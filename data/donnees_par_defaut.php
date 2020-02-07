@@ -1,5 +1,7 @@
 <?php
 
+//@formatter:off
+
 return [
     "IMPORT_TABLES" => [
         [
@@ -1506,1986 +1508,1986 @@ return [
     ],
     "PAYS" => [
         [
-            "LIBELLE_LONG" => "ACORES,MADERE",
-            "LIBELLE_COURT" => "ACORES,MAD",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "319"
+            "SOURCE_CODE" => "319",
+            "CODE" => "319",
+            "LIBELLE" => "ACORES,MADERE"
         ],
         [
-            "LIBELLE_LONG" => "AFGHANISTAN",
-            "LIBELLE_COURT" => "AFGHANISTA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "212"
+            "SOURCE_CODE" => "212",
+            "CODE" => "212",
+            "LIBELLE" => "AFGHANISTAN"
         ],
         [
-            "LIBELLE_LONG" => "AFRIQUE DU SUD",
-            "LIBELLE_COURT" => "AFRIQUE SD",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "303"
+            "SOURCE_CODE" => "303",
+            "CODE" => "303",
+            "LIBELLE" => "AFRIQUE DU SUD"
         ],
         [
-            "LIBELLE_LONG" => "ALAND, ILES",
-            "LIBELLE_COURT" => "Aland, îles",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ALA"
+            "SOURCE_CODE" => "ALA",
+            "CODE" => "ALA",
+            "LIBELLE" => "ALAND, ILES"
         ],
         [
-            "LIBELLE_LONG" => "ALBANIE",
-            "LIBELLE_COURT" => "ALBANIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "125"
+            "SOURCE_CODE" => "125",
+            "CODE" => "125",
+            "LIBELLE" => "ALBANIE"
         ],
         [
-            "LIBELLE_LONG" => "ALGERIE",
-            "LIBELLE_COURT" => "ALGERIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "352"
+            "SOURCE_CODE" => "352",
+            "CODE" => "352",
+            "LIBELLE" => "ALGERIE"
         ],
         [
-            "LIBELLE_LONG" => "ALLEMAGNE",
-            "LIBELLE_COURT" => "ALLEMAGNE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1990-10-04",
-            "SOURCE_CODE" => "109"
+            "SOURCE_CODE" => "109",
+            "CODE" => "109",
+            "LIBELLE" => "ALLEMAGNE"
         ],
         [
-            "LIBELLE_LONG" => "ANDORRE",
-            "LIBELLE_COURT" => "ANDORRE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "130"
+            "SOURCE_CODE" => "130",
+            "CODE" => "130",
+            "LIBELLE" => "ANDORRE"
         ],
         [
-            "LIBELLE_LONG" => "ANGOLA",
-            "LIBELLE_COURT" => "ANGOLA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "395"
+            "SOURCE_CODE" => "395",
+            "CODE" => "395",
+            "LIBELLE" => "ANGOLA"
         ],
         [
-            "LIBELLE_LONG" => "ANGUILLA",
-            "LIBELLE_COURT" => "Anguilla",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "AIA"
+            "SOURCE_CODE" => "AIA",
+            "CODE" => "AIA",
+            "LIBELLE" => "ANGUILLA"
         ],
         [
-            "LIBELLE_LONG" => "ANTARCTIQUE",
-            "LIBELLE_COURT" => "Antarctique",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ATA"
+            "SOURCE_CODE" => "ATA",
+            "CODE" => "ATA",
+            "LIBELLE" => "ANTARCTIQUE"
         ],
         [
-            "LIBELLE_LONG" => "ANTIGUA-ET-BARBUDA",
-            "LIBELLE_COURT" => "ANTIGUA-ET",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1981-01-01",
-            "SOURCE_CODE" => "441"
+            "SOURCE_CODE" => "441",
+            "CODE" => "441",
+            "LIBELLE" => "ANTIGUA-ET-BARBUDA"
         ],
         [
-            "LIBELLE_LONG" => "ARABIE SAOUDITE",
-            "LIBELLE_COURT" => "ARABIE SAO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "201"
+            "SOURCE_CODE" => "201",
+            "CODE" => "201",
+            "LIBELLE" => "ARABIE SAOUDITE"
         ],
         [
-            "LIBELLE_LONG" => "ARGENTINE",
-            "LIBELLE_COURT" => "ARGENTINE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "415"
+            "SOURCE_CODE" => "415",
+            "CODE" => "415",
+            "LIBELLE" => "ARGENTINE"
         ],
         [
-            "LIBELLE_LONG" => "ARMENIE",
-            "LIBELLE_COURT" => "ARMENIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "252"
+            "SOURCE_CODE" => "252",
+            "CODE" => "252",
+            "LIBELLE" => "ARMENIE"
         ],
         [
-            "LIBELLE_LONG" => "ARMENIE",
-            "LIBELLE_COURT" => "ARMENIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "146"
+            "SOURCE_CODE" => "146",
+            "CODE" => "146",
+            "LIBELLE" => "ARMENIE"
         ],
         [
-            "LIBELLE_LONG" => "ARUBA",
-            "LIBELLE_COURT" => "Aruba",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ABW"
+            "SOURCE_CODE" => "ABW",
+            "CODE" => "ABW",
+            "LIBELLE" => "ARUBA"
         ],
         [
-            "LIBELLE_LONG" => "AUSTRALIE",
-            "LIBELLE_COURT" => "AUSTRALIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "501"
+            "SOURCE_CODE" => "501",
+            "CODE" => "501",
+            "LIBELLE" => "AUSTRALIE"
         ],
         [
-            "LIBELLE_LONG" => "AUTRES PAYS",
-            "LIBELLE_COURT" => "AUTRES",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "990"
+            "SOURCE_CODE" => "990",
+            "CODE" => "990",
+            "LIBELLE" => "AUTRES PAYS"
         ],
         [
-            "LIBELLE_LONG" => "AUTRICHE",
-            "LIBELLE_COURT" => "AUTRICHE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "110"
+            "SOURCE_CODE" => "110",
+            "CODE" => "110",
+            "LIBELLE" => "AUTRICHE"
         ],
         [
-            "LIBELLE_LONG" => "AZERBAIDJAN",
-            "LIBELLE_COURT" => "AZERBAIDJA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "147"
+            "SOURCE_CODE" => "147",
+            "CODE" => "147",
+            "LIBELLE" => "AZERBAIDJAN"
         ],
         [
-            "LIBELLE_LONG" => "AZERBAIDJAN",
-            "LIBELLE_COURT" => "AZERBAIDJA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "253"
+            "SOURCE_CODE" => "253",
+            "CODE" => "253",
+            "LIBELLE" => "AZERBAIDJAN"
         ],
         [
-            "LIBELLE_LONG" => "BAHAMAS",
-            "LIBELLE_COURT" => "BAHAMAS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1973-01-01",
-            "SOURCE_CODE" => "436"
+            "SOURCE_CODE" => "436",
+            "CODE" => "436",
+            "LIBELLE" => "BAHAMAS"
         ],
         [
-            "LIBELLE_LONG" => "BAHREIN",
-            "LIBELLE_COURT" => "BAHREIN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "249"
+            "SOURCE_CODE" => "249",
+            "CODE" => "249",
+            "LIBELLE" => "BAHREIN"
         ],
         [
-            "LIBELLE_LONG" => "BANGLADESH",
-            "LIBELLE_COURT" => "BANGLADESH",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "246"
+            "SOURCE_CODE" => "246",
+            "CODE" => "246",
+            "LIBELLE" => "BANGLADESH"
         ],
         [
-            "LIBELLE_LONG" => "BARBADE",
-            "LIBELLE_COURT" => "BARBADE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1966-01-01",
-            "SOURCE_CODE" => "434"
+            "SOURCE_CODE" => "434",
+            "CODE" => "434",
+            "LIBELLE" => "BARBADE"
         ],
         [
-            "LIBELLE_LONG" => "BELGIQUE",
-            "LIBELLE_COURT" => "BELGIQUE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "131"
+            "SOURCE_CODE" => "131",
+            "CODE" => "131",
+            "LIBELLE" => "BELGIQUE"
         ],
         [
-            "LIBELLE_LONG" => "BELIZE",
-            "LIBELLE_COURT" => "BELIZE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "429"
+            "SOURCE_CODE" => "429",
+            "CODE" => "429",
+            "LIBELLE" => "BELIZE"
         ],
         [
-            "LIBELLE_LONG" => "BENIN",
-            "LIBELLE_COURT" => "BENIN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "327"
+            "SOURCE_CODE" => "327",
+            "CODE" => "327",
+            "LIBELLE" => "BENIN"
         ],
         [
-            "LIBELLE_LONG" => "BERMUDES",
-            "LIBELLE_COURT" => "Bermudes",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "BMU"
+            "SOURCE_CODE" => "BMU",
+            "CODE" => "BMU",
+            "LIBELLE" => "BERMUDES"
         ],
         [
-            "LIBELLE_LONG" => "BHOUTAN",
-            "LIBELLE_COURT" => "BHOUTAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "214"
+            "SOURCE_CODE" => "214",
+            "CODE" => "214",
+            "LIBELLE" => "BHOUTAN"
         ],
         [
-            "LIBELLE_LONG" => "BIELORUSSIE",
-            "LIBELLE_COURT" => "BIELORUSSI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "148"
+            "SOURCE_CODE" => "148",
+            "CODE" => "148",
+            "LIBELLE" => "BIELORUSSIE"
         ],
         [
-            "LIBELLE_LONG" => "BOLIVIE",
-            "LIBELLE_COURT" => "BOLIVIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "418"
+            "SOURCE_CODE" => "418",
+            "CODE" => "418",
+            "LIBELLE" => "BOLIVIE"
         ],
         [
-            "LIBELLE_LONG" => "BONAIRE,ST EUSTACHE,SABA",
-            "LIBELLE_COURT" => "BONAIRE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2010-10-10",
-            "SOURCE_CODE" => "443"
+            "SOURCE_CODE" => "443",
+            "CODE" => "443",
+            "LIBELLE" => "BONAIRE,ST EUSTACHE,SABA"
         ],
         [
-            "LIBELLE_LONG" => "BOSNIE-HERZEGOVINE",
-            "LIBELLE_COURT" => "BOSNIE-HER",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "118"
+            "SOURCE_CODE" => "118",
+            "CODE" => "118",
+            "LIBELLE" => "BOSNIE-HERZEGOVINE"
         ],
         [
-            "LIBELLE_LONG" => "BOTSWANA",
-            "LIBELLE_COURT" => "BOTSWANA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "347"
+            "SOURCE_CODE" => "347",
+            "CODE" => "347",
+            "LIBELLE" => "BOTSWANA"
         ],
         [
-            "LIBELLE_LONG" => "BOUVET, ILE",
-            "LIBELLE_COURT" => "Ile Bouvet",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "BVT"
+            "SOURCE_CODE" => "BVT",
+            "CODE" => "BVT",
+            "LIBELLE" => "BOUVET, ILE"
         ],
         [
-            "LIBELLE_LONG" => "BRESIL",
-            "LIBELLE_COURT" => "BRESIL",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "416"
+            "SOURCE_CODE" => "416",
+            "CODE" => "416",
+            "LIBELLE" => "BRESIL"
         ],
         [
-            "LIBELLE_LONG" => "BRUNEI",
-            "LIBELLE_COURT" => "BRUNEI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "225"
+            "SOURCE_CODE" => "225",
+            "CODE" => "225",
+            "LIBELLE" => "BRUNEI"
         ],
         [
-            "LIBELLE_LONG" => "BULGARIE",
-            "LIBELLE_COURT" => "BULGARIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "111"
+            "SOURCE_CODE" => "111",
+            "CODE" => "111",
+            "LIBELLE" => "BULGARIE"
         ],
         [
-            "LIBELLE_LONG" => "BURKINA",
-            "LIBELLE_COURT" => "BURKINA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "331"
+            "SOURCE_CODE" => "331",
+            "CODE" => "331",
+            "LIBELLE" => "BURKINA"
         ],
         [
-            "LIBELLE_LONG" => "BURUNDI",
-            "LIBELLE_COURT" => "BURUNDI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "321"
+            "SOURCE_CODE" => "321",
+            "CODE" => "321",
+            "LIBELLE" => "BURUNDI"
         ],
         [
-            "LIBELLE_LONG" => "CAIMANES, ILES",
-            "LIBELLE_COURT" => "Caïmanes, îles",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "CYM"
+            "SOURCE_CODE" => "CYM",
+            "CODE" => "CYM",
+            "LIBELLE" => "CAIMANES, ILES"
         ],
         [
-            "LIBELLE_LONG" => "CAMBODGE",
-            "LIBELLE_COURT" => "CAMBODGE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "234"
+            "SOURCE_CODE" => "234",
+            "CODE" => "234",
+            "LIBELLE" => "CAMBODGE"
         ],
         [
-            "LIBELLE_LONG" => "CAMEROUN",
-            "LIBELLE_COURT" => "CAMEROUN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "322"
+            "SOURCE_CODE" => "322",
+            "CODE" => "322",
+            "LIBELLE" => "CAMEROUN"
         ],
         [
-            "LIBELLE_LONG" => "CAMEROUN ET TOGO",
-            "LIBELLE_COURT" => "CAMEROUN E",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1960-01-01",
-            "SOURCE_CODE" => "305"
+            "SOURCE_CODE" => "305",
+            "CODE" => "305",
+            "LIBELLE" => "CAMEROUN ET TOGO"
         ],
         [
-            "LIBELLE_LONG" => "CANADA",
-            "LIBELLE_COURT" => "CANADA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "401"
+            "SOURCE_CODE" => "401",
+            "CODE" => "401",
+            "LIBELLE" => "CANADA"
         ],
         [
-            "LIBELLE_LONG" => "CAP-VERT",
-            "LIBELLE_COURT" => "CAP-VERT",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "396"
+            "SOURCE_CODE" => "396",
+            "CODE" => "396",
+            "LIBELLE" => "CAP-VERT"
         ],
         [
-            "LIBELLE_LONG" => "CENTRAFRICAINE (REPUBLIQUE)",
-            "LIBELLE_COURT" => "CENTRAFRIC",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "323"
+            "SOURCE_CODE" => "323",
+            "CODE" => "323",
+            "LIBELLE" => "CENTRAFRICAINE (REPUBLIQUE)"
         ],
         [
-            "LIBELLE_LONG" => "CHILI",
-            "LIBELLE_COURT" => "CHILI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "417"
+            "SOURCE_CODE" => "417",
+            "CODE" => "417",
+            "LIBELLE" => "CHILI"
         ],
         [
-            "LIBELLE_LONG" => "CHINE",
-            "LIBELLE_COURT" => "CHINE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "216"
+            "SOURCE_CODE" => "216",
+            "CODE" => "216",
+            "LIBELLE" => "CHINE"
         ],
         [
-            "LIBELLE_LONG" => "CHRISTMAS, ILE",
-            "LIBELLE_COURT" => "Christmas, île",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "CXR"
+            "SOURCE_CODE" => "CXR",
+            "CODE" => "CXR",
+            "LIBELLE" => "CHRISTMAS, ILE"
         ],
         [
-            "LIBELLE_LONG" => "CHYPRE",
-            "LIBELLE_COURT" => "CHYPRE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1996-03-31",
             "VALIDITE_FIN" => "1996-08-31",
-            "SOURCE_CODE" => "143"
+            "SOURCE_CODE" => "143",
+            "CODE" => "143",
+            "LIBELLE" => "CHYPRE"
         ],
         [
-            "LIBELLE_LONG" => "CHYPRE",
-            "LIBELLE_COURT" => "CHYPRE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "254"
+            "SOURCE_CODE" => "254",
+            "CODE" => "254",
+            "LIBELLE" => "CHYPRE"
         ],
         [
-            "LIBELLE_LONG" => "COCOS (KEELING), ILES",
-            "LIBELLE_COURT" => "Cocos (Keeling) îles",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "CCK"
+            "SOURCE_CODE" => "CCK",
+            "CODE" => "CCK",
+            "LIBELLE" => "COCOS (KEELING), ILES"
         ],
         [
-            "LIBELLE_LONG" => "COLOMBIE",
-            "LIBELLE_COURT" => "COLOMBIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "419"
+            "SOURCE_CODE" => "419",
+            "CODE" => "419",
+            "LIBELLE" => "COLOMBIE"
         ],
         [
-            "LIBELLE_LONG" => "COMORES",
-            "LIBELLE_COURT" => "COMORES",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "397"
+            "SOURCE_CODE" => "397",
+            "CODE" => "397",
+            "LIBELLE" => "COMORES"
         ],
         [
-            "LIBELLE_LONG" => "CONGO",
-            "LIBELLE_COURT" => "CONGO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "324"
+            "SOURCE_CODE" => "324",
+            "CODE" => "324",
+            "LIBELLE" => "CONGO"
         ],
         [
-            "LIBELLE_LONG" => "CONGO, REPUB. DEMOCRATIQUE DU /EX ZAIRE",
-            "LIBELLE_COURT" => "CONGO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "312"
+            "SOURCE_CODE" => "312",
+            "CODE" => "312",
+            "LIBELLE" => "CONGO, REPUB. DEMOCRATIQUE DU /EX ZAIRE"
         ],
         [
-            "LIBELLE_LONG" => "COOK, ILES",
-            "LIBELLE_COURT" => "Cook, îles",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "COK"
+            "SOURCE_CODE" => "COK",
+            "CODE" => "COK",
+            "LIBELLE" => "COOK, ILES"
         ],
         [
-            "LIBELLE_LONG" => "COREE",
-            "LIBELLE_COURT" => "COREE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "237"
+            "SOURCE_CODE" => "237",
+            "CODE" => "237",
+            "LIBELLE" => "COREE"
         ],
         [
-            "LIBELLE_LONG" => "COREE (REPUBLIQUE DE)",
-            "LIBELLE_COURT" => "COREE SUD",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "239"
+            "SOURCE_CODE" => "239",
+            "CODE" => "239",
+            "LIBELLE" => "COREE (REPUBLIQUE DE)"
         ],
         [
-            "LIBELLE_LONG" => "COREE (REPUBLIQUE POPULAIRE DEMOCRATIQUE",
-            "LIBELLE_COURT" => "COREE NORD",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "238"
+            "SOURCE_CODE" => "238",
+            "CODE" => "238",
+            "LIBELLE" => "COREE (REPUBLIQUE POPULAIRE DEMOCRATIQUE"
         ],
         [
-            "LIBELLE_LONG" => "COSTA RICA",
-            "LIBELLE_COURT" => "COSTA RICA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "406"
+            "SOURCE_CODE" => "406",
+            "CODE" => "406",
+            "LIBELLE" => "COSTA RICA"
         ],
         [
-            "LIBELLE_LONG" => "COTE D'IVOIRE",
-            "LIBELLE_COURT" => "COTE D'IVO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "326"
+            "SOURCE_CODE" => "326",
+            "CODE" => "326",
+            "LIBELLE" => "COTE D'IVOIRE"
         ],
         [
-            "LIBELLE_LONG" => "CROATIE",
-            "LIBELLE_COURT" => "CROATIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "119"
+            "SOURCE_CODE" => "119",
+            "CODE" => "119",
+            "LIBELLE" => "CROATIE"
         ],
         [
-            "LIBELLE_LONG" => "CUBA",
-            "LIBELLE_COURT" => "CUBA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "407"
+            "SOURCE_CODE" => "407",
+            "CODE" => "407",
+            "LIBELLE" => "CUBA"
         ],
         [
-            "LIBELLE_LONG" => "CURACAO",
-            "LIBELLE_COURT" => "CURACAO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2010-10-10",
-            "SOURCE_CODE" => "444"
+            "SOURCE_CODE" => "444",
+            "CODE" => "444",
+            "LIBELLE" => "CURACAO"
         ],
         [
-            "LIBELLE_LONG" => "DANEMARK",
-            "LIBELLE_COURT" => "DANEMARK",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "101"
+            "SOURCE_CODE" => "101",
+            "CODE" => "101",
+            "LIBELLE" => "DANEMARK"
         ],
         [
-            "LIBELLE_LONG" => "DJIBOUTI",
-            "LIBELLE_COURT" => "DJIBOUTI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "399"
+            "SOURCE_CODE" => "399",
+            "CODE" => "399",
+            "LIBELLE" => "DJIBOUTI"
         ],
         [
-            "LIBELLE_LONG" => "DOMINIQUE",
-            "LIBELLE_COURT" => "DOMINIQUE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1978-01-01",
-            "SOURCE_CODE" => "438"
+            "SOURCE_CODE" => "438",
+            "CODE" => "438",
+            "LIBELLE" => "DOMINIQUE"
         ],
         [
-            "LIBELLE_LONG" => "EGYPTE",
-            "LIBELLE_COURT" => "EGYPTE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "301"
+            "SOURCE_CODE" => "301",
+            "CODE" => "301",
+            "LIBELLE" => "EGYPTE"
         ],
         [
-            "LIBELLE_LONG" => "EL SALVADOR",
-            "LIBELLE_COURT" => "EL SALVADO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "414"
+            "SOURCE_CODE" => "414",
+            "CODE" => "414",
+            "LIBELLE" => "EL SALVADOR"
         ],
         [
-            "LIBELLE_LONG" => "EMIRATS ARABES UNIS",
-            "LIBELLE_COURT" => "EMIRATS AU",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "247"
+            "SOURCE_CODE" => "247",
+            "CODE" => "247",
+            "LIBELLE" => "EMIRATS ARABES UNIS"
         ],
         [
-            "LIBELLE_LONG" => "EQUATEUR",
-            "LIBELLE_COURT" => "EQUATEUR",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "420"
+            "SOURCE_CODE" => "420",
+            "CODE" => "420",
+            "LIBELLE" => "EQUATEUR"
         ],
         [
-            "LIBELLE_LONG" => "ERYTHREE",
-            "LIBELLE_COURT" => "ERYTHREE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "317"
+            "SOURCE_CODE" => "317",
+            "CODE" => "317",
+            "LIBELLE" => "ERYTHREE"
         ],
         [
-            "LIBELLE_LONG" => "ESPAGNE",
-            "LIBELLE_COURT" => "ESPAGNE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "134"
+            "SOURCE_CODE" => "134",
+            "CODE" => "134",
+            "LIBELLE" => "ESPAGNE"
         ],
         [
-            "LIBELLE_LONG" => "ESTONIE",
-            "LIBELLE_COURT" => "ESTONIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "106"
+            "SOURCE_CODE" => "106",
+            "CODE" => "106",
+            "LIBELLE" => "ESTONIE"
         ],
         [
-            "LIBELLE_LONG" => "ETATS MALAIS NON FEDERES",
-            "LIBELLE_COURT" => "ET. MALAIS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "228"
+            "SOURCE_CODE" => "228",
+            "CODE" => "228",
+            "LIBELLE" => "ETATS MALAIS NON FEDERES"
         ],
         [
-            "LIBELLE_LONG" => "ETATS-UNIS",
-            "LIBELLE_COURT" => "ETATS-UNIS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "404"
+            "SOURCE_CODE" => "404",
+            "CODE" => "404",
+            "LIBELLE" => "ETATS-UNIS"
         ],
         [
-            "LIBELLE_LONG" => "ETHIOPIE",
-            "LIBELLE_COURT" => "ETHIOPIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "315"
+            "SOURCE_CODE" => "315",
+            "CODE" => "315",
+            "LIBELLE" => "ETHIOPIE"
         ],
         [
-            "LIBELLE_LONG" => "FALKLAND, ILES (MALVINAS)",
-            "LIBELLE_COURT" => "Iles Falkland",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "FLK"
+            "SOURCE_CODE" => "FLK",
+            "CODE" => "FLK",
+            "LIBELLE" => "FALKLAND, ILES (MALVINAS)"
         ],
         [
-            "LIBELLE_LONG" => "FEROE, ILES",
-            "LIBELLE_COURT" => "Iles Féroé",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "FRO"
+            "SOURCE_CODE" => "FRO",
+            "CODE" => "FRO",
+            "LIBELLE" => "FEROE, ILES"
         ],
         [
-            "LIBELLE_LONG" => "FIDJI",
-            "LIBELLE_COURT" => "FIDJI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1970-01-01",
-            "SOURCE_CODE" => "508"
+            "SOURCE_CODE" => "508",
+            "CODE" => "508",
+            "LIBELLE" => "FIDJI"
         ],
         [
-            "LIBELLE_LONG" => "FINLANDE",
-            "LIBELLE_COURT" => "FINLANDE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "105"
+            "SOURCE_CODE" => "105",
+            "CODE" => "105",
+            "LIBELLE" => "FINLANDE"
         ],
         [
-            "LIBELLE_LONG" => "FRANCE",
-            "LIBELLE_COURT" => "FRANCE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "100"
+            "SOURCE_CODE" => "100",
+            "CODE" => "100",
+            "LIBELLE" => "FRANCE"
         ],
         [
-            "LIBELLE_LONG" => "GABON",
-            "LIBELLE_COURT" => "GABON",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "328"
+            "SOURCE_CODE" => "328",
+            "CODE" => "328",
+            "LIBELLE" => "GABON"
         ],
         [
-            "LIBELLE_LONG" => "GAMBIE",
-            "LIBELLE_COURT" => "GAMBIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "304"
+            "SOURCE_CODE" => "304",
+            "CODE" => "304",
+            "LIBELLE" => "GAMBIE"
         ],
         [
-            "LIBELLE_LONG" => "GEORGIE",
-            "LIBELLE_COURT" => "GEORGIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "255"
+            "SOURCE_CODE" => "255",
+            "CODE" => "255",
+            "LIBELLE" => "GEORGIE"
         ],
         [
-            "LIBELLE_LONG" => "GEORGIE DU SUD ET ILES SANDWICH DU SUD",
-            "LIBELLE_COURT" => "Géorgie et Sandwich",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "SGS"
+            "SOURCE_CODE" => "SGS",
+            "CODE" => "SGS",
+            "LIBELLE" => "GEORGIE DU SUD ET ILES SANDWICH DU SUD"
         ],
         [
-            "LIBELLE_LONG" => "GHANA",
-            "LIBELLE_COURT" => "GHANA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "329"
+            "SOURCE_CODE" => "329",
+            "CODE" => "329",
+            "LIBELLE" => "GHANA"
         ],
         [
-            "LIBELLE_LONG" => "GIBRALTAR",
-            "LIBELLE_COURT" => "GIBRALTAR",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "133"
+            "SOURCE_CODE" => "133",
+            "CODE" => "133",
+            "LIBELLE" => "GIBRALTAR"
         ],
         [
-            "LIBELLE_LONG" => "GRECE",
-            "LIBELLE_COURT" => "GRECE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "126"
+            "SOURCE_CODE" => "126",
+            "CODE" => "126",
+            "LIBELLE" => "GRECE"
         ],
         [
-            "LIBELLE_LONG" => "GRENADE",
-            "LIBELLE_COURT" => "GRENADE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1974-01-01",
-            "SOURCE_CODE" => "435"
+            "SOURCE_CODE" => "435",
+            "CODE" => "435",
+            "LIBELLE" => "GRENADE"
         ],
         [
-            "LIBELLE_LONG" => "GROENLAND",
-            "LIBELLE_COURT" => "GROENLAND",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "430"
+            "SOURCE_CODE" => "430",
+            "CODE" => "430",
+            "LIBELLE" => "GROENLAND"
         ],
         [
-            "LIBELLE_LONG" => "GUAM",
-            "LIBELLE_COURT" => "Guam",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "GUM"
+            "SOURCE_CODE" => "GUM",
+            "CODE" => "GUM",
+            "LIBELLE" => "GUAM"
         ],
         [
-            "LIBELLE_LONG" => "GUATEMALA",
-            "LIBELLE_COURT" => "GUATEMALA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "409"
+            "SOURCE_CODE" => "409",
+            "CODE" => "409",
+            "LIBELLE" => "GUATEMALA"
         ],
         [
-            "LIBELLE_LONG" => "GUERNESEY",
-            "LIBELLE_COURT" => "Guernesey",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "GGY"
+            "SOURCE_CODE" => "GGY",
+            "CODE" => "GGY",
+            "LIBELLE" => "GUERNESEY"
         ],
         [
-            "LIBELLE_LONG" => "GUINEE",
-            "LIBELLE_COURT" => "GUINEE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "330"
+            "SOURCE_CODE" => "330",
+            "CODE" => "330",
+            "LIBELLE" => "GUINEE"
         ],
         [
-            "LIBELLE_LONG" => "GUINEE EQUATORIALE",
-            "LIBELLE_COURT" => "GUINEE EQU",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "314"
+            "SOURCE_CODE" => "314",
+            "CODE" => "314",
+            "LIBELLE" => "GUINEE EQUATORIALE"
         ],
         [
-            "LIBELLE_LONG" => "GUINEE-BISSAU",
-            "LIBELLE_COURT" => "GUINEE-BIS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "392"
+            "SOURCE_CODE" => "392",
+            "CODE" => "392",
+            "LIBELLE" => "GUINEE-BISSAU"
         ],
         [
-            "LIBELLE_LONG" => "GUYANA",
-            "LIBELLE_COURT" => "GUYANA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "428"
+            "SOURCE_CODE" => "428",
+            "CODE" => "428",
+            "LIBELLE" => "GUYANA"
         ],
         [
-            "LIBELLE_LONG" => "HAITI",
-            "LIBELLE_COURT" => "HAITI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "410"
+            "SOURCE_CODE" => "410",
+            "CODE" => "410",
+            "LIBELLE" => "HAITI"
         ],
         [
-            "LIBELLE_LONG" => "HAWAII (ILES)",
-            "LIBELLE_COURT" => "HAWAII",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "504"
+            "SOURCE_CODE" => "504",
+            "CODE" => "504",
+            "LIBELLE" => "HAWAII (ILES)"
         ],
         [
-            "LIBELLE_LONG" => "HEARD, ET ILES MCDONALD, ILES",
-            "LIBELLE_COURT" => "Heard îles McDonald",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "HMD"
+            "SOURCE_CODE" => "HMD",
+            "CODE" => "HMD",
+            "LIBELLE" => "HEARD, ET ILES MCDONALD, ILES"
         ],
         [
-            "LIBELLE_LONG" => "HONDURAS",
-            "LIBELLE_COURT" => "HONDURAS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "411"
+            "SOURCE_CODE" => "411",
+            "CODE" => "411",
+            "LIBELLE" => "HONDURAS"
         ],
         [
-            "LIBELLE_LONG" => "HONG-KONG",
-            "LIBELLE_COURT" => "HONG-KONG",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1997-07-01",
-            "SOURCE_CODE" => "230"
+            "SOURCE_CODE" => "230",
+            "CODE" => "230",
+            "LIBELLE" => "HONG-KONG"
         ],
         [
-            "LIBELLE_LONG" => "HONGRIE",
-            "LIBELLE_COURT" => "HONGRIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "112"
+            "SOURCE_CODE" => "112",
+            "CODE" => "112",
+            "LIBELLE" => "HONGRIE"
         ],
         [
-            "LIBELLE_LONG" => "ILE DE MAN",
-            "LIBELLE_COURT" => "Ile de Man",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "IMN"
+            "SOURCE_CODE" => "IMN",
+            "CODE" => "IMN",
+            "LIBELLE" => "ILE DE MAN"
         ],
         [
-            "LIBELLE_LONG" => "ILES PORTUGAISES DE L'OCEAN INDIEN",
-            "LIBELLE_COURT" => "I.PORTUG I",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "320"
+            "SOURCE_CODE" => "320",
+            "CODE" => "320",
+            "LIBELLE" => "ILES PORTUGAISES DE L'OCEAN INDIEN"
         ],
         [
-            "LIBELLE_LONG" => "ILES VIERGES BRITANNIQUES",
-            "LIBELLE_COURT" => "Iles vierges britann",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "VGB"
+            "SOURCE_CODE" => "VGB",
+            "CODE" => "VGB",
+            "LIBELLE" => "ILES VIERGES BRITANNIQUES"
         ],
         [
-            "LIBELLE_LONG" => "ILES VIERGES DES ETATS-UNIS",
-            "LIBELLE_COURT" => "Iles vierges des USA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "VIR"
+            "SOURCE_CODE" => "VIR",
+            "CODE" => "VIR",
+            "LIBELLE" => "ILES VIERGES DES ETATS-UNIS"
         ],
         [
-            "LIBELLE_LONG" => "INDE",
-            "LIBELLE_COURT" => "INDE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "223"
+            "SOURCE_CODE" => "223",
+            "CODE" => "223",
+            "LIBELLE" => "INDE"
         ],
         [
-            "LIBELLE_LONG" => "INDONESIE",
-            "LIBELLE_COURT" => "INDONESIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "231"
+            "SOURCE_CODE" => "231",
+            "CODE" => "231",
+            "LIBELLE" => "INDONESIE"
         ],
         [
-            "LIBELLE_LONG" => "IRAN",
-            "LIBELLE_COURT" => "IRAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "204"
+            "SOURCE_CODE" => "204",
+            "CODE" => "204",
+            "LIBELLE" => "IRAN"
         ],
         [
-            "LIBELLE_LONG" => "IRAQ",
-            "LIBELLE_COURT" => "IRAQ",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "203"
+            "SOURCE_CODE" => "203",
+            "CODE" => "203",
+            "LIBELLE" => "IRAQ"
         ],
         [
-            "LIBELLE_LONG" => "IRLANDE, ou EIRE",
-            "LIBELLE_COURT" => "IRLANDE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "136"
+            "SOURCE_CODE" => "136",
+            "CODE" => "136",
+            "LIBELLE" => "IRLANDE, ou EIRE"
         ],
         [
-            "LIBELLE_LONG" => "ISLANDE",
-            "LIBELLE_COURT" => "ISLANDE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "102"
+            "SOURCE_CODE" => "102",
+            "CODE" => "102",
+            "LIBELLE" => "ISLANDE"
         ],
         [
-            "LIBELLE_LONG" => "ISRAEL",
-            "LIBELLE_COURT" => "ISRAEL",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "207"
+            "SOURCE_CODE" => "207",
+            "CODE" => "207",
+            "LIBELLE" => "ISRAEL"
         ],
         [
-            "LIBELLE_LONG" => "ITALIE",
-            "LIBELLE_COURT" => "ITALIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "127"
+            "SOURCE_CODE" => "127",
+            "CODE" => "127",
+            "LIBELLE" => "ITALIE"
         ],
         [
-            "LIBELLE_LONG" => "JAMAIQUE",
-            "LIBELLE_COURT" => "JAMAIQUE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "426"
+            "SOURCE_CODE" => "426",
+            "CODE" => "426",
+            "LIBELLE" => "JAMAIQUE"
         ],
         [
-            "LIBELLE_LONG" => "JAPON",
-            "LIBELLE_COURT" => "JAPON",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "217"
+            "SOURCE_CODE" => "217",
+            "CODE" => "217",
+            "LIBELLE" => "JAPON"
         ],
         [
-            "LIBELLE_LONG" => "JERSEY",
-            "LIBELLE_COURT" => "Jersey",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "JEY"
+            "SOURCE_CODE" => "JEY",
+            "CODE" => "JEY",
+            "LIBELLE" => "JERSEY"
         ],
         [
-            "LIBELLE_LONG" => "JORDANIE",
-            "LIBELLE_COURT" => "JORDANIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "222"
+            "SOURCE_CODE" => "222",
+            "CODE" => "222",
+            "LIBELLE" => "JORDANIE"
         ],
         [
-            "LIBELLE_LONG" => "KAMTCHATKA",
-            "LIBELLE_COURT" => "KAMTCHATKA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1991-01-01",
-            "SOURCE_CODE" => "211"
+            "SOURCE_CODE" => "211",
+            "CODE" => "211",
+            "LIBELLE" => "KAMTCHATKA"
         ],
         [
-            "LIBELLE_LONG" => "KAZAKHSTAN",
-            "LIBELLE_COURT" => "KAZAKHSTAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "256"
+            "SOURCE_CODE" => "256",
+            "CODE" => "256",
+            "LIBELLE" => "KAZAKHSTAN"
         ],
         [
-            "LIBELLE_LONG" => "KAZAKHSTAN",
-            "LIBELLE_COURT" => "KAZAKHSTAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "149"
+            "SOURCE_CODE" => "149",
+            "CODE" => "149",
+            "LIBELLE" => "KAZAKHSTAN"
         ],
         [
-            "LIBELLE_LONG" => "KENYA",
-            "LIBELLE_COURT" => "KENYA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "332"
+            "SOURCE_CODE" => "332",
+            "CODE" => "332",
+            "LIBELLE" => "KENYA"
         ],
         [
-            "LIBELLE_LONG" => "KIRGHIZISTAN",
-            "LIBELLE_COURT" => "KIRGHIZIST",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "257"
+            "SOURCE_CODE" => "257",
+            "CODE" => "257",
+            "LIBELLE" => "KIRGHIZISTAN"
         ],
         [
-            "LIBELLE_LONG" => "KIRGHIZISTAN",
-            "LIBELLE_COURT" => "KIRGHIZIST",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "150"
+            "SOURCE_CODE" => "150",
+            "CODE" => "150",
+            "LIBELLE" => "KIRGHIZISTAN"
         ],
         [
-            "LIBELLE_LONG" => "KIRIBATI",
-            "LIBELLE_COURT" => "KIRIBATI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1979-01-01",
-            "SOURCE_CODE" => "513"
+            "SOURCE_CODE" => "513",
+            "CODE" => "513",
+            "LIBELLE" => "KIRIBATI"
         ],
         [
-            "LIBELLE_LONG" => "KOSOVO",
-            "LIBELLE_COURT" => "KOSOVO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2009-01-01",
-            "SOURCE_CODE" => "157"
+            "SOURCE_CODE" => "157",
+            "CODE" => "157",
+            "LIBELLE" => "KOSOVO"
         ],
         [
-            "LIBELLE_LONG" => "KOWEIT",
-            "LIBELLE_COURT" => "KOWEIT",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "240"
+            "SOURCE_CODE" => "240",
+            "CODE" => "240",
+            "LIBELLE" => "KOWEIT"
         ],
         [
-            "LIBELLE_LONG" => "LABRADOR",
-            "LIBELLE_COURT" => "LABRADOR",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "403"
+            "SOURCE_CODE" => "403",
+            "CODE" => "403",
+            "LIBELLE" => "LABRADOR"
         ],
         [
-            "LIBELLE_LONG" => "LAO, REPUB. DEMOCRATIQUE POPULAIRE (LAOS",
-            "LIBELLE_COURT" => "LAOS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "241"
+            "SOURCE_CODE" => "241",
+            "CODE" => "241",
+            "LIBELLE" => "LAO, REPUB. DEMOCRATIQUE POPULAIRE (LAOS"
         ],
         [
-            "LIBELLE_LONG" => "LESOTHO",
-            "LIBELLE_COURT" => "LESOTHO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "348"
+            "SOURCE_CODE" => "348",
+            "CODE" => "348",
+            "LIBELLE" => "LESOTHO"
         ],
         [
-            "LIBELLE_LONG" => "LETTONIE",
-            "LIBELLE_COURT" => "LETTONIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "107"
+            "SOURCE_CODE" => "107",
+            "CODE" => "107",
+            "LIBELLE" => "LETTONIE"
         ],
         [
-            "LIBELLE_LONG" => "LIBAN",
-            "LIBELLE_COURT" => "LIBAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "205"
+            "SOURCE_CODE" => "205",
+            "CODE" => "205",
+            "LIBELLE" => "LIBAN"
         ],
         [
-            "LIBELLE_LONG" => "LIBERIA",
-            "LIBELLE_COURT" => "LIBERIA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "302"
+            "SOURCE_CODE" => "302",
+            "CODE" => "302",
+            "LIBELLE" => "LIBERIA"
         ],
         [
-            "LIBELLE_LONG" => "LIBYE",
-            "LIBELLE_COURT" => "LIBYE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "316"
+            "SOURCE_CODE" => "316",
+            "CODE" => "316",
+            "LIBELLE" => "LIBYE"
         ],
         [
-            "LIBELLE_LONG" => "LIECHTENSTEIN",
-            "LIBELLE_COURT" => "LIECHTENST",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "113"
+            "SOURCE_CODE" => "113",
+            "CODE" => "113",
+            "LIBELLE" => "LIECHTENSTEIN"
         ],
         [
-            "LIBELLE_LONG" => "LITUANIE",
-            "LIBELLE_COURT" => "LITUANIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "108"
+            "SOURCE_CODE" => "108",
+            "CODE" => "108",
+            "LIBELLE" => "LITUANIE"
         ],
         [
-            "LIBELLE_LONG" => "LUXEMBOURG",
-            "LIBELLE_COURT" => "LUXEMBOURG",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "137"
+            "SOURCE_CODE" => "137",
+            "CODE" => "137",
+            "LIBELLE" => "LUXEMBOURG"
         ],
         [
-            "LIBELLE_LONG" => "MACAO",
-            "LIBELLE_COURT" => "MACAO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "2000-01-01",
-            "SOURCE_CODE" => "232"
+            "SOURCE_CODE" => "232",
+            "CODE" => "232",
+            "LIBELLE" => "MACAO"
         ],
         [
-            "LIBELLE_LONG" => "MACEDOINE (EX-REPUBLIQUE YOUGOSLAVE DE)",
-            "LIBELLE_COURT" => "MACEDOINE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "156"
+            "SOURCE_CODE" => "156",
+            "CODE" => "156",
+            "LIBELLE" => "MACEDOINE (EX-REPUBLIQUE YOUGOSLAVE DE)"
         ],
         [
-            "LIBELLE_LONG" => "MADAGASCAR",
-            "LIBELLE_COURT" => "MADAGASCAR",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "333"
+            "SOURCE_CODE" => "333",
+            "CODE" => "333",
+            "LIBELLE" => "MADAGASCAR"
         ],
         [
-            "LIBELLE_LONG" => "MALAISIE",
-            "LIBELLE_COURT" => "MALAISIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "227"
+            "SOURCE_CODE" => "227",
+            "CODE" => "227",
+            "LIBELLE" => "MALAISIE"
         ],
         [
-            "LIBELLE_LONG" => "MALAWI",
-            "LIBELLE_COURT" => "MALAWI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "334"
+            "SOURCE_CODE" => "334",
+            "CODE" => "334",
+            "LIBELLE" => "MALAWI"
         ],
         [
-            "LIBELLE_LONG" => "MALDIVES",
-            "LIBELLE_COURT" => "MALDIVES",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "229"
+            "SOURCE_CODE" => "229",
+            "CODE" => "229",
+            "LIBELLE" => "MALDIVES"
         ],
         [
-            "LIBELLE_LONG" => "MALI",
-            "LIBELLE_COURT" => "MALI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "335"
+            "SOURCE_CODE" => "335",
+            "CODE" => "335",
+            "LIBELLE" => "MALI"
         ],
         [
-            "LIBELLE_LONG" => "MALTE",
-            "LIBELLE_COURT" => "MALTE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "144"
+            "SOURCE_CODE" => "144",
+            "CODE" => "144",
+            "LIBELLE" => "MALTE"
         ],
         [
-            "LIBELLE_LONG" => "MANDCHOURIE",
-            "LIBELLE_COURT" => "MANDCHOURI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "218"
+            "SOURCE_CODE" => "218",
+            "CODE" => "218",
+            "LIBELLE" => "MANDCHOURIE"
         ],
         [
-            "LIBELLE_LONG" => "MARIANNES DU NORD, ILES",
-            "LIBELLE_COURT" => "Mariannes Nord, îles",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "MNP"
+            "SOURCE_CODE" => "MNP",
+            "CODE" => "MNP",
+            "LIBELLE" => "MARIANNES DU NORD, ILES"
         ],
         [
-            "LIBELLE_LONG" => "MAROC",
-            "LIBELLE_COURT" => "MAROC",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "350"
+            "SOURCE_CODE" => "350",
+            "CODE" => "350",
+            "LIBELLE" => "MAROC"
         ],
         [
-            "LIBELLE_LONG" => "MARSHALL (ILES)",
-            "LIBELLE_COURT" => "MARSHALL",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1991-01-01",
-            "SOURCE_CODE" => "515"
+            "SOURCE_CODE" => "515",
+            "CODE" => "515",
+            "LIBELLE" => "MARSHALL (ILES)"
         ],
         [
-            "LIBELLE_LONG" => "MAURICE",
-            "LIBELLE_COURT" => "MAURICE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "390"
+            "SOURCE_CODE" => "390",
+            "CODE" => "390",
+            "LIBELLE" => "MAURICE"
         ],
         [
-            "LIBELLE_LONG" => "MAURITANIE",
-            "LIBELLE_COURT" => "MAURITANIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "336"
+            "SOURCE_CODE" => "336",
+            "CODE" => "336",
+            "LIBELLE" => "MAURITANIE"
         ],
         [
-            "LIBELLE_LONG" => "MEXIQUE",
-            "LIBELLE_COURT" => "MEXIQUE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "405"
+            "SOURCE_CODE" => "405",
+            "CODE" => "405",
+            "LIBELLE" => "MEXIQUE"
         ],
         [
-            "LIBELLE_LONG" => "MICRONESIE (ETATS FEDERES DE)",
-            "LIBELLE_COURT" => "MICRONESIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1991-01-01",
-            "SOURCE_CODE" => "516"
+            "SOURCE_CODE" => "516",
+            "CODE" => "516",
+            "LIBELLE" => "MICRONESIE (ETATS FEDERES DE)"
         ],
         [
-            "LIBELLE_LONG" => "MOLDAVIE",
-            "LIBELLE_COURT" => "MOLDAVIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "151"
+            "SOURCE_CODE" => "151",
+            "CODE" => "151",
+            "LIBELLE" => "MOLDAVIE"
         ],
         [
-            "LIBELLE_LONG" => "MONACO",
-            "LIBELLE_COURT" => "MONACO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "138"
+            "SOURCE_CODE" => "138",
+            "CODE" => "138",
+            "LIBELLE" => "MONACO"
         ],
         [
-            "LIBELLE_LONG" => "MONGOLIE",
-            "LIBELLE_COURT" => "MONGOLIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "242"
+            "SOURCE_CODE" => "242",
+            "CODE" => "242",
+            "LIBELLE" => "MONGOLIE"
         ],
         [
-            "LIBELLE_LONG" => "MONTENEGRO",
-            "LIBELLE_COURT" => "MONTENEGRO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "120"
+            "SOURCE_CODE" => "120",
+            "CODE" => "120",
+            "LIBELLE" => "MONTENEGRO"
         ],
         [
-            "LIBELLE_LONG" => "MONTSERRAT",
-            "LIBELLE_COURT" => "Montserrat",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "MSR"
+            "SOURCE_CODE" => "MSR",
+            "CODE" => "MSR",
+            "LIBELLE" => "MONTSERRAT"
         ],
         [
-            "LIBELLE_LONG" => "MOZAMBIQUE",
-            "LIBELLE_COURT" => "MOZAMBIQUE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "393"
+            "SOURCE_CODE" => "393",
+            "CODE" => "393",
+            "LIBELLE" => "MOZAMBIQUE"
         ],
         [
-            "LIBELLE_LONG" => "MYANMAR (BIRMANIE)",
-            "LIBELLE_COURT" => "MYANMAR (BIRMANIE)",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "224"
+            "SOURCE_CODE" => "224",
+            "CODE" => "224",
+            "LIBELLE" => "MYANMAR (BIRMANIE)"
         ],
         [
-            "LIBELLE_LONG" => "NAMIBIE",
-            "LIBELLE_COURT" => "NAMIBIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "311"
+            "SOURCE_CODE" => "311",
+            "CODE" => "311",
+            "LIBELLE" => "NAMIBIE"
         ],
         [
-            "LIBELLE_LONG" => "NAURU",
-            "LIBELLE_COURT" => "NAURU",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1968-01-01",
-            "SOURCE_CODE" => "507"
+            "SOURCE_CODE" => "507",
+            "CODE" => "507",
+            "LIBELLE" => "NAURU"
         ],
         [
-            "LIBELLE_LONG" => "NEPAL",
-            "LIBELLE_COURT" => "NEPAL",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "215"
+            "SOURCE_CODE" => "215",
+            "CODE" => "215",
+            "LIBELLE" => "NEPAL"
         ],
         [
-            "LIBELLE_LONG" => "NICARAGUA",
-            "LIBELLE_COURT" => "NICARAGUA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "412"
+            "SOURCE_CODE" => "412",
+            "CODE" => "412",
+            "LIBELLE" => "NICARAGUA"
         ],
         [
-            "LIBELLE_LONG" => "NIGER",
-            "LIBELLE_COURT" => "NIGER",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "337"
+            "SOURCE_CODE" => "337",
+            "CODE" => "337",
+            "LIBELLE" => "NIGER"
         ],
         [
-            "LIBELLE_LONG" => "NIGERIA",
-            "LIBELLE_COURT" => "NIGERIA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "338"
+            "SOURCE_CODE" => "338",
+            "CODE" => "338",
+            "LIBELLE" => "NIGERIA"
         ],
         [
-            "LIBELLE_LONG" => "NIUE",
-            "LIBELLE_COURT" => "Niué",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "NIU"
+            "SOURCE_CODE" => "NIU",
+            "CODE" => "NIU",
+            "LIBELLE" => "NIUE"
         ],
         [
-            "LIBELLE_LONG" => "NORFOLK, ILE",
-            "LIBELLE_COURT" => "Norfolk, île",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "NFK"
+            "SOURCE_CODE" => "NFK",
+            "CODE" => "NFK",
+            "LIBELLE" => "NORFOLK, ILE"
         ],
         [
-            "LIBELLE_LONG" => "NORVEGE",
-            "LIBELLE_COURT" => "NORVEGE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "103"
+            "SOURCE_CODE" => "103",
+            "CODE" => "103",
+            "LIBELLE" => "NORVEGE"
         ],
         [
-            "LIBELLE_LONG" => "NOUVELLE-ZELANDE",
-            "LIBELLE_COURT" => "N.ZELANDE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "502"
+            "SOURCE_CODE" => "502",
+            "CODE" => "502",
+            "LIBELLE" => "NOUVELLE-ZELANDE"
         ],
         [
-            "LIBELLE_LONG" => "OMAN",
-            "LIBELLE_COURT" => "OMAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "250"
+            "SOURCE_CODE" => "250",
+            "CODE" => "250",
+            "LIBELLE" => "OMAN"
         ],
         [
-            "LIBELLE_LONG" => "OUGANDA",
-            "LIBELLE_COURT" => "OUGANDA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "339"
+            "SOURCE_CODE" => "339",
+            "CODE" => "339",
+            "LIBELLE" => "OUGANDA"
         ],
         [
-            "LIBELLE_LONG" => "OUZBEKISTAN",
-            "LIBELLE_COURT" => "OUZBEKISTA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "258"
+            "SOURCE_CODE" => "258",
+            "CODE" => "258",
+            "LIBELLE" => "OUZBEKISTAN"
         ],
         [
-            "LIBELLE_LONG" => "OUZBEKISTAN",
-            "LIBELLE_COURT" => "OUZBEKISTA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "152"
+            "SOURCE_CODE" => "152",
+            "CODE" => "152",
+            "LIBELLE" => "OUZBEKISTAN"
         ],
         [
-            "LIBELLE_LONG" => "PAKISTAN",
-            "LIBELLE_COURT" => "PAKISTAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "213"
+            "SOURCE_CODE" => "213",
+            "CODE" => "213",
+            "LIBELLE" => "PAKISTAN"
         ],
         [
-            "LIBELLE_LONG" => "PALAOS (REPUBLIQUE DES ILES)",
-            "LIBELLE_COURT" => "PALAOS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1994-01-01",
-            "SOURCE_CODE" => "517"
+            "SOURCE_CODE" => "517",
+            "CODE" => "517",
+            "LIBELLE" => "PALAOS (REPUBLIQUE DES ILES)"
         ],
         [
-            "LIBELLE_LONG" => "PALESTINE (TERRITOIRES GAZA ET JERICHO)",
-            "LIBELLE_COURT" => "PALESTINE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "261"
+            "SOURCE_CODE" => "261",
+            "CODE" => "261",
+            "LIBELLE" => "PALESTINE (TERRITOIRES GAZA ET JERICHO)"
         ],
         [
-            "LIBELLE_LONG" => "PANAMA",
-            "LIBELLE_COURT" => "PANAMA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "413"
+            "SOURCE_CODE" => "413",
+            "CODE" => "413",
+            "LIBELLE" => "PANAMA"
         ],
         [
-            "LIBELLE_LONG" => "PAPOUASIE-NOUVELLE-GUINEE",
-            "LIBELLE_COURT" => "PAPOUASIE-",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1975-01-01",
-            "SOURCE_CODE" => "510"
+            "SOURCE_CODE" => "510",
+            "CODE" => "510",
+            "LIBELLE" => "PAPOUASIE-NOUVELLE-GUINEE"
         ],
         [
-            "LIBELLE_LONG" => "PARAGUAY",
-            "LIBELLE_COURT" => "PARAGUAY",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "421"
+            "SOURCE_CODE" => "421",
+            "CODE" => "421",
+            "LIBELLE" => "PARAGUAY"
         ],
         [
-            "LIBELLE_LONG" => "PAYS-BAS",
-            "LIBELLE_COURT" => "PAYS-BAS",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "135"
+            "SOURCE_CODE" => "135",
+            "CODE" => "135",
+            "LIBELLE" => "PAYS-BAS"
         ],
         [
-            "LIBELLE_LONG" => "PEROU",
-            "LIBELLE_COURT" => "PEROU",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "422"
+            "SOURCE_CODE" => "422",
+            "CODE" => "422",
+            "LIBELLE" => "PEROU"
         ],
         [
-            "LIBELLE_LONG" => "PHILIPPINES",
-            "LIBELLE_COURT" => "PHILIPPINE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "220"
+            "SOURCE_CODE" => "220",
+            "CODE" => "220",
+            "LIBELLE" => "PHILIPPINES"
         ],
         [
-            "LIBELLE_LONG" => "PITCAIRN (ILE)",
-            "LIBELLE_COURT" => "PITCAIRN I",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "503"
+            "SOURCE_CODE" => "503",
+            "CODE" => "503",
+            "LIBELLE" => "PITCAIRN (ILE)"
         ],
         [
-            "LIBELLE_LONG" => "POLOGNE",
-            "LIBELLE_COURT" => "POLOGNE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "122"
+            "SOURCE_CODE" => "122",
+            "CODE" => "122",
+            "LIBELLE" => "POLOGNE"
         ],
         [
-            "LIBELLE_LONG" => "PORTO RICO",
-            "LIBELLE_COURT" => "Porto Rico",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "PRI"
+            "SOURCE_CODE" => "PRI",
+            "CODE" => "PRI",
+            "LIBELLE" => "PORTO RICO"
         ],
         [
-            "LIBELLE_LONG" => "PORTUGAL",
-            "LIBELLE_COURT" => "PORTUGAL",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "139"
+            "SOURCE_CODE" => "139",
+            "CODE" => "139",
+            "LIBELLE" => "PORTUGAL"
         ],
         [
-            "LIBELLE_LONG" => "POSSESSIONS BRITANNIQUES AU PROCHE-ORIEN",
-            "LIBELLE_COURT" => "P-OR BRIT",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "221"
+            "SOURCE_CODE" => "221",
+            "CODE" => "221",
+            "LIBELLE" => "POSSESSIONS BRITANNIQUES AU PROCHE-ORIEN"
         ],
         [
-            "LIBELLE_LONG" => "PROVINCES ESPAGNOLES D'AFRIQUE",
-            "LIBELLE_COURT" => "ESPAG AFRI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "313"
+            "SOURCE_CODE" => "313",
+            "CODE" => "313",
+            "LIBELLE" => "PROVINCES ESPAGNOLES D'AFRIQUE"
         ],
         [
-            "LIBELLE_LONG" => "QATAR",
-            "LIBELLE_COURT" => "QATAR",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "248"
+            "SOURCE_CODE" => "248",
+            "CODE" => "248",
+            "LIBELLE" => "QATAR"
         ],
         [
-            "LIBELLE_LONG" => "REPUBLIQUE DEMOCRATIQUE ALLEMANDE",
-            "LIBELLE_COURT" => "RDA",
-            "TEMOIN_UE" => FALSE,
-            "VALIDITE_DEBUT" => "1900-01-01",
-            "VALIDITE_FIN" => "1990-10-03",
-            "SOURCE_CODE" => "141"
-        ],
-        [
-            "LIBELLE_LONG" => "REPUBLIQUE DOMINICAINE",
-            "LIBELLE_COURT" => "R.DOMINICA",
-            "TEMOIN_UE" => FALSE,
-            "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "408"
-        ],
-        [
-            "LIBELLE_LONG" => "REPUBLIQUE FEDERALE D'ALLEMAGNE",
-            "LIBELLE_COURT" => "RFA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1990-10-03",
-            "SOURCE_CODE" => "142"
+            "SOURCE_CODE" => "141",
+            "CODE" => "141",
+            "LIBELLE" => "REPUBLIQUE DEMOCRATIQUE ALLEMANDE"
         ],
         [
-            "LIBELLE_LONG" => "ROUMANIE",
-            "LIBELLE_COURT" => "ROUMANIE",
-            "TEMOIN_UE" => TRUE,
-            "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "114"
-        ],
-        [
-            "LIBELLE_LONG" => "ROYAUME-UNI",
-            "LIBELLE_COURT" => "ROYAUME-UN",
-            "TEMOIN_UE" => TRUE,
-            "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "132"
-        ],
-        [
-            "LIBELLE_LONG" => "RUSSIE",
-            "LIBELLE_COURT" => "RUSSIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "123"
+            "SOURCE_CODE" => "408",
+            "CODE" => "408",
+            "LIBELLE" => "REPUBLIQUE DOMINICAINE"
         ],
         [
-            "LIBELLE_LONG" => "RWANDA",
-            "LIBELLE_COURT" => "RWANDA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "340"
+            "VALIDITE_FIN" => "1990-10-03",
+            "SOURCE_CODE" => "142",
+            "CODE" => "142",
+            "LIBELLE" => "REPUBLIQUE FEDERALE D'ALLEMAGNE"
         ],
         [
-            "LIBELLE_LONG" => "SAHARA OCCIDENTAL",
-            "LIBELLE_COURT" => "SAHARA OCCIDENTAL",
+            "TEMOIN_UE" => TRUE,
+            "VALIDITE_DEBUT" => "1900-01-01",
+            "SOURCE_CODE" => "114",
+            "CODE" => "114",
+            "LIBELLE" => "ROUMANIE"
+        ],
+        [
+            "TEMOIN_UE" => TRUE,
+            "VALIDITE_DEBUT" => "1900-01-01",
+            "SOURCE_CODE" => "132",
+            "CODE" => "132",
+            "LIBELLE" => "ROYAUME-UNI"
+        ],
+        [
+            "TEMOIN_UE" => FALSE,
+            "VALIDITE_DEBUT" => "1900-01-01",
+            "SOURCE_CODE" => "123",
+            "CODE" => "123",
+            "LIBELLE" => "RUSSIE"
+        ],
+        [
+            "TEMOIN_UE" => FALSE,
+            "VALIDITE_DEBUT" => "1900-01-01",
+            "SOURCE_CODE" => "340",
+            "CODE" => "340",
+            "LIBELLE" => "RWANDA"
+        ],
+        [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1997-01-01",
-            "SOURCE_CODE" => "389"
+            "SOURCE_CODE" => "389",
+            "CODE" => "389",
+            "LIBELLE" => "SAHARA OCCIDENTAL"
         ],
         [
-            "LIBELLE_LONG" => "SAHARA OCCIDENTAL",
-            "LIBELLE_COURT" => "SAHARA OCC",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1996-12-31",
-            "SOURCE_CODE" => "353"
+            "SOURCE_CODE" => "353",
+            "CODE" => "353",
+            "LIBELLE" => "SAHARA OCCIDENTAL"
         ],
         [
-            "LIBELLE_LONG" => "SAINT-BARTHELEMY",
-            "LIBELLE_COURT" => "Saint-Barthélemy",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "BLM"
+            "SOURCE_CODE" => "BLM",
+            "CODE" => "BLM",
+            "LIBELLE" => "SAINT-BARTHELEMY"
         ],
         [
-            "LIBELLE_LONG" => "SAINT-CHRISTOPHE-ET-NIEVES",
-            "LIBELLE_COURT" => "ST-CHRISTO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1983-01-01",
-            "SOURCE_CODE" => "442"
+            "SOURCE_CODE" => "442",
+            "CODE" => "442",
+            "LIBELLE" => "SAINT-CHRISTOPHE-ET-NIEVES"
         ],
         [
-            "LIBELLE_LONG" => "SAINT-MARIN",
-            "LIBELLE_COURT" => "ST-MARIN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "128"
+            "SOURCE_CODE" => "128",
+            "CODE" => "128",
+            "LIBELLE" => "SAINT-MARIN"
         ],
         [
-            "LIBELLE_LONG" => "SAINT-VINCENT-ET-LES GRENADINES",
-            "LIBELLE_COURT" => "ST-VINCENT",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1979-01-01",
-            "SOURCE_CODE" => "440"
+            "SOURCE_CODE" => "440",
+            "CODE" => "440",
+            "LIBELLE" => "SAINT-VINCENT-ET-LES GRENADINES"
         ],
         [
-            "LIBELLE_LONG" => "SAINTE-HELENE",
-            "LIBELLE_COURT" => "STE-HELENE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "306"
+            "SOURCE_CODE" => "306",
+            "CODE" => "306",
+            "LIBELLE" => "SAINTE-HELENE"
         ],
         [
-            "LIBELLE_LONG" => "SAINTE-LUCIE",
-            "LIBELLE_COURT" => "STE-LUCIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1979-01-01",
-            "SOURCE_CODE" => "439"
+            "SOURCE_CODE" => "439",
+            "CODE" => "439",
+            "LIBELLE" => "SAINTE-LUCIE"
         ],
         [
-            "LIBELLE_LONG" => "SALOMON (ILES)",
-            "LIBELLE_COURT" => "SALOMON I.",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1978-01-01",
-            "SOURCE_CODE" => "512"
+            "SOURCE_CODE" => "512",
+            "CODE" => "512",
+            "LIBELLE" => "SALOMON (ILES)"
         ],
         [
-            "LIBELLE_LONG" => "SAMOA AMERICAINES",
-            "LIBELLE_COURT" => "Samoa américaines",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ASM"
+            "SOURCE_CODE" => "ASM",
+            "CODE" => "ASM",
+            "LIBELLE" => "SAMOA AMERICAINES"
         ],
         [
-            "LIBELLE_LONG" => "SAMOA OCCIDENTALES",
-            "LIBELLE_COURT" => "SAMOA OCC.",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1962-01-01",
-            "SOURCE_CODE" => "506"
+            "SOURCE_CODE" => "506",
+            "CODE" => "506",
+            "LIBELLE" => "SAMOA OCCIDENTALES"
         ],
         [
-            "LIBELLE_LONG" => "SANS NATIONALITE",
-            "LIBELLE_COURT" => "SANS NAT.",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "995"
+            "SOURCE_CODE" => "995",
+            "CODE" => "995",
+            "LIBELLE" => "SANS NATIONALITE"
         ],
         [
-            "LIBELLE_LONG" => "SAO TOME-ET-PRINCIPE",
-            "LIBELLE_COURT" => "SAO TOME",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "394"
+            "SOURCE_CODE" => "394",
+            "CODE" => "394",
+            "LIBELLE" => "SAO TOME-ET-PRINCIPE"
         ],
         [
-            "LIBELLE_LONG" => "SENEGAL",
-            "LIBELLE_COURT" => "SENEGAL",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "341"
+            "SOURCE_CODE" => "341",
+            "CODE" => "341",
+            "LIBELLE" => "SENEGAL"
         ],
         [
-            "LIBELLE_LONG" => "SERBIE (EX YOUGOSLAVIE)",
-            "LIBELLE_COURT" => "SERBIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "121"
+            "SOURCE_CODE" => "121",
+            "CODE" => "121",
+            "LIBELLE" => "SERBIE (EX YOUGOSLAVIE)"
         ],
         [
-            "LIBELLE_LONG" => "SEYCHELLES",
-            "LIBELLE_COURT" => "SEYCHELLES",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "398"
+            "SOURCE_CODE" => "398",
+            "CODE" => "398",
+            "LIBELLE" => "SEYCHELLES"
         ],
         [
-            "LIBELLE_LONG" => "SIBERIE",
-            "LIBELLE_COURT" => "SIBERIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "209"
+            "SOURCE_CODE" => "209",
+            "CODE" => "209",
+            "LIBELLE" => "SIBERIE"
         ],
         [
-            "LIBELLE_LONG" => "SIERRA LEONE",
-            "LIBELLE_COURT" => "SIERRA LEO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "342"
+            "SOURCE_CODE" => "342",
+            "CODE" => "342",
+            "LIBELLE" => "SIERRA LEONE"
         ],
         [
-            "LIBELLE_LONG" => "SINGAPOUR",
-            "LIBELLE_COURT" => "SINGAPOUR",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "226"
+            "SOURCE_CODE" => "226",
+            "CODE" => "226",
+            "LIBELLE" => "SINGAPOUR"
         ],
         [
-            "LIBELLE_LONG" => "SLOVAQUIE",
-            "LIBELLE_COURT" => "SLOVAQUIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1992-01-01",
-            "SOURCE_CODE" => "117"
+            "SOURCE_CODE" => "117",
+            "CODE" => "117",
+            "LIBELLE" => "SLOVAQUIE"
         ],
         [
-            "LIBELLE_LONG" => "SLOVENIE",
-            "LIBELLE_COURT" => "SLOVENIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "145"
+            "SOURCE_CODE" => "145",
+            "CODE" => "145",
+            "LIBELLE" => "SLOVENIE"
         ],
         [
-            "LIBELLE_LONG" => "SOMALIE",
-            "LIBELLE_COURT" => "SOMALIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "318"
+            "SOURCE_CODE" => "318",
+            "CODE" => "318",
+            "LIBELLE" => "SOMALIE"
         ],
         [
-            "LIBELLE_LONG" => "SOUDAN",
-            "LIBELLE_COURT" => "SOUDAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "343"
+            "SOURCE_CODE" => "343",
+            "CODE" => "343",
+            "LIBELLE" => "SOUDAN"
         ],
         [
-            "LIBELLE_LONG" => "SOUDAN ANGLO-EGYPTIEN, KENYA, OUGANDA",
-            "LIBELLE_COURT" => "SOUDAN ANG",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1962-01-01",
-            "SOURCE_CODE" => "307"
+            "SOURCE_CODE" => "307",
+            "CODE" => "307",
+            "LIBELLE" => "SOUDAN ANGLO-EGYPTIEN, KENYA, OUGANDA"
         ],
         [
-            "LIBELLE_LONG" => "SOUDAN DU SUD",
-            "LIBELLE_COURT" => "SOUDAN SUD",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2011-07-09",
-            "SOURCE_CODE" => "349"
+            "SOURCE_CODE" => "349",
+            "CODE" => "349",
+            "LIBELLE" => "SOUDAN DU SUD"
         ],
         [
-            "LIBELLE_LONG" => "SRI LANKA",
-            "LIBELLE_COURT" => "SRI LANKA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "235"
+            "SOURCE_CODE" => "235",
+            "CODE" => "235",
+            "LIBELLE" => "SRI LANKA"
         ],
         [
-            "LIBELLE_LONG" => "ST MARTIN (NEERLANDAISE)",
-            "LIBELLE_COURT" => "ST MART-NL",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2010-10-10",
-            "SOURCE_CODE" => "445"
+            "SOURCE_CODE" => "445",
+            "CODE" => "445",
+            "LIBELLE" => "ST MARTIN (NEERLANDAISE)"
         ],
         [
-            "LIBELLE_LONG" => "SUEDE",
-            "LIBELLE_COURT" => "SUEDE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "104"
+            "SOURCE_CODE" => "104",
+            "CODE" => "104",
+            "LIBELLE" => "SUEDE"
         ],
         [
-            "LIBELLE_LONG" => "SUISSE",
-            "LIBELLE_COURT" => "SUISSE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "140"
+            "SOURCE_CODE" => "140",
+            "CODE" => "140",
+            "LIBELLE" => "SUISSE"
         ],
         [
-            "LIBELLE_LONG" => "SURINAME",
-            "LIBELLE_COURT" => "SURINAME",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1975-01-01",
-            "SOURCE_CODE" => "437"
+            "SOURCE_CODE" => "437",
+            "CODE" => "437",
+            "LIBELLE" => "SURINAME"
         ],
         [
-            "LIBELLE_LONG" => "SVALBARD ET ILE JAN MAYEN",
-            "LIBELLE_COURT" => "Svalbard et Mayen",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "SJM"
+            "SOURCE_CODE" => "SJM",
+            "CODE" => "SJM",
+            "LIBELLE" => "SVALBARD ET ILE JAN MAYEN"
         ],
         [
-            "LIBELLE_LONG" => "SWAZILAND",
-            "LIBELLE_COURT" => "SWAZILAND",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "391"
+            "SOURCE_CODE" => "391",
+            "CODE" => "391",
+            "LIBELLE" => "SWAZILAND"
         ],
         [
-            "LIBELLE_LONG" => "SYRIE",
-            "LIBELLE_COURT" => "SYRIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "206"
+            "SOURCE_CODE" => "206",
+            "CODE" => "206",
+            "LIBELLE" => "SYRIE"
         ],
         [
-            "LIBELLE_LONG" => "TADJIKISTAN",
-            "LIBELLE_COURT" => "TADJIKISTA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "259"
+            "SOURCE_CODE" => "259",
+            "CODE" => "259",
+            "LIBELLE" => "TADJIKISTAN"
         ],
         [
-            "LIBELLE_LONG" => "TADJIKISTAN",
-            "LIBELLE_COURT" => "TADJIKISTA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "153"
+            "SOURCE_CODE" => "153",
+            "CODE" => "153",
+            "LIBELLE" => "TADJIKISTAN"
         ],
         [
-            "LIBELLE_LONG" => "TAIWAN",
-            "LIBELLE_COURT" => "TAIWAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "236"
+            "SOURCE_CODE" => "236",
+            "CODE" => "236",
+            "LIBELLE" => "TAIWAN"
         ],
         [
-            "LIBELLE_LONG" => "TANGER",
-            "LIBELLE_COURT" => "TANGER",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "325"
+            "SOURCE_CODE" => "325",
+            "CODE" => "325",
+            "LIBELLE" => "TANGER"
         ],
         [
-            "LIBELLE_LONG" => "TANZANIE",
-            "LIBELLE_COURT" => "TANZANIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "309"
+            "SOURCE_CODE" => "309",
+            "CODE" => "309",
+            "LIBELLE" => "TANZANIE"
         ],
         [
-            "LIBELLE_LONG" => "TCHAD",
-            "LIBELLE_COURT" => "TCHAD",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "344"
+            "SOURCE_CODE" => "344",
+            "CODE" => "344",
+            "LIBELLE" => "TCHAD"
         ],
         [
-            "LIBELLE_LONG" => "TCHECOSLOVAQUIE",
-            "LIBELLE_COURT" => "TCHECOSLOV",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1993-01-01",
-            "SOURCE_CODE" => "115"
+            "SOURCE_CODE" => "115",
+            "CODE" => "115",
+            "LIBELLE" => "TCHECOSLOVAQUIE"
         ],
         [
-            "LIBELLE_LONG" => "TCHEQUE (REPUBLIQUE)",
-            "LIBELLE_COURT" => "TCHEQUIE",
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1992-01-01",
-            "SOURCE_CODE" => "116"
+            "SOURCE_CODE" => "116",
+            "CODE" => "116",
+            "LIBELLE" => "TCHEQUE (REPUBLIQUE)"
         ],
         [
-            "LIBELLE_LONG" => "TERR BRIT OCEAN INDIEN",
-            "LIBELLE_COURT" => "TRU INDIEN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "2014-04-24",
-            "SOURCE_CODE" => "308"
+            "SOURCE_CODE" => "308",
+            "CODE" => "308",
+            "LIBELLE" => "TERR BRIT OCEAN INDIEN"
         ],
         [
-            "LIBELLE_LONG" => "TERR. D'USA EN AMERIQUE",
-            "LIBELLE_COURT" => "TUSA AMERI",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "432"
+            "SOURCE_CODE" => "432",
+            "CODE" => "432",
+            "LIBELLE" => "TERR. D'USA EN AMERIQUE"
         ],
         [
-            "LIBELLE_LONG" => "TERR. DES USA EN OCEANIE",
-            "LIBELLE_COURT" => "TUSA OCEAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "505"
+            "SOURCE_CODE" => "505",
+            "CODE" => "505",
+            "LIBELLE" => "TERR. DES USA EN OCEANIE"
         ],
         [
-            "LIBELLE_LONG" => "TERR. DU ROYAUME-UNI DANS L'ATLANTIQUE",
-            "LIBELLE_COURT" => "TRU ATLANT",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "427"
+            "SOURCE_CODE" => "427",
+            "CODE" => "427",
+            "LIBELLE" => "TERR. DU ROYAUME-UNI DANS L'ATLANTIQUE"
         ],
         [
-            "LIBELLE_LONG" => "TERRE-NEUVE",
-            "LIBELLE_COURT" => "TERRE-NEUV",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "402"
+            "SOURCE_CODE" => "402",
+            "CODE" => "402",
+            "LIBELLE" => "TERRE-NEUVE"
         ],
         [
-            "LIBELLE_LONG" => "TERRES AUSTRALES ET ANTARCTI. FRANÇAISES",
-            "LIBELLE_COURT" => "TAAF",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ATF"
+            "SOURCE_CODE" => "ATF",
+            "CODE" => "ATF",
+            "LIBELLE" => "TERRES AUSTRALES ET ANTARCTI. FRANÇAISES"
         ],
         [
-            "LIBELLE_LONG" => "TERRITOIRE DES PAYS-BAS",
-            "LIBELLE_COURT" => "TPAYS BAS",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "2010-10-09",
-            "SOURCE_CODE" => "431"
+            "SOURCE_CODE" => "431",
+            "CODE" => "431",
+            "LIBELLE" => "TERRITOIRE DES PAYS-BAS"
         ],
         [
-            "LIBELLE_LONG" => "TERRITOIRES DU ROYAUME-UNI AUX ANTILLES",
-            "LIBELLE_COURT" => "TRU ANTIL",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "425"
+            "SOURCE_CODE" => "425",
+            "CODE" => "425",
+            "LIBELLE" => "TERRITOIRES DU ROYAUME-UNI AUX ANTILLES"
         ],
         [
-            "LIBELLE_LONG" => "THAILANDE",
-            "LIBELLE_COURT" => "THAILANDE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "219"
+            "SOURCE_CODE" => "219",
+            "CODE" => "219",
+            "LIBELLE" => "THAILANDE"
         ],
         [
-            "LIBELLE_LONG" => "TIMOR LESTE",
-            "LIBELLE_COURT" => "TIMOR LESTE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2002-01-01",
-            "SOURCE_CODE" => "262"
+            "SOURCE_CODE" => "262",
+            "CODE" => "262",
+            "LIBELLE" => "TIMOR LESTE"
         ],
         [
-            "LIBELLE_LONG" => "TOGO",
-            "LIBELLE_COURT" => "TOGO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "345"
+            "SOURCE_CODE" => "345",
+            "CODE" => "345",
+            "LIBELLE" => "TOGO"
         ],
         [
-            "LIBELLE_LONG" => "TONGA",
-            "LIBELLE_COURT" => "TONGA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1970-01-01",
-            "SOURCE_CODE" => "509"
+            "SOURCE_CODE" => "509",
+            "CODE" => "509",
+            "LIBELLE" => "TONGA"
         ],
         [
-            "LIBELLE_LONG" => "TRINITE-ET-TOBAGO",
-            "LIBELLE_COURT" => "TRINITE-ET",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1960-01-01",
-            "SOURCE_CODE" => "433"
+            "SOURCE_CODE" => "433",
+            "CODE" => "433",
+            "LIBELLE" => "TRINITE-ET-TOBAGO"
         ],
         [
-            "LIBELLE_LONG" => "TUNISIE",
-            "LIBELLE_COURT" => "TUNISIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "351"
+            "SOURCE_CODE" => "351",
+            "CODE" => "351",
+            "LIBELLE" => "TUNISIE"
         ],
         [
-            "LIBELLE_LONG" => "TURKESTAN RUSSE",
-            "LIBELLE_COURT" => "TURKESTAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1991-01-01",
-            "SOURCE_CODE" => "210"
+            "SOURCE_CODE" => "210",
+            "CODE" => "210",
+            "LIBELLE" => "TURKESTAN RUSSE"
         ],
         [
-            "LIBELLE_LONG" => "TURKMENISTAN",
-            "LIBELLE_COURT" => "TURKMENISTAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "154"
+            "SOURCE_CODE" => "154",
+            "CODE" => "154",
+            "LIBELLE" => "TURKMENISTAN"
         ],
         [
-            "LIBELLE_LONG" => "TURKMENISTAN",
-            "LIBELLE_COURT" => "TURKMENIST",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "260"
+            "SOURCE_CODE" => "260",
+            "CODE" => "260",
+            "LIBELLE" => "TURKMENISTAN"
         ],
         [
-            "LIBELLE_LONG" => "TURKS ET CAIQUES, ILES",
-            "LIBELLE_COURT" => "Turks Caïques, îles",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "TCA"
+            "SOURCE_CODE" => "TCA",
+            "CODE" => "TCA",
+            "LIBELLE" => "TURKS ET CAIQUES, ILES"
         ],
         [
-            "LIBELLE_LONG" => "TURQUIE",
-            "LIBELLE_COURT" => "TURQUIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "208"
+            "SOURCE_CODE" => "208",
+            "CODE" => "208",
+            "LIBELLE" => "TURQUIE"
         ],
         [
-            "LIBELLE_LONG" => "TURQUIE D'EUROPE",
-            "LIBELLE_COURT" => "TURQUIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "124"
+            "SOURCE_CODE" => "124",
+            "CODE" => "124",
+            "LIBELLE" => "TURQUIE D'EUROPE"
         ],
         [
-            "LIBELLE_LONG" => "TUVALU",
-            "LIBELLE_COURT" => "TUVALU",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1978-01-01",
-            "SOURCE_CODE" => "511"
+            "SOURCE_CODE" => "511",
+            "CODE" => "511",
+            "LIBELLE" => "TUVALU"
         ],
         [
-            "LIBELLE_LONG" => "UKRAINE",
-            "LIBELLE_COURT" => "UKRAINE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "155"
+            "SOURCE_CODE" => "155",
+            "CODE" => "155",
+            "LIBELLE" => "UKRAINE"
         ],
         [
-            "LIBELLE_LONG" => "URUGUAY",
-            "LIBELLE_COURT" => "URUGUAY",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "423"
+            "SOURCE_CODE" => "423",
+            "CODE" => "423",
+            "LIBELLE" => "URUGUAY"
         ],
         [
-            "LIBELLE_LONG" => "VANUATU",
-            "LIBELLE_COURT" => "VANUATU",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1980-01-01",
-            "SOURCE_CODE" => "514"
+            "SOURCE_CODE" => "514",
+            "CODE" => "514",
+            "LIBELLE" => "VANUATU"
         ],
         [
-            "LIBELLE_LONG" => "VATICAN, ou SAINT-SIEGE",
-            "LIBELLE_COURT" => "VATICAN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "129"
+            "SOURCE_CODE" => "129",
+            "CODE" => "129",
+            "LIBELLE" => "VATICAN, ou SAINT-SIEGE"
         ],
         [
-            "LIBELLE_LONG" => "VENEZUELA",
-            "LIBELLE_COURT" => "VENEZUELA",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "424"
+            "SOURCE_CODE" => "424",
+            "CODE" => "424",
+            "LIBELLE" => "VENEZUELA"
         ],
         [
-            "LIBELLE_LONG" => "VIET NAM",
-            "LIBELLE_COURT" => "VIET NAM",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "243"
+            "SOURCE_CODE" => "243",
+            "CODE" => "243",
+            "LIBELLE" => "VIET NAM"
         ],
         [
-            "LIBELLE_LONG" => "VIET NAM DU NORD",
-            "LIBELLE_COURT" => "VIET NAM N",
-            "TEMOIN_UE" => FALSE,
-            "VALIDITE_DEBUT" => "1900-01-01",
-            "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "244"
-        ],
-        [
-            "LIBELLE_LONG" => "VIET NAM DU SUD",
-            "LIBELLE_COURT" => "VIET NAM S",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "245"
+            "SOURCE_CODE" => "244",
+            "CODE" => "244",
+            "LIBELLE" => "VIET NAM DU NORD"
         ],
         [
-            "LIBELLE_LONG" => "YEMEN",
-            "LIBELLE_COURT" => "YEMEN",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "251"
+            "VALIDITE_FIN" => "1995-10-13",
+            "SOURCE_CODE" => "245",
+            "CODE" => "245",
+            "LIBELLE" => "VIET NAM DU SUD"
         ],
         [
-            "LIBELLE_LONG" => "YEMEN (REPUBLIQUE ARABE DU)",
-            "LIBELLE_COURT" => "YEMEN REP",
+            "TEMOIN_UE" => FALSE,
+            "VALIDITE_DEBUT" => "1900-01-01",
+            "SOURCE_CODE" => "251",
+            "CODE" => "251",
+            "LIBELLE" => "YEMEN"
+        ],
+        [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1990-05-22",
-            "SOURCE_CODE" => "202"
+            "SOURCE_CODE" => "202",
+            "CODE" => "202",
+            "LIBELLE" => "YEMEN (REPUBLIQUE ARABE DU)"
         ],
         [
-            "LIBELLE_LONG" => "YEMEN DEMOCRATIQUE",
-            "LIBELLE_COURT" => "YEMEN DEMO",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1990-05-22",
-            "SOURCE_CODE" => "233"
+            "SOURCE_CODE" => "233",
+            "CODE" => "233",
+            "LIBELLE" => "YEMEN DEMOCRATIQUE"
         ],
         [
-            "LIBELLE_LONG" => "ZAMBIE",
-            "LIBELLE_COURT" => "ZAMBIE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "346"
+            "SOURCE_CODE" => "346",
+            "CODE" => "346",
+            "LIBELLE" => "ZAMBIE"
         ],
         [
-            "LIBELLE_LONG" => "ZIMBABWE",
-            "LIBELLE_COURT" => "ZIMBABWE",
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "310"
+            "SOURCE_CODE" => "310",
+            "CODE" => "310",
+            "LIBELLE" => "ZIMBABWE"
         ]
     ],
     "DISCIPLINE" => [
@@ -71675,3 +71677,5 @@ return [
         ]
     ]
 ];
+
+//@formatter:on

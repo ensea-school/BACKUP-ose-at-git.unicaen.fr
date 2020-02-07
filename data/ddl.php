@@ -1,4 +1,8 @@
-<?php return array (
+<?php
+
+//@formatter:off
+
+return array (
   'BddAdmin\\Ddl\\DdlSequence' => 
   array (
     'ADRESSE_INTERVENANT_ID_SEQ' => 
@@ -2822,106 +2826,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
-        array (
-          'name' => 'LIBELLE',
-          'type' => 'VARCHAR2',
-          'length' => 120,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'SOURCE_ID' =>
-        array (
-          'name' => 'SOURCE_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'SOURCE_CODE' =>
-        array (
-          'name' => 'SOURCE_CODE',
-          'type' => 'VARCHAR2',
-          'length' => 100,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_CREATION' =>
-        array (
-          'name' => 'HISTO_CREATION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => 'SYSDATE',
-          'commentaire' => NULL,
-        ),
-        'HISTO_MODIFICATION' =>
-        array (
-          'name' => 'HISTO_MODIFICATION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => 'SYSDATE',
-          'commentaire' => NULL,
-        ),
-        'HISTO_DESTRUCTION' =>
-        array (
-          'name' => 'HISTO_DESTRUCTION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_DESTRUCTEUR_ID' =>
-        array (
-          'name' => 'HISTO_DESTRUCTEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_MODIFICATEUR_ID' =>
-        array (
-          'name' => 'HISTO_MODIFICATEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_CREATEUR_ID' =>
-        array (
-          'name' => 'HISTO_CREATEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -2932,18 +2837,117 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'HISTO_DESTRUCTION' => 
+        array (
+          'name' => 'HISTO_DESTRUCTION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_CREATION' => 
+        array (
+          'name' => 'HISTO_CREATION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => 'SYSDATE',
+          'commentaire' => NULL,
+        ),
+        'HISTO_MODIFICATION' => 
+        array (
+          'name' => 'HISTO_MODIFICATION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => 'SYSDATE',
+          'commentaire' => NULL,
+        ),
+        'HISTO_DESTRUCTEUR_ID' => 
+        array (
+          'name' => 'HISTO_DESTRUCTEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'SOURCE_ID' => 
+        array (
+          'name' => 'SOURCE_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'SOURCE_CODE' => 
+        array (
+          'name' => 'SOURCE_CODE',
+          'type' => 'VARCHAR2',
+          'length' => 100,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_CREATEUR_ID' => 
+        array (
+          'name' => 'HISTO_CREATEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_MODIFICATEUR_ID' => 
+        array (
+          'name' => 'HISTO_MODIFICATEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'LIBELLE' => 
+        array (
+          'name' => 'LIBELLE',
+          'type' => 'VARCHAR2',
+          'length' => 120,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
-    'DISCIPLINE' =>
+    'DISCIPLINE' => 
     array (
       'name' => 'DISCIPLINE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'DISCIPLINE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -2954,7 +2958,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -2965,7 +2969,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -2976,7 +2980,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -2987,7 +2991,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -2998,7 +3002,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_1' =>
+        'CODES_CORRESP_1' => 
         array (
           'name' => 'CODES_CORRESP_1',
           'type' => 'VARCHAR2',
@@ -3009,7 +3013,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_2' =>
+        'CODES_CORRESP_2' => 
         array (
           'name' => 'CODES_CORRESP_2',
           'type' => 'VARCHAR2',
@@ -3020,7 +3024,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_3' =>
+        'CODES_CORRESP_3' => 
         array (
           'name' => 'CODES_CORRESP_3',
           'type' => 'VARCHAR2',
@@ -3031,7 +3035,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_4' =>
+        'CODES_CORRESP_4' => 
         array (
           'name' => 'CODES_CORRESP_4',
           'type' => 'VARCHAR2',
@@ -3042,7 +3046,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -3053,7 +3057,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -3064,7 +3068,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -3075,7 +3079,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -3086,7 +3090,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -3097,7 +3101,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -3110,16 +3114,16 @@
         ),
       ),
     ),
-    'DOMAINE_FONCTIONNEL' =>
+    'DOMAINE_FONCTIONNEL' => 
     array (
       'name' => 'DOMAINE_FONCTIONNEL',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'DOMAINE_FONCTIONNEL_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -3130,7 +3134,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -3141,7 +3145,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -3152,7 +3156,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -3163,7 +3167,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -3174,7 +3178,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -3185,7 +3189,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -3196,7 +3200,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -3207,7 +3211,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -3218,7 +3222,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -3231,16 +3235,16 @@
         ),
       ),
     ),
-    'DOSSIER' =>
+    'DOSSIER' => 
     array (
       'name' => 'DOSSIER',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'DOSSIER_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -3251,7 +3255,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOM_USUEL' =>
+        'NOM_USUEL' => 
         array (
           'name' => 'NOM_USUEL',
           'type' => 'VARCHAR2',
@@ -3262,7 +3266,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOM_PATRONYMIQUE' =>
+        'NOM_PATRONYMIQUE' => 
         array (
           'name' => 'NOM_PATRONYMIQUE',
           'type' => 'VARCHAR2',
@@ -3273,7 +3277,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PRENOM' =>
+        'PRENOM' => 
         array (
           'name' => 'PRENOM',
           'type' => 'VARCHAR2',
@@ -3284,7 +3288,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CIVILITE_ID' =>
+        'CIVILITE_ID' => 
         array (
           'name' => 'CIVILITE_ID',
           'type' => 'NUMBER',
@@ -3295,7 +3299,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NUMERO_INSEE' =>
+        'NUMERO_INSEE' => 
         array (
           'name' => 'NUMERO_INSEE',
           'type' => 'VARCHAR2',
@@ -3306,7 +3310,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATUT_ID' =>
+        'STATUT_ID' => 
         array (
           'name' => 'STATUT_ID',
           'type' => 'NUMBER',
@@ -3317,7 +3321,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ADRESSE' =>
+        'ADRESSE' => 
         array (
           'name' => 'ADRESSE',
           'type' => 'VARCHAR2',
@@ -3328,7 +3332,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'EMAIL' =>
+        'EMAIL' => 
         array (
           'name' => 'EMAIL',
           'type' => 'VARCHAR2',
@@ -3339,7 +3343,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TELEPHONE' =>
+        'TELEPHONE' => 
         array (
           'name' => 'TELEPHONE',
           'type' => 'VARCHAR2',
@@ -3350,7 +3354,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' =>
+        'PREMIER_RECRUTEMENT' => 
         array (
           'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
@@ -3361,7 +3365,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PERTE_EMPLOI' =>
+        'PERTE_EMPLOI' => 
         array (
           'name' => 'PERTE_EMPLOI',
           'type' => 'NUMBER',
@@ -3372,7 +3376,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'RIB' =>
+        'RIB' => 
         array (
           'name' => 'RIB',
           'type' => 'VARCHAR2',
@@ -3383,7 +3387,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -3394,7 +3398,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -3405,7 +3409,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -3416,7 +3420,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -3427,7 +3431,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -3438,7 +3442,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -3449,7 +3453,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NUMERO_INSEE_EST_PROVISOIRE' =>
+        'NUMERO_INSEE_EST_PROVISOIRE' => 
         array (
           'name' => 'NUMERO_INSEE_EST_PROVISOIRE',
           'type' => 'NUMBER',
@@ -3460,7 +3464,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'EMAIL_PERSO' =>
+        'EMAIL_PERSO' => 
         array (
           'name' => 'EMAIL_PERSO',
           'type' => 'VARCHAR2',
@@ -3471,7 +3475,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_NAISSANCE' =>
+        'DATE_NAISSANCE' => 
         array (
           'name' => 'DATE_NAISSANCE',
           'type' => 'DATE',
@@ -3482,7 +3486,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PAYS_NAISSANCE_ID' =>
+        'PAYS_NAISSANCE_ID' => 
         array (
           'name' => 'PAYS_NAISSANCE_ID',
           'type' => 'NUMBER',
@@ -3493,7 +3497,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEPT_NAISSANCE_ID' =>
+        'DEPT_NAISSANCE_ID' => 
         array (
           'name' => 'DEPT_NAISSANCE_ID',
           'type' => 'NUMBER',
@@ -3504,7 +3508,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VILLE_NAISSANCE' =>
+        'VILLE_NAISSANCE' => 
         array (
           'name' => 'VILLE_NAISSANCE',
           'type' => 'VARCHAR2',
@@ -3515,7 +3519,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -3526,7 +3530,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'RIB_HORS_SEPA' =>
+        'RIB_HORS_SEPA' => 
         array (
           'name' => 'RIB_HORS_SEPA',
           'type' => 'NUMBER',
@@ -3539,16 +3543,16 @@
         ),
       ),
     ),
-    'DOTATION' =>
+    'DOTATION' => 
     array (
       'name' => 'DOTATION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'DOTATION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -3559,7 +3563,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_RESSOURCE_ID' =>
+        'TYPE_RESSOURCE_ID' => 
         array (
           'name' => 'TYPE_RESSOURCE_ID',
           'type' => 'NUMBER',
@@ -3570,7 +3574,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -3581,7 +3585,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -3592,7 +3596,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -3603,7 +3607,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -3614,7 +3618,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -3625,7 +3629,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -3636,7 +3640,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -3647,7 +3651,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -3658,7 +3662,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -3669,7 +3673,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_CIVILE' =>
+        'ANNEE_CIVILE' => 
         array (
           'name' => 'ANNEE_CIVILE',
           'type' => 'NUMBER',
@@ -3680,7 +3684,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -3693,16 +3697,16 @@
         ),
       ),
     ),
-    'EFFECTIFS' =>
+    'EFFECTIFS' => 
     array (
       'name' => 'EFFECTIFS',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'EFFECTIFS_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -3713,7 +3717,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -3724,7 +3728,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FI' =>
+        'FI' => 
         array (
           'name' => 'FI',
           'type' => 'NUMBER',
@@ -3735,7 +3739,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FC' =>
+        'FC' => 
         array (
           'name' => 'FC',
           'type' => 'NUMBER',
@@ -3746,7 +3750,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FA' =>
+        'FA' => 
         array (
           'name' => 'FA',
           'type' => 'NUMBER',
@@ -3757,7 +3761,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -3768,7 +3772,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -3779,7 +3783,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -3790,7 +3794,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -3801,7 +3805,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -3812,7 +3816,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -3823,7 +3827,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -3834,7 +3838,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -3845,7 +3849,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -3858,16 +3862,16 @@
         ),
       ),
     ),
-    'EFFECTIFS_ETAPE' =>
+    'EFFECTIFS_ETAPE' => 
     array (
       'name' => 'EFFECTIFS_ETAPE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'EFFECTIFS_ETAPE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -3878,7 +3882,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -3889,7 +3893,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FI' =>
+        'FI' => 
         array (
           'name' => 'FI',
           'type' => 'NUMBER',
@@ -3900,7 +3904,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FC' =>
+        'FC' => 
         array (
           'name' => 'FC',
           'type' => 'NUMBER',
@@ -3911,7 +3915,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FA' =>
+        'FA' => 
         array (
           'name' => 'FA',
           'type' => 'NUMBER',
@@ -3922,7 +3926,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -3933,7 +3937,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -3944,7 +3948,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -3955,7 +3959,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -3966,7 +3970,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -3977,7 +3981,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -3988,7 +3992,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -3999,7 +4003,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -4012,16 +4016,16 @@
         ),
       ),
     ),
-    'ELEMENT_MODULATEUR' =>
+    'ELEMENT_MODULATEUR' => 
     array (
       'name' => 'ELEMENT_MODULATEUR',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ELEMENT_MODULATEUR_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -4032,7 +4036,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_ID' =>
+        'ELEMENT_ID' => 
         array (
           'name' => 'ELEMENT_ID',
           'type' => 'NUMBER',
@@ -4043,7 +4047,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MODULATEUR_ID' =>
+        'MODULATEUR_ID' => 
         array (
           'name' => 'MODULATEUR_ID',
           'type' => 'NUMBER',
@@ -4054,7 +4058,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -4065,7 +4069,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -4076,7 +4080,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -4087,7 +4091,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -4098,7 +4102,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -4109,7 +4113,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -4122,16 +4126,16 @@
         ),
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE' =>
+    'ELEMENT_PEDAGOGIQUE' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ELEMENT_PEDAGOGIQUE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -4142,7 +4146,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -4153,7 +4157,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -4164,7 +4168,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -4175,7 +4179,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -4186,7 +4190,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PERIODE_ID' =>
+        'PERIODE_ID' => 
         array (
           'name' => 'PERIODE_ID',
           'type' => 'NUMBER',
@@ -4197,7 +4201,7 @@
           'default' => NULL,
           'commentaire' => 'Un élément pédagogique ne peut avoir qu\'une et une seule période.',
         ),
-        'TAUX_FI' =>
+        'TAUX_FI' => 
         array (
           'name' => 'TAUX_FI',
           'type' => 'FLOAT',
@@ -4208,7 +4212,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_FC' =>
+        'TAUX_FC' => 
         array (
           'name' => 'TAUX_FC',
           'type' => 'FLOAT',
@@ -4219,7 +4223,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TAUX_FA' =>
+        'TAUX_FA' => 
         array (
           'name' => 'TAUX_FA',
           'type' => 'FLOAT',
@@ -4230,7 +4234,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TAUX_FOAD' =>
+        'TAUX_FOAD' => 
         array (
           'name' => 'TAUX_FOAD',
           'type' => 'FLOAT',
@@ -4241,7 +4245,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FI' =>
+        'FI' => 
         array (
           'name' => 'FI',
           'type' => 'NUMBER',
@@ -4252,7 +4256,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'FC' =>
+        'FC' => 
         array (
           'name' => 'FC',
           'type' => 'NUMBER',
@@ -4263,7 +4267,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FA' =>
+        'FA' => 
         array (
           'name' => 'FA',
           'type' => 'NUMBER',
@@ -4274,7 +4278,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -4285,7 +4289,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -4296,7 +4300,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -4307,7 +4311,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -4318,7 +4322,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -4329,7 +4333,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -4340,7 +4344,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -4351,7 +4355,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -4362,7 +4366,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -4373,7 +4377,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DISCIPLINE_ID' =>
+        'DISCIPLINE_ID' => 
         array (
           'name' => 'DISCIPLINE_ID',
           'type' => 'NUMBER',
@@ -4386,16 +4390,16 @@
         ),
       ),
     ),
-    'ELEMENT_TAUX_REGIMES' =>
+    'ELEMENT_TAUX_REGIMES' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ELEMENT_TAUX_REGIMES_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -4406,7 +4410,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -4417,7 +4421,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAUX_FI' =>
+        'TAUX_FI' => 
         array (
           'name' => 'TAUX_FI',
           'type' => 'FLOAT',
@@ -4428,7 +4432,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAUX_FC' =>
+        'TAUX_FC' => 
         array (
           'name' => 'TAUX_FC',
           'type' => 'FLOAT',
@@ -4439,7 +4443,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAUX_FA' =>
+        'TAUX_FA' => 
         array (
           'name' => 'TAUX_FA',
           'type' => 'FLOAT',
@@ -4450,7 +4454,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -4461,7 +4465,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -4472,7 +4476,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -4483,7 +4487,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -4494,7 +4498,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -4505,7 +4509,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -4516,7 +4520,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -4527,7 +4531,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -4540,16 +4544,16 @@
         ),
       ),
     ),
-    'ETABLISSEMENT' =>
+    'ETABLISSEMENT' => 
     array (
       'name' => 'ETABLISSEMENT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ETABLISSEMENT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -4560,7 +4564,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -4571,7 +4575,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LOCALISATION' =>
+        'LOCALISATION' => 
         array (
           'name' => 'LOCALISATION',
           'type' => 'VARCHAR2',
@@ -4582,7 +4586,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEPARTEMENT' =>
+        'DEPARTEMENT' => 
         array (
           'name' => 'DEPARTEMENT',
           'type' => 'VARCHAR2',
@@ -4593,7 +4597,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -4604,7 +4608,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -4615,7 +4619,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -4626,7 +4630,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -4637,7 +4641,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -4648,7 +4652,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -4659,7 +4663,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -4670,7 +4674,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -4683,16 +4687,16 @@
         ),
       ),
     ),
-    'ETAPE' =>
+    'ETAPE' => 
     array (
       'name' => 'ETAPE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ETAPE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -4703,7 +4707,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -4714,7 +4718,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -4725,7 +4729,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -4736,7 +4740,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_FORMATION_ID' =>
+        'TYPE_FORMATION_ID' => 
         array (
           'name' => 'TYPE_FORMATION_ID',
           'type' => 'NUMBER',
@@ -4747,7 +4751,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NIVEAU' =>
+        'NIVEAU' => 
         array (
           'name' => 'NIVEAU',
           'type' => 'NUMBER',
@@ -4758,7 +4762,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SPECIFIQUE_ECHANGES' =>
+        'SPECIFIQUE_ECHANGES' => 
         array (
           'name' => 'SPECIFIQUE_ECHANGES',
           'type' => 'NUMBER',
@@ -4769,7 +4773,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -4780,7 +4784,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DOMAINE_FONCTIONNEL_ID' =>
+        'DOMAINE_FONCTIONNEL_ID' => 
         array (
           'name' => 'DOMAINE_FONCTIONNEL_ID',
           'type' => 'NUMBER',
@@ -4791,7 +4795,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -4802,7 +4806,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -4813,7 +4817,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -4824,7 +4828,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -4835,7 +4839,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -4846,7 +4850,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -4857,7 +4861,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -4868,7 +4872,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -4881,16 +4885,16 @@
         ),
       ),
     ),
-    'ETAT_SORTIE' =>
+    'ETAT_SORTIE' => 
     array (
       'name' => 'ETAT_SORTIE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ETAT_SORTIE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -4901,7 +4905,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -4912,7 +4916,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -4923,7 +4927,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FICHIER' =>
+        'FICHIER' => 
         array (
           'name' => 'FICHIER',
           'type' => 'BLOB',
@@ -4934,7 +4938,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'REQUETE' =>
+        'REQUETE' => 
         array (
           'name' => 'REQUETE',
           'type' => 'VARCHAR2',
@@ -4945,7 +4949,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CLE' =>
+        'CLE' => 
         array (
           'name' => 'CLE',
           'type' => 'VARCHAR2',
@@ -4956,7 +4960,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CSV_PARAMS' =>
+        'CSV_PARAMS' => 
         array (
           'name' => 'CSV_PARAMS',
           'type' => 'CLOB',
@@ -4967,7 +4971,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PDF_TRAITEMENT' =>
+        'PDF_TRAITEMENT' => 
         array (
           'name' => 'PDF_TRAITEMENT',
           'type' => 'CLOB',
@@ -4978,7 +4982,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC1_NOM' =>
+        'BLOC1_NOM' => 
         array (
           'name' => 'BLOC1_NOM',
           'type' => 'VARCHAR2',
@@ -4989,7 +4993,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC1_ZONE' =>
+        'BLOC1_ZONE' => 
         array (
           'name' => 'BLOC1_ZONE',
           'type' => 'VARCHAR2',
@@ -5000,7 +5004,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC2_NOM' =>
+        'BLOC2_NOM' => 
         array (
           'name' => 'BLOC2_NOM',
           'type' => 'VARCHAR2',
@@ -5011,7 +5015,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC1_REQUETE' =>
+        'BLOC1_REQUETE' => 
         array (
           'name' => 'BLOC1_REQUETE',
           'type' => 'VARCHAR2',
@@ -5022,7 +5026,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC2_ZONE' =>
+        'BLOC2_ZONE' => 
         array (
           'name' => 'BLOC2_ZONE',
           'type' => 'VARCHAR2',
@@ -5033,7 +5037,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC2_REQUETE' =>
+        'BLOC2_REQUETE' => 
         array (
           'name' => 'BLOC2_REQUETE',
           'type' => 'VARCHAR2',
@@ -5044,7 +5048,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC3_NOM' =>
+        'BLOC3_NOM' => 
         array (
           'name' => 'BLOC3_NOM',
           'type' => 'VARCHAR2',
@@ -5055,7 +5059,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC3_ZONE' =>
+        'BLOC3_ZONE' => 
         array (
           'name' => 'BLOC3_ZONE',
           'type' => 'VARCHAR2',
@@ -5066,7 +5070,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC3_REQUETE' =>
+        'BLOC3_REQUETE' => 
         array (
           'name' => 'BLOC3_REQUETE',
           'type' => 'VARCHAR2',
@@ -5077,7 +5081,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC4_NOM' =>
+        'BLOC4_NOM' => 
         array (
           'name' => 'BLOC4_NOM',
           'type' => 'VARCHAR2',
@@ -5088,7 +5092,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC4_ZONE' =>
+        'BLOC4_ZONE' => 
         array (
           'name' => 'BLOC4_ZONE',
           'type' => 'VARCHAR2',
@@ -5099,7 +5103,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC4_REQUETE' =>
+        'BLOC4_REQUETE' => 
         array (
           'name' => 'BLOC4_REQUETE',
           'type' => 'VARCHAR2',
@@ -5110,7 +5114,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC5_NOM' =>
+        'BLOC5_NOM' => 
         array (
           'name' => 'BLOC5_NOM',
           'type' => 'VARCHAR2',
@@ -5121,7 +5125,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC5_ZONE' =>
+        'BLOC5_ZONE' => 
         array (
           'name' => 'BLOC5_ZONE',
           'type' => 'VARCHAR2',
@@ -5132,7 +5136,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC5_REQUETE' =>
+        'BLOC5_REQUETE' => 
         array (
           'name' => 'BLOC5_REQUETE',
           'type' => 'VARCHAR2',
@@ -5143,7 +5147,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC6_NOM' =>
+        'BLOC6_NOM' => 
         array (
           'name' => 'BLOC6_NOM',
           'type' => 'VARCHAR2',
@@ -5154,7 +5158,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC6_REQUETE' =>
+        'BLOC6_REQUETE' => 
         array (
           'name' => 'BLOC6_REQUETE',
           'type' => 'VARCHAR2',
@@ -5165,7 +5169,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC6_ZONE' =>
+        'BLOC6_ZONE' => 
         array (
           'name' => 'BLOC6_ZONE',
           'type' => 'VARCHAR2',
@@ -5176,7 +5180,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC7_NOM' =>
+        'BLOC7_NOM' => 
         array (
           'name' => 'BLOC7_NOM',
           'type' => 'VARCHAR2',
@@ -5187,7 +5191,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC7_ZONE' =>
+        'BLOC7_ZONE' => 
         array (
           'name' => 'BLOC7_ZONE',
           'type' => 'VARCHAR2',
@@ -5198,7 +5202,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC7_REQUETE' =>
+        'BLOC7_REQUETE' => 
         array (
           'name' => 'BLOC7_REQUETE',
           'type' => 'VARCHAR2',
@@ -5209,7 +5213,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC8_NOM' =>
+        'BLOC8_NOM' => 
         array (
           'name' => 'BLOC8_NOM',
           'type' => 'VARCHAR2',
@@ -5220,7 +5224,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC8_ZONE' =>
+        'BLOC8_ZONE' => 
         array (
           'name' => 'BLOC8_ZONE',
           'type' => 'VARCHAR2',
@@ -5231,7 +5235,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC8_REQUETE' =>
+        'BLOC8_REQUETE' => 
         array (
           'name' => 'BLOC8_REQUETE',
           'type' => 'VARCHAR2',
@@ -5242,7 +5246,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC9_NOM' =>
+        'BLOC9_NOM' => 
         array (
           'name' => 'BLOC9_NOM',
           'type' => 'VARCHAR2',
@@ -5253,7 +5257,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC9_ZONE' =>
+        'BLOC9_ZONE' => 
         array (
           'name' => 'BLOC9_ZONE',
           'type' => 'VARCHAR2',
@@ -5264,7 +5268,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC9_REQUETE' =>
+        'BLOC9_REQUETE' => 
         array (
           'name' => 'BLOC9_REQUETE',
           'type' => 'VARCHAR2',
@@ -5275,7 +5279,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC10_NOM' =>
+        'BLOC10_NOM' => 
         array (
           'name' => 'BLOC10_NOM',
           'type' => 'VARCHAR2',
@@ -5286,7 +5290,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC10_ZONE' =>
+        'BLOC10_ZONE' => 
         array (
           'name' => 'BLOC10_ZONE',
           'type' => 'VARCHAR2',
@@ -5297,7 +5301,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC10_REQUETE' =>
+        'BLOC10_REQUETE' => 
         array (
           'name' => 'BLOC10_REQUETE',
           'type' => 'VARCHAR2',
@@ -5308,7 +5312,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'AUTO_BREAK' =>
+        'AUTO_BREAK' => 
         array (
           'name' => 'AUTO_BREAK',
           'type' => 'NUMBER',
@@ -5319,7 +5323,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'CSV_TRAITEMENT' =>
+        'CSV_TRAITEMENT' => 
         array (
           'name' => 'CSV_TRAITEMENT',
           'type' => 'CLOB',
@@ -5332,16 +5336,16 @@
         ),
       ),
     ),
-    'ETAT_VOLUME_HORAIRE' =>
+    'ETAT_VOLUME_HORAIRE' => 
     array (
       'name' => 'ETAT_VOLUME_HORAIRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -5352,7 +5356,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -5363,7 +5367,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -5374,7 +5378,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -5387,16 +5391,16 @@
         ),
       ),
     ),
-    'FICHIER' =>
+    'FICHIER' => 
     array (
       'name' => 'FICHIER',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'FICHIER_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -5407,7 +5411,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOM' =>
+        'NOM' => 
         array (
           'name' => 'NOM',
           'type' => 'VARCHAR2',
@@ -5418,7 +5422,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE' =>
+        'TYPE' => 
         array (
           'name' => 'TYPE',
           'type' => 'VARCHAR2',
@@ -5429,7 +5433,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAILLE' =>
+        'TAILLE' => 
         array (
           'name' => 'TAILLE',
           'type' => 'NUMBER',
@@ -5440,7 +5444,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CONTENU' =>
+        'CONTENU' => 
         array (
           'name' => 'CONTENU',
           'type' => 'BLOB',
@@ -5451,7 +5455,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DESCRIPTION' =>
+        'DESCRIPTION' => 
         array (
           'name' => 'DESCRIPTION',
           'type' => 'VARCHAR2',
@@ -5462,7 +5466,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -5473,7 +5477,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -5484,7 +5488,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -5495,7 +5499,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -5506,7 +5510,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -5517,7 +5521,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -5528,7 +5532,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -5541,16 +5545,16 @@
         ),
       ),
     ),
-    'FONCTION_REFERENTIEL' =>
+    'FONCTION_REFERENTIEL' => 
     array (
       'name' => 'FONCTION_REFERENTIEL',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'FONCTION_REFERENTIEL_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -5561,7 +5565,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -5572,7 +5576,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -5583,7 +5587,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -5594,7 +5598,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DOMAINE_FONCTIONNEL_ID' =>
+        'DOMAINE_FONCTIONNEL_ID' => 
         array (
           'name' => 'DOMAINE_FONCTIONNEL_ID',
           'type' => 'NUMBER',
@@ -5605,7 +5609,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PLAFOND' =>
+        'PLAFOND' => 
         array (
           'name' => 'PLAFOND',
           'type' => 'FLOAT',
@@ -5616,7 +5620,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -5627,7 +5631,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -5638,7 +5642,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -5649,7 +5653,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -5660,7 +5664,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -5671,7 +5675,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -5682,7 +5686,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -5693,7 +5697,7 @@
           'default' => NULL,
           'commentaire' => 'Structure associée éventuelle',
         ),
-        'ETAPE_REQUISE' =>
+        'ETAPE_REQUISE' => 
         array (
           'name' => 'ETAPE_REQUISE',
           'type' => 'NUMBER',
@@ -5704,7 +5708,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_STATUTAIRE' =>
+        'SERVICE_STATUTAIRE' => 
         array (
           'name' => 'SERVICE_STATUTAIRE',
           'type' => 'NUMBER',
@@ -5715,7 +5719,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'PARENT_ID' =>
+        'PARENT_ID' => 
         array (
           'name' => 'PARENT_ID',
           'type' => 'NUMBER',
@@ -5728,16 +5732,16 @@
         ),
       ),
     ),
-    'FORMULE' =>
+    'FORMULE' => 
     array (
       'name' => 'FORMULE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -5748,7 +5752,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -5759,7 +5763,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PACKAGE_NAME' =>
+        'PACKAGE_NAME' => 
         array (
           'name' => 'PACKAGE_NAME',
           'type' => 'VARCHAR2',
@@ -5770,7 +5774,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PROCEDURE_NAME' =>
+        'PROCEDURE_NAME' => 
         array (
           'name' => 'PROCEDURE_NAME',
           'type' => 'VARCHAR2',
@@ -5781,7 +5785,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'I_PARAM_1_LIBELLE' =>
+        'I_PARAM_1_LIBELLE' => 
         array (
           'name' => 'I_PARAM_1_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5792,7 +5796,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'I_PARAM_2_LIBELLE' =>
+        'I_PARAM_2_LIBELLE' => 
         array (
           'name' => 'I_PARAM_2_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5803,7 +5807,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'I_PARAM_3_LIBELLE' =>
+        'I_PARAM_3_LIBELLE' => 
         array (
           'name' => 'I_PARAM_3_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5814,7 +5818,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'I_PARAM_4_LIBELLE' =>
+        'I_PARAM_4_LIBELLE' => 
         array (
           'name' => 'I_PARAM_4_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5825,7 +5829,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'I_PARAM_5_LIBELLE' =>
+        'I_PARAM_5_LIBELLE' => 
         array (
           'name' => 'I_PARAM_5_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5836,7 +5840,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VH_PARAM_1_LIBELLE' =>
+        'VH_PARAM_1_LIBELLE' => 
         array (
           'name' => 'VH_PARAM_1_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5847,7 +5851,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VH_PARAM_2_LIBELLE' =>
+        'VH_PARAM_2_LIBELLE' => 
         array (
           'name' => 'VH_PARAM_2_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5858,7 +5862,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VH_PARAM_3_LIBELLE' =>
+        'VH_PARAM_3_LIBELLE' => 
         array (
           'name' => 'VH_PARAM_3_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5869,7 +5873,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VH_PARAM_4_LIBELLE' =>
+        'VH_PARAM_4_LIBELLE' => 
         array (
           'name' => 'VH_PARAM_4_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5880,7 +5884,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VH_PARAM_5_LIBELLE' =>
+        'VH_PARAM_5_LIBELLE' => 
         array (
           'name' => 'VH_PARAM_5_LIBELLE',
           'type' => 'VARCHAR2',
@@ -5893,16 +5897,16 @@
         ),
       ),
     ),
-    'FORMULE_RESULTAT' =>
+    'FORMULE_RESULTAT' => 
     array (
       'name' => 'FORMULE_RESULTAT',
       'temporary' => false,
       'logging' => false,
       'commentaire' => NULL,
       'sequence' => 'FORMULE_RESULTAT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -5913,7 +5917,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -5924,7 +5928,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -5935,7 +5939,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAT_VOLUME_HORAIRE_ID' =>
+        'ETAT_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'ETAT_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -5946,7 +5950,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_DU' =>
+        'SERVICE_DU' => 
         array (
           'name' => 'SERVICE_DU',
           'type' => 'FLOAT',
@@ -5957,7 +5961,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FI' =>
+        'SERVICE_FI' => 
         array (
           'name' => 'SERVICE_FI',
           'type' => 'FLOAT',
@@ -5968,7 +5972,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FA' =>
+        'SERVICE_FA' => 
         array (
           'name' => 'SERVICE_FA',
           'type' => 'FLOAT',
@@ -5979,7 +5983,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FC' =>
+        'SERVICE_FC' => 
         array (
           'name' => 'SERVICE_FC',
           'type' => 'FLOAT',
@@ -5990,7 +5994,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL' =>
+        'SERVICE_REFERENTIEL' => 
         array (
           'name' => 'SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6001,7 +6005,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FI' =>
+        'HEURES_COMPL_FI' => 
         array (
           'name' => 'HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -6012,7 +6016,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FA' =>
+        'HEURES_COMPL_FA' => 
         array (
           'name' => 'HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -6023,7 +6027,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC' =>
+        'HEURES_COMPL_FC' => 
         array (
           'name' => 'HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -6034,7 +6038,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC_MAJOREES' =>
+        'HEURES_COMPL_FC_MAJOREES' => 
         array (
           'name' => 'HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -6045,7 +6049,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_REFERENTIEL' =>
+        'HEURES_COMPL_REFERENTIEL' => 
         array (
           'name' => 'HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6056,7 +6060,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TOTAL' =>
+        'TOTAL' => 
         array (
           'name' => 'TOTAL',
           'type' => 'FLOAT',
@@ -6067,7 +6071,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOLDE' =>
+        'SOLDE' => 
         array (
           'name' => 'SOLDE',
           'type' => 'FLOAT',
@@ -6078,7 +6082,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOUS_SERVICE' =>
+        'SOUS_SERVICE' => 
         array (
           'name' => 'SOUS_SERVICE',
           'type' => 'FLOAT',
@@ -6089,7 +6093,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL' =>
+        'HEURES_COMPL' => 
         array (
           'name' => 'HEURES_COMPL',
           'type' => 'FLOAT',
@@ -6100,7 +6104,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_CODE' =>
+        'TYPE_INTERVENANT_CODE' => 
         array (
           'name' => 'TYPE_INTERVENANT_CODE',
           'type' => 'VARCHAR2',
@@ -6113,16 +6117,16 @@
         ),
       ),
     ),
-    'FORMULE_RESULTAT_SERVICE' =>
+    'FORMULE_RESULTAT_SERVICE' => 
     array (
       'name' => 'FORMULE_RESULTAT_SERVICE',
       'temporary' => false,
       'logging' => false,
       'commentaire' => NULL,
       'sequence' => 'FORMULE_RESULTAT_SERVIC_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -6133,7 +6137,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RESULTAT_ID' =>
+        'FORMULE_RESULTAT_ID' => 
         array (
           'name' => 'FORMULE_RESULTAT_ID',
           'type' => 'NUMBER',
@@ -6144,7 +6148,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_ID' =>
+        'SERVICE_ID' => 
         array (
           'name' => 'SERVICE_ID',
           'type' => 'NUMBER',
@@ -6155,7 +6159,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_FI' =>
+        'SERVICE_FI' => 
         array (
           'name' => 'SERVICE_FI',
           'type' => 'FLOAT',
@@ -6166,7 +6170,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FA' =>
+        'SERVICE_FA' => 
         array (
           'name' => 'SERVICE_FA',
           'type' => 'FLOAT',
@@ -6177,7 +6181,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FC' =>
+        'SERVICE_FC' => 
         array (
           'name' => 'SERVICE_FC',
           'type' => 'FLOAT',
@@ -6188,7 +6192,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FI' =>
+        'HEURES_COMPL_FI' => 
         array (
           'name' => 'HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -6199,7 +6203,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FA' =>
+        'HEURES_COMPL_FA' => 
         array (
           'name' => 'HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -6210,7 +6214,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC' =>
+        'HEURES_COMPL_FC' => 
         array (
           'name' => 'HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -6221,7 +6225,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC_MAJOREES' =>
+        'HEURES_COMPL_FC_MAJOREES' => 
         array (
           'name' => 'HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -6232,7 +6236,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TOTAL' =>
+        'TOTAL' => 
         array (
           'name' => 'TOTAL',
           'type' => 'FLOAT',
@@ -6245,16 +6249,16 @@
         ),
       ),
     ),
-    'FORMULE_RESULTAT_SERVICE_REF' =>
+    'FORMULE_RESULTAT_SERVICE_REF' => 
     array (
       'name' => 'FORMULE_RESULTAT_SERVICE_REF',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'sequence=FORMULE_RESULTAT_SERREF_ID_SEQ;',
       'sequence' => 'FORMULE_RESULTAT_SERREF_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -6265,7 +6269,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RESULTAT_ID' =>
+        'FORMULE_RESULTAT_ID' => 
         array (
           'name' => 'FORMULE_RESULTAT_ID',
           'type' => 'NUMBER',
@@ -6276,7 +6280,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL_ID' =>
+        'SERVICE_REFERENTIEL_ID' => 
         array (
           'name' => 'SERVICE_REFERENTIEL_ID',
           'type' => 'NUMBER',
@@ -6287,7 +6291,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL' =>
+        'SERVICE_REFERENTIEL' => 
         array (
           'name' => 'SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6298,7 +6302,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_REFERENTIEL' =>
+        'HEURES_COMPL_REFERENTIEL' => 
         array (
           'name' => 'HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6309,7 +6313,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TOTAL' =>
+        'TOTAL' => 
         array (
           'name' => 'TOTAL',
           'type' => 'FLOAT',
@@ -6322,16 +6326,16 @@
         ),
       ),
     ),
-    'FORMULE_RESULTAT_VH' =>
+    'FORMULE_RESULTAT_VH' => 
     array (
       'name' => 'FORMULE_RESULTAT_VH',
       'temporary' => false,
       'logging' => false,
       'commentaire' => NULL,
       'sequence' => 'FORMULE_RESULTAT_VH_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -6342,7 +6346,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RESULTAT_ID' =>
+        'FORMULE_RESULTAT_ID' => 
         array (
           'name' => 'FORMULE_RESULTAT_ID',
           'type' => 'NUMBER',
@@ -6353,7 +6357,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VOLUME_HORAIRE_ID' =>
+        'VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -6364,7 +6368,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_FI' =>
+        'SERVICE_FI' => 
         array (
           'name' => 'SERVICE_FI',
           'type' => 'FLOAT',
@@ -6375,7 +6379,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FA' =>
+        'SERVICE_FA' => 
         array (
           'name' => 'SERVICE_FA',
           'type' => 'FLOAT',
@@ -6386,7 +6390,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FC' =>
+        'SERVICE_FC' => 
         array (
           'name' => 'SERVICE_FC',
           'type' => 'FLOAT',
@@ -6397,7 +6401,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FI' =>
+        'HEURES_COMPL_FI' => 
         array (
           'name' => 'HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -6408,7 +6412,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FA' =>
+        'HEURES_COMPL_FA' => 
         array (
           'name' => 'HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -6419,7 +6423,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC' =>
+        'HEURES_COMPL_FC' => 
         array (
           'name' => 'HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -6430,7 +6434,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC_MAJOREES' =>
+        'HEURES_COMPL_FC_MAJOREES' => 
         array (
           'name' => 'HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -6441,7 +6445,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TOTAL' =>
+        'TOTAL' => 
         array (
           'name' => 'TOTAL',
           'type' => 'FLOAT',
@@ -6454,16 +6458,16 @@
         ),
       ),
     ),
-    'FORMULE_RESULTAT_VH_REF' =>
+    'FORMULE_RESULTAT_VH_REF' => 
     array (
       'name' => 'FORMULE_RESULTAT_VH_REF',
       'temporary' => false,
       'logging' => false,
       'commentaire' => NULL,
       'sequence' => 'FORMULE_RESULTAT_VH_REF_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -6474,7 +6478,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RESULTAT_ID' =>
+        'FORMULE_RESULTAT_ID' => 
         array (
           'name' => 'FORMULE_RESULTAT_ID',
           'type' => 'NUMBER',
@@ -6485,7 +6489,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VOLUME_HORAIRE_REF_ID' =>
+        'VOLUME_HORAIRE_REF_ID' => 
         array (
           'name' => 'VOLUME_HORAIRE_REF_ID',
           'type' => 'NUMBER',
@@ -6496,7 +6500,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL' =>
+        'SERVICE_REFERENTIEL' => 
         array (
           'name' => 'SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6507,7 +6511,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_REFERENTIEL' =>
+        'HEURES_COMPL_REFERENTIEL' => 
         array (
           'name' => 'HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6518,7 +6522,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TOTAL' =>
+        'TOTAL' => 
         array (
           'name' => 'TOTAL',
           'type' => 'FLOAT',
@@ -6531,16 +6535,16 @@
         ),
       ),
     ),
-    'FORMULE_TEST_INTERVENANT' =>
+    'FORMULE_TEST_INTERVENANT' => 
     array (
       'name' => 'FORMULE_TEST_INTERVENANT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => 'sequence=FTEST_INTERVENANT_ID_SEQ;',
       'sequence' => 'FTEST_INTERVENANT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -6551,7 +6555,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -6562,7 +6566,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_ID' =>
+        'FORMULE_ID' => 
         array (
           'name' => 'FORMULE_ID',
           'type' => 'NUMBER',
@@ -6573,7 +6577,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -6584,7 +6588,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_ID' =>
+        'TYPE_INTERVENANT_ID' => 
         array (
           'name' => 'TYPE_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -6595,7 +6599,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -6606,7 +6610,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'ETAT_VOLUME_HORAIRE_ID' =>
+        'ETAT_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'ETAT_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -6617,7 +6621,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'HEURES_SERVICE_STATUTAIRE' =>
+        'HEURES_SERVICE_STATUTAIRE' => 
         array (
           'name' => 'HEURES_SERVICE_STATUTAIRE',
           'type' => 'FLOAT',
@@ -6628,7 +6632,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_SERVICE_MODIFIE' =>
+        'HEURES_SERVICE_MODIFIE' => 
         array (
           'name' => 'HEURES_SERVICE_MODIFIE',
           'type' => 'FLOAT',
@@ -6639,7 +6643,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DEPASSEMENT_SERVICE_DU_SANS_HC' =>
+        'DEPASSEMENT_SERVICE_DU_SANS_HC' => 
         array (
           'name' => 'DEPASSEMENT_SERVICE_DU_SANS_HC',
           'type' => 'NUMBER',
@@ -6650,7 +6654,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PARAM_1' =>
+        'PARAM_1' => 
         array (
           'name' => 'PARAM_1',
           'type' => 'VARCHAR2',
@@ -6661,7 +6665,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_2' =>
+        'PARAM_2' => 
         array (
           'name' => 'PARAM_2',
           'type' => 'VARCHAR2',
@@ -6672,7 +6676,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_3' =>
+        'PARAM_3' => 
         array (
           'name' => 'PARAM_3',
           'type' => 'VARCHAR2',
@@ -6683,7 +6687,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_4' =>
+        'PARAM_4' => 
         array (
           'name' => 'PARAM_4',
           'type' => 'VARCHAR2',
@@ -6694,7 +6698,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_5' =>
+        'PARAM_5' => 
         array (
           'name' => 'PARAM_5',
           'type' => 'VARCHAR2',
@@ -6705,7 +6709,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_SERVICE_DU' =>
+        'A_SERVICE_DU' => 
         array (
           'name' => 'A_SERVICE_DU',
           'type' => 'FLOAT',
@@ -6716,7 +6720,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'C_SERVICE_DU' =>
+        'C_SERVICE_DU' => 
         array (
           'name' => 'C_SERVICE_DU',
           'type' => 'FLOAT',
@@ -6727,7 +6731,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEBUG_INFO' =>
+        'DEBUG_INFO' => 
         array (
           'name' => 'DEBUG_INFO',
           'type' => 'CLOB',
@@ -6738,7 +6742,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAUX_TP_SERVICE_DU' =>
+        'TAUX_TP_SERVICE_DU' => 
         array (
           'name' => 'TAUX_TP_SERVICE_DU',
           'type' => 'FLOAT',
@@ -6749,7 +6753,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_AUTRE_SERVICE_DU' =>
+        'TAUX_AUTRE_SERVICE_DU' => 
         array (
           'name' => 'TAUX_AUTRE_SERVICE_DU',
           'type' => 'FLOAT',
@@ -6760,7 +6764,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_AUTRE_SERVICE_COMPL' =>
+        'TAUX_AUTRE_SERVICE_COMPL' => 
         array (
           'name' => 'TAUX_AUTRE_SERVICE_COMPL',
           'type' => 'FLOAT',
@@ -6771,7 +6775,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_CM_SERVICE_DU' =>
+        'TAUX_CM_SERVICE_DU' => 
         array (
           'name' => 'TAUX_CM_SERVICE_DU',
           'type' => 'FLOAT',
@@ -6782,7 +6786,7 @@
           'default' => '1.5',
           'commentaire' => NULL,
         ),
-        'TAUX_CM_SERVICE_COMPL' =>
+        'TAUX_CM_SERVICE_COMPL' => 
         array (
           'name' => 'TAUX_CM_SERVICE_COMPL',
           'type' => 'FLOAT',
@@ -6793,7 +6797,7 @@
           'default' => '1.5',
           'commentaire' => NULL,
         ),
-        'TAUX_TP_SERVICE_COMPL' =>
+        'TAUX_TP_SERVICE_COMPL' => 
         array (
           'name' => 'TAUX_TP_SERVICE_COMPL',
           'type' => 'FLOAT',
@@ -6804,7 +6808,7 @@
           'default' => '2/3',
           'commentaire' => NULL,
         ),
-        'STRUCTURE_CODE' =>
+        'STRUCTURE_CODE' => 
         array (
           'name' => 'STRUCTURE_CODE',
           'type' => 'VARCHAR2',
@@ -6817,16 +6821,16 @@
         ),
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE' =>
+    'FORMULE_TEST_VOLUME_HORAIRE' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => 'sequence=FTEST_VOLUME_HORAIRE_ID_SEQ;',
       'sequence' => 'FTEST_VOLUME_HORAIRE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -6837,7 +6841,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_TEST_ID' =>
+        'INTERVENANT_TEST_ID' => 
         array (
           'name' => 'INTERVENANT_TEST_ID',
           'type' => 'NUMBER',
@@ -6848,7 +6852,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'REFERENTIEL' =>
+        'REFERENTIEL' => 
         array (
           'name' => 'REFERENTIEL',
           'type' => 'NUMBER',
@@ -6859,7 +6863,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_STATUTAIRE' =>
+        'SERVICE_STATUTAIRE' => 
         array (
           'name' => 'SERVICE_STATUTAIRE',
           'type' => 'NUMBER',
@@ -6870,7 +6874,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_FI' =>
+        'TAUX_FI' => 
         array (
           'name' => 'TAUX_FI',
           'type' => 'FLOAT',
@@ -6881,7 +6885,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_FA' =>
+        'TAUX_FA' => 
         array (
           'name' => 'TAUX_FA',
           'type' => 'FLOAT',
@@ -6892,7 +6896,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TAUX_FC' =>
+        'TAUX_FC' => 
         array (
           'name' => 'TAUX_FC',
           'type' => 'FLOAT',
@@ -6903,7 +6907,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PONDERATION_SERVICE_DU' =>
+        'PONDERATION_SERVICE_DU' => 
         array (
           'name' => 'PONDERATION_SERVICE_DU',
           'type' => 'FLOAT',
@@ -6914,7 +6918,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'PONDERATION_SERVICE_COMPL' =>
+        'PONDERATION_SERVICE_COMPL' => 
         array (
           'name' => 'PONDERATION_SERVICE_COMPL',
           'type' => 'FLOAT',
@@ -6925,7 +6929,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'PARAM_1' =>
+        'PARAM_1' => 
         array (
           'name' => 'PARAM_1',
           'type' => 'VARCHAR2',
@@ -6936,7 +6940,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_2' =>
+        'PARAM_2' => 
         array (
           'name' => 'PARAM_2',
           'type' => 'VARCHAR2',
@@ -6947,7 +6951,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_3' =>
+        'PARAM_3' => 
         array (
           'name' => 'PARAM_3',
           'type' => 'VARCHAR2',
@@ -6958,7 +6962,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_4' =>
+        'PARAM_4' => 
         array (
           'name' => 'PARAM_4',
           'type' => 'VARCHAR2',
@@ -6969,7 +6973,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PARAM_5' =>
+        'PARAM_5' => 
         array (
           'name' => 'PARAM_5',
           'type' => 'VARCHAR2',
@@ -6980,7 +6984,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -6991,7 +6995,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'A_SERVICE_FI' =>
+        'A_SERVICE_FI' => 
         array (
           'name' => 'A_SERVICE_FI',
           'type' => 'FLOAT',
@@ -7002,7 +7006,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_SERVICE_FA' =>
+        'A_SERVICE_FA' => 
         array (
           'name' => 'A_SERVICE_FA',
           'type' => 'FLOAT',
@@ -7013,7 +7017,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_SERVICE_FC' =>
+        'A_SERVICE_FC' => 
         array (
           'name' => 'A_SERVICE_FC',
           'type' => 'FLOAT',
@@ -7024,7 +7028,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_SERVICE_REFERENTIEL' =>
+        'A_SERVICE_REFERENTIEL' => 
         array (
           'name' => 'A_SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -7035,7 +7039,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_HEURES_COMPL_FI' =>
+        'A_HEURES_COMPL_FI' => 
         array (
           'name' => 'A_HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -7046,7 +7050,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_HEURES_COMPL_FA' =>
+        'A_HEURES_COMPL_FA' => 
         array (
           'name' => 'A_HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -7057,7 +7061,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_HEURES_COMPL_FC' =>
+        'A_HEURES_COMPL_FC' => 
         array (
           'name' => 'A_HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -7068,7 +7072,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_HEURES_COMPL_FC_MAJOREES' =>
+        'A_HEURES_COMPL_FC_MAJOREES' => 
         array (
           'name' => 'A_HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -7079,7 +7083,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'A_HEURES_COMPL_REFERENTIEL' =>
+        'A_HEURES_COMPL_REFERENTIEL' => 
         array (
           'name' => 'A_HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -7090,7 +7094,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_SERVICE_FI' =>
+        'C_SERVICE_FI' => 
         array (
           'name' => 'C_SERVICE_FI',
           'type' => 'FLOAT',
@@ -7101,7 +7105,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_SERVICE_FA' =>
+        'C_SERVICE_FA' => 
         array (
           'name' => 'C_SERVICE_FA',
           'type' => 'FLOAT',
@@ -7112,7 +7116,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_SERVICE_FC' =>
+        'C_SERVICE_FC' => 
         array (
           'name' => 'C_SERVICE_FC',
           'type' => 'FLOAT',
@@ -7123,7 +7127,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_SERVICE_REFERENTIEL' =>
+        'C_SERVICE_REFERENTIEL' => 
         array (
           'name' => 'C_SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -7134,7 +7138,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_HEURES_COMPL_FI' =>
+        'C_HEURES_COMPL_FI' => 
         array (
           'name' => 'C_HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -7145,7 +7149,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_HEURES_COMPL_FA' =>
+        'C_HEURES_COMPL_FA' => 
         array (
           'name' => 'C_HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -7156,7 +7160,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_HEURES_COMPL_FC' =>
+        'C_HEURES_COMPL_FC' => 
         array (
           'name' => 'C_HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -7167,7 +7171,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_HEURES_COMPL_FC_MAJOREES' =>
+        'C_HEURES_COMPL_FC_MAJOREES' => 
         array (
           'name' => 'C_HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -7178,7 +7182,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C_HEURES_COMPL_REFERENTIEL' =>
+        'C_HEURES_COMPL_REFERENTIEL' => 
         array (
           'name' => 'C_HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -7189,7 +7193,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEBUG_INFO' =>
+        'DEBUG_INFO' => 
         array (
           'name' => 'DEBUG_INFO',
           'type' => 'CLOB',
@@ -7200,7 +7204,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_CODE' =>
+        'TYPE_INTERVENTION_CODE' => 
         array (
           'name' => 'TYPE_INTERVENTION_CODE',
           'type' => 'VARCHAR2',
@@ -7211,7 +7215,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_CODE' =>
+        'STRUCTURE_CODE' => 
         array (
           'name' => 'STRUCTURE_CODE',
           'type' => 'VARCHAR2',
@@ -7224,16 +7228,16 @@
         ),
       ),
     ),
-    'GRADE' =>
+    'GRADE' => 
     array (
       'name' => 'GRADE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'GRADE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -7244,7 +7248,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -7255,7 +7259,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -7266,7 +7270,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ECHELLE' =>
+        'ECHELLE' => 
         array (
           'name' => 'ECHELLE',
           'type' => 'VARCHAR2',
@@ -7277,7 +7281,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CORPS_ID' =>
+        'CORPS_ID' => 
         array (
           'name' => 'CORPS_ID',
           'type' => 'NUMBER',
@@ -7288,7 +7292,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -7299,7 +7303,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -7310,7 +7314,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -7321,7 +7325,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -7332,7 +7336,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -7343,7 +7347,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -7354,7 +7358,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -7365,7 +7369,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -7378,16 +7382,16 @@
         ),
       ),
     ),
-    'GROUPE' =>
+    'GROUPE' => 
     array (
       'name' => 'GROUPE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'GROUPE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -7398,7 +7402,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -7409,7 +7413,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -7420,7 +7424,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOMBRE' =>
+        'NOMBRE' => 
         array (
           'name' => 'NOMBRE',
           'type' => 'NUMBER',
@@ -7431,7 +7435,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -7442,7 +7446,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -7453,7 +7457,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -7464,7 +7468,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -7475,7 +7479,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -7486,7 +7490,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -7499,16 +7503,16 @@
         ),
       ),
     ),
-    'GROUPE_TYPE_FORMATION' =>
+    'GROUPE_TYPE_FORMATION' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'GROUPE_TYPE_FORMATION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -7519,7 +7523,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -7530,7 +7534,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -7541,7 +7545,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -7552,7 +7556,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PERTINENCE_NIVEAU' =>
+        'PERTINENCE_NIVEAU' => 
         array (
           'name' => 'PERTINENCE_NIVEAU',
           'type' => 'NUMBER',
@@ -7563,7 +7567,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -7574,7 +7578,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -7585,7 +7589,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -7596,7 +7600,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -7607,7 +7611,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -7618,7 +7622,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -7629,7 +7633,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -7640,7 +7644,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -7653,16 +7657,16 @@
         ),
       ),
     ),
-    'HISTO_INTERVENANT_SERVICE' =>
+    'HISTO_INTERVENANT_SERVICE' => 
     array (
       'name' => 'HISTO_INTERVENANT_SERVICE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'HISTO_INTERVENANT_SERVI_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -7673,7 +7677,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -7684,7 +7688,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -7695,7 +7699,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'REFERENTIEL' =>
+        'REFERENTIEL' => 
         array (
           'name' => 'REFERENTIEL',
           'type' => 'NUMBER',
@@ -7706,7 +7710,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -7717,7 +7721,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -7730,16 +7734,16 @@
         ),
       ),
     ),
-    'IMPORT_TABLES' =>
+    'IMPORT_TABLES' => 
     array (
       'name' => 'IMPORT_TABLES',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'TABLE_NAME' =>
+        'TABLE_NAME' => 
         array (
           'name' => 'TABLE_NAME',
           'type' => 'VARCHAR2',
@@ -7750,7 +7754,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SYNC_FILTRE' =>
+        'SYNC_FILTRE' => 
         array (
           'name' => 'SYNC_FILTRE',
           'type' => 'VARCHAR2',
@@ -7761,7 +7765,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SYNC_ENABLED' =>
+        'SYNC_ENABLED' => 
         array (
           'name' => 'SYNC_ENABLED',
           'type' => 'NUMBER',
@@ -7772,7 +7776,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SYNC_JOB' =>
+        'SYNC_JOB' => 
         array (
           'name' => 'SYNC_JOB',
           'type' => 'VARCHAR2',
@@ -7783,7 +7787,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SYNC_HOOK_BEFORE' =>
+        'SYNC_HOOK_BEFORE' => 
         array (
           'name' => 'SYNC_HOOK_BEFORE',
           'type' => 'VARCHAR2',
@@ -7794,7 +7798,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SYNC_HOOK_AFTER' =>
+        'SYNC_HOOK_AFTER' => 
         array (
           'name' => 'SYNC_HOOK_AFTER',
           'type' => 'VARCHAR2',
@@ -7805,7 +7809,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -7818,16 +7822,16 @@
         ),
       ),
     ),
-    'INDICATEUR' =>
+    'INDICATEUR' => 
     array (
       'name' => 'INDICATEUR',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'INDICATEUR_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -7838,7 +7842,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE' =>
+        'TYPE' => 
         array (
           'name' => 'TYPE',
           'type' => 'VARCHAR2',
@@ -7849,7 +7853,7 @@
           'default' => NULL,
           'commentaire' => 'Type de l\'indicateur (alerte, info, etc.)',
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -7860,7 +7864,7 @@
           'default' => '100',
           'commentaire' => NULL,
         ),
-        'ENABLED' =>
+        'ENABLED' => 
         array (
           'name' => 'ENABLED',
           'type' => 'NUMBER',
@@ -7871,7 +7875,7 @@
           'default' => '1',
           'commentaire' => 'Témoin indiquant si l\'indicateur est actif ou non',
         ),
-        'NUMERO' =>
+        'NUMERO' => 
         array (
           'name' => 'NUMERO',
           'type' => 'NUMBER',
@@ -7882,7 +7886,7 @@
           'default' => '0',
           'commentaire' => 'Numero unique pérenne user-friendly',
         ),
-        'LIBELLE_SINGULIER' =>
+        'LIBELLE_SINGULIER' => 
         array (
           'name' => 'LIBELLE_SINGULIER',
           'type' => 'VARCHAR2',
@@ -7893,7 +7897,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_PLURIEL' =>
+        'LIBELLE_PLURIEL' => 
         array (
           'name' => 'LIBELLE_PLURIEL',
           'type' => 'VARCHAR2',
@@ -7904,7 +7908,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ROUTE' =>
+        'ROUTE' => 
         array (
           'name' => 'ROUTE',
           'type' => 'VARCHAR2',
@@ -7915,7 +7919,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TEM_DISTINCT' =>
+        'TEM_DISTINCT' => 
         array (
           'name' => 'TEM_DISTINCT',
           'type' => 'NUMBER',
@@ -7926,7 +7930,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TEM_NOT_STRUCTURE' =>
+        'TEM_NOT_STRUCTURE' => 
         array (
           'name' => 'TEM_NOT_STRUCTURE',
           'type' => 'NUMBER',
@@ -7937,7 +7941,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'MESSAGE' =>
+        'MESSAGE' => 
         array (
           'name' => 'MESSAGE',
           'type' => 'VARCHAR2',
@@ -7950,16 +7954,16 @@
         ),
       ),
     ),
-    'INDIC_MODIF_DOSSIER' =>
+    'INDIC_MODIF_DOSSIER' => 
     array (
       'name' => 'INDIC_MODIF_DOSSIER',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'INDIC_MODIF_DOSSIER_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -7970,7 +7974,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -7981,7 +7985,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ATTR_NAME' =>
+        'ATTR_NAME' => 
         array (
           'name' => 'ATTR_NAME',
           'type' => 'VARCHAR2',
@@ -7992,7 +7996,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ATTR_OLD_SOURCE_NAME' =>
+        'ATTR_OLD_SOURCE_NAME' => 
         array (
           'name' => 'ATTR_OLD_SOURCE_NAME',
           'type' => 'VARCHAR2',
@@ -8003,7 +8007,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ATTR_OLD_VALUE' =>
+        'ATTR_OLD_VALUE' => 
         array (
           'name' => 'ATTR_OLD_VALUE',
           'type' => 'VARCHAR2',
@@ -8014,7 +8018,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ATTR_NEW_SOURCE_NAME' =>
+        'ATTR_NEW_SOURCE_NAME' => 
         array (
           'name' => 'ATTR_NEW_SOURCE_NAME',
           'type' => 'VARCHAR2',
@@ -8025,7 +8029,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ATTR_NEW_VALUE' =>
+        'ATTR_NEW_VALUE' => 
         array (
           'name' => 'ATTR_NEW_VALUE',
           'type' => 'VARCHAR2',
@@ -8036,7 +8040,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'EST_CREATION_DOSSIER' =>
+        'EST_CREATION_DOSSIER' => 
         array (
           'name' => 'EST_CREATION_DOSSIER',
           'type' => 'NUMBER',
@@ -8047,7 +8051,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -8058,7 +8062,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -8069,7 +8073,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -8080,7 +8084,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -8091,7 +8095,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -8102,7 +8106,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -8115,16 +8119,16 @@
         ),
       ),
     ),
-    'INTERVENANT' =>
+    'INTERVENANT' => 
     array (
       'name' => 'INTERVENANT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'INTERVENANT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -8135,7 +8139,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CIVILITE_ID' =>
+        'CIVILITE_ID' => 
         array (
           'name' => 'CIVILITE_ID',
           'type' => 'NUMBER',
@@ -8146,7 +8150,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOM_USUEL' =>
+        'NOM_USUEL' => 
         array (
           'name' => 'NOM_USUEL',
           'type' => 'VARCHAR2',
@@ -8157,7 +8161,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PRENOM' =>
+        'PRENOM' => 
         array (
           'name' => 'PRENOM',
           'type' => 'VARCHAR2',
@@ -8168,7 +8172,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOM_PATRONYMIQUE' =>
+        'NOM_PATRONYMIQUE' => 
         array (
           'name' => 'NOM_PATRONYMIQUE',
           'type' => 'VARCHAR2',
@@ -8179,7 +8183,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_NAISSANCE' =>
+        'DATE_NAISSANCE' => 
         array (
           'name' => 'DATE_NAISSANCE',
           'type' => 'DATE',
@@ -8190,7 +8194,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VILLE_NAISSANCE_CODE_INSEE' =>
+        'VILLE_NAISSANCE_CODE_INSEE' => 
         array (
           'name' => 'VILLE_NAISSANCE_CODE_INSEE',
           'type' => 'VARCHAR2',
@@ -8201,7 +8205,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VILLE_NAISSANCE_LIBELLE' =>
+        'VILLE_NAISSANCE_LIBELLE' => 
         array (
           'name' => 'VILLE_NAISSANCE_LIBELLE',
           'type' => 'VARCHAR2',
@@ -8212,7 +8216,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TEL_PRO' =>
+        'TEL_PRO' => 
         array (
           'name' => 'TEL_PRO',
           'type' => 'VARCHAR2',
@@ -8223,7 +8227,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TEL_MOBILE' =>
+        'TEL_MOBILE' => 
         array (
           'name' => 'TEL_MOBILE',
           'type' => 'VARCHAR2',
@@ -8234,7 +8238,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'EMAIL' =>
+        'EMAIL' => 
         array (
           'name' => 'EMAIL',
           'type' => 'VARCHAR2',
@@ -8245,7 +8249,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATUT_ID' =>
+        'STATUT_ID' => 
         array (
           'name' => 'STATUT_ID',
           'type' => 'NUMBER',
@@ -8256,7 +8260,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -8267,7 +8271,7 @@
           'default' => NULL,
           'commentaire' => 'Structure principale d\'affectation',
         ),
-        'DISCIPLINE_ID' =>
+        'DISCIPLINE_ID' => 
         array (
           'name' => 'DISCIPLINE_ID',
           'type' => 'NUMBER',
@@ -8278,7 +8282,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -8289,7 +8293,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -8300,7 +8304,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NUMERO_INSEE' =>
+        'NUMERO_INSEE' => 
         array (
           'name' => 'NUMERO_INSEE',
           'type' => 'VARCHAR2',
@@ -8311,7 +8315,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NUMERO_INSEE_CLE' =>
+        'NUMERO_INSEE_CLE' => 
         array (
           'name' => 'NUMERO_INSEE_CLE',
           'type' => 'VARCHAR2',
@@ -8322,7 +8326,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NUMERO_INSEE_PROVISOIRE' =>
+        'NUMERO_INSEE_PROVISOIRE' => 
         array (
           'name' => 'NUMERO_INSEE_PROVISOIRE',
           'type' => 'NUMBER',
@@ -8333,7 +8337,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'IBAN' =>
+        'IBAN' => 
         array (
           'name' => 'IBAN',
           'type' => 'VARCHAR2',
@@ -8344,7 +8348,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BIC' =>
+        'BIC' => 
         array (
           'name' => 'BIC',
           'type' => 'VARCHAR2',
@@ -8355,7 +8359,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MONTANT_INDEMNITE_FC' =>
+        'MONTANT_INDEMNITE_FC' => 
         array (
           'name' => 'MONTANT_INDEMNITE_FC',
           'type' => 'FLOAT',
@@ -8366,7 +8370,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -8377,7 +8381,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -8388,7 +8392,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -8399,7 +8403,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -8410,7 +8414,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -8421,7 +8425,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -8432,7 +8436,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' =>
+        'PREMIER_RECRUTEMENT' => 
         array (
           'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
@@ -8443,7 +8447,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -8454,7 +8458,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'GRADE_ID' =>
+        'GRADE_ID' => 
         array (
           'name' => 'GRADE_ID',
           'type' => 'NUMBER',
@@ -8465,7 +8469,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CRITERE_RECHERCHE' =>
+        'CRITERE_RECHERCHE' => 
         array (
           'name' => 'CRITERE_RECHERCHE',
           'type' => 'VARCHAR2',
@@ -8476,7 +8480,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -8487,7 +8491,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'UTILISATEUR_CODE' =>
+        'UTILISATEUR_CODE' => 
         array (
           'name' => 'UTILISATEUR_CODE',
           'type' => 'VARCHAR2',
@@ -8498,7 +8502,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PAYS_NAISSANCE_ID' =>
+        'PAYS_NAISSANCE_ID' => 
         array (
           'name' => 'PAYS_NAISSANCE_ID',
           'type' => 'NUMBER',
@@ -8509,7 +8513,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEP_NAISSANCE_ID' =>
+        'DEP_NAISSANCE_ID' => 
         array (
           'name' => 'DEP_NAISSANCE_ID',
           'type' => 'NUMBER',
@@ -8520,7 +8524,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PAYS_NATIONALITE_ID' =>
+        'PAYS_NATIONALITE_ID' => 
         array (
           'name' => 'PAYS_NATIONALITE_ID',
           'type' => 'NUMBER',
@@ -8531,7 +8535,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'RIB_HORS_SEPA' =>
+        'RIB_HORS_SEPA' => 
         array (
           'name' => 'RIB_HORS_SEPA',
           'type' => 'NUMBER',
@@ -8544,16 +8548,16 @@
         ),
       ),
     ),
-    'INTERVENANT_SAISIE' =>
+    'INTERVENANT_SAISIE' => 
     array (
       'name' => 'INTERVENANT_SAISIE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'INTERVENANT_SAISIE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -8564,7 +8568,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -8575,7 +8579,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATUT_ID' =>
+        'STATUT_ID' => 
         array (
           'name' => 'STATUT_ID',
           'type' => 'NUMBER',
@@ -8588,16 +8592,16 @@
         ),
       ),
     ),
-    'LIEN' =>
+    'LIEN' => 
     array (
       'name' => 'LIEN',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'LIEN_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -8608,7 +8612,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOEUD_SUP_ID' =>
+        'NOEUD_SUP_ID' => 
         array (
           'name' => 'NOEUD_SUP_ID',
           'type' => 'NUMBER',
@@ -8619,7 +8623,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOEUD_INF_ID' =>
+        'NOEUD_INF_ID' => 
         array (
           'name' => 'NOEUD_INF_ID',
           'type' => 'NUMBER',
@@ -8630,7 +8634,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -8641,7 +8645,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -8652,7 +8656,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -8663,7 +8667,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -8674,7 +8678,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -8685,7 +8689,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -8696,7 +8700,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -8707,7 +8711,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -8718,7 +8722,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -8731,16 +8735,16 @@
         ),
       ),
     ),
-    'LISTE_NOIRE' =>
+    'LISTE_NOIRE' => 
     array (
       'name' => 'LISTE_NOIRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -8753,16 +8757,16 @@
         ),
       ),
     ),
-    'MISE_EN_PAIEMENT' =>
+    'MISE_EN_PAIEMENT' => 
     array (
       'name' => 'MISE_EN_PAIEMENT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'MISE_EN_PAIEMENT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -8773,7 +8777,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RES_SERVICE_ID' =>
+        'FORMULE_RES_SERVICE_ID' => 
         array (
           'name' => 'FORMULE_RES_SERVICE_ID',
           'type' => 'NUMBER',
@@ -8784,7 +8788,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RES_SERVICE_REF_ID' =>
+        'FORMULE_RES_SERVICE_REF_ID' => 
         array (
           'name' => 'FORMULE_RES_SERVICE_REF_ID',
           'type' => 'NUMBER',
@@ -8795,7 +8799,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_MISE_EN_PAIEMENT' =>
+        'DATE_MISE_EN_PAIEMENT' => 
         array (
           'name' => 'DATE_MISE_EN_PAIEMENT',
           'type' => 'DATE',
@@ -8806,7 +8810,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PERIODE_PAIEMENT_ID' =>
+        'PERIODE_PAIEMENT_ID' => 
         array (
           'name' => 'PERIODE_PAIEMENT_ID',
           'type' => 'NUMBER',
@@ -8817,7 +8821,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CENTRE_COUT_ID' =>
+        'CENTRE_COUT_ID' => 
         array (
           'name' => 'CENTRE_COUT_ID',
           'type' => 'NUMBER',
@@ -8828,7 +8832,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DOMAINE_FONCTIONNEL_ID' =>
+        'DOMAINE_FONCTIONNEL_ID' => 
         array (
           'name' => 'DOMAINE_FONCTIONNEL_ID',
           'type' => 'NUMBER',
@@ -8839,7 +8843,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_HEURES_ID' =>
+        'TYPE_HEURES_ID' => 
         array (
           'name' => 'TYPE_HEURES_ID',
           'type' => 'NUMBER',
@@ -8850,7 +8854,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -8861,7 +8865,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -8872,7 +8876,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_VALIDATION' =>
+        'DATE_VALIDATION' => 
         array (
           'name' => 'DATE_VALIDATION',
           'type' => 'DATE',
@@ -8883,7 +8887,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -8894,7 +8898,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -8905,7 +8909,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -8916,7 +8920,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -8927,7 +8931,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -8938,7 +8942,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -8951,16 +8955,16 @@
         ),
       ),
     ),
-    'MODELE_CONTRAT' =>
+    'MODELE_CONTRAT' => 
     array (
       'name' => 'MODELE_CONTRAT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'MODELE_CONTRAT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -8971,7 +8975,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -8982,7 +8986,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATUT_INTERVENANT_ID' =>
+        'STATUT_INTERVENANT_ID' => 
         array (
           'name' => 'STATUT_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -8993,7 +8997,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -9004,7 +9008,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FICHIER' =>
+        'FICHIER' => 
         array (
           'name' => 'FICHIER',
           'type' => 'BLOB',
@@ -9015,7 +9019,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'REQUETE' =>
+        'REQUETE' => 
         array (
           'name' => 'REQUETE',
           'type' => 'VARCHAR2',
@@ -9026,7 +9030,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC1_NOM' =>
+        'BLOC1_NOM' => 
         array (
           'name' => 'BLOC1_NOM',
           'type' => 'VARCHAR2',
@@ -9037,7 +9041,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC1_ZONE' =>
+        'BLOC1_ZONE' => 
         array (
           'name' => 'BLOC1_ZONE',
           'type' => 'VARCHAR2',
@@ -9048,7 +9052,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC1_REQUETE' =>
+        'BLOC1_REQUETE' => 
         array (
           'name' => 'BLOC1_REQUETE',
           'type' => 'VARCHAR2',
@@ -9059,7 +9063,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC2_NOM' =>
+        'BLOC2_NOM' => 
         array (
           'name' => 'BLOC2_NOM',
           'type' => 'VARCHAR2',
@@ -9070,7 +9074,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC2_ZONE' =>
+        'BLOC2_ZONE' => 
         array (
           'name' => 'BLOC2_ZONE',
           'type' => 'VARCHAR2',
@@ -9081,7 +9085,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC2_REQUETE' =>
+        'BLOC2_REQUETE' => 
         array (
           'name' => 'BLOC2_REQUETE',
           'type' => 'VARCHAR2',
@@ -9092,7 +9096,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC3_NOM' =>
+        'BLOC3_NOM' => 
         array (
           'name' => 'BLOC3_NOM',
           'type' => 'VARCHAR2',
@@ -9103,7 +9107,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC3_ZONE' =>
+        'BLOC3_ZONE' => 
         array (
           'name' => 'BLOC3_ZONE',
           'type' => 'VARCHAR2',
@@ -9114,7 +9118,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC3_REQUETE' =>
+        'BLOC3_REQUETE' => 
         array (
           'name' => 'BLOC3_REQUETE',
           'type' => 'VARCHAR2',
@@ -9125,7 +9129,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC4_NOM' =>
+        'BLOC4_NOM' => 
         array (
           'name' => 'BLOC4_NOM',
           'type' => 'VARCHAR2',
@@ -9136,7 +9140,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC4_ZONE' =>
+        'BLOC4_ZONE' => 
         array (
           'name' => 'BLOC4_ZONE',
           'type' => 'VARCHAR2',
@@ -9147,7 +9151,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC4_REQUETE' =>
+        'BLOC4_REQUETE' => 
         array (
           'name' => 'BLOC4_REQUETE',
           'type' => 'VARCHAR2',
@@ -9158,7 +9162,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC5_NOM' =>
+        'BLOC5_NOM' => 
         array (
           'name' => 'BLOC5_NOM',
           'type' => 'VARCHAR2',
@@ -9169,7 +9173,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC5_ZONE' =>
+        'BLOC5_ZONE' => 
         array (
           'name' => 'BLOC5_ZONE',
           'type' => 'VARCHAR2',
@@ -9180,7 +9184,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC5_REQUETE' =>
+        'BLOC5_REQUETE' => 
         array (
           'name' => 'BLOC5_REQUETE',
           'type' => 'VARCHAR2',
@@ -9191,7 +9195,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC6_NOM' =>
+        'BLOC6_NOM' => 
         array (
           'name' => 'BLOC6_NOM',
           'type' => 'VARCHAR2',
@@ -9202,7 +9206,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC6_ZONE' =>
+        'BLOC6_ZONE' => 
         array (
           'name' => 'BLOC6_ZONE',
           'type' => 'VARCHAR2',
@@ -9213,7 +9217,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC6_REQUETE' =>
+        'BLOC6_REQUETE' => 
         array (
           'name' => 'BLOC6_REQUETE',
           'type' => 'VARCHAR2',
@@ -9224,7 +9228,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC7_NOM' =>
+        'BLOC7_NOM' => 
         array (
           'name' => 'BLOC7_NOM',
           'type' => 'VARCHAR2',
@@ -9235,7 +9239,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC7_ZONE' =>
+        'BLOC7_ZONE' => 
         array (
           'name' => 'BLOC7_ZONE',
           'type' => 'VARCHAR2',
@@ -9246,7 +9250,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC7_REQUETE' =>
+        'BLOC7_REQUETE' => 
         array (
           'name' => 'BLOC7_REQUETE',
           'type' => 'VARCHAR2',
@@ -9257,7 +9261,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC8_NOM' =>
+        'BLOC8_NOM' => 
         array (
           'name' => 'BLOC8_NOM',
           'type' => 'VARCHAR2',
@@ -9268,7 +9272,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC8_ZONE' =>
+        'BLOC8_ZONE' => 
         array (
           'name' => 'BLOC8_ZONE',
           'type' => 'VARCHAR2',
@@ -9279,7 +9283,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC8_REQUETE' =>
+        'BLOC8_REQUETE' => 
         array (
           'name' => 'BLOC8_REQUETE',
           'type' => 'VARCHAR2',
@@ -9290,7 +9294,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC9_NOM' =>
+        'BLOC9_NOM' => 
         array (
           'name' => 'BLOC9_NOM',
           'type' => 'VARCHAR2',
@@ -9301,7 +9305,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC9_ZONE' =>
+        'BLOC9_ZONE' => 
         array (
           'name' => 'BLOC9_ZONE',
           'type' => 'VARCHAR2',
@@ -9312,7 +9316,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC9_REQUETE' =>
+        'BLOC9_REQUETE' => 
         array (
           'name' => 'BLOC9_REQUETE',
           'type' => 'VARCHAR2',
@@ -9323,7 +9327,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC10_NOM' =>
+        'BLOC10_NOM' => 
         array (
           'name' => 'BLOC10_NOM',
           'type' => 'VARCHAR2',
@@ -9334,7 +9338,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC10_ZONE' =>
+        'BLOC10_ZONE' => 
         array (
           'name' => 'BLOC10_ZONE',
           'type' => 'VARCHAR2',
@@ -9345,7 +9349,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'BLOC10_REQUETE' =>
+        'BLOC10_REQUETE' => 
         array (
           'name' => 'BLOC10_REQUETE',
           'type' => 'VARCHAR2',
@@ -9358,16 +9362,16 @@
         ),
       ),
     ),
-    'MODIFICATION_SERVICE_DU' =>
+    'MODIFICATION_SERVICE_DU' => 
     array (
       'name' => 'MODIFICATION_SERVICE_DU',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'MODIFICATION_SERVICE_DU_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -9378,7 +9382,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -9389,7 +9393,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -9400,7 +9404,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MOTIF_ID' =>
+        'MOTIF_ID' => 
         array (
           'name' => 'MOTIF_ID',
           'type' => 'NUMBER',
@@ -9411,7 +9415,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -9422,7 +9426,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -9433,7 +9437,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -9444,7 +9448,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -9455,7 +9459,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -9466,7 +9470,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -9477,7 +9481,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'COMMENTAIRES' =>
+        'COMMENTAIRES' => 
         array (
           'name' => 'COMMENTAIRES',
           'type' => 'VARCHAR2',
@@ -9490,16 +9494,16 @@
         ),
       ),
     ),
-    'MODULATEUR' =>
+    'MODULATEUR' => 
     array (
       'name' => 'MODULATEUR',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'MODULATEUR_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -9510,7 +9514,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -9521,7 +9525,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -9532,7 +9536,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_MODULATEUR_ID' =>
+        'TYPE_MODULATEUR_ID' => 
         array (
           'name' => 'TYPE_MODULATEUR_ID',
           'type' => 'NUMBER',
@@ -9543,7 +9547,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PONDERATION_SERVICE_DU' =>
+        'PONDERATION_SERVICE_DU' => 
         array (
           'name' => 'PONDERATION_SERVICE_DU',
           'type' => 'FLOAT',
@@ -9554,7 +9558,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PONDERATION_SERVICE_COMPL' =>
+        'PONDERATION_SERVICE_COMPL' => 
         array (
           'name' => 'PONDERATION_SERVICE_COMPL',
           'type' => 'FLOAT',
@@ -9565,7 +9569,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -9576,7 +9580,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -9587,7 +9591,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -9598,7 +9602,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -9609,7 +9613,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -9620,7 +9624,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -9633,16 +9637,16 @@
         ),
       ),
     ),
-    'MOTIF_MODIFICATION_SERVICE' =>
+    'MOTIF_MODIFICATION_SERVICE' => 
     array (
       'name' => 'MOTIF_MODIFICATION_SERVICE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'MOTIF_MODIFICATION_SERV_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -9653,7 +9657,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -9664,7 +9668,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -9675,7 +9679,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MULTIPLICATEUR' =>
+        'MULTIPLICATEUR' => 
         array (
           'name' => 'MULTIPLICATEUR',
           'type' => 'NUMBER',
@@ -9686,7 +9690,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DECHARGE' =>
+        'DECHARGE' => 
         array (
           'name' => 'DECHARGE',
           'type' => 'NUMBER',
@@ -9697,7 +9701,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -9708,7 +9712,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -9719,7 +9723,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -9730,7 +9734,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -9741,7 +9745,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -9752,7 +9756,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -9765,16 +9769,16 @@
         ),
       ),
     ),
-    'MOTIF_NON_PAIEMENT' =>
+    'MOTIF_NON_PAIEMENT' => 
     array (
       'name' => 'MOTIF_NON_PAIEMENT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'MOTIF_NON_PAIEMENT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -9785,7 +9789,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -9796,7 +9800,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -9807,7 +9811,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -9818,7 +9822,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -9829,7 +9833,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -9840,7 +9844,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -9851,7 +9855,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -9862,7 +9866,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -9873,7 +9877,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -9886,16 +9890,16 @@
         ),
       ),
     ),
-    'NOEUD' =>
+    'NOEUD' => 
     array (
       'name' => 'NOEUD',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'NOEUD_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -9906,7 +9910,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -9917,7 +9921,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -9928,7 +9932,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LISTE' =>
+        'LISTE' => 
         array (
           'name' => 'LISTE',
           'type' => 'NUMBER',
@@ -9939,7 +9943,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -9950,7 +9954,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -9961,7 +9965,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -9972,7 +9976,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -9983,7 +9987,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -9994,7 +9998,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -10005,7 +10009,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -10016,7 +10020,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -10027,7 +10031,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -10038,7 +10042,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -10049,7 +10053,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -10060,7 +10064,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -10073,16 +10077,16 @@
         ),
       ),
     ),
-    'NOTIFICATION_INDICATEUR' =>
+    'NOTIFICATION_INDICATEUR' => 
     array (
       'name' => 'NOTIFICATION_INDICATEUR',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'NOTIFICATION_INDICATEUR_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10093,7 +10097,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INDICATEUR_ID' =>
+        'INDICATEUR_ID' => 
         array (
           'name' => 'INDICATEUR_ID',
           'type' => 'NUMBER',
@@ -10104,7 +10108,7 @@
           'default' => NULL,
           'commentaire' => 'Identifiant de l\'indicateur',
         ),
-        'AFFECTATION_ID' =>
+        'AFFECTATION_ID' => 
         array (
           'name' => 'AFFECTATION_ID',
           'type' => 'NUMBER',
@@ -10115,7 +10119,7 @@
           'default' => NULL,
           'commentaire' => 'Identifiant du personnel',
         ),
-        'FREQUENCE' =>
+        'FREQUENCE' => 
         array (
           'name' => 'FREQUENCE',
           'type' => 'NUMBER',
@@ -10126,7 +10130,7 @@
           'default' => NULL,
           'commentaire' => 'Fréquence de notification en secondes (60*60*24=jour, 60*60*24*7=semaine, etc.)',
         ),
-        'DATE_ABONNEMENT' =>
+        'DATE_ABONNEMENT' => 
         array (
           'name' => 'DATE_ABONNEMENT',
           'type' => 'DATE',
@@ -10137,7 +10141,7 @@
           'default' => NULL,
           'commentaire' => 'Date d\'abonnement à cette notification',
         ),
-        'DATE_DERN_NOTIF' =>
+        'DATE_DERN_NOTIF' => 
         array (
           'name' => 'DATE_DERN_NOTIF',
           'type' => 'DATE',
@@ -10148,7 +10152,7 @@
           'default' => NULL,
           'commentaire' => 'Eventuelle date de dernière notification',
         ),
-        'IN_HOME' =>
+        'IN_HOME' => 
         array (
           'name' => 'IN_HOME',
           'type' => 'NUMBER',
@@ -10161,16 +10165,16 @@
         ),
       ),
     ),
-    'PARAMETRE' =>
+    'PARAMETRE' => 
     array (
       'name' => 'PARAMETRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PARAMETRE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10181,7 +10185,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOM' =>
+        'NOM' => 
         array (
           'name' => 'NOM',
           'type' => 'VARCHAR2',
@@ -10192,7 +10196,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -10203,7 +10207,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -10214,7 +10218,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -10225,7 +10229,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -10236,7 +10240,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -10247,7 +10251,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -10258,7 +10262,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALEUR' =>
+        'VALEUR' => 
         array (
           'name' => 'VALEUR',
           'type' => 'VARCHAR2',
@@ -10269,7 +10273,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DESCRIPTION' =>
+        'DESCRIPTION' => 
         array (
           'name' => 'DESCRIPTION',
           'type' => 'VARCHAR2',
@@ -10282,16 +10286,16 @@
         ),
       ),
     ),
-    'PAYS' =>
+    'PAYS' => 
     array (
       'name' => 'PAYS',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PAYS_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10302,9 +10306,9 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE' => 
         array (
-          'name' => 'LIBELLE_LONG',
+          'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
           'length' => 120,
           'scale' => NULL,
@@ -10313,18 +10317,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
-        array (
-          'name' => 'LIBELLE_COURT',
-          'type' => 'VARCHAR2',
-          'length' => 60,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'TEMOIN_UE' =>
+        'TEMOIN_UE' => 
         array (
           'name' => 'TEMOIN_UE',
           'type' => 'NUMBER',
@@ -10335,7 +10328,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDITE_DEBUT' =>
+        'VALIDITE_DEBUT' => 
         array (
           'name' => 'VALIDITE_DEBUT',
           'type' => 'DATE',
@@ -10346,7 +10339,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'VALIDITE_FIN' =>
+        'VALIDITE_FIN' => 
         array (
           'name' => 'VALIDITE_FIN',
           'type' => 'DATE',
@@ -10357,7 +10350,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -10368,7 +10361,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -10379,7 +10372,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -10390,7 +10383,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -10401,7 +10394,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -10412,7 +10405,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -10423,7 +10416,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -10434,7 +10427,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -10445,18 +10438,29 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'CODE' => 
+        array (
+          'name' => 'CODE',
+          'type' => 'VARCHAR2',
+          'length' => 15,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
-    'PERIMETRE' =>
+    'PERIMETRE' => 
     array (
       'name' => 'PERIMETRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PERIMETRE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10467,7 +10471,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -10478,7 +10482,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -10491,16 +10495,16 @@
         ),
       ),
     ),
-    'PERIODE' =>
+    'PERIODE' => 
     array (
       'name' => 'PERIODE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PERIODE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10511,7 +10515,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -10522,7 +10526,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -10533,7 +10537,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -10544,7 +10548,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ECART_MOIS' =>
+        'ECART_MOIS' => 
         array (
           'name' => 'ECART_MOIS',
           'type' => 'NUMBER',
@@ -10555,7 +10559,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ECART_MOIS_PAIEMENT' =>
+        'ECART_MOIS_PAIEMENT' => 
         array (
           'name' => 'ECART_MOIS_PAIEMENT',
           'type' => 'NUMBER',
@@ -10566,7 +10570,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -10577,7 +10581,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ENSEIGNEMENT' =>
+        'ENSEIGNEMENT' => 
         array (
           'name' => 'ENSEIGNEMENT',
           'type' => 'NUMBER',
@@ -10588,7 +10592,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PAIEMENT' =>
+        'PAIEMENT' => 
         array (
           'name' => 'PAIEMENT',
           'type' => 'NUMBER',
@@ -10599,7 +10603,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -10610,7 +10614,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -10621,7 +10625,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -10632,7 +10636,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -10643,7 +10647,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -10654,7 +10658,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -10667,16 +10671,16 @@
         ),
       ),
     ),
-    'PIECE_JOINTE' =>
+    'PIECE_JOINTE' => 
     array (
       'name' => 'PIECE_JOINTE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PIECE_JOINTE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10687,7 +10691,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_PIECE_JOINTE_ID' =>
+        'TYPE_PIECE_JOINTE_ID' => 
         array (
           'name' => 'TYPE_PIECE_JOINTE_ID',
           'type' => 'NUMBER',
@@ -10698,7 +10702,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -10709,7 +10713,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -10720,7 +10724,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -10731,7 +10735,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -10742,7 +10746,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -10753,7 +10757,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -10764,7 +10768,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -10775,7 +10779,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -10788,16 +10792,16 @@
         ),
       ),
     ),
-    'PIECE_JOINTE_FICHIER' =>
+    'PIECE_JOINTE_FICHIER' => 
     array (
       'name' => 'PIECE_JOINTE_FICHIER',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PIECE_JOINTE_FICHIER_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'PIECE_JOINTE_ID' =>
+        'PIECE_JOINTE_ID' => 
         array (
           'name' => 'PIECE_JOINTE_ID',
           'type' => 'NUMBER',
@@ -10808,7 +10812,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FICHIER_ID' =>
+        'FICHIER_ID' => 
         array (
           'name' => 'FICHIER_ID',
           'type' => 'NUMBER',
@@ -10821,16 +10825,16 @@
         ),
       ),
     ),
-    'PLAFOND' =>
+    'PLAFOND' => 
     array (
       'name' => 'PLAFOND',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PLAFOND_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10841,7 +10845,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -10852,7 +10856,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -10865,16 +10869,16 @@
         ),
       ),
     ),
-    'PLAFOND_APPLICATION' =>
+    'PLAFOND_APPLICATION' => 
     array (
       'name' => 'PLAFOND_APPLICATION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PLAFOND_APPLICATION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10885,7 +10889,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PLAFOND_ID' =>
+        'PLAFOND_ID' => 
         array (
           'name' => 'PLAFOND_ID',
           'type' => 'NUMBER',
@@ -10896,7 +10900,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PLAFOND_ETAT_ID' =>
+        'PLAFOND_ETAT_ID' => 
         array (
           'name' => 'PLAFOND_ETAT_ID',
           'type' => 'NUMBER',
@@ -10907,7 +10911,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_DEBUT_ID' =>
+        'ANNEE_DEBUT_ID' => 
         array (
           'name' => 'ANNEE_DEBUT_ID',
           'type' => 'NUMBER',
@@ -10918,7 +10922,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_FIN_ID' =>
+        'ANNEE_FIN_ID' => 
         array (
           'name' => 'ANNEE_FIN_ID',
           'type' => 'NUMBER',
@@ -10929,7 +10933,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -10942,16 +10946,16 @@
         ),
       ),
     ),
-    'PLAFOND_ETAT' =>
+    'PLAFOND_ETAT' => 
     array (
       'name' => 'PLAFOND_ETAT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PLAFOND_ETAT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -10962,7 +10966,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -10973,7 +10977,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -10986,16 +10990,16 @@
         ),
       ),
     ),
-    'PRIVILEGE' =>
+    'PRIVILEGE' => 
     array (
       'name' => 'PRIVILEGE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'PRIVILEGE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11006,7 +11010,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CATEGORIE_ID' =>
+        'CATEGORIE_ID' => 
         array (
           'name' => 'CATEGORIE_ID',
           'type' => 'NUMBER',
@@ -11017,7 +11021,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -11028,7 +11032,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -11039,7 +11043,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -11052,16 +11056,16 @@
         ),
       ),
     ),
-    'REGLE_STRUCTURE_VALIDATION' =>
+    'REGLE_STRUCTURE_VALIDATION' => 
     array (
       'name' => 'REGLE_STRUCTURE_VALIDATION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'REGLE_STRUCTURE_VALIDAT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11072,7 +11076,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -11083,7 +11087,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_ID' =>
+        'TYPE_INTERVENANT_ID' => 
         array (
           'name' => 'TYPE_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -11094,7 +11098,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PRIORITE' =>
+        'PRIORITE' => 
         array (
           'name' => 'PRIORITE',
           'type' => 'VARCHAR2',
@@ -11105,7 +11109,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MESSAGE' =>
+        'MESSAGE' => 
         array (
           'name' => 'MESSAGE',
           'type' => 'VARCHAR2',
@@ -11118,16 +11122,16 @@
         ),
       ),
     ),
-    'ROLE' =>
+    'ROLE' => 
     array (
       'name' => 'ROLE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ROLE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11138,7 +11142,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -11149,7 +11153,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -11160,7 +11164,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PERIMETRE_ID' =>
+        'PERIMETRE_ID' => 
         array (
           'name' => 'PERIMETRE_ID',
           'type' => 'NUMBER',
@@ -11171,7 +11175,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_CHANGER_STRUCTURE' =>
+        'PEUT_CHANGER_STRUCTURE' => 
         array (
           'name' => 'PEUT_CHANGER_STRUCTURE',
           'type' => 'NUMBER',
@@ -11182,7 +11186,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -11193,7 +11197,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -11204,7 +11208,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -11215,7 +11219,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -11226,7 +11230,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -11237,7 +11241,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -11248,7 +11252,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACCESSIBLE_EXTERIEUR' =>
+        'ACCESSIBLE_EXTERIEUR' => 
         array (
           'name' => 'ACCESSIBLE_EXTERIEUR',
           'type' => 'NUMBER',
@@ -11261,16 +11265,16 @@
         ),
       ),
     ),
-    'ROLE_PRIVILEGE' =>
+    'ROLE_PRIVILEGE' => 
     array (
       'name' => 'ROLE_PRIVILEGE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'ROLE_PRIVILEGE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ROLE_ID' =>
+        'ROLE_ID' => 
         array (
           'name' => 'ROLE_ID',
           'type' => 'NUMBER',
@@ -11281,7 +11285,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PRIVILEGE_ID' =>
+        'PRIVILEGE_ID' => 
         array (
           'name' => 'PRIVILEGE_ID',
           'type' => 'NUMBER',
@@ -11294,16 +11298,16 @@
         ),
       ),
     ),
-    'SCENARIO' =>
+    'SCENARIO' => 
     array (
       'name' => 'SCENARIO',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SCENARIO_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11314,7 +11318,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -11325,7 +11329,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -11336,7 +11340,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -11347,7 +11351,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -11358,7 +11362,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -11369,7 +11373,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -11380,7 +11384,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -11391,7 +11395,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -11402,7 +11406,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE' =>
+        'TYPE' => 
         array (
           'name' => 'TYPE',
           'type' => 'NUMBER',
@@ -11415,16 +11419,16 @@
         ),
       ),
     ),
-    'SCENARIO_LIEN' =>
+    'SCENARIO_LIEN' => 
     array (
       'name' => 'SCENARIO_LIEN',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SCENARIO_LIEN_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11435,7 +11439,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_ID' =>
+        'SCENARIO_ID' => 
         array (
           'name' => 'SCENARIO_ID',
           'type' => 'NUMBER',
@@ -11446,7 +11450,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIEN_ID' =>
+        'LIEN_ID' => 
         array (
           'name' => 'LIEN_ID',
           'type' => 'NUMBER',
@@ -11457,7 +11461,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACTIF' =>
+        'ACTIF' => 
         array (
           'name' => 'ACTIF',
           'type' => 'NUMBER',
@@ -11468,7 +11472,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'POIDS' =>
+        'POIDS' => 
         array (
           'name' => 'POIDS',
           'type' => 'FLOAT',
@@ -11479,7 +11483,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'CHOIX_MINIMUM' =>
+        'CHOIX_MINIMUM' => 
         array (
           'name' => 'CHOIX_MINIMUM',
           'type' => 'NUMBER',
@@ -11490,7 +11494,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'CHOIX_MAXIMUM' =>
+        'CHOIX_MAXIMUM' => 
         array (
           'name' => 'CHOIX_MAXIMUM',
           'type' => 'NUMBER',
@@ -11501,7 +11505,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -11512,7 +11516,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -11523,7 +11527,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -11534,7 +11538,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -11545,7 +11549,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -11556,7 +11560,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -11567,7 +11571,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -11578,7 +11582,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -11591,16 +11595,16 @@
         ),
       ),
     ),
-    'SCENARIO_NOEUD' =>
+    'SCENARIO_NOEUD' => 
     array (
       'name' => 'SCENARIO_NOEUD',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SCENARIO_NOEUD_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11611,7 +11615,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_ID' =>
+        'SCENARIO_ID' => 
         array (
           'name' => 'SCENARIO_ID',
           'type' => 'NUMBER',
@@ -11622,7 +11626,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOEUD_ID' =>
+        'NOEUD_ID' => 
         array (
           'name' => 'NOEUD_ID',
           'type' => 'NUMBER',
@@ -11633,7 +11637,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ASSIDUITE' =>
+        'ASSIDUITE' => 
         array (
           'name' => 'ASSIDUITE',
           'type' => 'FLOAT',
@@ -11644,7 +11648,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -11655,7 +11659,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -11666,7 +11670,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -11677,7 +11681,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -11688,7 +11692,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -11699,7 +11703,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -11710,7 +11714,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -11721,7 +11725,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -11732,7 +11736,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -11745,16 +11749,16 @@
         ),
       ),
     ),
-    'SCENARIO_NOEUD_EFFECTIF' =>
+    'SCENARIO_NOEUD_EFFECTIF' => 
     array (
       'name' => 'SCENARIO_NOEUD_EFFECTIF',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SCENARIO_NOEUD_EFFECTIF_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11765,7 +11769,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_NOEUD_ID' =>
+        'SCENARIO_NOEUD_ID' => 
         array (
           'name' => 'SCENARIO_NOEUD_ID',
           'type' => 'NUMBER',
@@ -11776,7 +11780,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_HEURES_ID' =>
+        'TYPE_HEURES_ID' => 
         array (
           'name' => 'TYPE_HEURES_ID',
           'type' => 'NUMBER',
@@ -11787,7 +11791,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'EFFECTIF' =>
+        'EFFECTIF' => 
         array (
           'name' => 'EFFECTIF',
           'type' => 'FLOAT',
@@ -11798,7 +11802,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -11811,16 +11815,16 @@
         ),
       ),
     ),
-    'SCENARIO_NOEUD_SEUIL' =>
+    'SCENARIO_NOEUD_SEUIL' => 
     array (
       'name' => 'SCENARIO_NOEUD_SEUIL',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SCENARIO_NOEUD_SEUIL_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11831,7 +11835,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_NOEUD_ID' =>
+        'SCENARIO_NOEUD_ID' => 
         array (
           'name' => 'SCENARIO_NOEUD_ID',
           'type' => 'NUMBER',
@@ -11842,7 +11846,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -11853,7 +11857,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'OUVERTURE' =>
+        'OUVERTURE' => 
         array (
           'name' => 'OUVERTURE',
           'type' => 'NUMBER',
@@ -11864,7 +11868,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DEDOUBLEMENT' =>
+        'DEDOUBLEMENT' => 
         array (
           'name' => 'DEDOUBLEMENT',
           'type' => 'NUMBER',
@@ -11875,7 +11879,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'ASSIDUITE' =>
+        'ASSIDUITE' => 
         array (
           'name' => 'ASSIDUITE',
           'type' => 'FLOAT',
@@ -11888,16 +11892,16 @@
         ),
       ),
     ),
-    'SERVICE' =>
+    'SERVICE' => 
     array (
       'name' => 'SERVICE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SERVICE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -11908,7 +11912,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -11919,7 +11923,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -11930,7 +11934,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETABLISSEMENT_ID' =>
+        'ETABLISSEMENT_ID' => 
         array (
           'name' => 'ETABLISSEMENT_ID',
           'type' => 'NUMBER',
@@ -11941,7 +11945,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -11952,7 +11956,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -11963,7 +11967,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -11974,7 +11978,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -11985,7 +11989,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -11996,7 +12000,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -12007,7 +12011,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -12018,7 +12022,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -12029,7 +12033,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DESCRIPTION' =>
+        'DESCRIPTION' => 
         array (
           'name' => 'DESCRIPTION',
           'type' => 'VARCHAR2',
@@ -12042,16 +12046,16 @@
         ),
       ),
     ),
-    'SERVICE_REFERENTIEL' =>
+    'SERVICE_REFERENTIEL' => 
     array (
       'name' => 'SERVICE_REFERENTIEL',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SERVICE_REFERENTIEL_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -12062,7 +12066,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FONCTION_ID' =>
+        'FONCTION_ID' => 
         array (
           'name' => 'FONCTION_ID',
           'type' => 'NUMBER',
@@ -12073,7 +12077,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -12084,7 +12088,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -12095,7 +12099,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -12106,7 +12110,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -12117,7 +12121,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -12128,7 +12132,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -12139,7 +12143,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -12150,7 +12154,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -12161,7 +12165,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'COMMENTAIRES' =>
+        'COMMENTAIRES' => 
         array (
           'name' => 'COMMENTAIRES',
           'type' => 'VARCHAR2',
@@ -12172,7 +12176,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMATION' =>
+        'FORMATION' => 
         array (
           'name' => 'FORMATION',
           'type' => 'VARCHAR2',
@@ -12183,7 +12187,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -12194,7 +12198,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -12207,16 +12211,16 @@
         ),
       ),
     ),
-    'SEUIL_CHARGE' =>
+    'SEUIL_CHARGE' => 
     array (
       'name' => 'SEUIL_CHARGE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SEUIL_CHARGE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -12227,7 +12231,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_ID' =>
+        'SCENARIO_ID' => 
         array (
           'name' => 'SCENARIO_ID',
           'type' => 'NUMBER',
@@ -12238,7 +12242,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -12249,7 +12253,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'GROUPE_TYPE_FORMATION_ID' =>
+        'GROUPE_TYPE_FORMATION_ID' => 
         array (
           'name' => 'GROUPE_TYPE_FORMATION_ID',
           'type' => 'NUMBER',
@@ -12260,7 +12264,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -12271,7 +12275,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEDOUBLEMENT' =>
+        'DEDOUBLEMENT' => 
         array (
           'name' => 'DEDOUBLEMENT',
           'type' => 'NUMBER',
@@ -12282,7 +12286,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -12293,7 +12297,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -12304,7 +12308,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -12315,7 +12319,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -12326,7 +12330,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -12337,7 +12341,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -12348,7 +12352,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -12361,16 +12365,16 @@
         ),
       ),
     ),
-    'SOURCE' =>
+    'SOURCE' => 
     array (
       'name' => 'SOURCE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SOURCE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -12381,7 +12385,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -12392,7 +12396,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -12403,7 +12407,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'IMPORTABLE' =>
+        'IMPORTABLE' => 
         array (
           'name' => 'IMPORTABLE',
           'type' => 'NUMBER',
@@ -12416,16 +12420,16 @@
         ),
       ),
     ),
-    'STATUT_INTERVENANT' =>
+    'STATUT_INTERVENANT' => 
     array (
       'name' => 'STATUT_INTERVENANT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'STATUT_INTERVENANT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -12436,7 +12440,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -12447,7 +12451,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_STATUTAIRE' =>
+        'SERVICE_STATUTAIRE' => 
         array (
           'name' => 'SERVICE_STATUTAIRE',
           'type' => 'FLOAT',
@@ -12458,7 +12462,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEPASSEMENT' =>
+        'DEPASSEMENT' => 
         array (
           'name' => 'DEPASSEMENT',
           'type' => 'NUMBER',
@@ -12469,7 +12473,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PLAFOND_REFERENTIEL' =>
+        'PLAFOND_REFERENTIEL' => 
         array (
           'name' => 'PLAFOND_REFERENTIEL',
           'type' => 'FLOAT',
@@ -12480,7 +12484,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'MAXIMUM_HETD' =>
+        'MAXIMUM_HETD' => 
         array (
           'name' => 'MAXIMUM_HETD',
           'type' => 'FLOAT',
@@ -12491,7 +12495,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_ID' =>
+        'TYPE_INTERVENANT_ID' => 
         array (
           'name' => 'TYPE_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -12502,7 +12506,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -12513,7 +12517,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -12524,7 +12528,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -12535,7 +12539,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -12546,7 +12550,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -12557,7 +12561,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -12568,7 +12572,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -12579,7 +12583,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -12590,7 +12594,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -12601,7 +12605,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NON_AUTORISE' =>
+        'NON_AUTORISE' => 
         array (
           'name' => 'NON_AUTORISE',
           'type' => 'NUMBER',
@@ -12612,7 +12616,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_SERVICE' =>
+        'PEUT_SAISIR_SERVICE' => 
         array (
           'name' => 'PEUT_SAISIR_SERVICE',
           'type' => 'NUMBER',
@@ -12623,7 +12627,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_CHOISIR_DANS_DOSSIER' =>
+        'PEUT_CHOISIR_DANS_DOSSIER' => 
         array (
           'name' => 'PEUT_CHOISIR_DANS_DOSSIER',
           'type' => 'NUMBER',
@@ -12634,7 +12638,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_DOSSIER' =>
+        'PEUT_SAISIR_DOSSIER' => 
         array (
           'name' => 'PEUT_SAISIR_DOSSIER',
           'type' => 'NUMBER',
@@ -12645,7 +12649,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_REFERENTIEL' =>
+        'PEUT_SAISIR_REFERENTIEL' => 
         array (
           'name' => 'PEUT_SAISIR_REFERENTIEL',
           'type' => 'NUMBER',
@@ -12656,7 +12660,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_MOTIF_NON_PAIEMENT' =>
+        'PEUT_SAISIR_MOTIF_NON_PAIEMENT' => 
         array (
           'name' => 'PEUT_SAISIR_MOTIF_NON_PAIEMENT',
           'type' => 'NUMBER',
@@ -12667,7 +12671,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PEUT_AVOIR_CONTRAT' =>
+        'PEUT_AVOIR_CONTRAT' => 
         array (
           'name' => 'PEUT_AVOIR_CONTRAT',
           'type' => 'NUMBER',
@@ -12678,7 +12682,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PLAFOND_HC_HORS_REMU_FC' =>
+        'PLAFOND_HC_HORS_REMU_FC' => 
         array (
           'name' => 'PLAFOND_HC_HORS_REMU_FC',
           'type' => 'FLOAT',
@@ -12689,7 +12693,7 @@
           'default' => '9999',
           'commentaire' => NULL,
         ),
-        'PLAFOND_HC_REMU_FC' =>
+        'PLAFOND_HC_REMU_FC' => 
         array (
           'name' => 'PLAFOND_HC_REMU_FC',
           'type' => 'FLOAT',
@@ -12700,7 +12704,7 @@
           'default' => '13502',
           'commentaire' => NULL,
         ),
-        'DEPASSEMENT_SERVICE_DU_SANS_HC' =>
+        'DEPASSEMENT_SERVICE_DU_SANS_HC' => 
         array (
           'name' => 'DEPASSEMENT_SERVICE_DU_SANS_HC',
           'type' => 'NUMBER',
@@ -12711,7 +12715,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PEUT_CLOTURER_SAISIE' =>
+        'PEUT_CLOTURER_SAISIE' => 
         array (
           'name' => 'PEUT_CLOTURER_SAISIE',
           'type' => 'NUMBER',
@@ -12722,7 +12726,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_SERVICE_EXT' =>
+        'PEUT_SAISIR_SERVICE_EXT' => 
         array (
           'name' => 'PEUT_SAISIR_SERVICE_EXT',
           'type' => 'NUMBER',
@@ -12733,7 +12737,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TEM_ATV' =>
+        'TEM_ATV' => 
         array (
           'name' => 'TEM_ATV',
           'type' => 'NUMBER',
@@ -12744,7 +12748,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TEM_BIATSS' =>
+        'TEM_BIATSS' => 
         array (
           'name' => 'TEM_BIATSS',
           'type' => 'NUMBER',
@@ -12755,7 +12759,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PLAFOND_HC_FI_HORS_EAD' =>
+        'PLAFOND_HC_FI_HORS_EAD' => 
         array (
           'name' => 'PLAFOND_HC_FI_HORS_EAD',
           'type' => 'FLOAT',
@@ -12766,7 +12770,7 @@
           'default' => '9999',
           'commentaire' => NULL,
         ),
-        'TITULAIRE' =>
+        'TITULAIRE' => 
         array (
           'name' => 'TITULAIRE',
           'type' => 'NUMBER',
@@ -12777,7 +12781,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'CHARGES_PATRONALES' =>
+        'CHARGES_PATRONALES' => 
         array (
           'name' => 'CHARGES_PATRONALES',
           'type' => 'FLOAT',
@@ -12790,16 +12794,16 @@
         ),
       ),
     ),
-    'STATUT_PRIVILEGE' =>
+    'STATUT_PRIVILEGE' => 
     array (
       'name' => 'STATUT_PRIVILEGE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'STATUT_PRIVILEGE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'STATUT_ID' =>
+        'STATUT_ID' => 
         array (
           'name' => 'STATUT_ID',
           'type' => 'NUMBER',
@@ -12810,7 +12814,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PRIVILEGE_ID' =>
+        'PRIVILEGE_ID' => 
         array (
           'name' => 'PRIVILEGE_ID',
           'type' => 'NUMBER',
@@ -12823,16 +12827,16 @@
         ),
       ),
     ),
-    'STRUCTURE' =>
+    'STRUCTURE' => 
     array (
       'name' => 'STRUCTURE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'STRUCTURE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -12843,7 +12847,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -12854,7 +12858,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -12865,7 +12869,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -12876,7 +12880,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ENSEIGNEMENT' =>
+        'ENSEIGNEMENT' => 
         array (
           'name' => 'ENSEIGNEMENT',
           'type' => 'NUMBER',
@@ -12887,7 +12891,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -12898,7 +12902,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -12909,7 +12913,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -12920,7 +12924,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -12931,7 +12935,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -12942,7 +12946,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -12953,7 +12957,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -12964,7 +12968,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -12975,7 +12979,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PLAFOND_REFERENTIEL' =>
+        'PLAFOND_REFERENTIEL' => 
         array (
           'name' => 'PLAFOND_REFERENTIEL',
           'type' => 'FLOAT',
@@ -12986,7 +12990,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'AFF_ADRESSE_CONTRAT' =>
+        'AFF_ADRESSE_CONTRAT' => 
         array (
           'name' => 'AFF_ADRESSE_CONTRAT',
           'type' => 'NUMBER',
@@ -12999,16 +13003,16 @@
         ),
       ),
     ),
-    'SYNC_LOG' =>
+    'SYNC_LOG' => 
     array (
       'name' => 'SYNC_LOG',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'SYNC_LOG_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13019,7 +13023,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_SYNC' =>
+        'DATE_SYNC' => 
         array (
           'name' => 'DATE_SYNC',
           'type' => 'DATE',
@@ -13030,7 +13034,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TABLE_NAME' =>
+        'TABLE_NAME' => 
         array (
           'name' => 'TABLE_NAME',
           'type' => 'VARCHAR2',
@@ -13041,7 +13045,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -13052,7 +13056,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MESSAGE' =>
+        'MESSAGE' => 
         array (
           'name' => 'MESSAGE',
           'type' => 'VARCHAR2',
@@ -13065,16 +13069,16 @@
         ),
       ),
     ),
-    'TAUX_HORAIRE_HETD' =>
+    'TAUX_HORAIRE_HETD' => 
     array (
       'name' => 'TAUX_HORAIRE_HETD',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TAUX_HORAIRE_HETD_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13085,7 +13089,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALEUR' =>
+        'VALEUR' => 
         array (
           'name' => 'VALEUR',
           'type' => 'FLOAT',
@@ -13096,7 +13100,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -13107,7 +13111,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -13118,7 +13122,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -13129,7 +13133,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -13140,7 +13144,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -13151,7 +13155,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -13164,16 +13168,16 @@
         ),
       ),
     ),
-    'TBL' =>
+    'TBL' => 
     array (
       'name' => 'TBL',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'TBL_NAME' =>
+        'TBL_NAME' => 
         array (
           'name' => 'TBL_NAME',
           'type' => 'VARCHAR2',
@@ -13184,7 +13188,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TABLE_NAME' =>
+        'TABLE_NAME' => 
         array (
           'name' => 'TABLE_NAME',
           'type' => 'VARCHAR2',
@@ -13195,7 +13199,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VIEW_NAME' =>
+        'VIEW_NAME' => 
         array (
           'name' => 'VIEW_NAME',
           'type' => 'VARCHAR2',
@@ -13206,7 +13210,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SEQUENCE_NAME' =>
+        'SEQUENCE_NAME' => 
         array (
           'name' => 'SEQUENCE_NAME',
           'type' => 'VARCHAR2',
@@ -13217,7 +13221,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CONSTRAINT_NAME' =>
+        'CONSTRAINT_NAME' => 
         array (
           'name' => 'CONSTRAINT_NAME',
           'type' => 'VARCHAR2',
@@ -13228,7 +13232,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CUSTOM_CALCUL_PROC' =>
+        'CUSTOM_CALCUL_PROC' => 
         array (
           'name' => 'CUSTOM_CALCUL_PROC',
           'type' => 'VARCHAR2',
@@ -13239,7 +13243,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -13250,7 +13254,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'FEUILLE_DE_ROUTE' =>
+        'FEUILLE_DE_ROUTE' => 
         array (
           'name' => 'FEUILLE_DE_ROUTE',
           'type' => 'NUMBER',
@@ -13263,16 +13267,16 @@
         ),
       ),
     ),
-    'TBL_AGREMENT' =>
+    'TBL_AGREMENT' => 
     array (
       'name' => 'TBL_AGREMENT',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Gestion des agréments',
       'sequence' => 'TBL_AGREMENT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13283,7 +13287,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -13294,7 +13298,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_AGREMENT_ID' =>
+        'TYPE_AGREMENT_ID' => 
         array (
           'name' => 'TYPE_AGREMENT_ID',
           'type' => 'NUMBER',
@@ -13305,7 +13309,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -13316,7 +13320,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -13327,7 +13331,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -13338,7 +13342,7 @@
           'default' => NULL,
           'commentaire' => 'Témoin (1 ou 0) pour définir si l\'agrément doit être demandé obligatoirement ou non',
         ),
-        'AGREMENT_ID' =>
+        'AGREMENT_ID' => 
         array (
           'name' => 'AGREMENT_ID',
           'type' => 'NUMBER',
@@ -13349,7 +13353,7 @@
           'default' => NULL,
           'commentaire' => 'ID de l\'agrément si agréé',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -13362,16 +13366,16 @@
         ),
       ),
     ),
-    'TBL_CHARGENS' =>
+    'TBL_CHARGENS' => 
     array (
       'name' => 'TBL_CHARGENS',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Charges d\'enseignement',
       'sequence' => 'TBL_CHARGENS_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13382,7 +13386,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -13393,7 +13397,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOEUD_ID' =>
+        'NOEUD_ID' => 
         array (
           'name' => 'NOEUD_ID',
           'type' => 'NUMBER',
@@ -13404,7 +13408,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_ID' =>
+        'SCENARIO_ID' => 
         array (
           'name' => 'SCENARIO_ID',
           'type' => 'NUMBER',
@@ -13415,7 +13419,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_HEURES_ID' =>
+        'TYPE_HEURES_ID' => 
         array (
           'name' => 'TYPE_HEURES_ID',
           'type' => 'NUMBER',
@@ -13426,7 +13430,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -13437,7 +13441,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -13448,7 +13452,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -13459,7 +13463,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_ENS_ID' =>
+        'ETAPE_ENS_ID' => 
         array (
           'name' => 'ETAPE_ENS_ID',
           'type' => 'NUMBER',
@@ -13470,7 +13474,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -13481,7 +13485,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'GROUPE_TYPE_FORMATION_ID' =>
+        'GROUPE_TYPE_FORMATION_ID' => 
         array (
           'name' => 'GROUPE_TYPE_FORMATION_ID',
           'type' => 'NUMBER',
@@ -13492,7 +13496,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'OUVERTURE' =>
+        'OUVERTURE' => 
         array (
           'name' => 'OUVERTURE',
           'type' => 'FLOAT',
@@ -13503,7 +13507,7 @@
           'default' => NULL,
           'commentaire' => 'Seuil d\'ouverture',
         ),
-        'DEDOUBLEMENT' =>
+        'DEDOUBLEMENT' => 
         array (
           'name' => 'DEDOUBLEMENT',
           'type' => 'FLOAT',
@@ -13514,7 +13518,7 @@
           'default' => NULL,
           'commentaire' => 'Seuil de dédoublement',
         ),
-        'ASSIDUITE' =>
+        'ASSIDUITE' => 
         array (
           'name' => 'ASSIDUITE',
           'type' => 'FLOAT',
@@ -13525,7 +13529,7 @@
           'default' => NULL,
           'commentaire' => 'Taux d\'assiduité en % (entre 0 et 1)',
         ),
-        'EFFECTIF' =>
+        'EFFECTIF' => 
         array (
           'name' => 'EFFECTIF',
           'type' => 'FLOAT',
@@ -13536,7 +13540,7 @@
           'default' => NULL,
           'commentaire' => 'Effectifs',
         ),
-        'HEURES_ENS' =>
+        'HEURES_ENS' => 
         array (
           'name' => 'HEURES_ENS',
           'type' => 'FLOAT',
@@ -13547,7 +13551,7 @@
           'default' => NULL,
           'commentaire' => 'Heures d\'enseignement (charges par groupe)',
         ),
-        'GROUPES' =>
+        'GROUPES' => 
         array (
           'name' => 'GROUPES',
           'type' => 'FLOAT',
@@ -13558,7 +13562,7 @@
           'default' => NULL,
           'commentaire' => 'Nombre de groupes calculé',
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -13569,7 +13573,7 @@
           'default' => NULL,
           'commentaire' => 'Heures réelles calculées',
         ),
-        'HETD' =>
+        'HETD' => 
         array (
           'name' => 'HETD',
           'type' => 'FLOAT',
@@ -13580,7 +13584,7 @@
           'default' => NULL,
           'commentaire' => 'HETD réelles calculées',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -13593,16 +13597,16 @@
         ),
       ),
     ),
-    'TBL_CHARGENS_SEUILS_DEF' =>
+    'TBL_CHARGENS_SEUILS_DEF' => 
     array (
       'name' => 'TBL_CHARGENS_SEUILS_DEF',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Pré-calculs des seuils par défaut',
       'sequence' => 'TBL_CHARGENS_SEUILS_DEF_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13613,7 +13617,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -13624,7 +13628,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_ID' =>
+        'SCENARIO_ID' => 
         array (
           'name' => 'SCENARIO_ID',
           'type' => 'NUMBER',
@@ -13635,7 +13639,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -13646,7 +13650,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'GROUPE_TYPE_FORMATION_ID' =>
+        'GROUPE_TYPE_FORMATION_ID' => 
         array (
           'name' => 'GROUPE_TYPE_FORMATION_ID',
           'type' => 'NUMBER',
@@ -13657,7 +13661,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -13668,7 +13672,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEDOUBLEMENT' =>
+        'DEDOUBLEMENT' => 
         array (
           'name' => 'DEDOUBLEMENT',
           'type' => 'FLOAT',
@@ -13679,7 +13683,7 @@
           'default' => NULL,
           'commentaire' => 'Seuil de dédoublement',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -13692,16 +13696,16 @@
         ),
       ),
     ),
-    'TBL_CLOTURE_REALISE' =>
+    'TBL_CLOTURE_REALISE' => 
     array (
       'name' => 'TBL_CLOTURE_REALISE',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Clôture de saisie du service réalisé par les intervenants',
       'sequence' => 'TBL_CLOTURE_REALISE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13712,7 +13716,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -13723,7 +13727,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -13734,7 +13738,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_CLOTURER_SAISIE' =>
+        'PEUT_CLOTURER_SAISIE' => 
         array (
           'name' => 'PEUT_CLOTURER_SAISIE',
           'type' => 'NUMBER',
@@ -13745,7 +13749,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (0 ou 1)',
         ),
-        'CLOTURE' =>
+        'CLOTURE' => 
         array (
           'name' => 'CLOTURE',
           'type' => 'NUMBER',
@@ -13756,7 +13760,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (0 ou 1 : 1 si clôturé)',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -13769,16 +13773,16 @@
         ),
       ),
     ),
-    'TBL_CONTRAT' =>
+    'TBL_CONTRAT' => 
     array (
       'name' => 'TBL_CONTRAT',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Contrats de travail',
       'sequence' => 'TBL_CONTRAT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13789,7 +13793,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -13800,7 +13804,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -13811,7 +13815,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_AVOIR_CONTRAT' =>
+        'PEUT_AVOIR_CONTRAT' => 
         array (
           'name' => 'PEUT_AVOIR_CONTRAT',
           'type' => 'NUMBER',
@@ -13822,7 +13826,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -13833,7 +13837,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NBVH' =>
+        'NBVH' => 
         array (
           'name' => 'NBVH',
           'type' => 'FLOAT',
@@ -13844,7 +13848,7 @@
           'default' => '0',
           'commentaire' => 'Nombre de volumes horaires contractualisables',
         ),
-        'EDITE' =>
+        'EDITE' => 
         array (
           'name' => 'EDITE',
           'type' => 'FLOAT',
@@ -13855,7 +13859,7 @@
           'default' => '0',
           'commentaire' => 'Nombre de volumes horaires contractualisés',
         ),
-        'SIGNE' =>
+        'SIGNE' => 
         array (
           'name' => 'SIGNE',
           'type' => 'FLOAT',
@@ -13866,7 +13870,7 @@
           'default' => '0',
           'commentaire' => 'Nombre de volumes horaires signés',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -13879,16 +13883,16 @@
         ),
       ),
     ),
-    'TBL_DEMS' =>
+    'TBL_DEMS' => 
     array (
       'name' => 'TBL_DEMS',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TBL_DEMS_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -13899,7 +13903,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TBL_NAME' =>
+        'TBL_NAME' => 
         array (
           'name' => 'TBL_NAME',
           'type' => 'VARCHAR2',
@@ -13910,7 +13914,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C1' =>
+        'C1' => 
         array (
           'name' => 'C1',
           'type' => 'VARCHAR2',
@@ -13921,7 +13925,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'V1' =>
+        'V1' => 
         array (
           'name' => 'V1',
           'type' => 'VARCHAR2',
@@ -13932,7 +13936,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C2' =>
+        'C2' => 
         array (
           'name' => 'C2',
           'type' => 'VARCHAR2',
@@ -13943,7 +13947,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'V2' =>
+        'V2' => 
         array (
           'name' => 'V2',
           'type' => 'VARCHAR2',
@@ -13954,7 +13958,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C3' =>
+        'C3' => 
         array (
           'name' => 'C3',
           'type' => 'VARCHAR2',
@@ -13965,7 +13969,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'V3' =>
+        'V3' => 
         array (
           'name' => 'V3',
           'type' => 'VARCHAR2',
@@ -13976,7 +13980,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C4' =>
+        'C4' => 
         array (
           'name' => 'C4',
           'type' => 'VARCHAR2',
@@ -13987,7 +13991,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'V4' =>
+        'V4' => 
         array (
           'name' => 'V4',
           'type' => 'VARCHAR2',
@@ -13998,7 +14002,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'C5' =>
+        'C5' => 
         array (
           'name' => 'C5',
           'type' => 'VARCHAR2',
@@ -14009,7 +14013,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'V5' =>
+        'V5' => 
         array (
           'name' => 'V5',
           'type' => 'VARCHAR2',
@@ -14020,7 +14024,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SQLCOND' =>
+        'SQLCOND' => 
         array (
           'name' => 'SQLCOND',
           'type' => 'VARCHAR2',
@@ -14033,16 +14037,16 @@
         ),
       ),
     ),
-    'TBL_DMEP_LIQUIDATION' =>
+    'TBL_DMEP_LIQUIDATION' => 
     array (
       'name' => 'TBL_DMEP_LIQUIDATION',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Gestion budgétaire (enveloppes)',
       'sequence' => 'TBL_DMEP_LIQUIDATION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14053,7 +14057,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -14064,7 +14068,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_RESSOURCE_ID' =>
+        'TYPE_RESSOURCE_ID' => 
         array (
           'name' => 'TYPE_RESSOURCE_ID',
           'type' => 'NUMBER',
@@ -14075,7 +14079,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -14086,7 +14090,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -14097,7 +14101,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14110,16 +14114,16 @@
         ),
       ),
     ),
-    'TBL_DOSSIER' =>
+    'TBL_DOSSIER' => 
     array (
       'name' => 'TBL_DOSSIER',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Données personnelles',
       'sequence' => 'TBL_DOSSIER_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14130,7 +14134,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -14141,7 +14145,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -14152,7 +14156,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_DOSSIER' =>
+        'PEUT_SAISIR_DOSSIER' => 
         array (
           'name' => 'PEUT_SAISIR_DOSSIER',
           'type' => 'NUMBER',
@@ -14163,7 +14167,7 @@
           'default' => '0',
           'commentaire' => '1 Si l\'intervenant a un dossier, 0 sinon',
         ),
-        'DOSSIER_ID' =>
+        'DOSSIER_ID' => 
         array (
           'name' => 'DOSSIER_ID',
           'type' => 'NUMBER',
@@ -14174,7 +14178,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -14185,7 +14189,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14198,16 +14202,16 @@
         ),
       ),
     ),
-    'TBL_LIEN' =>
+    'TBL_LIEN' => 
     array (
       'name' => 'TBL_LIEN',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Liens (pour les charges d\'enseignement)',
       'sequence' => 'TBL_LIEN_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14218,7 +14222,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIEN_ID' =>
+        'LIEN_ID' => 
         array (
           'name' => 'LIEN_ID',
           'type' => 'NUMBER',
@@ -14229,7 +14233,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_ID' =>
+        'SCENARIO_ID' => 
         array (
           'name' => 'SCENARIO_ID',
           'type' => 'NUMBER',
@@ -14240,7 +14244,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_LIEN_ID' =>
+        'SCENARIO_LIEN_ID' => 
         array (
           'name' => 'SCENARIO_LIEN_ID',
           'type' => 'NUMBER',
@@ -14251,7 +14255,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOEUD_SUP_ID' =>
+        'NOEUD_SUP_ID' => 
         array (
           'name' => 'NOEUD_SUP_ID',
           'type' => 'NUMBER',
@@ -14262,7 +14266,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NOEUD_INF_ID' =>
+        'NOEUD_INF_ID' => 
         array (
           'name' => 'NOEUD_INF_ID',
           'type' => 'NUMBER',
@@ -14273,7 +14277,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -14284,7 +14288,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACTIF' =>
+        'ACTIF' => 
         array (
           'name' => 'ACTIF',
           'type' => 'NUMBER',
@@ -14295,7 +14299,7 @@
           'default' => '1',
           'commentaire' => 'Témoin (0 ou 1), 1 si actif',
         ),
-        'POIDS' =>
+        'POIDS' => 
         array (
           'name' => 'POIDS',
           'type' => 'NUMBER',
@@ -14306,7 +14310,7 @@
           'default' => '1',
           'commentaire' => 'Poids (1 par défaut)',
         ),
-        'CHOIX_MINIMUM' =>
+        'CHOIX_MINIMUM' => 
         array (
           'name' => 'CHOIX_MINIMUM',
           'type' => 'NUMBER',
@@ -14317,7 +14321,7 @@
           'default' => NULL,
           'commentaire' => 'Choix minimum',
         ),
-        'CHOIX_MAXIMUM' =>
+        'CHOIX_MAXIMUM' => 
         array (
           'name' => 'CHOIX_MAXIMUM',
           'type' => 'NUMBER',
@@ -14328,7 +14332,7 @@
           'default' => NULL,
           'commentaire' => 'Choix maximum',
         ),
-        'NB_CHOIX' =>
+        'NB_CHOIX' => 
         array (
           'name' => 'NB_CHOIX',
           'type' => 'NUMBER',
@@ -14339,7 +14343,7 @@
           'default' => '1',
           'commentaire' => 'Nombre de choix',
         ),
-        'TOTAL_POIDS' =>
+        'TOTAL_POIDS' => 
         array (
           'name' => 'TOTAL_POIDS',
           'type' => 'FLOAT',
@@ -14350,7 +14354,7 @@
           'default' => '1',
           'commentaire' => 'Total de poids des fils',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14361,7 +14365,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'MAX_POIDS' =>
+        'MAX_POIDS' => 
         array (
           'name' => 'MAX_POIDS',
           'type' => 'NUMBER',
@@ -14374,16 +14378,16 @@
         ),
       ),
     ),
-    'TBL_PAIEMENT' =>
+    'TBL_PAIEMENT' => 
     array (
       'name' => 'TBL_PAIEMENT',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Données liées aux paiements et demandes de mises en paiement',
       'sequence' => 'TBL_PAIEMENT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14394,7 +14398,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -14405,7 +14409,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -14416,7 +14420,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -14427,7 +14431,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MISE_EN_PAIEMENT_ID' =>
+        'MISE_EN_PAIEMENT_ID' => 
         array (
           'name' => 'MISE_EN_PAIEMENT_ID',
           'type' => 'NUMBER',
@@ -14438,7 +14442,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PERIODE_PAIEMENT_ID' =>
+        'PERIODE_PAIEMENT_ID' => 
         array (
           'name' => 'PERIODE_PAIEMENT_ID',
           'type' => 'NUMBER',
@@ -14449,7 +14453,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14460,7 +14464,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_A_PAYER' =>
+        'HEURES_A_PAYER' => 
         array (
           'name' => 'HEURES_A_PAYER',
           'type' => 'FLOAT',
@@ -14471,7 +14475,7 @@
           'default' => '0',
           'commentaire' => 'HETD à payer',
         ),
-        'HEURES_A_PAYER_POND' =>
+        'HEURES_A_PAYER_POND' => 
         array (
           'name' => 'HEURES_A_PAYER_POND',
           'type' => 'FLOAT',
@@ -14482,7 +14486,7 @@
           'default' => '0',
           'commentaire' => 'HETD à payer (en %)',
         ),
-        'HEURES_DEMANDEES' =>
+        'HEURES_DEMANDEES' => 
         array (
           'name' => 'HEURES_DEMANDEES',
           'type' => 'FLOAT',
@@ -14493,7 +14497,7 @@
           'default' => '0',
           'commentaire' => 'HETD demandées',
         ),
-        'HEURES_PAYEES' =>
+        'HEURES_PAYEES' => 
         array (
           'name' => 'HEURES_PAYEES',
           'type' => 'FLOAT',
@@ -14504,7 +14508,7 @@
           'default' => '0',
           'commentaire' => 'HETD payées',
         ),
-        'FORMULE_RES_SERVICE_ID' =>
+        'FORMULE_RES_SERVICE_ID' => 
         array (
           'name' => 'FORMULE_RES_SERVICE_ID',
           'type' => 'NUMBER',
@@ -14515,7 +14519,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RES_SERVICE_REF_ID' =>
+        'FORMULE_RES_SERVICE_REF_ID' => 
         array (
           'name' => 'FORMULE_RES_SERVICE_REF_ID',
           'type' => 'NUMBER',
@@ -14526,7 +14530,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_ID' =>
+        'SERVICE_ID' => 
         array (
           'name' => 'SERVICE_ID',
           'type' => 'NUMBER',
@@ -14537,7 +14541,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL_ID' =>
+        'SERVICE_REFERENTIEL_ID' => 
         array (
           'name' => 'SERVICE_REFERENTIEL_ID',
           'type' => 'NUMBER',
@@ -14550,16 +14554,16 @@
         ),
       ),
     ),
-    'TBL_PIECE_JOINTE' =>
+    'TBL_PIECE_JOINTE' => 
     array (
       'name' => 'TBL_PIECE_JOINTE',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Pièces justificatives',
       'sequence' => 'TBL_PIECE_JOINTE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14570,7 +14574,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -14581,7 +14585,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_PIECE_JOINTE_ID' =>
+        'TYPE_PIECE_JOINTE_ID' => 
         array (
           'name' => 'TYPE_PIECE_JOINTE_ID',
           'type' => 'NUMBER',
@@ -14592,7 +14596,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -14603,7 +14607,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEMANDEE' =>
+        'DEMANDEE' => 
         array (
           'name' => 'DEMANDEE',
           'type' => 'NUMBER',
@@ -14614,7 +14618,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (1 si la PJ est demandée)',
         ),
-        'FOURNIE' =>
+        'FOURNIE' => 
         array (
           'name' => 'FOURNIE',
           'type' => 'NUMBER',
@@ -14625,7 +14629,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (1 si la PJ est fournie)',
         ),
-        'VALIDEE' =>
+        'VALIDEE' => 
         array (
           'name' => 'VALIDEE',
           'type' => 'NUMBER',
@@ -14636,7 +14640,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (1 si la PJ est validée)',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14647,7 +14651,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_POUR_SEUIL' =>
+        'HEURES_POUR_SEUIL' => 
         array (
           'name' => 'HEURES_POUR_SEUIL',
           'type' => 'FLOAT',
@@ -14658,7 +14662,7 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de seuil pour la demande',
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -14671,16 +14675,16 @@
         ),
       ),
     ),
-    'TBL_PIECE_JOINTE_DEMANDE' =>
+    'TBL_PIECE_JOINTE_DEMANDE' => 
     array (
       'name' => 'TBL_PIECE_JOINTE_DEMANDE',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Pièces justificatives (demandes)',
       'sequence' => 'TBL_PIECE_JOINTE_DEMAND_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14691,7 +14695,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -14702,7 +14706,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_PIECE_JOINTE_ID' =>
+        'TYPE_PIECE_JOINTE_ID' => 
         array (
           'name' => 'TYPE_PIECE_JOINTE_ID',
           'type' => 'NUMBER',
@@ -14713,7 +14717,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -14724,7 +14728,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14735,7 +14739,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_POUR_SEUIL' =>
+        'HEURES_POUR_SEUIL' => 
         array (
           'name' => 'HEURES_POUR_SEUIL',
           'type' => 'FLOAT',
@@ -14746,7 +14750,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -14759,16 +14763,16 @@
         ),
       ),
     ),
-    'TBL_PIECE_JOINTE_FOURNIE' =>
+    'TBL_PIECE_JOINTE_FOURNIE' => 
     array (
       'name' => 'TBL_PIECE_JOINTE_FOURNIE',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Pièces justificatives fournies',
       'sequence' => 'TBL_PIECE_JOINTE_FOURNI_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14779,7 +14783,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -14790,7 +14794,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_PIECE_JOINTE_ID' =>
+        'TYPE_PIECE_JOINTE_ID' => 
         array (
           'name' => 'TYPE_PIECE_JOINTE_ID',
           'type' => 'NUMBER',
@@ -14801,7 +14805,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -14812,7 +14816,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -14823,7 +14827,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FICHIER_ID' =>
+        'FICHIER_ID' => 
         array (
           'name' => 'FICHIER_ID',
           'type' => 'NUMBER',
@@ -14834,7 +14838,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14845,7 +14849,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PIECE_JOINTE_ID' =>
+        'PIECE_JOINTE_ID' => 
         array (
           'name' => 'PIECE_JOINTE_ID',
           'type' => 'NUMBER',
@@ -14858,16 +14862,16 @@
         ),
       ),
     ),
-    'TBL_SERVICE' =>
+    'TBL_SERVICE' => 
     array (
       'name' => 'TBL_SERVICE',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Services d\'ensiegnement',
       'sequence' => 'TBL_SERVICE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -14878,7 +14882,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -14889,7 +14893,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -14900,7 +14904,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_SERVICE' =>
+        'PEUT_SAISIR_SERVICE' => 
         array (
           'name' => 'PEUT_SAISIR_SERVICE',
           'type' => 'NUMBER',
@@ -14911,7 +14915,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -14922,7 +14926,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -14933,7 +14937,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NBVH' =>
+        'NBVH' => 
         array (
           'name' => 'NBVH',
           'type' => 'FLOAT',
@@ -14944,7 +14948,7 @@
           'default' => '0',
           'commentaire' => 'Nombre de volumes horaires saisis',
         ),
-        'VALIDE' =>
+        'VALIDE' => 
         array (
           'name' => 'VALIDE',
           'type' => 'FLOAT',
@@ -14955,7 +14959,7 @@
           'default' => '0',
           'commentaire' => 'Nombre de volumes horaires validés',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -14966,7 +14970,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -14977,7 +14981,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_PERIODE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_PERIODE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_PERIODE_ID',
           'type' => 'NUMBER',
@@ -14988,7 +14992,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -14999,7 +15003,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_HISTO' =>
+        'ELEMENT_PEDAGOGIQUE_HISTO' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_HISTO',
           'type' => 'NUMBER',
@@ -15010,7 +15014,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'ETAPE_HISTO' =>
+        'ETAPE_HISTO' => 
         array (
           'name' => 'ETAPE_HISTO',
           'type' => 'NUMBER',
@@ -15021,7 +15025,7 @@
           'default' => '1',
           'commentaire' => 'Témoin (1 si l\'étape est supprimée)',
         ),
-        'HAS_HEURES_MAUVAISE_PERIODE' =>
+        'HAS_HEURES_MAUVAISE_PERIODE' => 
         array (
           'name' => 'HAS_HEURES_MAUVAISE_PERIODE',
           'type' => 'NUMBER',
@@ -15032,7 +15036,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (1 si heures saisies au mauvais semestre)',
         ),
-        'SERVICE_ID' =>
+        'SERVICE_ID' => 
         array (
           'name' => 'SERVICE_ID',
           'type' => 'NUMBER',
@@ -15043,7 +15047,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_STRUCTURE_ID' =>
+        'INTERVENANT_STRUCTURE_ID' => 
         array (
           'name' => 'INTERVENANT_STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -15054,7 +15058,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_ID' =>
+        'TYPE_INTERVENANT_ID' => 
         array (
           'name' => 'TYPE_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15065,7 +15069,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_CODE' =>
+        'TYPE_INTERVENANT_CODE' => 
         array (
           'name' => 'TYPE_INTERVENANT_CODE',
           'type' => 'VARCHAR2',
@@ -15076,7 +15080,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_CODE' =>
+        'TYPE_VOLUME_HORAIRE_CODE' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_CODE',
           'type' => 'VARCHAR2',
@@ -15087,7 +15091,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -15100,16 +15104,16 @@
         ),
       ),
     ),
-    'TBL_SERVICE_REFERENTIEL' =>
+    'TBL_SERVICE_REFERENTIEL' => 
     array (
       'name' => 'TBL_SERVICE_REFERENTIEL',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Référentiel',
       'sequence' => 'TBL_SERVICE_REFERENTIEL_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15120,7 +15124,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -15131,7 +15135,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15142,7 +15146,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_SERVICE' =>
+        'PEUT_SAISIR_SERVICE' => 
         array (
           'name' => 'PEUT_SAISIR_SERVICE',
           'type' => 'NUMBER',
@@ -15153,7 +15157,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (1=peut saisir du référentiel)',
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -15164,7 +15168,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -15175,7 +15179,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NBVH' =>
+        'NBVH' => 
         array (
           'name' => 'NBVH',
           'type' => 'FLOAT',
@@ -15186,7 +15190,7 @@
           'default' => '0',
           'commentaire' => 'Nombre de volumes horaires',
         ),
-        'VALIDE' =>
+        'VALIDE' => 
         array (
           'name' => 'VALIDE',
           'type' => 'FLOAT',
@@ -15197,7 +15201,7 @@
           'default' => '0',
           'commentaire' => 'Nombre de volumes horaires validés',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -15210,16 +15214,16 @@
         ),
       ),
     ),
-    'TBL_SERVICE_SAISIE' =>
+    'TBL_SERVICE_SAISIE' => 
     array (
       'name' => 'TBL_SERVICE_SAISIE',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Service (pour alimenter le Workflow)',
       'sequence' => 'TBL_SERVICE_SAISIE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15230,7 +15234,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -15241,7 +15245,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15252,7 +15256,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_SERVICE' =>
+        'PEUT_SAISIR_SERVICE' => 
         array (
           'name' => 'PEUT_SAISIR_SERVICE',
           'type' => 'NUMBER',
@@ -15263,7 +15267,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (0 ou 1)',
         ),
-        'PEUT_SAISIR_REFERENTIEL' =>
+        'PEUT_SAISIR_REFERENTIEL' => 
         array (
           'name' => 'PEUT_SAISIR_REFERENTIEL',
           'type' => 'NUMBER',
@@ -15274,7 +15278,7 @@
           'default' => '0',
           'commentaire' => 'Témoin (0 ou 1)',
         ),
-        'HEURES_SERVICE_PREV' =>
+        'HEURES_SERVICE_PREV' => 
         array (
           'name' => 'HEURES_SERVICE_PREV',
           'type' => 'FLOAT',
@@ -15285,7 +15289,7 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de service prévisionnel',
         ),
-        'HEURES_REFERENTIEL_PREV' =>
+        'HEURES_REFERENTIEL_PREV' => 
         array (
           'name' => 'HEURES_REFERENTIEL_PREV',
           'type' => 'FLOAT',
@@ -15296,7 +15300,7 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de référentiel prévisionnel',
         ),
-        'HEURES_SERVICE_REAL' =>
+        'HEURES_SERVICE_REAL' => 
         array (
           'name' => 'HEURES_SERVICE_REAL',
           'type' => 'FLOAT',
@@ -15307,7 +15311,7 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de service réalisé',
         ),
-        'HEURES_REFERENTIEL_REAL' =>
+        'HEURES_REFERENTIEL_REAL' => 
         array (
           'name' => 'HEURES_REFERENTIEL_REAL',
           'type' => 'FLOAT',
@@ -15318,7 +15322,7 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de référentiel réalisé',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -15331,16 +15335,16 @@
         ),
       ),
     ),
-    'TBL_VALIDATION_ENSEIGNEMENT' =>
+    'TBL_VALIDATION_ENSEIGNEMENT' => 
     array (
       'name' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Suivi des validations de services',
       'sequence' => 'TBL_VALIDATION_ENSEIGNE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15351,7 +15355,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -15362,7 +15366,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15373,7 +15377,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -15384,7 +15388,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -15395,7 +15399,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_ID' =>
+        'SERVICE_ID' => 
         array (
           'name' => 'SERVICE_ID',
           'type' => 'NUMBER',
@@ -15406,7 +15410,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -15417,7 +15421,7 @@
           'default' => NULL,
           'commentaire' => 'Si validé',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -15428,7 +15432,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'VOLUME_HORAIRE_ID' =>
+        'VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -15439,7 +15443,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'AUTO_VALIDATION' =>
+        'AUTO_VALIDATION' => 
         array (
           'name' => 'AUTO_VALIDATION',
           'type' => 'NUMBER',
@@ -15452,16 +15456,16 @@
         ),
       ),
     ),
-    'TBL_VALIDATION_REFERENTIEL' =>
+    'TBL_VALIDATION_REFERENTIEL' => 
     array (
       'name' => 'TBL_VALIDATION_REFERENTIEL',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Suivi des validations du référentiel',
       'sequence' => 'TBL_VALIDATION_REFERENT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15472,7 +15476,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -15483,7 +15487,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15494,7 +15498,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -15505,7 +15509,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -15516,7 +15520,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL_ID' =>
+        'SERVICE_REFERENTIEL_ID' => 
         array (
           'name' => 'SERVICE_REFERENTIEL_ID',
           'type' => 'NUMBER',
@@ -15527,7 +15531,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -15538,7 +15542,7 @@
           'default' => NULL,
           'commentaire' => 'Si validé',
         ),
-        'TO_DELETE' =>
+        'TO_DELETE' => 
         array (
           'name' => 'TO_DELETE',
           'type' => 'NUMBER',
@@ -15549,7 +15553,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'VOLUME_HORAIRE_REF_ID' =>
+        'VOLUME_HORAIRE_REF_ID' => 
         array (
           'name' => 'VOLUME_HORAIRE_REF_ID',
           'type' => 'NUMBER',
@@ -15560,7 +15564,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'AUTO_VALIDATION' =>
+        'AUTO_VALIDATION' => 
         array (
           'name' => 'AUTO_VALIDATION',
           'type' => 'NUMBER',
@@ -15573,16 +15577,16 @@
         ),
       ),
     ),
-    'TBL_WORKFLOW' =>
+    'TBL_WORKFLOW' => 
     array (
       'name' => 'TBL_WORKFLOW',
       'temporary' => false,
       'logging' => false,
       'commentaire' => 'Workflow (feuilles de routes : avancement par étape par intervenant et le cas échéant par composante)',
       'sequence' => 'TBL_WORKFLOW_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15593,7 +15597,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15604,7 +15608,7 @@
           'default' => NULL,
           'commentaire' => 'Identifiant de l\'intervenant concerné',
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -15615,7 +15619,7 @@
           'default' => NULL,
           'commentaire' => 'Identifiant de l\'étape concernée',
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -15626,7 +15630,7 @@
           'default' => 'null',
           'commentaire' => 'Eventuelle structure concernée',
         ),
-        'ATTEIGNABLE' =>
+        'ATTEIGNABLE' => 
         array (
           'name' => 'ATTEIGNABLE',
           'type' => 'NUMBER',
@@ -15637,7 +15641,7 @@
           'default' => '1',
           'commentaire' => 'Témoin indiquant si l\'étape est atteignable ou non',
         ),
-        'REALISATION' =>
+        'REALISATION' => 
         array (
           'name' => 'REALISATION',
           'type' => 'FLOAT',
@@ -15648,7 +15652,7 @@
           'default' => '0',
           'commentaire' => 'Pourcentage de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ),
-        'OBJECTIF' =>
+        'OBJECTIF' => 
         array (
           'name' => 'OBJECTIF',
           'type' => 'FLOAT',
@@ -15659,7 +15663,7 @@
           'default' => '1',
           'commentaire' => 'Objectif de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ),
-        'ANNEE_ID' =>
+        'ANNEE_ID' => 
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -15670,7 +15674,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_ID' =>
+        'TYPE_INTERVENANT_ID' => 
         array (
           'name' => 'TYPE_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15681,7 +15685,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_CODE' =>
+        'TYPE_INTERVENANT_CODE' => 
         array (
           'name' => 'TYPE_INTERVENANT_CODE',
           'type' => 'VARCHAR2',
@@ -15692,7 +15696,7 @@
           'default' => NULL,
           'commentaire' => 'Code du type d\'intevention (CM / TD / TP, etc)',
         ),
-        'ETAPE_CODE' =>
+        'ETAPE_CODE' => 
         array (
           'name' => 'ETAPE_CODE',
           'type' => 'VARCHAR2',
@@ -15703,7 +15707,7 @@
           'default' => NULL,
           'commentaire' => 'Code de l\'étape du workflow concernée',
         ),
-        'STATUT_INTERVENANT_ID' =>
+        'STATUT_INTERVENANT_ID' => 
         array (
           'name' => 'STATUT_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15716,16 +15720,16 @@
         ),
       ),
     ),
-    'TEST_BUFFER' =>
+    'TEST_BUFFER' => 
     array (
       'name' => 'TEST_BUFFER',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TEST_BUFFER_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15736,7 +15740,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TABLE_NAME' =>
+        'TABLE_NAME' => 
         array (
           'name' => 'TABLE_NAME',
           'type' => 'VARCHAR2',
@@ -15747,7 +15751,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATA_ID' =>
+        'DATA_ID' => 
         array (
           'name' => 'DATA_ID',
           'type' => 'NUMBER',
@@ -15760,16 +15764,16 @@
         ),
       ),
     ),
-    'TMP_SCENARIO_NOEUD_EFFECTIF' =>
+    'TMP_SCENARIO_NOEUD_EFFECTIF' => 
     array (
       'name' => 'TMP_SCENARIO_NOEUD_EFFECTIF',
       'temporary' => true,
       'logging' => false,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'SCENARIO_NOEUD_ID' =>
+        'SCENARIO_NOEUD_ID' => 
         array (
           'name' => 'SCENARIO_NOEUD_ID',
           'type' => 'NUMBER',
@@ -15780,7 +15784,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_HEURES_ID' =>
+        'TYPE_HEURES_ID' => 
         array (
           'name' => 'TYPE_HEURES_ID',
           'type' => 'NUMBER',
@@ -15791,7 +15795,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_ID' =>
+        'ETAPE_ID' => 
         array (
           'name' => 'ETAPE_ID',
           'type' => 'NUMBER',
@@ -15802,7 +15806,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'EFFECTIF' =>
+        'EFFECTIF' => 
         array (
           'name' => 'EFFECTIF',
           'type' => 'FLOAT',
@@ -15815,16 +15819,16 @@
         ),
       ),
     ),
-    'TYPE_AGREMENT' =>
+    'TYPE_AGREMENT' => 
     array (
       'name' => 'TYPE_AGREMENT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_AGREMENT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15835,7 +15839,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -15846,7 +15850,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -15857,7 +15861,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -15868,7 +15872,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -15879,7 +15883,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -15890,7 +15894,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -15901,7 +15905,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -15912,7 +15916,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -15925,16 +15929,16 @@
         ),
       ),
     ),
-    'TYPE_AGREMENT_STATUT' =>
+    'TYPE_AGREMENT_STATUT' => 
     array (
       'name' => 'TYPE_AGREMENT_STATUT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_AGREMENT_STATUT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -15945,7 +15949,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_AGREMENT_ID' =>
+        'TYPE_AGREMENT_ID' => 
         array (
           'name' => 'TYPE_AGREMENT_ID',
           'type' => 'NUMBER',
@@ -15956,7 +15960,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATUT_INTERVENANT_ID' =>
+        'STATUT_INTERVENANT_ID' => 
         array (
           'name' => 'STATUT_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -15967,7 +15971,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -15978,7 +15982,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' =>
+        'PREMIER_RECRUTEMENT' => 
         array (
           'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
@@ -15989,7 +15993,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16000,7 +16004,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -16011,7 +16015,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -16022,7 +16026,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -16033,7 +16037,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -16044,7 +16048,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -16057,16 +16061,16 @@
         ),
       ),
     ),
-    'TYPE_CONTRAT' =>
+    'TYPE_CONTRAT' => 
     array (
       'name' => 'TYPE_CONTRAT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_CONTRAT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -16077,7 +16081,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -16088,7 +16092,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -16099,7 +16103,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16110,7 +16114,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -16121,7 +16125,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -16132,7 +16136,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -16143,7 +16147,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -16154,7 +16158,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -16167,16 +16171,16 @@
         ),
       ),
     ),
-    'TYPE_FORMATION' =>
+    'TYPE_FORMATION' => 
     array (
       'name' => 'TYPE_FORMATION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_FORMATION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -16187,7 +16191,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -16198,7 +16202,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -16209,7 +16213,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'GROUPE_ID' =>
+        'GROUPE_ID' => 
         array (
           'name' => 'GROUPE_ID',
           'type' => 'NUMBER',
@@ -16220,7 +16224,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -16231,7 +16235,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -16242,7 +16246,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16253,7 +16257,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -16264,7 +16268,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -16275,7 +16279,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -16286,7 +16290,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -16297,7 +16301,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -16308,7 +16312,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_STATUTAIRE' =>
+        'SERVICE_STATUTAIRE' => 
         array (
           'name' => 'SERVICE_STATUTAIRE',
           'type' => 'NUMBER',
@@ -16321,16 +16325,16 @@
         ),
       ),
     ),
-    'TYPE_HEURES' =>
+    'TYPE_HEURES' => 
     array (
       'name' => 'TYPE_HEURES',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_HEURES_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -16341,7 +16345,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -16352,7 +16356,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_COURT' =>
+        'LIBELLE_COURT' => 
         array (
           'name' => 'LIBELLE_COURT',
           'type' => 'VARCHAR2',
@@ -16363,7 +16367,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' =>
+        'LIBELLE_LONG' => 
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -16374,7 +16378,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -16385,7 +16389,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_HEURES_ELEMENT_ID' =>
+        'TYPE_HEURES_ELEMENT_ID' => 
         array (
           'name' => 'TYPE_HEURES_ELEMENT_ID',
           'type' => 'NUMBER',
@@ -16396,7 +16400,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELIGIBLE_CENTRE_COUT_EP' =>
+        'ELIGIBLE_CENTRE_COUT_EP' => 
         array (
           'name' => 'ELIGIBLE_CENTRE_COUT_EP',
           'type' => 'NUMBER',
@@ -16407,7 +16411,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'ELIGIBLE_EXTRACTION_PAIE' =>
+        'ELIGIBLE_EXTRACTION_PAIE' => 
         array (
           'name' => 'ELIGIBLE_EXTRACTION_PAIE',
           'type' => 'NUMBER',
@@ -16418,7 +16422,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16429,7 +16433,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -16440,7 +16444,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -16451,7 +16455,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -16462,7 +16466,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -16473,7 +16477,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -16484,7 +16488,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ENSEIGNEMENT' =>
+        'ENSEIGNEMENT' => 
         array (
           'name' => 'ENSEIGNEMENT',
           'type' => 'NUMBER',
@@ -16497,16 +16501,16 @@
         ),
       ),
     ),
-    'TYPE_INTERVENANT' =>
+    'TYPE_INTERVENANT' => 
     array (
       'name' => 'TYPE_INTERVENANT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_INTERVENANT_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -16517,7 +16521,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -16528,7 +16532,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -16539,7 +16543,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16550,7 +16554,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -16561,7 +16565,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -16572,7 +16576,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -16583,7 +16587,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -16594,7 +16598,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -16607,16 +16611,16 @@
         ),
       ),
     ),
-    'TYPE_INTERVENTION' =>
+    'TYPE_INTERVENTION' => 
     array (
       'name' => 'TYPE_INTERVENTION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_INTERVENTION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -16627,7 +16631,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -16638,7 +16642,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -16649,7 +16653,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -16660,7 +16664,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAUX_HETD_SERVICE' =>
+        'TAUX_HETD_SERVICE' => 
         array (
           'name' => 'TAUX_HETD_SERVICE',
           'type' => 'FLOAT',
@@ -16671,7 +16675,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_HETD_COMPLEMENTAIRE' =>
+        'TAUX_HETD_COMPLEMENTAIRE' => 
         array (
           'name' => 'TAUX_HETD_COMPLEMENTAIRE',
           'type' => 'FLOAT',
@@ -16682,7 +16686,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'VISIBLE' =>
+        'VISIBLE' => 
         array (
           'name' => 'VISIBLE',
           'type' => 'NUMBER',
@@ -16693,7 +16697,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16704,7 +16708,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -16715,7 +16719,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -16726,7 +16730,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -16737,7 +16741,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -16748,7 +16752,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -16759,7 +16763,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_DEBUT_ID' =>
+        'ANNEE_DEBUT_ID' => 
         array (
           'name' => 'ANNEE_DEBUT_ID',
           'type' => 'NUMBER',
@@ -16770,7 +16774,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_FIN_ID' =>
+        'ANNEE_FIN_ID' => 
         array (
           'name' => 'ANNEE_FIN_ID',
           'type' => 'NUMBER',
@@ -16781,7 +16785,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'REGLE_FOAD' =>
+        'REGLE_FOAD' => 
         array (
           'name' => 'REGLE_FOAD',
           'type' => 'NUMBER',
@@ -16792,7 +16796,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'REGLE_FC' =>
+        'REGLE_FC' => 
         array (
           'name' => 'REGLE_FC',
           'type' => 'NUMBER',
@@ -16803,7 +16807,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_MAQUETTE_ID' =>
+        'TYPE_INTERVENTION_MAQUETTE_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_MAQUETTE_ID',
           'type' => 'NUMBER',
@@ -16814,7 +16818,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VISIBLE_EXTERIEUR' =>
+        'VISIBLE_EXTERIEUR' => 
         array (
           'name' => 'VISIBLE_EXTERIEUR',
           'type' => 'NUMBER',
@@ -16827,16 +16831,16 @@
         ),
       ),
     ),
-    'TYPE_INTERVENTION_EP' =>
+    'TYPE_INTERVENTION_EP' => 
     array (
       'name' => 'TYPE_INTERVENTION_EP',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_INTERVENTION_EP_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -16847,7 +16851,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -16858,7 +16862,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -16869,7 +16873,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16880,7 +16884,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -16891,7 +16895,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -16902,7 +16906,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -16913,7 +16917,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -16924,7 +16928,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -16935,7 +16939,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -16946,7 +16950,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -16959,16 +16963,16 @@
         ),
       ),
     ),
-    'TYPE_INTERVENTION_STATUT' =>
+    'TYPE_INTERVENTION_STATUT' => 
     array (
       'name' => 'TYPE_INTERVENTION_STATUT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_INTERVENTION_STATU_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -16979,7 +16983,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -16990,7 +16994,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATUT_INTERVENANT_ID' =>
+        'STATUT_INTERVENANT_ID' => 
         array (
           'name' => 'STATUT_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -17001,7 +17005,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAUX_HETD_SERVICE' =>
+        'TAUX_HETD_SERVICE' => 
         array (
           'name' => 'TAUX_HETD_SERVICE',
           'type' => 'FLOAT',
@@ -17012,7 +17016,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TAUX_HETD_COMPLEMENTAIRE' =>
+        'TAUX_HETD_COMPLEMENTAIRE' => 
         array (
           'name' => 'TAUX_HETD_COMPLEMENTAIRE',
           'type' => 'FLOAT',
@@ -17025,16 +17029,16 @@
         ),
       ),
     ),
-    'TYPE_INTERVENTION_STRUCTURE' =>
+    'TYPE_INTERVENTION_STRUCTURE' => 
     array (
       'name' => 'TYPE_INTERVENTION_STRUCTURE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_INTERVENTION_STRUC_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -17045,7 +17049,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -17056,7 +17060,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -17067,7 +17071,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VISIBLE' =>
+        'VISIBLE' => 
         array (
           'name' => 'VISIBLE',
           'type' => 'NUMBER',
@@ -17078,7 +17082,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_DEBUT_ID' =>
+        'ANNEE_DEBUT_ID' => 
         array (
           'name' => 'ANNEE_DEBUT_ID',
           'type' => 'NUMBER',
@@ -17089,7 +17093,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_FIN_ID' =>
+        'ANNEE_FIN_ID' => 
         array (
           'name' => 'ANNEE_FIN_ID',
           'type' => 'NUMBER',
@@ -17100,7 +17104,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17111,7 +17115,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -17122,7 +17126,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -17133,7 +17137,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -17144,7 +17148,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -17155,7 +17159,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -17168,16 +17172,16 @@
         ),
       ),
     ),
-    'TYPE_MODULATEUR' =>
+    'TYPE_MODULATEUR' => 
     array (
       'name' => 'TYPE_MODULATEUR',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_MODULATEUR_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -17188,7 +17192,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -17199,7 +17203,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -17210,7 +17214,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17221,7 +17225,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -17232,7 +17236,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -17243,7 +17247,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -17254,7 +17258,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -17265,7 +17269,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -17278,16 +17282,16 @@
         ),
       ),
     ),
-    'TYPE_MODULATEUR_EP' =>
+    'TYPE_MODULATEUR_EP' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_MODULATEUR_EP_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -17298,7 +17302,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_MODULATEUR_ID' =>
+        'TYPE_MODULATEUR_ID' => 
         array (
           'name' => 'TYPE_MODULATEUR_ID',
           'type' => 'NUMBER',
@@ -17309,7 +17313,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -17320,7 +17324,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -17331,7 +17335,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -17342,7 +17346,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17353,7 +17357,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -17364,7 +17368,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -17375,7 +17379,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -17386,7 +17390,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -17397,7 +17401,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -17410,16 +17414,16 @@
         ),
       ),
     ),
-    'TYPE_MODULATEUR_STRUCTURE' =>
+    'TYPE_MODULATEUR_STRUCTURE' => 
     array (
       'name' => 'TYPE_MODULATEUR_STRUCTURE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_MODULATEUR_STRUCTU_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -17430,7 +17434,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_MODULATEUR_ID' =>
+        'TYPE_MODULATEUR_ID' => 
         array (
           'name' => 'TYPE_MODULATEUR_ID',
           'type' => 'NUMBER',
@@ -17441,7 +17445,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -17452,7 +17456,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_DEBUT_ID' =>
+        'ANNEE_DEBUT_ID' => 
         array (
           'name' => 'ANNEE_DEBUT_ID',
           'type' => 'NUMBER',
@@ -17463,7 +17467,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_FIN_ID' =>
+        'ANNEE_FIN_ID' => 
         array (
           'name' => 'ANNEE_FIN_ID',
           'type' => 'NUMBER',
@@ -17474,7 +17478,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17485,7 +17489,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -17496,7 +17500,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -17507,7 +17511,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -17518,7 +17522,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -17529,7 +17533,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -17542,16 +17546,16 @@
         ),
       ),
     ),
-    'TYPE_PIECE_JOINTE' =>
+    'TYPE_PIECE_JOINTE' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_PIECE_JOINTE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -17562,7 +17566,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -17573,7 +17577,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -17584,7 +17588,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17595,7 +17599,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -17606,7 +17610,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -17617,7 +17621,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -17628,7 +17632,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -17639,7 +17643,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -17650,7 +17654,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'URL_MODELE_DOC' =>
+        'URL_MODELE_DOC' => 
         array (
           'name' => 'URL_MODELE_DOC',
           'type' => 'VARCHAR2',
@@ -17661,7 +17665,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -17674,16 +17678,16 @@
         ),
       ),
     ),
-    'TYPE_PIECE_JOINTE_STATUT' =>
+    'TYPE_PIECE_JOINTE_STATUT' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_STATUT',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_PIECE_JOINTE_STATU_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -17694,7 +17698,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_PIECE_JOINTE_ID' =>
+        'TYPE_PIECE_JOINTE_ID' => 
         array (
           'name' => 'TYPE_PIECE_JOINTE_ID',
           'type' => 'NUMBER',
@@ -17705,7 +17709,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATUT_INTERVENANT_ID' =>
+        'STATUT_INTERVENANT_ID' => 
         array (
           'name' => 'STATUT_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -17716,7 +17720,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -17727,7 +17731,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SEUIL_HETD' =>
+        'SEUIL_HETD' => 
         array (
           'name' => 'SEUIL_HETD',
           'type' => 'NUMBER',
@@ -17738,7 +17742,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' =>
+        'PREMIER_RECRUTEMENT' => 
         array (
           'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
@@ -17749,7 +17753,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17760,7 +17764,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -17771,7 +17775,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -17782,7 +17786,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -17793,7 +17797,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -17804,7 +17808,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -17815,7 +17819,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_DEBUT_ID' =>
+        'ANNEE_DEBUT_ID' => 
         array (
           'name' => 'ANNEE_DEBUT_ID',
           'type' => 'NUMBER',
@@ -17826,7 +17830,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_FIN_ID' =>
+        'ANNEE_FIN_ID' => 
         array (
           'name' => 'ANNEE_FIN_ID',
           'type' => 'NUMBER',
@@ -17837,7 +17841,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CHANGEMENT_RIB' =>
+        'CHANGEMENT_RIB' => 
         array (
           'name' => 'CHANGEMENT_RIB',
           'type' => 'NUMBER',
@@ -17848,7 +17852,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FC' =>
+        'FC' => 
         array (
           'name' => 'FC',
           'type' => 'NUMBER',
@@ -17861,16 +17865,16 @@
         ),
       ),
     ),
-    'TYPE_RESSOURCE' =>
+    'TYPE_RESSOURCE' => 
     array (
       'name' => 'TYPE_RESSOURCE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_RESSOURCE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -17881,7 +17885,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -17892,7 +17896,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -17903,7 +17907,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FI' =>
+        'FI' => 
         array (
           'name' => 'FI',
           'type' => 'NUMBER',
@@ -17914,7 +17918,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FA' =>
+        'FA' => 
         array (
           'name' => 'FA',
           'type' => 'NUMBER',
@@ -17925,7 +17929,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FC' =>
+        'FC' => 
         array (
           'name' => 'FC',
           'type' => 'NUMBER',
@@ -17936,7 +17940,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FC_MAJOREES' =>
+        'FC_MAJOREES' => 
         array (
           'name' => 'FC_MAJOREES',
           'type' => 'NUMBER',
@@ -17947,7 +17951,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'REFERENTIEL' =>
+        'REFERENTIEL' => 
         array (
           'name' => 'REFERENTIEL',
           'type' => 'NUMBER',
@@ -17958,7 +17962,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17969,7 +17973,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -17980,7 +17984,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -17991,7 +17995,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -18002,7 +18006,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -18013,7 +18017,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -18024,7 +18028,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETABLISSEMENT' =>
+        'ETABLISSEMENT' => 
         array (
           'name' => 'ETABLISSEMENT',
           'type' => 'NUMBER',
@@ -18037,16 +18041,16 @@
         ),
       ),
     ),
-    'TYPE_VALIDATION' =>
+    'TYPE_VALIDATION' => 
     array (
       'name' => 'TYPE_VALIDATION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'TYPE_VALIDATION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18057,7 +18061,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -18068,7 +18072,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -18081,16 +18085,16 @@
         ),
       ),
     ),
-    'TYPE_VOLUME_HORAIRE' =>
+    'TYPE_VOLUME_HORAIRE' => 
     array (
       'name' => 'TYPE_VOLUME_HORAIRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18101,7 +18105,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -18112,7 +18116,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' =>
+        'LIBELLE' => 
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -18123,7 +18127,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -18136,16 +18140,16 @@
         ),
       ),
     ),
-    'UTILISATEUR' =>
+    'UTILISATEUR' => 
     array (
       'name' => 'UTILISATEUR',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'UTILISATEUR_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18156,7 +18160,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'USERNAME' =>
+        'USERNAME' => 
         array (
           'name' => 'USERNAME',
           'type' => 'VARCHAR2',
@@ -18167,7 +18171,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'EMAIL' =>
+        'EMAIL' => 
         array (
           'name' => 'EMAIL',
           'type' => 'VARCHAR2',
@@ -18178,7 +18182,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DISPLAY_NAME' =>
+        'DISPLAY_NAME' => 
         array (
           'name' => 'DISPLAY_NAME',
           'type' => 'VARCHAR2',
@@ -18189,7 +18193,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PASSWORD' =>
+        'PASSWORD' => 
         array (
           'name' => 'PASSWORD',
           'type' => 'VARCHAR2',
@@ -18200,7 +18204,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STATE' =>
+        'STATE' => 
         array (
           'name' => 'STATE',
           'type' => 'NUMBER',
@@ -18211,7 +18215,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -18222,7 +18226,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PASSWORD_RESET_TOKEN' =>
+        'PASSWORD_RESET_TOKEN' => 
         array (
           'name' => 'PASSWORD_RESET_TOKEN',
           'type' => 'VARCHAR2',
@@ -18235,16 +18239,16 @@
         ),
       ),
     ),
-    'VALIDATION' =>
+    'VALIDATION' => 
     array (
       'name' => 'VALIDATION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'VALIDATION_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18255,7 +18259,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VALIDATION_ID' =>
+        'TYPE_VALIDATION_ID' => 
         array (
           'name' => 'TYPE_VALIDATION_ID',
           'type' => 'NUMBER',
@@ -18266,7 +18270,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' =>
+        'INTERVENANT_ID' => 
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -18277,7 +18281,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' =>
+        'STRUCTURE_ID' => 
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -18288,7 +18292,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -18299,7 +18303,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -18310,7 +18314,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -18321,7 +18325,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -18332,7 +18336,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -18343,7 +18347,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -18356,16 +18360,16 @@
         ),
       ),
     ),
-    'VALIDATION_VOL_HORAIRE' =>
+    'VALIDATION_VOL_HORAIRE' => 
     array (
       'name' => 'VALIDATION_VOL_HORAIRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'VALIDATION_VOL_HORAIRE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -18376,7 +18380,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VOLUME_HORAIRE_ID' =>
+        'VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -18389,16 +18393,16 @@
         ),
       ),
     ),
-    'VALIDATION_VOL_HORAIRE_REF' =>
+    'VALIDATION_VOL_HORAIRE_REF' => 
     array (
       'name' => 'VALIDATION_VOL_HORAIRE_REF',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'VALIDATION_VOL_HORAIRE__ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'VALIDATION_ID' =>
+        'VALIDATION_ID' => 
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -18409,7 +18413,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VOLUME_HORAIRE_REF_ID' =>
+        'VOLUME_HORAIRE_REF_ID' => 
         array (
           'name' => 'VOLUME_HORAIRE_REF_ID',
           'type' => 'NUMBER',
@@ -18422,16 +18426,16 @@
         ),
       ),
     ),
-    'VERSION' =>
+    'VERSION' => 
     array (
       'name' => 'VERSION',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => NULL,
-      'columns' =>
+      'columns' => 
       array (
-        'NUMERO' =>
+        'NUMERO' => 
         array (
           'name' => 'NUMERO',
           'type' => 'NUMBER',
@@ -18444,16 +18448,16 @@
         ),
       ),
     ),
-    'VOLUME_HORAIRE' =>
+    'VOLUME_HORAIRE' => 
     array (
       'name' => 'VOLUME_HORAIRE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'VOLUME_HORAIRE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18464,7 +18468,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -18475,7 +18479,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_ID' =>
+        'SERVICE_ID' => 
         array (
           'name' => 'SERVICE_ID',
           'type' => 'NUMBER',
@@ -18486,7 +18490,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PERIODE_ID' =>
+        'PERIODE_ID' => 
         array (
           'name' => 'PERIODE_ID',
           'type' => 'NUMBER',
@@ -18497,7 +18501,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -18508,7 +18512,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -18519,7 +18523,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'MOTIF_NON_PAIEMENT_ID' =>
+        'MOTIF_NON_PAIEMENT_ID' => 
         array (
           'name' => 'MOTIF_NON_PAIEMENT_ID',
           'type' => 'NUMBER',
@@ -18530,7 +18534,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CONTRAT_ID' =>
+        'CONTRAT_ID' => 
         array (
           'name' => 'CONTRAT_ID',
           'type' => 'NUMBER',
@@ -18541,7 +18545,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -18552,7 +18556,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -18563,7 +18567,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -18574,7 +18578,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -18585,7 +18589,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -18596,7 +18600,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -18607,7 +18611,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -18618,7 +18622,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -18629,7 +18633,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'AUTO_VALIDATION' =>
+        'AUTO_VALIDATION' => 
         array (
           'name' => 'AUTO_VALIDATION',
           'type' => 'NUMBER',
@@ -18640,7 +18644,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HORAIRE_DEBUT' =>
+        'HORAIRE_DEBUT' => 
         array (
           'name' => 'HORAIRE_DEBUT',
           'type' => 'DATE',
@@ -18651,7 +18655,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HORAIRE_FIN' =>
+        'HORAIRE_FIN' => 
         array (
           'name' => 'HORAIRE_FIN',
           'type' => 'DATE',
@@ -18664,16 +18668,16 @@
         ),
       ),
     ),
-    'VOLUME_HORAIRE_CHARGE' =>
+    'VOLUME_HORAIRE_CHARGE' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARGE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'VOLUME_HORAIRE_CHARGE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18684,7 +18688,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SCENARIO_ID' =>
+        'SCENARIO_ID' => 
         array (
           'name' => 'SCENARIO_ID',
           'type' => 'NUMBER',
@@ -18695,7 +18699,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -18706,7 +18710,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -18717,7 +18721,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'GROUPES' =>
+        'GROUPES' => 
         array (
           'name' => 'GROUPES',
           'type' => 'NUMBER',
@@ -18728,7 +18732,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -18739,7 +18743,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -18750,7 +18754,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -18761,7 +18765,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -18772,7 +18776,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -18783,7 +18787,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -18794,7 +18798,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -18805,7 +18809,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -18818,16 +18822,16 @@
         ),
       ),
     ),
-    'VOLUME_HORAIRE_ENS' =>
+    'VOLUME_HORAIRE_ENS' => 
     array (
       'name' => 'VOLUME_HORAIRE_ENS',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'VOLUME_HORAIRE_ENS_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18838,7 +18842,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' =>
+        'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -18849,7 +18853,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' =>
+        'TYPE_INTERVENTION_ID' => 
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -18860,7 +18864,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -18871,7 +18875,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -18882,7 +18886,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -18893,7 +18897,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -18904,7 +18908,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -18915,7 +18919,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -18926,7 +18930,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -18937,7 +18941,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -18948,7 +18952,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -18959,7 +18963,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'GROUPES' =>
+        'GROUPES' => 
         array (
           'name' => 'GROUPES',
           'type' => 'FLOAT',
@@ -18972,16 +18976,16 @@
         ),
       ),
     ),
-    'VOLUME_HORAIRE_REF' =>
+    'VOLUME_HORAIRE_REF' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'VOLUME_HORAIRE_REF_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -18992,7 +18996,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_VOLUME_HORAIRE_ID' =>
+        'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
           'type' => 'NUMBER',
@@ -19003,7 +19007,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL_ID' =>
+        'SERVICE_REFERENTIEL_ID' => 
         array (
           'name' => 'SERVICE_REFERENTIEL_ID',
           'type' => 'NUMBER',
@@ -19014,7 +19018,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' =>
+        'HEURES' => 
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -19025,7 +19029,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -19036,7 +19040,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATEUR_ID' =>
+        'HISTO_CREATEUR_ID' => 
         array (
           'name' => 'HISTO_CREATEUR_ID',
           'type' => 'NUMBER',
@@ -19047,7 +19051,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATION' =>
+        'HISTO_MODIFICATION' => 
         array (
           'name' => 'HISTO_MODIFICATION',
           'type' => 'DATE',
@@ -19058,7 +19062,7 @@
           'default' => 'SYSDATE',
           'commentaire' => NULL,
         ),
-        'HISTO_MODIFICATEUR_ID' =>
+        'HISTO_MODIFICATEUR_ID' => 
         array (
           'name' => 'HISTO_MODIFICATEUR_ID',
           'type' => 'NUMBER',
@@ -19069,7 +19073,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTION' =>
+        'HISTO_DESTRUCTION' => 
         array (
           'name' => 'HISTO_DESTRUCTION',
           'type' => 'DATE',
@@ -19080,7 +19084,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_DESTRUCTEUR_ID' =>
+        'HISTO_DESTRUCTEUR_ID' => 
         array (
           'name' => 'HISTO_DESTRUCTEUR_ID',
           'type' => 'NUMBER',
@@ -19091,7 +19095,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' =>
+        'SOURCE_ID' => 
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -19102,7 +19106,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' =>
+        'SOURCE_CODE' => 
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -19113,7 +19117,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'AUTO_VALIDATION' =>
+        'AUTO_VALIDATION' => 
         array (
           'name' => 'AUTO_VALIDATION',
           'type' => 'NUMBER',
@@ -19124,7 +19128,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HORAIRE_DEBUT' =>
+        'HORAIRE_DEBUT' => 
         array (
           'name' => 'HORAIRE_DEBUT',
           'type' => 'DATE',
@@ -19135,7 +19139,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HORAIRE_FIN' =>
+        'HORAIRE_FIN' => 
         array (
           'name' => 'HORAIRE_FIN',
           'type' => 'DATE',
@@ -19148,16 +19152,16 @@
         ),
       ),
     ),
-    'WF_DEP_BLOQUANTE' =>
+    'WF_DEP_BLOQUANTE' => 
     array (
       'name' => 'WF_DEP_BLOQUANTE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'WF_DEP_BLOQUANTE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -19168,7 +19172,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'WF_ETAPE_DEP_ID' =>
+        'WF_ETAPE_DEP_ID' => 
         array (
           'name' => 'WF_ETAPE_DEP_ID',
           'type' => 'NUMBER',
@@ -19179,7 +19183,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TBL_WORKFLOW_ID' =>
+        'TBL_WORKFLOW_ID' => 
         array (
           'name' => 'TBL_WORKFLOW_ID',
           'type' => 'NUMBER',
@@ -19192,16 +19196,16 @@
         ),
       ),
     ),
-    'WF_ETAPE' =>
+    'WF_ETAPE' => 
     array (
       'name' => 'WF_ETAPE',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'WF_ETAPE_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -19212,7 +19216,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' =>
+        'CODE' => 
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -19223,7 +19227,7 @@
           'default' => NULL,
           'commentaire' => 'Code de cette étape',
         ),
-        'ORDRE' =>
+        'ORDRE' => 
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -19234,7 +19238,7 @@
           'default' => '1',
           'commentaire' => 'Permet d\'ordonner les étapes',
         ),
-        'LIBELLE_INTERVENANT' =>
+        'LIBELLE_INTERVENANT' => 
         array (
           'name' => 'LIBELLE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -19245,7 +19249,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_AUTRES' =>
+        'LIBELLE_AUTRES' => 
         array (
           'name' => 'LIBELLE_AUTRES',
           'type' => 'VARCHAR2',
@@ -19256,7 +19260,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ROUTE' =>
+        'ROUTE' => 
         array (
           'name' => 'ROUTE',
           'type' => 'VARCHAR2',
@@ -19267,7 +19271,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DESC_NON_FRANCHIE' =>
+        'DESC_NON_FRANCHIE' => 
         array (
           'name' => 'DESC_NON_FRANCHIE',
           'type' => 'VARCHAR2',
@@ -19278,7 +19282,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -19289,7 +19293,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'DESC_SANS_OBJECTIF' =>
+        'DESC_SANS_OBJECTIF' => 
         array (
           'name' => 'DESC_SANS_OBJECTIF',
           'type' => 'VARCHAR2',
@@ -19300,7 +19304,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ROUTE_INTERVENANT' =>
+        'ROUTE_INTERVENANT' => 
         array (
           'name' => 'ROUTE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -19313,16 +19317,16 @@
         ),
       ),
     ),
-    'WF_ETAPE_DEP' =>
+    'WF_ETAPE_DEP' => 
     array (
       'name' => 'WF_ETAPE_DEP',
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
       'sequence' => 'WF_ETAPE_DEP_ID_SEQ',
-      'columns' =>
+      'columns' => 
       array (
-        'ETAPE_SUIV_ID' =>
+        'ETAPE_SUIV_ID' => 
         array (
           'name' => 'ETAPE_SUIV_ID',
           'type' => 'NUMBER',
@@ -19333,7 +19337,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ETAPE_PREC_ID' =>
+        'ETAPE_PREC_ID' => 
         array (
           'name' => 'ETAPE_PREC_ID',
           'type' => 'NUMBER',
@@ -19344,7 +19348,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LOCALE' =>
+        'LOCALE' => 
         array (
           'name' => 'LOCALE',
           'type' => 'NUMBER',
@@ -19355,7 +19359,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'INTEGRALE' =>
+        'INTEGRALE' => 
         array (
           'name' => 'INTEGRALE',
           'type' => 'NUMBER',
@@ -19366,7 +19370,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PARTIELLE' =>
+        'PARTIELLE' => 
         array (
           'name' => 'PARTIELLE',
           'type' => 'NUMBER',
@@ -19377,7 +19381,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'ID' =>
+        'ID' => 
         array (
           'name' => 'ID',
           'type' => 'NUMBER',
@@ -19388,7 +19392,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACTIVE' =>
+        'ACTIVE' => 
         array (
           'name' => 'ACTIVE',
           'type' => 'NUMBER',
@@ -19399,7 +19403,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENANT_ID' =>
+        'TYPE_INTERVENANT_ID' => 
         array (
           'name' => 'TYPE_INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -19410,7 +19414,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -19424,1378 +19428,1378 @@
       ),
     ),
   ),
-  'BddAdmin\\Ddl\\DdlPrimaryConstraint' =>
+  'BddAdmin\\Ddl\\DdlPrimaryConstraint' => 
   array (
-    'ADRESSE_INTERVENANT_PK' =>
+    'ADRESSE_INTERVENANT_PK' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_PK',
       'table' => 'ADRESSE_INTERVENANT',
       'index' => 'ADRESSE_INTERVENANT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_PK' =>
+    'ADRESSE_STRUCTURE_PK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_PK',
       'table' => 'ADRESSE_STRUCTURE',
       'index' => 'ADRESSE_STRUCTURE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'AFFECTATION_PK' =>
+    'AFFECTATION_PK' => 
     array (
       'name' => 'AFFECTATION_PK',
       'table' => 'AFFECTATION',
       'index' => 'AFFECTATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'AFFECTATION_R_PK' =>
+    'AFFECTATION_R_PK' => 
     array (
       'name' => 'AFFECTATION_R_PK',
       'table' => 'AFFECTATION_RECHERCHE',
       'index' => 'AFFECTATION_R_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'AGREMENT_PK' =>
+    'AGREMENT_PK' => 
     array (
       'name' => 'AGREMENT_PK',
       'table' => 'AGREMENT',
       'index' => 'AGREMENT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ANNEE_PK' =>
+    'ANNEE_PK' => 
     array (
       'name' => 'ANNEE_PK',
       'table' => 'ANNEE',
       'index' => 'ANNEE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CAMPAGNE_PK' =>
+    'CAMPAGNE_PK' => 
     array (
       'name' => 'CAMPAGNE_PK',
       'table' => 'CAMPAGNE_SAISIE',
       'index' => 'CAMPAGNE_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CATEGORIE_PRIVILEGE_PK' =>
+    'CATEGORIE_PRIVILEGE_PK' => 
     array (
       'name' => 'CATEGORIE_PRIVILEGE_PK',
       'table' => 'CATEGORIE_PRIVILEGE',
       'index' => 'CATEGORIE_PRIVILEGE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CC_ACTIVITE_PK' =>
+    'CC_ACTIVITE_PK' => 
     array (
       'name' => 'CC_ACTIVITE_PK',
       'table' => 'CC_ACTIVITE',
       'index' => 'CC_ACTIVITE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CENTRE_COUT_EP_PK' =>
+    'CENTRE_COUT_EP_PK' => 
     array (
       'name' => 'CENTRE_COUT_EP_PK',
       'table' => 'CENTRE_COUT_EP',
       'index' => 'CENTRE_COUT_EP_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CENTRE_COUT_PK' =>
+    'CENTRE_COUT_PK' => 
     array (
       'name' => 'CENTRE_COUT_PK',
       'table' => 'CENTRE_COUT',
       'index' => 'CENTRE_COUT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_PK' =>
+    'CENTRE_COUT_STRUCTURE_PK' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_PK',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'index' => 'CENTRE_COUT_STRUCTURE_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_PK' =>
+    'CHEMIN_PEDAGOGIQUE_PK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_PK',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'index' => 'CHEMIN_PEDAGOGIQUE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CIVILITE_PK' =>
+    'CIVILITE_PK' => 
     array (
       'name' => 'CIVILITE_PK',
       'table' => 'CIVILITE',
       'index' => 'CIVILITE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CONTRAT_FICHIER_PK' =>
+    'CONTRAT_FICHIER_PK' => 
     array (
       'name' => 'CONTRAT_FICHIER_PK',
       'table' => 'CONTRAT_FICHIER',
       'index' => 'CONTRAT_FICHIER_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CONTRAT_ID',
         1 => 'FICHIER_ID',
       ),
     ),
-    'CONTRAT_PK' =>
+    'CONTRAT_PK' => 
     array (
       'name' => 'CONTRAT_PK',
       'table' => 'CONTRAT',
       'index' => 'CONTRAT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CORPS_PK' =>
+    'CORPS_PK' => 
     array (
       'name' => 'CORPS_PK',
       'table' => 'CORPS',
       'index' => 'CORPS_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'DEPARTEMENT_PK' =>
+    'DEPARTEMENT_PK' => 
     array (
       'name' => 'DEPARTEMENT_PK',
       'table' => 'DEPARTEMENT',
       'index' => 'DEPARTEMENT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'DISCIPLINE_PK' =>
+    'DISCIPLINE_PK' => 
     array (
       'name' => 'DISCIPLINE_PK',
       'table' => 'DISCIPLINE',
       'index' => 'DISCIPLINE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'DOMAINE_FONCTIONNEL_PK' =>
+    'DOMAINE_FONCTIONNEL_PK' => 
     array (
       'name' => 'DOMAINE_FONCTIONNEL_PK',
       'table' => 'DOMAINE_FONCTIONNEL',
       'index' => 'DOMAINE_FONCTIONNEL_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'DOSSIER_PK' =>
+    'DOSSIER_PK' => 
     array (
       'name' => 'DOSSIER_PK',
       'table' => 'DOSSIER',
       'index' => 'DOSSIER_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'DOTATION_PK' =>
+    'DOTATION_PK' => 
     array (
       'name' => 'DOTATION_PK',
       'table' => 'DOTATION',
       'index' => 'DOTATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'EFFECTIFS_PK' =>
+    'EFFECTIFS_PK' => 
     array (
       'name' => 'EFFECTIFS_PK',
       'table' => 'EFFECTIFS',
       'index' => 'EFFECTIFS_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ELEMENT_MODULATEUR_PK' =>
+    'ELEMENT_MODULATEUR_PK' => 
     array (
       'name' => 'ELEMENT_MODULATEUR_PK',
       'table' => 'ELEMENT_MODULATEUR',
       'index' => 'ELEMENT_MODULATEUR_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_PK' =>
+    'ELEMENT_PEDAGOGIQUE_PK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_PK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'index' => 'ELEMENT_PEDAGOGIQUE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ELEMENT_TAUX_REGIMES_PK' =>
+    'ELEMENT_TAUX_REGIMES_PK' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES_PK',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'index' => 'ELEMENT_TAUX_REGIMES_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ETABLISSEMENT_PK' =>
+    'ETABLISSEMENT_PK' => 
     array (
       'name' => 'ETABLISSEMENT_PK',
       'table' => 'ETABLISSEMENT',
       'index' => 'ETABLISSEMENT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ETAPE_PK' =>
+    'ETAPE_PK' => 
     array (
       'name' => 'ETAPE_PK',
       'table' => 'ETAPE',
       'index' => 'ETAPE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ETAT_SORTIE_PK' =>
+    'ETAT_SORTIE_PK' => 
     array (
       'name' => 'ETAT_SORTIE_PK',
       'table' => 'ETAT_SORTIE',
       'index' => 'ETAT_SORTIE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ETAT_VOLUME_HORAIRE_PK' =>
+    'ETAT_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'ETAT_VOLUME_HORAIRE_PK',
       'table' => 'ETAT_VOLUME_HORAIRE',
       'index' => 'ETAT_VOLUME_HORAIRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FICHIER_PK' =>
+    'FICHIER_PK' => 
     array (
       'name' => 'FICHIER_PK',
       'table' => 'FICHIER',
       'index' => 'FICHIER_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FONCTION_REFERENTIEL_PK' =>
+    'FONCTION_REFERENTIEL_PK' => 
     array (
       'name' => 'FONCTION_REFERENTIEL_PK',
       'table' => 'FONCTION_REFERENTIEL',
       'index' => 'FONCTION_REFERENTIEL_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FORMULE_PK' =>
+    'FORMULE_PK' => 
     array (
       'name' => 'FORMULE_PK',
       'table' => 'FORMULE',
       'index' => 'FORMULE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FORMULE_RESULTAT_PK' =>
+    'FORMULE_RESULTAT_PK' => 
     array (
       'name' => 'FORMULE_RESULTAT_PK',
       'table' => 'FORMULE_RESULTAT',
       'index' => 'FORMULE_RESULTAT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FORMULE_RESULTAT_SERVICE_PK' =>
+    'FORMULE_RESULTAT_SERVICE_PK' => 
     array (
       'name' => 'FORMULE_RESULTAT_SERVICE_PK',
       'table' => 'FORMULE_RESULTAT_SERVICE',
       'index' => 'FORMULE_RESULTAT_SERVICE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FORMULE_RESULTAT_VH_PK' =>
+    'FORMULE_RESULTAT_VH_PK' => 
     array (
       'name' => 'FORMULE_RESULTAT_VH_PK',
       'table' => 'FORMULE_RESULTAT_VH',
       'index' => 'FORMULE_RESULTAT_VH_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FORMULE_RESULTAT_VH_REF_PK' =>
+    'FORMULE_RESULTAT_VH_REF_PK' => 
     array (
       'name' => 'FORMULE_RESULTAT_VH_REF_PK',
       'table' => 'FORMULE_RESULTAT_VH_REF',
       'index' => 'FORMULE_RESULTAT_VH_REF_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_INTERVENANT_PK' =>
+    'FORMULE_TEST_INTERVENANT_PK' => 
     array (
       'name' => 'FORMULE_TEST_INTERVENANT_PK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'index' => 'FORMULE_TEST_INTERVENANT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'index' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'FRSR_PK' =>
+    'FRSR_PK' => 
     array (
       'name' => 'FRSR_PK',
       'table' => 'FORMULE_RESULTAT_SERVICE_REF',
       'index' => 'FRSR_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'GRADE_PK' =>
+    'GRADE_PK' => 
     array (
       'name' => 'GRADE_PK',
       'table' => 'GRADE',
       'index' => 'GRADE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'GROUPE_PK' =>
+    'GROUPE_PK' => 
     array (
       'name' => 'GROUPE_PK',
       'table' => 'GROUPE',
       'index' => 'GROUPE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'GROUPE_TYPE_FORMATION_PK' =>
+    'GROUPE_TYPE_FORMATION_PK' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATION_PK',
       'table' => 'GROUPE_TYPE_FORMATION',
       'index' => 'GROUPE_TYPE_FORMATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'HISTO_SERVICE_MODIFICATION_PK' =>
+    'HISTO_SERVICE_MODIFICATION_PK' => 
     array (
       'name' => 'HISTO_SERVICE_MODIFICATION_PK',
       'table' => 'HISTO_INTERVENANT_SERVICE',
       'index' => 'HISTO_SERVICE_MODIFICATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'IMPORT_TABLES_PK' =>
+    'IMPORT_TABLES_PK' => 
     array (
       'name' => 'IMPORT_TABLES_PK',
       'table' => 'IMPORT_TABLES',
       'index' => 'IMPORT_TABLES_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TABLE_NAME',
       ),
     ),
-    'INDICATEUR_PK' =>
+    'INDICATEUR_PK' => 
     array (
       'name' => 'INDICATEUR_PK',
       'table' => 'INDICATEUR',
       'index' => 'INDICATEUR_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'INDIC_MODIF_DOSSIER_PK' =>
+    'INDIC_MODIF_DOSSIER_PK' => 
     array (
       'name' => 'INDIC_MODIF_DOSSIER_PK',
       'table' => 'INDIC_MODIF_DOSSIER',
       'index' => 'INDIC_MODIF_DOSSIER_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'INTERVENANT_LISTE_NOIRE_PK' =>
+    'INTERVENANT_LISTE_NOIRE_PK' => 
     array (
       'name' => 'INTERVENANT_LISTE_NOIRE_PK',
       'table' => 'LISTE_NOIRE',
       'index' => 'INTERVENANT_LISTE_NOIRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'INTERVENANT_PK' =>
+    'INTERVENANT_PK' => 
     array (
       'name' => 'INTERVENANT_PK',
       'table' => 'INTERVENANT',
       'index' => 'INTERVENANT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'INTERVENANT_SAISIE_PK' =>
+    'INTERVENANT_SAISIE_PK' => 
     array (
       'name' => 'INTERVENANT_SAISIE_PK',
       'table' => 'INTERVENANT_SAISIE',
       'index' => 'INTERVENANT_SAISIE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'LIEN_PK' =>
+    'LIEN_PK' => 
     array (
       'name' => 'LIEN_PK',
       'table' => 'LIEN',
       'index' => 'LIEN_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'MISE_EN_PAIEMENT_PK' =>
+    'MISE_EN_PAIEMENT_PK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_PK',
       'table' => 'MISE_EN_PAIEMENT',
       'index' => 'MISE_EN_PAIEMENT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'MODELE_CONTRAT_PK' =>
+    'MODELE_CONTRAT_PK' => 
     array (
       'name' => 'MODELE_CONTRAT_PK',
       'table' => 'MODELE_CONTRAT',
       'index' => 'MODELE_CONTRAT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'MODIFICATION_SERVICE_DU_PK' =>
+    'MODIFICATION_SERVICE_DU_PK' => 
     array (
       'name' => 'MODIFICATION_SERVICE_DU_PK',
       'table' => 'MODIFICATION_SERVICE_DU',
       'index' => 'MODIFICATION_SERVICE_DU_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'MODULATEUR_PK' =>
+    'MODULATEUR_PK' => 
     array (
       'name' => 'MODULATEUR_PK',
       'table' => 'MODULATEUR',
       'index' => 'MODULATEUR_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'MOTIF_MODIFICATION_SERVICE_PK' =>
+    'MOTIF_MODIFICATION_SERVICE_PK' => 
     array (
       'name' => 'MOTIF_MODIFICATION_SERVICE_PK',
       'table' => 'MOTIF_MODIFICATION_SERVICE',
       'index' => 'MOTIF_MODIFICATION_SERVICE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'MOTIF_NON_PAIEMENT_PK' =>
+    'MOTIF_NON_PAIEMENT_PK' => 
     array (
       'name' => 'MOTIF_NON_PAIEMENT_PK',
       'table' => 'MOTIF_NON_PAIEMENT',
       'index' => 'MOTIF_NON_PAIEMENT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'NOEUD_PK' =>
+    'NOEUD_PK' => 
     array (
       'name' => 'NOEUD_PK',
       'table' => 'NOEUD',
       'index' => 'NOEUD_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'NOTIF_INDICATEUR_PK' =>
+    'NOTIF_INDICATEUR_PK' => 
     array (
       'name' => 'NOTIF_INDICATEUR_PK',
       'table' => 'NOTIFICATION_INDICATEUR',
       'index' => 'NOTIF_INDICATEUR_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PARAMETRE_PK' =>
+    'PARAMETRE_PK' => 
     array (
       'name' => 'PARAMETRE_PK',
       'table' => 'PARAMETRE',
       'index' => 'PARAMETRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PAYS_PK' =>
+    'PAYS_PK' => 
     array (
       'name' => 'PAYS_PK',
       'table' => 'PAYS',
       'index' => 'PAYS_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PERIMETRE_PK' =>
+    'PERIMETRE_PK' => 
     array (
       'name' => 'PERIMETRE_PK',
       'table' => 'PERIMETRE',
       'index' => 'PERIMETRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PERIODE_PK' =>
+    'PERIODE_PK' => 
     array (
       'name' => 'PERIODE_PK',
       'table' => 'PERIODE',
       'index' => 'PERIODE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PIECE_JOINTE_FICHIER_PK' =>
+    'PIECE_JOINTE_FICHIER_PK' => 
     array (
       'name' => 'PIECE_JOINTE_FICHIER_PK',
       'table' => 'PIECE_JOINTE_FICHIER',
       'index' => 'PIECE_JOINTE_FICHIER_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'PIECE_JOINTE_ID',
         1 => 'FICHIER_ID',
       ),
     ),
-    'PIECE_JOINTE_PK' =>
+    'PIECE_JOINTE_PK' => 
     array (
       'name' => 'PIECE_JOINTE_PK',
       'table' => 'PIECE_JOINTE',
       'index' => 'PIECE_JOINTE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PLAFOND_APPLICATION_PK' =>
+    'PLAFOND_APPLICATION_PK' => 
     array (
       'name' => 'PLAFOND_APPLICATION_PK',
       'table' => 'PLAFOND_APPLICATION',
       'index' => 'PLAFOND_APPLICATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PLAFOND_ETAT_PK' =>
+    'PLAFOND_ETAT_PK' => 
     array (
       'name' => 'PLAFOND_ETAT_PK',
       'table' => 'PLAFOND_ETAT',
       'index' => 'PLAFOND_ETAT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PLAFOND_PK' =>
+    'PLAFOND_PK' => 
     array (
       'name' => 'PLAFOND_PK',
       'table' => 'PLAFOND',
       'index' => 'PLAFOND_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'PRIVILEGE_PK' =>
+    'PRIVILEGE_PK' => 
     array (
       'name' => 'PRIVILEGE_PK',
       'table' => 'PRIVILEGE',
       'index' => 'PRIVILEGE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'REGLE_STRUCTURE_VALIDATION_PK' =>
+    'REGLE_STRUCTURE_VALIDATION_PK' => 
     array (
       'name' => 'REGLE_STRUCTURE_VALIDATION_PK',
       'table' => 'REGLE_STRUCTURE_VALIDATION',
       'index' => 'REGLE_STRUCTURE_VALIDATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ROLE_PK' =>
+    'ROLE_PK' => 
     array (
       'name' => 'ROLE_PK',
       'table' => 'ROLE',
       'index' => 'ROLE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ROLE_PRIVILEGE_PK' =>
+    'ROLE_PRIVILEGE_PK' => 
     array (
       'name' => 'ROLE_PRIVILEGE_PK',
       'table' => 'ROLE_PRIVILEGE',
       'index' => 'ROLE_PRIVILEGE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'PRIVILEGE_ID',
         1 => 'ROLE_ID',
       ),
     ),
-    'SCENARIO_LIEN_PK' =>
+    'SCENARIO_LIEN_PK' => 
     array (
       'name' => 'SCENARIO_LIEN_PK',
       'table' => 'SCENARIO_LIEN',
       'index' => 'SCENARIO_LIEN_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_EFFECTIF_PK' =>
+    'SCENARIO_NOEUD_EFFECTIF_PK' => 
     array (
       'name' => 'SCENARIO_NOEUD_EFFECTIF_PK',
       'table' => 'SCENARIO_NOEUD_EFFECTIF',
       'index' => 'SCENARIO_NOEUD_EFFECTIF_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_PK' =>
+    'SCENARIO_NOEUD_PK' => 
     array (
       'name' => 'SCENARIO_NOEUD_PK',
       'table' => 'SCENARIO_NOEUD',
       'index' => 'SCENARIO_NOEUD_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_SEUIL_PK' =>
+    'SCENARIO_NOEUD_SEUIL_PK' => 
     array (
       'name' => 'SCENARIO_NOEUD_SEUIL_PK',
       'table' => 'SCENARIO_NOEUD_SEUIL',
       'index' => 'SCENARIO_NOEUD_SEUIL_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SCENARIO_PK' =>
+    'SCENARIO_PK' => 
     array (
       'name' => 'SCENARIO_PK',
       'table' => 'SCENARIO',
       'index' => 'SCENARIO_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SERVICE_PK' =>
+    'SERVICE_PK' => 
     array (
       'name' => 'SERVICE_PK',
       'table' => 'SERVICE',
       'index' => 'SERVICE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SERVICE_REFERENTIEL_PK' =>
+    'SERVICE_REFERENTIEL_PK' => 
     array (
       'name' => 'SERVICE_REFERENTIEL_PK',
       'table' => 'SERVICE_REFERENTIEL',
       'index' => 'SERVICE_REFERENTIEL_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SEUIL_CHARGE_PK' =>
+    'SEUIL_CHARGE_PK' => 
     array (
       'name' => 'SEUIL_CHARGE_PK',
       'table' => 'SEUIL_CHARGE',
       'index' => 'SEUIL_CHARGE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SOURCE_PK' =>
+    'SOURCE_PK' => 
     array (
       'name' => 'SOURCE_PK',
       'table' => 'SOURCE',
       'index' => 'SOURCE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'STATUT_INTERVENANT_PK' =>
+    'STATUT_INTERVENANT_PK' => 
     array (
       'name' => 'STATUT_INTERVENANT_PK',
       'table' => 'STATUT_INTERVENANT',
       'index' => 'STATUT_INTERVENANT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'STATUT_PRIVILEGE_PK' =>
+    'STATUT_PRIVILEGE_PK' => 
     array (
       'name' => 'STATUT_PRIVILEGE_PK',
       'table' => 'STATUT_PRIVILEGE',
       'index' => 'STATUT_PRIVILEGE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'STATUT_ID',
         1 => 'PRIVILEGE_ID',
       ),
     ),
-    'STRUCTURE_PK' =>
+    'STRUCTURE_PK' => 
     array (
       'name' => 'STRUCTURE_PK',
       'table' => 'STRUCTURE',
       'index' => 'STRUCTURE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'SYNC_LOG_PK' =>
+    'SYNC_LOG_PK' => 
     array (
       'name' => 'SYNC_LOG_PK',
       'table' => 'SYNC_LOG',
       'index' => 'SYNC_LOG_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TAUX_HORAIRE_HETD_PK' =>
+    'TAUX_HORAIRE_HETD_PK' => 
     array (
       'name' => 'TAUX_HORAIRE_HETD_PK',
       'table' => 'TAUX_HORAIRE_HETD',
       'index' => 'TAUX_HORAIRE_HETD_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_AGREMENT_PK' =>
+    'TBL_AGREMENT_PK' => 
     array (
       'name' => 'TBL_AGREMENT_PK',
       'table' => 'TBL_AGREMENT',
       'index' => 'TBL_AGREMENT_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_CHARGENS_PK' =>
+    'TBL_CHARGENS_PK' => 
     array (
       'name' => 'TBL_CHARGENS_PK',
       'table' => 'TBL_CHARGENS',
       'index' => 'TBL_CHARGENS_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_CHARGENS_SEUILS_DEF_PK' =>
+    'TBL_CHARGENS_SEUILS_DEF_PK' => 
     array (
       'name' => 'TBL_CHARGENS_SEUILS_DEF_PK',
       'table' => 'TBL_CHARGENS_SEUILS_DEF',
       'index' => 'TBL_CHARGENS_SEUILS_DEF_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_CLOTURE_REALISE_PK' =>
+    'TBL_CLOTURE_REALISE_PK' => 
     array (
       'name' => 'TBL_CLOTURE_REALISE_PK',
       'table' => 'TBL_CLOTURE_REALISE',
       'index' => 'TBL_CLOTURE_REALISE_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_CONTRAT_PK' =>
+    'TBL_CONTRAT_PK' => 
     array (
       'name' => 'TBL_CONTRAT_PK',
       'table' => 'TBL_CONTRAT',
       'index' => 'TBL_CONTRAT_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_DMEP_LIQUIDATION_PK' =>
+    'TBL_DMEP_LIQUIDATION_PK' => 
     array (
       'name' => 'TBL_DMEP_LIQUIDATION_PK',
       'table' => 'TBL_DMEP_LIQUIDATION',
       'index' => 'TBL_DMEP_LIQUIDATION_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_DOSSIER_PK' =>
+    'TBL_DOSSIER_PK' => 
     array (
       'name' => 'TBL_DOSSIER_PK',
       'table' => 'TBL_DOSSIER',
       'index' => 'TBL_DOSSIER_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_LIEN_PK' =>
+    'TBL_LIEN_PK' => 
     array (
       'name' => 'TBL_LIEN_PK',
       'table' => 'TBL_LIEN',
       'index' => 'TBL_LIEN_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_PK' =>
+    'TBL_PAIEMENT_PK' => 
     array (
       'name' => 'TBL_PAIEMENT_PK',
       'table' => 'TBL_PAIEMENT',
       'index' => 'TBL_PAIEMENT_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_PIECE_JOINTE_PK' =>
+    'TBL_PIECE_JOINTE_PK' => 
     array (
       'name' => 'TBL_PIECE_JOINTE_PK',
       'table' => 'TBL_PIECE_JOINTE',
       'index' => 'TBL_PIECE_JOINTE_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_PJD_PK' =>
+    'TBL_PJD_PK' => 
     array (
       'name' => 'TBL_PJD_PK',
       'table' => 'TBL_PIECE_JOINTE_DEMANDE',
       'index' => 'TBL_PJD_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_PJF_PK' =>
+    'TBL_PJF_PK' => 
     array (
       'name' => 'TBL_PJF_PK',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'index' => 'TBL_PJF_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_PK' =>
+    'TBL_PK' => 
     array (
       'name' => 'TBL_PK',
       'table' => 'TBL',
       'index' => 'TBL_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TBL_NAME',
       ),
     ),
-    'TBL_SERVICE_PK' =>
+    'TBL_SERVICE_PK' => 
     array (
       'name' => 'TBL_SERVICE_PK',
       'table' => 'TBL_SERVICE',
       'index' => 'TBL_SERVICE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_SERVICE_REFERENTIEL_PK' =>
+    'TBL_SERVICE_REFERENTIEL_PK' => 
     array (
       'name' => 'TBL_SERVICE_REFERENTIEL_PK',
       'table' => 'TBL_SERVICE_REFERENTIEL',
       'index' => 'TBL_SERVICE_REFERENTIEL_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_SERVICE_SAISIE_PK' =>
+    'TBL_SERVICE_SAISIE_PK' => 
     array (
       'name' => 'TBL_SERVICE_SAISIE_PK',
       'table' => 'TBL_SERVICE_SAISIE',
       'index' => 'TBL_SERVICE_SAISIE_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_VALIDATION_ENSEIGNEMENT_PK' =>
+    'TBL_VALIDATION_ENSEIGNEMENT_PK' => 
     array (
       'name' => 'TBL_VALIDATION_ENSEIGNEMENT_PK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'index' => 'TBL_VALIDATION_ENSEIGNEMENT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_VALIDATION_REFERENTIEL_PK' =>
+    'TBL_VALIDATION_REFERENTIEL_PK' => 
     array (
       'name' => 'TBL_VALIDATION_REFERENTIEL_PK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'index' => 'TBL_VALIDATION_REFERENTIEL_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TBL_WORKFLOW_PK' =>
+    'TBL_WORKFLOW_PK' => 
     array (
       'name' => 'TBL_WORKFLOW_PK',
       'table' => 'TBL_WORKFLOW',
       'index' => 'TBL_WORKFLOW_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TEST_BUFFER_PK' =>
+    'TEST_BUFFER_PK' => 
     array (
       'name' => 'TEST_BUFFER_PK',
       'table' => 'TEST_BUFFER',
       'index' => 'TEST_BUFFER_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_PK' =>
+    'TYPE_AGREMENT_PK' => 
     array (
       'name' => 'TYPE_AGREMENT_PK',
       'table' => 'TYPE_AGREMENT',
       'index' => 'TYPE_AGREMENT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_STATUT_PK' =>
+    'TYPE_AGREMENT_STATUT_PK' => 
     array (
       'name' => 'TYPE_AGREMENT_STATUT_PK',
       'table' => 'TYPE_AGREMENT_STATUT',
       'index' => 'TYPE_AGREMENT_STATUT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_CONTRAT_PK' =>
+    'TYPE_CONTRAT_PK' => 
     array (
       'name' => 'TYPE_CONTRAT_PK',
       'table' => 'TYPE_CONTRAT',
       'index' => 'TYPE_CONTRAT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_FORMATION_PK' =>
+    'TYPE_FORMATION_PK' => 
     array (
       'name' => 'TYPE_FORMATION_PK',
       'table' => 'TYPE_FORMATION',
       'index' => 'TYPE_FORMATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_HEURES_PK' =>
+    'TYPE_HEURES_PK' => 
     array (
       'name' => 'TYPE_HEURES_PK',
       'table' => 'TYPE_HEURES',
       'index' => 'TYPE_HEURES_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_INTERVENANT_PK' =>
+    'TYPE_INTERVENANT_PK' => 
     array (
       'name' => 'TYPE_INTERVENANT_PK',
       'table' => 'TYPE_INTERVENANT',
       'index' => 'TYPE_INTERVENANT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_EP_PK' =>
+    'TYPE_INTERVENTION_EP_PK' => 
     array (
       'name' => 'TYPE_INTERVENTION_EP_PK',
       'table' => 'TYPE_INTERVENTION_EP',
       'index' => 'TYPE_INTERVENTION_EP_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_PK' =>
+    'TYPE_INTERVENTION_PK' => 
     array (
       'name' => 'TYPE_INTERVENTION_PK',
       'table' => 'TYPE_INTERVENTION',
       'index' => 'TYPE_INTERVENTION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_STATUT_PK' =>
+    'TYPE_INTERVENTION_STATUT_PK' => 
     array (
       'name' => 'TYPE_INTERVENTION_STATUT_PK',
       'table' => 'TYPE_INTERVENTION_STATUT',
       'index' => 'TYPE_INTERVENTION_STATUT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_STRUCTURE_PK' =>
+    'TYPE_INTERVENTION_STRUCTURE_PK' => 
     array (
       'name' => 'TYPE_INTERVENTION_STRUCTURE_PK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'index' => 'TYPE_INTERVENTION_STRUCTURE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_EP_PK' =>
+    'TYPE_MODULATEUR_EP_PK' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP_PK',
       'table' => 'TYPE_MODULATEUR_EP',
       'index' => 'TYPE_MODULATEUR_EP_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_PK' =>
+    'TYPE_MODULATEUR_PK' => 
     array (
       'name' => 'TYPE_MODULATEUR_PK',
       'table' => 'TYPE_MODULATEUR',
       'index' => 'TYPE_MODULATEUR_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_STRUCTURE_PK' =>
+    'TYPE_MODULATEUR_STRUCTURE_PK' => 
     array (
       'name' => 'TYPE_MODULATEUR_STRUCTURE_PK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'index' => 'TYPE_MODULATEUR_STRUCTURE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_PK' =>
+    'TYPE_PIECE_JOINTE_PK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_PK',
       'table' => 'TYPE_PIECE_JOINTE',
       'index' => 'TYPE_PIECE_JOINTE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_STATUT_PK' =>
+    'TYPE_PIECE_JOINTE_STATUT_PK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_STATUT_PK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'index' => 'TYPE_PIECE_JOINTE_STATUT_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_RESSOURCE_PK' =>
+    'TYPE_RESSOURCE_PK' => 
     array (
       'name' => 'TYPE_RESSOURCE_PK',
       'table' => 'TYPE_RESSOURCE',
       'index' => 'TYPE_RESSOURCE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_VALIDATION_PK' =>
+    'TYPE_VALIDATION_PK' => 
     array (
       'name' => 'TYPE_VALIDATION_PK',
       'table' => 'TYPE_VALIDATION',
       'index' => 'TYPE_VALIDATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'TYPE_VOLUME_HORAIRE_PK' =>
+    'TYPE_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'TYPE_VOLUME_HORAIRE_PK',
       'table' => 'TYPE_VOLUME_HORAIRE',
       'index' => 'TYPE_VOLUME_HORAIRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'UTILISATEUR_PK' =>
+    'UTILISATEUR_PK' => 
     array (
       'name' => 'UTILISATEUR_PK',
       'table' => 'UTILISATEUR',
       'index' => 'UTILISATEUR_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'VALIDATION_PK' =>
+    'VALIDATION_PK' => 
     array (
       'name' => 'VALIDATION_PK',
       'table' => 'VALIDATION',
       'index' => 'VALIDATION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'VALIDATION_VOL_HORAIRE_PK' =>
+    'VALIDATION_VOL_HORAIRE_PK' => 
     array (
       'name' => 'VALIDATION_VOL_HORAIRE_PK',
       'table' => 'VALIDATION_VOL_HORAIRE',
       'index' => 'VALIDATION_VOL_HORAIRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'VALIDATION_ID',
         1 => 'VOLUME_HORAIRE_ID',
       ),
     ),
-    'VALIDATION_VOL_HORAIRE_REF_PK' =>
+    'VALIDATION_VOL_HORAIRE_REF_PK' => 
     array (
       'name' => 'VALIDATION_VOL_HORAIRE_REF_PK',
       'table' => 'VALIDATION_VOL_HORAIRE_REF',
       'index' => 'VALIDATION_VOL_HORAIRE_REF_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'VALIDATION_ID',
         1 => 'VOLUME_HORAIRE_REF_ID',
       ),
     ),
-    'VERSION_PK' =>
+    'VERSION_PK' => 
     array (
       'name' => 'VERSION_PK',
       'table' => 'VERSION',
       'index' => 'VERSION_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'NUMERO',
       ),
     ),
-    'VOLUME_HORAIRE_CHARGE_PK' =>
+    'VOLUME_HORAIRE_CHARGE_PK' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARGE_PK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'index' => 'VOLUME_HORAIRE_CHARGE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_ENS_PK' =>
+    'VOLUME_HORAIRE_ENS_PK' => 
     array (
       'name' => 'VOLUME_HORAIRE_ENS_PK',
       'table' => 'VOLUME_HORAIRE_ENS',
       'index' => 'VOLUME_HORAIRE_ENS_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_PK' =>
+    'VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'VOLUME_HORAIRE_PK',
       'table' => 'VOLUME_HORAIRE',
       'index' => 'VOLUME_HORAIRE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_REF_PK' =>
+    'VOLUME_HORAIRE_REF_PK' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_PK',
       'table' => 'VOLUME_HORAIRE_REF',
       'index' => 'VOLUME_HORAIRE_REF_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'WF_DEPS_BLOQUANTES_PK' =>
+    'WF_DEPS_BLOQUANTES_PK' => 
     array (
       'name' => 'WF_DEPS_BLOQUANTES_PK',
       'table' => 'WF_DEP_BLOQUANTE',
       'index' => 'WF_DEPS_BLOQUANTES_PK_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'WF_ETAPE_DEP_PK' =>
+    'WF_ETAPE_DEP_PK' => 
     array (
       'name' => 'WF_ETAPE_DEP_PK',
       'table' => 'WF_ETAPE_DEP',
       'index' => 'WF_ETAPE_DEP_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'WF_ETAPE_PK' =>
+    'WF_ETAPE_PK' => 
     array (
       'name' => 'WF_ETAPE_PK',
       'table' => 'WF_ETAPE',
       'index' => 'WF_ETAPE_PK',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
   ),
-  'BddAdmin\\Ddl\\DdlPackage' =>
+  'BddAdmin\\Ddl\\DdlPackage' => 
   array (
-    'FORMULE_ENSICAEN' =>
+    'FORMULE_ENSICAEN' => 
     array (
       'name' => 'FORMULE_ENSICAEN',
       'definition' => 'CREATE OR REPLACE PACKAGE FORMULE_ENSICAEN AS
@@ -21183,7 +21187,7 @@ END FORMULE_ENSICAEN;',
 
 END FORMULE_ENSICAEN;',
     ),
-    'FORMULE_LYON2' =>
+    'FORMULE_LYON2' => 
     array (
       'name' => 'FORMULE_LYON2',
       'definition' => 'CREATE OR REPLACE PACKAGE FORMULE_LYON2 AS
@@ -21803,7 +21807,7 @@ FUNCTION INTERVENANT_QUERY RETURN CLOB IS
 
 END FORMULE_LYON2;',
     ),
-    'FORMULE_MONTPELLIER' =>
+    'FORMULE_MONTPELLIER' => 
     array (
       'name' => 'FORMULE_MONTPELLIER',
       'definition' => 'CREATE OR REPLACE PACKAGE "FORMULE_MONTPELLIER" AS
@@ -22470,7 +22474,7 @@ END FORMULE_MONTPELLIER;',
 
 END FORMULE_MONTPELLIER;',
     ),
-    'FORMULE_NANTERRE' =>
+    'FORMULE_NANTERRE' => 
     array (
       'name' => 'FORMULE_NANTERRE',
       'definition' => 'CREATE OR REPLACE PACKAGE FORMULE_NANTERRE AS
@@ -23343,7 +23347,7 @@ END FORMULE_NANTERRE;',
 
 END FORMULE_NANTERRE;',
     ),
-    'FORMULE_UBO' =>
+    'FORMULE_UBO' => 
     array (
       'name' => 'FORMULE_UBO',
       'definition' => 'CREATE OR REPLACE PACKAGE "FORMULE_UBO" AS
@@ -24332,7 +24336,7 @@ END FORMULE_UBO;',
 
 END FORMULE_UBO;',
     ),
-    'FORMULE_ULHN' =>
+    'FORMULE_ULHN' => 
     array (
       'name' => 'FORMULE_ULHN',
       'definition' => 'CREATE OR REPLACE PACKAGE "FORMULE_ULHN" AS
@@ -24775,7 +24779,7 @@ END FORMULE_ULHN;',
 
 END FORMULE_ULHN;',
     ),
-    'FORMULE_UNICAEN' =>
+    'FORMULE_UNICAEN' => 
     array (
       'name' => 'FORMULE_UNICAEN',
       'definition' => 'CREATE OR REPLACE PACKAGE "FORMULE_UNICAEN" AS
@@ -25825,7 +25829,7 @@ END FORMULE_UNICAEN;',
 
 END FORMULE_UNICAEN;',
     ),
-    'OSE_CHARGENS' =>
+    'OSE_CHARGENS' => 
     array (
       'name' => 'OSE_CHARGENS',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_CHARGENS" AS
@@ -26479,7 +26483,7 @@ END OSE_CHARGENS;',
 
 END OSE_CHARGENS;',
     ),
-    'OSE_DIVERS' =>
+    'OSE_DIVERS' => 
     array (
       'name' => 'OSE_DIVERS',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_DIVERS" AS
@@ -26844,7 +26848,7 @@ END OSE_DIVERS;',
 
 END OSE_DIVERS;',
     ),
-    'OSE_EVENT' =>
+    'OSE_EVENT' => 
     array (
       'name' => 'OSE_EVENT',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_EVENT" AS
@@ -26866,7 +26870,7 @@ END OSE_EVENT;',
 
 END OSE_EVENT;',
     ),
-    'OSE_FORMULE' =>
+    'OSE_FORMULE' => 
     array (
       'name' => 'OSE_FORMULE',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
@@ -27890,7 +27894,7 @@ END OSE_FORMULE;',
 
 END OSE_FORMULE;',
     ),
-    'OSE_HISTO' =>
+    'OSE_HISTO' => 
     array (
       'name' => 'OSE_HISTO',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_HISTO" AS
@@ -27907,7 +27911,7 @@ END OSE_HISTO;',
 
 END OSE_HISTO;',
     ),
-    'OSE_PAIEMENT' =>
+    'OSE_PAIEMENT' => 
     array (
       'name' => 'OSE_PAIEMENT',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_PAIEMENT" AS
@@ -27941,7 +27945,7 @@ END OSE_PAIEMENT;',
 
 END OSE_PAIEMENT;',
     ),
-    'OSE_PARAMETRE' =>
+    'OSE_PARAMETRE' => 
     array (
       'name' => 'OSE_PARAMETRE',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_PARAMETRE" AS
@@ -28004,7 +28008,7 @@ END OSE_PARAMETRE;',
 
 END OSE_PARAMETRE;',
     ),
-    'OSE_TEST' =>
+    'OSE_TEST' => 
     array (
       'name' => 'OSE_TEST',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_TEST" AS
@@ -28163,7 +28167,7 @@ END OSE_TEST;',
 
 END OSE_TEST;',
     ),
-    'OSE_VALIDATION' =>
+    'OSE_VALIDATION' => 
     array (
       'name' => 'OSE_VALIDATION',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_VALIDATION" AS
@@ -28221,7 +28225,7 @@ END OSE_VALIDATION;',
 
 END OSE_VALIDATION;',
     ),
-    'OSE_WORKFLOW' =>
+    'OSE_WORKFLOW' => 
     array (
       'name' => 'OSE_WORKFLOW',
       'definition' => 'CREATE OR REPLACE PACKAGE "OSE_WORKFLOW" AS
@@ -29081,7 +29085,7 @@ END OSE_WORKFLOW;',
 
 END OSE_WORKFLOW;',
     ),
-    'UNICAEN_IMPORT' =>
+    'UNICAEN_IMPORT' => 
     array (
       'name' => 'UNICAEN_IMPORT',
       'definition' => 'CREATE OR REPLACE PACKAGE "UNICAEN_IMPORT" AS
@@ -29186,7 +29190,7 @@ END UNICAEN_IMPORT;',
 
 END UNICAEN_IMPORT;',
     ),
-    'UNICAEN_TBL' =>
+    'UNICAEN_TBL' => 
     array (
       'name' => 'UNICAEN_TBL',
       'definition' => 'CREATE OR REPLACE PACKAGE "UNICAEN_TBL" AS
@@ -31417,9 +31421,9 @@ END UNICAEN_TBL;',
 END UNICAEN_TBL;',
     ),
   ),
-  'BddAdmin\\Ddl\\DdlView' =>
+  'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'V_AGREMENT_EXPORT_CSV' =>
+    'V_AGREMENT_EXPORT_CSV' => 
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -31508,7 +31512,7 @@ FROM
   LEFT JOIN heures_s                    ON heures_s.intervenant_id = i.id
                                        AND heures_s.structure_id = s.id',
     ),
-    'V_CENTRE_COUT_STRUCTURE' =>
+    'V_CENTRE_COUT_STRUCTURE' => 
     array (
       'name' => 'V_CENTRE_COUT_STRUCTURE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CENTRE_COUT_STRUCTURE AS
@@ -31520,7 +31524,7 @@ FROM
 WHERE
   ccs.histo_destruction IS NULL',
     ),
-    'V_CENTRE_COUT_TYPE_HEURES' =>
+    'V_CENTRE_COUT_TYPE_HEURES' => 
     array (
       'name' => 'V_CENTRE_COUT_TYPE_HEURES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CENTRE_COUT_TYPE_HEURES AS
@@ -31577,7 +31581,7 @@ from
   join cc_activite    cca on cca.id = cc.activite_id
   join type_heures     th on th.code = decode(tr.fc_majorees + cca.fc_majorees, 2, \'fc_majorees\', null)',
     ),
-    'V_CHARGENS_CALC_EFFECTIF' =>
+    'V_CHARGENS_CALC_EFFECTIF' => 
     array (
       'name' => 'V_CHARGENS_CALC_EFFECTIF',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CHARGENS_CALC_EFFECTIF AS
@@ -31649,7 +31653,7 @@ GROUP BY
   slsup.choix_maximum,
   slinf.poids',
     ),
-    'V_CHARGENS_EXPORT_CSV' =>
+    'V_CHARGENS_EXPORT_CSV' => 
     array (
       'name' => 'V_CHARGENS_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CHARGENS_EXPORT_CSV AS
@@ -31719,7 +31723,7 @@ ORDER BY
   type_heures,
   type_intervention',
     ),
-    'V_CHARGENS_GRANDS_LIENS' =>
+    'V_CHARGENS_GRANDS_LIENS' => 
     array (
       'name' => 'V_CHARGENS_GRANDS_LIENS',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CHARGENS_GRANDS_LIENS AS
@@ -31749,7 +31753,7 @@ WHERE
   nsup.histo_destruction IS NULL
   AND nsup.liste = 0',
     ),
-    'V_CHARGENS_PRECALCUL_HEURES' =>
+    'V_CHARGENS_PRECALCUL_HEURES' => 
     array (
       'name' => 'V_CHARGENS_PRECALCUL_HEURES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CHARGENS_PRECALCUL_HEURES AS
@@ -31846,7 +31850,7 @@ SELECT
 FROM
   t',
     ),
-    'V_CHARGENS_SEUILS_DED_DEF' =>
+    'V_CHARGENS_SEUILS_DED_DEF' => 
     array (
       'name' => 'V_CHARGENS_SEUILS_DED_DEF',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CHARGENS_SEUILS_DED_DEF AS
@@ -31882,7 +31886,7 @@ FROM
 WHERE
   COALESCE(snsetp.dedoublement, tcsd.dedoublement)  IS NOT NULL',
     ),
-    'V_CONTRAT_MAIN' =>
+    'V_CONTRAT_MAIN' => 
     array (
       'name' => 'V_CONTRAT_MAIN',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
@@ -31993,7 +31997,7 @@ FROM
     c.histo_destruction IS NULL
 ) ct',
     ),
-    'V_CONTRAT_SERVICES' =>
+    'V_CONTRAT_SERVICES' => 
     array (
       'name' => 'V_CONTRAT_SERVICES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CONTRAT_SERVICES AS
@@ -32042,7 +32046,7 @@ WHERE
 GROUP BY
   c.contrat_id, str.libelle_court, ep.code, ep.libelle',
     ),
-    'V_CTL_SERVICES_ODF_HISTO' =>
+    'V_CTL_SERVICES_ODF_HISTO' => 
     array (
       'name' => 'V_CTL_SERVICES_ODF_HISTO',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CTL_SERVICES_ODF_HISTO AS
@@ -32094,7 +32098,7 @@ WHERE
 order by
   nom_usuel, prenom, etape, "ELEMENT", heures',
     ),
-    'V_CTL_VH_MAUVAIS_SEMESTRE' =>
+    'V_CTL_VH_MAUVAIS_SEMESTRE' => 
     array (
       'name' => 'V_CTL_VH_MAUVAIS_SEMESTRE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CTL_VH_MAUVAIS_SEMESTRE AS
@@ -32117,7 +32121,7 @@ WHERE
 ORDER BY
   nom_usuel, prenom, heures',
     ),
-    'V_ELEMENT_TYPE_HEURES' =>
+    'V_ELEMENT_TYPE_HEURES' => 
     array (
       'name' => 'V_ELEMENT_TYPE_HEURES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_ELEMENT_TYPE_HEURES AS
@@ -32133,7 +32137,7 @@ union all
   from element_pedagogique ep
   join type_heures th on th.code = decode(ep.fa, 1, \'fa\', null)',
     ),
-    'V_ELEMENT_TYPE_INTERVENTION' =>
+    'V_ELEMENT_TYPE_INTERVENTION' => 
     array (
       'name' => 'V_ELEMENT_TYPE_INTERVENTION',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_ELEMENT_TYPE_INTERVENTION AS
@@ -32148,7 +32152,7 @@ WHERE
 ORDER BY
   ti.ordre',
     ),
-    'V_ELEMENT_TYPE_INTERV_POSSIBLE' =>
+    'V_ELEMENT_TYPE_INTERV_POSSIBLE' => 
     array (
       'name' => 'V_ELEMENT_TYPE_INTERV_POSSIBLE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_ELEMENT_TYPE_INTERV_POSSIBLE AS
@@ -32171,7 +32175,7 @@ WHERE
   AND (ti.regle_foad = 0 OR ep.taux_foad > 0)
   AND (ti.regle_fc = 0 OR ep.taux_fc > 0)',
     ),
-    'V_ELEMENT_TYPE_MODULATEUR' =>
+    'V_ELEMENT_TYPE_MODULATEUR' => 
     array (
       'name' => 'V_ELEMENT_TYPE_MODULATEUR',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_ELEMENT_TYPE_MODULATEUR AS
@@ -32197,7 +32201,7 @@ FROM
 WHERE
   tm_ep.histo_destruction IS NULL',
     ),
-    'V_ETAPE_NIVEAU_FORMATION' =>
+    'V_ETAPE_NIVEAU_FORMATION' => 
     array (
       'name' => 'V_ETAPE_NIVEAU_FORMATION',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_ETAPE_NIVEAU_FORMATION AS
@@ -32214,7 +32218,7 @@ WHERE
   AND gtf.pertinence_niveau = 1
   AND e.niveau IS NOT NULL',
     ),
-    'V_ETAPE_TYPE_MODULATEUR' =>
+    'V_ETAPE_TYPE_MODULATEUR' => 
     array (
       'name' => 'V_ETAPE_TYPE_MODULATEUR',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_ETAPE_TYPE_MODULATEUR AS
@@ -32225,7 +32229,7 @@ FROM
   v_element_type_modulateur etm
   JOIN element_pedagogique ep ON ep.id = etm.element_pedagogique_id AND ep.histo_destruction IS NULL',
     ),
-    'V_ETAT_PAIEMENT' =>
+    'V_ETAT_PAIEMENT' => 
     array (
       'name' => 'V_ETAT_PAIEMENT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_ETAT_PAIEMENT AS
@@ -32417,7 +32421,7 @@ SELECT
                periode_id,
                intervenant_nom',
     ),
-    'V_EXPORT_DEPASS_CHARGES' =>
+    'V_EXPORT_DEPASS_CHARGES' => 
     array (
       'name' => 'V_EXPORT_DEPASS_CHARGES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_EXPORT_DEPASS_CHARGES AS
@@ -32521,7 +32525,7 @@ FROM
                                      AND c.type_intervention_id = COALESCE(tiv.type_intervention_maquette_id,tiv.id)
   LEFT JOIN periode                 p ON p.id = ep.periode_id',
     ),
-    'V_EXPORT_DMEP' =>
+    'V_EXPORT_DMEP' => 
     array (
       'name' => 'V_EXPORT_DMEP',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_EXPORT_DMEP AS
@@ -32645,7 +32649,7 @@ ORDER BY
   etape_libelle,
   element_libelle',
     ),
-    'V_EXPORT_PAIEMENT_WINPAIE' =>
+    'V_EXPORT_PAIEMENT_WINPAIE' => 
     array (
       'name' => 'V_EXPORT_PAIEMENT_WINPAIE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_WINPAIE AS
@@ -32762,7 +32766,7 @@ FROM (
 ORDER BY
   annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC',
     ),
-    'V_EXPORT_PILOTAGE_ECARTS_ETATS' =>
+    'V_EXPORT_PILOTAGE_ECARTS_ETATS' => 
     array (
       'name' => 'V_EXPORT_PILOTAGE_ECARTS_ETATS',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_EXPORT_PILOTAGE_ECARTS_ETATS AS
@@ -32991,7 +32995,7 @@ ORDER BY
   JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
   JOIN structure s ON s.id = t3.structure_id',
     ),
-    'V_EXPORT_SERVICE' =>
+    'V_EXPORT_SERVICE' => 
     array (
       'name' => 'V_EXPORT_SERVICE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_EXPORT_SERVICE AS
@@ -33300,7 +33304,7 @@ FROM
   LEFT JOIN type_validation              tv ON tvh.code = \'REALISE\' AND tv.code = \'CLOTURE_REALISE\'
   LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL',
     ),
-    'V_EXP_HETD_CENTRE_COUT' =>
+    'V_EXP_HETD_CENTRE_COUT' => 
     array (
       'name' => 'V_EXP_HETD_CENTRE_COUT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_EXP_HETD_CENTRE_COUT AS
@@ -33474,7 +33478,7 @@ GROUP BY
   code_formation,
   centre_couts',
     ),
-    'V_FORMULE_INTERVENANT' =>
+    'V_FORMULE_INTERVENANT' => 
     array (
       'name' => 'V_FORMULE_INTERVENANT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_INTERVENANT AS
@@ -33502,7 +33506,7 @@ WHERE
 GROUP BY
   i.id, i.annee_id, i.structure_id, ti.code, s.code, si.service_statutaire, si.depassement_service_du_sans_hc',
     ),
-    'V_FORMULE_VOLUME_HORAIRE' =>
+    'V_FORMULE_VOLUME_HORAIRE' => 
     array (
       'name' => 'V_FORMULE_VOLUME_HORAIRE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_VOLUME_HORAIRE AS
@@ -33644,7 +33648,7 @@ ORDER BY
   horaire_fin, horaire_debut, volume_horaire_id, volume_horaire_ref_id
 ) t',
     ),
-    'V_FR_SERVICE_CENTRE_COUT' =>
+    'V_FR_SERVICE_CENTRE_COUT' => 
     array (
       'name' => 'V_FR_SERVICE_CENTRE_COUT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_FR_SERVICE_CENTRE_COUT AS
@@ -33702,7 +33706,7 @@ WHERE
     OR (frs.heures_compl_fc_majorees > 0 AND tr.fc_majorees = 1 AND a.fc_majorees = 1 )
   )',
     ),
-    'V_FR_SERVICE_REF_CENTRE_COUT' =>
+    'V_FR_SERVICE_REF_CENTRE_COUT' => 
     array (
       'name' => 'V_FR_SERVICE_REF_CENTRE_COUT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_FR_SERVICE_REF_CENTRE_COUT AS
@@ -33725,7 +33729,7 @@ FROM
 WHERE
   frsr.heures_compl_referentiel > 0 AND tr.referentiel = 1',
     ),
-    'V_HAS_DMEP_A_FAIRE' =>
+    'V_HAS_DMEP_A_FAIRE' => 
     array (
       'name' => 'V_HAS_DMEP_A_FAIRE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_HAS_DMEP_A_FAIRE AS
@@ -33778,7 +33782,7 @@ GROUP BY
   intervenant_id,
   structure_id',
     ),
-    'V_HETD_PREV_VAL_STRUCT' =>
+    'V_HETD_PREV_VAL_STRUCT' => 
     array (
       'name' => 'V_HETD_PREV_VAL_STRUCT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_HETD_PREV_VAL_STRUCT AS
@@ -33810,7 +33814,7 @@ WHERE
 GROUP BY
   annee_id, structure_id',
     ),
-    'V_IMPORT_TAB_COLS' =>
+    'V_IMPORT_TAB_COLS' => 
     array (
       'name' => 'V_IMPORT_TAB_COLS',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_IMPORT_TAB_COLS AS
@@ -33867,7 +33871,7 @@ WHERE
 ORDER BY
   it.ordre, tc.table_name, tc.column_id',
     ),
-    'V_INDICATEUR_1010' =>
+    'V_INDICATEUR_1010' => 
     array (
       'name' => 'V_INDICATEUR_1010',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1010 AS
@@ -33890,7 +33894,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_1011' =>
+    'V_INDICATEUR_1011' => 
     array (
       'name' => 'V_INDICATEUR_1011',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1011 AS
@@ -33913,7 +33917,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_1020' =>
+    'V_INDICATEUR_1020' => 
     array (
       'name' => 'V_INDICATEUR_1020',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1020 AS
@@ -33936,7 +33940,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_1021' =>
+    'V_INDICATEUR_1021' => 
     array (
       'name' => 'V_INDICATEUR_1021',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1021 AS
@@ -33959,7 +33963,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_110' =>
+    'V_INDICATEUR_110' => 
     array (
       'name' => 'V_INDICATEUR_110',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_110 AS
@@ -33982,7 +33986,7 @@ WHERE
 
 ) t',
     ),
-    'V_INDICATEUR_1110' =>
+    'V_INDICATEUR_1110' => 
     array (
       'name' => 'V_INDICATEUR_1110',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1110 AS
@@ -34000,7 +34004,7 @@ WHERE
   AND tvh.code = \'PREVU\'
 ) t',
     ),
-    'V_INDICATEUR_1111' =>
+    'V_INDICATEUR_1111' => 
     array (
       'name' => 'V_INDICATEUR_1111',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1111 AS
@@ -34018,7 +34022,7 @@ WHERE
   AND tvh.code = \'PREVU\'
 ) t',
     ),
-    'V_INDICATEUR_1120' =>
+    'V_INDICATEUR_1120' => 
     array (
       'name' => 'V_INDICATEUR_1120',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1120 AS
@@ -34036,7 +34040,7 @@ WHERE
   AND tvh.code = \'REALISE\'
 ) t',
     ),
-    'V_INDICATEUR_1121' =>
+    'V_INDICATEUR_1121' => 
     array (
       'name' => 'V_INDICATEUR_1121',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1121 AS
@@ -34054,7 +34058,7 @@ WHERE
   AND tvh.code = \'REALISE\'
 ) t',
     ),
-    'V_INDICATEUR_120' =>
+    'V_INDICATEUR_120' => 
     array (
       'name' => 'V_INDICATEUR_120',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_120 AS
@@ -34077,7 +34081,7 @@ WHERE
 
 ) t',
     ),
-    'V_INDICATEUR_1210' =>
+    'V_INDICATEUR_1210' => 
     array (
       'name' => 'V_INDICATEUR_1210',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1210 AS
@@ -34119,7 +34123,7 @@ GROUP BY
   i.id,
   i.structure_id',
     ),
-    'V_INDICATEUR_1211' =>
+    'V_INDICATEUR_1211' => 
     array (
       'name' => 'V_INDICATEUR_1211',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1211 AS
@@ -34162,7 +34166,7 @@ GROUP BY
   i.id,
   i.structure_id',
     ),
-    'V_INDICATEUR_1220' =>
+    'V_INDICATEUR_1220' => 
     array (
       'name' => 'V_INDICATEUR_1220',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1220 AS
@@ -34204,7 +34208,7 @@ GROUP BY
   i.id,
   i.structure_id',
     ),
-    'V_INDICATEUR_1221' =>
+    'V_INDICATEUR_1221' => 
     array (
       'name' => 'V_INDICATEUR_1221',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1221 AS
@@ -34247,7 +34251,7 @@ GROUP BY
   i.id,
   i.structure_id',
     ),
-    'V_INDICATEUR_1230' =>
+    'V_INDICATEUR_1230' => 
     array (
       'name' => 'V_INDICATEUR_1230',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1230 AS
@@ -34279,7 +34283,7 @@ FROM
 WHERE
     t.heures > t.plafond',
     ),
-    'V_INDICATEUR_1240' =>
+    'V_INDICATEUR_1240' => 
     array (
       'name' => 'V_INDICATEUR_1240',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1240 AS
@@ -34311,7 +34315,7 @@ FROM
 WHERE
     t.heures > t.plafond',
     ),
-    'V_INDICATEUR_130' =>
+    'V_INDICATEUR_130' => 
     array (
       'name' => 'V_INDICATEUR_130',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_130 AS
@@ -34336,7 +34340,7 @@ WHERE
 
 ) t',
     ),
-    'V_INDICATEUR_210' =>
+    'V_INDICATEUR_210' => 
     array (
       'name' => 'V_INDICATEUR_210',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_210 AS
@@ -34353,7 +34357,7 @@ WHERE
   AND w.objectif > 0
   AND w.realisation < 1',
     ),
-    'V_INDICATEUR_220' =>
+    'V_INDICATEUR_220' => 
     array (
       'name' => 'V_INDICATEUR_220',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_220 AS
@@ -34371,7 +34375,7 @@ WHERE
   AND w.objectif > 0
   AND w.realisation < 1',
     ),
-    'V_INDICATEUR_310' =>
+    'V_INDICATEUR_310' => 
     array (
       'name' => 'V_INDICATEUR_310',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_310 AS
@@ -34399,7 +34403,7 @@ WHERE
   AND w.objectif > 0
   AND w.realisation < 1',
     ),
-    'V_INDICATEUR_320' =>
+    'V_INDICATEUR_320' => 
     array (
       'name' => 'V_INDICATEUR_320',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_320 AS
@@ -34422,7 +34426,7 @@ WHERE
   AND NVL(c.EDITE,0) <> 1
 ) t',
     ),
-    'V_INDICATEUR_330' =>
+    'V_INDICATEUR_330' => 
     array (
       'name' => 'V_INDICATEUR_330',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_330 AS
@@ -34448,7 +34452,7 @@ WHERE
   AND w.objectif > 0
   AND w.realisation < w.objectif',
     ),
-    'V_INDICATEUR_340' =>
+    'V_INDICATEUR_340' => 
     array (
       'name' => 'V_INDICATEUR_340',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_340 AS
@@ -34469,7 +34473,7 @@ WHERE
   AND w.objectif > 0
   AND w.realisation = w.objectif',
     ),
-    'V_INDICATEUR_350' =>
+    'V_INDICATEUR_350' => 
     array (
       'name' => 'V_INDICATEUR_350',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_350 AS
@@ -34492,7 +34496,7 @@ WHERE
   c.histo_destruction IS NULL
 ) t',
     ),
-    'V_INDICATEUR_360' =>
+    'V_INDICATEUR_360' => 
     array (
       'name' => 'V_INDICATEUR_360',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_360 AS
@@ -34515,7 +34519,7 @@ WHERE
   AND c.date_retour_signe IS NULL
 ) t',
     ),
-    'V_INDICATEUR_410' =>
+    'V_INDICATEUR_410' => 
     array (
       'name' => 'V_INDICATEUR_410',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_410 AS
@@ -34532,7 +34536,7 @@ WHERE
   AND d.validation_id IS NULL
   AND d.peut_saisir_dossier = 1',
     ),
-    'V_INDICATEUR_420' =>
+    'V_INDICATEUR_420' => 
     array (
       'name' => 'V_INDICATEUR_420',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_420 AS
@@ -34548,7 +34552,7 @@ SELECT rownum id, t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID" FROM (
     d.histo_destruction IS NULL
 ) t',
     ),
-    'V_INDICATEUR_510' =>
+    'V_INDICATEUR_510' => 
     array (
       'name' => 'V_INDICATEUR_510',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_510 AS
@@ -34577,7 +34581,7 @@ SELECT
   rownum id, t."INTERVENANT_ID",t."ANNEE_ID",t."STRUCTURE_ID", t.elements
 FROM t',
     ),
-    'V_INDICATEUR_520' =>
+    'V_INDICATEUR_520' => 
     array (
       'name' => 'V_INDICATEUR_520',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_520 AS
@@ -34599,7 +34603,7 @@ WHERE
   AND evh.code = \'saisi\'
   AND si.plafond_hc_hors_remu_fc < fr.heures_compl_fa + fr.heures_compl_fc + fr.heures_compl_fi + fr.heures_compl_referentiel',
     ),
-    'V_INDICATEUR_530' =>
+    'V_INDICATEUR_530' => 
     array (
       'name' => 'V_INDICATEUR_530',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_530 AS
@@ -34621,7 +34625,7 @@ WHERE
   AND evh.code = \'saisi\'
   AND si.plafond_hc_hors_remu_fc < fr.heures_compl_fa + fr.heures_compl_fc + fr.heures_compl_fi + fr.heures_compl_referentiel',
     ),
-    'V_INDICATEUR_540' =>
+    'V_INDICATEUR_540' => 
     array (
       'name' => 'V_INDICATEUR_540',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_540 AS
@@ -34643,7 +34647,7 @@ WHERE
   fr.heures_compl_fc_majorees > ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 )
   AND tvh.code = \'PREVU\'',
     ),
-    'V_INDICATEUR_550' =>
+    'V_INDICATEUR_550' => 
     array (
       'name' => 'V_INDICATEUR_550',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_550 AS
@@ -34665,7 +34669,7 @@ WHERE
   fr.heures_compl_fc_majorees > ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 )
   AND tvh.code = \'REALISE\'',
     ),
-    'V_INDICATEUR_560' =>
+    'V_INDICATEUR_560' => 
     array (
       'name' => 'V_INDICATEUR_560',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_560 AS
@@ -34685,7 +34689,7 @@ FROM
 WHERE
   fr.total - fr.heures_compl_fc_majorees > si.maximum_hetd',
     ),
-    'V_INDICATEUR_570' =>
+    'V_INDICATEUR_570' => 
     array (
       'name' => 'V_INDICATEUR_570',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_570 AS
@@ -34705,7 +34709,7 @@ FROM
 WHERE
   fr.total - fr.heures_compl_fc_majorees > si.maximum_hetd',
     ),
-    'V_INDICATEUR_580' =>
+    'V_INDICATEUR_580' => 
     array (
       'name' => 'V_INDICATEUR_580',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_580 AS
@@ -34749,7 +34753,7 @@ FROM
 WHERE
   t.heures > si.plafond_hc_fi_hors_ead',
     ),
-    'V_INDICATEUR_590' =>
+    'V_INDICATEUR_590' => 
     array (
       'name' => 'V_INDICATEUR_590',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_590 AS
@@ -34793,7 +34797,7 @@ FROM
 WHERE
   t.heures > si.plafond_hc_fi_hors_ead',
     ),
-    'V_INDICATEUR_610' =>
+    'V_INDICATEUR_610' => 
     array (
       'name' => 'V_INDICATEUR_610',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_610 AS
@@ -34813,7 +34817,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_620' =>
+    'V_INDICATEUR_620' => 
     array (
       'name' => 'V_INDICATEUR_620',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_620 AS
@@ -34832,7 +34836,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_630' =>
+    'V_INDICATEUR_630' => 
     array (
       'name' => 'V_INDICATEUR_630',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_630 AS
@@ -34851,7 +34855,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_640' =>
+    'V_INDICATEUR_640' => 
     array (
       'name' => 'V_INDICATEUR_640',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_640 AS
@@ -34873,7 +34877,7 @@ WHERE
   AND wc.objectif = wc.realisation
 ) t',
     ),
-    'V_INDICATEUR_650' =>
+    'V_INDICATEUR_650' => 
     array (
       'name' => 'V_INDICATEUR_650',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_650 AS
@@ -34903,7 +34907,7 @@ GROUP BY
   i.structure_id
 ) t',
     ),
-    'V_INDICATEUR_660' =>
+    'V_INDICATEUR_660' => 
     array (
       'name' => 'V_INDICATEUR_660',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_660 AS
@@ -34932,7 +34936,7 @@ GROUP BY
   i.structure_id
 ) t',
     ),
-    'V_INDICATEUR_670' =>
+    'V_INDICATEUR_670' => 
     array (
       'name' => 'V_INDICATEUR_670',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_670 AS
@@ -34962,7 +34966,7 @@ GROUP BY
   i.structure_id
 ) t',
     ),
-    'V_INDICATEUR_680' =>
+    'V_INDICATEUR_680' => 
     array (
       'name' => 'V_INDICATEUR_680',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_680 AS
@@ -34984,7 +34988,7 @@ WHERE
   AND evh.code = \'saisi\'
   AND si.plafond_referentiel < fr.service_referentiel + fr.heures_compl_referentiel',
     ),
-    'V_INDICATEUR_690' =>
+    'V_INDICATEUR_690' => 
     array (
       'name' => 'V_INDICATEUR_690',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_690 AS
@@ -35006,7 +35010,7 @@ WHERE
   AND evh.code = \'saisi\'
   AND si.plafond_referentiel < fr.service_referentiel + fr.heures_compl_referentiel',
     ),
-    'V_INDICATEUR_710' =>
+    'V_INDICATEUR_710' => 
     array (
       'name' => 'V_INDICATEUR_710',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_710 AS
@@ -35025,7 +35029,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_720' =>
+    'V_INDICATEUR_720' => 
     array (
       'name' => 'V_INDICATEUR_720',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_720 AS
@@ -35044,7 +35048,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_810' =>
+    'V_INDICATEUR_810' => 
     array (
       'name' => 'V_INDICATEUR_810',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_810 AS
@@ -35063,7 +35067,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_820' =>
+    'V_INDICATEUR_820' => 
     array (
       'name' => 'V_INDICATEUR_820',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_820 AS
@@ -35082,7 +35086,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_910' =>
+    'V_INDICATEUR_910' => 
     array (
       'name' => 'V_INDICATEUR_910',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_910 AS
@@ -35101,7 +35105,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDICATEUR_920' =>
+    'V_INDICATEUR_920' => 
     array (
       'name' => 'V_INDICATEUR_920',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_920 AS
@@ -35120,7 +35124,7 @@ WHERE
   AND w.objectif > w.realisation
 ) t',
     ),
-    'V_INDIC_ATTENTE_DEMANDE_MEP' =>
+    'V_INDIC_ATTENTE_DEMANDE_MEP' => 
     array (
       'name' => 'V_INDIC_ATTENTE_DEMANDE_MEP',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_ATTENTE_DEMANDE_MEP AS
@@ -35165,7 +35169,7 @@ select to_number(i.id||dmep.structure_id) id, i.id intervenant_id, i.source_code
     )
   )',
     ),
-    'V_INDIC_ATTENTE_MEP' =>
+    'V_INDIC_ATTENTE_MEP' => 
     array (
       'name' => 'V_INDIC_ATTENTE_MEP',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_ATTENTE_MEP AS
@@ -35207,7 +35211,7 @@ with
   )
 select to_number(intervenant_id||structure_id) id, 2014 annee_id, intervenant_id, structure_id, total_heures_mep from mep',
     ),
-    'V_INDIC_ATT_VALID_ENS_AUTRE' =>
+    'V_INDIC_ATT_VALID_ENS_AUTRE' => 
     array (
       'name' => 'V_INDIC_ATT_VALID_ENS_AUTRE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_ATT_VALID_ENS_AUTRE AS
@@ -35236,7 +35240,7 @@ WHERE EXISTS
             AND val2.ID IS NULL -- au moins un VH non validé
     )',
     ),
-    'V_INDIC_ATT_VALID_REF_AUTRE' =>
+    'V_INDIC_ATT_VALID_REF_AUTRE' => 
     array (
       'name' => 'V_INDIC_ATT_VALID_REF_AUTRE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_ATT_VALID_REF_AUTRE AS
@@ -35265,7 +35269,7 @@ WHERE EXISTS
             AND val.ID IS NULL -- au moins un VH non validé
     )',
     ),
-    'V_INDIC_ATT_VALID_SERVICE' =>
+    'V_INDIC_ATT_VALID_SERVICE' => 
     array (
       'name' => 'V_INDIC_ATT_VALID_SERVICE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_ATT_VALID_SERVICE AS
@@ -35279,7 +35283,7 @@ left join validation_vol_horaire vvh on vvh.volume_horaire_id = vh.id
 left join validation v on vvh.validation_id = v.id and v.histo_destruction IS NULL
 where v.id is null and s.histo_destruction IS NULL',
     ),
-    'V_INDIC_ATT_VALID_SERVICE_REF' =>
+    'V_INDIC_ATT_VALID_SERVICE_REF' => 
     array (
       'name' => 'V_INDIC_ATT_VALID_SERVICE_REF',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_ATT_VALID_SERVICE_REF AS
@@ -35293,7 +35297,7 @@ left join validation_vol_horaire_ref vvh on vvh.volume_horaire_ref_id = vh.id
 left join validation v on vvh.validation_id = v.id and v.histo_destruction IS NULL
 where v.id is null and s.histo_destruction IS NULL',
     ),
-    'V_INDIC_DEPASS_CHARGES' =>
+    'V_INDIC_DEPASS_CHARGES' => 
     array (
       'name' => 'V_INDIC_DEPASS_CHARGES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_DEPASS_CHARGES AS
@@ -35356,7 +35360,7 @@ FROM
 WHERE
   s.heures - COALESCE(c.heures * c.groupes,0) > 0',
     ),
-    'V_INDIC_DEPASS_HC_HORS_REMU_FC' =>
+    'V_INDIC_DEPASS_HC_HORS_REMU_FC' => 
     array (
       'name' => 'V_INDIC_DEPASS_HC_HORS_REMU_FC',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_DEPASS_HC_HORS_REMU_FC AS
@@ -35390,7 +35394,7 @@ select to_number(d.intervenant_id||d.type_volume_horaire_id||str.structure_id) i
 from depass d
 join str_interv str on str.intervenant_id = d.intervenant_id and str.type_volume_horaire_id = d.type_volume_horaire_id',
     ),
-    'V_INDIC_DEPASS_REF' =>
+    'V_INDIC_DEPASS_REF' => 
     array (
       'name' => 'V_INDIC_DEPASS_REF',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_DEPASS_REF AS
@@ -35421,7 +35425,7 @@ select to_number(d.intervenant_id||d.type_volume_horaire_id||str.structure_id) i
 from depass d
 join str_interv str on str.intervenant_id = d.intervenant_id and str.type_volume_horaire_id = d.type_volume_horaire_id',
     ),
-    'V_INDIC_DIFF_DOSSIER' =>
+    'V_INDIC_DIFF_DOSSIER' => 
     array (
       'name' => 'V_INDIC_DIFF_DOSSIER',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_DIFF_DOSSIER AS
@@ -35451,7 +35455,7 @@ select
   join dossier d on d.intervenant_id = i.id
   left join aa a on a.intervenant_id = i.id',
     ),
-    'V_INDIC_TOUS_SERVICES_VALIDES' =>
+    'V_INDIC_TOUS_SERVICES_VALIDES' => 
     array (
       'name' => 'V_INDIC_TOUS_SERVICES_VALIDES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDIC_TOUS_SERVICES_VALIDES AS
@@ -35499,7 +35503,7 @@ and not exists (
     where ref_nv.INTERVENANT_ID = s.intervenant_id and ref_nv.structure_id = s.structure_id and ref_nv.type_volume_horaire_id = vh.type_volume_horaire_id
 )',
     ),
-    'V_MEP_INTERVENANT_STRUCTURE' =>
+    'V_MEP_INTERVENANT_STRUCTURE' => 
     array (
       'name' => 'V_MEP_INTERVENANT_STRUCTURE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_MEP_INTERVENANT_STRUCTURE AS
@@ -35548,7 +35552,7 @@ FROM
   LEFT JOIN etape                        e ON e.id = ep.etape_id
 ) t1',
     ),
-    'V_MODIF_SERVICE_DU_EXPORT_CSV' =>
+    'V_MODIF_SERVICE_DU_EXPORT_CSV' => 
     array (
       'name' => 'V_MODIF_SERVICE_DU_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_MODIF_SERVICE_DU_EXPORT_CSV AS
@@ -35593,7 +35597,7 @@ ORDER BY
   motif_libelle,
   heures',
     ),
-    'V_NIVEAU_FORMATION' =>
+    'V_NIVEAU_FORMATION' => 
     array (
       'name' => 'V_NIVEAU_FORMATION',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_NIVEAU_FORMATION AS
@@ -35613,7 +35617,7 @@ WHERE
 ORDER BY
   gtf.libelle_long, e.niveau',
     ),
-    'V_PJ_HEURES' =>
+    'V_PJ_HEURES' => 
     array (
       'name' => 'V_PJ_HEURES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_PJ_HEURES AS
@@ -35642,7 +35646,7 @@ UNION
   where i.histo_destruction IS NULL
   group by i.NOM_USUEL, i.PRENOM, i.id, i.SOURCE_CODE, i.annee_id, \'referentiel\'',
     ),
-    'V_PRIVILEGES_ROLES' =>
+    'V_PRIVILEGES_ROLES' => 
     array (
       'name' => 'V_PRIVILEGES_ROLES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_PRIVILEGES_ROLES AS
@@ -35671,7 +35675,7 @@ FROM
   JOIN categorie_privilege cp ON cp.id = p.categorie_id
   LEFT JOIN statuts_roles sr ON sr.privilege_id = p.id',
     ),
-    'V_REF_INTERVENANT' =>
+    'V_REF_INTERVENANT' => 
     array (
       'name' => 'V_REF_INTERVENANT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_REF_INTERVENANT AS
@@ -35685,7 +35689,7 @@ WHERE
   s.nbvh > 0
   AND SYSDATE BETWEEN a.date_debut AND a.date_fin',
     ),
-    'V_SERVICE_NON_VALIDE' =>
+    'V_SERVICE_NON_VALIDE' => 
     array (
       'name' => 'V_SERVICE_NON_VALIDE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_SERVICE_NON_VALIDE AS
@@ -35704,7 +35708,7 @@ select vh.ID, i.ID as intervenant_id, s.ID as service_id, vh.ID as volume_horair
     where vvh2.VOLUME_HORAIRE_ID = vvh.VOLUME_HORAIRE_ID
   )',
     ),
-    'V_SERVICE_VALIDE' =>
+    'V_SERVICE_VALIDE' => 
     array (
       'name' => 'V_SERVICE_VALIDE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_SERVICE_VALIDE AS
@@ -35717,7 +35721,7 @@ select vh.ID, i.ID as intervenant_id, s.ID as service_id, vh.ID as volume_horair
   inner join VALIDATION v on vvh.VALIDATION_ID = v.ID and v.histo_destruction IS NULL
   inner join TYPE_VALIDATION tv on v.TYPE_VALIDATION_ID = tv.ID',
     ),
-    'V_STRUCTURE_TYPE_MODULATEUR' =>
+    'V_STRUCTURE_TYPE_MODULATEUR' => 
     array (
       'name' => 'V_STRUCTURE_TYPE_MODULATEUR',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_STRUCTURE_TYPE_MODULATEUR AS
@@ -35728,7 +35732,7 @@ FROM
   v_element_type_modulateur etm
   JOIN element_pedagogique ep ON ep.id = etm.element_pedagogique_id AND ep.histo_destruction IS NULL',
     ),
-    'V_TBL_AGREMENT' =>
+    'V_TBL_AGREMENT' => 
     array (
       'name' => 'V_TBL_AGREMENT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
@@ -35796,7 +35800,7 @@ FROM
 WHERE
   ta.code = \'CONSEIL_RESTREINT\'',
     ),
-    'V_TBL_CHARGENS' =>
+    'V_TBL_CHARGENS' => 
     array (
       'name' => 'V_TBL_CHARGENS',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_CHARGENS AS
@@ -35893,7 +35897,7 @@ SELECT
 FROM
   t',
     ),
-    'V_TBL_CHARGENS_SEUILS_DEF' =>
+    'V_TBL_CHARGENS_SEUILS_DEF' => 
     array (
       'name' => 'V_TBL_CHARGENS_SEUILS_DEF',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_CHARGENS_SEUILS_DEF AS
@@ -35943,7 +35947,7 @@ FROM
 WHERE
   COALESCE(sc1.dedoublement, sc2.dedoublement, sc3.dedoublement, sc4.dedoublement, 1) <> 1',
     ),
-    'V_TBL_CLOTURE_REALISE' =>
+    'V_TBL_CLOTURE_REALISE' => 
     array (
       'name' => 'V_TBL_CLOTURE_REALISE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_CLOTURE_REALISE AS
@@ -35977,7 +35981,7 @@ GROUP BY
   intervenant_id,
   peut_cloturer_saisie',
     ),
-    'V_TBL_CONTRAT' =>
+    'V_TBL_CONTRAT' => 
     array (
       'name' => 'V_TBL_CONTRAT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_CONTRAT AS
@@ -36065,7 +36069,7 @@ GROUP BY
   peut_avoir_contrat,
   structure_id',
     ),
-    'V_TBL_DMEP_LIQUIDATION' =>
+    'V_TBL_DMEP_LIQUIDATION' => 
     array (
       'name' => 'V_TBL_DMEP_LIQUIDATION',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_DMEP_LIQUIDATION AS
@@ -36112,7 +36116,7 @@ FROM
 GROUP BY
   annee_id, type_ressource_id, structure_id',
     ),
-    'V_TBL_DOSSIER' =>
+    'V_TBL_DOSSIER' => 
     array (
       'name' => 'V_TBL_DOSSIER',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_DOSSIER AS
@@ -36135,7 +36139,7 @@ FROM
 WHERE
   i.histo_destruction IS NULL',
     ),
-    'V_TBL_LIEN' =>
+    'V_TBL_LIEN' => 
     array (
       'name' => 'V_TBL_LIEN',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_LIEN AS
@@ -36165,7 +36169,7 @@ FROM
 WHERE
   l.histo_destruction IS NULL',
     ),
-    'V_TBL_PAIEMENT' =>
+    'V_TBL_PAIEMENT' => 
     array (
       'name' => 'V_TBL_PAIEMENT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PAIEMENT AS
@@ -36226,7 +36230,7 @@ FROM
   LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                AND mep.histo_destruction IS NULL',
     ),
-    'V_TBL_PIECE_JOINTE' =>
+    'V_TBL_PIECE_JOINTE' => 
     array (
       'name' => 'V_TBL_PIECE_JOINTE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
@@ -36258,7 +36262,7 @@ FROM
   tbl_piece_jointe_demande pjd
   FULL JOIN pjf ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id AND pjf.intervenant_id = pjd.intervenant_id',
     ),
-    'V_TBL_PIECE_JOINTE_DEMANDE' =>
+    'V_TBL_PIECE_JOINTE_DEMANDE' => 
     array (
       'name' => 'V_TBL_PIECE_JOINTE_DEMANDE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
@@ -36324,7 +36328,7 @@ GROUP BY
   tpj.id,
   tpjs.obligatoire',
     ),
-    'V_TBL_PIECE_JOINTE_FOURNIE' =>
+    'V_TBL_PIECE_JOINTE_FOURNIE' => 
     array (
       'name' => 'V_TBL_PIECE_JOINTE_FOURNIE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_FOURNIE AS
@@ -36349,7 +36353,7 @@ FROM
 WHERE
   pj.histo_destruction IS NULL',
     ),
-    'V_TBL_SERVICE' =>
+    'V_TBL_SERVICE' => 
     array (
       'name' => 'V_TBL_SERVICE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_SERVICE AS
@@ -36440,7 +36444,7 @@ GROUP BY
   t.element_pedagogique_histo,
   t.etape_histo',
     ),
-    'V_TBL_SERVICE_REFERENTIEL' =>
+    'V_TBL_SERVICE_REFERENTIEL' => 
     array (
       'name' => 'V_TBL_SERVICE_REFERENTIEL',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_SERVICE_REFERENTIEL AS
@@ -36491,7 +36495,7 @@ GROUP BY
   type_volume_horaire_id,
   structure_id',
     ),
-    'V_TBL_SERVICE_SAISIE' =>
+    'V_TBL_SERVICE_SAISIE' => 
     array (
       'name' => 'V_TBL_SERVICE_SAISIE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_SERVICE_SAISIE AS
@@ -36522,7 +36526,7 @@ GROUP BY
   si.peut_saisir_service,
   si.peut_saisir_referentiel',
     ),
-    'V_TBL_VALIDATION_ENSEIGNEMENT' =>
+    'V_TBL_VALIDATION_ENSEIGNEMENT' => 
     array (
       'name' => 'V_TBL_VALIDATION_ENSEIGNEMENT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_VALIDATION_ENSEIGNEMENT AS
@@ -36552,7 +36556,7 @@ WHERE
   s.histo_destruction IS NULL
   AND NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)',
     ),
-    'V_TBL_VALIDATION_REFERENTIEL' =>
+    'V_TBL_VALIDATION_REFERENTIEL' => 
     array (
       'name' => 'V_TBL_VALIDATION_REFERENTIEL',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_VALIDATION_REFERENTIEL AS
@@ -36580,7 +36584,7 @@ FROM
 WHERE
   s.histo_destruction IS NULL',
     ),
-    'V_TBL_VOLUME_HORAIRE' =>
+    'V_TBL_VOLUME_HORAIRE' => 
     array (
       'name' => 'V_TBL_VOLUME_HORAIRE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_VOLUME_HORAIRE AS
@@ -36638,7 +36642,7 @@ FROM
 WHERE
   i.histo_destruction IS NULL',
     ),
-    'V_TOTAL_DEMANDE_MEP_STRUCTURE' =>
+    'V_TOTAL_DEMANDE_MEP_STRUCTURE' => 
     array (
       'name' => 'V_TOTAL_DEMANDE_MEP_STRUCTURE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TOTAL_DEMANDE_MEP_STRUCTURE AS
@@ -36671,7 +36675,7 @@ with mep as (
 select intervenant_id, structure_id, sum(nvl(mep_heures, 0)) total_heures_mep from mep
 group by intervenant_id, structure_id',
     ),
-    'V_VALIDATION_MISE_EN_PAIEMENT' =>
+    'V_VALIDATION_MISE_EN_PAIEMENT' => 
     array (
       'name' => 'V_VALIDATION_MISE_EN_PAIEMENT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_VALIDATION_MISE_EN_PAIEMENT AS
@@ -36695,7 +36699,7 @@ FROM
   JOIN formule_resultat_service_ref frs ON frs.service_referentiel_id = vh.service_referentiel_id
   JOIN mise_en_paiement mep ON mep.formule_res_service_ref_id = frs.id',
     ),
-    'V_VOLUME_HORAIRE_ETAT' =>
+    'V_VOLUME_HORAIRE_ETAT' => 
     array (
       'name' => 'V_VOLUME_HORAIRE_ETAT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_VOLUME_HORAIRE_ETAT AS
@@ -36716,7 +36720,7 @@ FROM
     ELSE \'saisi\'
     END',
     ),
-    'V_VOLUME_HORAIRE_REF_ETAT' =>
+    'V_VOLUME_HORAIRE_REF_ETAT' => 
     array (
       'name' => 'V_VOLUME_HORAIRE_REF_ETAT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_VOLUME_HORAIRE_REF_ETAT AS
@@ -36733,7 +36737,7 @@ FROM
     ELSE \'saisi\'
   END',
     ),
-    'V_VOL_HORAIRE_ETAT_MULTI' =>
+    'V_VOL_HORAIRE_ETAT_MULTI' => 
     array (
       'name' => 'V_VOL_HORAIRE_ETAT_MULTI',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_VOL_HORAIRE_ETAT_MULTI AS
@@ -36767,7 +36771,7 @@ union all
   join etat_volume_horaire evh on evh.code = \'contrat-signe\'
   where vh.histo_destruction IS NULL',
     ),
-    'V_VOL_HORAIRE_REF_ETAT_MULTI' =>
+    'V_VOL_HORAIRE_REF_ETAT_MULTI' => 
     array (
       'name' => 'V_VOL_HORAIRE_REF_ETAT_MULTI',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_VOL_HORAIRE_REF_ETAT_MULTI AS
@@ -36788,9 +36792,9 @@ union all
   )',
     ),
   ),
-  'BddAdmin\\Ddl\\DdlMaterializedView' =>
+  'BddAdmin\\Ddl\\DdlMaterializedView' => 
   array (
-    'MV_EXT_DOTATION_LIQUIDATION' =>
+    'MV_EXT_DOTATION_LIQUIDATION' => 
     array (
       'name' => 'MV_EXT_DOTATION_LIQUIDATION',
       'definition' => 'SELECT
@@ -36839,17 +36843,17 @@ GROUP BY
 	COALESCE(HEURE_DOT.TYPE_RESSOURCE_ID, HEURE_LIQUID.TYPE_RESSOURCE_ID),
 	COALESCE(HEURE_DOT.STRUCTURE_ID, HEURE_LIQUID.STRUCTURE_ID)',
     ),
-    'MV_EXT_ETAT_PAIEMENT' =>
+    'MV_EXT_ETAT_PAIEMENT' => 
     array (
       'name' => 'MV_EXT_ETAT_PAIEMENT',
       'definition' => 'SELECT * FROM v_etat_paiement',
     ),
-    'MV_EXT_SERVICE' =>
+    'MV_EXT_SERVICE' => 
     array (
       'name' => 'MV_EXT_SERVICE',
       'definition' => 'SELECT * FROM V_EXPORT_SERVICE',
     ),
-    'TBL_NOEUD' =>
+    'TBL_NOEUD' => 
     array (
       'name' => 'TBL_NOEUD',
       'definition' => 'SELECT
@@ -36873,6656 +36877,6656 @@ WHERE
   n.histo_destruction IS NULL',
     ),
   ),
-  'BddAdmin\\Ddl\\DdlRefConstraint' =>
+  'BddAdmin\\Ddl\\DdlRefConstraint' => 
   array (
-    'ADRESSE_INTERVENANT_HCFK' =>
+    'ADRESSE_INTERVENANT_HCFK' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_HCFK',
       'table' => 'ADRESSE_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_HDFK' =>
+    'ADRESSE_INTERVENANT_HDFK' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_HDFK',
       'table' => 'ADRESSE_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_HMFK' =>
+    'ADRESSE_INTERVENANT_HMFK' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_HMFK',
       'table' => 'ADRESSE_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_SOURCE_FK' =>
+    'ADRESSE_INTERVENANT_SOURCE_FK' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_SOURCE_FK',
       'table' => 'ADRESSE_INTERVENANT',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_HCFK' =>
+    'ADRESSE_STRUCTURE_HCFK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_HCFK',
       'table' => 'ADRESSE_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_HDFK' =>
+    'ADRESSE_STRUCTURE_HDFK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_HDFK',
       'table' => 'ADRESSE_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_HMFK' =>
+    'ADRESSE_STRUCTURE_HMFK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_HMFK',
       'table' => 'ADRESSE_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_SOURCE_FK' =>
+    'ADRESSE_STRUCTURE_SOURCE_FK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_SOURCE_FK',
       'table' => 'ADRESSE_STRUCTURE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_STRUCTURE_FK' =>
+    'ADRESSE_STRUCTURE_STRUCTURE_FK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_STRUCTURE_FK',
       'table' => 'ADRESSE_STRUCTURE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_HCFK' =>
+    'AFFECTATION_HCFK' => 
     array (
       'name' => 'AFFECTATION_HCFK',
       'table' => 'AFFECTATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_HDFK' =>
+    'AFFECTATION_HDFK' => 
     array (
       'name' => 'AFFECTATION_HDFK',
       'table' => 'AFFECTATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_HMFK' =>
+    'AFFECTATION_HMFK' => 
     array (
       'name' => 'AFFECTATION_HMFK',
       'table' => 'AFFECTATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_RECHERCH_SOURCE_FK' =>
+    'AFFECTATION_RECHERCH_SOURCE_FK' => 
     array (
       'name' => 'AFFECTATION_RECHERCH_SOURCE_FK',
       'table' => 'AFFECTATION_RECHERCHE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_ROLE_FK' =>
+    'AFFECTATION_ROLE_FK' => 
     array (
       'name' => 'AFFECTATION_ROLE_FK',
       'table' => 'AFFECTATION',
       'rtable' => 'ROLE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ROLE_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_R_HCFK' =>
+    'AFFECTATION_R_HCFK' => 
     array (
       'name' => 'AFFECTATION_R_HCFK',
       'table' => 'AFFECTATION_RECHERCHE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_R_HDFK' =>
+    'AFFECTATION_R_HDFK' => 
     array (
       'name' => 'AFFECTATION_R_HDFK',
       'table' => 'AFFECTATION_RECHERCHE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_R_HMFK' =>
+    'AFFECTATION_R_HMFK' => 
     array (
       'name' => 'AFFECTATION_R_HMFK',
       'table' => 'AFFECTATION_RECHERCHE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_R_INTERVENANT_FK' =>
+    'AFFECTATION_R_INTERVENANT_FK' => 
     array (
       'name' => 'AFFECTATION_R_INTERVENANT_FK',
       'table' => 'AFFECTATION_RECHERCHE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_R_STRUCTURE_FK' =>
+    'AFFECTATION_R_STRUCTURE_FK' => 
     array (
       'name' => 'AFFECTATION_R_STRUCTURE_FK',
       'table' => 'AFFECTATION_RECHERCHE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_SOURCE_FK' =>
+    'AFFECTATION_SOURCE_FK' => 
     array (
       'name' => 'AFFECTATION_SOURCE_FK',
       'table' => 'AFFECTATION',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_STRUCTURE_FK' =>
+    'AFFECTATION_STRUCTURE_FK' => 
     array (
       'name' => 'AFFECTATION_STRUCTURE_FK',
       'table' => 'AFFECTATION',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'AFFECTATION_UTILISATEUR_FK' =>
+    'AFFECTATION_UTILISATEUR_FK' => 
     array (
       'name' => 'AFFECTATION_UTILISATEUR_FK',
       'table' => 'AFFECTATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'UTILISATEUR_ID' => 'ID',
       ),
     ),
-    'AGREMENT_HCFK' =>
+    'AGREMENT_HCFK' => 
     array (
       'name' => 'AGREMENT_HCFK',
       'table' => 'AGREMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'AGREMENT_HDFK' =>
+    'AGREMENT_HDFK' => 
     array (
       'name' => 'AGREMENT_HDFK',
       'table' => 'AGREMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'AGREMENT_HMFK' =>
+    'AGREMENT_HMFK' => 
     array (
       'name' => 'AGREMENT_HMFK',
       'table' => 'AGREMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'AGREMENT_INTERVENANT_FK' =>
+    'AGREMENT_INTERVENANT_FK' => 
     array (
       'name' => 'AGREMENT_INTERVENANT_FK',
       'table' => 'AGREMENT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'AGREMENT_STRUCTURE_FK' =>
+    'AGREMENT_STRUCTURE_FK' => 
     array (
       'name' => 'AGREMENT_STRUCTURE_FK',
       'table' => 'AGREMENT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'AGREMENT_TYPE_AGREMENT_FK' =>
+    'AGREMENT_TYPE_AGREMENT_FK' => 
     array (
       'name' => 'AGREMENT_TYPE_AGREMENT_FK',
       'table' => 'AGREMENT',
       'rtable' => 'TYPE_AGREMENT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_AGREMENT_ID' => 'ID',
       ),
     ),
-    'AII_FK' =>
+    'AII_FK' => 
     array (
       'name' => 'AII_FK',
       'table' => 'ADRESSE_INTERVENANT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'CAMPAGNE_SAISIE_ANNEE_FK' =>
+    'CAMPAGNE_SAISIE_ANNEE_FK' => 
     array (
       'name' => 'CAMPAGNE_SAISIE_ANNEE_FK',
       'table' => 'CAMPAGNE_SAISIE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'CCEP_CENTRE_COUT_FK' =>
+    'CCEP_CENTRE_COUT_FK' => 
     array (
       'name' => 'CCEP_CENTRE_COUT_FK',
       'table' => 'CENTRE_COUT_EP',
       'rtable' => 'CENTRE_COUT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CENTRE_COUT_ID' => 'ID',
       ),
     ),
-    'CCEP_ELEMENT_PEDAGOGIQUE_FK' =>
+    'CCEP_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'CCEP_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'CENTRE_COUT_EP',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'CCEP_TYPE_HEURES_FK' =>
+    'CCEP_TYPE_HEURES_FK' => 
     array (
       'name' => 'CCEP_TYPE_HEURES_FK',
       'table' => 'CENTRE_COUT_EP',
       'rtable' => 'TYPE_HEURES',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_HEURES_ID' => 'ID',
       ),
     ),
-    'CCS_CENTRE_COUT_FK' =>
+    'CCS_CENTRE_COUT_FK' => 
     array (
       'name' => 'CCS_CENTRE_COUT_FK',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'rtable' => 'CENTRE_COUT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CENTRE_COUT_ID' => 'ID',
       ),
     ),
-    'CCS_STRUCTURE_FK' =>
+    'CCS_STRUCTURE_FK' => 
     array (
       'name' => 'CCS_STRUCTURE_FK',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'CC_ACTIVITE_HCFK' =>
+    'CC_ACTIVITE_HCFK' => 
     array (
       'name' => 'CC_ACTIVITE_HCFK',
       'table' => 'CC_ACTIVITE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'CC_ACTIVITE_HDFK' =>
+    'CC_ACTIVITE_HDFK' => 
     array (
       'name' => 'CC_ACTIVITE_HDFK',
       'table' => 'CC_ACTIVITE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'CC_ACTIVITE_HMFK' =>
+    'CC_ACTIVITE_HMFK' => 
     array (
       'name' => 'CC_ACTIVITE_HMFK',
       'table' => 'CC_ACTIVITE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_ACTIVITE_FK' =>
+    'CENTRE_COUT_ACTIVITE_FK' => 
     array (
       'name' => 'CENTRE_COUT_ACTIVITE_FK',
       'table' => 'CENTRE_COUT',
       'rtable' => 'CC_ACTIVITE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ACTIVITE_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_CENTRE_COUT_FK' =>
+    'CENTRE_COUT_CENTRE_COUT_FK' => 
     array (
       'name' => 'CENTRE_COUT_CENTRE_COUT_FK',
       'table' => 'CENTRE_COUT',
       'rtable' => 'CENTRE_COUT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PARENT_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_EP_HCFK' =>
+    'CENTRE_COUT_EP_HCFK' => 
     array (
       'name' => 'CENTRE_COUT_EP_HCFK',
       'table' => 'CENTRE_COUT_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_EP_HDFK' =>
+    'CENTRE_COUT_EP_HDFK' => 
     array (
       'name' => 'CENTRE_COUT_EP_HDFK',
       'table' => 'CENTRE_COUT_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_EP_HMFK' =>
+    'CENTRE_COUT_EP_HMFK' => 
     array (
       'name' => 'CENTRE_COUT_EP_HMFK',
       'table' => 'CENTRE_COUT_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_EP_SOURCE_FK' =>
+    'CENTRE_COUT_EP_SOURCE_FK' => 
     array (
       'name' => 'CENTRE_COUT_EP_SOURCE_FK',
       'table' => 'CENTRE_COUT_EP',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_HCFK' =>
+    'CENTRE_COUT_HCFK' => 
     array (
       'name' => 'CENTRE_COUT_HCFK',
       'table' => 'CENTRE_COUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_HDFK' =>
+    'CENTRE_COUT_HDFK' => 
     array (
       'name' => 'CENTRE_COUT_HDFK',
       'table' => 'CENTRE_COUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_HMFK' =>
+    'CENTRE_COUT_HMFK' => 
     array (
       'name' => 'CENTRE_COUT_HMFK',
       'table' => 'CENTRE_COUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_SOURCE_FK' =>
+    'CENTRE_COUT_SOURCE_FK' => 
     array (
       'name' => 'CENTRE_COUT_SOURCE_FK',
       'table' => 'CENTRE_COUT',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_HCFK' =>
+    'CENTRE_COUT_STRUCTURE_HCFK' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_HCFK',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_HDFK' =>
+    'CENTRE_COUT_STRUCTURE_HDFK' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_HDFK',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_HMFK' =>
+    'CENTRE_COUT_STRUCTURE_HMFK' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_HMFK',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTUR_SOURCE_FK' =>
+    'CENTRE_COUT_STRUCTUR_SOURCE_FK' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTUR_SOURCE_FK',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'CENTRE_COUT_TYPE_RESSOURCE_FK' =>
+    'CENTRE_COUT_TYPE_RESSOURCE_FK' => 
     array (
       'name' => 'CENTRE_COUT_TYPE_RESSOURCE_FK',
       'table' => 'CENTRE_COUT',
       'rtable' => 'TYPE_RESSOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_RESSOURCE_ID' => 'ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_ETAPE_FK' =>
+    'CHEMIN_PEDAGOGIQUE_ETAPE_FK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_ETAPE_FK',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'rtable' => 'ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_HCFK' =>
+    'CHEMIN_PEDAGOGIQUE_HCFK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_HCFK',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_HDFK' =>
+    'CHEMIN_PEDAGOGIQUE_HDFK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_HDFK',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_HMFK' =>
+    'CHEMIN_PEDAGOGIQUE_HMFK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_HMFK',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_SOURCE_FK' =>
+    'CHEMIN_PEDAGOGIQUE_SOURCE_FK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_SOURCE_FK',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'CONTRAT_CONTRAT_FK' =>
+    'CONTRAT_CONTRAT_FK' => 
     array (
       'name' => 'CONTRAT_CONTRAT_FK',
       'table' => 'CONTRAT',
       'rtable' => 'CONTRAT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CONTRAT_ID' => 'ID',
       ),
     ),
-    'CONTRAT_FICHIER_FFK' =>
+    'CONTRAT_FICHIER_FFK' => 
     array (
       'name' => 'CONTRAT_FICHIER_FFK',
       'table' => 'CONTRAT_FICHIER',
       'rtable' => 'FICHIER',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FICHIER_ID' => 'ID',
       ),
     ),
-    'CONTRAT_FICHIER_FK' =>
+    'CONTRAT_FICHIER_FK' => 
     array (
       'name' => 'CONTRAT_FICHIER_FK',
       'table' => 'CONTRAT_FICHIER',
       'rtable' => 'CONTRAT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CONTRAT_ID' => 'ID',
       ),
     ),
-    'CONTRAT_HCFK' =>
+    'CONTRAT_HCFK' => 
     array (
       'name' => 'CONTRAT_HCFK',
       'table' => 'CONTRAT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'CONTRAT_HDFK' =>
+    'CONTRAT_HDFK' => 
     array (
       'name' => 'CONTRAT_HDFK',
       'table' => 'CONTRAT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'CONTRAT_HMFK' =>
+    'CONTRAT_HMFK' => 
     array (
       'name' => 'CONTRAT_HMFK',
       'table' => 'CONTRAT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'CONTRAT_INTERVENANT_FK' =>
+    'CONTRAT_INTERVENANT_FK' => 
     array (
       'name' => 'CONTRAT_INTERVENANT_FK',
       'table' => 'CONTRAT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'CONTRAT_STRUCTURE_FK' =>
+    'CONTRAT_STRUCTURE_FK' => 
     array (
       'name' => 'CONTRAT_STRUCTURE_FK',
       'table' => 'CONTRAT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'CONTRAT_TYPE_CONTRAT_FK' =>
+    'CONTRAT_TYPE_CONTRAT_FK' => 
     array (
       'name' => 'CONTRAT_TYPE_CONTRAT_FK',
       'table' => 'CONTRAT',
       'rtable' => 'TYPE_CONTRAT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_CONTRAT_ID' => 'ID',
       ),
     ),
-    'CONTRAT_VALIDATION_FK' =>
+    'CONTRAT_VALIDATION_FK' => 
     array (
       'name' => 'CONTRAT_VALIDATION_FK',
       'table' => 'CONTRAT',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'SET NULL',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'CORPS_HCFK' =>
+    'CORPS_HCFK' => 
     array (
       'name' => 'CORPS_HCFK',
       'table' => 'CORPS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'CORPS_HDFK' =>
+    'CORPS_HDFK' => 
     array (
       'name' => 'CORPS_HDFK',
       'table' => 'CORPS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'CORPS_HMFK' =>
+    'CORPS_HMFK' => 
     array (
       'name' => 'CORPS_HMFK',
       'table' => 'CORPS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'CORPS_SOURCE_FK' =>
+    'CORPS_SOURCE_FK' => 
     array (
       'name' => 'CORPS_SOURCE_FK',
       'table' => 'CORPS',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'CPEP_FK' =>
+    'CPEP_FK' => 
     array (
       'name' => 'CPEP_FK',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'CS_TYPE_INTERVENANT_FK' =>
+    'CS_TYPE_INTERVENANT_FK' => 
     array (
       'name' => 'CS_TYPE_INTERVENANT_FK',
       'table' => 'CAMPAGNE_SAISIE',
       'rtable' => 'TYPE_INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'CS_TYPE_VOLUME_HORAIRE_FK' =>
+    'CS_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'CS_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'CAMPAGNE_SAISIE',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'DEPARTEMENT_HCFK' =>
+    'DEPARTEMENT_HCFK' => 
     array (
       'name' => 'DEPARTEMENT_HCFK',
       'table' => 'DEPARTEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'DEPARTEMENT_HDFK' =>
+    'DEPARTEMENT_HDFK' => 
     array (
       'name' => 'DEPARTEMENT_HDFK',
       'table' => 'DEPARTEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'DEPARTEMENT_HMFK' =>
+    'DEPARTEMENT_HMFK' => 
     array (
       'name' => 'DEPARTEMENT_HMFK',
       'table' => 'DEPARTEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'DEPARTEMENT_SOURCE_FK' =>
+    'DEPARTEMENT_SOURCE_FK' => 
     array (
       'name' => 'DEPARTEMENT_SOURCE_FK',
       'table' => 'DEPARTEMENT',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'DISCIPLINE_HCFK' =>
+    'DISCIPLINE_HCFK' => 
     array (
       'name' => 'DISCIPLINE_HCFK',
       'table' => 'DISCIPLINE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'DISCIPLINE_HDFK' =>
+    'DISCIPLINE_HDFK' => 
     array (
       'name' => 'DISCIPLINE_HDFK',
       'table' => 'DISCIPLINE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'DISCIPLINE_HMFK' =>
+    'DISCIPLINE_HMFK' => 
     array (
       'name' => 'DISCIPLINE_HMFK',
       'table' => 'DISCIPLINE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'DISCIPLINE_SOURCE_FK' =>
+    'DISCIPLINE_SOURCE_FK' => 
     array (
       'name' => 'DISCIPLINE_SOURCE_FK',
       'table' => 'DISCIPLINE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'DOMAINE_FONCTIONNEL_HCFK' =>
+    'DOMAINE_FONCTIONNEL_HCFK' => 
     array (
       'name' => 'DOMAINE_FONCTIONNEL_HCFK',
       'table' => 'DOMAINE_FONCTIONNEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'DOMAINE_FONCTIONNEL_HDFK' =>
+    'DOMAINE_FONCTIONNEL_HDFK' => 
     array (
       'name' => 'DOMAINE_FONCTIONNEL_HDFK',
       'table' => 'DOMAINE_FONCTIONNEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'DOMAINE_FONCTIONNEL_HMFK' =>
+    'DOMAINE_FONCTIONNEL_HMFK' => 
     array (
       'name' => 'DOMAINE_FONCTIONNEL_HMFK',
       'table' => 'DOMAINE_FONCTIONNEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'DOMAINE_FONCTIONNEL_SOURCE_FK' =>
+    'DOMAINE_FONCTIONNEL_SOURCE_FK' => 
     array (
       'name' => 'DOMAINE_FONCTIONNEL_SOURCE_FK',
       'table' => 'DOMAINE_FONCTIONNEL',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'DOSSIER_D_FK' =>
+    'DOSSIER_D_FK' => 
     array (
       'name' => 'DOSSIER_D_FK',
       'table' => 'DOSSIER',
       'rtable' => 'DEPARTEMENT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DEPT_NAISSANCE_ID' => 'ID',
       ),
     ),
-    'DOSSIER_HCFK' =>
+    'DOSSIER_HCFK' => 
     array (
       'name' => 'DOSSIER_HCFK',
       'table' => 'DOSSIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'DOSSIER_HDFK' =>
+    'DOSSIER_HDFK' => 
     array (
       'name' => 'DOSSIER_HDFK',
       'table' => 'DOSSIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'DOSSIER_HMFK' =>
+    'DOSSIER_HMFK' => 
     array (
       'name' => 'DOSSIER_HMFK',
       'table' => 'DOSSIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'DOSSIER_INTERVENANT_FK' =>
+    'DOSSIER_INTERVENANT_FK' => 
     array (
       'name' => 'DOSSIER_INTERVENANT_FK',
       'table' => 'DOSSIER',
       'rtable' => 'INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'DOSSIER_P_FK' =>
+    'DOSSIER_P_FK' => 
     array (
       'name' => 'DOSSIER_P_FK',
       'table' => 'DOSSIER',
       'rtable' => 'PAYS',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PAYS_NAISSANCE_ID' => 'ID',
       ),
     ),
-    'DOTATION_ANNEE_FK' =>
+    'DOTATION_ANNEE_FK' => 
     array (
       'name' => 'DOTATION_ANNEE_FK',
       'table' => 'DOTATION',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'DOTATION_HCFK' =>
+    'DOTATION_HCFK' => 
     array (
       'name' => 'DOTATION_HCFK',
       'table' => 'DOTATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'DOTATION_HDFK' =>
+    'DOTATION_HDFK' => 
     array (
       'name' => 'DOTATION_HDFK',
       'table' => 'DOTATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'DOTATION_HMFK' =>
+    'DOTATION_HMFK' => 
     array (
       'name' => 'DOTATION_HMFK',
       'table' => 'DOTATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'DOTATION_STRUCTURE_FK' =>
+    'DOTATION_STRUCTURE_FK' => 
     array (
       'name' => 'DOTATION_STRUCTURE_FK',
       'table' => 'DOTATION',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'DOTATION_TYPE_RESSOURCE_FK' =>
+    'DOTATION_TYPE_RESSOURCE_FK' => 
     array (
       'name' => 'DOTATION_TYPE_RESSOURCE_FK',
       'table' => 'DOTATION',
       'rtable' => 'TYPE_RESSOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_RESSOURCE_ID' => 'ID',
       ),
     ),
-    'DS_MDS_FK' =>
+    'DS_MDS_FK' => 
     array (
       'name' => 'DS_MDS_FK',
       'table' => 'MODIFICATION_SERVICE_DU',
       'rtable' => 'MOTIF_MODIFICATION_SERVICE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'MOTIF_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_ELEMENT_FK' =>
+    'EFFECTIFS_ELEMENT_FK' => 
     array (
       'name' => 'EFFECTIFS_ELEMENT_FK',
       'table' => 'EFFECTIFS',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_ETAPE_ETAPE_FK' =>
+    'EFFECTIFS_ETAPE_ETAPE_FK' => 
     array (
       'name' => 'EFFECTIFS_ETAPE_ETAPE_FK',
       'table' => 'EFFECTIFS_ETAPE',
       'rtable' => 'ETAPE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_ETAPE_HCFK' =>
+    'EFFECTIFS_ETAPE_HCFK' => 
     array (
       'name' => 'EFFECTIFS_ETAPE_HCFK',
       'table' => 'EFFECTIFS_ETAPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_ETAPE_HDFK' =>
+    'EFFECTIFS_ETAPE_HDFK' => 
     array (
       'name' => 'EFFECTIFS_ETAPE_HDFK',
       'table' => 'EFFECTIFS_ETAPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_ETAPE_HMFK' =>
+    'EFFECTIFS_ETAPE_HMFK' => 
     array (
       'name' => 'EFFECTIFS_ETAPE_HMFK',
       'table' => 'EFFECTIFS_ETAPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_ETAPE_SOURCE_FK' =>
+    'EFFECTIFS_ETAPE_SOURCE_FK' => 
     array (
       'name' => 'EFFECTIFS_ETAPE_SOURCE_FK',
       'table' => 'EFFECTIFS_ETAPE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_FK' =>
+    'EFFECTIFS_FK' => 
     array (
       'name' => 'EFFECTIFS_FK',
       'table' => 'EFFECTIFS',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_HCFK' =>
+    'EFFECTIFS_HCFK' => 
     array (
       'name' => 'EFFECTIFS_HCFK',
       'table' => 'EFFECTIFS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_HDFK' =>
+    'EFFECTIFS_HDFK' => 
     array (
       'name' => 'EFFECTIFS_HDFK',
       'table' => 'EFFECTIFS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_HMFK' =>
+    'EFFECTIFS_HMFK' => 
     array (
       'name' => 'EFFECTIFS_HMFK',
       'table' => 'EFFECTIFS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_SOURCE_FK' =>
+    'EFFECTIFS_SOURCE_FK' => 
     array (
       'name' => 'EFFECTIFS_SOURCE_FK',
       'table' => 'EFFECTIFS',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'ELEMENT_MODULATEUR_HCFK' =>
+    'ELEMENT_MODULATEUR_HCFK' => 
     array (
       'name' => 'ELEMENT_MODULATEUR_HCFK',
       'table' => 'ELEMENT_MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_MODULATEUR_HDFK' =>
+    'ELEMENT_MODULATEUR_HDFK' => 
     array (
       'name' => 'ELEMENT_MODULATEUR_HDFK',
       'table' => 'ELEMENT_MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_MODULATEUR_HMFK' =>
+    'ELEMENT_MODULATEUR_HMFK' => 
     array (
       'name' => 'ELEMENT_MODULATEUR_HMFK',
       'table' => 'ELEMENT_MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_ANNEE_FK' =>
+    'ELEMENT_PEDAGOGIQUE_ANNEE_FK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_ANNEE_FK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_ETAPE_FK' =>
+    'ELEMENT_PEDAGOGIQUE_ETAPE_FK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_ETAPE_FK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'ETAPE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_HCFK' =>
+    'ELEMENT_PEDAGOGIQUE_HCFK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_HCFK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_HDFK' =>
+    'ELEMENT_PEDAGOGIQUE_HDFK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_HDFK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_HMFK' =>
+    'ELEMENT_PEDAGOGIQUE_HMFK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_HMFK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_PERIODE_FK' =>
+    'ELEMENT_PEDAGOGIQUE_PERIODE_FK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_PERIODE_FK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'PERIODE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PERIODE_ID' => 'ID',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_SOURCE_FK' =>
+    'ELEMENT_PEDAGOGIQUE_SOURCE_FK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_SOURCE_FK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'ELEMENT_TAUX_REGIMES_HCFK' =>
+    'ELEMENT_TAUX_REGIMES_HCFK' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES_HCFK',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_TAUX_REGIMES_HDFK' =>
+    'ELEMENT_TAUX_REGIMES_HDFK' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES_HDFK',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_TAUX_REGIMES_HMFK' =>
+    'ELEMENT_TAUX_REGIMES_HMFK' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES_HMFK',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ELEMENT_TAUX_REGIMES_SOURCE_FK' =>
+    'ELEMENT_TAUX_REGIMES_SOURCE_FK' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES_SOURCE_FK',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'EM_ELEMENT_PEDAGOGIQUE_FK' =>
+    'EM_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'EM_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'ELEMENT_MODULATEUR',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_ID' => 'ID',
       ),
     ),
-    'EM_MODULATEUR_FK' =>
+    'EM_MODULATEUR_FK' => 
     array (
       'name' => 'EM_MODULATEUR_FK',
       'table' => 'ELEMENT_MODULATEUR',
       'rtable' => 'MODULATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'MODULATEUR_ID' => 'ID',
       ),
     ),
-    'EPS_FK' =>
+    'EPS_FK' => 
     array (
       'name' => 'EPS_FK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'EP_DISCIPLINE_FK' =>
+    'EP_DISCIPLINE_FK' => 
     array (
       'name' => 'EP_DISCIPLINE_FK',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'rtable' => 'DISCIPLINE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DISCIPLINE_ID' => 'ID',
       ),
     ),
-    'ETABLISSEMENT_HCFK' =>
+    'ETABLISSEMENT_HCFK' => 
     array (
       'name' => 'ETABLISSEMENT_HCFK',
       'table' => 'ETABLISSEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ETABLISSEMENT_HDFK' =>
+    'ETABLISSEMENT_HDFK' => 
     array (
       'name' => 'ETABLISSEMENT_HDFK',
       'table' => 'ETABLISSEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ETABLISSEMENT_HMFK' =>
+    'ETABLISSEMENT_HMFK' => 
     array (
       'name' => 'ETABLISSEMENT_HMFK',
       'table' => 'ETABLISSEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ETABLISSEMENT_SOURCE_FK' =>
+    'ETABLISSEMENT_SOURCE_FK' => 
     array (
       'name' => 'ETABLISSEMENT_SOURCE_FK',
       'table' => 'ETABLISSEMENT',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'ETAPE_ANNEE_FK' =>
+    'ETAPE_ANNEE_FK' => 
     array (
       'name' => 'ETAPE_ANNEE_FK',
       'table' => 'ETAPE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'ETAPE_DOMAINE_FONCTIONNEL_FK' =>
+    'ETAPE_DOMAINE_FONCTIONNEL_FK' => 
     array (
       'name' => 'ETAPE_DOMAINE_FONCTIONNEL_FK',
       'table' => 'ETAPE',
       'rtable' => 'DOMAINE_FONCTIONNEL',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DOMAINE_FONCTIONNEL_ID' => 'ID',
       ),
     ),
-    'ETAPE_HCFK' =>
+    'ETAPE_HCFK' => 
     array (
       'name' => 'ETAPE_HCFK',
       'table' => 'ETAPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ETAPE_HDFK' =>
+    'ETAPE_HDFK' => 
     array (
       'name' => 'ETAPE_HDFK',
       'table' => 'ETAPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ETAPE_HMFK' =>
+    'ETAPE_HMFK' => 
     array (
       'name' => 'ETAPE_HMFK',
       'table' => 'ETAPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ETAPE_SOURCE_FK' =>
+    'ETAPE_SOURCE_FK' => 
     array (
       'name' => 'ETAPE_SOURCE_FK',
       'table' => 'ETAPE',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'ETAPE_STRUCTURE_FK' =>
+    'ETAPE_STRUCTURE_FK' => 
     array (
       'name' => 'ETAPE_STRUCTURE_FK',
       'table' => 'ETAPE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'ETAPE_TYPE_FORMATION_FK' =>
+    'ETAPE_TYPE_FORMATION_FK' => 
     array (
       'name' => 'ETAPE_TYPE_FORMATION_FK',
       'table' => 'ETAPE',
       'rtable' => 'TYPE_FORMATION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_FORMATION_ID' => 'ID',
       ),
     ),
-    'ETR_ELEMENT_FK' =>
+    'ETR_ELEMENT_FK' => 
     array (
       'name' => 'ETR_ELEMENT_FK',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'FICHIER_HCFK' =>
+    'FICHIER_HCFK' => 
     array (
       'name' => 'FICHIER_HCFK',
       'table' => 'FICHIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'FICHIER_HDFK' =>
+    'FICHIER_HDFK' => 
     array (
       'name' => 'FICHIER_HDFK',
       'table' => 'FICHIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'FICHIER_HMFK' =>
+    'FICHIER_HMFK' => 
     array (
       'name' => 'FICHIER_HMFK',
       'table' => 'FICHIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'FICHIER_VALID_FK' =>
+    'FICHIER_VALID_FK' => 
     array (
       'name' => 'FICHIER_VALID_FK',
       'table' => 'FICHIER',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'SET NULL',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'FONCTION_REFERENTIEL_HCFK' =>
+    'FONCTION_REFERENTIEL_HCFK' => 
     array (
       'name' => 'FONCTION_REFERENTIEL_HCFK',
       'table' => 'FONCTION_REFERENTIEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'FONCTION_REFERENTIEL_HDFK' =>
+    'FONCTION_REFERENTIEL_HDFK' => 
     array (
       'name' => 'FONCTION_REFERENTIEL_HDFK',
       'table' => 'FONCTION_REFERENTIEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'FONCTION_REFERENTIEL_HMFK' =>
+    'FONCTION_REFERENTIEL_HMFK' => 
     array (
       'name' => 'FONCTION_REFERENTIEL_HMFK',
       'table' => 'FONCTION_REFERENTIEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'FONCTION_REFERENTIEL_SFK' =>
+    'FONCTION_REFERENTIEL_SFK' => 
     array (
       'name' => 'FONCTION_REFERENTIEL_SFK',
       'table' => 'FONCTION_REFERENTIEL',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'FONC_REF_DOMAINE_FONCT_FK' =>
+    'FONC_REF_DOMAINE_FONCT_FK' => 
     array (
       'name' => 'FONC_REF_DOMAINE_FONCT_FK',
       'table' => 'FONCTION_REFERENTIEL',
       'rtable' => 'DOMAINE_FONCTIONNEL',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DOMAINE_FONCTIONNEL_ID' => 'ID',
       ),
     ),
-    'FRES_ETAT_VOLUME_HORAIRE_FK' =>
+    'FRES_ETAT_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'FRES_ETAT_VOLUME_HORAIRE_FK',
       'table' => 'FORMULE_RESULTAT',
       'rtable' => 'ETAT_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAT_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'FRES_INTERVENANT_FK' =>
+    'FRES_INTERVENANT_FK' => 
     array (
       'name' => 'FRES_INTERVENANT_FK',
       'table' => 'FORMULE_RESULTAT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'FRES_TYPE_VOLUME_HORAIRE_FK' =>
+    'FRES_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'FRES_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'FORMULE_RESULTAT',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'FRR_FORMULE_RESULTAT_FK' =>
+    'FRR_FORMULE_RESULTAT_FK' => 
     array (
       'name' => 'FRR_FORMULE_RESULTAT_FK',
       'table' => 'FORMULE_RESULTAT_SERVICE_REF',
       'rtable' => 'FORMULE_RESULTAT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RESULTAT_ID' => 'ID',
       ),
     ),
-    'FRSR_SERVICE_REFERENTIEL_FK' =>
+    'FRSR_SERVICE_REFERENTIEL_FK' => 
     array (
       'name' => 'FRSR_SERVICE_REFERENTIEL_FK',
       'table' => 'FORMULE_RESULTAT_SERVICE_REF',
       'rtable' => 'SERVICE_REFERENTIEL',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_REFERENTIEL_ID' => 'ID',
       ),
     ),
-    'FRS_FORMULE_RESULTAT_FK' =>
+    'FRS_FORMULE_RESULTAT_FK' => 
     array (
       'name' => 'FRS_FORMULE_RESULTAT_FK',
       'table' => 'FORMULE_RESULTAT_SERVICE',
       'rtable' => 'FORMULE_RESULTAT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RESULTAT_ID' => 'ID',
       ),
     ),
-    'FRS_SERVICE_FK' =>
+    'FRS_SERVICE_FK' => 
     array (
       'name' => 'FRS_SERVICE_FK',
       'table' => 'FORMULE_RESULTAT_SERVICE',
       'rtable' => 'SERVICE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_ID' => 'ID',
       ),
     ),
-    'FRVHR_FORMULE_RESULTAT_FK' =>
+    'FRVHR_FORMULE_RESULTAT_FK' => 
     array (
       'name' => 'FRVHR_FORMULE_RESULTAT_FK',
       'table' => 'FORMULE_RESULTAT_VH_REF',
       'rtable' => 'FORMULE_RESULTAT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RESULTAT_ID' => 'ID',
       ),
     ),
-    'FRVHR_VOLUME_HORAIRE_REF_FK' =>
+    'FRVHR_VOLUME_HORAIRE_REF_FK' => 
     array (
       'name' => 'FRVHR_VOLUME_HORAIRE_REF_FK',
       'table' => 'FORMULE_RESULTAT_VH_REF',
       'rtable' => 'VOLUME_HORAIRE_REF',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VOLUME_HORAIRE_REF_ID' => 'ID',
       ),
     ),
-    'FRVH_FORMULE_RESULTAT_FK' =>
+    'FRVH_FORMULE_RESULTAT_FK' => 
     array (
       'name' => 'FRVH_FORMULE_RESULTAT_FK',
       'table' => 'FORMULE_RESULTAT_VH',
       'rtable' => 'FORMULE_RESULTAT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RESULTAT_ID' => 'ID',
       ),
     ),
-    'FRVH_VOLUME_HORAIRE_FK' =>
+    'FRVH_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'FRVH_VOLUME_HORAIRE_FK',
       'table' => 'FORMULE_RESULTAT_VH',
       'rtable' => 'VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'FR_PARENT_FK' =>
+    'FR_PARENT_FK' => 
     array (
       'name' => 'FR_PARENT_FK',
       'table' => 'FONCTION_REFERENTIEL',
       'rtable' => 'FONCTION_REFERENTIEL',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PARENT_ID' => 'ID',
       ),
     ),
-    'FTI_ANNEE_FK' =>
+    'FTI_ANNEE_FK' => 
     array (
       'name' => 'FTI_ANNEE_FK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'FTI_ETAT_VOLUME_HORAIRE_FK' =>
+    'FTI_ETAT_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'FTI_ETAT_VOLUME_HORAIRE_FK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'rtable' => 'ETAT_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAT_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'FTI_FORMULE_FK' =>
+    'FTI_FORMULE_FK' => 
     array (
       'name' => 'FTI_FORMULE_FK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'rtable' => 'FORMULE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_ID' => 'ID',
       ),
     ),
-    'FTI_TYPE_INTERVENANT_FK' =>
+    'FTI_TYPE_INTERVENANT_FK' => 
     array (
       'name' => 'FTI_TYPE_INTERVENANT_FK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'rtable' => 'TYPE_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'FTI_TYPE_VOLUME_HORAIRE_FK' =>
+    'FTI_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'FTI_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'FTVH_FORMULE_TEST_INTERV_FK' =>
+    'FTVH_FORMULE_TEST_INTERV_FK' => 
     array (
       'name' => 'FTVH_FORMULE_TEST_INTERV_FK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'rtable' => 'FORMULE_TEST_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_TEST_ID' => 'ID',
       ),
     ),
-    'GRADE_CORPS_FK' =>
+    'GRADE_CORPS_FK' => 
     array (
       'name' => 'GRADE_CORPS_FK',
       'table' => 'GRADE',
       'rtable' => 'CORPS',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CORPS_ID' => 'ID',
       ),
     ),
-    'GRADE_HCFK' =>
+    'GRADE_HCFK' => 
     array (
       'name' => 'GRADE_HCFK',
       'table' => 'GRADE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'GRADE_HDFK' =>
+    'GRADE_HDFK' => 
     array (
       'name' => 'GRADE_HDFK',
       'table' => 'GRADE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'GRADE_HMFK' =>
+    'GRADE_HMFK' => 
     array (
       'name' => 'GRADE_HMFK',
       'table' => 'GRADE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'GRADE_SOURCE_FK' =>
+    'GRADE_SOURCE_FK' => 
     array (
       'name' => 'GRADE_SOURCE_FK',
       'table' => 'GRADE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'GROUPE_ELEMENT_PEDAGOGIQUE_FK' =>
+    'GROUPE_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'GROUPE_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'GROUPE',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'GROUPE_HCFK' =>
+    'GROUPE_HCFK' => 
     array (
       'name' => 'GROUPE_HCFK',
       'table' => 'GROUPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'GROUPE_HDFK' =>
+    'GROUPE_HDFK' => 
     array (
       'name' => 'GROUPE_HDFK',
       'table' => 'GROUPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'GROUPE_HMFK' =>
+    'GROUPE_HMFK' => 
     array (
       'name' => 'GROUPE_HMFK',
       'table' => 'GROUPE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'GROUPE_TYPE_FORMATION_HCFK' =>
+    'GROUPE_TYPE_FORMATION_HCFK' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATION_HCFK',
       'table' => 'GROUPE_TYPE_FORMATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'GROUPE_TYPE_FORMATION_HDFK' =>
+    'GROUPE_TYPE_FORMATION_HDFK' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATION_HDFK',
       'table' => 'GROUPE_TYPE_FORMATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'GROUPE_TYPE_FORMATION_HMFK' =>
+    'GROUPE_TYPE_FORMATION_HMFK' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATION_HMFK',
       'table' => 'GROUPE_TYPE_FORMATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'GROUPE_TYPE_FORMATIO_SOURCE_FK' =>
+    'GROUPE_TYPE_FORMATIO_SOURCE_FK' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATIO_SOURCE_FK',
       'table' => 'GROUPE_TYPE_FORMATION',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'GROUPE_TYPE_INTERVENTION_FK' =>
+    'GROUPE_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'GROUPE_TYPE_INTERVENTION_FK',
       'table' => 'GROUPE',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'HSM_INTERVENANT_FK' =>
+    'HSM_INTERVENANT_FK' => 
     array (
       'name' => 'HSM_INTERVENANT_FK',
       'table' => 'HISTO_INTERVENANT_SERVICE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'HSM_TYPE_VOLUME_HORAIRE_FK' =>
+    'HSM_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'HSM_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'HISTO_INTERVENANT_SERVICE',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'HSM_UTILISATEUR_FK' =>
+    'HSM_UTILISATEUR_FK' => 
     array (
       'name' => 'HSM_UTILISATEUR_FK',
       'table' => 'HISTO_INTERVENANT_SERVICE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'INDIC_DIFF_DOSSIER_INT_FK' =>
+    'INDIC_DIFF_DOSSIER_INT_FK' => 
     array (
       'name' => 'INDIC_DIFF_DOSSIER_INT_FK',
       'table' => 'INDIC_MODIF_DOSSIER',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'INDIC_MODIF_DOSSIER_HCFK' =>
+    'INDIC_MODIF_DOSSIER_HCFK' => 
     array (
       'name' => 'INDIC_MODIF_DOSSIER_HCFK',
       'table' => 'INDIC_MODIF_DOSSIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'INDIC_MODIF_DOSSIER_HDFK' =>
+    'INDIC_MODIF_DOSSIER_HDFK' => 
     array (
       'name' => 'INDIC_MODIF_DOSSIER_HDFK',
       'table' => 'INDIC_MODIF_DOSSIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'INDIC_MODIF_DOSSIER_HMFK' =>
+    'INDIC_MODIF_DOSSIER_HMFK' => 
     array (
       'name' => 'INDIC_MODIF_DOSSIER_HMFK',
       'table' => 'INDIC_MODIF_DOSSIER',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'INTERVENANTS_CIVILITES_FK' =>
+    'INTERVENANTS_CIVILITES_FK' => 
     array (
       'name' => 'INTERVENANTS_CIVILITES_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'CIVILITE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CIVILITE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_ANNEE_FK' =>
+    'INTERVENANT_ANNEE_FK' => 
     array (
       'name' => 'INTERVENANT_ANNEE_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_DEPARTEMENT_FK' =>
+    'INTERVENANT_DEPARTEMENT_FK' => 
     array (
       'name' => 'INTERVENANT_DEPARTEMENT_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'DEPARTEMENT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DEP_NAISSANCE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_DISCIPLINE_FK' =>
+    'INTERVENANT_DISCIPLINE_FK' => 
     array (
       'name' => 'INTERVENANT_DISCIPLINE_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'DISCIPLINE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DISCIPLINE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_GRADE_FK' =>
+    'INTERVENANT_GRADE_FK' => 
     array (
       'name' => 'INTERVENANT_GRADE_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'GRADE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'GRADE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_HCFK' =>
+    'INTERVENANT_HCFK' => 
     array (
       'name' => 'INTERVENANT_HCFK',
       'table' => 'INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_HDFK' =>
+    'INTERVENANT_HDFK' => 
     array (
       'name' => 'INTERVENANT_HDFK',
       'table' => 'INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_HMFK' =>
+    'INTERVENANT_HMFK' => 
     array (
       'name' => 'INTERVENANT_HMFK',
       'table' => 'INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_PAYS_NAISS_FK' =>
+    'INTERVENANT_PAYS_NAISS_FK' => 
     array (
       'name' => 'INTERVENANT_PAYS_NAISS_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'PAYS',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PAYS_NAISSANCE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_PAYS_NAT_FK' =>
+    'INTERVENANT_PAYS_NAT_FK' => 
     array (
       'name' => 'INTERVENANT_PAYS_NAT_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'PAYS',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PAYS_NATIONALITE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_SAISIE_INTERV_FK' =>
+    'INTERVENANT_SAISIE_INTERV_FK' => 
     array (
       'name' => 'INTERVENANT_SAISIE_INTERV_FK',
       'table' => 'INTERVENANT_SAISIE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_SOURCE_FK' =>
+    'INTERVENANT_SOURCE_FK' => 
     array (
       'name' => 'INTERVENANT_SOURCE_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_STATUT_FK' =>
+    'INTERVENANT_STATUT_FK' => 
     array (
       'name' => 'INTERVENANT_STATUT_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_ID' => 'ID',
       ),
     ),
-    'INTERVENANT_STRUCTURE_FK' =>
+    'INTERVENANT_STRUCTURE_FK' => 
     array (
       'name' => 'INTERVENANT_STRUCTURE_FK',
       'table' => 'INTERVENANT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'IS_STATUT_INTERVENANT_FK' =>
+    'IS_STATUT_INTERVENANT_FK' => 
     array (
       'name' => 'IS_STATUT_INTERVENANT_FK',
       'table' => 'INTERVENANT_SAISIE',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_ID' => 'ID',
       ),
     ),
-    'LIEN_HCFK' =>
+    'LIEN_HCFK' => 
     array (
       'name' => 'LIEN_HCFK',
       'table' => 'LIEN',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'LIEN_HDFK' =>
+    'LIEN_HDFK' => 
     array (
       'name' => 'LIEN_HDFK',
       'table' => 'LIEN',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'LIEN_HMFK' =>
+    'LIEN_HMFK' => 
     array (
       'name' => 'LIEN_HMFK',
       'table' => 'LIEN',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'LIEN_NOEUD_INF_FK' =>
+    'LIEN_NOEUD_INF_FK' => 
     array (
       'name' => 'LIEN_NOEUD_INF_FK',
       'table' => 'LIEN',
       'rtable' => 'NOEUD',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'NOEUD_INF_ID' => 'ID',
       ),
     ),
-    'LIEN_NOEUD_SUP_FK' =>
+    'LIEN_NOEUD_SUP_FK' => 
     array (
       'name' => 'LIEN_NOEUD_SUP_FK',
       'table' => 'LIEN',
       'rtable' => 'NOEUD',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'NOEUD_SUP_ID' => 'ID',
       ),
     ),
-    'LIEN_SOURCE_FK' =>
+    'LIEN_SOURCE_FK' => 
     array (
       'name' => 'LIEN_SOURCE_FK',
       'table' => 'LIEN',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'LIEN_STRUCTURE_FK' =>
+    'LIEN_STRUCTURE_FK' => 
     array (
       'name' => 'LIEN_STRUCTURE_FK',
       'table' => 'LIEN',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'MCT_STATUT_INTERVENANT_FK' =>
+    'MCT_STATUT_INTERVENANT_FK' => 
     array (
       'name' => 'MCT_STATUT_INTERVENANT_FK',
       'table' => 'MODELE_CONTRAT',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'MCT_STRUCTURE_FK' =>
+    'MCT_STRUCTURE_FK' => 
     array (
       'name' => 'MCT_STRUCTURE_FK',
       'table' => 'MODELE_CONTRAT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'MEP_CENTRE_COUT_FK' =>
+    'MEP_CENTRE_COUT_FK' => 
     array (
       'name' => 'MEP_CENTRE_COUT_FK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'CENTRE_COUT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CENTRE_COUT_ID' => 'ID',
       ),
     ),
-    'MEP_DOMAINE_FONCTIONNEL_FK' =>
+    'MEP_DOMAINE_FONCTIONNEL_FK' => 
     array (
       'name' => 'MEP_DOMAINE_FONCTIONNEL_FK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'DOMAINE_FONCTIONNEL',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DOMAINE_FONCTIONNEL_ID' => 'ID',
       ),
     ),
-    'MEP_FR_SERVICE_FK' =>
+    'MEP_FR_SERVICE_FK' => 
     array (
       'name' => 'MEP_FR_SERVICE_FK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'FORMULE_RESULTAT_SERVICE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RES_SERVICE_ID' => 'ID',
       ),
     ),
-    'MEP_FR_SERVICE_REF_FK' =>
+    'MEP_FR_SERVICE_REF_FK' => 
     array (
       'name' => 'MEP_FR_SERVICE_REF_FK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'FORMULE_RESULTAT_SERVICE_REF',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RES_SERVICE_REF_ID' => 'ID',
       ),
     ),
-    'MEP_TYPE_HEURES_FK' =>
+    'MEP_TYPE_HEURES_FK' => 
     array (
       'name' => 'MEP_TYPE_HEURES_FK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'TYPE_HEURES',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_HEURES_ID' => 'ID',
       ),
     ),
-    'MISE_EN_PAIEMENT_HCFK' =>
+    'MISE_EN_PAIEMENT_HCFK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_HCFK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'MISE_EN_PAIEMENT_HDFK' =>
+    'MISE_EN_PAIEMENT_HDFK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_HDFK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'MISE_EN_PAIEMENT_HMFK' =>
+    'MISE_EN_PAIEMENT_HMFK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_HMFK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'MISE_EN_PAIEMENT_PERIODE_FK' =>
+    'MISE_EN_PAIEMENT_PERIODE_FK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_PERIODE_FK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'PERIODE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PERIODE_PAIEMENT_ID' => 'ID',
       ),
     ),
-    'MISE_EN_PAIEMENT_VALIDATION_FK' =>
+    'MISE_EN_PAIEMENT_VALIDATION_FK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_VALIDATION_FK',
       'table' => 'MISE_EN_PAIEMENT',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'MODIFICATION_SERVICE_DU_HCFK' =>
+    'MODIFICATION_SERVICE_DU_HCFK' => 
     array (
       'name' => 'MODIFICATION_SERVICE_DU_HCFK',
       'table' => 'MODIFICATION_SERVICE_DU',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'MODIFICATION_SERVICE_DU_HDFK' =>
+    'MODIFICATION_SERVICE_DU_HDFK' => 
     array (
       'name' => 'MODIFICATION_SERVICE_DU_HDFK',
       'table' => 'MODIFICATION_SERVICE_DU',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'MODIFICATION_SERVICE_DU_HMFK' =>
+    'MODIFICATION_SERVICE_DU_HMFK' => 
     array (
       'name' => 'MODIFICATION_SERVICE_DU_HMFK',
       'table' => 'MODIFICATION_SERVICE_DU',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'MODULATEUR_HCFK' =>
+    'MODULATEUR_HCFK' => 
     array (
       'name' => 'MODULATEUR_HCFK',
       'table' => 'MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'MODULATEUR_HDFK' =>
+    'MODULATEUR_HDFK' => 
     array (
       'name' => 'MODULATEUR_HDFK',
       'table' => 'MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'MODULATEUR_HMFK' =>
+    'MODULATEUR_HMFK' => 
     array (
       'name' => 'MODULATEUR_HMFK',
       'table' => 'MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'MODULATEUR_TYPE_MODULATEUR_FK' =>
+    'MODULATEUR_TYPE_MODULATEUR_FK' => 
     array (
       'name' => 'MODULATEUR_TYPE_MODULATEUR_FK',
       'table' => 'MODULATEUR',
       'rtable' => 'TYPE_MODULATEUR',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_MODULATEUR_ID' => 'ID',
       ),
     ),
-    'MOTIF_MODIFICATION_SERVIC_HCFK' =>
+    'MOTIF_MODIFICATION_SERVIC_HCFK' => 
     array (
       'name' => 'MOTIF_MODIFICATION_SERVIC_HCFK',
       'table' => 'MOTIF_MODIFICATION_SERVICE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'MOTIF_MODIFICATION_SERVIC_HDFK' =>
+    'MOTIF_MODIFICATION_SERVIC_HDFK' => 
     array (
       'name' => 'MOTIF_MODIFICATION_SERVIC_HDFK',
       'table' => 'MOTIF_MODIFICATION_SERVICE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'MOTIF_MODIFICATION_SERVIC_HMFK' =>
+    'MOTIF_MODIFICATION_SERVIC_HMFK' => 
     array (
       'name' => 'MOTIF_MODIFICATION_SERVIC_HMFK',
       'table' => 'MOTIF_MODIFICATION_SERVICE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'MOTIF_NON_PAIEMENT_HCFK' =>
+    'MOTIF_NON_PAIEMENT_HCFK' => 
     array (
       'name' => 'MOTIF_NON_PAIEMENT_HCFK',
       'table' => 'MOTIF_NON_PAIEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'MOTIF_NON_PAIEMENT_HDFK' =>
+    'MOTIF_NON_PAIEMENT_HDFK' => 
     array (
       'name' => 'MOTIF_NON_PAIEMENT_HDFK',
       'table' => 'MOTIF_NON_PAIEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'MOTIF_NON_PAIEMENT_HMFK' =>
+    'MOTIF_NON_PAIEMENT_HMFK' => 
     array (
       'name' => 'MOTIF_NON_PAIEMENT_HMFK',
       'table' => 'MOTIF_NON_PAIEMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'MSD_INTERVENANT_FK' =>
+    'MSD_INTERVENANT_FK' => 
     array (
       'name' => 'MSD_INTERVENANT_FK',
       'table' => 'MODIFICATION_SERVICE_DU',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'NOEUD_ANNEE_FK' =>
+    'NOEUD_ANNEE_FK' => 
     array (
       'name' => 'NOEUD_ANNEE_FK',
       'table' => 'NOEUD',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'NOEUD_ELEMENT_PEDAGOGIQUE_FK' =>
+    'NOEUD_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'NOEUD_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'NOEUD',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'NOEUD_ETAPE_FK' =>
+    'NOEUD_ETAPE_FK' => 
     array (
       'name' => 'NOEUD_ETAPE_FK',
       'table' => 'NOEUD',
       'rtable' => 'ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'NOEUD_HCFK' =>
+    'NOEUD_HCFK' => 
     array (
       'name' => 'NOEUD_HCFK',
       'table' => 'NOEUD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'NOEUD_HDFK' =>
+    'NOEUD_HDFK' => 
     array (
       'name' => 'NOEUD_HDFK',
       'table' => 'NOEUD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'NOEUD_HMFK' =>
+    'NOEUD_HMFK' => 
     array (
       'name' => 'NOEUD_HMFK',
       'table' => 'NOEUD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'NOEUD_SOURCE_FK' =>
+    'NOEUD_SOURCE_FK' => 
     array (
       'name' => 'NOEUD_SOURCE_FK',
       'table' => 'NOEUD',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'NOEUD_STRUCTURE_FK' =>
+    'NOEUD_STRUCTURE_FK' => 
     array (
       'name' => 'NOEUD_STRUCTURE_FK',
       'table' => 'NOEUD',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'NOTIF_INDICATEUR_IFK' =>
+    'NOTIF_INDICATEUR_IFK' => 
     array (
       'name' => 'NOTIF_INDICATEUR_IFK',
       'table' => 'NOTIFICATION_INDICATEUR',
       'rtable' => 'INDICATEUR',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INDICATEUR_ID' => 'ID',
       ),
     ),
-    'PARAMETRE_HCFK' =>
+    'PARAMETRE_HCFK' => 
     array (
       'name' => 'PARAMETRE_HCFK',
       'table' => 'PARAMETRE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'PARAMETRE_HDFK' =>
+    'PARAMETRE_HDFK' => 
     array (
       'name' => 'PARAMETRE_HDFK',
       'table' => 'PARAMETRE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'PARAMETRE_HMFK' =>
+    'PARAMETRE_HMFK' => 
     array (
       'name' => 'PARAMETRE_HMFK',
       'table' => 'PARAMETRE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'PAYS_HCFK' =>
+    'PAYS_HCFK' => 
     array (
       'name' => 'PAYS_HCFK',
       'table' => 'PAYS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'PAYS_HDFK' =>
+    'PAYS_HDFK' => 
     array (
       'name' => 'PAYS_HDFK',
       'table' => 'PAYS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'PAYS_HMFK' =>
+    'PAYS_HMFK' => 
     array (
       'name' => 'PAYS_HMFK',
       'table' => 'PAYS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'PAYS_SOURCE_FK' =>
+    'PAYS_SOURCE_FK' => 
     array (
       'name' => 'PAYS_SOURCE_FK',
       'table' => 'PAYS',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'PERIODE_HCFK' =>
+    'PERIODE_HCFK' => 
     array (
       'name' => 'PERIODE_HCFK',
       'table' => 'PERIODE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'PERIODE_HDFK' =>
+    'PERIODE_HDFK' => 
     array (
       'name' => 'PERIODE_HDFK',
       'table' => 'PERIODE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'PERIODE_HMFK' =>
+    'PERIODE_HMFK' => 
     array (
       'name' => 'PERIODE_HMFK',
       'table' => 'PERIODE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'PIECE_JOINTE_FICHIER_FFK' =>
+    'PIECE_JOINTE_FICHIER_FFK' => 
     array (
       'name' => 'PIECE_JOINTE_FICHIER_FFK',
       'table' => 'PIECE_JOINTE_FICHIER',
       'rtable' => 'FICHIER',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FICHIER_ID' => 'ID',
       ),
     ),
-    'PIECE_JOINTE_FICHIER_PJFK' =>
+    'PIECE_JOINTE_FICHIER_PJFK' => 
     array (
       'name' => 'PIECE_JOINTE_FICHIER_PJFK',
       'table' => 'PIECE_JOINTE_FICHIER',
       'rtable' => 'PIECE_JOINTE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PIECE_JOINTE_ID' => 'ID',
       ),
     ),
-    'PIECE_JOINTE_HCFK' =>
+    'PIECE_JOINTE_HCFK' => 
     array (
       'name' => 'PIECE_JOINTE_HCFK',
       'table' => 'PIECE_JOINTE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'PIECE_JOINTE_HDFK' =>
+    'PIECE_JOINTE_HDFK' => 
     array (
       'name' => 'PIECE_JOINTE_HDFK',
       'table' => 'PIECE_JOINTE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'PIECE_JOINTE_HMFK' =>
+    'PIECE_JOINTE_HMFK' => 
     array (
       'name' => 'PIECE_JOINTE_HMFK',
       'table' => 'PIECE_JOINTE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'PIECE_JOINTE_INTERVENANT_FK' =>
+    'PIECE_JOINTE_INTERVENANT_FK' => 
     array (
       'name' => 'PIECE_JOINTE_INTERVENANT_FK',
       'table' => 'PIECE_JOINTE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'PIECE_JOINTE_VFK' =>
+    'PIECE_JOINTE_VFK' => 
     array (
       'name' => 'PIECE_JOINTE_VFK',
       'table' => 'PIECE_JOINTE',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'SET NULL',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'PJ_TYPE_PIECE_JOINTE_FK' =>
+    'PJ_TYPE_PIECE_JOINTE_FK' => 
     array (
       'name' => 'PJ_TYPE_PIECE_JOINTE_FK',
       'table' => 'PIECE_JOINTE',
       'rtable' => 'TYPE_PIECE_JOINTE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_PIECE_JOINTE_ID' => 'ID',
       ),
     ),
-    'PLAFONDAPP_ANNEE_DFK' =>
+    'PLAFONDAPP_ANNEE_DFK' => 
     array (
       'name' => 'PLAFONDAPP_ANNEE_DFK',
       'table' => 'PLAFOND_APPLICATION',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_DEBUT_ID' => 'ID',
       ),
     ),
-    'PLAFONDAPP_ANNEE_FFK' =>
+    'PLAFONDAPP_ANNEE_FFK' => 
     array (
       'name' => 'PLAFONDAPP_ANNEE_FFK',
       'table' => 'PLAFOND_APPLICATION',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_FIN_ID' => 'ID',
       ),
     ),
-    'PLAFONDAPP_PLAFOND_ETAT_FK' =>
+    'PLAFONDAPP_PLAFOND_ETAT_FK' => 
     array (
       'name' => 'PLAFONDAPP_PLAFOND_ETAT_FK',
       'table' => 'PLAFOND_APPLICATION',
       'rtable' => 'PLAFOND_ETAT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PLAFOND_ETAT_ID' => 'ID',
       ),
     ),
-    'PLAFONDAPP_PLAFOND_FK' =>
+    'PLAFONDAPP_PLAFOND_FK' => 
     array (
       'name' => 'PLAFONDAPP_PLAFOND_FK',
       'table' => 'PLAFOND_APPLICATION',
       'rtable' => 'PLAFOND',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PLAFOND_ID' => 'ID',
       ),
     ),
-    'PLAFONDAPP_TVH_FK' =>
+    'PLAFONDAPP_TVH_FK' => 
     array (
       'name' => 'PLAFONDAPP_TVH_FK',
       'table' => 'PLAFOND_APPLICATION',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'PRIVILEGE_CATEGORIE_FK' =>
+    'PRIVILEGE_CATEGORIE_FK' => 
     array (
       'name' => 'PRIVILEGE_CATEGORIE_FK',
       'table' => 'PRIVILEGE',
       'rtable' => 'CATEGORIE_PRIVILEGE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CATEGORIE_ID' => 'ID',
       ),
     ),
-    'ROLE_HCFK' =>
+    'ROLE_HCFK' => 
     array (
       'name' => 'ROLE_HCFK',
       'table' => 'ROLE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'ROLE_HDFK' =>
+    'ROLE_HDFK' => 
     array (
       'name' => 'ROLE_HDFK',
       'table' => 'ROLE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'ROLE_HMFK' =>
+    'ROLE_HMFK' => 
     array (
       'name' => 'ROLE_HMFK',
       'table' => 'ROLE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'ROLE_PERIMETRE_FK' =>
+    'ROLE_PERIMETRE_FK' => 
     array (
       'name' => 'ROLE_PERIMETRE_FK',
       'table' => 'ROLE',
       'rtable' => 'PERIMETRE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PERIMETRE_ID' => 'ID',
       ),
     ),
-    'ROLE_PRIVILEGE_PRIVILEGE_FK' =>
+    'ROLE_PRIVILEGE_PRIVILEGE_FK' => 
     array (
       'name' => 'ROLE_PRIVILEGE_PRIVILEGE_FK',
       'table' => 'ROLE_PRIVILEGE',
       'rtable' => 'PRIVILEGE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PRIVILEGE_ID' => 'ID',
       ),
     ),
-    'ROLE_PRIVILEGE_ROLE_FK' =>
+    'ROLE_PRIVILEGE_ROLE_FK' => 
     array (
       'name' => 'ROLE_PRIVILEGE_ROLE_FK',
       'table' => 'ROLE_PRIVILEGE',
       'rtable' => 'ROLE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ROLE_ID' => 'ID',
       ),
     ),
-    'RSV_TYPE_INTERVENANT_FK' =>
+    'RSV_TYPE_INTERVENANT_FK' => 
     array (
       'name' => 'RSV_TYPE_INTERVENANT_FK',
       'table' => 'REGLE_STRUCTURE_VALIDATION',
       'rtable' => 'TYPE_INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'RSV_TYPE_VOLUME_HORAIRE_FK' =>
+    'RSV_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'RSV_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'REGLE_STRUCTURE_VALIDATION',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'SCENARIO_HCFK' =>
+    'SCENARIO_HCFK' => 
     array (
       'name' => 'SCENARIO_HCFK',
       'table' => 'SCENARIO',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_HDFK' =>
+    'SCENARIO_HDFK' => 
     array (
       'name' => 'SCENARIO_HDFK',
       'table' => 'SCENARIO',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_HMFK' =>
+    'SCENARIO_HMFK' => 
     array (
       'name' => 'SCENARIO_HMFK',
       'table' => 'SCENARIO',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_LIEN_HCFK' =>
+    'SCENARIO_LIEN_HCFK' => 
     array (
       'name' => 'SCENARIO_LIEN_HCFK',
       'table' => 'SCENARIO_LIEN',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_LIEN_HDFK' =>
+    'SCENARIO_LIEN_HDFK' => 
     array (
       'name' => 'SCENARIO_LIEN_HDFK',
       'table' => 'SCENARIO_LIEN',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_LIEN_HMFK' =>
+    'SCENARIO_LIEN_HMFK' => 
     array (
       'name' => 'SCENARIO_LIEN_HMFK',
       'table' => 'SCENARIO_LIEN',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_LIEN_LIEN_FK' =>
+    'SCENARIO_LIEN_LIEN_FK' => 
     array (
       'name' => 'SCENARIO_LIEN_LIEN_FK',
       'table' => 'SCENARIO_LIEN',
       'rtable' => 'LIEN',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'LIEN_ID' => 'ID',
       ),
     ),
-    'SCENARIO_LIEN_SCENARIO_FK' =>
+    'SCENARIO_LIEN_SCENARIO_FK' => 
     array (
       'name' => 'SCENARIO_LIEN_SCENARIO_FK',
       'table' => 'SCENARIO_LIEN',
       'rtable' => 'SCENARIO',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_ID' => 'ID',
       ),
     ),
-    'SCENARIO_LIEN_SOURCE_FK' =>
+    'SCENARIO_LIEN_SOURCE_FK' => 
     array (
       'name' => 'SCENARIO_LIEN_SOURCE_FK',
       'table' => 'SCENARIO_LIEN',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_HCFK' =>
+    'SCENARIO_NOEUD_HCFK' => 
     array (
       'name' => 'SCENARIO_NOEUD_HCFK',
       'table' => 'SCENARIO_NOEUD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_HDFK' =>
+    'SCENARIO_NOEUD_HDFK' => 
     array (
       'name' => 'SCENARIO_NOEUD_HDFK',
       'table' => 'SCENARIO_NOEUD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_HMFK' =>
+    'SCENARIO_NOEUD_HMFK' => 
     array (
       'name' => 'SCENARIO_NOEUD_HMFK',
       'table' => 'SCENARIO_NOEUD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_NOEUD_FK' =>
+    'SCENARIO_NOEUD_NOEUD_FK' => 
     array (
       'name' => 'SCENARIO_NOEUD_NOEUD_FK',
       'table' => 'SCENARIO_NOEUD',
       'rtable' => 'NOEUD',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'NOEUD_ID' => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_SCENARIO_FK' =>
+    'SCENARIO_NOEUD_SCENARIO_FK' => 
     array (
       'name' => 'SCENARIO_NOEUD_SCENARIO_FK',
       'table' => 'SCENARIO_NOEUD',
       'rtable' => 'SCENARIO',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_ID' => 'ID',
       ),
     ),
-    'SCENARIO_NOEUD_SOURCE_FK' =>
+    'SCENARIO_NOEUD_SOURCE_FK' => 
     array (
       'name' => 'SCENARIO_NOEUD_SOURCE_FK',
       'table' => 'SCENARIO_NOEUD',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'SCENARIO_STRUCTURE_FK' =>
+    'SCENARIO_STRUCTURE_FK' => 
     array (
       'name' => 'SCENARIO_STRUCTURE_FK',
       'table' => 'SCENARIO',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'SERVICE_ELEMENT_PEDAGOGIQUE_FK' =>
+    'SERVICE_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'SERVICE_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'SERVICE',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'SERVICE_ETABLISSEMENT_FK' =>
+    'SERVICE_ETABLISSEMENT_FK' => 
     array (
       'name' => 'SERVICE_ETABLISSEMENT_FK',
       'table' => 'SERVICE',
       'rtable' => 'ETABLISSEMENT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETABLISSEMENT_ID' => 'ID',
       ),
     ),
-    'SERVICE_HCFK' =>
+    'SERVICE_HCFK' => 
     array (
       'name' => 'SERVICE_HCFK',
       'table' => 'SERVICE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'SERVICE_HDFK' =>
+    'SERVICE_HDFK' => 
     array (
       'name' => 'SERVICE_HDFK',
       'table' => 'SERVICE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'SERVICE_HMFK' =>
+    'SERVICE_HMFK' => 
     array (
       'name' => 'SERVICE_HMFK',
       'table' => 'SERVICE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'SERVICE_INTERVENANT_FK' =>
+    'SERVICE_INTERVENANT_FK' => 
     array (
       'name' => 'SERVICE_INTERVENANT_FK',
       'table' => 'SERVICE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'SERVICE_REFERENTIEL_HCFK' =>
+    'SERVICE_REFERENTIEL_HCFK' => 
     array (
       'name' => 'SERVICE_REFERENTIEL_HCFK',
       'table' => 'SERVICE_REFERENTIEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'SERVICE_REFERENTIEL_HDFK' =>
+    'SERVICE_REFERENTIEL_HDFK' => 
     array (
       'name' => 'SERVICE_REFERENTIEL_HDFK',
       'table' => 'SERVICE_REFERENTIEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'SERVICE_REFERENTIEL_HMFK' =>
+    'SERVICE_REFERENTIEL_HMFK' => 
     array (
       'name' => 'SERVICE_REFERENTIEL_HMFK',
       'table' => 'SERVICE_REFERENTIEL',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'SERVICE_REFERENTIEL_SOURCE_FK' =>
+    'SERVICE_REFERENTIEL_SOURCE_FK' => 
     array (
       'name' => 'SERVICE_REFERENTIEL_SOURCE_FK',
       'table' => 'SERVICE_REFERENTIEL',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'SERVICE_SOURCE_FK' =>
+    'SERVICE_SOURCE_FK' => 
     array (
       'name' => 'SERVICE_SOURCE_FK',
       'table' => 'SERVICE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'SEUIL_CHARGE_ANNEE_FK' =>
+    'SEUIL_CHARGE_ANNEE_FK' => 
     array (
       'name' => 'SEUIL_CHARGE_ANNEE_FK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'SEUIL_CH_GT_FORMATION_FK' =>
+    'SEUIL_CH_GT_FORMATION_FK' => 
     array (
       'name' => 'SEUIL_CH_GT_FORMATION_FK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'GROUPE_TYPE_FORMATION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'GROUPE_TYPE_FORMATION_ID' => 'ID',
       ),
     ),
-    'SEUIL_CH_SCENARIO_FK' =>
+    'SEUIL_CH_SCENARIO_FK' => 
     array (
       'name' => 'SEUIL_CH_SCENARIO_FK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'SCENARIO',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_ID' => 'ID',
       ),
     ),
-    'SEUIL_CH_STRUCTURE_FK' =>
+    'SEUIL_CH_STRUCTURE_FK' => 
     array (
       'name' => 'SEUIL_CH_STRUCTURE_FK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'SEUIL_CH_TYPE_INTERVENTION_FK' =>
+    'SEUIL_CH_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'SEUIL_CH_TYPE_INTERVENTION_FK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'SEUIL_CH_UTILISATEUR_HCFK' =>
+    'SEUIL_CH_UTILISATEUR_HCFK' => 
     array (
       'name' => 'SEUIL_CH_UTILISATEUR_HCFK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'SEUIL_CH_UTILISATEUR_HDFK' =>
+    'SEUIL_CH_UTILISATEUR_HDFK' => 
     array (
       'name' => 'SEUIL_CH_UTILISATEUR_HDFK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'SEUIL_CH_UTILISATEUR_HMFK' =>
+    'SEUIL_CH_UTILISATEUR_HMFK' => 
     array (
       'name' => 'SEUIL_CH_UTILISATEUR_HMFK',
       'table' => 'SEUIL_CHARGE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'SNE_ETAPE_FK' =>
+    'SNE_ETAPE_FK' => 
     array (
       'name' => 'SNE_ETAPE_FK',
       'table' => 'SCENARIO_NOEUD_EFFECTIF',
       'rtable' => 'ETAPE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'SNE_SCENARIO_NOEUD_FK' =>
+    'SNE_SCENARIO_NOEUD_FK' => 
     array (
       'name' => 'SNE_SCENARIO_NOEUD_FK',
       'table' => 'SCENARIO_NOEUD_EFFECTIF',
       'rtable' => 'SCENARIO_NOEUD',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_NOEUD_ID' => 'ID',
       ),
     ),
-    'SNE_TYPE_HEURES_FK' =>
+    'SNE_TYPE_HEURES_FK' => 
     array (
       'name' => 'SNE_TYPE_HEURES_FK',
       'table' => 'SCENARIO_NOEUD_EFFECTIF',
       'rtable' => 'TYPE_HEURES',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_HEURES_ID' => 'ID',
       ),
     ),
-    'SNS_SCENARIO_NOEUD_FK' =>
+    'SNS_SCENARIO_NOEUD_FK' => 
     array (
       'name' => 'SNS_SCENARIO_NOEUD_FK',
       'table' => 'SCENARIO_NOEUD_SEUIL',
       'rtable' => 'SCENARIO_NOEUD',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_NOEUD_ID' => 'ID',
       ),
     ),
-    'SNS_TYPE_INTERVENTION_FK' =>
+    'SNS_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'SNS_TYPE_INTERVENTION_FK',
       'table' => 'SCENARIO_NOEUD_SEUIL',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'SRFR_FK' =>
+    'SRFR_FK' => 
     array (
       'name' => 'SRFR_FK',
       'table' => 'SERVICE_REFERENTIEL',
       'rtable' => 'FONCTION_REFERENTIEL',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FONCTION_ID' => 'ID',
       ),
     ),
-    'SR_INTERVENANT_FK' =>
+    'SR_INTERVENANT_FK' => 
     array (
       'name' => 'SR_INTERVENANT_FK',
       'table' => 'SERVICE_REFERENTIEL',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'SR_STRUCTURE_FK' =>
+    'SR_STRUCTURE_FK' => 
     array (
       'name' => 'SR_STRUCTURE_FK',
       'table' => 'SERVICE_REFERENTIEL',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'STATUT_INTERVENANT_HCFK' =>
+    'STATUT_INTERVENANT_HCFK' => 
     array (
       'name' => 'STATUT_INTERVENANT_HCFK',
       'table' => 'STATUT_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'STATUT_INTERVENANT_HDFK' =>
+    'STATUT_INTERVENANT_HDFK' => 
     array (
       'name' => 'STATUT_INTERVENANT_HDFK',
       'table' => 'STATUT_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'STATUT_INTERVENANT_HMFK' =>
+    'STATUT_INTERVENANT_HMFK' => 
     array (
       'name' => 'STATUT_INTERVENANT_HMFK',
       'table' => 'STATUT_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'STATUT_INTERVENANT_SOURCE_FK' =>
+    'STATUT_INTERVENANT_SOURCE_FK' => 
     array (
       'name' => 'STATUT_INTERVENANT_SOURCE_FK',
       'table' => 'STATUT_INTERVENANT',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'STATUT_INTERVENANT_TYPE_FK' =>
+    'STATUT_INTERVENANT_TYPE_FK' => 
     array (
       'name' => 'STATUT_INTERVENANT_TYPE_FK',
       'table' => 'STATUT_INTERVENANT',
       'rtable' => 'TYPE_INTERVENANT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'STAT_PRIV_PRIVILEGE_FK' =>
+    'STAT_PRIV_PRIVILEGE_FK' => 
     array (
       'name' => 'STAT_PRIV_PRIVILEGE_FK',
       'table' => 'STATUT_PRIVILEGE',
       'rtable' => 'PRIVILEGE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PRIVILEGE_ID' => 'ID',
       ),
     ),
-    'STAT_PRIV_STATUT_FK' =>
+    'STAT_PRIV_STATUT_FK' => 
     array (
       'name' => 'STAT_PRIV_STATUT_FK',
       'table' => 'STATUT_PRIVILEGE',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_ID' => 'ID',
       ),
     ),
-    'STRUCTURE_HCFK' =>
+    'STRUCTURE_HCFK' => 
     array (
       'name' => 'STRUCTURE_HCFK',
       'table' => 'STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'STRUCTURE_HDFK' =>
+    'STRUCTURE_HDFK' => 
     array (
       'name' => 'STRUCTURE_HDFK',
       'table' => 'STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'STRUCTURE_HMFK' =>
+    'STRUCTURE_HMFK' => 
     array (
       'name' => 'STRUCTURE_HMFK',
       'table' => 'STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'STRUCTURE_SOURCE_FK' =>
+    'STRUCTURE_SOURCE_FK' => 
     array (
       'name' => 'STRUCTURE_SOURCE_FK',
       'table' => 'STRUCTURE',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'TAS_STATUT_INTERVENANT_FK' =>
+    'TAS_STATUT_INTERVENANT_FK' => 
     array (
       'name' => 'TAS_STATUT_INTERVENANT_FK',
       'table' => 'TYPE_AGREMENT_STATUT',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TAS_TYPE_AGREMENT_FK' =>
+    'TAS_TYPE_AGREMENT_FK' => 
     array (
       'name' => 'TAS_TYPE_AGREMENT_FK',
       'table' => 'TYPE_AGREMENT_STATUT',
       'rtable' => 'TYPE_AGREMENT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_AGREMENT_ID' => 'ID',
       ),
     ),
-    'TAUX_HORAIRE_HETD_HCFK' =>
+    'TAUX_HORAIRE_HETD_HCFK' => 
     array (
       'name' => 'TAUX_HORAIRE_HETD_HCFK',
       'table' => 'TAUX_HORAIRE_HETD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TAUX_HORAIRE_HETD_HDFK' =>
+    'TAUX_HORAIRE_HETD_HDFK' => 
     array (
       'name' => 'TAUX_HORAIRE_HETD_HDFK',
       'table' => 'TAUX_HORAIRE_HETD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TAUX_HORAIRE_HETD_HMFK' =>
+    'TAUX_HORAIRE_HETD_HMFK' => 
     array (
       'name' => 'TAUX_HORAIRE_HETD_HMFK',
       'table' => 'TAUX_HORAIRE_HETD',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TBCH_ANNEE_FK' =>
+    'TBCH_ANNEE_FK' => 
     array (
       'name' => 'TBCH_ANNEE_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBCH_ELEMENT_PEDAGOGIQUE_FK' =>
+    'TBCH_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'TBCH_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'TBCH_ETAPE_FK' =>
+    'TBCH_ETAPE_FK' => 
     array (
       'name' => 'TBCH_ETAPE_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'TBCH_ETAPE_FKV1' =>
+    'TBCH_ETAPE_FKV1' => 
     array (
       'name' => 'TBCH_ETAPE_FKV1',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ENS_ID' => 'ID',
       ),
     ),
-    'TBCH_GROUPE_TYPE_FORMATION_FK' =>
+    'TBCH_GROUPE_TYPE_FORMATION_FK' => 
     array (
       'name' => 'TBCH_GROUPE_TYPE_FORMATION_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'GROUPE_TYPE_FORMATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'GROUPE_TYPE_FORMATION_ID' => 'ID',
       ),
     ),
-    'TBCH_NOEUD_FK' =>
+    'TBCH_NOEUD_FK' => 
     array (
       'name' => 'TBCH_NOEUD_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'NOEUD',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'NOEUD_ID' => 'ID',
       ),
     ),
-    'TBCH_SCENARIO_FK' =>
+    'TBCH_SCENARIO_FK' => 
     array (
       'name' => 'TBCH_SCENARIO_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'SCENARIO',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_ID' => 'ID',
       ),
     ),
-    'TBCH_STRUCTURE_FK' =>
+    'TBCH_STRUCTURE_FK' => 
     array (
       'name' => 'TBCH_STRUCTURE_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBCH_TYPE_HEURES_FK' =>
+    'TBCH_TYPE_HEURES_FK' => 
     array (
       'name' => 'TBCH_TYPE_HEURES_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'TYPE_HEURES',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_HEURES_ID' => 'ID',
       ),
     ),
-    'TBCH_TYPE_INTERVENTION_FK' =>
+    'TBCH_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'TBCH_TYPE_INTERVENTION_FK',
       'table' => 'TBL_CHARGENS',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'TBL_AGR_AGREMENT_FK' =>
+    'TBL_AGR_AGREMENT_FK' => 
     array (
       'name' => 'TBL_AGR_AGREMENT_FK',
       'table' => 'TBL_AGREMENT',
       'rtable' => 'AGREMENT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'AGREMENT_ID' => 'ID',
       ),
     ),
-    'TBL_AGR_ANNEE_FK' =>
+    'TBL_AGR_ANNEE_FK' => 
     array (
       'name' => 'TBL_AGR_ANNEE_FK',
       'table' => 'TBL_AGREMENT',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_AGR_INTERVENANT_FK' =>
+    'TBL_AGR_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_AGR_INTERVENANT_FK',
       'table' => 'TBL_AGREMENT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_AGR_STRUCTURE_FK' =>
+    'TBL_AGR_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_AGR_STRUCTURE_FK',
       'table' => 'TBL_AGREMENT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_AGR_TYPE_AGREMENT_FK' =>
+    'TBL_AGR_TYPE_AGREMENT_FK' => 
     array (
       'name' => 'TBL_AGR_TYPE_AGREMENT_FK',
       'table' => 'TBL_AGREMENT',
       'rtable' => 'TYPE_AGREMENT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_AGREMENT_ID' => 'ID',
       ),
     ),
-    'TBL_CLOTURE_REALISE_ANNEE_FK' =>
+    'TBL_CLOTURE_REALISE_ANNEE_FK' => 
     array (
       'name' => 'TBL_CLOTURE_REALISE_ANNEE_FK',
       'table' => 'TBL_CLOTURE_REALISE',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_CLO_REAL_INTERVENANT_FK' =>
+    'TBL_CLO_REAL_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_CLO_REAL_INTERVENANT_FK',
       'table' => 'TBL_CLOTURE_REALISE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_CONTRAT_ANNEE_FK' =>
+    'TBL_CONTRAT_ANNEE_FK' => 
     array (
       'name' => 'TBL_CONTRAT_ANNEE_FK',
       'table' => 'TBL_CONTRAT',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_CONTRAT_INTERVENANT_FK' =>
+    'TBL_CONTRAT_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_CONTRAT_INTERVENANT_FK',
       'table' => 'TBL_CONTRAT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_CONTRAT_STRUCTURE_FK' =>
+    'TBL_CONTRAT_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_CONTRAT_STRUCTURE_FK',
       'table' => 'TBL_CONTRAT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_CSD_ANNEE_FK' =>
+    'TBL_CSD_ANNEE_FK' => 
     array (
       'name' => 'TBL_CSD_ANNEE_FK',
       'table' => 'TBL_CHARGENS_SEUILS_DEF',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_CSD_GTF_FK' =>
+    'TBL_CSD_GTF_FK' => 
     array (
       'name' => 'TBL_CSD_GTF_FK',
       'table' => 'TBL_CHARGENS_SEUILS_DEF',
       'rtable' => 'GROUPE_TYPE_FORMATION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'GROUPE_TYPE_FORMATION_ID' => 'ID',
       ),
     ),
-    'TBL_CSD_SCENARIO_FK' =>
+    'TBL_CSD_SCENARIO_FK' => 
     array (
       'name' => 'TBL_CSD_SCENARIO_FK',
       'table' => 'TBL_CHARGENS_SEUILS_DEF',
       'rtable' => 'SCENARIO',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_ID' => 'ID',
       ),
     ),
-    'TBL_CSD_STRUCTURE_FK' =>
+    'TBL_CSD_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_CSD_STRUCTURE_FK',
       'table' => 'TBL_CHARGENS_SEUILS_DEF',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_CSD_TYPE_INTERVENTION_FK' =>
+    'TBL_CSD_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'TBL_CSD_TYPE_INTERVENTION_FK',
       'table' => 'TBL_CHARGENS_SEUILS_DEF',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'TBL_DEMS_TBL_FK' =>
+    'TBL_DEMS_TBL_FK' => 
     array (
       'name' => 'TBL_DEMS_TBL_FK',
       'table' => 'TBL_DEMS',
       'rtable' => 'TBL',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TBL_NAME' => 'TBL_NAME',
       ),
     ),
-    'TBL_DMLIQ_ANNEE_FK' =>
+    'TBL_DMLIQ_ANNEE_FK' => 
     array (
       'name' => 'TBL_DMLIQ_ANNEE_FK',
       'table' => 'TBL_DMEP_LIQUIDATION',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_DMLIQ_STRUCTURE_FK' =>
+    'TBL_DMLIQ_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_DMLIQ_STRUCTURE_FK',
       'table' => 'TBL_DMEP_LIQUIDATION',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_DMLIQ_TYPE_RESSOURCE_FK' =>
+    'TBL_DMLIQ_TYPE_RESSOURCE_FK' => 
     array (
       'name' => 'TBL_DMLIQ_TYPE_RESSOURCE_FK',
       'table' => 'TBL_DMEP_LIQUIDATION',
       'rtable' => 'TYPE_RESSOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_RESSOURCE_ID' => 'ID',
       ),
     ),
-    'TBL_DOSSIER_ANNEE_FK' =>
+    'TBL_DOSSIER_ANNEE_FK' => 
     array (
       'name' => 'TBL_DOSSIER_ANNEE_FK',
       'table' => 'TBL_DOSSIER',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_DOSSIER_DOSSIER_FK' =>
+    'TBL_DOSSIER_DOSSIER_FK' => 
     array (
       'name' => 'TBL_DOSSIER_DOSSIER_FK',
       'table' => 'TBL_DOSSIER',
       'rtable' => 'DOSSIER',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'DOSSIER_ID' => 'ID',
       ),
     ),
-    'TBL_DOSSIER_INTERVENANT_FK' =>
+    'TBL_DOSSIER_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_DOSSIER_INTERVENANT_FK',
       'table' => 'TBL_DOSSIER',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_DOSSIER_VALIDATION_FK' =>
+    'TBL_DOSSIER_VALIDATION_FK' => 
     array (
       'name' => 'TBL_DOSSIER_VALIDATION_FK',
       'table' => 'TBL_DOSSIER',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'TBL_LIEN_LIEN_FK' =>
+    'TBL_LIEN_LIEN_FK' => 
     array (
       'name' => 'TBL_LIEN_LIEN_FK',
       'table' => 'TBL_LIEN',
       'rtable' => 'LIEN',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'LIEN_ID' => 'ID',
       ),
     ),
-    'TBL_LIEN_NOEUD_INF_FK' =>
+    'TBL_LIEN_NOEUD_INF_FK' => 
     array (
       'name' => 'TBL_LIEN_NOEUD_INF_FK',
       'table' => 'TBL_LIEN',
       'rtable' => 'NOEUD',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'NOEUD_INF_ID' => 'ID',
       ),
     ),
-    'TBL_LIEN_NOEUD_SUP_FK' =>
+    'TBL_LIEN_NOEUD_SUP_FK' => 
     array (
       'name' => 'TBL_LIEN_NOEUD_SUP_FK',
       'table' => 'TBL_LIEN',
       'rtable' => 'NOEUD',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'NOEUD_SUP_ID' => 'ID',
       ),
     ),
-    'TBL_LIEN_SCENARIO_FK' =>
+    'TBL_LIEN_SCENARIO_FK' => 
     array (
       'name' => 'TBL_LIEN_SCENARIO_FK',
       'table' => 'TBL_LIEN',
       'rtable' => 'SCENARIO',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_ID' => 'ID',
       ),
     ),
-    'TBL_LIEN_SCENARIO_LIEN_FK' =>
+    'TBL_LIEN_SCENARIO_LIEN_FK' => 
     array (
       'name' => 'TBL_LIEN_SCENARIO_LIEN_FK',
       'table' => 'TBL_LIEN',
       'rtable' => 'SCENARIO_LIEN',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_LIEN_ID' => 'ID',
       ),
     ),
-    'TBL_LIEN_STRUCTURE_FK' =>
+    'TBL_LIEN_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_LIEN_STRUCTURE_FK',
       'table' => 'TBL_LIEN',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_ANNEE_FK' =>
+    'TBL_PAIEMENT_ANNEE_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_ANNEE_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_FRSR_FK' =>
+    'TBL_PAIEMENT_FRSR_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_FRSR_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'FORMULE_RESULTAT_SERVICE_REF',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RES_SERVICE_REF_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_FRS_FK' =>
+    'TBL_PAIEMENT_FRS_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_FRS_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'FORMULE_RESULTAT_SERVICE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FORMULE_RES_SERVICE_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_INTERVENANT_FK' =>
+    'TBL_PAIEMENT_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_INTERVENANT_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_MEP_FK' =>
+    'TBL_PAIEMENT_MEP_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_MEP_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'MISE_EN_PAIEMENT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'MISE_EN_PAIEMENT_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_PERIODE_FK' =>
+    'TBL_PAIEMENT_PERIODE_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_PERIODE_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'PERIODE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PERIODE_PAIEMENT_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_SR_FK' =>
+    'TBL_PAIEMENT_SR_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_SR_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'SERVICE_REFERENTIEL',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_REFERENTIEL_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_STRUCTURE_FK' =>
+    'TBL_PAIEMENT_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_STRUCTURE_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_PAIEMENT_S_FK' =>
+    'TBL_PAIEMENT_S_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_S_FK',
       'table' => 'TBL_PAIEMENT',
       'rtable' => 'SERVICE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_ID' => 'ID',
       ),
     ),
-    'TBL_PIECE_JOINTE_ANNEE_FK' =>
+    'TBL_PIECE_JOINTE_ANNEE_FK' => 
     array (
       'name' => 'TBL_PIECE_JOINTE_ANNEE_FK',
       'table' => 'TBL_PIECE_JOINTE',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_PJD_ANNEE_FK' =>
+    'TBL_PJD_ANNEE_FK' => 
     array (
       'name' => 'TBL_PJD_ANNEE_FK',
       'table' => 'TBL_PIECE_JOINTE_DEMANDE',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_PJD_INTERVENANT_FK' =>
+    'TBL_PJD_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_PJD_INTERVENANT_FK',
       'table' => 'TBL_PIECE_JOINTE_DEMANDE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_PJD_TYPE_PIECE_JOINTE_FK' =>
+    'TBL_PJD_TYPE_PIECE_JOINTE_FK' => 
     array (
       'name' => 'TBL_PJD_TYPE_PIECE_JOINTE_FK',
       'table' => 'TBL_PIECE_JOINTE_DEMANDE',
       'rtable' => 'TYPE_PIECE_JOINTE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_PIECE_JOINTE_ID' => 'ID',
       ),
     ),
-    'TBL_PJF_ANNEE_FK' =>
+    'TBL_PJF_ANNEE_FK' => 
     array (
       'name' => 'TBL_PJF_ANNEE_FK',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_PJF_FICHIER_FK' =>
+    'TBL_PJF_FICHIER_FK' => 
     array (
       'name' => 'TBL_PJF_FICHIER_FK',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'rtable' => 'FICHIER',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'FICHIER_ID' => 'ID',
       ),
     ),
-    'TBL_PJF_INTERVENANT_FK' =>
+    'TBL_PJF_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_PJF_INTERVENANT_FK',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_PJF_PIECE_JOINTE_FK' =>
+    'TBL_PJF_PIECE_JOINTE_FK' => 
     array (
       'name' => 'TBL_PJF_PIECE_JOINTE_FK',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'rtable' => 'PIECE_JOINTE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PIECE_JOINTE_ID' => 'ID',
       ),
     ),
-    'TBL_PJF_TYPE_PIECE_JOINTE_FK' =>
+    'TBL_PJF_TYPE_PIECE_JOINTE_FK' => 
     array (
       'name' => 'TBL_PJF_TYPE_PIECE_JOINTE_FK',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'rtable' => 'TYPE_PIECE_JOINTE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_PIECE_JOINTE_ID' => 'ID',
       ),
     ),
-    'TBL_PJF_VALIDATION_FK' =>
+    'TBL_PJF_VALIDATION_FK' => 
     array (
       'name' => 'TBL_PJF_VALIDATION_FK',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'TBL_PJ_INTERVENANT_FK' =>
+    'TBL_PJ_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_PJ_INTERVENANT_FK',
       'table' => 'TBL_PIECE_JOINTE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_PJ_TYPE_PIECE_JOINTE_FK' =>
+    'TBL_PJ_TYPE_PIECE_JOINTE_FK' => 
     array (
       'name' => 'TBL_PJ_TYPE_PIECE_JOINTE_FK',
       'table' => 'TBL_PIECE_JOINTE',
       'rtable' => 'TYPE_PIECE_JOINTE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_PIECE_JOINTE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_ANNEE_FK' =>
+    'TBL_SERVICE_ANNEE_FK' => 
     array (
       'name' => 'TBL_SERVICE_ANNEE_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_ELEMENT_FK' =>
+    'TBL_SERVICE_ELEMENT_FK' => 
     array (
       'name' => 'TBL_SERVICE_ELEMENT_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_ETAPE_FK' =>
+    'TBL_SERVICE_ETAPE_FK' => 
     array (
       'name' => 'TBL_SERVICE_ETAPE_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_INTERVENANT_FK' =>
+    'TBL_SERVICE_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_SERVICE_INTERVENANT_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_PERIODE_EP_FK' =>
+    'TBL_SERVICE_PERIODE_EP_FK' => 
     array (
       'name' => 'TBL_SERVICE_PERIODE_EP_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'PERIODE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_PERIODE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_REF_ANNEE_FK' =>
+    'TBL_SERVICE_REF_ANNEE_FK' => 
     array (
       'name' => 'TBL_SERVICE_REF_ANNEE_FK',
       'table' => 'TBL_SERVICE_REFERENTIEL',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_REF_INTERVENANT_FK' =>
+    'TBL_SERVICE_REF_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_SERVICE_REF_INTERVENANT_FK',
       'table' => 'TBL_SERVICE_REFERENTIEL',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_REF_STRUCTURE_FK' =>
+    'TBL_SERVICE_REF_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_SERVICE_REF_STRUCTURE_FK',
       'table' => 'TBL_SERVICE_REFERENTIEL',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_REF_TVH_FK' =>
+    'TBL_SERVICE_REF_TVH_FK' => 
     array (
       'name' => 'TBL_SERVICE_REF_TVH_FK',
       'table' => 'TBL_SERVICE_REFERENTIEL',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_SAISIE_ANNEE_FK' =>
+    'TBL_SERVICE_SAISIE_ANNEE_FK' => 
     array (
       'name' => 'TBL_SERVICE_SAISIE_ANNEE_FK',
       'table' => 'TBL_SERVICE_SAISIE',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_SERVICE_FK' =>
+    'TBL_SERVICE_SERVICE_FK' => 
     array (
       'name' => 'TBL_SERVICE_SERVICE_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'SERVICE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_STRUCTURE_FK' =>
+    'TBL_SERVICE_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_SERVICE_STRUCTURE_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_STRUCTURE_FKV1' =>
+    'TBL_SERVICE_STRUCTURE_FKV1' => 
     array (
       'name' => 'TBL_SERVICE_STRUCTURE_FKV1',
       'table' => 'TBL_SERVICE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_TINTERVENANT_FK' =>
+    'TBL_SERVICE_TINTERVENANT_FK' => 
     array (
       'name' => 'TBL_SERVICE_TINTERVENANT_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'TYPE_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_SERVICE_TVH_FK' =>
+    'TBL_SERVICE_TVH_FK' => 
     array (
       'name' => 'TBL_SERVICE_TVH_FK',
       'table' => 'TBL_SERVICE',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'TBL_SRV_SAISIE_INTERVENANT_FK' =>
+    'TBL_SRV_SAISIE_INTERVENANT_FK' => 
     array (
       'name' => 'TBL_SRV_SAISIE_INTERVENANT_FK',
       'table' => 'TBL_SERVICE_SAISIE',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_WORKFLOW_ANNEE_FK' =>
+    'TBL_WORKFLOW_ANNEE_FK' => 
     array (
       'name' => 'TBL_WORKFLOW_ANNEE_FK',
       'table' => 'TBL_WORKFLOW',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TBL_WORKFLOW_EFK' =>
+    'TBL_WORKFLOW_EFK' => 
     array (
       'name' => 'TBL_WORKFLOW_EFK',
       'table' => 'TBL_WORKFLOW',
       'rtable' => 'WF_ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_ID' => 'ID',
       ),
     ),
-    'TBL_WORKFLOW_IFK' =>
+    'TBL_WORKFLOW_IFK' => 
     array (
       'name' => 'TBL_WORKFLOW_IFK',
       'table' => 'TBL_WORKFLOW',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_WORKFLOW_SFK' =>
+    'TBL_WORKFLOW_SFK' => 
     array (
       'name' => 'TBL_WORKFLOW_SFK',
       'table' => 'TBL_WORKFLOW',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TBL_WORKFLOW_STATUT_FK' =>
+    'TBL_WORKFLOW_STATUT_FK' => 
     array (
       'name' => 'TBL_WORKFLOW_STATUT_FK',
       'table' => 'TBL_WORKFLOW',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TBL_WORKFLOW_TINTERVENANT_FK' =>
+    'TBL_WORKFLOW_TINTERVENANT_FK' => 
     array (
       'name' => 'TBL_WORKFLOW_TINTERVENANT_FK',
       'table' => 'TBL_WORKFLOW',
       'rtable' => 'TYPE_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TIEP_ELEMENT_PEDAGOGIQUE_FK' =>
+    'TIEP_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'TIEP_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'TYPE_INTERVENTION_EP',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'TIEP_TYPE_INTERVENTION_FK' =>
+    'TIEP_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'TIEP_TYPE_INTERVENTION_FK',
       'table' => 'TYPE_INTERVENTION_EP',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'TIS_ANNEE_DEBUT_FK' =>
+    'TIS_ANNEE_DEBUT_FK' => 
     array (
       'name' => 'TIS_ANNEE_DEBUT_FK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_DEBUT_ID' => 'ID',
       ),
     ),
-    'TIS_ANNEE_FIN_FK' =>
+    'TIS_ANNEE_FIN_FK' => 
     array (
       'name' => 'TIS_ANNEE_FIN_FK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_FIN_ID' => 'ID',
       ),
     ),
-    'TIS_STATUT_INTERVENANT_FK' =>
+    'TIS_STATUT_INTERVENANT_FK' => 
     array (
       'name' => 'TIS_STATUT_INTERVENANT_FK',
       'table' => 'TYPE_INTERVENTION_STATUT',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TIS_STRUCTURE_FK' =>
+    'TIS_STRUCTURE_FK' => 
     array (
       'name' => 'TIS_STRUCTURE_FK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TIS_TYPE_INTERVENTION_FK' =>
+    'TIS_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'TIS_TYPE_INTERVENTION_FK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'TIS_TYPE_INTERVENTION_FKV1' =>
+    'TIS_TYPE_INTERVENTION_FKV1' => 
     array (
       'name' => 'TIS_TYPE_INTERVENTION_FKV1',
       'table' => 'TYPE_INTERVENTION_STATUT',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'TI_TYPE_INTERVENTION_FK' =>
+    'TI_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'TI_TYPE_INTERVENTION_FK',
       'table' => 'TYPE_INTERVENTION',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_MAQUETTE_ID' => 'ID',
       ),
     ),
-    'TME_ELEMENT_PEDAGOGIQUE_FK' =>
+    'TME_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'TME_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'TYPE_MODULATEUR_EP',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'TME_TYPE_MODULATEUR_FK' =>
+    'TME_TYPE_MODULATEUR_FK' => 
     array (
       'name' => 'TME_TYPE_MODULATEUR_FK',
       'table' => 'TYPE_MODULATEUR_EP',
       'rtable' => 'TYPE_MODULATEUR',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_MODULATEUR_ID' => 'ID',
       ),
     ),
-    'TMS_ANNEE_DEBUT_FK' =>
+    'TMS_ANNEE_DEBUT_FK' => 
     array (
       'name' => 'TMS_ANNEE_DEBUT_FK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_DEBUT_ID' => 'ID',
       ),
     ),
-    'TMS_ANNEE_FIN_FK' =>
+    'TMS_ANNEE_FIN_FK' => 
     array (
       'name' => 'TMS_ANNEE_FIN_FK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_FIN_ID' => 'ID',
       ),
     ),
-    'TMS_STRUCTURE_FK' =>
+    'TMS_STRUCTURE_FK' => 
     array (
       'name' => 'TMS_STRUCTURE_FK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'rtable' => 'STRUCTURE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TMS_TYPE_MODUL_FK' =>
+    'TMS_TYPE_MODUL_FK' => 
     array (
       'name' => 'TMS_TYPE_MODUL_FK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'rtable' => 'TYPE_MODULATEUR',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_MODULATEUR_ID' => 'ID',
       ),
     ),
-    'TPJS_ANNEE_DEB_FK' =>
+    'TPJS_ANNEE_DEB_FK' => 
     array (
       'name' => 'TPJS_ANNEE_DEB_FK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_DEBUT_ID' => 'ID',
       ),
     ),
-    'TPJS_ANNEE_FIN_FK' =>
+    'TPJS_ANNEE_FIN_FK' => 
     array (
       'name' => 'TPJS_ANNEE_FIN_FK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_FIN_ID' => 'ID',
       ),
     ),
-    'TPJS_STATUT_INTERVENANT_FK' =>
+    'TPJS_STATUT_INTERVENANT_FK' => 
     array (
       'name' => 'TPJS_STATUT_INTERVENANT_FK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'rtable' => 'STATUT_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STATUT_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TPJS_TYPE_PIECE_JOINTE_FK' =>
+    'TPJS_TYPE_PIECE_JOINTE_FK' => 
     array (
       'name' => 'TPJS_TYPE_PIECE_JOINTE_FK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'rtable' => 'TYPE_PIECE_JOINTE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_PIECE_JOINTE_ID' => 'ID',
       ),
     ),
-    'TVE_ANNEE_FK' =>
+    'TVE_ANNEE_FK' => 
     array (
       'name' => 'TVE_ANNEE_FK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TVE_INTERVENANT_FK' =>
+    'TVE_INTERVENANT_FK' => 
     array (
       'name' => 'TVE_INTERVENANT_FK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TVE_SERVICE_FK' =>
+    'TVE_SERVICE_FK' => 
     array (
       'name' => 'TVE_SERVICE_FK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'rtable' => 'SERVICE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_ID' => 'ID',
       ),
     ),
-    'TVE_STRUCTURE_FK' =>
+    'TVE_STRUCTURE_FK' => 
     array (
       'name' => 'TVE_STRUCTURE_FK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TVE_TYPE_VOLUME_HORAIRE_FK' =>
+    'TVE_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'TVE_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'TVE_VALIDATION_FK' =>
+    'TVE_VALIDATION_FK' => 
     array (
       'name' => 'TVE_VALIDATION_FK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'TVE_VOLUME_HORAIRE_FK' =>
+    'TVE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'TVE_VOLUME_HORAIRE_FK',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'rtable' => 'VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'TVR_ANNEE_FK' =>
+    'TVR_ANNEE_FK' => 
     array (
       'name' => 'TVR_ANNEE_FK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'rtable' => 'ANNEE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_ID' => 'ID',
       ),
     ),
-    'TVR_INTERVENANT_FK' =>
+    'TVR_INTERVENANT_FK' => 
     array (
       'name' => 'TVR_INTERVENANT_FK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TVR_SERVICE_REFERENTIEL_FK' =>
+    'TVR_SERVICE_REFERENTIEL_FK' => 
     array (
       'name' => 'TVR_SERVICE_REFERENTIEL_FK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'rtable' => 'SERVICE_REFERENTIEL',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_REFERENTIEL_ID' => 'ID',
       ),
     ),
-    'TVR_STRUCTURE_FK' =>
+    'TVR_STRUCTURE_FK' => 
     array (
       'name' => 'TVR_STRUCTURE_FK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'TVR_TYPE_VOLUME_HORAIRE_FK' =>
+    'TVR_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'TVR_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'TVR_VALIDATION_FK' =>
+    'TVR_VALIDATION_FK' => 
     array (
       'name' => 'TVR_VALIDATION_FK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'TVR_VOLUME_HORAIRE_REF_FK' =>
+    'TVR_VOLUME_HORAIRE_REF_FK' => 
     array (
       'name' => 'TVR_VOLUME_HORAIRE_REF_FK',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'rtable' => 'VOLUME_HORAIRE_REF',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VOLUME_HORAIRE_REF_ID' => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_HCFK' =>
+    'TYPE_AGREMENT_HCFK' => 
     array (
       'name' => 'TYPE_AGREMENT_HCFK',
       'table' => 'TYPE_AGREMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_HDFK' =>
+    'TYPE_AGREMENT_HDFK' => 
     array (
       'name' => 'TYPE_AGREMENT_HDFK',
       'table' => 'TYPE_AGREMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_HMFK' =>
+    'TYPE_AGREMENT_HMFK' => 
     array (
       'name' => 'TYPE_AGREMENT_HMFK',
       'table' => 'TYPE_AGREMENT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_STATUT_HCFK' =>
+    'TYPE_AGREMENT_STATUT_HCFK' => 
     array (
       'name' => 'TYPE_AGREMENT_STATUT_HCFK',
       'table' => 'TYPE_AGREMENT_STATUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_STATUT_HDFK' =>
+    'TYPE_AGREMENT_STATUT_HDFK' => 
     array (
       'name' => 'TYPE_AGREMENT_STATUT_HDFK',
       'table' => 'TYPE_AGREMENT_STATUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_STATUT_HMFK' =>
+    'TYPE_AGREMENT_STATUT_HMFK' => 
     array (
       'name' => 'TYPE_AGREMENT_STATUT_HMFK',
       'table' => 'TYPE_AGREMENT_STATUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_CONTRAT_HCFK' =>
+    'TYPE_CONTRAT_HCFK' => 
     array (
       'name' => 'TYPE_CONTRAT_HCFK',
       'table' => 'TYPE_CONTRAT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_CONTRAT_HDFK' =>
+    'TYPE_CONTRAT_HDFK' => 
     array (
       'name' => 'TYPE_CONTRAT_HDFK',
       'table' => 'TYPE_CONTRAT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_CONTRAT_HMFK' =>
+    'TYPE_CONTRAT_HMFK' => 
     array (
       'name' => 'TYPE_CONTRAT_HMFK',
       'table' => 'TYPE_CONTRAT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_FORMATION_GROUPE_FK' =>
+    'TYPE_FORMATION_GROUPE_FK' => 
     array (
       'name' => 'TYPE_FORMATION_GROUPE_FK',
       'table' => 'TYPE_FORMATION',
       'rtable' => 'GROUPE_TYPE_FORMATION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'GROUPE_ID' => 'ID',
       ),
     ),
-    'TYPE_FORMATION_HCFK' =>
+    'TYPE_FORMATION_HCFK' => 
     array (
       'name' => 'TYPE_FORMATION_HCFK',
       'table' => 'TYPE_FORMATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_FORMATION_HDFK' =>
+    'TYPE_FORMATION_HDFK' => 
     array (
       'name' => 'TYPE_FORMATION_HDFK',
       'table' => 'TYPE_FORMATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_FORMATION_HMFK' =>
+    'TYPE_FORMATION_HMFK' => 
     array (
       'name' => 'TYPE_FORMATION_HMFK',
       'table' => 'TYPE_FORMATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_FORMATION_SOURCE_FK' =>
+    'TYPE_FORMATION_SOURCE_FK' => 
     array (
       'name' => 'TYPE_FORMATION_SOURCE_FK',
       'table' => 'TYPE_FORMATION',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'TYPE_HEURES_HCFK' =>
+    'TYPE_HEURES_HCFK' => 
     array (
       'name' => 'TYPE_HEURES_HCFK',
       'table' => 'TYPE_HEURES',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_HEURES_HDFK' =>
+    'TYPE_HEURES_HDFK' => 
     array (
       'name' => 'TYPE_HEURES_HDFK',
       'table' => 'TYPE_HEURES',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_HEURES_HMFK' =>
+    'TYPE_HEURES_HMFK' => 
     array (
       'name' => 'TYPE_HEURES_HMFK',
       'table' => 'TYPE_HEURES',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_HEURES_TYPE_HEURES_FK' =>
+    'TYPE_HEURES_TYPE_HEURES_FK' => 
     array (
       'name' => 'TYPE_HEURES_TYPE_HEURES_FK',
       'table' => 'TYPE_HEURES',
       'rtable' => 'TYPE_HEURES',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_HEURES_ELEMENT_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENANT_HCFK' =>
+    'TYPE_INTERVENANT_HCFK' => 
     array (
       'name' => 'TYPE_INTERVENANT_HCFK',
       'table' => 'TYPE_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENANT_HDFK' =>
+    'TYPE_INTERVENANT_HDFK' => 
     array (
       'name' => 'TYPE_INTERVENANT_HDFK',
       'table' => 'TYPE_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENANT_HMFK' =>
+    'TYPE_INTERVENANT_HMFK' => 
     array (
       'name' => 'TYPE_INTERVENANT_HMFK',
       'table' => 'TYPE_INTERVENANT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_ANNEE_FK' =>
+    'TYPE_INTERVENTION_ANNEE_FK' => 
     array (
       'name' => 'TYPE_INTERVENTION_ANNEE_FK',
       'table' => 'TYPE_INTERVENTION',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_DEBUT_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_ANNEE_FKV1' =>
+    'TYPE_INTERVENTION_ANNEE_FKV1' => 
     array (
       'name' => 'TYPE_INTERVENTION_ANNEE_FKV1',
       'table' => 'TYPE_INTERVENTION',
       'rtable' => 'ANNEE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ANNEE_FIN_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_EP_HCFK' =>
+    'TYPE_INTERVENTION_EP_HCFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_EP_HCFK',
       'table' => 'TYPE_INTERVENTION_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_EP_HDFK' =>
+    'TYPE_INTERVENTION_EP_HDFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_EP_HDFK',
       'table' => 'TYPE_INTERVENTION_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_EP_HMFK' =>
+    'TYPE_INTERVENTION_EP_HMFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_EP_HMFK',
       'table' => 'TYPE_INTERVENTION_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_EP_SOURCE_FK' =>
+    'TYPE_INTERVENTION_EP_SOURCE_FK' => 
     array (
       'name' => 'TYPE_INTERVENTION_EP_SOURCE_FK',
       'table' => 'TYPE_INTERVENTION_EP',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_HCFK' =>
+    'TYPE_INTERVENTION_HCFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_HCFK',
       'table' => 'TYPE_INTERVENTION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_HDFK' =>
+    'TYPE_INTERVENTION_HDFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_HDFK',
       'table' => 'TYPE_INTERVENTION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_HMFK' =>
+    'TYPE_INTERVENTION_HMFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_HMFK',
       'table' => 'TYPE_INTERVENTION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_STRUCTU_HCFK' =>
+    'TYPE_INTERVENTION_STRUCTU_HCFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_STRUCTU_HCFK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_STRUCTU_HDFK' =>
+    'TYPE_INTERVENTION_STRUCTU_HDFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_STRUCTU_HDFK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_INTERVENTION_STRUCTU_HMFK' =>
+    'TYPE_INTERVENTION_STRUCTU_HMFK' => 
     array (
       'name' => 'TYPE_INTERVENTION_STRUCTU_HMFK',
       'table' => 'TYPE_INTERVENTION_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_EP_HCFK' =>
+    'TYPE_MODULATEUR_EP_HCFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP_HCFK',
       'table' => 'TYPE_MODULATEUR_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_EP_HDFK' =>
+    'TYPE_MODULATEUR_EP_HDFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP_HDFK',
       'table' => 'TYPE_MODULATEUR_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_EP_HMFK' =>
+    'TYPE_MODULATEUR_EP_HMFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP_HMFK',
       'table' => 'TYPE_MODULATEUR_EP',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_EP_SOURCE_FK' =>
+    'TYPE_MODULATEUR_EP_SOURCE_FK' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP_SOURCE_FK',
       'table' => 'TYPE_MODULATEUR_EP',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_HCFK' =>
+    'TYPE_MODULATEUR_HCFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_HCFK',
       'table' => 'TYPE_MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_HDFK' =>
+    'TYPE_MODULATEUR_HDFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_HDFK',
       'table' => 'TYPE_MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_HMFK' =>
+    'TYPE_MODULATEUR_HMFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_HMFK',
       'table' => 'TYPE_MODULATEUR',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_STRUCTURE_HCFK' =>
+    'TYPE_MODULATEUR_STRUCTURE_HCFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_STRUCTURE_HCFK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_STRUCTURE_HDFK' =>
+    'TYPE_MODULATEUR_STRUCTURE_HDFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_STRUCTURE_HDFK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_MODULATEUR_STRUCTURE_HMFK' =>
+    'TYPE_MODULATEUR_STRUCTURE_HMFK' => 
     array (
       'name' => 'TYPE_MODULATEUR_STRUCTURE_HMFK',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_HCFK' =>
+    'TYPE_PIECE_JOINTE_HCFK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_HCFK',
       'table' => 'TYPE_PIECE_JOINTE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_HDFK' =>
+    'TYPE_PIECE_JOINTE_HDFK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_HDFK',
       'table' => 'TYPE_PIECE_JOINTE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_HMFK' =>
+    'TYPE_PIECE_JOINTE_HMFK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_HMFK',
       'table' => 'TYPE_PIECE_JOINTE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_STATUT_HCFK' =>
+    'TYPE_PIECE_JOINTE_STATUT_HCFK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_STATUT_HCFK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_STATUT_HDFK' =>
+    'TYPE_PIECE_JOINTE_STATUT_HDFK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_STATUT_HDFK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_PIECE_JOINTE_STATUT_HMFK' =>
+    'TYPE_PIECE_JOINTE_STATUT_HMFK' => 
     array (
       'name' => 'TYPE_PIECE_JOINTE_STATUT_HMFK',
       'table' => 'TYPE_PIECE_JOINTE_STATUT',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_RESSOURCE_HCFK' =>
+    'TYPE_RESSOURCE_HCFK' => 
     array (
       'name' => 'TYPE_RESSOURCE_HCFK',
       'table' => 'TYPE_RESSOURCE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_RESSOURCE_HDFK' =>
+    'TYPE_RESSOURCE_HDFK' => 
     array (
       'name' => 'TYPE_RESSOURCE_HDFK',
       'table' => 'TYPE_RESSOURCE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'TYPE_RESSOURCE_HMFK' =>
+    'TYPE_RESSOURCE_HMFK' => 
     array (
       'name' => 'TYPE_RESSOURCE_HMFK',
       'table' => 'TYPE_RESSOURCE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'VALIDATION_HCFK' =>
+    'VALIDATION_HCFK' => 
     array (
       'name' => 'VALIDATION_HCFK',
       'table' => 'VALIDATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'VALIDATION_HDFK' =>
+    'VALIDATION_HDFK' => 
     array (
       'name' => 'VALIDATION_HDFK',
       'table' => 'VALIDATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'VALIDATION_HMFK' =>
+    'VALIDATION_HMFK' => 
     array (
       'name' => 'VALIDATION_HMFK',
       'table' => 'VALIDATION',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'VALIDATION_INTERVENANT_FK' =>
+    'VALIDATION_INTERVENANT_FK' => 
     array (
       'name' => 'VALIDATION_INTERVENANT_FK',
       'table' => 'VALIDATION',
       'rtable' => 'INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'INTERVENANT_ID' => 'ID',
       ),
     ),
-    'VALIDATION_STRUCTURE_FK' =>
+    'VALIDATION_STRUCTURE_FK' => 
     array (
       'name' => 'VALIDATION_STRUCTURE_FK',
       'table' => 'VALIDATION',
       'rtable' => 'STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
       ),
     ),
-    'VALIDATION_TYPE_VALIDATION_FK' =>
+    'VALIDATION_TYPE_VALIDATION_FK' => 
     array (
       'name' => 'VALIDATION_TYPE_VALIDATION_FK',
       'table' => 'VALIDATION',
       'rtable' => 'TYPE_VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VALIDATION_ID' => 'ID',
       ),
     ),
-    'VHC_ELEMENT_PEDAGOGIQUE_FK' =>
+    'VHC_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'VHC_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'VHC_SCENARIO_FK' =>
+    'VHC_SCENARIO_FK' => 
     array (
       'name' => 'VHC_SCENARIO_FK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'rtable' => 'SCENARIO',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SCENARIO_ID' => 'ID',
       ),
     ),
-    'VHC_TYPE_INTERVENTION_FK' =>
+    'VHC_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'VHC_TYPE_INTERVENTION_FK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'VHENS_ELEMENT_PEDAGOGIQUE_FK' =>
+    'VHENS_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'VHENS_ELEMENT_PEDAGOGIQUE_FK',
       'table' => 'VOLUME_HORAIRE_ENS',
       'rtable' => 'ELEMENT_PEDAGOGIQUE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'VHENS_TYPE_INTERVENTION_FK' =>
+    'VHENS_TYPE_INTERVENTION_FK' => 
     array (
       'name' => 'VHENS_TYPE_INTERVENTION_FK',
       'table' => 'VOLUME_HORAIRE_ENS',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'VHIT_FK' =>
+    'VHIT_FK' => 
     array (
       'name' => 'VHIT_FK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'TYPE_INTERVENTION',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENTION_ID' => 'ID',
       ),
     ),
-    'VHMNP_FK' =>
+    'VHMNP_FK' => 
     array (
       'name' => 'VHMNP_FK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'MOTIF_NON_PAIEMENT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'MOTIF_NON_PAIEMENT_ID' => 'ID',
       ),
     ),
-    'VHR_SERVICE_REFERENTIEL_FK' =>
+    'VHR_SERVICE_REFERENTIEL_FK' => 
     array (
       'name' => 'VHR_SERVICE_REFERENTIEL_FK',
       'table' => 'VOLUME_HORAIRE_REF',
       'rtable' => 'SERVICE_REFERENTIEL',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_REFERENTIEL_ID' => 'ID',
       ),
     ),
-    'VHR_TYPE_VOLUME_HORAIRE_FK' =>
+    'VHR_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'VHR_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'VOLUME_HORAIRE_REF',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'VH_PERIODE_FK' =>
+    'VH_PERIODE_FK' => 
     array (
       'name' => 'VH_PERIODE_FK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'PERIODE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'PERIODE_ID' => 'ID',
       ),
     ),
-    'VH_TYPE_VOLUME_HORAIRE_FK' =>
+    'VH_TYPE_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'VH_TYPE_VOLUME_HORAIRE_FK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'TYPE_VOLUME_HORAIRE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'VOLUMES_HORAIRES_SERVICES_FK' =>
+    'VOLUMES_HORAIRES_SERVICES_FK' => 
     array (
       'name' => 'VOLUMES_HORAIRES_SERVICES_FK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'SERVICE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SERVICE_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_CHARGE_HCFK' =>
+    'VOLUME_HORAIRE_CHARGE_HCFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARGE_HCFK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_CHARGE_HDFK' =>
+    'VOLUME_HORAIRE_CHARGE_HDFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARGE_HDFK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_CHARGE_HMFK' =>
+    'VOLUME_HORAIRE_CHARGE_HMFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARGE_HMFK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_CHARG_SOURCE_FK' =>
+    'VOLUME_HORAIRE_CHARG_SOURCE_FK' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARG_SOURCE_FK',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_CONTRAT_FK' =>
+    'VOLUME_HORAIRE_CONTRAT_FK' => 
     array (
       'name' => 'VOLUME_HORAIRE_CONTRAT_FK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'CONTRAT',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'CONTRAT_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_ENS_HCFK' =>
+    'VOLUME_HORAIRE_ENS_HCFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_ENS_HCFK',
       'table' => 'VOLUME_HORAIRE_ENS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_ENS_HDFK' =>
+    'VOLUME_HORAIRE_ENS_HDFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_ENS_HDFK',
       'table' => 'VOLUME_HORAIRE_ENS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_ENS_HMFK' =>
+    'VOLUME_HORAIRE_ENS_HMFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_ENS_HMFK',
       'table' => 'VOLUME_HORAIRE_ENS',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_ENS_SOURCE_FK' =>
+    'VOLUME_HORAIRE_ENS_SOURCE_FK' => 
     array (
       'name' => 'VOLUME_HORAIRE_ENS_SOURCE_FK',
       'table' => 'VOLUME_HORAIRE_ENS',
       'rtable' => 'SOURCE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_HCFK' =>
+    'VOLUME_HORAIRE_HCFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_HCFK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_HDFK' =>
+    'VOLUME_HORAIRE_HDFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_HDFK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_HMFK' =>
+    'VOLUME_HORAIRE_HMFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_HMFK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_REF_HCFK' =>
+    'VOLUME_HORAIRE_REF_HCFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_HCFK',
       'table' => 'VOLUME_HORAIRE_REF',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_CREATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_REF_HDFK' =>
+    'VOLUME_HORAIRE_REF_HDFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_HDFK',
       'table' => 'VOLUME_HORAIRE_REF',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_DESTRUCTEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_REF_HMFK' =>
+    'VOLUME_HORAIRE_REF_HMFK' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_HMFK',
       'table' => 'VOLUME_HORAIRE_REF',
       'rtable' => 'UTILISATEUR',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_REF_SOURCE_FK' =>
+    'VOLUME_HORAIRE_REF_SOURCE_FK' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_SOURCE_FK',
       'table' => 'VOLUME_HORAIRE_REF',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'VOLUME_HORAIRE_SOURCE_FK' =>
+    'VOLUME_HORAIRE_SOURCE_FK' => 
     array (
       'name' => 'VOLUME_HORAIRE_SOURCE_FK',
       'table' => 'VOLUME_HORAIRE',
       'rtable' => 'SOURCE',
       'delete_rule' => NULL,
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'SOURCE_ID' => 'ID',
       ),
     ),
-    'VVHR_VALIDATION_FK' =>
+    'VVHR_VALIDATION_FK' => 
     array (
       'name' => 'VVHR_VALIDATION_FK',
       'table' => 'VALIDATION_VOL_HORAIRE_REF',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'VVHR_VOLUME_HORAIRE_REF_FK' =>
+    'VVHR_VOLUME_HORAIRE_REF_FK' => 
     array (
       'name' => 'VVHR_VOLUME_HORAIRE_REF_FK',
       'table' => 'VALIDATION_VOL_HORAIRE_REF',
       'rtable' => 'VOLUME_HORAIRE_REF',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VOLUME_HORAIRE_REF_ID' => 'ID',
       ),
     ),
-    'VVH_VALIDATION_FK' =>
+    'VVH_VALIDATION_FK' => 
     array (
       'name' => 'VVH_VALIDATION_FK',
       'table' => 'VALIDATION_VOL_HORAIRE',
       'rtable' => 'VALIDATION',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VALIDATION_ID' => 'ID',
       ),
     ),
-    'VVH_VOLUME_HORAIRE_FK' =>
+    'VVH_VOLUME_HORAIRE_FK' => 
     array (
       'name' => 'VVH_VOLUME_HORAIRE_FK',
       'table' => 'VALIDATION_VOL_HORAIRE',
       'rtable' => 'VOLUME_HORAIRE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'WE_PREC_WE_FK' =>
+    'WE_PREC_WE_FK' => 
     array (
       'name' => 'WE_PREC_WE_FK',
       'table' => 'WF_ETAPE_DEP',
       'rtable' => 'WF_ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_PREC_ID' => 'ID',
       ),
     ),
-    'WE_SUIV_WE_FK' =>
+    'WE_SUIV_WE_FK' => 
     array (
       'name' => 'WE_SUIV_WE_FK',
       'table' => 'WF_ETAPE_DEP',
       'rtable' => 'WF_ETAPE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'ETAPE_SUIV_ID' => 'ID',
       ),
     ),
-    'WE_TYPE_INTERVENANT_FK' =>
+    'WE_TYPE_INTERVENANT_FK' => 
     array (
       'name' => 'WE_TYPE_INTERVENANT_FK',
       'table' => 'WF_ETAPE_DEP',
       'rtable' => 'TYPE_INTERVENANT',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'WF_DB_ETAPE_DEP_FK' =>
+    'WF_DB_ETAPE_DEP_FK' => 
     array (
       'name' => 'WF_DB_ETAPE_DEP_FK',
       'table' => 'WF_DEP_BLOQUANTE',
       'rtable' => 'WF_ETAPE_DEP',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'WF_ETAPE_DEP_ID' => 'ID',
       ),
     ),
-    'WF_DB_TBL_WORKFLOW_FK' =>
+    'WF_DB_TBL_WORKFLOW_FK' => 
     array (
       'name' => 'WF_DB_TBL_WORKFLOW_FK',
       'table' => 'WF_DEP_BLOQUANTE',
       'rtable' => 'TBL_WORKFLOW',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'TBL_WORKFLOW_ID' => 'ID',
       ),
     ),
   ),
-  'BddAdmin\\Ddl\\DdlUniqueConstraint' =>
+  'BddAdmin\\Ddl\\DdlUniqueConstraint' => 
   array (
-    'ADRESSE_INTERVENANT_SOURCE_UN' =>
+    'ADRESSE_INTERVENANT_SOURCE_UN' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_SOURCE_UN',
       'table' => 'ADRESSE_INTERVENANT',
       'index' => 'ADRESSE_INTERVENANT_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'ADRESSE_INTERVENANT__UN' =>
+    'ADRESSE_INTERVENANT__UN' => 
     array (
       'name' => 'ADRESSE_INTERVENANT__UN',
       'table' => 'ADRESSE_INTERVENANT',
       'index' => 'ADRESSE_INTERVENANT__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'ADRESSE_STRUCTURE_SOURCE_UN' =>
+    'ADRESSE_STRUCTURE_SOURCE_UN' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_SOURCE_UN',
       'table' => 'ADRESSE_STRUCTURE',
       'index' => 'ADRESSE_STRUCTURE_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'AFFECTATION_RECHERCH_SOURCE_UN' =>
+    'AFFECTATION_RECHERCH_SOURCE_UN' => 
     array (
       'name' => 'AFFECTATION_RECHERCH_SOURCE_UN',
       'table' => 'AFFECTATION_RECHERCHE',
       'index' => 'AFFECTATION_R_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'AFFECTATION_SOURCE_UN' =>
+    'AFFECTATION_SOURCE_UN' => 
     array (
       'name' => 'AFFECTATION_SOURCE_UN',
       'table' => 'AFFECTATION',
       'index' => 'AFFECTATION_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'AFFECTATION__UN' =>
+    'AFFECTATION__UN' => 
     array (
       'name' => 'AFFECTATION__UN',
       'table' => 'AFFECTATION',
       'index' => 'AFFECTATION__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ROLE_ID',
         1 => 'STRUCTURE_ID',
@@ -43530,12 +43534,12 @@ WHERE
         3 => 'UTILISATEUR_ID',
       ),
     ),
-    'AGREMENT__UN' =>
+    'AGREMENT__UN' => 
     array (
       'name' => 'AGREMENT__UN',
       'table' => 'AGREMENT',
       'index' => 'AGREMENT__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'INTERVENANT_ID',
@@ -43543,46 +43547,46 @@ WHERE
         3 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CAMPAGNE_SAISIE__UN' =>
+    'CAMPAGNE_SAISIE__UN' => 
     array (
       'name' => 'CAMPAGNE_SAISIE__UN',
       'table' => 'CAMPAGNE_SAISIE',
       'index' => 'CAMPAGNE_SAISIE__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ANNEE_ID',
         1 => 'TYPE_INTERVENANT_ID',
         2 => 'TYPE_VOLUME_HORAIRE_ID',
       ),
     ),
-    'CATEGORIE_PRIVILEGE__UN' =>
+    'CATEGORIE_PRIVILEGE__UN' => 
     array (
       'name' => 'CATEGORIE_PRIVILEGE__UN',
       'table' => 'CATEGORIE_PRIVILEGE',
       'index' => 'CATEGORIE_PRIVILEGE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'CCS_CC_S__UN' =>
+    'CCS_CC_S__UN' => 
     array (
       'name' => 'CCS_CC_S__UN',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'index' => 'CCS_CC_S__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CENTRE_COUT_ID',
         1 => 'STRUCTURE_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CENTRE_COUT_EP__UN' =>
+    'CENTRE_COUT_EP__UN' => 
     array (
       'name' => 'CENTRE_COUT_EP__UN',
       'table' => 'CENTRE_COUT_EP',
       'index' => 'CENTRE_COUT_EP__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CENTRE_COUT_ID',
         1 => 'ELEMENT_PEDAGOGIQUE_ID',
@@ -43590,55 +43594,55 @@ WHERE
         3 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CENTRE_COUT_STRUCTUR_SOURCE_UN' =>
+    'CENTRE_COUT_STRUCTUR_SOURCE_UN' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTUR_SOURCE_UN',
       'table' => 'CENTRE_COUT_STRUCTURE',
       'index' => 'CCS_SOURCE_CODE_UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_SOURCE_UN' =>
+    'CHEMIN_PEDAGOGIQUE_SOURCE_UN' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_SOURCE_UN',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'index' => 'CHEMIN_PEDAGO_SRC_ID_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE__UN' =>
+    'CHEMIN_PEDAGOGIQUE__UN' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE__UN',
       'table' => 'CHEMIN_PEDAGOGIQUE',
       'index' => 'CHEMIN_PEDAGOGIQUE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
         1 => 'ETAPE_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CIVILITE_LIBELLE_COURT_UN' =>
+    'CIVILITE_LIBELLE_COURT_UN' => 
     array (
       'name' => 'CIVILITE_LIBELLE_COURT_UN',
       'table' => 'CIVILITE',
       'index' => 'CIVILITE_LIBELLE_COURT_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'LIBELLE_COURT',
       ),
     ),
-    'CONTRAT_NUMERO_AVENANT_UN' =>
+    'CONTRAT_NUMERO_AVENANT_UN' => 
     array (
       'name' => 'CONTRAT_NUMERO_AVENANT_UN',
       'table' => 'CONTRAT',
       'index' => 'CONTRAT_NUMERO_AVENANT_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'STRUCTURE_ID',
@@ -43647,54 +43651,54 @@ WHERE
         4 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CORPS_SRC_UN' =>
+    'CORPS_SRC_UN' => 
     array (
       'name' => 'CORPS_SRC_UN',
       'table' => 'CORPS',
       'index' => 'CORPS_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'DEPARTEMENT_SRC_UN' =>
+    'DEPARTEMENT_SRC_UN' => 
     array (
       'name' => 'DEPARTEMENT_SRC_UN',
       'table' => 'DEPARTEMENT',
       'index' => 'DEPARTEMENT_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'DISCIPLINE_SOURCE_UN' =>
+    'DISCIPLINE_SOURCE_UN' => 
     array (
       'name' => 'DISCIPLINE_SOURCE_UN',
       'table' => 'DISCIPLINE',
       'index' => 'DISCIPLINE_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'DOSSIER_UK1' =>
+    'DOSSIER_UK1' => 
     array (
       'name' => 'DOSSIER_UK1',
       'table' => 'DOSSIER',
       'index' => 'DOSSIER_UK1',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'DOTATION__UN' =>
+    'DOTATION__UN' => 
     array (
       'name' => 'DOTATION__UN',
       'table' => 'DOTATION',
       'index' => 'DOTATION__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_RESSOURCE_ID',
         1 => 'ANNEE_ID',
@@ -43704,475 +43708,475 @@ WHERE
         5 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'EFFECTIFS_ETAPE_SOURCE_UN' =>
+    'EFFECTIFS_ETAPE_SOURCE_UN' => 
     array (
       'name' => 'EFFECTIFS_ETAPE_SOURCE_UN',
       'table' => 'EFFECTIFS_ETAPE',
       'index' => 'EFFECTIFS_ETAPE_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'EFFECTIFS_SOURCE_UN' =>
+    'EFFECTIFS_SOURCE_UN' => 
     array (
       'name' => 'EFFECTIFS_SOURCE_UN',
       'table' => 'EFFECTIFS',
       'index' => 'EFFECTIFS__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'ANNEE_ID',
       ),
     ),
-    'ELEMENT_MODULATEUR__UN' =>
+    'ELEMENT_MODULATEUR__UN' => 
     array (
       'name' => 'ELEMENT_MODULATEUR__UN',
       'table' => 'ELEMENT_MODULATEUR',
       'index' => 'ELEMENT_MODULATEUR__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_ID',
         1 => 'MODULATEUR_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'ELEMENT_PEDAGOGIQUE_SOURCE_UN' =>
+    'ELEMENT_PEDAGOGIQUE_SOURCE_UN' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_SOURCE_UN',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'index' => 'EP_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'ANNEE_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'ELEMENT_TAUX_REGIMES_SOURCE_UN' =>
+    'ELEMENT_TAUX_REGIMES_SOURCE_UN' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES_SOURCE_UN',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'index' => 'ELEMENT_TAUX_REGIMES__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'ELEMENT_TAUX_REGIMES__UNV1' =>
+    'ELEMENT_TAUX_REGIMES__UNV1' => 
     array (
       'name' => 'ELEMENT_TAUX_REGIMES__UNV1',
       'table' => 'ELEMENT_TAUX_REGIMES',
       'index' => 'ELEMENT_TAUX_REGIMES__UNV1',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'EP_CODE_UN' =>
+    'EP_CODE_UN' => 
     array (
       'name' => 'EP_CODE_UN',
       'table' => 'ELEMENT_PEDAGOGIQUE',
       'index' => 'EP_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
         1 => 'HISTO_DESTRUCTION',
         2 => 'ANNEE_ID',
       ),
     ),
-    'ETABLISSEMENT_SOURCE_UN' =>
+    'ETABLISSEMENT_SOURCE_UN' => 
     array (
       'name' => 'ETABLISSEMENT_SOURCE_UN',
       'table' => 'ETABLISSEMENT',
       'index' => 'ETABLISSEMENT_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'ETAPE_CODE_UN' =>
+    'ETAPE_CODE_UN' => 
     array (
       'name' => 'ETAPE_CODE_UN',
       'table' => 'ETAPE',
       'index' => 'ETAPE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
         1 => 'ANNEE_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'ETAPE_SOURCE_UN' =>
+    'ETAPE_SOURCE_UN' => 
     array (
       'name' => 'ETAPE_SOURCE_UN',
       'table' => 'ETAPE',
       'index' => 'ETAPE_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
         2 => 'ANNEE_ID',
       ),
     ),
-    'ETAT_SORTIE_CODE_UN' =>
+    'ETAT_SORTIE_CODE_UN' => 
     array (
       'name' => 'ETAT_SORTIE_CODE_UN',
       'table' => 'ETAT_SORTIE',
       'index' => 'ETAT_SORTIE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'ETAT_VOLUME_HORAIRE__UN' =>
+    'ETAT_VOLUME_HORAIRE__UN' => 
     array (
       'name' => 'ETAT_VOLUME_HORAIRE__UN',
       'table' => 'ETAT_VOLUME_HORAIRE',
       'index' => 'ETAT_VOLUME_HORAIRE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'FONCTION_REFERENTIEL_CODE_UN' =>
+    'FONCTION_REFERENTIEL_CODE_UN' => 
     array (
       'name' => 'FONCTION_REFERENTIEL_CODE_UN',
       'table' => 'FONCTION_REFERENTIEL',
       'index' => 'FONCTION_REFERENTIEL_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'FORMULE_RESULTAT__UN' =>
+    'FORMULE_RESULTAT__UN' => 
     array (
       'name' => 'FORMULE_RESULTAT__UN',
       'table' => 'FORMULE_RESULTAT',
       'index' => 'FORMULE_RESULTAT__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'TYPE_VOLUME_HORAIRE_ID',
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
-    'FORMULE__UN' =>
+    'FORMULE__UN' => 
     array (
       'name' => 'FORMULE__UN',
       'table' => 'FORMULE',
       'index' => 'FORMULE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'LIBELLE',
       ),
     ),
-    'GRADE_SRC_UN' =>
+    'GRADE_SRC_UN' => 
     array (
       'name' => 'GRADE_SRC_UN',
       'table' => 'GRADE',
       'index' => 'GRADE_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'GROUPE_TYPE_FORMATIO_SOURCE_UN' =>
+    'GROUPE_TYPE_FORMATIO_SOURCE_UN' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATIO_SOURCE_UN',
       'table' => 'GROUPE_TYPE_FORMATION',
       'index' => 'GTYPE_FORMATION_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'GROUPE__UN' =>
+    'GROUPE__UN' => 
     array (
       'name' => 'GROUPE__UN',
       'table' => 'GROUPE',
       'index' => 'GROUPE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
         1 => 'HISTO_DESTRUCTEUR_ID',
         2 => 'TYPE_INTERVENTION_ID',
       ),
     ),
-    'HISTO_INTERVENANT_SERVICE__UN' =>
+    'HISTO_INTERVENANT_SERVICE__UN' => 
     array (
       'name' => 'HISTO_INTERVENANT_SERVICE__UN',
       'table' => 'HISTO_INTERVENANT_SERVICE',
       'index' => 'HISTO_INTERVENANT_SERVICE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'TYPE_VOLUME_HORAIRE_ID',
         2 => 'REFERENTIEL',
       ),
     ),
-    'INTERVENANT_CODE_UN' =>
+    'INTERVENANT_CODE_UN' => 
     array (
       'name' => 'INTERVENANT_CODE_UN',
       'table' => 'INTERVENANT',
       'index' => 'INTERVENANT_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
         1 => 'ANNEE_ID',
       ),
     ),
-    'INTERVENANT_SAISIE__UN' =>
+    'INTERVENANT_SAISIE__UN' => 
     array (
       'name' => 'INTERVENANT_SAISIE__UN',
       'table' => 'INTERVENANT_SAISIE',
       'index' => 'INTERVENANT_SAISIE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
       ),
     ),
-    'INTERVENANT_SOURCE_UN' =>
+    'INTERVENANT_SOURCE_UN' => 
     array (
       'name' => 'INTERVENANT_SOURCE_UN',
       'table' => 'INTERVENANT',
       'index' => 'INTERVENANT_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'ANNEE_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'INTERVENANT_UTIL_CODE_UN' =>
+    'INTERVENANT_UTIL_CODE_UN' => 
     array (
       'name' => 'INTERVENANT_UTIL_CODE_UN',
       'table' => 'INTERVENANT',
       'index' => 'INTERVENANT_UTIL_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'UTILISATEUR_CODE',
         1 => 'ANNEE_ID',
         2 => 'STATUT_ID',
       ),
     ),
-    'LIEN_SOURCE_UN' =>
+    'LIEN_SOURCE_UN' => 
     array (
       'name' => 'LIEN_SOURCE_UN',
       'table' => 'LIEN',
       'index' => 'LIEN_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'MODULATEUR__UN' =>
+    'MODULATEUR__UN' => 
     array (
       'name' => 'MODULATEUR__UN',
       'table' => 'MODULATEUR',
       'index' => 'MODULATEUR__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'MOTIF_MODIFICATION_SERVIC_UK1' =>
+    'MOTIF_MODIFICATION_SERVIC_UK1' => 
     array (
       'name' => 'MOTIF_MODIFICATION_SERVIC_UK1',
       'table' => 'MOTIF_MODIFICATION_SERVICE',
       'index' => 'MOTIF_MODIFICATION_SERVIC_UK1',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'NOEUD_SOURCE_UN' =>
+    'NOEUD_SOURCE_UN' => 
     array (
       'name' => 'NOEUD_SOURCE_UN',
       'table' => 'NOEUD',
       'index' => 'NOEUD_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'NOTIFICATION_INDICATEUR__UN' =>
+    'NOTIFICATION_INDICATEUR__UN' => 
     array (
       'name' => 'NOTIFICATION_INDICATEUR__UN',
       'table' => 'NOTIFICATION_INDICATEUR',
       'index' => 'NOTIFICATION_INDICATEUR__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INDICATEUR_ID',
         1 => 'AFFECTATION_ID',
       ),
     ),
-    'PAYS_SRC_UN' =>
+    'PAYS_SRC_UN' => 
     array (
       'name' => 'PAYS_SRC_UN',
       'table' => 'PAYS',
       'index' => 'PAYS_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'PERIMETRE_CODE_UN' =>
+    'PERIMETRE_CODE_UN' => 
     array (
       'name' => 'PERIMETRE_CODE_UN',
       'table' => 'PERIMETRE',
       'index' => 'PERIMETRE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'PERIMETRE_LIBELLE_UN' =>
+    'PERIMETRE_LIBELLE_UN' => 
     array (
       'name' => 'PERIMETRE_LIBELLE_UN',
       'table' => 'PERIMETRE',
       'index' => 'PERIMETRE_LIBELLE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'LIBELLE',
       ),
     ),
-    'PERIODE__UN' =>
+    'PERIODE__UN' => 
     array (
       'name' => 'PERIODE__UN',
       'table' => 'PERIODE',
       'index' => 'PERIODE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'PIECE_JOINTE__UN' =>
+    'PIECE_JOINTE__UN' => 
     array (
       'name' => 'PIECE_JOINTE__UN',
       'table' => 'PIECE_JOINTE',
       'index' => 'PIECE_JOINTE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_PIECE_JOINTE_ID',
         1 => 'INTERVENANT_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'PRIVILEGE__UN' =>
+    'PRIVILEGE__UN' => 
     array (
       'name' => 'PRIVILEGE__UN',
       'table' => 'PRIVILEGE',
       'index' => 'PRIVILEGE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CATEGORIE_ID',
         1 => 'CODE',
       ),
     ),
-    'REGLE_STRUCTURE_VALIDATION__UN' =>
+    'REGLE_STRUCTURE_VALIDATION__UN' => 
     array (
       'name' => 'REGLE_STRUCTURE_VALIDATION__UN',
       'table' => 'REGLE_STRUCTURE_VALIDATION',
       'index' => 'REGLE_STRUCTURE_VALIDATION__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_VOLUME_HORAIRE_ID',
         1 => 'TYPE_INTERVENANT_ID',
       ),
     ),
-    'ROLE_CODE_UN' =>
+    'ROLE_CODE_UN' => 
     array (
       'name' => 'ROLE_CODE_UN',
       'table' => 'ROLE',
       'index' => 'ROLE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'SCENARIO_LIEN_SOURCE_UN' =>
+    'SCENARIO_LIEN_SOURCE_UN' => 
     array (
       'name' => 'SCENARIO_LIEN_SOURCE_UN',
       'table' => 'SCENARIO_LIEN',
       'index' => 'SCENARIO_LIEN_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'SCENARIO_LIEN__UN' =>
+    'SCENARIO_LIEN__UN' => 
     array (
       'name' => 'SCENARIO_LIEN__UN',
       'table' => 'SCENARIO_LIEN',
       'index' => 'SCENARIO_LIEN__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SCENARIO_ID',
         1 => 'LIEN_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'SCENARIO_NOEUD_SOURCE_UN' =>
+    'SCENARIO_NOEUD_SOURCE_UN' => 
     array (
       'name' => 'SCENARIO_NOEUD_SOURCE_UN',
       'table' => 'SCENARIO_NOEUD',
       'index' => 'SCENARIO_NOEUD_SRC_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'SCENARIO_NOEUD__UN' =>
+    'SCENARIO_NOEUD__UN' => 
     array (
       'name' => 'SCENARIO_NOEUD__UN',
       'table' => 'SCENARIO_NOEUD',
       'index' => 'SCENARIO_NOEUD__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SCENARIO_ID',
         1 => 'NOEUD_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'SERVICE_REFERENTIEL_SOURCE_UN' =>
+    'SERVICE_REFERENTIEL_SOURCE_UN' => 
     array (
       'name' => 'SERVICE_REFERENTIEL_SOURCE_UN',
       'table' => 'SERVICE_REFERENTIEL',
       'index' => 'SERVICE_REFERENTIEL_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'SERVICE_SOURCE_UN' =>
+    'SERVICE_SOURCE_UN' => 
     array (
       'name' => 'SERVICE_SOURCE_UN',
       'table' => 'SERVICE',
       'index' => 'SERVICE_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'SERVICE__UN' =>
+    'SERVICE__UN' => 
     array (
       'name' => 'SERVICE__UN',
       'table' => 'SERVICE',
       'index' => 'SERVICE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'ELEMENT_PEDAGOGIQUE_ID',
@@ -44180,65 +44184,65 @@ WHERE
         3 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'SOURCE_CODE_UN' =>
+    'SOURCE_CODE_UN' => 
     array (
       'name' => 'SOURCE_CODE_UN',
       'table' => 'SOURCE',
       'index' => 'SOURCE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'STATUT_INTERVENANT_ODRE_UN' =>
+    'STATUT_INTERVENANT_ODRE_UN' => 
     array (
       'name' => 'STATUT_INTERVENANT_ODRE_UN',
       'table' => 'STATUT_INTERVENANT',
       'index' => 'STATUT_INTERVENANT_ODRE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTION',
         1 => 'ORDRE',
       ),
     ),
-    'STATUT_INTERVENANT_SOURCE_UN' =>
+    'STATUT_INTERVENANT_SOURCE_UN' => 
     array (
       'name' => 'STATUT_INTERVENANT_SOURCE_UN',
       'table' => 'STATUT_INTERVENANT',
       'index' => 'STATUT_INTERVENANT__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'STRUCTURE_CODE_UN' =>
+    'STRUCTURE_CODE_UN' => 
     array (
       'name' => 'STRUCTURE_CODE_UN',
       'table' => 'STRUCTURE',
       'index' => 'STRUCTURE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'STRUCTURE_SOURCE_UN' =>
+    'STRUCTURE_SOURCE_UN' => 
     array (
       'name' => 'STRUCTURE_SOURCE_UN',
       'table' => 'STRUCTURE',
       'index' => 'STRUCTURE_SOURCE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'TBL_AGREMENT__UN' =>
+    'TBL_AGREMENT__UN' => 
     array (
       'name' => 'TBL_AGREMENT__UN',
       'table' => 'TBL_AGREMENT',
       'index' => 'TBL_AGREMENT__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'INTERVENANT_ID',
@@ -44246,12 +44250,12 @@ WHERE
         3 => 'TO_DELETE',
       ),
     ),
-    'TBL_CHARGENS_SEUILS_DEF__UN' =>
+    'TBL_CHARGENS_SEUILS_DEF__UN' => 
     array (
       'name' => 'TBL_CHARGENS_SEUILS_DEF__UN',
       'table' => 'TBL_CHARGENS_SEUILS_DEF',
       'index' => 'TBL_CHARGENS_SEUILS_DEF__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SCENARIO_ID',
         1 => 'TYPE_INTERVENTION_ID',
@@ -44260,12 +44264,12 @@ WHERE
         4 => 'ANNEE_ID',
       ),
     ),
-    'TBL_CHARGENS__UN' =>
+    'TBL_CHARGENS__UN' => 
     array (
       'name' => 'TBL_CHARGENS__UN',
       'table' => 'TBL_CHARGENS',
       'index' => 'TBL_CHARGENS__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ANNEE_ID',
         1 => 'NOEUD_ID',
@@ -44279,35 +44283,35 @@ WHERE
         9 => 'GROUPE_TYPE_FORMATION_ID',
       ),
     ),
-    'TBL_CLOTURE_REALISE__UN' =>
+    'TBL_CLOTURE_REALISE__UN' => 
     array (
       'name' => 'TBL_CLOTURE_REALISE__UN',
       'table' => 'TBL_CLOTURE_REALISE',
       'index' => 'TBL_CLOTURE_REALISE__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'TO_DELETE',
       ),
     ),
-    'TBL_CONTRAT__UN' =>
+    'TBL_CONTRAT__UN' => 
     array (
       'name' => 'TBL_CONTRAT__UN',
       'table' => 'TBL_CONTRAT',
       'index' => 'TBL_CONTRAT__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'STRUCTURE_ID',
         2 => 'TO_DELETE',
       ),
     ),
-    'TBL_DMEP_LIQUIDATION__UN' =>
+    'TBL_DMEP_LIQUIDATION__UN' => 
     array (
       'name' => 'TBL_DMEP_LIQUIDATION__UN',
       'table' => 'TBL_DMEP_LIQUIDATION',
       'index' => 'TBL_DMEP_LIQUIDATION__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ANNEE_ID',
         1 => 'TYPE_RESSOURCE_ID',
@@ -44315,23 +44319,23 @@ WHERE
         3 => 'TO_DELETE',
       ),
     ),
-    'TBL_DOSSIER__UN' =>
+    'TBL_DOSSIER__UN' => 
     array (
       'name' => 'TBL_DOSSIER__UN',
       'table' => 'TBL_DOSSIER',
       'index' => 'TBL_DOSSIER__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'TO_DELETE',
       ),
     ),
-    'TBL_PAIEMENT__UN' =>
+    'TBL_PAIEMENT__UN' => 
     array (
       'name' => 'TBL_PAIEMENT__UN',
       'table' => 'TBL_PAIEMENT',
       'index' => 'TBL_PAIEMENT__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'TO_DELETE',
@@ -44340,24 +44344,24 @@ WHERE
         4 => 'FORMULE_RES_SERVICE_REF_ID',
       ),
     ),
-    'TBL_PIECE_JOINTE_DEMANDE__UN' =>
+    'TBL_PIECE_JOINTE_DEMANDE__UN' => 
     array (
       'name' => 'TBL_PIECE_JOINTE_DEMANDE__UN',
       'table' => 'TBL_PIECE_JOINTE_DEMANDE',
       'index' => 'TBL_PJD_UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_PIECE_JOINTE_ID',
         1 => 'INTERVENANT_ID',
         2 => 'TO_DELETE',
       ),
     ),
-    'TBL_PIECE_JOINTE_FOURNIE__UN' =>
+    'TBL_PIECE_JOINTE_FOURNIE__UN' => 
     array (
       'name' => 'TBL_PIECE_JOINTE_FOURNIE__UN',
       'table' => 'TBL_PIECE_JOINTE_FOURNIE',
       'index' => 'TBL_PJF_UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_PIECE_JOINTE_ID',
         1 => 'INTERVENANT_ID',
@@ -44365,24 +44369,24 @@ WHERE
         3 => 'FICHIER_ID',
       ),
     ),
-    'TBL_PIECE_JOINTE__UN' =>
+    'TBL_PIECE_JOINTE__UN' => 
     array (
       'name' => 'TBL_PIECE_JOINTE__UN',
       'table' => 'TBL_PIECE_JOINTE',
       'index' => 'TBL_PIECE_JOINTE__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_PIECE_JOINTE_ID',
         1 => 'INTERVENANT_ID',
         2 => 'TO_DELETE',
       ),
     ),
-    'TBL_SERVICE_REFERENTIEL__UN' =>
+    'TBL_SERVICE_REFERENTIEL__UN' => 
     array (
       'name' => 'TBL_SERVICE_REFERENTIEL__UN',
       'table' => 'TBL_SERVICE_REFERENTIEL',
       'index' => 'TBL_SERVICE_REFERENTIEL_UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'TYPE_VOLUME_HORAIRE_ID',
@@ -44390,35 +44394,35 @@ WHERE
         3 => 'TO_DELETE',
       ),
     ),
-    'TBL_SERVICE_SAISIE__UN' =>
+    'TBL_SERVICE_SAISIE__UN' => 
     array (
       'name' => 'TBL_SERVICE_SAISIE__UN',
       'table' => 'TBL_SERVICE_SAISIE',
       'index' => 'TBL_SERVICE_SAISIE_UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'TO_DELETE',
       ),
     ),
-    'TBL_SERVICE__UN' =>
+    'TBL_SERVICE__UN' => 
     array (
       'name' => 'TBL_SERVICE__UN',
       'table' => 'TBL_SERVICE',
       'index' => 'TBL_SERVICE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SERVICE_ID',
         1 => 'TYPE_VOLUME_HORAIRE_ID',
         2 => 'TO_DELETE',
       ),
     ),
-    'TBL_VALIDATION_ENSEIGNEMENT_UN' =>
+    'TBL_VALIDATION_ENSEIGNEMENT_UN' => 
     array (
       'name' => 'TBL_VALIDATION_ENSEIGNEMENT_UN',
       'table' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'index' => 'TBL_VALIDATION_ENSEIGNEMENT_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'STRUCTURE_ID',
@@ -44429,12 +44433,12 @@ WHERE
         6 => 'TO_DELETE',
       ),
     ),
-    'TBL_VALIDATION_REFERENTIEL__UN' =>
+    'TBL_VALIDATION_REFERENTIEL__UN' => 
     array (
       'name' => 'TBL_VALIDATION_REFERENTIEL__UN',
       'table' => 'TBL_VALIDATION_REFERENTIEL',
       'index' => 'TBL_VALIDATION_REFERENTIEL__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'STRUCTURE_ID',
@@ -44445,107 +44449,107 @@ WHERE
         6 => 'TO_DELETE',
       ),
     ),
-    'TBL_WORKFLOW__UN' =>
+    'TBL_WORKFLOW__UN' => 
     array (
       'name' => 'TBL_WORKFLOW__UN',
       'table' => 'TBL_WORKFLOW',
       'index' => 'TBL_WORKFLOW__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'ETAPE_ID',
         2 => 'STRUCTURE_ID',
       ),
     ),
-    'TYPE_AGREMENT_STATUT__UN' =>
+    'TYPE_AGREMENT_STATUT__UN' => 
     array (
       'name' => 'TYPE_AGREMENT_STATUT__UN',
       'table' => 'TYPE_AGREMENT_STATUT',
       'index' => 'TYPE_AGREMENT_STATUT__UN1',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'STATUT_INTERVENANT_ID',
       ),
     ),
-    'TYPE_AGREMENT__UN' =>
+    'TYPE_AGREMENT__UN' => 
     array (
       'name' => 'TYPE_AGREMENT__UN',
       'table' => 'TYPE_AGREMENT',
       'index' => 'TYPE_AGREMENT__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'TYPE_FORMATION_SOURCE_UN' =>
+    'TYPE_FORMATION_SOURCE_UN' => 
     array (
       'name' => 'TYPE_FORMATION_SOURCE_UN',
       'table' => 'TYPE_FORMATION',
       'index' => 'TYPE_FORMATION__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'TYPE_HEURES_UN' =>
+    'TYPE_HEURES_UN' => 
     array (
       'name' => 'TYPE_HEURES_UN',
       'table' => 'TYPE_HEURES',
       'index' => 'TYPE_HEURES_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'TYPE_INTERVENANT_CODE_UN' =>
+    'TYPE_INTERVENANT_CODE_UN' => 
     array (
       'name' => 'TYPE_INTERVENANT_CODE_UN',
       'table' => 'TYPE_INTERVENANT',
       'index' => 'TYPE_INTERVENANT_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'TYPE_INTERVENTION_STATUT__UN' =>
+    'TYPE_INTERVENTION_STATUT__UN' => 
     array (
       'name' => 'TYPE_INTERVENTION_STATUT__UN',
       'table' => 'TYPE_INTERVENTION_STATUT',
       'index' => 'TYPE_INTERVENTION_STATUT__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_INTERVENTION_ID',
         1 => 'STATUT_INTERVENANT_ID',
       ),
     ),
-    'TYPE_MODULATEUR_EP_SOURCE_UN' =>
+    'TYPE_MODULATEUR_EP_SOURCE_UN' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP_SOURCE_UN',
       'table' => 'TYPE_MODULATEUR_EP',
       'index' => 'TYPE_MODULATEUR_EP__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'TYPE_MODULATEUR_EP__UNV1' =>
+    'TYPE_MODULATEUR_EP__UNV1' => 
     array (
       'name' => 'TYPE_MODULATEUR_EP__UNV1',
       'table' => 'TYPE_MODULATEUR_EP',
       'index' => 'TYPE_MODULATEUR_EP__UNV1',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_MODULATEUR_ID',
         1 => 'ELEMENT_PEDAGOGIQUE_ID',
       ),
     ),
-    'TYPE_MODULATEUR_STRUCTURE_UN' =>
+    'TYPE_MODULATEUR_STRUCTURE_UN' => 
     array (
       'name' => 'TYPE_MODULATEUR_STRUCTURE_UN',
       'table' => 'TYPE_MODULATEUR_STRUCTURE',
       'index' => 'TYPE_MODULATEUR_STRUCTURE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_MODULATEUR_ID',
         1 => 'STRUCTURE_ID',
@@ -44553,107 +44557,107 @@ WHERE
         3 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'TYPE_VOLUME_HORAIRE__UN' =>
+    'TYPE_VOLUME_HORAIRE__UN' => 
     array (
       'name' => 'TYPE_VOLUME_HORAIRE__UN',
       'table' => 'TYPE_VOLUME_HORAIRE',
       'index' => 'TYPE_VOLUME_HORAIRE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'UTILISATEUR_USERNAME_UN' =>
+    'UTILISATEUR_USERNAME_UN' => 
     array (
       'name' => 'UTILISATEUR_USERNAME_UN',
       'table' => 'UTILISATEUR',
       'index' => 'UTILISATEUR_USERNAME_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'USERNAME',
       ),
     ),
-    'VOLUME_HORAIRE_CHARGE__UN' =>
+    'VOLUME_HORAIRE_CHARGE__UN' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARGE__UN',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'index' => 'VOLUME_HORAIRE_CHARGE__UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
         1 => 'TYPE_INTERVENTION_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'VOLUME_HORAIRE_CHARG_SOURCE_UN' =>
+    'VOLUME_HORAIRE_CHARG_SOURCE_UN' => 
     array (
       'name' => 'VOLUME_HORAIRE_CHARG_SOURCE_UN',
       'table' => 'VOLUME_HORAIRE_CHARGE',
       'index' => 'VHC_HISTO_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'VOLUME_HORAIRE_ENS_SOURCE_UN' =>
+    'VOLUME_HORAIRE_ENS_SOURCE_UN' => 
     array (
       'name' => 'VOLUME_HORAIRE_ENS_SOURCE_UN',
       'table' => 'VOLUME_HORAIRE_ENS',
       'index' => 'VOLUME_HORAIRE_ENS_UK1',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'VOLUME_HORAIRE_REF_SOURCE_UN' =>
+    'VOLUME_HORAIRE_REF_SOURCE_UN' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_SOURCE_UN',
       'table' => 'VOLUME_HORAIRE_REF',
       'index' => 'VOLUME_HORAIRE_REF_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'VOLUME_HORAIRE_SOURCE_UN' =>
+    'VOLUME_HORAIRE_SOURCE_UN' => 
     array (
       'name' => 'VOLUME_HORAIRE_SOURCE_UN',
       'table' => 'VOLUME_HORAIRE',
       'index' => 'VOLUME_HORAIRE_SOURCE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'WF_ETAPE_CODE_UN' =>
+    'WF_ETAPE_CODE_UN' => 
     array (
       'name' => 'WF_ETAPE_CODE_UN',
       'table' => 'WF_ETAPE',
       'index' => 'WF_ETAPE_CODE_UN',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'WF_ETAPE_DEP__UN' =>
+    'WF_ETAPE_DEP__UN' => 
     array (
       'name' => 'WF_ETAPE_DEP__UN',
       'table' => 'WF_ETAPE_DEP',
       'index' => 'WF_ETAPE_DEP__UN_IDX',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ETAPE_SUIV_ID',
         1 => 'ETAPE_PREC_ID',
       ),
     ),
   ),
-  'BddAdmin\\Ddl\\DdlTrigger' =>
+  'BddAdmin\\Ddl\\DdlTrigger' => 
   array (
-    'AFFECTATION_RECHERCHE_CK' =>
+    'AFFECTATION_RECHERCHE_CK' => 
     array (
       'name' => 'AFFECTATION_RECHERCHE_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "AFFECTATION_RECHERCHE_CK"
@@ -44682,7 +44686,7 @@ BEGIN
 
 END;',
     ),
-    'AGREMENT_CK' =>
+    'AGREMENT_CK' => 
     array (
       'name' => 'AGREMENT_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "AGREMENT_CK"
@@ -44715,7 +44719,7 @@ BEGIN
 
 END;',
     ),
-    'CALC_TAUX_HETD_ANNEES' =>
+    'CALC_TAUX_HETD_ANNEES' => 
     array (
       'name' => 'CALC_TAUX_HETD_ANNEES',
       'definition' => 'CREATE OR REPLACE TRIGGER "CALC_TAUX_HETD_ANNEES"
@@ -44724,7 +44728,7 @@ BEGIN
   OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD;
 END;',
     ),
-    'CHARGENS_MAJ_EFFECTIFS' =>
+    'CHARGENS_MAJ_EFFECTIFS' => 
     array (
       'name' => 'CHARGENS_MAJ_EFFECTIFS',
       'definition' => 'CREATE OR REPLACE TRIGGER "CHARGENS_MAJ_EFFECTIFS"
@@ -44742,7 +44746,7 @@ RETURN;
 
 END;',
     ),
-    'ELEMENT_PEDAGOGIQUE_CK' =>
+    'ELEMENT_PEDAGOGIQUE_CK' => 
     array (
       'name' => 'ELEMENT_PEDAGOGIQUE_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "ELEMENT_PEDAGOGIQUE_CK"
@@ -44787,7 +44791,7 @@ BEGIN
 
 END;',
     ),
-    'F_CONTRAT' =>
+    'F_CONTRAT' => 
     array (
       'name' => 'F_CONTRAT',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_CONTRAT"
@@ -44816,7 +44820,7 @@ END;',
 
 END;',
     ),
-    'F_CONTRAT_S' =>
+    'F_CONTRAT_S' => 
     array (
       'name' => 'F_CONTRAT_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_CONTRAT_S"
@@ -44825,7 +44829,7 @@ BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_ELEMENT_MODULATEUR' =>
+    'F_ELEMENT_MODULATEUR' => 
     array (
       'name' => 'F_ELEMENT_MODULATEUR',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_ELEMENT_MODULATEUR"
@@ -44853,7 +44857,7 @@ BEGIN
 
 END;',
     ),
-    'F_ELEMENT_MODULATEUR_S' =>
+    'F_ELEMENT_MODULATEUR_S' => 
     array (
       'name' => 'F_ELEMENT_MODULATEUR_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_ELEMENT_MODULATEUR_S"
@@ -44862,7 +44866,7 @@ BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_ELEMENT_PEDAGOGIQUE' =>
+    'F_ELEMENT_PEDAGOGIQUE' => 
     array (
       'name' => 'F_ELEMENT_PEDAGOGIQUE',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_ELEMENT_PEDAGOGIQUE"
@@ -44882,7 +44886,7 @@ END;',
 END LOOP;
 END;',
     ),
-    'F_ELEMENT_PEDAGOGIQUE_S' =>
+    'F_ELEMENT_PEDAGOGIQUE_S' => 
     array (
       'name' => 'F_ELEMENT_PEDAGOGIQUE_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_ELEMENT_PEDAGOGIQUE_S" AFTER
@@ -44890,7 +44894,7 @@ UPDATE OR DELETE ON element_pedagogique BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_INTERVENANT' =>
+    'F_INTERVENANT' => 
     array (
       'name' => 'F_INTERVENANT',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_INTERVENANT"
@@ -44917,7 +44921,7 @@ END;',
 
 END;',
     ),
-    'F_INTERVENANT_S' =>
+    'F_INTERVENANT_S' => 
     array (
       'name' => 'F_INTERVENANT_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_INTERVENANT_S"
@@ -44926,7 +44930,7 @@ BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_MODIF_SERVICE_DU' =>
+    'F_MODIF_SERVICE_DU' => 
     array (
       'name' => 'F_MODIF_SERVICE_DU',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_MODIF_SERVICE_DU"
@@ -44945,7 +44949,7 @@ BEGIN
 
 END;',
     ),
-    'F_MODIF_SERVICE_DU_S' =>
+    'F_MODIF_SERVICE_DU_S' => 
     array (
       'name' => 'F_MODIF_SERVICE_DU_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_MODIF_SERVICE_DU_S"
@@ -44954,7 +44958,7 @@ BEGIN
     UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_MODULATEUR' =>
+    'F_MODULATEUR' => 
     array (
       'name' => 'F_MODULATEUR',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_MODULATEUR"
@@ -44984,7 +44988,7 @@ BEGIN
   END LOOP;
 END;',
     ),
-    'F_MODULATEUR_S' =>
+    'F_MODULATEUR_S' => 
     array (
       'name' => 'F_MODULATEUR_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_MODULATEUR_S"
@@ -44993,7 +44997,7 @@ BEGIN
     UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_MOTIF_MODIFICATION_SERVICE' =>
+    'F_MOTIF_MODIFICATION_SERVICE' => 
     array (
       'name' => 'F_MOTIF_MODIFICATION_SERVICE',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_MOTIF_MODIFICATION_SERVICE"
@@ -45021,7 +45025,7 @@ BEGIN
 
 END;',
     ),
-    'F_MOTIF_MODIFICATION_SERVICE_S' =>
+    'F_MOTIF_MODIFICATION_SERVICE_S' => 
     array (
       'name' => 'F_MOTIF_MODIFICATION_SERVICE_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_MOTIF_MODIFICATION_SERVICE_S"
@@ -45030,7 +45034,7 @@ BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_STATUT_INTERVENANT' =>
+    'F_STATUT_INTERVENANT' => 
     array (
       'name' => 'F_STATUT_INTERVENANT',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_STATUT_INTERVENANT"
@@ -45063,7 +45067,7 @@ BEGIN return; /* Désactivation du trigger... */
   END LOOP;
 END;',
     ),
-    'F_STATUT_INTERVENANT_S' =>
+    'F_STATUT_INTERVENANT_S' => 
     array (
       'name' => 'F_STATUT_INTERVENANT_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_STATUT_INTERVENANT_S"
@@ -45072,7 +45076,7 @@ BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'F_TYPE_INTERVENTION' =>
+    'F_TYPE_INTERVENTION' => 
     array (
       'name' => 'F_TYPE_INTERVENTION',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_TYPE_INTERVENTION"
@@ -45103,7 +45107,7 @@ BEGIN
   END LOOP;
 END;',
     ),
-    'F_TYPE_INTERVENTION_S' =>
+    'F_TYPE_INTERVENTION_S' => 
     array (
       'name' => 'F_TYPE_INTERVENTION_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "F_TYPE_INTERVENTION_S"
@@ -45112,7 +45116,7 @@ BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'INDIC_TRG_MODIF_DOSSIER' =>
+    'INDIC_TRG_MODIF_DOSSIER' => 
     array (
       'name' => 'INDIC_TRG_MODIF_DOSSIER',
       'definition' => 'CREATE OR REPLACE TRIGGER "INDIC_TRG_MODIF_DOSSIER"
@@ -45371,7 +45375,7 @@ BEGIN
 
 END;',
     ),
-    'INTERVENANT_HORO_SERVICE' =>
+    'INTERVENANT_HORO_SERVICE' => 
     array (
       'name' => 'INTERVENANT_HORO_SERVICE',
       'definition' => 'CREATE OR REPLACE TRIGGER "INTERVENANT_HORO_SERVICE"
@@ -45403,7 +45407,7 @@ BEGIN
 
 END;',
     ),
-    'INTERVENANT_HORO_SERVICE_REF' =>
+    'INTERVENANT_HORO_SERVICE_REF' => 
     array (
       'name' => 'INTERVENANT_HORO_SERVICE_REF',
       'definition' => 'CREATE OR REPLACE TRIGGER "INTERVENANT_HORO_SERVICE_REF"
@@ -45435,7 +45439,7 @@ BEGIN
 
 END;',
     ),
-    'INTERVENANT_HORO_VH' =>
+    'INTERVENANT_HORO_VH' => 
     array (
       'name' => 'INTERVENANT_HORO_VH',
       'definition' => 'CREATE OR REPLACE TRIGGER "INTERVENANT_HORO_VH"
@@ -45473,7 +45477,7 @@ BEGIN
 
 END;',
     ),
-    'INTERVENANT_HORO_VH_REF' =>
+    'INTERVENANT_HORO_VH_REF' => 
     array (
       'name' => 'INTERVENANT_HORO_VH_REF',
       'definition' => 'CREATE OR REPLACE TRIGGER "INTERVENANT_HORO_VH_REF"
@@ -45511,7 +45515,7 @@ BEGIN
 
 END;',
     ),
-    'INTERVENANT_RECHERCHE' =>
+    'INTERVENANT_RECHERCHE' => 
     array (
       'name' => 'INTERVENANT_RECHERCHE',
       'definition' => 'CREATE OR REPLACE TRIGGER "INTERVENANT_RECHERCHE"
@@ -45523,7 +45527,7 @@ BEGIN
 
 END;',
     ),
-    'MISE_EN_PAIEMENT_CK' =>
+    'MISE_EN_PAIEMENT_CK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "MISE_EN_PAIEMENT_CK"
@@ -45570,7 +45574,7 @@ BEGIN
   END IF;
 END;',
     ),
-    'MISE_EN_PAIEMENT_DEL_CK' =>
+    'MISE_EN_PAIEMENT_DEL_CK' => 
     array (
       'name' => 'MISE_EN_PAIEMENT_DEL_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "MISE_EN_PAIEMENT_DEL_CK"
@@ -45593,7 +45597,7 @@ BEGIN
   END IF;
 END;',
     ),
-    'SERVICE_CK' =>
+    'SERVICE_CK' => 
     array (
       'name' => 'SERVICE_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "SERVICE_CK"
@@ -45634,7 +45638,7 @@ BEGIN
 
 END;',
     ),
-    'SERVICE_HISTO_CK' =>
+    'SERVICE_HISTO_CK' => 
     array (
       'name' => 'SERVICE_HISTO_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "SERVICE_HISTO_CK"
@@ -45658,7 +45662,7 @@ BEGIN
 
 END;',
     ),
-    'SERVICE_HISTO_CK_S' =>
+    'SERVICE_HISTO_CK_S' => 
     array (
       'name' => 'SERVICE_HISTO_CK_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "SERVICE_HISTO_CK_S"
@@ -45681,7 +45685,7 @@ BEGIN
 
 END;',
     ),
-    'SERVICE_REFERENTIEL_HISTO_CK' =>
+    'SERVICE_REFERENTIEL_HISTO_CK' => 
     array (
       'name' => 'SERVICE_REFERENTIEL_HISTO_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "SERVICE_REFERENTIEL_HISTO_CK"
@@ -45709,7 +45713,7 @@ BEGIN
 
 END;',
     ),
-    'T_CRG_ETAPE' =>
+    'T_CRG_ETAPE' => 
     array (
       'name' => 'T_CRG_ETAPE',
       'definition' => 'CREATE OR REPLACE TRIGGER "T_CRG_ETAPE"
@@ -45726,7 +45730,7 @@ END;',
 
 END;',
     ),
-    'T_CRG_ETAPE_S' =>
+    'T_CRG_ETAPE_S' => 
     array (
       'name' => 'T_CRG_ETAPE_S',
       'definition' => 'CREATE OR REPLACE TRIGGER "T_CRG_ETAPE_S"
@@ -45735,7 +45739,7 @@ END;',
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'T_CRG_SCENARIO_NOEUD' =>
+    'T_CRG_SCENARIO_NOEUD' => 
     array (
       'name' => 'T_CRG_SCENARIO_NOEUD',
       'definition' => 'CREATE OR REPLACE TRIGGER "T_CRG_SCENARIO_NOEUD"
@@ -45752,7 +45756,7 @@ END;',
 
 END;',
     ),
-    'T_CRG_SCENARIO_NOEUD_EFFECTIF' =>
+    'T_CRG_SCENARIO_NOEUD_EFFECTIF' => 
     array (
       'name' => 'T_CRG_SCENARIO_NOEUD_EFFECTIF',
       'definition' => 'CREATE OR REPLACE TRIGGER "T_CRG_SCENARIO_NOEUD_EFFECTIF"
@@ -45782,7 +45786,7 @@ END;',
 
 END;',
     ),
-    'T_CRG_SCENARIO_NOEUD_SEUIL' =>
+    'T_CRG_SCENARIO_NOEUD_SEUIL' => 
     array (
       'name' => 'T_CRG_SCENARIO_NOEUD_SEUIL',
       'definition' => 'CREATE OR REPLACE TRIGGER "T_CRG_SCENARIO_NOEUD_SEUIL"
@@ -45812,7 +45816,7 @@ END;',
 
 END;',
     ),
-    'T_CRG_TYPE_INTERVENTION' =>
+    'T_CRG_TYPE_INTERVENTION' => 
     array (
       'name' => 'T_CRG_TYPE_INTERVENTION',
       'definition' => 'CREATE OR REPLACE TRIGGER "T_CRG_TYPE_INTERVENTION"
@@ -45821,7 +45825,7 @@ END;',
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;',
     ),
-    'T_CRG_VOLUME_HORAIRE_ENS' =>
+    'T_CRG_VOLUME_HORAIRE_ENS' => 
     array (
       'name' => 'T_CRG_VOLUME_HORAIRE_ENS',
       'definition' => 'CREATE OR REPLACE TRIGGER "T_CRG_VOLUME_HORAIRE_ENS"
@@ -45838,7 +45842,7 @@ END;',
 
 END;',
     ),
-    'VALIDATION_CK' =>
+    'VALIDATION_CK' => 
     array (
       'name' => 'VALIDATION_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "VALIDATION_CK"
@@ -45874,7 +45878,7 @@ BEGIN
 
 END;',
     ),
-    'VALIDATION_VOL_HORAIRE_CK' =>
+    'VALIDATION_VOL_HORAIRE_CK' => 
     array (
       'name' => 'VALIDATION_VOL_HORAIRE_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "VALIDATION_VOL_HORAIRE_CK"
@@ -45924,7 +45928,7 @@ BEGIN
 
 END;',
     ),
-    'VOLUME_HORAIRE_CK' =>
+    'VOLUME_HORAIRE_CK' => 
     array (
       'name' => 'VOLUME_HORAIRE_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "VOLUME_HORAIRE_CK"
@@ -45975,7 +45979,7 @@ FOR EACH ROW
     END IF;
   END;',
     ),
-    'VOLUME_HORAIRE_DEL_CK' =>
+    'VOLUME_HORAIRE_DEL_CK' => 
     array (
       'name' => 'VOLUME_HORAIRE_DEL_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "VOLUME_HORAIRE_DEL_CK" BEFORE
@@ -45994,7 +45998,7 @@ FOR EACH ROW
     END IF;
   END;',
     ),
-    'VOLUME_HORAIRE_REF_CK' =>
+    'VOLUME_HORAIRE_REF_CK' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "VOLUME_HORAIRE_REF_CK" BEFORE UPDATE ON volume_horaire_REF FOR EACH ROW
@@ -46018,7 +46022,7 @@ FOR EACH ROW
   END IF;
 END;',
     ),
-    'VOLUME_HORAIRE_REF_DEL_CK' =>
+    'VOLUME_HORAIRE_REF_DEL_CK' => 
     array (
       'name' => 'VOLUME_HORAIRE_REF_DEL_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "VOLUME_HORAIRE_REF_DEL_CK" BEFORE DELETE ON volume_horaire_REF FOR EACH ROW
@@ -46037,7 +46041,7 @@ END;',
     END IF;
   END;',
     ),
-    'WF_ETAPE_DEP_CK' =>
+    'WF_ETAPE_DEP_CK' => 
     array (
       'name' => 'WF_ETAPE_DEP_CK',
       'definition' => 'CREATE OR REPLACE TRIGGER "WF_ETAPE_DEP_CK"
@@ -46050,315 +46054,315 @@ BEGIN
 END;',
     ),
   ),
-  'BddAdmin\\Ddl\\DdlIndex' =>
+  'BddAdmin\\Ddl\\DdlIndex' => 
   array (
-    'ADRESSE_INTERVENANT_HCFK_IDX' =>
+    'ADRESSE_INTERVENANT_HCFK_IDX' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_HCFK_IDX',
       'unique' => false,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_HDFK_IDX' =>
+    'ADRESSE_INTERVENANT_HDFK_IDX' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_HDFK_IDX',
       'unique' => false,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_HMFK_IDX' =>
+    'ADRESSE_INTERVENANT_HMFK_IDX' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_HMFK_IDX',
       'unique' => false,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_PK' =>
+    'ADRESSE_INTERVENANT_PK' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_PK',
       'unique' => true,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_SOURCE_FK' =>
+    'ADRESSE_INTERVENANT_SOURCE_FK' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_SOURCE_FK',
       'unique' => false,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'ADRESSE_INTERVENANT_SOURCE_UN' =>
+    'ADRESSE_INTERVENANT_SOURCE_UN' => 
     array (
       'name' => 'ADRESSE_INTERVENANT_SOURCE_UN',
       'unique' => true,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'ADRESSE_INTERVENANT__UN' =>
+    'ADRESSE_INTERVENANT__UN' => 
     array (
       'name' => 'ADRESSE_INTERVENANT__UN',
       'unique' => true,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'ADRESSE_STRUCTURE_HCFK_IDX' =>
+    'ADRESSE_STRUCTURE_HCFK_IDX' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_HCFK_IDX',
       'unique' => false,
       'table' => 'ADRESSE_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_HDFK_IDX' =>
+    'ADRESSE_STRUCTURE_HDFK_IDX' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_HDFK_IDX',
       'unique' => false,
       'table' => 'ADRESSE_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_HMFK_IDX' =>
+    'ADRESSE_STRUCTURE_HMFK_IDX' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_HMFK_IDX',
       'unique' => false,
       'table' => 'ADRESSE_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_PK' =>
+    'ADRESSE_STRUCTURE_PK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_PK',
       'unique' => true,
       'table' => 'ADRESSE_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_SOURCE_FK' =>
+    'ADRESSE_STRUCTURE_SOURCE_FK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_SOURCE_FK',
       'unique' => false,
       'table' => 'ADRESSE_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'ADRESSE_STRUCTURE_SOURCE_UN' =>
+    'ADRESSE_STRUCTURE_SOURCE_UN' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_SOURCE_UN',
       'unique' => true,
       'table' => 'ADRESSE_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'ADRESSE_STRUCTURE_STRUCTURE_FK' =>
+    'ADRESSE_STRUCTURE_STRUCTURE_FK' => 
     array (
       'name' => 'ADRESSE_STRUCTURE_STRUCTURE_FK',
       'unique' => false,
       'table' => 'ADRESSE_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'STRUCTURE_ID',
       ),
     ),
-    'AFFECTATION_HCFK_IDX' =>
+    'AFFECTATION_HCFK_IDX' => 
     array (
       'name' => 'AFFECTATION_HCFK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'AFFECTATION_HDFK_IDX' =>
+    'AFFECTATION_HDFK_IDX' => 
     array (
       'name' => 'AFFECTATION_HDFK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'AFFECTATION_HMFK_IDX' =>
+    'AFFECTATION_HMFK_IDX' => 
     array (
       'name' => 'AFFECTATION_HMFK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'AFFECTATION_PK' =>
+    'AFFECTATION_PK' => 
     array (
       'name' => 'AFFECTATION_PK',
       'unique' => true,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'AFFECTATION_RECHERCH_SOURCE_FK' =>
+    'AFFECTATION_RECHERCH_SOURCE_FK' => 
     array (
       'name' => 'AFFECTATION_RECHERCH_SOURCE_FK',
       'unique' => false,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'AFFECTATION_ROLE_FK_IDX' =>
+    'AFFECTATION_ROLE_FK_IDX' => 
     array (
       'name' => 'AFFECTATION_ROLE_FK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ROLE_ID',
       ),
     ),
-    'AFFECTATION_R_HCFK_IDX' =>
+    'AFFECTATION_R_HCFK_IDX' => 
     array (
       'name' => 'AFFECTATION_R_HCFK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'AFFECTATION_R_HDFK_IDX' =>
+    'AFFECTATION_R_HDFK_IDX' => 
     array (
       'name' => 'AFFECTATION_R_HDFK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'AFFECTATION_R_HMFK_IDX' =>
+    'AFFECTATION_R_HMFK_IDX' => 
     array (
       'name' => 'AFFECTATION_R_HMFK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'AFFECTATION_R_INTERVENANT_FK' =>
+    'AFFECTATION_R_INTERVENANT_FK' => 
     array (
       'name' => 'AFFECTATION_R_INTERVENANT_FK',
       'unique' => false,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
       ),
     ),
-    'AFFECTATION_R_PK' =>
+    'AFFECTATION_R_PK' => 
     array (
       'name' => 'AFFECTATION_R_PK',
       'unique' => true,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'AFFECTATION_R_SRC_UN' =>
+    'AFFECTATION_R_SRC_UN' => 
     array (
       'name' => 'AFFECTATION_R_SRC_UN',
       'unique' => true,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'AFFECTATION_R_STRUCTURE_FK_IDX' =>
+    'AFFECTATION_R_STRUCTURE_FK_IDX' => 
     array (
       'name' => 'AFFECTATION_R_STRUCTURE_FK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION_RECHERCHE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'STRUCTURE_ID',
       ),
     ),
-    'AFFECTATION_SOURCE_FK_IDX' =>
+    'AFFECTATION_SOURCE_FK_IDX' => 
     array (
       'name' => 'AFFECTATION_SOURCE_FK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'AFFECTATION_SOURCE_UN' =>
+    'AFFECTATION_SOURCE_UN' => 
     array (
       'name' => 'AFFECTATION_SOURCE_UN',
       'unique' => true,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'AFFECTATION_STRUCTURE_FK_IDX' =>
+    'AFFECTATION_STRUCTURE_FK_IDX' => 
     array (
       'name' => 'AFFECTATION_STRUCTURE_FK_IDX',
       'unique' => false,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'STRUCTURE_ID',
       ),
     ),
-    'AFFECTATION__UN' =>
+    'AFFECTATION__UN' => 
     array (
       'name' => 'AFFECTATION__UN',
       'unique' => true,
       'table' => 'AFFECTATION',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ROLE_ID',
         1 => 'STRUCTURE_ID',
@@ -46366,82 +46370,82 @@ END;',
         3 => 'UTILISATEUR_ID',
       ),
     ),
-    'AGREMENT_HCFK_IDX' =>
+    'AGREMENT_HCFK_IDX' => 
     array (
       'name' => 'AGREMENT_HCFK_IDX',
       'unique' => false,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'AGREMENT_HDFK_IDX' =>
+    'AGREMENT_HDFK_IDX' => 
     array (
       'name' => 'AGREMENT_HDFK_IDX',
       'unique' => false,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'AGREMENT_HMFK_IDX' =>
+    'AGREMENT_HMFK_IDX' => 
     array (
       'name' => 'AGREMENT_HMFK_IDX',
       'unique' => false,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'AGREMENT_INTERVENANT_FK_IDX' =>
+    'AGREMENT_INTERVENANT_FK_IDX' => 
     array (
       'name' => 'AGREMENT_INTERVENANT_FK_IDX',
       'unique' => false,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
       ),
     ),
-    'AGREMENT_PK' =>
+    'AGREMENT_PK' => 
     array (
       'name' => 'AGREMENT_PK',
       'unique' => true,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'AGREMENT_STRUCTURE_FK_IDX' =>
+    'AGREMENT_STRUCTURE_FK_IDX' => 
     array (
       'name' => 'AGREMENT_STRUCTURE_FK_IDX',
       'unique' => false,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'STRUCTURE_ID',
       ),
     ),
-    'AGREMENT_TYPE_AGREMENT_FK_IDX' =>
+    'AGREMENT_TYPE_AGREMENT_FK_IDX' => 
     array (
       'name' => 'AGREMENT_TYPE_AGREMENT_FK_IDX',
       'unique' => false,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
       ),
     ),
-    'AGREMENT__UN' =>
+    'AGREMENT__UN' => 
     array (
       'name' => 'AGREMENT__UN',
       'unique' => true,
       'table' => 'AGREMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'INTERVENANT_ID',
@@ -46449,307 +46453,307 @@ END;',
         3 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'AII_FK' =>
+    'AII_FK' => 
     array (
       'name' => 'AII_FK',
       'unique' => false,
       'table' => 'ADRESSE_INTERVENANT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
       ),
     ),
-    'ANNEE_PK' =>
+    'ANNEE_PK' => 
     array (
       'name' => 'ANNEE_PK',
       'unique' => true,
       'table' => 'ANNEE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CAMPAGNE_PK_IDX' =>
+    'CAMPAGNE_PK_IDX' => 
     array (
       'name' => 'CAMPAGNE_PK_IDX',
       'unique' => true,
       'table' => 'CAMPAGNE_SAISIE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CAMPAGNE_SAISIE_ANNEE_FK_IDX' =>
+    'CAMPAGNE_SAISIE_ANNEE_FK_IDX' => 
     array (
       'name' => 'CAMPAGNE_SAISIE_ANNEE_FK_IDX',
       'unique' => false,
       'table' => 'CAMPAGNE_SAISIE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ANNEE_ID',
       ),
     ),
-    'CAMPAGNE_SAISIE__UN_IDX' =>
+    'CAMPAGNE_SAISIE__UN_IDX' => 
     array (
       'name' => 'CAMPAGNE_SAISIE__UN_IDX',
       'unique' => true,
       'table' => 'CAMPAGNE_SAISIE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ANNEE_ID',
         1 => 'TYPE_INTERVENANT_ID',
         2 => 'TYPE_VOLUME_HORAIRE_ID',
       ),
     ),
-    'CATEGORIE_PRIVILEGE_PK' =>
+    'CATEGORIE_PRIVILEGE_PK' => 
     array (
       'name' => 'CATEGORIE_PRIVILEGE_PK',
       'unique' => true,
       'table' => 'CATEGORIE_PRIVILEGE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CATEGORIE_PRIVILEGE__UN' =>
+    'CATEGORIE_PRIVILEGE__UN' => 
     array (
       'name' => 'CATEGORIE_PRIVILEGE__UN',
       'unique' => true,
       'table' => 'CATEGORIE_PRIVILEGE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CODE',
       ),
     ),
-    'CCEP_CENTRE_COUT_FK_IDX' =>
+    'CCEP_CENTRE_COUT_FK_IDX' => 
     array (
       'name' => 'CCEP_CENTRE_COUT_FK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CENTRE_COUT_ID',
       ),
     ),
-    'CCEP_ELEMENT_PEDAGOGIQUE_FK' =>
+    'CCEP_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'CCEP_ELEMENT_PEDAGOGIQUE_FK',
       'unique' => false,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
       ),
     ),
-    'CCEP_TYPE_HEURES_FK_IDX' =>
+    'CCEP_TYPE_HEURES_FK_IDX' => 
     array (
       'name' => 'CCEP_TYPE_HEURES_FK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_HEURES_ID',
       ),
     ),
-    'CCS_CC_S__UN_IDX' =>
+    'CCS_CC_S__UN_IDX' => 
     array (
       'name' => 'CCS_CC_S__UN_IDX',
       'unique' => true,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CENTRE_COUT_ID',
         1 => 'STRUCTURE_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CCS_CENTRE_COUT_FK_IDX' =>
+    'CCS_CENTRE_COUT_FK_IDX' => 
     array (
       'name' => 'CCS_CENTRE_COUT_FK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CENTRE_COUT_ID',
       ),
     ),
-    'CCS_SOURCE_CODE_UN_IDX' =>
+    'CCS_SOURCE_CODE_UN_IDX' => 
     array (
       'name' => 'CCS_SOURCE_CODE_UN_IDX',
       'unique' => true,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CCS_STRUCTURE_FK_IDX' =>
+    'CCS_STRUCTURE_FK_IDX' => 
     array (
       'name' => 'CCS_STRUCTURE_FK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'STRUCTURE_ID',
       ),
     ),
-    'CC_ACTIVITE_FA' =>
+    'CC_ACTIVITE_FA' => 
     array (
       'name' => 'CC_ACTIVITE_FA',
       'unique' => false,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'FA',
       ),
     ),
-    'CC_ACTIVITE_FC' =>
+    'CC_ACTIVITE_FC' => 
     array (
       'name' => 'CC_ACTIVITE_FC',
       'unique' => false,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'FC',
       ),
     ),
-    'CC_ACTIVITE_FI' =>
+    'CC_ACTIVITE_FI' => 
     array (
       'name' => 'CC_ACTIVITE_FI',
       'unique' => false,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'FI',
       ),
     ),
-    'CC_ACTIVITE_HCFK_IDX' =>
+    'CC_ACTIVITE_HCFK_IDX' => 
     array (
       'name' => 'CC_ACTIVITE_HCFK_IDX',
       'unique' => false,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'CC_ACTIVITE_HDFK_IDX' =>
+    'CC_ACTIVITE_HDFK_IDX' => 
     array (
       'name' => 'CC_ACTIVITE_HDFK_IDX',
       'unique' => false,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'CC_ACTIVITE_HMFK_IDX' =>
+    'CC_ACTIVITE_HMFK_IDX' => 
     array (
       'name' => 'CC_ACTIVITE_HMFK_IDX',
       'unique' => false,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'CC_ACTIVITE_PK' =>
+    'CC_ACTIVITE_PK' => 
     array (
       'name' => 'CC_ACTIVITE_PK',
       'unique' => true,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CC_ACTIVITE_REF' =>
+    'CC_ACTIVITE_REF' => 
     array (
       'name' => 'CC_ACTIVITE_REF',
       'unique' => false,
       'table' => 'CC_ACTIVITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'REFERENTIEL',
       ),
     ),
-    'CENTRE_COUT_ACTIVITE_FK_IDX' =>
+    'CENTRE_COUT_ACTIVITE_FK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_ACTIVITE_FK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ACTIVITE_ID',
       ),
     ),
-    'CENTRE_COUT_CENTRE_COUT_FK_IDX' =>
+    'CENTRE_COUT_CENTRE_COUT_FK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_CENTRE_COUT_FK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'PARENT_ID',
       ),
     ),
-    'CENTRE_COUT_EP_HCFK_IDX' =>
+    'CENTRE_COUT_EP_HCFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_EP_HCFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'CENTRE_COUT_EP_HDFK_IDX' =>
+    'CENTRE_COUT_EP_HDFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_EP_HDFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'CENTRE_COUT_EP_HMFK_IDX' =>
+    'CENTRE_COUT_EP_HMFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_EP_HMFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'CENTRE_COUT_EP_PK' =>
+    'CENTRE_COUT_EP_PK' => 
     array (
       'name' => 'CENTRE_COUT_EP_PK',
       'unique' => true,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CENTRE_COUT_EP_SOURCE_FK' =>
+    'CENTRE_COUT_EP_SOURCE_FK' => 
     array (
       'name' => 'CENTRE_COUT_EP_SOURCE_FK',
       'unique' => false,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'CENTRE_COUT_EP__UN' =>
+    'CENTRE_COUT_EP__UN' => 
     array (
       'name' => 'CENTRE_COUT_EP__UN',
       'unique' => true,
       'table' => 'CENTRE_COUT_EP',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CENTRE_COUT_ID',
         1 => 'ELEMENT_PEDAGOGIQUE_ID',
@@ -46757,295 +46761,295 @@ END;',
         3 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CENTRE_COUT_HCFK_IDX' =>
+    'CENTRE_COUT_HCFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_HCFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'CENTRE_COUT_HDFK_IDX' =>
+    'CENTRE_COUT_HDFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_HDFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'CENTRE_COUT_HMFK_IDX' =>
+    'CENTRE_COUT_HMFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_HMFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'CENTRE_COUT_PK' =>
+    'CENTRE_COUT_PK' => 
     array (
       'name' => 'CENTRE_COUT_PK',
       'unique' => true,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CENTRE_COUT_SOURCE_FK_IDX' =>
+    'CENTRE_COUT_SOURCE_FK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_SOURCE_FK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_HCFK_IDX' =>
+    'CENTRE_COUT_STRUCTURE_HCFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_HCFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_HDFK_IDX' =>
+    'CENTRE_COUT_STRUCTURE_HDFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_HDFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_HMFK_IDX' =>
+    'CENTRE_COUT_STRUCTURE_HMFK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_HMFK_IDX',
       'unique' => false,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'CENTRE_COUT_STRUCTURE_PK_IDX' =>
+    'CENTRE_COUT_STRUCTURE_PK_IDX' => 
     array (
       'name' => 'CENTRE_COUT_STRUCTURE_PK_IDX',
       'unique' => true,
       'table' => 'CENTRE_COUT_STRUCTURE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CENTRE_COUT_TYPE_RESSOURCE_FK' =>
+    'CENTRE_COUT_TYPE_RESSOURCE_FK' => 
     array (
       'name' => 'CENTRE_COUT_TYPE_RESSOURCE_FK',
       'unique' => false,
       'table' => 'CENTRE_COUT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_RESSOURCE_ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_ETAPE_FK' =>
+    'CHEMIN_PEDAGOGIQUE_ETAPE_FK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_ETAPE_FK',
       'unique' => false,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ETAPE_ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_HCFK_IDX' =>
+    'CHEMIN_PEDAGOGIQUE_HCFK_IDX' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_HCFK_IDX',
       'unique' => false,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_HDFK_IDX' =>
+    'CHEMIN_PEDAGOGIQUE_HDFK_IDX' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_HDFK_IDX',
       'unique' => false,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_HMFK_IDX' =>
+    'CHEMIN_PEDAGOGIQUE_HMFK_IDX' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_HMFK_IDX',
       'unique' => false,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_PK' =>
+    'CHEMIN_PEDAGOGIQUE_PK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_PK',
       'unique' => true,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE_SOURCE_FK' =>
+    'CHEMIN_PEDAGOGIQUE_SOURCE_FK' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE_SOURCE_FK',
       'unique' => false,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'CHEMIN_PEDAGOGIQUE__UN' =>
+    'CHEMIN_PEDAGOGIQUE__UN' => 
     array (
       'name' => 'CHEMIN_PEDAGOGIQUE__UN',
       'unique' => true,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
         1 => 'ETAPE_ID',
         2 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CHEMIN_PEDAGO_SRC_ID_UN' =>
+    'CHEMIN_PEDAGO_SRC_ID_UN' => 
     array (
       'name' => 'CHEMIN_PEDAGO_SRC_ID_UN',
       'unique' => true,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'CIVILITE_LIBELLE_COURT_UN' =>
+    'CIVILITE_LIBELLE_COURT_UN' => 
     array (
       'name' => 'CIVILITE_LIBELLE_COURT_UN',
       'unique' => true,
       'table' => 'CIVILITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'LIBELLE_COURT',
       ),
     ),
-    'CIVILITE_PK' =>
+    'CIVILITE_PK' => 
     array (
       'name' => 'CIVILITE_PK',
       'unique' => true,
       'table' => 'CIVILITE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CONTRAT_CONTRAT_FK_IDX' =>
+    'CONTRAT_CONTRAT_FK_IDX' => 
     array (
       'name' => 'CONTRAT_CONTRAT_FK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CONTRAT_ID',
       ),
     ),
-    'CONTRAT_FICHIER_FFK_IDX' =>
+    'CONTRAT_FICHIER_FFK_IDX' => 
     array (
       'name' => 'CONTRAT_FICHIER_FFK_IDX',
       'unique' => false,
       'table' => 'CONTRAT_FICHIER',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'FICHIER_ID',
       ),
     ),
-    'CONTRAT_FICHIER_FK' =>
+    'CONTRAT_FICHIER_FK' => 
     array (
       'name' => 'CONTRAT_FICHIER_FK',
       'unique' => false,
       'table' => 'CONTRAT_FICHIER',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CONTRAT_ID',
       ),
     ),
-    'CONTRAT_FICHIER_PK' =>
+    'CONTRAT_FICHIER_PK' => 
     array (
       'name' => 'CONTRAT_FICHIER_PK',
       'unique' => true,
       'table' => 'CONTRAT_FICHIER',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'CONTRAT_ID',
         1 => 'FICHIER_ID',
       ),
     ),
-    'CONTRAT_HCFK_IDX' =>
+    'CONTRAT_HCFK_IDX' => 
     array (
       'name' => 'CONTRAT_HCFK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'CONTRAT_HDFK_IDX' =>
+    'CONTRAT_HDFK_IDX' => 
     array (
       'name' => 'CONTRAT_HDFK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'CONTRAT_HMFK_IDX' =>
+    'CONTRAT_HMFK_IDX' => 
     array (
       'name' => 'CONTRAT_HMFK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'CONTRAT_INTERVENANT_FK_IDX' =>
+    'CONTRAT_INTERVENANT_FK_IDX' => 
     array (
       'name' => 'CONTRAT_INTERVENANT_FK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
       ),
     ),
-    'CONTRAT_NUMERO_AVENANT_UN' =>
+    'CONTRAT_NUMERO_AVENANT_UN' => 
     array (
       'name' => 'CONTRAT_NUMERO_AVENANT_UN',
       'unique' => true,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'INTERVENANT_ID',
         1 => 'STRUCTURE_ID',
@@ -47054,203 +47058,203 @@ END;',
         4 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CONTRAT_PK' =>
+    'CONTRAT_PK' => 
     array (
       'name' => 'CONTRAT_PK',
       'unique' => true,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CONTRAT_STRUCTURE_FK_IDX' =>
+    'CONTRAT_STRUCTURE_FK_IDX' => 
     array (
       'name' => 'CONTRAT_STRUCTURE_FK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'STRUCTURE_ID',
       ),
     ),
-    'CONTRAT_TYPE_CONTRAT_FK_IDX' =>
+    'CONTRAT_TYPE_CONTRAT_FK_IDX' => 
     array (
       'name' => 'CONTRAT_TYPE_CONTRAT_FK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_CONTRAT_ID',
       ),
     ),
-    'CONTRAT_VALIDATION_FK_IDX' =>
+    'CONTRAT_VALIDATION_FK_IDX' => 
     array (
       'name' => 'CONTRAT_VALIDATION_FK_IDX',
       'unique' => false,
       'table' => 'CONTRAT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'VALIDATION_ID',
       ),
     ),
-    'CORPS_HCFK_IDX' =>
+    'CORPS_HCFK_IDX' => 
     array (
       'name' => 'CORPS_HCFK_IDX',
       'unique' => false,
       'table' => 'CORPS',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'CORPS_HDFK_IDX' =>
+    'CORPS_HDFK_IDX' => 
     array (
       'name' => 'CORPS_HDFK_IDX',
       'unique' => false,
       'table' => 'CORPS',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'CORPS_HMFK_IDX' =>
+    'CORPS_HMFK_IDX' => 
     array (
       'name' => 'CORPS_HMFK_IDX',
       'unique' => false,
       'table' => 'CORPS',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'CORPS_PK' =>
+    'CORPS_PK' => 
     array (
       'name' => 'CORPS_PK',
       'unique' => true,
       'table' => 'CORPS',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'CORPS_SOURCE_FK_IDX' =>
+    'CORPS_SOURCE_FK_IDX' => 
     array (
       'name' => 'CORPS_SOURCE_FK_IDX',
       'unique' => false,
       'table' => 'CORPS',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'CORPS_SOURCE_UN' =>
+    'CORPS_SOURCE_UN' => 
     array (
       'name' => 'CORPS_SOURCE_UN',
       'unique' => true,
       'table' => 'CORPS',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
       ),
     ),
-    'CORPS_SRC_UN' =>
+    'CORPS_SRC_UN' => 
     array (
       'name' => 'CORPS_SRC_UN',
       'unique' => true,
       'table' => 'CORPS',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CPEP_FK_IDX' =>
+    'CPEP_FK_IDX' => 
     array (
       'name' => 'CPEP_FK_IDX',
       'unique' => false,
       'table' => 'CHEMIN_PEDAGOGIQUE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
       ),
     ),
-    'CS_TYPE_INTERVENANT_FK_IDX' =>
+    'CS_TYPE_INTERVENANT_FK_IDX' => 
     array (
       'name' => 'CS_TYPE_INTERVENANT_FK_IDX',
       'unique' => false,
       'table' => 'CAMPAGNE_SAISIE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_INTERVENANT_ID',
       ),
     ),
-    'CS_TYPE_VOLUME_HORAIRE_FK_IDX' =>
+    'CS_TYPE_VOLUME_HORAIRE_FK_IDX' => 
     array (
       'name' => 'CS_TYPE_VOLUME_HORAIRE_FK_IDX',
       'unique' => false,
       'table' => 'CAMPAGNE_SAISIE',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'TYPE_VOLUME_HORAIRE_ID',
       ),
     ),
-    'DEPARTEMENT_HCFK_IDX' =>
+    'DEPARTEMENT_HCFK_IDX' => 
     array (
       'name' => 'DEPARTEMENT_HCFK_IDX',
       'unique' => false,
       'table' => 'DEPARTEMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_CREATEUR_ID',
       ),
     ),
-    'DEPARTEMENT_HDFK_IDX' =>
+    'DEPARTEMENT_HDFK_IDX' => 
     array (
       'name' => 'DEPARTEMENT_HDFK_IDX',
       'unique' => false,
       'table' => 'DEPARTEMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_DESTRUCTEUR_ID',
       ),
     ),
-    'DEPARTEMENT_HMFK_IDX' =>
+    'DEPARTEMENT_HMFK_IDX' => 
     array (
       'name' => 'DEPARTEMENT_HMFK_IDX',
       'unique' => false,
       'table' => 'DEPARTEMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'HISTO_MODIFICATEUR_ID',
       ),
     ),
-    'DEPARTEMENT_PK' =>
+    'DEPARTEMENT_PK' => 
     array (
       'name' => 'DEPARTEMENT_PK',
       'unique' => true,
       'table' => 'DEPARTEMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'ID',
       ),
     ),
-    'DEPARTEMENT_SOURCE_FK_IDX' =>
+    'DEPARTEMENT_SOURCE_FK_IDX' => 
     array (
       'name' => 'DEPARTEMENT_SOURCE_FK_IDX',
       'unique' => false,
       'table' => 'DEPARTEMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_ID',
       ),
     ),
-    'DEPARTEMENT_SRC_UN' =>
+    'DEPARTEMENT_SRC_UN' => 
     array (
       'name' => 'DEPARTEMENT_SRC_UN',
       'unique' => true,
       'table' => 'DEPARTEMENT',
-      'columns' =>
+      'columns' => 
       array (
         0 => 'SOURCE_CODE',
         1 => 'HISTO_DESTRUCTION',
@@ -54009,3 +54013,5 @@ END;',
     ),
   ),
 );
+
+//@formatter:on

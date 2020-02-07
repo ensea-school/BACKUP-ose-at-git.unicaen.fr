@@ -284,13 +284,37 @@ class Schema
 
 
 
+    private function var_export54($var, $indent = "")
+    {
+        switch (gettype($var)) {
+            case "string":
+                return '"' . addcslashes($var, "\\\$\"\r\n\t\v\f") . '"';
+            case "array":
+                $indexed = array_keys($var) === range(0, count($var) - 1);
+                $r       = [];
+                foreach ($var as $key => $value) {
+                    $r[] = "$indent    "
+                        . ($indexed ? "" : $this->var_export54($key) . " => ")
+                        . $this->var_export54($value, "$indent    ");
+                }
+
+                return "[\n" . implode(",\n", $r) . "\n" . $indent . "]";
+            case "boolean":
+                return $var ? "TRUE" : "FALSE";
+            default:
+                return var_export($var, true);
+        }
+    }
+
+
+
     /**
      * @param array  $ddl
      * @param string $filename
      */
     public function saveToFile(array $ddl, string $filename)
     {
-        $ddlString = '<?php return ' . var_export($ddl, true) . ';';
+        $ddlString = "<?php\n\n//@formatter:off\n\nreturn " . $this->var_export54($ddl) . ";\n\n//@formatter:on\n";
 
         file_put_contents($filename, $ddlString);
     }
@@ -739,7 +763,7 @@ class Schema
         $errors = [];
 
         $bdd     = $this->getBdd();
-        $sql     = "SELECT object_type, object_name FROM user_objects where object_type IN ('VIEW','PACKAGE','TRIGGER')";
+        $sql     = "SELECT OBJECT_TYPE, OBJECT_NAME FROM USER_OBJECTS WHERE OBJECT_TYPE IN ('VIEW','PACKAGE','TRIGGER')";
         $objects = $bdd->select($sql);
         foreach ($objects as $object) {
             $type = $object['OBJECT_TYPE'];

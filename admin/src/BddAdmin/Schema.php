@@ -583,7 +583,7 @@ class Schema
                 $this->logger->logTitle("\n" . 'Compilation de tous les objets de la BDD');
             }
             if (empty($this->compilerTout()) && $this->logger) {
-                $this->logger->log('Compilation effectuée avec succès.');
+                //$this->logger->log('Compilation effectuée avec succès.');
             }
         }
 
@@ -672,7 +672,7 @@ class Schema
 
         if ($ddlObject->getQueries()) {
             if ($autoExecute) {
-                return [DdlTable::class . '.majSequences' => $ddlObject->execQueries($this->logger)];
+                return [DdlTable::class . '.majSequences' => $ddlObject->execQueries()];
             } else {
                 return [DdlTable::class . '.majSequences' => $ddlObject->getQueries($this->logger)];
             }

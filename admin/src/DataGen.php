@@ -426,15 +426,16 @@ class DataGen
             }
         }
 
-        echo str_pad($table, 31, ' '); // provisoire
-        //$this->oseAdmin->getConsole()->println($tbl);
         $result = $tableObject->merge(
             $data,
             isset($params['key']) ? $params['key'] : 'ID',
             isset($params['options']) ? $params['options'] : []
         );
-        echo 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete'];
-        echo "\n";
+        if ($result['insert'] + $result['update'] + $result['delete'] > 0) {
+            echo str_pad($table, 31, ' '); // provisoire
+            echo 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete'];
+            echo "\n";
+        }
     }
 
 

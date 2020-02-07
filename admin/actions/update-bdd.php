@@ -10,7 +10,7 @@ $schema = new \BddAdmin\Schema($bdd);
 
 $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
 
-$c->println("\n" . 'Mise à jour des définitions de la base de données', $c::COLOR_LIGHT_PURPLE);
+$c->println("\n" . 'Mise à jour des définitions de la base de données. Merci de patienter ...', $c::COLOR_LIGHT_PURPLE);
 
 /* Récupération du schéma de référence */
 $ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
@@ -46,7 +46,7 @@ $dataGen->update();
 $c->println('');
 $mm->migration('post');
 
-$c->println("\n" . 'Mise à jour du point d\'indice pour les HETD', $c::COLOR_LIGHT_PURPLE);
+//$c->println("\n" . 'Mise à jour du point d\'indice pour les HETD', $c::COLOR_LIGHT_PURPLE);
 $bdd->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
 
 // Néttoyage des caches

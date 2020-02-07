@@ -287,18 +287,23 @@ class Schema
     private function var_export54($var, $indent = "")
     {
         switch (gettype($var)) {
-            case "string":
-                return '"' . addcslashes($var, "\\\$\"\r\n\t\v\f") . '"';
             case "array":
-                $indexed = array_keys($var) === range(0, count($var) - 1);
-                $r       = [];
+                $indexed   = array_keys($var) === range(0, count($var) - 1);
+                $r         = [];
+                $maxKeyLen = 0;
                 foreach ($var as $key => $value) {
+                    $key    = $this->var_export54($key);
+                    $keyLen = strlen($key);
+                    if ($keyLen > $maxKeyLen) $maxKeyLen = $keyLen;
+                }
+                foreach ($var as $key => $value) {
+                    $key = $this->var_export54($key);
                     $r[] = "$indent    "
-                        . ($indexed ? "" : $this->var_export54($key) . " => ")
+                        . ($indexed ? "" : str_pad($key, $maxKeyLen, ' ') . " => ")
                         . $this->var_export54($value, "$indent    ");
                 }
 
-                return "[\n" . implode(",\n", $r) . "\n" . $indent . "]";
+                return "[\n" . implode(",\n", $r) . ",\n" . $indent . "]";
             case "boolean":
                 return $var ? "TRUE" : "FALSE";
             default:

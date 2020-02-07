@@ -229,8 +229,8 @@ class DataGen
         ],
         [
             'table'   => 'DEPARTEMENT',
-            'context' => ['install', 'update'],
-            'key'     => 'CODE',
+            'context' => ['install'],
+            'key'     => 'SOURCE_CODE',
         ],
         [
             'table'   => 'ETABLISSEMENT',
@@ -479,15 +479,26 @@ class DataGen
 
     public function DEPARTEMENT()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/departements.php';
-
         $departements = [];
-        foreach ($data as $code => $libelle) {
-            $departements[] = [
-                'CODE'    => (string)$code,
-                'LIBELLE' => $libelle,
-            ];
+
+        $r = fopen($this->oseAdmin->getOseDir() . 'data/departement.csv', 'r');
+        $i = 0;
+        while ($d = fgetcsv($r, 0, ',', '"')) {
+            $i++;
+            if ($i > 1) {
+                $code = (string)$d[0];
+                if (2 == strlen($code)) {
+                    $code = '0' . $code;
+                }
+                $departements[] = [
+                    'SOURCE_CODE' => $code,
+                    'CODE'        => $code,
+                    'LIBELLE'     => $d[6],
+                ];
+            }
         }
+
+        fclose($r);
 
         return $departements;
     }

@@ -23,6 +23,26 @@ $r = $mm->testUtile('FormuleMigrationVolumeHoraireStructuresTestVersCode');
 var_dump($r);
 */
 
-$t = $oa->getTags();
 
-var_dump($t);
+$departements = [];
+
+$r = fopen($oa->getOseDir() . 'data/departement.csv', 'r');
+$i = 0;
+while ($d = fgetcsv($r, 0, ',', '"')) {
+    $i++;
+    if ($i > 1) {
+        $code = (string)$d[0];
+        if (2 == strlen($code)) {
+            $code = '0' . $code;
+        }
+        $departements[] = [
+            'CODE'    => $code,
+            'LIBELLE' => $d[6],
+        ];
+        $c->println("update departement set libelle = '$d[6]' where code = '$code';");
+    }
+}
+
+fclose($r);
+
+//var_dump($departements);

@@ -8,9 +8,9 @@ use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
- * Departement
+ * Voirie
  */
-class Departement implements HistoriqueAwareInterface, ImportAwareInterface
+class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
@@ -45,9 +45,9 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @param int|null $id
      *
-     * @return Departement
+     * @return Voirie
      */
-    public function setId(?int $id): Departement
+    public function setId(?int $id): Voirie
     {
         $this->id = $id;
 
@@ -69,9 +69,9 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @param string|null $code
      *
-     * @return Departement
+     * @return Voirie
      */
-    public function setCode(?string $code): Departement
+    public function setCode(?string $code): Voirie
     {
         $this->code = $code;
 
@@ -93,9 +93,9 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @param string|null $libelle
      *
-     * @return Departement
+     * @return Voirie
      */
-    public function setLibelle(?string $libelle): Departement
+    public function setLibelle(?string $libelle): Voirie
     {
         $this->libelle = $libelle;
 
@@ -111,19 +111,7 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
      */
     public function __toString()
     {
-        return $this->getCode() . " - " . $this->getLibelle();
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function inIleDeFrance(): bool
-    {
-        $intCode = (int)$this->getCode();
-
-        return in_array($intCode, [78, 91, 92, 93, 94, 95]);
+        return $this->getLibelle();
     }
 
 }

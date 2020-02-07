@@ -233,6 +233,11 @@ class DataGen
             'key'     => 'SOURCE_CODE',
         ],
         [
+            'table'   => 'VOIRIE',
+            'context' => ['install'],
+            'key'     => 'SOURCE_CODE',
+        ],
+        [
             'table'   => 'ETABLISSEMENT',
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',

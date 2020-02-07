@@ -151,6 +151,7 @@ $config = [
             Service\RoleService::class                    => Service\RoleService::class,
             Service\PaysService::class                    => Service\PaysService::class,
             Service\DepartementService::class             => Service\DepartementService::class,
+            Service\VoirieService::class                  => Service\VoirieService::class,
             Service\FichierService::class                 => Service\FichierService::class,
             Service\TauxHoraireHETDService::class         => Service\TauxHoraireHETDService::class,
             Assertion\InformationAssertion::class         => Assertion\InformationAssertion::class,

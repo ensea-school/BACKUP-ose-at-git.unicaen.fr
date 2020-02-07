@@ -15,36 +15,179 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
 
-
     /**
-     * @var string
-     */
-    protected $libelleCourt;
-
-    /**
-     * @var string
-     */
-    protected $libelleLong;
-
-    /**
-     * @var boolean
-     */
-    protected $temoinUe;
-
-    /**
-     * @var integer
+     * @var int|null
      */
     protected $id;
 
     /**
-     * @var \DateTime
+     * @var string
+     */
+    protected $code;
+
+    /**
+     * @var string|null
+     */
+    protected $libelle;
+
+    /**
+     * @var bool|null
+     */
+    protected $temoinUe;
+
+    /**
+     * @var \DateTime|null
      */
     protected $validiteDebut;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $validiteFin;
+
+
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
+
+    /**
+     * @param int|null $id
+     *
+     * @return Pays
+     */
+    public function setId(?int $id): Pays
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return Pays
+     */
+    public function setCode(string $code): Pays
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+
+
+    /**
+     * @param string|null $libelle
+     *
+     * @return Pays
+     */
+    public function setLibelle(?string $libelle): Pays
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool|null
+     */
+    public function getTemoinUe(): ?bool
+    {
+        return $this->temoinUe;
+    }
+
+
+
+    /**
+     * @param bool|null $temoinUe
+     *
+     * @return Pays
+     */
+    public function setTemoinUe(?bool $temoinUe): Pays
+    {
+        $this->temoinUe = $temoinUe;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getValiditeDebut(): ?\DateTime
+    {
+        return $this->validiteDebut;
+    }
+
+
+
+    /**
+     * @param \DateTime|null $validiteDebut
+     *
+     * @return Pays
+     */
+    public function setValiditeDebut(?\DateTime $validiteDebut): Pays
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getValiditeFin(): ?\DateTime
+    {
+        return $this->validiteFin;
+    }
+
+
+
+    /**
+     * @param \DateTime|null $validiteFin
+     *
+     * @return Pays
+     */
+    public function setValiditeFin(?\DateTime $validiteFin): Pays
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
 
 
 
@@ -55,158 +198,7 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
      */
     public function __toString()
     {
-        return $this->getLibelleLong();
+        return $this->getLibelle();
     }
 
-
-
-    /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return Structure
-     */
-    public function setLibelleCourt($libelleCourt)
-    {
-        $this->libelleCourt = $libelleCourt;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelleCourt
-     *
-     * @return string
-     */
-    public function getLibelleCourt()
-    {
-        return $this->libelleCourt;
-    }
-
-
-
-    /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     *
-     * @return Structure
-     */
-    public function setLibelleLong($libelleLong)
-    {
-        $this->libelleLong = $libelleLong;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelleLong
-     *
-     * @return string
-     */
-    public function getLibelleLong()
-    {
-        return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Set temoinUe
-     *
-     * @param boolean $temoinUe
-     *
-     * @return Structure
-     */
-    public function setTemoinUe($temoinUe)
-    {
-        $this->temoinUe = $temoinUe;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get temoinUe
-     *
-     * @return boolean
-     */
-    public function getTemoinUe()
-    {
-        return $this->temoinUe;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     *
-     * @return self
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     *
-     * @return self
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
 }

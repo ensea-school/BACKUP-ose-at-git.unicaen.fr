@@ -79,11 +79,13 @@ class PieceJointeController extends AbstractController
         $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
         //$archives        = $this->getServicePieceJointe()->getPiecesFourniesArchives($intervenant);
 
+        $annee = $this->getServiceContext()->getAnnee();
+
         $messages = $this->makeMessages($demandees, $fournies);
 
         $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getPeutAvoirContrat();
 
-        return compact('intervenant', 'title', 'demandees', 'heuresPourSeuil', 'fournies', 'messages', 'alertContrat');
+        return compact('intervenant', 'title', 'demandees', 'heuresPourSeuil', 'fournies', 'messages', 'alertContrat', 'annee');
     }
 
 
@@ -177,6 +179,20 @@ class PieceJointeController extends AbstractController
         $viewModel->setVariable('pj', $pj);
 
         return $viewModel;
+    }
+
+    public function archiverAction()
+    {
+        $this->initFilters();
+        /** @var PieceJointe $pj */
+        $pj = $this->getEvent()->getParam('pieceJointe');
+        $pj = $this->getServicePieceJointe()->archiver($pj);
+        $this->updateTableauxBord($pj->getIntervenant(), true);
+        $viewModel = new ViewModel();
+
+
+        return $viewModel;
+
     }
 
 

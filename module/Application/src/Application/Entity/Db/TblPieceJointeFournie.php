@@ -57,6 +57,13 @@ class TblPieceJointeFournie
      */
     private $dateValidite;
 
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    private $dateArchive;
+
+
+
 
 
     /**
@@ -175,6 +182,16 @@ class TblPieceJointeFournie
     public function getDateValidite()
     {
         return $this->dateValidite;
+    }
+
+    /**
+     * Get dateArchive
+     *
+     * @return \Application\Entity\Db\Annee
+     */
+    public function getDateArchive()
+    {
+        return $this->dateArchive;
     }
 
 

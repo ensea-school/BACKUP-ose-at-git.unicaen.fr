@@ -142,6 +142,19 @@ return [
                                     ],
                                 ],
                             ],
+                            'archiver'  => [
+                                // archiver la PJ
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/archiver/:pieceJointe',
+                                    'constraints' => [
+                                        'pieceJointe' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'archiver',
+                                    ],
+                                ],
+                            ],
                             'fichier'    => [
                                 'type'          => 'Literal',
                                 'options'       => [
@@ -347,7 +360,7 @@ return [
         'guards'             => [
             PrivilegeController::class => [
                 /* Dossier */
-                [
+                [//Créer un droit archivage
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => ['index'],
                     'privileges' => [Privileges::DOSSIER_VISUALISATION],
@@ -416,7 +429,7 @@ return [
                 /* Pièces jointes */
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['index'],
+                    'action'     => ['index','archiver'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
                     'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],

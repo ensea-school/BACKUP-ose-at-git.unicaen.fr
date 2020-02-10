@@ -10852,6 +10852,17 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'DATE_ARCHIVE' => 
+        array (
+          'name' => 'DATE_ARCHIVE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'PIECE_JOINTE_FICHIER' => 
@@ -14958,6 +14969,17 @@
         'DATE_VALIDITE' => 
         array (
           'name' => 'DATE_VALIDITE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DATE_ARCHIVE' => 
+        array (
+          'name' => 'DATE_ARCHIVE',
           'type' => 'NUMBER',
           'length' => 0,
           'scale' => NULL,
@@ -30332,6 +30354,8 @@ END UNICAEN_TBL;',
             pjf.intervenant_id,
             pjf.code_intervenant,
             pjf.date_validite,
+            pjf.duree_vie,
+            pjf.date_archive,
             COUNT(*) count,
             SUM(CASE WHEN validation_id IS NULL THEN 0 ELSE 1 END) validation,
             SUM(CASE WHEN fichier_id IS NULL THEN 0 ELSE 1 END) fichier
@@ -30339,10 +30363,13 @@ END UNICAEN_TBL;',
             tbl_piece_jointe_fournie pjf
           GROUP BY
             pjf.annee_id,
-            pjf.type_piece_jointe_id,
             pjf.intervenant_id,
             pjf.code_intervenant,
-            pjf.date_validite
+            pjf.type_piece_jointe_id,
+            pjf.date_validite,
+            pjf.duree_vie,
+            pjf.date_archive
+            ORDER BY pjf.annee_id ASC
 
         )
         SELECT
@@ -30352,13 +30379,19 @@ END UNICAEN_TBL;',
           CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END demandee,
           CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
           CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
-          NVL(pjd.heures_pour_seuil,0) heures_pour_seuil
+          NVL(pjd.heures_pour_seuil,0) heures_pour_seuil,
+          pjf.date_archive
         FROM
           tbl_piece_jointe_demande pjd
           FULL JOIN pjf
           ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
           AND pjd.code_intervenant = pjf.code_intervenant
-          AND pjd.annee_id < pjf.date_validite) tv
+          AND pjd.annee_id BETWEEN pjf.annee_id AND (pjf.annee_id + pjf.duree_vie - 1)
+          AND pjd.annee_id BETWEEN pjf.annee_id AND NVL(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
+
+          --AND (pjd.annee_id = pjf.annee_id
+          --AND pjd.annee_id < pjf.date_validite
+        ORDER By annee_id) tv
       WHERE
         \' || conds || \'
 
@@ -30555,7 +30588,8 @@ END UNICAEN_TBL;',
           v.id validation_id,
           f.id fichier_id,
           COALESCE(tpjs.duree_vie, 1) duree_vie,
-          i.annee_id+COALESCE(tpjs.duree_vie, 1) date_validite
+          i.annee_id+COALESCE(tpjs.duree_vie, 1) date_validite,
+          pj.date_archive date_archive
         FROM
                     piece_jointe          pj
                JOIN intervenant            i ON i.id = pj.intervenant_id
@@ -30581,9 +30615,10 @@ END UNICAEN_TBL;',
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      DUREE_VIE            = v.DUREE_VIE,
-      CODE_INTERVENANT     = v.CODE_INTERVENANT,
+      DATE_ARCHIVE         = v.DATE_ARCHIVE,
       DATE_VALIDITE        = v.DATE_VALIDITE,
+      CODE_INTERVENANT     = v.CODE_INTERVENANT,
+      DUREE_VIE            = v.DUREE_VIE,
       PIECE_JOINTE_ID      = v.PIECE_JOINTE_ID,
       ANNEE_ID             = v.ANNEE_ID,
       to_delete = 0
@@ -30591,9 +30626,10 @@ END UNICAEN_TBL;',
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      DUREE_VIE,
-      CODE_INTERVENANT,
+      DATE_ARCHIVE,
       DATE_VALIDITE,
+      CODE_INTERVENANT,
+      DUREE_VIE,
       PIECE_JOINTE_ID,
       FICHIER_ID,
       VALIDATION_ID,
@@ -30605,9 +30641,10 @@ END UNICAEN_TBL;',
     ) VALUES (
 
       TBL_PIECE_JOINTE_FOURNI_ID_SEQ.NEXTVAL,
-      v.DUREE_VIE,
-      v.CODE_INTERVENANT,
+      v.DATE_ARCHIVE,
       v.DATE_VALIDITE,
+      v.CODE_INTERVENANT,
+      v.DUREE_VIE,
       v.PIECE_JOINTE_ID,
       v.FICHIER_ID,
       v.VALIDATION_ID,
@@ -36017,6 +36054,8 @@ WITH pjf AS (
     pjf.intervenant_id,
     pjf.code_intervenant,
     pjf.date_validite,
+    pjf.duree_vie,
+    pjf.date_archive,
     COUNT(*) count,
     SUM(CASE WHEN validation_id IS NULL THEN 0 ELSE 1 END) validation,
     SUM(CASE WHEN fichier_id IS NULL THEN 0 ELSE 1 END) fichier
@@ -36024,10 +36063,13 @@ WITH pjf AS (
     tbl_piece_jointe_fournie pjf
   GROUP BY
     pjf.annee_id,
-    pjf.type_piece_jointe_id,
     pjf.intervenant_id,
     pjf.code_intervenant,
-    pjf.date_validite
+    pjf.type_piece_jointe_id,
+    pjf.date_validite,
+    pjf.duree_vie,
+    pjf.date_archive
+    ORDER BY pjf.annee_id ASC
 
 )
 SELECT
@@ -36037,13 +36079,19 @@ SELECT
   CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END demandee,
   CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
   CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
-  NVL(pjd.heures_pour_seuil,0) heures_pour_seuil
+  NVL(pjd.heures_pour_seuil,0) heures_pour_seuil,
+  pjf.date_archive
 FROM
   tbl_piece_jointe_demande pjd
   FULL JOIN pjf
   ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
   AND pjd.code_intervenant = pjf.code_intervenant
-  AND pjd.annee_id < pjf.date_validite',
+  AND pjd.annee_id BETWEEN pjf.annee_id AND (pjf.annee_id + pjf.duree_vie - 1)
+  AND pjd.annee_id BETWEEN pjf.annee_id AND NVL(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
+
+  --AND (pjd.annee_id = pjf.annee_id
+  --AND pjd.annee_id < pjf.date_validite
+ORDER By annee_id',
     ),
     'V_TBL_PIECE_JOINTE_DEMANDE' => 
     array (
@@ -36124,7 +36172,8 @@ SELECT
   v.id validation_id,
   f.id fichier_id,
   COALESCE(tpjs.duree_vie, 1) duree_vie,
-  i.annee_id+COALESCE(tpjs.duree_vie, 1) date_validite
+  i.annee_id+COALESCE(tpjs.duree_vie, 1) date_validite,
+  pj.date_archive date_archive
 FROM
             piece_jointe          pj
        JOIN intervenant            i ON i.id = pj.intervenant_id

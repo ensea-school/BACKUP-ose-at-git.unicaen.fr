@@ -344,6 +344,8 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         if ($this->getPremierRecrutement()) $txt .= ' PR ';
         if ($this->getFC()) $txt .= ' FC ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
+        if ($this->getDureeVie() && $this->getDureeVie() > 1 ) $txt .= ' ' . $this->getDureeVie() . 'ans';
+
 
         return $txt;
     }

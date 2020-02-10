@@ -54,5 +54,10 @@
     </field>
     <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="true" >
     </field>
+    <many-to-one field="dateArchive" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="DATE_ARCHIVE" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

@@ -75,6 +75,7 @@ $.widget("ose.pieceJointe", {
 
     onValidationChange: function( tpj, isValider )
     {
+        this.refreshFiles(tpj, isValider);
         this.refreshInfos();
         this._trigger('validation-change', null, this);
     },

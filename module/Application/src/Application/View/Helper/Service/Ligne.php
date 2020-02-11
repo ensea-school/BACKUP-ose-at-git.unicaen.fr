@@ -18,7 +18,6 @@ class Ligne extends AbstractViewHelper
     use ServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-
     /**
      * @var Liste
      */
@@ -33,21 +32,23 @@ class Ligne extends AbstractViewHelper
 
 
 
-
-
     /**
      * Helper entry point.
      *
-     * @param Liste $liste
+     * @param Liste   $liste
      * @param Service $service
+     *
      * @return self
      */
-    final public function __invoke( Liste $liste, Service $service )
+    final public function __invoke(Liste $liste, Service $service)
     {
         $this->setListe($liste);
-        $this->setService( $service );
+        $this->setService($service);
+
         return $this;
     }
+
+
 
     /**
      * Retourne le code HTML généré par cette aide de vue.
@@ -59,182 +60,210 @@ class Ligne extends AbstractViewHelper
         return $this->render();
     }
 
+
+
     /**
      * @return string
      */
     public function getRefreshUrl()
     {
         $typesIntervention = [];
-        foreach( $this->getListe()->getTypesIntervention() as $typeIntervention ){
+        foreach ($this->getListe()->getTypesIntervention() as $typeIntervention) {
             $typesIntervention[] = $typeIntervention->getCode();
         }
 
         $url = $this->getView()->url(
-                'service/rafraichir-ligne',
-                [
-                    'service' => $this->getService()->getId(),
-                ],
-                ['query' => [
-                    'only-content'          => 1,
-                    'read-only'             => $this->getReadOnly() ? '1' : '0',
-                ]]);
+            'service/rafraichir-ligne',
+            [
+                'service' => $this->getService()->getId(),
+            ],
+            ['query' => [
+                'only-content' => 1,
+                'read-only'    => $this->getReadOnly() ? '1' : '0',
+            ]]);
+
         return $url;
     }
+
+
 
     /**
      * Génère le code HTML.
      *
      * @param boolean $details
+     *
      * @return string
      */
-    public function render( $details=false )
+    public function render($details = false)
     {
-        $liste = $this->getListe();
+        $liste   = $this->getListe();
         $service = $this->getService();
         $element = $service->getElementPedagogique();
 
-        $vhl     = $service->getVolumeHoraireListe()->setTypeVolumeHoraire( $liste->getTypeVolumeHoraire() );
+        $vhl = $service->getVolumeHoraireListe()->setTypeVolumeHoraire($liste->getTypeVolumeHoraire());
 
         $typesIntervention = $this->getListe()->getTypesIntervention();
 
         $out = '';
-        if ($liste->getColumnVisibility('intervenant')){
-            $out .= '<td>'.$this->renderIntervenant($service->getIntervenant()).'</td>';
+        if ($liste->getColumnVisibility('intervenant')) {
+            $out .= '<td>' . $this->renderIntervenant($service->getIntervenant()) . '</td>';
         }
-        if ($liste->getColumnVisibility('structure-aff')){
-            if ($service->getIntervenant()->estPermanent()){
-                $out .= '<td>'.$this->renderStructure( $service->getIntervenant()->getStructure() )."</td>\n";
+        if ($liste->getColumnVisibility('structure-aff')) {
+            if ($service->getIntervenant()->getStatut()->estPermanent()) {
+                $out .= '<td>' . $this->renderStructure($service->getIntervenant()->getStructure()) . "</td>\n";
             } else {
                 $out .= "<td>&nbsp;</td>\n";
             }
         }
-        if (! empty($element)) {
-            if ($liste->getColumnVisibility('structure-ens')){
-                $out .= '<td>'.$this->renderStructure($element ? $element->getStructure() : null)."</td>\n";
+        if (!empty($element)) {
+            if ($liste->getColumnVisibility('structure-ens')) {
+                $out .= '<td>' . $this->renderStructure($element ? $element->getStructure() : null) . "</td>\n";
             }
-            if ($liste->getColumnVisibility('formation')){
-                $out .= '<td>'.$this->renderEtape($element ? $element->getEtape() : null)."</td>\n";
+            if ($liste->getColumnVisibility('formation')) {
+                $out .= '<td>' . $this->renderEtape($element ? $element->getEtape() : null) . "</td>\n";
             }
-            if ($liste->getColumnVisibility('periode')){
-                $out .= '<td style="text-align:center">'.$this->renderPeriode($element ? $element->getPeriode() : null)."</td>\n";
+            if ($liste->getColumnVisibility('periode')) {
+                $out .= '<td style="text-align:center">' . $this->renderPeriode($element ? $element->getPeriode() : null) . "</td>\n";
             }
-            if ($liste->getColumnVisibility('enseignement')){
-                $out .= '<td>'.$this->getView()->elementPedagogique($element)->renderLink()."</td>\n";
+            if ($liste->getColumnVisibility('enseignement')) {
+                $out .= '<td>' . $this->getView()->elementPedagogique($element)->renderLink() . "</td>\n";
             }
-            if ($liste->getColumnVisibility('foad')){
-                $out .= '<td style="text-align:center">'.$this->renderFOAD($element)."</td>\n";
+            if ($liste->getColumnVisibility('foad')) {
+                $out .= '<td style="text-align:center">' . $this->renderFOAD($element) . "</td>\n";
             }
-            if ($liste->getColumnVisibility('regimes-inscription')){
-                $out .= '<td style="text-align:center">'.$this->renderRegimeInscription($element)."</td>\n";
+            if ($liste->getColumnVisibility('regimes-inscription')) {
+                $out .= '<td style="text-align:center">' . $this->renderRegimeInscription($element) . "</td>\n";
             }
-        }else{
+        } else {
             $colspan = 0;
-            if ($liste->getColumnVisibility('structure-ens'))       $colspan++;
-            if ($liste->getColumnVisibility('formation'))           $colspan++;
-            if ($liste->getColumnVisibility('periode'))             $colspan++;
-            if ($colspan > 0){
-                $out .= '<td colspan="'.$colspan.'">'.$this->renderEtablissement( $service->getEtablissement() )."</td>\n";
+            if ($liste->getColumnVisibility('structure-ens')) $colspan++;
+            if ($liste->getColumnVisibility('formation')) $colspan++;
+            if ($liste->getColumnVisibility('periode')) $colspan++;
+            if ($colspan > 0) {
+                $out .= '<td colspan="' . $colspan . '">' . $this->renderEtablissement($service->getEtablissement()) . "</td>\n";
             }
 
             $colspan = 0;
-            if ($liste->getColumnVisibility('enseignement'))        $colspan++;
-            if ($liste->getColumnVisibility('foad'))                $colspan++;
+            if ($liste->getColumnVisibility('enseignement')) $colspan++;
+            if ($liste->getColumnVisibility('foad')) $colspan++;
             if ($liste->getColumnVisibility('regimes-inscription')) $colspan++;
-            if ($colspan > 0){
-                $out .= '<td colspan="'.$colspan.'">'.$service->getDescription()."</td>\n";
+            if ($colspan > 0) {
+                $out .= '<td colspan="' . $colspan . '">' . $service->getDescription() . "</td>\n";
             }
-
         }
-        if ($liste->getColumnVisibility('annee')){
-            $out .= '<td>'.$this->renderAnnee( $element ? $element->getAnnee() : null )."</td>\n";
+        if ($liste->getColumnVisibility('annee')) {
+            $out .= '<td>' . $this->renderAnnee($element ? $element->getAnnee() : null) . "</td>\n";
         }
-        foreach( $typesIntervention as $ti ){
-            $out .= $this->renderTypeIntervention( $vhl->setTypeIntervention($ti) );
+        foreach ($typesIntervention as $ti) {
+            $out .= $this->renderTypeIntervention($vhl->setTypeIntervention($ti));
         }
 
         $out .= '<td class="actions">';
-        if (! $this->getReadOnly()){
+        if (!$this->getReadOnly()) {
             $out .= $this->renderModifier();
             $out .= $this->renderSupprimer();
         }
-        $out .= $this->renderDetails( $details );
+        $out .= $this->renderDetails($details);
         $out .= '</td>';
+
         return $out;
     }
+
+
 
     protected function renderIntervenant($intervenant)
     {
-        return $this->getView()->intervenant( $intervenant )->renderLink();
+        return $this->getView()->intervenant($intervenant)->renderLink();
     }
+
+
 
     protected function renderStructure($structure)
     {
-        if (! $structure) return '';
+        if (!$structure) return '';
 
         $url = $this->getView()->url('structure/voir', ['structure' => $structure->getId()]);
-        $out = '<a href="'.$url.'" class="ajax-modal">'.$structure.'</a>';
+        $out = '<a href="' . $url . '" class="ajax-modal">' . $structure . '</a>';
+
         return $out;
     }
+
+
 
     protected function renderEtape($etape)
     {
         return $this->getView()->etape()->setEtape($etape)->renderLink();
     }
 
+
+
     protected function renderPeriode($periode)
     {
-        if ($periode){
+        if ($periode) {
             return $periode->getLibelleCourt();
-        }else{
+        } else {
             return '';
         }
     }
 
+
+
     protected function renderFOAD($element)
     {
-        if (! $element) return '';
+        if (!$element) return '';
         $out = (bool)$element->getTauxFoad() ? "Oui" : "Non";
+
         return $out;
     }
 
+
+
     protected function renderRegimeInscription($element)
     {
-        if (! $element) return '';
+        if (!$element) return '';
+
         return $element->getRegimesInscription(true);
     }
+
+
 
     protected function renderAnnee($annee)
     {
         $out = $annee->getLibelle();
+
         return $out;
     }
+
+
 
     protected function renderEtablissement($etablissement)
     {
         return $this->getView()->etablissement()->setEtablissement($etablissement)->renderLink();
     }
 
-    protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )
+
+
+    protected function renderTypeIntervention(\Application\Entity\VolumeHoraireListe $liste)
     {
-        $liste = $liste->setMotifNonPaiement(false);
+        $liste  = $liste->setMotifNonPaiement(false);
         $heures = $liste->getHeures();
 
-        $hasForbiddenPeriodes = $liste->hasForbiddenPeriodes();
+        $hasForbiddenPeriodes   = $liste->hasForbiddenPeriodes();
         $hasBadTypeIntervention =
-                $heures > 0
-                && $liste->getService()->getElementPedagogique()
-                && ! $liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention());
+            $heures > 0
+            && $liste->getService()->getElementPedagogique()
+            && !$liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention());
 
         $display = $this->getListe()->getTypeInterventionVisibility($liste->getTypeIntervention()) ? '' : ';display:none';
 
         $attribs = [
-            'class'                         => 'heures type-intervention '.$liste->getTypeIntervention()->getCode(),
-            'style'                         => 'text-align:right'.$display,
-            'id'                            => 'service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId(),
-            'data-value'                    => $heures,
-            'data-type-intervention-code'   => $liste->getTypeIntervention()->getCode(),
+            'class'                       => 'heures type-intervention ' . $liste->getTypeIntervention()->getCode(),
+            'style'                       => 'text-align:right' . $display,
+            'id'                          => 'service-' . $liste->getService()->getId() . '-ti-' . $liste->getTypeIntervention()->getId(),
+            'data-value'                  => $heures,
+            'data-type-intervention-code' => $liste->getTypeIntervention()->getCode(),
         ];
-        $out = '<td '.$this->htmlAttribs($attribs).'>';
+        $out     = '<td ' . $this->htmlAttribs($attribs) . '>';
         if ($hasForbiddenPeriodes) $out .= '<abbr class="bg-danger" title="Des heures sont renseignées sur une période non conforme à la période de l\'enseignement">';
         if ($hasBadTypeIntervention) $out .= '<abbr class="bg-danger" title="Ce type d\'intervention n\'est pas appliquable à cet enseignement">';
 
@@ -243,20 +272,26 @@ class Ligne extends AbstractViewHelper
         if ($hasBadTypeIntervention) $out .= '</abbr>';
         if ($hasForbiddenPeriodes) $out .= '</abbr>';
         $out .= "</td>\n";
+
         return $out;
     }
+
+
 
     protected function renderModifier()
     {
         $query = [
             'type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId(),
         ];
-        if ($this->getListe()->getIntervenant()){
+        if ($this->getListe()->getIntervenant()) {
             $query['intervenant'] = $this->getListe()->getIntervenant()->getRouteParam();
         }
         $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => $query]);
-        return '<a class="ajax-modal" data-event="service-modify-message" href="'.$url.'" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-pencil"></span></a>';
+
+        return '<a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-pencil"></span></a>';
     }
+
+
 
     protected function renderSupprimer()
     {
@@ -273,23 +308,31 @@ class Ligne extends AbstractViewHelper
         ])->html('<span class="glyphicon glyphicon-trash"></span>');
     }
 
-    protected function renderDetails( $details=false )
+
+
+    protected function renderDetails($details = false)
     {
         $out =
-              '<a class="service-details-button" title="Détail des heures">'
-                  .'<span class="glyphicon glyphicon-chevron-'.($details ? 'up' : 'down').'"></span>'
-              .'</a>';
+            '<a class="service-details-button" title="Détail des heures">'
+            . '<span class="glyphicon glyphicon-chevron-' . ($details ? 'up' : 'down') . '"></span>'
+            . '</a>';
+
         return $out;
     }
 
+
+
     protected function toQuery($param)
     {
-        if (null === $param) return null;
-        elseif (false === $param) return 'false';
-        elseif( true === $param) return 'true';
-        elseif(method_exists($param, 'getId')) return $param->getId();
+        if (null === $param) {
+            return null;
+        } elseif (false === $param) return 'false';
+        elseif (true === $param) return 'true';
+        elseif (method_exists($param, 'getId')) return $param->getId();
         else throw new \LogicException('Le paramètre n\'est pas du bon type');
     }
+
+
 
     /**
      *
@@ -300,32 +343,42 @@ class Ligne extends AbstractViewHelper
         return $this->liste;
     }
 
+
+
     /**
      *
      * @param Liste $liste
+     *
      * @return self
      */
     function setListe(Liste $liste)
     {
         $this->liste = $liste;
+
         return $this;
     }
+
+
 
     public function getReadOnly()
     {
         return $this->getListe()->getReadOnly() || $this->forcedReadOnly;
     }
 
+
+
     /**
      *
      * @param Service $service
+     *
      * @return self
      */
     public function setService(Service $service = null)
     {
         $service->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire());
-        $this->forcedReadOnly = ! $this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
-        $this->service = $service;
+        $this->forcedReadOnly = !$this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
+        $this->service        = $service;
+
         return $this;
     }
 

@@ -88,7 +88,7 @@ class ServiceReferentielController extends AbstractController
             $services = [];
         }
 
-        $renderReferentiel = $intervenant && $intervenant->estPermanent();
+        $renderReferentiel = $intervenant && $intervenant->getStatut()->estPermanent();
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
 
@@ -219,7 +219,6 @@ class ServiceReferentielController extends AbstractController
                     $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
                 }
             }
-
         }
 
         return new MessengerViewModel;
@@ -273,7 +272,7 @@ class ServiceReferentielController extends AbstractController
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
@@ -342,7 +341,7 @@ class ServiceReferentielController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->enregistrer($typeVolumeHoraire, $validation);
-                    $this->updateTableauxBord($intervenant,true);
+                    $this->updateTableauxBord($intervenant, true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Validation effectuée avec succès."
                     );
@@ -370,7 +369,7 @@ class ServiceReferentielController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->supprimer($validation);
-                    $this->updateTableauxBord($validation->getIntervenant(),true);
+                    $this->updateTableauxBord($validation->getIntervenant(), true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Dévalidation effectuée avec succès."
                     );
@@ -387,11 +386,11 @@ class ServiceReferentielController extends AbstractController
 
 
 
-    private function updateTableauxBord(Intervenant $intervenant, $validation=false)
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
-        $this->getServiceWorkflow()->calculerTableauxBord(['formule','validation_referentiel','service_referentiel'], $intervenant);
-        if (!$validation){
-            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie','piece_jointe_fournie'], $intervenant);
+        $this->getServiceWorkflow()->calculerTableauxBord(['formule', 'validation_referentiel', 'service_referentiel'], $intervenant);
+        if (!$validation) {
+            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie', 'piece_jointe_fournie'], $intervenant);
         }
     }
 

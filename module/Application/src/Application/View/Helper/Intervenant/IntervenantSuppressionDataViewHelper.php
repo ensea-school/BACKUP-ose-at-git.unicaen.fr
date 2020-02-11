@@ -77,12 +77,11 @@ class IntervenantSuppressionDataViewHelper extends AbstractViewHelper
         if ($isd->getLabel()) {
             $html = $isd->getLabel();
         } elseif ($isd->getEntity()) {
-            if ($isd->getEntity()->estNonHistorise()){
+            if ($isd->getEntity()->estNonHistorise()) {
                 $html = $this->renderEntity($isd->getEntity());
-            }else{
-                $html = $this->getView()->tag('span', ['class' => 'bg-danger'] )->html($this->renderEntity($isd->getEntity()));
+            } else {
+                $html = $this->getView()->tag('span', ['class' => 'bg-danger'])->html($this->renderEntity($isd->getEntity()));
             }
-
         } else {
             $html = 'Inconnu';
         }
@@ -97,14 +96,14 @@ class IntervenantSuppressionDataViewHelper extends AbstractViewHelper
         }
 
         $attrs = [
-            'id'    => $isd->getAbsoluteId(),
+            'id' => $isd->getAbsoluteId(),
         ];
-        if ($first || $isd->getEntity() instanceof VolumeHoraire || $isd->getEntity() instanceof VolumeHoraireReferentiel){
+        if ($first || $isd->getEntity() instanceof VolumeHoraire || $isd->getEntity() instanceof VolumeHoraireReferentiel) {
             $attrs['class'] = 'jstree-open';
         }
         if ($isd->getIcon()) {
             $attrs['data-jstree'] = [
-                'icon'  => $isd->getIcon(),
+                'icon' => $isd->getIcon(),
 
             ];
         }
@@ -132,7 +131,7 @@ class IntervenantSuppressionDataViewHelper extends AbstractViewHelper
                 return $this->renderModificationServiceDu($entity);
 
             case $entity instanceof Intervenant:
-                return (string)$entity->getNomComplet().' <small>(Fiche '.$entity->getAnnee().' uniquement)</small>';
+                return (string)$entity . ' <small>(Fiche ' . $entity->getAnnee() . ' uniquement)</small>';
 
             case $entity instanceof Validation:
                 return (string)$this->getView()->validation($entity)->renderLabel();

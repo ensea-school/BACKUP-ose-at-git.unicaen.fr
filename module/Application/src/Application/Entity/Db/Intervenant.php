@@ -2,17 +2,21 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\AnneeAwareTrait;
+use Application\Entity\Db\Traits\CiviliteAwareTrait;
 use Application\Entity\Db\Traits\DisciplineAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectManagerAware;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Traits\AdresseTrait;
+use Application\Interfaces\AdresseInterface;
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManagerAware;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Application\Constants;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 
@@ -20,16 +24,25 @@ use Application\Entity\Db\Interfaces\AnneeAwareInterface;
  * Intervenant
  *
  */
-class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface, ObjectManagerAware
+class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface, ObjectManagerAware, AdresseInterface
 {
-    use HistoriqueAwareTrait;
+    use AnneeAwareTrait;
+    use StructureAwareTrait;
     use GradeAwareTrait;
     use DisciplineAwareTrait;
+    use CiviliteAwareTrait;
+    use AdresseTrait;
     use ImportAwareTrait;
+    use HistoriqueAwareTrait;
     use EntityManagerAwareTrait;
 
     /**
-     * @var string
+     * @var int|null
+     */
+    protected $id;
+
+    /**
+     * @var string|null
      */
     protected $code;
 
@@ -39,99 +52,151 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     protected $utilisateurCode;
 
     /**
-     * @var \DateTime
+     * @var \Application\Entity\Db\StatutIntervenant
      */
-    protected $dateNaissance;
+    protected $statut;
 
     /**
-     * @var string
-     */
-    protected $depNaissanceCodeInsee;
-
-    /**
-     * @var Pays
-     */
-    private $paysNaissance;
-
-    /**
-     * @var Pays
-     */
-    private $paysNationalite;
-
-    /**
-     * @var Departement
-     */
-    private $depNaissance;
-
-    /**
-     * @var string
-     */
-    protected $depNaissanceLibelle;
-
-    /**
-     * @var string
-     */
-    protected $email;
-
-    /**
-     * @var string
-     */
-    protected $nomPatronymique;
-
-    /**
-     * @var string
+     * @var string|null
      */
     protected $nomUsuel;
 
     /**
-     * @var string
-     */
-    protected $numeroInsee;
-
-    /**
-     * @var string
-     */
-    protected $numeroInseeCle;
-
-    /**
-     * @var boolean
-     */
-    protected $numeroInseeProvisoire;
-
-    /**
-     * @var string
+     * @var string|null
      */
     protected $prenom;
 
     /**
-     * @var string
+     * @var \DateTime|null
      */
-    protected $telMobile;
+    protected $dateNaissance;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $telPro;
+    protected $nomPatronymique;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $villeNaissanceCodeInsee;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $villeNaissanceLibelle;
 
     /**
-     * @var integer
+     * @var Pays|null
      */
-    protected $id;
+    private $paysNaissance;
 
     /**
-     * @var \Application\Entity\Db\Annee
+     * @var Departement|null
      */
-    protected $annee;
+    private $depNaissance;
+
+    /**
+     * @var Pays|null
+     */
+    private $paysNationalite;
+
+    /**
+     * @var string|null
+     */
+    protected $telPro;
+
+    /**
+     * @var string|null
+     */
+    protected $telPerso;
+
+    /**
+     * @var string|null
+     */
+    protected $emailPro;
+
+    /**
+     * @var string|null
+     */
+    protected $emailPerso;
+
+    /**
+     * @var string|null
+     */
+    protected $numeroInsee;
+
+    /**
+     * @var string|null
+     */
+    protected $numeroInseeCle;
+
+    /**
+     * @var bool|null
+     */
+    protected $numeroInseeProvisoire;
+
+    /**
+     * @var string|null
+     */
+    protected $IBAN;
+
+    /**
+     * @var string|null
+     */
+    protected $BIC;
+
+    /**
+     * @var bool
+     */
+    protected $ribHorsSepa = false;
+
+    /**
+     * @var string|null
+     */
+    protected $autre1;
+
+    /**
+     * @var string|null
+     */
+    protected $autre2;
+
+    /**
+     * @var string|null
+     */
+    protected $autre3;
+
+    /**
+     * @var string|null
+     */
+    protected $autre4;
+
+    /**
+     * @var string|null
+     */
+    protected $autre5;
+
+    //protected $employeur;
+
+    /**
+     * @var float|null
+     */
+    protected $montantIndemniteFc;
+
+    /**
+     * @var bool|null
+     */
+    protected $premierRecrutement;
+
+    /**
+     * @var bool
+     */
+    protected $syncStatut = true;
+
+    /**
+     * @var bool
+     */
+    protected $syncStructure = true;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -141,82 +206,12 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    protected $adresse;
-
-    /**
-     * @var \Application\Entity\Db\Adresse
-     */
-    protected $adressePrinc;
-
-    /**
-     * @var \Application\Entity\Db\StatutIntervenant
-     */
-    protected $statut;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structure;
-
-    /**
-     * @var \Application\Entity\Db\Civilite
-     */
-    protected $civilite;
-
-    /**
-     * @var string
-     */
-    protected $BIC;
-
-    /**
-     * @var string
-     */
-    protected $IBAN;
-
-    /**
-     * @var bool
-     */
-    protected $ribHorsSepa = false;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $service;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $pieceJointe;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $histoService;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $serviceReferentiel;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $validation;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
     protected $agrement;
 
     /**
-     * @var boolean
-     */
-    protected $premierRecrutement;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $formuleReferentiel;
+    protected $contrat;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -224,13 +219,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     private $formuleResultat;
 
     /**
-     * @var \Application\Entity\Db\IndicModifDossier
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $indicModifDossier;
+    protected $histoService;
 
     /**
-     * miseEnPaiementIntervenantStructure
-     *
      * @var MiseEnPaiementIntervenantStructure
      */
     protected $miseEnPaiementIntervenantStructure;
@@ -243,17 +236,39 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    protected $contrat;
+    protected $pieceJointe;
 
     /**
-     * @var float
+     * @var \Doctrine\Common\Collections\Collection
      */
-    protected $montantIndemniteFc;
+    protected $service;
 
     /**
-     * @var boolean
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $serviceReferentiel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $validation;
+
+    /**
+     * Cache
+     *
+     * @var bool
      */
     protected $hasMiseEnPaiement = null;
+
+
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
 
 
@@ -263,25 +278,121 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     public function __construct()
     {
         $this->affectation                        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->adresse                            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->validation                         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->agrement                           = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->service                            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pieceJointe                        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->histoService                       = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serviceReferentiel                 = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleResultat                    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->histoService                       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modificationServiceDu              = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pieceJointe                        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->service                            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviceReferentiel                 = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation                         = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
 
     /**
+     * Retourne la représentation littérale de cet objet.
+     *
      * @return string
      */
-    public function getCode()
+    public function __toString()
+    {
+        return strtoupper($this->getNomUsuel()) . ' ' . ucfirst($this->getPrenom());
+    }
+
+
+
+    function __sleep()
+    {
+        return [];
+    }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'Intervenant';
+    }
+
+
+
+    /**
+     * retourne le paramètre de route
+     *
+     * @return string
+     */
+    public function getRouteParam()
+    {
+        return $this->getCode();
+    }
+
+
+
+    public function getAdresseIdentite(): ?string
+    {
+        $identite = [];
+        if ($this->getCivilite()) $identite[] = (string)$this->getCivilite();
+        if ($this->getNomUsuel()) $identite[] = $this->getNomUsuel();
+        if ($this->getPrenom()) $identite[] = $this->getPrenom();
+
+        if (empty($identite)) {
+            return null;
+        } else {
+            return implode(' ', $identite);
+        }
+    }
+
+
+
+    /**
+     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
+     *
+     * @param ObjectManager $objectManager
+     * @param ClassMetadata $classMetadata
+     *
+     * @return void
+     */
+    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
+    {
+        $this->setEntityManager($objectManager);
+    }
+
+
+
+    /**
+     * @param bool $demande
+     */
+    public function hasMiseEnPaiement($demande = true)
+    {
+        if ($this->hasMiseEnPaiement === null) {
+            $id     = (int)$this->getId();
+            $heures = $demande ? 'heures_demandees' : 'heures_payees';
+
+            $sql = "SELECT COUNT(*) res FROM tbl_paiement p "
+                . "WHERE p.intervenant_id = $id AND p.$heures > 0 AND rownum = 1";
+
+            $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
+
+            $this->hasMiseEnPaiement = $res[0]['RES'] == 1;
+        }
+
+        return $this->hasMiseEnPaiement;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -289,11 +400,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * @param string $code
+     * @param string|null $code
      *
      * @return Intervenant
      */
-    public function setCode($code)
+    public function setCode(?string $code): Intervenant
     {
         $this->code = $code;
 
@@ -305,7 +416,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     /**
      * @return string|null
      */
-    public function getUtilisateurCode()
+    public function getUtilisateurCode(): ?string
     {
         return $this->utilisateurCode;
     }
@@ -317,7 +428,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
      *
      * @return Intervenant
      */
-    public function setUtilisateurCode($utilisateurCode)
+    public function setUtilisateurCode(?string $utilisateurCode): Intervenant
     {
         $this->utilisateurCode = $utilisateurCode;
 
@@ -327,609 +438,9 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Set dateNaissance
-     *
-     * @param \DateTime $dateNaissance
-     *
-     * @return Intervenant
-     */
-    public function setDateNaissance($dateNaissance)
-    {
-        $this->dateNaissance = $dateNaissance;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get dateNaissance
-     *
-     * @return \DateTime
-     */
-    public function getDateNaissance()
-    {
-        return $this->dateNaissance;
-    }
-
-
-
-    /**
-     * Set depNaissanceCodeInsee
-     *
-     * @param string $depNaissanceCodeInsee
-     *
-     * @return Intervenant
-     */
-    public function setDepNaissanceCodeInsee($depNaissanceCodeInsee)
-    {
-        $this->depNaissanceCodeInsee = $depNaissanceCodeInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get depNaissanceCodeInsee
-     *
-     * @return string
-     */
-    public function getDepNaissanceCodeInsee()
-    {
-        return $this->depNaissanceCodeInsee;
-    }
-
-
-
-    /**
-     * @return Pays
-     */
-    public function getPaysNaissance()
-    {
-        return $this->paysNaissance;
-    }
-
-
-
-    /**
-     * @param Pays $paysNaissance
-     *
-     * @return Intervenant
-     */
-    public function setPaysNaissance($paysNaissance)
-    {
-        $this->paysNaissance = $paysNaissance;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return Pays
-     */
-    public function getPaysNationalite()
-    {
-        return $this->paysNationalite;
-    }
-
-
-
-    /**
-     * @param Pays $paysNationalite
-     *
-     * @return Intervenant
-     */
-    public function setPaysNationalite($paysNationalite)
-    {
-        $this->paysNationalite = $paysNationalite;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return Departement
-     */
-    public function getDepNaissance()
-    {
-        return $this->depNaissance;
-    }
-
-
-
-    /**
-     * @param Departement $depNaissance
-     *
-     * @return Intervenant
-     */
-    public function setDepNaissance($depNaissance)
-    {
-        $this->depNaissance = $depNaissance;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Set depNaissanceLibelle
-     *
-     * @param string $depNaissanceLibelle
-     *
-     * @return Intervenant
-     */
-    public function setDepNaissanceLibelle($depNaissanceLibelle)
-    {
-        $this->depNaissanceLibelle = $depNaissanceLibelle;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get depNaissanceLibelle
-     *
-     * @return string
-     */
-    public function getDepNaissanceLibelle()
-    {
-        return $this->depNaissanceLibelle;
-    }
-
-
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Intervenant
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-
-
-    /**
-     * Set nomPatronymique
-     *
-     * @param string $nomPatronymique
-     *
-     * @return Intervenant
-     */
-    public function setNomPatronymique($nomPatronymique)
-    {
-        $this->nomPatronymique = $nomPatronymique;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get nomPatronymique
-     *
-     * @return string
-     */
-    public function getNomPatronymique()
-    {
-        return $this->nomPatronymique;
-    }
-
-
-
-    /**
-     * Set nomUsuel
-     *
-     * @param string $nomUsuel
-     *
-     * @return Intervenant
-     */
-    public function setNomUsuel($nomUsuel)
-    {
-        $this->nomUsuel = $nomUsuel;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string
-     */
-    public function getNomUsuel()
-    {
-        return $this->nomUsuel;
-    }
-
-
-
-    /**
-     * Set numeroInsee
-     *
-     * @param string $numeroInsee
-     *
-     * @return Intervenant
-     */
-    public function setNumeroInsee($numeroInsee)
-    {
-        $this->numeroInsee = $numeroInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get numeroInsee
-     *
-     * @return string
-     */
-    public function getNumeroInsee()
-    {
-        return $this->numeroInsee;
-    }
-
-
-
-    /**
-     * Set numeroInseeCle
-     *
-     * @param string $numeroInseeCle
-     *
-     * @return Intervenant
-     */
-    public function setNumeroInseeCle($numeroInseeCle)
-    {
-        $this->numeroInseeCle = $numeroInseeCle;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get numeroInseeCle
-     *
-     * @return string
-     */
-    public function getNumeroInseeCle()
-    {
-        return $this->numeroInseeCle ? sprintf('%02d', $this->numeroInseeCle) : $this->numeroInseeCle;
-    }
-
-
-
-    /**
-     * Set numeroInseeProvisoire
-     *
-     * @param boolean $numeroInseeProvisoire
-     *
-     * @return Intervenant
-     */
-    public function setNumeroInseeProvisoire($numeroInseeProvisoire)
-    {
-        $this->numeroInseeProvisoire = $numeroInseeProvisoire;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get numeroInseeProvisoire
-     *
-     * @return boolean
-     */
-    public function getNumeroInseeProvisoire()
-    {
-        return $this->numeroInseeProvisoire;
-    }
-
-
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     *
-     * @return Intervenant
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get prenom
-     *
-     * @return string
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-
-
-    /**
-     * Set telMobile
-     *
-     * @param string $telMobile
-     *
-     * @return Intervenant
-     */
-    public function setTelMobile($telMobile)
-    {
-        $this->telMobile = $telMobile;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get telMobile
-     *
-     * @return string
-     */
-    public function getTelMobile()
-    {
-        return $this->telMobile;
-    }
-
-
-
-    /**
-     * Set telPro
-     *
-     * @param string $telPro
-     *
-     * @return Intervenant
-     */
-    public function setTelPro($telPro)
-    {
-        $this->telPro = $telPro;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get telPro
-     *
-     * @return string
-     */
-    public function getTelPro()
-    {
-        return $this->telPro;
-    }
-
-
-
-    /**
-     * Set villeNaissanceCodeInsee
-     *
-     * @param string $villeNaissanceCodeInsee
-     *
-     * @return Intervenant
-     */
-    public function setVilleNaissanceCodeInsee($villeNaissanceCodeInsee)
-    {
-        $this->villeNaissanceCodeInsee = $villeNaissanceCodeInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get villeNaissanceCodeInsee
-     *
-     * @return string
-     */
-    public function getVilleNaissanceCodeInsee()
-    {
-        return $this->villeNaissanceCodeInsee;
-    }
-
-
-
-    /**
-     * Set villeNaissanceLibelle
-     *
-     * @param string $villeNaissanceLibelle
-     *
-     * @return Intervenant
-     */
-    public function setVilleNaissanceLibelle($villeNaissanceLibelle)
-    {
-        $this->villeNaissanceLibelle = $villeNaissanceLibelle;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get villeNaissanceLibelle
-     *
-     * @return string
-     */
-    public function getVilleNaissanceLibelle()
-    {
-        return $this->villeNaissanceLibelle;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return Service
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
-    }
-
-
-
-    /**
-     * Add affectation
-     *
-     * @param \Application\Entity\Db\AffectationRecherche $affectation
-     *
-     * @return Intervenant
-     */
-    public function addAffectation(\Application\Entity\Db\AffectationRecherche $affectation)
-    {
-        $this->affectation[] = $affectation;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove affectation
-     *
-     * @param \Application\Entity\Db\AffectationRecherche $affectation
-     */
-    public function removeAffectation(\Application\Entity\Db\AffectationRecherche $affectation)
-    {
-        $this->affectation->removeElement($affectation);
-    }
-
-
-
-    /**
-     * Get affectation
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAffectation()
-    {
-        return $this->affectation;
-    }
-
-
-
-    /**
-     * Add adresse
-     *
-     * @param \Application\Entity\Db\AdresseIntervenant $adresse
-     *
-     * @return Intervenant
-     */
-    public function addAdresse(\Application\Entity\Db\AdresseIntervenant $adresse)
-    {
-        $this->adresse[] = $adresse;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove adresse
-     *
-     * @param \Application\Entity\Db\AdresseIntervenant $adresse
-     */
-    public function removeAdresse(\Application\Entity\Db\AdresseIntervenant $adresse)
-    {
-        $this->adresse->removeElement($adresse);
-    }
-
-
-
-    /**
-     * Get adresse
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAdresse()
-    {
-        return $this->adresse;
-    }
-
-
-
-    /**
-     * Set statut
-     *
-     * @param \Application\Entity\Db\StatutIntervenant $statut
-     *
-     * @return Intervenant
-     */
-    public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get statut
      *
-     * @return \Application\Entity\Db\StatutIntervenant
+     * @return StatutIntervenant
      */
     public function getStatut()
     {
@@ -939,15 +450,15 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Set civilite
+     * Set statut
      *
-     * @param \Application\Entity\Db\Civilite $civilite
+     * @param StatutIntervenant $statut
      *
      * @return Intervenant
      */
-    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
+    public function setStatut(StatutIntervenant $statut = null)
     {
-        $this->civilite = $civilite;
+        $this->statut = $statut;
 
         return $this;
     }
@@ -955,27 +466,23 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Get civilite
-     *
-     * @return \Application\Entity\Db\Civilite
+     * @return string|null
      */
-    public function getCivilite()
+    public function getNomUsuel(): ?string
     {
-        return $this->civilite;
+        return $this->nomUsuel;
     }
 
 
 
     /**
-     * Set BIC
-     *
-     * @param string $BIC
+     * @param string|null $nomUsuel
      *
      * @return Intervenant
      */
-    public function setBIC($BIC = null)
+    public function setNomUsuel(?string $nomUsuel): Intervenant
     {
-        $this->BIC = $BIC;
+        $this->nomUsuel = $nomUsuel;
 
         return $this;
     }
@@ -983,25 +490,381 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Get BIC
-     *
-     * @return string
+     * @return string|null
      */
-    public function getBIC()
+    public function getPrenom(): ?string
     {
-        return $this->BIC;
+        return $this->prenom;
     }
 
 
 
     /**
-     * Set IBAN
-     *
-     * @param string $IBAN
+     * @param string|null $prenom
      *
      * @return Intervenant
      */
-    public function setIBAN($IBAN = null)
+    public function setPrenom(?string $prenom): Intervenant
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDateNaissance(): ?\DateTime
+    {
+        return $this->dateNaissance;
+    }
+
+
+
+    /**
+     * @param \DateTime|null $dateNaissance
+     *
+     * @return Intervenant
+     */
+    public function setDateNaissance(?\DateTime $dateNaissance): Intervenant
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getNomPatronymique(): ?string
+    {
+        return $this->nomPatronymique;
+    }
+
+
+
+    /**
+     * @param string|null $nomPatronymique
+     *
+     * @return Intervenant
+     */
+    public function setNomPatronymique(?string $nomPatronymique): Intervenant
+    {
+        $this->nomPatronymique = $nomPatronymique;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getVilleNaissanceCodeInsee(): ?string
+    {
+        return $this->villeNaissanceCodeInsee;
+    }
+
+
+
+    /**
+     * @param string|null $villeNaissanceCodeInsee
+     *
+     * @return Intervenant
+     */
+    public function setVilleNaissanceCodeInsee(?string $villeNaissanceCodeInsee): Intervenant
+    {
+        $this->villeNaissanceCodeInsee = $villeNaissanceCodeInsee;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getVilleNaissanceLibelle(): ?string
+    {
+        return $this->villeNaissanceLibelle;
+    }
+
+
+
+    /**
+     * @param string|null $villeNaissanceLibelle
+     *
+     * @return Intervenant
+     */
+    public function setVilleNaissanceLibelle(?string $villeNaissanceLibelle): Intervenant
+    {
+        $this->villeNaissanceLibelle = $villeNaissanceLibelle;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Pays|null
+     */
+    public function getPaysNaissance(): ?Pays
+    {
+        return $this->paysNaissance;
+    }
+
+
+
+    /**
+     * @param Pays|null $paysNaissance
+     *
+     * @return Intervenant
+     */
+    public function setPaysNaissance(?Pays $paysNaissance): Intervenant
+    {
+        $this->paysNaissance = $paysNaissance;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Departement|null
+     */
+    public function getDepNaissance(): ?Departement
+    {
+        return $this->depNaissance;
+    }
+
+
+
+    /**
+     * @param Departement|null $depNaissance
+     *
+     * @return Intervenant
+     */
+    public function setDepNaissance(?Departement $depNaissance): Intervenant
+    {
+        $this->depNaissance = $depNaissance;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Pays|null
+     */
+    public function getPaysNationalite(): ?Pays
+    {
+        return $this->paysNationalite;
+    }
+
+
+
+    /**
+     * @param Pays|null $paysNationalite
+     *
+     * @return Intervenant
+     */
+    public function setPaysNationalite(?Pays $paysNationalite): Intervenant
+    {
+        $this->paysNationalite = $paysNationalite;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getTelPro(): ?string
+    {
+        return $this->telPro;
+    }
+
+
+
+    /**
+     * @param string|null $telPro
+     *
+     * @return Intervenant
+     */
+    public function setTelPro(?string $telPro): Intervenant
+    {
+        $this->telPro = $telPro;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getTelPerso(): ?string
+    {
+        return $this->telPerso;
+    }
+
+
+
+    /**
+     * @param string|null $telPerso
+     *
+     * @return Intervenant
+     */
+    public function setTelPerso(?string $telPerso): Intervenant
+    {
+        $this->telPerso = $telPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getEmailPro(): ?string
+    {
+        return $this->emailPro;
+    }
+
+
+
+    /**
+     * @param string|null $emailPro
+     *
+     * @return Intervenant
+     */
+    public function setEmailPro(?string $emailPro): Intervenant
+    {
+        $this->emailPro = $emailPro;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getEmailPerso(): ?string
+    {
+        return $this->emailPerso;
+    }
+
+
+
+    /**
+     * @param string|null $emailPerso
+     *
+     * @return Intervenant
+     */
+    public function setEmailPerso(?string $emailPerso): Intervenant
+    {
+        $this->emailPerso = $emailPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getNumeroInsee(): ?string
+    {
+        return $this->numeroInsee;
+    }
+
+
+
+    /**
+     * @param string|null $numeroInsee
+     *
+     * @return Intervenant
+     */
+    public function setNumeroInsee(?string $numeroInsee): Intervenant
+    {
+        $this->numeroInsee = $numeroInsee;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getNumeroInseeCle(): ?string
+    {
+        return $this->numeroInseeCle;
+    }
+
+
+
+    /**
+     * @param string|null $numeroInseeCle
+     *
+     * @return Intervenant
+     */
+    public function setNumeroInseeCle(?string $numeroInseeCle): Intervenant
+    {
+        $this->numeroInseeCle = $numeroInseeCle;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool|null
+     */
+    public function getNumeroInseeProvisoire(): ?bool
+    {
+        return $this->numeroInseeProvisoire;
+    }
+
+
+
+    /**
+     * @param bool|null $numeroInseeProvisoire
+     *
+     * @return Intervenant
+     */
+    public function setNumeroInseeProvisoire(?bool $numeroInseeProvisoire): Intervenant
+    {
+        $this->numeroInseeProvisoire = $numeroInseeProvisoire;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getIBAN(): ?string
+    {
+        return $this->IBAN;
+    }
+
+
+
+    /**
+     * @param string|null $IBAN
+     *
+     * @return Intervenant
+     */
+    public function setIBAN(?string $IBAN): Intervenant
     {
         $this->IBAN = $IBAN;
 
@@ -1011,13 +874,25 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Get IBAN
-     *
-     * @return string
+     * @return string|null
      */
-    public function getIBAN()
+    public function getBIC(): ?string
     {
-        return $this->IBAN;
+        return $this->BIC;
+    }
+
+
+
+    /**
+     * @param string|null $BIC
+     *
+     * @return Intervenant
+     */
+    public function setBIC(?string $BIC): Intervenant
+    {
+        $this->BIC = $BIC;
+
+        return $this;
     }
 
 
@@ -1047,15 +922,23 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
+     * @return string|null
+     */
+    public function getAutre1(): ?string
+    {
+        return $this->autre1;
+    }
+
+
+
+    /**
+     * @param string|null $autre1
      *
      * @return Intervenant
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setAutre1(?string $autre1): Intervenant
     {
-        $this->structure = $structure;
+        $this->autre1 = $autre1;
 
         return $this;
     }
@@ -1063,27 +946,23 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
+     * @return string|null
      */
-    public function getStructure()
+    public function getAutre2(): ?string
     {
-        return $this->structure;
+        return $this->autre2;
     }
 
 
 
     /**
-     * Add pieceJointe
-     *
-     * @param \Application\Entity\Db\PieceJointe $pieceJointe
+     * @param string|null $autre2
      *
      * @return Intervenant
      */
-    public function addPieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe)
+    public function setAutre2(?string $autre2): Intervenant
     {
-        $this->pieceJointe[] = $pieceJointe;
+        $this->autre2 = $autre2;
 
         return $this;
     }
@@ -1091,259 +970,181 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Remove pieceJointe
-     *
-     * @param \Application\Entity\Db\PieceJointe $pieceJointe
+     * @return string|null
      */
-    public function removePieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe)
+    public function getAutre3(): ?string
     {
-        $this->service->removeElement($pieceJointe);
+        return $this->autre3;
     }
 
 
 
     /**
-     * Get pieceJointe
+     * @param string|null $autre3
+     *
+     * @return Intervenant
+     */
+    public function setAutre3(?string $autre3): Intervenant
+    {
+        $this->autre3 = $autre3;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getAutre4(): ?string
+    {
+        return $this->autre4;
+    }
+
+
+
+    /**
+     * @param string|null $autre4
+     *
+     * @return Intervenant
+     */
+    public function setAutre4(?string $autre4): Intervenant
+    {
+        $this->autre4 = $autre4;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getAutre5(): ?string
+    {
+        return $this->autre5;
+    }
+
+
+
+    /**
+     * @param string|null $autre5
+     *
+     * @return Intervenant
+     */
+    public function setAutre5(?string $autre5): Intervenant
+    {
+        $this->autre5 = $autre5;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float|null
+     */
+    public function getMontantIndemniteFc(): ?float
+    {
+        return $this->montantIndemniteFc;
+    }
+
+
+
+    /**
+     * @param float|null $montantIndemniteFc
+     *
+     * @return Intervenant
+     */
+    public function setMontantIndemniteFc(?float $montantIndemniteFc): Intervenant
+    {
+        $this->montantIndemniteFc = $montantIndemniteFc;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool|null
+     */
+    public function getPremierRecrutement(): ?bool
+    {
+        return $this->premierRecrutement;
+    }
+
+
+
+    /**
+     * @param bool|null $premierRecrutement
+     *
+     * @return Intervenant
+     */
+    public function setPremierRecrutement(?bool $premierRecrutement): Intervenant
+    {
+        $this->premierRecrutement = $premierRecrutement;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isSyncStatut(): bool
+    {
+        return $this->syncStatut;
+    }
+
+
+
+    /**
+     * @param bool $syncStatut
+     *
+     * @return Intervenant
+     */
+    public function setSyncStatut(bool $syncStatut): Intervenant
+    {
+        $this->syncStatut = $syncStatut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isSyncStructure(): bool
+    {
+        return $this->syncStructure;
+    }
+
+
+
+    /**
+     * @param bool $syncStructure
+     *
+     * @return Intervenant
+     */
+    public function setSyncStructure(bool $syncStructure): Intervenant
+    {
+        $this->syncStructure = $syncStructure;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get affectation
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPieceJointe()
+    public function getAffectation()
     {
-        return $this->pieceJointe;
-    }
-
-
-
-    /**
-     * Add service
-     *
-     * @param \Application\Entity\Db\Service $service
-     *
-     * @return Intervenant
-     */
-    public function addService(\Application\Entity\Db\Service $service)
-    {
-        $this->service[] = $service;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove service
-     *
-     * @param \Application\Entity\Db\Service $service
-     */
-    public function removeService(\Application\Entity\Db\Service $service)
-    {
-        $this->service->removeElement($service);
-    }
-
-
-
-    /**
-     * Get service
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-
-
-    /**
-     * Add histo service
-     *
-     * @param HistoIntervenantService $histoService
-     *
-     * @return Intervenant
-     */
-    public function addHistoService(HistoIntervenantService $histoService)
-    {
-        $this->histoService[] = $histoService;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove histo service
-     *
-     * @param HistoIntervenantService $histoService
-     */
-    public function removeHistoService(HistoIntervenantService $histoService)
-    {
-        $this->histoService->removeElement($histoService);
-    }
-
-
-
-    /**
-     * Get histo service
-     *
-     * @param TypeVolumeHoraire|null $typeVolumeHoraire
-     * @param boolean                $referentiel
-     *
-     * @return HistoIntervenantService
-     */
-    public function getHistoService($typeVolumeHoraire, $referentiel = false)
-    {
-        $result = $this->histoService->filter(function (HistoIntervenantService $histoService) use ($typeVolumeHoraire, $referentiel) {
-            return
-                ($histoService->getTypeVolumeHoraire() == $typeVolumeHoraire || $histoService->getTypeVolumeHoraire() === null)
-                && $histoService->getReferentiel() == $referentiel;
-        });
-        if ($result->count() == 1) { // un seul résultat
-            return $result->first();
-        } elseif ($result->count() == 2) { // deux possibles : pour le service et pour le VH
-            $r = array_values($result->toArray());
-            if ($r[0]->getHistoModification() > $r[1]->getHistoModification()) {
-                return $r[0];
-            } else {
-                return $r[1];
-            }
-        } else {
-            return null;
-        }
-    }
-
-
-
-    /**
-     * Add service référentiel
-     *
-     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
-     *
-     * @return Intervenant
-     */
-    public function addServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel)
-    {
-        $this->serviceReferentiel[] = $serviceReferentiel;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove serviceReferentiel
-     *
-     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
-     * @param bool                                      $softDelete
-     */
-    public function removeServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel, $softDelete = true)
-    {
-        if ($softDelete && $serviceReferentiel instanceof HistoriqueAwareInterface) {
-            $serviceReferentiel->setHistoDestruction(new \DateTime());
-        } else {
-            $this->serviceReferentiel->removeElement($serviceReferentiel);
-        }
-    }
-
-
-
-    /**
-     * Get service référentiel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getServiceReferentiel()
-    {
-        return $this->serviceReferentiel;
-    }
-
-
-
-    /**
-     * Get serviceReferentielToStrings
-     *
-     * @return string[]
-     */
-    public function getServiceReferentielToStrings()
-    {
-        $services = [];
-        foreach ($this->getServiceReferentiel() as $sr) {
-            /* @var $sr \Application\Entity\Db\ServiceReferentiel */
-            $services[] = "" . $sr;
-        }
-
-        return $services;
-    }
-
-
-
-    /**
-     * Remove all serviceReferentiel
-     *
-     * @param bool $softDelete
-     *
-     * @return self
-     */
-    public function removeAllServiceReferentiel($softDelete = true)
-    {
-        foreach ($this->getServiceReferentiel() as $serviceReferentiel) {
-            $this->removeServiceReferentiel($serviceReferentiel, $softDelete);
-        }
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get validation
-     *
-     * @param \Application\Entity\Db\TypeValidation $type
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getValidation(TypeValidation $type = null)
-    {
-        if (null === $type) {
-            return $this->validation;
-        }
-        if (null === $this->validation) {
-            return null;
-        }
-
-        $filter      = function (Validation $validation) use ($type) {
-            return $type === $validation->getTypeValidation();
-        };
-        $validations = $this->validation->filter($filter);
-
-        return $validations;
-    }
-
-
-
-    /**
-     * Add agrement
-     *
-     * @param \Application\Entity\Db\Agrement $agrement
-     *
-     * @return Intervenant
-     */
-    public function addAgrement(\Application\Entity\Db\Agrement $agrement)
-    {
-        $this->agrement[] = $agrement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove agrement
-     *
-     * @param \Application\Entity\Db\Agrement $agrement
-     */
-    public function removeAgrement(\Application\Entity\Db\Agrement $agrement)
-    {
-        $this->agrement->removeElement($agrement);
+        return $this->affectation;
     }
 
 
@@ -1372,293 +1173,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
         $agrements = $this->agrement->filter($filter);
 
         return $agrements;
-    }
-
-
-
-    /**
-     * Indique si cet intervenant est permanent.
-     *
-     * @return bool
-     */
-    public function estPermanent()
-    {
-        return $this->getStatut()->estPermanent();
-    }
-
-
-
-    /**
-     * Get affectations
-     *
-     * @return string
-     */
-    public function getAffectationsToString()
-    {
-        return "" . $this->getStructure() ?: "(Inconnue)";
-    }
-
-
-
-    /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return strtoupper($this->getNomUsuel()) . ' ' . ucfirst($this->getPrenom());
-    }
-
-
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string
-     */
-    public function getNomComplet($avecCivilite = false, $avecNomPatro = false)
-    {
-        $f = new \Application\Filter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
-
-        return $f->filter($this);
-    }
-
-
-
-    /**
-     * Get dateNaissance
-     *
-     * @return \DateTime
-     */
-    public function getDateNaissanceToString()
-    {
-        return $this->dateNaissance->format(Constants::DATE_FORMAT);
-    }
-
-
-
-    /**
-     * Retourne l'adresse principale.
-     *
-     * NB: si aucune adresse principale n'est trouvée, la 1ère adresse non principale trouvée est retournée.
-     *
-     * @return AdresseIntervenant|null
-     */
-    public function getAdressePrincipale()
-    {
-        $adresses = $this->getAdresse()->filter(function(AdresseIntervenant $adresse){
-            return $adresse->estNonHistorise();
-        });
-
-        if (!count($adresses)) {
-            return null;
-        }
-        $adresse = $adresses->first();
-
-        return $adresse ?: null;
-    }
-
-
-
-    /**
-     * Set premierRecrutement
-     *
-     * @param null|boolean $premierRecrutement
-     *
-     * @return self
-     */
-    public function setPremierRecrutement($premierRecrutement)
-    {
-        $this->premierRecrutement = $premierRecrutement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get premierRecrutement
-     *
-     * @return null|boolean
-     */
-    public function getPremierRecrutement()
-    {
-        return $this->premierRecrutement;
-    }
-
-
-
-    /**
-     * Get indicDiffDossier
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getIndicModifDossier()
-    {
-        return $this->indicModifDossier;
-    }
-
-
-
-    /**
-     * Get formuleReferentiel
-     *
-     * @param Structure|null $structure
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFormuleReferentiel(Structure $structure = null)
-    {
-        $filter = function (FormuleReferentiel $formuleReferentiel) use ($structure) {
-            if ($structure && $structure !== $formuleReferentiel->getStructure()) {
-                return false;
-            }
-
-            return true;
-        };
-
-        return $this->formuleReferentiel->filter($filter);
-    }
-
-
-
-    /**
-     * Get formuleResultat
-     *
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param EtatVolumeHoraire $etatVolumehoraire
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
-    {
-        $filter = function (FormuleResultat $formuleResultat) use ($typeVolumeHoraire, $etatVolumehoraire) {
-            if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
-                return false;
-            }
-            if ($etatVolumehoraire && $etatVolumehoraire !== $formuleResultat->getEtatVolumeHoraire()) {
-                return false;
-            }
-
-            return true;
-        };
-
-        return $this->formuleResultat->filter($filter);
-    }
-
-
-
-    /**
-     * Get unique formuleResultat
-     *
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param EtatVolumeHoraire $etatVolumehoraire
-     *
-     * @return FormuleResultat
-     */
-    public function getUniqueFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire)
-    {
-        $formuleResultat = $this->getFormuleResultat($typeVolumeHoraire, $etatVolumehoraire)->first();
-        if (false === $formuleResultat) {
-            $formuleResultat = new FormuleResultat;
-            $formuleResultat->init($this, $typeVolumeHoraire, $etatVolumehoraire);
-        }
-
-        return $formuleResultat;
-    }
-
-
-
-    /**
-     * Get miseEnPaiementIntervenantStructure
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMiseEnPaiementIntervenantStructure()
-    {
-        return $this->miseEnPaiementIntervenantStructure;
-    }
-
-
-
-    /**
-     * Add modificationServiceDu
-     *
-     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
-     *
-     * @return Intervenant
-     */
-    public function addModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu)
-    {
-        $this->modificationServiceDu[] = $modificationServiceDu;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove modificationServiceDu
-     *
-     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
-     * @param bool                                         $softDelete
-     */
-    public function removeModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu, $softDelete = true)
-    {
-        if ($softDelete && $modificationServiceDu instanceof HistoriqueAwareInterface) {
-            $modificationServiceDu->setHistoDestruction(new \DateTime());
-        } else {
-            $this->modificationServiceDu->removeElement($modificationServiceDu);
-        }
-    }
-
-
-
-    /**
-     * Get modificationServiceDu
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getModificationServiceDu()
-    {
-        return $this->modificationServiceDu;
-    }
-
-
-
-    /**
-     * Get modificationServiceDuToStrings
-     *
-     * @return string[]
-     */
-    public function getModificationServiceDuToStrings()
-    {
-        $services = [];
-        foreach ($this->getModificationServiceDu() as $sr) {
-            /* @var $sr \Application\Entity\Db\ModificationServiceDu */
-            $services[] = "" . $sr;
-        }
-
-        return $services;
-    }
-
-
-
-    /**
-     * Remove all modificationServiceDu
-     *
-     * @param bool $softDelete
-     *
-     * @return self
-     */
-    public function removeAllModificationServiceDu($softDelete = true)
-    {
-        foreach ($this->getModificationServiceDu() as $modificationServiceDu) {
-            $this->removeModificationServiceDu($modificationServiceDu, $softDelete);
-        }
-
-        return $this;
     }
 
 
@@ -1749,42 +1263,105 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Get avenants
+     * Get formuleResultat
      *
-     * @return Contrat[]|null
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAvenants()
+    public function getFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
     {
-        $type = TypeContrat::CODE_AVENANT;
+        $filter = function (FormuleResultat $formuleResultat) use ($typeVolumeHoraire, $etatVolumehoraire) {
+            if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if ($etatVolumehoraire && $etatVolumehoraire !== $formuleResultat->getEtatVolumeHoraire()) {
+                return false;
+            }
 
-        $filter   = function (Contrat $contrat) use ($type) {
-            return $type === $contrat->getTypeContrat()->getCode();
+            return true;
         };
-        $contrats = $this->getContrat()->filter($filter);
 
-        return $contrats;
+        return $this->formuleResultat->filter($filter);
     }
 
 
 
     /**
-     * @return float
+     * Get unique formuleResultat
+     *
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return FormuleResultat
      */
-    public function getMontantIndemniteFc()
+    public function getUniqueFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire)
     {
-        return $this->montantIndemniteFc;
+        $formuleResultat = $this->getFormuleResultat($typeVolumeHoraire, $etatVolumehoraire)->first();
+        if (false === $formuleResultat) {
+            $formuleResultat = new FormuleResultat;
+            $formuleResultat->init($this, $typeVolumeHoraire, $etatVolumehoraire);
+        }
+
+        return $formuleResultat;
     }
 
 
 
     /**
-     * @param float $montantIndemniteFc
+     * Get histo service
+     *
+     * @param TypeVolumeHoraire|null $typeVolumeHoraire
+     * @param boolean                $referentiel
+     *
+     * @return HistoIntervenantService
+     */
+    public function getHistoService($typeVolumeHoraire, $referentiel = false)
+    {
+        $result = $this->histoService->filter(function (HistoIntervenantService $histoService) use ($typeVolumeHoraire, $referentiel) {
+            return
+                ($histoService->getTypeVolumeHoraire() == $typeVolumeHoraire || $histoService->getTypeVolumeHoraire() === null)
+                && $histoService->getReferentiel() == $referentiel;
+        });
+        if ($result->count() == 1) { // un seul résultat
+            return $result->first();
+        } elseif ($result->count() == 2) { // deux possibles : pour le service et pour le VH
+            $r = array_values($result->toArray());
+            if ($r[0]->getHistoModification() > $r[1]->getHistoModification()) {
+                return $r[0];
+            } else {
+                return $r[1];
+            }
+        } else {
+            return null;
+        }
+    }
+
+
+
+    /**
+     * Get miseEnPaiementIntervenantStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiementIntervenantStructure()
+    {
+        return $this->miseEnPaiementIntervenantStructure;
+    }
+
+
+
+    /**
+     * Add modificationServiceDu
+     *
+     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
      *
      * @return Intervenant
      */
-    public function setMontantIndemniteFc($montantIndemniteFc)
+    public function addModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu)
     {
-        $this->montantIndemniteFc = $montantIndemniteFc;
+        $this->modificationServiceDu[] = $modificationServiceDu;
 
         return $this;
     }
@@ -1792,69 +1369,92 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Returns the string identifier of the Resource
+     * Remove modificationServiceDu
      *
-     * @return string
-     * @see ResourceInterface
+     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
+     * @param bool                                         $softDelete
      */
-    public function getResourceId()
+    public function removeModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu, $softDelete = true)
     {
-        return 'Intervenant';
+        if ($softDelete && $modificationServiceDu instanceof HistoriqueAwareInterface) {
+            $modificationServiceDu->setHistoDestruction(new \DateTime());
+        } else {
+            $this->modificationServiceDu->removeElement($modificationServiceDu);
+        }
     }
 
 
 
     /**
-     * retourne le paramètre de route
+     * Get modificationServiceDu
      *
-     * @return string
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRouteParam()
+    public function getModificationServiceDu()
     {
-        return $this->getSourceCode();
+        return $this->modificationServiceDu;
     }
 
 
 
     /**
-     * @param bool $demande
+     * Get pieceJointe
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function hasMiseEnPaiement($demande = true)
+    public function getPieceJointe()
     {
-        if ($this->hasMiseEnPaiement === null) {
-            $id     = (int)$this->getId();
-            $heures = $demande ? 'heures_demandees' : 'heures_payees';
+        return $this->pieceJointe;
+    }
 
-            $sql = "SELECT COUNT(*) res FROM tbl_paiement p "
-                . "WHERE p.intervenant_id = $id AND p.$heures > 0 AND rownum = 1";
 
-            $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
 
-            $this->hasMiseEnPaiement = $res[0]['RES'] == 1;
+    /**
+     * Get service
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+
+
+
+    /**
+     * Get service référentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiceReferentiel()
+    {
+        return $this->serviceReferentiel;
+    }
+
+
+
+    /**
+     * Get validation
+     *
+     * @param \Application\Entity\Db\TypeValidation $type
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getValidation(TypeValidation $type = null)
+    {
+        if (null === $type) {
+            return $this->validation;
+        }
+        if (null === $this->validation) {
+            return null;
         }
 
-        return $this->hasMiseEnPaiement;
+        $filter      = function (Validation $validation) use ($type) {
+            return $type === $validation->getTypeValidation();
+        };
+        $validations = $this->validation->filter($filter);
+
+        return $validations;
     }
 
-
-
-    /**
-     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
-     *
-     * @param ObjectManager $objectManager
-     * @param ClassMetadata $classMetadata
-     *
-     * @return void
-     */
-    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
-    {
-        $this->setEntityManager($objectManager);
-    }
-
-
-
-    function __sleep()
-    {
-        return [];
-    }
 }

@@ -1,6 +1,29 @@
 <?php
 
 return [
+    'ADRESSE_NUMERO_COMPL' => [
+        [
+            'ID'      => 2,
+            'CODE'    => 'B',
+            'LIBELLE' => 'BIS',
+        ],
+        [
+            'ID'      => 3,
+            'CODE'    => 'T',
+            'LIBELLE' => 'TER',
+        ],
+        [
+            'ID'      => 4,
+            'CODE'    => 'Q',
+            'LIBELLE' => 'QUATER',
+        ],
+        [
+            'ID'      => 5,
+            'CODE'    => 'C',
+            'LIBELLE' => 'QUINQUIES',
+        ],
+    ],
+
     'AFFECTATION' => [
         [
             'UTILISATEUR_ID' => 'oseappli',

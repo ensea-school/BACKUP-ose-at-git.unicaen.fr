@@ -700,9 +700,9 @@ class Dossier implements HistoriqueAwareInterface
             ->setDepartementNaissance($intervenant->getDepNaissance())
             ->setVilleNaissance($intervenant->getVilleNaissanceLibelle())
             ->setNumeroInsee($intervenant->getNumeroInsee() . $intervenant->getNumeroInseeCle())
-            ->setAdresse((string)$intervenant->getAdressePrincipale())
-            ->setEmail($intervenant->getEmail())
-            ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile())
+            ->setAdresse($intervenant->getAdresse(false))
+            ->setEmail($intervenant->getEmailPerso())
+            ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelPerso())
             ->setStatut($intervenant->getStatut())
             ->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()));
 

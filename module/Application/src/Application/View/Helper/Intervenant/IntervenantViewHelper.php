@@ -3,8 +3,6 @@
 namespace Application\View\Helper\Intervenant;
 
 use Application\Constants;
-use Application\Util;
-use UnicaenImport\Entity\Db\Source;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
@@ -59,16 +57,15 @@ class IntervenantViewHelper extends AbstractHtmlElement
             'identite'    => [
                 "NOM prénom"         => $entity,
                 "Civilité"           => (string)$entity->getCivilite(),
-                "Date de naissance"  => (string)$entity->getDateNaissanceToString(),
+                "Date de naissance"  => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
                 "Ville de naissance" => (string)$entity->getVilleNaissanceLibelle() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Pays de naissance"  => (string)$entity->getPaysNaissance(),
-                "N° INSEE"           => (string)$entity->getNumeroInsee(),
             ],
             'coordonnees' => [
-                "Email"            => $entity->getEmail() ?: '<span class="inconnu">(Inconnu)</span>',
-                "Téléphone mobile" => $entity->getTelMobile() ?: '<span class="inconnu">(Inconnu)</span>',
-                "Téléphone pro"    => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
-                "Adresse"          => nl2br($entity->getAdressePrincipale()),
+                "Email"           => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
+                "Téléphone perso" => $entity->getTelPerso() ?: '<span class="inconnu">(Inconnu)</span>',
+                "Téléphone pro"   => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
+                "Adresse"         => nl2br($entity->getAdresse(false)),
             ],
             'metier'      => [
                 "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
@@ -77,7 +74,6 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Affectation recherche"     => count($aff = $entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : '<span class="inconnu">(Inconnue)</span>',
                 "Discipline"                => $entity->getDiscipline() ?: '<span class="inconnu">(Inconnue)</span>',
-                "Grade"                     => $entity->getGrade() ?: '<span class="inconnu">(Aucun ou inconnu)</span>',
                 "Montant de l'indemnité FC" => $entity->getMontantIndemniteFc() !== null ? \UnicaenApp\Util::formattedEuros($entity->getMontantIndemniteFc()) : '<span class="inconnu">(Inconnue)</span>',
             ],
             'divers'      => [
@@ -96,13 +92,13 @@ class IntervenantViewHelper extends AbstractHtmlElement
         }
 
         if ($entity->getHistoDestruction()) {
-            $msg = 'Cet intervenant a été supprimé de OSE le '.$entity->getHistoDestruction()->format(Constants::DATE_FORMAT).'.';
+            $msg = 'Cet intervenant a été supprimé de OSE le ' . $entity->getHistoDestruction()->format(Constants::DATE_FORMAT) . '.';
 
-            if ($entity->getSource()->getCode() !== \Application\Service\SourceService::CODE_SOURCE_OSE){
-                $msg .= ' Sa fiche ne remonte plus depuis l\'application '.$entity->getSource().'.';
+            if ($entity->getSource()->getCode() !== \Application\Service\SourceService::CODE_SOURCE_OSE) {
+                $msg .= ' Sa fiche ne remonte plus depuis l\'application ' . $entity->getSource() . '.';
             }
 
-            $html .= '<div class="alert alert-danger">'.$msg.'</div>';
+            $html .= '<div class="alert alert-danger">' . $msg . '</div>';
         }
 
         //$html .= $this->getView()->historique($entity); => pas de sens ici

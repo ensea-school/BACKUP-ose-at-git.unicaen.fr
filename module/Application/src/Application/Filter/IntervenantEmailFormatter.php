@@ -12,13 +12,16 @@ class IntervenantEmailFormatter extends AbstractFilter
 
     private $intervenantsWithNoEmail = [];
 
+
+
     /**
      * Returns the result of filtering $value
      *
-     * @param  mixed $value Un ou plusieurs objets de type Intervenant
-     * @throws \RuntimeException If filtering $value is impossible
-     * @throws \RuntimeException Rencontre d'un intervenant sans adresse mail
+     * @param mixed $value Un ou plusieurs objets de type Intervenant
+     *
      * @return array email => name
+     * @throws \RuntimeException Rencontre d'un intervenant sans adresse mail
+     * @throws \RuntimeException If filtering $value is impossible
      */
     public function filter($value)
     {
@@ -26,6 +29,8 @@ class IntervenantEmailFormatter extends AbstractFilter
 
         return $this->filterRecursive($value);
     }
+
+
 
     private function filterRecursive($value)
     {
@@ -35,31 +40,31 @@ class IntervenantEmailFormatter extends AbstractFilter
             $intervenant = $value;
 
             $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-            if ($dossier->getId() && $dossier->getEmailPerso()){
+            if ($dossier->getId() && $dossier->getEmailPerso()) {
                 $email = $dossier->getEmailPerso();
-            }else{
-                $email = $intervenant->getEmail();
+            } else {
+                $email = $intervenant->getEmailPro();
             }
 
-            if (! $email) {
+            if (!$email) {
                 $this->intervenantsWithNoEmail[] = $intervenant;
-            }else{
+            } else {
                 $emails = [
-                    $email => $intervenant->getNomComplet()
+                    $email => (string)$intervenant,
                 ];
             }
-        }
-        elseif (is_array($value)) {
+        } elseif (is_array($value)) {
             foreach ($value as $intervenant) {
                 $emails = array_merge($emails, $this->filterRecursive($intervenant));
             }
-        }
-        else {
+        } else {
             throw new \RuntimeException("Type d'entrée attendue : Intervenant ou Intervenant[].");
         }
 
         return $emails;
     }
+
+
 
     /**
      * Retourne les intervenants sans adresse mail rencontrés lors du filtrage.
@@ -71,10 +76,13 @@ class IntervenantEmailFormatter extends AbstractFilter
         return $this->intervenantsWithNoEmail;
     }
 
+
+
     /**
      * Convenient method.
      *
      * @param mixed $value
+     *
      * @return array
      * @throws \RuntimeException If filtering $value is impossible
      * @throws \RuntimeException Rencontre d'un intervenant sans adresse mail

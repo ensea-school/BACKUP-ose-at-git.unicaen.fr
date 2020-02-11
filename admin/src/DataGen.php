@@ -39,6 +39,11 @@ class DataGen
 
         /* Nomenclatures fixes et jamais paramétrables */
         [
+            'table'   => 'ADRESSE_NUMERO_COMPL',
+            'context' => ['install', 'update'],
+            'key'     => ['CODE'],
+        ],
+        [
             'table'   => 'CIVILITE',
             'context' => ['install', 'update'],
             'key'     => ['LIBELLE_COURT'],

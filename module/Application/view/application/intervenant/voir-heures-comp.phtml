@@ -52,7 +52,7 @@ function vn(array $array, $key, $type = 's')
 </div>
 <?= $this->form()->closeTag(); ?>
 
-<?php if ($intervenant->estPermanent()): ?>
+<?php if ($intervenant->getStatut()->estPermanent()): ?>
     <h2>Service Dû</h2>
     <div class="row">
         <div class="col-sm-4">Composante d'affectation</div>

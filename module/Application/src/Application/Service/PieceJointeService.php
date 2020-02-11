@@ -154,7 +154,6 @@ class PieceJointeService extends AbstractEntityService
             (pjf.dateArchive IS NULL OR pjf.dateArchive > :annee)    
           
         ";
-        //TODO modifier ici la requette pour qu'elle prenne en compte la validité de la PJ
         $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
             'intervenant' => $intervenant->getCode(),
             'annee'       => $intervenant->getAnnee()->getId(),

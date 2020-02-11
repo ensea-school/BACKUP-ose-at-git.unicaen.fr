@@ -47,12 +47,6 @@ class TblPieceJointe
      */
     private $annee;
 
-    /**
-     * @var integer
-     */
-    private $dureeVie;
-    
-
 
     /**
      * Get demandee
@@ -147,16 +141,5 @@ class TblPieceJointe
     }
 
 
-
-    /**
-     * Get dureeVie
-     *
-     * @return integer
-     */
-
-    public function getDureeVie()
-    {
-        return $this->dureeVie;
-    }
 }
 

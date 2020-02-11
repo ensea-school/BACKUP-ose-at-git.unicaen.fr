@@ -220,6 +220,11 @@ class PieceJointeController extends AbstractController
         $this->initFilters();
         $intervenant     = $this->getEvent()->getParam('intervenant');
         $pj = $this->getEvent()->getParam('pieceJointe');
+        if(empty($pj))
+        {
+            $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
+            $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+        }
 
         return compact('pj');
     }

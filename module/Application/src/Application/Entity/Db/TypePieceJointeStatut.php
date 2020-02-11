@@ -16,11 +16,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     use ObligatoireSelonSeuilHeuresAwareTrait;
 
     /**
-     * @var boolean
-     */
-    private $premierRecrutement;
-
-    /**
      * @var integer
      */
     private $id;
@@ -80,35 +75,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         return $this->seuilHetd;
     }
-
-
-
-    /**
-     * Set premierRecrutement
-     *
-     * @param boolean $premierRecrutement
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setPremierRecrutement($premierRecrutement)
-    {
-        $this->premierRecrutement = $premierRecrutement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get premierRecrutement
-     *
-     * @return boolean
-     */
-    public function getPremierRecrutement()
-    {
-        return $this->premierRecrutement;
-    }
-
 
 
     /**
@@ -341,7 +307,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
         if ($this->getSeuilHeures()) $txt .= ' >' . $this->getSeuilHeures();
-        if ($this->getPremierRecrutement()) $txt .= ' PR ';
         if ($this->getFC()) $txt .= ' FC ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
         if ($this->getDureeVie() && $this->getDureeVie() > 1 ) $txt .= ' ' . $this->getDureeVie() . 'ans';
@@ -360,7 +325,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         $t   = [];
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
         if ($this->getSeuilHeures()) $t[] = 'À partir de ' . $this->getSeuilHeures() . ' heures';
-        if ($this->getPremierRecrutement()) $t[] = 'Uniquement en cas de premier recrutement';
         if ($this->getFC()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
         if ($this->getAnneeDebut()) $t[] = 'Actif à partir de ' . $this->getAnneeDebut();

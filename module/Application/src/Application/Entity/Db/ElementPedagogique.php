@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\DisciplineAwareTrait;
 use Application\Entity\Db\Traits\EtapeAwareTrait;
@@ -22,7 +21,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware
+class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware
 {
     use HistoriqueAwareTrait;
     use DisciplineAwareTrait;
@@ -783,7 +782,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     {
         if (!$this->getId()) return [];
 
-        $sql = 'SELECT type_intervention_id FROM V_ELEMENT_TYPE_INTERV_POSSIBLE WHERE element_pedagogique_id = :element';
+        $sql = 'SELECT TYPE_INTERVENTION_ID FROM V_ELEMENT_TYPE_INTERV_POSSIBLE WHERE ELEMENT_PEDAGOGIQUE_ID = :element';
         $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['element' => $this->getId()]);
 
         $ids = [];

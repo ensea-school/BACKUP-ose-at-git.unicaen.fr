@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TypeRessourceAwareTrait;
@@ -13,7 +12,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * Dotation
  */
-class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface
+class Dotation implements HistoriqueAwareInterface, ResourceInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;

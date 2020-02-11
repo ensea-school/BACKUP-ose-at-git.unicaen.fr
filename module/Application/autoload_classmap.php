@@ -38,7 +38,6 @@ return [
     'Application\Entity\Db\Interfaces\TypeAgrementStatutAwareInterface'                                  => __DIR__ . '/src/Application/Entity/Db/Interfaces/TypeAgrementStatutAwareInterface.php',
     'Application\Entity\Db\Interfaces\ServiceReferentielAwareInterface'                                  => __DIR__ . '/src/Application/Entity/Db/Interfaces/ServiceReferentielAwareInterface.php',
     'Application\Entity\Db\Interfaces\RoleAwareInterface'                                                => __DIR__ . '/src/Application/Entity/Db/Interfaces/RoleAwareInterface.php',
-    'Application\Entity\Db\Interfaces\AnneeAwareInterface'                                               => __DIR__ . '/src/Application/Entity/Db/Interfaces/AnneeAwareInterface.php',
     'Application\Entity\Db\Interfaces\PerimetreAwareInterface'                                           => __DIR__ . '/src/Application/Entity/Db/Interfaces/PerimetreAwareInterface.php',
     'Application\Entity\Db\Interfaces\StatutIntervenantAwareInterface'                                   => __DIR__ . '/src/Application/Entity/Db/Interfaces/StatutIntervenantAwareInterface.php',
     'Application\Entity\Db\Interfaces\VIndicAttenteValidRefAutreAwareInterface'                          => __DIR__ . '/src/Application/Entity/Db/Interfaces/VIndicAttenteValidRefAutreAwareInterface.php',

@@ -18,13 +18,12 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 
 /**
  * Intervenant
  *
  */
-class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface, ObjectManagerAware, AdresseInterface
+class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware, AdresseInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;

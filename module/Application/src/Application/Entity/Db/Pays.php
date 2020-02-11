@@ -12,6 +12,8 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
  */
 class Pays implements HistoriqueAwareInterface, ImportAwareInterface
 {
+    const FRANCE = 'france';
+
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
 
@@ -201,4 +203,10 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
         return $this->getLibelle();
     }
 
+
+
+    public function isFrance(): bool
+    {
+        return \UnicaenApp\Util::reduce($this->getLibelle()) == self::FRANCE;
+    }
 }

@@ -136,11 +136,11 @@ class DossierFieldset extends AbstractFieldset
             'empty_option' => "(Sélectionnez un pays...)",
         ]);
         $paysSelect->getProxy()
-            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
+            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelle' => 'ASC']]])
             ->setObjectManager($this->getServiceContext()->getEntityManager())
             ->setTargetClass(\Application\Entity\Db\Pays::class);
         foreach ($paysSelect->getProxy()->getObjects() as $p) {
-            $estFrance = $this->getServicePays()->isFrance($p);
+            $estFrance = $p->isFrance();
             if ($estFrance) {
                 self::$franceId = $p->getId();
             }
@@ -507,7 +507,7 @@ class PaysProxy extends Proxy
         foreach ($this->valueOptions as $key => $value) {
             $id        = $value['value'];
             $pays      = $this->objects[$id];
-            $estFrance = $this->getServicePays()->isFrance($pays);
+            $estFrance = $pays->isFrance();
 
             $this->valueOptions[$key]['attributes'] = [
                 'class'      => "pays" . ($estFrance ? " france" : null),

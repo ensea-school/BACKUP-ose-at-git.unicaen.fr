@@ -97,7 +97,7 @@ class Table
         $cols = '';
         foreach ($ddl['columns'] as $colDdl) {
             if ($cols != '') $cols .= ', ';
-            if ($colDdl['type'] == 'DATE') {
+            if ($colDdl['type'] == Bdd::TYPE_DATE) {
                 $cols .= 'to_char(' . $colDdl['name'] . ',\'YYYY-mm-dd\') ' . $colDdl['name'];
             } else {
                 $cols .= $colDdl['name'];
@@ -464,25 +464,26 @@ class Table
         if ($value === null) return null;
 
         switch ($ddl['type']) {
-            case 'NUMBER':
+            case Bdd::TYPE_INT:
                 if (1 == $ddl['precision']) {
                     return $value === '1';
                 } else {
                     return (int)$value;
                 }
-
-            case 'FLOAT':
+            case Bdd::TYPE_BOOL:
+                return (bool)$value;
+            case Bdd::TYPE_FLOAT:
                 return (float)$value;
-            case 'VARCHAR2':
-            case 'CLOB':
+            case Bdd::TYPE_STRING:
+            case Bdd::TYPE_CLOB:
                 return $value;
-            case 'DATE':
+            case Bdd::TYPE_DATE:
                 if (!$value) return null;
                 $date = \DateTime::createFromFormat('Y-m-d', $value);
                 $date->setTime(0, 0, 0);
 
                 return $date;
-            case 'BLOB':
+            case Bdd::TYPE_BLOB:
                 return $value;
             default:
                 throw new \Exception("Type de donnée " . $ddl['type'] . " non géré.");

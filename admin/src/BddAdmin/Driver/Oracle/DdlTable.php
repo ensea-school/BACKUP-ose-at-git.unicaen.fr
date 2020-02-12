@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
 use BddAdmin\Ddl\DdlAbstract;
 
 class DdlTable extends DdlAbstract
@@ -154,12 +155,42 @@ class DdlTable extends DdlAbstract
                 $default = $paq['default'] !== null ? $this->purger($paq['default']) : null;
                 if ('NULL' === $default) $default = null;
 
+                $type      = $paq['type'];
+                $precision = $paq['precision'] ? (int)$paq['precision'] : null;
+
+                switch ($paq['type']) {
+                    case 'NUMBER':
+                        if (1 === $precision) {
+                            $type = Bdd::TYPE_BOOL;
+                        } else {
+                            $type = Bdd::TYPE_INT;
+                        }
+                    break;
+                    case 'VARCHAR2':
+                    case 'CHAR':
+                        $type = Bdd::TYPE_STRING;
+                    break;
+                    case 'DATE':
+                        $type = Bdd::TYPE_DATE;
+                    break;
+                    case 'FLOAT':
+                        $type = Bdd::TYPE_FLOAT;
+                    break;
+                    case 'BLOB':
+                        $type = Bdd::TYPE_BLOB;
+                    break;
+                    case 'CLOB':
+                        $type = Bdd::TYPE_CLOB;
+                    break;
+                }
+
                 $data[$paq['name']]['columns'][$paq['cname']] = [
                     'name'        => $paq['cname'],
-                    'type'        => $paq['type'],
+                    'type'        => $type,
+                    'bdd-type'    => $paq['type'],
                     'length'      => (int)$paq['length'],
                     'scale'       => $paq['scale'],
-                    'precision'   => $paq['precision'] ? (int)$paq['precision'] : null,
+                    'precision'   => $precision,
                     'nullable'    => $paq['nullable'] == 'Y',
                     'default'     => $default,
                     'commentaire' => $paq['col_commentaire'],
@@ -218,22 +249,42 @@ class DdlTable extends DdlAbstract
 
     private function makeColumnType(array $column): string
     {
-        $type = $column['type'];
+        if (isset($column['bdd-type'])) {
+            $resType = $column['bdd-type'];
+        } else {
+            $resType = null;
+        }
         switch ($column['type']) {
-            case 'NUMBER':
+            case Bdd::TYPE_BOOL:
+                if (!$resType) $resType = 'NUMBER';
+                $resType .= '(1)';
+            break;
+            case Bdd::TYPE_INT:
                 if ($column['scale'] == '0') {
-                    $type .= '(' . ($column['precision'] ? $column['precision'] : '*') . ',0)';
+                    if (!$resType) $resType = 'NUMBER';
+                    $resType .= '(' . ($column['precision'] ? $column['precision'] : '*') . ',0)';
                 }
             break;
-            case 'VARCHAR2':
-                $type .= '(' . $column['length'] . ' CHAR)';
+            case Bdd::TYPE_STRING:
+                if (!$resType) $resType = 'VARCHAR2';
+                $resType .= 'VARCHAR2(' . $column['length'] . ' CHAR)';
             break;
-            case 'FLOAT':
-                $type .= '(' . $column['precision'] . ')';
+            case Bdd::TYPE_FLOAT:
+                if (!$resType) $resType = 'FLOAT';
+                $resType .= '(' . $column['precision'] . ')';
+            break;
+            case Bdd::TYPE_BLOB:
+                if (!$resType) $resType = 'BLOB';
+            break;
+            case Bdd::TYPE_CLOB:
+                if (!$resType) $resType = 'CLOB';
+            break;
+            case Bdd::TYPE_DATE:
+                if (!$resType) $resType = 'DATE';
             break;
         }
 
-        return $type;
+        return $resType;
     }
 
 

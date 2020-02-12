@@ -424,7 +424,7 @@ class DataGen
 
         foreach ($data as $i => $line) {
             foreach ($line as $col => $val) {
-                if (isset($ddl['columns'][$col]) && $ddl['columns'][$col]['type'] == 'DATE' && !empty($val) && is_string($val)) {
+                if (isset($ddl['columns'][$col]) && $ddl['columns'][$col]['type'] == \BddAdmin\Bdd::TYPE_DATE && !empty($val) && is_string($val)) {
                     $data[$i][$col] = \DateTime::createFromFormat('Y-m-d', $val);
                 }
             }

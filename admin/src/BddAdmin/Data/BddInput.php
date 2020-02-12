@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Data;
 
+use BddAdmin\Bdd;
 use BddAdmin\BddAwareTrait;
 use BddAdmin\Ddl\DdlTable;
 
@@ -48,7 +49,7 @@ class BddInput extends AbstractInput
 
     protected function transformerMatch(string $transformer, string $table, string $column)
     {
-        list($mt, $mc) = explode('.', strtoupper($transformer));
+        [$mt, $mc] = explode('.', strtoupper($transformer));
 
         $ok = true;
         if (!($mt == $table || $mt == '*')) { // si ça ne passe pas
@@ -79,24 +80,26 @@ class BddInput extends AbstractInput
     protected function sqlToVal($value, array $ddl)
     {
         switch ($ddl['type']) {
-            case 'NUMBER':
+            case Bdd::TYPE_BOOL:
+                return (bool)$value;
+            case Bdd::TYPE_INT:
                 if (1 == $ddl['precision']) {
                     return $value === '1';
                 } else {
                     return (int)$value;
                 }
 
-            case 'FLOAT':
+            case Bdd::TYPE_FLOAT:
                 return (float)$value;
-            case 'VARCHAR2':
-            case 'CLOB':
+            case Bdd::TYPE_STRING:
+            case Bdd::TYPE_CLOB:
                 return $value;
-            case 'DATE':
+            case Bdd::TYPE_DATE:
                 $date = \DateTime::createFromFormat('Y-m-d', $value);
                 $date->setTime(0, 0, 0, 0);
 
                 return $date;
-            case 'BLOB':
+            case Bdd::TYPE_BLOB:
                 return $value;
             default:
                 throw new \Exception("Type de donnée " . $ddl['type'] . " non géré.");
@@ -163,7 +166,7 @@ class BddInput extends AbstractInput
         foreach ($this->currentDdl['columns'] as $name => $column) {
             $fields[$name] = null;
             switch ($column['type']) {
-                case 'DATE':
+                case Bdd::TYPE_DATE:
                     $fields[$name] = "to_char( $name, 'YYYY-mm-dd' )";
             }
         }

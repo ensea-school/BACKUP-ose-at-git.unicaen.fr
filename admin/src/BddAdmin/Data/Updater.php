@@ -23,10 +23,10 @@ class Updater
 
 
     /**
-     * @param string $table
-     * @param array  $data
+     * @param string       $table
+     * @param array        $data
      * @param string|array $key
-     * @param array  $ignoredCols
+     * @param array        $ignoredCols
      *
      * @throws \BddAdmin\Exception\BddCompileException
      * @throws \BddAdmin\Exception\BddException
@@ -74,8 +74,8 @@ class Updater
 
         /* Chargement des données */
         foreach ($data as $d) {
-            foreach( $d as $k => $v ){
-                if (isset($options[$k]['transformer'])){
+            foreach ($d as $k => $v) {
+                if (isset($options[$k]['transformer'])) {
                     $d[$k] = $this->transform($v, $options[$k]['transformer'], $ddl['columns'][$k]);
                 }
             }
@@ -100,7 +100,7 @@ class Updater
                     $record['id'] = $this->getBdd()->sequenceNextVal($ddl['sequence']);
                 }
                 $new = [];
-                if ($tableWithId){
+                if ($tableWithId) {
                     $new['ID'] = $record['id'];
                 }
                 foreach ($ddl['columns'] as $colName => $colDdl) {
@@ -131,7 +131,7 @@ class Updater
 
     protected function transform($value, string $transformer, array $ddl)
     {
-        $val = $this->getBdd()->select(sprintf($transformer,':val'), ['val' => $value]);
+        $val    = $this->getBdd()->select(sprintf($transformer, ':val'), ['val' => $value]);
         $result = $this->sqlToVal(current($val[0]), $ddl);
 
         return $result;
@@ -139,12 +139,12 @@ class Updater
 
 
 
-    protected function makeValWithKey( array $data, $key)
+    protected function makeValWithKey(array $data, $key)
     {
         $result = '';
-        $key = (array)$key;
-        foreach( $key as $k ){
-            if ($result != ''){
+        $key    = (array)$key;
+        foreach ($key as $k) {
+            if ($result != '') {
                 $result .= '_&@&@&@&_';
             }
             $result .= $data[$k];
@@ -158,24 +158,26 @@ class Updater
     protected function sqlToVal($value, array $ddl)
     {
         switch ($ddl['type']) {
-            case 'NUMBER':
+            case Bdd::TYPE_BOOL:
+                return (bool)$value;
+            case Bdd::TYPE_INT:
                 if (1 == $ddl['precision']) {
                     return $value === '1';
                 } else {
                     return (int)$value;
                 }
 
-            case 'FLOAT':
+            case Bdd::TYPE_FLOAT:
                 return (float)$value;
-            case 'VARCHAR2':
-            case 'CLOB':
+            case Bdd::TYPE_STRING:
+            case Bdd::TYPE_CLOB:
                 return $value;
-            case 'DATE':
+            case Bdd::TYPE_DATE:
                 $date = \DateTime::createFromFormat('Y-m-d', $value);
                 $date->setTime(0, 0, 0, 0);
 
                 return $date;
-            case 'BLOB':
+            case Bdd::TYPE_BLOB
                 return $value;
             default:
                 throw new \Exception("Type de donnée " . $ddl['type'] . " non géré.");

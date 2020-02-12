@@ -26,6 +26,14 @@ class Bdd
     const DDL_UNIQUE_CONSTRAINT  = 'unique-constraint';
     const DDL_TRIGGER            = 'trigger';
 
+    const TYPE_INT    = 'int';
+    const TYPE_BOOL   = 'bool';
+    const TYPE_FLOAT  = 'float';
+    const TYPE_STRING = 'string';
+    const TYPE_DATE   = 'date';
+    const TYPE_BLOB   = 'blob';
+    const TYPE_CLOB   = 'clob';
+
     /**
      * @var array
      */

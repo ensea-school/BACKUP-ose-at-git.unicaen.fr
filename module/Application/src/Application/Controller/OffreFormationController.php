@@ -118,10 +118,10 @@ class OffreFormationController extends AbstractController
             $effectifs  = $element->getEffectifs();
             $discipline = $element->getDiscipline();
             $csvModel->addLine([
-                $etape->getSourceCode(),
+                $etape->getCode(),
                 $etape->getLibelle(),
                 $etape->getNiveauToString(),
-                $element->getSourceCode(),
+                $element->getCode(),
                 $element->getLibelle(),
                 $discipline ? $discipline->getSourceCode() : null,
                 $discipline ? $discipline->getLibelleLong() : null,

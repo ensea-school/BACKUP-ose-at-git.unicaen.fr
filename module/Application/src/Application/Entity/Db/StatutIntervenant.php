@@ -968,7 +968,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
     public function getRoleId()
     {
-        return 'statut/' . $this->getSourceCode();
+        return 'statut/' . $this->getCode();
     }
 
 
@@ -1009,7 +1009,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         }
         $new->setId(null);
         $uid = uniqid();
-        $new->setSourceCode($this->getSourceCode() . '_' . $uid);
+        $new->setCode($this->getCode() . '_' . $uid);
         $new->setLibelle($this->getLibelle() . ' (Copie ' . $uid . ')');
 
         return $new;

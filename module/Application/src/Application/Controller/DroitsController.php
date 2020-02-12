@@ -86,7 +86,7 @@ class DroitsController extends AbstractController
             if ($form->isValid()) {
                 try {
                     $this->getServiceRole()->save($role);
-                    $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
+                    $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $errors[] = $this->translate($e);
@@ -101,15 +101,15 @@ class DroitsController extends AbstractController
 
     public function roleSuppressionAction()
     {
-        $role   = $this->getEvent()->getParam('role');
+        $role = $this->getEvent()->getParam('role');
 
-        $title  = "Suppression du rôle";
-        $form   = $this->makeFormSupprimer( function() use ($role){
+        $title = "Suppression du rôle";
+        $form  = $this->makeFormSupprimer(function () use ($role) {
             $this->getServiceRole()->delete($role);
-            $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
+            $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
             $cc = $this->getCacheContainer(PrivilegeService::class);
             unset($cc->privilegesRoles);
-        } );
+        });
 
         return compact('role', 'title', 'form');
     }
@@ -122,7 +122,7 @@ class DroitsController extends AbstractController
         if ($categorieFilter = $this->params()->fromQuery('cat')) {
             $filters['cat'] = $categorieFilter;
         }
-        if ($rsFilter = $this->params()->fromQuery('rs')){
+        if ($rsFilter = $this->params()->fromQuery('rs')) {
             $filters['rs'] = $rsFilter;
         }
 
@@ -138,7 +138,7 @@ class DroitsController extends AbstractController
                 if (!isset($privileges[$categorie->getCode()])) {
                     $privileges[$categorie->getCode()] = [
                         'categorie'     => $categorie,
-                        'categorieLink' => $this->url()->fromRoute(null, [], ['query' => $filters+['cat'=>$categorie->getCode()]], true),
+                        'categorieLink' => $this->url()->fromRoute(null, [], ['query' => $filters + ['cat' => $categorie->getCode()]], true),
                         'privileges'    => [],
                     ];
                 }
@@ -149,14 +149,14 @@ class DroitsController extends AbstractController
         if ($rsFilter == 'r' || !$rsFilter) {
             $qb    = $this->getServiceRole()->finderByHistorique();
             $roles = $this->getServiceRole()->getList($qb);
-        }else{
+        } else {
             $roles = [];
         }
 
         if ($rsFilter == 's' || !$rsFilter) {
             $qb      = $this->getServiceStatutIntervenant()->finderByHistorique();
             $statuts = $this->getServiceStatutIntervenant()->getList($qb);
-        }else{
+        } else {
             $statuts = [];
         }
 
@@ -171,20 +171,20 @@ class DroitsController extends AbstractController
         $statut    = $this->context()->statutIntervenantFromPost('statut');
         $privilege = $this->getServicePrivilege()->get($this->params()->fromPost('privilege'));
         $action    = $this->params()->fromPost('action');
-        $cc = $this->getCacheContainer(PrivilegeService::class);
+        $cc        = $this->getCacheContainer(PrivilegeService::class);
         unset($cc->privilegesRoles);
 
         switch ($action) {
             case 'accorder':
                 if ($role) $this->roleAddPrivilege($role, $privilege);
                 if ($statut) $this->statutAddPrivilege($statut, $privilege);
-                break;
+            break;
             case 'refuser':
                 if ($role) $this->roleRemovePrivilege($role, $privilege);
                 if ($statut) $this->statutRemovePrivilege($statut, $privilege);
-                break;
+            break;
         }
-        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
+        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
 
         return compact('role', 'statut', 'privilege');
     }
@@ -238,14 +238,14 @@ class DroitsController extends AbstractController
 
         $serviceAffectations = $this->getServiceAffectation();
 
-        list($qb, $alias) = $serviceAffectations->initQuery();
+        [$qb, $alias] = $serviceAffectations->initQuery();
 
         $serviceAffectations->join($this->getServiceRole(), $qb, 'role', true);
         $serviceAffectations->join($this->getServiceUtilisateur(), $qb, 'utilisateur', true);
         $serviceAffectations->join($this->getServiceSource(), $qb, 'source', true);
         $serviceAffectations->leftJoin($this->getServiceStructure(), $qb, 'structure', true);
         $serviceAffectations->finderByHistorique($qb);
-        if ($structure = $role->getStructure()){
+        if ($structure = $role->getStructure()) {
             $serviceAffectations->finderByStructure($structure, $qb);
         }
 
@@ -290,7 +290,7 @@ class DroitsController extends AbstractController
                 }
             }
         }
-        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
+        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
 
         return compact('form', 'title', 'errors');
     }
@@ -301,12 +301,12 @@ class DroitsController extends AbstractController
     {
         $affectation = $this->getEvent()->getParam('affectation');
 
-        $title  = "Suppression de l'affectation";
+        $title = "Suppression de l'affectation";
 
-        $form = $this->makeFormSupprimer(function()use($affectation){
+        $form = $this->makeFormSupprimer(function () use ($affectation) {
             $this->getServiceAffectation()->delete($affectation);
         });
-        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
+        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
 
         return compact('affectation', 'title', 'form');
     }
@@ -337,7 +337,7 @@ class DroitsController extends AbstractController
         $qb      = $this->getServiceStatutIntervenant()->finderByHistorique();
         $statuts = $this->getServiceStatutIntervenant()->getList($qb);
         foreach ($statuts as $statut) {
-            $options['statuts']['options']['s-' . $statut->getSourceCode()] = (string)$statut;
+            $options['statuts']['options']['s-' . $statut->getCode()] = (string)$statut;
         }
 
         $form = new \Zend\Form\Form;

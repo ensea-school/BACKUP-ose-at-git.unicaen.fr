@@ -378,7 +378,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setPeutSaisirServiceExt($data['peut-saisir-service-ext']);
         $object->setTemAtv($data['TEM-ATV']);
         $object->setTemBiatss($data['TEM-BIATSS']);
-        $object->setSourceCode($data['code']);
+        $object->setCode($data['code']);
         $object->setPlafondHcHorsRemuFc(FloatFromString::run($data['plafond-h-h-c']));
         $object->setPlafondHcRemuFc(FloatFromString::run($data['plafond-h-c']));
         $object->setPlafondHcFiHorsEad(FloatFromString::run($data['plafond-hc-fi-hors-ead']));
@@ -419,7 +419,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'TEM-ATV'                        => $object->getTemAtv(),
             'TEM-BIATSS'                     => $object->getTemBiatss(),
             'type-intervenant'               => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
-            'code'                           => $object->getSourceCode(),
+            'code'                           => $object->getCode(),
             'plafond-h-h-c'                  => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
             'plafond-h-c'                    => StringFromFloat::run($object->getPlafondHcRemuFc()),
             'plafond-hc-fi-hors-ead'         => StringFromFloat::run($object->getPlafondHcFiHorsEad()),

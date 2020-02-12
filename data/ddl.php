@@ -12571,22 +12571,11 @@ return [
                     'default'     => NULL,
                     'commentaire' => NULL,
                 ],
-                'SOURCE_ID'                      => [
-                    'name'        => 'SOURCE_ID',
-                    'type'        => 'int',
-                    'bdd-type'    => 'NUMBER',
-                    'length'      => 0,
-                    'scale'       => '0',
-                    'precision'   => NULL,
-                    'nullable'    => FALSE,
-                    'default'     => NULL,
-                    'commentaire' => NULL,
-                ],
-                'SOURCE_CODE'                    => [
-                    'name'        => 'SOURCE_CODE',
+                'CODE'                           => [
+                    'name'        => 'CODE',
                     'type'        => 'string',
                     'bdd-type'    => 'VARCHAR2',
-                    'length'      => 100,
+                    'length'      => 50,
                     'scale'       => NULL,
                     'precision'   => NULL,
                     'nullable'    => FALSE,
@@ -12855,6 +12844,50 @@ return [
                     'precision'   => 126,
                     'nullable'    => FALSE,
                     'default'     => '1',
+                    'commentaire' => NULL,
+                ],
+                'CODES_CORRESP_1'                => [
+                    'name'        => 'CODES_CORRESP_1',
+                    'type'        => 'string',
+                    'bdd-type'    => 'VARCHAR2',
+                    'length'      => 1000,
+                    'scale'       => NULL,
+                    'precision'   => NULL,
+                    'nullable'    => TRUE,
+                    'default'     => NULL,
+                    'commentaire' => NULL,
+                ],
+                'CODES_CORRESP_2'                => [
+                    'name'        => 'CODES_CORRESP_2',
+                    'type'        => 'string',
+                    'bdd-type'    => 'VARCHAR2',
+                    'length'      => 1000,
+                    'scale'       => NULL,
+                    'precision'   => NULL,
+                    'nullable'    => TRUE,
+                    'default'     => NULL,
+                    'commentaire' => NULL,
+                ],
+                'CODES_CORRESP_3'                => [
+                    'name'        => 'CODES_CORRESP_3',
+                    'type'        => 'string',
+                    'bdd-type'    => 'VARCHAR2',
+                    'length'      => 1000,
+                    'scale'       => NULL,
+                    'precision'   => NULL,
+                    'nullable'    => TRUE,
+                    'default'     => NULL,
+                    'commentaire' => NULL,
+                ],
+                'CODES_CORRESP_4'                => [
+                    'name'        => 'CODES_CORRESP_4',
+                    'type'        => 'string',
+                    'bdd-type'    => 'VARCHAR2',
+                    'length'      => 1000,
+                    'scale'       => NULL,
+                    'precision'   => NULL,
+                    'nullable'    => TRUE,
+                    'default'     => NULL,
                     'commentaire' => NULL,
                 ],
             ],
@@ -35451,7 +35484,7 @@ UNION ALL
 
 SELECT
   sp.privilege_id,
-  \'statut/\' || s.source_code role
+  \'statut/\' || s.code role
 FROM
   statut_privilege sp
   JOIN statut_intervenant s ON s.id = sp.statut_id AND s.histo_destruction IS NULL
@@ -39944,16 +39977,6 @@ WHERE
                 'HISTO_MODIFICATEUR_ID' => 'ID',
             ],
         ],
-        'STATUT_INTERVENANT_SOURCE_FK'   => [
-            'name'        => 'STATUT_INTERVENANT_SOURCE_FK',
-            'table'       => 'STATUT_INTERVENANT',
-            'rtable'      => 'SOURCE',
-            'delete_rule' => 'CASCADE',
-            'index'       => NULL,
-            'columns'     => [
-                'SOURCE_ID' => 'ID',
-            ],
-        ],
         'STATUT_INTERVENANT_TYPE_FK'     => [
             'name'        => 'STATUT_INTERVENANT_TYPE_FK',
             'table'       => 'STATUT_INTERVENANT',
@@ -42818,7 +42841,7 @@ WHERE
             'table'   => 'STATUT_INTERVENANT',
             'index'   => 'STATUT_INTERVENANT__UN',
             'columns' => [
-                'SOURCE_CODE',
+                'CODE',
             ],
         ],
         'STRUCTURE_CODE_UN'              => [
@@ -48277,14 +48300,6 @@ END;',
                 'ID',
             ],
         ],
-        'STATUT_INTERVENANT_SOURCE_FK'   => [
-            'name'    => 'STATUT_INTERVENANT_SOURCE_FK',
-            'unique'  => FALSE,
-            'table'   => 'STATUT_INTERVENANT',
-            'columns' => [
-                'SOURCE_ID',
-            ],
-        ],
         'STATUT_INTERVENANT_TYPE_FK_IDX' => [
             'name'    => 'STATUT_INTERVENANT_TYPE_FK_IDX',
             'unique'  => FALSE,
@@ -48298,7 +48313,7 @@ END;',
             'unique'  => TRUE,
             'table'   => 'STATUT_INTERVENANT',
             'columns' => [
-                'SOURCE_CODE',
+                'CODE',
             ],
         ],
         'STATUT_PRIVILEGE_PK'            => [

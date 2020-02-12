@@ -1,7 +1,8 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Ddl\DdlAbstract;
 
 class DdlTable extends DdlAbstract
 {
@@ -409,7 +410,7 @@ END;';
         $sql = "ALTER TABLE \"$table\" ADD (" . implode(" ", $cp) . ")";
         $this->addQuery($sql, 'Ajout de la colonne ' . $column['name'] . ' sur la table ' . $table);
 
-        /* Ajout du commentaire éventuel de la conne */
+        /* Ajout du commentaire éventuel de la colonne */
         $this->alterColumnComment($table, ['commentaire' => null], $column);
     }
 

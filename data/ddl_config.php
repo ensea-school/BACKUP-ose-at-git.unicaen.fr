@@ -1,17 +1,17 @@
 <?php
 
 return [
-    'explicit'                               => true,
-    'include-tables-deps'                    => true,
-    \BddAdmin\Ddl\DdlTable::class            => ['includes' => [
+    'explicit'            => true,
+    'include-tables-deps' => true,
+    'table'               => ['includes' => [
         'TYPE_DOTATION',
         'ELEMENT_TAUX_REGIMES_SAVE',
         'TBL_DOSSIER2',
     ]],
-    \BddAdmin\Ddl\DdlMaterializedView::class => ['includes' => [
+    'materialized-view'   => ['includes' => [
 
     ]],
-    \BddAdmin\Ddl\DdlView::class             => ['includes' => [
+    'view'                => ['includes' => [
         'V_FORMULE_LOCAL_I_PARAMS',
         'V_FORMULE_LOCAL_VH_PARAMS',
         'V_TYPE_INTERVENTION_REGLE_EP',
@@ -23,14 +23,14 @@ return [
         'V_WORKFLOW_ETAPE_PERTINENTE',
         'V_TBL_WORKFLOW',
     ]],
-    \BddAdmin\Ddl\DdlPackage::class          => ['includes' => [
+    'package'             => ['includes' => [
         'OSE_IMPORT',
         'UNICAEN_OSE_FORMULE',
     ]],
-    \BddAdmin\Ddl\DdlTrigger::class          => ['includes' => [
+    'trigger'             => ['includes' => [
         'TYPE_INTERVENTION_STRUCTURE_CK',
     ]],
-    \BddAdmin\Ddl\DdlSequence::class         => ['includes' => [
+    'sequence'            => ['includes' => [
         'FORMULE_ID_SEQ',
         'MESSAGE_ID_SEQ',
         'PACKAGE_DEPS_ID_SEQ',

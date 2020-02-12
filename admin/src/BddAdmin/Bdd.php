@@ -2,7 +2,8 @@
 
 namespace BddAdmin;
 
-use BddAdmin\Event\EventManagerAwareTrait;
+use BddAdmin\Ddl\DdlInterface;
+use BddAdmin\Driver\DriverInterface;
 use BddAdmin\Exception\BddCompileException;
 use BddAdmin\Exception\BddException;
 use BddAdmin\Exception\BddIndexExistsException;
@@ -10,51 +11,35 @@ use \Exception;
 
 class Bdd
 {
-    use EventManagerAwareTrait;
-
     const FETCH_ALL  = 32;
     const FETCH_EACH = 16;
     const FETCH_ONE  = 8;
 
-    /**
-     * @var string
-     */
-    private $host;
+    const DDL_TABLE              = 'table';
+    const DDL_VIEW               = 'view';
+    const DDL_SEQUENCE           = 'sequence';
+    const DDL_MATERIALIZED_VIEW  = 'materialized-view';
+    const DDL_PRIMARY_CONSTRAINT = 'primary-constraint';
+    const DDL_PACKAGE            = 'package';
+    const DDL_REF_CONSTRAINT     = 'ref-constraint';
+    const DDL_INDEX              = 'index';
+    const DDL_UNIQUE_CONSTRAINT  = 'unique-constraint';
+    const DDL_TRIGGER            = 'trigger';
 
     /**
-     * @var integer
+     * @var array
      */
-    private $port;
+    private $config;
 
     /**
-     * @var string
+     * @var DriverInterface
      */
-    private $dbname;
+    private $driver;
 
     /**
-     * @var string
+     * @var DdlInterface[]
      */
-    private $username;
-
-    /**
-     * @var string
-     */
-    private $password;
-
-    /**
-     * @var resource
-     */
-    private $connexion;
-
-    /**
-     * @var string
-     */
-    private $currentSchema;
-
-    /**
-     * @var int
-     */
-    private $commitMode = OCI_COMMIT_ON_SUCCESS;
+    private $ddlObjects = [];
 
     /**
      * @var bool
@@ -72,88 +57,7 @@ class Bdd
     {
         if (!empty($config)) {
             $this->setConfig($config);
-            $this->connect();
         }
-    }
-
-
-
-    /**
-     * @return self
-     * @throws BddCompileException
-     * @throws BddException
-     * @throws BddIndexExistsException
-     */
-    public function connect(): self
-    {
-        $cs              = $this->getHost() . ':' . $this->getPort() . '/' . $this->getDbname();
-        $characterSet    = 'AL32UTF8';
-        $this->connexion = oci_pconnect($this->getUsername(), $this->password, $cs, $characterSet);
-        if (!$this->connexion) {
-            $error = oci_error();
-            throw $this->sendException($error);
-        }
-
-        return $this;
-    }
-
-
-
-    protected function sendException(array $error)
-    {
-        $message = $error['message'];
-        $offset  = $error['offset'];
-        $sqlText = $error['sqltext'];
-        $code    = $error['code'];
-
-        $msg = "$message (offset $offset\n$sqlText\n";
-        switch ($code) {
-            case 24344: // erreur de compilation
-                return new BddCompileException($msg, $code);
-            case 955:
-            case 1408:
-                return new BddIndexExistsException($msg, $code);
-            default: // par défaut
-                return new BddException($msg, $code);
-        }
-    }
-
-
-
-    private function execStatement($sql, array $params = [])
-    {
-        $statement = oci_parse($this->connexion, $sql);
-
-        foreach ($params as $key => $val) {
-            ${$key} = $val;
-            oci_bind_by_name($statement, ':' . $key, ${$key});
-        }
-
-        if (false === @oci_execute($statement, $this->commitMode)) {
-            $error = oci_error($statement);
-            oci_free_statement($statement);
-            throw $this->sendException($error);
-        }
-
-        return $statement;
-    }
-
-
-
-    /**
-     * @return string
-     * @throws BddCompileException
-     * @throws BddException
-     * @throws BddIndexExistsException
-     */
-    public function getCurrentSchema(): string
-    {
-        if (!$this->currentSchema) {
-            $sql                 = "SELECT user scname FROM dual";
-            $this->currentSchema = $this->select($sql)[0]['SCNAME'];
-        }
-
-        return $this->currentSchema;
     }
 
 
@@ -163,9 +67,7 @@ class Bdd
      */
     public function beginTransaction(): self
     {
-        $this->sendEvent();
-
-        $this->commitMode = OCI_NO_AUTO_COMMIT;
+        $this->driver->beginTransaction();
 
         return $this;
     }
@@ -180,13 +82,7 @@ class Bdd
      */
     public function commitTransaction(): self
     {
-        $this->sendEvent();
-
-        $this->commitMode = OCI_COMMIT_ON_SUCCESS;
-        if (!oci_commit($this->connexion)) {
-            $error = oci_error($this->connexion);
-            throw $this->sendException($error);
-        }
+        $this->driver->commitTransaction();
 
         return $this;
     }
@@ -198,10 +94,7 @@ class Bdd
      */
     public function rollbackTransaction(): self
     {
-        $this->sendEvent();
-
-        oci_rollback($this->connexion);
-        $this->commitMode = OCI_COMMIT_ON_SUCCESS;
+        $this->driver->rollbackTransaction();
 
         return $this;
     }
@@ -233,18 +126,12 @@ class Bdd
      */
     public function exec(string $sql, array $params = [])
     {
-        if ($this->sendEvent()->getReturn('no-exec')) return true;
-
-        [$s, $p] = $this->prepareQuery($sql, $params);
-
         if ($this->debug) {
-            echo $s;
-            var_dump($p);
+            echo $sql;
+            var_dump($params);
         } else {
-            $statement = $this->execStatement($s, $p);
-            oci_free_statement($statement);
+            $this->driver->exec($sql, $params);
         }
-
 
         return true;
     }
@@ -297,28 +184,7 @@ class Bdd
      */
     public function select(string $sql, array $params = [], $fetchMode = self::FETCH_ALL)
     {
-        if ($this->sendEvent()->getReturn('no-exec')) return [];
-
-        [$s, $p] = $this->prepareQuery($sql, $params);
-
-        $statement = $this->execStatement($s, $p);
-
-        if ($fetchMode == self::FETCH_EACH) {
-            return $statement;
-        }
-
-        if (false === oci_fetch_all($statement, $res, 0, -1, OCI_FETCHSTATEMENT_BY_ROW)) {
-            $error = oci_error($statement);
-            oci_free_statement($statement);
-            throw $this->sendException($error);
-        }
-        oci_free_statement($statement);
-
-        if ($fetchMode == self::FETCH_ONE && isset($res[0])) {
-            return $res[0];
-        }
-
-        return $res;
+        return $this->driver->select($sql, $params, $fetchMode);
     }
 
 
@@ -337,195 +203,67 @@ class Bdd
 
 
 
-    private function prepareQuery($sql, array $params = [])
+    /**
+     * @param string $name
+     * @param bool   $autoClear
+     *
+     * @return DdlInterface
+     * @throws Exception
+     */
+    public function getDdl(string $name, bool $autoClear = false): DdlInterface
     {
-        $s = $sql;
-        $p = [];
-        foreach ($params as $name => $val) {
-            if ($val instanceof \DateTime) {
-                $p[$name] = $val->format('Y-m-d H:i:s');
-                $s        = str_replace(":$name", "to_date(:$name, 'YYYY-MM-DD HH24:MI:SS')", $s);
-            } elseif (is_bool($val)) {
-                $p[$name] = $val ? 1 : 0;
-            } else {
-                $p[$name] = $val;
-            }
+        $class = $this->driver->getDdlClass($name);
+
+        if (!is_subclass_of($class, DdlInterface::class)) {
+            throw new \Exception($class . ' n\'est pas un objet DDL valide!!');
         }
 
-        return [$s, $p];
+        if (!isset($this->ddlObjects[$class])) {
+            $this->ddlObjects[$class] = new $class($this);
+        }
+
+        if ($autoClear) {
+            $this->ddlObjects[$class]->clearQueries();
+            $this->ddlObjects[$class]->clearOptions();
+        }
+
+        return $this->ddlObjects[$class];
     }
 
 
 
     public function fetch($statement)
     {
-        $result = oci_fetch_array($statement, OCI_ASSOC);
-        if (false == $result) {
-            oci_free_statement($statement);
-        }
-
-        return $result;
+        return $this->driver->fetch($statement);
     }
 
 
 
     public function __destruct()
     {
-        oci_close($this->connexion);
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-
-
-    /**
-     * @param string $host
-     *
-     * @return Bdd
-     */
-    public function setHost(string $host): self
-    {
-        $this->host = $host;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return int
-     */
-    public function getPort(): int
-    {
-        return $this->port;
-    }
-
-
-
-    /**
-     * @param int $port
-     *
-     * @return Bdd
-     */
-    public function setPort(int $port): self
-    {
-        $this->port = $port;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getDbname(): string
-    {
-        return $this->dbname;
-    }
-
-
-
-    /**
-     * @param string $dbname
-     *
-     * @return Bdd
-     */
-    public function setDbname(string $dbname): self
-    {
-        $this->dbname = $dbname;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
-
-
-    /**
-     * @param string $username
-     *
-     * @return Bdd
-     */
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-
-
-    /**
-     * @param string $password
-     *
-     * @return Bdd
-     */
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
+        $this->driver->disconnect();
     }
 
 
 
     public function getConfig(): array
     {
-        return [
-            'host'     => $this->getHost(),
-            'port'     => $this->getPort(),
-            'dbname'   => $this->getDbname(),
-            'username' => $this->getUsername(),
-            'password' => $this->getPassword(),
-        ];
+        return $this->config;
     }
 
 
 
     public function setConfig(array $config): self
     {
-        if (array_key_exists('host', $config)) {
-            $this->setHost($config['host']);
+        $this->config = $config;
+        if ($this->driver) {
+            $this->driver->disconnect();
+            $this->ddlObjects = [];
         }
-        if (array_key_exists('port', $config)) {
-            $this->setPort($config['port']);
-        }
-        if (array_key_exists('dbname', $config)) {
-            $this->setDbname($config['dbname']);
-        }
-        if (array_key_exists('username', $config)) {
-            $this->setUsername($config['username']);
-        }
-        if (array_key_exists('password', $config)) {
-            $this->setPassword($config['password']);
-        }
+        $driverClass  = isset($config['driver']) ? $config['driver'] : 'Oracle';
+        $driverClass  = "\BddAdmin\Driver\\$driverClass\Driver";
+        $this->driver = new $driverClass($this);
+        $this->driver->connect();
 
         return $this;
     }

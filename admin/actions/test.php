@@ -24,5 +24,9 @@ var_dump($r);
 */
 
 
-$dataGen = new DataGen($oa);
-$dataGen->update('ADRESSE_NUMERO_COMPL');
+$bdd = $oa->getBdd();
+
+$d = $bdd->getTable('ANNEE')->getDdl();
+
+
+var_dump($d);

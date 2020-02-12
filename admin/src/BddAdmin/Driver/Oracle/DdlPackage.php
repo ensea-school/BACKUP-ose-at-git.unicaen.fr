@@ -1,7 +1,8 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Ddl\DdlAbstract;
 
 class DdlPackage extends DdlAbstract
 {

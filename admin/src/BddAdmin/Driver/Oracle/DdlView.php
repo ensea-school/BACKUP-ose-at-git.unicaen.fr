@@ -1,31 +1,34 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Ddl\DdlAbstract;
 
-class DdlMaterializedView extends DdlAbstract
+class DdlView extends DdlAbstract
 {
-    const ALIAS = 'materialized-view';
+    const ALIAS = 'view';
+    const LABEL = 'Vues';
 
 
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('mview_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('view_name', $includes, $excludes);
         $data = [];
 
         $q = "SELECT
-            mview_name \"name\",
-            query \"definition\"
+            view_name \"name\",
+            text \"definition\"
           FROM
-            USER_MVIEWS
+            USER_VIEWS
           WHERE
             1=1 $f
           ORDER BY
-            mview_name
+            view_name
         ";
         $p = $this->bdd->select($q, $p);
         foreach ($p as $r) {
+            $r['definition']  = 'CREATE OR REPLACE FORCE VIEW ' . $r['name'] . " AS\n" . $r['definition'];
             $data[$r['name']] = [
                 'name'       => $r['name'],
                 'definition' => $this->purger($r['definition'], true),
@@ -37,13 +40,11 @@ class DdlMaterializedView extends DdlAbstract
 
 
 
-    public function create(array $data)
+    public function create(array $data, $test = null)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $sql = 'CREATE MATERIALIZED VIEW ' . $data['name'] . " AS\n";
-        $sql .= $data['definition'];
-        $this->addQuery($sql, 'Ajout de la vue matérialisée ' . $data['name']);
+        $this->addQuery($data['definition'], 'Ajout/modification de la vue ' . $data['name']);
     }
 
 
@@ -52,17 +53,16 @@ class DdlMaterializedView extends DdlAbstract
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée ' . $name);
+        $this->addQuery("DROP VIEW " . $name, 'Suppression de la vue ' . $name);
     }
 
 
 
     public function alter(array $old, array $new)
     {
-        if ($this->sendEvent()->getReturn('no-exec')) return;
-
         if ($old != $new) {
-            $this->drop($old['name']);
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $this->create($new);
         }
     }

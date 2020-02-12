@@ -1,33 +1,32 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Ddl\DdlAbstract;
 
-class DdlView extends DdlAbstract
+class DdlMaterializedView extends DdlAbstract
 {
-    const ALIAS = 'view';
-    const LABEL = 'Vues';
+    const ALIAS = 'materialized-view';
 
 
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('view_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('mview_name', $includes, $excludes);
         $data = [];
 
         $q = "SELECT
-            view_name \"name\",
-            text \"definition\"
+            mview_name \"name\",
+            query \"definition\"
           FROM
-            USER_VIEWS
+            USER_MVIEWS
           WHERE
             1=1 $f
           ORDER BY
-            view_name
+            mview_name
         ";
         $p = $this->bdd->select($q, $p);
         foreach ($p as $r) {
-            $r['definition']  = 'CREATE OR REPLACE FORCE VIEW ' . $r['name'] . " AS\n" . $r['definition'];
             $data[$r['name']] = [
                 'name'       => $r['name'],
                 'definition' => $this->purger($r['definition'], true),
@@ -39,11 +38,13 @@ class DdlView extends DdlAbstract
 
 
 
-    public function create(array $data, $test = null)
+    public function create(array $data)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $this->addQuery($data['definition'], 'Ajout/modification de la vue ' . $data['name']);
+        $sql = 'CREATE MATERIALIZED VIEW ' . $data['name'] . " AS\n";
+        $sql .= $data['definition'];
+        $this->addQuery($sql, 'Ajout de la vue matérialisée ' . $data['name']);
     }
 
 
@@ -52,16 +53,17 @@ class DdlView extends DdlAbstract
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $this->addQuery("DROP VIEW " . $name, 'Suppression de la vue ' . $name);
+        $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée ' . $name);
     }
 
 
 
     public function alter(array $old, array $new)
     {
-        if ($old != $new) {
-            if ($this->sendEvent()->getReturn('no-exec')) return;
+        if ($this->sendEvent()->getReturn('no-exec')) return;
 
+        if ($old != $new) {
+            $this->drop($old['name']);
             $this->create($new);
         }
     }

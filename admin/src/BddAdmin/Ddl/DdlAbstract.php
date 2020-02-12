@@ -9,7 +9,7 @@ use BddAdmin\SchemaLoggerInterface;
 use Exception;
 
 
-abstract class DdlAbstract
+abstract class DdlAbstract implements DdlInterface
 {
     const ALIAS = 'no-alias';
 
@@ -147,7 +147,7 @@ abstract class DdlAbstract
      *
      * @return array
      */
-    public function execQueries($logger = null): array
+    public function execQueries(?SchemaLoggerInterface $logger = null): array
     {
         $errors = [];
         foreach ($this->queries as $sql => $description) {
@@ -196,7 +196,7 @@ abstract class DdlAbstract
      *
      * @return self
      */
-    public function setOptions(array $options = []): self
+    public function setOptions(array $options = []): DdlInterface
     {
         $this->options = $options;
 
@@ -211,7 +211,7 @@ abstract class DdlAbstract
      *
      * @return self
      */
-    public function addOption(string $option, $params = null): self
+    public function addOption(string $option, $params = null): DdlInterface
     {
         $this->options[$option] = $params;
 
@@ -225,7 +225,7 @@ abstract class DdlAbstract
      *
      * @return self
      */
-    public function addOptions(array $options): self
+    public function addOptions(array $options): DdlInterface
     {
         foreach ($options as $option => $params) {
             $this->addOption($option, $params);
@@ -241,7 +241,7 @@ abstract class DdlAbstract
      *
      * @return self
      */
-    public function removeOption(string $option): self
+    public function removeOption(string $option): DdlInterface
     {
         unset($this->options[$option]);
 

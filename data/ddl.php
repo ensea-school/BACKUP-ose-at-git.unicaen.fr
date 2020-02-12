@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'BddAdmin\\Ddl\\DdlSequence'          => [
+    'sequence'           => [
         'ADRESSE_INTERVENANT_ID_SEQ'     => [
             'name' => 'ADRESSE_INTERVENANT_ID_SEQ',
         ],
@@ -407,7 +407,7 @@ return [
             'name' => 'WF_ETAPE_ID_SEQ',
         ],
     ],
-    'BddAdmin\\Ddl\\DdlTable'             => [
+    'table'              => [
         'ADRESSE_NUMERO_COMPL'         => [
             'name'        => 'ADRESSE_NUMERO_COMPL',
             'temporary'   => FALSE,
@@ -7301,7 +7301,7 @@ return [
                 'ADDR_PRECISIONS'            => [
                     'name'        => 'ADDR_PRECISIONS',
                     'type'        => 'VARCHAR2',
-                    'length'      => 120,
+                    'length'      => 240,
                     'scale'       => NULL,
                     'precision'   => NULL,
                     'nullable'    => TRUE,
@@ -17979,7 +17979,7 @@ return [
             ],
         ],
     ],
-    'BddAdmin\\Ddl\\DdlPrimaryConstraint' => [
+    'primary-constraint' => [
         'ADRESSE_NUMERO_COMPL_PK'        => [
             'name'    => 'ADRESSE_NUMERO_COMPL_PK',
             'table'   => 'ADRESSE_NUMERO_COMPL',
@@ -19075,7 +19075,7 @@ return [
             ],
         ],
     ],
-    'BddAdmin\\Ddl\\DdlPackage'           => [
+    'package'            => [
         'FORMULE_ENSICAEN'    => [
             'name'       => 'FORMULE_ENSICAEN',
             'definition' => 'CREATE OR REPLACE PACKAGE FORMULE_ENSICAEN AS
@@ -29679,7 +29679,7 @@ END UNICAEN_TBL;',
 END UNICAEN_TBL;',
         ],
     ],
-    'BddAdmin\\Ddl\\DdlView'              => [
+    'view'               => [
         'V_AGREMENT_EXPORT_CSV'          => [
             'name'       => 'V_AGREMENT_EXPORT_CSV',
             'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -34922,7 +34922,7 @@ union all
   )',
         ],
     ],
-    'BddAdmin\\Ddl\\DdlMaterializedView'  => [
+    'materialized-view'  => [
         'MV_EXT_DOTATION_LIQUIDATION' => [
             'name'       => 'MV_EXT_DOTATION_LIQUIDATION',
             'definition' => 'SELECT
@@ -35002,7 +35002,7 @@ WHERE
   n.histo_destruction IS NULL',
         ],
     ],
-    'BddAdmin\\Ddl\\DdlRefConstraint'     => [
+    'ref-constraint'     => [
         'AFFECTATION_HCFK'               => [
             'name'        => 'AFFECTATION_HCFK',
             'table'       => 'AFFECTATION',
@@ -40594,7 +40594,7 @@ WHERE
             ],
         ],
     ],
-    'BddAdmin\\Ddl\\DdlUniqueConstraint'  => [
+    'unique-constraint'  => [
         'ADRESSE_NUMERO_COMPL_UN'        => [
             'name'    => 'ADRESSE_NUMERO_COMPL_UN',
             'table'   => 'ADRESSE_NUMERO_COMPL',
@@ -41574,7 +41574,7 @@ WHERE
             ],
         ],
     ],
-    'BddAdmin\\Ddl\\DdlTrigger'           => [
+    'trigger'            => [
         'AFFECTATION_RECHERCHE_CK'       => [
             'name'       => 'AFFECTATION_RECHERCHE_CK',
             'definition' => 'CREATE OR REPLACE TRIGGER "AFFECTATION_RECHERCHE_CK"
@@ -42933,7 +42933,7 @@ BEGIN
 END;',
         ],
     ],
-    'BddAdmin\\Ddl\\DdlIndex'             => [
+    'index'              => [
         'ADRESSE_NUMERO_COMPL_PK'        => [
             'name'    => 'ADRESSE_NUMERO_COMPL_PK',
             'unique'  => TRUE,

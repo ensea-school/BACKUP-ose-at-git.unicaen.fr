@@ -1,7 +1,8 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Ddl\DdlAbstract;
 
 class DdlUniqueConstraint extends DdlAbstract
 {
@@ -49,7 +50,7 @@ class DdlUniqueConstraint extends DdlAbstract
 
     private function indexExists($indexName)
     {
-        $sql = "SELECT count(*) res FROM all_indexes WHERE index_name = :indexName AND rownum = 1";
+        $sql = "SELECT count(*) RES FROM ALL_INDEXES WHERE INDEX_NAME = :indexName AND ROWNUM = 1";
         $res = $this->bdd->select($sql, compact('indexName'));
 
         return $res[0]['RES'] == '1';
@@ -101,7 +102,7 @@ class DdlUniqueConstraint extends DdlAbstract
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $sql       = "SELECT table_name FROM all_constraints WHERE constraint_name = :name";
+        $sql       = "SELECT TABLE_NAME FROM ALL_CONSTRAINTS WHERE CONSTRAINT_NAME = :name";
         $d         = $this->bdd->select($sql, compact('name'));
         $tableName = $d[0]['TABLE_NAME'];
 

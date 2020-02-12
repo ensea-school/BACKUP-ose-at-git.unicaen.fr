@@ -4,6 +4,7 @@ namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Bdd;
 use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Exception\BddException;
 
 class DdlTable extends DdlAbstract
 {
@@ -182,6 +183,8 @@ class DdlTable extends DdlAbstract
                     case 'CLOB':
                         $type = Bdd::TYPE_CLOB;
                     break;
+                    default:
+                        throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu');
                 }
 
                 $data[$paq['name']]['columns'][$paq['cname']] = [

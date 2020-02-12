@@ -3,16 +3,6 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Application\Entity\Db\StatutIntervenant" table="STATUT_INTERVENANT">
-        <indexes>
-            <index name="IDX_157F091959860CDC" columns="HISTO_CREATEUR_ID"/>
-            <index name="IDX_157F09197E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-            <index name="IDX_157F091963F06898" columns="HISTO_MODIFICATEUR_ID"/>
-            <index name="IDX_157F0919E9B3446E" columns="SOURCE_ID"/>
-            <index name="IDX_157F09196C6285FC" columns="TYPE_INTERVENANT_ID"/>
-        </indexes>
-        <unique-constraints>
-            <unique-constraint name="statut_intervenant__un" columns="SOURCE_CODE"/>
-        </unique-constraints>
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
@@ -28,6 +18,10 @@
         <field name="plafondHcFiHorsEad" type="float" column="PLAFOND_HC_FI_HORS_EAD" precision="126" scale="0" nullable="false"/>
         <field name="maximumHETD" type="float" column="MAXIMUM_HETD" precision="126" scale="0" nullable="false"/>
         <field name="chargesPatronales" type="float" column="CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
+        <field name="codesCorresp1" type="string" column="CODES_CORRESP_1" length="1000" nullable="true"/>
+        <field name="codesCorresp2" type="string" column="CODES_CORRESP_2" length="1000" nullable="true"/>
+        <field name="codesCorresp3" type="string" column="CODES_CORRESP_3" length="1000" nullable="true"/>
+        <field name="codesCorresp4" type="string" column="CODES_CORRESP_4" length="1000" nullable="true"/>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
         <field name="nonAutorise" type="boolean" column="NON_AUTORISE" nullable="false"/>
         <field name="ordre" type="integer" column="ORDRE" nullable="false"/>

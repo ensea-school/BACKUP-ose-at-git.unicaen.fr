@@ -287,7 +287,7 @@ class DataGen
         [
             'table'   => 'STATUT_INTERVENANT',
             'context' => ['install'],
-            'key'     => 'SOURCE_CODE',
+            'key'     => 'CODE',
             'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
         ],
         [

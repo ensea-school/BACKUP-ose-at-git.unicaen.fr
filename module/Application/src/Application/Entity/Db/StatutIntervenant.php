@@ -5,17 +5,19 @@ namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenAuth\Entity\Db\Privilege;
-use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
-use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
  * StatutIntervenant
  */
-class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, ImportAwareInterface
+class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 {
     use HistoriqueAwareTrait;
-    use ImportAwareTrait;
+
+    /**
+     * @var string|null
+     */
+    protected $code;
 
 
 
@@ -188,6 +190,50 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
      * @var boolean
      */
     protected $depassementSDSHC;
+
+    /**
+     * @var string|null
+     */
+    protected $codesCorresp1;
+
+    /**
+     * @var string|null
+     */
+    protected $codesCorresp2;
+
+    /**
+     * @var string|null
+     */
+    protected $codesCorresp3;
+
+    /**
+     * @var string|null
+     */
+    protected $codesCorresp4;
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string|null $code
+     *
+     * @return StatutIntervenant
+     */
+    public function setCode(?string $code): StatutIntervenant
+    {
+        $this->code = $code;
+
+        return $this;
+    }
 
 
 
@@ -968,4 +1014,101 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
 
         return $new;
     }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp1(): ?string
+    {
+        return $this->codesCorresp1;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp1
+     *
+     * @return StatutIntervenant
+     */
+    public function setCodesCorresp1(?string $codesCorresp1): StatutIntervenant
+    {
+        $this->codesCorresp1 = $codesCorresp1;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp2(): ?string
+    {
+        return $this->codesCorresp2;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp2
+     *
+     * @return StatutIntervenant
+     */
+    public function setCodesCorresp2(?string $codesCorresp2): StatutIntervenant
+    {
+        $this->codesCorresp2 = $codesCorresp2;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp3(): ?string
+    {
+        return $this->codesCorresp3;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp3
+     *
+     * @return StatutIntervenant
+     */
+    public function setCodesCorresp3(?string $codesCorresp3): StatutIntervenant
+    {
+        $this->codesCorresp3 = $codesCorresp3;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp4(): ?string
+    {
+        return $this->codesCorresp4;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp4
+     *
+     * @return StatutIntervenant
+     */
+    public function setCodesCorresp4(?string $codesCorresp4): StatutIntervenant
+    {
+        $this->codesCorresp4 = $codesCorresp4;
+
+        return $this;
+    }
+
 }

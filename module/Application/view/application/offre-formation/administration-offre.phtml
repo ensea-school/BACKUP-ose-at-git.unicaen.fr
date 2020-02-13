@@ -1,12 +1,9 @@
+<?php
 
-<div class="row" style="margin:0 5px 0 5px;">
-    <div class="col-11">
-        <h3>Administration offre de formation</h3>
-        Mettre ici un récap des modules possibles
-    </div>
+use Application\Provider\Privilege\Privileges;
 
-</div>
-<script type="text/javascript">
+?>
+    <h1 class="page-header">Administration de l'offre de formation</h1>
+<?php
 
-</script>
-
+echo $this->navigation('navigation')->menuContextuel()->setPartial('unicaen-app/menu-dl.phtml');

@@ -47,6 +47,11 @@ class TblPieceJointe
      */
     private $annee;
 
+    /**
+     * @var integer
+     */
+    private $obligatoire;
+
 
 
     /**
@@ -139,6 +144,17 @@ class TblPieceJointe
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+
+
+    public function isObligatoire()
+    {
+        if ($this->obligatoire) {
+            return true;
+        }
+        
+        return false;
     }
 }
 

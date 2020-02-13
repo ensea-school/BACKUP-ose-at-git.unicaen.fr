@@ -173,8 +173,7 @@ class modulateurController extends AbstractController
 
 
 
-    public
-    function typeModulateurStructureDeleteAction()
+    public function typeModulateurStructureDeleteAction()
     {
         /* @var $typeModulateurStructure typeModulateurStructure */
         $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
@@ -185,6 +184,6 @@ class modulateurController extends AbstractController
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
-        return new MessengerViewModel(compact('typeModulateur'));
+        return new MessengerViewModel();
     }
 }

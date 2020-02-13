@@ -4546,10 +4546,6 @@ return [
             "SOURCE_CODE" => "D102"
         ],
         [
-            "LIBELLE" => "NE PLUS UTILISER",
-            "SOURCE_CODE" => "D1132"
-        ],
-        [
             "LIBELLE" => "PILOTAGE PÉDAGOGIQUE",
             "SOURCE_CODE" => "D1011"
         ],
@@ -6674,6 +6670,12 @@ return [
             "SOURCE_CODE" => "ETR1194"
         ],
         [
+            "LIBELLE" => "Agence Nationale pour la Formation Professionnelle des Adultes (AFPA) - ANGERS",
+            "LOCALISATION" => "AFPA",
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "04900000"
+        ],
+        [
             "LIBELLE" => "Agence nationale de la sécurité des systèmes d'information",
             "LOCALISATION" => "ANSSI",
             "DEPARTEMENT" => "075",
@@ -6900,12 +6902,6 @@ return [
             "LOCALISATION" => "CCI PARIS",
             "DEPARTEMENT" => "076",
             "SOURCE_CODE" => "0762498C"
-        ],
-        [
-            "LIBELLE" => "C.F.A.",
-            "LOCALISATION" => "LA GLACERI",
-            "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0501565E"
         ],
         [
             "LIBELLE" => "C.F.A. IND.GRAPHIQUES",
@@ -7233,15 +7229,15 @@ return [
         ],
         [
             "LIBELLE" => "CENTRE NATIONAL DE LA RECHERCHE SCIENTIF",
-            "LOCALISATION" => "DELEG.REG.",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0383049H"
-        ],
-        [
-            "LIBELLE" => "CENTRE NATIONAL DE LA RECHERCHE SCIENTIF",
             "LOCALISATION" => "CNRS",
             "DEPARTEMENT" => "034",
             "SOURCE_CODE" => "0341860M"
+        ],
+        [
+            "LIBELLE" => "CENTRE NATIONAL DE LA RECHERCHE SCIENTIF",
+            "LOCALISATION" => "DELEG.REG.",
+            "DEPARTEMENT" => "038",
+            "SOURCE_CODE" => "0383049H"
         ],
         [
             "LIBELLE" => "CENTRE NATIONAL DE RECHERCHE",
@@ -8046,6 +8042,12 @@ return [
             "LOCALISATION" => "LY MOLIERE",
             "DEPARTEMENT" => "031",
             "SOURCE_CODE" => "0312801B"
+        ],
+        [
+            "LIBELLE" => "CPGF HORIZON",
+            "LOCALISATION" => "Société",
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "CPGF"
         ],
         [
             "LIBELLE" => "CREGAS",
@@ -9122,6 +9124,12 @@ return [
             "SOURCE_CODE" => "0611020C"
         ],
         [
+            "LIBELLE" => "E2SE - ECOLE SUPERIEURE DES SERVICES AUX ENTREPRISES",
+            "LOCALISATION" => "E2SE",
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0142248T"
+        ],
+        [
             "LIBELLE" => "EBP INTERNATIONAL BORDX GRPE BORDX ECOLE MANAGEMENT",
             "LOCALISATION" => "EBPI BORDX",
             "DEPARTEMENT" => "033",
@@ -9975,15 +9983,15 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE GENERAL PRIVEE FIDES",
-            "LOCALISATION" => "ECG PR",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0133785U"
-        ],
-        [
-            "LIBELLE" => "ECOLE 2D DEGRE GENERAL PRIVEE FIDES",
             "LOCALISATION" => "2D FIDES",
             "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0753859M"
+        ],
+        [
+            "LIBELLE" => "ECOLE 2D DEGRE GENERAL PRIVEE FIDES",
+            "LOCALISATION" => "ECG PR",
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0133785U"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE GENERAL PRIVEE FM SPORTS ETUDES",
@@ -10437,27 +10445,27 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE",
-            "LOCALISATION" => "2D CFF/EST",
-            "DEPARTEMENT" => "036",
-            "SOURCE_CODE" => "0360846Z"
-        ],
-        [
-            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE",
-            "LOCALISATION" => "2D AMGE",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0672735J"
-        ],
-        [
-            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE",
             "LOCALISATION" => "2D S-JOSEP",
             "DEPARTEMENT" => "058",
             "SOURCE_CODE" => "0580977X"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE",
+            "LOCALISATION" => "2D CFF/EST",
+            "DEPARTEMENT" => "036",
+            "SOURCE_CODE" => "0360846Z"
+        ],
+        [
+            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE",
             "LOCALISATION" => "2D IFCE",
             "DEPARTEMENT" => "067",
             "SOURCE_CODE" => "0672598K"
+        ],
+        [
+            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE",
+            "LOCALISATION" => "2D AMGE",
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0672735J"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE A.D.F.I.",
@@ -10563,15 +10571,15 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE BEAUTE COIFFURE FORMATION",
-            "LOCALISATION" => "2D BEA/CFF",
-            "DEPARTEMENT" => "028",
-            "SOURCE_CODE" => "0281150Y"
-        ],
-        [
-            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE BEAUTE COIFFURE FORMATION",
             "LOCALISATION" => "2D BCFORMA",
             "DEPARTEMENT" => "049",
             "SOURCE_CODE" => "0492317C"
+        ],
+        [
+            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE BEAUTE COIFFURE FORMATION",
+            "LOCALISATION" => "2D BEA/CFF",
+            "DEPARTEMENT" => "028",
+            "SOURCE_CODE" => "0281150Y"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE BEAUTE COIFFURE FORMATION SART",
@@ -10977,12 +10985,6 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE FRANCAISE COIFFURE ESTHETIQUE",
-            "LOCALISATION" => "2D CFF/EST",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0492343F"
-        ],
-        [
-            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE FRANCAISE COIFFURE ESTHETIQUE",
             "LOCALISATION" => "2D EFCESTH",
             "DEPARTEMENT" => "049",
             "SOURCE_CODE" => "0492028N"
@@ -10992,6 +10994,12 @@ return [
             "LOCALISATION" => "2D CFF/EST",
             "DEPARTEMENT" => "044",
             "SOURCE_CODE" => "0442649R"
+        ],
+        [
+            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE FRANCAISE COIFFURE ESTHETIQUE",
+            "LOCALISATION" => "2D CFF/EST",
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0492343F"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE GIORGIFONT",
@@ -11218,14 +11226,14 @@ return [
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PATRICK LAMEYNARDIE",
             "LOCALISATION" => "2D LAMEYNA",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0851437A"
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0442196Y"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PATRICK LAMEYNARDIE",
             "LOCALISATION" => "2D LAMEYNA",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0442196Y"
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0851437A"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER",
@@ -11236,26 +11244,26 @@ return [
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER",
             "LOCALISATION" => "2D PIGIER",
-            "DEPARTEMENT" => "084",
-            "SOURCE_CODE" => "0841119K"
-        ],
-        [
-            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER",
-            "LOCALISATION" => "2D PIGIER",
             "DEPARTEMENT" => "074",
             "SOURCE_CODE" => "0741708E"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER",
             "LOCALISATION" => "2D PIGIER",
-            "DEPARTEMENT" => "010",
-            "SOURCE_CODE" => "0101122R"
+            "DEPARTEMENT" => "084",
+            "SOURCE_CODE" => "0841119K"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER",
             "LOCALISATION" => "2D PIGIER",
             "DEPARTEMENT" => "024",
             "SOURCE_CODE" => "0241256K"
+        ],
+        [
+            "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER",
+            "LOCALISATION" => "2D PIGIER",
+            "DEPARTEMENT" => "010",
+            "SOURCE_CODE" => "0101122R"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER COIFFURE",
@@ -11272,14 +11280,14 @@ return [
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER CREATION",
             "LOCALISATION" => "2D PIGIER",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0755544U"
+            "DEPARTEMENT" => "072",
+            "SOURCE_CODE" => "0720829K"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER CREATION",
             "LOCALISATION" => "2D PIGIER",
-            "DEPARTEMENT" => "072",
-            "SOURCE_CODE" => "0720829K"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0755544U"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE PIGIER FORMANIMES",
@@ -11379,6 +11387,12 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE",
+            "LOCALISATION" => "EA S-GERVA",
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "0611018A"
+        ],
+        [
+            "LIBELLE" => "ECOLE AGRICOLE PRIVEE",
             "LOCALISATION" => "EA ROUVROY",
             "DEPARTEMENT" => "060",
             "SOURCE_CODE" => "0601404A"
@@ -11388,12 +11402,6 @@ return [
             "LOCALISATION" => "EA YSSINGE",
             "DEPARTEMENT" => "043",
             "SOURCE_CODE" => "0430842G"
-        ],
-        [
-            "LIBELLE" => "ECOLE AGRICOLE PRIVEE",
-            "LOCALISATION" => "EA S-GERVA",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0611018A"
         ],
         [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE",
@@ -11517,15 +11525,15 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE INSTITUT AGRICOLE",
-            "LOCALISATION" => "EA SAVY",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0623280D"
-        ],
-        [
-            "LIBELLE" => "ECOLE AGRICOLE PRIVEE INSTITUT AGRICOLE",
             "LOCALISATION" => "EA HAZEBR",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0595124Z"
+        ],
+        [
+            "LIBELLE" => "ECOLE AGRICOLE PRIVEE INSTITUT AGRICOLE",
+            "LOCALISATION" => "EA SAVY",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0623280D"
         ],
         [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE INSTITUT AGRICOLE SAINT JOSEPH",
@@ -11745,15 +11753,15 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE D'ARCHITECTURE DE MARNE LA VALLEE",
-            "LOCALISATION" => "AR MARNE/V",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772551E"
-        ],
-        [
-            "LIBELLE" => "ECOLE D'ARCHITECTURE DE MARNE LA VALLEE",
             "LOCALISATION" => "AR NOISY",
             "DEPARTEMENT" => "093",
             "SOURCE_CODE" => "0932304Z"
+        ],
+        [
+            "LIBELLE" => "ECOLE D'ARCHITECTURE DE MARNE LA VALLEE",
+            "LOCALISATION" => "AR MARNE/V",
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0772551E"
         ],
         [
             "LIBELLE" => "ECOLE D'ARCHITECTURE PARIS-CONFLANS (UPA 4)",
@@ -12290,12 +12298,6 @@ return [
             "SOURCE_CODE" => "0350089G"
         ],
         [
-            "LIBELLE" => "ECOLE NAT. SUP. D'ARCHITECTURE ENSA NORMANDIE",
-            "LOCALISATION" => "AR NORMAND",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760164R"
-        ],
-        [
             "LIBELLE" => "ECOLE NAT.SUP. D'ART ET METIER BASTIA",
             "LOCALISATION" => "BASTIA",
             "DEPARTEMENT" => "02B",
@@ -12369,15 +12371,15 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE NATIONALE DU GENIE RURAL DES EAUX ET DES FORETS",
-            "LOCALISATION" => "ENGREF PAR",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0753503A"
-        ],
-        [
-            "LIBELLE" => "ECOLE NATIONALE DU GENIE RURAL DES EAUX ET DES FORETS",
             "LOCALISATION" => "ENGREF",
             "DEPARTEMENT" => "034",
             "SOURCE_CODE" => "0341652L"
+        ],
+        [
+            "LIBELLE" => "ECOLE NATIONALE DU GENIE RURAL DES EAUX ET DES FORETS",
+            "LOCALISATION" => "ENGREF PAR",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0753503A"
         ],
         [
             "LIBELLE" => "ECOLE NATIONALE SUPERIEUR D ELECTRONIQUE ET DE RADIO-ELECTRI",
@@ -13084,12 +13086,6 @@ return [
         [
             "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE COIFFURE ET ESTHETIQUE",
             "LOCALISATION" => "ES CFF/EST",
-            "DEPARTEMENT" => "083",
-            "SOURCE_CODE" => "0831412J"
-        ],
-        [
-            "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE COIFFURE ET ESTHETIQUE",
-            "LOCALISATION" => "ES CFF/EST",
             "DEPARTEMENT" => "033",
             "SOURCE_CODE" => "0332588J"
         ],
@@ -13104,6 +13100,12 @@ return [
             "LOCALISATION" => "ECP PR",
             "DEPARTEMENT" => "013",
             "SOURCE_CODE" => "0133229P"
+        ],
+        [
+            "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE COIFFURE ET ESTHETIQUE",
+            "LOCALISATION" => "ES CFF/EST",
+            "DEPARTEMENT" => "083",
+            "SOURCE_CODE" => "0831412J"
         ],
         [
             "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE COIFFURE PERFORMANCE",
@@ -13221,15 +13223,15 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE ESTHETIQUE COSMETIQUE",
-            "LOCALISATION" => "ES EST/COS",
-            "DEPARTEMENT" => "064",
-            "SOURCE_CODE" => "0641900T"
-        ],
-        [
-            "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE ESTHETIQUE COSMETIQUE",
             "LOCALISATION" => "ES COS/EST",
             "DEPARTEMENT" => "087",
             "SOURCE_CODE" => "0870913V"
+        ],
+        [
+            "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE ESTHETIQUE COSMETIQUE",
+            "LOCALISATION" => "ES EST/COS",
+            "DEPARTEMENT" => "064",
+            "SOURCE_CODE" => "0641900T"
         ],
         [
             "LIBELLE" => "ECOLE SECONDAIRE PROF.PRIVEE ESTHETIQUE FOURNIER-BAPTISTINI",
@@ -13683,15 +13685,15 @@ return [
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE D'OPTIQUE",
-            "LOCALISATION" => "IOTA",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910725U"
-        ],
-        [
-            "LIBELLE" => "ECOLE SUPERIEURE D'OPTIQUE",
             "LOCALISATION" => "LY ESOS",
             "DEPARTEMENT" => "067",
             "SOURCE_CODE" => "0672881T"
+        ],
+        [
+            "LIBELLE" => "ECOLE SUPERIEURE D'OPTIQUE",
+            "LOCALISATION" => "IOTA",
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0910725U"
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE DE BIOTECHNOLOGIE DE STRASBOURG",
@@ -13844,12 +13846,6 @@ return [
             "SOURCE_CODE" => "0311115U"
         ],
         [
-            "LIBELLE" => "ECOLE SUPERIEURE DES SERVICES AUX ENTREPRISES",
-            "LOCALISATION" => "E2SE",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0142248T"
-        ],
-        [
             "LIBELLE" => "ECOLE SUPERIEURE DU BOIS",
             "LOCALISATION" => "ESB NANTES",
             "DEPARTEMENT" => "044",
@@ -13901,25 +13897,25 @@ return [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0755465H"
-        ],
-        [
-            "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
-            "LOCALISATION" => "ES PARIS",
-            "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0755466J"
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0755467K"
+            "SOURCE_CODE" => "0755464G"
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0755464G"
+            "SOURCE_CODE" => "0755465H"
+        ],
+        [
+            "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
+            "LOCALISATION" => "ES PARIS",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0755467K"
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE ACADEMIE DE PORT-ROYAL",
@@ -14416,14 +14412,14 @@ return [
         [
             "LIBELLE" => "ECOLE TECHNIQUE PRIVEE PIGIER",
             "LOCALISATION" => "ET PIGIER",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0741690K"
+            "DEPARTEMENT" => "038",
+            "SOURCE_CODE" => "0383347G"
         ],
         [
             "LIBELLE" => "ECOLE TECHNIQUE PRIVEE PIGIER",
             "LOCALISATION" => "ET PIGIER",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0383347G"
+            "DEPARTEMENT" => "074",
+            "SOURCE_CODE" => "0741690K"
         ],
         [
             "LIBELLE" => "ECOLE TECHNIQUE PRIVEE PRO' STYLE FORMATION",
@@ -14657,13 +14653,13 @@ return [
             "LIBELLE" => "ECOLE TECHNOLOGIQUE PRIVEE ILEC",
             "LOCALISATION" => "ET ILEC",
             "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060818G"
+            "SOURCE_CODE" => "0060777M"
         ],
         [
             "LIBELLE" => "ECOLE TECHNOLOGIQUE PRIVEE ILEC",
             "LOCALISATION" => "ET ILEC",
             "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060777M"
+            "SOURCE_CODE" => "0060818G"
         ],
         [
             "LIBELLE" => "ECOLE TECHNOLOGIQUE PRIVEE INTERNATIONAL BUSINESS SCHOOL",
@@ -14966,6 +14962,12 @@ return [
             "SOURCE_CODE" => "0062022R"
         ],
         [
+            "LIBELLE" => "ENSA Normandie",
+            "LOCALISATION" => "Ecole",
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0760164R"
+        ],
+        [
             "LIBELLE" => "ENSAI",
             "LOCALISATION" => "BRUZ",
             "DEPARTEMENT" => "035",
@@ -15150,6 +15152,12 @@ return [
             "LOCALISATION" => "EPVM REIMS",
             "DEPARTEMENT" => "051",
             "SOURCE_CODE" => "0512132R"
+        ],
+        [
+            "LIBELLE" => "ERG Ecole de recherche Graphique",
+            "LOCALISATION" => "Ecole",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1375"
         ],
         [
             "LIBELLE" => "ES COMMERCE EXTER COURBEVOIE GROUPE ESCE COURBEVOIE",
@@ -16256,6 +16264,12 @@ return [
             "SOURCE_CODE" => "ETR1062"
         ],
         [
+            "LIBELLE" => "Ecole Nationale d'Ingénieurs de Monastir (ENIM)",
+            "LOCALISATION" => "Ecole",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1377"
+        ],
+        [
             "LIBELLE" => "Ecole Nationale d'Ingénieurs de Sfax",
             "LOCALISATION" => "ENIS",
             "DEPARTEMENT" => "099",
@@ -16425,12 +16439,6 @@ return [
         ],
         [
             "LIBELLE" => "Ecole Supérieure d'Electricité",
-            "LOCALISATION" => "SUPELEC",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "SUPELEC"
-        ],
-        [
-            "LIBELLE" => "Ecole Supérieure d'Electricité",
             "LOCALISATION" => "SUPELEC CE",
             "DEPARTEMENT" => "035",
             "SOURCE_CODE" => "0351781W"
@@ -16440,6 +16448,12 @@ return [
             "LOCALISATION" => "CESSON-SEV",
             "DEPARTEMENT" => "035",
             "SOURCE_CODE" => "9SUPELEC"
+        ],
+        [
+            "LIBELLE" => "Ecole Supérieure d'Electricité",
+            "LOCALISATION" => "SUPELEC",
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "SUPELEC"
         ],
         [
             "LIBELLE" => "Ecole Supérieure d'Ingénieurs en Electronique et Electrotechnique d'Amiens",
@@ -17042,6 +17056,12 @@ return [
             "SOURCE_CODE" => "05000000"
         ],
         [
+            "LIBELLE" => "FIM CCI Formation Normandie Cherbourg",
+            "LOCALISATION" => "FIM CCI",
+            "DEPARTEMENT" => "050",
+            "SOURCE_CODE" => "0501565E"
+        ],
+        [
             "LIBELLE" => "FLE ? PARIS",
             "LOCALISATION" => "FLE PARIS",
             "DEPARTEMENT" => "075",
@@ -17228,12 +17248,6 @@ return [
             "LOCALISATION" => "ESC DIJON",
             "DEPARTEMENT" => "021",
             "SOURCE_CODE" => "0210099U"
-        ],
-        [
-            "LIBELLE" => "GROUPE ESC TOULOUSE",
-            "LOCALISATION" => "ESC TOULOU",
-            "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0310156B"
         ],
         [
             "LIBELLE" => "GROUPE ESCI AIN GPE EC SUP COMMERCE ET INDUST",
@@ -18134,6 +18148,12 @@ return [
             "LOCALISATION" => "INSA RENNE",
             "DEPARTEMENT" => "035",
             "SOURCE_CODE" => "0350097R"
+        ],
+        [
+            "LIBELLE" => "INSA de Rennes",
+            "LOCALISATION" => "Institut",
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "INSA_R"
         ],
         [
             "LIBELLE" => "INSA de Rouen Normandie",
@@ -19367,15 +19387,15 @@ return [
         ],
         [
             "LIBELLE" => "INSTITUT DE GESTION SOCIALE",
-            "LOCALISATION" => "IGS PARIS",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0754738T"
-        ],
-        [
-            "LIBELLE" => "INSTITUT DE GESTION SOCIALE",
             "LOCALISATION" => "IGS MULHOU",
             "DEPARTEMENT" => "069",
             "SOURCE_CODE" => "0693270E"
+        ],
+        [
+            "LIBELLE" => "INSTITUT DE GESTION SOCIALE",
+            "LOCALISATION" => "IGS PARIS",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0754738T"
         ],
         [
             "LIBELLE" => "INSTITUT DE LA COMMUNICATION UNIVERSITE LYON 2",
@@ -19532,12 +19552,6 @@ return [
             "LOCALISATION" => "GRENOBLE1",
             "DEPARTEMENT" => "038",
             "SOURCE_CODE" => "0382881A"
-        ],
-        [
-            "LIBELLE" => "INSTITUT DES TECHNIQUES AVANCEES DE ST ETIENNE",
-            "LOCALISATION" => "ST ETIENNE",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0422026Z"
         ],
         [
             "LIBELLE" => "INSTITUT DROIT UNIVERSITE LYON 3",
@@ -20105,15 +20119,15 @@ return [
         ],
         [
             "LIBELLE" => "INSTITUT UNIVERSITAIRE DE TECHNOLOGIE",
-            "LOCALISATION" => "IUT B BORD",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0331420P"
-        ],
-        [
-            "LIBELLE" => "INSTITUT UNIVERSITAIRE DE TECHNOLOGIE",
             "LOCALISATION" => "IUT A BORD",
             "DEPARTEMENT" => "033",
             "SOURCE_CODE" => "0331494V"
+        ],
+        [
+            "LIBELLE" => "INSTITUT UNIVERSITAIRE DE TECHNOLOGIE",
+            "LOCALISATION" => "IUT B BORD",
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0331420P"
         ],
         [
             "LIBELLE" => "INSTITUT UNIVERSITAIRE DE TECHNOLOGIE",
@@ -20468,6 +20482,12 @@ return [
             "LOCALISATION" => "IRTS",
             "DEPARTEMENT" => "014",
             "SOURCE_CODE" => "0142121E"
+        ],
+        [
+            "LIBELLE" => "IRTS - Montpellier",
+            "LOCALISATION" => "IRTS",
+            "DEPARTEMENT" => "034",
+            "SOURCE_CODE" => "0341728U"
         ],
         [
             "LIBELLE" => "IRTS IDF Montrouge / Neuilly sur Marne",
@@ -23698,6 +23718,12 @@ return [
             "SOURCE_CODE" => "INSTITUT"
         ],
         [
+            "LIBELLE" => "Institut Mines Telecom",
+            "LOCALISATION" => "institut",
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0422026Z"
+        ],
+        [
             "LIBELLE" => "Institut National",
             "LOCALISATION" => "QUEBEC",
             "DEPARTEMENT" => "099",
@@ -23975,15 +24001,15 @@ return [
         ],
         [
             "LIBELLE" => "Institut de Formation en Ergothérapie",
-            "LOCALISATION" => "IFE ALENC",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "061129W"
-        ],
-        [
-            "LIBELLE" => "Institut de Formation en Ergothérapie",
             "LOCALISATION" => "IFE Alenço",
             "DEPARTEMENT" => "014",
             "SOURCE_CODE" => "0611269Y"
+        ],
+        [
+            "LIBELLE" => "Institut de Formation en Ergothérapie",
+            "LOCALISATION" => "IFE ALENC",
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "061129W"
         ],
         [
             "LIBELLE" => "Institut de Gestion de Rennes",
@@ -24103,13 +24129,13 @@ return [
             "LIBELLE" => "Institut de chimie des substances naturelles",
             "LOCALISATION" => "ICSN",
             "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "ICSN"
+            "SOURCE_CODE" => "ICNS"
         ],
         [
             "LIBELLE" => "Institut de chimie des substances naturelles",
             "LOCALISATION" => "ICSN",
             "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "ICNS"
+            "SOURCE_CODE" => "ICSN"
         ],
         [
             "LIBELLE" => "Institut de formation en ergothérapie de Rennes",
@@ -24122,6 +24148,12 @@ return [
             "LOCALISATION" => "IFSI",
             "DEPARTEMENT" => "044",
             "SOURCE_CODE" => "0441772M"
+        ],
+        [
+            "LIBELLE" => "Institut de formation en soins infirmiers (IFSI) - PERIGUEUX",
+            "LOCALISATION" => "IFSI",
+            "DEPARTEMENT" => "024",
+            "SOURCE_CODE" => "0240999F"
         ],
         [
             "LIBELLE" => "Institut de formation en soins infirmiers de l'hôpital de Beaujon",
@@ -24184,6 +24216,12 @@ return [
             "SOURCE_CODE" => "0352302M"
         ],
         [
+            "LIBELLE" => "Institut des hautes études de droit rural et d'économie agricole (IHEDREA)",
+            "LOCALISATION" => "IHEDREA",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0922485B"
+        ],
+        [
             "LIBELLE" => "Institut des matériaux Jean Rouxel",
             "LOCALISATION" => "IMN",
             "DEPARTEMENT" => "044",
@@ -24212,6 +24250,12 @@ return [
             "LOCALISATION" => "IEP RENNES",
             "DEPARTEMENT" => "035",
             "SOURCE_CODE" => "0352317D"
+        ],
+        [
+            "LIBELLE" => "Institut formation manipulateurs d'électroradiologie CH Sud-Francilien",
+            "LOCALISATION" => "IFMEM",
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0911786X"
         ],
         [
             "LIBELLE" => "Institut français des sciences et technologies des transports, de l'aménagement et des réseaux",
@@ -24292,6 +24336,12 @@ return [
             "SOURCE_CODE" => "0763400H"
         ],
         [
+            "LIBELLE" => "Institut pour la Recherche sur le Cancer de Lille",
+            "LOCALISATION" => "Institut",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "IRCL"
+        ],
+        [
             "LIBELLE" => "Institut préparatoire aux études d'ingénieurs de Sfax (IPEIS)",
             "LOCALISATION" => "Institut",
             "DEPARTEMENT" => "099",
@@ -24332,6 +24382,12 @@ return [
             "LOCALISATION" => "Instituto",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR1328"
+        ],
+        [
+            "LIBELLE" => "Instituto de Catalisis y Petroleoquimica",
+            "LOCALISATION" => "Institut",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1379"
         ],
         [
             "LIBELLE" => "Instituto de Estructura de la Materia",
@@ -24606,14 +24662,14 @@ return [
         [
             "LIBELLE" => "LGT LYCEE DES METIERS CONDORCET",
             "LOCALISATION" => "LY CONDORC",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0020050U"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0930122C"
         ],
         [
             "LIBELLE" => "LGT LYCEE DES METIERS CONDORCET",
             "LOCALISATION" => "LY CONDORC",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0930122C"
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0020050U"
         ],
         [
             "LIBELLE" => "LGT LYCEE DES METIERS DE LA CHIMIE ALBERT CAMUS",
@@ -24875,27 +24931,15 @@ return [
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS",
-            "LOCALISATION" => "LY BLANQUE",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0330018R"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS",
-            "LOCALISATION" => "LY QUIMERC",
-            "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0290092T"
+            "LOCALISATION" => "LY HENIN",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620191W"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS",
             "LOCALISATION" => "LY MTDIDIE",
             "DEPARTEMENT" => "080",
             "SOURCE_CODE" => "0801534H"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS",
-            "LOCALISATION" => "LY HENIN",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620191W"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS",
@@ -24908,6 +24952,18 @@ return [
             "LOCALISATION" => "LY POTEL",
             "DEPARTEMENT" => "002",
             "SOURCE_CODE" => "0020025S"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS",
+            "LOCALISATION" => "LY QUIMERC",
+            "DEPARTEMENT" => "029",
+            "SOURCE_CODE" => "0290092T"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS",
+            "LOCALISATION" => "LY BLANQUE",
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0330018R"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS  L'INDUSTRIE - OPTIQUE J.BREL",
@@ -24996,14 +25052,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS AMBROISE CROIZAT",
             "LOCALISATION" => "LY CROIZAT",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0594532F"
+            "DEPARTEMENT" => "073",
+            "SOURCE_CODE" => "0730030L"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS AMBROISE CROIZAT",
             "LOCALISATION" => "LY CROIZAT",
-            "DEPARTEMENT" => "073",
-            "SOURCE_CODE" => "0730030L"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0594532F"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS AMEDEE GASQUET",
@@ -25451,15 +25507,15 @@ return [
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS DU BOIS",
-            "LOCALISATION" => "LY DU BOIS",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0763004C"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS DU BOIS",
             "LOCALISATION" => "LY BOIS",
             "DEPARTEMENT" => "031",
             "SOURCE_CODE" => "0310006N"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS DU BOIS",
+            "LOCALISATION" => "LY DU BOIS",
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0763004C"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS DU BOIS ET DE L'HABITAT",
@@ -25650,14 +25706,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS FRANCOISE DOLTO",
             "LOCALISATION" => "LY DOLTO",
-            "DEPARTEMENT" => "045",
-            "SOURCE_CODE" => "0451304Y"
+            "DEPARTEMENT" => "038",
+            "SOURCE_CODE" => "0382274R"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS FRANCOISE DOLTO",
             "LOCALISATION" => "LY DOLTO",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0382274R"
+            "DEPARTEMENT" => "045",
+            "SOURCE_CODE" => "0451304Y"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS FREDERIC ET IRENE JOLIOT CURIE",
@@ -25685,15 +25741,15 @@ return [
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS GABRIEL PERI",
-            "LOCALISATION" => "LY PERRY",
-            "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940132H"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS GABRIEL PERI",
             "LOCALISATION" => "LY PERI",
             "DEPARTEMENT" => "031",
             "SOURCE_CODE" => "0310056T"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS GABRIEL PERI",
+            "LOCALISATION" => "LY PERRY",
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940132H"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS GABRIEL VOISIN",
@@ -25776,14 +25832,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910632T"
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0770945J"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0770945J"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0910632T"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS GUSTAVE EIFFEL",
@@ -25824,6 +25880,12 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS HELENE BOUCHER",
             "LOCALISATION" => "LY BOUCHER",
+            "DEPARTEMENT" => "031",
+            "SOURCE_CODE" => "0310057U"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS HELENE BOUCHER",
+            "LOCALISATION" => "LY BOUCHER",
             "DEPARTEMENT" => "069",
             "SOURCE_CODE" => "0690093B"
         ],
@@ -25832,12 +25894,6 @@ return [
             "LOCALISATION" => "LY BOUCHER",
             "DEPARTEMENT" => "093",
             "SOURCE_CODE" => "0931193S"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS HELENE BOUCHER",
-            "LOCALISATION" => "LY BOUCHER",
-            "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0310057U"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS HENRI BECQUEREL",
@@ -25884,14 +25940,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS HOTELIER",
             "LOCALISATION" => "LY HOTELIE",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0421736J"
+            "DEPARTEMENT" => "081",
+            "SOURCE_CODE" => "0811144D"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS HOTELIER",
             "LOCALISATION" => "LY HOTELIE",
-            "DEPARTEMENT" => "081",
-            "SOURCE_CODE" => "0811144D"
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0421736J"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS HOTELIER CHATEAU DES COUDRAIES",
@@ -26058,14 +26114,8 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS JEAN MONNET",
             "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "003",
-            "SOURCE_CODE" => "0030060Z"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS JEAN MONNET",
-            "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "022",
-            "SOURCE_CODE" => "0220075M"
+            "DEPARTEMENT" => "043",
+            "SOURCE_CODE" => "0430024T"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS JEAN MONNET",
@@ -26076,8 +26126,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS JEAN MONNET",
             "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "043",
-            "SOURCE_CODE" => "0430024T"
+            "DEPARTEMENT" => "022",
+            "SOURCE_CODE" => "0220075M"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS JEAN MONNET",
+            "LOCALISATION" => "LY MONNET",
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0030060Z"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS JEAN MOULIN",
@@ -26118,14 +26174,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS JEAN-BAPTISTE CLEMENT",
             "LOCALISATION" => "LY CLEMENT",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0931233K"
+            "DEPARTEMENT" => "008",
+            "SOURCE_CODE" => "0080047H"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS JEAN-BAPTISTE CLEMENT",
             "LOCALISATION" => "LY CLEMENT",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080047H"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0931233K"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS JEAN-CHARLES CAZIN",
@@ -26285,15 +26341,15 @@ return [
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "053",
-            "SOURCE_CODE" => "0530079Y"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS LEONARD DE VINCI",
             "LOCALISATION" => "LY D-VINCI",
             "DEPARTEMENT" => "034",
             "SOURCE_CODE" => "0341385W"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "053",
+            "SOURCE_CODE" => "0530079Y"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LES CANUTS",
@@ -26340,14 +26396,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910756C"
+            "DEPARTEMENT" => "056",
+            "SOURCE_CODE" => "0561507J"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "056",
-            "SOURCE_CODE" => "0561507J"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0910756C"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS ARMAND",
@@ -26358,14 +26414,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS BLERIOT",
             "LOCALISATION" => "LY BLERIOT",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920171L"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0780273Y"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS BLERIOT",
             "LOCALISATION" => "LY BLERIOT",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0780273Y"
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0920171L"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS BLERIOT",
@@ -26442,14 +26498,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS MARIE LAURENCIN",
             "LOCALISATION" => "LY LAURENC",
-            "DEPARTEMENT" => "063",
-            "SOURCE_CODE" => "0630054S"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0750776L"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS MARIE LAURENCIN",
             "LOCALISATION" => "LY LAURENC",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0750776L"
+            "DEPARTEMENT" => "063",
+            "SOURCE_CODE" => "0630054S"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS MARIE LE FRANC",
@@ -26556,14 +26612,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS PAUL LANGEVIN",
             "LOCALISATION" => "LY LANGEVI",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0593495D"
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0600061R"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS PAUL LANGEVIN",
             "LOCALISATION" => "LY LANGEVI",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0600061R"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0593495D"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS PAUL MATHOU",
@@ -26604,14 +26660,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS PIERRE ET MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "089",
-            "SOURCE_CODE" => "0890053Z"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0060027X"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS PIERRE ET MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060027X"
+            "DEPARTEMENT" => "089",
+            "SOURCE_CODE" => "0890053Z"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS PIERRE LATECOERE",
@@ -26622,14 +26678,14 @@ return [
         [
             "LIBELLE" => "LP LYCEE DES METIERS PIERRE MENDES FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "DEPARTEMENT" => "034",
-            "SOURCE_CODE" => "0340043M"
+            "DEPARTEMENT" => "080",
+            "SOURCE_CODE" => "0801514L"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS PIERRE MENDES FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "DEPARTEMENT" => "080",
-            "SOURCE_CODE" => "0801514L"
+            "DEPARTEMENT" => "034",
+            "SOURCE_CODE" => "0340043M"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS PIERRE MENDES-FRANCE",
@@ -26663,15 +26719,15 @@ return [
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS RENE CASSIN",
-            "LOCALISATION" => "LP LYC MET",
-            "DEPARTEMENT" => "018",
-            "SOURCE_CODE" => "0180049F"
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS RENE CASSIN",
             "LOCALISATION" => "LY CASSIN",
             "DEPARTEMENT" => "042",
             "SOURCE_CODE" => "0420029D"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS RENE CASSIN",
+            "LOCALISATION" => "LP LYC MET",
+            "DEPARTEMENT" => "018",
+            "SOURCE_CODE" => "0180049F"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS RENE LAENNEC",
@@ -27024,8 +27080,14 @@ return [
         [
             "LIBELLE" => "LPO LYCEE DES METIERS CHARLES DE GAULLE",
             "LOCALISATION" => "LY GAULLE",
-            "DEPARTEMENT" => "052",
-            "SOURCE_CODE" => "0521032P"
+            "DEPARTEMENT" => "031",
+            "SOURCE_CODE" => "0312822Z"
+        ],
+        [
+            "LIBELLE" => "LPO LYCEE DES METIERS CHARLES DE GAULLE",
+            "LOCALISATION" => "LY GAULLE",
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0772228D"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS CHARLES DE GAULLE",
@@ -27036,14 +27098,8 @@ return [
         [
             "LIBELLE" => "LPO LYCEE DES METIERS CHARLES DE GAULLE",
             "LOCALISATION" => "LY GAULLE",
-            "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0312822Z"
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS CHARLES DE GAULLE",
-            "LOCALISATION" => "LY GAULLE",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772228D"
+            "DEPARTEMENT" => "052",
+            "SOURCE_CODE" => "0521032P"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS CHARLES ET ADRIEN DUPUY",
@@ -27312,14 +27368,14 @@ return [
         [
             "LIBELLE" => "LPO LYCEE DES METIERS GASPARD MONGE",
             "LOCALISATION" => "LY MONGE",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0912142J"
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0570319M"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS GASPARD MONGE",
             "LOCALISATION" => "LY MONGE",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570319M"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0912142J"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS GASTON MONNERVILLE",
@@ -27582,14 +27638,14 @@ return [
         [
             "LIBELLE" => "LPO LYCEE DES METIERS JEAN MONNET",
             "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "015",
-            "SOURCE_CODE" => "0150006A"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0781839A"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS JEAN MONNET",
             "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0781839A"
+            "DEPARTEMENT" => "015",
+            "SOURCE_CODE" => "0150006A"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS JEAN MOULIN",
@@ -27678,12 +27734,6 @@ return [
         [
             "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
             "LOCALISATION" => "LY CORBUSI",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0672198A"
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
-            "LOCALISATION" => "LY CORBUSI",
             "DEPARTEMENT" => "076",
             "SOURCE_CODE" => "0762964J"
         ],
@@ -27694,28 +27744,22 @@ return [
             "SOURCE_CODE" => "0022044L"
         ],
         [
-            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0382440W"
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0921230M"
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0754475G"
+            "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
+            "LOCALISATION" => "LY CORBUSI",
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0672198A"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
             "LOCALISATION" => "LY D.VINCI",
             "DEPARTEMENT" => "077",
             "SOURCE_CODE" => "0770934X"
+        ],
+        [
+            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0754475G"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
@@ -27728,6 +27772,18 @@ return [
             "LOCALISATION" => "LY D.VINCI",
             "DEPARTEMENT" => "002",
             "SOURCE_CODE" => "0021476U"
+        ],
+        [
+            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "038",
+            "SOURCE_CODE" => "0382440W"
+        ],
+        [
+            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0921230M"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
@@ -27924,14 +27980,14 @@ return [
         [
             "LIBELLE" => "LPO LYCEE DES METIERS PIERRE MENDES FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350030T"
+            "DEPARTEMENT" => "088",
+            "SOURCE_CODE" => "0880021V"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS PIERRE MENDES FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "DEPARTEMENT" => "088",
-            "SOURCE_CODE" => "0880021V"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350030T"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS PIERRE-EMILE MARTIN",
@@ -28386,14 +28442,14 @@ return [
         [
             "LIBELLE" => "LYC POLYVAL PRIVE DES METIERS JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350808N"
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0850136L"
         ],
         [
             "LIBELLE" => "LYC POLYVAL PRIVE DES METIERS JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0850136L"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350808N"
         ],
         [
             "LIBELLE" => "LYC POLYVAL PRIVE DES METIERS JEANNE D'ARC-ST IVY",
@@ -28506,14 +28562,14 @@ return [
         [
             "LIBELLE" => "LYC POLYVAL PRIVE DES METIERS ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "056",
-            "SOURCE_CODE" => "0560198L"
+            "DEPARTEMENT" => "029",
+            "SOURCE_CODE" => "0290184T"
         ],
         [
             "LIBELLE" => "LYC POLYVAL PRIVE DES METIERS ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0290184T"
+            "DEPARTEMENT" => "056",
+            "SOURCE_CODE" => "0560198L"
         ],
         [
             "LIBELLE" => "LYC POLYVAL PRIVE DES METIERS ST PIERRE",
@@ -28739,15 +28795,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE AGRICOLE PRIVE",
-            "LOCALISATION" => "LY VILLEFR",
-            "DEPARTEMENT" => "012",
-            "SOURCE_CODE" => "0120936C"
-        ],
-        [
-            "LIBELLE" => "LYCEE AGRICOLE PRIVE",
-            "LOCALISATION" => "LY S-MAURE",
-            "DEPARTEMENT" => "010",
-            "SOURCE_CODE" => "0100734U"
+            "LOCALISATION" => "LY S-CYRAN",
+            "DEPARTEMENT" => "036",
+            "SOURCE_CODE" => "0360686A"
         ],
         [
             "LIBELLE" => "LYCEE AGRICOLE PRIVE",
@@ -28757,9 +28807,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE AGRICOLE PRIVE",
-            "LOCALISATION" => "LY S-CYRAN",
-            "DEPARTEMENT" => "036",
-            "SOURCE_CODE" => "0360686A"
+            "LOCALISATION" => "LY S-MAURE",
+            "DEPARTEMENT" => "010",
+            "SOURCE_CODE" => "0100734U"
+        ],
+        [
+            "LIBELLE" => "LYCEE AGRICOLE PRIVE",
+            "LOCALISATION" => "LY VILLEFR",
+            "DEPARTEMENT" => "012",
+            "SOURCE_CODE" => "0120936C"
         ],
         [
             "LIBELLE" => "LYCEE AGRICOLE PRIVE DE NERMONT",
@@ -28832,6 +28888,12 @@ return [
             "LOCALISATION" => "LY OIS",
             "DEPARTEMENT" => "064",
             "SOURCE_CODE" => "0641538Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE AGRICOLE SAINT-LO THERE",
+            "LOCALISATION" => "LY THERE",
+            "DEPARTEMENT" => "050",
+            "SOURCE_CODE" => "0500060U"
         ],
         [
             "LIBELLE" => "LYCEE AGRICOLE TECH. PRIVE INSTITUT DE FONTLONGUE",
@@ -29243,15 +29305,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE FRANCAIS",
-            "LOCALISATION" => "LY ISRAEL",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "2070007H"
-        ],
-        [
-            "LIBELLE" => "LYCEE FRANCAIS",
             "LOCALISATION" => "LY I-MAURI",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "3900005L"
+        ],
+        [
+            "LIBELLE" => "LYCEE FRANCAIS",
+            "LOCALISATION" => "LY ISRAEL",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "2070007H"
         ],
         [
             "LIBELLE" => "LYCEE FRANCAIS  (C,L)",
@@ -29365,13 +29427,13 @@ return [
             "LIBELLE" => "LYCEE FRANCAIS CHARLES DE GAULLE(M,E,C,L)",
             "LOCALISATION" => "LY GAULLE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "4170001K"
+            "SOURCE_CODE" => "3230004Z"
         ],
         [
             "LIBELLE" => "LYCEE FRANCAIS CHARLES DE GAULLE(M,E,C,L)",
             "LOCALISATION" => "LY GAULLE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "3230004Z"
+            "SOURCE_CODE" => "4170001K"
         ],
         [
             "LIBELLE" => "LYCEE FRANCAIS CHARLES LEPIERRE ( M,E,C,L )",
@@ -30821,15 +30883,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECH. AGRICOLE",
-            "LOCALISATION" => "LY LACAPEL",
-            "DEPARTEMENT" => "046",
-            "SOURCE_CODE" => "0460727R"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECH. AGRICOLE",
             "LOCALISATION" => "LY SEMUR",
             "DEPARTEMENT" => "021",
             "SOURCE_CODE" => "0212082Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECH. AGRICOLE",
+            "LOCALISATION" => "LY LACAPEL",
+            "DEPARTEMENT" => "046",
+            "SOURCE_CODE" => "0460727R"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECH. AGRICOLE ANNEXE DU LYCEE DE VENOURS",
@@ -30959,6 +31021,18 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY PONCETY",
+            "DEPARTEMENT" => "071",
+            "SOURCE_CODE" => "0711067Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY FONTAIN",
+            "DEPARTEMENT" => "071",
+            "SOURCE_CODE" => "0711068A"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
             "LOCALISATION" => "LY CHAUSSA",
             "DEPARTEMENT" => "023",
             "SOURCE_CODE" => "0230030H"
@@ -30971,63 +31045,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY FONTAIN",
-            "DEPARTEMENT" => "071",
-            "SOURCE_CODE" => "0711068A"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY BLANQUE",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0331424U"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY GENIS",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690279D"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY ROUFFAC",
-            "DEPARTEMENT" => "068",
-            "SOURCE_CODE" => "0680003J"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY PRECIEU",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0421088E"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY SEES",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0610790C"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY S-LAURE",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080863V"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY PONCETY",
-            "DEPARTEMENT" => "071",
-            "SOURCE_CODE" => "0711067Z"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY HEUGAS",
-            "DEPARTEMENT" => "040",
-            "SOURCE_CODE" => "0400750Y"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY MONTARD",
-            "DEPARTEMENT" => "064",
-            "SOURCE_CODE" => "0640220S"
+            "LOCALISATION" => "LY CAPOU",
+            "DEPARTEMENT" => "082",
+            "SOURCE_CODE" => "0820559M"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
@@ -31037,9 +31057,51 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
-            "LOCALISATION" => "LY CAPOU",
-            "DEPARTEMENT" => "082",
-            "SOURCE_CODE" => "0820559M"
+            "LOCALISATION" => "LY HEUGAS",
+            "DEPARTEMENT" => "040",
+            "SOURCE_CODE" => "0400750Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY PRECIEU",
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0421088E"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY BLANQUE",
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0331424U"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY S-LAURE",
+            "DEPARTEMENT" => "008",
+            "SOURCE_CODE" => "0080863V"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY GENIS",
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0690279D"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY SEES",
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "0610790C"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY ROUFFAC",
+            "DEPARTEMENT" => "068",
+            "SOURCE_CODE" => "0680003J"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
+            "LOCALISATION" => "LY MONTARD",
+            "DEPARTEMENT" => "064",
+            "SOURCE_CODE" => "0640220S"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE",
@@ -31242,26 +31304,8 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
             "LOCALISATION" => "LY LEGTA",
-            "DEPARTEMENT" => "028",
-            "SOURCE_CODE" => "0280706R"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
-            "LOCALISATION" => "LY LEGTA",
-            "DEPARTEMENT" => "041",
-            "SOURCE_CODE" => "0410018X"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
-            "LOCALISATION" => "LY LEGTA",
             "DEPARTEMENT" => "037",
             "SOURCE_CODE" => "0370781Y"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
-            "LOCALISATION" => "LY LEGTA",
-            "DEPARTEMENT" => "036",
-            "SOURCE_CODE" => "0360017Y"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
@@ -31272,8 +31316,26 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
             "LOCALISATION" => "LY LEGTA",
+            "DEPARTEMENT" => "036",
+            "SOURCE_CODE" => "0360017Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
+            "LOCALISATION" => "LY LEGTA",
             "DEPARTEMENT" => "018",
             "SOURCE_CODE" => "0180585N"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
+            "LOCALISATION" => "LY LEGTA",
+            "DEPARTEMENT" => "041",
+            "SOURCE_CODE" => "0410018X"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
+            "LOCALISATION" => "LY LEGTA",
+            "DEPARTEMENT" => "028",
+            "SOURCE_CODE" => "0280706R"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LES BARRES",
@@ -31364,12 +31426,6 @@ return [
             "LOCALISATION" => "LY SARTENE",
             "DEPARTEMENT" => "02A",
             "SOURCE_CODE" => "6200190M"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE ST LO THERE",
-            "LOCALISATION" => "LY THERE",
-            "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0500060U"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.EPISCOPAL SAINT-ANDRE",
@@ -31488,14 +31544,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE CHARLES DE FOUCAULD",
             "LOCALISATION" => "LY FOUCAUL",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0754086J"
+            "DEPARTEMENT" => "054",
+            "SOURCE_CODE" => "0542408Z"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE CHARLES DE FOUCAULD",
             "LOCALISATION" => "LY FOUCAUL",
-            "DEPARTEMENT" => "054",
-            "SOURCE_CODE" => "0542408Z"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0754086J"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE CHARLES PEGUY",
@@ -31590,14 +31646,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE FENELON",
             "LOCALISATION" => "LY FENELON",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0761708U"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0060674A"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE FENELON",
             "LOCALISATION" => "LY FENELON",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060674A"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0761708U"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE FREDERIC OZANAM",
@@ -31752,6 +31808,12 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D ARC",
             "LOCALISATION" => "LY J.D'ARC",
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0910815S"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D ARC",
+            "LOCALISATION" => "LY J.D'ARC",
             "DEPARTEMENT" => "092",
             "SOURCE_CODE" => "0921663H"
         ],
@@ -31774,22 +31836,16 @@ return [
             "SOURCE_CODE" => "0610694Y"
         ],
         [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D ARC",
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910815S"
+            "DEPARTEMENT" => "088",
+            "SOURCE_CODE" => "0880097C"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
             "DEPARTEMENT" => "071",
             "SOURCE_CODE" => "0710112L"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D'ARC",
-            "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "088",
-            "SOURCE_CODE" => "0880097C"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D'ARC",
@@ -31866,14 +31922,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0021872Z"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0761713Z"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0761707T"
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0021872Z"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
@@ -31885,7 +31941,7 @@ return [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
             "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0761713Z"
+            "SOURCE_CODE" => "0761707T"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA SALLE - SAINT ROSAIRE",
@@ -32046,26 +32102,20 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "083",
-            "SOURCE_CODE" => "0830100H"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
-            "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "028",
-            "SOURCE_CODE" => "0280665W"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
-            "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "092",
             "SOURCE_CODE" => "0920897A"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
+            "DEPARTEMENT" => "072",
+            "SOURCE_CODE" => "0720837U"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
+            "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0783288A"
+            "SOURCE_CODE" => "0783289B"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
@@ -32077,13 +32127,19 @@ return [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0783289B"
+            "SOURCE_CODE" => "0783288A"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "072",
-            "SOURCE_CODE" => "0720837U"
+            "DEPARTEMENT" => "083",
+            "SOURCE_CODE" => "0830100H"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
+            "LOCALISATION" => "LY N-DAME",
+            "DEPARTEMENT" => "028",
+            "SOURCE_CODE" => "0280665W"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME - SAINT JOSEPH",
@@ -32179,7 +32235,7 @@ return [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE-DAME",
             "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920906K"
+            "SOURCE_CODE" => "0920917X"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE-DAME",
@@ -32191,7 +32247,7 @@ return [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE-DAME",
             "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920917X"
+            "SOURCE_CODE" => "0920906K"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE-DAME DE GRACE",
@@ -32286,14 +32342,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SACRE COEUR",
             "LOCALISATION" => "LY S.COEUR",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910824B"
+            "DEPARTEMENT" => "080",
+            "SOURCE_CODE" => "0801226Y"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SACRE COEUR",
             "LOCALISATION" => "LY S.COEUR",
-            "DEPARTEMENT" => "080",
-            "SOURCE_CODE" => "0801226Y"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0910824B"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SACRE COEUR",
@@ -32364,8 +32420,8 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "001",
-            "SOURCE_CODE" => "0010075B"
+            "DEPARTEMENT" => "083",
+            "SOURCE_CODE" => "0830098F"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT JOSEPH",
@@ -32376,8 +32432,8 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "083",
-            "SOURCE_CODE" => "0830098F"
+            "DEPARTEMENT" => "001",
+            "SOURCE_CODE" => "0010075B"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT JOSEPH - BOSSUET",
@@ -32400,14 +32456,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT LOUIS",
             "LOCALISATION" => "LY S-LOUIS",
-            "DEPARTEMENT" => "017",
-            "SOURCE_CODE" => "0170098P"
+            "DEPARTEMENT" => "055",
+            "SOURCE_CODE" => "0550047C"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT LOUIS",
             "LOCALISATION" => "LY S-LOUIS",
-            "DEPARTEMENT" => "055",
-            "SOURCE_CODE" => "0550047C"
+            "DEPARTEMENT" => "017",
+            "SOURCE_CODE" => "0170098P"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT LOUIS-SAINT BRUNO",
@@ -32424,14 +32480,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT PAUL",
             "LOCALISATION" => "LY S-PAUL",
-            "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0251021Z"
+            "DEPARTEMENT" => "016",
+            "SOURCE_CODE" => "0160062F"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT PAUL",
             "LOCALISATION" => "LY S-PAUL",
-            "DEPARTEMENT" => "016",
-            "SOURCE_CODE" => "0160062F"
+            "DEPARTEMENT" => "025",
+            "SOURCE_CODE" => "0251021Z"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT PAUL",
@@ -32454,14 +32510,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT PIERRE",
             "LOCALISATION" => "LY S-PIERR",
-            "DEPARTEMENT" => "080",
-            "SOURCE_CODE" => "0801206B"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0622110G"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT PIERRE",
             "LOCALISATION" => "LY S-PIERR",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0622110G"
+            "DEPARTEMENT" => "080",
+            "SOURCE_CODE" => "0801206B"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINT REMY",
@@ -32544,14 +32600,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINTE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0592928M"
+            "DEPARTEMENT" => "055",
+            "SOURCE_CODE" => "0550048D"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINTE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "055",
-            "SOURCE_CODE" => "0550048D"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0592928M"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE SAINTE MARIE",
@@ -32706,8 +32762,20 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "024",
-            "SOURCE_CODE" => "0240079F"
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440201E"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440149Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440151A"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
@@ -32724,20 +32792,8 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440149Y"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440201E"
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440151A"
+            "DEPARTEMENT" => "024",
+            "SOURCE_CODE" => "0240079F"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH DE CLUNY",
@@ -32856,14 +32912,14 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE GENEVIEVE",
             "LOCALISATION" => "LY S-GENEV",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350783L"
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0920889S"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE GENEVIEVE",
             "LOCALISATION" => "LY S-GENEV",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920889S"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350783L"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE MARIE",
@@ -33114,14 +33170,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL CARNOT",
             "LOCALISATION" => "LY CARNOT",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060011E"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0750704H"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL CARNOT",
             "LOCALISATION" => "LY CARNOT",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0750704H"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0060011E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL CHAMPOLLION",
@@ -33149,15 +33205,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL CHARLES DE GAULLE",
-            "LOCALISATION" => "LY D.GAULL",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0142107P"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL CHARLES DE GAULLE",
             "LOCALISATION" => "LY DGAULLE",
             "DEPARTEMENT" => "021",
             "SOURCE_CODE" => "0211928G"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL CHARLES DE GAULLE",
+            "LOCALISATION" => "LY D.GAULL",
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0142107P"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL CHARLES NODIER",
@@ -33391,13 +33447,13 @@ return [
             "LIBELLE" => "LYCEE GENERAL ET TECHNO. PRIVE SAINT-JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "012",
-            "SOURCE_CODE" => "0120104Y"
+            "SOURCE_CODE" => "0120061B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNO. PRIVE SAINT-JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "012",
-            "SOURCE_CODE" => "0120061B"
+            "SOURCE_CODE" => "0120104Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNO. PRIVE SAINTE-MARIE DE NEVERS",
@@ -33599,15 +33655,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE",
-            "LOCALISATION" => "LY MIREPOI",
-            "DEPARTEMENT" => "009",
-            "SOURCE_CODE" => "0090013R"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE",
             "LOCALISATION" => "LY PIE-MIQ",
             "DEPARTEMENT" => "975",
             "SOURCE_CODE" => "9750001C"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE",
+            "LOCALISATION" => "LY MIREPOI",
+            "DEPARTEMENT" => "009",
+            "SOURCE_CODE" => "0090013R"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ACAJOU 1",
@@ -33666,12 +33722,6 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALBERT CAMUS",
             "LOCALISATION" => "LY CAMUS",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0692517L"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALBERT CAMUS",
-            "LOCALISATION" => "LY CAMUS",
             "DEPARTEMENT" => "044",
             "SOURCE_CODE" => "0440288Z"
         ],
@@ -33686,6 +33736,12 @@ return [
             "LOCALISATION" => "LY CAMUS",
             "DEPARTEMENT" => "092",
             "SOURCE_CODE" => "0920132U"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALBERT CAMUS",
+            "LOCALISATION" => "LY CAMUS",
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0692517L"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALBERT CAMUS",
@@ -33749,15 +33805,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALEXIS DE TOCQUEVILLE",
-            "LOCALISATION" => "LY TOCQUEV",
-            "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0500017X"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALEXIS DE TOCQUEVILLE",
             "LOCALISATION" => "LY AD.TOCQ",
             "DEPARTEMENT" => "006",
             "SOURCE_CODE" => "0061760F"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALEXIS DE TOCQUEVILLE",
+            "LOCALISATION" => "LY TOCQUEV",
+            "DEPARTEMENT" => "050",
+            "SOURCE_CODE" => "0500017X"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALEXIS MONTEIL",
@@ -33774,14 +33830,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALFRED KASTLER",
             "LOCALISATION" => "LY KASTLER",
-            "DEPARTEMENT" => "068",
-            "SOURCE_CODE" => "0680015X"
+            "DEPARTEMENT" => "095",
+            "SOURCE_CODE" => "0951399E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALFRED KASTLER",
             "LOCALISATION" => "LY KASTLER",
-            "DEPARTEMENT" => "095",
-            "SOURCE_CODE" => "0951399E"
+            "DEPARTEMENT" => "068",
+            "SOURCE_CODE" => "0680015X"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALFRED KASTLER",
@@ -33804,14 +33860,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALPHONSE DAUDET",
             "LOCALISATION" => "LY DAUDET",
-            "DEPARTEMENT" => "030",
-            "SOURCE_CODE" => "0300021K"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130164H"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ALPHONSE DAUDET",
             "LOCALISATION" => "LY DAUDET",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130164H"
+            "DEPARTEMENT" => "030",
+            "SOURCE_CODE" => "0300021K"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE AMBROISE BRUGIERE",
@@ -33882,14 +33938,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ANDRE MALRAUX",
             "LOCALISATION" => "LY MALRAUX",
-            "DEPARTEMENT" => "072",
-            "SOURCE_CODE" => "0721548S"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620042J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ANDRE MALRAUX",
             "LOCALISATION" => "LY MALRAUX",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620042J"
+            "DEPARTEMENT" => "072",
+            "SOURCE_CODE" => "0721548S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ANDRE MALRAUX",
@@ -33900,14 +33956,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ANDRE MAUROIS",
             "LOCALISATION" => "LY MAUROIS",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0670005S"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0760029U"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ANDRE MAUROIS",
             "LOCALISATION" => "LY MAUROIS",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760029U"
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0670005S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ANDRE THEURIET",
@@ -33990,14 +34046,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ARISTIDE BRIAND",
             "LOCALISATION" => "LY BRIAND",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440069L"
+            "DEPARTEMENT" => "027",
+            "SOURCE_CODE" => "0270016W"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ARISTIDE BRIAND",
             "LOCALISATION" => "LY BRIAND",
-            "DEPARTEMENT" => "027",
-            "SOURCE_CODE" => "0270016W"
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440069L"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ARISTIDE BRIAND",
@@ -34026,14 +34082,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ARTHUR RIMBAUD",
             "LOCALISATION" => "LY RIMBAUD",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0595885B"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0132495S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ARTHUR RIMBAUD",
             "LOCALISATION" => "LY RIMBAUD",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0132495S"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0595885B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ARTHUR VAROQUAUX",
@@ -34080,12 +34136,6 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE AUGUSTE RENOIR",
             "LOCALISATION" => "LY RENOIR",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920131T"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE AUGUSTE RENOIR",
-            "LOCALISATION" => "LY RENOIR",
             "DEPARTEMENT" => "087",
             "SOURCE_CODE" => "0870017W"
         ],
@@ -34096,16 +34146,22 @@ return [
             "SOURCE_CODE" => "0060009C"
         ],
         [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE AUGUSTIN FRESNEL",
-            "LOCALISATION" => "LY FRESNBE",
-            "DEPARTEMENT" => "027",
-            "SOURCE_CODE" => "0270003G"
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE AUGUSTE RENOIR",
+            "LOCALISATION" => "LY RENOIR",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0920131T"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE AUGUSTIN FRESNEL",
             "LOCALISATION" => "LY FRESNEL",
             "DEPARTEMENT" => "014",
             "SOURCE_CODE" => "0140014P"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE AUGUSTIN FRESNEL",
+            "LOCALISATION" => "LY FRESNBE",
+            "DEPARTEMENT" => "027",
+            "SOURCE_CODE" => "0270003G"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BAIMBRIDGE",
@@ -34188,8 +34244,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BERNARD PALISSY",
             "LOCALISATION" => "LY PALISSY",
-            "DEPARTEMENT" => "045",
-            "SOURCE_CODE" => "0450029M"
+            "DEPARTEMENT" => "017",
+            "SOURCE_CODE" => "0170060Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BERNARD PALISSY",
@@ -34200,8 +34256,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BERNARD PALISSY",
             "LOCALISATION" => "LY PALISSY",
-            "DEPARTEMENT" => "017",
-            "SOURCE_CODE" => "0170060Y"
+            "DEPARTEMENT" => "045",
+            "SOURCE_CODE" => "0450029M"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BERNART DE VENTADOUR",
@@ -34224,14 +34280,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0693518Z"
+            "DEPARTEMENT" => "052",
+            "SOURCE_CODE" => "0520028Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "052",
-            "SOURCE_CODE" => "0520028Y"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0693518Z"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE BLAISE PASCAL",
@@ -34290,8 +34346,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CAMILLE CLAUDEL",
             "LOCALISATION" => "LY CLAUDEL",
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0911938M"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CAMILLE CLAUDEL",
+            "LOCALISATION" => "LY CLAUDEL",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590083V"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CAMILLE CLAUDEL",
+            "LOCALISATION" => "LY CLAUDEL",
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0772243V"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CAMILLE CLAUDEL",
@@ -34304,18 +34372,6 @@ return [
             "LOCALISATION" => "LY CLAUDEL",
             "DEPARTEMENT" => "044",
             "SOURCE_CODE" => "0442207K"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CAMILLE CLAUDEL",
-            "LOCALISATION" => "LY CLAUDEL",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0911938M"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CAMILLE CLAUDEL",
-            "LOCALISATION" => "LY CLAUDEL",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772243V"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CAMILLE CLAUDEL",
@@ -34356,14 +34412,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CARNOT",
             "LOCALISATION" => "LY CARNOT",
-            "DEPARTEMENT" => "021",
-            "SOURCE_CODE" => "0210015C"
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0420034J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CARNOT",
             "LOCALISATION" => "LY CARNOT",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0420034J"
+            "DEPARTEMENT" => "021",
+            "SOURCE_CODE" => "0210015C"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CASSINI",
@@ -34392,12 +34448,6 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CHAPTAL",
             "LOCALISATION" => "LY CHAPTAL",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0750663N"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CHAPTAL",
-            "LOCALISATION" => "LY CHAPTAL",
             "DEPARTEMENT" => "048",
             "SOURCE_CODE" => "0480007X"
         ],
@@ -34406,6 +34456,12 @@ return [
             "LOCALISATION" => "LY CHAPTAL",
             "DEPARTEMENT" => "022",
             "SOURCE_CODE" => "0220058U"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CHAPTAL",
+            "LOCALISATION" => "LY CHAPTAL",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0750663N"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CHARLES A COULOMB",
@@ -34536,14 +34592,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE COLBERT",
             "LOCALISATION" => "LY COLBERT",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590214M"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0690042W"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE COLBERT",
             "LOCALISATION" => "LY COLBERT",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690042W"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590214M"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE COMTE DE FOIX",
@@ -34566,14 +34622,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CONDORCET",
             "LOCALISATION" => "LY CONDORC",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0601865B"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620108F"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CONDORCET",
             "LOCALISATION" => "LY CONDORC",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620108F"
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0601865B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE CORDOUAN",
@@ -34722,14 +34778,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE DIDEROT",
             "LOCALISATION" => "LY DIDEROT",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620070P"
+            "DEPARTEMENT" => "052",
+            "SOURCE_CODE" => "0520021R"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE DIDEROT",
             "LOCALISATION" => "LY DIDEROT",
-            "DEPARTEMENT" => "052",
-            "SOURCE_CODE" => "0520021R"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620070P"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE DOCTEUR KOEBERLE",
@@ -34890,14 +34946,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE EDOUARD HERRIOT",
             "LOCALISATION" => "LY HERRIOT",
-            "DEPARTEMENT" => "010",
-            "SOURCE_CODE" => "0101016A"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0690027E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE EDOUARD HERRIOT",
             "LOCALISATION" => "LY HERRIOT",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690027E"
+            "DEPARTEMENT" => "010",
+            "SOURCE_CODE" => "0101016A"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ELIE FAURE",
@@ -34950,14 +35006,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE EMMANUEL MOUNIER",
             "LOCALISATION" => "LY MOUNIER",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920135X"
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0492089E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE EMMANUEL MOUNIER",
             "LOCALISATION" => "LY MOUNIER",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0492089E"
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0920135X"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE EMPERI (L')",
@@ -35184,14 +35240,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE FRANCOIS TRUFFAUT",
             "LOCALISATION" => "LY TRUFFAU",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0851346B"
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0601823F"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE FRANCOIS TRUFFAUT",
             "LOCALISATION" => "LY TRUFFAU",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0601823F"
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0851346B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE FRANCOIS VILLON",
@@ -35268,14 +35324,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GABRIEL FAURE",
             "LOCALISATION" => "LY FAURE",
-            "DEPARTEMENT" => "009",
-            "SOURCE_CODE" => "0090002D"
+            "DEPARTEMENT" => "074",
+            "SOURCE_CODE" => "0740005D"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GABRIEL FAURE",
             "LOCALISATION" => "LY FAURE",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740005D"
+            "DEPARTEMENT" => "009",
+            "SOURCE_CODE" => "0090002D"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GABRIEL VOISIN",
@@ -35364,8 +35420,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GEORGES CLEMENCEAU",
             "LOCALISATION" => "LY CLEMENC",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0930127H"
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0850006V"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GEORGES CLEMENCEAU",
@@ -35376,8 +35432,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GEORGES CLEMENCEAU",
             "LOCALISATION" => "LY CLEMENC",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0850006V"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0930127H"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GEORGES COLOMB",
@@ -35447,15 +35503,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GRAND AIR",
-            "LOCALISATION" => "LY G-AIR",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440012Z"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GRAND AIR",
             "LOCALISATION" => "LY GD AIR",
             "DEPARTEMENT" => "033",
             "SOURCE_CODE" => "0330003Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GRAND AIR",
+            "LOCALISATION" => "LY G-AIR",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440012Z"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE GUEZ DE BALZAC",
@@ -35760,26 +35816,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES MONOD",
             "LOCALISATION" => "LY MONOD",
-            "DEPARTEMENT" => "064",
-            "SOURCE_CODE" => "0641839B"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES MONOD",
-            "LOCALISATION" => "LY MONOD",
             "DEPARTEMENT" => "092",
             "SOURCE_CODE" => "0921555R"
         ],
         [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES PREVERT",
-            "LOCALISATION" => "LY PREVERT",
-            "DEPARTEMENT" => "027",
-            "SOURCE_CODE" => "0271431J"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES PREVERT",
-            "LOCALISATION" => "LY PREVERT",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0911577V"
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES MONOD",
+            "LOCALISATION" => "LY MONOD",
+            "DEPARTEMENT" => "064",
+            "SOURCE_CODE" => "0641839B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES PREVERT",
@@ -35796,8 +35840,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES PREVERT",
             "LOCALISATION" => "LY PREVERT",
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0911577V"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES PREVERT",
+            "LOCALISATION" => "LY PREVERT",
             "DEPARTEMENT" => "092",
             "SOURCE_CODE" => "0920134W"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JACQUES PREVERT",
+            "LOCALISATION" => "LY PREVERT",
+            "DEPARTEMENT" => "027",
+            "SOURCE_CODE" => "0271431J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JAN LAVEZZARI",
@@ -35928,14 +35984,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN JAURES",
             "LOCALISATION" => "LY JAURES",
-            "DEPARTEMENT" => "081",
-            "SOURCE_CODE" => "0810012Y"
+            "DEPARTEMENT" => "051",
+            "SOURCE_CODE" => "0510032H"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN JAURES",
             "LOCALISATION" => "LY JAURES",
-            "DEPARTEMENT" => "051",
-            "SOURCE_CODE" => "0510032H"
+            "DEPARTEMENT" => "081",
+            "SOURCE_CODE" => "0810012Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN JOLY",
@@ -35958,14 +36014,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MACE",
             "LOCALISATION" => "LY MACE",
-            "DEPARTEMENT" => "079",
-            "SOURCE_CODE" => "0790023W"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350026N"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MACE",
             "LOCALISATION" => "LY MACE",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350026N"
+            "DEPARTEMENT" => "079",
+            "SOURCE_CODE" => "0790023W"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MICHEL",
@@ -35976,26 +36032,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
             "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0741476C"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
-            "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0420043U"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
-            "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "034",
-            "SOURCE_CODE" => "0341736C"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
-            "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "003",
-            "SOURCE_CODE" => "0030038A"
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0670078W"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
@@ -36006,8 +36044,26 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
             "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0670078W"
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0420043U"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
+            "LOCALISATION" => "LY MONNET",
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0030038A"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
+            "LOCALISATION" => "LY MONNET",
+            "DEPARTEMENT" => "034",
+            "SOURCE_CODE" => "0341736C"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MONNET",
+            "LOCALISATION" => "LY MONNET",
+            "DEPARTEMENT" => "074",
+            "SOURCE_CODE" => "0741476C"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
@@ -36018,14 +36074,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "018",
-            "SOURCE_CODE" => "0180024D"
+            "DEPARTEMENT" => "086",
+            "SOURCE_CODE" => "0860028N"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
             "DEPARTEMENT" => "077",
             "SOURCE_CODE" => "0772120L"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
+            "LOCALISATION" => "LY MOULIN",
+            "DEPARTEMENT" => "008",
+            "SOURCE_CODE" => "0080040A"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
@@ -36048,8 +36110,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "034",
-            "SOURCE_CODE" => "0340011C"
+            "DEPARTEMENT" => "029",
+            "SOURCE_CODE" => "0290023T"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
@@ -36060,26 +36122,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0290023T"
+            "DEPARTEMENT" => "034",
+            "SOURCE_CODE" => "0340011C"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080040A"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
-            "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "086",
-            "SOURCE_CODE" => "0860028N"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN PERRIN",
-            "LOCALISATION" => "LY PERRIN",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440062D"
+            "DEPARTEMENT" => "018",
+            "SOURCE_CODE" => "0180024D"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN PERRIN",
@@ -36092,6 +36142,12 @@ return [
             "LOCALISATION" => "LY PERRIN",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590110Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN PERRIN",
+            "LOCALISATION" => "LY PERRIN",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440062D"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN PREVOST",
@@ -36114,12 +36170,6 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN ROSTAND",
             "LOCALISATION" => "LY ROSTAND",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0600009J"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN ROSTAND",
-            "LOCALISATION" => "LY ROSTAND",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590184E"
         ],
@@ -36130,16 +36180,16 @@ return [
             "SOURCE_CODE" => "0140017T"
         ],
         [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN ROSTAND",
+            "LOCALISATION" => "LY ROSTAND",
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0600009J"
+        ],
+        [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN VIGO",
             "LOCALISATION" => "LY VIGO",
             "DEPARTEMENT" => "012",
             "SOURCE_CODE" => "0120012Y"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN VILAR",
-            "LOCALISATION" => "LY VILAR",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772229E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN VILAR",
@@ -36152,6 +36202,12 @@ return [
             "LOCALISATION" => "LY VILAR",
             "DEPARTEMENT" => "078",
             "SOURCE_CODE" => "0780582J"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN VILAR",
+            "LOCALISATION" => "LY VILAR",
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0772229E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN ZAY",
@@ -36318,8 +36374,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JULES FERRY",
             "LOCALISATION" => "LY FERRY",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0781845G"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0060014H"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JULES FERRY",
+            "LOCALISATION" => "LY FERRY",
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0770924L"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JULES FERRY",
@@ -36330,14 +36392,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JULES FERRY",
             "LOCALISATION" => "LY FERRY",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060014H"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JULES FERRY",
-            "LOCALISATION" => "LY FERRY",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0770924L"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0781845G"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JULES FIL",
@@ -36714,14 +36770,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
             "LOCALISATION" => "LY PASTEUR",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620095S"
+            "DEPARTEMENT" => "025",
+            "SOURCE_CODE" => "0250008Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
             "LOCALISATION" => "LY PASTEUR",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590207E"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
+            "LOCALISATION" => "LY PASTEUR",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620095S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
@@ -36734,12 +36796,6 @@ return [
             "LOCALISATION" => "LY PASTEUR",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590117G"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
-            "LOCALISATION" => "LY PASTEUR",
-            "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0250008Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PAYEN",
@@ -36816,14 +36872,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARC BLOCH",
             "LOCALISATION" => "LY BLOCH",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0672604S"
+            "DEPARTEMENT" => "027",
+            "SOURCE_CODE" => "0271582Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARC BLOCH",
             "LOCALISATION" => "LY BLOCH",
-            "DEPARTEMENT" => "027",
-            "SOURCE_CODE" => "0271582Y"
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0672604S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARC CHAGALL",
@@ -36846,14 +36902,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARCEL SEMBAT",
             "LOCALISATION" => "LY SEMBAT",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760110G"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0690104N"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARCEL SEMBAT",
             "LOCALISATION" => "LY SEMBAT",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690104N"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0760110G"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARCELIN BERTHELOT",
+            "LOCALISATION" => "LY BERTHEL",
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940120V"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARCELIN BERTHELOT",
@@ -36866,12 +36928,6 @@ return [
             "LOCALISATION" => "LY MARCELI",
             "DEPARTEMENT" => "086",
             "SOURCE_CODE" => "0860003L"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARCELIN BERTHELOT",
-            "LOCALISATION" => "LY BERTHEL",
-            "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940120V"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARCELIN BERTHELOT",
@@ -36894,14 +36950,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARGUERITE DE NAVARRE",
             "LOCALISATION" => "LY NAVARRE",
-            "DEPARTEMENT" => "018",
-            "SOURCE_CODE" => "0180006J"
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "0610002W"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARGUERITE DE NAVARRE",
             "LOCALISATION" => "LY NAVARRE",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0610002W"
+            "DEPARTEMENT" => "018",
+            "SOURCE_CODE" => "0180006J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARGUERITE DE VALOIS",
@@ -36924,14 +36980,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "065",
-            "SOURCE_CODE" => "0650026A"
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0141555P"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0141555P"
+            "DEPARTEMENT" => "065",
+            "SOURCE_CODE" => "0650026A"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
@@ -37002,14 +37058,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MAURICE GENEVOIX",
             "LOCALISATION" => "LY GENEVOI",
-            "DEPARTEMENT" => "079",
-            "SOURCE_CODE" => "0790007D"
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0921399W"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MAURICE GENEVOIX",
             "LOCALISATION" => "LY GENEVOI",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0921399W"
+            "DEPARTEMENT" => "079",
+            "SOURCE_CODE" => "0790007D"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MAURICE MERLEAU-PONTY",
@@ -37091,15 +37147,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MONTESQUIEU",
-            "LOCALISATION" => "LY MONTESQ",
-            "DEPARTEMENT" => "095",
-            "SOURCE_CODE" => "0951723G"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MONTESQUIEU",
             "LOCALISATION" => "LE MANS",
             "DEPARTEMENT" => "072",
             "SOURCE_CODE" => "0720029"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MONTESQUIEU",
+            "LOCALISATION" => "LY MONTESQ",
+            "DEPARTEMENT" => "095",
+            "SOURCE_CODE" => "0951723G"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MONTGERALD",
@@ -37380,14 +37436,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE PIERRE ET MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0501219D"
+            "DEPARTEMENT" => "036",
+            "SOURCE_CODE" => "0360009P"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE PIERRE ET MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "036",
-            "SOURCE_CODE" => "0360009P"
+            "DEPARTEMENT" => "050",
+            "SOURCE_CODE" => "0501219D"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE PIERRE LAROUSSE",
@@ -37518,14 +37574,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RAOUL FOLLEREAU",
             "LOCALISATION" => "LY FOLLERE",
-            "DEPARTEMENT" => "090",
-            "SOURCE_CODE" => "0900004R"
+            "DEPARTEMENT" => "058",
+            "SOURCE_CODE" => "0580032V"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RAOUL FOLLEREAU",
             "LOCALISATION" => "LY FOLLERE",
-            "DEPARTEMENT" => "058",
-            "SOURCE_CODE" => "0580032V"
+            "DEPARTEMENT" => "090",
+            "SOURCE_CODE" => "0900004R"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RAYMOND POINCARE",
@@ -37554,14 +37610,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RENE CASSIN",
             "LOCALISATION" => "LY CASSIN",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0911632E"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0690085T"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RENE CASSIN",
             "LOCALISATION" => "LY CASSIN",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690085T"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0911632E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RENE CASSIN",
@@ -37583,9 +37639,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RENE DESCARTES",
-            "LOCALISATION" => "LY MAESTRI",
-            "DEPARTEMENT" => "063",
-            "SOURCE_CODE" => "0631861F"
+            "LOCALISATION" => "LY DESCART",
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0693654X"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RENE DESCARTES",
@@ -37595,9 +37651,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RENE DESCARTES",
-            "LOCALISATION" => "LY DESCART",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0693654X"
+            "LOCALISATION" => "LY MAESTRI",
+            "DEPARTEMENT" => "063",
+            "SOURCE_CODE" => "0631861F"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE RENE GOSSE",
@@ -37758,8 +37814,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SEVIGNE",
             "LOCALISATION" => "LY SEVIGNE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590215N"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0352304P"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SEVIGNE",
@@ -37770,8 +37826,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SEVIGNE",
             "LOCALISATION" => "LY SEVIGNE",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0352304P"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590215N"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SIMONE DE BEAUVOIR",
@@ -37788,12 +37844,6 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SIMONE WEIL",
             "LOCALISATION" => "LY WEIL",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0420044V"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SIMONE WEIL",
-            "LOCALISATION" => "LY WEIL",
             "DEPARTEMENT" => "043",
             "SOURCE_CODE" => "0430021P"
         ],
@@ -37802,6 +37852,12 @@ return [
             "LOCALISATION" => "LY WEIL",
             "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0750651A"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SIMONE WEIL",
+            "LOCALISATION" => "LY WEIL",
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0420044V"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE SIVARD DE BEAULIEU",
@@ -37968,8 +38024,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
+            "DEPARTEMENT" => "053",
+            "SOURCE_CODE" => "0530004S"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
+            "LOCALISATION" => "LY HUGO",
             "DEPARTEMENT" => "013",
             "SOURCE_CODE" => "0130043B"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
+            "LOCALISATION" => "LY HUGO",
+            "DEPARTEMENT" => "084",
+            "SOURCE_CODE" => "0840016L"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
@@ -37980,32 +38048,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0250007X"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
-            "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "053",
-            "SOURCE_CODE" => "0530004S"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
-            "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "081",
-            "SOURCE_CODE" => "0810023K"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
-            "LOCALISATION" => "LY HUGO",
             "DEPARTEMENT" => "056",
             "SOURCE_CODE" => "0561607T"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "084",
-            "SOURCE_CODE" => "0840016L"
+            "DEPARTEMENT" => "025",
+            "SOURCE_CODE" => "0250007X"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
+            "LOCALISATION" => "LY HUGO",
+            "DEPARTEMENT" => "081",
+            "SOURCE_CODE" => "0810023K"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR SCHOELCHER",
@@ -38028,6 +38084,12 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VOLTAIRE",
             "LOCALISATION" => "LY VOLTAIR",
+            "DEPARTEMENT" => "045",
+            "SOURCE_CODE" => "0450782F"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VOLTAIRE",
+            "LOCALISATION" => "LY VOLTAIR",
             "DEPARTEMENT" => "062",
             "SOURCE_CODE" => "0623915U"
         ],
@@ -38036,12 +38098,6 @@ return [
             "LOCALISATION" => "LY VOLTAIR",
             "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0750675B"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VOLTAIRE",
-            "LOCALISATION" => "LY VOLTAIR",
-            "DEPARTEMENT" => "045",
-            "SOURCE_CODE" => "0450782F"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE WATTEAU",
@@ -38532,14 +38588,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920146J"
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0670083B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0670083B"
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0920146J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL MARIE IMMACULEE",
@@ -38634,14 +38690,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PAUL VALERY",
             "LOCALISATION" => "LY VALERY",
-            "DEPARTEMENT" => "034",
-            "SOURCE_CODE" => "0340075X"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0750679F"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PAUL VALERY",
             "LOCALISATION" => "LY VALERY",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0750679F"
+            "DEPARTEMENT" => "034",
+            "SOURCE_CODE" => "0340075X"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PIERRE ABELARD",
@@ -38724,14 +38780,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ASSOMPTION",
             "LOCALISATION" => "LY ASSOMPT",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350778F"
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0772648K"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ASSOMPTION",
             "LOCALISATION" => "LY ASSOMPT",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772648K"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350778F"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE BARRAL",
@@ -38802,8 +38858,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE CHARLES PEGUY",
             "LOCALISATION" => "LY PEGUY",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0442273G"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0930962R"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE CHARLES PEGUY",
@@ -38814,8 +38870,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE CHARLES PEGUY",
             "LOCALISATION" => "LY PEGUY",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0930962R"
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0442273G"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE CHEVREUL",
@@ -38916,14 +38972,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE DON BOSCO",
             "LOCALISATION" => "LY BOSCO",
-            "DEPARTEMENT" => "053",
-            "SOURCE_CODE" => "0530052U"
+            "DEPARTEMENT" => "068",
+            "SOURCE_CODE" => "0680134B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE DON BOSCO",
             "LOCALISATION" => "LY BOSCO",
-            "DEPARTEMENT" => "068",
-            "SOURCE_CODE" => "0680134B"
+            "DEPARTEMENT" => "053",
+            "SOURCE_CODE" => "0530052U"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE DU MIRAIL",
@@ -39018,14 +39074,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE FENELON",
             "LOCALISATION" => "LY FENELON",
-            "DEPARTEMENT" => "083",
-            "SOURCE_CODE" => "0830099G"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0931799A"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE FENELON",
             "LOCALISATION" => "LY FENELON",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0931799A"
+            "DEPARTEMENT" => "083",
+            "SOURCE_CODE" => "0830099G"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE FENELON SAINTE-MARIE",
@@ -39038,12 +39094,6 @@ return [
             "LOCALISATION" => "LY LEVEN",
             "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0753935V"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE GERSON",
-            "LOCALISATION" => "LY GERSON",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0753941B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE GUY GASNIER-SAINTE BATHILDE",
@@ -39144,8 +39194,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0141161L"
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490822C"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE JEANNE D'ARC",
@@ -39162,8 +39212,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0490822C"
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0141161L"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE JEANNE D'ARC SAINT ASPAIS",
@@ -39330,14 +39380,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE MASSILLON",
             "LOCALISATION" => "LY MASSILL",
-            "DEPARTEMENT" => "063",
-            "SOURCE_CODE" => "0631847R"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0753824Z"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE MASSILLON",
             "LOCALISATION" => "LY MASSILL",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0753824Z"
+            "DEPARTEMENT" => "063",
+            "SOURCE_CODE" => "0631847R"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE MAURICE TIECHE",
@@ -39444,20 +39494,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0490837U"
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0421025L"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "021",
-            "SOURCE_CODE" => "0211074D"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME",
-            "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0331499A"
+            "DEPARTEMENT" => "026",
+            "SOURCE_CODE" => "0260069J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME",
@@ -39468,14 +39512,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0421025L"
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0331499A"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "026",
-            "SOURCE_CODE" => "0260069J"
+            "DEPARTEMENT" => "021",
+            "SOURCE_CODE" => "0211074D"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME",
+            "LOCALISATION" => "LY N-DAME",
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490837U"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE NOTRE DAME DE BELLEGARDE",
@@ -39606,14 +39656,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE OZAR HATORAH",
             "LOCALISATION" => "LY HATORAH",
-            "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0312356T"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0754479L"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE OZAR HATORAH",
             "LOCALISATION" => "LY HATORAH",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0754479L"
+            "DEPARTEMENT" => "031",
+            "SOURCE_CODE" => "0312356T"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE OZAR HATORAH FILLES",
@@ -39786,6 +39836,12 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0690550Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "003",
             "SOURCE_CODE" => "0030445T"
         ],
@@ -39794,12 +39850,6 @@ return [
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "037",
             "SOURCE_CODE" => "0371306U"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690550Y"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
@@ -39852,6 +39902,12 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PAUL",
             "LOCALISATION" => "LY S-PAUL",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0593114P"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PAUL",
+            "LOCALISATION" => "LY S-PAUL",
             "DEPARTEMENT" => "042",
             "SOURCE_CODE" => "0421035X"
         ],
@@ -39862,12 +39918,6 @@ return [
             "SOURCE_CODE" => "0421023J"
         ],
         [
-            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PAUL",
-            "LOCALISATION" => "LY S-PAUL",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0593114P"
-        ],
-        [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PAUL-BOURDON BLANC",
             "LOCALISATION" => "LY SP-BBLA",
             "DEPARTEMENT" => "045",
@@ -39876,8 +39926,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PIERRE",
             "LOCALISATION" => "LY S-PIERR",
-            "DEPARTEMENT" => "063",
-            "SOURCE_CODE" => "0631032E"
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0030072M"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PIERRE",
@@ -39888,8 +39938,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PIERRE",
             "LOCALISATION" => "LY S-PIERR",
-            "DEPARTEMENT" => "003",
-            "SOURCE_CODE" => "0030072M"
+            "DEPARTEMENT" => "063",
+            "SOURCE_CODE" => "0631032E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT PIERRE CHANEL",
@@ -40026,26 +40076,26 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINTE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "083",
-            "SOURCE_CODE" => "0830095C"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE SAINTE MARIE",
-            "LOCALISATION" => "LY S-MARIE",
             "DEPARTEMENT" => "041",
             "SOURCE_CODE" => "0410676M"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINTE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0592932S"
+            "DEPARTEMENT" => "083",
+            "SOURCE_CODE" => "0830095C"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINTE MARIE",
             "LOCALISATION" => "LY S-MARIE",
             "DEPARTEMENT" => "063",
             "SOURCE_CODE" => "0631034G"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE SAINTE MARIE",
+            "LOCALISATION" => "LY S-MARIE",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0592932S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINTE MARIE LA GRAND'GRANGE",
@@ -40164,8 +40214,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0490835S"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0352341E"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "005",
+            "SOURCE_CODE" => "0050035L"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "051",
+            "SOURCE_CODE" => "0511140M"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
@@ -40182,20 +40244,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0352341E"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "051",
-            "SOURCE_CODE" => "0511140M"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "005",
-            "SOURCE_CODE" => "0050035L"
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490835S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
@@ -40212,14 +40262,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ST LOUIS",
             "LOCALISATION" => "LY S-LOUIS",
-            "DEPARTEMENT" => "084",
-            "SOURCE_CODE" => "0840075A"
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440177D"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ST LOUIS",
             "LOCALISATION" => "LY S-LOUIS",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440177D"
+            "DEPARTEMENT" => "084",
+            "SOURCE_CODE" => "0840075A"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE ST LOUIS VILLA PIA",
@@ -40278,8 +40328,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE STANISLAS",
             "LOCALISATION" => "LY STANISL",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0753840S"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0060729K"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE STANISLAS",
@@ -40290,8 +40340,8 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE STANISLAS",
             "LOCALISATION" => "LY STANISL",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060729K"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0753840S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE STE ANNE",
@@ -40307,15 +40357,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE STE CATHERINE DE SIENNE",
-            "LOCALISATION" => "LY S-CATHE",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0131320P"
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE STE CATHERINE DE SIENNE",
             "LOCALISATION" => "ST MANVIEU",
             "DEPARTEMENT" => "014",
             "SOURCE_CODE" => "0142213E"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE STE CATHERINE DE SIENNE",
+            "LOCALISATION" => "LY S-CATHE",
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0131320P"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE STE ELISABETH",
@@ -40536,14 +40586,14 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0750648X"
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0142059M"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0142059M"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0750648X"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL YVES KERNANEC",
@@ -40848,20 +40898,8 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760095R"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
-            "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0932221J"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
-            "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772230F"
+            "DEPARTEMENT" => "063",
+            "SOURCE_CODE" => "0630001J"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
@@ -40872,20 +40910,32 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0490782J"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
-            "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "063",
-            "SOURCE_CODE" => "0630001J"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0932221J"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
             "DEPARTEMENT" => "068",
             "SOURCE_CODE" => "0680010S"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
+            "LOCALISATION" => "LY PASCAL",
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490782J"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
+            "LOCALISATION" => "LY PASCAL",
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0760095R"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
+            "LOCALISATION" => "LY PASCAL",
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0772230F"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT BLANCHE DE CASTILLE",
@@ -41010,14 +41060,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT CLEMENT ADER",
             "LOCALISATION" => "LY ADER",
-            "DEPARTEMENT" => "027",
-            "SOURCE_CODE" => "0271581X"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0910676R"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT CLEMENT ADER",
             "LOCALISATION" => "LY ADER",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910676R"
+            "DEPARTEMENT" => "027",
+            "SOURCE_CODE" => "0271581X"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT CLEMENT ADER",
@@ -41052,14 +41102,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT CONDORCET",
             "LOCALISATION" => "LY CONDORC",
-            "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940122X"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0781884Z"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT CONDORCET",
             "LOCALISATION" => "LY CONDORC",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0781884Z"
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940122X"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT COSTEBELLE",
@@ -41472,14 +41522,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT EVARISTE GALOIS",
             "LOCALISATION" => "LY GALOIS",
-            "DEPARTEMENT" => "095",
-            "SOURCE_CODE" => "0951748J"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0932047V"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT EVARISTE GALOIS",
             "LOCALISATION" => "LY GALOIS",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0932047V"
+            "DEPARTEMENT" => "095",
+            "SOURCE_CODE" => "0951748J"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT FELIX MAYER",
@@ -41526,6 +41576,12 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT FRANCOIS RABELAIS",
             "LOCALISATION" => "LY RABELAI",
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0850068M"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT FRANCOIS RABELAIS",
+            "LOCALISATION" => "LY RABELAI",
             "DEPARTEMENT" => "014",
             "SOURCE_CODE" => "0142132S"
         ],
@@ -41534,12 +41590,6 @@ return [
             "LOCALISATION" => "LY RABELAI",
             "DEPARTEMENT" => "037",
             "SOURCE_CODE" => "0370009J"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT FRANCOIS RABELAIS",
-            "LOCALISATION" => "LY RABELAI",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0850068M"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT FRANCOIS TRUFFAUT",
@@ -41622,8 +41672,8 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT GEORGES BRASSENS",
             "LOCALISATION" => "LY BRASSEN",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0420027B"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0932260B"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT GEORGES BRASSENS",
@@ -41634,8 +41684,8 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT GEORGES BRASSENS",
             "LOCALISATION" => "LY BRASSEN",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0932260B"
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0420027B"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT GEORGES BRASSENS",
@@ -41700,18 +41750,6 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940111K"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
-            "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0922398G"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
-            "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590011S"
         ],
@@ -41720,6 +41758,18 @@ return [
             "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "033",
             "SOURCE_CODE" => "0330028B"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
+            "LOCALISATION" => "LY EIFFEL",
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940111K"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
+            "LOCALISATION" => "LY EIFFEL",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0922398G"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT GUY MOLLET",
@@ -41862,14 +41912,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN JAURES",
             "LOCALISATION" => "LY JAURES",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0930121B"
+            "DEPARTEMENT" => "095",
+            "SOURCE_CODE" => "0950641F"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN JAURES",
             "LOCALISATION" => "LY JAURES",
-            "DEPARTEMENT" => "095",
-            "SOURCE_CODE" => "0950641F"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0930121B"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN JAURES",
@@ -41897,12 +41947,6 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN MERMOZ",
-            "LOCALISATION" => "LY MERMOZ",
-            "DEPARTEMENT" => "034",
-            "SOURCE_CODE" => "0340042L"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT JEAN MERMOZ",
             "LOCALISATION" => "VIRE",
             "DEPARTEMENT" => "014",
             "SOURCE_CODE" => "0142177R"
@@ -41910,14 +41954,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN MERMOZ",
             "LOCALISATION" => "LY MERMOZ",
-            "DEPARTEMENT" => "068",
-            "SOURCE_CODE" => "0680066C"
+            "DEPARTEMENT" => "034",
+            "SOURCE_CODE" => "0340042L"
         ],
         [
-            "LIBELLE" => "LYCEE POLYVALENT JEAN MONNET",
-            "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "016",
-            "SOURCE_CODE" => "0160020K"
+            "LIBELLE" => "LYCEE POLYVALENT JEAN MERMOZ",
+            "LOCALISATION" => "LY MERMOZ",
+            "DEPARTEMENT" => "068",
+            "SOURCE_CODE" => "0680066C"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN MONNET",
@@ -41944,16 +41988,22 @@ return [
             "SOURCE_CODE" => "0133288D"
         ],
         [
-            "LIBELLE" => "LYCEE POLYVALENT JEAN MOULIN",
-            "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "027",
-            "SOURCE_CODE" => "0271585B"
+            "LIBELLE" => "LYCEE POLYVALENT JEAN MONNET",
+            "LOCALISATION" => "LY MONNET",
+            "DEPARTEMENT" => "016",
+            "SOURCE_CODE" => "0160020K"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
             "DEPARTEMENT" => "093",
             "SOURCE_CODE" => "0932118X"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT JEAN MOULIN",
+            "LOCALISATION" => "LY MOULIN",
+            "DEPARTEMENT" => "027",
+            "SOURCE_CODE" => "0271585B"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN PAUL DE ROCCA SERRA",
@@ -41964,14 +42014,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN PERRIN",
             "LOCALISATION" => "LY PERRIN",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130053M"
+            "DEPARTEMENT" => "095",
+            "SOURCE_CODE" => "0951104J"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN PERRIN",
             "LOCALISATION" => "LY PERRIN",
-            "DEPARTEMENT" => "095",
-            "SOURCE_CODE" => "0951104J"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130053M"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN PIERRE TIMBAUD",
@@ -42018,14 +42068,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN ZAY",
             "LOCALISATION" => "LY ZAY",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0930833A"
+            "DEPARTEMENT" => "054",
+            "SOURCE_CODE" => "0540076P"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN ZAY",
             "LOCALISATION" => "LY ZAY",
-            "DEPARTEMENT" => "054",
-            "SOURCE_CODE" => "0540076P"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0930833A"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT JEAN-AUGUSTE MARGUERITTE",
@@ -42306,14 +42356,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT LEONARD DE VINCI",
             "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0911946W"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0624141P"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT LEONARD DE VINCI",
             "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0624141P"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0911946W"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT LEOPOLD ELFORT",
@@ -42366,14 +42416,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0691644M"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0751708Z"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0751708Z"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0691644M"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT LOUIS ARMAND",
@@ -42528,14 +42578,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT MARGUERITE YOURCENAR",
             "LOCALISATION" => "LY YOURCEN",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0672677W"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0911945V"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT MARGUERITE YOURCENAR",
             "LOCALISATION" => "LY YOURCEN",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0911945V"
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0672677W"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT MARIE LAURENCIN",
@@ -42966,14 +43016,8 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "089",
-            "SOURCE_CODE" => "0890064L"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT PRIVE JEANNE D'ARC",
-            "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0761735Y"
+            "DEPARTEMENT" => "001",
+            "SOURCE_CODE" => "0010878Z"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE JEANNE D'ARC",
@@ -42984,8 +43028,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "001",
-            "SOURCE_CODE" => "0010878Z"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0761735Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT PRIVE JEANNE D'ARC",
+            "LOCALISATION" => "LY J.D'ARC",
+            "DEPARTEMENT" => "089",
+            "SOURCE_CODE" => "0890064L"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE JEANNE DELANOUE",
@@ -43145,15 +43195,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE NOTRE-DAME",
-            "LOCALISATION" => "LPO PR",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080091F"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT PRIVE NOTRE-DAME",
             "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "027",
             "SOURCE_CODE" => "0271070S"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT PRIVE NOTRE-DAME",
+            "LOCALISATION" => "LPO PR",
+            "DEPARTEMENT" => "008",
+            "SOURCE_CODE" => "0080091F"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE NOTRE-DAME -ST VINCENT DE PAUL",
@@ -43260,8 +43310,8 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "058",
-            "SOURCE_CODE" => "0580778F"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0762442S"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT JOSEPH",
@@ -43272,20 +43322,20 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060774J"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "079",
             "SOURCE_CODE" => "0790080H"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0762442S"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0060774J"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "058",
+            "SOURCE_CODE" => "0580778F"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT JOSEPH L'AMANDIER",
@@ -43314,14 +43364,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT LOUIS",
             "LOCALISATION" => "LY S-LOUIS",
-            "DEPARTEMENT" => "045",
-            "SOURCE_CODE" => "0450107X"
+            "DEPARTEMENT" => "011",
+            "SOURCE_CODE" => "0110045P"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT LOUIS",
             "LOCALISATION" => "LY S-LOUIS",
-            "DEPARTEMENT" => "011",
-            "SOURCE_CODE" => "0110045P"
+            "DEPARTEMENT" => "045",
+            "SOURCE_CODE" => "0450107X"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINT MARC",
@@ -43404,14 +43454,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINTE-THERESE",
             "LOCALISATION" => "LY S-THERE",
-            "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0311131L"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0753217P"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SAINTE-THERESE",
             "LOCALISATION" => "LY S-THERE",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0753217P"
+            "DEPARTEMENT" => "031",
+            "SOURCE_CODE" => "0311131L"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE SIMONE DOUNON",
@@ -43596,12 +43646,6 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT RENE CASSIN",
             "LOCALISATION" => "LY CASSIN",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0670086E"
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT RENE CASSIN",
-            "LOCALISATION" => "LY CASSIN",
             "DEPARTEMENT" => "093",
             "SOURCE_CODE" => "0932222K"
         ],
@@ -43610,6 +43654,12 @@ return [
             "LOCALISATION" => "LY CASSIN",
             "DEPARTEMENT" => "077",
             "SOURCE_CODE" => "0771941S"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT RENE CASSIN",
+            "LOCALISATION" => "LY CASSIN",
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0670086E"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT RENE DESCARTES",
@@ -43740,14 +43790,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT SIMONE WEIL",
             "LOCALISATION" => "LY WEIL",
-            "DEPARTEMENT" => "021",
-            "SOURCE_CODE" => "0212015B"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0783447Y"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT SIMONE WEIL",
             "LOCALISATION" => "LY WEIL",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0783447Y"
+            "DEPARTEMENT" => "021",
+            "SOURCE_CODE" => "0212015B"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT SONIA DELAUNAY",
@@ -43818,14 +43868,14 @@ return [
         [
             "LIBELLE" => "LYCEE POLYVALENT VAUBAN",
             "LOCALISATION" => "LY VAUBAN",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0623981R"
+            "DEPARTEMENT" => "029",
+            "SOURCE_CODE" => "0290012F"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT VAUBAN",
             "LOCALISATION" => "LY VAUBAN",
-            "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0290012F"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0623981R"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT VAUCANSON",
@@ -43912,6 +43962,12 @@ return [
             "SOURCE_CODE" => "0910819W"
         ],
         [
+            "LIBELLE" => "LYCEE PRIVE GERSON",
+            "LOCALISATION" => "LY GERSON",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0753941B"
+        ],
+        [
             "LIBELLE" => "LYCEE PRIVE HAUTEFEUILLE",
             "LOCALISATION" => "LY H-FEUIL",
             "DEPARTEMENT" => "092",
@@ -43979,9 +44035,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROF AGRICOLE PRIVE",
-            "LOCALISATION" => "LY QUESTEM",
-            "DEPARTEMENT" => "056",
-            "SOURCE_CODE" => "0561464M"
+            "LOCALISATION" => "LY BEAULIE",
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0351960R"
         ],
         [
             "LIBELLE" => "LYCEE PROF AGRICOLE PRIVE",
@@ -43991,15 +44047,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROF AGRICOLE PRIVE",
-            "LOCALISATION" => "LY BEAULIE",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0351960R"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROF AGRICOLE PRIVE",
             "LOCALISATION" => "LY MALESTR",
             "DEPARTEMENT" => "056",
             "SOURCE_CODE" => "0561460H"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROF AGRICOLE PRIVE",
+            "LOCALISATION" => "LY QUESTEM",
+            "DEPARTEMENT" => "056",
+            "SOURCE_CODE" => "0561464M"
         ],
         [
             "LIBELLE" => "LYCEE PROF AGRICOLE PRIVE EDMOND MICHELET",
@@ -44124,14 +44180,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS DON BOSCO",
             "LOCALISATION" => "LY BOSCO",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0131466Y"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0061462G"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS DON BOSCO",
             "LOCALISATION" => "LY BOSCO",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0061462G"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0131466Y"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS ECOLE INDUSTRIELLE",
@@ -44220,14 +44276,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
-            "DEPARTEMENT" => "080",
-            "SOURCE_CODE" => "0801946F"
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490886X"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0490886X"
+            "DEPARTEMENT" => "080",
+            "SOURCE_CODE" => "0801946F"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS LA SALLE",
@@ -44304,14 +44360,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0693375U"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350807M"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350807M"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0693375U"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE DAME",
@@ -44335,6 +44391,12 @@ return [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0021999M"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROF PRIVE DES METIERS SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "002",
             "SOURCE_CODE" => "0022002R"
         ],
         [
@@ -44342,12 +44404,6 @@ return [
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "001",
             "SOURCE_CODE" => "0010099C"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROF PRIVE DES METIERS SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0021999M"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS SAINT JOSEPH - SAINT MARC",
@@ -44418,14 +44474,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS ST GABRIEL",
             "LOCALISATION" => "LY S-GABRI",
-            "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0290202M"
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0851504Y"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS ST GABRIEL",
             "LOCALISATION" => "LY S-GABRI",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0851504Y"
+            "DEPARTEMENT" => "029",
+            "SOURCE_CODE" => "0290202M"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS ST GENES",
@@ -44447,15 +44503,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS ST VINCENT DE PAUL",
-            "LOCALISATION" => "LY SV.PAUL",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0020492Z"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROF PRIVE DES METIERS ST VINCENT DE PAUL",
             "LOCALISATION" => "LY SVDPAUL",
             "DEPARTEMENT" => "033",
             "SOURCE_CODE" => "0332497K"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROF PRIVE DES METIERS ST VINCENT DE PAUL",
+            "LOCALISATION" => "LY SV.PAUL",
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0020492Z"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS STE CROIX ST EUVERTE",
@@ -44603,15 +44659,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROF.AGRICOLE PRIVE",
-            "LOCALISATION" => "LY S-GENIE",
-            "DEPARTEMENT" => "012",
-            "SOURCE_CODE" => "0121293R"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROF.AGRICOLE PRIVE",
             "LOCALISATION" => "LY BEAUMON",
             "DEPARTEMENT" => "082",
             "SOURCE_CODE" => "0820724S"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROF.AGRICOLE PRIVE",
+            "LOCALISATION" => "LY S-GENIE",
+            "DEPARTEMENT" => "012",
+            "SOURCE_CODE" => "0121293R"
         ],
         [
             "LIBELLE" => "LYCEE PROF.AGRICOLE PRIVE ASSOMPTION",
@@ -44819,30 +44875,6 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LY LILLE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590123N"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LY LILLE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590125R"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LY BAPAUME",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620030W"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LY FLERS",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0611287T"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
             "LOCALISATION" => "LY ALBERT",
             "DEPARTEMENT" => "080",
             "SOURCE_CODE" => "0800060F"
@@ -44855,15 +44887,45 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LY HERRIOT",
-            "DEPARTEMENT" => "011",
-            "SOURCE_CODE" => "0110027V"
+            "LOCALISATION" => "LY LILLE",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590125R"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
             "LOCALISATION" => "LY MAZAMET",
             "DEPARTEMENT" => "081",
             "SOURCE_CODE" => "0811324Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL",
+            "LOCALISATION" => "LY HERRIOT",
+            "DEPARTEMENT" => "011",
+            "SOURCE_CODE" => "0110027V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL",
+            "LOCALISATION" => "LY FLERS",
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "0611287T"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL",
+            "LOCALISATION" => "LY LILLE",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590123N"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL",
+            "LOCALISATION" => "LY BAPAUME",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620030W"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0622240Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
@@ -44876,12 +44938,6 @@ return [
             "LOCALISATION" => "LP",
             "DEPARTEMENT" => "085",
             "SOURCE_CODE" => "0850029V"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0622240Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
@@ -44957,6 +45013,12 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
+            "LOCALISATION" => "LY YRIEIX",
+            "DEPARTEMENT" => "087",
+            "SOURCE_CODE" => "0870671G"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
             "LOCALISATION" => "LY UVEA",
             "DEPARTEMENT" => "986",
             "SOURCE_CODE" => "9870033X"
@@ -44966,12 +45028,6 @@ return [
             "LOCALISATION" => "LY C/YONNE",
             "DEPARTEMENT" => "089",
             "SOURCE_CODE" => "0890849P"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY YRIEIX",
-            "DEPARTEMENT" => "087",
-            "SOURCE_CODE" => "0870671G"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
@@ -44993,6 +45049,12 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
+            "LOCALISATION" => "LY DURDAT",
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0031047X"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
             "LOCALISATION" => "LY RIBECO",
             "DEPARTEMENT" => "060",
             "SOURCE_CODE" => "0601265Z"
@@ -45011,15 +45073,21 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY DURDAT",
-            "DEPARTEMENT" => "003",
-            "SOURCE_CODE" => "0031047X"
+            "LOCALISATION" => "LY NAVES",
+            "DEPARTEMENT" => "019",
+            "SOURCE_CODE" => "0190624A"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY AUBIN",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350940G"
+            "LOCALISATION" => "LY FAYL",
+            "DEPARTEMENT" => "052",
+            "SOURCE_CODE" => "0520741Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
+            "LOCALISATION" => "LY TONNEIN",
+            "DEPARTEMENT" => "047",
+            "SOURCE_CODE" => "0470107L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
@@ -45035,9 +45103,21 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY FAYL",
-            "DEPARTEMENT" => "052",
-            "SOURCE_CODE" => "0520741Y"
+            "LOCALISATION" => "LY S-HILAI",
+            "DEPARTEMENT" => "050",
+            "SOURCE_CODE" => "0501234V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
+            "LOCALISATION" => "LY CONTAMI",
+            "DEPARTEMENT" => "074",
+            "SOURCE_CODE" => "0740276Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
+            "LOCALISATION" => "LY AUBIN",
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350940G"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
@@ -45047,9 +45127,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY NAVES",
-            "DEPARTEMENT" => "019",
-            "SOURCE_CODE" => "0190624A"
+            "LOCALISATION" => "LY ALENCO",
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "0610746E"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
@@ -45065,33 +45145,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY ALENCO",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0610746E"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY S-HILAI",
-            "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0501234V"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY CONTAMI",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740276Y"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
             "LOCALISATION" => "LY MACON",
             "DEPARTEMENT" => "071",
             "SOURCE_CODE" => "0711120G"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY TONNEIN",
-            "DEPARTEMENT" => "047",
-            "SOURCE_CODE" => "0470107L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
@@ -45606,14 +45662,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ALAIN SAVARY",
             "LOCALISATION" => "LY SAVARY",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0595787V"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620257T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ALAIN SAVARY",
             "LOCALISATION" => "LY SAVARY",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620257T"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0595787V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ALAIN-FOURNIER",
@@ -45623,15 +45679,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ALBERT CAMUS",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0251557G"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL ALBERT CAMUS",
             "LOCALISATION" => "LY CAMUS",
             "DEPARTEMENT" => "042",
             "SOURCE_CODE" => "0420074C"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL ALBERT CAMUS",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "025",
+            "SOURCE_CODE" => "0251557G"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ALBERT CHASSAGNE",
@@ -45731,15 +45787,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AMPERE",
-            "LOCALISATION" => "LY AMPERE",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130072H"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AMPERE",
             "LOCALISATION" => "LP",
             "DEPARTEMENT" => "072",
             "SOURCE_CODE" => "0720064D"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL AMPERE",
+            "LOCALISATION" => "LY AMPERE",
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130072H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AMPERE",
@@ -45858,8 +45914,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ARISTIDE BRIAND",
             "LOCALISATION" => "LY BRIAND",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0930831Y"
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0670062D"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ARISTIDE BRIAND",
@@ -45870,8 +45926,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ARISTIDE BRIAND",
             "LOCALISATION" => "LY BRIAND",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0670062D"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0930831Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ARISTIDE BRIAND (COURS)",
@@ -45894,14 +45950,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ARTHUR RIMBAUD",
             "LOCALISATION" => "LY RIMBAUD",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0601822E"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0931738J"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ARTHUR RIMBAUD",
             "LOCALISATION" => "LY RIMBAUD",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0931738J"
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0601822E"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ASTIER",
@@ -46013,15 +46069,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BEAUREGARD",
-            "LOCALISATION" => "LY BEAUREG",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0420075D"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL BEAUREGARD",
             "LOCALISATION" => "LY BREGARD",
             "DEPARTEMENT" => "070",
             "SOURCE_CODE" => "0700024W"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL BEAUREGARD",
+            "LOCALISATION" => "LY BEAUREG",
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0420075D"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BEAUTE BIEN ETRE FORMATION",
@@ -46056,14 +46112,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BERNARD PALISSY",
             "LOCALISATION" => "LY PALISSY",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760022L"
+            "DEPARTEMENT" => "017",
+            "SOURCE_CODE" => "0170078T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BERNARD PALISSY",
             "LOCALISATION" => "LY PALISSY",
-            "DEPARTEMENT" => "017",
-            "SOURCE_CODE" => "0170078T"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0760022L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BERNART DE VENTADOUR",
@@ -46085,6 +46141,12 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BLAISE PASCAL",
+            "LOCALISATION" => "LY PASCAL",
+            "DEPARTEMENT" => "017",
+            "SOURCE_CODE" => "0170052P"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL BLAISE PASCAL",
             "LOCALISATION" => "LP",
             "DEPARTEMENT" => "057",
             "SOURCE_CODE" => "0570031Z"
@@ -46092,8 +46154,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "017",
-            "SOURCE_CODE" => "0170052P"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130059U"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BLAISE PASCAL",
@@ -46104,20 +46166,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130059U"
+            "DEPARTEMENT" => "052",
+            "SOURCE_CODE" => "0520029Z"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BLAISE PASCAL",
             "LOCALISATION" => "LP",
             "DEPARTEMENT" => "049",
             "SOURCE_CODE" => "0490785M"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL BLAISE PASCAL",
-            "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "052",
-            "SOURCE_CODE" => "0520029Z"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL BORDE BASSE",
@@ -46152,8 +46208,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE CLAUDEL",
             "LOCALISATION" => "LY CLAUDEL",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0140019V"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590260M"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE CLAUDEL",
@@ -46164,14 +46220,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE CLAUDEL",
             "LOCALISATION" => "LY CLAUDEL",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590260M"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE CLAUDEL",
-            "LOCALISATION" => "LY CLAUDEL",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0020088K"
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940145X"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE CLAUDEL",
@@ -46182,8 +46232,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE CLAUDEL",
             "LOCALISATION" => "LY CLAUDEL",
-            "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940145X"
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0140019V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE CLAUDEL",
+            "LOCALISATION" => "LY CLAUDEL",
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0020088K"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CAMILLE COROT",
@@ -46254,14 +46310,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CHARLES BAUDELAIRE",
             "LOCALISATION" => "LY BAUDELA",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0771880A"
+            "DEPARTEMENT" => "091",
+            "SOURCE_CODE" => "0911254U"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CHARLES BAUDELAIRE",
             "LOCALISATION" => "LY BAUDELA",
-            "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0911254U"
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0771880A"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL CHARLES CROS",
@@ -46410,14 +46466,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL COLBERT",
             "LOCALISATION" => "LY COLBERT",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590269X"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130071G"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL COLBERT",
             "LOCALISATION" => "LY COLBERT",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130071G"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590269X"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL COMMERCIAL ET HOTELIER",
@@ -46830,8 +46886,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDMOND LABBE",
             "LOCALISATION" => "LY LABBE",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760007V"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590265T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDMOND LABBE",
@@ -46842,8 +46898,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDMOND LABBE",
             "LOCALISATION" => "LY LABBE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590265T"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0760007V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDMOND ROSTAND",
@@ -46853,9 +46909,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDOUARD BRANLY",
-            "LOCALISATION" => "LY BRANLY",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0850028U"
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620193Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDOUARD BRANLY",
@@ -46866,14 +46922,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDOUARD BRANLY",
             "LOCALISATION" => "LY BRANLY",
-            "DEPARTEMENT" => "086",
-            "SOURCE_CODE" => "0860006P"
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0850028U"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDOUARD BRANLY",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620193Y"
+            "LOCALISATION" => "LY BRANLY",
+            "DEPARTEMENT" => "086",
+            "SOURCE_CODE" => "0860006P"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EDOUARD LALO",
@@ -47022,14 +47078,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EUGENE FREYSSINET",
             "LOCALISATION" => "LY FREYSSI",
-            "DEPARTEMENT" => "055",
-            "SOURCE_CODE" => "0550891V"
+            "DEPARTEMENT" => "022",
+            "SOURCE_CODE" => "0220071H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EUGENE FREYSSINET",
             "LOCALISATION" => "LY FREYSSI",
-            "DEPARTEMENT" => "022",
-            "SOURCE_CODE" => "0220071H"
+            "DEPARTEMENT" => "055",
+            "SOURCE_CODE" => "0550891V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL EUGENE GUILLAUME",
@@ -47075,6 +47131,12 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL FERNAND LEGER",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "0610022T"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL FERNAND LEGER",
             "LOCALISATION" => "LY LEGER",
             "DEPARTEMENT" => "076",
             "SOURCE_CODE" => "0762836V"
@@ -47084,12 +47146,6 @@ return [
             "LOCALISATION" => "LY LEGER",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590263R"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL FERNAND LEGER",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0610022T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL FERRAGES (QUARTIER LES)",
@@ -47178,14 +47234,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL FRANCOISE DOLTO",
             "LOCALISATION" => "LY DOLTO",
-            "DEPARTEMENT" => "071",
-            "SOURCE_CODE" => "0710079A"
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0021479X"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL FRANCOISE DOLTO",
             "LOCALISATION" => "LY DOLTO",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0021479X"
+            "DEPARTEMENT" => "071",
+            "SOURCE_CODE" => "0710079A"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL FREDERIC BARTHOLDI",
@@ -47207,15 +47263,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL FULGENCE BIENVENUE",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "022",
-            "SOURCE_CODE" => "0220187J"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL FULGENCE BIENVENUE",
             "LOCALISATION" => "LY BVENUE",
             "DEPARTEMENT" => "054",
             "SOURCE_CODE" => "0540084Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL FULGENCE BIENVENUE",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "022",
+            "SOURCE_CODE" => "0220187J"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GABRIEL",
@@ -47244,14 +47300,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GASTON BACHELARD",
             "LOCALISATION" => "LY BACHELA",
-            "DEPARTEMENT" => "010",
-            "SOURCE_CODE" => "0100906F"
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0750553U"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GASTON BACHELARD",
             "LOCALISATION" => "LY BACHELA",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0750553U"
+            "DEPARTEMENT" => "010",
+            "SOURCE_CODE" => "0100906F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GASTON DARBOUX",
@@ -47358,12 +47414,6 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "037",
-            "SOURCE_CODE" => "0370053G"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL GUSTAVE EIFFEL",
-            "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "013",
             "SOURCE_CODE" => "0130013U"
         ],
@@ -47376,8 +47426,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "003",
-            "SOURCE_CODE" => "0030905T"
+            "DEPARTEMENT" => "037",
+            "SOURCE_CODE" => "0370053G"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GUSTAVE EIFFEL",
@@ -47390,6 +47440,12 @@ return [
             "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0752961L"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL GUSTAVE EIFFEL",
+            "LOCALISATION" => "LY EIFFEL",
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0030905T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL GUSTAVE EIFFEL",
@@ -47604,14 +47660,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JACQUES PREVERT",
             "LOCALISATION" => "LY PREVERT",
-            "DEPARTEMENT" => "039",
-            "SOURCE_CODE" => "0390015E"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0782603F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JACQUES PREVERT",
             "LOCALISATION" => "LY PREVERT",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0782603F"
+            "DEPARTEMENT" => "039",
+            "SOURCE_CODE" => "0390015E"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JACQUES PREVERT",
@@ -47735,9 +47791,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN JAURES",
-            "LOCALISATION" => "NANTES",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440142R"
+            "LOCALISATION" => "LY JAURES",
+            "DEPARTEMENT" => "023",
+            "SOURCE_CODE" => "0230003D"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN JAURES",
@@ -47747,9 +47803,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN JAURES",
-            "LOCALISATION" => "LY JAURES",
-            "DEPARTEMENT" => "023",
-            "SOURCE_CODE" => "0230003D"
+            "LOCALISATION" => "NANTES",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440142R"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN JOORIS",
@@ -47790,20 +47846,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MERMOZ",
             "LOCALISATION" => "LY MERMOZ",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0142178S"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MERMOZ",
-            "LOCALISATION" => "LY MERMOZ",
             "DEPARTEMENT" => "034",
             "SOURCE_CODE" => "0340012D"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MERMOZ",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "015",
-            "SOURCE_CODE" => "0150036H"
+            "LOCALISATION" => "LY MERMOZ",
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0142178S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MERMOZ",
@@ -47812,22 +47862,10 @@ return [
             "SOURCE_CODE" => "0950949R"
         ],
         [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MONNET",
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MERMOZ",
             "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "054",
-            "SOURCE_CODE" => "0541816F"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MONNET",
-            "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590124P"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MONNET",
-            "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "047",
-            "SOURCE_CODE" => "0470782V"
+            "DEPARTEMENT" => "015",
+            "SOURCE_CODE" => "0150036H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MONNET",
@@ -47840,6 +47878,24 @@ return [
             "LOCALISATION" => "LY MONNET",
             "DEPARTEMENT" => "002",
             "SOURCE_CODE" => "0020022N"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MONNET",
+            "LOCALISATION" => "LY MONNET",
+            "DEPARTEMENT" => "047",
+            "SOURCE_CODE" => "0470782V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MONNET",
+            "LOCALISATION" => "LY MONNET",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590124P"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MONNET",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "054",
+            "SOURCE_CODE" => "0541816F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MORETTE",
@@ -47856,20 +47912,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "018",
-            "SOURCE_CODE" => "0180026F"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
-            "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0623327E"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
-            "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080066D"
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940143V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
@@ -47886,14 +47930,26 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0623327E"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
+            "LOCALISATION" => "LY MOULIN",
+            "DEPARTEMENT" => "008",
+            "SOURCE_CODE" => "0080066D"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
+            "LOCALISATION" => "LY MOULIN",
             "DEPARTEMENT" => "013",
             "SOURCE_CODE" => "0130150T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940143V"
+            "DEPARTEMENT" => "018",
+            "SOURCE_CODE" => "0180026F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN PERRIN",
@@ -47928,14 +47984,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN ROSTAND",
             "LOCALISATION" => "LY ROSTAND",
-            "DEPARTEMENT" => "058",
-            "SOURCE_CODE" => "0580050P"
+            "DEPARTEMENT" => "016",
+            "SOURCE_CODE" => "0160049S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN ROSTAND",
             "LOCALISATION" => "LY ROSTAND",
-            "DEPARTEMENT" => "016",
-            "SOURCE_CODE" => "0160049S"
+            "DEPARTEMENT" => "058",
+            "SOURCE_CODE" => "0580050P"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN VICTOR PONCELET",
@@ -48060,14 +48116,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JOUFFROY D'ABBANS",
             "LOCALISATION" => "LY ABBANS",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570237Y"
+            "DEPARTEMENT" => "025",
+            "SOURCE_CODE" => "0250063H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JOUFFROY D'ABBANS",
             "LOCALISATION" => "LY ABBANS",
-            "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0250063H"
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0570237Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULES ALGOUD",
@@ -48077,15 +48133,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULES FERRY",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620142T"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JULES FERRY",
             "LOCALISATION" => "LY FERRY",
             "DEPARTEMENT" => "090",
             "SOURCE_CODE" => "0900019G"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JULES FERRY",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620142T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULES FERRY",
@@ -48113,9 +48169,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULES VERNE",
-            "LOCALISATION" => "LY VERNE",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690130S"
+            "LOCALISATION" => "LY VERNES",
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0020013D"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULES VERNE",
@@ -48125,15 +48181,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULES VERNE",
-            "LOCALISATION" => "LY VERNES",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0020013D"
+            "LOCALISATION" => "LY VERNE",
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0601897L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULES VERNE",
             "LOCALISATION" => "LY VERNE",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0601897L"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0690130S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JULIE DAUBIE",
@@ -48264,6 +48320,12 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LAVOISIER",
             "LOCALISATION" => "LY LAVOISI",
+            "DEPARTEMENT" => "019",
+            "SOURCE_CODE" => "0190701J"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL LAVOISIER",
+            "LOCALISATION" => "LY LAVOISI",
             "DEPARTEMENT" => "060",
             "SOURCE_CODE" => "0601470X"
         ],
@@ -48272,12 +48334,6 @@ return [
             "LOCALISATION" => "LY LAVOISI",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590189K"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL LAVOISIER",
-            "LOCALISATION" => "LY LAVOISI",
-            "DEPARTEMENT" => "019",
-            "SOURCE_CODE" => "0190701J"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LAZARE PONTICELLI",
@@ -48293,15 +48349,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LE CORBUSIER",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0020061F"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL LE CORBUSIER",
             "LOCALISATION" => "LY CORBUSI",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590216P"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL LE CORBUSIER",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0020061F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LE CORBUSIER - BATIMENT",
@@ -48414,26 +48470,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
             "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440035Z"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "024",
-            "SOURCE_CODE" => "0240984P"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0595678B"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
             "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920680P"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130172S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
@@ -48444,8 +48488,20 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
             "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130172S"
+            "DEPARTEMENT" => "024",
+            "SOURCE_CODE" => "0240984P"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440035Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0920680P"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LEONCE VIELJEUX",
@@ -48552,12 +48608,6 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "073",
-            "SOURCE_CODE" => "0731249L"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
-            "LOCALISATION" => "LY ARMAND",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0592712C"
         ],
@@ -48572,6 +48622,12 @@ return [
             "LOCALISATION" => "LY ARMAND",
             "DEPARTEMENT" => "086",
             "SOURCE_CODE" => "0860052P"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
+            "LOCALISATION" => "LY ARMAND",
+            "DEPARTEMENT" => "073",
+            "SOURCE_CODE" => "0731249L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS BLERIOT",
@@ -48846,14 +48902,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "063",
-            "SOURCE_CODE" => "0630023H"
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0600062S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0600062S"
+            "DEPARTEMENT" => "063",
+            "SOURCE_CODE" => "0630023H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL MARIE CURIE",
@@ -48869,15 +48925,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL MARITIME",
-            "LOCALISATION" => "LY TRINITE",
-            "DEPARTEMENT" => "972",
-            "SOURCE_CODE" => "9720787Y"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL MARITIME",
             "LOCALISATION" => "LY MARITIM",
             "DEPARTEMENT" => "064",
             "SOURCE_CODE" => "0641770B"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL MARITIME",
+            "LOCALISATION" => "LY TRINITE",
+            "DEPARTEMENT" => "972",
+            "SOURCE_CODE" => "9720787Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL MARITIME",
@@ -49086,12 +49142,6 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PABLO PICASSO",
             "LOCALISATION" => "LY PICASSO",
-            "DEPARTEMENT" => "024",
-            "SOURCE_CODE" => "0240028A"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PABLO PICASSO",
-            "LOCALISATION" => "LY PICASSO",
             "DEPARTEMENT" => "069",
             "SOURCE_CODE" => "0693200D"
         ],
@@ -49100,6 +49150,12 @@ return [
             "LOCALISATION" => "LP",
             "DEPARTEMENT" => "062",
             "SOURCE_CODE" => "0620255R"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PABLO PICASSO",
+            "LOCALISATION" => "LY PICASSO",
+            "DEPARTEMENT" => "024",
+            "SOURCE_CODE" => "0240028A"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PARDAILHAN",
@@ -49188,14 +49244,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LANGEVIN",
             "LOCALISATION" => "LY LANGEVI",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0921677Y"
+            "DEPARTEMENT" => "030",
+            "SOURCE_CODE" => "0300011Z"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LANGEVIN",
             "LOCALISATION" => "LY LANGEVI",
-            "DEPARTEMENT" => "030",
-            "SOURCE_CODE" => "0300011Z"
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0921677Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LAPIE",
@@ -49254,14 +49310,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE DE COUBERTIN",
             "LOCALISATION" => "LY COUBERT",
-            "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0770932V"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0620189U"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE DE COUBERTIN",
             "LOCALISATION" => "LY COUBERT",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620189U"
+            "DEPARTEMENT" => "077",
+            "SOURCE_CODE" => "0770932V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE DESGRANGES",
@@ -49278,20 +49334,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE ET MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590015W"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE ET MARIE CURIE",
-            "LOCALISATION" => "LY CURIE",
             "DEPARTEMENT" => "050",
             "SOURCE_CODE" => "0500066A"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE ET MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "053",
-            "SOURCE_CODE" => "0530040F"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590015W"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE ET MARIE CURIE",
@@ -49304,6 +49354,12 @@ return [
             "LOCALISATION" => "LY CURIE",
             "DEPARTEMENT" => "076",
             "SOURCE_CODE" => "0760013B"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE ET MARIE CURIE",
+            "LOCALISATION" => "LY CURIE",
+            "DEPARTEMENT" => "053",
+            "SOURCE_CODE" => "0530040F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE ET MARIE CURIE",
@@ -49326,14 +49382,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE MENDES FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "DEPARTEMENT" => "005",
-            "SOURCE_CODE" => "0050027C"
+            "DEPARTEMENT" => "088",
+            "SOURCE_CODE" => "0880013L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE MENDES FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "DEPARTEMENT" => "088",
-            "SOURCE_CODE" => "0880013L"
+            "DEPARTEMENT" => "005",
+            "SOURCE_CODE" => "0050027C"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE MENDES FRANCE",
@@ -49626,14 +49682,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE CHARLES DE FOUCAULD",
             "LOCALISATION" => "LY FOUCAUL",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0672602P"
+            "DEPARTEMENT" => "054",
+            "SOURCE_CODE" => "0541998D"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE CHARLES DE FOUCAULD",
             "LOCALISATION" => "LY FOUCAUL",
-            "DEPARTEMENT" => "054",
-            "SOURCE_CODE" => "0541998D"
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0672602P"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE CHARLOTTE GRAWITZ",
@@ -49944,14 +50000,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE IMMACULEE CONCEPTION",
             "LOCALISATION" => "LY CONCEPT",
-            "DEPARTEMENT" => "053",
-            "SOURCE_CODE" => "0530904V"
+            "DEPARTEMENT" => "052",
+            "SOURCE_CODE" => "0520692V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE IMMACULEE CONCEPTION",
             "LOCALISATION" => "LY CONCEPT",
-            "DEPARTEMENT" => "052",
-            "SOURCE_CODE" => "0520692V"
+            "DEPARTEMENT" => "053",
+            "SOURCE_CODE" => "0530904V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE INDUSTRIES LILLOISES",
@@ -50021,15 +50077,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE INTERENTREPRISE",
-            "LOCALISATION" => "LY INT-ENT",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570225K"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE INTERENTREPRISE",
             "LOCALISATION" => "LP PR",
             "DEPARTEMENT" => "057",
             "SOURCE_CODE" => "0572500H"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE INTERENTREPRISE",
+            "LOCALISATION" => "LY INT-ENT",
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0570225K"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE INTERFORA",
@@ -50088,24 +50144,6 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0133274N"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D ARC",
-            "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740156T"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D ARC",
-            "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0331569B"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D ARC",
-            "LOCALISATION" => "LY J.D'ARC",
             "DEPARTEMENT" => "061",
             "SOURCE_CODE" => "0610721C"
         ],
@@ -50122,28 +50160,22 @@ return [
             "SOURCE_CODE" => "0880133S"
         ],
         [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0381733C"
+            "DEPARTEMENT" => "074",
+            "SOURCE_CODE" => "0740156T"
         ],
         [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080093H"
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0331569B"
         ],
         [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "051",
-            "SOURCE_CODE" => "0511153B"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
-            "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "088",
-            "SOURCE_CODE" => "0881498A"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0133274N"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
@@ -50154,8 +50186,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "012",
-            "SOURCE_CODE" => "0120105Z"
+            "DEPARTEMENT" => "039",
+            "SOURCE_CODE" => "0391001B"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
@@ -50166,14 +50198,38 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "DEPARTEMENT" => "039",
-            "SOURCE_CODE" => "0391001B"
+            "DEPARTEMENT" => "088",
+            "SOURCE_CODE" => "0881498A"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
             "LOCALISATION" => "LY J.D'ARC",
             "DEPARTEMENT" => "088",
             "SOURCE_CODE" => "0881651S"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
+            "LOCALISATION" => "LY J.D'ARC",
+            "DEPARTEMENT" => "051",
+            "SOURCE_CODE" => "0511153B"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
+            "LOCALISATION" => "LY J.D'ARC",
+            "DEPARTEMENT" => "012",
+            "SOURCE_CODE" => "0120105Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
+            "LOCALISATION" => "LY J.D'ARC",
+            "DEPARTEMENT" => "008",
+            "SOURCE_CODE" => "0080093H"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC",
+            "LOCALISATION" => "LY J.D'ARC",
+            "DEPARTEMENT" => "038",
+            "SOURCE_CODE" => "0381733C"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE JEANNE D'ARC - SAINT-ANSELME",
@@ -50262,14 +50318,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
-            "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0311209W"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE LA PROVIDENCE",
-            "LOCALISATION" => "LY PROVIDE",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060715V"
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0570248K"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE LA PROVIDENCE",
@@ -50280,8 +50330,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570248K"
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0060715V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE LA PROVIDENCE",
+            "LOCALISATION" => "LY PROVIDE",
+            "DEPARTEMENT" => "031",
+            "SOURCE_CODE" => "0311209W"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE LA SALLE PASSY BUZENVAL",
@@ -50562,14 +50618,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0783537W"
+            "DEPARTEMENT" => "050",
+            "SOURCE_CODE" => "0501941N"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "028",
-            "SOURCE_CODE" => "0280684S"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0783537W"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
@@ -50581,7 +50637,7 @@ return [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "028",
-            "SOURCE_CODE" => "0280691Z"
+            "SOURCE_CODE" => "0280684S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
@@ -50592,8 +50648,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0501941N"
+            "DEPARTEMENT" => "028",
+            "SOURCE_CODE" => "0280691Z"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME - SAINT JOSEPH",
@@ -50610,6 +50666,12 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME DE LA PROVIDENCE",
             "LOCALISATION" => "LY ND-PROV",
+            "DEPARTEMENT" => "050",
+            "SOURCE_CODE" => "0501787W"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME DE LA PROVIDENCE",
+            "LOCALISATION" => "LY ND-PROV",
             "DEPARTEMENT" => "088",
             "SOURCE_CODE" => "0880120C"
         ],
@@ -50618,12 +50680,6 @@ return [
             "LOCALISATION" => "LY ND-PROV",
             "DEPARTEMENT" => "057",
             "SOURCE_CODE" => "0572951Y"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME DE LA PROVIDENCE",
-            "LOCALISATION" => "LY ND-PROV",
-            "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0501787W"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME DE LA TILLOYE",
@@ -50658,14 +50714,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE-DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0761347B"
+            "DEPARTEMENT" => "048",
+            "SOURCE_CODE" => "0480041J"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE-DAME",
             "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "048",
-            "SOURCE_CODE" => "0480041J"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0761347B"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE-DAME -ST VINCENT DE PAUL",
@@ -50814,14 +50870,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ROBERT SCHUMAN",
             "LOCALISATION" => "LY SCHUMAN",
-            "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940820F"
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0931573E"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ROBERT SCHUMAN",
             "LOCALISATION" => "LY SCHUMAN",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0931573E"
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940820F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ROBIN ST VINCENT DE PAUL",
@@ -50862,14 +50918,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT ANDRE",
             "LOCALISATION" => "LY S-ANDRE",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0572101Z"
+            "DEPARTEMENT" => "007",
+            "SOURCE_CODE" => "0070112J"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT ANDRE",
             "LOCALISATION" => "LY S-ANDRE",
-            "DEPARTEMENT" => "007",
-            "SOURCE_CODE" => "0070112J"
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0572101Z"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT BENIGNE",
@@ -50916,6 +50972,12 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "025",
+            "SOURCE_CODE" => "0251592V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "062",
             "SOURCE_CODE" => "0622192W"
         ],
@@ -50928,8 +50990,20 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0251592V"
+            "DEPARTEMENT" => "038",
+            "SOURCE_CODE" => "0382600V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "083",
+            "SOURCE_CODE" => "0831187P"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "090",
+            "SOURCE_CODE" => "0900425Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
@@ -50942,24 +51016,6 @@ return [
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "018",
             "SOURCE_CODE" => "0180572Z"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "083",
-            "SOURCE_CODE" => "0831187P"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0382600V"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "090",
-            "SOURCE_CODE" => "0900425Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH - BOSSUET",
@@ -51042,14 +51098,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT",
             "LOCALISATION" => "LY S-VINCE",
-            "DEPARTEMENT" => "003",
-            "SOURCE_CODE" => "0030105Y"
+            "DEPARTEMENT" => "074",
+            "SOURCE_CODE" => "0740144E"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT",
             "LOCALISATION" => "LY S-VINCE",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740144E"
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0030105Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT DE PAUL",
@@ -51109,12 +51165,6 @@ return [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT-JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "012",
-            "SOURCE_CODE" => "0121260E"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT-JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "012",
             "SOURCE_CODE" => "0121309H"
         ],
         [
@@ -51122,6 +51172,12 @@ return [
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "031",
             "SOURCE_CODE" => "0312065B"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT-JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "012",
+            "SOURCE_CODE" => "0121260E"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT-OUEN",
@@ -51149,12 +51205,6 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE ANNE",
-            "LOCALISATION" => "LP PR",
-            "DEPARTEMENT" => "042",
-            "SOURCE_CODE" => "0420980M"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE ANNE",
             "LOCALISATION" => "LY S-ANNE",
             "DEPARTEMENT" => "055",
             "SOURCE_CODE" => "0550983V"
@@ -51164,6 +51214,12 @@ return [
             "LOCALISATION" => "LY S-ANNE",
             "DEPARTEMENT" => "042",
             "SOURCE_CODE" => "0421979Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE ANNE",
+            "LOCALISATION" => "LP PR",
+            "DEPARTEMENT" => "042",
+            "SOURCE_CODE" => "0420980M"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE ANNE LA SAVOISIENNE",
@@ -51216,14 +51272,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0622195Z"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0593063J"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "039",
-            "SOURCE_CODE" => "0390094R"
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0622195Z"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE MARIE",
@@ -51234,8 +51290,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0593063J"
+            "DEPARTEMENT" => "039",
+            "SOURCE_CODE" => "0390094R"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE MARIE LA GRAND'GRANGE",
@@ -51251,15 +51307,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE THERESE",
-            "LOCALISATION" => "LP PR",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740151M"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE THERESE",
             "LOCALISATION" => "LY FAVORIT",
             "DEPARTEMENT" => "067",
             "SOURCE_CODE" => "0671679L"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE THERESE",
+            "LOCALISATION" => "LP PR",
+            "DEPARTEMENT" => "074",
+            "SOURCE_CODE" => "0740151M"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINTE URSULE",
@@ -51348,14 +51404,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST FRANCOIS D ASSISE",
             "LOCALISATION" => "LY FR-ASSI",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0781855T"
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0920963X"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST FRANCOIS D ASSISE",
             "LOCALISATION" => "LY FR-ASSI",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920963X"
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0781855T"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST GEORGES",
@@ -51378,6 +51434,18 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "022",
+            "SOURCE_CODE" => "0221865H"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0332535B"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "040",
             "SOURCE_CODE" => "0400916D"
         ],
@@ -51389,21 +51457,9 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0332535B"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "022",
-            "SOURCE_CODE" => "0221865H"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
             "LOCALISATION" => "LP PR",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350788S"
+            "DEPARTEMENT" => "051",
+            "SOURCE_CODE" => "0511151Z"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
@@ -51414,8 +51470,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
             "LOCALISATION" => "LP PR",
-            "DEPARTEMENT" => "051",
-            "SOURCE_CODE" => "0511151Z"
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350788S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
@@ -51462,14 +51518,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST MICHEL",
             "LOCALISATION" => "LY S-MICHE",
-            "DEPARTEMENT" => "085",
-            "SOURCE_CODE" => "0851516L"
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0331548D"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST MICHEL",
             "LOCALISATION" => "LY S-MICHE",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0331548D"
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0851516L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST MICHEL (ANN. ST CH. CAMAS)",
@@ -51516,20 +51572,8 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST VINCENT DE PAUL",
             "LOCALISATION" => "LY SVDPAUL",
-            "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0783325R"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST VINCENT DE PAUL",
-            "LOCALISATION" => "LY SVDPAUL",
-            "DEPARTEMENT" => "024",
-            "SOURCE_CODE" => "0240089S"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST VINCENT DE PAUL",
-            "LOCALISATION" => "LY SVDPAUL",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0132835L"
+            "DEPARTEMENT" => "060",
+            "SOURCE_CODE" => "0601162M"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST VINCENT DE PAUL",
@@ -51540,8 +51584,20 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST VINCENT DE PAUL",
             "LOCALISATION" => "LY SVDPAUL",
-            "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0601162M"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0132835L"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST VINCENT DE PAUL",
+            "LOCALISATION" => "LY SVDPAUL",
+            "DEPARTEMENT" => "078",
+            "SOURCE_CODE" => "0783325R"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST VINCENT DE PAUL",
+            "LOCALISATION" => "LY SVDPAUL",
+            "DEPARTEMENT" => "024",
+            "SOURCE_CODE" => "0240089S"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST-JOSEPH",
@@ -51576,14 +51632,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE STE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "051",
-            "SOURCE_CODE" => "0511149X"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0131459R"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE STE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0131459R"
+            "DEPARTEMENT" => "051",
+            "SOURCE_CODE" => "0511149X"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE STE MARIE-GROUPE MAINE",
@@ -51732,12 +51788,6 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL RENE CASSIN",
             "LOCALISATION" => "LY CASSIN",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570124A"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL RENE CASSIN",
-            "LOCALISATION" => "LY CASSIN",
             "DEPARTEMENT" => "019",
             "SOURCE_CODE" => "0190034J"
         ],
@@ -51752,6 +51802,12 @@ return [
             "LOCALISATION" => "LP",
             "DEPARTEMENT" => "090",
             "SOURCE_CODE" => "0900294F"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL RENE CASSIN",
+            "LOCALISATION" => "LY CASSIN",
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0570124A"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL RENE CASSIN",
@@ -51804,14 +51860,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ROBERT SCHUMAN",
             "LOCALISATION" => "LY SCHUMAN",
-            "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760144U"
+            "DEPARTEMENT" => "084",
+            "SOURCE_CODE" => "0840042P"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ROBERT SCHUMAN",
             "LOCALISATION" => "LY SCHUMAN",
-            "DEPARTEMENT" => "084",
-            "SOURCE_CODE" => "0840042P"
+            "DEPARTEMENT" => "076",
+            "SOURCE_CODE" => "0760144U"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ROBERVAL",
@@ -51828,14 +51884,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ROMAIN ROLLAND",
             "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590078P"
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0570016H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ROMAIN ROLLAND",
             "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570016H"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590078P"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL ROMPSAY",
@@ -51906,14 +51962,14 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL SEVIGNE",
             "LOCALISATION" => "LY SEVIGNE",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590217R"
+            "DEPARTEMENT" => "005",
+            "SOURCE_CODE" => "0050009H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL SEVIGNE",
             "LOCALISATION" => "LY SEVIGNE",
-            "DEPARTEMENT" => "005",
-            "SOURCE_CODE" => "0050009H"
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590217R"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL SIMON LAZARD",
@@ -51947,15 +52003,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL SONIA DELAUNAY",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "063",
-            "SOURCE_CODE" => "0630070J"
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL SONIA DELAUNAY",
             "LOCALISATION" => "LY DELAYNA",
             "DEPARTEMENT" => "059",
             "SOURCE_CODE" => "0590111A"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL SONIA DELAUNAY",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "063",
+            "SOURCE_CODE" => "0630070J"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL SOPHIE GERMAIN",
@@ -52776,14 +52832,14 @@ return [
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE DON BOSCO",
             "LOCALISATION" => "LY BOSCO",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0133396W"
+            "DEPARTEMENT" => "069",
+            "SOURCE_CODE" => "0691659D"
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE DON BOSCO",
             "LOCALISATION" => "LY BOSCO",
-            "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0691659D"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0133396W"
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE EC SUP TECH BIOLOGIE APPLIQUEE",
@@ -53051,15 +53107,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT ANDRE",
-            "LOCALISATION" => "LT PR",
-            "DEPARTEMENT" => "007",
-            "SOURCE_CODE" => "0070099V"
-        ],
-        [
-            "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT ANDRE",
             "LOCALISATION" => "LY S-ANDRE",
             "DEPARTEMENT" => "057",
             "SOURCE_CODE" => "0573519R"
+        ],
+        [
+            "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT ANDRE",
+            "LOCALISATION" => "LT PR",
+            "DEPARTEMENT" => "007",
+            "SOURCE_CODE" => "0070099V"
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT DENIS",
@@ -53069,15 +53125,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0593077Z"
-        ],
-        [
-            "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LT PR",
             "DEPARTEMENT" => "074",
             "SOURCE_CODE" => "0741414K"
+        ],
+        [
+            "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0593077Z"
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE SAINT JOSEPH",
@@ -53196,14 +53252,14 @@ return [
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE STE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0490887Y"
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0133395V"
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE STE MARIE",
             "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0133395V"
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490887Y"
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE PRIVE URBAIN MONGAZON",
@@ -53219,15 +53275,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE SAINTE MARIE",
-            "LOCALISATION" => "FLERS",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0611158C"
-        ],
-        [
-            "LIBELLE" => "LYCEE TECHNOLOGIQUE SAINTE MARIE",
             "LOCALISATION" => "CAEN",
             "DEPARTEMENT" => "014",
             "SOURCE_CODE" => "0142083N"
+        ],
+        [
+            "LIBELLE" => "LYCEE TECHNOLOGIQUE SAINTE MARIE",
+            "LOCALISATION" => "FLERS",
+            "DEPARTEMENT" => "061",
+            "SOURCE_CODE" => "0611158C"
         ],
         [
             "LIBELLE" => "LYCEE TECHNOLOGIQUE ST FRANCOIS DE SALES",
@@ -53597,15 +53653,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEES AUTRES SAVOIE",
-            "LOCALISATION" => "SAVOIE",
-            "DEPARTEMENT" => "073",
-            "SOURCE_CODE" => "0730000X"
-        ],
-        [
-            "LIBELLE" => "LYCEES AUTRES SAVOIE",
             "LOCALISATION" => "HTE SAVOIE",
             "DEPARTEMENT" => "074",
             "SOURCE_CODE" => "0740000X"
+        ],
+        [
+            "LIBELLE" => "LYCEES AUTRES SAVOIE",
+            "LOCALISATION" => "SAVOIE",
+            "DEPARTEMENT" => "073",
+            "SOURCE_CODE" => "0730000X"
         ],
         [
             "LIBELLE" => "LYCEES AUTRES SEINE MARITIME",
@@ -53957,15 +54013,15 @@ return [
         ],
         [
             "LIBELLE" => "Lycée général et technologique privé Saint-Félix - La Salle",
-            "LOCALISATION" => "LGT PR",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0442774B"
-        ],
-        [
-            "LIBELLE" => "Lycée général et technologique privé Saint-Félix - La Salle",
             "LOCALISATION" => "St Felix",
             "DEPARTEMENT" => "044",
             "SOURCE_CODE" => "044277B"
+        ],
+        [
+            "LIBELLE" => "Lycée général et technologique privé Saint-Félix - La Salle",
+            "LOCALISATION" => "LGT PR",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0442774B"
         ],
         [
             "LIBELLE" => "Lycée médico-pédagogique Dupré Annexe du Lycée Lakanal",
@@ -54013,13 +54069,13 @@ return [
             "LIBELLE" => "Lycée polyvalent de Mamoudzou nord",
             "LOCALISATION" => "LPO",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "9760370Y"
+            "SOURCE_CODE" => "9760370"
         ],
         [
             "LIBELLE" => "Lycée polyvalent de Mamoudzou nord",
             "LOCALISATION" => "LPO",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "9760370"
+            "SOURCE_CODE" => "9760370Y"
         ],
         [
             "LIBELLE" => "Lycée polyvalent de Pouembout",
@@ -54440,6 +54496,12 @@ return [
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR1202"
+        ],
+        [
+            "LIBELLE" => "National University of ireland maynooth",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1384"
         ],
         [
             "LIBELLE" => "Naval Group /SIREHNA",
@@ -55216,6 +55278,12 @@ return [
             "SOURCE_CODE" => "0512045W"
         ],
         [
+            "LIBELLE" => "TELECOM SUDPARIS",
+            "LOCALISATION" => "entreprise",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "TELECOMP"
+        ],
+        [
             "LIBELLE" => "TENNESSEE TECHNOLOGICAL UNIVERSITY",
             "LOCALISATION" => "TENNESSEE",
             "DEPARTEMENT" => "099",
@@ -55232,6 +55300,12 @@ return [
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR1320"
+        ],
+        [
+            "LIBELLE" => "TOULOUSE BUSINESS SCHOOL (TBS)",
+            "LOCALISATION" => "TBS",
+            "DEPARTEMENT" => "031",
+            "SOURCE_CODE" => "0310156B"
         ],
         [
             "LIBELLE" => "Technicolor Cesson-Sévigné",
@@ -55954,12 +56028,6 @@ return [
             "SOURCE_CODE" => "0331686D"
         ],
         [
-            "LIBELLE" => "UFR ETUDES ANGL ND AMERICAINES UNIVERSITE PARIS 4",
-            "LOCALISATION" => "PARIS 4",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0751998P"
-        ],
-        [
             "LIBELLE" => "UFR ETUDES ANGLO-AMERICAINES UNIVERSITE PARIS 10",
             "LOCALISATION" => "NANTERRE",
             "DEPARTEMENT" => "092",
@@ -56042,6 +56110,12 @@ return [
             "LOCALISATION" => "PARIS 3",
             "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0753451U"
+        ],
+        [
+            "LIBELLE" => "UFR Etudes anglophones, Sorbonne université",
+            "LOCALISATION" => "PARIS 4",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0751998P"
         ],
         [
             "LIBELLE" => "UFR FAC SCIENCES TECHNIQUES UNIVERSITE AIX MARSEILLE 3",
@@ -58810,6 +58884,12 @@ return [
             "SOURCE_CODE" => "ETR1105"
         ],
         [
+            "LIBELLE" => "Universita degli Studi del Molise",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1380"
+        ],
+        [
             "LIBELLE" => "Universita di Pisa",
             "LOCALISATION" => "Universita",
             "DEPARTEMENT" => "099",
@@ -59572,16 +59652,16 @@ return [
             "SOURCE_CODE" => "ETR0075"
         ],
         [
+            "LIBELLE" => "Université Degli Studi de Naples l'Orientale",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1381"
+        ],
+        [
             "LIBELLE" => "Université Der Bundeswehr-Hamburg-Allem",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR"
-        ],
-        [
-            "LIBELLE" => "Université Dijon Bourgogne",
-            "LOCALISATION" => "DIJON",
-            "DEPARTEMENT" => "021",
-            "SOURCE_CODE" => "0211237F"
         ],
         [
             "LIBELLE" => "Université Dimkritio Panepistimio Grèce",
@@ -60109,13 +60189,13 @@ return [
             "LIBELLE" => "Université Libre de Bruxelles - Belgique",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0373"
+            "SOURCE_CODE" => "ETR0025"
         ],
         [
             "LIBELLE" => "Université Libre de Bruxelles - Belgique",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0025"
+            "SOURCE_CODE" => "ETR0373"
         ],
         [
             "LIBELLE" => "Université Lietuvos Teises Lituanie",
@@ -60367,13 +60447,13 @@ return [
             "LIBELLE" => "Université Moulay Ismail",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "TER1004"
+            "SOURCE_CODE" => "ETR1004"
         ],
         [
             "LIBELLE" => "Université Moulay Ismail",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR1004"
+            "SOURCE_CODE" => "TER1004"
         ],
         [
             "LIBELLE" => "Université Mouloud Mammeri - Algérie",
@@ -61123,13 +61203,13 @@ return [
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0168"
+            "SOURCE_CODE" => "ETR168"
         ],
         [
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR168"
+            "SOURCE_CODE" => "ETR0168"
         ],
         [
             "LIBELLE" => "Université Tampereen  Yliopisto Finlande",
@@ -61591,13 +61671,13 @@ return [
             "LIBELLE" => "Université d'Aveiro - Portugal",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR549"
+            "SOURCE_CODE" => "ETR511"
         ],
         [
             "LIBELLE" => "Université d'Aveiro - Portugal",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR511"
+            "SOURCE_CODE" => "ETR549"
         ],
         [
             "LIBELLE" => "Université d'Essen - Allemagne",
@@ -61882,6 +61962,12 @@ return [
             "SOURCE_CODE" => "0333298F"
         ],
         [
+            "LIBELLE" => "Université de Bourgogne",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "021",
+            "SOURCE_CODE" => "0211237F"
+        ],
+        [
             "LIBELLE" => "Université de Bremen - Allemagne",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
@@ -61937,15 +62023,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Calabre - Italie",
-            "LOCALISATION" => "CALABRIA",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0176"
-        ],
-        [
-            "LIBELLE" => "Université de Calabre - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0030"
+        ],
+        [
+            "LIBELLE" => "Université de Calabre - Italie",
+            "LOCALISATION" => "CALABRIA",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0176"
         ],
         [
             "LIBELLE" => "Université de Calabre Italie",
@@ -62027,15 +62113,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Cologne - Allemagne",
-            "LOCALISATION" => "UNIVERSITE",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0036"
-        ],
-        [
-            "LIBELLE" => "Université de Cologne - Allemagne",
             "LOCALISATION" => "KOLN",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR166"
+        ],
+        [
+            "LIBELLE" => "Université de Cologne - Allemagne",
+            "LOCALISATION" => "UNIVERSITE",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0036"
         ],
         [
             "LIBELLE" => "Université de Cologne -Allemagne",
@@ -62215,13 +62301,13 @@ return [
             "LIBELLE" => "Université de Geneve - Suisse",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0356"
+            "SOURCE_CODE" => "ETR0057"
         ],
         [
             "LIBELLE" => "Université de Geneve - Suisse",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0057"
+            "SOURCE_CODE" => "ETR0356"
         ],
         [
             "LIBELLE" => "Université de Genova - Italie",
@@ -62239,13 +62325,13 @@ return [
             "LIBELLE" => "Université de Glasgow - Royaume Uni",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0058"
+            "SOURCE_CODE" => "ETR350"
         ],
         [
             "LIBELLE" => "Université de Glasgow - Royaume Uni",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR350"
+            "SOURCE_CODE" => "ETR0058"
         ],
         [
             "LIBELLE" => "Université de Goteborg - Suede",
@@ -62597,15 +62683,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Moscou - Russie",
-            "LOCALISATION" => "Russie",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ET352"
-        ],
-        [
-            "LIBELLE" => "Université de Moscou - Russie",
             "LOCALISATION" => "MOSCOU",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0097"
+        ],
+        [
+            "LIBELLE" => "Université de Moscou - Russie",
+            "LOCALISATION" => "Russie",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ET352"
         ],
         [
             "LIBELLE" => "Université de Munich - Allemagne",
@@ -62705,15 +62791,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Ouagadougou",
-            "LOCALISATION" => "Université",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR601"
-        ],
-        [
-            "LIBELLE" => "Université de Ouagadougou",
             "LOCALISATION" => "université",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR205"
+        ],
+        [
+            "LIBELLE" => "Université de Ouagadougou",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR601"
         ],
         [
             "LIBELLE" => "Université de Oviedo - Espagne",
@@ -62983,12 +63069,6 @@ return [
             "LIBELLE" => "Université de Sienne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR00407"
-        ],
-        [
-            "LIBELLE" => "Université de Sienne - Italie",
-            "LOCALISATION" => "UNIVERSITE",
-            "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0359"
         ],
         [
@@ -62996,6 +63076,12 @@ return [
             "LOCALISATION" => "SIENE",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0131"
+        ],
+        [
+            "LIBELLE" => "Université de Sienne - Italie",
+            "LOCALISATION" => "UNIVERSITE",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR00407"
         ],
         [
             "LIBELLE" => "Université de Sofia - Bulgarie",
@@ -63149,15 +63235,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Turin - Italie",
-            "LOCALISATION" => "UNIVERSITE",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0418"
-        ],
-        [
-            "LIBELLE" => "Université de Turin - Italie",
             "LOCALISATION" => "TURIN",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0141"
+        ],
+        [
+            "LIBELLE" => "Université de Turin - Italie",
+            "LOCALISATION" => "UNIVERSITE",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0418"
         ],
         [
             "LIBELLE" => "Université de Turku - Finlande",
@@ -63221,15 +63307,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Vorarlberg - Autriche",
-            "LOCALISATION" => "VORARLBERG",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0227"
-        ],
-        [
-            "LIBELLE" => "Université de Vorarlberg - Autriche",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0008"
+        ],
+        [
+            "LIBELLE" => "Université de Vorarlberg - Autriche",
+            "LOCALISATION" => "VORARLBERG",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0227"
         ],
         [
             "LIBELLE" => "Université de Wales Cardiff - Uk",
@@ -63254,6 +63340,12 @@ return [
             "LOCALISATION" => "WASHINGTON",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR344"
+        ],
+        [
+            "LIBELLE" => "Université de Winchester",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1374"
         ],
         [
             "LIBELLE" => "Université de Wisconsin - USA",
@@ -63820,6 +63912,12 @@ return [
             "SOURCE_CODE" => "ETR1315"
         ],
         [
+            "LIBELLE" => "université de Antwerp",
+            "LOCALISATION" => "université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1378"
+        ],
+        [
             "LIBELLE" => "université de Cordoba",
             "LOCALISATION" => "université",
             "DEPARTEMENT" => "099",
@@ -63842,6 +63940,12 @@ return [
             "LOCALISATION" => "université",
             "DEPARTEMENT" => "075",
             "SOURCE_CODE" => "0751720M"
+        ],
+        [
+            "LIBELLE" => "École Nationale Supérieure d'Arts et Métiers",
+            "LOCALISATION" => "Ecole",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1382"
         ],
         [
             "LIBELLE" => "École nationale d'ingénieurs de Monastir",
@@ -69445,6 +69549,10 @@ return [
         ],
         [
             "ROLE_ID" => "superviseur-etablissement",
+            "PRIVILEGE_ID" => "discipline-gestion"
+        ],
+        [
+            "ROLE_ID" => "superviseur-etablissement",
             "PRIVILEGE_ID" => "discipline-visualisation"
         ],
         [
@@ -69635,15 +69743,6 @@ return [
             "LIBELLE_COURT" => "Direction d'une Unité de Recherche",
             "PLAFOND" => 60.0,
             "DOMAINE_FONCTIONNEL_ID" => "D1153",
-            "ETAPE_REQUISE" => FALSE,
-            "SERVICE_STATUTAIRE" => TRUE
-        ],
-        [
-            "CODE" => "DIRRECH_ENSI",
-            "LIBELLE_LONG" => "Direction Recherche ENSI Caen",
-            "LIBELLE_COURT" => "Direction Recherche ENSI Caen",
-            "PLAFOND" => 96.0,
-            "DOMAINE_FONCTIONNEL_ID" => "D1132",
             "ETAPE_REQUISE" => FALSE,
             "SERVICE_STATUTAIRE" => TRUE
         ],

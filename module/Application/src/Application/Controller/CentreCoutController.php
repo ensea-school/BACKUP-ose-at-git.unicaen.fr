@@ -18,6 +18,7 @@ class CentreCoutController extends AbstractController
     use CentreCoutStructureSaisieFormAwareTrait;
 
 
+
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -27,10 +28,10 @@ class CentreCoutController extends AbstractController
             CentreCoutStructure::class,
         ]);
 
-        $centreCouts = $this->getServiceCentreCout()->getList();
+        $centreCouts          = $this->getServiceCentreCout()->getList();
         $centreCoutStructures = $this->getServiceCentreCoutStructure()->getList();
 
-        return compact('centreCouts','centreCoutStructures');
+        return compact('centreCouts', 'centreCoutStructures');
     }
 
 
@@ -39,11 +40,11 @@ class CentreCoutController extends AbstractController
     {
         /* @var $centreCout CentreCout */
 
-        $centreCout = $this->getEvent()->getParam('centre-cout');
+        $centreCout = $this->getEvent()->getParam('centreCout');
 
         $form = $this->getFormCentreCoutSaisie();
         if (empty($centreCout)) {
-            $title = 'Création d\'un nouveau Centre de Coûts';
+            $title      = 'Création d\'un nouveau Centre de Coûts';
             $centreCout = $this->getServiceCentreCout()->newEntity();
         } else {
             $title = 'Édition d\'un Centre de Coûts';
@@ -61,9 +62,11 @@ class CentreCoutController extends AbstractController
         return compact('form', 'title');
     }
 
+
+
     public function deleteAction()
     {
-        $centreCout = $this->getEvent()->getParam('centre-cout');
+        $centreCout = $this->getEvent()->getParam('centreCout');
 
         try {
             $this->getServiceCentreCout()->delete($centreCout);
@@ -71,20 +74,23 @@ class CentreCoutController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
+
         return new MessengerViewModel(compact('centreCout'));
     }
+
+
 
     public function saisieStructureAction()
     {
         /* @var $centreCout CentreCout */
         /* @var $centreCoutStructure CentreCoutStructure */
 
-        $centreCout = $this->getEvent()->getParam('centre-cout');
-        $centreCoutStructure = $this->getEvent()->getParam('centre-cout-structure');
+        $centreCout          = $this->getEvent()->getParam('centreCout');
+        $centreCoutStructure = $this->getEvent()->getParam('centreCoutStructure');
 
         $form = $this->getFormCentreCoutStructureSaisie();
         if (empty($centreCoutStructure)) {
-            $title = 'Création d\'une structure pour le Centre de Coûts';
+            $title               = 'Création d\'une structure pour le Centre de Coûts';
             $centreCoutStructure = $this->getServiceCentreCoutStructure()->newEntity()
                 ->setCentreCout($centreCout);
         } else {
@@ -103,9 +109,11 @@ class CentreCoutController extends AbstractController
         return compact('form', 'title');
     }
 
+
+
     public function deleteStructureAction()
     {
-        $centreCoutStructure = $this->getEvent()->getParam('centre-cout-structure');
+        $centreCoutStructure = $this->getEvent()->getParam('centreCoutStructure');
 
         try {
             $this->getServiceCentreCoutStructure()->delete($centreCoutStructure);
@@ -113,6 +121,7 @@ class CentreCoutController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
+
         return new MessengerViewModel(compact('centreCoutStructure'));
     }
 }

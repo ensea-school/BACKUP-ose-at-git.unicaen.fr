@@ -14,6 +14,8 @@ class DomaineFonctionnelController extends AbstractController
     use DomaineFonctionnelSaisieFormAwareTrait;
     use SourceServiceAwareTrait;
 
+
+
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -31,14 +33,13 @@ class DomaineFonctionnelController extends AbstractController
     {
         /* @var $domaineFonctionnel DomaineFonctionnel */
 
-        $domaineFonctionnel = $this->getEvent()->getParam('domaine-fonctionnel');
+        $domaineFonctionnel = $this->getEvent()->getParam('domaineFonctionnel');
 
         $form = $this->getFormDomaineFonctionnelSaisie();
         if (empty($domaineFonctionnel)) {
-            $title = 'Création d\'un nouveau domaine fonctionnel';
+            $title              = 'Création d\'un nouveau domaine fonctionnel';
             $domaineFonctionnel = $this->getServiceDomaineFonctionnel()->newEntity()
-            ->setSource($this->getServiceSource()->getOse());
-
+                ->setSource($this->getServiceSource()->getOse());
         } else {
             $title = 'Édition d\'un domaine fonctionnel';
         }
@@ -56,9 +57,11 @@ class DomaineFonctionnelController extends AbstractController
         return compact('form', 'title');
     }
 
+
+
     public function deleteAction()
     {
-        $domaineFonctionnel = $this->getEvent()->getParam('domaine-fonctionnel');
+        $domaineFonctionnel = $this->getEvent()->getParam('domaineFonctionnel');
 
         try {
             $this->getServiceDomaineFonctionnel()->delete($domaineFonctionnel);
@@ -66,6 +69,7 @@ class DomaineFonctionnelController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }
+
         return new MessengerViewModel(compact('domaineFonctionnel'));
     }
 }

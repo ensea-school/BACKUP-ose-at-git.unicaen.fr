@@ -112,20 +112,23 @@ class PieceJointeController extends AbstractController
      */
     protected function makeMessages($demandees, $fournies)
     {
-        $role          = $this->getServiceContext()->getSelectedIdentityRole();
-        $isIntervenant = (boolean)$role->getIntervenant();
-        $nbDemandees   = 0;
-        $nbFournies    = 0;
-        $nbValidees    = 0;
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
+        $isIntervenant            = (boolean)$role->getIntervenant();
+        $nbDemandees              = 0;
+        $nbFournies               = 0;
+        $nbValidees               = 0;
+        $nbObligatoiresNonFournis = 0;
 
         foreach ($demandees as $demandee) {
-            $nbDemandees++;
-            if (isset($fournies[$demandee->getId()])) {
-                $pj = $fournies[$demandee->getId()];
-                if (!$pj->getFichier()->isEmpty()) {
-                    $nbFournies++;
-                    if ($pj->getValidation()) {
-                        $nbValidees++;
+            if ($demandee->isObligatoire()) {
+                $nbDemandees++;
+                if (isset($fournies[$demandee->getTypePieceJointe()->getId()])) {
+                    $pj = $fournies[$demandee->getTypePieceJointe()->getId()];
+                    if (!$pj->getFichier()->isEmpty()) {
+                        $nbFournies++;
+                        if ($pj->getValidation()) {
+                            $nbValidees++;
+                        }
                     }
                 }
             }
@@ -304,9 +307,9 @@ class PieceJointeController extends AbstractController
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
             $tpjID = $tpjs->getTypePieceJointe()->getId();
-            $siId = $tpjs->getStatutIntervenant()->getId();
+            $siId  = $tpjs->getStatutIntervenant()->getId();
 
-            if (!isset($typesPiecesJointesStatuts[$tpjID][$siId])){
+            if (!isset($typesPiecesJointesStatuts[$tpjID][$siId])) {
                 $typesPiecesJointesStatuts[$tpjID][$siId] = [];
             }
             $typesPiecesJointesStatuts[$tpjID][$siId][] = $tpjs;
@@ -340,13 +343,13 @@ class PieceJointeController extends AbstractController
 
         $form = $this->getFormTypePieceJointeSaisie();
         if (empty($typePieceJointe)) {
-            $title = 'Création d\'un nouveau type de pièce jointe';
+            $title           = 'Création d\'un nouveau type de pièce jointe';
             $typePieceJointe = $this->getServiceTypePieceJointe()->newEntity();
             $typePieceJointe->setOrdre(9999);
         } else {
             $title = 'Édition du type de pièce jointe';
         }
-        $form->bindRequestSave($typePieceJointe, $this->getRequest(),$this->getServiceTypePieceJointe() );
+        $form->bindRequestSave($typePieceJointe, $this->getRequest(), $this->getServiceTypePieceJointe());
 
         return compact('form', 'title');
     }
@@ -368,7 +371,7 @@ class PieceJointeController extends AbstractController
             $tpjs->setStatutIntervenant($statutIntervenant);
             $tpjs->setObligatoire(true);
         } else {
-            $title = 'Édition du paramètre de gestion de pièce justificative';
+            $title             = 'Édition du paramètre de gestion de pièce justificative';
             $typePieceJointe   = $tpjs->getTypePieceJointe();
             $statutIntervenant = $tpjs->getStatutIntervenant();
         }

@@ -29,11 +29,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DOMAINES_FONCT
             <?php if (($canEdit) && ($fr->getSource() == 'OSE')) { ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal" data-event="domaine-fonctionnel-saisie"
-                       href="<?= $this->url('domaine-fonctionnel/saisie', ['domaine-fonctionnel' => $fr->getId()]) ?>"
+                       href="<?= $this->url('domaine-fonctionnel/saisie', ['domaineFonctionnel' => $fr->getId()]) ?>"
                        title="Modifier la DomaineFonctionnel">
                         <span class="glyphicon glyphicon-edit"></span></a>
                     <a class="pop-ajax"
-                       href="<?= $this->url('domaine-fonctionnel/delete', ['domaine-fonctionnel' => $fr->getId()]) ?>"
+                       href="<?= $this->url('domaine-fonctionnel/delete', ['domaineFonctionnel' => $fr->getId()]) ?>"
                        title="Supprimer la DomaineFonctionnel"
                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                        data-confirm="true"

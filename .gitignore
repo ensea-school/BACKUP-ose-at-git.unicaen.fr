@@ -6,4 +6,6 @@ cache/*
 deploy.log
 VERSION
 public/vendor/unicaen/*
+public/unicaen/*
+public/.gitignore
 composer.phar

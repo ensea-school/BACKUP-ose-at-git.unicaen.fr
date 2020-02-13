@@ -36,7 +36,10 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
             echo '<div class="well">';
             echo '<h2>Pièces demandées</h2>';
             $obligatoire = true;
-            foreach ($demandees as $tpj) { // on liste les pièces demandées
+            foreach ($demandees as $pj) { // on liste les pièces demandées
+                //Check si piece obligatoire
+                $obligatoire = $pj->isObligatoire();
+                $tpj = $pj->getTypePieceJointe();
                 if (isset($fournies[$tpj->getId()])) { // qu'elles soient fournies ou non
                     $pj = $fournies[$tpj->getId()];
                     unset($restantes[$tpj->getId()]);

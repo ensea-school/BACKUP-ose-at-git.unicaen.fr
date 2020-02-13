@@ -1,15 +1,28 @@
-# OSE 12 alpha
+# OSE 12.1
+
+## Correction de bugs
+
+* L'interface d'administration des centres de coûts est de nouveau opérationnelle
+* L'interface d'administration des domaines fonctionnels est de nouveau opérationnelle
+
+
+# OSE 12
 
 ## Nouveautés
 
 * Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
-* Amélioration des performances (x20 environ) pour le calcul en masse des workflows 
+* Amélioration des performances (x20 environ) pour le calcul en masse des workflows
+* Correction d'un bug portant sur le calcul des feuilles de routes qui ne prenait pas en compte certaines règles dans certains cas
 * Modifications sur l'infrastructure des formules de calcul : 
   * le code de la structure est fourni en natif et n'est plus un paramètre supplémentaire.
   * les formules des établissements concernés ont été modifiées pour tenir compte de cette nouveauté.
   * les heures de décharge ne sont plus gérées en tant que telles, mais impactent le paramètre "Dépassement de service dû sans HC"
   * il est maintenant possible de personnaliser les structures gérées dans l'interface de test.
-* Possibilité de saisir le taux de charges patronales directement dans l'IHM d'administration des statuts des intervenants
+* Possibilité de saisir le taux de charges patronales directement dans l'IHM d'administration des statuts des intervenants.
+* Lorsqu'on utilise la commande ./bin/ose creer-utilisateur et que l'on demande à créer un intervenant, la feuille de route s'initialisera dans la foulée.
+* Possibilité de définir des paramètres (version, etc.) avant les mises à jour de l'application afin de pouvoir automatiser à 100% les processus d'installation et de mise à jour.
+* Possibilité de mettre à jour OSE vers une branche et plus uniquement vers un TAG de version (utile pour les développeurs ou en test)
+* Les pièces justificatives configurées comme facultatives ne sont maintenant plus considérées comme obligatoires
 
 ## Correction de bugs
 
@@ -21,6 +34,10 @@
 
 Le paramètre "global" => "inEtablissement" devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir
 si l'application est utilisée depuis l'établissement ou non. Le fichier config.local.php.default comporte un exemple d'usage de ce paramètre, pour vous aider à l'exploiter.
+
+Si vous mettez à jour à partir d'une version antérieure à la 11, il vous faut également prendre en compte les notes de mise à jour des versions intermédiaires.
+
+ATTENTION également : Si vous migrez d'une édition zf2 vers cette nouvelle version (<9 ou *-zf2, il vous faudra également supprimer manuellement le répertoire /vendor de OSE AVANT de démarrer la mise à jour, sans quoi Composer, le gestionnaire de dépendances de PHP, ne parviendra pas à tout actualiser.
 
 # OSE 11.2
 

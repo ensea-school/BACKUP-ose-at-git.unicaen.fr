@@ -5,9 +5,12 @@ namespace Application\Controller\OffreFormation;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Filter\FloatFromString;
+use Application\Form\OffreFormation\Traits\ElementModulateurCentreCoutFormAwareTrait;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
 use Application\Form\OffreFormation\Traits\VolumeHoraireEnsFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
+use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
@@ -24,6 +27,9 @@ class ElementPedagogiqueController extends AbstractController
     use ElementPedagogiqueSaisieAwareTrait;
     use VolumeHoraireEnsFormAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
+    use ElementModulateurCentreCoutFormAwareTrait;
+    use ElementModulateurServiceAwareTrait;
+    use CentreCoutEpServiceAwareTrait;
 
 
 
@@ -140,13 +146,13 @@ class ElementPedagogiqueController extends AbstractController
         $result = [];
         foreach ($found as $item) {
             if (null === $term) {
-                if (0 === strpos($item['LIBELLE'], $item['CODE'])){
+                if (0 === strpos($item['LIBELLE'], $item['CODE'])) {
                     $label = $item['LIBELLE'];
-                }else{
-                    $label = $item['CODE'].' '.$item['LIBELLE'];
+                } else {
+                    $label = $item['CODE'] . ' ' . $item['LIBELLE'];
                 }
                 $result[] = [
-                    'id' => $item['ID'],
+                    'id'    => $item['ID'],
                     'label' => $label,
                     'extra' => $item['LIBELLE_PE'] ?: '',
                 ];
@@ -254,5 +260,47 @@ class ElementPedagogiqueController extends AbstractController
         $form->build($vhes);
 
         return compact('title', 'vhes', 'form');
+    }
+
+
+
+    public function modulateursCentresCoutsAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\ElementModulateur::class,
+            \Application\Entity\Db\CentreCout::class,
+            \Application\Entity\Db\CentreCoutEp::class,
+        ]);
+
+        $element = $this->getEvent()->getParam('elementPedagogique');
+        $form    = $this->getElementModulateurCentreCoutForm();
+        //Traitement retour formulaire
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $datasPost = $request->getPost();
+            //Modulateur
+            foreach($datasPost as $name => $value)
+            {
+                if(strstr($name, 'modulateur'))
+                {
+                    $element = $this->getServiceElementModulateur()->addElementModulateur($element, $datasPost[$name]);
+                }
+            }
+            //Centres de coûts
+            $centreCouts = [
+                'fi' => $datasPost['fi'],
+                'fa' => $datasPost['fa'],
+                'fc' => $datasPost['fc'],
+            ];
+            $element     = $this->getServiceCentreCoutEp()->addElementCentreCout($element, $centreCouts);
+        }
+
+        $form->setElementPedagogique($element);
+        $form->setAttribute('action', $this->url()->fromRoute('of/element/modulateurs-centres-couts', ['elementPedagogique' => $element->getId()]));
+        $form->build();
+
+        return [
+            'form' => $form,
+        ];
     }
 }

@@ -144,6 +144,31 @@ return [
                                     ],
                                 ],
                             ],
+
+                            'modulateurs-centres-couts' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/modulateurs-centres-couts/:elementPedagogique',
+                                    'constraints' => [
+                                        'elementPedagogique' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'modulateurs-centres-couts',
+                                    ],
+                                ],
+                            ],
+                            'modifier-modulateurs'      => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/modulateurs/modifier/:elementPedagogique',
+                                    'constraints' => [
+                                        'elementPedagogique' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'modifier-modulateur',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'etape'   => [
@@ -344,6 +369,15 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
+                    'action'     => ['modulateurs-centres-couts'],
+                    'privileges' => [
+                        Privileges::ODF_CENTRES_COUT_EDITION,
+                        Privileges::ODF_MODULATEURS_EDITION,
+                    ],
+
+                ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => ['saisir', 'supprimer'],
                     'privileges' => Privileges::ODF_ELEMENT_EDITION,
                 ],
@@ -451,6 +485,7 @@ return [
             Form\OffreFormation\EtapeSaisie::class                               => Form\OffreFormation\EtapeSaisie::class,
             Form\OffreFormation\ElementPedagogiqueSaisie::class                  => Form\OffreFormation\ElementPedagogiqueSaisie::class,
             Form\OffreFormation\EtapeModulateursSaisie::class                    => Form\OffreFormation\EtapeModulateursSaisie::class,
+            Form\OffreFormation\ElementModulateurCCSaisie::class                 => Form\OffreFormation\ElementModulateurCCSaisie::class,
             Form\OffreFormation\ElementModulateursFieldset::class                => Form\OffreFormation\ElementModulateursFieldset::class,
             Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class       => Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class,
             Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,

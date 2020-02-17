@@ -35,7 +35,17 @@ class TblAgrementService extends AbstractEntityService
     public function getAlias()
     {
         return 'tbla';
+
     }
+
+    public function getAgrement($typeAgrement, $intervenant)
+    {
+        return [];
+    }
+
+
+
+
 
 
 

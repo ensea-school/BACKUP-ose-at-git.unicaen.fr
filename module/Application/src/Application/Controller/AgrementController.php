@@ -96,8 +96,9 @@ class AgrementController extends AbstractController
         }
 
         $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
-        $this->getServiceTblAgrement()->finderByIntervenant($intervenant, $qb);
-
+        $this->getServiceTblAgrement()->finderByCodeIntervenant($intervenant->getCode(), $qb);
+        $annee = $this->getServiceContext()->getAnnee();
+        $this->getServiceTblAgrement()->finderByAnnee($annee, $qb);
         $this->getServiceTblAgrement()->leftJoin(AgrementService::class, $qb, 'agrement', true);
 
         $tas = $this->getServiceTblAgrement()->getList($qb);
@@ -152,6 +153,7 @@ class AgrementController extends AbstractController
             $agrement->setType($this->getEvent()->getParam('typeAgrement'));
             $agrement->setIntervenant($this->getEvent()->getParam('intervenant'));
             $agrement->setStructure($this->getEvent()->getParam('structure'));
+            $agrement->setCodeIntervenant($this->getEvent()->getParam('intervenant')->getCode());
         }
 
         $form = $this->getFormAgrementSaisie();

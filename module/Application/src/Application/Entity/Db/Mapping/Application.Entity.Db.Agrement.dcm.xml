@@ -8,6 +8,7 @@
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="dateDecision" type="datetime" column="DATE_DECISION" nullable="false"/>
+    <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="true" />
     <many-to-one field="type" target-entity="Application\Entity\Db\TypeAgrement">
       <join-columns>
         <join-column name="TYPE_AGREMENT_ID" referenced-column-name="ID"/>

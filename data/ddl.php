@@ -1403,6 +1403,17 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'CODE_INTERVENANT' => 
+        array (
+          'name' => 'CODE_INTERVENANT',
+          'type' => 'VARCHAR2',
+          'length' => 255,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'ANNEE' => 
@@ -6824,6 +6835,50 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
+        ),
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE',
+      'temporary' => false,
+      'logging' => true,
+      'commentaire' => 'sequence=FTEST_STRUCTURE_ID_SEQ;',
+      'sequence' => 'FTEST_STRUCTURE_ID_SEQ',
+      'columns' => 
+      array (
+        'ID' => 
+        array (
+          'name' => 'ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'LIBELLE' => 
+        array (
+          'name' => 'LIBELLE',
+          'type' => 'VARCHAR2',
+          'length' => 80,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'UNIVERSITE' => 
+        array (
+          'name' => 'UNIVERSITE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
           'commentaire' => NULL,
         ),
       ),
@@ -13371,6 +13426,28 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
+        'DUREE_VIE' => 
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => '1',
+          'commentaire' => NULL,
+        ),
+        'CODE_INTERVENANT' => 
+        array (
+          'name' => 'CODE_INTERVENANT',
+          'type' => 'VARCHAR2',
+          'length' => 255,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'TBL_CHARGENS' => 
@@ -15989,17 +16066,6 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' => 
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
         'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
@@ -16064,6 +16130,17 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => '1',
           'commentaire' => NULL,
         ),
       ),
@@ -17749,17 +17826,6 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' => 
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '0',
-          'commentaire' => NULL,
-        ),
         'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
@@ -17862,6 +17928,17 @@
         'FC' => 
         array (
           'name' => 'FC',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'PREMIER_RECRUTEMENT' => 
+        array (
+          'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
           'length' => 0,
           'scale' => '0',
@@ -19813,6 +19890,16 @@
       'name' => 'FORMULE_TEST_INTERVENANT_PK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'index' => 'FORMULE_TEST_INTERVENANT_PK',
+      'columns' => 
+      array (
+        0 => 'ID',
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE_PK' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE_PK',
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'index' => 'FORMULE_TEST_STRUCTURE_PK',
       'columns' => 
       array (
         0 => 'ID',
@@ -29602,16 +29689,18 @@ END UNICAEN_TBL;',
           i.annee_id              annee_id,
           tas.type_agrement_id    type_agrement_id,
           i.id                    intervenant_id,
+          i.code                  code_intervenant,
           null                    structure_id,
           tas.obligatoire         obligatoire,
-          a.id                    agrement_id
+          a.id                    agrement_id,
+          tas.duree_vie           duree_vie
         FROM
           type_agrement                  ta
           JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
                                             AND tas.histo_destruction IS NULL
 
           JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                            AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
+                                            --AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
                                             AND i.statut_id = tas.statut_intervenant_id
 
           LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
@@ -29626,16 +29715,18 @@ END UNICAEN_TBL;',
           i.annee_id              annee_id,
           tas.type_agrement_id    type_agrement_id,
           i.id                    intervenant_id,
+          i.code                  code_intervenant,
           i_s.structure_id        structure_id,
           tas.obligatoire         obligatoire,
-          a.id                    agrement_id
+          a.id                    agrement_id,
+          tas.duree_vie           duree_vie
         FROM
           type_agrement                   ta
           JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
                                             AND tas.histo_destruction IS NULL
 
           JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                            AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
+                                           -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
                                             AND i.statut_id = tas.statut_intervenant_id
 
           JOIN                           i_s ON i_s.intervenant_id = i.id
@@ -29650,37 +29741,43 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.TYPE_AGREMENT_ID = v.TYPE_AGREMENT_ID
+            COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
         AND t.INTERVENANT_ID   = v.INTERVENANT_ID
-        AND COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
+        AND t.TYPE_AGREMENT_ID = v.TYPE_AGREMENT_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID         = v.ANNEE_ID,
-      OBLIGATOIRE      = v.OBLIGATOIRE,
+      DUREE_VIE        = v.DUREE_VIE,
+      CODE_INTERVENANT = v.CODE_INTERVENANT,
       AGREMENT_ID      = v.AGREMENT_ID,
+      OBLIGATOIRE      = v.OBLIGATOIRE,
+      ANNEE_ID         = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      TYPE_AGREMENT_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      OBLIGATOIRE,
+      DUREE_VIE,
+      CODE_INTERVENANT,
       AGREMENT_ID,
+      OBLIGATOIRE,
+      STRUCTURE_ID,
+      INTERVENANT_ID,
+      TYPE_AGREMENT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_AGREMENT_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.TYPE_AGREMENT_ID,
-      v.INTERVENANT_ID,
-      v.STRUCTURE_ID,
-      v.OBLIGATOIRE,
+      v.DUREE_VIE,
+      v.CODE_INTERVENANT,
       v.AGREMENT_ID,
+      v.OBLIGATOIRE,
+      v.STRUCTURE_ID,
+      v.INTERVENANT_ID,
+      v.TYPE_AGREMENT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -29805,73 +29902,73 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.ANNEE_ID                 = v.ANNEE_ID
-        AND t.NOEUD_ID                 = v.NOEUD_ID
-        AND t.SCENARIO_ID              = v.SCENARIO_ID
-        AND t.TYPE_HEURES_ID           = v.TYPE_HEURES_ID
-        AND t.TYPE_INTERVENTION_ID     = v.TYPE_INTERVENTION_ID
-        AND t.ELEMENT_PEDAGOGIQUE_ID   = v.ELEMENT_PEDAGOGIQUE_ID
-        AND t.ETAPE_ID                 = v.ETAPE_ID
-        AND t.ETAPE_ENS_ID             = v.ETAPE_ENS_ID
+            t.GROUPE_TYPE_FORMATION_ID = v.GROUPE_TYPE_FORMATION_ID
         AND t.STRUCTURE_ID             = v.STRUCTURE_ID
-        AND t.GROUPE_TYPE_FORMATION_ID = v.GROUPE_TYPE_FORMATION_ID
+        AND t.ETAPE_ENS_ID             = v.ETAPE_ENS_ID
+        AND t.ETAPE_ID                 = v.ETAPE_ID
+        AND t.ELEMENT_PEDAGOGIQUE_ID   = v.ELEMENT_PEDAGOGIQUE_ID
+        AND t.TYPE_INTERVENTION_ID     = v.TYPE_INTERVENTION_ID
+        AND t.TYPE_HEURES_ID           = v.TYPE_HEURES_ID
+        AND t.SCENARIO_ID              = v.SCENARIO_ID
+        AND t.NOEUD_ID                 = v.NOEUD_ID
+        AND t.ANNEE_ID                 = v.ANNEE_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      OUVERTURE                = v.OUVERTURE,
-      DEDOUBLEMENT             = v.DEDOUBLEMENT,
-      ASSIDUITE                = v.ASSIDUITE,
-      EFFECTIF                 = v.EFFECTIF,
-      HEURES_ENS               = v.HEURES_ENS,
-      GROUPES                  = v.GROUPES,
-      HEURES                   = v.HEURES,
       HETD                     = v.HETD,
+      HEURES                   = v.HEURES,
+      GROUPES                  = v.GROUPES,
+      HEURES_ENS               = v.HEURES_ENS,
+      EFFECTIF                 = v.EFFECTIF,
+      ASSIDUITE                = v.ASSIDUITE,
+      DEDOUBLEMENT             = v.DEDOUBLEMENT,
+      OUVERTURE                = v.OUVERTURE,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      NOEUD_ID,
-      SCENARIO_ID,
-      TYPE_HEURES_ID,
-      TYPE_INTERVENTION_ID,
-      ELEMENT_PEDAGOGIQUE_ID,
-      ETAPE_ID,
-      ETAPE_ENS_ID,
-      STRUCTURE_ID,
-      GROUPE_TYPE_FORMATION_ID,
-      OUVERTURE,
-      DEDOUBLEMENT,
-      ASSIDUITE,
-      EFFECTIF,
-      HEURES_ENS,
-      GROUPES,
-      HEURES,
       HETD,
+      HEURES,
+      GROUPES,
+      HEURES_ENS,
+      EFFECTIF,
+      ASSIDUITE,
+      DEDOUBLEMENT,
+      OUVERTURE,
+      GROUPE_TYPE_FORMATION_ID,
+      STRUCTURE_ID,
+      ETAPE_ENS_ID,
+      ETAPE_ID,
+      ELEMENT_PEDAGOGIQUE_ID,
+      TYPE_INTERVENTION_ID,
+      TYPE_HEURES_ID,
+      SCENARIO_ID,
+      NOEUD_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_CHARGENS_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.NOEUD_ID,
-      v.SCENARIO_ID,
-      v.TYPE_HEURES_ID,
-      v.TYPE_INTERVENTION_ID,
-      v.ELEMENT_PEDAGOGIQUE_ID,
-      v.ETAPE_ID,
-      v.ETAPE_ENS_ID,
-      v.STRUCTURE_ID,
-      v.GROUPE_TYPE_FORMATION_ID,
-      v.OUVERTURE,
-      v.DEDOUBLEMENT,
-      v.ASSIDUITE,
-      v.EFFECTIF,
-      v.HEURES_ENS,
-      v.GROUPES,
-      v.HEURES,
       v.HETD,
+      v.HEURES,
+      v.GROUPES,
+      v.HEURES_ENS,
+      v.EFFECTIF,
+      v.ASSIDUITE,
+      v.DEDOUBLEMENT,
+      v.OUVERTURE,
+      v.GROUPE_TYPE_FORMATION_ID,
+      v.STRUCTURE_ID,
+      v.ETAPE_ENS_ID,
+      v.ETAPE_ID,
+      v.ELEMENT_PEDAGOGIQUE_ID,
+      v.TYPE_INTERVENTION_ID,
+      v.TYPE_HEURES_ID,
+      v.SCENARIO_ID,
+      v.NOEUD_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -29949,11 +30046,11 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.ANNEE_ID                 = v.ANNEE_ID
-        AND t.SCENARIO_ID              = v.SCENARIO_ID
-        AND t.STRUCTURE_ID             = v.STRUCTURE_ID
+            t.TYPE_INTERVENTION_ID     = v.TYPE_INTERVENTION_ID
         AND t.GROUPE_TYPE_FORMATION_ID = v.GROUPE_TYPE_FORMATION_ID
-        AND t.TYPE_INTERVENTION_ID     = v.TYPE_INTERVENTION_ID
+        AND t.STRUCTURE_ID             = v.STRUCTURE_ID
+        AND t.SCENARIO_ID              = v.SCENARIO_ID
+        AND t.ANNEE_ID                 = v.ANNEE_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
@@ -29963,23 +30060,23 @@ END UNICAEN_TBL;',
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      SCENARIO_ID,
-      STRUCTURE_ID,
-      GROUPE_TYPE_FORMATION_ID,
-      TYPE_INTERVENTION_ID,
       DEDOUBLEMENT,
+      TYPE_INTERVENTION_ID,
+      GROUPE_TYPE_FORMATION_ID,
+      STRUCTURE_ID,
+      SCENARIO_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_CHARGENS_SEUILS_DEF_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.SCENARIO_ID,
-      v.STRUCTURE_ID,
-      v.GROUPE_TYPE_FORMATION_ID,
-      v.TYPE_INTERVENTION_ID,
       v.DEDOUBLEMENT,
+      v.TYPE_INTERVENTION_ID,
+      v.GROUPE_TYPE_FORMATION_ID,
+      v.STRUCTURE_ID,
+      v.SCENARIO_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30045,27 +30142,27 @@ END UNICAEN_TBL;',
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID             = v.ANNEE_ID,
-      PEUT_CLOTURER_SAISIE = v.PEUT_CLOTURER_SAISIE,
       CLOTURE              = v.CLOTURE,
+      PEUT_CLOTURER_SAISIE = v.PEUT_CLOTURER_SAISIE,
+      ANNEE_ID             = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      PEUT_CLOTURER_SAISIE,
       CLOTURE,
+      PEUT_CLOTURER_SAISIE,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_CLOTURE_REALISE_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.PEUT_CLOTURER_SAISIE,
       v.CLOTURE,
+      v.PEUT_CLOTURER_SAISIE,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30181,40 +30278,40 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.INTERVENANT_ID = v.INTERVENANT_ID
-        AND COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
+            COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
+        AND t.INTERVENANT_ID = v.INTERVENANT_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID           = v.ANNEE_ID,
-      PEUT_AVOIR_CONTRAT = v.PEUT_AVOIR_CONTRAT,
-      NBVH               = v.NBVH,
-      EDITE              = v.EDITE,
       SIGNE              = v.SIGNE,
+      EDITE              = v.EDITE,
+      NBVH               = v.NBVH,
+      PEUT_AVOIR_CONTRAT = v.PEUT_AVOIR_CONTRAT,
+      ANNEE_ID           = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      PEUT_AVOIR_CONTRAT,
-      STRUCTURE_ID,
-      NBVH,
-      EDITE,
       SIGNE,
+      EDITE,
+      NBVH,
+      STRUCTURE_ID,
+      PEUT_AVOIR_CONTRAT,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_CONTRAT_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.PEUT_AVOIR_CONTRAT,
-      v.STRUCTURE_ID,
-      v.NBVH,
-      v.EDITE,
       v.SIGNE,
+      v.EDITE,
+      v.NBVH,
+      v.STRUCTURE_ID,
+      v.PEUT_AVOIR_CONTRAT,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30289,9 +30386,9 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.ANNEE_ID          = v.ANNEE_ID
+            t.STRUCTURE_ID      = v.STRUCTURE_ID
         AND t.TYPE_RESSOURCE_ID = v.TYPE_RESSOURCE_ID
-        AND t.STRUCTURE_ID      = v.STRUCTURE_ID
+        AND t.ANNEE_ID          = v.ANNEE_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
@@ -30301,19 +30398,19 @@ END UNICAEN_TBL;',
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      TYPE_RESSOURCE_ID,
-      STRUCTURE_ID,
       HEURES,
+      STRUCTURE_ID,
+      TYPE_RESSOURCE_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_DMEP_LIQUIDATION_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.TYPE_RESSOURCE_ID,
-      v.STRUCTURE_ID,
       v.HEURES,
+      v.STRUCTURE_ID,
+      v.TYPE_RESSOURCE_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30368,30 +30465,30 @@ END UNICAEN_TBL;',
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID            = v.ANNEE_ID,
-      PEUT_SAISIR_DOSSIER = v.PEUT_SAISIR_DOSSIER,
-      DOSSIER_ID          = v.DOSSIER_ID,
       VALIDATION_ID       = v.VALIDATION_ID,
+      DOSSIER_ID          = v.DOSSIER_ID,
+      PEUT_SAISIR_DOSSIER = v.PEUT_SAISIR_DOSSIER,
+      ANNEE_ID            = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      PEUT_SAISIR_DOSSIER,
-      DOSSIER_ID,
       VALIDATION_ID,
+      DOSSIER_ID,
+      PEUT_SAISIR_DOSSIER,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_DOSSIER_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.PEUT_SAISIR_DOSSIER,
-      v.DOSSIER_ID,
       v.VALIDATION_ID,
+      v.DOSSIER_ID,
+      v.PEUT_SAISIR_DOSSIER,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30480,58 +30577,58 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.INTERVENANT_ID             = v.INTERVENANT_ID
-        AND COALESCE(t.MISE_EN_PAIEMENT_ID,0) = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
+            COALESCE(t.FORMULE_RES_SERVICE_REF_ID,0) = COALESCE(v.FORMULE_RES_SERVICE_REF_ID,0)
         AND COALESCE(t.FORMULE_RES_SERVICE_ID,0) = COALESCE(v.FORMULE_RES_SERVICE_ID,0)
-        AND COALESCE(t.FORMULE_RES_SERVICE_REF_ID,0) = COALESCE(v.FORMULE_RES_SERVICE_REF_ID,0)
+        AND COALESCE(t.MISE_EN_PAIEMENT_ID,0) = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
+        AND t.INTERVENANT_ID             = v.INTERVENANT_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID                   = v.ANNEE_ID,
-      STRUCTURE_ID               = v.STRUCTURE_ID,
-      PERIODE_PAIEMENT_ID        = v.PERIODE_PAIEMENT_ID,
-      HEURES_A_PAYER             = v.HEURES_A_PAYER,
-      HEURES_A_PAYER_POND        = v.HEURES_A_PAYER_POND,
-      HEURES_DEMANDEES           = v.HEURES_DEMANDEES,
-      HEURES_PAYEES              = v.HEURES_PAYEES,
-      SERVICE_ID                 = v.SERVICE_ID,
       SERVICE_REFERENTIEL_ID     = v.SERVICE_REFERENTIEL_ID,
+      SERVICE_ID                 = v.SERVICE_ID,
+      HEURES_PAYEES              = v.HEURES_PAYEES,
+      HEURES_DEMANDEES           = v.HEURES_DEMANDEES,
+      HEURES_A_PAYER_POND        = v.HEURES_A_PAYER_POND,
+      HEURES_A_PAYER             = v.HEURES_A_PAYER,
+      PERIODE_PAIEMENT_ID        = v.PERIODE_PAIEMENT_ID,
+      STRUCTURE_ID               = v.STRUCTURE_ID,
+      ANNEE_ID                   = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      MISE_EN_PAIEMENT_ID,
-      PERIODE_PAIEMENT_ID,
-      HEURES_A_PAYER,
-      HEURES_A_PAYER_POND,
-      HEURES_DEMANDEES,
-      HEURES_PAYEES,
-      FORMULE_RES_SERVICE_ID,
-      FORMULE_RES_SERVICE_REF_ID,
-      SERVICE_ID,
       SERVICE_REFERENTIEL_ID,
+      SERVICE_ID,
+      FORMULE_RES_SERVICE_REF_ID,
+      FORMULE_RES_SERVICE_ID,
+      HEURES_PAYEES,
+      HEURES_DEMANDEES,
+      HEURES_A_PAYER_POND,
+      HEURES_A_PAYER,
+      PERIODE_PAIEMENT_ID,
+      MISE_EN_PAIEMENT_ID,
+      STRUCTURE_ID,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_PAIEMENT_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.STRUCTURE_ID,
-      v.MISE_EN_PAIEMENT_ID,
-      v.PERIODE_PAIEMENT_ID,
-      v.HEURES_A_PAYER,
-      v.HEURES_A_PAYER_POND,
-      v.HEURES_DEMANDEES,
-      v.HEURES_PAYEES,
-      v.FORMULE_RES_SERVICE_ID,
-      v.FORMULE_RES_SERVICE_REF_ID,
-      v.SERVICE_ID,
       v.SERVICE_REFERENTIEL_ID,
+      v.SERVICE_ID,
+      v.FORMULE_RES_SERVICE_REF_ID,
+      v.FORMULE_RES_SERVICE_ID,
+      v.HEURES_PAYEES,
+      v.HEURES_DEMANDEES,
+      v.HEURES_A_PAYER_POND,
+      v.HEURES_A_PAYER,
+      v.PERIODE_PAIEMENT_ID,
+      v.MISE_EN_PAIEMENT_ID,
+      v.STRUCTURE_ID,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30591,43 +30688,43 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.TYPE_PIECE_JOINTE_ID = v.TYPE_PIECE_JOINTE_ID
-        AND t.INTERVENANT_ID       = v.INTERVENANT_ID
+            t.INTERVENANT_ID       = v.INTERVENANT_ID
+        AND t.TYPE_PIECE_JOINTE_ID = v.TYPE_PIECE_JOINTE_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID             = v.ANNEE_ID,
-      DEMANDEE             = v.DEMANDEE,
-      FOURNIE              = v.FOURNIE,
-      VALIDEE              = v.VALIDEE,
-      HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
       OBLIGATOIRE          = v.OBLIGATOIRE,
+      HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
+      VALIDEE              = v.VALIDEE,
+      FOURNIE              = v.FOURNIE,
+      DEMANDEE             = v.DEMANDEE,
+      ANNEE_ID             = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      TYPE_PIECE_JOINTE_ID,
-      INTERVENANT_ID,
-      DEMANDEE,
-      FOURNIE,
-      VALIDEE,
-      HEURES_POUR_SEUIL,
       OBLIGATOIRE,
+      HEURES_POUR_SEUIL,
+      VALIDEE,
+      FOURNIE,
+      DEMANDEE,
+      INTERVENANT_ID,
+      TYPE_PIECE_JOINTE_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_PIECE_JOINTE_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.TYPE_PIECE_JOINTE_ID,
-      v.INTERVENANT_ID,
-      v.DEMANDEE,
-      v.FOURNIE,
-      v.VALIDEE,
-      v.HEURES_POUR_SEUIL,
       v.OBLIGATOIRE,
+      v.HEURES_POUR_SEUIL,
+      v.VALIDEE,
+      v.FOURNIE,
+      v.DEMANDEE,
+      v.INTERVENANT_ID,
+      v.TYPE_PIECE_JOINTE_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30721,34 +30818,34 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.TYPE_PIECE_JOINTE_ID = v.TYPE_PIECE_JOINTE_ID
-        AND t.INTERVENANT_ID       = v.INTERVENANT_ID
+            t.INTERVENANT_ID       = v.INTERVENANT_ID
+        AND t.TYPE_PIECE_JOINTE_ID = v.TYPE_PIECE_JOINTE_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID             = v.ANNEE_ID,
-      HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
       OBLIGATOIRE          = v.OBLIGATOIRE,
+      HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
+      ANNEE_ID             = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      TYPE_PIECE_JOINTE_ID,
-      INTERVENANT_ID,
-      HEURES_POUR_SEUIL,
       OBLIGATOIRE,
+      HEURES_POUR_SEUIL,
+      INTERVENANT_ID,
+      TYPE_PIECE_JOINTE_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_PIECE_JOINTE_DEMAND_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.TYPE_PIECE_JOINTE_ID,
-      v.INTERVENANT_ID,
-      v.HEURES_POUR_SEUIL,
       v.OBLIGATOIRE,
+      v.HEURES_POUR_SEUIL,
+      v.INTERVENANT_ID,
+      v.TYPE_PIECE_JOINTE_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30801,37 +30898,37 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.TYPE_PIECE_JOINTE_ID = v.TYPE_PIECE_JOINTE_ID
-        AND t.INTERVENANT_ID       = v.INTERVENANT_ID
+            COALESCE(t.FICHIER_ID,0) = COALESCE(v.FICHIER_ID,0)
         AND COALESCE(t.VALIDATION_ID,0) = COALESCE(v.VALIDATION_ID,0)
-        AND COALESCE(t.FICHIER_ID,0) = COALESCE(v.FICHIER_ID,0)
+        AND t.INTERVENANT_ID       = v.INTERVENANT_ID
+        AND t.TYPE_PIECE_JOINTE_ID = v.TYPE_PIECE_JOINTE_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID             = v.ANNEE_ID,
       PIECE_JOINTE_ID      = v.PIECE_JOINTE_ID,
+      ANNEE_ID             = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      TYPE_PIECE_JOINTE_ID,
-      INTERVENANT_ID,
-      VALIDATION_ID,
-      FICHIER_ID,
       PIECE_JOINTE_ID,
+      FICHIER_ID,
+      VALIDATION_ID,
+      INTERVENANT_ID,
+      TYPE_PIECE_JOINTE_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_PIECE_JOINTE_FOURNI_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.TYPE_PIECE_JOINTE_ID,
-      v.INTERVENANT_ID,
-      v.VALIDATION_ID,
-      v.FICHIER_ID,
       v.PIECE_JOINTE_ID,
+      v.FICHIER_ID,
+      v.VALIDATION_ID,
+      v.INTERVENANT_ID,
+      v.TYPE_PIECE_JOINTE_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30950,76 +31047,76 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
-        AND t.SERVICE_ID             = v.SERVICE_ID
+            t.SERVICE_ID             = v.SERVICE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID                       = v.ANNEE_ID,
-      INTERVENANT_ID                 = v.INTERVENANT_ID,
-      PEUT_SAISIR_SERVICE            = v.PEUT_SAISIR_SERVICE,
-      STRUCTURE_ID                   = v.STRUCTURE_ID,
-      NBVH                           = v.NBVH,
-      VALIDE                         = v.VALIDE,
-      ELEMENT_PEDAGOGIQUE_ID         = v.ELEMENT_PEDAGOGIQUE_ID,
-      ELEMENT_PEDAGOGIQUE_PERIODE_ID = v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,
-      ETAPE_ID                       = v.ETAPE_ID,
-      ELEMENT_PEDAGOGIQUE_HISTO      = v.ELEMENT_PEDAGOGIQUE_HISTO,
-      ETAPE_HISTO                    = v.ETAPE_HISTO,
-      HAS_HEURES_MAUVAISE_PERIODE    = v.HAS_HEURES_MAUVAISE_PERIODE,
-      INTERVENANT_STRUCTURE_ID       = v.INTERVENANT_STRUCTURE_ID,
-      TYPE_INTERVENANT_ID            = v.TYPE_INTERVENANT_ID,
-      TYPE_INTERVENANT_CODE          = v.TYPE_INTERVENANT_CODE,
-      TYPE_VOLUME_HORAIRE_CODE       = v.TYPE_VOLUME_HORAIRE_CODE,
       HEURES                         = v.HEURES,
+      TYPE_VOLUME_HORAIRE_CODE       = v.TYPE_VOLUME_HORAIRE_CODE,
+      TYPE_INTERVENANT_CODE          = v.TYPE_INTERVENANT_CODE,
+      TYPE_INTERVENANT_ID            = v.TYPE_INTERVENANT_ID,
+      INTERVENANT_STRUCTURE_ID       = v.INTERVENANT_STRUCTURE_ID,
+      HAS_HEURES_MAUVAISE_PERIODE    = v.HAS_HEURES_MAUVAISE_PERIODE,
+      ETAPE_HISTO                    = v.ETAPE_HISTO,
+      ELEMENT_PEDAGOGIQUE_HISTO      = v.ELEMENT_PEDAGOGIQUE_HISTO,
+      ETAPE_ID                       = v.ETAPE_ID,
+      ELEMENT_PEDAGOGIQUE_PERIODE_ID = v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,
+      ELEMENT_PEDAGOGIQUE_ID         = v.ELEMENT_PEDAGOGIQUE_ID,
+      VALIDE                         = v.VALIDE,
+      NBVH                           = v.NBVH,
+      STRUCTURE_ID                   = v.STRUCTURE_ID,
+      PEUT_SAISIR_SERVICE            = v.PEUT_SAISIR_SERVICE,
+      INTERVENANT_ID                 = v.INTERVENANT_ID,
+      ANNEE_ID                       = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      PEUT_SAISIR_SERVICE,
-      TYPE_VOLUME_HORAIRE_ID,
-      STRUCTURE_ID,
-      NBVH,
-      VALIDE,
-      ELEMENT_PEDAGOGIQUE_ID,
-      ELEMENT_PEDAGOGIQUE_PERIODE_ID,
-      ETAPE_ID,
-      ELEMENT_PEDAGOGIQUE_HISTO,
-      ETAPE_HISTO,
-      HAS_HEURES_MAUVAISE_PERIODE,
-      SERVICE_ID,
-      INTERVENANT_STRUCTURE_ID,
-      TYPE_INTERVENANT_ID,
-      TYPE_INTERVENANT_CODE,
-      TYPE_VOLUME_HORAIRE_CODE,
       HEURES,
+      TYPE_VOLUME_HORAIRE_CODE,
+      TYPE_INTERVENANT_CODE,
+      TYPE_INTERVENANT_ID,
+      INTERVENANT_STRUCTURE_ID,
+      SERVICE_ID,
+      HAS_HEURES_MAUVAISE_PERIODE,
+      ETAPE_HISTO,
+      ELEMENT_PEDAGOGIQUE_HISTO,
+      ETAPE_ID,
+      ELEMENT_PEDAGOGIQUE_PERIODE_ID,
+      ELEMENT_PEDAGOGIQUE_ID,
+      VALIDE,
+      NBVH,
+      STRUCTURE_ID,
+      TYPE_VOLUME_HORAIRE_ID,
+      PEUT_SAISIR_SERVICE,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_SERVICE_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.PEUT_SAISIR_SERVICE,
-      v.TYPE_VOLUME_HORAIRE_ID,
-      v.STRUCTURE_ID,
-      v.NBVH,
-      v.VALIDE,
-      v.ELEMENT_PEDAGOGIQUE_ID,
-      v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,
-      v.ETAPE_ID,
-      v.ELEMENT_PEDAGOGIQUE_HISTO,
-      v.ETAPE_HISTO,
-      v.HAS_HEURES_MAUVAISE_PERIODE,
-      v.SERVICE_ID,
-      v.INTERVENANT_STRUCTURE_ID,
-      v.TYPE_INTERVENANT_ID,
-      v.TYPE_INTERVENANT_CODE,
-      v.TYPE_VOLUME_HORAIRE_CODE,
       v.HEURES,
+      v.TYPE_VOLUME_HORAIRE_CODE,
+      v.TYPE_INTERVENANT_CODE,
+      v.TYPE_INTERVENANT_ID,
+      v.INTERVENANT_STRUCTURE_ID,
+      v.SERVICE_ID,
+      v.HAS_HEURES_MAUVAISE_PERIODE,
+      v.ETAPE_HISTO,
+      v.ELEMENT_PEDAGOGIQUE_HISTO,
+      v.ETAPE_ID,
+      v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,
+      v.ELEMENT_PEDAGOGIQUE_ID,
+      v.VALIDE,
+      v.NBVH,
+      v.STRUCTURE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.PEUT_SAISIR_SERVICE,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -31098,40 +31195,40 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.INTERVENANT_ID         = v.INTERVENANT_ID
+            COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
-        AND COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
+        AND t.INTERVENANT_ID         = v.INTERVENANT_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID               = v.ANNEE_ID,
-      PEUT_SAISIR_SERVICE    = v.PEUT_SAISIR_SERVICE,
-      NBVH                   = v.NBVH,
       VALIDE                 = v.VALIDE,
+      NBVH                   = v.NBVH,
+      PEUT_SAISIR_SERVICE    = v.PEUT_SAISIR_SERVICE,
+      ANNEE_ID               = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      PEUT_SAISIR_SERVICE,
-      TYPE_VOLUME_HORAIRE_ID,
-      STRUCTURE_ID,
-      NBVH,
       VALIDE,
+      NBVH,
+      STRUCTURE_ID,
+      TYPE_VOLUME_HORAIRE_ID,
+      PEUT_SAISIR_SERVICE,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_SERVICE_REFERENTIEL_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.PEUT_SAISIR_SERVICE,
-      v.TYPE_VOLUME_HORAIRE_ID,
-      v.STRUCTURE_ID,
-      v.NBVH,
       v.VALIDE,
+      v.NBVH,
+      v.STRUCTURE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.PEUT_SAISIR_SERVICE,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -31194,39 +31291,39 @@ END UNICAEN_TBL;',
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID                = v.ANNEE_ID,
-      PEUT_SAISIR_SERVICE     = v.PEUT_SAISIR_SERVICE,
-      PEUT_SAISIR_REFERENTIEL = v.PEUT_SAISIR_REFERENTIEL,
-      HEURES_SERVICE_PREV     = v.HEURES_SERVICE_PREV,
-      HEURES_REFERENTIEL_PREV = v.HEURES_REFERENTIEL_PREV,
-      HEURES_SERVICE_REAL     = v.HEURES_SERVICE_REAL,
       HEURES_REFERENTIEL_REAL = v.HEURES_REFERENTIEL_REAL,
+      HEURES_SERVICE_REAL     = v.HEURES_SERVICE_REAL,
+      HEURES_REFERENTIEL_PREV = v.HEURES_REFERENTIEL_PREV,
+      HEURES_SERVICE_PREV     = v.HEURES_SERVICE_PREV,
+      PEUT_SAISIR_REFERENTIEL = v.PEUT_SAISIR_REFERENTIEL,
+      PEUT_SAISIR_SERVICE     = v.PEUT_SAISIR_SERVICE,
+      ANNEE_ID                = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      PEUT_SAISIR_SERVICE,
-      PEUT_SAISIR_REFERENTIEL,
-      HEURES_SERVICE_PREV,
-      HEURES_REFERENTIEL_PREV,
-      HEURES_SERVICE_REAL,
       HEURES_REFERENTIEL_REAL,
+      HEURES_SERVICE_REAL,
+      HEURES_REFERENTIEL_PREV,
+      HEURES_SERVICE_PREV,
+      PEUT_SAISIR_REFERENTIEL,
+      PEUT_SAISIR_SERVICE,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_SERVICE_SAISIE_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.PEUT_SAISIR_SERVICE,
-      v.PEUT_SAISIR_REFERENTIEL,
-      v.HEURES_SERVICE_PREV,
-      v.HEURES_REFERENTIEL_PREV,
-      v.HEURES_SERVICE_REAL,
       v.HEURES_REFERENTIEL_REAL,
+      v.HEURES_SERVICE_REAL,
+      v.HEURES_REFERENTIEL_PREV,
+      v.HEURES_SERVICE_PREV,
+      v.PEUT_SAISIR_REFERENTIEL,
+      v.PEUT_SAISIR_SERVICE,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -31284,43 +31381,43 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.INTERVENANT_ID         = v.INTERVENANT_ID
-        AND t.STRUCTURE_ID           = v.STRUCTURE_ID
-        AND t.TYPE_VOLUME_HORAIRE_ID = v.TYPE_VOLUME_HORAIRE_ID
-        AND t.SERVICE_ID             = v.SERVICE_ID
+            t.VOLUME_HORAIRE_ID      = v.VOLUME_HORAIRE_ID
         AND COALESCE(t.VALIDATION_ID,0) = COALESCE(v.VALIDATION_ID,0)
-        AND t.VOLUME_HORAIRE_ID      = v.VOLUME_HORAIRE_ID
+        AND t.SERVICE_ID             = v.SERVICE_ID
+        AND t.TYPE_VOLUME_HORAIRE_ID = v.TYPE_VOLUME_HORAIRE_ID
+        AND t.STRUCTURE_ID           = v.STRUCTURE_ID
+        AND t.INTERVENANT_ID         = v.INTERVENANT_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID               = v.ANNEE_ID,
       AUTO_VALIDATION        = v.AUTO_VALIDATION,
+      ANNEE_ID               = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      TYPE_VOLUME_HORAIRE_ID,
-      SERVICE_ID,
-      VALIDATION_ID,
-      VOLUME_HORAIRE_ID,
       AUTO_VALIDATION,
+      VOLUME_HORAIRE_ID,
+      VALIDATION_ID,
+      SERVICE_ID,
+      TYPE_VOLUME_HORAIRE_ID,
+      STRUCTURE_ID,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_VALIDATION_ENSEIGNE_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.STRUCTURE_ID,
-      v.TYPE_VOLUME_HORAIRE_ID,
-      v.SERVICE_ID,
-      v.VALIDATION_ID,
-      v.VOLUME_HORAIRE_ID,
       v.AUTO_VALIDATION,
+      v.VOLUME_HORAIRE_ID,
+      v.VALIDATION_ID,
+      v.SERVICE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.STRUCTURE_ID,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -31376,43 +31473,43 @@ END UNICAEN_TBL;',
         \' || conds || \'
 
     ) v ON (
-            t.INTERVENANT_ID         = v.INTERVENANT_ID
-        AND t.STRUCTURE_ID           = v.STRUCTURE_ID
-        AND t.TYPE_VOLUME_HORAIRE_ID = v.TYPE_VOLUME_HORAIRE_ID
-        AND t.SERVICE_REFERENTIEL_ID = v.SERVICE_REFERENTIEL_ID
+            t.VOLUME_HORAIRE_REF_ID  = v.VOLUME_HORAIRE_REF_ID
         AND COALESCE(t.VALIDATION_ID,0) = COALESCE(v.VALIDATION_ID,0)
-        AND t.VOLUME_HORAIRE_REF_ID  = v.VOLUME_HORAIRE_REF_ID
+        AND t.SERVICE_REFERENTIEL_ID = v.SERVICE_REFERENTIEL_ID
+        AND t.TYPE_VOLUME_HORAIRE_ID = v.TYPE_VOLUME_HORAIRE_ID
+        AND t.STRUCTURE_ID           = v.STRUCTURE_ID
+        AND t.INTERVENANT_ID         = v.INTERVENANT_ID
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID               = v.ANNEE_ID,
       AUTO_VALIDATION        = v.AUTO_VALIDATION,
+      ANNEE_ID               = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      TYPE_VOLUME_HORAIRE_ID,
-      SERVICE_REFERENTIEL_ID,
-      VALIDATION_ID,
-      VOLUME_HORAIRE_REF_ID,
       AUTO_VALIDATION,
+      VOLUME_HORAIRE_REF_ID,
+      VALIDATION_ID,
+      SERVICE_REFERENTIEL_ID,
+      TYPE_VOLUME_HORAIRE_ID,
+      STRUCTURE_ID,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_VALIDATION_REFERENT_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.STRUCTURE_ID,
-      v.TYPE_VOLUME_HORAIRE_ID,
-      v.SERVICE_REFERENTIEL_ID,
-      v.VALIDATION_ID,
-      v.VOLUME_HORAIRE_REF_ID,
       v.AUTO_VALIDATION,
+      v.VOLUME_HORAIRE_REF_ID,
+      v.VALIDATION_ID,
+      v.SERVICE_REFERENTIEL_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.STRUCTURE_ID,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -35762,16 +35859,18 @@ SELECT
   i.annee_id              annee_id,
   tas.type_agrement_id    type_agrement_id,
   i.id                    intervenant_id,
+  i.code                  code_intervenant,
   null                    structure_id,
   tas.obligatoire         obligatoire,
-  a.id                    agrement_id
+  a.id                    agrement_id,
+  tas.duree_vie           duree_vie
 FROM
   type_agrement                  ta
   JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
                                     AND tas.histo_destruction IS NULL
 
   JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                    AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
+                                    --AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
                                     AND i.statut_id = tas.statut_intervenant_id
 
   LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
@@ -35786,16 +35885,18 @@ SELECT
   i.annee_id              annee_id,
   tas.type_agrement_id    type_agrement_id,
   i.id                    intervenant_id,
+  i.code                  code_intervenant,
   i_s.structure_id        structure_id,
   tas.obligatoire         obligatoire,
-  a.id                    agrement_id
+  a.id                    agrement_id,
+  tas.duree_vie           duree_vie
 FROM
   type_agrement                   ta
   JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
                                     AND tas.histo_destruction IS NULL
 
   JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                    AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
+                                   -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
                                     AND i.statut_id = tas.statut_intervenant_id
 
   JOIN                           i_s ON i_s.intervenant_id = i.id
@@ -43872,6 +43973,16 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
+    'FORMULE_TEST_STRUCTURE__UN' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE__UN',
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'index' => 'FORMULE_TEST_STRUCTURE__UN',
+      'columns' => 
+      array (
+        0 => 'LIBELLE',
+      ),
+    ),
     'FORMULE__UN' => 
     array (
       'name' => 'FORMULE__UN',
@@ -48410,6 +48521,26 @@ END;',
         0 => 'ID',
       ),
     ),
+    'FORMULE_TEST_STRUCTURE_PK' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE_PK',
+      'unique' => true,
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'columns' => 
+      array (
+        0 => 'ID',
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE__UN' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE__UN',
+      'unique' => true,
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'columns' => 
+      array (
+        0 => 'LIBELLE',
+      ),
+    ),
     'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
@@ -52588,18 +52719,6 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
-      ),
-    ),
-    'TYPE_AGREMENT_STATUT__UN' => 
-    array (
-      'name' => 'TYPE_AGREMENT_STATUT__UN',
-      'unique' => true,
-      'table' => 'TYPE_AGREMENT_STATUT',
-      'columns' => 
-      array (
-        0 => 'TYPE_AGREMENT_ID',
-        1 => 'STATUT_INTERVENANT_ID',
-        2 => 'PREMIER_RECRUTEMENT',
       ),
     ),
     'TYPE_AGREMENT_STATUT__UN1' => 

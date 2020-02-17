@@ -13,11 +13,6 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
 
     /**
-     * @var boolean
-     */
-    private $premierRecrutement;
-
-    /**
      * @var integer
      */
     private $id;
@@ -31,6 +26,11 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\StatutIntervenant
      */
     private $statut;
+
+    /**
+     * @var dureeVie
+     */
+    private $dureeVie;
 
 
 
@@ -48,35 +48,6 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
             $this->getPremierRecrutement()
         );
     }
-
-
-
-    /**
-     * Set premierRecrutement
-     *
-     * @param boolean $premierRecrutement
-     *
-     * @return TypeAgrementStatut
-     */
-    public function setPremierRecrutement($premierRecrutement)
-    {
-        $this->premierRecrutement = $premierRecrutement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get premierRecrutement
-     *
-     * @return boolean
-     */
-    public function getPremierRecrutement()
-    {
-        return $this->premierRecrutement;
-    }
-
 
 
     /**
@@ -159,5 +130,29 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     public function getStatut()
     {
         return $this->statut;
+    }
+
+    /**
+     * Get dureeVie
+     *
+     * @return integer
+     */
+    public function getDureeVie()
+    {
+        return $this->dureeVie;
+    }
+
+    /**
+     * Set dureeVie
+     *
+     * @param integer dureeVie
+     *
+     * @return TypeAgrementStatut
+     */
+    public function setDureeVie($dureeVie)
+    {
+        $this->dureeVie = $dureeVie;
+
+        return $this;
     }
 }

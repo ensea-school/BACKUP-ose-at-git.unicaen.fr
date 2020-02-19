@@ -153,6 +153,16 @@ class IntervenantService extends AbstractEntityService
         return $this->getBy('sourceCode', 'SOURCE_CODE', $sourceCode, $annee, $autoImport);
     }
 
+    public function getByCodeIntervenant($codeIntervenant)
+    {
+        $findParams = ['code' => $codeIntervenant];
+        $repo       = $this->getRepo();
+
+        $intervenants = $repo->findBy($findParams);
+
+        return $intervenants;
+    }
+
 
 
     /**

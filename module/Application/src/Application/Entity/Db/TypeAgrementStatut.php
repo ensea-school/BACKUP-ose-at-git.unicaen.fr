@@ -28,6 +28,13 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     private $statut;
 
     /**
+     * @var boolean
+     */
+    private $premierRecrutement;
+
+
+
+    /**
      * @var dureeVie
      */
     private $dureeVie;
@@ -131,6 +138,34 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     {
         return $this->statut;
     }
+
+    /**
+     * Set premierRecrutement
+     *
+     * @param boolean $premierRecrutement
+     *
+     * @return TypeAgrementStatut
+     */
+    public function setPremierRecrutement($premierRecrutement)
+    {
+        $this->premierRecrutement = $premierRecrutement;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get premierRecrutement
+     *
+     * @return boolean
+     */
+    public function getPremierRecrutement()
+    {
+        return $this->premierRecrutement;
+    }
+
+
 
     /**
      * Get dureeVie

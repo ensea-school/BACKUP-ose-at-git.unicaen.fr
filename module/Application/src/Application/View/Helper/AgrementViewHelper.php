@@ -3,8 +3,10 @@
 namespace Application\View\Helper;
 
 use Application\Entity\Db\Agrement as Entity;
+use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\Traits\AgrementAwareTrait;
 use Application\Constants;
+use Application\Entity\Db\Traits\TblAgrementAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 
 /**
@@ -15,6 +17,7 @@ use Zend\View\Helper\AbstractHtmlElement;
 class AgrementViewHelper extends AbstractHtmlElement
 {
     use AgrementAwareTrait;
+    use TblAgrementAwareTrait;
 
     /**
      * @var boolean
@@ -34,9 +37,10 @@ class AgrementViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(Entity $agrement = null)
+    public function __invoke(Entity $agrement = null, TblAgrement $tblAgrement = null)
     {
         if ($agrement) $this->setAgrement($agrement);
+        if ($tblAgrement) $this->setTblAgrement($tblAgrement);
 
         return $this;
     }
@@ -81,13 +85,17 @@ class AgrementViewHelper extends AbstractHtmlElement
     public function render()
     {
         $entity = $this->getAgrement();
+        $tblAgrement = $this->getTblAgrement();
 
-        if (!$entity) {
+        if (!$entity || !$tblAgrement) {
             return '';
         }
 
         $vars = [
             "Type d'agrément" => (string)$entity->getType(),
+            "Date de la décision" => $entity->getDateDecision()->format(Constants::DATE_FORMAT),
+            "Année d'agrémentation" => (string)$tblAgrement->getAnneeAgrement()->getLibelle(),
+            "Valable jusqu'en" => (integer)$tblAgrement->getAnneeAgrement()->getId()+(integer)$tblAgrement->getDureeVie()
         ];
 
         if (!$this->short) {
@@ -96,11 +104,12 @@ class AgrementViewHelper extends AbstractHtmlElement
                 $vars["Structure"] = (string)$structure;
             }
         }
-        $vars["Date de la décision"] = $entity->getDateDecision()->format(Constants::DATE_FORMAT);
+        //$vars[] = $entity->getDateDecision()->format(Constants::DATE_FORMAT);
+
 
         $html = "<dl class=\"agrement dl-horizontal\">\n";
         foreach ($vars as $key => $value) {
-            $html .= "\t<dt>$key : </dt><dd>$value</dd>\n";
+            $html .= "\t<dt>$key&nbsp;:&nbsp;</dt><dd>$value</dd>\n";
         }
         $html .= "</dl>";
 

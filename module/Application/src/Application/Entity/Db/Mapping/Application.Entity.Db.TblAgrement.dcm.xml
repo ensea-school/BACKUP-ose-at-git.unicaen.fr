@@ -5,6 +5,11 @@
             <generator strategy="SEQUENCE"/>
         </id>
         <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
+        <many-to-one field="anneeAgrement" target-entity="Application\Entity\Db\Annee">
+            <join-columns>
+                <join-column name="ANNEE_AGREMENT" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-columns>
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>

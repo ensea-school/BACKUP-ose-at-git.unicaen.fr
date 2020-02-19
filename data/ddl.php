@@ -13448,6 +13448,17 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'ANNEE_AGREMENT' => 
+        array (
+          'name' => 'ANNEE_AGREMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'TBL_CHARGENS' => 
@@ -16141,6 +16152,17 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => '1',
+          'commentaire' => NULL,
+        ),
+        'PREMIER_RECRUTEMENT' => 
+        array (
+          'name' => 'PREMIER_RECRUTEMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
           'commentaire' => NULL,
         ),
       ),
@@ -29684,64 +29706,119 @@ END UNICAEN_TBL;',
             JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
           WHERE
             frs.total > 0
+        ),
+        avi AS (
+            SELECT DISTINCT
+                i.code                code_intervenant,
+                i.annee_id            annee_id,
+                a.type_agrement_id    type_agrement,
+                a.id             agrement_id,
+                tas.duree_vie         duree_vie,
+                i.annee_id+duree_vie date_validite
+            FROM intervenant i
+            JOIN type_agrement_statut tas ON tas.statut_intervenant_id = i.statut_id
+            JOIN agrement a ON a.intervenant_id = i.id AND tas.type_agrement_id = a.type_agrement_id AND a.histo_destruction IS NULL
         )
-        SELECT
-          i.annee_id              annee_id,
-          tas.type_agrement_id    type_agrement_id,
-          i.id                    intervenant_id,
-          i.code                  code_intervenant,
-          null                    structure_id,
-          tas.obligatoire         obligatoire,
-          a.id                    agrement_id,
-          tas.duree_vie           duree_vie
-        FROM
-          type_agrement                  ta
-          JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
-                                            AND tas.histo_destruction IS NULL
+        SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+            SELECT DISTINCT
+              i.annee_id                     annee_id,
+              CASE
+                WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+                THEN NULL
+                ELSE NVL(avi.annee_id, i.annee_id) END   annee_agrement,
+              tas.type_agrement_id                       type_agrement_id,
+              i.id                                       intervenant_id,
+              i.code                                     code_intervenant,
+              null                                       structure_id,
+              tas.obligatoire                            obligatoire,
+              NVL(a.id, avi.agrement_id)                 agrement_id,
+              tas.duree_vie                              duree_vie,
+              RANK() OVER(
+                PARTITION BY i.annee_id ORDER BY
+                CASE
+                WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+                THEN NULL
+                ELSE NVL(avi.annee_id, i.annee_id) END DESC
+              ) rank
+            FROM
+              type_agrement                  ta
+              JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
+                                                AND tas.histo_destruction IS NULL
 
-          JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                            --AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
-                                            AND i.statut_id = tas.statut_intervenant_id
+              JOIN intervenant                 i ON i.histo_destruction IS NULL
+                                               -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
+                                                AND i.statut_id = tas.statut_intervenant_id
 
-          LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
-                                            AND a.intervenant_id = i.id
-                                            AND a.histo_destruction IS NULL
+              JOIN                           i_s ON i_s.intervenant_id = i.id
+
+
+              LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
+                                                AND a.intervenant_id = i.id
+                                                AND a.histo_destruction IS NULL
+
+              LEFT JOIN                      avi ON i.code = avi.code_intervenant
+                                                AND tas.type_agrement_id = avi.type_agrement
+                                                AND i.annee_id < avi.date_validite
+                                                AND i.annee_id >= avi.annee_id
+
+            WHERE
+              ta.code = \'\'CONSEIL_ACADEMIQUE\'\')
         WHERE
-          ta.code = \'\'CONSEIL_ACADEMIQUE\'\'
+          rank = 1
 
         UNION ALL
+        SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+            SELECT DISTINCT
+              i.annee_id                                  annee_id,
+              CASE
+                WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+                THEN NULL
+                ELSE NVL(avi.annee_id, i.annee_id) END    annee_agrement,
+              tas.type_agrement_id                        type_agrement_id,
+              i.id                                        intervenant_id,
+              i.code                                      code_intervenant,
+              i_s.structure_id                            structure_id,
+              tas.obligatoire                             obligatoire,
+              NVL(a.id, avi.agrement_id)                  agrement_id,
+              tas.duree_vie                               duree_vie,
+              RANK() OVER(
+                PARTITION BY i.annee_id ORDER BY
+                CASE
+                WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+                THEN NULL
+                ELSE NVL(avi.annee_id, i.annee_id) END DESC
+              ) rank
+            FROM
+              type_agrement                   ta
+              JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
+                                                AND tas.histo_destruction IS NULL
 
-        SELECT
-          i.annee_id              annee_id,
-          tas.type_agrement_id    type_agrement_id,
-          i.id                    intervenant_id,
-          i.code                  code_intervenant,
-          i_s.structure_id        structure_id,
-          tas.obligatoire         obligatoire,
-          a.id                    agrement_id,
-          tas.duree_vie           duree_vie
-        FROM
-          type_agrement                   ta
-          JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
-                                            AND tas.histo_destruction IS NULL
+              JOIN intervenant                 i ON i.histo_destruction IS NULL
+                                                AND i.statut_id = tas.statut_intervenant_id
 
-          JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                           -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
-                                            AND i.statut_id = tas.statut_intervenant_id
+              JOIN                           i_s ON i_s.intervenant_id = i.id
 
-          JOIN                           i_s ON i_s.intervenant_id = i.id
+              LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
+                                                AND a.intervenant_id = i.id
+                                                AND a.structure_id = i_s.structure_id
+                                                AND a.histo_destruction IS NULL
 
-          LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
-                                            AND a.intervenant_id = i.id
-                                            AND a.structure_id = i_s.structure_id
-                                            AND a.histo_destruction IS NULL
+              LEFT JOIN                      avi ON i.code = avi.code_intervenant
+                                                AND tas.type_agrement_id = avi.type_agrement
+                                                AND i.annee_id < avi.date_validite
+                                                AND i.annee_id >= avi.annee_id
+
+
+            WHERE
+              ta.code = \'\'CONSEIL_RESTREINT\'\')
         WHERE
-          ta.code = \'\'CONSEIL_RESTREINT\'\') tv
+          rank = 1) tv
       WHERE
         \' || conds || \'
 
     ) v ON (
-            COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
+            COALESCE(t.ANNEE_AGREMENT,0) = COALESCE(v.ANNEE_AGREMENT,0)
+        AND COALESCE(t.STRUCTURE_ID,0) = COALESCE(v.STRUCTURE_ID,0)
         AND t.INTERVENANT_ID   = v.INTERVENANT_ID
         AND t.TYPE_AGREMENT_ID = v.TYPE_AGREMENT_ID
 
@@ -29757,6 +29834,7 @@ END UNICAEN_TBL;',
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
+      ANNEE_AGREMENT,
       DUREE_VIE,
       CODE_INTERVENANT,
       AGREMENT_ID,
@@ -29770,6 +29848,7 @@ END UNICAEN_TBL;',
     ) VALUES (
 
       TBL_AGREMENT_ID_SEQ.NEXTVAL,
+      v.ANNEE_AGREMENT,
       v.DUREE_VIE,
       v.CODE_INTERVENANT,
       v.AGREMENT_ID,
@@ -35854,59 +35933,113 @@ WITH i_s AS (
     JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
   WHERE
     frs.total > 0
+),
+avi AS (
+    SELECT DISTINCT
+        i.code                code_intervenant,
+        i.annee_id            annee_id,
+        a.type_agrement_id    type_agrement,
+        a.id             agrement_id,
+        tas.duree_vie         duree_vie,
+        i.annee_id+duree_vie date_validite
+    FROM intervenant i
+    JOIN type_agrement_statut tas ON tas.statut_intervenant_id = i.statut_id
+    JOIN agrement a ON a.intervenant_id = i.id AND tas.type_agrement_id = a.type_agrement_id AND a.histo_destruction IS NULL
 )
-SELECT
-  i.annee_id              annee_id,
-  tas.type_agrement_id    type_agrement_id,
-  i.id                    intervenant_id,
-  i.code                  code_intervenant,
-  null                    structure_id,
-  tas.obligatoire         obligatoire,
-  a.id                    agrement_id,
-  tas.duree_vie           duree_vie
-FROM
-  type_agrement                  ta
-  JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
-                                    AND tas.histo_destruction IS NULL
+SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+    SELECT DISTINCT
+      i.annee_id                     annee_id,
+      CASE
+        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        THEN NULL
+        ELSE NVL(avi.annee_id, i.annee_id) END   annee_agrement,
+      tas.type_agrement_id                       type_agrement_id,
+      i.id                                       intervenant_id,
+      i.code                                     code_intervenant,
+      null                                       structure_id,
+      tas.obligatoire                            obligatoire,
+      NVL(a.id, avi.agrement_id)                 agrement_id,
+      tas.duree_vie                              duree_vie,
+      RANK() OVER(
+        PARTITION BY i.annee_id ORDER BY
+        CASE
+        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        THEN NULL
+        ELSE NVL(avi.annee_id, i.annee_id) END DESC
+      ) rank
+    FROM
+      type_agrement                  ta
+      JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
+                                        AND tas.histo_destruction IS NULL
 
-  JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                    --AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
-                                    AND i.statut_id = tas.statut_intervenant_id
+      JOIN intervenant                 i ON i.histo_destruction IS NULL
+                                       -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
+                                        AND i.statut_id = tas.statut_intervenant_id
 
-  LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
-                                    AND a.intervenant_id = i.id
-                                    AND a.histo_destruction IS NULL
+      JOIN                           i_s ON i_s.intervenant_id = i.id
+
+
+      LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
+                                        AND a.intervenant_id = i.id
+                                        AND a.histo_destruction IS NULL
+
+      LEFT JOIN                      avi ON i.code = avi.code_intervenant
+                                        AND tas.type_agrement_id = avi.type_agrement
+                                        AND i.annee_id < avi.date_validite
+                                        AND i.annee_id >= avi.annee_id
+
+    WHERE
+      ta.code = \'CONSEIL_ACADEMIQUE\')
 WHERE
-  ta.code = \'CONSEIL_ACADEMIQUE\'
+  rank = 1
 
 UNION ALL
+SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+    SELECT DISTINCT
+      i.annee_id                                  annee_id,
+      CASE
+        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        THEN NULL
+        ELSE NVL(avi.annee_id, i.annee_id) END    annee_agrement,
+      tas.type_agrement_id                        type_agrement_id,
+      i.id                                        intervenant_id,
+      i.code                                      code_intervenant,
+      i_s.structure_id                            structure_id,
+      tas.obligatoire                             obligatoire,
+      NVL(a.id, avi.agrement_id)                  agrement_id,
+      tas.duree_vie                               duree_vie,
+      RANK() OVER(
+        PARTITION BY i.annee_id ORDER BY
+        CASE
+        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        THEN NULL
+        ELSE NVL(avi.annee_id, i.annee_id) END DESC
+      ) rank
+    FROM
+      type_agrement                   ta
+      JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
+                                        AND tas.histo_destruction IS NULL
 
-SELECT
-  i.annee_id              annee_id,
-  tas.type_agrement_id    type_agrement_id,
-  i.id                    intervenant_id,
-  i.code                  code_intervenant,
-  i_s.structure_id        structure_id,
-  tas.obligatoire         obligatoire,
-  a.id                    agrement_id,
-  tas.duree_vie           duree_vie
-FROM
-  type_agrement                   ta
-  JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
-                                    AND tas.histo_destruction IS NULL
+      JOIN intervenant                 i ON i.histo_destruction IS NULL
+                                        AND i.statut_id = tas.statut_intervenant_id
 
-  JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                   -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
-                                    AND i.statut_id = tas.statut_intervenant_id
+      JOIN                           i_s ON i_s.intervenant_id = i.id
 
-  JOIN                           i_s ON i_s.intervenant_id = i.id
+      LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
+                                        AND a.intervenant_id = i.id
+                                        AND a.structure_id = i_s.structure_id
+                                        AND a.histo_destruction IS NULL
 
-  LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
-                                    AND a.intervenant_id = i.id
-                                    AND a.structure_id = i_s.structure_id
-                                    AND a.histo_destruction IS NULL
+      LEFT JOIN                      avi ON i.code = avi.code_intervenant
+                                        AND tas.type_agrement_id = avi.type_agrement
+                                        AND i.annee_id < avi.date_validite
+                                        AND i.annee_id >= avi.annee_id
+
+
+    WHERE
+      ta.code = \'CONSEIL_RESTREINT\')
 WHERE
-  ta.code = \'CONSEIL_RESTREINT\'',
+  rank = 1',
     ),
     'V_TBL_CHARGENS' => 
     array (
@@ -44359,13 +44492,14 @@ WHERE
     array (
       'name' => 'TBL_AGREMENT__UN',
       'table' => 'TBL_AGREMENT',
-      'index' => 'TBL_AGREMENT__UN_IDX',
+      'index' => 'TBL_AGREMENT__UN',
       'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'INTERVENANT_ID',
         2 => 'STRUCTURE_ID',
         3 => 'TO_DELETE',
+        4 => 'ANNEE_AGREMENT',
       ),
     ),
     'TBL_CHARGENS_SEUILS_DEF__UN' => 
@@ -51155,6 +51289,20 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
+      ),
+    ),
+    'TBL_AGREMENT__UN' => 
+    array (
+      'name' => 'TBL_AGREMENT__UN',
+      'unique' => true,
+      'table' => 'TBL_AGREMENT',
+      'columns' => 
+      array (
+        0 => 'TYPE_AGREMENT_ID',
+        1 => 'INTERVENANT_ID',
+        2 => 'STRUCTURE_ID',
+        3 => 'TO_DELETE',
+        4 => 'ANNEE_AGREMENT',
       ),
     ),
     'TBL_AGREMENT__UN_IDX' => 

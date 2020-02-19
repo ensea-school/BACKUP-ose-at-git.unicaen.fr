@@ -88,9 +88,8 @@ class AgrementController extends AbstractController
 
         $role         = $this->getServiceContext()->getSelectedIdentityRole();
         $typeAgrement = $this->getEvent()->getParam('typeAgrement');
-        /* @var $typeAgrement TypeAgrement */
         $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
+
         if (!$intervenant){
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
@@ -102,7 +101,6 @@ class AgrementController extends AbstractController
         $this->getServiceTblAgrement()->leftJoin(AgrementService::class, $qb, 'agrement', true);
 
         $tas = $this->getServiceTblAgrement()->getList($qb);
-        /* @var $tas TblAgrement[] */
 
         $needStructure = false;
         $hasActions    = false;
@@ -304,9 +302,17 @@ class AgrementController extends AbstractController
 
     private function updateTableauxBord(Intervenant $intervenant)
     {
+        //@alecourtes : Récupérer les intervenants avec le même code car l'agrement peut être valide
+        //plusieurs années pour plusieurs intervenants avec un même code
+
+        $listeIntervenants = $this->getServiceIntervenant()->getByCodeIntervenant($intervenant->getCode());
+        if(empty($listeIntervenants))
+        {
+            $listeIntervenants[] = $intervenant;
+        }
         $this->getServiceWorkflow()->calculerTableauxBord([
             'agrement',
             'contrat',
-        ], $intervenant);
+        ], $listeIntervenants);
     }
 }

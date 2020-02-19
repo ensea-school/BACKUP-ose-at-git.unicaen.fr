@@ -36,6 +36,8 @@ class TblAgrement implements ResourceInterface
 
     private $dureeVie;
 
+    private $anneeAgrement;
+
     /**
      * Get id
      *
@@ -67,6 +69,14 @@ class TblAgrement implements ResourceInterface
     public function getDureeVie()
     {
         return $this->dureeVie;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnneeAgrement()
+    {
+        return $this->anneeAgrement;
     }
 
 

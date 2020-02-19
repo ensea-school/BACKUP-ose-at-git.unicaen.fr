@@ -6628,7 +6628,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'HEURES_SERVICE_STATUTAIRE' =>
+        'HEURES_SERVICE_STATUTAIRE' => 
         array (
           'name' => 'HEURES_SERVICE_STATUTAIRE',
           'type' => 'FLOAT',
@@ -6815,7 +6815,7 @@
           'default' => '2/3',
           'commentaire' => NULL,
         ),
-        'STRUCTURE_CODE' =>
+        'STRUCTURE_CODE' => 
         array (
           'name' => 'STRUCTURE_CODE',
           'type' => 'VARCHAR2',
@@ -6824,6 +6824,50 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
+        ),
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE',
+      'temporary' => false,
+      'logging' => true,
+      'commentaire' => 'sequence=FTEST_STRUCTURE_ID_SEQ;',
+      'sequence' => 'FTEST_STRUCTURE_ID_SEQ',
+      'columns' => 
+      array (
+        'ID' => 
+        array (
+          'name' => 'ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'LIBELLE' => 
+        array (
+          'name' => 'LIBELLE',
+          'type' => 'VARCHAR2',
+          'length' => 80,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'UNIVERSITE' => 
+        array (
+          'name' => 'UNIVERSITE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
           'commentaire' => NULL,
         ),
       ),
@@ -7222,7 +7266,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_CODE' =>
+        'STRUCTURE_CODE' => 
         array (
           'name' => 'STRUCTURE_CODE',
           'type' => 'VARCHAR2',
@@ -10797,7 +10841,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_ARCHIVE' =>
+        'DATE_ARCHIVE' => 
         array (
           'name' => 'DATE_ARCHIVE',
           'type' => 'NUMBER',
@@ -11270,7 +11314,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACCESSIBLE_EXTERIEUR' =>
+        'ACCESSIBLE_EXTERIEUR' => 
         array (
           'name' => 'ACCESSIBLE_EXTERIEUR',
           'type' => 'NUMBER',
@@ -14680,18 +14724,7 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de seuil pour la demande',
         ),
-        'DUREE_VIE' =>
-        array (
-          'name' => 'DUREE_VIE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -14700,6 +14733,17 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
           'commentaire' => NULL,
         ),
       ),
@@ -14779,7 +14823,18 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' =>
+        'OBLIGATOIRE' => 
+        array (
+          'name' => 'OBLIGATOIRE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -14790,23 +14845,12 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' =>
+        'CODE_INTERVENANT' => 
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
           'length' => 255,
           'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'OBLIGATOIRE' =>
-        array (
-          'name' => 'OBLIGATOIRE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
@@ -14911,7 +14955,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' =>
+        'DUREE_VIE' => 
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -14922,7 +14966,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' =>
+        'CODE_INTERVENANT' => 
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -14933,7 +14977,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_VALIDITE' =>
+        'DATE_VALIDITE' => 
         array (
           'name' => 'DATE_VALIDITE',
           'type' => 'NUMBER',
@@ -14944,7 +14988,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_ARCHIVE' =>
+        'DATE_ARCHIVE' => 
         array (
           'name' => 'DATE_ARCHIVE',
           'type' => 'NUMBER',
@@ -16077,17 +16121,6 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' => 
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
         'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
@@ -16150,6 +16183,17 @@
           'length' => 0,
           'scale' => '0',
           'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'PREMIER_RECRUTEMENT' => 
+        array (
+          'name' => 'PREMIER_RECRUTEMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
           'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
@@ -17837,17 +17881,6 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' => 
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '0',
-          'commentaire' => NULL,
-        ),
         'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
@@ -17958,7 +17991,18 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' =>
+        'PREMIER_RECRUTEMENT' => 
+        array (
+          'name' => 'PREMIER_RECRUTEMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -19912,6 +19956,16 @@
       'name' => 'FORMULE_TEST_INTERVENANT_PK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'index' => 'FORMULE_TEST_INTERVENANT_PK',
+      'columns' => 
+      array (
+        0 => 'ID',
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE_PK' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE_PK',
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'index' => 'FORMULE_TEST_STRUCTURE_PK',
       'columns' => 
       array (
         0 => 'ID',
@@ -30586,51 +30640,51 @@ END UNICAEN_TBL;',
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      ANNEE_ID                   = v.ANNEE_ID,
-      STRUCTURE_ID               = v.STRUCTURE_ID,
-      PERIODE_PAIEMENT_ID        = v.PERIODE_PAIEMENT_ID,
-      HEURES_A_PAYER             = v.HEURES_A_PAYER,
-      HEURES_A_PAYER_POND        = v.HEURES_A_PAYER_POND,
-      HEURES_DEMANDEES           = v.HEURES_DEMANDEES,
-      HEURES_PAYEES              = v.HEURES_PAYEES,
-      SERVICE_ID                 = v.SERVICE_ID,
       SERVICE_REFERENTIEL_ID     = v.SERVICE_REFERENTIEL_ID,
+      SERVICE_ID                 = v.SERVICE_ID,
+      HEURES_PAYEES              = v.HEURES_PAYEES,
+      HEURES_DEMANDEES           = v.HEURES_DEMANDEES,
+      HEURES_A_PAYER_POND        = v.HEURES_A_PAYER_POND,
+      HEURES_A_PAYER             = v.HEURES_A_PAYER,
+      PERIODE_PAIEMENT_ID        = v.PERIODE_PAIEMENT_ID,
+      STRUCTURE_ID               = v.STRUCTURE_ID,
+      ANNEE_ID                   = v.ANNEE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      ANNEE_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      MISE_EN_PAIEMENT_ID,
-      PERIODE_PAIEMENT_ID,
-      HEURES_A_PAYER,
-      HEURES_A_PAYER_POND,
-      HEURES_DEMANDEES,
-      HEURES_PAYEES,
-      FORMULE_RES_SERVICE_ID,
-      FORMULE_RES_SERVICE_REF_ID,
-      SERVICE_ID,
       SERVICE_REFERENTIEL_ID,
+      SERVICE_ID,
+      FORMULE_RES_SERVICE_REF_ID,
+      FORMULE_RES_SERVICE_ID,
+      HEURES_PAYEES,
+      HEURES_DEMANDEES,
+      HEURES_A_PAYER_POND,
+      HEURES_A_PAYER,
+      PERIODE_PAIEMENT_ID,
+      MISE_EN_PAIEMENT_ID,
+      STRUCTURE_ID,
+      INTERVENANT_ID,
+      ANNEE_ID,
       TO_DELETE
 
     ) VALUES (
 
       TBL_PAIEMENT_ID_SEQ.NEXTVAL,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.STRUCTURE_ID,
-      v.MISE_EN_PAIEMENT_ID,
-      v.PERIODE_PAIEMENT_ID,
-      v.HEURES_A_PAYER,
-      v.HEURES_A_PAYER_POND,
-      v.HEURES_DEMANDEES,
-      v.HEURES_PAYEES,
-      v.FORMULE_RES_SERVICE_ID,
-      v.FORMULE_RES_SERVICE_REF_ID,
-      v.SERVICE_ID,
       v.SERVICE_REFERENTIEL_ID,
+      v.SERVICE_ID,
+      v.FORMULE_RES_SERVICE_REF_ID,
+      v.FORMULE_RES_SERVICE_ID,
+      v.HEURES_PAYEES,
+      v.HEURES_DEMANDEES,
+      v.HEURES_A_PAYER_POND,
+      v.HEURES_A_PAYER,
+      v.PERIODE_PAIEMENT_ID,
+      v.MISE_EN_PAIEMENT_ID,
+      v.STRUCTURE_ID,
+      v.INTERVENANT_ID,
+      v.ANNEE_ID,
       0
 
     );
@@ -30660,7 +30714,7 @@ END UNICAEN_TBL;',
         tv.*
       FROM
         (WITH pjf AS (
-          SELECT
+          SELECT DISTINCT
             pjf.annee_id,
             pjf.type_piece_jointe_id,
             pjf.intervenant_id,
@@ -30684,7 +30738,7 @@ END UNICAEN_TBL;',
             ORDER BY pjf.annee_id ASC
 
         )
-        SELECT
+        SELECT DISTINCT
           COALESCE( pjd.annee_id, pjf.annee_id ) annee_id,
           COALESCE( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
           COALESCE( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
@@ -30701,9 +30755,6 @@ END UNICAEN_TBL;',
           AND pjd.code_intervenant = pjf.code_intervenant
           AND pjd.annee_id BETWEEN pjf.annee_id AND (pjf.annee_id + pjf.duree_vie - 1)
           AND pjd.annee_id BETWEEN pjf.annee_id AND NVL(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
-
-          --AND (pjd.annee_id = pjf.annee_id
-          --AND pjd.annee_id < pjf.date_validite
         ORDER By annee_id) tv
       WHERE
         \' || conds || \'
@@ -30714,10 +30765,9 @@ END UNICAEN_TBL;',
 
     ) WHEN MATCHED THEN UPDATE SET
 
+      OBLIGATOIRE          = v.OBLIGATOIRE,
       HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
       VALIDEE              = v.VALIDEE,
-      HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
-      OBLIGATOIRE          = v.OBLIGATOIRE,
       FOURNIE              = v.FOURNIE,
       DEMANDEE             = v.DEMANDEE,
       ANNEE_ID             = v.ANNEE_ID,
@@ -30726,12 +30776,10 @@ END UNICAEN_TBL;',
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
+      OBLIGATOIRE,
       HEURES_POUR_SEUIL,
       VALIDEE,
       FOURNIE,
-      VALIDEE,
-      HEURES_POUR_SEUIL,
-      OBLIGATOIRE,
       DEMANDEE,
       INTERVENANT_ID,
       TYPE_PIECE_JOINTE_ID,
@@ -30741,6 +30789,7 @@ END UNICAEN_TBL;',
     ) VALUES (
 
       TBL_PIECE_JOINTE_ID_SEQ.NEXTVAL,
+      v.OBLIGATOIRE,
       v.HEURES_POUR_SEUIL,
       v.VALIDEE,
       v.FOURNIE,
@@ -30748,7 +30797,6 @@ END UNICAEN_TBL;',
       v.INTERVENANT_ID,
       v.TYPE_PIECE_JOINTE_ID,
       v.ANNEE_ID,
-      v.OBLIGATOIRE,
       0
 
     );
@@ -30850,31 +30898,31 @@ END UNICAEN_TBL;',
     ) WHEN MATCHED THEN UPDATE SET
 
       CODE_INTERVENANT     = v.CODE_INTERVENANT,
+      OBLIGATOIRE          = v.OBLIGATOIRE,
       HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
       ANNEE_ID             = v.ANNEE_ID,
-      OBLIGATOIRE          = v.OBLIGATOIRE,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
       CODE_INTERVENANT,
+      OBLIGATOIRE,
       HEURES_POUR_SEUIL,
       INTERVENANT_ID,
       TYPE_PIECE_JOINTE_ID,
       ANNEE_ID,
-      OBLIGATOIRE,
       TO_DELETE
 
     ) VALUES (
 
       TBL_PIECE_JOINTE_DEMAND_ID_SEQ.NEXTVAL,
       v.CODE_INTERVENANT,
+      v.OBLIGATOIRE,
       v.HEURES_POUR_SEUIL,
       v.INTERVENANT_ID,
       v.TYPE_PIECE_JOINTE_ID,
       v.ANNEE_ID,
-      v.OBLIGATOIRE,
       0
 
     );
@@ -30939,10 +30987,10 @@ END UNICAEN_TBL;',
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      DATE_ARCHIVE         = v.DATE_ARCHIVE,
-      DATE_VALIDITE        = v.DATE_VALIDITE,
-      CODE_INTERVENANT     = v.CODE_INTERVENANT,
       DUREE_VIE            = v.DUREE_VIE,
+      CODE_INTERVENANT     = v.CODE_INTERVENANT,
+      DATE_VALIDITE        = v.DATE_VALIDITE,
+      DATE_ARCHIVE         = v.DATE_ARCHIVE,
       PIECE_JOINTE_ID      = v.PIECE_JOINTE_ID,
       ANNEE_ID             = v.ANNEE_ID,
       to_delete = 0
@@ -30950,10 +30998,10 @@ END UNICAEN_TBL;',
     WHEN NOT MATCHED THEN INSERT (
 
       ID,
-      DATE_ARCHIVE,
-      DATE_VALIDITE,
-      CODE_INTERVENANT,
       DUREE_VIE,
+      CODE_INTERVENANT,
+      DATE_VALIDITE,
+      DATE_ARCHIVE,
       PIECE_JOINTE_ID,
       FICHIER_ID,
       VALIDATION_ID,
@@ -30965,10 +31013,10 @@ END UNICAEN_TBL;',
     ) VALUES (
 
       TBL_PIECE_JOINTE_FOURNI_ID_SEQ.NEXTVAL,
-      v.DATE_ARCHIVE,
-      v.DATE_VALIDITE,
-      v.CODE_INTERVENANT,
       v.DUREE_VIE,
+      v.CODE_INTERVENANT,
+      v.DATE_VALIDITE,
+      v.DATE_ARCHIVE,
       v.PIECE_JOINTE_ID,
       v.FICHIER_ID,
       v.VALIDATION_ID,
@@ -36385,7 +36433,7 @@ FROM
       'name' => 'V_TBL_PIECE_JOINTE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
 WITH pjf AS (
-  SELECT
+  SELECT DISTINCT
     pjf.annee_id,
     pjf.type_piece_jointe_id,
     pjf.intervenant_id,
@@ -36409,7 +36457,7 @@ WITH pjf AS (
     ORDER BY pjf.annee_id ASC
 
 )
-SELECT
+SELECT DISTINCT
   COALESCE( pjd.annee_id, pjf.annee_id ) annee_id,
   COALESCE( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
   COALESCE( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
@@ -36426,9 +36474,6 @@ FROM
   AND pjd.code_intervenant = pjf.code_intervenant
   AND pjd.annee_id BETWEEN pjf.annee_id AND (pjf.annee_id + pjf.duree_vie - 1)
   AND pjd.annee_id BETWEEN pjf.annee_id AND NVL(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
-
-  --AND (pjd.annee_id = pjf.annee_id
-  --AND pjd.annee_id < pjf.date_validite
 ORDER By annee_id',
     ),
     'V_TBL_PIECE_JOINTE_DEMANDE' => 
@@ -39083,7 +39128,7 @@ WHERE
         'INTERVENANT_TEST_ID' => 'ID',
       ),
     ),
-    'GRADE_CORPS_FK' =>
+    'GRADE_CORPS_FK' => 
     array (
       'name' => 'GRADE_CORPS_FK',
       'table' => 'GRADE',
@@ -44041,6 +44086,16 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
+    'FORMULE_TEST_STRUCTURE__UN' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE__UN',
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'index' => 'FORMULE_TEST_STRUCTURE__UN',
+      'columns' => 
+      array (
+        0 => 'LIBELLE',
+      ),
+    ),
     'FORMULE__UN' => 
     array (
       'name' => 'FORMULE__UN',
@@ -48577,6 +48632,26 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE_PK' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE_PK',
+      'unique' => true,
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'columns' => 
+      array (
+        0 => 'ID',
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE__UN' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE__UN',
+      'unique' => true,
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'columns' => 
+      array (
+        0 => 'LIBELLE',
       ),
     ),
     'FORMULE_TEST_VOLUME_HORAIRE_PK' => 

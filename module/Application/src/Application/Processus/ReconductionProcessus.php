@@ -2,14 +2,17 @@
 
 namespace Application\Processus;
 
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etape;
 use Application\Service\Traits\AnneeServiceAwareTrait;
+use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
-use Zend\Stdlib\Parameters;
 
 /**
  * Description of ReconductionProcessus
@@ -25,6 +28,8 @@ class ReconductionProcessus extends AbstractProcessus
     use VolumeHoraireEnsServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use CentreCoutEpServiceAwareTrait;
+    use ElementModulateurServiceAwareTrait;
     use SourceServiceAwareTrait;
 
     protected $etapeService;
@@ -39,6 +44,8 @@ class ReconductionProcessus extends AbstractProcessus
 
     protected $contextService;
 
+    protected $centreCoutEpService;
+
 
 
     public function __construct()
@@ -49,11 +56,13 @@ class ReconductionProcessus extends AbstractProcessus
         $this->volumeHoraireEnsService   = $this->getServiceVolumeHoraireEns();
         $this->anneeService              = $this->getServiceAnnee();
         $this->contextService            = $this->getServiceContext();
+        $this->centreCoutEpService       = $this->getServiceCentreCoutEp();
+        $this->elementModulateurService  = $this->getServiceElementModulateur();
     }
 
 
 
-    public function reconduction(Parameters $datas)
+    public function reconduction($datas)
     {
         if (empty($datas['element']) && empty($datas['etape'])) {
             Throw new \Exception('Aucune donnée à reconduire');
@@ -143,7 +152,6 @@ class ReconductionProcessus extends AbstractProcessus
                         //Reconduction des chemins pédagogiques
                         $cheminsPedagogique = $elementEnCours->getCheminPedagogique();
                         foreach ($cheminsPedagogique as $chemin) {
-
                             $cheminReconduit = $this->cheminPedagogiqueService->newEntity();
                             $cheminReconduit->setElementPedagogique($elementReconduit);
                             $cheminReconduit->setEtape($etapeReconduit);
@@ -179,4 +187,136 @@ class ReconductionProcessus extends AbstractProcessus
         return true;
     }
 
+
+
+    public function reconduireCCFormation($etapes)
+    {
+        $anneeN       = $this->getServiceContext()->getAnnee();
+        $anneeN1      = $this->getServiceContext()->getAnneeSuivante();
+        $serviceEtape = $this->getServiceEtape();
+        $em           = $this->getEntityManager();
+        $nbEPN1       = 0;
+
+        foreach ($etapes as $code => $etape) {
+            $etapeN                     = $etape['N']['etape'];
+            $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
+            $elementsPedagogiqueNByCode = [];
+            $codesEpWithoutCc = [];
+            foreach ($elementsPedagogiqueN as $ep) {
+                //Check si ep a un élément pédagoggique
+                $ccep = $ep->getCentreCoutEp();
+                if(count($ccep) > 0)
+                {
+                    //Si il a des centres de couts alors je le stocke
+                    $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+                }
+                else{
+                    $codesEpWithoutCc[] = $ep->getCode();
+                }
+            }
+            $etapeN1                     = $etape['N1']['etape'];
+            $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
+            $elementsPedagogiqueN1ByCode = [];
+            foreach ($elementsPedagogiqueN1 as $epN1) {
+                //Si l'epN possède des CC alors je continuer
+                if(!in_array($epN1->getCode(), $codesEpWithoutCc))
+                {
+                    $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+                }
+            }
+
+            foreach ($elementsPedagogiqueN as $ep) {
+                //Cas d'un élément pédagogique historisé a ne pas reconduire
+                if ($ep->estHistorise()) {
+                    continue;
+                }
+                //Retrouver l'EP reconduite sur N1
+                $epN1 = (array_key_exists($ep->getCode(), $elementsPedagogiqueN1ByCode)) ? $elementsPedagogiqueN1ByCode[$ep->getCode()] : false;
+                if ($epN1) {
+                    $nbEPN1++;
+                    //Suppression CCEP de l'EPN1 avant la reconduction N -> N1
+                    $centreCoutEpN1 = $epN1->getCentreCoutEp();
+                    foreach ($centreCoutEpN1 as $ccepN1) {
+                        $em->remove($ccepN1);
+                    }
+                    $em->flush();
+                    $centreCoutEpN = $ep->getCentreCoutEp();
+                    foreach ($centreCoutEpN as $ccep) {
+                        //cas d'un centre de coût historisé.
+                        if ($ccep->estHistorise()) {
+                            continue;
+                        }
+                        $ccepN1 = $this->centreCoutEpService->newEntity();
+                        $ccepN1->setTypeHeures($ccep->getTypeHeures());
+                        $ccepN1->setCentreCout($ccep->getCentreCout());
+                        $ccepN1->setElementPedagogique($epN1);
+                        $this->centreCoutEpService->save($ccepN1);
+                    }
+                    $em->persist($epN1);
+                }
+            }
+        }
+        //Execution en BDD
+        $em->flush();
+
+        return $nbEPN1;
+    }
+
+
+
+    public function reconduireModulateurFormation($etapes)
+    {
+        $em     = $this->getEntityManager();
+        $nbEPN1 = 0;
+
+
+        foreach ($etapes as $code => $etape) {
+            $etapeN                     = $etape['N']['etape'];
+            $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
+            $elementsPedagogiqueNByCode = [];
+            $codesEpWithoutModulateur = [];
+            foreach ($elementsPedagogiqueN as $ep) {
+                $mep = $ep->getElementModulateur();
+                if(count($mep) > 0)
+                {
+                    //Si il a des modulateurs alors je le stocke
+                    $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+                }
+                else{
+                    $codesEpWithoutModulateur[] = $ep->getCode();
+                }
+            }
+            $etapeN1                     = $etape['N1']['etape'];
+            $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
+            $elementsPedagogiqueN1ByCode = [];
+            foreach ($elementsPedagogiqueN1 as $epN1) {
+                if(!in_array($epN1->getCode(), $codesEpWithoutModulateur))
+                {
+                    $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+                }
+            }
+
+            foreach ($elementsPedagogiqueN as $ep) {
+                $epN1 = (array_key_exists($ep->getCode(), $elementsPedagogiqueN1ByCode)) ? $elementsPedagogiqueN1ByCode[$ep->getCode()] : false;
+                if ($epN1) {
+                    $nbEPN1++;
+                    $elementsModulateursN1 = $epN1->getElementModulateur();
+                    foreach ($elementsModulateursN1 as $epmepN1) {
+                        $em->remove($epmepN1);
+                    }
+                    $em->flush();
+                    $elementsModulateurs = $ep->getElementModulateur();
+                    foreach ($elementsModulateurs as $epm) {
+                        $epmepN1 = $this->elementModulateurService->newEntity();
+                        $epmepN1->setModulateur($epm->getModulateur());
+                        $epmepN1->setElement($epN1);
+                        $em->persist($epmepN1);
+                    }
+                }
+            }
+            $em->flush();
+        }
+
+        return $nbEPN1;
+    }
 }

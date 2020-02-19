@@ -2,6 +2,10 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\ElementModulateur;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Modulateur;
+use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -12,6 +16,9 @@ use Doctrine\ORM\QueryBuilder;
 class ElementModulateurService extends AbstractEntityService
 {
     use Traits\ElementPedagogiqueServiceAwareTrait;
+    use ModulateurServiceAwareTrait;
+
+
 
     /**
      * retourne la classe des entités
@@ -24,6 +31,8 @@ class ElementModulateurService extends AbstractEntityService
         return \Application\Entity\Db\ElementModulateur::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -34,21 +43,66 @@ class ElementModulateurService extends AbstractEntityService
         return 'epmod';
     }
 
+
+
     /**
      * Filtre la liste des services selon lecontexte courant
      *
      * @param QueryBuilder|null $qb
-     * @param string|null $alias
+     * @param string|null       $alias
+     *
      * @return QueryBuilder
      */
-    public function finderByContext( QueryBuilder $qb=null, $alias=null )
+    public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $this->join( $this->getServiceElementPedagogique(), $qb, 'elementPedagogique', false, $alias );
+        $this->join($this->getServiceElementPedagogique(), $qb, 'elementPedagogique', false, $alias);
 
-        $this->getServiceElementPedagogique()->finderByAnnee( $this->getServiceContext()->getannee(), $qb ); // Filtre d'année obligatoire
+        $this->getServiceElementPedagogique()->finderByAnnee($this->getServiceContext()->getannee(), $qb); // Filtre d'année obligatoire
 
         return $qb;
+    }
+
+
+
+    /**
+     * Ajoute un élément modulateur à un élément pédagogique
+     *
+     * @param ElementPedagogique $element
+     * @param String             $codeModulateur Code du modulateur
+     *
+     * @return ElementPedagogique
+     */
+
+
+    public function addElementModulateur(ElementPedagogique $element, $codeModulateur)
+    {
+
+        $elementModulateurCollection = $element->getElementModulateur();
+        if ($elementModulateurCollection->count() != 0) {
+            foreach ($elementModulateurCollection as $elementModulateur) {
+                if (empty($codeModulateur)) {
+                    $this->delete($elementModulateur);
+                } else {
+                    $modulateur = $this->getServiceModulateur()->getRepo()->findOneByCode($codeModulateur);
+                    $elementModulateur->setModulateur($modulateur);
+                    $this->save($elementModulateur);
+                }
+            }
+        } else {
+            //Uniquement si le code modulateur n'est pas vide.
+            if (!empty($codeModulateur)) {
+                $modulateur           = $this->getServiceModulateur()->getRepo()->findOneByCode($codeModulateur);
+                $newElementModulateur = $this->newEntity();
+                $newElementModulateur->setElement($element);
+                $newElementModulateur->setModulateur($modulateur);
+                $this->save($newElementModulateur);
+            }
+        }
+        //refresh l'entité pour l'affichage utilisateur post traitement
+        $this->entityManager->refresh($element);
+
+        return $element;
     }
 }

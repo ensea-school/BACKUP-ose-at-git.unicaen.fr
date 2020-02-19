@@ -30,6 +30,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Entity\Db\Contrat;
 use Zend\View\Model\JsonModel;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Description of ContratController
@@ -52,6 +53,16 @@ class ContratController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ModeleContratServiceAwareTrait;
     use ModeleFormAwareTrait;
+
+    private $renderer;
+
+
+
+    public function __construct(PhpRenderer $renderer)
+    {
+
+        $this->renderer = $renderer;
+    }
 
 
 
@@ -323,6 +334,28 @@ class ContratController extends AbstractController
 
 
 
+    public function envoyerMailAction()
+    {
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+            throw new UnAuthorizedException("Interdiction d'envoyer le contrat par email");
+        }
+
+        if (!empty($contrat->getIntervenant()->getEmail())) {
+            $html    = $this->renderer->render('application/contrat/mail/contrat', [
+                'contrat' => $contrat,
+            ]);
+            $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
+            $mail = $this->mail()->send($message);
+            $here="";
+        }
+
+        return $this->getResponse();
+    }
+
+
+
     /**
      * Dépôt du contrat signé.
      *
@@ -499,7 +532,7 @@ class ContratController extends AbstractController
         $fichier->setNom(Util::reduce($modeleContrat->getLibelle()) . '.odt');
         $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
         if ($modeleContrat->hasFichier()) {
-            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(),-1,0));
+            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(), -1, 0));
         } else {
             $fichier->setContenu(file_get_contents($this->getServiceModeleContrat()->getModeleGeneriqueFile()));
         }

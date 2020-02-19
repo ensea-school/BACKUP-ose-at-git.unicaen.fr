@@ -5,6 +5,10 @@ namespace Application\Service;
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\ModeleContrat;
 use Unicaen\OpenDocument\Document;
+use Zend\Mail\Message as MailMessage;
+use Zend\Mime\Message;
+use Zend\Mime\Mime;
+use Zend\Mime\Part;
 
 /**
  * Description of ModeleContratService
@@ -59,7 +63,7 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    public function generer(Contrat $contrat)
+    public function generer(Contrat $contrat, $download = true)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             $contrat->getStructure()->getCode(),
@@ -73,10 +77,10 @@ class ModeleContratService extends AbstractEntityService
         }
 
         $document = new Document();
-        if (isset($this->config['host'])){
+        if (isset($this->config['host'])) {
             $document->setHost($this->config['host']);
         }
-        if (isset($this->config['tmp-dir'])){
+        if (isset($this->config['tmp-dir'])) {
             $document->setTmpDir($this->config['tmp-dir']);
         }
 
@@ -92,7 +96,55 @@ class ModeleContratService extends AbstractEntityService
         $document->getPublisher()->setAutoBreak(true);
         $document->publish($this->generateData($modele, $contrat));
         $document->setPdfOutput(true);
-        $document->download($fileName);
+        if ($download) {
+            $document->download($fileName);
+        } else {
+
+            return $document;
+        }
+    }
+
+
+
+    public function prepareMail(Contrat $contrat, String $htmlContent)
+    {
+        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+            $contrat->getStructure()->getCode(),
+            $contrat->getIntervenant()->getNomUsuel(),
+            $contrat->getIntervenant()->getCode());
+
+        $document = $this->generer($contrat, false);
+        $content  = $document->saveToData();
+
+        $subject          = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
+        $emailIntervenant = $contrat->getIntervenant()->getEmail();
+
+        $body = new Message();
+
+        // Contenu HTML du mail
+        $text          = new Part($htmlContent);
+        $text->type    = Mime::TYPE_HTML;
+        $text->charset = 'utf-8';
+        $body->addPart($text);
+
+        //Contrat en pièce jointe
+        $attachment              = new Part($content);
+        $attachment->type        = 'application/pdf';
+        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+        $attachment->encoding    = Mime::ENCODING_BASE64;
+        $attachment->filename    = $fileName;
+        $body->addPart($attachment);
+
+        $message     = new MailMessage();
+        $messageType = 'multipart/related';
+        $message->setEncoding('UTF-8')
+            ->setFrom(\AppConfig::get('mail', 'from'), "Application OSE")
+            ->setSubject($subject)
+            ->addTo($emailIntervenant)
+            ->setBody($body)
+            ->getHeaders()->get('content-type')->setType($messageType);
+
+        return $message;
     }
 
 
@@ -220,7 +272,5 @@ class ModeleContratService extends AbstractEntityService
 
         return $this;
     }
-
-
 
 }

@@ -61,9 +61,6 @@ class PieceJointeController extends AbstractController
     public function indexAction()
     {
         //$this->initFilters();
-        //Todo : rendre impossible de supprimer un fichier fournis en ANNEE N-1 si le contexte est en ANNEE N
-        //Todo : Si param PJ passé à la vue lister regarder le comportement si PJ est null (Call to a member function getId() on null /app/module/Application/view/application/piece-jointe/partial/piece-jointe.phtml                    :71)
-
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $intervenant = $this->getEvent()->getParam('intervenant');

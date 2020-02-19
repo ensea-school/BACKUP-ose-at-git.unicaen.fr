@@ -117,20 +117,23 @@ class PieceJointeController extends AbstractController
      */
     protected function makeMessages($demandees, $fournies)
     {
-        $role          = $this->getServiceContext()->getSelectedIdentityRole();
-        $isIntervenant = (boolean)$role->getIntervenant();
-        $nbDemandees   = 0;
-        $nbFournies    = 0;
-        $nbValidees    = 0;
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
+        $isIntervenant            = (boolean)$role->getIntervenant();
+        $nbDemandees              = 0;
+        $nbFournies               = 0;
+        $nbValidees               = 0;
+        $nbObligatoiresNonFournis = 0;
 
         foreach ($demandees as $demandee) {
-            $nbDemandees++;
-            if (isset($fournies[$demandee->getId()])) {
-                $pj = $fournies[$demandee->getId()];
-                if (!$pj->getFichier()->isEmpty()) {
-                    $nbFournies++;
-                    if ($pj->getValidation()) {
-                        $nbValidees++;
+            if ($demandee->isObligatoire()) {
+                $nbDemandees++;
+                if (isset($fournies[$demandee->getTypePieceJointe()->getId()])) {
+                    $pj = $fournies[$demandee->getTypePieceJointe()->getId()];
+                    if (!$pj->getFichier()->isEmpty()) {
+                        $nbFournies++;
+                        if ($pj->getValidation()) {
+                            $nbValidees++;
+                        }
                     }
                 }
             }

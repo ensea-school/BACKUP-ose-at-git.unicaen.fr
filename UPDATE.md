@@ -6,6 +6,9 @@
 Vous êtes invités à consulter cette page, car y sont mentionnées des "notes de mise à jour" par version qu'il
 convient de lire attentivement avant de démarrer toute opération.
 
+Si vous "sautez" plusieurs versions, attention à bien lire également les notes de mises à jour de chaque version intermédiaire, car des opérations
+manuelles à effectuer peuvent y être consignées. Opérations sans lesquelles pourrait ne plus fonctionner.
+
 ## Mode maintenance
 Placez OSE en mode maintenance. Dans le fichier `config.local.php` :
 

@@ -15,9 +15,6 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 {
     use HistoriqueAwareTrait;
 
-    const CODE_RESPONSABLE_COMPOSANTE  = 'responsable-composante';
-    const CODE_GESTIONNAIRE_COMPOSANTE = 'gestionnaire-composante';
-
     /**
      * @var integer
      */
@@ -39,14 +36,14 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     protected $perimetre;
 
     /**
+     * @var bool
+     */
+    protected $accessibleExterieur = true;
+
+    /**
      * @var boolean
      */
     protected $peutChangerStructure;
-
-    /**
-     * @var bool
-     */
-    private $accessibleExterieur = true;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -180,6 +177,30 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
+     * @return bool
+     */
+    public function getAccessibleExterieur(): bool
+    {
+        return $this->accessibleExterieur;
+    }
+
+
+
+    /**
+     * @param bool $accessibleExterieur
+     *
+     * @return self
+     */
+    public function setAccessibleExterieur(bool $accessibleExterieur): self
+    {
+        $this->accessibleExterieur = $accessibleExterieur;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return boolean
      */
     public function getPeutChangerStructure()
@@ -197,30 +218,6 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     public function setPeutChangerStructure($peutChangerStructure)
     {
         $this->peutChangerStructure = $peutChangerStructure;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getAccessibleExterieur(): bool
-    {
-        return $this->accessibleExterieur;
-    }
-
-
-
-    /**
-     * @param bool $accessibleExterieur
-     *
-     * @return Role
-     */
-    public function setAccessibleExterieur(bool $accessibleExterieur): Role
-    {
-        $this->accessibleExterieur = $accessibleExterieur;
 
         return $this;
     }

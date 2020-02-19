@@ -13,18 +13,18 @@ return [
                 'options'       => [
                     'route'    => '/domaine-fonctionnel',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\DomaineFonctionnel',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\DomaineFonctionnel',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'delete'  => [
+                    'delete' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/delete/:domaine-fonctionnel',
+                            'route'       => '/delete/:domaineFonctionnel',
                             'constraints' => [
-                                'domaine-fonctionnel' => '[0-9]*',
+                                'domaineFonctionnel' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'delete',
@@ -34,9 +34,9 @@ return [
                     'saisie' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/saisie/[:domaine-fonctionnel]',
+                            'route'       => '/saisie/[:domaineFonctionnel]',
                             'constraints' => [
-                                'domaine-fonctionnel' => '[0-9]*',
+                                'domaineFonctionnel' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'saisie',
@@ -47,7 +47,7 @@ return [
             ],
         ],
     ],
-    'navigation'    => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -66,7 +66,7 @@ return [
                 ],
             ],
         ],
-	],
+    ],
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [
@@ -77,7 +77,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\DomaineFonctionnel',
-                    'action'     => ['saisie','delete'],
+                    'action'     => ['saisie', 'delete'],
                     'privileges' => Privileges::DOMAINES_FONCTIONNELS_ADMINISTRATION_EDITION,
                 ],
             ],
@@ -90,14 +90,14 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\DomaineFonctionnelService::class            => Service\DomaineFonctionnelService::class,
+            Service\DomaineFonctionnelService::class => Service\DomaineFonctionnelService::class,
         ],
     ],
     'view_helpers'    => [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\DomaineFonctionnel\DomaineFonctionnelSaisieForm::class                 => Form\DomaineFonctionnel\DomaineFonctionnelSaisieForm::class,
+            Form\DomaineFonctionnel\DomaineFonctionnelSaisieForm::class => Form\DomaineFonctionnel\DomaineFonctionnelSaisieForm::class,
         ],
     ],
 ];

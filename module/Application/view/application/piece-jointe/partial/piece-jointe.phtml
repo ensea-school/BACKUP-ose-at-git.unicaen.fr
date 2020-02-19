@@ -41,8 +41,6 @@ if ($tpj->getCode() === \Application\Entity\Db\TypePieceJointe::CARTE_ETUD) {
 
 $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichier/televerser', ['typePieceJointe' => $tpj->getId()], [], true));
 
-//Vérification si piece est de l'année en cours
-
 ?>
 <div
         class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-<?= $tpj->getId() ?> panel panel-<?= $pj && $pj->getValidation() ? 'success' : 'default' ?> upload-container"
@@ -71,7 +69,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
             <?php endif; ?>
             <?=
             ($pj && $pj->annee->getId() != $annee->getId()) ? $type . "  <span style=\"font-size:0.6em;\">Fourni(e) en " . $pj->annee->getId() . "</span>" : $type;
-
+            !$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
             ?><br/>
         </h3>
     </div>

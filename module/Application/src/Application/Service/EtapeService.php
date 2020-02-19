@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Provider\Privilege\Privileges;
@@ -10,8 +11,10 @@ use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape;
+use Zend\Form\Element;
 
 /**
  * Description of ElementPedagogique
@@ -54,6 +57,46 @@ class EtapeService extends AbstractEntityService
     public function getAlias()
     {
         return 'etp';
+    }
+
+
+
+    /**
+     * Retour uniquement les Etapes ayant été reconduites pour l'année universitaire suivante
+     *
+     * @return string
+     */
+
+    public function getEtapeReconduit($structure)
+    {
+        $anneeN  = $this->getServiceContext()->getAnnee();
+        $anneeN1 = $this->getServiceContext()->getAnneeSuivante();
+
+
+        $qb1 = $this->getEntityManager()->createQueryBuilder();
+        $qb2 = $this->getEntityManager()->createQueryBuilder();
+
+        $etapeN1 = $qb1
+            ->select('eN1.code')
+            ->from(Etape::class, 'eN1')
+            ->leftJoin(Structure::class, 'sN1', \Doctrine\ORM\Query\Expr\Join::WITH, 'eN1.structure = sN1.id')
+            ->where('eN1.annee = :anneeN1')
+            ->andWhere('sN1 = :structure');
+
+        $qb2 = $this->finderByStructure($structure)
+            ->where($qb2->expr()->in('etp.code', $etapeN1->getDQL()))
+            ->andWhere($qb2->expr()->orX(
+                $qb2->expr()->eq('etp.annee', ':anneeN'),
+                $qb2->expr()->eq('etp.annee', ':anneeN1')
+            ))
+            ->setParameter('anneeN', $anneeN)
+            ->setParameter('anneeN1', $anneeN1)
+            ->setParameter('structure', $structure)
+            ->orderBy('etp.annee', 'desc');
+
+        $result = $qb2->getQuery()->getResult();
+
+        return $result;
     }
 
 

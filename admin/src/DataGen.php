@@ -103,7 +103,7 @@ class DataGen
             'table'   => 'PRIVILEGE',
             'context' => ['install', 'update', 'privileges'],
             'key'     => ['CATEGORIE_ID', 'CODE'],
-            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]],
+            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT ID FROM CATEGORIE_PRIVILEGE WHERE CODE = %s']]],
         ],
         [
             'table'   => 'INDICATEUR',
@@ -112,10 +112,6 @@ class DataGen
         ],
         [
             'table'   => 'FORMULE',
-            'context' => ['install', 'update'],
-        ],
-        [
-            'table'   => 'FORMULE_TEST_STRUCTURE',
             'context' => ['install', 'update'],
         ],
         [
@@ -203,15 +199,15 @@ class DataGen
             'table'   => 'ROLE',
             'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['columns' => ['PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s']]],
+            'options' => ['columns' => ['PERIMETRE_ID' => ['transformer' => 'SELECT ID FROM PERIMETRE WHERE CODE = %s']]],
         ],
         [
             'table'   => 'ROLE_PRIVILEGE',
             'context' => ['install'],
             'key'     => ['ROLE_ID', 'PRIVILEGE_ID'],
             'options' => ['columns' => [
-                'ROLE_ID'      => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
-                'PRIVILEGE_ID' => ['transformer' => 'SELECT p.id FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE cp.code || \'-\' || p.code = %s'],
+                'ROLE_ID'      => ['transformer' => 'SELECT ID FROM ROLE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
             ],],
         ],
         [
@@ -219,8 +215,8 @@ class DataGen
             'context' => ['install'],
             'key'     => ['UTILISATEUR_ID', 'ROLE_ID'],
             'options' => ['columns' => [
-                'ROLE_ID'        => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
-                'UTILISATEUR_ID' => ['transformer' => 'SELECT id FROM utilisateur WHERE username = %s'],
+                'ROLE_ID'        => ['transformer' => 'SELECT ID FROM ROLE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'UTILISATEUR_ID' => ['transformer' => 'SELECT ID FROM UTILISATEUR WHERE USERNAME = %s'],
             ],],
         ],
 
@@ -250,7 +246,7 @@ class DataGen
             'table'   => 'GRADE',
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',
-            'options' => ['columns' => ['CORPS_ID' => ['transformer' => 'SELECT id FROM corps WHERE source_code = %s']]],
+            'options' => ['columns' => ['CORPS_ID' => ['transformer' => 'SELECT ID FROM CORPS WHERE SOURCE_CODE = %s']]],
         ],
         [
             'table'   => 'DISCIPLINE',
@@ -266,7 +262,7 @@ class DataGen
             'table'   => 'FONCTION_REFERENTIEL',
             'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['columns' => ['DOMAINE_FONCTIONNEL_ID' => ['transformer' => 'SELECT id FROM domaine_fonctionnel WHERE source_code = %s']]],
+            'options' => ['columns' => ['DOMAINE_FONCTIONNEL_ID' => ['transformer' => 'SELECT ID FROM DOMAINE_FONCTIONNEL WHERE SOURCE_CODE = %s']]],
         ],
         [
             'table'   => 'MOTIF_MODIFICATION_SERVICE',
@@ -282,15 +278,15 @@ class DataGen
             'table'   => 'STATUT_INTERVENANT',
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',
-            'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM TYPE_INTERVENANT WHERE code = %s']]],
+            'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
         ],
         [
             'table'   => 'STATUT_PRIVILEGE',
             'context' => ['install'],
             'key'     => ['STATUT_ID', 'PRIVILEGE_ID'],
             'options' => ['columns' => [
-                'STATUT_ID'    => ['transformer' => 'SELECT id FROM statut_intervenant WHERE histo_destruction IS NULL AND source_code = %s'],
-                'PRIVILEGE_ID' => ['transformer' => 'SELECT p.id FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE cp.code || \'-\' || p.code = %s'],
+                'STATUT_ID'    => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND SOURCE_CODE = %s'],
+                'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
             ],],
         ],
         [
@@ -298,8 +294,8 @@ class DataGen
             'context' => ['install'],
             'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_AGREMENT_ID'],
             'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM statut_intervenant WHERE histo_destruction IS NULL AND source_code = %s'],
-                'TYPE_AGREMENT_ID'      => ['transformer' => 'SELECT id FROM TYPE_AGREMENT WHERE code = %s'],
+                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND SOURCE_CODE = %s'],
+                'TYPE_AGREMENT_ID'      => ['transformer' => 'SELECT ID FROM TYPE_AGREMENT WHERE CODE = %s'],
             ],],
         ],
         [
@@ -312,8 +308,8 @@ class DataGen
             'context' => ['install'],
             'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_PIECE_JOINTE_ID'],
             'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM statut_intervenant WHERE histo_destruction IS NULL AND source_code = %s'],
-                'TYPE_PIECE_JOINTE_ID'  => ['transformer' => 'SELECT id FROM TYPE_PIECE_JOINTE WHERE histo_destruction IS NULL AND code = %s'],
+                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND SOURCE_CODE = %s'],
+                'TYPE_PIECE_JOINTE_ID'  => ['transformer' => 'SELECT ID FROM TYPE_PIECE_JOINTE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
             ],],
         ],
         [
@@ -321,9 +317,9 @@ class DataGen
             'context' => ['install'],
             'key'     => ['ETAPE_SUIV_ID', 'ETAPE_PREC_ID'],
             'options' => ['columns' => [
-                'ETAPE_PREC_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
-                'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
-                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
+                'ETAPE_PREC_ID'       => ['transformer' => 'SELECT ID FROM WF_ETAPE WHERE CODE = %s'],
+                'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT ID FROM WF_ETAPE WHERE CODE = %s'],
+                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s'],
             ],],
         ],
 
@@ -381,15 +377,15 @@ class DataGen
         /* L'administrateur doit avoir tous les droits obligatoirement! */
         $this->oseAdmin->getBdd()->exec("
         INSERT INTO
-          role_privilege(privilege_id, role_id)
+          ROLE_PRIVILEGE(PRIVILEGE_ID, ROLE_ID)
         SELECT
-          p.id privilege_id, r.id role_id
+          P.ID PRIVILEGE_ID, R.ID ROLE_ID
         FROM
-          privilege p
-          JOIN role r ON r.code = 'administrateur'
-          LEFT JOIN role_privilege rp on rp.privilege_id = p.id AND rp.role_id = r.id
+          PRIVILEGE P
+          JOIN ROLE R ON R.CODE = 'administrateur'
+          LEFT JOIN ROLE_PRIVILEGE RP ON RP.PRIVILEGE_ID = P.ID AND RP.ROLE_ID = R.ID
         WHERE
-          rp.role_id IS NULL
+          RP.ROLE_ID IS NULL
         ");
     }
 
@@ -542,23 +538,6 @@ class DataGen
         }
 
         return $formules;
-    }
-
-
-
-    public function FORMULE_TEST_STRUCTURE()
-    {
-        $data       = require $this->oseAdmin->getOseDir() . 'data/formule_test_structures.php';
-        $structures = [];
-        foreach ($data as $id => $structure) {
-            $structures[] = [
-                'ID'         => $id,
-                'LIBELLE'    => $structure['libelle'],
-                'UNIVERSITE' => $structure['universite'],
-            ];
-        }
-
-        return $structures;
     }
 
 

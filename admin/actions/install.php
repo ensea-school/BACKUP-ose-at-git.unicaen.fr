@@ -7,31 +7,32 @@ $osedir = $oa->getOseDir();
 $c->println("Installation de OSE");
 
 if (!$fromMaster) {
-    // Choix de la version
-    $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
-    $c->println("Voici la liste des versions de OSE disponibles:");
-    $tags = $oa->getTags();
-    foreach ($tags as $tag) {
-        $c->println($tag);
-    }
-    $ok = false;
-    while (!$ok) {
-        $c->print("Veuillez choisir une version à déployer: ");
-        $version = $c->getInput('version');
-        if ($oa->tagIsValid($version)) {
-            $ok = true;
-        } else {
-            $c->println("$version n'est pas dans la liste des versions disponibles.");
+    if (!$c->hasOption('version')) {
+        // Choix de la version
+        $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
+        $c->println("Voici la liste des versions de OSE disponibles:");
+        $tags = $oa->getTags();
+        foreach ($tags as $tag) {
+            $c->println($tag);
         }
+        $c->print("Veuillez choisir une version à déployer: ");
     }
+    $version = $c->getInput('version');
+    if (!($oa->tagIsValid($version) || $oa->brancheIsValid($version))) {
+        $c->printDie("$version n'est pas dans la liste des versions disponibles.");
+    }
+
 
     // Récupération des sources
     $c->println("\nDéploiement à partir des sources GIT", $c::COLOR_LIGHT_CYAN);
+    $tbr = $oa->tagIsValid($version) ? 'tags/' : '';
     $c->exec([
         "cd $osedir",
-        "git checkout tags/$version",
+        "git checkout $tbr$version",
         "mkdir cache",
         "chmod 777 cache",
+        "mkdir log",
+        "chmod 777 log",
         "chmod +7 bin/ose",
     ]);
     $oa->writeVersion($version);
@@ -40,6 +41,8 @@ if (!$fromMaster) {
         "cd $osedir",
         "mkdir cache",
         "chmod 777 cache",
+        "mkdir log",
+        "chmod 777 log",
         "chmod +7 bin/ose",
     ]);
 }

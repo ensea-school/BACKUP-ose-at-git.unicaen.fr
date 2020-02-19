@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Assertion\ContratAssertion;
+use Application\Controller\Factory\ContratControllerFactory;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -90,6 +91,18 @@ return [
                             ],
                             'defaults'    => [
                                 'action' => 'exporter',
+                            ],
+                        ],
+                    ],
+                    'envoyer-mail'        => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/:contrat/mail',
+                            'constraints' => [
+                                'contrat' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'envoyer-mail',
                             ],
                         ],
                     ],
@@ -211,7 +224,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['exporter'],
+                    'action'     => ['exporter', 'envoyer-mail'],
                     'privileges' => [Privileges::CONTRAT_CONTRAT_GENERATION, Privileges::CONTRAT_PROJET_GENERATION],
                     'assertion'  => Assertion\ContratAssertion::class,
                 ],
@@ -318,8 +331,8 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Contrat' => Controller\ContratController::class,
+        'factories' => [
+            'Application\Controller\Contrat' => Controller\Factory\ContratControllerFactory::class,
         ],
     ],
     'service_manager' => [

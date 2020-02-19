@@ -102,7 +102,7 @@ class PieceJointeService extends AbstractEntityService
             } // les heures sont toutes les mêmes pour l'intervenant
 
             $typePieceJointe                   = $pjd->getTypePieceJointe();
-            $result[$typePieceJointe->getId()] = $typePieceJointe;
+            $result[$typePieceJointe->getId()] = $pjd;
         }
         $this->hps[$intervenant->getId()] = $hps;
 
@@ -134,7 +134,6 @@ class PieceJointeService extends AbstractEntityService
      */
     public function getPiecesFournies(Intervenant $intervenant)
     {
-
         $dql  = "
         SELECT
           pjf, pj, tpj, v, f        

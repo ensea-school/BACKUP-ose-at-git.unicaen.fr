@@ -5,7 +5,6 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Entity\Db\Traits\FormuleAwareTrait;
-use Application\Entity\Db\Traits\FormuleTestStructureAwareTrait;
 use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Hydrator\FormuleTestIntervenantHydrator;
@@ -15,7 +14,6 @@ class FormuleTestIntervenant
     use FormuleAwareTrait;
     use AnneeAwareTrait;
     use TypeIntervenantAwareTrait;
-    use FormuleTestStructureAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
 
@@ -30,9 +28,9 @@ class FormuleTestIntervenant
     private $libelle;
 
     /**
-     * @var float
+     * @var string|null
      */
-    private $heuresDecharge = 0;
+    private $structureCode;
 
     /**
      * @var float
@@ -67,7 +65,7 @@ class FormuleTestIntervenant
     /**
      * @var float
      */
-    private $tauxTpServiceCompl = 2/3;
+    private $tauxTpServiceCompl = 2 / 3;
 
     /**
      * @var float
@@ -159,23 +157,46 @@ class FormuleTestIntervenant
 
 
     /**
-     * @return float
+     * @return string|null
      */
-    public function getHeuresDecharge()
+    public function getStructureCode(): ?string
     {
-        return $this->heuresDecharge;
+        return $this->structureCode;
     }
 
 
 
     /**
-     * @param float $heuresDecharge
+     * @param string|null $structureCode
+     *
+     * @return FormuleTestIntervenant
      */
-    public function setHeuresDecharge(float $heuresDecharge): FormuleTestIntervenant
+    public function setStructureCode(?string $structureCode): FormuleTestIntervenant
     {
-        $this->heuresDecharge = $heuresDecharge;
+        $this->structureCode = $structureCode;
 
         return $this;
+    }
+
+
+
+    /**
+     * @return string[]
+     */
+    public function getStructures(): array
+    {
+        $structures = [];
+        if ($this->getStructureCode()) {
+            $structures[$this->getStructureCode()] = $this->getStructureCode();
+        }
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            if ($vht->getStructureCode()) {
+                $structures[$vht->getStructureCode()] = $vht->getStructureCode();
+            }
+        }
+        asort($structures);
+
+        return $structures;
     }
 
 
@@ -937,34 +958,34 @@ class FormuleTestIntervenant
      */
     public function getDebugInfo()
     {
-        $data = ['lines' => [], 'cols' => [], 'cells' => [], 'inds' => []];
+        $data  = ['lines' => [], 'cols' => [], 'cells' => [], 'inds' => []];
         $calcs = [];
 
-        $a = explode('[',$this->debugInfo);
-        foreach( $a as $d ){
-            $d = explode( '|', $d);
-            switch($d[0]){
+        $a = explode('[', $this->debugInfo);
+        foreach ($a as $d) {
+            $d = explode('|', $d);
+            switch ($d[0]) {
                 case 'cell':
-                    $c = $d[1];
-                    $l = (int)$d[2];
+                    $c   = $d[1];
+                    $l   = (int)$d[2];
                     $val = (float)$d[3];
 
-                    if ($l > 0){
+                    if ($l > 0) {
                         $data['cells'][$c][$l] = $val;
-                        $data['lines'][$l] = $l;
-                        $data['cols'][$c] = $c;
-                    }else{
+                        $data['lines'][$l]     = $l;
+                        $data['cols'][$c]      = $c;
+                    } else {
                         $data['inds'][$c] = $val;
                     }
 
                 break;
                 case 'calc':
-                    $fnc = $d[1];
-                    $c = $d[2];
-                    $res = $d[3];
+                    $fnc                     = $d[1];
+                    $c                       = $d[2];
+                    $res                     = $d[3];
                     $data['cells'][$c][$fnc] = $res;
-                    $calcs[$fnc] = $fnc;
-                    $data['cols'][$c] = $c;
+                    $calcs[$fnc]             = $fnc;
+                    $data['cols'][$c]        = $c;
                 break;
             }
         }
@@ -972,9 +993,10 @@ class FormuleTestIntervenant
         sort($data['lines']);
         sort($calcs);
         $data['lines'] = array_merge($data['lines'], $calcs);
-        usort($data['cols'], function($a, $b){
-            $diffLen = strlen($a ) - strlen($b);
+        usort($data['cols'], function ($a, $b) {
+            $diffLen = strlen($a) - strlen($b);
             if ($diffLen) return $diffLen;
+
             return $a > $b;
         });
 

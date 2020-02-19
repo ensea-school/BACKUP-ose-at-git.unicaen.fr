@@ -84,15 +84,6 @@ function vn(array $array, $key, $type = 's')
             étant du service dû.
         </div>
     <?php endif; ?>
-    <?php if (vn($data, 'HEURES_DECHARGE', 'f') < 0): ?>
-        <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:1em">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-            <strong>* </strong>
-            Cet intervenant bénéficie d'une décharge de service et ne peut, par conséquent, prétendre au versement d'heures
-            complémentaires.
-        </div>
-    <?php endif; ?>
 
 <?php endif; ?>
 
@@ -259,8 +250,10 @@ function vn(array $array, $key, $type = 's')
 <br/>
 <div class="row">
     <div class="col-sm-4">Solde</div>
-    <div class="col-sm-2 nombre"><span class="label label-<?php $hs = (float)vn($data,'SOLDE','f');
-        if ($hs == 0) echo 'info'; elseif ($hs < 0) echo 'danger';
+    <div class="col-sm-2 nombre"><span class="label label-<?php $hs = (float)vn($data, 'SOLDE', 'f');
+        if ($hs == 0) {
+            echo 'info';
+        } elseif ($hs < 0) echo 'danger';
         else echo 'warning'; ?>"
                                        style="font-size:12pt"><?= vn($data, 'SOLDE') ?></span>
     </div>

@@ -113,8 +113,8 @@ class CentreCoutStructureHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                      $data
-     * @param  \Application\Entity\Db\CentreCoutStructure $object
+     * @param array                                      $data
+     * @param \Application\Entity\Db\CentreCoutStructure $object
      *
      * @return object
      */
@@ -133,7 +133,7 @@ class CentreCoutStructureHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\CentreCoutStructure $object
+     * @param \Application\Entity\Db\CentreCoutStructure $object
      *
      * @return array
      */
@@ -142,7 +142,7 @@ class CentreCoutStructureHydrator implements HydratorInterface
         $data = [
             'id'          => $object->getId(),
             'structure'   => ($s = $object->getStructure()) ? $s->getId() : null,
-            'centre-cout' => $object->getCentreCout()->getId(),
+            'centre-cout' => $object->getCentreCout() ? $object->getCentreCout()->getId() : null,
         ];
 
         return $data;

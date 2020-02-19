@@ -6,7 +6,6 @@ use Application\Constants;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
-use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -21,7 +20,7 @@ use Application\Entity\Db\FormuleTestIntervenant;
  */
 class FormuleTestIntervenantHydrator implements HydratorInterface
 {
-    private function findEntity( $class, $id)
+    private function findEntity($class, $id)
     {
         if (!$id) return null;
 
@@ -35,8 +34,8 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                  $data
-     * @param  FormuleTestIntervenant $object
+     * @param array                  $data
+     * @param FormuleTestIntervenant $object
      *
      * @return object
      */
@@ -46,27 +45,24 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
         foreach ($methods as $method) {
             if (0 === strpos($method, 'set')) {
                 $property = lcfirst(substr($method, 3));
-                if (array_key_exists($property,$data)) {
+                if (array_key_exists($property, $data)) {
                     switch ($property) {
                         case 'volumeHoraireTest':
                         break;
                         case 'formule':
-                            $object->$method($this->findEntity(Formule::class,$data[$property]));
+                            $object->$method($this->findEntity(Formule::class, $data[$property]));
                         break;
                         case 'annee':
-                            $object->$method($this->findEntity(Annee::class,$data[$property]));
+                            $object->$method($this->findEntity(Annee::class, $data[$property]));
                         break;
                         case 'typeIntervenant':
-                            $object->$method($this->findEntity(TypeIntervenant::class,$data[$property]));
-                        break;
-                        case 'structureTest':
-                            $object->$method($this->findEntity(FormuleTestStructure::class,$data[$property]));
+                            $object->$method($this->findEntity(TypeIntervenant::class, $data[$property]));
                         break;
                         case 'typeVolumeHoraire':
-                            $object->$method($this->findEntity(TypeVolumeHoraire::class,$data[$property]));
+                            $object->$method($this->findEntity(TypeVolumeHoraire::class, $data[$property]));
                         break;
                         case 'etatVolumeHoraire':
-                            $object->$method($this->findEntity(EtatVolumeHoraire::class,$data[$property]));
+                            $object->$method($this->findEntity(EtatVolumeHoraire::class, $data[$property]));
                         break;
                         default:
                             $object->$method($data[$property]);
@@ -75,21 +71,21 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
             }
         }
 
-        for($p=1;$p<6;$p++){
-            if (!$object->getFormule()->{'getIParam'.$p.'Libelle'}()){
-                $object->{'setParam'.$p}(null);
+        for ($p = 1; $p < 6; $p++) {
+            if (!$object->getFormule()->{'getIParam' . $p . 'Libelle'}()) {
+                $object->{'setParam' . $p}(null);
             }
         }
 
         if (isset($data['volumeHoraireTest'])) {
             $vhs = $object->getVolumeHoraireTest()->toArray();
             foreach ($data['volumeHoraireTest'] as $index => $vhta) {
-                $exists = isset($vhs[$index]);
-                $toDelete = $vhta['structureTest'] == null;
+                $exists   = isset($vhs[$index]);
+                $toDelete = $vhta['structureCode'] == null;
 
-                if ($exists && $toDelete){
+                if ($exists && $toDelete) {
                     $object->removeVolumeHoraireTest($vhs[$index]);
-                }elseif(!$exists && !$toDelete){
+                } elseif (!$exists && !$toDelete) {
                     $vhs[$index] = new FormuleTestVolumeHoraire();
                     $vhs[$index]->setIntervenantTest($object);
                     $object->addVolumeHoraireTest($vhs[$index]);
@@ -108,7 +104,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  FormuleTestIntervenant $object
+     * @param FormuleTestIntervenant $object
      *
      * @return array
      */
@@ -126,10 +122,9 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                     case 'formule':
                     case 'annee':
                     case 'typeIntervenant':
-                    case 'structureTest':
                     case 'typeVolumeHoraire':
                     case 'etatVolumeHoraire':
-                        $dep = $object->$method();
+                        $dep             = $object->$method();
                         $data[$property] = $dep ? $dep->getId() : null;
                     break;
                     default:
@@ -153,8 +148,8 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                    $data
-     * @param  FormuleTestVolumeHoraire $object
+     * @param array                    $data
+     * @param FormuleTestVolumeHoraire $object
      *
      * @return object
      */
@@ -164,13 +159,10 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
         foreach ($methods as $method) {
             if (0 === strpos($method, 'set')) {
                 $property = lcfirst(substr($method, 3));
-                if (array_key_exists($property,$data)) {
+                if (array_key_exists($property, $data)) {
                     switch ($property) {
                         case 'heures':
                             $object->setHeures($data[$property] == null ? 0 : $data[$property]);
-                        break;
-                        case 'structureTest':
-                            $object->$method($this->findEntity(FormuleTestStructure::class,$data[$property]));
                         break;
                         default:
                             $object->$method($data[$property]);
@@ -179,19 +171,19 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
             }
         }
 
-        if (array_key_exists('typeInterventionCode',$data)){
+        if (array_key_exists('typeInterventionCode', $data)) {
             $ti = $data['typeInterventionCode'];
-            if ('REFERENTIEL' == $ti){
+            if ('REFERENTIEL' == $ti) {
                 $object->setReferentiel(true);
                 $object->setTypeInterventionCode(null);
-            }else{
+            } else {
                 $object->setReferentiel(false);
             }
         }
 
-        for($p=1;$p<6;$p++){
-            if (!$object->getIntervenantTest()->getFormule()->{'getVhParam'.$p.'Libelle'}()){
-                $object->{'setParam'.$p}(null);
+        for ($p = 1; $p < 6; $p++) {
+            if (!$object->getIntervenantTest()->getFormule()->{'getVhParam' . $p . 'Libelle'}()) {
+                $object->{'setParam' . $p}(null);
             }
         }
 
@@ -203,7 +195,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  FormuleTestVolumeHoraire $object
+     * @param FormuleTestVolumeHoraire $object
      *
      * @return array
      */
@@ -217,17 +209,13 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                 switch ($property) {
                     case 'intervenantTest':
                     break;
-                    case 'structureTest':
-                        $dep = $object->$method();
-                        $data[$property] = $dep ? $dep->getId() : null;
-                    break;
                     default:
                         $data[$property] = $object->$method();
                 }
             }
         }
 
-        if ($object->getReferentiel()){
+        if ($object->getReferentiel()) {
             $data['typeInterventionCode'] = 'REFERENTIEL';
         }
 

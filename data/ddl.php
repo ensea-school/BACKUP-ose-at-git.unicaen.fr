@@ -33561,10 +33561,10 @@ SELECT
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fi ELSE 1 END               taux_fi,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fa ELSE 0 END               taux_fa,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fc ELSE 0 END               taux_fc,
-  s.id                                                                 structure_id,
-  s.code                                                               structure_code,
-  CASE WHEN COALESCE(s.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
-  CASE WHEN COALESCE(s.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
+  str.id                                                               structure_id,
+  str.code                                                             structure_code,
+  CASE WHEN COALESCE(str.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
+  CASE WHEN COALESCE(str.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
   MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl,
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
@@ -33585,7 +33585,7 @@ FROM
        JOIN type_volume_horaire      tvh ON tvh.id = vh.type_volume_horaire_id
 
   LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
-  LEFT JOIN structure                  s ON s.id = ep.structure_id
+  LEFT JOIN structure                str ON str.id = ep.structure_id
   LEFT JOIN etape                      e ON e.id = ep.etape_id
   LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
   LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
@@ -33600,7 +33600,7 @@ WHERE
   AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
 GROUP BY
   vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, tvh.code,
-  ep.id, ep.taux_fi, ep.taux_fa, ep.taux_fc, s.id, s.code, tf.service_statutaire, vh.heures,
+  ep.id, ep.taux_fi, ep.taux_fa, ep.taux_fc, str.id, str.code, tf.service_statutaire, vh.heures,
   vh.horaire_debut, vh.horaire_fin, tis.taux_hetd_service, tis.taux_hetd_complementaire,
   ti.code, ti.taux_hetd_service, ti.taux_hetd_complementaire, i.structure_id, p.valeur
 

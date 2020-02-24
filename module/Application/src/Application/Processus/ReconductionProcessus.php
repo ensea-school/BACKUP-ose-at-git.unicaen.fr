@@ -2,6 +2,7 @@
 
 namespace Application\Processus;
 
+use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Service\Traits\AnneeServiceAwareTrait;
@@ -13,6 +14,8 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 
 /**
  * Description of ReconductionProcessus
@@ -23,6 +26,7 @@ class ReconductionProcessus extends AbstractProcessus
 {
 
     use EtapeServiceAwareTrait;
+    use BddConnecteurAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use CheminPedagogiqueServiceAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
@@ -45,7 +49,6 @@ class ReconductionProcessus extends AbstractProcessus
     protected $contextService;
 
     protected $centreCoutEpService;
-
 
 
     public function __construct()
@@ -187,79 +190,63 @@ class ReconductionProcessus extends AbstractProcessus
         return true;
     }
 
+    /**
+     * Reconduit les centres de coutq des élements pédagogiques d'une sélection d'étapes
+     *
+     * @param array $etapes
+     *
+     * @return integer
+     */
 
 
     public function reconduireCCFormation($etapes)
     {
-        $anneeN       = $this->getServiceContext()->getAnnee();
-        $anneeN1      = $this->getServiceContext()->getAnneeSuivante();
-        $serviceEtape = $this->getServiceEtape();
-        $em           = $this->getEntityManager();
-        $nbEPN1       = 0;
+        //Récupération des étapes dont il faut reconduire les cc
+        $etapes_codes = array_keys($etapes);
+        $sql = '
+        SELECT 
+            *            
+        FROM 
+            V_RECONDUCTION_CENTRE_COUT 
+        WHERE
+            annee_id = ?
+        AND 
+            etape_code IN (?)';
+        $connection = $this->getEntityManager()->getConnection();
+        $stmt = $connection->executeQuery($sql, [ $this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
+        $ccepN = $stmt->fetchAll();
+        $listEp = [];
+        $nbInsertedEp = 0;
+        foreach ($ccepN as $key => $value) {
+            if(empty($value['NEW_CENTRE_COUT_EP_ID']))
+            {
+                //Récupération de la dernière incrémentation ID CCEP
+                $nextSequence = $this->getNextSequence();
+                try{
+                    $stmt = $connection->insert('centre_cout_ep',
+                        ['id' => $nextSequence,
+                         'centre_cout_id' => $value['CENTRE_COUT_ID'],
+                         'element_pedagogique_id' => $value['NEW_ELEMENT_PEDAGOGIQUE_ID'],
+                         'type_heures_id' => $value['TYPE_HEURES_ID'],
+                         'source_id'    => $this->getServiceSource()->getOse()->getId(),
+                         'source_code'  => uniqid($value['CENTRE_COUT_ID'] . '_' . $value['TYPE_HEURES_ID'] . '_' . $value['NEW_ELEMENT_PEDAGOGIQUE_ID']),
+                         'histo_createur_id' => $this->getServiceContext()->getUtilisateur()->getId(),
+                         'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId()
+                        ]);
 
-        foreach ($etapes as $code => $etape) {
-            $etapeN                     = $etape['N']['etape'];
-            $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
-            $elementsPedagogiqueNByCode = [];
-            $codesEpWithoutCc = [];
-            foreach ($elementsPedagogiqueN as $ep) {
-                //Check si ep a un élément pédagoggique
-                $ccep = $ep->getCentreCoutEp();
-                if(count($ccep) > 0)
+                    if(!in_array($value['NEW_ELEMENT_PEDAGOGIQUE_ID'], $listEp))
+                    {
+                        $listEp[] = $value['NEW_ELEMENT_PEDAGOGIQUE_ID'];
+                        $nbInsertedEp++;
+                    }
+                }catch(\Exception $e)
                 {
-                    //Si il a des centres de couts alors je le stocke
-                    $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
-                }
-                else{
-                    $codesEpWithoutCc[] = $ep->getCode();
-                }
-            }
-            $etapeN1                     = $etape['N1']['etape'];
-            $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
-            $elementsPedagogiqueN1ByCode = [];
-            foreach ($elementsPedagogiqueN1 as $epN1) {
-                //Si l'epN possède des CC alors je continuer
-                if(!in_array($epN1->getCode(), $codesEpWithoutCc))
-                {
-                    $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
-                }
-            }
-
-            foreach ($elementsPedagogiqueN as $ep) {
-                //Cas d'un élément pédagogique historisé a ne pas reconduire
-                if ($ep->estHistorise()) {
                     continue;
                 }
-                //Retrouver l'EP reconduite sur N1
-                $epN1 = (array_key_exists($ep->getCode(), $elementsPedagogiqueN1ByCode)) ? $elementsPedagogiqueN1ByCode[$ep->getCode()] : false;
-                if ($epN1) {
-                    $nbEPN1++;
-                    //Suppression CCEP de l'EPN1 avant la reconduction N -> N1
-                    $centreCoutEpN1 = $epN1->getCentreCoutEp();
-                    foreach ($centreCoutEpN1 as $ccepN1) {
-                        $em->remove($ccepN1);
-                    }
-                    $em->flush();
-                    $centreCoutEpN = $ep->getCentreCoutEp();
-                    foreach ($centreCoutEpN as $ccep) {
-                        //cas d'un centre de coût historisé.
-                        if ($ccep->estHistorise()) {
-                            continue;
-                        }
-                        $ccepN1 = $this->centreCoutEpService->newEntity();
-                        $ccepN1->setTypeHeures($ccep->getTypeHeures());
-                        $ccepN1->setCentreCout($ccep->getCentreCout());
-                        $ccepN1->setElementPedagogique($epN1);
-                        $this->centreCoutEpService->save($ccepN1);
-                    }
-                    $em->persist($epN1);
-                }
             }
-        }
-        //Execution en BDD
-        $em->flush();
 
-        return $nbEPN1;
+        }
+        return $nbInsertedEp;
     }
 
 
@@ -319,4 +306,15 @@ class ReconductionProcessus extends AbstractProcessus
 
         return $nbEPN1;
     }
+
+    public function getNextSequence()
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $stmt = $connection->executeQuery('SELECT CENTRE_COUT_EP_ID_SEQ.NEXTVAL val FROM DUAL');
+        $result = $stmt->fetch();
+
+        return $result['VAL'];
+    }
+
+
 }

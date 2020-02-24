@@ -69,34 +69,35 @@ class EtapeService extends AbstractEntityService
 
     public function getEtapeReconduit($structure)
     {
-        $anneeN  = $this->getServiceContext()->getAnnee();
-        $anneeN1 = $this->getServiceContext()->getAnneeSuivante();
+        $annee  = $this->getServiceContext()->getAnnee()->getId();
 
 
-        $qb1 = $this->getEntityManager()->createQueryBuilder();
-        $qb2 = $this->getEntityManager()->createQueryBuilder();
+        $sql = '
+                SELECT 
+            etape_id,
+            etape_libelle,
+            etape_code,
+            count(DISTINCT element_pedagogique_id) AS nb_ep,
+            count(DISTINCT new_centre_cout_ep_id) AS nb_cc_ep
+        FROM 
+            V_RECONDUCTION_CENTRE_COUT 
+        WHERE
+            annee_id = :annee
+        GROUP BY 
+            etape_id,
+            etape_libelle,
+            etape_code';
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindParam(':annee', $annee);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $etapes = [];
+        foreach($result as $etape)
+        {
+            $etapes[$etape['ETAPE_CODE']] = $etape;
+        }
 
-        $etapeN1 = $qb1
-            ->select('eN1.code')
-            ->from(Etape::class, 'eN1')
-            ->leftJoin(Structure::class, 'sN1', \Doctrine\ORM\Query\Expr\Join::WITH, 'eN1.structure = sN1.id')
-            ->where('eN1.annee = :anneeN1')
-            ->andWhere('sN1 = :structure');
-
-        $qb2 = $this->finderByStructure($structure)
-            ->where($qb2->expr()->in('etp.code', $etapeN1->getDQL()))
-            ->andWhere($qb2->expr()->orX(
-                $qb2->expr()->eq('etp.annee', ':anneeN'),
-                $qb2->expr()->eq('etp.annee', ':anneeN1')
-            ))
-            ->setParameter('anneeN', $anneeN)
-            ->setParameter('anneeN1', $anneeN1)
-            ->setParameter('structure', $structure)
-            ->orderBy('etp.annee', 'desc');
-
-        $result = $qb2->getQuery()->getResult();
-
-        return $result;
+        return $etapes;
     }
 
 

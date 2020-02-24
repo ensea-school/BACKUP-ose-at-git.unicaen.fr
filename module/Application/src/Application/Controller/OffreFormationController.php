@@ -211,9 +211,6 @@ class OffreFormationController extends AbstractController
     public function reconductionCentreCoutAction()
     {
         $this->initFilterHistorique();
-        $anneeN            = $this->getServiceContext()->getAnnee();
-        $anneeN1           = $this->getServiceContext()->getAnneeSuivante();
-        $fromPost          = false;
         $etapesReconduites = [];
         [$structure, $niveau, $etape] = $this->getParams();
 
@@ -225,41 +222,13 @@ class OffreFormationController extends AbstractController
         $this->getServiceStructure()->finderByRole($role, $qb);
         $structures = $this->getServiceStructure()->getList($qb);
 
-
-        //Récupération de toutes les étapes éligibles à la reconduction des coûts
-        if (!empty($structure)) {
-            $etapesReconduitesResult = $this->getServiceEtape()->getEtapeReconduit($structure);
-            $codesEtapesWithoutCC = [];
-            if ($etapesReconduitesResult) {
-                foreach ($etapesReconduitesResult as $etape) {
-                    if ($etape->getAnnee()->getLibelle() == $this->getServiceContext()->getAnnee()->getLibelle()) {
-                        $epWithCc = $this->getServiceElementPedagogique()->countEpWithCc($etape);
-                        if(empty($epWithCc))
-                        {
-                            $codesEtapesWithoutCC[] = $etape->getCode();
-                        }
-                        $etapesReconduites[$etape->getCode()]['N']['etape']    = $etape;
-                        $etapesReconduites[$etape->getCode()]['N']['epWithCc'] = $epWithCc;
-                    } else {
-                        $epWithCc = $this->getServiceElementPedagogique()->countEpWithCc($etape);
-                        $etapesReconduites[$etape->getCode()]['N1']['etape']    = $etape;
-                        $etapesReconduites[$etape->getCode()]['N1']['epWithCc'] = $epWithCc;
-                    }
-                }
-                //Clean etapes sans aucun centre de coût
-                foreach($codesEtapesWithoutCC as $code)
-                {
-                    unset($etapesReconduites[$code]);
-                }
-            }
-        }
-
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $fromPost = true;
+
             $datas    = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
             try {
+                $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
                 $etapesReconduitesCc = [];
                 if (isset($datas['etapes'])) {
                     foreach ($datas['etapes'] as $code) {
@@ -269,27 +238,28 @@ class OffreFormationController extends AbstractController
                     }
                 }
                 $result = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
-                if ($result > 0) {
-                    $this->flashMessenger()->addSuccessMessage("Les centres de coût des éléments pédagogiques des étapes sélectionnées ont bien été reconduit pour la prochaine année universitaire ($result 
-                élément(s) pédagogique(s) concerné(s))");
-                } else {
-                    $this->flashMessenger()->addWarningMessage("Aucun centre de cout n'a été reconduit car aucun élément
-                pédagogique n'existe pour cette formation pour la prochaine année universitaire.");
-                }
+
+                $this->flashMessenger()->addSuccessMessage("Les centres de coûts des éléments pédagogiques des étapes sélectionnées ont bien été reconduit (<b>uniquement dans le cas où ils n'avaient pas encore de centre de coût paramétré pour l'année prochaine</b>). $result 
+                élément(s) pédagogique(s) ont été mis à jour");
+
+
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-            $fromPost = true;
+
+
+        }
+
+        if(empty($etapesReconduites) && !empty($structure))
+        {
+            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
         }
 
 
         return [
-            'anneeN'            => $anneeN,
-            'anneeN1'           => $anneeN1,
             'structures'        => $structures,
             'structure'         => $structure,
-            'etapesReconduites' => $etapesReconduites,
-            'fromPost'          => $fromPost,
+            'etapesReconduites' => $etapesReconduites
         ];
     }
 

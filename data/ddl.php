@@ -6828,6 +6828,50 @@
         ),
       ),
     ),
+    'FORMULE_TEST_STRUCTURE' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE',
+      'temporary' => false,
+      'logging' => true,
+      'commentaire' => 'sequence=FTEST_STRUCTURE_ID_SEQ;',
+      'sequence' => 'FTEST_STRUCTURE_ID_SEQ',
+      'columns' => 
+      array (
+        'ID' => 
+        array (
+          'name' => 'ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'LIBELLE' => 
+        array (
+          'name' => 'LIBELLE',
+          'type' => 'VARCHAR2',
+          'length' => 80,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'UNIVERSITE' => 
+        array (
+          'name' => 'UNIVERSITE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+      ),
+    ),
     'FORMULE_TEST_VOLUME_HORAIRE' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
@@ -19818,6 +19862,16 @@
         0 => 'ID',
       ),
     ),
+    'FORMULE_TEST_STRUCTURE_PK' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE_PK',
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'index' => 'FORMULE_TEST_STRUCTURE_PK',
+      'columns' => 
+      array (
+        0 => 'ID',
+      ),
+    ),
     'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
@@ -31430,6 +31484,36 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
+    'NEWVIEW' => 
+    array (
+      'name' => 'NEWVIEW',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW NEWVIEW AS
+WITH t AS (
+SELECT
+  e.id                etape_id,
+  ep.id               element_pedagogique_id,
+  ccep.centre_cout_id centre_cout_id,
+  ccep.type_heures_id type_heures_id,
+  ep.annee_id         annee_id,
+  ep.code             code
+FROM
+  etape                     e
+  JOIN source               s ON s.importable = 0
+  JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
+  JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
+WHERE
+  e.histo_destruction IS NULL
+)
+SELECT
+  t."ETAPE_ID",t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID",t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
+  ep.id new_element_pedagogique_id,
+  ccep.id new_centre_cout_ep_id,
+  ccep.histo_destruction
+FROM
+  t
+  JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
+  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id',
+    ),
     'V_AGREMENT_EXPORT_CSV' => 
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
@@ -35681,6 +35765,37 @@ FROM
   privilege p
   JOIN categorie_privilege cp ON cp.id = p.categorie_id
   LEFT JOIN statuts_roles sr ON sr.privilege_id = p.id',
+    ),
+    'V_RECONDUCTION_CENTRE_COUT' => 
+    array (
+      'name' => 'V_RECONDUCTION_CENTRE_COUT',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_CENTRE_COUT AS
+WITH t AS (
+SELECT
+  e.id                etape_id,
+  e.libelle           etape_libelle,
+  e.code              etape_code,
+  ep.id               element_pedagogique_id,
+  ccep.centre_cout_id centre_cout_id,
+  ccep.type_heures_id type_heures_id,
+  ep.annee_id         annee_id,
+  ep.code             code
+FROM
+  etape                     e
+  JOIN source               s ON s.importable = 0
+  JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
+  LEFT JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
+WHERE
+  e.histo_destruction IS NULL
+)
+SELECT
+  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID",t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
+  ep.id new_element_pedagogique_id,
+  ccep.id new_centre_cout_ep_id
+FROM
+  t
+  LEFT JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
+  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id',
     ),
     'V_REF_INTERVENANT' => 
     array (
@@ -43872,6 +43987,16 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
+    'FORMULE_TEST_STRUCTURE__UN' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE__UN',
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'index' => 'FORMULE_TEST_STRUCTURE__UN',
+      'columns' => 
+      array (
+        0 => 'LIBELLE',
+      ),
+    ),
     'FORMULE__UN' => 
     array (
       'name' => 'FORMULE__UN',
@@ -48408,6 +48533,26 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE_PK' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE_PK',
+      'unique' => true,
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'columns' => 
+      array (
+        0 => 'ID',
+      ),
+    ),
+    'FORMULE_TEST_STRUCTURE__UN' => 
+    array (
+      'name' => 'FORMULE_TEST_STRUCTURE__UN',
+      'unique' => true,
+      'table' => 'FORMULE_TEST_STRUCTURE',
+      'columns' => 
+      array (
+        0 => 'LIBELLE',
       ),
     ),
     'FORMULE_TEST_VOLUME_HORAIRE_PK' => 

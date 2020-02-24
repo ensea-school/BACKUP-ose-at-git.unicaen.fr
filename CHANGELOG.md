@@ -1,3 +1,9 @@
+# OSE 12.2
+
+## Correction de bug
+
+* Depuis la V12, la formule de calcul ne distinguait plus si le service était effectué dans la composante d'affectation de l'intervenant ou dans une autre composante. C'est rétabli. 
+
 # OSE 12.1
 
 ## Correction de bugs

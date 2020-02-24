@@ -1,3 +1,9 @@
+# OSE 13.0 ALPHA
+
+## Correction de bugs
+
+* La page de saisie des services était accessible en écrivant la bonne URL, même si le workflow ne permettait pas d'arriver à cette étape.
+
 # OSE 12.2
 
 ## Correction de bug

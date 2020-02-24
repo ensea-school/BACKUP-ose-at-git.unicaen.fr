@@ -35766,10 +35766,10 @@ FROM
   JOIN categorie_privilege cp ON cp.id = p.categorie_id
   LEFT JOIN statuts_roles sr ON sr.privilege_id = p.id',
     ),
-    'V_RECONDUCTION_CENTRE_COUT' => 
+    'V_RECONDUCTION_CC_MODULATEUR' => 
     array (
-      'name' => 'V_RECONDUCTION_CENTRE_COUT',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_CENTRE_COUT AS
+      'name' => 'V_RECONDUCTION_CC_MODULATEUR',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_CC_MODULATEUR AS
 WITH t AS (
 SELECT
   e.id                etape_id,
@@ -35777,6 +35777,7 @@ SELECT
   e.code              etape_code,
   ep.id               element_pedagogique_id,
   ccep.centre_cout_id centre_cout_id,
+  em.MODULATEUR_ID    modulateur_id,
   ccep.type_heures_id type_heures_id,
   ep.annee_id         annee_id,
   ep.code             code
@@ -35785,17 +35786,20 @@ FROM
   JOIN source               s ON s.importable = 0
   JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
   LEFT JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
+  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID
 WHERE
   e.histo_destruction IS NULL
 )
 SELECT
-  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID",t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
+  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID", t.modulateur_id, t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
   ep.id new_element_pedagogique_id,
-  ccep.id new_centre_cout_ep_id
+  ccep.id new_centre_cout_ep_id,
+  em.id new_element_modulateur_id
 FROM
   t
   LEFT JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
-  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id',
+  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id
+  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID',
     ),
     'V_REF_INTERVENANT' => 
     array (

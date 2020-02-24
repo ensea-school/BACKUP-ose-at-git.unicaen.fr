@@ -78,9 +78,10 @@ class EtapeService extends AbstractEntityService
             etape_libelle,
             etape_code,
             count(DISTINCT element_pedagogique_id) AS nb_ep,
-            count(DISTINCT new_centre_cout_ep_id) AS nb_cc_ep
+            count(DISTINCT new_centre_cout_ep_id) AS nb_cc_ep,
+            count(DISTINCT new_element_modulateur_id) AS nb_m_ep
         FROM 
-            V_RECONDUCTION_CENTRE_COUT 
+            V_RECONDUCTION_CC_MODULATEUR 
         WHERE
             annee_id = :annee
         GROUP BY 

@@ -268,54 +268,21 @@ class OffreFormationController extends AbstractController
     public function reconductionModulateurAction()
     {
         $this->initFilterHistorique();
-        $anneeN  = $this->getServiceContext()->getAnnee();
-        $anneeN1 = $this->getServiceContext()->getAnneeSuivante();
-
 
         [$structure, $niveau, $etape] = $this->getParams();
         $etapesReconduites = [];
-        $fromPost          = 0;
         $role              = $this->getServiceContext()->getSelectedIdentityRole();
-
-
 
         $qb = $this->getServiceStructure()->finderByHistorique();
         $this->getServiceStructure()->finderByEnseignement($qb);
         $this->getServiceStructure()->finderByRole($role, $qb);
         $structures = $this->getServiceStructure()->getList($qb);
-        $codesEtapesWithoutModulateur = [];
 
-        //Récupération de toutes les étapes éligibles à la reconduction des coûts
-        if (!empty($structure)) {
-            $etapesReconduitesResult = $this->getServiceEtape()->getEtapeReconduit($structure);
-            if ($etapesReconduitesResult) {
-                foreach ($etapesReconduitesResult as $etape) {
-                    if ($etape->getAnnee()->getLibelle() == $this->getServiceContext()->getAnnee()->getLibelle()) {
-                        $epWithModulateur = $this->getServiceElementPedagogique()->countEpWithModulateur($etape);
-                        if(empty($epWithModulateur))
-                        {
-                            $codesEtapesWithoutModulateur[] = $etape->getCode();
-                        }
-                        $etapesReconduites[$etape->getCode()]['N']['etape']            = $etape;
-                        $etapesReconduites[$etape->getCode()]['N']['epWithModulateur'] = $epWithModulateur;
-                    } else {
-                        $etapesReconduites[$etape->getCode()]['N1']['etape']            = $etape;
-                        $etapesReconduites[$etape->getCode()]['N1']['epWithModulateur'] = $this->getServiceElementPedagogique()->countEpWithModulateur($etape);
-                    }
-                }
-                //Clean etapes sans aucun centre de coût
-                foreach($codesEtapesWithoutModulateur as $code)
-                {
-                    unset($etapesReconduites[$code]);
-                }
-            }
-        }
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $fromPost = true;
             $datas    = $request->getPost();
-            //Reconduire les modulateurs des EP de l'étape.
+            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
             try {
                 $etapesReconduitesCc = [];
                 if (isset($datas['etapes'])) {
@@ -327,26 +294,25 @@ class OffreFormationController extends AbstractController
                     }
                 }
                 $result = $this->getProcessusReconduction()->reconduireModulateurFormation($etapesReconduitesCc);
-                if ($result > 0) {
-                    $this->flashMessenger()->addSuccessMessage("Les modulateurs des éléments pédagogiques des étapes sélectionnées ont bien été reconduit pour la prochaine année universitaire ($result 
-                élément(s) pédagogique(s) concerné(s))");
-                } else {
-                    $this->flashMessenger()->addWarningMessage("Aucun modulateur n'a été reconduit car aucun élément
-                pédagogique n'existe pour cette formation pour la prochaine année universitaire.");
-                }
+
+                    $this->flashMessenger()->addSuccessMessage("Les modulateurs des éléments pédagogiques des étapes sélectionnées ont bien été reconduit (<b>uniquement dans le cas où ils n'avaient pas encore de modulateur paramétré pour l'année prochaine</b>). $result 
+                élément(s) pédagogique(s) ont été mis à jour");
+
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-            $fromPost = true;
         }
 
+        //Récupération de toutes les étapes éligibles à la reconduction des coûts
+        if (empty($etapesReconduites) && !empty($structure)) {
+            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
+        }
+
+
         return [
-            'anneeN'            => $anneeN,
-            'anneeN1'           => $anneeN1,
             'structures'        => $structures,
             'etapesReconduites' => $etapesReconduites,
             'structure'         => $structure,
-            'fromPost'          => $fromPost,
         ];
     }
 

@@ -207,7 +207,7 @@ class ReconductionProcessus extends AbstractProcessus
         SELECT 
             *            
         FROM 
-            V_RECONDUCTION_CENTRE_COUT 
+            V_RECONDUCTION_CC_MODULATEUR
         WHERE
             annee_id = ?
         AND 
@@ -221,7 +221,7 @@ class ReconductionProcessus extends AbstractProcessus
             if(empty($value['NEW_CENTRE_COUT_EP_ID']))
             {
                 //Récupération de la dernière incrémentation ID CCEP
-                $nextSequence = $this->getNextSequence();
+                $nextSequence = $this->getNextSequence('CENTRE_COUT_EP_ID_SEQ');
                 try{
                     $stmt = $connection->insert('centre_cout_ep',
                         ['id' => $nextSequence,
@@ -253,64 +253,55 @@ class ReconductionProcessus extends AbstractProcessus
 
     public function reconduireModulateurFormation($etapes)
     {
-        $em     = $this->getEntityManager();
-        $nbEPN1 = 0;
+        //Récupération des étapes dont il faut reconduire les cc
+        $etapes_codes = array_keys($etapes);
+        $sql = '
+        SELECT 
+            *            
+        FROM 
+            V_RECONDUCTION_CC_MODULATEUR
+        WHERE
+            annee_id = ?
+        AND 
+            etape_code IN (?)';
+        $connection = $this->getEntityManager()->getConnection();
+        $stmt = $connection->executeQuery($sql, [ $this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
+        $mepN = $stmt->fetchAll();
+        $listEp = [];
+        $nbInsertedEp = 0;
+        foreach ($mepN as $key => $value) {
+            if(empty($value['NEW_ELEMENT_MODULATEUR_ID']))
+            {
+                //Récupération de la dernière incrémentation ID CCEP
+                $nextSequence = $this->getNextSequence('ELEMENT_MODULATEUR_ID_SEQ');
+                try{
+                    $stmt = $connection->insert('element_modulateur',
+                        ['id' => $nextSequence,
+                         'element_id' => $value['NEW_ELEMENT_PEDAGOGIQUE_ID'],
+                         'modulateur_id'    => $value['MODULATEUR_ID'],
+                         'histo_createur_id' => $this->getServiceContext()->getUtilisateur()->getId(),
+                         'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId()
+                        ]);
 
-
-        foreach ($etapes as $code => $etape) {
-            $etapeN                     = $etape['N']['etape'];
-            $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
-            $elementsPedagogiqueNByCode = [];
-            $codesEpWithoutModulateur = [];
-            foreach ($elementsPedagogiqueN as $ep) {
-                $mep = $ep->getElementModulateur();
-                if(count($mep) > 0)
-                {
-                    //Si il a des modulateurs alors je le stocke
-                    $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
-                }
-                else{
-                    $codesEpWithoutModulateur[] = $ep->getCode();
-                }
-            }
-            $etapeN1                     = $etape['N1']['etape'];
-            $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
-            $elementsPedagogiqueN1ByCode = [];
-            foreach ($elementsPedagogiqueN1 as $epN1) {
-                if(!in_array($epN1->getCode(), $codesEpWithoutModulateur))
-                {
-                    $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
-                }
-            }
-
-            foreach ($elementsPedagogiqueN as $ep) {
-                $epN1 = (array_key_exists($ep->getCode(), $elementsPedagogiqueN1ByCode)) ? $elementsPedagogiqueN1ByCode[$ep->getCode()] : false;
-                if ($epN1) {
-                    $nbEPN1++;
-                    $elementsModulateursN1 = $epN1->getElementModulateur();
-                    foreach ($elementsModulateursN1 as $epmepN1) {
-                        $em->remove($epmepN1);
+                    if(!in_array($value['NEW_ELEMENT_PEDAGOGIQUE_ID'], $listEp))
+                    {
+                        $listEp[] = $value['NEW_ELEMENT_PEDAGOGIQUE_ID'];
+                        $nbInsertedEp++;
                     }
-                    $em->flush();
-                    $elementsModulateurs = $ep->getElementModulateur();
-                    foreach ($elementsModulateurs as $epm) {
-                        $epmepN1 = $this->elementModulateurService->newEntity();
-                        $epmepN1->setModulateur($epm->getModulateur());
-                        $epmepN1->setElement($epN1);
-                        $em->persist($epmepN1);
-                    }
+                }catch(\Exception $e)
+                {
+                    continue;
                 }
             }
-            $em->flush();
+
         }
-
-        return $nbEPN1;
+        return $nbInsertedEp;
     }
 
-    public function getNextSequence()
+    public function getNextSequence($sequenceName = '')
     {
         $connection = $this->getEntityManager()->getConnection();
-        $stmt = $connection->executeQuery('SELECT CENTRE_COUT_EP_ID_SEQ.NEXTVAL val FROM DUAL');
+        $stmt = $connection->executeQuery('SELECT ' . $sequenceName . '.NEXTVAL val FROM DUAL');
         $result = $stmt->fetch();
 
         return $result['VAL'];

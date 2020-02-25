@@ -29,7 +29,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-modulateur.js');
     Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.
 </div>
 
-<h3>Offre de formation disponible (possédants des modulateurs définis) pour la prochaine année universitaire :</h3>
+<h3>Veuillez sélectionner les formations pour reconduire les modulateurs :</h3>
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
@@ -62,7 +62,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                         <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
                         <th>Code</th>
                         <th>Libellé</th>
-                        <th>Nb Elements pédagogiques</th>
+                        <th>Nb Elements pédagogiques avec un modulateur</th>
 
                     </tr>
 

@@ -3,8 +3,6 @@
 namespace Application\Processus;
 
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;

@@ -16,6 +16,8 @@ class TypePieceJointeStatutService extends AbstractEntityService
 {
     use AnneeServiceAwareTrait;
 
+
+
     /**
      * retourne la classe des entités
      *
@@ -45,32 +47,14 @@ class TypePieceJointeStatutService extends AbstractEntityService
      * Retourne la liste des enregistrements correspondant aux statut intervenant spécifié.
      *
      * @param StatutIntervenant $statut
-     * @param QueryBuilder|null       $queryBuilder
+     * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
     public function finderByStatutIntervenant(StatutIntervenant $statut, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.statut = :statut")->setParameter('statut', $statut);
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Retourne la liste des enregistrements correspondant au témoin de premier recrutement spécifié.
-     *
-     * @param bool              $premierRecrutement
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByPremierRecrutement($premierRecrutement, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere("$alias.premierRecrutement = :flag")->setParameter('flag', $premierRecrutement);
 
         return $qb;
     }
@@ -84,29 +68,29 @@ class TypePieceJointeStatutService extends AbstractEntityService
      */
     public function derniereAnneeDebut(TypePieceJointeStatut $typePieceJointeStatut)
     {
-        $id = $typePieceJointeStatut->getId() ?: 0;
+        $id     = $typePieceJointeStatut->getId() ?: 0;
         $statut = $typePieceJointeStatut->getStatutIntervenant()->getId();
-        $tpj = $typePieceJointeStatut->getTypePieceJointe()->getId();
-        $annee = $this->getServiceContext()->getAnnee()->getId();
-        $params = compact('id','statut','tpj','annee');
+        $tpj    = $typePieceJointeStatut->getTypePieceJointe()->getId();
+        $annee  = $this->getServiceContext()->getAnnee()->getId();
+        $params = compact('id', 'statut', 'tpj', 'annee');
 
         $sql = "
         SELECT 
-          MAX(annee_fin_id) annee_fin
+          MAX(ANNEE_FIN_ID) ANNEE_FIN
         FROM 
-          type_piece_jointe_statut tpjs
+          TYPE_PIECE_JOINTE_STATUT TPJS
         WHERE
-          tpjs.histo_destruction IS NULL
-          AND tpjs.statut_intervenant_id = :statut
-          AND tpjs.type_piece_jointe_id = :tpj
-          AND tpjs.id <> :id
-          AND tpjs.annee_fin_id IS NOT NULL
-          AND tpjs.annee_fin_id < :annee
+          TPJS.HISTO_DESTRUCTION IS NULL
+          AND TPJS.STATUT_INTERVENANT_ID = :statut
+          AND TPJS.TYPE_PIECE_JOINTE_ID = :tpj
+          AND TPJS.ID <> :id
+          AND TPJS.ANNEE_FIN_ID IS NOT NULL
+          AND TPJS.ANNEE_FIN_ID < :annee
         ";
-        $res    = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
-        if ($res && (int)$res['ANNEE_FIN'] !== 0){
+        $res = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
+        if ($res && (int)$res['ANNEE_FIN'] !== 0) {
             return $this->getServiceAnnee()->get((int)$res['ANNEE_FIN']);
-        }else{
+        } else {
             return null;
         }
     }
@@ -120,29 +104,29 @@ class TypePieceJointeStatutService extends AbstractEntityService
      */
     public function premiereAnneeFin(TypePieceJointeStatut $typePieceJointeStatut)
     {
-        $id = $typePieceJointeStatut->getId() ?: 0;
+        $id     = $typePieceJointeStatut->getId() ?: 0;
         $statut = $typePieceJointeStatut->getStatutIntervenant()->getId();
-        $tpj = $typePieceJointeStatut->getTypePieceJointe()->getId();
-        $annee = $this->getServiceContext()->getAnnee()->getId();
-        $params = compact('id','statut','tpj','annee');
+        $tpj    = $typePieceJointeStatut->getTypePieceJointe()->getId();
+        $annee  = $this->getServiceContext()->getAnnee()->getId();
+        $params = compact('id', 'statut', 'tpj', 'annee');
 
         $sql = "
         SELECT 
-          MAX(annee_debut_id) annee_debut
+          MAX(ANNEE_DEBUT_ID) ANNEE_DEBUT
         FROM 
-          type_piece_jointe_statut tpjs
+          TYPE_PIECE_JOINTE_STATUT TPJS
         WHERE
-          tpjs.histo_destruction IS NULL
-          AND tpjs.statut_intervenant_id = :statut
-          AND tpjs.type_piece_jointe_id = :tpj
-          AND tpjs.id <> :id
-          AND tpjs.annee_debut_id IS NOT NULL
-          AND tpjs.annee_debut_id > :annee
+          TPJS.HISTO_DESTRUCTION IS NULL
+          AND TPJS.STATUT_INTERVENANT_ID = :statut
+          AND TPJS.TYPE_PIECE_JOINTE_ID = :tpj
+          AND TPJS.ID <> :id
+          AND TPJS.ANNEE_DEBUT_ID IS NOT NULL
+          AND TPJS.ANNEE_DEBUT_ID > :annee
         ";
-        $res    = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
-        if ($res && (int)$res['ANNEE_DEBUT'] !== 0){
+        $res = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
+        if ($res && (int)$res['ANNEE_DEBUT'] !== 0) {
             return $this->getServiceAnnee()->get((int)$res['ANNEE_DEBUT']);
-        }else{
+        } else {
             return null;
         }
     }
@@ -178,7 +162,7 @@ class TypePieceJointeStatutService extends AbstractEntityService
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
 
         return parent::getList($qb, $alias);

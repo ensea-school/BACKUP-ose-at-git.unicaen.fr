@@ -14742,7 +14742,7 @@
           'length' => 0,
           'scale' => NULL,
           'precision' => NULL,
-          'nullable' => true,
+          'nullable' => false,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -14841,7 +14841,7 @@
           'length' => 0,
           'scale' => NULL,
           'precision' => NULL,
-          'nullable' => true,
+          'nullable' => false,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -14962,7 +14962,7 @@
           'length' => 0,
           'scale' => NULL,
           'precision' => NULL,
-          'nullable' => true,
+          'nullable' => false,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -17881,18 +17881,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' => 
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '0',
-          'commentaire' => NULL,
-        ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -18009,8 +17998,8 @@
           'length' => 0,
           'scale' => NULL,
           'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
+          'nullable' => false,
+          'default' => '1',
           'commentaire' => 'Durée de vie de la pièce jointe',
         ),
       ),
@@ -30871,9 +30860,6 @@ END UNICAEN_TBL;',
           -- Seuil HETD
           AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
 
-          -- En fonction du premier recrutement ou non
-          AND (tpjs.premier_recrutement = 0 OR COALESCE(i.premier_recrutement,0) = 1)
-
           -- Le RIB n\'\'est demandé QUE s\'\'il est différent!!
           AND CASE
                 WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
@@ -30959,7 +30945,7 @@ END UNICAEN_TBL;',
           pj.id piece_jointe_id,
           v.id validation_id,
           f.id fichier_id,
-          MAX(COALESCE(tpjs.duree_vie, 1)) duree_vie,
+          MAX(tpjs.duree_vie) duree_vie,
           MAX(i.annee_id+duree_vie) date_validite,
           pj.date_archive date_archive
         FROM
@@ -36601,9 +36587,6 @@ WHERE
   -- Seuil HETD
   AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
 
-  -- En fonction du premier recrutement ou non
-  AND (tpjs.premier_recrutement = 0 OR COALESCE(i.premier_recrutement,0) = 1)
-
   -- Le RIB n\'est demandé QUE s\'il est différent!!
   AND CASE
         WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
@@ -36631,7 +36614,7 @@ SELECT DISTINCT
   pj.id piece_jointe_id,
   v.id validation_id,
   f.id fichier_id,
-  MAX(COALESCE(tpjs.duree_vie, 1)) duree_vie,
+  MAX(tpjs.duree_vie) duree_vie,
   MAX(i.annee_id+duree_vie) date_validite,
   pj.date_archive date_archive
 FROM

@@ -6,7 +6,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-modulateur.js');
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
         <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante : </div>
+            <div class="panel-heading">Veuillez sélectionner une composante :</div>
             <div class="panel-body">
                 <?php
                 $selectStructure = new \Zend\Form\Element\Select('structure');
@@ -25,71 +25,78 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-modulateur.js');
 </div>
 <div class="alert alert-warning" role="alert">
     <strong>IMPORTANT</strong><br/>
-    Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des modulateurs d'une année sur l'autre.
-    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.
+    Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des
+    modulateurs d'une année sur l'autre.
+    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la
+    prochaine année universitaire.
 </div>
 
 <h3>Veuillez sélectionner les formations pour reconduire les modulateurs :</h3>
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
-<?php if(empty($etapesReconduites)): ?>
-<table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
-    <thead>
-    <tr>
-        <th colspan="2">Code</th>
-        <th>Libellé</th>
-        <th>Période</th>
-        <th title="Formation ouverte à distance">FOAD</th>
-        <th title="Régime d'inscription">Rég. d'insc.</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td colspan="6" style="text-align: center;">
-            Aucune formation disponible
-        </td>
-    </tr>
-    </tbody>
-</table>
+<?php if (empty($etapesReconduites)): ?>
+    <table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+            <th colspan="2">Code</th>
+            <th>Libellé</th>
+            <th>Période</th>
+            <th title="Formation ouverte à distance">FOAD</th>
+            <th title="Régime d'inscription">Rég. d'insc.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="6" style="text-align: center;">
+                Aucune formation disponible
+            </td>
+        </tr>
+        </tbody>
+    </table>
 <?php else: ?>
-        <form action="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
+    <form action="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>"
+          method="POST" id="form-reconduction">
 
-            <p style="text-align:right;"><strong>EP</strong> = Elément pédagogique / <strong>CC</strong> = Centre de coût</p>
-            <table class="reconduction-offre table table-bordered table-condensed table-hover" >
-                <thead>
-                    <tr>
-                        <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
-                        <th>Code</th>
-                        <th>Libellé</th>
-                        <th>Nb Elements pédagogiques avec un modulateur</th>
+        <p style="text-align:right;"><strong>EP</strong> = Elément pédagogique / <strong>CC</strong> = Centre de coût</p>
+        <table class="reconduction-offre table table-bordered table-condensed table-hover table-sort">
+            <thead>
+            <tr>
+                <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
+                <th>Code</th>
+                <th>Libellé</th>
+                <th>Nb Elements pédagogiques avec un modulateur</th>
 
-                    </tr>
+            </tr>
 
-                </thead>
-                <tbody>
-                    <?php foreach ($etapesReconduites as $er): ?>
-                    <tr>
-                        <td>
-                            <?php if($er['NB_M_EP'] > 0): ?>
-                            <span style="color:#ae0000;font-size:16px;" class="glyphicon glyphicon-alert" aria-hidden="true" title="Attention des centres de coût sont déjà positionnés sur les éléments pédagogiques de la prochaine année universitaire, ils ne seront pas écrasés par ceux de cette année."></span>
-                            <?php endif; ?>
-                            <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE']; ?>">
-                        </td>
-                        <td><?= $er['ETAPE_CODE']; ?></td>
-                        <td><?=  $er['ETAPE_LIBELLE']; ?></td>
-                        <td><?=  $er['NB_EP']; ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <button disabled="disabled" id="reconduction-modulateur-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
+            </thead>
+            <tbody>
+            <?php foreach ($etapesReconduites as $er): ?>
+                <tr>
+                    <td>
+                        <?php if ($er['NB_M_EP'] > 0): ?>
+                            <span style="color:#ae0000;font-size:16px;" class="glyphicon glyphicon-alert" aria-hidden="true"
+                                  title="Attention des centres de coût sont déjà positionnés sur les éléments pédagogiques de la prochaine année universitaire, ils ne seront pas écrasés par ceux de cette année."></span>
+                        <?php endif; ?>
+                        <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE']; ?>">
+                    </td>
+                    <td><?= $er['ETAPE_CODE']; ?></td>
+                    <td><?= $er['ETAPE_LIBELLE']; ?></td>
+                    <td><?= $er['NB_EP']; ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <button disabled="disabled" id="reconduction-modulateur-button" class="btn btn-primary pop-ajax" type="button"
+                data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
                 <div class='alert alert-warning'>
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                     Les modulateurs seront reconduits dans leurs globalités pour la prochaine année universitaire sur les formations séléctionnées. Si des modulateurs ont été renseignés manuellement pour l'année prochaine, ils seront écrasés par ceux de cette année.
                 </div>
                 <div style='text-align:right'>
                 <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>
-                <button type='button' class='btn btn-primary' id='confirm-reconduction'>Oui</button></div>"><span class="glyphicon glyphicon-share"></span> Reconduire les modulateurs pour l'année suivante</button>
-        </form>
-    <?php endif; ?>
+                <button type='button' class='btn btn-primary' id='confirm-reconduction'>Oui</button></div>"><span
+                    class="glyphicon glyphicon-share"></span> Reconduire les modulateurs pour l'année suivante
+        </button>
+    </form>
+<?php endif; ?>

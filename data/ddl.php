@@ -16083,7 +16083,7 @@
           'type' => 'NUMBER',
           'length' => 0,
           'scale' => NULL,
-          'precision' => NULL,
+          'precision' => 1,
           'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,

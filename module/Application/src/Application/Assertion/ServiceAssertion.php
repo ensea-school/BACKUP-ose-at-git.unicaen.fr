@@ -194,7 +194,8 @@ class ServiceAssertion extends AbstractAssertion
         if (!$intervenant) return true;
 
         $typeVolumehoraireCode = $this->getMvcEvent()->getRouteMatch()->getParam('type-volume-horaire-code');
-        $typeVolumeHoraire     = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumehoraireCode);
+        if (!$typeVolumehoraireCode) return true;
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumehoraireCode);
 
         $wfEtape = $this->getWorkflowEtape($typeVolumeHoraire, 'saisie');
 

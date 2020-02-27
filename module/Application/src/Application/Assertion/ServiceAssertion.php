@@ -58,11 +58,13 @@ class ServiceAssertion extends AbstractAssertion
                 && $role
                 && $role->getStructure()
                 && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
-            ){ // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
-               // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
-                return $this->assertHasServices( $intervenant, $role->getStructure() );
-            }else if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
-                return false;
+            ) { // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
+                // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
+                return $this->assertHasServices($intervenant, $role->getStructure());
+            } else {
+                if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
+                    return false;
+                }
             }
         }
 
@@ -187,8 +189,10 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertPageServices(Role $role, Intervenant $intervenant)
+    protected function assertPageServices(Role $role, Intervenant $intervenant = null)
     {
+        if (!$intervenant) return true;
+
         $typeVolumehoraireCode = $this->getMvcEvent()->getRouteMatch()->getParam('type-volume-horaire-code');
         $typeVolumeHoraire     = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumehoraireCode);
 
@@ -308,18 +312,20 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertHasServices( Intervenant $intervenant, Structure $structure )
+    protected function assertHasServices(Intervenant $intervenant, Structure $structure)
     {
-        $services = $intervenant->getService()->filter( function(Service $service) use ($structure){
+        $services = $intervenant->getService()->filter(function (Service $service) use ($structure) {
             if (!$service->getElementPedagogique()) return false;
+
             return $service->getElementPedagogique()->getStructure() == $structure;
         });
+
         return $services->count() > 0;
     }
 
 
 
-    protected function assertCampagneSaisie( Role $role, TypeVolumeHoraire $typeVolumeHoraire )
+    protected function assertCampagneSaisie(Role $role, TypeVolumeHoraire $typeVolumeHoraire)
     {
         if ($typeVolumeHoraire && $role->getIntervenant()) {
             $campagneSaisie = $this->getServiceCampagneSaisie()->getBy(
@@ -328,6 +334,7 @@ class ServiceAssertion extends AbstractAssertion
             );
             if (!$campagneSaisie->estOuverte()) return false;
         }
+
         return true;
     }
 
@@ -342,12 +349,13 @@ class ServiceAssertion extends AbstractAssertion
             if ($hardPassCloture) return true; // on n'a toujours le droit
 
             if ($softPassCloture) { // si on peut éditer toujours alors pas la peine de tester...
-                return ! $intervenant->hasMiseEnPaiement(); // on n'a le droit s'il n'y a pas de MEP
+                return !$intervenant->hasMiseEnPaiement(); // on n'a le droit s'il n'y a pas de MEP
             } else {
                 $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
                 if ($cloture && $cloture->getId()) return false; // pas de saisie si c'est clôturé
             }
         }
+
         return true;
     }
 

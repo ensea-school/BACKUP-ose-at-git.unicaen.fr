@@ -31563,37 +31563,7 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'NEWVIEW' => 
-    array (
-      'name' => 'NEWVIEW',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW NEWVIEW AS
-WITH t AS (
-SELECT
-  e.id                etape_id,
-  ep.id               element_pedagogique_id,
-  ccep.centre_cout_id centre_cout_id,
-  ccep.type_heures_id type_heures_id,
-  ep.annee_id         annee_id,
-  ep.code             code
-FROM
-  etape                     e
-  JOIN source               s ON s.importable = 0
-  JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
-  JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
-WHERE
-  e.histo_destruction IS NULL
-)
-SELECT
-  t."ETAPE_ID",t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID",t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
-  ep.id new_element_pedagogique_id,
-  ccep.id new_centre_cout_ep_id,
-  ccep.histo_destruction
-FROM
-  t
-  JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
-  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id',
-    ),
-    'V_AGREMENT_EXPORT_CSV' => 
+    'V_AGREMENT_EXPORT_CSV' =>
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS

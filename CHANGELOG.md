@@ -1,3 +1,15 @@
+# OSE 13.0 ALPHA
+
+## Correction de bugs
+
+* La page de saisie des services était accessible en écrivant la bonne URL, même si le workflow ne permettait pas d'arriver à cette étape.
+
+# OSE 12.2
+
+## Correction de bug
+
+* Depuis la V12, la formule de calcul ne distinguait plus si le service était effectué dans la composante d'affectation de l'intervenant ou dans une autre composante. C'est rétabli. 
+
 # OSE 12.1
 
 ## Correction de bugs

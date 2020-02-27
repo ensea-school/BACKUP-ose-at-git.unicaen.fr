@@ -14691,17 +14691,6 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' => 
-        array (
-          'name' => 'DUREE_VIE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
       ),
     ),
     'TBL_PIECE_JOINTE_DEMANDE' => 
@@ -14790,18 +14779,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' => 
-        array (
-          'name' => 'DUREE_VIE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'CODE_INTERVENANT' => 
+        'CODE_INTERVENANT' =>
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',

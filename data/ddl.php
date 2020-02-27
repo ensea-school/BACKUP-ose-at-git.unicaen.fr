@@ -1403,7 +1403,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' => 
+        'CODE_INTERVENANT' =>
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -6839,51 +6839,7 @@
         ),
       ),
     ),
-    'FORMULE_TEST_STRUCTURE' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE',
-      'temporary' => false,
-      'logging' => true,
-      'commentaire' => 'sequence=FTEST_STRUCTURE_ID_SEQ;',
-      'sequence' => 'FTEST_STRUCTURE_ID_SEQ',
-      'columns' => 
-      array (
-        'ID' => 
-        array (
-          'name' => 'ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'LIBELLE' => 
-        array (
-          'name' => 'LIBELLE',
-          'type' => 'VARCHAR2',
-          'length' => 80,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'UNIVERSITE' => 
-        array (
-          'name' => 'UNIVERSITE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '0',
-          'commentaire' => NULL,
-        ),
-      ),
-    ),
-    'FORMULE_TEST_VOLUME_HORAIRE' => 
+    'FORMULE_TEST_VOLUME_HORAIRE' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'temporary' => false,
@@ -13426,7 +13382,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' => 
+        'DUREE_VIE' =>
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -13437,7 +13393,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' => 
+        'CODE_INTERVENANT' =>
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -13448,7 +13404,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_AGREMENT' => 
+        'ANNEE_AGREMENT' =>
         array (
           'name' => 'ANNEE_AGREMENT',
           'type' => 'NUMBER',
@@ -16143,7 +16099,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' => 
+        'DUREE_VIE' =>
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -16152,17 +16108,6 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => '1',
-          'commentaire' => NULL,
-        ),
-        'PREMIER_RECRUTEMENT' => 
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
           'commentaire' => NULL,
         ),
       ),
@@ -17950,17 +17895,6 @@
         'FC' => 
         array (
           'name' => 'FC',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '0',
-          'commentaire' => NULL,
-        ),
-        'PREMIER_RECRUTEMENT' => 
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
           'length' => 0,
           'scale' => '0',
@@ -19917,17 +19851,7 @@
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_STRUCTURE_PK' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE_PK',
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'index' => 'FORMULE_TEST_STRUCTURE_PK',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
@@ -33737,10 +33661,10 @@ SELECT
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fi ELSE 1 END               taux_fi,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fa ELSE 0 END               taux_fa,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fc ELSE 0 END               taux_fc,
-  s.id                                                                 structure_id,
-  s.code                                                               structure_code,
-  CASE WHEN COALESCE(s.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
-  CASE WHEN COALESCE(s.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
+  str.id                                                               structure_id,
+  str.code                                                             structure_code,
+  CASE WHEN COALESCE(str.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
+  CASE WHEN COALESCE(str.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
   MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl,
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
@@ -33761,7 +33685,7 @@ FROM
        JOIN type_volume_horaire      tvh ON tvh.id = vh.type_volume_horaire_id
 
   LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
-  LEFT JOIN structure                  s ON s.id = ep.structure_id
+  LEFT JOIN structure                str ON str.id = ep.structure_id
   LEFT JOIN etape                      e ON e.id = ep.etape_id
   LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
   LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
@@ -33776,7 +33700,7 @@ WHERE
   AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
 GROUP BY
   vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, tvh.code,
-  ep.id, ep.taux_fi, ep.taux_fa, ep.taux_fc, s.id, s.code, tf.service_statutaire, vh.heures,
+  ep.id, ep.taux_fi, ep.taux_fa, ep.taux_fc, str.id, str.code, tf.service_statutaire, vh.heures,
   vh.horaire_debut, vh.horaire_fin, tis.taux_hetd_service, tis.taux_hetd_complementaire,
   ti.code, ti.taux_hetd_service, ti.taux_hetd_complementaire, i.structure_id, p.valeur
 
@@ -35858,7 +35782,42 @@ FROM
   JOIN categorie_privilege cp ON cp.id = p.categorie_id
   LEFT JOIN statuts_roles sr ON sr.privilege_id = p.id',
     ),
-    'V_REF_INTERVENANT' => 
+    'V_RECONDUCTION_CC_MODULATEUR' =>
+    array (
+      'name' => 'V_RECONDUCTION_CC_MODULATEUR',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_CC_MODULATEUR AS
+WITH t AS (
+SELECT
+  e.id                etape_id,
+  e.libelle           etape_libelle,
+  e.code              etape_code,
+  ep.id               element_pedagogique_id,
+  ccep.centre_cout_id centre_cout_id,
+  em.MODULATEUR_ID    modulateur_id,
+  ccep.type_heures_id type_heures_id,
+  ep.annee_id         annee_id,
+  ep.code             code
+FROM
+  etape                     e
+  JOIN source               s ON s.importable = 0
+  JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
+  LEFT JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
+  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID
+WHERE
+  e.histo_destruction IS NULL
+)
+SELECT
+  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID", t.modulateur_id, t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
+  ep.id new_element_pedagogique_id,
+  ccep.id new_centre_cout_ep_id,
+  em.id new_element_modulateur_id
+FROM
+  t
+  LEFT JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
+  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id
+  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID',
+    ),
+    'V_REF_INTERVENANT' =>
     array (
       'name' => 'V_REF_INTERVENANT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_REF_INTERVENANT AS
@@ -44106,17 +44065,7 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
-    'FORMULE_TEST_STRUCTURE__UN' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE__UN',
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'index' => 'FORMULE_TEST_STRUCTURE__UN',
-      'columns' => 
-      array (
-        0 => 'LIBELLE',
-      ),
-    ),
-    'FORMULE__UN' => 
+    'FORMULE__UN' =>
     array (
       'name' => 'FORMULE__UN',
       'table' => 'FORMULE',
@@ -48655,27 +48604,7 @@ END;',
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_STRUCTURE_PK' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE_PK',
-      'unique' => true,
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
-    'FORMULE_TEST_STRUCTURE__UN' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE__UN',
-      'unique' => true,
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'columns' => 
-      array (
-        0 => 'LIBELLE',
-      ),
-    ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'unique' => true,
@@ -51291,12 +51220,12 @@ END;',
         0 => 'ID',
       ),
     ),
-    'TBL_AGREMENT__UN' => 
+    'TBL_AGREMENT__UN' =>
     array (
       'name' => 'TBL_AGREMENT__UN',
       'unique' => true,
       'table' => 'TBL_AGREMENT',
-      'columns' => 
+      'columns' =>
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'INTERVENANT_ID',
@@ -51305,20 +51234,7 @@ END;',
         4 => 'ANNEE_AGREMENT',
       ),
     ),
-    'TBL_AGREMENT__UN_IDX' => 
-    array (
-      'name' => 'TBL_AGREMENT__UN_IDX',
-      'unique' => true,
-      'table' => 'TBL_AGREMENT',
-      'columns' => 
-      array (
-        0 => 'TYPE_AGREMENT_ID',
-        1 => 'INTERVENANT_ID',
-        2 => 'STRUCTURE_ID',
-        3 => 'TO_DELETE',
-      ),
-    ),
-    'TBL_AGR_AGREMENT_FK_IDX' => 
+    'TBL_AGR_AGREMENT_FK_IDX' =>
     array (
       'name' => 'TBL_AGR_AGREMENT_FK_IDX',
       'unique' => false,

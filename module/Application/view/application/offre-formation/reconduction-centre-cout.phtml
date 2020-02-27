@@ -6,7 +6,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-centre-cout.js');
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
         <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante : </div>
+            <div class="panel-heading">Veuillez sélectionner une composante :</div>
             <div class="panel-body">
                 <?php
                 $selectStructure = new \Zend\Form\Element\Select('structure');
@@ -26,90 +26,79 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-centre-cout.js');
 
 <div class="alert alert-warning" role="alert">
     <strong>IMPORTANT</strong><br/>
-    Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des centres de coûts d'une année sur l'autre.
-    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.
+    Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des centres
+    de coûts d'une année sur l'autre.
+    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la
+    prochaine année universitaire.
 </div>
 
-<h3>Offre de formation disponible (possédants des centres de coûts définis) pour la prochaine année universitaire :</h3>
+<h3>Veuillez sélectionner les formations pour reconduire les centres de coûts :</h3>
 <br/>
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
 
-<?php if(empty($etapesReconduites)): ?>
-<table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
-    <thead>
-    <tr>
-        <th colspan="2">Code</th>
-        <th>Libellé</th>
-        <th>Période</th>
-        <th title="Formation ouverte à distance">FOAD</th>
-        <th title="Régime d'inscription">Rég. d'insc.</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td colspan="6" style="text-align: center;">
-            Aucune formation disponible
-        </td>
-    </tr>
-    </tbody>
-</table>
+<?php if (empty($etapesReconduites)): ?>
+    <table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+            <th colspan="2">Code</th>
+            <th>Libellé</th>
+            <th>Période</th>
+            <th title="Formation ouverte à distance">FOAD</th>
+            <th title="Régime d'inscription">Rég. d'insc.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="6" style="text-align: center;">
+                Aucune formation disponible
+            </td>
+        </tr>
+        </tbody>
+    </table>
 <?php else: ?>
-    <?php if($fromPost): ?>
-        <p> <a href="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>" >< Retour à la liste des formations éligibles à la reconduction des centres de coûts.</a></p>
-    <?php else: ?>
-        <form action="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
+    <form action="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>"
+          method="POST" id="form-reconduction">
 
-            <p style="text-align:right;"><strong>EP</strong> = Elément pédagogique / <strong>CC</strong> = Centre de coût</p>
-            <table class="reconduction-offre table table-bordered table-condensed table-hover" >
-                <thead>
-                    <tr>
-                        <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
-                        <th>Code</th>
-                        <th>Libellé</th>
-                        <th colspan="3" style="text-align:center;">Année <?= $anneeN->getLibelle(); ?></th>
-                        <th colspan="3" style="text-align:center;">Année <?= $anneeN1->getLibelle(); ?></th>
-                    </tr>
-                    <tr>
-                        <th colspan="3"></th>
-                        <th>EP</th>
-                        <th>EP avec CC</th>
-                        <th>EP sans CC</th>
-                        <th>EP</th>
-                        <th>EP avec CC</th>
-                        <th>EP sans CC</th>
+        <p style="text-align:right;"><strong>EP</strong> = Elément pédagogique / <strong>CC</strong> = Centre de coût</p>
+        <table class="reconduction-offre table table-bordered table-condensed table-hover table-sort">
+            <thead>
+            <tr>
+                <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
+                <th>Code</th>
+                <th>Libellé</th>
+                <th>Nb Elements pédagogiques avec un centre de coût</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($etapesReconduites as $er): ?>
-                    <tr>
-                        <td>
-                            <?php if($er['N1']['epWithCc'] > 0): ?>
-                            <span style="color:#ae0000;font-size:16px;" class="glyphicon glyphicon-alert" aria-hidden="true" title="Attention des centres de coût sont déjà positionnés sur les éléments pédagogiques de la prochaine année universitaire, vous risquez des les écraser avec ceux de l'année courante."></span>
-                            <?php endif; ?>
-                            <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['N']['etape']->getCode(); ?>">
-                        </td>
-                        <td><?= $er['N']['etape']->getCode(); ?></td>
-                        <td><?= $er['N']['etape']->getLibelle(); ?></td>
-                        <td><?= count($er['N']['etape']->getElementPedagogique()); ?></td>
-                        <td style="text-align:center;"><?= $er['N']['epWithCc']; ?></td>
-                        <td style="text-align:center;"><?= count($er['N']['etape']->getElementPedagogique())-$er['N']['epWithCc'];?></td>
-                        <td style="text-align:center;"><?= count($er['N1']['etape']->getElementPedagogique()); ?></td>
-                        <td style="text-align:center;"><?= $er['N1']['epWithCc']; ?></td>
-                        <td style="text-align:center;"><?= count($er['N1']['etape']->getElementPedagogique())-$er['N1']['epWithCc'];?></td>            </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <button disabled="disabled" id="reconduction-cc-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
+            </tr>
+
+            </thead>
+            <tbody>
+            <?php foreach ($etapesReconduites as $er): ?>
+                <tr>
+                    <td>
+                        <?php if ($er['NB_CC_EP'] > 0): ?>
+                            <span style="color:#ae0000;font-size:16px;" class="glyphicon glyphicon-alert" aria-hidden="true"
+                                  title="Attention des centres de coût sont déjà positionnés sur les éléments pédagogiques de la prochaine année universitaire, ils ne seront pas écrasés par ceux de cette année."></span>
+                        <?php endif; ?>
+                        <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE']; ?>">
+                    </td>
+                    <td><?= $er['ETAPE_CODE']; ?></td>
+                    <td><?= $er['ETAPE_LIBELLE']; ?></td>
+                    <td><?= $er['NB_EP']; ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <button disabled="disabled" id="reconduction-cc-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
                 <div class='alert alert-warning'>
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                     Les centres de coûts seront reconduits dans leurs globalités pour la prochaine année universitaire sur les formations séléctionnées. Si des centres de coûts ont été renseignés manuellement pour l'année prochaine, ils seront écrasés par ceux de cette année.
                 </div>
                 <div style='text-align:right'>
                 <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>
-                <button type='button' class='btn btn-primary' id='confirm-reconduction'>Oui</button></div>"><span class="glyphicon glyphicon-share"></span> Reconduire les centres de coûts pour l'année suivante</button>
-        </form>
-    <?php endif; ?>
+                <button type='button' class='btn btn-primary' id='confirm-reconduction'>Oui</button></div>"><span
+                    class="glyphicon glyphicon-share"></span> Reconduire les centres de coûts pour l'année suivante
+        </button>
+    </form>
 <?php endif; ?>

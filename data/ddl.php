@@ -16077,18 +16077,18 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' => 
+        'PREMIER_RECRUTEMENT' =>
         array (
           'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
           'length' => 0,
-          'scale' => NULL,
+          'scale' => '0',
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',

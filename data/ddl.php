@@ -6828,51 +6828,7 @@
         ),
       ),
     ),
-    'FORMULE_TEST_STRUCTURE' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE',
-      'temporary' => false,
-      'logging' => true,
-      'commentaire' => 'sequence=FTEST_STRUCTURE_ID_SEQ;',
-      'sequence' => 'FTEST_STRUCTURE_ID_SEQ',
-      'columns' => 
-      array (
-        'ID' => 
-        array (
-          'name' => 'ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'LIBELLE' => 
-        array (
-          'name' => 'LIBELLE',
-          'type' => 'VARCHAR2',
-          'length' => 80,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'UNIVERSITE' => 
-        array (
-          'name' => 'UNIVERSITE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '0',
-          'commentaire' => NULL,
-        ),
-      ),
-    ),
-    'FORMULE_TEST_VOLUME_HORAIRE' => 
+    'FORMULE_TEST_VOLUME_HORAIRE' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'temporary' => false,
@@ -19950,17 +19906,7 @@
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_STRUCTURE_PK' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE_PK',
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'index' => 'FORMULE_TEST_STRUCTURE_PK',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
@@ -44154,17 +44100,7 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
-    'FORMULE_TEST_STRUCTURE__UN' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE__UN',
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'index' => 'FORMULE_TEST_STRUCTURE__UN',
-      'columns' => 
-      array (
-        0 => 'LIBELLE',
-      ),
-    ),
-    'FORMULE__UN' => 
+    'FORMULE__UN' =>
     array (
       'name' => 'FORMULE__UN',
       'table' => 'FORMULE',
@@ -48702,27 +48638,7 @@ END;',
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_STRUCTURE_PK' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE_PK',
-      'unique' => true,
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
-    'FORMULE_TEST_STRUCTURE__UN' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE__UN',
-      'unique' => true,
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'columns' => 
-      array (
-        0 => 'LIBELLE',
-      ),
-    ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'unique' => true,

@@ -81,14 +81,14 @@ class Driver implements DriverInterface
 
 
 
-    private function execStatement($sql, array $params = [])
+    private function execStatement($sql, array $params = [], array $types = [])
     {
         foreach ($params as $name => $val) {
-            if ($val instanceof \DateTime) {
+            if (is_bool($val)) {
+                $params[$name] = $val ? 1 : 0;
+            } elseif ($val instanceof \DateTime) {
                 $params[$name] = $val->format('Y-m-d H:i:s');
                 $sql           = str_replace(":$name", "to_date(:$name, 'YYYY-MM-DD HH24:MI:SS')", $sql);
-            } elseif (is_bool($val)) {
-                $params[$name] = $val ? 1 : 0;
             } else {
                 $params[$name] = $val;
             }
@@ -97,10 +97,24 @@ class Driver implements DriverInterface
         $statement = oci_parse($this->connexion, $sql);
 
         foreach ($params as $key => $val) {
-            ${$key} = $val;
-            oci_bind_by_name($statement, ':' . $key, ${$key});
+            $type = isset($types[$key]) ? $types[$key] : null;
+            switch ($type) {
+                case Bdd::TYPE_CLOB:
+                    ${$key} = oci_new_descriptor($this->connexion, OCI_D_LOB);
+                    ${$key}->writeTemporary($params[$key], OCI_TEMP_CLOB);
+                    oci_bind_by_name($statement, ':' . $key, ${$key}, -1, OCI_B_CLOB);
+                break;
+                case Bdd::TYPE_BLOB:
+                    ${$key} = oci_new_descriptor($this->connexion, OCI_D_LOB);
+                    ${$key}->writeTemporary($params[$key], OCI_TEMP_BLOB);
+                    oci_bind_by_name($statement, ':' . $key, ${$key}, -1, OCI_B_BLOB);
+                break;
+                default:
+                    ${$key} = $val;
+                    oci_bind_by_name($statement, ':' . $key, ${$key});
+                break;
+            }
         }
-
         if (false === @oci_execute($statement, $this->commitMode)) {
             $error = oci_error($statement);
             oci_free_statement($statement);
@@ -186,9 +200,9 @@ class Driver implements DriverInterface
      * @throws BddException
      * @throws BddIndexExistsException
      */
-    public function exec(string $sql, array $params = []): bool
+    public function exec(string $sql, array $params = [], array $types = []): bool
     {
-        $statement = $this->execStatement($sql, $params);
+        $statement = $this->execStatement($sql, $params, $types);
         oci_free_statement($statement);
 
         return true;
@@ -206,35 +220,57 @@ class Driver implements DriverInterface
      * @throws BddException
      * @throws BddIndexExistsException
      */
-    public function select(string $sql, array $params = [], $fetchMode = Bdd::FETCH_ALL)
+    public function select(string $sql, array $params = [], array $options = [])
     {
+        $defaultOptions = [
+            'fetch' => Bdd::FETCH_ALL,
+            'types' => [],
+        ];
+        $options        = array_merge($defaultOptions, $options);
+
         $statement = $this->execStatement($sql, $params);
 
-        if ($fetchMode == Bdd::FETCH_EACH) {
-            return $statement;
-        }
+        switch ($options['fetch']) {
+            case Bdd::FETCH_ONE:
+                return $this->fetch($statement, $options);
+            case Bdd::FETCH_EACH:
+                return $statement;
+            case Bdd::FETCH_ALL:
+                if (false === oci_fetch_all($statement, $res, 0, -1, OCI_FETCHSTATEMENT_BY_ROW)) {
+                    $error = oci_error($statement);
+                    oci_free_statement($statement);
+                    throw $this->sendException($error);
+                }
+                oci_free_statement($statement);
+                if ($res) {
+                    foreach ($res as $l => $r) {
+                        foreach ($r as $c => $v) {
+                            $type        = isset($options['types'][$c]) ? $options['types'][$c] : null;
+                            $res[$l][$c] = $this->bddToPhpConvertVar($v, $type);
+                        }
+                    }
+                }
 
-        if (false === oci_fetch_all($statement, $res, 0, -1, OCI_FETCHSTATEMENT_BY_ROW)) {
-            $error = oci_error($statement);
-            oci_free_statement($statement);
-            throw $this->sendException($error);
+                return $res;
         }
-        oci_free_statement($statement);
-
-        if ($fetchMode == Bdd::FETCH_ONE && isset($res[0])) {
-            return $res[0];
-        }
-
-        return $res;
     }
 
 
 
-    public function fetch($statement)
+    public function fetch($statement, array $options = [])
     {
-        $result = oci_fetch_array($statement, OCI_ASSOC);
+        $defaultOptions = [
+            'types' => [],
+        ];
+        $options        = array_merge($defaultOptions, $options);
+        $result         = oci_fetch_array($statement, OCI_ASSOC);
         if (false == $result) {
             oci_free_statement($statement);
+        } else {
+            foreach ($result as $c => $v) {
+                $type       = isset($options['types'][$c]) ? $options['types'][$c] : null;
+                $result[$c] = $this->bddToPhpConvertVar($v, $type);
+            }
         }
 
         return $result;
@@ -267,5 +303,50 @@ class Driver implements DriverInterface
         }
 
         return $mapping[$name];
+    }
+
+
+
+    protected function bddToPhpConvertVar($variable, ?string $type = null)
+    {
+        if ($variable === null) return null;
+
+        if (null === $type) {
+            if (is_object($variable) && get_class($variable) == 'OCI-Lob') {
+                return $variable->load();
+            } else {
+                return $variable;
+            }
+        }
+
+        switch ($type) {
+            case Bdd::TYPE_INT:
+                return (int)$variable;
+            case Bdd::TYPE_BOOL:
+                return (bool)$variable;
+            case Bdd::TYPE_FLOAT:
+                return (float)$variable;
+            case Bdd::TYPE_STRING:
+                return (string)$variable;
+            case Bdd::TYPE_DATE:
+                $date = \DateTime::createFromFormat('Y-m-d', $variable);
+                if ($date instanceof \DateTime) {
+                    $date->setTime(0, 0, 0);
+
+                    return $date;
+                } else {
+                    return $variable;
+                }
+
+            case Bdd::TYPE_BLOB:
+            case Bdd::TYPE_CLOB:
+                if (is_object($variable) && get_class($variable) == 'OCI-Lob') {
+                    return $variable->load();
+                } else {
+                    return $variable;
+                }
+            default:
+                throw new \Exception("Type de donnée " . $type . " non géré.");
+        }
     }
 }

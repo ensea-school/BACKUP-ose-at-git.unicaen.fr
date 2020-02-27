@@ -3,11 +3,34 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlCompilationInterface;
+use BddAdmin\Ddl\DdlViewInterface;
 
-class DdlView extends DdlAbstract
+class DdlView extends DdlAbstract implements DdlViewInterface
 {
     const ALIAS = 'view';
     const LABEL = 'Vues';
+
+
+
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT OBJECT_NAME 
+          FROM ALL_OBJECTS 
+          WHERE 
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND OBJECT_TYPE = 'VIEW' AND GENERATED = 'N'
+          ORDER BY OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
@@ -20,9 +43,10 @@ class DdlView extends DdlAbstract
             view_name \"name\",
             text \"definition\"
           FROM
-            USER_VIEWS
+            ALL_VIEWS
           WHERE
-            1=1 $f
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            $f
           ORDER BY
             view_name
         ";
@@ -49,9 +73,11 @@ class DdlView extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("DROP VIEW " . $name, 'Suppression de la vue ' . $name);
     }
@@ -75,5 +101,31 @@ class DdlView extends DdlAbstract
 
         $this->drop($oldName);
         $this->create($new);
+    }
+
+
+
+    /**
+     * @param string|array $name
+     *
+     * @return mixed
+     */
+    public function compiler($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
+
+        $this->addQuery("ALTER VIEW $name COMPILE", 'Compilation de la vue ' . $name);
+    }
+
+
+
+    public function compilerTout()
+    {
+        $objects = $this->getList();
+        foreach ($objects as $object) {
+            $this->compiler($object);
+        }
     }
 }

@@ -2,11 +2,35 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlRefConstraintInterface;
 
-class DdlRefConstraint extends DdlAbstract
+class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraintInterface
 {
     const ALIAS = 'ref-constraint';
+
+    protected $description = 'clé étrangère';
+
+
+
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT CONSTRAINT_NAME
+          FROM ALL_CONSTRAINTS 
+          WHERE OWNER = sys_context( 'userenv', 'current_schema' ) 
+            AND CONSTRAINT_TYPE = 'R'
+          AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%'
+          ORDER BY CONSTRAINT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+
+        foreach ($r as $l) {
+            $list[] = $l['CONSTRAINT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
@@ -24,12 +48,13 @@ class DdlRefConstraint extends DdlAbstract
           c.delete_rule \"delete_rule\",
           c.index_name \"index\"
         FROM
-          user_constraints c
+          all_constraints c
           JOIN all_constraints rc ON rc.constraint_name = c.r_constraint_name AND rc.constraint_type = 'P'
-          JOIN user_cons_columns cc ON cc.constraint_name = c.constraint_name
-          JOIN user_cons_columns rcc ON rcc.constraint_name = rc.constraint_name AND rcc.position = cc.position
+          JOIN all_cons_columns cc ON cc.constraint_name = c.constraint_name
+          JOIN all_cons_columns rcc ON rcc.constraint_name = rc.constraint_name AND rcc.position = cc.position
         WHERE
-          c.constraint_type = 'R' $f
+          c.OWNER = sys_context( 'userenv', 'current_schema' )
+          AND c.constraint_type = 'R' $f
         ORDER BY
           c.constraint_name,
           cc.position";
@@ -50,16 +75,6 @@ class DdlRefConstraint extends DdlAbstract
         }
 
         return $data;
-    }
-
-
-
-    private function indexExists($indexName)
-    {
-        $sql = "SELECT count(*) RES FROM ALL_INDEXES WHERE INDEX_NAME = :indexName AND ROWNUM = 1";
-        $res = $this->bdd->select($sql, compact('indexName'));
-
-        return $res[0]['RES'] == '1';
     }
 
 
@@ -92,32 +107,26 @@ class DdlRefConstraint extends DdlAbstract
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $sql = $this->makeCreate($data);
-        $this->addQuery($sql, 'Ajout de la clé étrangère ' . $data['name']);
+        parent::create($data);
     }
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $sql       = "SELECT TABLE_NAME FROM ALL_CONSTRAINTS WHERE CONSTRAINT_NAME = :name";
-        $d         = $this->bdd->select($sql, compact('name'));
-        $tableName = $d[0]['TABLE_NAME'];
-
-        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name", 'Suppression de la clé étrangère ' . $name);
+        parent::drop($name);
     }
 
 
 
     public function alter(array $old, array $new)
     {
-        if ($old != $new) {
+        if ($this->isDiff($old, $new)) {
             if ($this->sendEvent()->getReturn('no-exec')) return;
 
-            $this->drop($old['name']);
-            $this->create($new);
+            parent::alter($old, $new);
         }
     }
 
@@ -127,10 +136,30 @@ class DdlRefConstraint extends DdlAbstract
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $tableName = $new['table'];
-        $newName   = $new['name'];
+        parent::rename($oldName, $new);
+    }
 
-        $sql = "ALTER TABLE \"$tableName\" RENAME CONSTRAINT \"$oldName\" TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage de la clé étrangère ' . $oldName . ' en ' . $newName);
+
+
+    /***
+     * @param string|array $name
+     */
+    public function enable($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        parent::enable($name);
+    }
+
+
+
+    /***
+     * @param string|array $name
+     */
+    public function disable($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        parent::disable($name);
     }
 }

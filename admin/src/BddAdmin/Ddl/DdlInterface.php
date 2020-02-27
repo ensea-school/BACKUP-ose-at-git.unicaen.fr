@@ -3,7 +3,6 @@
 namespace BddAdmin\Ddl;
 
 use BddAdmin\Bdd;
-use BddAdmin\SchemaLoggerInterface;
 
 
 interface DdlInterface
@@ -12,23 +11,6 @@ interface DdlInterface
      * DdlAbstract constructor.
      */
     public function __construct(Bdd $bdd);
-
-
-
-    public function getQueries($logger = null): array;
-
-
-
-    public function clearQueries();
-
-
-
-    /**
-     * @param SchemaLoggerInterface|null $logger
-     *
-     * @return array
-     */
-    public function execQueries(?SchemaLoggerInterface $logger = null): array;
 
 
 
@@ -100,6 +82,13 @@ interface DdlInterface
 
 
     /**
+     * @return array
+     */
+    public function getList(): array;
+
+
+
+    /**
      * @param string|string[]|null $includes
      * @param string|string[]|null $excludes
      *
@@ -117,9 +106,9 @@ interface DdlInterface
 
 
     /**
-     * @param string $name
+     * @param string|array $name
      */
-    public function drop(string $name);
+    public function drop($name);
 
 
 

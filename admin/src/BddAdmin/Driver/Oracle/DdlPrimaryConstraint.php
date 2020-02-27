@@ -2,11 +2,35 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlPrimaryConstraintInterface;
 
-class DdlPrimaryConstraint extends DdlAbstract
+class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryConstraintInterface
 {
     const ALIAS = 'primary-constraint';
+
+    protected $description = 'clé primaire';
+
+
+
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT CONSTRAINT_NAME
+          FROM ALL_CONSTRAINTS 
+          WHERE OWNER = sys_context( 'userenv', 'current_schema' ) 
+            AND CONSTRAINT_TYPE = 'P'
+          AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%'
+          ORDER BY CONSTRAINT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+
+        foreach ($r as $l) {
+            $list[] = $l['CONSTRAINT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
@@ -21,10 +45,11 @@ class DdlPrimaryConstraint extends DdlAbstract
           c.index_name \"index\",
           cc.column_name \"column\"
         FROM
-          user_constraints c
-          JOIN user_cons_columns cc ON cc.constraint_name = c.constraint_name
+          all_constraints c
+          JOIN all_cons_columns cc ON cc.constraint_name = c.constraint_name
         WHERE
-          c.constraint_type = 'P'
+          c.owner = sys_context( 'userenv', 'current_schema' )
+          AND c.constraint_type = 'P'
           AND c.constraint_name NOT LIKE 'BIN$" . "%' $f
         ORDER BY
           c.constraint_name,
@@ -44,16 +69,6 @@ class DdlPrimaryConstraint extends DdlAbstract
         }
 
         return $data;
-    }
-
-
-
-    private function indexExists($indexName)
-    {
-        $sql = "SELECT count(*) RES FROM ALL_INDEXES WHERE INDEX_NAME = :indexName AND ROWNUM = 1";
-        $res = $this->bdd->select($sql, compact('indexName'));
-
-        return $res[0]['RES'] == '1';
     }
 
 
@@ -82,31 +97,16 @@ class DdlPrimaryConstraint extends DdlAbstract
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $sql = $this->makeCreate($data);
-        $this->addQuery($sql, 'Création de la clé primaine ' . $data['name']);
+        parent::create($data);
     }
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $sql       = "SELECT TABLE_NAME FROM ALL_CONSTRAINTS WHERE CONSTRAINT_NAME = :name";
-        $d         = $this->bdd->select($sql, compact('name'));
-        $tableName = $d[0]['TABLE_NAME'];
-
-        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name", 'Suppression de la clé primaire ' . $name);
-    }
-
-
-
-    public function isDiff(array $d1, array $d2)
-    {
-        unset($d1['index']);
-        unset($d2['index']);
-
-        return $d1 != $d2;
+        parent::drop($name);
     }
 
 
@@ -116,8 +116,7 @@ class DdlPrimaryConstraint extends DdlAbstract
         if ($this->isDiff($old, $new)) {
             if ($this->sendEvent()->getReturn('no-exec')) return;
 
-            $this->drop($old['name']);
-            $this->create($new);
+            parent::alter($old, $new);
         }
     }
 
@@ -127,11 +126,30 @@ class DdlPrimaryConstraint extends DdlAbstract
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $tableName = $new['table'];
-        $newName   = $new['name'];
-
-        $sql = "ALTER TABLE \"$tableName\" RENAME CONSTRAINT \"$oldName\" TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage de la clé primaire ' . $oldName . ' en ' . $newName);
+        parent::rename($oldName, $new);
     }
 
+
+
+    /**
+     * @param string|array $name
+     */
+    public function enable($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        parent::enable($name);
+    }
+
+
+
+    /**
+     * @param string|array $name
+     */
+    public function disable($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        parent::disable($name);
+    }
 }

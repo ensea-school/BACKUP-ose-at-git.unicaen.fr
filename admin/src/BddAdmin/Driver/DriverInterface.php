@@ -24,11 +24,11 @@ interface DriverInterface
 
 
 
-    public function exec(string $sql, array $params = []): bool;
+    public function exec(string $sql, array $params = [], array $types = []): bool;
 
 
 
-    public function select(string $sql, array $params = [], $fetchMode = self::FETCH_ALL);
+    public function select(string $sql, array $params = [], array $options = []);
 
 
 
@@ -37,4 +37,5 @@ interface DriverInterface
 
 
     public function getDdlClass(string $name): string;
+
 }

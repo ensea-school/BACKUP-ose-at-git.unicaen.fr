@@ -58,7 +58,7 @@ class MigrationManager
 
     public function initTablesDef(array $ref, array $ddlConfig)
     {
-        $tablesKey = \BddAdmin\Ddl\DdlTable::class;
+        $tablesKey = \BddAdmin\Bdd::DDL_TABLE;
 
         /* On ne parse que les tables */
         $ddlConfig                        = [$tablesKey => $ddlConfig[$tablesKey]];
@@ -196,7 +196,7 @@ class MigrationManager
     protected function tableRealExists($tableName): bool
     {
         $sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME = :tableName";
-        $tn  = $this->getSchema()->getBdd()->select($sql, compact('tableName'), \BddAdmin\Bdd::FETCH_ONE);
+        $tn  = $this->getSchema()->getBdd()->select($sql, compact('tableName'), ['fetch' => \BddAdmin\Bdd::FETCH_ONE]);
 
         return isset($tn['TABLE_NAME']) && $tn['TABLE_NAME'] == $tableName;
     }

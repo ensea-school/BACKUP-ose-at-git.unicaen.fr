@@ -2,8 +2,17 @@
 
 namespace BddAdmin;
 
-use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlIndexInterface;
 use BddAdmin\Ddl\DdlInterface;
+use BddAdmin\Ddl\DdlMaterializedViewInteface;
+use BddAdmin\Ddl\DdlPackageInteface;
+use BddAdmin\Ddl\DdlPrimaryConstraintInterface;
+use BddAdmin\Ddl\DdlRefConstraintInterface;
+use BddAdmin\Ddl\DdlSequenceInterface;
+use BddAdmin\Ddl\DdlTableInterface;
+use BddAdmin\Ddl\DdlTriggerInterface;
+use BddAdmin\Ddl\DdlUniqueConstraintInterface;
+use BddAdmin\Ddl\DdlViewInterface;
 use BddAdmin\Event\EventManagerAwareTrait;
 use BddAdmin\Exception\BddCompileException;
 
@@ -81,9 +90,24 @@ class Schema
     ];
 
     /**
+     * @var DdlInterface[]
+     */
+    private $ddlObjects = [];
+
+    /**
      * @var SchemaLoggerInterface
      */
     public $logger;
+
+    /**
+     * @var bool
+     */
+    protected $queryCollect = false;
+
+    /**
+     * @var array
+     */
+    protected $queries = [];
 
 
 
@@ -92,6 +116,93 @@ class Schema
         if ($bdd) {
             $this->setBdd($bdd);
         }
+    }
+
+
+
+    protected function object(string $name): DdlInterface
+    {
+        $ddlClass = $this->getBdd()->getDdlClass($name);
+
+        if (!is_subclass_of($ddlClass, DdlInterface::class)) {
+            throw new \Exception($ddlClass . ' n\'est pas un objet DDL valide!!');
+        }
+
+        if (!isset($this->ddlObjects[$ddlClass])) {
+            $this->ddlObjects[$ddlClass] = new $ddlClass($this->getBdd());
+        }
+
+        return $this->ddlObjects[$ddlClass];
+    }
+
+
+
+    public function index(): DdlIndexInterface
+    {
+        return $this->object(Bdd::DDL_INDEX);
+    }
+
+
+
+    public function materializedView(): DdlMaterializedViewInteface
+    {
+        return $this->object(Bdd::DDL_MATERIALIZED_VIEW);
+    }
+
+
+
+    public function package(): DdlPackageInteface
+    {
+        return $this->object(Bdd::DDL_PACKAGE);
+    }
+
+
+
+    public function primaryConstraint(): DdlPrimaryConstraintInterface
+    {
+        return $this->object(Bdd::DDL_PRIMARY_CONSTRAINT);
+    }
+
+
+
+    public function refConstraint(): DdlRefConstraintInterface
+    {
+        return $this->object(Bdd::DDL_REF_CONSTRAINT);
+    }
+
+
+
+    public function sequence(): DdlSequenceInterface
+    {
+        return $this->object(Bdd::DDL_SEQUENCE);
+    }
+
+
+
+    public function table(): DdlTableInterface
+    {
+        return $this->object(Bdd::DDL_TABLE);
+    }
+
+
+
+    public function trigger(): DdlTriggerInterface
+    {
+        return $this->object(Bdd::DDL_TRIGGER);
+    }
+
+
+
+    public function uniqueConstraint(): DdlUniqueConstraintInterface
+    {
+        return $this->object(Bdd::DDL_UNIQUE_CONSTRAINT);
+    }
+
+
+
+    public function view(): DdlViewInterface
+    {
+        return $this->object(Bdd::DDL_VIEW);
     }
 
 
@@ -132,19 +243,23 @@ class Schema
             unset($ddlConfig['explicit']);
         }
 
-        if ($explicit) {
-            foreach ($this->ddlTypes as $type) {
-                if (empty($this->ddlConfigGet($ddlConfig, $type))) {
-                    $ddlConfig[$type] = ['excludes' => '%']; // si pas défini, alors on exclue tout
-                }
+        foreach ($this->ddlTypes as $type) {
+            if (!array_key_exists($type, $ddlConfig)) {
+                $ddlConfig[$type] = [];
             }
-        } else {
-            foreach ($this->ddlTypes as $type) {
-                if (empty($this->ddlConfigGet($ddlConfig, $type))) {
-                    $ddlConfig[$type] = ['includes' => '%']; // si pas défini, alors on inclue tout
+            $includes = isset($ddlConfig[$type]['includes']) ? $ddlConfig[$type]['includes'] : null;
+            $excludes = isset($ddlConfig[$type]['excludes']) ? $ddlConfig[$type]['excludes'] : null;
+            $options  = isset($ddlConfig[$type]['options']) ? $ddlConfig[$type]['options'] : [];
+
+            if (empty($includes) && empty($excludes)) {
+                if ($explicit) {
+                    $excludes = '%'; // si pas défini, alors on exclue tout
+                } else {
+                    $includes = '%'; // si pas défini, alors on inclue tout
                 }
             }
         }
+        $ddlConfig[$type] = compact('includes', 'excludes', 'options');
 
         return $ddlConfig;
     }
@@ -162,15 +277,8 @@ class Schema
         $ddlConfig = $this->prepareDdlConfig($ddlConfig);
         $data      = [];
         foreach ($this->ddlTypes as $type) {
-            if ($this->ddlConfigGet($ddlConfig, $type) !== false) {
-                $includes = $this->ddlConfigGet($ddlConfig, $type, 'includes');
-                $excludes = $this->ddlConfigGet($ddlConfig, $type, 'excludes');
-                $options  = $this->ddlConfigGet($ddlConfig, $type, 'options');
-                if ($options) {
-                    $this->getBdd()->getDdl($type)->setOptions($options);
-                }
-                $data[$type] = $this->getBdd()->getDdl($type)->get($includes, $excludes);
-            }
+            $this->object($type)->setOptions($ddlConfig['options']);
+            $data[$type] = $this->object($type)->get($ddlConfig['includes'], $ddlConfig['excludes']);
         }
 
         return $data;
@@ -266,7 +374,7 @@ class Schema
      */
     public function saveToFile(array $ddl, string $filename)
     {
-        $ddlString = "<?php\n\n//@formatter:off\n\nreturn " . $this->var_export54($ddl) . ";\n\n//@formatter:on\n";
+        $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->var_export54($ddl) . ";\n\n//@" . "formatter:on\n";
 
         file_put_contents($filename, $ddlString);
     }
@@ -287,13 +395,10 @@ class Schema
 
     /**
      * @param array|Schema $ddl
-     * @param bool         $autoExecute
-     *
-     * @return array
      */
-    public function create($ddl, $autoExecute = true): array
+    public function create($ddl)
     {
-        return $this->change('create', $ddl, [], $autoExecute);
+        $this->change('create', $ddl, []);
     }
 
 
@@ -301,26 +406,20 @@ class Schema
     /**
      * @param array|Schema $ddl
      * @param array        $ddlConfig
-     * @param bool         $autoExecute
-     *
-     * @return array
      */
-    public function alter($ddl, array $ddlConfig = [], $autoExecute = true): array
+    public function alter($ddl, array $ddlConfig = [])
     {
-        return $this->change('alter', $ddl, $ddlConfig, $autoExecute);
+        $this->change('alter', $ddl, $ddlConfig);
     }
 
 
 
     /**
      * @param array $ddlConfig
-     * @param bool  $autoExecute
-     *
-     * @return array
      */
-    public function drop(array $ddlConfig = [], $autoExecute = true): array
+    public function drop(array $ddlConfig = [])
     {
-        return $this->change('drop', [], $ddlConfig, $autoExecute);
+        $this->change('drop', [], $ddlConfig);
     }
 
 
@@ -365,18 +464,15 @@ class Schema
             $new = $bdd;
         }
 
+        $this->queryCollect = true;
+
         $res = [];
         foreach ($this->changements as $changement => $params) {
             [$ddlName, $action, $precision] = explode('.', $changement);
             $noGet = isset($ddlConfig[$ddlName]) ? ($ddlConfig[$ddlName] === false) : false;
             if (!$noGet) {
-                $ddlObject = $this->getBdd()->getDdl($ddlName, true);
-
-                $options = $this->ddlConfigGet($ddlConfig, $ddlName, 'options');
-                if ($options) {
-                    $ddlObject->addOptions((array)$options);
-                }
-
+                $ddlObject = $this->object($ddlName);
+                $ddlObject->addOptions($ddlConfig['options']);
                 $kold = isset($old[$ddlName]) ? $old[$ddlName] : [];
                 $knew = isset($new[$ddlName]) ? $new[$ddlName] : [];
 
@@ -424,18 +520,21 @@ class Schema
                         break;
                     }
                 }
-                if ($ddlObject->getQueries()) {
-                    $res[$changement] = $ddlObject->getQueries($this->logger);
+                if (!empty($this->queries)) {
+                    $res[$changement] = $this->queries;
+                    $this->queries    = [];
                 }
             }
         }
+
+        $this->queryCollect = false;
 
         return $res;
     }
 
 
 
-    private function change(string $mode, $ddl, array $ddlConfig = [], $autoExecute = true): array
+    private function change(string $mode, $ddl, array $ddlConfig = [])
     {
         if ($ddl instanceof self) {
             $ddl = $ddl->getDdl($ddlConfig);
@@ -448,12 +547,11 @@ class Schema
             unset($ddlConfig['include-tables-deps']);
             $this->filterIncludeTableDeps($ddl, $ddlConfig);
         }
-        $res = [];
         foreach ($this->changements as $changement => $params) {
             [$ddlName, $action, $precision] = explode('.', $changement);
             $noGet = isset($ddlConfig[$ddlName]) ? ($ddlConfig[$ddlName] === false) : false;
             if (!$noGet) {
-                $ddlObject = $this->getBdd()->getDdl($ddlName, true);
+                $ddlObject = $this->object($ddlName);
 
                 $includes = $this->ddlConfigGet($ddlConfig, $ddlName, 'includes');
                 $excludes = $this->ddlConfigGet($ddlConfig, $ddlName, 'excludes');
@@ -515,26 +613,58 @@ class Schema
                         break;
                     }
                 }
-                if ($ddlObject->getQueries()) {
-                    if ($autoExecute) {
-                        $res[$changement] = $ddlObject->execQueries($this->logger);
-                    } else {
-                        $res[$changement] = $ddlObject->getQueries($this->logger);
+            }
+        }
+
+        if ($mode != 'drop') { // create ou alter
+            if ($this->logger) {
+                $this->logger->logTitle("\n" . 'Compilation de tous les objets de la BDD');
+            }
+            $this->compilerTout();
+        }
+    }
+
+
+
+    /**
+     * @param array $ddl
+     */
+    public function majSequences(array $ddl)
+    {
+        foreach ($ddl[Bdd::DDL_TABLE] as $tdata) {
+            $this->table()->majSequence($tdata);
+        }
+    }
+
+
+
+    /**
+     * @return array
+     * @throws BddCompileException
+     * @throws BddException
+     * @throws BddIndexExistsException
+     */
+    public function compilerTout(): array
+    {
+        $errors = [];
+
+        $compileTypes = [Bdd::DDL_PACKAGE, Bdd::DDL_VIEW, Bdd::DDL_TRIGGER];
+        foreach ($compileTypes as $compileType) {
+            $object = $this->object($compileType);
+            $list   = $object->getList();
+            foreach ($list as $name) {
+                try {
+                    $object->compiler($name);
+                } catch (BddCompileException $e) {
+                    $errors[$compileType][$name] = $e->getMessage();
+                    if ($this->logger) {
+                        $this->logger->log($compileType . ' ' . $name . ' : Erreur de compilation');
                     }
                 }
             }
         }
 
-        if ($mode != 'drop' && $autoExecute) { // create ou alter
-            if ($this->logger) {
-                $this->logger->logTitle("\n" . 'Compilation de tous les objets de la BDD');
-            }
-            if (empty($this->compilerTout()) && $this->logger) {
-                //$this->logger->log('Compilation effectuée avec succès.');
-            }
-        }
-
-        return $res;
+        return $errors;
     }
 
 
@@ -565,7 +695,7 @@ class Schema
             if (!isset($ddlConfig[$ddlName]['includes'])) {
                 $ddlConfig[$ddlName]['includes'] = [];
             }
-            $objects = $this->getBdd()->getDdl($ddlName)->get();
+            $objects = $this->object($ddlName)->get();
             foreach ($objects as $name => $def) {
                 if (in_array($def['table'], $tables) && !in_array($name, $ddlConfig[$ddlName]['includes'])) {
                     $ddlConfig[$ddlName]['includes'][] = $name;
@@ -600,29 +730,12 @@ class Schema
 
 
 
-    /**
-     * @param array $ddl
-     * @param bool  $autoExecute
-     *
-     * @return array
-     */
-    public function majSequences(array $ddl, $autoExecute = true): array
+    public function queryExec(string $sql, string $description = null)
     {
-        if (!isset($ddl[Bdd::DDL_TABLE])) {
-            return [];
-        }
-
-        $ddlObject = $this->getBdd()->getDdl(Bdd::DDL_TABLE, true);
-        foreach ($ddl[Bdd::DDL_TABLE] as $tdata) {
-            $ddlObject->majSequence($tdata);
-        }
-
-        if ($ddlObject->getQueries()) {
-            if ($autoExecute) {
-                return [Bdd::DDL_TABLE . '.majSequences' => $ddlObject->execQueries()];
-            } else {
-                return [Bdd::DDL_TABLE . '.majSequences' => $ddlObject->getQueries($this->logger)];
-            }
+        if ($this->queryCollect) {
+            $this->queries[$sql] = $description;
+        } else {
+            $this->getBdd()->exec($sql);
         }
     }
 
@@ -677,71 +790,4 @@ class Schema
 
         return $sql;
     }
-
-
-
-    public function dumpErrors(array $errors)
-    {
-        if (empty($errors)) {
-            echo "<h2>L'opération s'est bien déroulée.</h2>";
-        } else {
-            foreach ($errors as $key => $errs) {
-                if (!empty($errs)) {
-                    echo "<h2>$key</h2>";
-                    foreach ($errs as $name => $qr) {
-                        if ($qr instanceof \Exception) {
-                            $qrl = explode("\n", $qr);
-                            echo "<span style='color:red'>" . $qrl[0] . "</span><br />";
-                            echo "<pre>" . $qr->getMessage() . "</pre>";
-                        } else {
-                            echo "$qr<br />";
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-
-    /**
-     * @return array
-     * @throws BddCompileException
-     * @throws BddException
-     * @throws BddIndexExistsException
-     */
-    public function compilerTout(): array
-    {
-        $errors = [];
-
-        $bdd     = $this->getBdd();
-        $sql     = "SELECT OBJECT_TYPE, OBJECT_NAME FROM USER_OBJECTS WHERE OBJECT_TYPE IN ('VIEW','PACKAGE','TRIGGER')";
-        $objects = $bdd->select($sql);
-        foreach ($objects as $object) {
-            $type = $object['OBJECT_TYPE'];
-            $name = $object['OBJECT_NAME'];
-            try {
-                switch ($type) {
-                    case 'PACKAGE':
-                        $bdd->exec("ALTER PACKAGE $name COMPILE PACKAGE");
-                        $bdd->exec("ALTER PACKAGE $name COMPILE BODY");
-                    break;
-                    case 'VIEW':
-                        $bdd->exec("ALTER VIEW $name COMPILE");
-                    break;
-                    case 'TRIGGER':
-                        $bdd->exec("ALTER TRIGGER $name COMPILE");
-                    break;
-                }
-            } catch (BddCompileException $e) {
-                $errors[$type][$name] = $e->getMessage();
-                if ($this->logger) {
-                    $this->logger->log($type . ' ' . $name . ' : Erreur de compilation');
-                }
-            }
-        }
-
-        return $errors;
-    }
-
 }

@@ -4,9 +4,10 @@ namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Bdd;
 use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlTableInterface;
 use BddAdmin\Exception\BddException;
 
-class DdlTable extends DdlAbstract
+class DdlTable extends DdlAbstract implements DdlTableInterface
 {
     const ALIAS = 'table';
 
@@ -95,6 +96,28 @@ class DdlTable extends DdlAbstract
 
 
 
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT O.OBJECT_NAME 
+          FROM ALL_OBJECTS O 
+            LEFT JOIN ALL_OBJECTS O2 ON O2.OBJECT_NAME = O.OBJECT_NAME AND O2.OBJECT_TYPE = 'MATERIALIZED VIEW'
+          WHERE 
+            O.OWNER = sys_context( 'userenv', 'current_schema' )
+            AND O.OBJECT_TYPE = 'TABLE' AND O.GENERATED = 'N' AND O2.OBJECT_NAME IS NULL
+          ORDER BY O.OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
+
+
+
     public function get($includes = null, $excludes = null): array
     {
         [$f, $p] = $this->makeFilterParams('t.table_name', $includes, $excludes);
@@ -119,13 +142,14 @@ class DdlTable extends DdlAbstract
             comm.comments     \"commentaire\",
             s.sequence_name   \"sequence\"
           FROM
-                      user_tables          t
-            LEFT JOIN user_mviews          m ON m.mview_name = t.table_name
-            LEFT JOIN user_tab_comments comm ON comm.table_name = t.table_name
-            LEFT JOIN user_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
-            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
+                      all_tables          t
+            LEFT JOIN all_mviews          m ON m.mview_name = t.table_name
+            LEFT JOIN all_tab_comments comm ON comm.table_name = t.table_name
+            LEFT JOIN all_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
+            " . ($withColumns ? "JOIN all_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
           WHERE
-            m.mview_name IS NULL 
+            t.OWNER = sys_context( 'userenv', 'current_schema' )
+            AND m.mview_name IS NULL 
             " . ($this->hasOption(self::OPT_NO_TEMPORARY) ? "AND t.temporary <> 'Y'" : '') . "
             $f
           ORDER BY
@@ -270,7 +294,7 @@ class DdlTable extends DdlAbstract
             break;
             case Bdd::TYPE_STRING:
                 if (!$resType) $resType = 'VARCHAR2';
-                $resType .= 'VARCHAR2(' . $column['length'] . ' CHAR)';
+                $resType .= '(' . $column['length'] . ' CHAR)';
             break;
             case Bdd::TYPE_FLOAT:
                 if (!$resType) $resType = 'FLOAT';
@@ -312,9 +336,11 @@ class DdlTable extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("DROP TABLE $name", 'Suppression de la table ' . $name);
     }

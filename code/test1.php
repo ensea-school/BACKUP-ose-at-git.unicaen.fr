@@ -39,7 +39,7 @@ $list = [
 ];
 
 $tables = [];
-$tbls   = $schema->getDdlObject(\BddAdmin\Ddl\DdlTable::class)->get($list);
+$tbls   = $bdd->getSchema()->table()->get($list);
 foreach ($tbls as $tbl) {
     $table = [
         'key'    => $tbl['name'],
@@ -62,7 +62,7 @@ foreach ($tbls as $tbl) {
 }
 
 $cles = [];
-$cls  = $schema->getDdlObject(\BddAdmin\Ddl\DdlRefConstraint::class)->get();
+$cls  = $bdd->getSchema()->refConstraint()->get();
 foreach ($cls as $cl) {
     foreach ($cl['columns'] as $col => $rcol) {
         $cle    = [

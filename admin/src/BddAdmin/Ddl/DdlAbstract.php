@@ -4,9 +4,6 @@ namespace BddAdmin\Ddl;
 
 use BddAdmin\Bdd;
 use BddAdmin\Event\EventManagerAwareTrait;
-use BddAdmin\Exception\BddCompileException;
-use BddAdmin\SchemaLoggerInterface;
-use Exception;
 
 
 abstract class DdlAbstract implements DdlInterface
@@ -24,11 +21,6 @@ abstract class DdlAbstract implements DdlInterface
      * @var string
      */
     protected $type;
-
-    /**
-     * @var array
-     */
-    private $queries = [];
 
     /**
      * @var string[]
@@ -110,63 +102,7 @@ abstract class DdlAbstract implements DdlInterface
 
     protected function addQuery(string $sql, string $description = null) // (?string $sql)
     {
-        if ($sql) {
-            $this->queries[$sql] = $description;
-        }
-    }
-
-
-
-    /**
-     * @param SchemaLoggerInterface|null $logger
-     *
-     * @return string[]
-     */
-    public function getQueries($logger = null): array
-    {
-        if ($logger) {
-            foreach ($this->queries as $sql => $description) {
-                $logger->log($description);
-            }
-        }
-
-        return $this->queries;
-    }
-
-
-
-    public function clearQueries()
-    {
-        $this->queries = [];
-    }
-
-
-
-    /**
-     * @param SchemaLoggerInterface|null $logger
-     *
-     * @return array
-     */
-    public function execQueries(?SchemaLoggerInterface $logger = null): array
-    {
-        $errors = [];
-        foreach ($this->queries as $sql => $description) {
-            try {
-                if ($logger) {
-                    $logger->log($description);
-                }
-                $this->bdd->exec($sql);
-            } catch (Exception $e) {
-                if (!$e instanceof BddCompileException) {
-                    if ($logger) {
-                        $logger->log($e->getMessage());
-                    }
-                    $errors[] = $e;
-                }
-            }
-        }
-
-        return $errors;
+        $this->bdd->getSchema()->queryExec($sql, $description);
     }
 
 
@@ -253,7 +189,7 @@ abstract class DdlAbstract implements DdlInterface
     /**
      * @return self
      */
-    public function clearOptions(): self
+    public function clearOptions(): DdlInterface
     {
         $this->options = [];
 
@@ -292,9 +228,9 @@ abstract class DdlAbstract implements DdlInterface
 
 
     /**
-     * @param string $name
+     * @param string|array $name
      */
-    abstract public function drop(string $name);
+    abstract public function drop($name);
 
 
 

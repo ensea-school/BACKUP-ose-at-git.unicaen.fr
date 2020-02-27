@@ -18,6 +18,7 @@ class StatutIntervenantService extends AbstractEntityService
     const CODE_AUTRES = 'AUTRES';
 
 
+
     /**
      * retourne la classe des entités
      *
@@ -48,11 +49,11 @@ class StatutIntervenantService extends AbstractEntityService
      *
      * @return StatutIntervenant|null
      */
-    public function getByCode(string $code=null)
+    public function getByCode(string $code = null)
     {
         if (!$code) $code = self::CODE_AUTRES;
 
-        return $this->getRepo()->findOneBy(['sourceCode' => $code]);
+        return $this->getRepo()->findOneBy(['code' => $code]);
     }
 
 
@@ -73,9 +74,9 @@ class StatutIntervenantService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function orderBy( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");
 
         return $qb;
@@ -88,7 +89,7 @@ class StatutIntervenantService extends AbstractEntityService
      */
     public function fetchMaxOrdre(): int
     {
-        $sql = 'SELECT MAX(ordre) max_ordre FROM statut_intervenant WHERE histo_destruction IS NULL';
+        $sql = 'SELECT MAX(ORDRE) MAX_ORDRE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL';
 
         $res = $this->getEntityManager()->getConnection()->fetchColumn($sql, [], 0);
 
@@ -106,9 +107,6 @@ class StatutIntervenantService extends AbstractEntityService
     {
         /** @var StatutIntervenant $entity */
         $entity = parent::newEntity();
-
-        // toutes les entités créées ont OSE pour source!!
-        $entity->setSource($this->getServiceSource()->getOse());
 
         return $entity;
     }

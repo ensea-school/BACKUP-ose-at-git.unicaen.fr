@@ -3,10 +3,32 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlTriggerInterface;
 
-class DdlTrigger extends DdlAbstract
+class DdlTrigger extends DdlAbstract implements DdlTriggerInterface
 {
     const ALIAS = 'trigger';
+
+
+
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT OBJECT_NAME 
+          FROM ALL_OBJECTS 
+          WHERE 
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND OBJECT_TYPE = 'TRIGGER' AND GENERATED = 'N'
+          ORDER BY OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
@@ -19,9 +41,10 @@ class DdlTrigger extends DdlAbstract
             name \"name\",
             text \"ddl\"
           FROM
-            user_source 
+            all_source 
           WHERE
-            type = 'TRIGGER' $f
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND type = 'TRIGGER' $f
             AND name NOT LIKE 'BIN$%'
           ORDER BY name, line
         ";
@@ -53,9 +76,11 @@ class DdlTrigger extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("DROP TRIGGER $name", 'Suppression du trigger ' . $name);
     }
@@ -65,9 +90,11 @@ class DdlTrigger extends DdlAbstract
     /***
      * @param string $name
      */
-    public function enable(string $name)
+    public function enable($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("alter trigger $name enable", 'Activation du trigger ' . $name);
     }
@@ -77,9 +104,11 @@ class DdlTrigger extends DdlAbstract
     /***
      * @param string $name
      */
-    public function disable(string $name)
+    public function disable($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("alter trigger $name disable", 'Désactivation du trigger ' . $name);
     }
@@ -107,4 +136,29 @@ class DdlTrigger extends DdlAbstract
         $this->addQuery($sql, 'Renommage du trigger ' . $oldName . ' en ' . $newName);
     }
 
+
+
+    /**
+     * @param string|array $name
+     *
+     * @return mixed
+     */
+    public function compiler($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
+
+        $this->addQuery("ALTER TRIGGER $name COMPILE", 'Compilation du trigger ' . $name);
+    }
+
+
+
+    public function compilerTout()
+    {
+        $objects = $this->getList();
+        foreach ($objects as $object) {
+            $this->compiler($object);
+        }
+    }
 }

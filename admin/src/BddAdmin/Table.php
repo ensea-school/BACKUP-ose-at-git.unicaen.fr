@@ -54,8 +54,8 @@ class Table
     public function getDdl(): array
     {
         if (empty($this->ddl)) {
-            $ddlObject = $this->getBdd()->getDdl(Bdd::DDL_TABLE);
-            $this->ddl = $ddlObject->get($this->name)[$this->name];
+            $sTable    = $this->getBdd()->getSchema()->table();
+            $this->ddl = $sTable->get($this->name)[$this->name];
         }
 
         return $this->ddl;
@@ -73,21 +73,37 @@ class Table
 
 
 
+    protected function makeTypesOptions(): array
+    {
+        $ddl = $this->getDdl();
+
+        $types = [];
+        foreach ($ddl['columns'] as $column => $d) {
+            $types[$column] = $d['type'];
+        }
+
+        return $types;
+    }
+
+
+
     /**
      * @param array|integer|null $where
-     * @param string|null        $orderBy
+     * @param array|null         $options
      *
-     * @return array
+     * @return array|null|resource
      * @throws Exception\BddCompileException
      * @throws Exception\BddException
      * @throws Exception\BddIndexExistsException
      */
-    public function select($where = null, array $options = []): array
+    public function select($where = null, array $options = [])
     {
         /* Initialisation des entrées */
         $defaultOptions = [
-            'orderBy' => '',
+            'fetch'   => Bdd::FETCH_ALL,
+            'types'   => $this->makeTypesOptions(),
             'key'     => null,
+            'orderBy' => '',
         ];
         $options        = array_merge($defaultOptions, $options);
 
@@ -110,19 +126,37 @@ class Table
         if ($options['orderBy']) {
             $sql .= ' ORDER BY ' . $options['orderBy'];
         }
-        $select = $this->getBdd()->select($sql, $params);
+        $select = $this->getBdd()->select($sql, $params, $options);
 
-        /* Mise en forme des résultats */
-        $data = [];
-        foreach ($select as $d) {
-            foreach ($d as $c => $v) {
-                $d[$c] = $this->sqlToVal($v, $ddl['columns'][$c]);
+        if ($options['fetch'] == Bdd::FETCH_ALL) {
+            /* Mise en forme des résultats */
+            $data = [];
+            foreach ($select as $d) {
+                $keyValue        = $this->makeKey($d, $options['key']);
+                $data[$keyValue] = $d;
             }
-            $keyValue        = $this->makeKey($d, $options['key']);
-            $data[$keyValue] = $d;
-        }
 
-        return $data;
+            return $data;
+        } else {
+            return $select;
+        }
+    }
+
+
+
+    public function copy(Bdd $bdd, callable $fnc = null)
+    {
+        $options = ['types' => $this->makeTypesOptions()];
+
+        $r    = $this->select(null, ['fetch' => Bdd::FETCH_EACH]);
+        $dest = $bdd->getTable($this->getName());
+
+        while ($data = $this->getBdd()->fetch($r, $options)) {
+            if (is_callable($fnc)) $data = $fnc($data);
+            if (null !== $data) {
+                $dest->insert($data);
+            }
+        }
     }
 
 
@@ -149,22 +183,26 @@ class Table
             if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $options['histo-user-id'];
         }
 
-        $cols = array_keys($data);
-        $cols = implode(', ', $cols);
-
-        $vals = '';
+        $cols   = [];
+        $vals   = [];
+        $params = [];
         foreach ($data as $col => $val) {
-            if ($vals != '') $vals .= ',';
+            $transformer = isset($options['columns'][$col]['transformer']) ? $options['columns'][$col]['transformer'] : null;
 
-            $transVal = ':' . $col;
-            if (isset($options['columns'][$col]['transformer'])) {
-                $transVal = '(' . sprintf($options['columns'][$col]['transformer'], $transVal) . ')';
+            $cols[] = $col;
+            if ($transformer) {
+                $vals[] = '(' . sprintf($transformer, ':' . $col) . ')';
+            } else {
+                $vals[] = ':' . $col;
             }
-            $vals .= $transVal;
+            $params[$col] = $val;
         }
-        $sql = "INSERT INTO \"$this->name\" ($cols) VALUES ($vals)";
 
-        return $this->getBdd()->exec($sql, $data);
+        $cols = implode(", ", $cols);
+        $vals = implode(", ", $vals);
+        $sql  = "INSERT INTO \"$this->name\" ($cols) VALUES ($vals)";
+
+        return $this->getBdd()->exec($sql, $params, $this->makeTypesOptions());
     }
 
 
@@ -192,7 +230,7 @@ class Table
 
         $sql = "UPDATE \"$this->name\" SET $dataSql" . $this->makeWhere($where, $options, $params);
 
-        return $this->getBdd()->exec($sql, $params);
+        return $this->getBdd()->exec($sql, $params, $this->makeTypesOptions());
     }
 
 
@@ -448,7 +486,7 @@ class Table
         if (!isset($this->transformCache[$transformer][$value])) {
             $val = $this->getBdd()->select(sprintf($transformer, ':val'), ['val' => $value]);
             if (isset($val[0])) {
-                $this->transformCache[$transformer][$value] = $this->sqlToVal(current($val[0]), $ddl);
+                $this->transformCache[$transformer][$value] = current($val[0]);
             } else {
                 $this->transformCache[$transformer][$value] = null;
             }
@@ -457,38 +495,4 @@ class Table
         return $this->transformCache[$transformer][$value];
     }
 
-
-
-    protected function sqlToVal($value, array $ddl)
-    {
-        if ($value === null) return null;
-
-        switch ($ddl['type']) {
-            case Bdd::TYPE_INT:
-                if (1 == $ddl['precision']) {
-                    return $value === '1';
-                } else {
-                    return (int)$value;
-                }
-            case Bdd::TYPE_BOOL:
-                return (bool)$value;
-            case Bdd::TYPE_FLOAT:
-                return (float)$value;
-            case Bdd::TYPE_STRING:
-            case Bdd::TYPE_CLOB:
-                return $value;
-            case Bdd::TYPE_DATE:
-                if (!$value) return null;
-                $date = \DateTime::createFromFormat('Y-m-d', $value);
-                $date->setTime(0, 0, 0);
-
-                return $date;
-            case Bdd::TYPE_BLOB:
-                return $value;
-            default:
-                throw new \Exception("Type de donnée " . $ddl['type'] . " non géré.");
-        }
-
-        return $value;
-    }
 }

@@ -3,10 +3,32 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlPackageInteface;
 
-class DdlPackage extends DdlAbstract
+class DdlPackage extends DdlAbstract implements DdlPackageInteface
 {
     const ALIAS = 'package';
+
+
+
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT OBJECT_NAME 
+          FROM ALL_OBJECTS 
+          WHERE 
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND OBJECT_TYPE = 'PACKAGE' AND GENERATED = 'N'
+          ORDER BY OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
@@ -20,9 +42,10 @@ class DdlPackage extends DdlAbstract
             text \"ddl\",
             CASE WHEN type = 'PACKAGE' THEN 'definition' ELSE 'body' END \"type\"
           FROM
-            user_source 
+            all_source 
           WHERE
-            (type = 'PACKAGE' OR type = 'PACKAGE BODY') $f 
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND (type = 'PACKAGE' OR type = 'PACKAGE BODY') $f 
           ORDER BY name, line
         ";
         $p = $this->bdd->select($q, $p);
@@ -79,9 +102,11 @@ class DdlPackage extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("DROP PACKAGE $name", 'Suppression du package ' . $name);
     }
@@ -105,5 +130,32 @@ class DdlPackage extends DdlAbstract
 
         $this->drop($oldName);
         $this->create($new);
+    }
+
+
+
+    /**
+     * @param string|array $name
+     *
+     * @return mixed
+     */
+    public function compiler($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
+
+        $this->addQuery("ALTER PACKAGE $name COMPILE PACKAGE", 'Compilation de la déclaration du package ' . $name);
+        $this->addQuery("ALTER PACKAGE $name COMPILE BODY", 'Compilation du corps de package ' . $name);
+    }
+
+
+
+    public function compilerTout()
+    {
+        $objects = $this->getList();
+        foreach ($objects as $object) {
+            $this->compiler($object);
+        }
     }
 }

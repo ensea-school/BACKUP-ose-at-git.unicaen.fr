@@ -31,7 +31,7 @@ class DepartementsInitCodes extends AbstractMigration
         WHERE 
             CODE IS NULL AND SOURCE_CODE IS NOT NULL
             AND SOURCE_ID=:source";
-        $res     = $bdd->select($sql, ['source' => $oa->getSourceOseId()], \BddAdmin\Bdd::FETCH_ONE);
+        $res     = $bdd->select($sql, ['source' => $oa->getSourceOseId()], ['fetch' => $bdd::FETCH_ONE]);
         $nbvides = (int)$res['NBVIDES'];
 
         return $nbvides > 0;

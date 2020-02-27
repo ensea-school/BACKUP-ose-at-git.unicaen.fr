@@ -45,14 +45,14 @@ class Bdd
     private $driver;
 
     /**
-     * @var DdlInterface[]
-     */
-    private $ddlObjects = [];
-
-    /**
      * @var bool
      */
     public $debug = false;
+
+    /**
+     * @var Schema
+     */
+    protected $schema;
 
 
 
@@ -66,6 +66,17 @@ class Bdd
         if (!empty($config)) {
             $this->setConfig($config);
         }
+    }
+
+
+
+    public function getSchema(): Schema
+    {
+        if (!$this->schema) {
+            $this->schema = new Schema($this);
+        }
+
+        return $this->schema;
     }
 
 
@@ -132,13 +143,13 @@ class Bdd
      * @throws BddException
      * @throws BddIndexExistsException
      */
-    public function exec(string $sql, array $params = [])
+    public function exec(string $sql, array $params = [], array $types = [])
     {
         if ($this->debug) {
             echo $sql;
             var_dump($params);
         } else {
-            $this->driver->exec($sql, $params);
+            $this->driver->exec($sql, $params, $types);
         }
 
         return true;
@@ -183,16 +194,16 @@ class Bdd
     /**
      * @param string $sql
      * @param array  $params
-     * @param int    $fetchMode
+     * @param array  $options
      *
      * @return resource
      * @throws BddCompileException
      * @throws BddException
      * @throws BddIndexExistsException
      */
-    public function select(string $sql, array $params = [], $fetchMode = self::FETCH_ALL)
+    public function select(string $sql, array $params = [], array $options = [])
     {
-        return $this->driver->select($sql, $params, $fetchMode);
+        return $this->driver->select($sql, $params, $options);
     }
 
 
@@ -213,36 +224,19 @@ class Bdd
 
     /**
      * @param string $name
-     * @param bool   $autoClear
      *
-     * @return DdlInterface
-     * @throws Exception
+     * @return string
      */
-    public function getDdl(string $name, bool $autoClear = false): DdlInterface
+    public function getDdlClass(string $name): string
     {
-        $class = $this->driver->getDdlClass($name);
-
-        if (!is_subclass_of($class, DdlInterface::class)) {
-            throw new \Exception($class . ' n\'est pas un objet DDL valide!!');
-        }
-
-        if (!isset($this->ddlObjects[$class])) {
-            $this->ddlObjects[$class] = new $class($this);
-        }
-
-        if ($autoClear) {
-            $this->ddlObjects[$class]->clearQueries();
-            $this->ddlObjects[$class]->clearOptions();
-        }
-
-        return $this->ddlObjects[$class];
+        return $this->driver->getDdlClass($name);
     }
 
 
 
-    public function fetch($statement)
+    public function fetch($statement, array $options = [])
     {
-        return $this->driver->fetch($statement);
+        return $this->driver->fetch($statement, $options);
     }
 
 
@@ -266,7 +260,6 @@ class Bdd
         $this->config = $config;
         if ($this->driver) {
             $this->driver->disconnect();
-            $this->ddlObjects = [];
         }
         $driverClass  = isset($config['driver']) ? $config['driver'] : 'Oracle';
         $driverClass  = "\BddAdmin\Driver\\$driverClass\Driver";

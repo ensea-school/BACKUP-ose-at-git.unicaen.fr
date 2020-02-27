@@ -660,7 +660,7 @@ class DataGen
                 $query = $params['QUERY'];
 
                 $val = isset($data[$nom]['VALEUR']) ? $data[$nom]['VALEUR'] : null;
-                $res = $bdd->select($query, ['valeur' => $val], $bdd::FETCH_ONE);
+                $res = $bdd->select($query, ['valeur' => $val], ['fetch' => $bdd::FETCH_ONE]);
                 if (isset($res['VALEUR'])) {
                     $data[$nom]['VALEUR'] = (string)$res['VALEUR'];
                 }

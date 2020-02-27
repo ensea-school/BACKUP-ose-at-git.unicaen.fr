@@ -3,10 +3,32 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Ddl\DdlIndexInterface;
 
-class DdlIndex extends DdlAbstract
+class DdlIndex extends DdlAbstract implements DdlIndexInterface
 {
     const ALIAS = 'index';
+
+
+
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT OBJECT_NAME 
+          FROM ALL_OBJECTS 
+          WHERE 
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND OBJECT_TYPE = 'INDEX' AND GENERATED = 'N'
+          ORDER BY OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
@@ -21,10 +43,11 @@ class DdlIndex extends DdlAbstract
           uniqueness \"unique\",
           table_name \"table\"
         FROM
-          user_indexes
+          all_indexes
         WHERE
-          index_name NOT LIKE 'BIN$%'
-          AND index_name NOT LIKE 'SYS_IL%$$'
+          owner = sys_context( 'userenv', 'current_schema' )
+          AND index_type <> 'LOB'
+          AND index_name NOT LIKE 'BIN$%'
           $f
         ORDER BY
           index_name";
@@ -75,9 +98,11 @@ class DdlIndex extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("DROP INDEX $name", 'Suppression de l\'index ' . $name);
     }

@@ -23,7 +23,11 @@ $("document").ready(function ()
     $("#check-all").click(function () {
         var check = $(this).prop('checked');
         if (check) {
-            $("#form-reconduction tbody input[type='checkbox']").prop('checked', 'checked');
+            $("#form-reconduction tbody input[type='checkbox']").each(function() {
+                if(!$(this).prop('disabled')) {
+                    $(this).prop('checked', 'checked');
+                }
+            });
         } else {
             $("#form-reconduction tbody input[type='checkbox']").prop('checked', '');
         }
@@ -36,7 +40,7 @@ $("document").ready(function ()
             $("#check-all").prop('checked', false);
         }
         //Disable submit button if any check box are click
-        if ($('#form-reconduction input[type="checkbox"]:checked').length > 0) {
+        if ($('#form-reconduction td .checkbox-element:checked').length > 0) {
             $('#reconduction-modulateur-button').prop('disabled', false);
         } else {
             $('#reconduction-modulateur-button').prop('disabled', true);

@@ -77,6 +77,8 @@ class EtapeService extends AbstractEntityService
             etape_id,
             etape_libelle,
             etape_code,
+            count(element_pedagogique_id) AS nb_ep_type_heure,
+            count(DISTINCT element_modulateur_id) as nb_m,
             count(DISTINCT element_pedagogique_id) AS nb_ep,
             count(DISTINCT new_centre_cout_ep_id) AS nb_cc_ep,
             count(DISTINCT new_element_modulateur_id) AS nb_m_ep
@@ -87,7 +89,8 @@ class EtapeService extends AbstractEntityService
         GROUP BY 
             etape_id,
             etape_libelle,
-            etape_code';
+            etape_code
+        ORDER BY etape_id ASC';
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindParam(':annee', $annee);
         $stmt->execute();

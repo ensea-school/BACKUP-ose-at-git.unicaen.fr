@@ -16,11 +16,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     use ObligatoireSelonSeuilHeuresAwareTrait;
 
     /**
-     * @var boolean
-     */
-    private $premierRecrutement;
-
-    /**
      * @var integer
      */
     private $id;
@@ -52,7 +47,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      */
     private $anneeFin;
 
-
     /**
      * @var boolean
      */
@@ -62,6 +56,12 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      * @var boolean
      */
     private $changementRIB;
+
+    /**
+     * @var integeer
+     */
+    private $dureeVie;
+
 
 
     /**
@@ -75,35 +75,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         return $this->seuilHetd;
     }
-
-
-
-    /**
-     * Set premierRecrutement
-     *
-     * @param boolean $premierRecrutement
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setPremierRecrutement($premierRecrutement)
-    {
-        $this->premierRecrutement = $premierRecrutement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get premierRecrutement
-     *
-     * @return boolean
-     */
-    public function getPremierRecrutement()
-    {
-        return $this->premierRecrutement;
-    }
-
 
 
     /**
@@ -204,6 +175,8 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         return $this->statutIntervenant;
     }
 
+
+
     /**
      * @return Annee
      */
@@ -251,12 +224,14 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     }
 
 
+
     /**
      * @return boolean
      */
     public function getFC()
     {
         if (!isset($this->fc)) return false;
+
         return $this->fc;
     }
 
@@ -267,24 +242,28 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      *
      * * @return * TypePieceJointeStatut
      */
-    public function setFC( $fc = null)
+    public function setFC($fc = null)
     {
         $this->fc = $fc;
 
         return $this;
     }
 
+
+
     /**
      * @param boolean $changementRIB
      *
      * * @return * TypePieceJointeStatut
      */
-    public function setChangementRIB( $changementRIB = null)
+    public function setChangementRIB($changementRIB = null)
     {
-        $this->changementRIB=$changementRIB;
+        $this->changementRIB = $changementRIB;
 
         return $this;
     }
+
+
 
     /**
      * @return boolean
@@ -292,18 +271,50 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     public function getChangementRIB()
     {
         if (!isset($this->changementRIB)) return false;
+
         return $this->changementRIB;
     }
 
+
+
+    /**
+     * @return integer
+     */
+    public function getDureeVie()
+    {
+        if (!isset($this->dureeVie)) return 1;
+
+        return $this->dureeVie;
+    }
+
+
+
+    /**
+     * @param integer $dureeVie
+     *
+     * * @return * TypePieceJointeStatut
+     */
+    public function setDureeVie($dureeVie = null)
+    {
+        $this->dureeVie = $dureeVie;
+
+        return $this;
+    }
+
+
+
     public function __toString()
     {
-        $txt=$this->getObligatoire() ? 'Obl' : 'Fac';
-        if ($this->getSeuilHeures()) $txt.=  ' >' .$this->getSeuilHeures();
-        if ($this->getPremierRecrutement()) $txt.=' PR ';
-        if ($this->getFC()) $txt.=' FC ';
-        if ($this->getChangementRIB()) $txt.=' RIB';
+        $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
+        if ($this->getSeuilHeures()) $txt .= ' >' . $this->getSeuilHeures();
+        if ($this->getFC()) $txt .= ' FC ';
+        if ($this->getChangementRIB()) $txt .= ' RIB';
+        if ($this->getDureeVie() && $this->getDureeVie() > 1 ) $txt .= ' ' . $this->getDureeVie() . 'ans';
+
+
         return $txt;
     }
+
 
 
     /**
@@ -311,15 +322,16 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      */
     public function getTitle(): string
     {
-        $t = [];
+        $t   = [];
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
-        if ($this->getSeuilHeures()) $t[] = 'À partir de ' .$this->getSeuilHeures().' heures';
-        if ($this->getPremierRecrutement()) $t[] = 'Uniquement en cas de premier recrutement';
+        if ($this->getSeuilHeures()) $t[] = 'À partir de ' . $this->getSeuilHeures() . ' heures';
         if ($this->getFC()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
-        if ($this->getAnneeDebut()) $t[] = 'Actif à partir de '.$this->getAnneeDebut();
-        if ($this->getAnneeFin()) $t[] = 'Actif jusqu\'à'.$this->getAnneeFin();
-        return implode( "\n", $t);
+        if ($this->getAnneeDebut()) $t[] = 'Actif à partir de ' . $this->getAnneeDebut();
+        if ($this->getAnneeFin()) $t[] = 'Actif jusqu\'à' . $this->getAnneeFin();
+        if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie();
+
+        return implode("\n", $t);
     }
 
 }

@@ -34,5 +34,8 @@
         <option name="default">1</option>
       </options>
     </field>
+    <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="true" >
+    </field>
+
   </entity>
 </doctrine-mapping>

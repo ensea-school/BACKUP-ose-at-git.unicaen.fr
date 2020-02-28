@@ -213,8 +213,7 @@ class ReconductionProcessus extends AbstractProcessus
         $connection = $this->getEntityManager()->getConnection();
         $stmt = $connection->executeQuery($sql, [ $this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
         $ccepN = $stmt->fetchAll();
-        $listEp = [];
-        $nbInsertedEp = 0;
+        $nbCCReconduit = 0;
         foreach ($ccepN as $key => $value) {
             if(empty($value['NEW_CENTRE_COUT_EP_ID']))
             {
@@ -232,11 +231,8 @@ class ReconductionProcessus extends AbstractProcessus
                          'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId()
                         ]);
 
-                    if(!in_array($value['NEW_ELEMENT_PEDAGOGIQUE_ID'], $listEp))
-                    {
-                        $listEp[] = $value['NEW_ELEMENT_PEDAGOGIQUE_ID'];
-                        $nbInsertedEp++;
-                    }
+                    $nbCCReconduit++;
+
                 }catch(\Exception $e)
                 {
                     continue;
@@ -244,7 +240,7 @@ class ReconductionProcessus extends AbstractProcessus
             }
 
         }
-        return $nbInsertedEp;
+        return $nbCCReconduit;
     }
 
 
@@ -265,8 +261,7 @@ class ReconductionProcessus extends AbstractProcessus
         $connection = $this->getEntityManager()->getConnection();
         $stmt = $connection->executeQuery($sql, [ $this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
         $mepN = $stmt->fetchAll();
-        $listEp = [];
-        $nbInsertedEp = 0;
+        $nbMReconduit = 0;
         foreach ($mepN as $key => $value) {
             if(empty($value['NEW_ELEMENT_MODULATEUR_ID']))
             {
@@ -280,12 +275,9 @@ class ReconductionProcessus extends AbstractProcessus
                          'histo_createur_id' => $this->getServiceContext()->getUtilisateur()->getId(),
                          'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId()
                         ]);
+                    $nbMReconduit++;
 
-                    if(!in_array($value['NEW_ELEMENT_PEDAGOGIQUE_ID'], $listEp))
-                    {
-                        $listEp[] = $value['NEW_ELEMENT_PEDAGOGIQUE_ID'];
-                        $nbInsertedEp++;
-                    }
+
                 }catch(\Exception $e)
                 {
                     continue;
@@ -293,7 +285,7 @@ class ReconductionProcessus extends AbstractProcessus
             }
 
         }
-        return $nbInsertedEp;
+        return $nbMReconduit;
     }
 
     public function getNextSequence($sequenceName = '')

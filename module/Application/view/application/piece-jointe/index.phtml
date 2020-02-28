@@ -46,7 +46,7 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
                 } else {
                     $pj = null;
                 }
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
+                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire', 'annee'));
             }
             echo '</div>';
 
@@ -70,7 +70,7 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
             $obligatoire = false;
             foreach ($restantes as $tpjId => $pj) { // on liste les pièces fournies mais qui ne sont pas demandées...
                 $tpj = $pj->getType();
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
+                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire', 'annee'));
             }
             echo '</div>';
         }

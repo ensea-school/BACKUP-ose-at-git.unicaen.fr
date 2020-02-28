@@ -35,7 +35,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-centre-cout.js');
 <h3>Veuillez sélectionner les formations pour reconduire les centres de coûts :</h3>
 <br/>
 <?php
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
 ?>
 
 <?php if (empty($etapesReconduites)): ?>
@@ -61,31 +61,25 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <form action="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>"
           method="POST" id="form-reconduction">
 
-        <p style="text-align:right;"><strong>EP</strong> = Elément pédagogique / <strong>CC</strong> = Centre de coût</p>
         <table class="reconduction-offre table table-bordered table-condensed table-hover table-sort">
             <thead>
             <tr>
                 <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
                 <th>Code</th>
                 <th>Libellé</th>
-                <th>Nb Elements pédagogiques avec un centre de coût</th>
+                <th>Nombre de <abbr title="Le comptage se fait uniquement sur les éléments pédagogiques/types heures n'ayant pas encore de centre de coût pour l'année prochaine">CC à reconduire</abbr></th>
 
             </tr>
-
             </thead>
             <tbody>
             <?php foreach ($etapesReconduites as $er): ?>
                 <tr>
                     <td>
-                        <?php if ($er['NB_CC_EP'] > 0): ?>
-                            <span style="color:#ae0000;font-size:16px;" class="glyphicon glyphicon-alert" aria-hidden="true"
-                                  title="Attention des centres de coût sont déjà positionnés sur les éléments pédagogiques de la prochaine année universitaire, ils ne seront pas écrasés par ceux de cette année."></span>
-                        <?php endif; ?>
-                        <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE']; ?>">
+                        <?= ($er['NB_EP']-$er['NB_CC_EP'] == 0)?'<input disabled="disabled" title="Aucun centre de coût à reconduire" class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">':'<input class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">'; ?>
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>
-                    <td><?= $er['NB_EP']; ?></td>
+                    <td><?= ($er['NB_EP_TYPE_HEURE']-$er['NB_CC_EP'] == 0)?'Aucun centre de coût à reconduire':$er['NB_EP']-$er['NB_CC_EP']; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -93,7 +87,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <button disabled="disabled" id="reconduction-cc-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
                 <div class='alert alert-warning'>
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    Les centres de coûts seront reconduits dans leurs globalités pour la prochaine année universitaire sur les formations séléctionnées. Si des centres de coûts ont été renseignés manuellement pour l'année prochaine, ils seront écrasés par ceux de cette année.
+                    Les centres de coûts seront reconduits uniquement sur les éléments pédagogiques / types heures non encore paramétrés. Les centres de coûts déjà positionnés ne seront pas modifiés.
                 </div>
                 <div style='text-align:right'>
                 <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>

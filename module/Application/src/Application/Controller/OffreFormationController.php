@@ -238,15 +238,14 @@ class OffreFormationController extends AbstractController
                     }
                 }
                 $result = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
+                $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
 
-                $this->flashMessenger()->addSuccessMessage("Les centres de coûts des éléments pédagogiques des étapes sélectionnées ont bien été reconduit (<b>uniquement dans le cas où ils n'avaient pas encore de centre de coût paramétré pour l'année prochaine</b>). $result 
-                élément(s) pédagogique(s) ont été mis à jour");
+                $this->flashMessenger()->addSuccessMessage("$result centre(s) de coût(s) ont été reconduit pour l'année prochaine. ");
 
 
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-
 
         }
 
@@ -295,8 +294,10 @@ class OffreFormationController extends AbstractController
                 }
                 $result = $this->getProcessusReconduction()->reconduireModulateurFormation($etapesReconduitesCc);
 
-                    $this->flashMessenger()->addSuccessMessage("Les modulateurs des éléments pédagogiques des étapes sélectionnées ont bien été reconduit (<b>uniquement dans le cas où ils n'avaient pas encore de modulateur paramétré pour l'année prochaine</b>). $result 
-                élément(s) pédagogique(s) ont été mis à jour");
+                    $this->flashMessenger()->addSuccessMessage("$result modulateur(s) ont été reconduit pour l'année prochaine. ");
+
+                $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
+
 
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());

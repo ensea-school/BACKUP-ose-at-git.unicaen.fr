@@ -4,8 +4,9 @@ version: '3'
 # 172.21.0.10 ose-dev.localhost
 
 services:
-  ose-dev:
+  ose-dev-test:
     container_name: ose-dev
+    image: ose-dev:php7.4
 
     environment:
       XDEBUG_CONFIG: remote_host=172.17.0.1

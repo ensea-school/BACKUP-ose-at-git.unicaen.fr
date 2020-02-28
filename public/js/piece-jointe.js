@@ -12,6 +12,13 @@ $.widget("ose.pieceJointe", {
             event.preventDefault();
         });
 
+        that.element.on('click', '.archiver-pj', function (event){
+            that.archiver($(this));
+            event.preventDefault();
+
+
+        });
+
         $("body").on("upload-event-file-deleted upload-event-file-uploaded", function (event, container)
         {
             var tpj = container.data('tpj');
@@ -20,7 +27,21 @@ $.widget("ose.pieceJointe", {
 
     },
 
-
+    archiver: function( element)
+    {
+        var that = this;
+        var tpj = element.parent('.tpj').data('tpj');
+        element.button('loading');
+        $.post(element.prop('href'), [], function(data, textStatus, jqXHR){
+            that.onFileChange(tpj);
+        }).done(function( jqXHR ){
+            location.reload(true);
+        })
+        .fail(function( jqXHR ) {
+            alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
+            console.log(jqXHR);
+        });
+    },
 
     validerDevalider: function( element )
     {

@@ -47,5 +47,10 @@
         <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="dateArchive" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="DATE_ARCHIVE" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

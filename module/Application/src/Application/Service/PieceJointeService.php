@@ -144,10 +144,18 @@ class PieceJointeService extends AbstractEntityService
           LEFT JOIN pjf.validation v
           LEFT JOIN pjf.fichier f
         WHERE
-          pjf.intervenant = :intervenant
+          pjf.codeIntervenant = :intervenant
+        AND
+          pjf.dateValidite > :annee 
+        AND 
+            pjf.annee <= :annee
+        AND 
+            (pjf.dateArchive IS NULL OR pjf.dateArchive > :annee)    
+          
         ";
         $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
-            'intervenant' => $intervenant,
+            'intervenant' => $intervenant->getCode(),
+            'annee'       => $intervenant->getAnnee()->getId(),
         ])->getResult();
 
         /* @var $lpjf \Application\Entity\Db\TblPieceJointeFournie[] */
@@ -155,6 +163,7 @@ class PieceJointeService extends AbstractEntityService
         $result = [];
         foreach ($lpjf as $pjf) {
             $pj                              = $pjf->getPieceJointe();
+            $pj->annee = $pjf->getAnnee();
             $result[$pj->getType()->getId()] = $pj;
         }
 
@@ -189,6 +198,17 @@ class PieceJointeService extends AbstractEntityService
         $this->getEntityManager()->flush();
 
         return $validation;
+    }
+
+    public function archiver(PieceJointe $pj)
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+        $pj->setDateArchive($annee);
+        $this->getEntityManager()->persist($pj);
+        $this->getEntityManager()->flush();
+
+        return $pj;
+
     }
 
 

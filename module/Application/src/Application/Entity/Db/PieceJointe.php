@@ -39,6 +39,11 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
      */
     private $validation;
 
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    protected $dateArchive;
+
 
 
     /**
@@ -199,6 +204,31 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
         return $this->validation;
     }
 
+
+    /**
+     * Set dateArchive
+     *
+     * @param \Application\Entity\Db\Annee $annee
+     *
+     * @return PieceJointe
+     */
+
+    public function setDateArchive(\Application\Entity\Db\Annee $annee = null)
+    {
+        $this->dateArchive = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get dateArchive
+     *
+     * @return \Application\Entity\Db\Annee
+     */
+    public function getDateArchive()
+    {
+        return $this->dateArchive;
+    }
 
 
     /**

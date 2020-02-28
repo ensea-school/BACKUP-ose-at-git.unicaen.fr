@@ -10808,6 +10808,17 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'DATE_ARCHIVE' =>
+        array (
+          'name' => 'DATE_ARCHIVE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'PIECE_JOINTE_FICHIER' => 
@@ -14812,6 +14823,17 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'CODE_INTERVENANT' =>
+        array (
+          'name' => 'CODE_INTERVENANT',
+          'type' => 'VARCHAR2',
+          'length' => 255,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'TBL_PIECE_JOINTE_FOURNIE' => 
@@ -14908,6 +14930,50 @@
           'scale' => '0',
           'precision' => NULL,
           'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' =>
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'CODE_INTERVENANT' =>
+        array (
+          'name' => 'CODE_INTERVENANT',
+          'type' => 'VARCHAR2',
+          'length' => 255,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DATE_VALIDITE' =>
+        array (
+          'name' => 'DATE_VALIDITE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DATE_ARCHIVE' =>
+        array (
+          'name' => 'DATE_ARCHIVE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -16033,7 +16099,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17793,7 +17859,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -17902,6 +17968,17 @@
           'nullable' => false,
           'default' => '0',
           'commentaire' => NULL,
+        ),
+        'DUREE_VIE' =>
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => '1',
+          'commentaire' => 'Durée de vie de la pièce jointe',
         ),
       ),
     ),
@@ -30661,10 +30738,14 @@ END UNICAEN_TBL;',
         tv.*
       FROM
         (WITH pjf AS (
-          SELECT
+          SELECT DISTINCT
             pjf.annee_id,
             pjf.type_piece_jointe_id,
             pjf.intervenant_id,
+            pjf.code_intervenant,
+            pjf.date_validite,
+            pjf.duree_vie,
+            pjf.date_archive,
             COUNT(*) count,
             SUM(CASE WHEN validation_id IS NULL THEN 0 ELSE 1 END) validation,
             SUM(CASE WHEN fichier_id IS NULL THEN 0 ELSE 1 END) fichier
@@ -30672,10 +30753,16 @@ END UNICAEN_TBL;',
             tbl_piece_jointe_fournie pjf
           GROUP BY
             pjf.annee_id,
+            pjf.intervenant_id,
+            pjf.code_intervenant,
             pjf.type_piece_jointe_id,
-            pjf.intervenant_id
+            pjf.date_validite,
+            pjf.duree_vie,
+            pjf.date_archive
+            ORDER BY pjf.annee_id ASC
+
         )
-        SELECT
+        SELECT DISTINCT
           COALESCE( pjd.annee_id, pjf.annee_id ) annee_id,
           COALESCE( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
           COALESCE( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
@@ -30683,10 +30770,16 @@ END UNICAEN_TBL;',
           CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
           CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
           COALESCE(pjd.heures_pour_seuil,0) heures_pour_seuil,
-          COALESCE(pjd.obligatoire,1) obligatoire
+          COALESCE(pjd.obligatoire,1) obligatoire,
+          pjf.date_archive
         FROM
           tbl_piece_jointe_demande pjd
-          FULL JOIN pjf ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id AND pjf.intervenant_id = pjd.intervenant_id) tv
+          FULL JOIN pjf
+          ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
+          AND pjd.code_intervenant = pjf.code_intervenant
+          AND pjd.annee_id BETWEEN pjf.annee_id AND (pjf.annee_id + pjf.duree_vie - 1)
+          AND pjd.annee_id BETWEEN pjf.annee_id AND NVL(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
+        ORDER By annee_id) tv
       WHERE
         \' || conds || \'
 
@@ -30776,6 +30869,7 @@ END UNICAEN_TBL;',
         )
         SELECT
           i.annee_id                      annee_id,
+          i.code code_intervenant,
           i.id                            intervenant_id,
           tpj.id                          type_piece_jointe_id,
           MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
@@ -30801,9 +30895,6 @@ END UNICAEN_TBL;',
           -- Seuil HETD
           AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
 
-          -- En fonction du premier recrutement ou non
-          AND (tpjs.premier_recrutement = 0 OR COALESCE(i.premier_recrutement,0) = 1)
-
           -- Le RIB n\'\'est demandé QUE s\'\'il est différent!!
           AND CASE
                 WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
@@ -30814,7 +30905,8 @@ END UNICAEN_TBL;',
           AND (tpjs.fc = 0 OR i_h.fc > 0)
         GROUP BY
           i.annee_id,
-          i.id,
+        i.id,
+        i.code,
           tpj.id,
           tpjs.obligatoire) tv
       WHERE
@@ -30829,6 +30921,7 @@ END UNICAEN_TBL;',
       OBLIGATOIRE          = v.OBLIGATOIRE,
       HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
       ANNEE_ID             = v.ANNEE_ID,
+      CODE_INTERVENANT     = v.CODE_INTERVENANT,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -30839,6 +30932,7 @@ END UNICAEN_TBL;',
       INTERVENANT_ID,
       TYPE_PIECE_JOINTE_ID,
       ANNEE_ID,
+      CODE_INTERVENANT,
       TO_DELETE
 
     ) VALUES (
@@ -30849,6 +30943,7 @@ END UNICAEN_TBL;',
       v.INTERVENANT_ID,
       v.TYPE_PIECE_JOINTE_ID,
       v.ANNEE_ID,
+      v.CODE_INTERVENANT,
       0
 
     );
@@ -30877,13 +30972,17 @@ END UNICAEN_TBL;',
       SELECT
         tv.*
       FROM
-        (SELECT
+        (SELECT DISTINCT
           i.annee_id,
+          i.code code_intervenant,
           pj.type_piece_jointe_id,
           pj.intervenant_id,
           pj.id piece_jointe_id,
           v.id validation_id,
-          f.id fichier_id
+          f.id fichier_id,
+          MAX(tpjs.duree_vie) duree_vie,
+          MAX(i.annee_id+duree_vie) date_validite,
+          pj.date_archive date_archive
         FROM
                     piece_jointe          pj
                JOIN intervenant            i ON i.id = pj.intervenant_id
@@ -30892,11 +30991,23 @@ END UNICAEN_TBL;',
                JOIN piece_jointe_fichier pjf ON pjf.piece_jointe_id = pj.id
                JOIN fichier                f ON f.id = pjf.fichier_id
                                             AND f.histo_destruction IS NULL
+                JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
+                                                   AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
+                                                   AND tpjs.HISTO_DESTRUCTION IS NULL
 
-          LEFT JOIN validation             v ON v.id = pj.validation_id
+         LEFT JOIN validation             v ON v.id = pj.validation_id
                                             AND v.histo_destruction IS NULL
         WHERE
-          pj.histo_destruction IS NULL) tv
+          pj.histo_destruction IS NULL
+        GROUP BY
+        i.annee_id,
+          i.code,
+          pj.type_piece_jointe_id,
+          pj.intervenant_id,
+          pj.id,
+          v.id,
+          f.id,
+          pj.date_archive) tv
       WHERE
         \' || conds || \'
 
@@ -30910,6 +31021,10 @@ END UNICAEN_TBL;',
 
       PIECE_JOINTE_ID      = v.PIECE_JOINTE_ID,
       ANNEE_ID             = v.ANNEE_ID,
+      DATE_ARCHIVE         = v.DATE_ARCHIVE,
+      DATE_VALIDITE        = v.DATE_VALIDITE,
+      CODE_INTERVENANT     = v.CODE_INTERVENANT,
+      DUREE_VIE            = v.DUREE_VIE,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -30921,6 +31036,10 @@ END UNICAEN_TBL;',
       INTERVENANT_ID,
       TYPE_PIECE_JOINTE_ID,
       ANNEE_ID,
+      DATE_ARCHIVE,
+      DATE_VALIDITE,
+      CODE_INTERVENANT,
+      DUREE_VIE,
       TO_DELETE
 
     ) VALUES (
@@ -30932,6 +31051,11 @@ END UNICAEN_TBL;',
       v.INTERVENANT_ID,
       v.TYPE_PIECE_JOINTE_ID,
       v.ANNEE_ID,
+      v.PIECE_JOINTE_ID,
+      v.DATE_ARCHIVE,
+      v.DATE_VALIDITE,
+      v.CODE_INTERVENANT,
+      v.DUREE_VIE,
       0
 
     );
@@ -31530,7 +31654,7 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'V_AGREMENT_EXPORT_CSV' => 
+    'V_AGREMENT_EXPORT_CSV' =>
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -36435,10 +36559,14 @@ FROM
       'name' => 'V_TBL_PIECE_JOINTE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
 WITH pjf AS (
-  SELECT
+  SELECT DISTINCT
     pjf.annee_id,
     pjf.type_piece_jointe_id,
     pjf.intervenant_id,
+    pjf.code_intervenant,
+    pjf.date_validite,
+    pjf.duree_vie,
+    pjf.date_archive,
     COUNT(*) count,
     SUM(CASE WHEN validation_id IS NULL THEN 0 ELSE 1 END) validation,
     SUM(CASE WHEN fichier_id IS NULL THEN 0 ELSE 1 END) fichier
@@ -36446,10 +36574,16 @@ WITH pjf AS (
     tbl_piece_jointe_fournie pjf
   GROUP BY
     pjf.annee_id,
+    pjf.intervenant_id,
+    pjf.code_intervenant,
     pjf.type_piece_jointe_id,
-    pjf.intervenant_id
+    pjf.date_validite,
+    pjf.duree_vie,
+    pjf.date_archive
+    ORDER BY pjf.annee_id ASC
+
 )
-SELECT
+SELECT DISTINCT
   COALESCE( pjd.annee_id, pjf.annee_id ) annee_id,
   COALESCE( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
   COALESCE( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
@@ -36457,10 +36591,16 @@ SELECT
   CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
   CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
   COALESCE(pjd.heures_pour_seuil,0) heures_pour_seuil,
-  COALESCE(pjd.obligatoire,1) obligatoire
+  COALESCE(pjd.obligatoire,1) obligatoire,
+  pjf.date_archive
 FROM
   tbl_piece_jointe_demande pjd
-  FULL JOIN pjf ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id AND pjf.intervenant_id = pjd.intervenant_id',
+  FULL JOIN pjf
+  ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
+  AND pjd.code_intervenant = pjf.code_intervenant
+  AND pjd.annee_id BETWEEN pjf.annee_id AND (pjf.annee_id + pjf.duree_vie - 1)
+  AND pjd.annee_id BETWEEN pjf.annee_id AND NVL(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
+ORDER By annee_id',
     ),
     'V_TBL_PIECE_JOINTE_DEMANDE' => 
     array (
@@ -36486,6 +36626,7 @@ WITH i_h AS (
 )
 SELECT
   i.annee_id                      annee_id,
+  i.code code_intervenant,
   i.id                            intervenant_id,
   tpj.id                          type_piece_jointe_id,
   MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
@@ -36511,9 +36652,6 @@ WHERE
   -- Seuil HETD
   AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
 
-  -- En fonction du premier recrutement ou non
-  AND (tpjs.premier_recrutement = 0 OR COALESCE(i.premier_recrutement,0) = 1)
-
   -- Le RIB n\'est demandé QUE s\'il est différent!!
   AND CASE
         WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
@@ -36524,7 +36662,8 @@ WHERE
   AND (tpjs.fc = 0 OR i_h.fc > 0)
 GROUP BY
   i.annee_id,
-  i.id,
+i.id,
+i.code,
   tpj.id,
   tpjs.obligatoire',
     ),
@@ -36532,26 +36671,41 @@ GROUP BY
     array (
       'name' => 'V_TBL_PIECE_JOINTE_FOURNIE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_FOURNIE AS
-SELECT
+SELECT DISTINCT
   i.annee_id,
+  i.code code_intervenant,
   pj.type_piece_jointe_id,
   pj.intervenant_id,
   pj.id piece_jointe_id,
   v.id validation_id,
-  f.id fichier_id
+  f.id fichier_id,
+  MAX(tpjs.duree_vie) duree_vie,
+  MAX(i.annee_id+duree_vie) date_validite,
+  pj.date_archive date_archive
 FROM
             piece_jointe          pj
        JOIN intervenant            i ON i.id = pj.intervenant_id
                                     AND i.histo_destruction IS NULL
-
        JOIN piece_jointe_fichier pjf ON pjf.piece_jointe_id = pj.id
        JOIN fichier                f ON f.id = pjf.fichier_id
                                     AND f.histo_destruction IS NULL
+        JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
+                                           AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
+                                           AND tpjs.HISTO_DESTRUCTION IS NULL
 
-  LEFT JOIN validation             v ON v.id = pj.validation_id
+ LEFT JOIN validation             v ON v.id = pj.validation_id
                                     AND v.histo_destruction IS NULL
 WHERE
-  pj.histo_destruction IS NULL',
+  pj.histo_destruction IS NULL
+GROUP BY
+i.annee_id,
+  i.code,
+  pj.type_piece_jointe_id,
+  pj.intervenant_id,
+  pj.id,
+  v.id,
+  f.id,
+  pj.date_archive',
     ),
     'V_TBL_SERVICE' => 
     array (

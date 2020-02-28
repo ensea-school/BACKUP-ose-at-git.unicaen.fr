@@ -153,7 +153,7 @@ class TblPieceJointe
         if ($this->obligatoire) {
             return true;
         }
-        
+
         return false;
     }
 }

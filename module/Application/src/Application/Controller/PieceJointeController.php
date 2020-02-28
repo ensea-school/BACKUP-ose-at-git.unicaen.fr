@@ -60,8 +60,7 @@ class PieceJointeController extends AbstractController
      */
     public function indexAction()
     {
-        $this->initFilters();
-
+        //$this->initFilters();
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -75,12 +74,15 @@ class PieceJointeController extends AbstractController
         $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
         $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
         $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        //$archives        = $this->getServicePieceJointe()->getPiecesFourniesArchives($intervenant);
+
+        $annee = $this->getServiceContext()->getAnnee();
 
         $messages = $this->makeMessages($demandees, $fournies);
 
         $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getPeutAvoirContrat();
 
-        return compact('intervenant', 'title', 'demandees', 'heuresPourSeuil', 'fournies', 'messages', 'alertContrat');
+        return compact('intervenant', 'title', 'demandees', 'heuresPourSeuil', 'fournies', 'messages', 'alertContrat', 'annee');
     }
 
 
@@ -163,8 +165,6 @@ class PieceJointeController extends AbstractController
         return compact('pj');
     }
 
-
-
     public function validerAction()
     {
         $this->initFilters();
@@ -179,6 +179,20 @@ class PieceJointeController extends AbstractController
         $viewModel->setVariable('pj', $pj);
 
         return $viewModel;
+    }
+
+    public function archiverAction()
+    {
+        $this->initFilters();
+        /** @var PieceJointe $pj */
+        $pj = $this->getEvent()->getParam('pieceJointe');
+        $pj = $this->getServicePieceJointe()->archiver($pj);
+        $this->updateTableauxBord($pj->getIntervenant(), true);
+        $viewModel = new ViewModel();
+
+
+        return $viewModel;
+
     }
 
 
@@ -204,10 +218,13 @@ class PieceJointeController extends AbstractController
     public function listerAction()
     {
         $this->initFilters();
-
         $intervenant     = $this->getEvent()->getParam('intervenant');
-        $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
-        $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+        $pj = $this->getEvent()->getParam('pieceJointe');
+        if(empty($pj))
+        {
+            $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
+            $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+        }
 
         return compact('pj');
     }

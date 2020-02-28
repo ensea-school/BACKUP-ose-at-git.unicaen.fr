@@ -9,6 +9,7 @@ use Application\Provider\Privilege\Privileges;
 
 $fichiers = $pj ? $pj->getFichier() : []; /* @var $fichiers \Application\Entity\Db\Fichier[] */
 
+
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
 $canDownload = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT));
 
@@ -44,3 +45,5 @@ if (!empty($fichiers)): ?>
 <p>Aucun.</p>
 
 <?php endif ?>
+
+

@@ -4,13 +4,10 @@ namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
 use BddAdmin\Ddl\DdlMaterializedViewInteface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInteface
 {
-    const ALIAS = 'materialized-view';
-
-
-
     public function getList(): array
     {
         $list = [];
@@ -34,7 +31,8 @@ class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInte
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('mview_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('mview_name');
         $data = [];
 
         $q = "SELECT

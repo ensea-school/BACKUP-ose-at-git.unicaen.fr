@@ -1,17 +1,16 @@
 <?php
 
 return [
-    'explicit'            => true,
-    'include-tables-deps' => true,
-    'table'               => ['includes' => [
+    'explicit'          => true,
+    'table'             => ['includes' => [
         'TYPE_DOTATION',
         'ELEMENT_TAUX_REGIMES_SAVE',
         'TBL_DOSSIER2',
     ]],
-    'materialized-view'   => ['includes' => [
+    'materialized-view' => ['includes' => [
 
     ]],
-    'view'                => ['includes' => [
+    'view'              => ['includes' => [
         'V_FORMULE_LOCAL_I_PARAMS',
         'V_FORMULE_LOCAL_VH_PARAMS',
         'V_TYPE_INTERVENTION_REGLE_EP',
@@ -23,14 +22,14 @@ return [
         'V_WORKFLOW_ETAPE_PERTINENTE',
         'V_TBL_WORKFLOW',
     ]],
-    'package'             => ['includes' => [
+    'package'           => ['includes' => [
         'OSE_IMPORT',
         'UNICAEN_OSE_FORMULE',
     ]],
-    'trigger'             => ['includes' => [
+    'trigger'           => ['includes' => [
         'TYPE_INTERVENTION_STRUCTURE_CK',
     ]],
-    'sequence'            => ['includes' => [
+    'sequence'          => ['includes' => [
         'FORMULE_ID_SEQ',
         'MESSAGE_ID_SEQ',
         'PACKAGE_DEPS_ID_SEQ',

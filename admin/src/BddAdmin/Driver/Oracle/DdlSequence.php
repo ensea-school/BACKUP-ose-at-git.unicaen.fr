@@ -4,13 +4,10 @@ namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
 use BddAdmin\Ddl\DdlSequenceInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlSequence extends DdlAbstract implements DdlSequenceInterface
 {
-    const ALIAS = 'sequence';
-
-
-
     public function getList(): array
     {
         $list = [];
@@ -34,7 +31,8 @@ class DdlSequence extends DdlAbstract implements DdlSequenceInterface
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('sequence_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('sequence_name');
         $data = [];
 
         $qr = $this->bdd->select('

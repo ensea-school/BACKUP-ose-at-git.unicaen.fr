@@ -5,65 +5,11 @@ namespace BddAdmin\Driver\Oracle;
 use BddAdmin\Bdd;
 use BddAdmin\Ddl\DdlAbstract;
 use BddAdmin\Ddl\DdlTableInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 use BddAdmin\Exception\BddException;
 
 class DdlTable extends DdlAbstract implements DdlTableInterface
 {
-    const ALIAS = 'table';
-
-    const COL_ACTION_CREATE         = 0b00001;
-    const COL_ACTION_DROP           = 0b00010;
-    const COL_ACTION_ALTER_TYPE     = 0b00100;
-    const COL_ACTION_ALTER_NOT_NULL = 0b01000;
-    const COL_ACTION_ALTER_DEFAULT  = 0b10000;
-    const COL_ACTION_ALL            = 0b11111;
-
-    const OPT_NO_COLUMNS   = 'no-columns';
-    const OPT_NO_TEMPORARY = 'no-temporary';
-
-    /**
-     * @var int
-     */
-    private $colActions = 0;
-
-
-
-    /**
-     * @return int
-     */
-    public function getColActions(): int
-    {
-        return $this->colActions;
-    }
-
-
-
-    /**
-     * @param int $colActions
-     *
-     * @return DdlTable
-     */
-    public function setColActions(int $colActions): DdlTable
-    {
-        $this->colActions = $colActions;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param int $colAction
-     *
-     * @return bool
-     */
-    public function canColAction(int $colAction): bool
-    {
-        return $this->colActions === 0 || (($this->colActions & $colAction) > 0);
-    }
-
-
-
     /**
      * @param string|null $commentaire
      *
@@ -120,25 +66,22 @@ class DdlTable extends DdlAbstract implements DdlTableInterface
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('t.table_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('t.table_name');
         $data = [];
-
-        $withColumns = !$this->hasOption(self::OPT_NO_COLUMNS);
 
         $q = "SELECT
             t.table_name      \"name\",
             t.temporary       \"temporary\",
             t.logging         \"logging\",
-            " . ($withColumns ? "
-                c.column_name      \"cname\",
-                c.data_type        \"type\",
-                c.char_length      \"length\",
-                c.data_scale       \"scale\",
-                c.data_precision   \"precision\",
-                c.nullable         \"nullable\",
-                c.data_default     \"default\",
-                ccomm.comments     \"col_commentaire\",
-            " : '') . "
+            c.column_name     \"cname\",
+            c.data_type       \"type\",
+            c.char_length     \"length\",
+            c.data_scale      \"scale\",
+            c.data_precision  \"precision\",
+            c.nullable        \"nullable\",
+            c.data_default    \"default\",
+            ccomm.comments    \"col_commentaire\",
             comm.comments     \"commentaire\",
             s.sequence_name   \"sequence\"
           FROM
@@ -146,15 +89,13 @@ class DdlTable extends DdlAbstract implements DdlTableInterface
             LEFT JOIN all_mviews          m ON m.mview_name = t.table_name
             LEFT JOIN all_tab_comments comm ON comm.table_name = t.table_name
             LEFT JOIN all_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
-            " . ($withColumns ? "JOIN all_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
+            JOIN all_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name
           WHERE
             t.OWNER = sys_context( 'userenv', 'current_schema' )
             AND m.mview_name IS NULL 
-            " . ($this->hasOption(self::OPT_NO_TEMPORARY) ? "AND t.temporary <> 'Y'" : '') . "
             $f
           ORDER BY
-            t.table_name
-            " . ($withColumns ? ", c.column_id" : '') . "
+            t.table_name, c.column_id
         ";
         $p = $this->bdd->select($q, $p);
         foreach ($p as $paq) {
@@ -165,10 +106,8 @@ class DdlTable extends DdlAbstract implements DdlTableInterface
                     'logging'     => $paq['logging'] == 'YES',
                     'commentaire' => $paq['commentaire'],
                     'sequence'    => $paq['sequence'],
+                    'columns'     => [],
                 ];
-                if ($withColumns) {
-                    $data[$paq['name']]['columns'] = [];
-                }
                 if ($commData = $this->interpreterCommentaire($paq['commentaire'])) {
                     foreach ($commData as $k => $v) {
                         $data[$paq['name']][$k] = $v;
@@ -176,53 +115,51 @@ class DdlTable extends DdlAbstract implements DdlTableInterface
                 }
             }
 
-            if ($withColumns) {
-                $default = $paq['default'] !== null ? $this->purger($paq['default']) : null;
-                if ('NULL' === $default) $default = null;
+            $default = $paq['default'] !== null ? $this->purger($paq['default']) : null;
+            if ('NULL' === $default) $default = null;
 
-                $type      = $paq['type'];
-                $precision = $paq['precision'] ? (int)$paq['precision'] : null;
+            $type      = $paq['type'];
+            $precision = $paq['precision'] ? (int)$paq['precision'] : null;
 
-                switch ($paq['type']) {
-                    case 'NUMBER':
-                        if (1 === $precision) {
-                            $type = Bdd::TYPE_BOOL;
-                        } else {
-                            $type = Bdd::TYPE_INT;
-                        }
-                    break;
-                    case 'VARCHAR2':
-                    case 'CHAR':
-                        $type = Bdd::TYPE_STRING;
-                    break;
-                    case 'DATE':
-                        $type = Bdd::TYPE_DATE;
-                    break;
-                    case 'FLOAT':
-                        $type = Bdd::TYPE_FLOAT;
-                    break;
-                    case 'BLOB':
-                        $type = Bdd::TYPE_BLOB;
-                    break;
-                    case 'CLOB':
-                        $type = Bdd::TYPE_CLOB;
-                    break;
-                    default:
-                        throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu');
-                }
-
-                $data[$paq['name']]['columns'][$paq['cname']] = [
-                    'name'        => $paq['cname'],
-                    'type'        => $type,
-                    'bdd-type'    => $paq['type'],
-                    'length'      => (int)$paq['length'],
-                    'scale'       => $paq['scale'],
-                    'precision'   => $precision,
-                    'nullable'    => $paq['nullable'] == 'Y',
-                    'default'     => $default,
-                    'commentaire' => $paq['col_commentaire'],
-                ];
+            switch ($paq['type']) {
+                case 'NUMBER':
+                    if (1 === $precision) {
+                        $type = Bdd::TYPE_BOOL;
+                    } else {
+                        $type = Bdd::TYPE_INT;
+                    }
+                break;
+                case 'VARCHAR2':
+                case 'CHAR':
+                    $type = Bdd::TYPE_STRING;
+                break;
+                case 'DATE':
+                    $type = Bdd::TYPE_DATE;
+                break;
+                case 'FLOAT':
+                    $type = Bdd::TYPE_FLOAT;
+                break;
+                case 'BLOB':
+                    $type = Bdd::TYPE_BLOB;
+                break;
+                case 'CLOB':
+                    $type = Bdd::TYPE_CLOB;
+                break;
+                default:
+                    throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu');
             }
+
+            $data[$paq['name']]['columns'][$paq['cname']] = [
+                'name'        => $paq['cname'],
+                'type'        => $type,
+                'bdd-type'    => $paq['type'],
+                'length'      => (int)$paq['length'],
+                'scale'       => $paq['scale'],
+                'precision'   => $precision,
+                'nullable'    => $paq['nullable'] == 'Y',
+                'default'     => $default,
+                'commentaire' => $paq['col_commentaire'],
+            ];
         }
 
         return $data;
@@ -460,10 +397,8 @@ END;';
                 $this->alterColumnComment($name, $cOld, $cNew);
             }
 
-            if (!(isset($new['options']['noDropColumns']) && $new['options']['noDropColumns'])) {
-                foreach ($delCols as $delCol) {
-                    $this->dropColumn($name, $old['columns'][$delCol]);
-                }
+            foreach ($delCols as $delCol) {
+                $this->dropColumn($name, $old['columns'][$delCol]);
             }
 
             if ($old['commentaire'] !== $new['commentaire']) {

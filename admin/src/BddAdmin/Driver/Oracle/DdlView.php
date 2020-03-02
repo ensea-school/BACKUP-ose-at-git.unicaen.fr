@@ -5,14 +5,10 @@ namespace BddAdmin\Driver\Oracle;
 use BddAdmin\Ddl\DdlAbstract;
 use BddAdmin\Ddl\DdlCompilationInterface;
 use BddAdmin\Ddl\DdlViewInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlView extends DdlAbstract implements DdlViewInterface
 {
-    const ALIAS = 'view';
-    const LABEL = 'Vues';
-
-
-
     public function getList(): array
     {
         $list = [];
@@ -36,7 +32,8 @@ class DdlView extends DdlAbstract implements DdlViewInterface
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('view_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('view_name');
         $data = [];
 
         $q = "SELECT

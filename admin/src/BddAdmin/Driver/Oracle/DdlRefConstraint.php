@@ -3,11 +3,10 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlRefConstraintInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraintInterface
 {
-    const ALIAS = 'ref-constraint';
-
     protected $description = 'clé étrangère';
 
 
@@ -36,7 +35,8 @@ class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraint
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('c.constraint_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('c.constraint_name');
         $data = [];
 
         $sql = "SELECT

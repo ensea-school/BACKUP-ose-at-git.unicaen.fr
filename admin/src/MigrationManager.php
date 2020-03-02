@@ -61,11 +61,10 @@ class MigrationManager
         $tablesKey = \BddAdmin\Bdd::DDL_TABLE;
 
         /* On ne parse que les tables */
-        $ddlConfig                        = [$tablesKey => $ddlConfig[$tablesKey]];
-        $ddlConfig['explicit']            = true;
-        $ddlConfig['include-tables-deps'] = false;
-        $oldRef                           = $this->schema->getDdl($ddlConfig);
-        $this->tablesDiff                 = [];
+        $ddlConfig             = [$tablesKey => $ddlConfig[$tablesKey]];
+        $ddlConfig['explicit'] = true;
+        $oldRef                = $this->schema->getDdl($ddlConfig);
+        $this->tablesDiff      = [];
         if (isset($oldRef[$tablesKey]) && is_array($oldRef[$tablesKey])) {
             foreach ($oldRef[$tablesKey] as $table => $ddl) {
                 $this->tablesDiff[$table]['old'] = $ddl;

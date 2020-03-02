@@ -3,11 +3,10 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlPrimaryConstraintInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryConstraintInterface
 {
-    const ALIAS = 'primary-constraint';
-
     protected $description = 'clé primaire';
 
 
@@ -36,7 +35,8 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('c.constraint_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('c.constraint_name');
         $data = [];
 
         $sql = "SELECT

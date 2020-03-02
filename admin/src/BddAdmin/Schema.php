@@ -2,6 +2,7 @@
 
 namespace BddAdmin;
 
+use BddAdmin\Ddl\Filter\DdlFilters;
 use BddAdmin\Ddl\DdlIndexInterface;
 use BddAdmin\Ddl\DdlInterface;
 use BddAdmin\Ddl\DdlMaterializedViewInteface;
@@ -39,54 +40,46 @@ class Schema
     ];
 
     private $changements = [
-        Bdd::DDL_SEQUENCE . '.rename.'           => ['label' => 'Renomage des séquences'],
-        Bdd::DDL_TABLE . '.rename.'              => ['label' => 'Renomage des tables'],
-        Bdd::DDL_VIEW . '.rename.'               => ['label' => 'Renomage des vues'],
-        Bdd::DDL_MATERIALIZED_VIEW . '.rename.'  => ['label' => 'Renomage des vues matérialisées'],
-        Bdd::DDL_PACKAGE . '.rename.'            => ['label' => 'Renomage des packages'],
-        Bdd::DDL_INDEX . '.rename.'              => ['label' => 'Renomage des indexes'],
-        Bdd::DDL_TRIGGER . '.rename.'            => ['label' => 'Renomage des triggers'],
-        Bdd::DDL_PRIMARY_CONSTRAINT . '.rename.' => ['label' => 'Renomage des clés primaires'],
-        Bdd::DDL_REF_CONSTRAINT . '.rename.'     => ['label' => 'Renomage des clés étrangères'],
-        Bdd::DDL_UNIQUE_CONSTRAINT . '.rename.'  => ['label' => 'Renomage des contraintes d\'unicité'],
-
-        Bdd::DDL_TRIGGER . '.drop.'            => ['label' => 'Suppression des triggers'],
-        Bdd::DDL_SEQUENCE . '.drop.'           => ['label' => 'Suppression des séquences'],
-        Bdd::DDL_VIEW . '.drop.'               => ['label' => 'Suppression des vues'],
-        Bdd::DDL_MATERIALIZED_VIEW . '.drop.'  => ['label' => 'Suppression des vues matérialisées'],
-        Bdd::DDL_PACKAGE . '.drop.'            => ['label' => 'Suppression des packages'],
-        Bdd::DDL_REF_CONSTRAINT . '.drop.'     => ['label' => 'Suppression des clés étrangères'],
-        Bdd::DDL_PRIMARY_CONSTRAINT . '.drop.' => ['label' => 'Suppression des clés primaires'],
-        Bdd::DDL_UNIQUE_CONSTRAINT . '.drop.'  => ['label' => 'Suppression des contraintes d\'unicité'],
-        Bdd::DDL_INDEX . '.drop.'              => ['label' => 'Suppression des indexes'],
-
-        Bdd::DDL_SEQUENCE . '.create.'          => ['label' => 'Création des séquences'],
-        Bdd::DDL_TABLE . '.create.'             => ['label' => 'Création des tables'],
-        Bdd::DDL_VIEW . '.create.'              => ['label' => 'Création des vues'],
-        Bdd::DDL_PACKAGE . '.create.definition' => ['label' => 'Création des définitions de packages'],
-        Bdd::DDL_PACKAGE . '.create.body'       => ['label' => 'Création des corps de packages'],
-
-        Bdd::DDL_SEQUENCE . '.alter.'                     => ['label' => 'Modification des séquences'],
-        Bdd::DDL_TABLE . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
-
-        Bdd::DDL_PACKAGE . '.alter.'                      => ['label' => 'Modification des packages'],
-        Bdd::DDL_VIEW . '.alter.'                         => ['label' => 'Modification des vues'],
-        Bdd::DDL_MATERIALIZED_VIEW . '.create.'           => ['label' => 'Création des vues matérialisées'],
-        Bdd::DDL_MATERIALIZED_VIEW . '.alter.'            => ['label' => 'Modification des vues matérialisées'],
-        Bdd::DDL_PRIMARY_CONSTRAINT . '.alter.'           => ['label' => 'Modification des clés primaires'],
-        Bdd::DDL_REF_CONSTRAINT . '.alter.'               => ['label' => 'Modification des clés étrangères'],
-        Bdd::DDL_UNIQUE_CONSTRAINT . '.alter.'            => ['label' => 'Modification des contraintes d\'unicité'],
-        Bdd::DDL_TRIGGER . '.alter.'                      => ['label' => 'Modification des triggers'],
-        Bdd::DDL_INDEX . '.alter.'                        => ['label' => 'Modification des indexes'],
-        Bdd::DDL_TABLE . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
-
-        Bdd::DDL_INDEX . '.create.'              => ['label' => 'Création des indexes'],
-        Bdd::DDL_PRIMARY_CONSTRAINT . '.create.' => ['label' => 'Création des clés primaires'],
-        Bdd::DDL_REF_CONSTRAINT . '.create.'     => ['label' => 'Création des clés étrangères'],
-        Bdd::DDL_UNIQUE_CONSTRAINT . '.create.'  => ['label' => 'Création des contraintes d\'unicité'],
-        Bdd::DDL_TRIGGER . '.create.'            => ['label' => 'Création des triggers'],
-
-        Bdd::DDL_TABLE . '.drop.' => ['label' => 'Suppression des tables'],
+        Bdd::DDL_SEQUENCE . '.rename'           => 'Renomage des séquences',
+        Bdd::DDL_TABLE . '.rename'              => 'Renomage des tables',
+        Bdd::DDL_VIEW . '.rename'               => 'Renomage des vues',
+        Bdd::DDL_MATERIALIZED_VIEW . '.rename'  => 'Renomage des vues matérialisées',
+        Bdd::DDL_PACKAGE . '.rename'            => 'Renomage des packages',
+        Bdd::DDL_INDEX . '.rename'              => 'Renomage des indexes',
+        Bdd::DDL_TRIGGER . '.rename'            => 'Renomage des triggers',
+        Bdd::DDL_PRIMARY_CONSTRAINT . '.rename' => 'Renomage des clés primaires',
+        Bdd::DDL_REF_CONSTRAINT . '.rename'     => 'Renomage des clés étrangères',
+        Bdd::DDL_UNIQUE_CONSTRAINT . '.rename'  => 'Renomage des contraintes d\'unicité',
+        Bdd::DDL_TRIGGER . '.drop'              => 'Suppression des triggers',
+        Bdd::DDL_SEQUENCE . '.drop'             => 'Suppression des séquences',
+        Bdd::DDL_VIEW . '.drop'                 => 'Suppression des vues',
+        Bdd::DDL_MATERIALIZED_VIEW . '.drop'    => 'Suppression des vues matérialisées',
+        Bdd::DDL_PACKAGE . '.drop'              => 'Suppression des packages',
+        Bdd::DDL_REF_CONSTRAINT . '.drop'       => 'Suppression des clés étrangères',
+        Bdd::DDL_PRIMARY_CONSTRAINT . '.drop'   => 'Suppression des clés primaires',
+        Bdd::DDL_UNIQUE_CONSTRAINT . '.drop'    => 'Suppression des contraintes d\'unicité',
+        Bdd::DDL_INDEX . '.drop'                => 'Suppression des indexes',
+        Bdd::DDL_SEQUENCE . '.create'           => 'Création des séquences',
+        Bdd::DDL_TABLE . '.create'              => 'Création des tables',
+        Bdd::DDL_VIEW . '.create'               => 'Création des vues',
+        Bdd::DDL_PACKAGE . '.create'            => 'Création des packages',
+        Bdd::DDL_SEQUENCE . '.alter'            => 'Modification des séquences',
+        Bdd::DDL_PACKAGE . '.alter'             => 'Modification des packages',
+        Bdd::DDL_VIEW . '.alter'                => 'Modification des vues',
+        Bdd::DDL_MATERIALIZED_VIEW . '.create'  => 'Création des vues matérialisées',
+        Bdd::DDL_MATERIALIZED_VIEW . '.alter'   => 'Modification des vues matérialisées',
+        Bdd::DDL_PRIMARY_CONSTRAINT . '.alter'  => 'Modification des clés primaires',
+        Bdd::DDL_REF_CONSTRAINT . '.alter'      => 'Modification des clés étrangères',
+        Bdd::DDL_UNIQUE_CONSTRAINT . '.alter'   => 'Modification des contraintes d\'unicité',
+        Bdd::DDL_TRIGGER . '.alter'             => 'Modification des triggers',
+        Bdd::DDL_INDEX . '.alter'               => 'Modification des indexes',
+        Bdd::DDL_TABLE . '.alter'               => 'Modification des tables',
+        Bdd::DDL_INDEX . '.create'              => 'Création des indexes',
+        Bdd::DDL_PRIMARY_CONSTRAINT . '.create' => 'Création des clés primaires',
+        Bdd::DDL_REF_CONSTRAINT . '.create'     => 'Création des clés étrangères',
+        Bdd::DDL_UNIQUE_CONSTRAINT . '.create'  => 'Création des contraintes d\'unicité',
+        Bdd::DDL_TRIGGER . '.create'            => 'Création des triggers',
+        Bdd::DDL_TABLE . '.drop'                => 'Suppression des tables',
     ];
 
     /**
@@ -208,77 +201,19 @@ class Schema
 
 
     /**
-     * @param array  $ddlConfig
-     * @param string $name
-     * @param string $key
-     *
-     * @return mixed|null
-     */
-    protected function ddlConfigGet(array $ddlConfig, string $name, string $key = null)
-    {
-        if (array_key_exists($name, $ddlConfig)) {
-            $ddlConf = $ddlConfig[$name];
-        } else {
-            $ddlConf = [];
-        }
-
-        if (null === $key) {
-            return $ddlConf;
-        }
-
-        if (isset($ddlConf[$key])) {
-            return $ddlConf[$key];
-        } else {
-            return [];
-        }
-    }
-
-
-
-    private function prepareDdlConfig(array $ddlConfig): array
-    {
-        $explicit = false;
-        if (isset($ddlConfig['explicit'])) {
-            $explicit = (bool)$ddlConfig['explicit'];
-            unset($ddlConfig['explicit']);
-        }
-
-        foreach ($this->ddlTypes as $type) {
-            if (!array_key_exists($type, $ddlConfig)) {
-                $ddlConfig[$type] = [];
-            }
-            $includes = isset($ddlConfig[$type]['includes']) ? $ddlConfig[$type]['includes'] : null;
-            $excludes = isset($ddlConfig[$type]['excludes']) ? $ddlConfig[$type]['excludes'] : null;
-            $options  = isset($ddlConfig[$type]['options']) ? $ddlConfig[$type]['options'] : [];
-
-            if (empty($includes) && empty($excludes)) {
-                if ($explicit) {
-                    $excludes = '%'; // si pas défini, alors on exclue tout
-                } else {
-                    $includes = '%'; // si pas défini, alors on inclue tout
-                }
-            }
-        }
-        $ddlConfig[$type] = compact('includes', 'excludes', 'options');
-
-        return $ddlConfig;
-    }
-
-
-
-    /**
-     * @param array $ddlConfig
+     * @param DdlFilters|array|null $filters
      *
      * @return array
      * @throws Exception
      */
-    public function getDdl(array $ddlConfig = []): array
+    public function getDdl($filters = []): array
     {
-        $ddlConfig = $this->prepareDdlConfig($ddlConfig);
-        $data      = [];
+        $filters = DdlFilters::normalize($filters);
+        $data    = [];
         foreach ($this->ddlTypes as $type) {
-            $this->object($type)->setOptions($ddlConfig['options']);
-            $data[$type] = $this->object($type)->get($ddlConfig['includes'], $ddlConfig['excludes']);
+            if (!($filters->isExplicit() && $filters->get($type)->isEmpty())) {
+                $data[$type] = $this->object($type)->get($filters[$type]);
+            }
         }
 
         return $data;
@@ -287,54 +222,24 @@ class Schema
 
 
     /**
-     * @param array $ddl
-     * @param array $ddlConfig
+     * @param array                        $ddl
+     * @param DdlFilters|array|string|null $filters
      *
      * @return array
      */
-    public function ddlFilter(array $ddl, array $ddlConfig): array
+    public function ddlFilter(array $ddl, $filters): array
     {
-        $ddlConfig = $this->prepareDdlConfig($ddlConfig);
+        $filters = DdlFilters::normalize($filters);
+
         foreach ($ddl as $ddlType => $ddlConf) {
-            if (empty($this->ddlConfigGet($ddlConfig, $ddlType))) {
-                unset($ddl[$ddlType]);
-            } else {
-                foreach ($ddlConf as $name => $config) {
-                    if (!$this->ddlFilterObject($name, $this->ddlConfigGet($ddlConfig, $ddlType))) {
-                        unset($ddl[$ddlType][$name]);
-                    }
+            foreach ($ddlConf as $name => $config) {
+                if (!$filters[$ddlType]->match($name)) {
+                    unset($ddl[$ddlType][$name]);
                 }
             }
         }
 
         return $ddl;
-    }
-
-
-
-    private function ddlFilterObject(string $name, array $filter): bool
-    {
-        if (isset($filter['excludes'])) {
-            $excludes = (array)$filter['excludes'];
-            foreach ($excludes as $exclude) {
-                if (preg_match('/^' . str_replace('%', '.*', $exclude) . '$/', $name, $out)) {
-                    return false;
-                }
-            }
-        }
-
-        if (isset($filter['includes'])) {
-            $includes = (array)$filter['includes'];
-            foreach ($includes as $include) {
-                if (preg_match('/^' . str_replace('%', '.*', $include) . '$/', $name, $out)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return true;
     }
 
 
@@ -424,21 +329,26 @@ class Schema
 
 
 
-    private function checkRenames(DdlInterface $ddlObject, array $kold, array $knew)
+    protected function alterDdlObject(DdlInterface $object, string $action, array $kold, array $knew): array
     {
+        $this->queryCollect = true;
+        $this->queries      = [];
+
         $renames = [];
         foreach ($kold as $koldIndex => $koldData) {
             if (isset($koldData['name'])) {
                 $koldName = $koldData['name'];
-                $koldData = $ddlObject->prepareRenameCompare($koldData);
+                $koldData = $object->prepareRenameCompare($koldData);
                 unset($koldData['name']);
                 foreach ($knew as $knewIndex => $knewData) {
                     if (isset($knewData['name'])) {
                         $knewName = $knewData['name'];
-                        $knewData = $ddlObject->prepareRenameCompare($knewData);
+                        $knewData = $object->prepareRenameCompare($knewData);
                         if ($koldName !== $knewName) {
                             if ($koldData == $knewData) {
                                 $renames[$koldIndex] = $knew[$knewIndex];
+                                unset($kold[$koldIndex]);
+                                unset($knew[$knewName]);
                             }
                         }
                     }
@@ -446,15 +356,53 @@ class Schema
             }
         }
 
-        return $renames;
+        switch ($action) {
+            case 'rename':
+                $names = $renames;
+            break;
+            case 'create':
+                $names = array_diff(array_keys($knew), array_keys($kold));
+            break;
+            case 'alter':
+                $names = array_intersect(array_keys($kold), array_keys($knew));
+            break;
+            case 'drop':
+                $names = array_diff(array_keys($kold), array_keys($knew));
+            break;
+        }
+
+        foreach ($names as $oldName => $name) {
+            switch ($action) {
+                case 'rename':
+                    $object->rename($oldName, $name);
+                break;
+                case 'drop':
+                    $object->drop($kold[$name]);
+                break;
+                case 'alter':
+                    $object->alter($kold[$name], $knew[$name]);
+                break;
+                case 'create':
+                    $object->create($knew[$name]);
+                break;
+            }
+        }
+        $this->queryCollect = false;
+
+        return $this->queries;
     }
 
 
 
-    public function diff(array $ddl, bool $inverse = false, array $ddlConfig = []): array
+    public function diff($ddl, bool $inverse = false, $filters = []): array
     {
-        $ddl = $this->ddlFilter($ddl, $ddlConfig);
-        $bdd = $this->getDdl($ddlConfig);
+        if ($ddl instanceof self) {
+            $ddl = $ddl->getDdl($filters);
+        } else {
+            $ddl = $this->ddlFilter($ddl, $filters);
+        }
+
+        $bdd = $this->getDdl($filters);
 
         if (!$inverse) {
             $old = $bdd;
@@ -463,155 +411,48 @@ class Schema
             $old = $ddl;
             $new = $bdd;
         }
-
-        $this->queryCollect = true;
-
         $res = [];
         foreach ($this->changements as $changement => $params) {
-            [$ddlName, $action, $precision] = explode('.', $changement);
-            $noGet = isset($ddlConfig[$ddlName]) ? ($ddlConfig[$ddlName] === false) : false;
-            if (!$noGet) {
-                $ddlObject = $this->object($ddlName);
-                $ddlObject->addOptions($ddlConfig['options']);
-                $kold = isset($old[$ddlName]) ? $old[$ddlName] : [];
-                $knew = isset($new[$ddlName]) ? $new[$ddlName] : [];
-
-                $renames = $this->checkRenames($ddlObject, $kold, $knew);
-                foreach ($renames as $koldName => $knewData) {
-                    unset($kold[$koldName]);
-                    unset($knew[$knewData['name']]);
-                }
-                switch ($action) {
-                    case 'rename':
-                        $names = $renames;
-                    break;
-                    case 'create':
-                        $names = array_diff(array_keys($knew), array_keys($kold));
-                    break;
-                    case 'alter':
-                        $names = array_intersect(array_keys($kold), array_keys($knew));
-                    break;
-                    case 'drop':
-                        $names = array_diff(array_keys($kold), array_keys($knew));
-                    break;
-                }
-
-                if ($precision) {
-                    $precisions = explode('|', $precision);
-                    foreach ($precisions as $precision) {
-                        $ddlObject->addOption($precision);
-                    }
-                }
-                foreach ($names as $oldName => $name) {
-                    switch ($action) {
-                        case 'rename':
-                            $ddlObject->rename($oldName, $name);
-                        break;
-                        case 'drop':
-                            if (!(isset($options['noDrop']) && $options['noDrop'])) {
-                                $ddlObject->drop($name);
-                            }
-                        break;
-                        case 'alter':
-                            $ddlObject->alter($kold[$name], $knew[$name]);
-                        break;
-                        case 'create':
-                            $ddlObject->create($knew[$name]);
-                        break;
-                    }
-                }
-                if (!empty($this->queries)) {
-                    $res[$changement] = $this->queries;
-                    $this->queries    = [];
-                }
+            [$ddlName, $action] = explode('.', $changement);
+            $object  = $this->object($ddlName);
+            $queries = $this->alterDdlObject($object, $action, $old[$ddlName], $new[$ddlName]);
+            if (!empty($queries)) {
+                $res[$changement] = $queries;
             }
         }
-
-        $this->queryCollect = false;
 
         return $res;
     }
 
 
 
-    private function change(string $mode, $ddl, array $ddlConfig = [])
+    private function change(string $mode, $ddl, $filters = [])
     {
         if ($ddl instanceof self) {
-            $ddl = $ddl->getDdl($ddlConfig);
-        } elseif ($mode != 'create') {
-            $ddl = $this->ddlFilter($ddl, $ddlConfig);
+            $new = $ddl->getDdl($filters);
+        } else {
+            $new = $this->ddlFilter($ddl, $filters);
         }
 
-        $ddlConfig = $this->prepareDdlConfig($ddlConfig);
-        if (isset($ddlConfig['include-tables-deps']) && $ddlConfig['include-tables-deps']) {
-            unset($ddlConfig['include-tables-deps']);
-            $this->filterIncludeTableDeps($ddl, $ddlConfig);
+        if ($mode == 'create') {
+            $old = [];
+        } else {
+            $old = $this->getDdl($filters);
         }
-        foreach ($this->changements as $changement => $params) {
-            [$ddlName, $action, $precision] = explode('.', $changement);
-            $noGet = isset($ddlConfig[$ddlName]) ? ($ddlConfig[$ddlName] === false) : false;
-            if (!$noGet) {
-                $ddlObject = $this->object($ddlName);
 
-                $includes = $this->ddlConfigGet($ddlConfig, $ddlName, 'includes');
-                $excludes = $this->ddlConfigGet($ddlConfig, $ddlName, 'excludes');
-                $options  = $this->ddlConfigGet($ddlConfig, $ddlName, 'options');
-                if ($options) {
-                    $ddlObject->addOptions((array)$options);
-                }
+        foreach ($this->changements as $changement => $label) {
+            [$ddlName, $action] = explode('.', $changement);
 
-                $kold = [];
-                $knew = [];
-                if ($mode != 'create') { // alter ou drop
-                    $kold = $ddlObject->get($includes, $excludes);
-                }
-                if ($mode != 'drop') { // create ou alter
-                    $knew = isset($ddl[$ddlName]) ? $ddl[$ddlName] : [];
-                }
+            if ($this->logger) {
+                $this->logger->logTitle($label);
+            }
 
-                $renames = $this->checkRenames($ddlObject, $kold, $knew);
-                foreach ($renames as $koldName => $knewData) {
-                    unset($kold[$koldName]);
-                    unset($knew[$knewData['name']]);
-                }
-                switch ($action) {
-                    case 'rename':
-                        $names = $renames;
-                    break;
-                    case 'create':
-                        $names = array_diff(array_keys($knew), array_keys($kold));
-                    break;
-                    case 'alter':
-                        $names = array_intersect(array_keys($kold), array_keys($knew));
-                    break;
-                    case 'drop':
-                        $names = array_diff(array_keys($kold), array_keys($knew));
-                    break;
-                }
-
-                if ($precision) {
-                    $precisions = explode('|', $precision);
-                    foreach ($precisions as $precision) {
-                        $ddlObject->addOption($precision);
-                    }
-                }
-                foreach ($names as $oldName => $name) {
-                    switch ($action) {
-                        case 'rename':
-                            $ddlObject->rename($oldName, $name);
-                        break;
-                        case 'drop':
-                            if (!(isset($options['noDrop']) && $options['noDrop'])) {
-                                $ddlObject->drop($name);
-                            }
-                        break;
-                        case 'alter':
-                            $ddlObject->alter($kold[$name], $knew[$name]);
-                        break;
-                        case 'create':
-                            $ddlObject->create($knew[$name]);
-                        break;
-                    }
+            $object  = $this->object($ddlName);
+            $queries = $this->alterDdlObject($object, $action, $old[$ddlName], $new[$ddlName]);
+            foreach ($queries as $query => $desc) {
+                if ($this->logger) {
+                    $this->logger->log($desc);
+                    $this->getBdd()->exec($query);
                 }
             }
         }
@@ -665,43 +506,6 @@ class Schema
         }
 
         return $errors;
-    }
-
-
-
-    /**
-     * On ajoute, en fonction de la liste des tables fournie en includes, tous les objets dépendants des tables en question.
-     * Classes parsées :
-     *  - DdlIndex::class,
-     *  - DdlPrimaryConstraint::class,
-     *  - DdlUniqueConstraint::class,
-     *  - DdlRefConstraint::class,
-     *
-     * @param array $ddl
-     * @param array $ddlConfig
-     */
-    private function filterIncludeTableDeps(array $ddl, array &$ddlConfig)
-    {
-        $tables = array_unique(isset($ddlConfig[Bdd::DDL_TABLE]['includes']) ? $ddlConfig[Bdd::DDL_TABLE]['includes'] : []);
-
-        $ddlDeps = [
-            Bdd::DDL_INDEX,
-            Bdd::DDL_PRIMARY_CONSTRAINT,
-            Bdd::DDL_UNIQUE_CONSTRAINT,
-            Bdd::DDL_REF_CONSTRAINT,
-        ];
-
-        foreach ($ddlDeps as $ddlName) {
-            if (!isset($ddlConfig[$ddlName]['includes'])) {
-                $ddlConfig[$ddlName]['includes'] = [];
-            }
-            $objects = $this->object($ddlName)->get();
-            foreach ($objects as $name => $def) {
-                if (in_array($def['table'], $tables) && !in_array($name, $ddlConfig[$ddlName]['includes'])) {
-                    $ddlConfig[$ddlName]['includes'][] = $name;
-                }
-            }
-        }
     }
 
 

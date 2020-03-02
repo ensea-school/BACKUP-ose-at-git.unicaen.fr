@@ -14,7 +14,7 @@ abstract class AbstractDdlConstraint extends DdlAbstract
     protected function indexExists($indexName)
     {
         $sql = "SELECT count(*) RES FROM ALL_INDEXES WHERE INDEX_NAME = :indexName AND ROWNUM = 1";
-        $res = $this->bdd->select($sql, compact('indexName'), Bdd::FETCH_ONE);
+        $res = $this->bdd->select($sql, compact('indexName'), ['fetch' => Bdd::FETCH_ONE]);
 
         return $res['RES'] == '1';
     }

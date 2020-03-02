@@ -4,13 +4,10 @@ namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
 use BddAdmin\Ddl\DdlIndexInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlIndex extends DdlAbstract implements DdlIndexInterface
 {
-    const ALIAS = 'index';
-
-
-
     public function getList(): array
     {
         $list = [];
@@ -34,7 +31,8 @@ class DdlIndex extends DdlAbstract implements DdlIndexInterface
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('index_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('index_name');
 
         $data = [];
 

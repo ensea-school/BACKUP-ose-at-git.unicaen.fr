@@ -3,11 +3,10 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlUniqueConstraintInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueConstraintInterface
 {
-    const ALIAS = 'unique-constraint';
-
     protected $description = 'contrainte d\'unicité';
 
 
@@ -36,7 +35,8 @@ class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueCons
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('c.constraint_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('c.constraint_name');
         $data = [];
 
         $sql = "SELECT

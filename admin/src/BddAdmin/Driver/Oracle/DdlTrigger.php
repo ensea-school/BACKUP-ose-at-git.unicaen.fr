@@ -4,13 +4,10 @@ namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
 use BddAdmin\Ddl\DdlTriggerInterface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlTrigger extends DdlAbstract implements DdlTriggerInterface
 {
-    const ALIAS = 'trigger';
-
-
-
     public function getList(): array
     {
         $list = [];
@@ -34,7 +31,8 @@ class DdlTrigger extends DdlAbstract implements DdlTriggerInterface
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('name');
         $data = [];
 
         $q = "SELECT 

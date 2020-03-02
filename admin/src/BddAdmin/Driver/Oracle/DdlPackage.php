@@ -4,13 +4,10 @@ namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Ddl\DdlAbstract;
 use BddAdmin\Ddl\DdlPackageInteface;
+use BddAdmin\Ddl\Filter\DdlFilter;
 
 class DdlPackage extends DdlAbstract implements DdlPackageInteface
 {
-    const ALIAS = 'package';
-
-
-
     public function getList(): array
     {
         $list = [];
@@ -34,7 +31,8 @@ class DdlPackage extends DdlAbstract implements DdlPackageInteface
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('name');
         $data = [];
 
         $q = "SELECT 
@@ -61,14 +59,8 @@ class DdlPackage extends DdlAbstract implements DdlPackageInteface
             $data[$r['name']][$r['type']] .= $r['ddl'];
         }
         foreach ($data as $name => $d) {
-            $definition = $this->purger($d['definition'], false);
-            $body       = $this->purger($d['body'], false);
-
-            if ($this->hasOption('clearAutogen')) {
-                $definition = $this->clearAutogen($definition);
-                $body       = $this->clearAutogen($body);
-            }
-
+            $definition                = $this->purger($d['definition'], false);
+            $body                      = $this->purger($d['body'], false);
             $data[$name]['definition'] = $definition;
             $data[$name]['body']       = $body;
         }
@@ -78,26 +70,12 @@ class DdlPackage extends DdlAbstract implements DdlPackageInteface
 
 
 
-    private function clearAutogen(string $sql): string
-    {
-        return substr($sql, 0, strpos($sql, '-- AUTOMATIC GENERATION --') + 26)
-            . substr($sql, strpos($sql, '-- END OF AUTOMATIC GENERATION --') - 4);
-    }
-
-
-
     public function create(array $data)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        if ($this->hasOption('definition')) {
-            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package ' . $data['name']);
-        } elseif ($this->hasOption('body')) {
-            $this->addQuery($data['body'], 'Ajout/modification du corps du package ' . $data['name']);
-        } else {
-            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package ' . $data['name']);
-            $this->addQuery($data['body'], 'Ajout/modification du corps du package ' . $data['name']);
-        }
+        $this->addQuery($data['definition'], 'Ajout/modification de la définition du package ' . $data['name']);
+        $this->addQuery($data['body'], 'Ajout/modification du corps du package ' . $data['name']);
     }
 
 

@@ -8,24 +8,12 @@ use BddAdmin\Event\EventManagerAwareTrait;
 
 abstract class DdlAbstract implements DdlInterface
 {
-    const ALIAS = 'no-alias';
-
     use EventManagerAwareTrait;
 
     /**
      * @var Bdd
      */
     protected $bdd;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var string[]
-     */
-    private $options = [];
 
 
 
@@ -35,44 +23,6 @@ abstract class DdlAbstract implements DdlInterface
     public function __construct(Bdd $bdd)
     {
         $this->bdd = $bdd;
-    }
-
-
-
-    protected function makeFilterParams(string $colName, $includes = null, $excludes = null)
-    {
-        $f = [];
-        $p = [];
-
-        if ($includes) {
-            if (is_string($includes)) {
-                $includes = [$includes];
-            }
-            $i = 0;
-            if (!empty($includes)) {
-                $f[] = 'AND (0=1';
-                foreach ($includes as $include) {
-                    $i++;
-                    $f[]            = "OR $colName LIKE :include$i";
-                    $p["include$i"] = $include;
-                }
-                $f[] = ')';
-            }
-        }
-
-        if ($excludes) {
-            if (is_string($excludes)) {
-                $excludes = [$excludes];
-            }
-            $i = 0;
-            foreach ($excludes as $exclude) {
-                $i++;
-                $f[]            = "AND $colName NOT LIKE :exclude$i";
-                $p["exclude$i"] = $exclude;
-            }
-        }
-
-        return [implode(' ', $f), $p];
     }
 
 
@@ -103,109 +53,6 @@ abstract class DdlAbstract implements DdlInterface
     protected function addQuery(string $sql, string $description = null) // (?string $sql)
     {
         $this->bdd->getSchema()->queryExec($sql, $description);
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-
-
-    /**
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-
-
-    /**
-     * @param array $options
-     *
-     * @return self
-     */
-    public function setOptions(array $options = []): DdlInterface
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param string $option
-     * @param null   $params
-     *
-     * @return self
-     */
-    public function addOption(string $option, $params = null): DdlInterface
-    {
-        $this->options[$option] = $params;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param array $options
-     *
-     * @return self
-     */
-    public function addOptions(array $options): DdlInterface
-    {
-        foreach ($options as $option => $params) {
-            $this->addOption($option, $params);
-        }
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param string $option
-     *
-     * @return self
-     */
-    public function removeOption(string $option): DdlInterface
-    {
-        unset($this->options[$option]);
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return self
-     */
-    public function clearOptions(): DdlInterface
-    {
-        $this->options = [];
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param string $option
-     *
-     * @return bool
-     */
-    public function hasOption(string $option): bool
-    {
-        return array_key_exists($option, $this->options);
     }
 
 

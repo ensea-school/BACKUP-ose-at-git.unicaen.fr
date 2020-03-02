@@ -26,7 +26,8 @@ var_dump($r);
 
 $bdd = $oa->getBdd();
 
-$d = $bdd->getTable('ANNEE')->getDdl();
+$dep = new \BddAdmin\Bdd(Config::get('bdds', 'deploy-local'));
+
+$dep->getSchema()->alter($bdd->getSchema());
 
 
-var_dump($d);

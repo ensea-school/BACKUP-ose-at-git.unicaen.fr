@@ -452,8 +452,8 @@ class Schema
             foreach ($queries as $query => $desc) {
                 if ($this->logger) {
                     $this->logger->log($desc);
-                    $this->getBdd()->exec($query);
                 }
+                $this->getBdd()->exec($query);
             }
         }
 

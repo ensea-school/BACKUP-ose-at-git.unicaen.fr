@@ -145,6 +145,7 @@ class Bdd
      */
     public function exec(string $sql, array $params = [], array $types = [])
     {
+        var_dump($sql);
         if ($this->debug) {
             echo $sql;
             var_dump($params);

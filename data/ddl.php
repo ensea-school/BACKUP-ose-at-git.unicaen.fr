@@ -1403,7 +1403,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' => 
+        'CODE_INTERVENANT' =>
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -6839,7 +6839,7 @@
         ),
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE' => 
+    'FORMULE_TEST_VOLUME_HORAIRE' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'temporary' => false,
@@ -13393,7 +13393,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' => 
+        'DUREE_VIE' =>
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -13404,7 +13404,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' => 
+        'CODE_INTERVENANT' =>
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -13415,7 +13415,18 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_AGREMENT' => 
+        'ANNEE_AGREMENT' =>
+        array (
+          'name' => 'ANNEE_AGREMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'ANNEE_AGREMENT' =>
         array (
           'name' => 'ANNEE_AGREMENT',
           'type' => 'NUMBER',
@@ -14823,7 +14834,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' => 
+        'CODE_INTERVENANT' =>
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -16099,7 +16110,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16165,7 +16176,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' => 
+        'DUREE_VIE' =>
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -17859,7 +17870,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -19928,7 +19939,7 @@
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
@@ -28345,7 +28356,7 @@ END OSE_VALIDATION;',
     'OSE_WORKFLOW' => 
     array (
       'name' => 'OSE_WORKFLOW',
-      'definition' => 'CREATE OR REPLACE PACKAGE     "OSE_WORKFLOW" AS
+      'definition' => 'CREATE OR REPLACE PACKAGE "OSE_WORKFLOW" AS
 
   PACKAGE_SUJET VARCHAR2(80) DEFAULT \'OSE_WORKFLOW\';
 
@@ -28356,7 +28367,7 @@ END OSE_VALIDATION;',
   PROCEDURE DEP_CHECK( etape_suiv_id NUMERIC, etape_prec_id NUMERIC );
   FUNCTION MAKE_V_TBL_WORKFLOW(PARAMS UNICAEN_TBL.T_PARAMS) RETURN CLOB;
 END OSE_WORKFLOW;',
-      'body' => 'CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
+      'body' => 'CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   TYPE t_dep_bloquante IS RECORD (
     id NUMERIC,
     to_delete BOOLEAN DEFAULT TRUE
@@ -31652,37 +31663,7 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'NEWVIEW' => 
-    array (
-      'name' => 'NEWVIEW',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW NEWVIEW AS
-WITH t AS (
-SELECT
-  e.id                etape_id,
-  ep.id               element_pedagogique_id,
-  ccep.centre_cout_id centre_cout_id,
-  ccep.type_heures_id type_heures_id,
-  ep.annee_id         annee_id,
-  ep.code             code
-FROM
-  etape                     e
-  JOIN source               s ON s.importable = 0
-  JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
-  JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
-WHERE
-  e.histo_destruction IS NULL
-)
-SELECT
-  t."ETAPE_ID",t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID",t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
-  ep.id new_element_pedagogique_id,
-  ccep.id new_centre_cout_ep_id,
-  ccep.histo_destruction
-FROM
-  t
-  JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
-  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id',
-    ),
-    'V_AGREMENT_EXPORT_CSV' => 
+    'V_AGREMENT_EXPORT_CSV' =>
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -44247,7 +44228,7 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
-    'FORMULE__UN' => 
+    'FORMULE__UN' =>
     array (
       'name' => 'FORMULE__UN',
       'table' => 'FORMULE',
@@ -48786,7 +48767,7 @@ END;',
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'unique' => true,
@@ -51402,12 +51383,12 @@ END;',
         0 => 'ID',
       ),
     ),
-    'TBL_AGREMENT__UN' => 
+    'TBL_AGREMENT__UN' =>
     array (
       'name' => 'TBL_AGREMENT__UN',
       'unique' => true,
       'table' => 'TBL_AGREMENT',
-      'columns' => 
+      'columns' =>
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'INTERVENANT_ID',
@@ -51416,7 +51397,7 @@ END;',
         4 => 'ANNEE_AGREMENT',
       ),
     ),
-    'TBL_AGREMENT__UN_IDX' => 
+    'TBL_AGREMENT__UN_IDX' =>
     array (
       'name' => 'TBL_AGREMENT__UN_IDX',
       'unique' => true,

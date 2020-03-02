@@ -18,8 +18,6 @@ use Application\Service\Traits\OffreFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
-use Zend\View\Renderer\PhpRenderer;
 
 
 /**
@@ -38,11 +36,6 @@ class OffreFormationController extends AbstractController
     use AnneeServiceAwareTrait;
     use ReconductionProcessusAwareTrait;
     use OffreFormationServiceAwareTrait;
-
-    /**
-     * @var Container
-     */
-    protected $sessionContainer;
 
 
 
@@ -225,10 +218,10 @@ class OffreFormationController extends AbstractController
         $request = $this->getRequest();
         if ($request->isPost()) {
 
-            $datas    = $request->getPost();
+            $datas = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
             try {
-                $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
+                $etapesReconduites   = $this->getServiceEtape()->getEtapeReconduit($structure);
                 $etapesReconduitesCc = [];
                 if (isset($datas['etapes'])) {
                     foreach ($datas['etapes'] as $code) {
@@ -237,20 +230,16 @@ class OffreFormationController extends AbstractController
                         }
                     }
                 }
-                $result = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
+                $result            = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
                 $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
 
                 $this->flashMessenger()->addSuccessMessage("$result centre(s) de coût(s) ont été reconduit pour l'année prochaine. ");
-
-
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-
         }
 
-        if(empty($etapesReconduites) && !empty($structure))
-        {
+        if (empty($etapesReconduites) && !empty($structure)) {
             $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
         }
 
@@ -258,7 +247,7 @@ class OffreFormationController extends AbstractController
         return [
             'structures'        => $structures,
             'structure'         => $structure,
-            'etapesReconduites' => $etapesReconduites
+            'etapesReconduites' => $etapesReconduites,
         ];
     }
 
@@ -280,7 +269,7 @@ class OffreFormationController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $datas    = $request->getPost();
+            $datas             = $request->getPost();
             $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
             try {
                 $etapesReconduitesCc = [];
@@ -294,11 +283,9 @@ class OffreFormationController extends AbstractController
                 }
                 $result = $this->getProcessusReconduction()->reconduireModulateurFormation($etapesReconduitesCc);
 
-                    $this->flashMessenger()->addSuccessMessage("$result modulateur(s) ont été reconduit pour l'année prochaine. ");
+                $this->flashMessenger()->addSuccessMessage("$result modulateur(s) ont été reconduit pour l'année prochaine. ");
 
                 $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
-
-
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }

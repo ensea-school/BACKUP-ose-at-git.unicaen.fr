@@ -73,11 +73,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <?php foreach ($etapesReconduites as $er): ?>
                 <tr>
                     <td>
-                        <?= ($er['NB_M']-$er['NB_M_EP'] == 0)?'<input disabled="disabled" title="Aucun modulateur à reconduire" class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">':'<input class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">'; ?>
+                        <?= ($er['NB_M']-$er['NB_M_EP'] <= 0)?'<input disabled="disabled" title="Aucun modulateur à reconduire" class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">':'<input class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">'; ?>
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>
-                    <td><?=($er['NB_M']-$er['NB_M_EP'] == 0)?'Aucun modulateur à reconduire':$er['NB_M']-$er['NB_M_EP']; ?> </td>
+                    <td><?=($er['NB_M']-$er['NB_M_EP'] <= 0)?'Aucun modulateur à reconduire':$er['NB_M']-$er['NB_M_EP']; ?> </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

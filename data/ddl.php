@@ -35841,26 +35841,28 @@ FROM
 WITH t AS (
 SELECT
   e.id                etape_id,
+  e.structure_id      structure_id,
   e.libelle           etape_libelle,
   e.code              etape_code,
   ep.id               element_pedagogique_id,
   ccep.centre_cout_id centre_cout_id,
-  em.id				  element_modulateur_id,
+  em.id                  element_modulateur_id,
   em.MODULATEUR_ID    modulateur_id,
   ccep.type_heures_id type_heures_id,
   ep.annee_id         annee_id,
   ep.code             code
 FROM
   etape                     e
-  JOIN source               s ON s.importable = 0
   JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
-  LEFT JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
+  LEFT JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL
   LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID AND em.HISTO_DESTRUCTION  IS NULL
+  LEFT JOIN source               s ON s.id = ccep.source_id AND s.importable = 0
 WHERE
   e.histo_destruction IS NULL
+  AND (ccep.id IS NULL OR s.id IS NOT NULL)
 )
 SELECT
-  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID", t."ELEMENT_MODULATEUR_ID",t."MODULATEUR_ID", t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
+  t."ETAPE_ID",t."STRUCTURE_ID", t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID", t."ELEMENT_MODULATEUR_ID",t."MODULATEUR_ID", t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
   ep.id new_element_pedagogique_id,
   ccep.id new_centre_cout_ep_id,
   em.id new_element_modulateur_id

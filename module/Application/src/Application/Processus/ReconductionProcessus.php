@@ -221,7 +221,6 @@ class ReconductionProcessus extends AbstractProcessus
             if (empty($value['NEW_CENTRE_COUT_EP_ID'])) {
                 //Récupération de la dernière incrémentation ID CCEP
                 $nextSequence = $this->getNextSequence('CENTRE_COUT_EP_ID_SEQ');
-//                try{
                 $stmt = $connection->insert('centre_cout_ep',
                     ['id'                     => $nextSequence,
                      'centre_cout_id'         => $value['CENTRE_COUT_ID'],
@@ -234,11 +233,6 @@ class ReconductionProcessus extends AbstractProcessus
                     ]);
 
                 $nbCCReconduit++;
-
-//                }catch(\Exception $e)
-//                {
-//                    continue;
-//                }
             }
         }
 
@@ -258,8 +252,9 @@ class ReconductionProcessus extends AbstractProcessus
             V_RECONDUCTION_CC_MODULATEUR
         WHERE
             ANNEE_ID = ?
-        AND 
-            ETAPE_CODE IN (?)';
+            AND ETAPE_CODE IN (?)
+            AND ELEMENT_MODULATEUR_ID IS NOT NULL ';
+
         $connection   = $this->getEntityManager()->getConnection();
         $stmt         = $connection->executeQuery($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
         $mepN         = $stmt->fetchAll();

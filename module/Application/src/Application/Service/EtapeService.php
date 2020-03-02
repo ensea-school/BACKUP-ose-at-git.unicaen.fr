@@ -67,13 +67,13 @@ class EtapeService extends AbstractEntityService
      * @return string
      */
 
-    public function getEtapeReconduit($structure)
+    public function getEtapeReconduit($structure, $filter = null)
     {
         $annee  = $this->getServiceContext()->getAnnee()->getId();
 
 
         $sql = '
-                SELECT 
+        SELECT 
             etape_id,
             etape_libelle,
             etape_code,
@@ -86,7 +86,22 @@ class EtapeService extends AbstractEntityService
             V_RECONDUCTION_CC_MODULATEUR 
         WHERE
             annee_id = :annee
-        GROUP BY 
+            AND new_element_pedagogique_id IS NOT NULL
+            AND structure_id = '  . $structure->getId();
+
+        if(!empty($filter))
+        {
+            if($filter == 'centrecout')
+            {
+                $sql .= ' AND  centre_cout_id IS NOT NULL';
+            }
+            if($filter == 'modulateur')
+            {
+                $sql .= ' AND element_modulateur_id IS NOT NULL';
+            }
+        }
+
+        $sql .= ' GROUP BY 
             etape_id,
             etape_libelle,
             etape_code
@@ -116,7 +131,7 @@ class EtapeService extends AbstractEntityService
      */
     public function finderByNiveau(\Application\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $typeFormationAlias       = $this->getServiceTypeFormation()->getAlias();
         $groupeTypeFormationAlias = $this->getServiceGroupeTypeFormation()->getAlias();
@@ -143,7 +158,7 @@ class EtapeService extends AbstractEntityService
      */
     public function finderByStructure(\Application\Entity\Db\Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $structureService = $this->getServiceStructure();
         $structureAlias   = $structureService->getAlias();
@@ -166,7 +181,7 @@ class EtapeService extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb, $alias);
         if ($cStructure = $this->getServiceContext()->getStructure()) {
@@ -180,7 +195,7 @@ class EtapeService extends AbstractEntityService
 
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.libelle");
 

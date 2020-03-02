@@ -75,7 +75,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
             <?php foreach ($etapesReconduites as $er): ?>
                 <tr>
                     <td>
-                        <?= ($er['NB_EP']-$er['NB_CC_EP'] == 0)?'<input disabled="disabled" title="Aucun centre de coût à reconduire" class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">':'<input class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">'; ?>
+                        <?= ($er['NB_EP']-$er['NB_CC_EP'] <= 0)?'<input disabled="disabled" title="Aucun centre de coût à reconduire" class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">':'<input class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">'; ?>
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>

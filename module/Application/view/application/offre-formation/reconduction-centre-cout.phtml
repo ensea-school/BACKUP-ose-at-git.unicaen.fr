@@ -79,7 +79,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>
-                    <td><?= ($er['NB_EP_TYPE_HEURE']-$er['NB_CC_EP'] == 0)?'Aucun centre de coût à reconduire':$er['NB_EP']-$er['NB_CC_EP']; ?></td>
+                    <td><?= ($er['NB_EP_TYPE_HEURE']-$er['NB_CC_EP'] <= 0)?'Aucun centre de coût à reconduire':$er['NB_EP_TYPE_HEURE']-$er['NB_CC_EP']; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

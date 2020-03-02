@@ -6828,7 +6828,7 @@
         ),
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE' =>
+    'FORMULE_TEST_VOLUME_HORAIRE' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'temporary' => false,
@@ -13382,6 +13382,17 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
+        'ANNEE_AGREMENT' => 
+        array (
+          'name' => 'ANNEE_AGREMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'TBL_CHARGENS' => 
@@ -14779,7 +14790,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' =>
+        'CODE_INTERVENANT' => 
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -16055,18 +16066,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' =>
-        array (
-          'name' => 'PREMIER_RECRUTEMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16128,6 +16128,17 @@
           'length' => 0,
           'scale' => '0',
           'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'PREMIER_RECRUTEMENT' => 
+        array (
+          'name' => 'PREMIER_RECRUTEMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
           'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
@@ -17815,7 +17826,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -19884,7 +19895,7 @@
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
@@ -31541,7 +31552,37 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'V_AGREMENT_EXPORT_CSV' =>
+    'NEWVIEW' => 
+    array (
+      'name' => 'NEWVIEW',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW NEWVIEW AS
+WITH t AS (
+SELECT
+  e.id                etape_id,
+  ep.id               element_pedagogique_id,
+  ccep.centre_cout_id centre_cout_id,
+  ccep.type_heures_id type_heures_id,
+  ep.annee_id         annee_id,
+  ep.code             code
+FROM
+  etape                     e
+  JOIN source               s ON s.importable = 0
+  JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
+  JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
+WHERE
+  e.histo_destruction IS NULL
+)
+SELECT
+  t."ETAPE_ID",t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID",t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
+  ep.id new_element_pedagogique_id,
+  ccep.id new_centre_cout_ep_id,
+  ccep.histo_destruction
+FROM
+  t
+  JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
+  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id',
+    ),
+    'V_AGREMENT_EXPORT_CSV' => 
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -35804,6 +35845,7 @@ SELECT
   e.code              etape_code,
   ep.id               element_pedagogique_id,
   ccep.centre_cout_id centre_cout_id,
+  em.id				  element_modulateur_id,
   em.MODULATEUR_ID    modulateur_id,
   ccep.type_heures_id type_heures_id,
   ep.annee_id         annee_id,
@@ -35813,12 +35855,12 @@ FROM
   JOIN source               s ON s.importable = 0
   JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
   LEFT JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
-  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID
+  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID AND em.HISTO_DESTRUCTION  IS NULL
 WHERE
   e.histo_destruction IS NULL
 )
 SELECT
-  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID", t.modulateur_id, t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
+  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID", t."ELEMENT_MODULATEUR_ID",t."MODULATEUR_ID", t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
   ep.id new_element_pedagogique_id,
   ccep.id new_centre_cout_ep_id,
   em.id new_element_modulateur_id
@@ -35826,7 +35868,7 @@ FROM
   t
   LEFT JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
   LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id
-  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID',
+  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID AND em.HISTO_DESTRUCTION  IS NULL',
     ),
     'V_REF_INTERVENANT' => 
     array (
@@ -44048,7 +44090,7 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
-    'FORMULE__UN' =>
+    'FORMULE__UN' => 
     array (
       'name' => 'FORMULE__UN',
       'table' => 'FORMULE',
@@ -48586,7 +48628,7 @@ END;',
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'unique' => true,

@@ -262,7 +262,7 @@ class ReconductionProcessus extends AbstractProcessus
 
 
         foreach ($mepN as $key => $value) {
-            //Récupération de la dernière incrémentation ID CCEP
+            //Récupération de la dernière incrémentation ID EM
             $nextSequence = $this->getNextSequence('ELEMENT_MODULATEUR_ID_SEQ');
 
             $stmt = $connection->insert('element_modulateur',

@@ -221,7 +221,7 @@ class OffreFormationController extends AbstractController
             $datas = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
             try {
-                $etapesReconduites   = $this->getServiceEtape()->getEtapeReconduit($structure, 'centrecout');
+                $etapesReconduites   = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
                 $etapesReconduitesCc = [];
                 if (isset($datas['etapes'])) {
                     foreach ($datas['etapes'] as $code) {
@@ -231,7 +231,7 @@ class OffreFormationController extends AbstractController
                     }
                 }
                 $result            = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
-                $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure, 'centrecout');
+                $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
 
                 $this->flashMessenger()->addSuccessMessage("$result centre(s) de coût(s) ont été reconduit pour l'année prochaine. ");
             } catch (\Exception $e) {
@@ -240,7 +240,7 @@ class OffreFormationController extends AbstractController
         }
 
         if (empty($etapesReconduites) && !empty($structure)) {
-            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure, 'centrecout');
+            $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
         }
 
 
@@ -270,7 +270,7 @@ class OffreFormationController extends AbstractController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $datas             = $request->getPost();
-            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
+            $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
             try {
                 $etapesReconduitesCc = [];
                 if (isset($datas['etapes'])) {
@@ -285,7 +285,7 @@ class OffreFormationController extends AbstractController
 
                 $this->flashMessenger()->addSuccessMessage("$result modulateur(s) ont été reconduit pour l'année prochaine. ");
 
-                $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure, 'modulateur');
+                $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
@@ -293,7 +293,7 @@ class OffreFormationController extends AbstractController
 
         //Récupération de toutes les étapes éligibles à la reconduction des coûts
         if (empty($etapesReconduites) && !empty($structure)) {
-            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure, 'modulateur');
+            $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
         }
 
 

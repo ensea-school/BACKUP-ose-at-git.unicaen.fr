@@ -52,7 +52,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
         <tbody>
         <tr>
             <td colspan="6" style="text-align: center;">
-                Aucune formation disponible
+                Aucune centre de cout à reconduire
             </td>
         </tr>
         </tbody>
@@ -75,11 +75,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
             <?php foreach ($etapesReconduites as $er): ?>
                 <tr>
                     <td>
-                        <?= ($er['NB_EP']-$er['NB_CC_EP'] <= 0)?'<input disabled="disabled" title="Aucun centre de coût à reconduire" class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">':'<input class="checkbox-element" type="checkbox" name="etapes[]" value="'.$er['ETAPE_CODE'].'">'; ?>
+                        <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE'] ?>">
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>
-                    <td><?= ($er['NB_EP_TYPE_HEURE']-$er['NB_CC_EP'] <= 0)?'Aucun centre de coût à reconduire':$er['NB_EP_TYPE_HEURE']-$er['NB_CC_EP']; ?></td>
+                    <td><?= $er['NB_CENTRE_COUT']; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

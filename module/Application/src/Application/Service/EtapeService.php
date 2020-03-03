@@ -63,49 +63,34 @@ class EtapeService extends AbstractEntityService
 
     /**
      * Retour uniquement les Etapes ayant été reconduites pour l'année universitaire suivante
+     * et possédant des centres de coût à reconduire
      *
      * @return string
      */
 
-    public function getEtapeReconduit($structure, $filter = null)
+    public function getEtapeCentreCoutReconductible($structure)
     {
         $annee  = $this->getServiceContext()->getAnnee()->getId();
 
 
         $sql = '
         SELECT 
+            count(*) as nb_centre_cout,
             etape_id,
-            etape_libelle,
             etape_code,
-            count(element_pedagogique_id) AS nb_ep_type_heure,
-            count(DISTINCT element_modulateur_id) as nb_m,
-            count(DISTINCT element_pedagogique_id) AS nb_ep,
-            count(DISTINCT new_centre_cout_ep_id) AS nb_cc_ep,
-            count(DISTINCT new_element_modulateur_id) AS nb_m_ep
+            etape_libelle
         FROM 
-            V_RECONDUCTION_CC_MODULATEUR 
+            V_RECONDUCTION_CENTRE_COUT 
         WHERE
             annee_id = :annee
-            AND new_element_pedagogique_id IS NOT NULL
             AND structure_id = '  . $structure->getId();
 
-        if(!empty($filter))
-        {
-            if($filter == 'centrecout')
-            {
-                $sql .= ' AND  centre_cout_id IS NOT NULL';
-            }
-            if($filter == 'modulateur')
-            {
-                $sql .= ' AND element_modulateur_id IS NOT NULL';
-            }
-        }
+        $sql .= 'GROUP BY
+                   etape_id,
+                   etape_code,
+                   etape_libelle
+                ORDER BY etape_id ASC';
 
-        $sql .= ' GROUP BY 
-            etape_id,
-            etape_libelle,
-            etape_code
-        ORDER BY etape_id ASC';
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindParam(':annee', $annee);
         $stmt->execute();
@@ -118,6 +103,51 @@ class EtapeService extends AbstractEntityService
 
         return $etapes;
     }
+
+
+    /**
+     * Retour uniquement les Etapes ayant été reconduites pour l'année universitaire suivante
+     * et possédant des modulateurs à reconduire
+     *
+     * @return string
+     */
+
+    public function getEtapeModulateurReconductible($structure)
+    {
+        $annee  = $this->getServiceContext()->getAnnee()->getId();
+
+
+        $sql = '
+        SELECT 
+            count(*) as nb_modulateur,
+            etape_id,
+            etape_code,
+            etape_libelle
+        FROM 
+            V_RECONDUCTION_MODULATEUR 
+        WHERE
+            annee_id = :annee
+            AND structure_id = '  . $structure->getId();
+
+        $sql .= 'GROUP BY
+                   etape_id,
+                   etape_code,
+                   etape_libelle
+                ORDER BY etape_id ASC';
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindParam(':annee', $annee);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $etapes = [];
+        foreach($result as $etape)
+        {
+            $etapes[$etape['ETAPE_CODE']] = $etape;
+        }
+
+        return $etapes;
+    }
+
 
 
 

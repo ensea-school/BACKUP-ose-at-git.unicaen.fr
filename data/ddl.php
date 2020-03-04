@@ -1403,17 +1403,6 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' =>
-        array (
-          'name' => 'CODE_INTERVENANT',
-          'type' => 'VARCHAR2',
-          'length' => 255,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
       ),
     ),
     'ANNEE' => 
@@ -13409,17 +13398,6 @@
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
           'length' => 255,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'ANNEE_AGREMENT' =>
-        array (
-          'name' => 'ANNEE_AGREMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => true,
@@ -28757,7 +28735,6 @@ END OSE_WORKFLOW;',
             WHERE tas.histo_destruction IS NULL
               AND ta.code = e.code
               AND tas.statut_intervenant_id = si.id
-             -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = \'\'CONTRAT\'\' THEN
@@ -35915,40 +35892,54 @@ FROM
   JOIN categorie_privilege cp ON cp.id = p.categorie_id
   LEFT JOIN statuts_roles sr ON sr.privilege_id = p.id',
     ),
-    'V_RECONDUCTION_CC_MODULATEUR' => 
+    'V_RECONDUCTION_CENTRE_COUT' =>
     array (
-      'name' => 'V_RECONDUCTION_CC_MODULATEUR',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_CC_MODULATEUR AS
-WITH t AS (
+      'name' => 'V_RECONDUCTION_CENTRE_COUT',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_CENTRE_COUT AS
 SELECT
-  e.id                etape_id,
-  e.libelle           etape_libelle,
-  e.code              etape_code,
-  ep.id               element_pedagogique_id,
-  ccep.centre_cout_id centre_cout_id,
-  em.MODULATEUR_ID    modulateur_id,
-  ccep.type_heures_id type_heures_id,
-  ep.annee_id         annee_id,
-  ep.code             code
+    e.annee_id          annee_id,
+    e.structure_id      structure_id,
+    e.id                etape_id,
+    e.code              etape_code,
+    e.libelle           etape_libelle,
+    cc1.id               centre_cout_id,
+    ccep1.type_heures_id type_heures_id,
+    ep1.code             ep_code,
+    ep2.id              new_ep_id
 FROM
-  etape                     e
-  JOIN source               s ON s.importable = 0
-  JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction IS NULL
-  LEFT JOIN centre_cout_ep    ccep ON ccep.element_pedagogique_id = ep.id AND ccep.histo_destruction IS NULL AND ccep.source_id = s.id
-  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID
-WHERE
-  e.histo_destruction IS NULL
-)
+	etape e
+	JOIN element_pedagogique    ep1 ON ep1.etape_id = e.id AND ep1.HISTO_DESTRUCTION IS NULL
+	JOIN centre_cout_ep       ccep1 ON ccep1.element_pedagogique_id = ep1.id AND ccep1.HISTO_DESTRUCTION IS NULL
+	JOIN centre_cout 		     cc1 ON ccep1.centre_cout_id = cc1.id AND cc1.HISTO_DESTRUCTION IS NULL
+    JOIN source                   s ON s.id = ccep1.source_id AND s.importable = 0
+	JOIN element_pedagogique    ep2 ON ep2.annee_id = ep1.annee_id+1  AND ep1.code = ep2.code AND ep2.HISTO_DESTRUCTION IS NULL
+    LEFT JOIN centre_cout_ep  ccep2 ON ccep2.element_pedagogique_id = ep2.id AND ccep2.histo_destruction IS NULL AND ccep2.type_heures_id = ccep1.TYPE_HEURES_ID
+ WHERE
+ 	e.histo_destruction IS NULL
+    AND ccep2.id IS NULL',
+    ),
+    'V_RECONDUCTION_MODULATEUR' =>
+    array (
+      'name' => 'V_RECONDUCTION_MODULATEUR',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_MODULATEUR AS
 SELECT
-  t."ETAPE_ID",t."ETAPE_LIBELLE", t."ETAPE_CODE", t."ELEMENT_PEDAGOGIQUE_ID",t."CENTRE_COUT_ID", t.modulateur_id, t."TYPE_HEURES_ID",t."ANNEE_ID",t."CODE",
-  ep.id new_element_pedagogique_id,
-  ccep.id new_centre_cout_ep_id,
-  em.id new_element_modulateur_id
+    e.annee_id          annee_id,
+    e.structure_id      structure_id,
+    e.id                etape_id,
+    e.code              etape_code,
+    e.libelle           etape_libelle,
+	em1.modulateur_id   modulateur_id,
+    ep1.code            ep_code,
+    ep2.id              new_ep_id
 FROM
-  t
-  LEFT JOIN element_pedagogique ep ON ep.annee_id = t.annee_id + 1 AND ep.code = t.code AND ep.histo_destruction IS NULL
-  LEFT JOIN centre_cout_ep ccep ON ccep.element_pedagogique_id = ep.id AND ccep.centre_cout_id = t.centre_cout_id AND ccep.type_heures_id = t.type_heures_id
-  LEFT JOIN ELEMENT_MODULATEUR em ON em.ELEMENT_ID = ep.ID',
+	etape e
+	JOIN element_pedagogique     ep1 ON ep1.etape_id = e.id AND ep1.HISTO_DESTRUCTION IS NULL
+	JOIN element_modulateur      em1 ON em1.element_id = ep1.id AND em1.histo_destruction IS NULL
+	JOIN element_pedagogique     ep2 ON ep2.annee_id = ep1.annee_id+1  AND ep1.code = ep2.code AND ep2.HISTO_DESTRUCTION IS NULL
+    LEFT JOIN element_modulateur em2 ON em2.element_id=ep2.id AND em2.histo_destruction IS NULL
+ WHERE
+ 	e.histo_destruction IS NULL
+    AND em2.id IS NULL',
     ),
     'V_REF_INTERVENANT' => 
     array (
@@ -44604,7 +44595,7 @@ WHERE
     array (
       'name' => 'TBL_AGREMENT__UN',
       'table' => 'TBL_AGREMENT',
-      'index' => 'TBL_AGREMENT__UN',
+      'index' => 'TBL_AGREMENT__UN_IDX',
       'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
@@ -51383,21 +51374,7 @@ END;',
         0 => 'ID',
       ),
     ),
-    'TBL_AGREMENT__UN' =>
-    array (
-      'name' => 'TBL_AGREMENT__UN',
-      'unique' => true,
-      'table' => 'TBL_AGREMENT',
-      'columns' =>
-      array (
-        0 => 'TYPE_AGREMENT_ID',
-        1 => 'INTERVENANT_ID',
-        2 => 'STRUCTURE_ID',
-        3 => 'TO_DELETE',
-        4 => 'ANNEE_AGREMENT',
-      ),
-    ),
-    'TBL_AGREMENT__UN_IDX' =>
+    'TBL_AGREMENT__UN_IDX' => 
     array (
       'name' => 'TBL_AGREMENT__UN_IDX',
       'unique' => true,
@@ -51408,6 +51385,7 @@ END;',
         1 => 'INTERVENANT_ID',
         2 => 'STRUCTURE_ID',
         3 => 'TO_DELETE',
+        4 => 'ANNEE_AGREMENT',
       ),
     ),
     'TBL_AGR_AGREMENT_FK_IDX' => 
@@ -52959,6 +52937,18 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
+      ),
+    ),
+    'TYPE_AGREMENT_STATUT__UN' =>
+    array (
+      'name' => 'TYPE_AGREMENT_STATUT__UN',
+      'unique' => true,
+      'table' => 'TYPE_AGREMENT_STATUT',
+      'columns' =>
+      array (
+        0 => 'TYPE_AGREMENT_ID',
+        1 => 'STATUT_INTERVENANT_ID',
+        2 => 'PREMIER_RECRUTEMENT',
       ),
     ),
     'TYPE_AGREMENT_STATUT__UN1' => 

@@ -88,9 +88,9 @@ class AgrementController extends AbstractController
 
         $role         = $this->getServiceContext()->getSelectedIdentityRole();
         $typeAgrement = $this->getEvent()->getParam('typeAgrement');
-        $intervenant = $this->getEvent()->getParam('intervenant');
+        $intervenant  = $this->getEvent()->getParam('intervenant');
 
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
@@ -151,7 +151,6 @@ class AgrementController extends AbstractController
             $agrement->setType($this->getEvent()->getParam('typeAgrement'));
             $agrement->setIntervenant($this->getEvent()->getParam('intervenant'));
             $agrement->setStructure($this->getEvent()->getParam('structure'));
-            $agrement->setCodeIntervenant($this->getEvent()->getParam('intervenant')->getCode());
         }
 
         $form = $this->getFormAgrementSaisie();
@@ -288,7 +287,7 @@ class AgrementController extends AbstractController
         $annee = $this->getServiceContext()->getAnnee();
         $role  = $this->getServiceContext()->getSelectedIdentityRole();
 
-        $data = $this->getServiceAgrement()->getExportCsvData( $annee, $role->getStructure() );
+        $data = $this->getServiceAgrement()->getExportCsvData($annee, $role->getStructure());
 
         $csvModel = new CsvModel();
         $csvModel->setHeader($data['head']);
@@ -306,8 +305,7 @@ class AgrementController extends AbstractController
         //plusieurs années pour plusieurs intervenants avec un même code
 
         $listeIntervenants = $this->getServiceIntervenant()->getByCodeIntervenant($intervenant->getCode());
-        if(empty($listeIntervenants))
-        {
+        if (empty($listeIntervenants)) {
             $listeIntervenants[] = $intervenant;
         }
         $this->getServiceWorkflow()->calculerTableauxBord([

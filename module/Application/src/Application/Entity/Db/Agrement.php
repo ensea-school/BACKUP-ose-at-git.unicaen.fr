@@ -27,12 +27,6 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var integer
      */
-    private $codeIntervenant;
-
-
-    /**
-     * @var integer
-     */
     private $id;
 
     /**
@@ -79,6 +73,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     }
 
 
+
     /**
      * Set dateDecision
      *
@@ -93,6 +88,8 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get dateDecision
      *
@@ -102,6 +99,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->dateDecision;
     }
+
 
 
     /**
@@ -168,27 +166,6 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getCodeIntervenant(): string
-    {
-        return $this->codeIntervenant;
-    }
-
-
-
-    /**
-     * @param int $codeIntervenant
-     */
-    public function setCodeIntervenant(string $codeIntervenant)
-    {
-        $this->codeIntervenant = $codeIntervenant;
-
-        return $this;
     }
 
 

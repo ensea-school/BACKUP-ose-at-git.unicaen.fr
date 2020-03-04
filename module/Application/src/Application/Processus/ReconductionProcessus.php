@@ -3,6 +3,7 @@
 namespace Application\Processus;
 
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
+use Application\Entity\Db\ElementModulateur;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
@@ -12,6 +13,7 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
+use BddAdmin\Bdd;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 
@@ -47,6 +49,7 @@ class ReconductionProcessus extends AbstractProcessus
     protected $contextService;
 
     protected $centreCoutEpService;
+
 
 
     public function __construct()
@@ -188,6 +191,8 @@ class ReconductionProcessus extends AbstractProcessus
         return true;
     }
 
+
+
     /**
      * Reconduit les centres de coutq des élements pédagogiques d'une sélection d'étapes
      *
@@ -200,46 +205,38 @@ class ReconductionProcessus extends AbstractProcessus
     public function reconduireCCFormation($etapes)
     {
         //Récupération des étapes dont il faut reconduire les cc
-        $etapes_codes = array_keys($etapes);
-        $sql = '
+        $etapes_codes  = array_keys($etapes);
+        $sql           = '
         SELECT 
             *            
         FROM 
-            V_RECONDUCTION_CC_MODULATEUR
+            V_RECONDUCTION_CENTRE_COUT
         WHERE
-            annee_id = ?
-        AND 
-            etape_code IN (?)';
-        $connection = $this->getEntityManager()->getConnection();
-        $stmt = $connection->executeQuery($sql, [ $this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
-        $ccepN = $stmt->fetchAll();
+          ANNEE_ID = ?
+          AND ETAPE_CODE IN (?)';
+
+        $connection    = $this->getEntityManager()->getConnection();
+        $stmt          = $connection->executeQuery($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
+        $ccepN         = $stmt->fetchAll();
         $nbCCReconduit = 0;
         foreach ($ccepN as $key => $value) {
-            if(empty($value['NEW_CENTRE_COUT_EP_ID']))
-            {
-                //Récupération de la dernière incrémentation ID CCEP
-                $nextSequence = $this->getNextSequence('CENTRE_COUT_EP_ID_SEQ');
-                try{
-                    $stmt = $connection->insert('centre_cout_ep',
-                        ['id' => $nextSequence,
-                         'centre_cout_id' => $value['CENTRE_COUT_ID'],
-                         'element_pedagogique_id' => $value['NEW_ELEMENT_PEDAGOGIQUE_ID'],
-                         'type_heures_id' => $value['TYPE_HEURES_ID'],
-                         'source_id'    => $this->getServiceSource()->getOse()->getId(),
-                         'source_code'  => uniqid($value['CENTRE_COUT_ID'] . '_' . $value['TYPE_HEURES_ID'] . '_' . $value['NEW_ELEMENT_PEDAGOGIQUE_ID']),
-                         'histo_createur_id' => $this->getServiceContext()->getUtilisateur()->getId(),
-                         'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId()
-                        ]);
+            //Récupération de la dernière incrémentation ID CCEP
+            $nextSequence = $this->getNextSequence('CENTRE_COUT_EP_ID_SEQ');
+            $stmt = $connection->insert('centre_cout_ep',
+                ['id'                     => $nextSequence,
+                 'centre_cout_id'         => $value['CENTRE_COUT_ID'],
+                 'element_pedagogique_id' => $value['NEW_EP_ID'],
+                 'type_heures_id'         => $value['TYPE_HEURES_ID'],
+                 'source_id'              => $this->getServiceSource()->getOse()->getId(),
+                 'source_code'            => uniqid($value['CENTRE_COUT_ID'] . '_' . $value['TYPE_HEURES_ID'] . '_' . $value['NEW_EP_ID']),
+                 'histo_createur_id'      => $this->getServiceContext()->getUtilisateur()->getId(),
+                 'histo_modificateur_id'  => $this->getServiceContext()->getUtilisateur()->getId(),
+                ]);
 
-                    $nbCCReconduit++;
-
-                }catch(\Exception $e)
-                {
-                    continue;
-                }
-            }
+            $nbCCReconduit++;
 
         }
+
         return $nbCCReconduit;
     }
 
@@ -249,53 +246,47 @@ class ReconductionProcessus extends AbstractProcessus
     {
         //Récupération des étapes dont il faut reconduire les cc
         $etapes_codes = array_keys($etapes);
-        $sql = '
+        $sql          = '
         SELECT 
             *            
         FROM 
-            V_RECONDUCTION_CC_MODULATEUR
+            V_RECONDUCTION_MODULATEUR
         WHERE
-            annee_id = ?
-        AND 
-            etape_code IN (?)';
-        $connection = $this->getEntityManager()->getConnection();
-        $stmt = $connection->executeQuery($sql, [ $this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
-        $mepN = $stmt->fetchAll();
+            ANNEE_ID = ?
+            AND ETAPE_CODE IN (?)';
+
+        $connection   = $this->getEntityManager()->getConnection();
+        $stmt         = $connection->executeQuery($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
+        $mepN         = $stmt->fetchAll();
         $nbMReconduit = 0;
+
+
         foreach ($mepN as $key => $value) {
-            if(empty($value['NEW_ELEMENT_MODULATEUR_ID']))
-            {
-                //Récupération de la dernière incrémentation ID CCEP
-                $nextSequence = $this->getNextSequence('ELEMENT_MODULATEUR_ID_SEQ');
-                try{
-                    $stmt = $connection->insert('element_modulateur',
-                        ['id' => $nextSequence,
-                         'element_id' => $value['NEW_ELEMENT_PEDAGOGIQUE_ID'],
-                         'modulateur_id'    => $value['MODULATEUR_ID'],
-                         'histo_createur_id' => $this->getServiceContext()->getUtilisateur()->getId(),
-                         'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId()
-                        ]);
-                    $nbMReconduit++;
+            //Récupération de la dernière incrémentation ID EM
+            $nextSequence = $this->getNextSequence('ELEMENT_MODULATEUR_ID_SEQ');
 
-
-                }catch(\Exception $e)
-                {
-                    continue;
-                }
-            }
-
+            $stmt = $connection->insert('element_modulateur',
+                ['id'                    => $nextSequence,
+                 'element_id'            => $value['NEW_EP_ID'],
+                 'modulateur_id'         => $value['MODULATEUR_ID'],
+                 'histo_createur_id'     => $this->getServiceContext()->getUtilisateur()->getId(),
+                 'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId(),
+                ]);
+                $nbMReconduit++;
         }
+
         return $nbMReconduit;
     }
+
+
 
     public function getNextSequence($sequenceName = '')
     {
         $connection = $this->getEntityManager()->getConnection();
-        $stmt = $connection->executeQuery('SELECT ' . $sequenceName . '.NEXTVAL val FROM DUAL');
-        $result = $stmt->fetch();
+        $stmt       = $connection->executeQuery('SELECT ' . $sequenceName . '.NEXTVAL val FROM DUAL');
+        $result     = $stmt->fetch();
 
         return $result['VAL'];
     }
-
 
 }

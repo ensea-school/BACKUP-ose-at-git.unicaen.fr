@@ -458,7 +458,7 @@ class DataGen
         );
         if ($result['insert'] + $result['update'] + $result['delete'] > 0) {
             $msg = str_pad($table, 31, ' ');
-            $msg .= 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete']
+            $msg .= 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete'];
             $this->logMsg($msg);
         }
     }

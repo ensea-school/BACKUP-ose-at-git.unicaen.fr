@@ -148,6 +148,7 @@ return [
             'modeles-edition'          => 'Édition des modèles',
             'projet-generation'        => 'Génération de projet de contrat',
             'contrat-generation'       => 'Génération de contrat',
+            'envoi-email'              => 'Envoyer le contrat par email',
         ],
     ],
 

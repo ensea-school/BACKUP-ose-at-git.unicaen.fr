@@ -224,9 +224,14 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['exporter', 'envoyer-mail'],
+                    'action'     => ['exporter'],
                     'privileges' => [Privileges::CONTRAT_CONTRAT_GENERATION, Privileges::CONTRAT_PROJET_GENERATION],
                     'assertion'  => Assertion\ContratAssertion::class,
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['envoyer-mail'],
+                    'privileges' => [Privileges::CONTRAT_ENVOI_EMAIL],
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
@@ -298,6 +303,7 @@ return [
                             Privileges::CONTRAT_VISUALISATION,
                             Privileges::CONTRAT_PROJET_GENERATION,
                             Privileges::CONTRAT_CONTRAT_GENERATION,
+                            Privileges::CONTRAT_ENVOI_EMAIL,
                             ContratAssertion::PRIV_LISTER_FICHIERS,
                             ContratAssertion::PRIV_AJOUTER_FICHIER,
                             ContratAssertion::PRIV_SUPPRIMER_FICHIER,

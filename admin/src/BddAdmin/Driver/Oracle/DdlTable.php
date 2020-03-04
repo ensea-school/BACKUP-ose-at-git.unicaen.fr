@@ -121,7 +121,7 @@ class DdlTable extends DdlAbstract implements DdlTableInterface
             $type      = $paq['type'];
             $precision = $paq['precision'] ? (int)$paq['precision'] : null;
 
-            switch ($paq['type']) {
+            switch ($type) {
                 case 'NUMBER':
                     if (1 === $precision) {
                         $type = Bdd::TYPE_BOOL;
@@ -409,6 +409,15 @@ END;';
 
 
 
+    private function isEmpty(string $table): bool
+    {
+        $r = $this->bdd->select('SELECT * FROM ' . $table, [], ['fetch' => $this->bdd::FETCH_ONE]);
+
+        return false === $r;
+    }
+
+
+
     private function addColumn(string $table, array $column, $noNotNull = false)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
@@ -419,7 +428,11 @@ END;';
         }
 
         if (!$column['nullable'] && !$noNotNull) {
-            $cp[] = "NOT NULL ENABLE";
+            if ($column['default'] === null && $this->isEmpty($table)) {
+                $this->bdd->getSchema()->logError("La colonne $table." . $column['name'] . " n\'a pas pu être déclarée NOT NULL, car des données sont déjà présentes dans la table et aucune valeur par défaut n'a été configurée");
+            } else {
+                $cp[] = "NOT NULL ENABLE";
+            }
         }
 
         $sql = "ALTER TABLE \"$table\" ADD (" . implode(" ", $cp) . ")";

@@ -14908,7 +14908,7 @@
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => false,
-          'default' => NULL,
+          'default' => '1',
           'commentaire' => NULL,
         ),
         'CODE_INTERVENANT' => 

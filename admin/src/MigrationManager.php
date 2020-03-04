@@ -56,22 +56,26 @@ class MigrationManager
 
 
 
-    public function initTablesDef(array $ref, array $ddlConfig)
+    public function initTablesDef(array $ref, $filters = [])
     {
-        $tablesKey = \BddAdmin\Bdd::DDL_TABLE;
+        $filters = \BddAdmin\Ddl\Filter\DdlFilters::normalize($filters);
+
+        if (array_key_exists(\BddAdmin\Bdd::DDL_TABLE, $ref)) {
+            $ref = $ref[\BddAdmin\Bdd::DDL_TABLE];
+        } else {
+            $ref = [];
+        }
 
         /* On ne parse que les tables */
-        $ddlConfig             = [$tablesKey => $ddlConfig[$tablesKey]];
-        $ddlConfig['explicit'] = true;
-        $oldRef                = $this->schema->getDdl($ddlConfig);
-        $this->tablesDiff      = [];
-        if (isset($oldRef[$tablesKey]) && is_array($oldRef[$tablesKey])) {
-            foreach ($oldRef[$tablesKey] as $table => $ddl) {
+        $oldRef           = $this->schema->table()->get($filters->get(\BddAdmin\Bdd::DDL_TABLE));
+        $this->tablesDiff = [];
+        if (isset($oldRef) && is_array($oldRef)) {
+            foreach ($oldRef as $table => $ddl) {
                 $this->tablesDiff[$table]['old'] = $ddl;
             }
         }
-        if (isset($ref[$tablesKey]) && is_array($ref[$tablesKey])) {
-            foreach ($ref[$tablesKey] as $table => $ddl) {
+        if (isset($ref) && is_array($ref)) {
+            foreach ($ref as $table => $ddl) {
                 $this->tablesDiff[$table]['new'] = $ddl;
             }
         }

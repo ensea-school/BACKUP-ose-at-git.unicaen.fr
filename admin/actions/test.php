@@ -24,10 +24,19 @@ var_dump($r);
 */
 
 
-$bdd = $oa->getBdd();
+$devLocal    = new \BddAdmin\Bdd(Config::get('bdds', 'dev-local'));
+$deployLocal = new \BddAdmin\Bdd(Config::get('bdds', 'deploy-local'));
+$test        = new \BddAdmin\Bdd(Config::get('bdds', 'test'));
 
-$dep = new \BddAdmin\Bdd(Config::get('bdds', 'deploy-local'));
+//$dep->getSchema()->alter($bdd->getSchema());
 
-$dep->getSchema()->alter($bdd->getSchema());
+$deployLocal->getSchema()->setLogger($c);
 
+$filters = [
+    \BddAdmin\Bdd::DDL_MATERIALIZED_VIEW => ['excludes' => ['MV_UNICAEN_STRUCTURE_CODES']],
+];
+
+$deployLocal->getSchema()->alter($test, $filters);
+
+//$deployLocal->getSchema()->drop();
 

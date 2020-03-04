@@ -56,11 +56,9 @@ class OseAdmin
      *
      * @param Console $console
      */
-    public function __construct(Console $console = null)
+    public function __construct(Console $console)
     {
-        if ($console) {
-            $this->console = $console;
-        }
+        $this->console = $console;
     }
 
 
@@ -284,6 +282,10 @@ class OseAdmin
     public function getBdd(): \BddAdmin\Bdd
     {
         if (!$this->bdd) {
+            if (!$this->bddIsOk($msg)) {
+                $this->console->printDie("Impossible d'accéder à la base de données : $msg!"
+                    . "\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
+            }
             $this->bdd = new \BddAdmin\Bdd(Config::getBdd());
         }
 
@@ -311,25 +313,7 @@ class OseAdmin
      */
     public function getConsole(): Console
     {
-        if (!$this->console) {
-            $this->console = new Console();
-        }
-
         return $this->console;
-    }
-
-
-
-    /**
-     * @param Console $console
-     *
-     * @return OseAdmin
-     */
-    public function setConsole(Console $console): OseAdmin
-    {
-        $this->console = $console;
-
-        return $this;
     }
 
 

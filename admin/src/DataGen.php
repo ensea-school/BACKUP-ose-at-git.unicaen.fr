@@ -6,6 +6,8 @@
 
 class DataGen
 {
+    use \BddAdmin\Logger\LoggerAwareTrait;
+
     /**
      * @var OseAdmin
      */
@@ -20,6 +22,12 @@ class DataGen
      * @var array
      */
     private $donneesDefaut = [];
+
+    private $actions       = [
+        'install'    => 'Insertion des données',
+        'update'     => 'Contrôle et mise à jour des données',
+        'privileges' => 'Mise à jour des privilèges dans la base de données',
+    ];
 
     private $config        = [
         /* Obligatoire au début */
@@ -347,6 +355,7 @@ class DataGen
     public function __construct(OseAdmin $oseAdmin)
     {
         $this->oseAdmin = $oseAdmin;
+        $this->setLogger($oseAdmin->getConsole());
     }
 
 
@@ -374,6 +383,7 @@ class DataGen
 
     private function action(string $action, string $table = null)
     {
+        $this->logBegin($this->actions[$action]);
         $this->nomenclature  = require $this->oseAdmin->getOseDir() . 'data/nomenclatures.php';
         $this->donneesDefaut = require $this->oseAdmin->getOseDir() . 'data/donnees_par_defaut.php';
 
@@ -385,6 +395,7 @@ class DataGen
         }
 
         /* L'administrateur doit avoir tous les droits obligatoirement! */
+        $this->logMsg('Attribution de tous les droits au rôle Administrateur ...', true);
         $this->oseAdmin->getBdd()->exec("
         INSERT INTO
           ROLE_PRIVILEGE(PRIVILEGE_ID, ROLE_ID)
@@ -397,6 +408,10 @@ class DataGen
         WHERE
           RP.ROLE_ID IS NULL
         ");
+
+        $this->logMsg('Mise à jour du point d\'indice pour les HETD ...', true);
+        $this->oseAdmin->getBdd()->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
+        $this->logEnd();
     }
 
 
@@ -442,9 +457,9 @@ class DataGen
             isset($params['options']) ? $params['options'] : []
         );
         if ($result['insert'] + $result['update'] + $result['delete'] > 0) {
-            echo str_pad($table, 31, ' '); // provisoire
-            echo 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete'];
-            echo "\n";
+            $msg = str_pad($table, 31, ' ');
+            $msg .= 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete']
+            $this->logMsg($msg);
         }
     }
 

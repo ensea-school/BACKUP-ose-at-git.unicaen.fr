@@ -1,53 +1,49 @@
 <?php
 
-if (!$oa->bddIsOk($msg)) {
-    $c->printDie("Impossible d'accéder à la base de données : $msg!"
-        . "\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
-}
-
-$bdd    = $oa->getBdd();
-$schema = new \BddAdmin\Schema($bdd);
+// Initialisation
+$schema = $oa->getBdd()->getSchema();
+$schema->setLogger($c);
 
 $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
-
 $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci de patienter ...', $c::COLOR_LIGHT_PURPLE);
 
-/* Récupération du schéma de référence */
+
+// Récupération du schéma de référence
 $ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
 
-/* Construction de la config de DDL pour filtrer */
-$ddlConfig = require $oa->getOseDir() . 'data/ddl_config.php';
+
+// Construction de la config de DDL pour filtrer
+$filters = require $oa->getOseDir() . 'data/ddl_config.php';
 foreach ($ref as $ddlClass => $objects) {
     foreach ($objects as $object => $objectDdl) {
-        $ddlConfig[$ddlClass]['includes'][] = $object;
+        $filters[$ddlClass]['includes'][] = $object;
     }
 }
 
+
+// Initialisation et lancement de la pré-migration
 $mm = new MigrationManager($oa, $schema);
-$mm->initTablesDef($ref, $ddlConfig);
+$mm->initTablesDef($ref, $filters);
 $mm->migration('pre');
 
-/* Mise en place du logging en mode console */
-$scl          = new \BddAdmin\SchemaConsoleLogger();
-$scl->console = $c;
-$schema->setLogger($scl);
 
-/* Mise à jour de la BDD */
-$schema->alter($ref, $ddlConfig, true);
+// Mise à jour de la BDD (structures)
+$schema->alter($ref, $filters, true);
 
-/* Mise à jour des séquences */
-$c->println("\n" . 'Mise à jour des séquences', $c::COLOR_LIGHT_PURPLE);
+
+// Mise à jour des séquences
 $schema->majSequences($ref);
 
-$c->println("\n" . 'Contrôle et mise à jour des données', $c::COLOR_LIGHT_PURPLE);
+
+// Mise à jour des données
 $dataGen = new DataGen($oa);
 $dataGen->update();
 
+
+// Post-migration
 $c->println('');
 $mm->migration('post');
 
-//$c->println("\n" . 'Mise à jour du point d\'indice pour les HETD', $c::COLOR_LIGHT_PURPLE);
-$bdd->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
 
 // Néttoyage des caches
-$oa->run('clear-cache', false);
+$oa->run('clear-cache');

@@ -1,34 +1,16 @@
 <?php
 
 /* Initialisation */
-$c->println("\nInstallation de la base de données", $c::COLOR_LIGHT_CYAN);
-if (!$oa->bddIsOk($msg)) {
-    $c->printDie("Impossible d'accéder à la base de données : $msg!"
-        . "\nVeuillez contrôler les paramètres de configurations entrés dans le fichier confg.local.php s'il vous plaît, avant de refaire une tentative d'installation de la base de données.");
-}
-
-$bdd    = $oa->getBdd();
-$schema = new \BddAdmin\Schema($bdd);
-
+$schema = $oa->getBdd()->getSchema();
+$schema->setLogger($c);
 
 /* Mise en place du schéma de la BDD */
-$c->println("\n" . 'Création des définitions de la base de données', $c::COLOR_LIGHT_PURPLE);
-
 $ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
-
-$scl          = new \BddAdmin\SchemaConsoleLogger();
-$scl->console = $c;
-$schema->setLogger($scl);
-$schema->create($ref, true);
-
+$schema->create($ref);
 
 /* Insertion des données */
-$c->println("\n" . 'Insertion des données', $c::COLOR_LIGHT_PURPLE);
 $dataGen = new DataGen($oa);
 $dataGen->install();
-
-$c->println("\n" . 'Mise à jour du point d\'indice pour les HETD', $c::COLOR_LIGHT_PURPLE);
-$bdd->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
 
 
 /* Définition d'un mdp pour oseappli */
@@ -47,7 +29,7 @@ if ($c->hasOption('oseappli-pwd')) {
     }
 }
 
-$c->println('Application du de mot de pase de oseappli...');
+$c->println('Application du de mot de passe de oseappli...');
 $oa->exec("changement-mot-de-passe --utilisateur=oseappli --mot-de-passe=$pwd1");
 
 $c->println('Mot de passe changé', $c::COLOR_LIGHT_GREEN);

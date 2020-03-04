@@ -2,7 +2,6 @@
 
 namespace BddAdmin;
 
-use BddAdmin\Ddl\DdlInterface;
 use BddAdmin\Driver\DriverInterface;
 use BddAdmin\Exception\BddCompileException;
 use BddAdmin\Exception\BddException;
@@ -145,7 +144,6 @@ class Bdd
      */
     public function exec(string $sql, array $params = [], array $types = [])
     {
-        var_dump($sql);
         if ($this->debug) {
             echo $sql;
             var_dump($params);
@@ -204,6 +202,8 @@ class Bdd
      */
     public function select(string $sql, array $params = [], array $options = [])
     {
+        //echo substr($sql, 0, 100) . "\n";
+
         return $this->driver->select($sql, $params, $options);
     }
 

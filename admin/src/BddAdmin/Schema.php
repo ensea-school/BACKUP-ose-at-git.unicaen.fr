@@ -16,12 +16,14 @@ use BddAdmin\Ddl\DdlUniqueConstraintInterface;
 use BddAdmin\Ddl\DdlViewInterface;
 use BddAdmin\Event\EventManagerAwareTrait;
 use BddAdmin\Exception\BddCompileException;
+use BddAdmin\Logger\LoggerAwareTrait;
 
 
 class Schema
 {
     use BddAwareTrait;
     use EventManagerAwareTrait;
+    use LoggerAwareTrait;
 
     /**
      * @var array
@@ -86,11 +88,6 @@ class Schema
      * @var DdlInterface[]
      */
     private $ddlObjects = [];
-
-    /**
-     * @var SchemaLoggerInterface
-     */
-    public $logger;
 
     /**
      * @var bool
@@ -208,13 +205,16 @@ class Schema
      */
     public function getDdl($filters = []): array
     {
+        $this->logBegin("Récupération de la DDL");
         $filters = DdlFilters::normalize($filters);
         $data    = [];
         foreach ($this->ddlTypes as $type) {
             if (!($filters->isExplicit() && $filters->get($type)->isEmpty())) {
+                $this->logMsg('Traitement des objets de type ' . $type . ' ...', true);
                 $data[$type] = $this->object($type)->get($filters[$type]);
             }
         }
+        $this->logEnd();
 
         return $data;
     }
@@ -244,87 +244,13 @@ class Schema
 
 
 
-    private function var_export54($var, $indent = "")
+    public function queryExec(string $sql, string $description = null)
     {
-        switch (gettype($var)) {
-            case "array":
-                $indexed   = array_keys($var) === range(0, count($var) - 1);
-                $r         = [];
-                $maxKeyLen = 0;
-                foreach ($var as $key => $value) {
-                    $key    = $this->var_export54($key);
-                    $keyLen = strlen($key);
-                    if ($keyLen > $maxKeyLen) $maxKeyLen = $keyLen;
-                }
-                foreach ($var as $key => $value) {
-                    $key = $this->var_export54($key);
-                    $r[] = "$indent    "
-                        . ($indexed ? "" : str_pad($key, $maxKeyLen, ' ') . " => ")
-                        . $this->var_export54($value, "$indent    ");
-                }
-
-                return "[\n" . implode(",\n", $r) . ",\n" . $indent . "]";
-            case "boolean":
-                return $var ? "TRUE" : "FALSE";
-            default:
-                return var_export($var, true);
+        if ($this->queryCollect) {
+            $this->queries[$sql] = $description;
+        } else {
+            $this->getBdd()->exec($sql);
         }
-    }
-
-
-
-    /**
-     * @param array  $ddl
-     * @param string $filename
-     */
-    public function saveToFile(array $ddl, string $filename)
-    {
-        $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->var_export54($ddl) . ";\n\n//@" . "formatter:on\n";
-
-        file_put_contents($filename, $ddlString);
-    }
-
-
-
-    /**
-     * @param string $filename
-     *
-     * @return array
-     */
-    public function loadFromFile(string $filename): array
-    {
-        return require_once $filename;
-    }
-
-
-
-    /**
-     * @param array|Schema $ddl
-     */
-    public function create($ddl)
-    {
-        $this->change('create', $ddl, []);
-    }
-
-
-
-    /**
-     * @param array|Schema $ddl
-     * @param array        $ddlConfig
-     */
-    public function alter($ddl, array $ddlConfig = [])
-    {
-        $this->change('alter', $ddl, $ddlConfig);
-    }
-
-
-
-    /**
-     * @param array $ddlConfig
-     */
-    public function drop(array $ddlConfig = [])
-    {
-        $this->change('drop', [], $ddlConfig);
     }
 
 
@@ -394,8 +320,153 @@ class Schema
 
 
 
-    public function diff($ddl, bool $inverse = false, $filters = []): array
+    /**
+     * @param array|Schema $ddl
+     */
+    public function create($ddl)
     {
+        $this->logBegin('Mise en place de la base de données');
+        if ($ddl instanceof Bdd) {
+            $ddl = $ddl->getSchema();
+        }
+        if ($ddl instanceof Schema) {
+            $ddl = $this->getDdl();
+        }
+
+        foreach ($this->changements as $changement => $label) {
+            [$ddlName, $action] = explode('.', $changement);
+            if ($action == 'create') {
+                $object = $this->object($ddlName);
+                if (isset($ddl[$ddlName])) {
+                    $queries = $this->alterDdlObject($object, $action, [], $ddl[$ddlName]);
+                    if ($queries) {
+                        $this->logBegin($label);
+                        foreach ($queries as $query => $desc) {
+                            $this->logMsg($desc);
+                            try {
+                                $this->getBdd()->exec($query);
+                            } catch (BddCompileException $e) {
+                                // ne rien faire => trité après
+                            } catch (\Throwable $e) {
+                                $this->logError($e);
+                            }
+                        }
+                        $this->logEnd();
+                    }
+                }
+            }
+        }
+        $this->compilerTout();
+        $this->logEnd("Base de données créée");
+    }
+
+
+
+    /**
+     * @param Bdd|Schema|array $ddl
+     * @param DdlFilters|array $filters
+     */
+    public function alter($ddl, $filters = [])
+    {
+        $this->logBegin('Application des changements sur la BDD');
+        $filters = DdlFilters::normalize($filters);
+        if ($ddl instanceof Bdd) {
+            $ddl = $ddl->getSchema();
+        }
+        if ($ddl instanceof self) {
+            if (!$ddl->getLogger() && $this->getLogger()) {
+                $ddl->setLogger($this->getLogger());
+            }
+            $ddl = $ddl->getDdl($filters);
+        } else {
+            $ddl = $this->ddlFilter($ddl, $filters);
+        }
+
+        foreach ($this->changements as $changement => $label) {
+            [$ddlName, $action] = explode('.', $changement);
+
+            $object       = $this->object($ddlName);
+            $objectFilter = $filters->get($ddlName);
+
+            if (!($filters->isExplicit() && $objectFilter->isEmpty())) {
+                $objectDdl = isset($ddl[$ddlName]) ? $ddl[$ddlName] : [];
+                $this->logMsg("Préparation de l'action \"$label\" ...", true);
+                $queries = $this->alterDdlObject($object, $action, $object->get($objectFilter), $objectDdl);
+                if ($queries) {
+                    $this->logBegin($label);
+                    foreach ($queries as $query => $desc) {
+                        $this->logMsg($desc);
+                        try {
+                            $this->getBdd()->exec($query);
+                        } catch (BddCompileException $e) {
+                            // ne rien faire => trité après
+                        } catch (\Throwable $e) {
+                            $this->logError($e);
+                        }
+                    }
+                    $this->logEnd();
+                }
+            }
+        }
+
+        $this->compilerTout();
+        $this->logEnd('Changements appliqués');
+    }
+
+
+
+    /**
+     * @param DdlFilters|array $filters
+     *
+     * @throws \Exception
+     */
+    public function drop($filters = [])
+    {
+        $this->logBegin('Suppression de la base de données');
+        $filters = DdlFilters::normalize($filters);
+
+        foreach ($this->changements as $changement => $label) {
+            [$ddlName, $action] = explode('.', $changement);
+
+            if ($action == 'drop' && !($filters->isExplicit() && $filters->get($ddlName)->isEmpty())) {
+                $object = $this->object($ddlName);
+                $ddl    = $object->get($filters->get($ddlName));
+                if (!empty($ddl)) {
+                    $queries = $this->alterDdlObject($object, 'drop', $ddl, []);
+                    if ($queries) {
+                        $this->logBegin($label);
+                        foreach ($queries as $query => $desc) {
+                            $this->logMsg($desc);
+                            try {
+                                $this->getBdd()->exec($query);
+                            } catch (\Throwable $e) {
+                                $this->logError($e);
+                            }
+                        }
+                        $this->logEnd();
+                    }
+                }
+            }
+        }
+        $this->logEnd("Base de données vide");
+    }
+
+
+
+    /**
+     * @param Bdd|Schema|array $ddl
+     * @param DdlFilters|array $filters
+     * @param bool             $inverse
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function diff($ddl, $filters = [], bool $inverse = false): array
+    {
+        $this->logBegin('Génération du différentiel de DDLs');
+        if ($ddl instanceof Bdd) {
+            $ddl = $ddl->getSchema();
+        }
         if ($ddl instanceof self) {
             $ddl = $ddl->getDdl($filters);
         } else {
@@ -412,57 +483,21 @@ class Schema
             $new = $bdd;
         }
         $res = [];
-        foreach ($this->changements as $changement => $params) {
+        $cc  = count($this->changements);
+        $c   = 0;
+        foreach ($this->changements as $changement => $label) {
+            $c++;
             [$ddlName, $action] = explode('.', $changement);
+            $this->logMsg($label . " (opération $c/$cc) ...", true);
             $object  = $this->object($ddlName);
             $queries = $this->alterDdlObject($object, $action, $old[$ddlName], $new[$ddlName]);
             if (!empty($queries)) {
                 $res[$changement] = $queries;
             }
         }
+        $this->logEnd();
 
         return $res;
-    }
-
-
-
-    private function change(string $mode, $ddl, $filters = [])
-    {
-        if ($ddl instanceof self) {
-            $new = $ddl->getDdl($filters);
-        } else {
-            $new = $this->ddlFilter($ddl, $filters);
-        }
-
-        if ($mode == 'create') {
-            $old = [];
-        } else {
-            $old = $this->getDdl($filters);
-        }
-
-        foreach ($this->changements as $changement => $label) {
-            [$ddlName, $action] = explode('.', $changement);
-
-            if ($this->logger) {
-                $this->logger->logTitle($label);
-            }
-
-            $object  = $this->object($ddlName);
-            $queries = $this->alterDdlObject($object, $action, $old[$ddlName], $new[$ddlName]);
-            foreach ($queries as $query => $desc) {
-                if ($this->logger) {
-                    $this->logger->log($desc);
-                }
-                $this->getBdd()->exec($query);
-            }
-        }
-
-        if ($mode != 'drop') { // create ou alter
-            if ($this->logger) {
-                $this->logger->logTitle("\n" . 'Compilation de tous les objets de la BDD');
-            }
-            $this->compilerTout();
-        }
     }
 
 
@@ -472,9 +507,16 @@ class Schema
      */
     public function majSequences(array $ddl)
     {
+        $this->logBegin("Mise à jour de toutes les séquences");
         foreach ($ddl[Bdd::DDL_TABLE] as $tdata) {
-            $this->table()->majSequence($tdata);
+            try {
+                $this->logMsg("Séquence " . $tdata['sequence'] . " ...", true);
+                $this->table()->majSequence($tdata);
+            } catch (\Throwable $e) {
+                $this->logError($e);
+            }
         }
+        $this->logEnd();
     }
 
 
@@ -487,6 +529,7 @@ class Schema
      */
     public function compilerTout(): array
     {
+        $this->logBegin("Compilation de tous les objets de la BDD");
         $errors = [];
 
         $compileTypes = [Bdd::DDL_PACKAGE, Bdd::DDL_VIEW, Bdd::DDL_TRIGGER];
@@ -495,52 +538,71 @@ class Schema
             $list   = $object->getList();
             foreach ($list as $name) {
                 try {
+                    $this->logMsg("Compilation de $name ...", true);
                     $object->compiler($name);
                 } catch (BddCompileException $e) {
                     $errors[$compileType][$name] = $e->getMessage();
-                    if ($this->logger) {
-                        $this->logger->log($compileType . ' ' . $name . ' : Erreur de compilation');
-                    }
+                    $this->logError($compileType . ' ' . $name . ' : Erreur de compilation');
                 }
             }
         }
+        $this->logEnd("Fin de la compilation");
 
         return $errors;
     }
 
 
 
-    /**
-     * @return SchemaLoggerInterface
-     */
-    public function getLogger() //: ?SchemaLoggerInterface
+    private function arrayExport($var, $indent = "")
     {
-        return $this->logger;
-    }
+        switch (gettype($var)) {
+            case "array":
+                $indexed   = array_keys($var) === range(0, count($var) - 1);
+                $r         = [];
+                $maxKeyLen = 0;
+                foreach ($var as $key => $value) {
+                    $key    = $this->arrayExport($key);
+                    $keyLen = strlen($key);
+                    if ($keyLen > $maxKeyLen) $maxKeyLen = $keyLen;
+                }
+                foreach ($var as $key => $value) {
+                    $key = $this->arrayExport($key);
+                    $r[] = "$indent    "
+                        . ($indexed ? "" : str_pad($key, $maxKeyLen, ' ') . " => ")
+                        . $this->arrayExport($value, "$indent    ");
+                }
 
-
-
-    /**
-     * @param SchemaLoggerInterface $logger
-     *
-     * @return Schema
-     */
-    public function setLogger($logger): Schema // (?SchemaLoggerInterface $logger): Schema
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-
-
-    public function queryExec(string $sql, string $description = null)
-    {
-        if ($this->queryCollect) {
-            $this->queries[$sql] = $description;
-        } else {
-            $this->getBdd()->exec($sql);
+                return "[\n" . implode(",\n", $r) . ",\n" . $indent . "]";
+            case "boolean":
+                return $var ? "TRUE" : "FALSE";
+            default:
+                return var_export($var, true);
         }
+    }
+
+
+
+    /**
+     * @param array  $ddl
+     * @param string $filename
+     */
+    public function saveToFile(array $ddl, string $filename)
+    {
+        $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->arrayExport($ddl) . ";\n\n//@" . "formatter:on\n";
+
+        file_put_contents($filename, $ddlString);
+    }
+
+
+
+    /**
+     * @param string $filename
+     *
+     * @return array
+     */
+    public function loadFromFile(string $filename): array
+    {
+        return require_once $filename;
     }
 
 
@@ -568,7 +630,7 @@ class Schema
         } else {
             foreach ($queries as $key => $qs) {
                 if (array_key_exists($key, $this->changements) && $this->changements[$key]) {
-                    $label = $this->changements[$key]['label'];
+                    $label = $this->changements[$key];
                 } else {
                     $label = $key;
                 }

@@ -13,10 +13,6 @@ $validation  = $contrat->getValidation();
 $retourSigne = $contrat->getDateRetourSigne();
 $uploader    = $this->uploader();
 
-$urlEmail = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
-    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()])
-    : null;
-
 $urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
     ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
     : null;
@@ -24,6 +20,11 @@ $urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
 $urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
     ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
     : null;
+
+$urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
+    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()])
+    : null;
+
 
 $urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
     ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
@@ -56,7 +57,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
 ?>
 <div class="contrat panel panel-<?= $panel ?>" id="contrat-<?= $contrat->getId() ?>">
     <div class="panel-heading panel-heading-h3">
-        <?php if ($urlExport): ?>
+        <?php if ($urlExport && $urlEmail): ?>
             <span class="pull-right">
                 <?php if($disableEmail): ?>
                     <a class="disabled btn btn-<?= $panel ?>" href="<?= $urlEmail ?>" title="L'intervenant du contrat n'a pas renseigné son email.">

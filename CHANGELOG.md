@@ -1,8 +1,32 @@
-# OSE 13.0 ALPHA
+# OSE 13.0 BETA
+
+## Nouveautés
+
+* Gestion de la durée de vie des pièces justificatives :
+  * La notion de "premier recrutement" disparait au profit de la durée de vie de la pièce
+  * Vous pouvez maintenant préciser combien d'années est valable une pièce justificative par statut d'intervenant
+  * Une pièce obligatoire mais jamais fournie sera maintenant systématiquement demandée
+  * Une pièce ancienne mais toujours valable sera affichée dans la fiche actuelle de l'intervenant : inutile de se positionner dans l'année de fourniture de la pièce
+  * Une pièce fournie anciennement mais toujours valide pourra être archivée si l'on souhaite en fournir une nouvelle version
+  
+* Vous pouvez maintenant envoyer par mail le contrat de travail généré (privilège "Envoyer le contrat par mail") à donner aux rôles ad hoc pour donner accès à la fonctionnalité)
+ 
+* Vous pouvez maintenant éditer les centres de coûts et les modulateurs directement sur un élément pédagogique particulier.
+ 
+* Reconduction des centres de coûts et des modulateurs de l'offre de formation
+  * une nouvelle interface d'administration vous permet de reporter les modulateurs d'une formation qui ont été positionnés de l'année en cours à l'année suivante
+  * une nouvelle interface d'administration vous permet de reporter les centres de coûts d'une formation qui ont été positionnés de l'année en cours à l'année suivante
 
 ## Correction de bugs
 
 * La page de saisie des services était accessible en écrivant la bonne URL, même si le workflow ne permettait pas d'arriver à cette étape.
+
+## Notes de mise à jour
+
+L'ensemble des tableaux de bord doivent être recalculés.
+Pensez à recalculer les tableaux de bord au moyen de la commande ./bin/ose calcul-tableaux-bord
+
+En ce qui concerne les pièces justificatives, les données demandées uniquement s'il s'agit d'un premier recrutement ont été migrées en données valables 99 ans. A vous de revoir ensuite cette durée de vie si nécessaire.
 
 # OSE 12.2
 

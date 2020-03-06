@@ -1,8 +1,7 @@
 <?php
 
-$bdd    = $oa->getBdd();
-$schema = $bdd->getSchema();
-$schema->setLogger($c);
+$bdd = $oa->getBdd();
+$bdd->setLogger($c);
 
 $fichier = $oa->getOseDir() . 'cache/bdd-update-diff.sql';
 
@@ -23,7 +22,7 @@ foreach ($ref as $ddlClass => $objects) {
 }
 
 /* Mise à jour de la BDD */
-$diff = $schema->diff($ref, $filters);
+$diff = $bdd->diff($ref, $filters);
 $sql  = $diff->toScript();
 file_put_contents($fichier, $sql);
 

@@ -30,13 +30,13 @@ $test        = new \BddAdmin\Bdd(Config::get('bdds', 'test'));
 
 //$dep->getSchema()->alter($bdd->getSchema());
 
-$deployLocal->getSchema()->setLogger($c);
+$deployLocal->setLogger($c);
 
 $filters = [
     \BddAdmin\Ddl\Ddl::MATERIALIZED_VIEW => ['excludes' => ['MV_UNICAEN_STRUCTURE_CODES']],
 ];
 
-$r = $devLocal->getSchema()->getDdl($filters);
+$r = $devLocal->getDdl($filters);
 var_dump($r);
 
 //$deployLocal->getSchema()->alter($test, $filters);

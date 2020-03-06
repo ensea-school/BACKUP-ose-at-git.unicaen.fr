@@ -1,13 +1,13 @@
 <?php
 
 /* Initialisation */
-$schema = $oa->getBdd()->getSchema();
-$schema->setLogger($c);
+$bdd = $oa->getBdd();
+$bdd->setLogger($c);
 
 /* Mise en place du schéma de la BDD */
 $ref = new BddAdmin\Ddl\Ddl();
 $ref->loadFromFile($oa->getOseDir() . 'data/ddl.php');
-$schema->create($ref);
+$bdd->create($ref);
 
 /* Insertion des données */
 $dataGen = new DataGen($oa);

@@ -1,15 +1,17 @@
 <?php
 
+use BddAdmin\Ddl\Ddl;
+
 // Initialisation
-$schema = $oa->getBdd()->getSchema();
-$schema->setLogger($c);
+$bdd = $oa->getBdd();
+$bdd->setLogger($c);
 
 $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
 $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci de patienter ...', $c::COLOR_LIGHT_PURPLE);
 
 
 // Récupération du schéma de référence
-$ref = new \BddAdmin\Ddl\Ddl();
+$ref = new Ddl();
 $ref->loadFromFile($oa->getOseDir() . 'data/ddl.php');
 
 
@@ -23,17 +25,17 @@ foreach ($ref as $ddlClass => $objects) {
 
 
 // Initialisation et lancement de la pré-migration
-$mm = new MigrationManager($oa, $schema);
+$mm = new MigrationManager($oa, $bdd);
 $mm->initTablesDef($ref, $filters);
 $mm->migration('pre');
 
 
 // Mise à jour de la BDD (structures)
-$schema->alter($ref, $filters, true);
+$bdd->alter($ref, $filters, true);
 
 
 // Mise à jour des séquences
-$schema->majSequences($ref);
+$bdd->majSequences($ref);
 
 
 // Mise à jour des données

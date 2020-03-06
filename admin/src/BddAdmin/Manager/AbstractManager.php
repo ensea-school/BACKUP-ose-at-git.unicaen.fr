@@ -52,7 +52,7 @@ abstract class AbstractManager implements ManagerInterface
 
     protected function addQuery(string $sql, string $description = null) // (?string $sql)
     {
-        $this->bdd->getSchema()->queryExec($sql, $description);
+        $this->bdd->queryLogExec($sql, $description);
     }
 
 

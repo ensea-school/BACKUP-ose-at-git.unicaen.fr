@@ -429,7 +429,7 @@ END;';
 
         if (!$column['nullable'] && !$noNotNull) {
             if ($column['default'] === null && $this->isEmpty($table)) {
-                $this->bdd->getSchema()->logError("La colonne $table." . $column['name'] . " n\'a pas pu être déclarée NOT NULL, car des données sont déjà présentes dans la table et aucune valeur par défaut n'a été configurée");
+                $this->bdd->logError("La colonne $table." . $column['name'] . " n\'a pas pu être déclarée NOT NULL, car des données sont déjà présentes dans la table et aucune valeur par défaut n'a été configurée");
             } else {
                 $cp[] = "NOT NULL ENABLE";
             }

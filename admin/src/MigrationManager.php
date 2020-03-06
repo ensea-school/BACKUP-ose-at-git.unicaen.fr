@@ -12,11 +12,6 @@ class MigrationManager
     protected $oseAdmin;
 
     /**
-     * @var \BddAdmin\Schema
-     */
-    protected $schema;
-
-    /**
      * @var array
      */
     protected $tablesDiff = [];
@@ -28,10 +23,9 @@ class MigrationManager
 
 
 
-    public function __construct(OseAdmin $oseAdmin, \BddAdmin\Schema $schema)
+    public function __construct(OseAdmin $oseAdmin)
     {
         $this->oseAdmin = $oseAdmin;
-        $this->schema   = $schema;
     }
 
 
@@ -46,12 +40,9 @@ class MigrationManager
 
 
 
-    /**
-     * @return \BddAdmin\Schema
-     */
-    public function getSchema(): \BddAdmin\Schema
+    public function getBdd(): \BddAdmin\Bdd
     {
-        return $this->schema;
+        return $this->oseAdmin->getBdd();
     }
 
 
@@ -67,7 +58,7 @@ class MigrationManager
         }
 
         /* On ne parse que les tables */
-        $oldRef           = $this->schema->table()->get($filters->get(\BddAdmin\Ddl\Ddl::TABLE));
+        $oldRef           = $this->getBdd()->table()->get($filters->get(\BddAdmin\Ddl\Ddl::TABLE));
         $this->tablesDiff = [];
         if (isset($oldRef) && is_array($oldRef)) {
             foreach ($oldRef as $table => $ddl) {
@@ -199,7 +190,7 @@ class MigrationManager
     protected function tableRealExists($tableName): bool
     {
         $sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME = :tableName";
-        $tn  = $this->getSchema()->getBdd()->select($sql, compact('tableName'), ['fetch' => \BddAdmin\Bdd::FETCH_ONE]);
+        $tn  = $this->getBdd()->select($sql, compact('tableName'), ['fetch' => \BddAdmin\Bdd::FETCH_ONE]);
 
         return isset($tn['TABLE_NAME']) && $tn['TABLE_NAME'] == $tableName;
     }
@@ -209,7 +200,7 @@ class MigrationManager
     public function sauvegarderTable(string $tableName, string $name)
     {
         if ($this->tableRealExists($tableName) && !$this->tableRealExists($name)) {
-            $this->getSchema()->getBdd()->exec("CREATE TABLE $name AS SELECT * FROM $tableName");
+            $this->getBdd()->exec("CREATE TABLE $name AS SELECT * FROM $tableName");
         }
     }
 
@@ -218,7 +209,7 @@ class MigrationManager
     public function supprimerSauvegarde(string $name)
     {
         if ($this->tableRealExists($name)) {
-            $this->getSchema()->getBdd()->exec("DROP TABLE $name");
+            $this->getBdd()->exec("DROP TABLE $name");
         }
     }
 

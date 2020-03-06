@@ -54,7 +54,7 @@ class Table
     public function getDdl(): array
     {
         if (empty($this->ddl)) {
-            $sTable    = $this->getBdd()->getSchema()->table();
+            $sTable    = $this->getBdd()->table();
             $this->ddl = $sTable->get($this->name)[$this->name];
         }
 

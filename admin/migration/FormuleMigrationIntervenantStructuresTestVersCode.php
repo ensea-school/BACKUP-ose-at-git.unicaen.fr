@@ -57,7 +57,7 @@ class FormuleMigrationIntervenantStructuresTestVersCode extends AbstractMigratio
 
     public function apres()
     {
-        $bdd = $this->manager->getSchema()->getBdd();
+        $bdd = $this->manager->getBdd();
 
         $sql  = "
         SELECT 

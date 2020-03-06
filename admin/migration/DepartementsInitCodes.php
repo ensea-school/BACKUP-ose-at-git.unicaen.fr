@@ -19,9 +19,8 @@ class DepartementsInitCodes extends AbstractMigration
 
     public function utile(): bool
     {
-        $oa = $this->manager->getOseAdmin();
-
-        $bdd = $this->manager->getSchema()->getBdd();
+        $oa  = $this->manager->getOseAdmin();
+        $bdd = $this->manager->getBdd();
 
         $sql     = "
         SELECT 
@@ -41,10 +40,11 @@ class DepartementsInitCodes extends AbstractMigration
 
     public function action(string $contexte)
     {
-        $oa = $this->manager->getOseAdmin();
+        $oa  = $this->manager->getOseAdmin();
+        $bdd = $this->manager->getBdd();
 
         $sql = "UPDATE DEPARTEMENT SET CODE = SOURCE_CODE WHERE CODE IS NULL AND SOURCE_ID= :source";
-        $this->manager->getSchema()->getBdd()->exec($sql, ['source' => $oa->getSourceOseId()]);
+        $bdd->exec($sql, ['source' => $oa->getSourceOseId()]);
     }
 
 }

@@ -2,11 +2,11 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlAbstract;
-use BddAdmin\Ddl\DdlPackageInteface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\PackageManagerInteface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlPackage extends DdlAbstract implements DdlPackageInteface
+class PackageManager extends AbstractManager implements PackageManagerInteface
 {
     public function getList(): array
     {

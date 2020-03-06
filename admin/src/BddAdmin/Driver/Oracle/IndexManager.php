@@ -2,11 +2,11 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlAbstract;
-use BddAdmin\Ddl\DdlIndexInterface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\IndexManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlIndex extends DdlAbstract implements DdlIndexInterface
+class IndexManager extends AbstractManager implements IndexManagerInterface
 {
     public function getList(): array
     {

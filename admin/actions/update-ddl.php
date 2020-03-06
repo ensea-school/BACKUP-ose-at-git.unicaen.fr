@@ -23,5 +23,5 @@ $filters = [
 
 $c->begin('Génération du fichier de DDL à partir de la base de données');
 $ddl = $schema->getDdl($filters);
-$schema->saveToFile($ddl, $filename);
+$ddl->saveToFile($filename);
 $c->end('Fichier de DDL ' . $filename . ' Mis à jour');

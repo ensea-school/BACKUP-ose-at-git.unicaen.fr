@@ -3,6 +3,7 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Bdd;
+use BddAdmin\Ddl\Ddl;
 use BddAdmin\Driver\DriverInterface;
 use BddAdmin\Exception\BddCompileException;
 use BddAdmin\Exception\BddException;
@@ -287,16 +288,16 @@ class Driver implements DriverInterface
     public function getDdlClass(string $name): string
     {
         $mapping = [
-            Bdd::DDL_SEQUENCE           => DdlSequence::class,
-            Bdd::DDL_TABLE              => DdlTable::class,
-            Bdd::DDL_PRIMARY_CONSTRAINT => DdlPrimaryConstraint::class,
-            Bdd::DDL_PACKAGE            => DdlPackage::class,
-            Bdd::DDL_VIEW               => DdlView::class,
-            Bdd::DDL_MATERIALIZED_VIEW  => DdlMaterializedView::class,
-            Bdd::DDL_REF_CONSTRAINT     => DdlRefConstraint::class,
-            Bdd::DDL_UNIQUE_CONSTRAINT  => DdlUniqueConstraint::class,
-            Bdd::DDL_TRIGGER            => DdlTrigger::class,
-            Bdd::DDL_INDEX              => DdlIndex::class,
+            Ddl::SEQUENCE           => SequenceManager::class,
+            Ddl::TABLE              => TableManager::class,
+            Ddl::PRIMARY_CONSTRAINT => PrimaryConstraintManager::class,
+            Ddl::PACKAGE            => PackageManager::class,
+            Ddl::VIEW               => ViewManager::class,
+            Ddl::MATERIALIZED_VIEW  => MaterializedViewManager::class,
+            Ddl::REF_CONSTRAINT     => RefConstraintManager::class,
+            Ddl::UNIQUE_CONSTRAINT  => UniqueConstraintManager::class,
+            Ddl::TRIGGER            => TriggerManager::class,
+            Ddl::INDEX              => IndexManager::class,
         ];
         if (!array_key_exists($name, $mapping)) {
             throw new \Exception('La Classe Ddl ' . $name . ' n\'existe pas.');

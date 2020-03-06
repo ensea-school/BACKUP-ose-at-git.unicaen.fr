@@ -1,8 +1,8 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Manager;
 
-interface DdlTableInterface extends DdlInterface
+interface TableManagerInterface extends ManagerInterface
 {
     public function majSequence(array $data);
 

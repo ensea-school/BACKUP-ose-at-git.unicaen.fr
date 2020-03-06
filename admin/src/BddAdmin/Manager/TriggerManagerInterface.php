@@ -1,8 +1,8 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Manager;
 
-interface DdlTriggerInterface extends DdlInterface
+interface TriggerManagerInterface extends ManagerInterface
 {
     /**
      * @param string|array $name

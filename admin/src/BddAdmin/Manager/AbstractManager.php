@@ -1,12 +1,12 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Manager;
 
 use BddAdmin\Bdd;
 use BddAdmin\Event\EventManagerAwareTrait;
 
 
-abstract class DdlAbstract implements DdlInterface
+abstract class AbstractManager implements ManagerInterface
 {
     use EventManagerAwareTrait;
 

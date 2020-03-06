@@ -1,6 +1,6 @@
 <?php
 
-namespace BddAdmin\Ddl\Filter;
+namespace BddAdmin\Ddl;
 
 class DdlFilters implements \Iterator, \ArrayAccess
 {

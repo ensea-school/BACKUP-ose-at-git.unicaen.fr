@@ -2,11 +2,11 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlAbstract;
-use BddAdmin\Ddl\DdlTriggerInterface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\TriggerManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlTrigger extends DdlAbstract implements DdlTriggerInterface
+class TriggerManager extends AbstractManager implements TriggerManagerInterface
 {
     public function getList(): array
     {

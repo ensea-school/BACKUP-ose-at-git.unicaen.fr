@@ -2,11 +2,11 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlAbstract;
-use BddAdmin\Ddl\DdlSequenceInterface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\MaterializedViewManagerInteface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlSequence extends DdlAbstract implements DdlSequenceInterface
+class MaterializedViewManager extends AbstractManager implements MaterializedViewManagerInteface
 {
     public function getList(): array
     {
@@ -16,7 +16,7 @@ class DdlSequence extends DdlAbstract implements DdlSequenceInterface
           FROM ALL_OBJECTS 
           WHERE 
             OWNER = sys_context( 'userenv', 'current_schema' )
-            AND OBJECT_TYPE = 'SEQUENCE' AND GENERATED = 'N'
+            AND OBJECT_TYPE = 'MATERIALIZED VIEW' AND GENERATED = 'N'
           ORDER BY OBJECT_NAME
         ";
         $r    = $this->bdd->select($sql);
@@ -32,15 +32,26 @@ class DdlSequence extends DdlAbstract implements DdlSequenceInterface
     public function get($includes = null, $excludes = null): array
     {
         $filter = DdlFilter::normalize2($includes, $excludes);
-        [$f, $p] = $filter->toSql('sequence_name');
+        [$f, $p] = $filter->toSql('mview_name');
         $data = [];
 
-        $qr = $this->bdd->select('
-          SELECT sequence_name "name" FROM all_sequences 
-          WHERE SEQUENCE_OWNER = sys_context( \'userenv\', \'current_schema\' ) 
-        ' . $f, $p);
-        foreach ($qr as $r) {
-            $data[$r['name']] = $r;
+        $q = "SELECT
+            mview_name \"name\",
+            query \"definition\"
+          FROM
+            ALL_MVIEWS
+          WHERE
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            $f
+          ORDER BY
+            mview_name
+        ";
+        $p = $this->bdd->select($q, $p);
+        foreach ($p as $r) {
+            $data[$r['name']] = [
+                'name'       => $r['name'],
+                'definition' => $this->purger($r['definition'], true),
+            ];
         }
 
         return $data;
@@ -52,9 +63,9 @@ class DdlSequence extends DdlAbstract implements DdlSequenceInterface
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-
-        $sql = "CREATE SEQUENCE " . $data['name'] . " INCREMENT BY 1 MINVALUE 1 NOCACHE";
-        $this->addQuery($sql, 'Ajout de la séquence ' . $data['name']);
+        $sql = 'CREATE MATERIALIZED VIEW ' . $data['name'] . " AS\n";
+        $sql .= $data['definition'];
+        $this->addQuery($sql, 'Ajout de la vue matérialisée ' . $data['name']);
     }
 
 
@@ -65,17 +76,16 @@ class DdlSequence extends DdlAbstract implements DdlSequenceInterface
 
         if (is_array($name)) $name = $name['name'];
 
-        $sql = "DROP SEQUENCE $name";
-        $this->addQuery($sql, 'Suppression de la séquence ' . $name);
+        $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée ' . $name);
     }
 
 
 
     public function alter(array $old, array $new)
     {
-        if ($old != $new) {
-            if ($this->sendEvent()->getReturn('no-exec')) return;
+        if ($this->sendEvent()->getReturn('no-exec')) return;
 
+        if ($old != $new) {
             $this->drop($old['name']);
             $this->create($new);
         }
@@ -90,15 +100,4 @@ class DdlSequence extends DdlAbstract implements DdlSequenceInterface
         $this->drop($oldName);
         $this->create($new);
     }
-
-
-
-    /**
-     * @inheritDoc
-     */
-    public function prepareRenameCompare(array $data): array
-    {
-        return $data;
-    }
-
 }

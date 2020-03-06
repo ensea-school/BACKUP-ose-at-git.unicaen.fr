@@ -3,9 +3,9 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Bdd;
-use BddAdmin\Ddl\DdlAbstract;
+use BddAdmin\Manager\AbstractManager;
 
-abstract class AbstractDdlConstraint extends DdlAbstract
+abstract class AbstractManagerDdlConstraint extends AbstractManager
 {
     protected $description = '';
 

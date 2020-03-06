@@ -1,11 +1,11 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Manager;
 
 use BddAdmin\Bdd;
 
 
-interface DdlInterface
+interface ManagerInterface
 {
     /**
      * DdlAbstract constructor.

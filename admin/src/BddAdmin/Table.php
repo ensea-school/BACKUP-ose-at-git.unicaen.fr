@@ -3,7 +3,7 @@
 namespace BddAdmin;
 
 
-use BddAdmin\Ddl\DdlTable;
+use BddAdmin\Manager\DdlTable;
 
 class Table
 {

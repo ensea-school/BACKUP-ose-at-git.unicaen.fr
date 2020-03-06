@@ -2,12 +2,12 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlUniqueConstraintInterface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\PrimaryConstraintManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueConstraintInterface
+class PrimaryConstraintManager extends AbstractManagerDdlConstraint implements PrimaryConstraintManagerInterface
 {
-    protected $description = 'contrainte d\'unicité';
+    protected $description = 'clé primaire';
 
 
 
@@ -18,7 +18,7 @@ class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueCons
           SELECT CONSTRAINT_NAME
           FROM ALL_CONSTRAINTS 
           WHERE OWNER = sys_context( 'userenv', 'current_schema' ) 
-            AND CONSTRAINT_TYPE = 'U'
+            AND CONSTRAINT_TYPE = 'P'
           AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%'
           ORDER BY CONSTRAINT_NAME
         ";
@@ -49,8 +49,8 @@ class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueCons
           JOIN all_cons_columns cc ON cc.constraint_name = c.constraint_name
         WHERE
           c.owner = sys_context( 'userenv', 'current_schema' )
-          AND c.constraint_type = 'U'
-          AND c.constraint_name NOT LIKE 'BIN$%' $f
+          AND c.constraint_type = 'P'
+          AND c.constraint_name NOT LIKE 'BIN$" . "%' $f
         ORDER BY
           c.constraint_name,
           cc.position";
@@ -76,7 +76,7 @@ class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueCons
     public function makeCreate(array $data)
     {
         $cols = implode(', ', $data['columns']);
-        $sql  = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " UNIQUE ($cols) ";
+        $sql  = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " PRIMARY KEY ($cols) ";
         if ($data['index']) {
             if ($this->indexExists($data['index'])) {
                 $sql .= 'USING INDEX ' . $data['index'] . ' ';
@@ -131,7 +131,7 @@ class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueCons
 
 
 
-    /***
+    /**
      * @param string|array $name
      */
     public function enable($name)
@@ -143,7 +143,7 @@ class DdlUniqueConstraint extends AbstractDdlConstraint implements DdlUniqueCons
 
 
 
-    /***
+    /**
      * @param string|array $name
      */
     public function disable($name)

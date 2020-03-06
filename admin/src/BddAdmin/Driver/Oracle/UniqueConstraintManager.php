@@ -2,12 +2,12 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlRefConstraintInterface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\UniqueConstraintManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraintInterface
+class UniqueConstraintManager extends AbstractManagerDdlConstraint implements UniqueConstraintManagerInterface
 {
-    protected $description = 'clé étrangère';
+    protected $description = 'contrainte d\'unicité';
 
 
 
@@ -18,7 +18,7 @@ class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraint
           SELECT CONSTRAINT_NAME
           FROM ALL_CONSTRAINTS 
           WHERE OWNER = sys_context( 'userenv', 'current_schema' ) 
-            AND CONSTRAINT_TYPE = 'R'
+            AND CONSTRAINT_TYPE = 'U'
           AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%'
           ORDER BY CONSTRAINT_NAME
         ";
@@ -42,19 +42,15 @@ class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraint
         $sql = "SELECT
           c.constraint_name \"name\",
           c.table_name \"table\",
-          cc.column_name \"column\",
-          rc.table_name \"rtable\",
-          rcc.column_name \"rcolumn\",
-          c.delete_rule \"delete_rule\",
-          c.index_name \"index\"
+          c.index_name \"index\",
+          cc.column_name \"column\"
         FROM
           all_constraints c
-          JOIN all_constraints rc ON rc.constraint_name = c.r_constraint_name AND rc.constraint_type = 'P'
           JOIN all_cons_columns cc ON cc.constraint_name = c.constraint_name
-          JOIN all_cons_columns rcc ON rcc.constraint_name = rc.constraint_name AND rcc.position = cc.position
         WHERE
-          c.OWNER = sys_context( 'userenv', 'current_schema' )
-          AND c.constraint_type = 'R' $f
+          c.owner = sys_context( 'userenv', 'current_schema' )
+          AND c.constraint_type = 'U'
+          AND c.constraint_name NOT LIKE 'BIN$%' $f
         ORDER BY
           c.constraint_name,
           cc.position";
@@ -63,15 +59,13 @@ class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraint
         foreach ($rs as $r) {
             if (!isset($data[$r['name']])) {
                 $data[$r['name']] = [
-                    'name'        => $r['name'],
-                    'table'       => $r['table'],
-                    'rtable'      => $r['rtable'],
-                    'delete_rule' => ($r['delete_rule'] != 'NO ACTION') ? $r['delete_rule'] : null,
-                    'index'       => $r['index'],
-                    'columns'     => [],
+                    'name'    => $r['name'],
+                    'table'   => $r['table'],
+                    'index'   => $r['index'],
+                    'columns' => [],
                 ];
             }
-            $data[$r['name']]['columns'][$r['column']] = $r['rcolumn'];
+            $data[$r['name']]['columns'][] = $r['column'];
         }
 
         return $data;
@@ -81,11 +75,8 @@ class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraint
 
     public function makeCreate(array $data)
     {
-        $cols  = implode(', ', array_keys($data['columns']));
-        $rCols = implode(', ', array_values($data['columns']));
-
-        $sql = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " FOREIGN KEY ($cols) 
-        REFERENCES " . $data['rtable'] . " ($rCols) ";
+        $cols = implode(', ', $data['columns']);
+        $sql  = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " UNIQUE ($cols) ";
         if ($data['index']) {
             if ($this->indexExists($data['index'])) {
                 $sql .= 'USING INDEX ' . $data['index'] . ' ';
@@ -95,7 +86,6 @@ class DdlRefConstraint extends AbstractDdlConstraint implements DdlRefConstraint
                 $sql .= "\n) ";
             }
         }
-        if ($data['delete_rule']) $sql .= 'ON DELETE ' . $data['delete_rule'] . ' ';
         $sql .= "ENABLE";
 
         return $sql;

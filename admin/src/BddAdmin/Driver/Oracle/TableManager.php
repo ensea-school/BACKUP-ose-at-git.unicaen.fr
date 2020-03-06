@@ -3,12 +3,12 @@
 namespace BddAdmin\Driver\Oracle;
 
 use BddAdmin\Bdd;
-use BddAdmin\Ddl\DdlAbstract;
-use BddAdmin\Ddl\DdlTableInterface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\TableManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 use BddAdmin\Exception\BddException;
 
-class DdlTable extends DdlAbstract implements DdlTableInterface
+class TableManager extends AbstractManager implements TableManagerInterface
 {
     /**
      * @param string|null $commentaire

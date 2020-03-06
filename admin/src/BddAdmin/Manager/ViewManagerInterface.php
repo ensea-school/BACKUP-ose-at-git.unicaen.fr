@@ -1,8 +1,8 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Manager;
 
-interface DdlViewInterface extends DdlInterface
+interface ViewManagerInterface extends ManagerInterface
 {
     /**
      * @param string|array $name

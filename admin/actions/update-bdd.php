@@ -9,7 +9,8 @@ $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci 
 
 
 // Récupération du schéma de référence
-$ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
+$ref = new \BddAdmin\Ddl\Ddl();
+$ref->loadFromFile($oa->getOseDir() . 'data/ddl.php');
 
 
 // Construction de la config de DDL pour filtrer

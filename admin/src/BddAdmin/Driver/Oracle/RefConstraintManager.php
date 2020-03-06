@@ -2,12 +2,12 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlPrimaryConstraintInterface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\RefConstraintManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryConstraintInterface
+class RefConstraintManager extends AbstractManagerDdlConstraint implements RefConstraintManagerInterface
 {
-    protected $description = 'clé primaire';
+    protected $description = 'clé étrangère';
 
 
 
@@ -18,7 +18,7 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
           SELECT CONSTRAINT_NAME
           FROM ALL_CONSTRAINTS 
           WHERE OWNER = sys_context( 'userenv', 'current_schema' ) 
-            AND CONSTRAINT_TYPE = 'P'
+            AND CONSTRAINT_TYPE = 'R'
           AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%'
           ORDER BY CONSTRAINT_NAME
         ";
@@ -42,15 +42,19 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
         $sql = "SELECT
           c.constraint_name \"name\",
           c.table_name \"table\",
-          c.index_name \"index\",
-          cc.column_name \"column\"
+          cc.column_name \"column\",
+          rc.table_name \"rtable\",
+          rcc.column_name \"rcolumn\",
+          c.delete_rule \"delete_rule\",
+          c.index_name \"index\"
         FROM
           all_constraints c
+          JOIN all_constraints rc ON rc.constraint_name = c.r_constraint_name AND rc.constraint_type = 'P'
           JOIN all_cons_columns cc ON cc.constraint_name = c.constraint_name
+          JOIN all_cons_columns rcc ON rcc.constraint_name = rc.constraint_name AND rcc.position = cc.position
         WHERE
-          c.owner = sys_context( 'userenv', 'current_schema' )
-          AND c.constraint_type = 'P'
-          AND c.constraint_name NOT LIKE 'BIN$" . "%' $f
+          c.OWNER = sys_context( 'userenv', 'current_schema' )
+          AND c.constraint_type = 'R' $f
         ORDER BY
           c.constraint_name,
           cc.position";
@@ -59,13 +63,15 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
         foreach ($rs as $r) {
             if (!isset($data[$r['name']])) {
                 $data[$r['name']] = [
-                    'name'    => $r['name'],
-                    'table'   => $r['table'],
-                    'index'   => $r['index'],
-                    'columns' => [],
+                    'name'        => $r['name'],
+                    'table'       => $r['table'],
+                    'rtable'      => $r['rtable'],
+                    'delete_rule' => ($r['delete_rule'] != 'NO ACTION') ? $r['delete_rule'] : null,
+                    'index'       => $r['index'],
+                    'columns'     => [],
                 ];
             }
-            $data[$r['name']]['columns'][] = $r['column'];
+            $data[$r['name']]['columns'][$r['column']] = $r['rcolumn'];
         }
 
         return $data;
@@ -75,8 +81,11 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
 
     public function makeCreate(array $data)
     {
-        $cols = implode(', ', $data['columns']);
-        $sql  = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " PRIMARY KEY ($cols) ";
+        $cols  = implode(', ', array_keys($data['columns']));
+        $rCols = implode(', ', array_values($data['columns']));
+
+        $sql = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " FOREIGN KEY ($cols) 
+        REFERENCES " . $data['rtable'] . " ($rCols) ";
         if ($data['index']) {
             if ($this->indexExists($data['index'])) {
                 $sql .= 'USING INDEX ' . $data['index'] . ' ';
@@ -86,6 +95,7 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
                 $sql .= "\n) ";
             }
         }
+        if ($data['delete_rule']) $sql .= 'ON DELETE ' . $data['delete_rule'] . ' ';
         $sql .= "ENABLE";
 
         return $sql;
@@ -131,7 +141,7 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
 
 
 
-    /**
+    /***
      * @param string|array $name
      */
     public function enable($name)
@@ -143,7 +153,7 @@ class DdlPrimaryConstraint extends AbstractDdlConstraint implements DdlPrimaryCo
 
 
 
-    /**
+    /***
      * @param string|array $name
      */
     public function disable($name)

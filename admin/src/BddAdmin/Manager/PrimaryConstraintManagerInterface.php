@@ -1,8 +1,8 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Manager;
 
-interface DdlPrimaryConstraintInterface extends DdlInterface
+interface PrimaryConstraintManagerInterface extends ManagerInterface
 {
     /**
      * @param string|array $name

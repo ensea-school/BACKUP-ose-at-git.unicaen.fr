@@ -5,7 +5,8 @@ $schema = $oa->getBdd()->getSchema();
 $schema->setLogger($c);
 
 /* Mise en place du schéma de la BDD */
-$ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
+$ref = new BddAdmin\Ddl\Ddl();
+$ref->loadFromFile($oa->getOseDir() . 'data/ddl.php');
 $schema->create($ref);
 
 /* Insertion des données */

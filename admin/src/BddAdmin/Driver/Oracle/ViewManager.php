@@ -2,11 +2,12 @@
 
 namespace BddAdmin\Driver\Oracle;
 
-use BddAdmin\Ddl\DdlAbstract;
-use BddAdmin\Ddl\DdlMaterializedViewInteface;
-use BddAdmin\Ddl\Filter\DdlFilter;
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\DdlCompilationInterface;
+use BddAdmin\Manager\ViewManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInteface
+class ViewManager extends AbstractManager implements ViewManagerInterface
 {
     public function getList(): array
     {
@@ -16,7 +17,7 @@ class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInte
           FROM ALL_OBJECTS 
           WHERE 
             OWNER = sys_context( 'userenv', 'current_schema' )
-            AND OBJECT_TYPE = 'MATERIALIZED VIEW' AND GENERATED = 'N'
+            AND OBJECT_TYPE = 'VIEW' AND GENERATED = 'N'
           ORDER BY OBJECT_NAME
         ";
         $r    = $this->bdd->select($sql);
@@ -32,22 +33,23 @@ class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInte
     public function get($includes = null, $excludes = null): array
     {
         $filter = DdlFilter::normalize2($includes, $excludes);
-        [$f, $p] = $filter->toSql('mview_name');
+        [$f, $p] = $filter->toSql('view_name');
         $data = [];
 
         $q = "SELECT
-            mview_name \"name\",
-            query \"definition\"
+            view_name \"name\",
+            text \"definition\"
           FROM
-            ALL_MVIEWS
+            ALL_VIEWS
           WHERE
             OWNER = sys_context( 'userenv', 'current_schema' )
             $f
           ORDER BY
-            mview_name
+            view_name
         ";
         $p = $this->bdd->select($q, $p);
         foreach ($p as $r) {
+            $r['definition']  = 'CREATE OR REPLACE FORCE VIEW ' . $r['name'] . " AS\n" . $r['definition'];
             $data[$r['name']] = [
                 'name'       => $r['name'],
                 'definition' => $this->purger($r['definition'], true),
@@ -59,13 +61,11 @@ class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInte
 
 
 
-    public function create(array $data)
+    public function create(array $data, $test = null)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
-        $sql = 'CREATE MATERIALIZED VIEW ' . $data['name'] . " AS\n";
-        $sql .= $data['definition'];
-        $this->addQuery($sql, 'Ajout de la vue matérialisée ' . $data['name']);
+        $this->addQuery($data['definition'], 'Ajout/modification de la vue ' . $data['name']);
     }
 
 
@@ -76,17 +76,16 @@ class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInte
 
         if (is_array($name)) $name = $name['name'];
 
-        $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée ' . $name);
+        $this->addQuery("DROP VIEW " . $name, 'Suppression de la vue ' . $name);
     }
 
 
 
     public function alter(array $old, array $new)
     {
-        if ($this->sendEvent()->getReturn('no-exec')) return;
-
         if ($old != $new) {
-            $this->drop($old['name']);
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $this->create($new);
         }
     }
@@ -99,5 +98,31 @@ class DdlMaterializedView extends DdlAbstract implements DdlMaterializedViewInte
 
         $this->drop($oldName);
         $this->create($new);
+    }
+
+
+
+    /**
+     * @param string|array $name
+     *
+     * @return mixed
+     */
+    public function compiler($name)
+    {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
+
+        $this->addQuery("ALTER VIEW $name COMPILE", 'Compilation de la vue ' . $name);
+    }
+
+
+
+    public function compilerTout()
+    {
+        $objects = $this->getList();
+        foreach ($objects as $object) {
+            $this->compiler($object);
+        }
     }
 }

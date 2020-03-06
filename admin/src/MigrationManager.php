@@ -58,16 +58,16 @@ class MigrationManager
 
     public function initTablesDef(array $ref, $filters = [])
     {
-        $filters = \BddAdmin\Ddl\Filter\DdlFilters::normalize($filters);
+        $filters = \BddAdmin\Ddl\DdlFilters::normalize($filters);
 
-        if (array_key_exists(\BddAdmin\Bdd::DDL_TABLE, $ref)) {
-            $ref = $ref[\BddAdmin\Bdd::DDL_TABLE];
+        if (array_key_exists(\BddAdmin\Ddl\Ddl::TABLE, $ref)) {
+            $ref = $ref[\BddAdmin\Ddl\Ddl::TABLE];
         } else {
             $ref = [];
         }
 
         /* On ne parse que les tables */
-        $oldRef           = $this->schema->table()->get($filters->get(\BddAdmin\Bdd::DDL_TABLE));
+        $oldRef           = $this->schema->table()->get($filters->get(\BddAdmin\Ddl\Ddl::TABLE));
         $this->tablesDiff = [];
         if (isset($oldRef) && is_array($oldRef)) {
             foreach ($oldRef as $table => $ddl) {

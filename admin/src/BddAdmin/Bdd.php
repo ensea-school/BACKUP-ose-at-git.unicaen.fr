@@ -14,17 +14,6 @@ class Bdd
     const FETCH_EACH = 16;
     const FETCH_ONE  = 8;
 
-    const DDL_TABLE              = 'table';
-    const DDL_VIEW               = 'view';
-    const DDL_SEQUENCE           = 'sequence';
-    const DDL_MATERIALIZED_VIEW  = 'materialized-view';
-    const DDL_PRIMARY_CONSTRAINT = 'primary-constraint';
-    const DDL_PACKAGE            = 'package';
-    const DDL_REF_CONSTRAINT     = 'ref-constraint';
-    const DDL_INDEX              = 'index';
-    const DDL_UNIQUE_CONSTRAINT  = 'unique-constraint';
-    const DDL_TRIGGER            = 'trigger';
-
     const TYPE_INT    = 'int';
     const TYPE_BOOL   = 'bool';
     const TYPE_FLOAT  = 'float';

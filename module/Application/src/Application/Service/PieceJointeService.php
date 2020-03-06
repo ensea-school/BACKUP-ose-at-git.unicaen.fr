@@ -150,9 +150,9 @@ class PieceJointeService extends AbstractEntityService
         AND 
             pjf.annee <= :annee
         AND 
-            (pjf.dateArchive IS NULL OR pjf.dateArchive > :annee)    
-          
-        ";
+            (pjf.dateArchive IS NULL OR pjf.dateArchive > :annee)  
+        ORDER BY pjf.annee DESC";
+
         $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
             'intervenant' => $intervenant->getCode(),
             'annee'       => $intervenant->getAnnee()->getId(),
@@ -164,7 +164,11 @@ class PieceJointeService extends AbstractEntityService
         foreach ($lpjf as $pjf) {
             $pj                              = $pjf->getPieceJointe();
             $pj->annee = $pjf->getAnnee();
-            $result[$pj->getType()->getId()] = $pj;
+            //Gérer les cas où plusieurs PJ sont éligible mais sans date d'archive, on prend la première uniquement.
+            if(!array_key_exists($pj->getType()->getId(), $result))
+            {
+                $result[$pj->getType()->getId()] = $pj;
+            }
         }
 
         return $result;

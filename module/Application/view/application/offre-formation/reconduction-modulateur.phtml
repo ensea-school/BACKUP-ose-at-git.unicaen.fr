@@ -1,5 +1,5 @@
 <?php
-$this->headScript()->offsetSetFile(100, $this->getView()->basePath('/js/reconduction-modulateur.js'));
+$this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-modulateur.js'));
 ?>
 
 <div class="row" id="reconduction-filters">
@@ -64,7 +64,9 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
                 <th>Code</th>
                 <th>Libellé</th>
-                <th>Nombre de  <abbr title="Le comptage se fait uniquement sur les éléments pédagogiques n'ayant pas encore de modulateur pour l'année prochaine">modulateur(s) à reconduire</abbr></th>
+                <th>Nombre de <abbr
+                            title="Le comptage se fait uniquement sur les éléments pédagogiques n'ayant pas encore de modulateur pour l'année prochaine">modulateur(s)
+                        à reconduire</abbr></th>
 
             </tr>
 
@@ -73,7 +75,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <?php foreach ($etapesReconduites as $er): ?>
                 <tr>
                     <td>
-                       <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE']; ?>">
+                        <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE']; ?>">
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>

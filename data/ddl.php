@@ -30637,7 +30637,7 @@ END UNICAEN_TBL;',
       SELECT
         tv.*
       FROM
-        (SELECT 
+        (SELECT
             annee_id,
             type_piece_jointe_id,
             intervenant_id,
@@ -30658,7 +30658,7 @@ END UNICAEN_TBL;',
             COALESCE(pjd.heures_pour_seuil,0)                                   heures_pour_seuil,
             COALESCE(pjd.obligatoire,1)                                         obligatoire,
             pjf.date_archive                                                    date_archive,
-            rank() over (partition by pjd.annee_id order by pjf.annee_id DESC)  rank1
+            rank() over (partition by pjd.annee_id, pjd.code_intervenant, pjd.type_piece_jointe_id order by pjf.annee_id DESC)  rank1
           FROM
             tbl_piece_jointe_demande pjd
             FULL JOIN (
@@ -30883,7 +30883,7 @@ END UNICAEN_TBL;',
       SELECT
         tv.*
       FROM
-        (SELECT DISTINCT
+        (SELECT
           i.annee_id,
           i.code code_intervenant,
           pj.type_piece_jointe_id,
@@ -30892,7 +30892,7 @@ END UNICAEN_TBL;',
           v.id validation_id,
           f.id fichier_id,
           MIN(tpjs.duree_vie) duree_vie,
-          MAX(i.annee_id+duree_vie) date_validite,
+          MIN(i.annee_id+tpjs.duree_vie) date_validite,
           pj.date_archive date_archive
         FROM
                     piece_jointe          pj
@@ -30933,8 +30933,8 @@ END UNICAEN_TBL;',
       PIECE_JOINTE_ID      = v.PIECE_JOINTE_ID,
       DATE_ARCHIVE         = v.DATE_ARCHIVE,
       DATE_VALIDITE        = v.DATE_VALIDITE,
-      CODE_INTERVENANT     = v.CODE_INTERVENANT,
       DUREE_VIE            = v.DUREE_VIE,
+      CODE_INTERVENANT     = v.CODE_INTERVENANT,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -30948,8 +30948,8 @@ END UNICAEN_TBL;',
       PIECE_JOINTE_ID,
       DATE_ARCHIVE,
       DATE_VALIDITE,
-      CODE_INTERVENANT,
       DUREE_VIE,
+      CODE_INTERVENANT,
       TO_DELETE
 
     ) VALUES (
@@ -30963,8 +30963,8 @@ END UNICAEN_TBL;',
       v.PIECE_JOINTE_ID,
       v.DATE_ARCHIVE,
       v.DATE_VALIDITE,
-      v.CODE_INTERVENANT,
       v.DUREE_VIE,
+      v.CODE_INTERVENANT,
       0
 
     );
@@ -36423,7 +36423,7 @@ FROM
     array (
       'name' => 'V_TBL_PIECE_JOINTE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
-SELECT 
+SELECT
     annee_id,
     type_piece_jointe_id,
     intervenant_id,
@@ -36444,7 +36444,7 @@ FROM (
     COALESCE(pjd.heures_pour_seuil,0)                                   heures_pour_seuil,
     COALESCE(pjd.obligatoire,1)                                         obligatoire,
     pjf.date_archive                                                    date_archive,
-    rank() over (partition by pjd.annee_id order by pjf.annee_id DESC)  rank1
+    rank() over (partition by pjd.annee_id, pjd.code_intervenant, pjd.type_piece_jointe_id order by pjf.annee_id DESC)  rank1
   FROM
     tbl_piece_jointe_demande pjd
     FULL JOIN (
@@ -36547,7 +36547,7 @@ i.code,
     array (
       'name' => 'V_TBL_PIECE_JOINTE_FOURNIE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_FOURNIE AS
-SELECT DISTINCT
+SELECT
   i.annee_id,
   i.code code_intervenant,
   pj.type_piece_jointe_id,
@@ -36556,7 +36556,7 @@ SELECT DISTINCT
   v.id validation_id,
   f.id fichier_id,
   MIN(tpjs.duree_vie) duree_vie,
-  MAX(i.annee_id+duree_vie) date_validite,
+  MIN(i.annee_id+tpjs.duree_vie) date_validite,
   pj.date_archive date_archive
 FROM
             piece_jointe          pj

@@ -15,12 +15,13 @@ class TableManager extends AbstractManager implements TableManagerInterface
      *
      * @return array
      */
-    private function interpreterCommentaire($commentaire): array // (?string $commentaire): array
+    private function interpreterCommentaire($commentaire): array
     {
         $data = [];
         if ($commentaire) {
             $keys = [
                 'sequence',
+                'columns-order',
             ];
 
             $commentaire = strtoupper($commentaire);
@@ -95,7 +96,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
             AND m.mview_name IS NULL 
             $f
           ORDER BY
-            t.table_name, c.column_id
+            t.table_name, c.column_name
         ";
         $p = $this->bdd->select($q, $p);
         foreach ($p as $paq) {
@@ -176,6 +177,23 @@ class TableManager extends AbstractManager implements TableManagerInterface
         $sql .= "TABLE \"" . $data['name'] . "\"\n   (\t";
 
         $cols = [];
+        if (array_key_exists('columns-order', $data)) {
+            $ordering = explode(',', $data['columns-order']);
+            var_dump($ordering);
+            $cols            = $data['columns'];
+            $data['columns'] = [];
+            foreach ($ordering as $col) {
+                $col = strtoupper(trim($col));
+                if (isset($cols[$col])) {
+                    $data['columns'][$col] = $cols[$col];
+                    unset($cols[$col]);
+                }
+            }
+            foreach ($cols as $k => $c) {
+                $data['columns'][$k] = $c;
+            }
+        }
+
         foreach ($data['columns'] as $column) {
             $cp = ['"' . $column['name'] . '"', $this->makeColumnType($column)];
             if ($column['default'] !== null) {

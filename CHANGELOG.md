@@ -1,4 +1,4 @@
-# OSE 13.0 BETA
+# OSE 13.0
 
 ## Nouveautés
 

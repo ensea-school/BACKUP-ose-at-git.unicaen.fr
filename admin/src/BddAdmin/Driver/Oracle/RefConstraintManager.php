@@ -162,4 +162,48 @@ class RefConstraintManager extends AbstractManagerDdlConstraint implements RefCo
 
         parent::disable($name);
     }
+
+
+
+    /**
+     * @return RefConstraintManagerInterface
+     */
+    public function enableAll(): RefConstraintManagerInterface
+    {
+        $this->bdd->logBegin("Activation de toutes les clés étrangères");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Contrainte " . $d['name'], true);
+            try {
+                $this->enable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Toutes les clés étrangères ont été activées');
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return RefConstraintManagerInterface
+     */
+    public function disableAll(): RefConstraintManagerInterface
+    {
+        $this->bdd->logBegin("Désactivation de toutes les clés étrangères");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Contrainte " . $d['name'], true);
+            try {
+                $this->disable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Toutes les clés étrangères ont été désactivées');
+
+        return $this;
+    }
 }

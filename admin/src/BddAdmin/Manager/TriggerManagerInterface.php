@@ -19,6 +19,20 @@ interface TriggerManagerInterface extends ManagerInterface
 
 
     /**
+     * @return TriggerManagerInterface
+     */
+    public function enableAll(): TriggerManagerInterface;
+
+
+
+    /**
+     * @return TriggerManagerInterface
+     */
+    public function disableAll(): TriggerManagerInterface;
+
+
+
+    /**
      * @param string|array $name
      *
      * @return mixed

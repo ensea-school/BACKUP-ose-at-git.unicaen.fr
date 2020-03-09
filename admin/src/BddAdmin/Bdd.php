@@ -130,6 +130,11 @@ class Bdd
      */
     protected $queries = [];
 
+    /**
+     * @var bool
+     */
+    protected $inCopy = false;
+
 
 
     /**
@@ -234,45 +239,11 @@ class Bdd
 
 
     /**
-     * @param string $filename
-     *
-     * @return \Exception[]
-     * @throws BddCompileException
-     * @throws BddException
-     * @throws BddIndexExistsException
-     */
-    public function execFile(string $filename): array
-    {
-        if (!file_exists($filename)) {
-            throw new Exception('Le fichier ' . $filename . ' n \'existe pas.');
-        }
-
-        $file    = file_get_contents($filename);
-        $queries = explode("/--", $file);
-        $errors  = [];
-        foreach ($queries as $q) {
-            $q = trim($q);
-            if (substr($q, -1) == ';') {
-                $q = substr($q, 0, -1);
-            }
-            try {
-                $this->exec($q);
-            } catch (\Exception $e) {
-                $errors[] = $e;
-            }
-        }
-
-        return $errors;
-    }
-
-
-
-    /**
      * @param string $sql
      * @param array  $params
      * @param array  $options
      *
-     * @return resource
+     * @return array|null|SelectParser
      * @throws BddCompileException
      * @throws BddException
      * @throws BddIndexExistsException
@@ -296,13 +267,6 @@ class Bdd
         $table = new Table($this, $name);
 
         return $table;
-    }
-
-
-
-    public function fetch($statement, array $options = [])
-    {
-        return $this->driver->fetch($statement, $options);
     }
 
 
@@ -516,13 +480,15 @@ class Bdd
     /**
      * @param Bdd|Ddl|array| $ddl
      */
-    public function create($ddl)
+    public function create($ddl, $filters = [])
     {
         $this->logBegin('Mise en place de la base de données');
+        $filters = DdlFilters::normalize($filters);
         if ($ddl instanceof self) {
-            $ddl = $this->getDdl();
+            $ddl = $this->getDdl($filters);
         } else {
             $ddl = Ddl::normalize($ddl);
+            $ddl->filter($filters);
         }
 
         foreach ($this->changements as $changement => $label) {
@@ -691,12 +657,17 @@ class Bdd
     /**
      * @param Bdd|Ddl|array $ddl
      */
-    public function majSequences($ddl)
+    public function majSequences($ddl = null)
     {
-        $ddl = Ddl::normalize($ddl);
+        if (!$ddl) {
+            $ddl = $this->table()->get();
+        } else {
+            $ddl = Ddl::normalize($ddl)->get(Ddl::TABLE);
+            if (!$ddl) $ddl = [];
+        }
 
         $this->logBegin("Mise à jour de toutes les séquences");
-        foreach ($ddl[Ddl::TABLE] as $tdata) {
+        foreach ($ddl as $tdata) {
             try {
                 $this->logMsg("Séquence " . $tdata['sequence'] . " ...", true);
                 $this->table()->majSequence($tdata);
@@ -739,4 +710,75 @@ class Bdd
         return $errors;
     }
 
+
+
+    /**
+     * @return bool
+     */
+    public function isInCopy(): bool
+    {
+        return $this->inCopy;
+    }
+
+
+
+    public function copy(Bdd $destination, callable $fnc = null): self
+    {
+        if ($this->getLogger() && !$destination->getLogger()) {
+            $destination->setLogger($this->getLogger());
+        }
+
+        $this->inCopy = true;
+
+        $this->logBegin("Copie de données entre deux bases");
+
+        $destination->uniqueConstraint()->disableAll();
+        $destination->refConstraint()->disableAll();
+        $destination->primaryConstraint()->disableAll();
+        $destination->trigger()->disableAll();
+
+
+        $this->logMsg('');
+
+        //$tables = $this->table()->getList();
+        $tables = ['ANNEE', 'ETAPE', 'DOSSIER', 'FICHIER'];
+        sort($tables);
+
+        foreach ($tables as $table) {
+            $this->getTable($table)->copy($destination, $fnc);
+        }
+
+        $this->logMsg('');
+
+        $destination->trigger()->enableAll();
+        $destination->primaryConstraint()->enableAll();
+        $destination->refConstraint()->enableAll();
+        $destination->uniqueConstraint()->enableAll();
+
+        $this->logEnd("Copie terminée");
+
+        $this->inCopy = false;
+
+        return $this;
+    }
+
+
+
+    public function cloner(Bdd $destination): self
+    {
+        $this->logBegin("Clonage de bases de données");
+
+        $destination->drop();
+
+        $filters = ['explicit' => true, Ddl::TABLE => ['includes' => '%']];
+        $destination->create($this, $filters);
+//        $this->copy($destination);
+
+        $filters = [Ddl::TABLE => ['excludes' => '%']];
+//        $destination->create($this, $filters);
+
+        $this->logEnd();
+
+        return $this;
+    }
 }

@@ -287,6 +287,7 @@ class OseAdmin
                     . "\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
             }
             $this->bdd = new \BddAdmin\Bdd(Config::getBdd());
+            $this->bdd->setLogger($this->console);
         }
 
         return $this->bdd;

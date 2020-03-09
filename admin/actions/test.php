@@ -28,18 +28,14 @@ $devLocal    = new \BddAdmin\Bdd(Config::get('bdds', 'dev-local'));
 $deployLocal = new \BddAdmin\Bdd(Config::get('bdds', 'deploy-local'));
 $test        = new \BddAdmin\Bdd(Config::get('bdds', 'test'));
 
-//$dep->getSchema()->alter($bdd->getSchema());
-
+$devLocal->setLogger($c);
 $deployLocal->setLogger($c);
 
-$filters = [
-    \BddAdmin\Ddl\Ddl::MATERIALIZED_VIEW => ['excludes' => ['MV_UNICAEN_STRUCTURE_CODES']],
-];
+//$deployLocal->drop();
+//$deployLocal->create($devLocal);
 
-$r = $devLocal->getDdl($filters);
-var_dump($r);
 
-//$deployLocal->getSchema()->alter($test, $filters);
+$devLocal->cloner($deployLocal);
 
-//$deployLocal->getSchema()->drop();
+//$devLocal->getTable('ANNEE')->copy($deployLocal);
 

@@ -113,6 +113,50 @@ class TriggerManager extends AbstractManager implements TriggerManagerInterface
 
 
 
+    /**
+     * @return TriggerManagerInterface
+     */
+    public function enableAll(): TriggerManagerInterface
+    {
+        $this->bdd->logBegin("Activation de tous les déclencheurs");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Déclencheur " . $d['name'], true);
+            try {
+                $this->enable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Tous les déclencheurs ont été activés');
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return TriggerManagerInterface
+     */
+    public function disableAll(): TriggerManagerInterface
+    {
+        $this->bdd->logBegin("Désactivation de tous les déclencheurs");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Déclencheur " . $d['name'], true);
+            try {
+                $this->disable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Tous les déclencheurs ont été désactivés');
+
+        return $this;
+    }
+
+
+
     public function alter(array $old, array $new)
     {
         if ($old != $new) {

@@ -152,4 +152,48 @@ class PrimaryConstraintManager extends AbstractManagerDdlConstraint implements P
 
         parent::disable($name);
     }
+
+
+
+    /**
+     * @return PrimaryConstraintManagerInterface
+     */
+    public function enableAll(): PrimaryConstraintManagerInterface
+    {
+        $this->bdd->logBegin("Activation de toutes les clés primaires");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Clé primaire " . $d['name'], true);
+            try {
+                $this->enable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Toutes les clés primaires ont été activées');
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return PrimaryConstraintManagerInterface
+     */
+    public function disableAll(): PrimaryConstraintManagerInterface
+    {
+        $this->bdd->logBegin("Désactivation de toutes les clés primaires");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Clé primaire " . $d['name'], true);
+            try {
+                $this->disable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Toutes les clés primaires ont été désactivées');
+
+        return $this;
+    }
 }

@@ -152,4 +152,48 @@ class UniqueConstraintManager extends AbstractManagerDdlConstraint implements Un
 
         parent::disable($name);
     }
+
+
+
+    /**
+     * @return UniqueConstraintManagerInterface
+     */
+    public function enableAll(): UniqueConstraintManagerInterface
+    {
+        $this->bdd->logBegin("Activation de toutes les contraintes d'unicité");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Clé primaire " . $d['name'], true);
+            try {
+                $this->enable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Toutes les contraintes d\'unicité ont été activées');
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return UniqueConstraintManagerInterface
+     */
+    public function disableAll(): UniqueConstraintManagerInterface
+    {
+        $this->bdd->logBegin("Désactivation de toutes les contraintes d'unicité");
+        $l = $this->get();
+        foreach ($l as $d) {
+            $this->bdd->logMsg("Clé primaire " . $d['name'], true);
+            try {
+                $this->disable($d);
+            } catch (\Throwable $e) {
+                $this->bdd->logError($e);
+            }
+        }
+        $this->bdd->logEnd('Toutes les contraintes d\'unicité ont été désactivées');
+
+        return $this;
+    }
 }

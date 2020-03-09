@@ -132,7 +132,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
             }
             if ($rewrite) {
                 if ($this->lastMessage) {
-                    $m = $message . str_pad('', strlen($this->lastMessage) - strlen($message)) . "\r";
+                    $m = $message . str_pad('', strlen($this->lastMessage) - strlen($message) + 2) . "\r";
                 } else {
                     $m = $message . "\r";
                 }
@@ -161,7 +161,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
     public function begin(string $title)
     {
         if ($this->lastMessage) {
-            $title .= str_pad('', strlen($this->lastMessage) - strlen($title));
+            $title .= str_pad('', strlen($this->lastMessage) - strlen($title) + 2);
         }
         $this->lastRewrite = false;
         $this->lastMessage = null;
@@ -190,7 +190,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
     public function end(?string $msg = null)
     {
         if ($this->lastMessage && $this->lastRewrite) {
-            $msg .= str_pad('', strlen($this->lastMessage) - strlen($msg));
+            $msg .= str_pad('', strlen($this->lastMessage) - strlen($msg) + 2);
         }
         if ($msg) {
             $this->println($msg);

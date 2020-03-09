@@ -91,7 +91,7 @@ class Table
      * @param array|integer|null $where
      * @param array|null         $options
      *
-     * @return array|null|resource
+     * @return array|null|SelectParser
      * @throws Exception\BddCompileException
      * @throws Exception\BddException
      * @throws Exception\BddIndexExistsException
@@ -113,11 +113,7 @@ class Table
         $cols = '';
         foreach ($ddl['columns'] as $colDdl) {
             if ($cols != '') $cols .= ', ';
-            if ($colDdl['type'] == Bdd::TYPE_DATE) {
-                $cols .= 'to_char(' . $colDdl['name'] . ',\'YYYY-mm-dd\') ' . $colDdl['name'];
-            } else {
-                $cols .= $colDdl['name'];
-            }
+            $cols .= $colDdl['name'];
         }
         $sql    = "SELECT $cols FROM \"$this->name\"";
         $params = [];
@@ -144,19 +140,40 @@ class Table
 
 
 
-    public function copy(Bdd $bdd, callable $fnc = null)
+    public function copy(Bdd $destination, callable $fnc = null)
     {
-        $options = ['types' => $this->makeTypesOptions()];
+        $options = ['types' => $this->makeTypesOptions(), 'fetch' => Bdd::FETCH_EACH];
 
-        $r    = $this->select(null, ['fetch' => Bdd::FETCH_EACH]);
-        $dest = $bdd->getTable($this->getName());
+        $count = (int)$this->getBdd()->select('SELECT count(*) C FROM ' . $this->getName(), [], ['fetch' => Bdd::FETCH_ONE])['C'];
 
-        while ($data = $this->getBdd()->fetch($r, $options)) {
+        $r    = $this->select(null, $options);
+        $dest = $destination->getTable($this->getName());
+
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logBegin("Copie de la table " . $this->getName());
+        }
+
+        $current = 0;
+        while ($data = $r->next()) {
+            $current++;
+            if ($current == $count) {
+                $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " Terminée", true);
+            } else {
+                $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " en cours (" . round($current * 100 / $count, 1) . "%)", true);
+            }
             if (is_callable($fnc)) $data = $fnc($data);
             if (null !== $data) {
                 $dest->insert($data);
             }
         }
+
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logEnd();
+        } else {
+            $this->getBdd()->logMsg("\n", true);
+        }
+
+        return $this;
     }
 
 
@@ -481,7 +498,7 @@ class Table
 
 
 
-    protected function transform($value, string $transformer, array $ddl)
+    protected function transform($value, string $transformer)
     {
         if (!isset($this->transformCache[$transformer][$value])) {
             $val = $this->getBdd()->select(sprintf($transformer, ':val'), ['val' => $value]);

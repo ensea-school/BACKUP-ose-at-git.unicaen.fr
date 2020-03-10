@@ -140,14 +140,12 @@ class Table
 
 
 
-    public function copy(Bdd $destination, callable $fnc = null)
+    public function copy(Bdd $source, callable $fnc = null)
     {
         $options = ['types' => $this->makeTypesOptions(), 'fetch' => Bdd::FETCH_EACH];
 
-        $count = (int)$this->getBdd()->select('SELECT count(*) C FROM ' . $this->getName(), [], ['fetch' => Bdd::FETCH_ONE])['C'];
-
-        $r    = $this->select(null, $options);
-        $dest = $destination->getTable($this->getName());
+        $count = (int)$source->select('SELECT count(*) C FROM ' . $this->getName(), [], ['fetch' => Bdd::FETCH_ONE])['C'];
+        $r     = $source->select('SELECT * FROM ' . $this->getName(), [], $options);
 
         if (!$this->getBdd()->isInCopy()) {
             $this->getBdd()->logBegin("Copie de la table " . $this->getName());
@@ -159,11 +157,12 @@ class Table
             if ($current == $count) {
                 $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " Terminée", true);
             } else {
-                $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " en cours (" . round($current * 100 / $count, 1) . "%)", true);
+                $val = round($current * 100 / $count, 2);
+                $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " en cours (" . $val . "%)", true);
             }
             if (is_callable($fnc)) $data = $fnc($data);
             if (null !== $data) {
-                $dest->insert($data);
+                $this->insert($data);
             }
         }
 

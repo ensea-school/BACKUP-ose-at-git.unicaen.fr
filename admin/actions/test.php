@@ -35,18 +35,6 @@ $deployLocal->setLogger($c);
 //$deployLocal->create($devLocal);
 
 
-//$devLocal->cloner($deployLocal);
+$deployLocal->copy($devLocal);
 
 //$devLocal->getTable('ANNEE')->copy($deployLocal);
-
-
-$ddl = new BddAdmin\Ddl\Ddl();
-$ddl->loadFromFile($oa->getOseDir() . 'data/ddl');
-$ddl->saveToDir($oa->getOseDir() . 'cache/ddl');
-
-
-$ddl2 = new BddAdmin\Ddl\Ddl();
-$ddl2->loadFromDir($oa->getOseDir() . 'cache/ddl');
-
-$ddl->saveToFile('cache/ddl');
-$ddl2->saveToFile('cache/ddl2.php');

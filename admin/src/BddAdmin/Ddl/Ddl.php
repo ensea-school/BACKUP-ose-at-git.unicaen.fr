@@ -274,20 +274,6 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
-    /*
-        TABLE
-        VIEW
-        SEQUENCE
-        MATERIALIZED_VIEW
-        PRIMARY_CONSTRAINT
-        PACKAGE
-        REF_CONSTRAINT
-        INDEX
-        UNIQUE_CONSTRAINT
-        TRIGGER
-     */
-
-
     public function saveToDir(string $dirname)
     {
         if (file_exists($dirname)) {

@@ -178,8 +178,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
         $cols = [];
         if (array_key_exists('columns-order', $data)) {
-            $ordering = explode(',', $data['columns-order']);
-            var_dump($ordering);
+            $ordering        = explode(',', $data['columns-order']);
             $cols            = $data['columns'];
             $data['columns'] = [];
             foreach ($ordering as $col) {

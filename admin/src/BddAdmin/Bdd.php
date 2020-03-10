@@ -485,7 +485,7 @@ class Bdd
         $this->logBegin('Mise en place de la base de données');
         $filters = DdlFilters::normalize($filters);
         if ($ddl instanceof self) {
-            $ddl = $this->getDdl($filters);
+            $ddl = $ddl->getDdl($filters);
         } else {
             $ddl = Ddl::normalize($ddl);
             $ddl->filter($filters);
@@ -722,60 +722,35 @@ class Bdd
 
 
 
-    public function copy(Bdd $destination, callable $fnc = null): self
+    public function copy(Bdd $source, callable $fnc = null): self
     {
-        if ($this->getLogger() && !$destination->getLogger()) {
-            $destination->setLogger($this->getLogger());
+        if ($this->getLogger() && !$source->getLogger()) {
+            $source->setLogger($this->getLogger());
         }
 
+        $this->logBegin("Duplication d'une base de données");
+
+        $tDdl = $source->table()->get();
+        $this->drop();
+        $this->create([Ddl::TABLE => $tDdl]);
         $this->inCopy = true;
 
-        $this->logBegin("Copie de données entre deux bases");
-
-        $destination->uniqueConstraint()->disableAll();
-        $destination->refConstraint()->disableAll();
-        $destination->primaryConstraint()->disableAll();
-        $destination->trigger()->disableAll();
-
-
+        $this->logBegin("Copie des données");
         $this->logMsg('');
 
-        //$tables = $this->table()->getList();
-        $tables = ['ANNEE', 'ETAPE', 'DOSSIER', 'FICHIER'];
+        $tables = array_keys($tDdl);
         sort($tables);
 
         foreach ($tables as $table) {
-            $this->getTable($table)->copy($destination, $fnc);
+            $this->getTable($table)->copy($source, $fnc);
         }
-
         $this->logMsg('');
-
-        $destination->trigger()->enableAll();
-        $destination->primaryConstraint()->enableAll();
-        $destination->refConstraint()->enableAll();
-        $destination->uniqueConstraint()->enableAll();
-
         $this->logEnd("Copie terminée");
 
         $this->inCopy = false;
 
-        return $this;
-    }
-
-
-
-    public function cloner(Bdd $destination): self
-    {
-        $this->logBegin("Clonage de bases de données");
-
-        $destination->drop();
-
-        $filters = ['explicit' => true, Ddl::TABLE => ['includes' => '%']];
-        $destination->create($this, $filters);
-//        $this->copy($destination);
-
         $filters = [Ddl::TABLE => ['excludes' => '%']];
-//        $destination->create($this, $filters);
+        $this->create($source, $filters);
 
         $this->logEnd();
 

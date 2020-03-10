@@ -216,7 +216,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
 
 
-    protected function makeCreateComm(array $data)
+    protected function makeCreateComm(array $data, $forceUpdateNull = false)
     {
         if ($data['commentaire']) {
             $comm = "'" . str_replace("'", "''", $data['commentaire']) . "'";
@@ -224,7 +224,11 @@ class TableManager extends AbstractManager implements TableManagerInterface
             return 'COMMENT ON TABLE "' . $data['name'] . '" IS ' . $comm;
         }
 
-        return null;
+        if ($forceUpdateNull) {
+            return 'COMMENT ON TABLE "' . $data['name'] . '" IS \'\'';
+        } else {
+            return null;
+        }
     }
 
 
@@ -420,7 +424,7 @@ END;';
             }
 
             if ($old['commentaire'] !== $new['commentaire']) {
-                $this->addQuery($this->makeCreateComm($new), 'Modification du commentaire de la table ' . $new['name']);
+                $this->addQuery($this->makeCreateComm($new, true), 'Modification du commentaire de la table ' . $new['name']);
             }
         }
     }

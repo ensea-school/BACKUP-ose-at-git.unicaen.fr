@@ -2,8 +2,6 @@
 
 namespace BddAdmin\Ddl;
 
-use BddAdmin\Ddl\DdlFilters;
-
 class Ddl implements \Iterator, \ArrayAccess
 {
     const TABLE              = 'table';
@@ -234,25 +232,160 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
-    /**
-     * @param array  $ddl
-     * @param string $filename
-     */
-    public function saveToFile(string $filename)
+    protected function writeArray(string $filename, array $data)
     {
-        $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->arrayExport($this->data) . ";\n\n//@" . "formatter:on\n";
+        $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->arrayExport($data) . ";\n\n//@" . "formatter:on\n";
 
         file_put_contents($filename, $ddlString);
     }
 
 
 
+    /**
+     * @param array  $ddl
+     * @param string $filename
+     */
+    public function saveToFile(string $filename)
+    {
+        $data = $this->data;
+        asort($data);
+
+        $this->writeArray($filename, $data);
+    }
+
+
+
+    protected function rrmdir($src)
+    {
+        $dir = opendir($src);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                $full = $src . '/' . $file;
+                if (is_dir($full)) {
+                    $this->rrmdir($full);
+                } else {
+                    unlink($full);
+                }
+            }
+        }
+        closedir($dir);
+        rmdir($src);
+    }
+
+
+
+    /*
+        TABLE
+        VIEW
+        SEQUENCE
+        MATERIALIZED_VIEW
+        PRIMARY_CONSTRAINT
+        PACKAGE
+        REF_CONSTRAINT
+        INDEX
+        UNIQUE_CONSTRAINT
+        TRIGGER
+     */
+
+
     public function saveToDir(string $dirname)
     {
         if (file_exists($dirname)) {
-            unlink($dirname);
+            $this->rrmdir($dirname);
         }
         mkdir($dirname);
+        foreach ($this->data as $type => $ds) {
+            $dir = $dirname . '/' . $type;
+
+            if ($type == self::SEQUENCE) {
+                $this->writeArray($dir . '.php', array_keys($ds));
+            } else {
+                mkdir($dir);
+                foreach ($this->data[$type] as $d) {
+                    $file = $dir . '/' . $d['name'];
+                    switch ($type) {
+                        case self::TABLE:
+                        case self::PRIMARY_CONSTRAINT:
+                        case self::REF_CONSTRAINT:
+                        case self::UNIQUE_CONSTRAINT:
+                        case self::INDEX:
+                            $this->writeArray($file . '.php', $d);
+                        break;
+                        case self::VIEW:
+                        case self::MATERIALIZED_VIEW:
+                        case self::TRIGGER:
+                            file_put_contents($file . '.sql', $d['definition']);
+                        break;
+                        case self::PACKAGE:
+                            mkdir($file);
+                            file_put_contents($file . '/definition.sql', $d['definition']);
+                            file_put_contents($file . '/body.sql', $d['body']);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    public function loadFromDir(string $dir)
+    {
+        if (substr($dir, -1) != '/') $dir .= '/';
+
+        $this->data = [];
+        if (file_exists($dir . self::SEQUENCE . '.php')) {
+            $sequences                  = require $dir . self::SEQUENCE . '.php';
+            $this->data[self::SEQUENCE] = [];
+            foreach ($sequences as $sequence) {
+                $this->data[self::SEQUENCE][$sequence] = ['name' => $sequence];
+            }
+        }
+
+        if (file_exists($dir . self::PACKAGE) && is_dir($dir . self::PACKAGE)) {
+            $this->data[self::PACKAGE] = [];
+            $data                      = scandir($dir . self::PACKAGE);
+            foreach ($data as $name) {
+                if ($name != '.' && $name != '..') {
+                    $this->data[self::PACKAGE][$name] = ['name' => $name];
+                    if (file_exists($dir . self::PACKAGE . '/' . $name . '/definition.sql')) {
+                        $this->data[self::PACKAGE][$name]['definition'] = file_get_contents($dir . self::PACKAGE . '/' . $name . '/definition.sql');
+                    }
+                    if (file_exists($dir . self::PACKAGE . '/' . $name . '/body.sql')) {
+                        $this->data[self::PACKAGE][$name]['body'] = file_get_contents($dir . self::PACKAGE . '/' . $name . '/body.sql');
+                    }
+                }
+            }
+        }
+
+        $arrays = [self::TABLE, self::PRIMARY_CONSTRAINT, self::REF_CONSTRAINT, self::UNIQUE_CONSTRAINT, self::INDEX];
+        foreach ($arrays as $type) {
+            if (file_exists($dir . $type) && is_dir($dir . $type)) {
+                $this->data[$type] = [];
+                $data              = scandir($dir . $type);
+                foreach ($data as $name) {
+                    if ($name != '.' && $name != '..') {
+                        $def                             = require $dir . $type . '/' . $name;
+                        $this->data[$type][$def['name']] = $def;
+                    }
+                }
+            }
+        }
+
+        $sqls = [self::VIEW, self::MATERIALIZED_VIEW, self::TRIGGER];
+        foreach ($sqls as $type) {
+            if (file_exists($dir . $type) && is_dir($dir . $type)) {
+                $this->data[$type] = [];
+                $data              = scandir($dir . $type);
+                foreach ($data as $name) {
+                    if ($name != '.' && $name != '..') {
+                        $def                      = file_get_contents($dir . $type . '/' . $name);
+                        $name                     = substr($name, 0, -4);
+                        $this->data[$type][$name] = ['name' => $name, 'definition' => $def];
+                    }
+                }
+            }
+        }
     }
 
 

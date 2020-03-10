@@ -40,6 +40,13 @@ $deployLocal->setLogger($c);
 //$devLocal->getTable('ANNEE')->copy($deployLocal);
 
 
-$ddl = $devLocal->getDdl();
-
+$ddl = new BddAdmin\Ddl\Ddl();
+$ddl->loadFromFile($oa->getOseDir() . 'data/ddl.php');
 $ddl->saveToDir($oa->getOseDir() . 'cache/ddl');
+
+
+$ddl2 = new BddAdmin\Ddl\Ddl();
+$ddl2->loadFromDir($oa->getOseDir() . 'cache/ddl');
+
+$ddl->saveToFile('cache/ddl.php');
+$ddl2->saveToFile('cache/ddl2.php');

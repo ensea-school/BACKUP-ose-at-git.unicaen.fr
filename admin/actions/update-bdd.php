@@ -12,7 +12,7 @@ $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci 
 
 // Récupération du schéma de référence
 $ref = new Ddl();
-$ref->loadFromFile($oa->getOseDir() . 'data/ddl.php');
+$ref->loadFromDir($oa->getOseDir() . 'data/ddl');
 
 
 // Construction de la config de DDL pour filtrer

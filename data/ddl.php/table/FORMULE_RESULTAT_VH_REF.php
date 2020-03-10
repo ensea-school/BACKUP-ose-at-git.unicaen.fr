@@ -1,0 +1,81 @@
+<?php
+
+//@formatter:off
+
+return [
+    'name'        => 'FORMULE_RESULTAT_VH_REF',
+    'temporary'   => FALSE,
+    'logging'     => FALSE,
+    'commentaire' => NULL,
+    'sequence'    => 'FORMULE_RESULTAT_VH_REF_ID_SEQ',
+    'columns'     => [
+        'FORMULE_RESULTAT_ID'      => [
+            'name'        => 'FORMULE_RESULTAT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'HEURES_COMPL_REFERENTIEL' => [
+            'name'        => 'HEURES_COMPL_REFERENTIEL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'commentaire' => NULL,
+        ],
+        'ID'                       => [
+            'name'        => 'ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'SERVICE_REFERENTIEL'      => [
+            'name'        => 'SERVICE_REFERENTIEL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'commentaire' => NULL,
+        ],
+        'TOTAL'                    => [
+            'name'        => 'TOTAL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'commentaire' => NULL,
+        ],
+        'VOLUME_HORAIRE_REF_ID'    => [
+            'name'        => 'VOLUME_HORAIRE_REF_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+    ],
+];
+
+//@formatter:on

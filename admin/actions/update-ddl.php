@@ -1,6 +1,6 @@
 <?php
 
-$filename = $oa->getOseDir() . 'data/ddl.php';
+$dirname = $oa->getOseDir() . 'data/ddl.php';
 
 $filters = [
     'table'              => ['excludes' => 'UNICAEN_%'],
@@ -20,5 +20,5 @@ $filters = [
 
 $c->begin('Génération du fichier de DDL à partir de la base de données');
 $ddl = $oa->getBdd()->getDdl($filters);
-$ddl->saveToFile($filename);
-$c->end('Fichier de DDL ' . $filename . ' Mis à jour');
+$ddl->saveToDir($dirname);
+$c->end('Définition Fichier de la base de données mise à jour');

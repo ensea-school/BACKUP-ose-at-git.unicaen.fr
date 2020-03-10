@@ -10,7 +10,7 @@ $c->msg("Attention : par rapport à update-bdd, seules les définitions des obje
 
 /* Récupération du schéma de référence */
 $ref = new BddAdmin\Ddl\Ddl;
-$ref->loadFromFile($oa->getOseDir() . 'data/ddl.php');
+$ref->loadFromDir($oa->getOseDir() . 'data/ddl');
 
 
 /* Construction de la config de DDL pour filtrer */

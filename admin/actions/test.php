@@ -26,6 +26,17 @@ var_dump($r);
 $bdd = $oa->getBdd();
 
 
+$c->println("Calcul du tableau de bord piece_jointe_demande");
+$bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_demande\'); END;');
+
+$c->println("Calcul du tableau de bord piece_jointe_fournie");
+$bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_fournie\'); END;');
+
+$c->println("Calcul du tableau de bord piece_jointe");
+$bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe\'); END;');
+
+$c->println("");
+
 /* On fournie et on valide de force les PJ qui n'étaient pas tout le temps demandées avant */
 $sql   = '
         SELECT
@@ -80,5 +91,17 @@ foreach ($r as $i) {
     $bdd->getTable('PIECE_JOINTE_FICHIER')->insert($pjf, $o);
     $c->print("Insertion des pièces jointes manquantes : $count / " . count($r) . "\r");
 }
-$c->println("\nInsertion terminée");
 
+$c->println("Calcul du tableau de bord piece_jointe_demande");
+$bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_demande\'); END;');
+
+$c->println("Calcul du tableau de bord piece_jointe_fournie");
+$bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_fournie\'); END;');
+
+$c->println("Calcul du tableau de bord piece_jointe");
+$bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe\'); END;');
+
+$c->println("Calcul du tableau de bord workflow");
+$bdd->exec('BEGIN unicaen_tbl.calculer(\'workflow\'); END;');
+
+$c->println("Terminé");

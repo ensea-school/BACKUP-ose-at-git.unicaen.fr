@@ -122,16 +122,16 @@ class PJPassageDureeVie extends AbstractMigration
             $this->manager->getOseAdmin()->getConsole()->print("Insertion des pièces jointes manquantes : $count / " . count($r) . "\r");
         }
 
-        $this->manager->getOseAdmin()->getConsole()->println("Calcul du tableau de bord piece_jointe_demande");
+        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord piece_jointe_demande");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_demande\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Calcul du tableau de bord piece_jointe_fournie");
+        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord piece_jointe_fournie");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_fournie\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Calcul du tableau de bord piece_jointe");
+        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord piece_jointe");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Calcul du tableau de bord workflow");
+        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord workflow");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'workflow\'); END;');
 
         $this->manager->getOseAdmin()->getConsole()->println("Terminé");

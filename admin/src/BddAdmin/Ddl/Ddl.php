@@ -247,6 +247,16 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
+    public function saveToDir(string $dirname)
+    {
+        if (file_exists($dirname)) {
+            unlink($dirname);
+        }
+        mkdir($dirname);
+    }
+
+
+
     /**
      * @param string $filename
      *

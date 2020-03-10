@@ -35,7 +35,11 @@ $deployLocal->setLogger($c);
 //$deployLocal->create($devLocal);
 
 
-$devLocal->cloner($deployLocal);
+//$devLocal->cloner($deployLocal);
 
 //$devLocal->getTable('ANNEE')->copy($deployLocal);
 
+
+$ddl = $devLocal->getDdl();
+
+$ddl->saveToDir($oa->getOseDir() . 'cache/ddl');

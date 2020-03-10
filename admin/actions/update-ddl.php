@@ -1,6 +1,6 @@
 <?php
 
-$dirname = $oa->getOseDir() . 'data/ddl.php';
+$dirname = $oa->getOseDir() . 'data/ddl';
 
 $filters = [
     'table'              => ['excludes' => 'UNICAEN_%'],

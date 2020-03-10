@@ -1,1 +1,0 @@
-SELECT * FROM v_etat_paiement

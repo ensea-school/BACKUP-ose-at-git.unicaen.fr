@@ -6,7 +6,7 @@ $oa->setBdd($bdd);*/
 $schema = new \BddAdmin\Schema($bdd);
 
 /* Récupération du schéma de référence *
-$ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
+$ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl');
 
 /* Construction de la config de DDL pour filtrer *
 $ddlConfig = require $oa->getOseDir() . 'data/ddl_config.php';
@@ -41,12 +41,12 @@ $deployLocal->setLogger($c);
 
 
 $ddl = new BddAdmin\Ddl\Ddl();
-$ddl->loadFromFile($oa->getOseDir() . 'data/ddl.php');
+$ddl->loadFromFile($oa->getOseDir() . 'data/ddl');
 $ddl->saveToDir($oa->getOseDir() . 'cache/ddl');
 
 
 $ddl2 = new BddAdmin\Ddl\Ddl();
 $ddl2->loadFromDir($oa->getOseDir() . 'cache/ddl');
 
-$ddl->saveToFile('cache/ddl.php');
+$ddl->saveToFile('cache/ddl');
 $ddl2->saveToFile('cache/ddl2.php');

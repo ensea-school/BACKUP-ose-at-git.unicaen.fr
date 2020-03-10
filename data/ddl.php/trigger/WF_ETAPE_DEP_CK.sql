@@ -1,8 +1,0 @@
-CREATE OR REPLACE TRIGGER "WF_ETAPE_DEP_CK"
-BEFORE INSERT OR UPDATE ON wf_etape_dep
-FOR EACH ROW
-BEGIN
-
-  OSE_WORKFLOW.DEP_CHECK( :new.etape_suiv_id, :new.etape_prec_id );
-
-END;

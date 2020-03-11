@@ -126,6 +126,34 @@ class PieceJointeService extends AbstractEntityService
     }
 
 
+    /**
+     * @param Intervenant $intervenant
+     *
+     * @return mixed $result
+     */
+    public function getPiecesSynthese(Intervenant $intervenant)
+    {
+        $dql = "
+            SELECT 
+              pj
+            FROM 
+              Application\Entity\Db\TblPieceJointe pj
+            WHERE
+              pj.intervenant = :intervenant
+        ";
+
+        $listTblPieceJointe = $this->getEntityManager()->createQuery($dql)->setParameters([
+            'intervenant' => $intervenant->getId(),
+        ])->getResult();
+
+        $result = [];
+        foreach ($listTblPieceJointe as $TblPieceJointe) {
+            $result[$TblPieceJointe->getTypePieceJointe()->getId()] = $TblPieceJointe;
+        }
+
+        return $result;
+    }
+
 
     /**
      * @param Intervenant $intervenant
@@ -157,6 +185,7 @@ class PieceJointeService extends AbstractEntityService
             'intervenant' => $intervenant->getCode(),
             'annee'       => $intervenant->getAnnee()->getId(),
         ])->getResult();
+
 
         /* @var $lpjf \Application\Entity\Db\TblPieceJointeFournie[] */
 

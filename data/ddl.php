@@ -30903,7 +30903,7 @@ END UNICAEN_TBL;',
                                             AND f.histo_destruction IS NULL
                 JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
                                                    AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
-                                                   AND tpjs.HISTO_DESTRUCTION IS NULL
+                                                   --AND tpjs.HISTO_DESTRUCTION IS NULL
 
          LEFT JOIN validation             v ON v.id = pj.validation_id
                                             AND v.histo_destruction IS NULL
@@ -30931,10 +30931,10 @@ END UNICAEN_TBL;',
 
       ANNEE_ID             = v.ANNEE_ID,
       PIECE_JOINTE_ID      = v.PIECE_JOINTE_ID,
-      DATE_ARCHIVE         = v.DATE_ARCHIVE,
-      DATE_VALIDITE        = v.DATE_VALIDITE,
       DUREE_VIE            = v.DUREE_VIE,
       CODE_INTERVENANT     = v.CODE_INTERVENANT,
+      DATE_VALIDITE        = v.DATE_VALIDITE,
+      DATE_ARCHIVE         = v.DATE_ARCHIVE,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -30946,10 +30946,10 @@ END UNICAEN_TBL;',
       VALIDATION_ID,
       FICHIER_ID,
       PIECE_JOINTE_ID,
-      DATE_ARCHIVE,
-      DATE_VALIDITE,
       DUREE_VIE,
       CODE_INTERVENANT,
+      DATE_VALIDITE,
+      DATE_ARCHIVE,
       TO_DELETE
 
     ) VALUES (
@@ -30961,10 +30961,10 @@ END UNICAEN_TBL;',
       v.VALIDATION_ID,
       v.FICHIER_ID,
       v.PIECE_JOINTE_ID,
-      v.DATE_ARCHIVE,
-      v.DATE_VALIDITE,
       v.DUREE_VIE,
       v.CODE_INTERVENANT,
+      v.DATE_VALIDITE,
+      v.DATE_ARCHIVE,
       0
 
     );
@@ -31563,7 +31563,7 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'V_AGREMENT_EXPORT_CSV' =>
+    'V_AGREMENT_EXPORT_CSV' => 
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -36567,7 +36567,7 @@ FROM
                                     AND f.histo_destruction IS NULL
         JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
                                            AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
-                                           AND tpjs.HISTO_DESTRUCTION IS NULL
+                                           --AND tpjs.HISTO_DESTRUCTION IS NULL
 
  LEFT JOIN validation             v ON v.id = pj.validation_id
                                     AND v.histo_destruction IS NULL

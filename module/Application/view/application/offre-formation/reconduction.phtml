@@ -4,7 +4,7 @@
  *
  */
 
-$this->headScript()->offsetSetFile(100, '/js/reconduction-offre.js');
+$this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.js'));
 ?>
 
 
@@ -12,7 +12,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-offre.js');
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
         <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante : </div>
+            <div class="panel-heading">Veuillez sélectionner une composante :</div>
             <div class="panel-body">
                 <?php
                 $selectStructure = new \Zend\Form\Element\Select('structure');
@@ -39,7 +39,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-offre.js');
             universitaire prochaine. Les lignes avec fond gris sont déjà reconduites pour l'année prochaine.
         </div>
 
-        <h3>Offre de formation complémantaire / Année universitaire :  <?php echo $anneeEnCours->getLibelle(); ?></h3>
+        <h3>Offre de formation complémantaire / Année universitaire : <?php echo $anneeEnCours->getLibelle(); ?></h3>
         <br/>
         <?php
         echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -74,7 +74,8 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-offre.js');
                     <div class="well well-sm">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
                         universitaire.
                     </div>
-                    <form action="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
+                    <form action="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"
+                          method="POST" id="form-reconduction">
 
                         <?php foreach ($offresComplementaires
 

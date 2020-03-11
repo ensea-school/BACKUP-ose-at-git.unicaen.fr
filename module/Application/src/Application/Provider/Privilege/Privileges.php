@@ -54,6 +54,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const CLOTURE_EDITION_SERVICES_AVEC_MEP                   = 'cloture-edition-services-avec-mep';
     const CLOTURE_REOUVERTURE                                 = 'cloture-reouverture';
     const CONTRAT_CONTRAT_GENERATION                          = 'contrat-contrat-generation';
+    const CONTRAT_ENVOI_EMAIL                                 = 'contrat-envoi-email';
     const CONTRAT_CREATION                                    = 'contrat-creation';
     const CONTRAT_DEPOT_RETOUR_SIGNE                          = 'contrat-depot-retour-signe';
     const CONTRAT_DEVALIDATION                                = 'contrat-devalidation';

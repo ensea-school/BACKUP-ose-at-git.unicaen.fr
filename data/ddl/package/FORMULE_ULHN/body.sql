@@ -147,7 +147,8 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
     -- j=SI(ESTVIDE(C22);0;RECHERCHEH(SI(ET(C22="TP";TP_vaut_TD="Oui");"TD";C22);types_intervention;2;0))
     --  = RECHERCHEH(SI(ET(C22="TP";TP_vaut_TD="Oui");"TD";C22);types_intervention;2;0)
     WHEN c = 'j' AND v >= 1 THEN
-      RETURN GREATEST(vh.taux_service_du * vh.ponderation_service_du,1);
+      --RETURN GREATEST(vh.taux_service_du * vh.ponderation_service_du,1);
+      RETURN vh.taux_service_du * vh.ponderation_service_du ;
 
     -- k=SI(ESTVIDE(C22);0;RECHERCHEH(C22;types_intervention;3;0))
     --  =RECHERCHEH(C22;types_intervention;3;0)
@@ -233,7 +234,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
 
     -- v=SI(service_du=0;I22;SI(J22>0;SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0))
     WHEN c = 'v' AND v >= 1 THEN
-    IF i.service_du = 0 THEN
+      IF i.service_du = 0 THEN
         RETURN vh.heures;
       ELSE
         --SI(J22>0;SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0)

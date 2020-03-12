@@ -93,6 +93,7 @@ class Bdd
             $error = oci_error();
             throw $this->sendException($error);
         }
+        $this->exec('ALTER SESSION SET NLS_NUMERIC_CHARACTERS=". "');
 
         return $this;
     }
@@ -149,7 +150,7 @@ class Bdd
     public function getCurrentSchema(): string
     {
         if (!$this->currentSchema) {
-            $sql                 = "SELECT user scname FROM dual";
+            $sql                 = "SELECT user SCNAME FROM DUAL";
             $this->currentSchema = $this->select($sql)[0]['SCNAME'];
         }
 

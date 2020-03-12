@@ -69,6 +69,7 @@ class Driver implements DriverInterface
 
         $this->exec('ALTER SESSION SET NLS_DATE_FORMAT = \'yyyy-mm-dd\'');
         $this->exec('ALTER SESSION SET NLS_TIMESTAMP_TZ_FORMAT = \'yyyy-mm-dd"T"hh24:mi:ss\'');
+        $this->exec('ALTER SESSION SET NLS_NUMERIC_CHARACTERS=". "');
 
         return $this;
     }
@@ -92,8 +93,8 @@ class Driver implements DriverInterface
             if (is_bool($val)) {
                 $params[$name] = $val ? 1 : 0;
             } elseif ($val instanceof \DateTime) {
-                $params[$name] = $val->format('Y - m - d H:i:s');
-                $sql           = str_replace(":$name", "to_date(:$name, 'YYYY - MM - DD HH24:MI:SS')", $sql);
+                $params[$name] = $val->format('Y-m-d H:i:s');
+                $sql           = str_replace(":$name", "to_date(:$name, 'YYYY-MM-DD HH24:MI:SS')", $sql);
             } else {
                 $params[$name] = $val;
             }

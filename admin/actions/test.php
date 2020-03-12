@@ -35,6 +35,15 @@ $deployLocal->setLogger($c);
 //$deployLocal->create($devLocal);
 
 
-$deployLocal->copy($devLocal);
+//$deployLocal->copy($devLocal);
 
 //$devLocal->getTable('ANNEE')->copy($deployLocal);
+
+$deployLocal->getTable('TAUX_HORAIRE_HETD')->delete(['ID' => 999]);
+
+$d = [
+    'ID'     => 999,
+    'VALEUR' => 15.78956,
+];
+
+$deployLocal->getTable('TAUX_HORAIRE_HETD')->insert($d, ['histo-user-id' => $oa->getOseAppliId()]);

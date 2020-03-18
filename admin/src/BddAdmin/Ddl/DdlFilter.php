@@ -92,6 +92,8 @@ class DdlFilter implements \ArrayAccess
                     $co->$var = $data[$var];
                 }
             }
+        } else {
+            $co->setIncludes($data);
         }
 
         return $co;

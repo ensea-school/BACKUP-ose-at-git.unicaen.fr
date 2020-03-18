@@ -179,16 +179,16 @@ class TableManager extends AbstractManager implements TableManagerInterface
         $cols = [];
         if (array_key_exists('columns-order', $data)) {
             $ordering        = explode(',', $data['columns-order']);
-            $cols            = $data['columns'];
+            $cs              = $data['columns'];
             $data['columns'] = [];
             foreach ($ordering as $col) {
                 $col = strtoupper(trim($col));
-                if (isset($cols[$col])) {
-                    $data['columns'][$col] = $cols[$col];
-                    unset($cols[$col]);
+                if (isset($cs[$col])) {
+                    $data['columns'][$col] = $cs[$col];
+                    unset($cs[$col]);
                 }
             }
-            foreach ($cols as $k => $c) {
+            foreach ($cs as $k => $c) {
                 $data['columns'][$k] = $c;
             }
         }

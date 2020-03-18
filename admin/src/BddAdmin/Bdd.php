@@ -642,7 +642,7 @@ class Bdd
             [$ddlName, $action] = explode('.', $changement);
             $this->logMsg($label . " (opération $c/$cc) ...", true);
             $object  = $this->manager($ddlName);
-            $queries = $this->alterDdlObject($object, $action, $old[$ddlName], $new[$ddlName]);
+            $queries = $this->alterDdlObject($object, $action, $old[$ddlName] ?: [], $new[$ddlName] ?: []);
             if (!empty($queries)) {
                 $diff->set($changement, $queries);
             }

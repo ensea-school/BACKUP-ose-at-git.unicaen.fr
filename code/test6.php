@@ -8,27 +8,49 @@
  * @var $viewFile   string
  */
 
-use Application\Service\ModeleContratService;
-use Unicaen\OpenDocument\Document;
-
-$fichier = '/home/laurent/Téléchargements/testfill.odt';
-//$fichier = '/home/laurent/UnicaenCode/srcodt.odt';
-//$fichier = '/home/laurent/tt.odt';
-//$fichier = '/home/laurent/Téléchargements/Contrat.odt';
-
-$modeleContrat = $container->get(ModeleContratService::class)->get(13);
-
-$document = new Document();
-$document->setTmpDir('/home/laurent/UnicaenCode');
-//$document->loadFromFile($fichier);
-$document->loadFromData($modeleContrat->getFichier());
-
-$document->getStylist()->addFiligrane('PROJET');
-
-$document->setStylesChanged(true);
-xmlDump($document->getStyles());
-$document->setPdfOutput(true);
-//$document->saveToFile('/home/laurent/UnicaenCode/odtExport.pdf');
+/** @var \Application\Service\IntervenantService $si */
+$si = $container->get(\Application\Service\IntervenantService::class);
 
 
-//$document->download('exp.pdf');
+$is = $si->getEntityManager()->getConnection()->fetchAll('
+SELECT 
+  ID, NUMERO_INSEE, NUMERO_INSEE_CLE, DATE_NAISSANCE, CIVILITE_ID, PAYS_NAISSANCE_ID, DEP_NAISSANCE_ID , NUMERO_INSEE_PROVISOIRE
+FROM 
+  INTERVENANT 
+WHERE 
+  NUMERO_INSEE IS NOT NULL 
+  AND HISTO_DESTRUCTION IS NOT NULL 
+--AND ID = 6391
+');
+
+
+$iv = new \Application\Validator\NumeroINSEEValidator(['provisoire' => false]);
+$ov = new \Application\Validator\NumeroINSEEValidatorOld(['provisoire' => false]);
+
+echo '<table class="table table-bordered">';
+foreach ($is as $i) {
+    $dn      = substr($i['DATE_NAISSANCE'], 0, 10);
+    $dn      = \DateTime::createFromFormat('Y-m-d', $dn);
+    $dn      = $dn->format(\Application\Constants::DATE_FORMAT);
+    $context = [
+        'civilite'             => $i['CIVILITE_ID'],
+        'dateNaissance'        => $dn,
+        'paysNaissance'        => $i['PAYS_NAISSANCE_ID'],
+        'departementNaissance' => $i['DEP_NAISSANCE_ID'],
+    ];
+    $insee   = $i['NUMERO_INSEE'] . $i['NUMERO_INSEE_CLE'];
+    $valid   = $iv->isValid($insee, $context);
+
+    $ovValid = $ov->isValid($insee, $context);
+
+    if ($valid != $ovValid) {
+        echo '<tr>
+<th>' . $i['ID'] . '</th>
+<td>' . ($i['NUMERO_INSEE_PROVISOIRE'] ? 'oui' : 'non') . '</td>
+<td>' . $insee . '</td>
+<td>' . ($valid ? 'oui' : 'non') . '</td>
+<td>' . ($ovValid ? 'oui' : 'non') . '</td>
+</tr>';
+    }
+}
+echo '</table>';

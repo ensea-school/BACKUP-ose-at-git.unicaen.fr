@@ -140,7 +140,7 @@ select * from (
     JOIN etape e ON cp.etape_id = e.id
     JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID
     JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID
-    JOIN structure s ON ep.structure_id = s.id
+    JOIN structure s ON e.structure_id = s.id
     LEFT JOIN periode pe ON ep.periode_id = pe.id
   where
     (cp.histo_destruction IS NULL$orCp)

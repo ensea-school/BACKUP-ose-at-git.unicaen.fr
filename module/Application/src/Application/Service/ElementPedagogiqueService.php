@@ -140,7 +140,7 @@ select * from (
     JOIN etape e ON cp.etape_id = e.id
     JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID
     JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID
-    JOIN structure s ON e.structure_id = s.id
+    JOIN structure s ON s.id = e.structure_id OR s.id = ep.structure_id
     LEFT JOIN periode pe ON ep.periode_id = pe.id
   where
     (cp.histo_destruction IS NULL$orCp)
@@ -241,7 +241,7 @@ where rang = 1
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
@@ -420,7 +420,7 @@ where rang = 1
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy($this->getAlias() . '.libelle');
 
         return $qb;

@@ -126,11 +126,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $numeroInsee;
 
     /**
-     * @var string|null
-     */
-    protected $numeroInseeCle;
-
-    /**
      * @var bool|null
      */
     protected $numeroInseeProvisoire;
@@ -794,30 +789,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function setNumeroInsee(?string $numeroInsee): Intervenant
     {
         $this->numeroInsee = $numeroInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string|null
-     */
-    public function getNumeroInseeCle(): ?string
-    {
-        return $this->numeroInseeCle;
-    }
-
-
-
-    /**
-     * @param string|null $numeroInseeCle
-     *
-     * @return Intervenant
-     */
-    public function setNumeroInseeCle(?string $numeroInseeCle): Intervenant
-    {
-        $this->numeroInseeCle = $numeroInseeCle;
 
         return $this;
     }

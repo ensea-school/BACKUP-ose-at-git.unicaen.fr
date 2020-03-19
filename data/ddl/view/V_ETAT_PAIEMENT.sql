@@ -99,7 +99,7 @@ SELECT
                                 ti.libelle                                                          statut,
                                 i.source_code                                                       intervenant_code,
                                 i.nom_usuel || ' ' || i.prenom                                      intervenant_nom,
-                                TRIM( i.numero_insee || NVL(TRIM(i.numero_insee_cle),'00') )        intervenant_numero_insee,
+                                i.numero_insee                                                      intervenant_numero_insee,
                                 cc.source_code                                                      centre_cout_code,
                                 cc.libelle                                                          centre_cout_libelle,
                                 df.source_code                                                      domaine_fonctionnel_code,

@@ -416,17 +416,6 @@ return [
             'default'     => NULL,
             'commentaire' => NULL,
         ],
-        'NUMERO_INSEE_CLE'           => [
-            'name'        => 'NUMERO_INSEE_CLE',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 2,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'commentaire' => NULL,
-        ],
         'NUMERO_INSEE_PROVISOIRE'    => [
             'name'        => 'NUMERO_INSEE_PROVISOIRE',
             'type'        => 'bool',

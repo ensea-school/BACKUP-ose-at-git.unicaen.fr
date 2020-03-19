@@ -64,8 +64,8 @@ FROM
     to_char(COALESCE(d.date_naissance,i.date_naissance), 'dd/mm/YYYY')                            "dateNaissance",
     COALESCE(d.adresse,ose_divers.formatted_adresse(
         ai.NO_VOIE, ai.NOM_VOIE, ai.BATIMENT, ai.MENTION_COMPLEMENTAIRE, ai.LOCALITE,
-        ai.CODE_POSTAL, ai.VILLE, ai.PAYS_LIBELLE))                                               "adresse",
-    COALESCE(d.numero_insee,i.numero_insee || ' ' || COALESCE(LPAD(i.numero_insee_cle,2,'0'),'')) "numInsee",
+        ai.CODE_POSTAL, ai.VILLE, ai.PAYS_LIBELLE))                 "adresse",
+    COALESCE(d.numero_insee,i.numero_insee)                                                       "numInsee",
     si.libelle                                                                                    "statut",
     replace(ltrim(to_char(COALESCE(fr.total,0), '999999.00')),'.',',')                            "totalHETD",
     replace(ltrim(to_char(COALESCE(th.valeur,0), '999999.00')),'.',',')                           "tauxHoraireValeur",

@@ -27,7 +27,7 @@ FROM (
     t2.periode_paiement_id                                                                              periode_id,
     i.id                                                                                                intervenant_id,
     CASE WHEN i.numero_insee IS NULL THEN '''' ELSE
-      '''' || TRIM(i.numero_insee) || COALESCE(LPAD(TRIM(i.numero_insee_cle), 2, '0'),'00')
+      '''' || TRIM(i.numero_insee)
     END                                                                                                 insee,
     i.nom_usuel || ',' || i.prenom                                                                      nom,
     t2.code_origine                                                                                     code_origine,

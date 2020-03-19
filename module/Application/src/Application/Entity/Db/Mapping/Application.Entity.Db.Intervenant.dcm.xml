@@ -67,7 +67,6 @@
         </many-to-one>
 
         <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="13" nullable="true"/>
-        <field name="numeroInseeCle" type="string" column="NUMERO_INSEE_CLE" length="2" nullable="true"/>
         <field name="numeroInseeProvisoire" type="boolean" column="NUMERO_INSEE_PROVISOIRE" nullable="true"/>
 
         <field name="IBAN" type="string" column="IBAN" length="255" nullable="true"/>

@@ -78,12 +78,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var string|null
      */
-    protected $villeNaissanceCodeInsee;
-
-    /**
-     * @var string|null
-     */
-    protected $villeNaissanceLibelle;
+    protected $communeNaissance;
 
     /**
      * @var Pays|null
@@ -558,45 +553,21 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getVilleNaissanceCodeInsee(): ?string
+    public function getCommuneNaissance(): ?string
     {
-        return $this->villeNaissanceCodeInsee;
+        return $this->communeNaissance;
     }
 
 
 
     /**
-     * @param string|null $villeNaissanceCodeInsee
+     * @param string|null $communeNaissance
      *
      * @return Intervenant
      */
-    public function setVilleNaissanceCodeInsee(?string $villeNaissanceCodeInsee): Intervenant
+    public function setCommuneNaissance(?string $communeNaissance): Intervenant
     {
-        $this->villeNaissanceCodeInsee = $villeNaissanceCodeInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string|null
-     */
-    public function getVilleNaissanceLibelle(): ?string
-    {
-        return $this->villeNaissanceLibelle;
-    }
-
-
-
-    /**
-     * @param string|null $villeNaissanceLibelle
-     *
-     * @return Intervenant
-     */
-    public function setVilleNaissanceLibelle(?string $villeNaissanceLibelle): Intervenant
-    {
-        $this->villeNaissanceLibelle = $villeNaissanceLibelle;
+        $this->communeNaissance = $communeNaissance;
 
         return $this;
     }

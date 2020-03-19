@@ -33,8 +33,7 @@
         <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="false"/>
         <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="60" nullable="true"/>
 
-        <field name="villeNaissanceCodeInsee" type="string" column="VILLE_NAISSANCE_CODE_INSEE" length="5" nullable="true"/>
-        <field name="villeNaissanceLibelle" type="string" column="VILLE_NAISSANCE_LIBELLE" length="26" nullable="true"/>
+        <field name="communeNaissance" type="string" column="COMMUNE_NAISSANCE" length="60" nullable="true"/>
         <many-to-one field="paysNaissance" target-entity="Application\Entity\Db\Pays">
             <join-column name="PAYS_NAISSANCE_ID" referenced-column-name="ID"/>
         </many-to-one>

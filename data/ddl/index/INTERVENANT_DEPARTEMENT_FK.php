@@ -7,7 +7,7 @@ return [
     'unique'  => FALSE,
     'table'   => 'INTERVENANT',
     'columns' => [
-        'DEP_NAISSANCE_ID',
+        'DEPARTEMENT_NAISSANCE_ID',
     ],
 ];
 

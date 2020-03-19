@@ -5,6 +5,7 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
 use Application\Entity\Db\Traits\DisciplineAwareTrait;
+use Application\Entity\Db\Traits\EmployeurAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;
@@ -31,6 +32,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     use DisciplineAwareTrait;
     use CiviliteAwareTrait;
     use AdresseTrait;
+    use EmployeurAwareTrait;
     use ImportAwareTrait;
     use HistoriqueAwareTrait;
     use EntityManagerAwareTrait;
@@ -164,8 +166,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * @var string|null
      */
     protected $autre5;
-
-    //protected $employeur;
 
     /**
      * @var float|null

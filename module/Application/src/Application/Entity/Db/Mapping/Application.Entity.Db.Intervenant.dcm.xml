@@ -78,10 +78,10 @@
         <field name="autre4" type="string" column="AUTRE_4" length="1000" nullable="true"/>
         <field name="autre5" type="string" column="AUTRE_5" length="1000" nullable="true"/>
 
-
-
+        <many-to-one field="employeur" target-entity="UnicaenImport\Entity\Db\Employeur">
+            <join-column name="EMPLOYEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true" />
-        <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="true"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-column name="SOURCE_ID" referenced-column-name="ID"/>

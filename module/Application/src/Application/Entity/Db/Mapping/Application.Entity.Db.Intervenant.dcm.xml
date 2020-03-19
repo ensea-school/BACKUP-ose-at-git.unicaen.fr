@@ -37,8 +37,8 @@
         <many-to-one field="paysNaissance" target-entity="Application\Entity\Db\Pays">
             <join-column name="PAYS_NAISSANCE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="depNaissance" target-entity="Application\Entity\Db\Departement">
-            <join-column name="DEP_NAISSANCE_ID" referenced-column-name="ID"/>
+        <many-to-one field="departementNaissance" target-entity="Application\Entity\Db\Departement">
+            <join-column name="DEPARTEMENT_NAISSANCE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="paysNationalite" target-entity="Application\Entity\Db\Pays">
             <join-column name="PAYS_NATIONALITE_ID" referenced-column-name="ID"/>

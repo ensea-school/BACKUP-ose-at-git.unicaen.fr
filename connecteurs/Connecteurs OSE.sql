@@ -224,7 +224,7 @@ SELECT
   initcap(individu.nom_patronymique)                          nom_patronymique,
   individu.d_naissance                                        date_naissance,
   individu.c_pays_naissance                                   z_pays_naissance_id,
-  individu.c_dept_naissance                                   z_dep_naissance_id,
+  individu.c_dept_naissance                                   z_departement_naissance_id,
   COALESCE(commune.libelle_commune,individu.ville_de_naissance) commune_naissance,
   individu.c_pays_nationnalite                                z_pays_nationalite_id,
   individu_telephone.no_telephone                             tel_pro,
@@ -617,7 +617,7 @@ SELECT
   i.nom_usuel, i.prenom, i.nom_patronymique,
   COALESCE(i.date_naissance,TO_DATE('2099-01-01','YYYY-MM-DD')) date_naissance,
   pnaiss.id pays_naissance_id,
-  dep.id dep_naissance_id,
+  dep.id departement_naissance_id,
   i.commune_naissance,
   pnat.id pays_nationalite_id,
   i.tel_pro, i.tel_mobile, i.email,
@@ -640,7 +640,7 @@ FROM
   LEFT JOIN grade           g ON g.source_code = i.z_grade_id
   LEFT JOIN pays       pnaiss ON pnaiss.source_code = i.z_pays_naissance_id
   LEFT JOIN pays         pnat ON pnat.source_code = i.z_pays_nationalite_id
-  LEFT JOIN departement   dep ON dep.source_code = i.z_dep_naissance_id
+  LEFT JOIN departement   dep ON dep.source_code = i.z_departement_naissance_id
   LEFT JOIN discipline d99 ON d99.source_code = '99'
   LEFT JOIN discipline d ON
     d.histo_destruction IS NULL
@@ -674,7 +674,7 @@ SELECT
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
   i.pays_naissance_id,
-  i.dep_naissance_id,
+  i.departement_naissance_id,
   i.commune_naissance,
   i.pays_nationalite_id,
   i.tel_pro, i.tel_mobile, i.email,
@@ -706,7 +706,7 @@ SELECT
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
   i.pays_naissance_id,
-  i.dep_naissance_id,
+  i.departement_naissance_id,
   i.commune_naissance,
   i.pays_nationalite_id,
   i.tel_pro, i.tel_mobile, i.email,

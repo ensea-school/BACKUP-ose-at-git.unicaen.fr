@@ -88,7 +88,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var Departement|null
      */
-    private $depNaissance;
+    private $departementNaissance;
 
     /**
      * @var Pays|null
@@ -601,21 +601,21 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return Departement|null
      */
-    public function getDepNaissance(): ?Departement
+    public function getDepartementNaissance(): ?Departement
     {
-        return $this->depNaissance;
+        return $this->departementNaissance;
     }
 
 
 
     /**
-     * @param Departement|null $depNaissance
+     * @param Departement|null $departementNaissance
      *
      * @return Intervenant
      */
-    public function setDepNaissance(?Departement $depNaissance): Intervenant
+    public function setDepartementNaissance(?Departement $departementNaissance): Intervenant
     {
-        $this->depNaissance = $depNaissance;
+        $this->departementNaissance = $departementNaissance;
 
         return $this;
     }

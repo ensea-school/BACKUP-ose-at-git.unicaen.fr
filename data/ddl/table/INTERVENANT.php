@@ -431,7 +431,7 @@ return [
             'name'        => 'NUMERO_INSEE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 13,
+            'length'      => 15,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,

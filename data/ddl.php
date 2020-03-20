@@ -48164,18 +48164,7 @@ END;',
         2 => 'ANNEE_ID',
       ),
     ),
-    'EP_CODE__UN' => 
-    array (
-      'name' => 'EP_CODE__UN',
-      'unique' => true,
-      'table' => 'ELEMENT_PEDAGOGIQUE',
-      'columns' => 
-      array (
-        0 => 'SOURCE_CODE',
-        1 => 'ANNEE_ID',
-      ),
-    ),
-    'EP_DISCIPLINE_FK_IDX' => 
+    'EP_DISCIPLINE_FK_IDX' =>
     array (
       'name' => 'EP_DISCIPLINE_FK_IDX',
       'unique' => false,

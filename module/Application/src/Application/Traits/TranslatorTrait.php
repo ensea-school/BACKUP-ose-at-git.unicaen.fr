@@ -14,7 +14,7 @@ trait TranslatorTrait
         'ORA-01722',
         '.MEP_FR_SERVICE_FK',
         '.MEP_FR_SERVICE_REF_FK',
-        '.EP_CODE__UN',
+        '.EP_CODE_UN',
         '.ETAPE_SOURCE_UN',
     ];
 
@@ -24,8 +24,8 @@ trait TranslatorTrait
      * Se charge de traduire les exceptions en provenance de la base de données ou d'une erreur standard
      *
      * @param \Exception $exception
-     * @param string $textDomain
-     * @param string $locale
+     * @param string     $textDomain
+     * @param string     $locale
      *
      * @return string
      */
@@ -40,7 +40,7 @@ trait TranslatorTrait
 
         foreach ($this->dbErrors as $key) {
             if (false !== strpos($msg, $key)) {
-                return $this->translate('bdd '.$key, $textDomain, $locale);
+                return $this->translate('bdd ' . $key, $textDomain, $locale);
             }
         }
 
@@ -56,8 +56,8 @@ trait TranslatorTrait
 
     /**
      * @param string|\Exception $message
-     * @param string $textDomain
-     * @param string $locale
+     * @param string            $textDomain
+     * @param string            $locale
      *
      * @return string
      */

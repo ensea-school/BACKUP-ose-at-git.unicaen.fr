@@ -14,12 +14,12 @@ $si = $container->get(\Application\Service\IntervenantService::class);
 
 $is = $si->getEntityManager()->getConnection()->fetchAll('
 SELECT 
-  ID, NUMERO_INSEE, NUMERO_INSEE_CLE, DATE_NAISSANCE, CIVILITE_ID, PAYS_NAISSANCE_ID, DEP_NAISSANCE_ID , NUMERO_INSEE_PROVISOIRE
+  ID, ANNEE_ID, NOM_USUEL, PRENOM, NUMERO_INSEE, NUMERO_INSEE_CLE, DATE_NAISSANCE, CIVILITE_ID, PAYS_NAISSANCE_ID, DEP_NAISSANCE_ID , NUMERO_INSEE_PROVISOIRE
 FROM 
   INTERVENANT 
 WHERE 
   NUMERO_INSEE IS NOT NULL 
-  AND HISTO_DESTRUCTION IS NOT NULL 
+  AND HISTO_DESTRUCTION IS NULL 
 --AND ID = 6391
 ');
 
@@ -46,6 +46,9 @@ foreach ($is as $i) {
     if ($valid != $ovValid) {
         echo '<tr>
 <th>' . $i['ID'] . '</th>
+<th>' . $i['ANNEE_ID'] . '</th>
+<th>' . $i['NOM_USUEL'] . '</th>
+<th>' . $i['PRENOM'] . '</th>
 <td>' . ($i['NUMERO_INSEE_PROVISOIRE'] ? 'oui' : 'non') . '</td>
 <td>' . $insee . '</td>
 <td>' . ($valid ? 'oui' : 'non') . '</td>

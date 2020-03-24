@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -11,6 +12,10 @@ class Parametre implements HistoriqueAwareInterface
 {
     const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';
     const SERVICES_MODALITE_CALENDAIRE = 'calendaire';
+
+    const CONTRAT_FRANCHI_VALIDATION  = 'validation';
+    const CONTRAT_FRANCHI_DEPOT       = 'depot';
+    const CONTRAT_FRANCHI_DATE_RETOUR = 'date-retour';
 
     use HistoriqueAwareTrait;
 

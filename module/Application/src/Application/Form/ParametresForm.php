@@ -304,8 +304,7 @@ class ParametresForm extends AbstractForm
             'options'    => [
                 'value_options' => [
                     Parametre::CONTRAT_FRANCHI_VALIDATION  => 'Validation du contrat',
-                    Parametre::CONTRAT_FRANCHI_DEPOT       => 'Validation & dépot dans l\'application du contrat signé',
-                    Parametre::CONTRAT_FRANCHI_DATE_RETOUR => 'Validation, dépôt du fichier & saisie de la date de retour du contrat signé',
+                    Parametre::CONTRAT_FRANCHI_DATE_RETOUR => 'Validation & saisie de la date de retour du contrat signé',
                 ],
             ],
             'attributes' => [

@@ -37,35 +37,42 @@ class StatutIntervenantController extends AbstractController
     public function saisieAction()
     {
         /* @var $statutIntervenant StatutIntervenant */
+        try {
 
-        $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
-        $form              = $this->getFormStatutIntervenantSaisie();
-        if (empty($statutIntervenant)) {
-            $title             = 'Création d\'un nouveau statut d\'intervenant';
-            $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
-            $statutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
-        } else {
-            $title = 'Édition d\'un statut d\'intervenant';
+
+            $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
+            $form              = $this->getFormStatutIntervenantSaisie();
+            if (empty($statutIntervenant)) {
+                $title             = 'Création d\'un nouveau statut d\'intervenant';
+                $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
+                $statutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
+            } else {
+                $title = 'Édition d\'un statut d\'intervenant';
+            }
+
+            $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
+            if ($statutIntervenant->getSource()->getImportable()) {
+                $canEdit = false; // Si la source est synchronisable alors pas d'édition possible
+            }
+
+            if ($canEdit) {
+                $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
+                    try {
+                        $this->getServiceStatutIntervenant()->save($si);
+                        unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                        $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                    } catch (\Exception $e) {
+                        $this->flashMessenger()->addErrorMessage($this->translate($e));
+                    }
+                });
+            } else {
+                $form->bind($statutIntervenant);
+                $form->readOnly();
+            }
         }
-
-        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-        if ($statutIntervenant->getSource()->getImportable()) {
-            $canEdit = false; // Si la source est synchronisable alors pas d'édition possible
-        }
-
-        if ($canEdit) {
-            $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
-                try {
-                    $this->getServiceStatutIntervenant()->save($si);
-                    unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            });
-        } else {
-            $form->bind($statutIntervenant);
-            $form->readOnly();
+        catch(\Exception $e)
+        {
+            var_dump($e);
         }
 
 

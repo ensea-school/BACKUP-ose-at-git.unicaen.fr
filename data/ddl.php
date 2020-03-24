@@ -6828,7 +6828,7 @@
         ),
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE' =>
+    'FORMULE_TEST_VOLUME_HORAIRE' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'temporary' => false,
@@ -13382,7 +13382,18 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' =>
+        'ANNEE_AGREMENT' => 
+        array (
+          'name' => 'ANNEE_AGREMENT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -13393,22 +13404,11 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' =>
+        'CODE_INTERVENANT' => 
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
           'length' => 255,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'ANNEE_AGREMENT' =>
-        array (
-          'name' => 'ANNEE_AGREMENT',
-          'type' => 'NUMBER',
-          'length' => 0,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => true,
@@ -14812,7 +14812,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE_INTERVENANT' =>
+        'CODE_INTERVENANT' => 
         array (
           'name' => 'CODE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -16088,7 +16088,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -16154,7 +16154,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DUREE_VIE' =>
+        'DUREE_VIE' => 
         array (
           'name' => 'DUREE_VIE',
           'type' => 'NUMBER',
@@ -17848,7 +17848,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -19917,7 +19917,7 @@
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
@@ -31651,7 +31651,7 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'V_AGREMENT_EXPORT_CSV' =>
+    'V_AGREMENT_EXPORT_CSV' => 
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -35903,7 +35903,7 @@ FROM
   JOIN categorie_privilege cp ON cp.id = p.categorie_id
   LEFT JOIN statuts_roles sr ON sr.privilege_id = p.id',
     ),
-    'V_RECONDUCTION_CENTRE_COUT' =>
+    'V_RECONDUCTION_CENTRE_COUT' => 
     array (
       'name' => 'V_RECONDUCTION_CENTRE_COUT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_CENTRE_COUT AS
@@ -35929,7 +35929,7 @@ FROM
  	e.histo_destruction IS NULL
     AND ccep2.id IS NULL',
     ),
-    'V_RECONDUCTION_MODULATEUR' =>
+    'V_RECONDUCTION_MODULATEUR' => 
     array (
       'name' => 'V_RECONDUCTION_MODULATEUR',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_RECONDUCTION_MODULATEUR AS
@@ -44241,7 +44241,7 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
-    'FORMULE__UN' =>
+    'FORMULE__UN' => 
     array (
       'name' => 'FORMULE__UN',
       'table' => 'FORMULE',
@@ -44842,11 +44842,12 @@ WHERE
     array (
       'name' => 'TYPE_AGREMENT_STATUT__UN',
       'table' => 'TYPE_AGREMENT_STATUT',
-      'index' => 'TYPE_AGREMENT_STATUT__UN1',
+      'index' => 'TYPE_AGREMENT_STATUT__UN',
       'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'STATUT_INTERVENANT_ID',
+        2 => 'HISTO_DESTRUCTION',
       ),
     ),
     'TYPE_AGREMENT__UN' => 
@@ -48780,7 +48781,7 @@ END;',
         0 => 'ID',
       ),
     ),
-    'FORMULE_TEST_VOLUME_HORAIRE_PK' =>
+    'FORMULE_TEST_VOLUME_HORAIRE_PK' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE_PK',
       'unique' => true,
@@ -52966,22 +52967,11 @@ END;',
       'name' => 'TYPE_AGREMENT_STATUT__UN',
       'unique' => true,
       'table' => 'TYPE_AGREMENT_STATUT',
-      'columns' =>
-      array (
-        0 => 'TYPE_AGREMENT_ID',
-        1 => 'STATUT_INTERVENANT_ID',
-        2 => 'PREMIER_RECRUTEMENT',
-      ),
-    ),
-    'TYPE_AGREMENT_STATUT__UN1' => 
-    array (
-      'name' => 'TYPE_AGREMENT_STATUT__UN1',
-      'unique' => true,
-      'table' => 'TYPE_AGREMENT_STATUT',
       'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'STATUT_INTERVENANT_ID',
+        2 => 'HISTO_DESTRUCTION',
       ),
     ),
     'TYPE_AGREMENT__UN' => 

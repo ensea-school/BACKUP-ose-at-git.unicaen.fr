@@ -9,7 +9,7 @@
       <index name="IDX_52F2ED3963F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
     <unique-constraints>
-      <unique-constraint name="type_agrement_statut__un" columns="TYPE_AGREMENT_ID,STATUT_INTERVENANT_ID"/>
+      <unique-constraint name="type_agrement_statut__un" columns="TYPE_AGREMENT_ID,STATUT_INTERVENANT_ID,HISTO_DESTRUCTION"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
@@ -17,7 +17,6 @@
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="true"/>
     <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>

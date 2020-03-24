@@ -52,6 +52,13 @@ class TypeAgrementService extends AbstractEntityService
         }
     }
 
+    public function getTypesAgrement()
+    {
+        $this->getEntityManager()->find('TypeAgrement');
+
+
+    }
+
 
 
     /**

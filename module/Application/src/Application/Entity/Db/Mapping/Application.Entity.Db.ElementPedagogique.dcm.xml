@@ -14,7 +14,7 @@
             <index name="IDX_CCADDAC0884B0F7B" columns="STRUCTURE_ID"/>
         </indexes>
         <unique-constraints>
-            <unique-constraint name="ep_code__un" columns="SOURCE_CODE"/>
+            <unique-constraint name="ep_code_un" columns="SOURCE_CODE"/>
         </unique-constraints>
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>

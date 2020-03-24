@@ -1,3 +1,13 @@
+# OSE 13.1
+
+## Correction de bugs
+
+* Lors de l'installation de OSE, les taux horaires des heures équivalent TD s'initialisent maintenant bien quelle que soit la configuration du serveur
+* Lors de la saisie de service, un élément remonte maintenant même si on filtre par une composante qui n'est pas la composante porteuse de l'élément
+* Les numéros d'INSEE Corses sont maintenant gérés correctement, de même que les anciens départements français du Maroc et de Tunisie
+* Lors de l'installation de l'application, l'initialisation des données fonctionne à nouveau
+* Le cache des données de pièces jointes (TBL_PIECE_JOINTE) pose problème depuis la V13 avec les version d'Oracle > 11. Un palliatif est intégré à cette nouvelle version.
+
 # OSE 13.0
 
 ## Nouveautés

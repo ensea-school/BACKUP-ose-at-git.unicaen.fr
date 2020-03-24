@@ -10,5 +10,5 @@ _('bdd .SERVICE__UN');
 _('bdd ORA-01722');
 _('bdd .MEP_FR_SERVICE_FK');
 _('bdd .MEP_FR_SERVICE_REF_FK');
-_('bdd .EP_CODE__UN');
+_('bdd .EP_CODE_UN');
 _('bdd .ETAPE_SOURCE_UN');

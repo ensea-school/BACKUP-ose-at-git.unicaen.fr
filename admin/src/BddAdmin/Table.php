@@ -3,7 +3,7 @@
 namespace BddAdmin;
 
 
-use BddAdmin\Ddl\DdlTable;
+use BddAdmin\Manager\DdlTable;
 
 class Table
 {
@@ -54,8 +54,8 @@ class Table
     public function getDdl(): array
     {
         if (empty($this->ddl)) {
-            $ddlObject = new DdlTable($this->getBdd());
-            $this->ddl = $ddlObject->get($this->name)[$this->name];
+            $sTable    = $this->getBdd()->table();
+            $this->ddl = $sTable->get($this->name)[$this->name];
         }
 
         return $this->ddl;
@@ -73,21 +73,37 @@ class Table
 
 
 
+    protected function makeTypesOptions(): array
+    {
+        $ddl = $this->getDdl();
+
+        $types = [];
+        foreach ($ddl['columns'] as $column => $d) {
+            $types[$column] = $d['type'];
+        }
+
+        return $types;
+    }
+
+
+
     /**
      * @param array|integer|null $where
-     * @param string|null        $orderBy
+     * @param array|null         $options
      *
-     * @return array
+     * @return array|null|SelectParser
      * @throws Exception\BddCompileException
      * @throws Exception\BddException
      * @throws Exception\BddIndexExistsException
      */
-    public function select($where = null, array $options = []): array
+    public function select($where = null, array $options = [])
     {
         /* Initialisation des entrées */
         $defaultOptions = [
-            'orderBy' => '',
+            'fetch'   => Bdd::FETCH_ALL,
+            'types'   => $this->makeTypesOptions(),
             'key'     => null,
+            'orderBy' => '',
         ];
         $options        = array_merge($defaultOptions, $options);
 
@@ -97,11 +113,7 @@ class Table
         $cols = '';
         foreach ($ddl['columns'] as $colDdl) {
             if ($cols != '') $cols .= ', ';
-            if ($colDdl['type'] == 'DATE') {
-                $cols .= 'to_char(' . $colDdl['name'] . ',\'YYYY-mm-dd\') ' . $colDdl['name'];
-            } else {
-                $cols .= $colDdl['name'];
-            }
+            $cols .= $colDdl['name'];
         }
         $sql    = "SELECT $cols FROM \"$this->name\"";
         $params = [];
@@ -110,19 +122,57 @@ class Table
         if ($options['orderBy']) {
             $sql .= ' ORDER BY ' . $options['orderBy'];
         }
-        $select = $this->getBdd()->select($sql, $params);
+        $select = $this->getBdd()->select($sql, $params, $options);
 
-        /* Mise en forme des résultats */
-        $data = [];
-        foreach ($select as $d) {
-            foreach ($d as $c => $v) {
-                $d[$c] = $this->sqlToVal($v, $ddl['columns'][$c]);
+        if ($options['fetch'] == Bdd::FETCH_ALL) {
+            /* Mise en forme des résultats */
+            $data = [];
+            foreach ($select as $d) {
+                $keyValue        = $this->makeKey($d, $options['key']);
+                $data[$keyValue] = $d;
             }
-            $keyValue        = $this->makeKey($d, $options['key']);
-            $data[$keyValue] = $d;
+
+            return $data;
+        } else {
+            return $select;
+        }
+    }
+
+
+
+    public function copy(Bdd $source, callable $fnc = null)
+    {
+        $options = ['types' => $this->makeTypesOptions(), 'fetch' => Bdd::FETCH_EACH];
+
+        $count = (int)$source->select('SELECT count(*) C FROM ' . $this->getName(), [], ['fetch' => Bdd::FETCH_ONE])['C'];
+        $r     = $source->select('SELECT * FROM ' . $this->getName(), [], $options);
+
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logBegin("Copie de la table " . $this->getName());
         }
 
-        return $data;
+        $current = 0;
+        while ($data = $r->next()) {
+            $current++;
+            if ($current == $count) {
+                $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " Terminée", true);
+            } else {
+                $val = round($current * 100 / $count, 2);
+                $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " en cours (" . $val . "%)", true);
+            }
+            if (is_callable($fnc)) $data = $fnc($data);
+            if (null !== $data) {
+                $this->insert($data);
+            }
+        }
+
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logEnd();
+        } else {
+            $this->getBdd()->logMsg("\n", true);
+        }
+
+        return $this;
     }
 
 
@@ -149,22 +199,26 @@ class Table
             if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $options['histo-user-id'];
         }
 
-        $cols = array_keys($data);
-        $cols = implode(', ', $cols);
-
-        $vals = '';
+        $cols   = [];
+        $vals   = [];
+        $params = [];
         foreach ($data as $col => $val) {
-            if ($vals != '') $vals .= ',';
+            $transformer = isset($options['columns'][$col]['transformer']) ? $options['columns'][$col]['transformer'] : null;
 
-            $transVal = ':' . $col;
-            if (isset($options['columns'][$col]['transformer'])) {
-                $transVal = '(' . sprintf($options['columns'][$col]['transformer'], $transVal) . ')';
+            $cols[] = $col;
+            if ($transformer) {
+                $vals[] = '(' . sprintf($transformer, ':' . $col) . ')';
+            } else {
+                $vals[] = ':' . $col;
             }
-            $vals .= $transVal;
+            $params[$col] = $val;
         }
-        $sql = "INSERT INTO \"$this->name\" ($cols) VALUES ($vals)";
 
-        return $this->getBdd()->exec($sql, $data);
+        $cols = implode(", ", $cols);
+        $vals = implode(", ", $vals);
+        $sql  = "INSERT INTO \"$this->name\" ($cols) VALUES ($vals)";
+
+        return $this->getBdd()->exec($sql, $params, $this->makeTypesOptions());
     }
 
 
@@ -192,7 +246,7 @@ class Table
 
         $sql = "UPDATE \"$this->name\" SET $dataSql" . $this->makeWhere($where, $options, $params);
 
-        return $this->getBdd()->exec($sql, $params);
+        return $this->getBdd()->exec($sql, $params, $this->makeTypesOptions());
     }
 
 
@@ -443,12 +497,12 @@ class Table
 
 
 
-    protected function transform($value, string $transformer, array $ddl)
+    protected function transform($value, string $transformer)
     {
         if (!isset($this->transformCache[$transformer][$value])) {
             $val = $this->getBdd()->select(sprintf($transformer, ':val'), ['val' => $value]);
             if (isset($val[0])) {
-                $this->transformCache[$transformer][$value] = $this->sqlToVal(current($val[0]), $ddl);
+                $this->transformCache[$transformer][$value] = current($val[0]);
             } else {
                 $this->transformCache[$transformer][$value] = null;
             }
@@ -457,37 +511,4 @@ class Table
         return $this->transformCache[$transformer][$value];
     }
 
-
-
-    protected function sqlToVal($value, array $ddl)
-    {
-        if ($value === null) return null;
-
-        switch ($ddl['type']) {
-            case 'NUMBER':
-                if (1 == $ddl['precision']) {
-                    return $value === '1';
-                } else {
-                    return (int)$value;
-                }
-
-            case 'FLOAT':
-                return (float)$value;
-            case 'VARCHAR2':
-            case 'CLOB':
-                return $value;
-            case 'DATE':
-                if (!$value) return null;
-                $date = \DateTime::createFromFormat('Y-m-d', $value);
-                $date->setTime(0, 0, 0);
-
-                return $date;
-            case 'BLOB':
-                return $value;
-            default:
-                throw new \Exception("Type de donnée " . $ddl['type'] . " non géré.");
-        }
-
-        return $value;
-    }
 }

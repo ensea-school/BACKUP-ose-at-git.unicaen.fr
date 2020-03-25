@@ -23,11 +23,11 @@ if ($params['params']['creer-intervenant']) {
 
     $bdd = $oa->getBdd();
 
-    $annee                     = $bdd->select("SELECT libelle FROM annee WHERE id = (SELECT valeur FROM parametre WHERE nom = 'annee')", [], $bdd::FETCH_ONE)['LIBELLE'];
+    $annee                     = $bdd->select("SELECT LIBELLE FROM ANNEE WHERE ID = (SELECT VALEUR FROM PARAMETRE WHERE NOM = 'annee')", [], ['fetch' => $bdd::FETCH_ONE])['LIBELLE'];
     $params['params']['annee'] = $c->getInput('annee', 'Année universitaire (' . $annee . ' par défaut, sinon entrez 2020 pour 2020/2021, etc.)');
 
     if (!$c->hasOption('statut')) {
-        $statuts = $bdd->select("SELECT source_code CODE, libelle FROM statut_intervenant WHERE histo_destruction IS NULL AND source_code <> 'AUTRES' ORDER BY ordre");
+        $statuts = $bdd->select("SELECT CODE CODE, LIBELLE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE <> 'AUTRES' ORDER BY ORDRE");
         $c->println('Statut de \'intervenant ("AUTRES" par défaut, sinon entrez le code parmi les propositions suivantes) :');
         $maxCodeLength = 0;
         foreach ($statuts as $statut) {

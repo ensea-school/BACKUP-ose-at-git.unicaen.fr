@@ -1,76 +1,27 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\TableManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
+use BddAdmin\Exception\BddException;
 
-class DdlTable extends DdlAbstract
+class TableManager extends AbstractManager implements TableManagerInterface
 {
-    const ALIAS = 'table';
-
-    const COL_ACTION_CREATE         = 0b00001;
-    const COL_ACTION_DROP           = 0b00010;
-    const COL_ACTION_ALTER_TYPE     = 0b00100;
-    const COL_ACTION_ALTER_NOT_NULL = 0b01000;
-    const COL_ACTION_ALTER_DEFAULT  = 0b10000;
-    const COL_ACTION_ALL            = 0b11111;
-
-    const OPT_NO_COLUMNS   = 'no-columns';
-    const OPT_NO_TEMPORARY = 'no-temporary';
-
-    /**
-     * @var int
-     */
-    private $colActions = 0;
-
-
-
-    /**
-     * @return int
-     */
-    public function getColActions(): int
-    {
-        return $this->colActions;
-    }
-
-
-
-    /**
-     * @param int $colActions
-     *
-     * @return DdlTable
-     */
-    public function setColActions(int $colActions): DdlTable
-    {
-        $this->colActions = $colActions;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param int $colAction
-     *
-     * @return bool
-     */
-    public function canColAction(int $colAction): bool
-    {
-        return $this->colActions === 0 || (($this->colActions & $colAction) > 0);
-    }
-
-
-
     /**
      * @param string|null $commentaire
      *
      * @return array
      */
-    private function interpreterCommentaire($commentaire): array // (?string $commentaire): array
+    private function interpreterCommentaire($commentaire): array
     {
         $data = [];
         if ($commentaire) {
             $keys = [
                 'sequence',
+                'columns-order',
             ];
 
             $commentaire = strtoupper($commentaire);
@@ -92,42 +43,60 @@ class DdlTable extends DdlAbstract
 
 
 
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT O.OBJECT_NAME 
+          FROM ALL_OBJECTS O 
+            LEFT JOIN ALL_OBJECTS O2 ON O2.OBJECT_NAME = O.OBJECT_NAME AND O2.OBJECT_TYPE = 'MATERIALIZED VIEW'
+          WHERE 
+            O.OWNER = sys_context( 'userenv', 'current_schema' )
+            AND O.OBJECT_TYPE = 'TABLE' AND O.GENERATED = 'N' AND O2.OBJECT_NAME IS NULL
+          ORDER BY O.OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
+
+
+
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('t.table_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('t.table_name');
         $data = [];
-
-        $withColumns = !$this->hasOption(self::OPT_NO_COLUMNS);
 
         $q = "SELECT
             t.table_name      \"name\",
             t.temporary       \"temporary\",
             t.logging         \"logging\",
-            " . ($withColumns ? "
-                c.column_name      \"cname\",
-                c.data_type        \"type\",
-                c.char_length      \"length\",
-                c.data_scale       \"scale\",
-                c.data_precision   \"precision\",
-                c.nullable         \"nullable\",
-                c.data_default     \"default\",
-                ccomm.comments     \"col_commentaire\",
-            " : '') . "
+            c.column_name     \"cname\",
+            c.data_type       \"type\",
+            c.char_length     \"length\",
+            c.data_scale      \"scale\",
+            c.data_precision  \"precision\",
+            c.nullable        \"nullable\",
+            c.data_default    \"default\",
+            ccomm.comments    \"col_commentaire\",
             comm.comments     \"commentaire\",
             s.sequence_name   \"sequence\"
           FROM
-                      user_tables          t
-            LEFT JOIN user_mviews          m ON m.mview_name = t.table_name
-            LEFT JOIN user_tab_comments comm ON comm.table_name = t.table_name
-            LEFT JOIN user_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
-            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
+                      all_tables          t
+            LEFT JOIN all_mviews          m ON m.mview_name = t.table_name
+            LEFT JOIN all_tab_comments comm ON comm.table_name = t.table_name
+            LEFT JOIN all_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
+            JOIN all_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name
           WHERE
-            m.mview_name IS NULL 
-            " . ($this->hasOption(self::OPT_NO_TEMPORARY) ? "AND t.temporary <> 'Y'" : '') . "
+            t.OWNER = sys_context( 'userenv', 'current_schema' )
+            AND m.mview_name IS NULL 
             $f
           ORDER BY
-            t.table_name
-            " . ($withColumns ? ", c.column_id" : '') . "
+            t.table_name, c.column_name
         ";
         $p = $this->bdd->select($q, $p);
         foreach ($p as $paq) {
@@ -138,10 +107,8 @@ class DdlTable extends DdlAbstract
                     'logging'     => $paq['logging'] == 'YES',
                     'commentaire' => $paq['commentaire'],
                     'sequence'    => $paq['sequence'],
+                    'columns'     => [],
                 ];
-                if ($withColumns) {
-                    $data[$paq['name']]['columns'] = [];
-                }
                 if ($commData = $this->interpreterCommentaire($paq['commentaire'])) {
                     foreach ($commData as $k => $v) {
                         $data[$paq['name']][$k] = $v;
@@ -149,21 +116,51 @@ class DdlTable extends DdlAbstract
                 }
             }
 
-            if ($withColumns) {
-                $default = $paq['default'] !== null ? $this->purger($paq['default']) : null;
-                if ('NULL' === $default) $default = null;
+            $default = $paq['default'] !== null ? $this->purger($paq['default']) : null;
+            if ('NULL' === $default) $default = null;
 
-                $data[$paq['name']]['columns'][$paq['cname']] = [
-                    'name'        => $paq['cname'],
-                    'type'        => $paq['type'],
-                    'length'      => (int)$paq['length'],
-                    'scale'       => $paq['scale'],
-                    'precision'   => $paq['precision'] ? (int)$paq['precision'] : null,
-                    'nullable'    => $paq['nullable'] == 'Y',
-                    'default'     => $default,
-                    'commentaire' => $paq['col_commentaire'],
-                ];
+            $type      = $paq['type'];
+            $precision = $paq['precision'] ? (int)$paq['precision'] : null;
+
+            switch ($type) {
+                case 'NUMBER':
+                    if (1 === $precision) {
+                        $type = Bdd::TYPE_BOOL;
+                    } else {
+                        $type = Bdd::TYPE_INT;
+                    }
+                break;
+                case 'VARCHAR2':
+                case 'CHAR':
+                    $type = Bdd::TYPE_STRING;
+                break;
+                case 'DATE':
+                    $type = Bdd::TYPE_DATE;
+                break;
+                case 'FLOAT':
+                    $type = Bdd::TYPE_FLOAT;
+                break;
+                case 'BLOB':
+                    $type = Bdd::TYPE_BLOB;
+                break;
+                case 'CLOB':
+                    $type = Bdd::TYPE_CLOB;
+                break;
+                default:
+                    throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu');
             }
+
+            $data[$paq['name']]['columns'][$paq['cname']] = [
+                'name'        => $paq['cname'],
+                'type'        => $type,
+                'bdd-type'    => $paq['type'],
+                'length'      => (int)$paq['length'],
+                'scale'       => $paq['scale'],
+                'precision'   => $precision,
+                'nullable'    => $paq['nullable'] == 'Y',
+                'default'     => $default,
+                'commentaire' => $paq['col_commentaire'],
+            ];
         }
 
         return $data;
@@ -180,6 +177,22 @@ class DdlTable extends DdlAbstract
         $sql .= "TABLE \"" . $data['name'] . "\"\n   (\t";
 
         $cols = [];
+        if (array_key_exists('columns-order', $data)) {
+            $ordering        = explode(',', $data['columns-order']);
+            $cs              = $data['columns'];
+            $data['columns'] = [];
+            foreach ($ordering as $col) {
+                $col = strtoupper(trim($col));
+                if (isset($cs[$col])) {
+                    $data['columns'][$col] = $cs[$col];
+                    unset($cs[$col]);
+                }
+            }
+            foreach ($cs as $k => $c) {
+                $data['columns'][$k] = $c;
+            }
+        }
+
         foreach ($data['columns'] as $column) {
             $cp = ['"' . $column['name'] . '"', $this->makeColumnType($column)];
             if ($column['default'] !== null) {
@@ -202,7 +215,7 @@ class DdlTable extends DdlAbstract
 
 
 
-    protected function makeCreateComm(array $data)
+    protected function makeCreateComm(array $data, $forceUpdateNull = false)
     {
         if ($data['commentaire']) {
             $comm = "'" . str_replace("'", "''", $data['commentaire']) . "'";
@@ -210,29 +223,53 @@ class DdlTable extends DdlAbstract
             return 'COMMENT ON TABLE "' . $data['name'] . '" IS ' . $comm;
         }
 
-        return null;
+        if ($forceUpdateNull) {
+            return 'COMMENT ON TABLE "' . $data['name'] . '" IS \'\'';
+        } else {
+            return null;
+        }
     }
 
 
 
     private function makeColumnType(array $column): string
     {
-        $type = $column['type'];
+        if (isset($column['bdd-type'])) {
+            $resType = $column['bdd-type'];
+        } else {
+            $resType = null;
+        }
         switch ($column['type']) {
-            case 'NUMBER':
+            case Bdd::TYPE_BOOL:
+                if (!$resType) $resType = 'NUMBER';
+                $resType .= '(1)';
+            break;
+            case Bdd::TYPE_INT:
                 if ($column['scale'] == '0') {
-                    $type .= '(' . ($column['precision'] ? $column['precision'] : '*') . ',0)';
+                    if (!$resType) $resType = 'NUMBER';
+                    $resType .= '(' . ($column['precision'] ? $column['precision'] : '*') . ',0)';
                 }
             break;
-            case 'VARCHAR2':
-                $type .= '(' . $column['length'] . ' CHAR)';
+            case Bdd::TYPE_STRING:
+                if (!$resType) $resType = 'VARCHAR2';
+                $resType .= '(' . $column['length'] . ' CHAR)';
             break;
-            case 'FLOAT':
-                $type .= '(' . $column['precision'] . ')';
+            case Bdd::TYPE_FLOAT:
+                if (!$resType) $resType = 'FLOAT';
+                $resType .= '(' . $column['precision'] . ')';
+            break;
+            case Bdd::TYPE_BLOB:
+                if (!$resType) $resType = 'BLOB';
+            break;
+            case Bdd::TYPE_CLOB:
+                if (!$resType) $resType = 'CLOB';
+            break;
+            case Bdd::TYPE_DATE:
+                if (!$resType) $resType = 'DATE';
             break;
         }
 
-        return $type;
+        return $resType;
     }
 
 
@@ -257,9 +294,11 @@ class DdlTable extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("DROP TABLE $name", 'Suppression de la table ' . $name);
     }
@@ -379,16 +418,23 @@ END;';
                 $this->alterColumnComment($name, $cOld, $cNew);
             }
 
-            if (!(isset($new['options']['noDropColumns']) && $new['options']['noDropColumns'])) {
-                foreach ($delCols as $delCol) {
-                    $this->dropColumn($name, $old['columns'][$delCol]);
-                }
+            foreach ($delCols as $delCol) {
+                $this->dropColumn($name, $old['columns'][$delCol]);
             }
 
             if ($old['commentaire'] !== $new['commentaire']) {
-                $this->addQuery($this->makeCreateComm($new), 'Modification du commentaire de la table ' . $new['name']);
+                $this->addQuery($this->makeCreateComm($new, true), 'Modification du commentaire de la table ' . $new['name']);
             }
         }
+    }
+
+
+
+    private function isEmpty(string $table): bool
+    {
+        $r = $this->bdd->select('SELECT * FROM ' . $table, [], ['fetch' => $this->bdd::FETCH_ONE]);
+
+        return false === $r;
     }
 
 
@@ -403,13 +449,17 @@ END;';
         }
 
         if (!$column['nullable'] && !$noNotNull) {
-            $cp[] = "NOT NULL ENABLE";
+            if ($column['default'] === null && $this->isEmpty($table)) {
+                $this->bdd->logError("La colonne $table." . $column['name'] . " n\'a pas pu être déclarée NOT NULL, car des données sont déjà présentes dans la table et aucune valeur par défaut n'a été configurée");
+            } else {
+                $cp[] = "NOT NULL ENABLE";
+            }
         }
 
         $sql = "ALTER TABLE \"$table\" ADD (" . implode(" ", $cp) . ")";
         $this->addQuery($sql, 'Ajout de la colonne ' . $column['name'] . ' sur la table ' . $table);
 
-        /* Ajout du commentaire éventuel de la conne */
+        /* Ajout du commentaire éventuel de la colonne */
         $this->alterColumnComment($table, ['commentaire' => null], $column);
     }
 

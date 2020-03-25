@@ -1,20 +1,44 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\SequenceManagerInterface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlSequence extends DdlAbstract
+class SequenceManager extends AbstractManager implements SequenceManagerInterface
 {
-    const ALIAS = 'sequence';
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT OBJECT_NAME 
+          FROM ALL_OBJECTS 
+          WHERE 
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND OBJECT_TYPE = 'SEQUENCE' AND GENERATED = 'N'
+          ORDER BY OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('sequence_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('sequence_name');
         $data = [];
 
-        $qr = $this->bdd->select('SELECT sequence_name "name" FROM user_sequences WHERE 1=1 ' . $f, $p);
+        $qr = $this->bdd->select('
+          SELECT sequence_name "name" FROM all_sequences 
+          WHERE SEQUENCE_OWNER = sys_context( \'userenv\', \'current_schema\' ) 
+        ' . $f, $p);
         foreach ($qr as $r) {
             $data[$r['name']] = $r;
         }
@@ -35,9 +59,11 @@ class DdlSequence extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $sql = "DROP SEQUENCE $name";
         $this->addQuery($sql, 'Suppression de la séquence ' . $name);

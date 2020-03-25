@@ -1,26 +1,48 @@
 <?php
 
-namespace BddAdmin\Ddl;
+namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Manager\AbstractManager;
+use BddAdmin\Manager\MaterializedViewManagerInteface;
+use BddAdmin\Ddl\DdlFilter;
 
-class DdlMaterializedView extends DdlAbstract
+class MaterializedViewManager extends AbstractManager implements MaterializedViewManagerInteface
 {
-    const ALIAS = 'materialized-view';
+    public function getList(): array
+    {
+        $list = [];
+        $sql  = "
+          SELECT OBJECT_NAME 
+          FROM ALL_OBJECTS 
+          WHERE 
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            AND OBJECT_TYPE = 'MATERIALIZED VIEW' AND GENERATED = 'N'
+          ORDER BY OBJECT_NAME
+        ";
+        $r    = $this->bdd->select($sql);
+        foreach ($r as $l) {
+            $list[] = $l['OBJECT_NAME'];
+        }
+
+        return $list;
+    }
 
 
 
     public function get($includes = null, $excludes = null): array
     {
-        [$f, $p] = $this->makeFilterParams('mview_name', $includes, $excludes);
+        $filter = DdlFilter::normalize2($includes, $excludes);
+        [$f, $p] = $filter->toSql('mview_name');
         $data = [];
 
         $q = "SELECT
             mview_name \"name\",
             query \"definition\"
           FROM
-            USER_MVIEWS
+            ALL_MVIEWS
           WHERE
-            1=1 $f
+            OWNER = sys_context( 'userenv', 'current_schema' )
+            $f
           ORDER BY
             mview_name
         ";
@@ -48,9 +70,11 @@ class DdlMaterializedView extends DdlAbstract
 
 
 
-    public function drop(string $name)
+    public function drop($name)
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if (is_array($name)) $name = $name['name'];
 
         $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée ' . $name);
     }

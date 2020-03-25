@@ -6,6 +6,8 @@
 
 class DataGen
 {
+    use \BddAdmin\Logger\LoggerAwareTrait;
+
     /**
      * @var OseAdmin
      */
@@ -20,6 +22,12 @@ class DataGen
      * @var array
      */
     private $donneesDefaut = [];
+
+    private $actions       = [
+        'install'    => 'Insertion des données',
+        'update'     => 'Contrôle et mise à jour des données',
+        'privileges' => 'Mise à jour des privilèges dans la base de données',
+    ];
 
     private $config        = [
         /* Obligatoire au début */
@@ -38,6 +46,11 @@ class DataGen
 
 
         /* Nomenclatures fixes et jamais paramétrables */
+        [
+            'table'   => 'ADRESSE_NUMERO_COMPL',
+            'context' => ['install', 'update'],
+            'key'     => ['CODE'],
+        ],
         [
             'table'   => 'CIVILITE',
             'context' => ['install', 'update'],
@@ -233,6 +246,11 @@ class DataGen
             'key'     => 'SOURCE_CODE',
         ],
         [
+            'table'   => 'VOIRIE',
+            'context' => ['install'],
+            'key'     => 'SOURCE_CODE',
+        ],
+        [
             'table'   => 'ETABLISSEMENT',
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',
@@ -277,7 +295,7 @@ class DataGen
         [
             'table'   => 'STATUT_INTERVENANT',
             'context' => ['install'],
-            'key'     => 'SOURCE_CODE',
+            'key'     => 'CODE',
             'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
         ],
         [
@@ -337,6 +355,7 @@ class DataGen
     public function __construct(OseAdmin $oseAdmin)
     {
         $this->oseAdmin = $oseAdmin;
+        $this->setLogger($oseAdmin->getConsole());
     }
 
 
@@ -364,6 +383,7 @@ class DataGen
 
     private function action(string $action, string $table = null)
     {
+        $this->logBegin($this->actions[$action]);
         $this->nomenclature  = require $this->oseAdmin->getOseDir() . 'data/nomenclatures.php';
         $this->donneesDefaut = require $this->oseAdmin->getOseDir() . 'data/donnees_par_defaut.php';
 
@@ -375,6 +395,7 @@ class DataGen
         }
 
         /* L'administrateur doit avoir tous les droits obligatoirement! */
+        $this->logMsg('Attribution de tous les droits au rôle Administrateur ...', true);
         $this->oseAdmin->getBdd()->exec("
         INSERT INTO
           ROLE_PRIVILEGE(PRIVILEGE_ID, ROLE_ID)
@@ -387,6 +408,10 @@ class DataGen
         WHERE
           RP.ROLE_ID IS NULL
         ");
+
+        $this->logMsg('Mise à jour du point d\'indice pour les HETD ...', true);
+        $this->oseAdmin->getBdd()->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
+        $this->logEnd();
     }
 
 
@@ -414,7 +439,7 @@ class DataGen
 
         foreach ($data as $i => $line) {
             foreach ($line as $col => $val) {
-                if (isset($ddl['columns'][$col]) && $ddl['columns'][$col]['type'] == 'DATE' && !empty($val) && is_string($val)) {
+                if (isset($ddl['columns'][$col]) && $ddl['columns'][$col]['type'] == \BddAdmin\Bdd::TYPE_DATE && !empty($val) && is_string($val)) {
                     $data[$i][$col] = \DateTime::createFromFormat('Y-m-d', $val);
                 }
             }
@@ -426,15 +451,16 @@ class DataGen
             }
         }
 
-        echo str_pad($table, 31, ' '); // provisoire
-        //$this->oseAdmin->getConsole()->println($tbl);
         $result = $tableObject->merge(
             $data,
             isset($params['key']) ? $params['key'] : 'ID',
             isset($params['options']) ? $params['options'] : []
         );
-        echo 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete'];
-        echo "\n";
+        if ($result['insert'] + $result['update'] + $result['delete'] > 0) {
+            $msg = str_pad($table, 31, ' ');
+            $msg .= 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete'];
+            $this->logMsg($msg);
+        }
     }
 
 
@@ -473,6 +499,34 @@ class DataGen
         }
 
         return $annees;
+    }
+
+
+
+    public function DEPARTEMENT()
+    {
+        $departements = [];
+
+        $r = fopen($this->oseAdmin->getOseDir() . 'data/departement.csv', 'r');
+        $i = 0;
+        while ($d = fgetcsv($r, 0, ',', '"')) {
+            $i++;
+            if ($i > 1) {
+                $code = (string)$d[0];
+                if (2 == strlen($code)) {
+                    $code = '0' . $code;
+                }
+                $departements[] = [
+                    'SOURCE_CODE' => $code,
+                    'CODE'        => $code,
+                    'LIBELLE'     => $d[6],
+                ];
+            }
+        }
+
+        fclose($r);
+
+        return $departements;
     }
 
 
@@ -621,7 +675,7 @@ class DataGen
                 $query = $params['QUERY'];
 
                 $val = isset($data[$nom]['VALEUR']) ? $data[$nom]['VALEUR'] : null;
-                $res = $bdd->select($query, ['valeur' => $val], $bdd::FETCH_ONE);
+                $res = $bdd->select($query, ['valeur' => $val], ['fetch' => $bdd::FETCH_ONE]);
                 if (isset($res['VALEUR'])) {
                     $data[$nom]['VALEUR'] = (string)$res['VALEUR'];
                 }

@@ -295,7 +295,7 @@ class DataGen
         [
             'table'   => 'STATUT_INTERVENANT',
             'context' => ['install'],
-            'key'     => 'CODE',
+            'key'     => 'SOURCE_CODE',
             'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
         ],
         [
@@ -503,32 +503,33 @@ class DataGen
 
 
 
-    public function DEPARTEMENT()
-    {
-        $departements = [];
-
-        $r = fopen($this->oseAdmin->getOseDir() . 'data/departement.csv', 'r');
-        $i = 0;
-        while ($d = fgetcsv($r, 0, ',', '"')) {
-            $i++;
-            if ($i > 1) {
-                $code = (string)$d[0];
-                if (2 == strlen($code)) {
-                    $code = '0' . $code;
+    /*
+        public function DEPARTEMENT()
+        {
+            $departements = [];
+    
+            $r = fopen($this->oseAdmin->getOseDir() . 'data/departement.csv', 'r');
+            $i = 0;
+            while ($d = fgetcsv($r, 0, ',', '"')) {
+                $i++;
+                if ($i > 1) {
+                    $code = (string)$d[0];
+                    if (2 == strlen($code)) {
+                        $code = '0' . $code;
+                    }
+                    $departements[] = [
+                        'SOURCE_CODE' => $code,
+                        'CODE'        => $code,
+                        'LIBELLE'     => $d[6],
+                    ];
                 }
-                $departements[] = [
-                    'SOURCE_CODE' => $code,
-                    'CODE'        => $code,
-                    'LIBELLE'     => $d[6],
-                ];
             }
+    
+            fclose($r);
+    
+            return $departements;
         }
-
-        fclose($r);
-
-        return $departements;
-    }
-
+    */
 
 
     public function ETAT_SORTIE()

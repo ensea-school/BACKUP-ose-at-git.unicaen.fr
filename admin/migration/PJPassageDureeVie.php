@@ -46,7 +46,7 @@ class PJPassageDureeVie extends AbstractMigration
 
     protected function after()
     {
-        $bdd = $this->manager->getSchema()->getBdd();
+        $bdd = $this->manager->getBdd();
 
         $sql = '
         UPDATE TYPE_PIECE_JOINTE_STATUT SET DUREE_VIE = (

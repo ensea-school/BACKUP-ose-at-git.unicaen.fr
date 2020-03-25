@@ -47,12 +47,12 @@ class MigrationManager
 
 
 
-    public function initTablesDef($ref, $filters = [])
+    public function initTablesDef(\BddAdmin\Ddl\Ddl $ref, $filters = [])
     {
         $filters = \BddAdmin\Ddl\DdlFilters::normalize($filters);
 
         if (array_key_exists(\BddAdmin\Ddl\Ddl::TABLE, $ref)) {
-            $ref = $ref[\BddAdmin\Ddl\Ddl::TABLE];
+            $ref = $ref->get(\BddAdmin\Ddl\Ddl::TABLE);
         } else {
             $ref = [];
         }
@@ -65,7 +65,7 @@ class MigrationManager
                 $this->tablesDiff[$table]['old'] = $ddl;
             }
         }
-        if (isset($ref) && is_array($ref)) {
+        if ($ref) {
             foreach ($ref as $table => $ddl) {
                 $this->tablesDiff[$table]['new'] = $ddl;
             }

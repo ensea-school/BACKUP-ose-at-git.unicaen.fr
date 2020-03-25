@@ -1007,7 +1007,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'UTILISATEUR_ID' => 
+        'UTILISATEUR_ID' =>
         array (
           'name' => 'UTILISATEUR_ID',
           'type' => 'NUMBER',
@@ -1293,7 +1293,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_AGREMENT_ID' => 
+        'TYPE_AGREMENT_ID' =>
         array (
           'name' => 'TYPE_AGREMENT_ID',
           'type' => 'NUMBER',
@@ -1315,7 +1315,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_DECISION' => 
+        'DATE_DECISION' =>
         array (
           'name' => 'DATE_DECISION',
           'type' => 'DATE',
@@ -1326,7 +1326,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -1392,7 +1392,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' => 
+        'STRUCTURE_ID' =>
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -1821,7 +1821,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' => 
+        'CODE' =>
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -1843,7 +1843,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACTIVITE_ID' => 
+        'ACTIVITE_ID' =>
         array (
           'name' => 'ACTIVITE_ID',
           'type' => 'NUMBER',
@@ -1854,7 +1854,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_RESSOURCE_ID' => 
+        'TYPE_RESSOURCE_ID' =>
         array (
           'name' => 'TYPE_RESSOURCE_ID',
           'type' => 'NUMBER',
@@ -2503,7 +2503,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_ID' => 
+        'STRUCTURE_ID' =>
         array (
           'name' => 'STRUCTURE_ID',
           'type' => 'NUMBER',
@@ -2514,7 +2514,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'VALIDATION_ID' => 
+        'VALIDATION_ID' =>
         array (
           'name' => 'VALIDATION_ID',
           'type' => 'NUMBER',
@@ -2525,7 +2525,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'NUMERO_AVENANT' => 
+        'NUMERO_AVENANT' =>
         array (
           'name' => 'NUMERO_AVENANT',
           'type' => 'NUMBER',
@@ -2536,7 +2536,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'DATE_RETOUR_SIGNE' => 
+        'DATE_RETOUR_SIGNE' =>
         array (
           'name' => 'DATE_RETOUR_SIGNE',
           'type' => 'DATE',
@@ -3009,7 +3009,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_1' => 
+        'CODES_CORRESP_1' =>
         array (
           'name' => 'CODES_CORRESP_1',
           'type' => 'VARCHAR2',
@@ -3020,7 +3020,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_2' => 
+        'CODES_CORRESP_2' =>
         array (
           'name' => 'CODES_CORRESP_2',
           'type' => 'VARCHAR2',
@@ -3031,7 +3031,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_3' => 
+        'CODES_CORRESP_3' =>
         array (
           'name' => 'CODES_CORRESP_3',
           'type' => 'VARCHAR2',
@@ -3042,7 +3042,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODES_CORRESP_4' => 
+        'CODES_CORRESP_4' =>
         array (
           'name' => 'CODES_CORRESP_4',
           'type' => 'VARCHAR2',
@@ -3471,7 +3471,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'EMAIL_PERSO' => 
+        'EMAIL_PERSO' =>
         array (
           'name' => 'EMAIL_PERSO',
           'type' => 'VARCHAR2',
@@ -3482,7 +3482,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DATE_NAISSANCE' => 
+        'DATE_NAISSANCE' =>
         array (
           'name' => 'DATE_NAISSANCE',
           'type' => 'DATE',
@@ -3493,7 +3493,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PAYS_NAISSANCE_ID' => 
+        'PAYS_NAISSANCE_ID' =>
         array (
           'name' => 'PAYS_NAISSANCE_ID',
           'type' => 'NUMBER',
@@ -3504,7 +3504,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DEPT_NAISSANCE_ID' => 
+        'DEPT_NAISSANCE_ID' =>
         array (
           'name' => 'DEPT_NAISSANCE_ID',
           'type' => 'NUMBER',
@@ -3570,7 +3570,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_RESSOURCE_ID' => 
+        'TYPE_RESSOURCE_ID' =>
         array (
           'name' => 'TYPE_RESSOURCE_ID',
           'type' => 'NUMBER',
@@ -3581,7 +3581,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' => 
+        'ANNEE_ID' =>
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -3856,7 +3856,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' => 
+        'ANNEE_ID' =>
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -4153,7 +4153,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' => 
+        'CODE' =>
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -4164,7 +4164,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' => 
+        'LIBELLE' =>
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -4208,7 +4208,7 @@
           'default' => NULL,
           'commentaire' => 'Un élément pédagogique ne peut avoir qu\'une et une seule période.',
         ),
-        'TAUX_FI' => 
+        'TAUX_FI' =>
         array (
           'name' => 'TAUX_FI',
           'type' => 'FLOAT',
@@ -4219,7 +4219,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'TAUX_FC' => 
+        'TAUX_FC' =>
         array (
           'name' => 'TAUX_FC',
           'type' => 'FLOAT',
@@ -4230,7 +4230,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TAUX_FA' => 
+        'TAUX_FA' =>
         array (
           'name' => 'TAUX_FA',
           'type' => 'FLOAT',
@@ -4241,7 +4241,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TAUX_FOAD' => 
+        'TAUX_FOAD' =>
         array (
           'name' => 'TAUX_FOAD',
           'type' => 'FLOAT',
@@ -4714,7 +4714,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' => 
+        'CODE' =>
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -4725,7 +4725,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' => 
+        'LIBELLE' =>
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -4736,7 +4736,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_ID' => 
+        'ANNEE_ID' =>
         array (
           'name' => 'ANNEE_ID',
           'type' => 'NUMBER',
@@ -4791,7 +4791,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DOMAINE_FONCTIONNEL_ID' => 
+        'DOMAINE_FONCTIONNEL_ID' =>
         array (
           'name' => 'DOMAINE_FONCTIONNEL_ID',
           'type' => 'NUMBER',
@@ -4802,7 +4802,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' => 
+        'SOURCE_ID' =>
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -5605,7 +5605,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DOMAINE_FONCTIONNEL_ID' => 
+        'DOMAINE_FONCTIONNEL_ID' =>
         array (
           'name' => 'DOMAINE_FONCTIONNEL_ID',
           'type' => 'NUMBER',
@@ -5616,7 +5616,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PLAFOND' => 
+        'PLAFOND' =>
         array (
           'name' => 'PLAFOND',
           'type' => 'FLOAT',
@@ -5968,7 +5968,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FI' => 
+        'SERVICE_FI' =>
         array (
           'name' => 'SERVICE_FI',
           'type' => 'FLOAT',
@@ -5979,7 +5979,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FA' => 
+        'SERVICE_FA' =>
         array (
           'name' => 'SERVICE_FA',
           'type' => 'FLOAT',
@@ -5990,7 +5990,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FC' => 
+        'SERVICE_FC' =>
         array (
           'name' => 'SERVICE_FC',
           'type' => 'FLOAT',
@@ -6001,7 +6001,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL' => 
+        'SERVICE_REFERENTIEL' =>
         array (
           'name' => 'SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6012,7 +6012,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FI' => 
+        'HEURES_COMPL_FI' =>
         array (
           'name' => 'HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -6023,7 +6023,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FA' => 
+        'HEURES_COMPL_FA' =>
         array (
           'name' => 'HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -6034,7 +6034,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC' => 
+        'HEURES_COMPL_FC' =>
         array (
           'name' => 'HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -6045,7 +6045,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC_MAJOREES' => 
+        'HEURES_COMPL_FC_MAJOREES' =>
         array (
           'name' => 'HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -6056,7 +6056,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_REFERENTIEL' => 
+        'HEURES_COMPL_REFERENTIEL' =>
         array (
           'name' => 'HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6067,7 +6067,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TOTAL' => 
+        'TOTAL' =>
         array (
           'name' => 'TOTAL',
           'type' => 'FLOAT',
@@ -6078,7 +6078,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOLDE' => 
+        'SOLDE' =>
         array (
           'name' => 'SOLDE',
           'type' => 'FLOAT',
@@ -6089,7 +6089,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOUS_SERVICE' => 
+        'SOUS_SERVICE' =>
         array (
           'name' => 'SOUS_SERVICE',
           'type' => 'FLOAT',
@@ -6100,7 +6100,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL' => 
+        'HEURES_COMPL' =>
         array (
           'name' => 'HEURES_COMPL',
           'type' => 'FLOAT',
@@ -6166,7 +6166,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_FI' => 
+        'SERVICE_FI' =>
         array (
           'name' => 'SERVICE_FI',
           'type' => 'FLOAT',
@@ -6177,7 +6177,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FA' => 
+        'SERVICE_FA' =>
         array (
           'name' => 'SERVICE_FA',
           'type' => 'FLOAT',
@@ -6188,7 +6188,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FC' => 
+        'SERVICE_FC' =>
         array (
           'name' => 'SERVICE_FC',
           'type' => 'FLOAT',
@@ -6199,7 +6199,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FI' => 
+        'HEURES_COMPL_FI' =>
         array (
           'name' => 'HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -6210,7 +6210,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FA' => 
+        'HEURES_COMPL_FA' =>
         array (
           'name' => 'HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -6221,7 +6221,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC' => 
+        'HEURES_COMPL_FC' =>
         array (
           'name' => 'HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -6232,7 +6232,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC_MAJOREES' => 
+        'HEURES_COMPL_FC_MAJOREES' =>
         array (
           'name' => 'HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -6298,7 +6298,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL' => 
+        'SERVICE_REFERENTIEL' =>
         array (
           'name' => 'SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6309,7 +6309,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_REFERENTIEL' => 
+        'HEURES_COMPL_REFERENTIEL' =>
         array (
           'name' => 'HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6375,7 +6375,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_FI' => 
+        'SERVICE_FI' =>
         array (
           'name' => 'SERVICE_FI',
           'type' => 'FLOAT',
@@ -6386,7 +6386,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FA' => 
+        'SERVICE_FA' =>
         array (
           'name' => 'SERVICE_FA',
           'type' => 'FLOAT',
@@ -6397,7 +6397,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SERVICE_FC' => 
+        'SERVICE_FC' =>
         array (
           'name' => 'SERVICE_FC',
           'type' => 'FLOAT',
@@ -6408,7 +6408,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FI' => 
+        'HEURES_COMPL_FI' =>
         array (
           'name' => 'HEURES_COMPL_FI',
           'type' => 'FLOAT',
@@ -6419,7 +6419,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FA' => 
+        'HEURES_COMPL_FA' =>
         array (
           'name' => 'HEURES_COMPL_FA',
           'type' => 'FLOAT',
@@ -6430,7 +6430,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC' => 
+        'HEURES_COMPL_FC' =>
         array (
           'name' => 'HEURES_COMPL_FC',
           'type' => 'FLOAT',
@@ -6441,7 +6441,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_FC_MAJOREES' => 
+        'HEURES_COMPL_FC_MAJOREES' =>
         array (
           'name' => 'HEURES_COMPL_FC_MAJOREES',
           'type' => 'FLOAT',
@@ -6507,7 +6507,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SERVICE_REFERENTIEL' => 
+        'SERVICE_REFERENTIEL' =>
         array (
           'name' => 'SERVICE_REFERENTIEL',
           'type' => 'FLOAT',
@@ -6518,7 +6518,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HEURES_COMPL_REFERENTIEL' => 
+        'HEURES_COMPL_REFERENTIEL' =>
         array (
           'name' => 'HEURES_COMPL_REFERENTIEL',
           'type' => 'FLOAT',
@@ -7211,7 +7211,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_CODE' => 
+        'TYPE_INTERVENTION_CODE' =>
         array (
           'name' => 'TYPE_INTERVENTION_CODE',
           'type' => 'VARCHAR2',
@@ -7222,7 +7222,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_CODE' => 
+        'STRUCTURE_CODE' =>
         array (
           'name' => 'STRUCTURE_CODE',
           'type' => 'VARCHAR2',
@@ -7893,7 +7893,7 @@
           'default' => '0',
           'commentaire' => 'Numero unique pérenne user-friendly',
         ),
-        'LIBELLE_SINGULIER' => 
+        'LIBELLE_SINGULIER' =>
         array (
           'name' => 'LIBELLE_SINGULIER',
           'type' => 'VARCHAR2',
@@ -7904,7 +7904,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_PLURIEL' => 
+        'LIBELLE_PLURIEL' =>
         array (
           'name' => 'LIBELLE_PLURIEL',
           'type' => 'VARCHAR2',
@@ -7948,7 +7948,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'MESSAGE' => 
+        'MESSAGE' =>
         array (
           'name' => 'MESSAGE',
           'type' => 'VARCHAR2',
@@ -8366,7 +8366,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'MONTANT_INDEMNITE_FC' => 
+        'MONTANT_INDEMNITE_FC' =>
         array (
           'name' => 'MONTANT_INDEMNITE_FC',
           'type' => 'FLOAT',
@@ -8377,7 +8377,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -8498,7 +8498,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'UTILISATEUR_CODE' => 
+        'UTILISATEUR_CODE' =>
         array (
           'name' => 'UTILISATEUR_CODE',
           'type' => 'VARCHAR2',
@@ -8509,7 +8509,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PAYS_NAISSANCE_ID' => 
+        'PAYS_NAISSANCE_ID' =>
         array (
           'name' => 'PAYS_NAISSANCE_ID',
           'type' => 'NUMBER',
@@ -8784,7 +8784,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RES_SERVICE_ID' => 
+        'FORMULE_RES_SERVICE_ID' =>
         array (
           'name' => 'FORMULE_RES_SERVICE_ID',
           'type' => 'NUMBER',
@@ -8795,7 +8795,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'FORMULE_RES_SERVICE_REF_ID' => 
+        'FORMULE_RES_SERVICE_REF_ID' =>
         array (
           'name' => 'FORMULE_RES_SERVICE_REF_ID',
           'type' => 'NUMBER',
@@ -8828,7 +8828,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CENTRE_COUT_ID' => 
+        'CENTRE_COUT_ID' =>
         array (
           'name' => 'CENTRE_COUT_ID',
           'type' => 'NUMBER',
@@ -8839,7 +8839,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DOMAINE_FONCTIONNEL_ID' => 
+        'DOMAINE_FONCTIONNEL_ID' =>
         array (
           'name' => 'DOMAINE_FONCTIONNEL_ID',
           'type' => 'NUMBER',
@@ -8850,7 +8850,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_HEURES_ID' => 
+        'TYPE_HEURES_ID' =>
         array (
           'name' => 'TYPE_HEURES_ID',
           'type' => 'NUMBER',
@@ -8861,7 +8861,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES' => 
+        'HEURES' =>
         array (
           'name' => 'HEURES',
           'type' => 'FLOAT',
@@ -9697,7 +9697,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DECHARGE' => 
+        'DECHARGE' =>
         array (
           'name' => 'DECHARGE',
           'type' => 'NUMBER',
@@ -9708,7 +9708,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -10115,7 +10115,7 @@
           'default' => NULL,
           'commentaire' => 'Identifiant de l\'indicateur',
         ),
-        'AFFECTATION_ID' => 
+        'AFFECTATION_ID' =>
         array (
           'name' => 'AFFECTATION_ID',
           'type' => 'NUMBER',
@@ -10126,7 +10126,7 @@
           'default' => NULL,
           'commentaire' => 'Identifiant du personnel',
         ),
-        'FREQUENCE' => 
+        'FREQUENCE' =>
         array (
           'name' => 'FREQUENCE',
           'type' => 'NUMBER',
@@ -10555,7 +10555,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ECART_MOIS' => 
+        'ECART_MOIS' =>
         array (
           'name' => 'ECART_MOIS',
           'type' => 'NUMBER',
@@ -10566,7 +10566,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ECART_MOIS_PAIEMENT' => 
+        'ECART_MOIS_PAIEMENT' =>
         array (
           'name' => 'ECART_MOIS_PAIEMENT',
           'type' => 'NUMBER',
@@ -10577,7 +10577,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ORDRE' => 
+        'ORDRE' =>
         array (
           'name' => 'ORDRE',
           'type' => 'NUMBER',
@@ -10709,7 +10709,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'INTERVENANT_ID' => 
+        'INTERVENANT_ID' =>
         array (
           'name' => 'INTERVENANT_ID',
           'type' => 'NUMBER',
@@ -10720,7 +10720,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -11028,7 +11028,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CATEGORIE_ID' => 
+        'CATEGORIE_ID' =>
         array (
           'name' => 'CATEGORIE_ID',
           'type' => 'NUMBER',
@@ -11160,7 +11160,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' => 
+        'CODE' =>
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -11171,7 +11171,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE' => 
+        'LIBELLE' =>
         array (
           'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
@@ -11182,7 +11182,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PERIMETRE_ID' => 
+        'PERIMETRE_ID' =>
         array (
           'name' => 'PERIMETRE_ID',
           'type' => 'NUMBER',
@@ -11193,7 +11193,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_CHANGER_STRUCTURE' => 
+        'PEUT_CHANGER_STRUCTURE' =>
         array (
           'name' => 'PEUT_CHANGER_STRUCTURE',
           'type' => 'NUMBER',
@@ -11204,7 +11204,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -12667,7 +12667,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_REFERENTIEL' => 
+        'PEUT_SAISIR_REFERENTIEL' =>
         array (
           'name' => 'PEUT_SAISIR_REFERENTIEL',
           'type' => 'NUMBER',
@@ -12678,7 +12678,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_MOTIF_NON_PAIEMENT' => 
+        'PEUT_SAISIR_MOTIF_NON_PAIEMENT' =>
         array (
           'name' => 'PEUT_SAISIR_MOTIF_NON_PAIEMENT',
           'type' => 'NUMBER',
@@ -12689,7 +12689,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PEUT_AVOIR_CONTRAT' => 
+        'PEUT_AVOIR_CONTRAT' =>
         array (
           'name' => 'PEUT_AVOIR_CONTRAT',
           'type' => 'NUMBER',
@@ -12744,7 +12744,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'PEUT_SAISIR_SERVICE_EXT' => 
+        'PEUT_SAISIR_SERVICE_EXT' =>
         array (
           'name' => 'PEUT_SAISIR_SERVICE_EXT',
           'type' => 'NUMBER',
@@ -12755,7 +12755,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TEM_ATV' => 
+        'TEM_ATV' =>
         array (
           'name' => 'TEM_ATV',
           'type' => 'NUMBER',
@@ -12766,7 +12766,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'TEM_BIATSS' => 
+        'TEM_BIATSS' =>
         array (
           'name' => 'TEM_BIATSS',
           'type' => 'NUMBER',
@@ -12865,7 +12865,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CODE' => 
+        'CODE' =>
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
@@ -12887,7 +12887,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' => 
+        'LIBELLE_LONG' =>
         array (
           'name' => 'LIBELLE_LONG',
           'type' => 'VARCHAR2',
@@ -12898,7 +12898,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ENSEIGNEMENT' => 
+        'ENSEIGNEMENT' =>
         array (
           'name' => 'ENSEIGNEMENT',
           'type' => 'NUMBER',
@@ -12909,7 +12909,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'SOURCE_ID' => 
+        'SOURCE_ID' =>
         array (
           'name' => 'SOURCE_ID',
           'type' => 'NUMBER',
@@ -12997,7 +12997,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PLAFOND_REFERENTIEL' => 
+        'PLAFOND_REFERENTIEL' =>
         array (
           'name' => 'PLAFOND_REFERENTIEL',
           'type' => 'FLOAT',
@@ -13008,7 +13008,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'AFF_ADRESSE_CONTRAT' => 
+        'AFF_ADRESSE_CONTRAT' =>
         array (
           'name' => 'AFF_ADRESSE_CONTRAT',
           'type' => 'NUMBER',
@@ -13052,7 +13052,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TABLE_NAME' => 
+        'TABLE_NAME' =>
         array (
           'name' => 'TABLE_NAME',
           'type' => 'VARCHAR2',
@@ -13063,7 +13063,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SOURCE_CODE' => 
+        'SOURCE_CODE' =>
         array (
           'name' => 'SOURCE_CODE',
           'type' => 'VARCHAR2',
@@ -16132,7 +16132,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PREMIER_RECRUTEMENT' => 
+        'PREMIER_RECRUTEMENT' =>
         array (
           'name' => 'PREMIER_RECRUTEMENT',
           'type' => 'NUMBER',
@@ -16770,7 +16770,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'VISIBLE' => 
+        'VISIBLE' =>
         array (
           'name' => 'VISIBLE',
           'type' => 'NUMBER',
@@ -17166,7 +17166,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_DEBUT_ID' => 
+        'ANNEE_DEBUT_ID' =>
         array (
           'name' => 'ANNEE_DEBUT_ID',
           'type' => 'NUMBER',
@@ -17177,7 +17177,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_FIN_ID' => 
+        'ANNEE_FIN_ID' =>
         array (
           'name' => 'ANNEE_FIN_ID',
           'type' => 'NUMBER',
@@ -17540,7 +17540,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_DEBUT_ID' => 
+        'ANNEE_DEBUT_ID' =>
         array (
           'name' => 'ANNEE_DEBUT_ID',
           'type' => 'NUMBER',
@@ -17551,7 +17551,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ANNEE_FIN_ID' => 
+        'ANNEE_FIN_ID' =>
         array (
           'name' => 'ANNEE_FIN_ID',
           'type' => 'NUMBER',
@@ -17914,7 +17914,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'CHANGEMENT_RIB' => 
+        'CHANGEMENT_RIB' =>
         array (
           'name' => 'CHANGEMENT_RIB',
           'type' => 'NUMBER',
@@ -17925,7 +17925,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'FC' => 
+        'FC' =>
         array (
           'name' => 'FC',
           'type' => 'NUMBER',
@@ -18926,7 +18926,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ELEMENT_PEDAGOGIQUE_ID' => 
+        'ELEMENT_PEDAGOGIQUE_ID' =>
         array (
           'name' => 'ELEMENT_PEDAGOGIQUE_ID',
           'type' => 'NUMBER',
@@ -18937,7 +18937,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'TYPE_INTERVENTION_ID' => 
+        'TYPE_INTERVENTION_ID' =>
         array (
           'name' => 'TYPE_INTERVENTION_ID',
           'type' => 'NUMBER',
@@ -19322,7 +19322,7 @@
           'default' => '1',
           'commentaire' => 'Permet d\'ordonner les étapes',
         ),
-        'LIBELLE_INTERVENANT' => 
+        'LIBELLE_INTERVENANT' =>
         array (
           'name' => 'LIBELLE_INTERVENANT',
           'type' => 'VARCHAR2',
@@ -19333,7 +19333,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_AUTRES' => 
+        'LIBELLE_AUTRES' =>
         array (
           'name' => 'LIBELLE_AUTRES',
           'type' => 'VARCHAR2',
@@ -19344,7 +19344,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ROUTE' => 
+        'ROUTE' =>
         array (
           'name' => 'ROUTE',
           'type' => 'VARCHAR2',
@@ -19355,7 +19355,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'DESC_NON_FRANCHIE' => 
+        'DESC_NON_FRANCHIE' =>
         array (
           'name' => 'DESC_NON_FRANCHIE',
           'type' => 'VARCHAR2',
@@ -19377,7 +19377,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'DESC_SANS_OBJECTIF' => 
+        'DESC_SANS_OBJECTIF' =>
         array (
           'name' => 'DESC_SANS_OBJECTIF',
           'type' => 'VARCHAR2',
@@ -28976,9 +28976,13 @@ END OSE_WORKFLOW;',
           intervenant_id                                            intervenant_id,
           structure_id                                              structure_id,
           nbvh                                                      objectif,
-          edite                                                     realisation
+          CASE p.valeur 
+            WHEN \'\'date-retour\'\' THEN signe 
+            ELSE edite 
+          END                                                       realisation
         FROM
           tbl_contrat c
+          JOIN parametre p on p.nom = \'\'contrat_regle_franchissement\'\'
         WHERE
           \' || p || \'
           AND peut_avoir_contrat = 1
@@ -34602,6 +34606,33 @@ FROM
   JOIN intervenant i ON i.id = c.intervenant_id
   JOIN tbl_workflow w ON w.intervenant_id = i.id AND w.structure_id = c.structure_id AND w.etape_code = \'CONTRAT\' AND w.atteignable = 1
   JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL
+  LEFT JOIN contrat_fichier cf ON cf.contrat_id = c.id
+  LEFT JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL
+WHERE
+  c.histo_destruction IS NULL
+  AND f.id IS NULL
+) t',
+    ),
+    'V_INDICATEUR_370' => 
+    array (
+      'name' => 'V_INDICATEUR_370',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_370 AS
+SELECT
+  rownum id,
+  t."INTERVENANT_ID",t."ANNEE_ID",t."STRUCTURE_ID",t."CONTRAT_ID"
+FROM (
+SELECT DISTINCT
+  i.id intervenant_id,
+  i.annee_id annee_id,
+  c.structure_id structure_id,
+  c.id contrat_id
+FROM
+  contrat                c
+  JOIN intervenant i ON i.id = c.intervenant_id
+  JOIN tbl_workflow w ON w.intervenant_id = i.id AND w.structure_id = c.structure_id AND w.etape_code = \'CONTRAT\' AND w.atteignable = 1
+  JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL
+  JOIN contrat_fichier cf ON cf.contrat_id = c.id
+  JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL
 WHERE
   c.histo_destruction IS NULL
   AND c.date_retour_signe IS NULL

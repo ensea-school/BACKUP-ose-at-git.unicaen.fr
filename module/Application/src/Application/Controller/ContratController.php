@@ -343,12 +343,15 @@ class ContratController extends AbstractController
         }
 
         if (!empty($contrat->getIntervenant()->getEmail())) {
-            $html    = $this->renderer->render('application/contrat/mail/contrat', [
-                'contrat' => $contrat,
-            ]);
+            //Utilisation ici du parametre email
+            $html  = $this->getServiceParametres()->get('contrat_modele_mail');
+            //Personnalisation des variables
+            $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " ". $contrat->getIntervenant()->getNomUsuel();
+            $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
+            $html = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
             $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
             $mail = $this->mail()->send($message);
-            $here="";
+
         }
 
         return $this->getResponse();

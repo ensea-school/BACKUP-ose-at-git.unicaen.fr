@@ -299,6 +299,33 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_regle_franchissement',
+            'options'    => [
+                'value_options' => [
+                    Parametre::CONTRAT_FRANCHI_VALIDATION  => 'Validation du contrat',
+                    Parametre::CONTRAT_FRANCHI_DATE_RETOUR => 'Validation & saisie de la date de retour du contrat signé',
+                ],
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'contrat_modele_mail',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Corps du mail envoyé aux intervenants lorsqu\'on leur transmet leur contrat',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+        $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [

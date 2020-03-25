@@ -1,3 +1,14 @@
+# OSE 14 (Alpha)
+
+## Nouveautés
+
+* Améliorations portées au système de gestion des contrats.
+  * Le corps de message de l'envoi du ontrat par mail peut maintenant être personnalisé (cf. Paramètres globaux dans le menu Administration).
+  * L'indicateur 360 resence maintenant les contrats validés qui n'ont aucun fichier téléversé.
+  * Un nouvel indicateur 370 liste les contrats validés qui ont des fichiers téléversés, mais sans date de retour.
+  * Les fichiers téléversés ne peuvent plus être modifiés si une date de retour a été saisie. Pour pouvoir modifier à nouveau, il faut d'abord enlever la date de retour.
+  * La règle de franchissement de l'étape contrat peut maintenant être personnalisés : soit l'étape est franchie si le projet de contrat est validé, soit il faut en plus qu'une date de retour ait été saisie. 
+
 # OSE 13.1
 
 ## Correction de bugs

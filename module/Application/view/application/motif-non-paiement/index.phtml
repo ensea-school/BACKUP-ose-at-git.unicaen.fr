@@ -32,11 +32,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal" data-event="motif-non-paiement-saisie"
                        href="<?= $this->url('motif-non-paiement/saisir', ['motifNonPaiement' => $fr->getId()]) ?>"
-                       title="Modifier la MotifNonPaiement">
+                       title="Modifier le motif de non paiement">
                         <span class="glyphicon glyphicon-edit"></span></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('motif-non-paiement/supprimer', ['motifNonPaiement' => $fr->getId()]) ?>"
-                       title="Supprimer la MotifNonPaiement"
+                       title="Supprimer le motif de non paiement"
                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                        data-confirm="true"
                        data-confirm-button="Oui"

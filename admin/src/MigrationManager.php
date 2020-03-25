@@ -47,7 +47,7 @@ class MigrationManager
 
 
 
-    public function initTablesDef(array $ref, $filters = [])
+    public function initTablesDef($ref, $filters = [])
     {
         $filters = \BddAdmin\Ddl\DdlFilters::normalize($filters);
 

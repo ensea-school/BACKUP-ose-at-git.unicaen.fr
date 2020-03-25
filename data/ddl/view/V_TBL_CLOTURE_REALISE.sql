@@ -1,0 +1,30 @@
+CREATE OR REPLACE FORCE VIEW V_TBL_CLOTURE_REALISE AS
+WITH t AS (
+  SELECT
+    i.annee_id              annee_id,
+    i.id                    intervenant_id,
+    si.peut_cloturer_saisie peut_cloturer_saisie,
+    CASE WHEN v.id IS NULL THEN 0 ELSE 1 END cloture
+  FROM
+              intervenant         i
+         JOIN statut_intervenant si ON si.id = i.statut_id
+         JOIN type_validation    tv ON tv.code = 'CLOTURE_REALISE'
+
+    LEFT JOIN validation          v ON v.intervenant_id = i.id
+                                   AND v.type_validation_id = tv.id
+                                   AND v.histo_destruction IS NULL
+
+  WHERE
+    i.histo_destruction IS NULL
+)
+SELECT
+  annee_id,
+  intervenant_id,
+  peut_cloturer_saisie,
+  CASE WHEN sum(cloture) = 0 THEN 0 ELSE 1 END cloture
+FROM
+  t
+GROUP BY
+  annee_id,
+  intervenant_id,
+  peut_cloturer_saisie

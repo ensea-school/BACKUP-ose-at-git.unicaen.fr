@@ -1,0 +1,93 @@
+CREATE OR REPLACE FORCE VIEW V_CHARGENS_PRECALCUL_HEURES AS
+WITH t AS (
+SELECT
+  n.annee_id                        annee_id,
+  n.noeud_id                        noeud_id,
+  sn.scenario_id                    scenario_id,
+  sne.type_heures_id                type_heures_id,
+  ti.id                             type_intervention_id,
+
+  n.element_pedagogique_id          element_pedagogique_id,
+  n.element_pedagogique_etape_id    etape_id,
+  sne.etape_id                      etape_ens_id,
+  n.structure_id                    structure_id,
+
+  vhe.heures                        heures,
+  vhe.heures * ti.taux_hetd_service hetd,
+
+  GREATEST(COALESCE(sns.ouverture, 1),1)                                           ouverture,
+  GREATEST(COALESCE(sns.dedoublement, snsetp.dedoublement, csdd.dedoublement,1),1) dedoublement,
+  COALESCE(sns.assiduite,1)                                                        assiduite,
+  sne.effectif*COALESCE(sns.assiduite,1)                                           effectif,
+
+  SUM(sne.effectif*COALESCE(sns.assiduite,1)) OVER (PARTITION BY n.noeud_id, sn.scenario_id, ti.id) t_effectif
+
+FROM
+            scenario_noeud_effectif    sne
+            JOIN etape                        e ON e.id = sne.etape_id
+                                          AND e.histo_destruction IS NULL
+
+       JOIN scenario_noeud              sn ON sn.id = sne.scenario_noeud_id
+                                          AND sn.histo_destruction IS NULL
+
+       JOIN tbl_noeud                       n ON n.noeud_id = sn.noeud_id
+
+       JOIN volume_horaire_ens         vhe ON vhe.element_pedagogique_id = n.element_pedagogique_id
+                                          AND vhe.histo_destruction IS NULL
+                                          AND vhe.heures > 0
+
+       JOIN type_intervention           ti ON ti.id = vhe.type_intervention_id
+
+  LEFT JOIN tbl_noeud                 netp ON netp.etape_id = e.id
+
+  LEFT JOIN scenario_noeud           snetp ON snetp.scenario_id = sn.scenario_id
+                                          AND snetp.noeud_id = netp.noeud_id
+                                          AND snetp.histo_destruction IS NULL
+
+  LEFT JOIN scenario_noeud_seuil    snsetp ON snsetp.scenario_noeud_id = snetp.id
+                                          AND snsetp.type_intervention_id = ti.id
+
+  LEFT JOIN tbl_chargens_seuils_def   csdd ON csdd.annee_id = n.annee_id
+                                          AND csdd.scenario_id = sn.scenario_id
+                                          AND csdd.type_intervention_id = ti.id
+                                          AND csdd.groupe_type_formation_id = n.groupe_type_formation_id
+                                          AND csdd.structure_id = n.structure_id
+
+  LEFT JOIN scenario_noeud_seuil       sns ON sns.scenario_noeud_id = sn.id
+                                          AND sns.type_intervention_id = ti.id
+WHERE
+  1 = OSE_CHARGENS.MATCH_PRECALC_HEURES_PARAMS( n.annee_id, n.structure_id, sn.scenario_id, sne.type_heures_id, sne.etape_id, n.noeud_id )
+)
+SELECT
+  annee_id,
+  noeud_id,
+  scenario_id,
+  type_heures_id,
+  type_intervention_id,
+
+  element_pedagogique_id,
+  etape_id,
+  etape_ens_id,
+  structure_id,
+
+  ouverture,
+  dedoublement,
+  assiduite,
+  effectif,
+  heures heures_ens,
+  --t_effectif,
+
+  CASE WHEN t_effectif < ouverture THEN 0 ELSE
+    CEIL( t_effectif / dedoublement ) * effectif / t_effectif
+  END groupes,
+
+  CASE WHEN t_effectif < ouverture THEN 0 ELSE
+    CEIL( t_effectif / dedoublement ) * heures * effectif / t_effectif
+  END heures,
+
+  CASE WHEN t_effectif < ouverture THEN 0 ELSE
+    CEIL( t_effectif / dedoublement ) * hetd * effectif / t_effectif
+  END  hetd
+
+FROM
+  t

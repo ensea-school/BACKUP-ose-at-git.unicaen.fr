@@ -46,11 +46,11 @@ class DataGen
 
 
         /* Nomenclatures fixes et jamais paramétrables */
-        [
+        /*[
             'table'   => 'ADRESSE_NUMERO_COMPL',
             'context' => ['install', 'update'],
             'key'     => ['CODE'],
-        ],
+        ],*/
         [
             'table'   => 'CIVILITE',
             'context' => ['install', 'update'],
@@ -245,11 +245,11 @@ class DataGen
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',
         ],
-        [
+        /*[
             'table'   => 'VOIRIE',
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',
-        ],
+        ],*/
         [
             'table'   => 'ETABLISSEMENT',
             'context' => ['install'],

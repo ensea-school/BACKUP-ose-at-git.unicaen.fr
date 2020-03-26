@@ -472,6 +472,7 @@ class StatutIntervenantHydrator implements HydratorInterface
                     $tasToCreate->setType($ta);
                     $tasToCreate->setStatut($object);
                     $this->getServiceTypeAgrementStatut()->save($tasToCreate);
+                    $object->addTypeAgrementStatut($tasToCreate);
 
                 }
             }

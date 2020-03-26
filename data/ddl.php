@@ -35962,7 +35962,7 @@ FROM
       'name' => 'V_TBL_AGREMENT',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
 WITH i_s AS (
-  SELECT DISTINCT
+  SELECT
     fr.intervenant_id,
     ep.structure_id
   FROM
@@ -35977,7 +35977,7 @@ WITH i_s AS (
     frs.total > 0
 ),
 avi AS (
-    SELECT DISTINCT
+    SELECT
         i.code                code_intervenant,
         i.annee_id            annee_id,
         a.type_agrement_id    type_agrement,
@@ -35988,8 +35988,8 @@ avi AS (
     JOIN type_agrement_statut tas ON tas.statut_intervenant_id = i.statut_id
     JOIN agrement a ON a.intervenant_id = i.id AND tas.type_agrement_id = a.type_agrement_id AND a.histo_destruction IS NULL
 )
-SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
-    SELECT DISTINCT
+SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+    SELECT
       i.annee_id                     annee_id,
       CASE
         WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
@@ -36003,7 +36003,7 @@ SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INT
       NVL(a.id, avi.agrement_id)                 agrement_id,
       tas.duree_vie                              duree_vie,
       RANK() OVER(
-        PARTITION BY i.annee_id ORDER BY
+        PARTITION BY i.code,i.annee_id ORDER BY
         CASE
         WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
         THEN NULL
@@ -36036,8 +36036,8 @@ WHERE
   rank = 1
 
 UNION ALL
-SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
-    SELECT DISTINCT
+SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+    SELECT
       i.annee_id                                  annee_id,
       CASE
         WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
@@ -36046,12 +36046,12 @@ SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INT
       tas.type_agrement_id                        type_agrement_id,
       i.id                                        intervenant_id,
       i.code                                      code_intervenant,
-      i_s.structure_id                            structure_id,
+      a.structure_id                            structure_id,
       tas.obligatoire                             obligatoire,
       NVL(a.id, avi.agrement_id)                  agrement_id,
       tas.duree_vie                               duree_vie,
       RANK() OVER(
-        PARTITION BY i.annee_id ORDER BY
+        PARTITION BY i.code,i.annee_id ORDER BY
         CASE
         WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
         THEN NULL
@@ -36069,7 +36069,6 @@ SELECT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INT
 
       LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
                                         AND a.intervenant_id = i.id
-                                        AND a.structure_id = i_s.structure_id
                                         AND a.histo_destruction IS NULL
 
       LEFT JOIN                      avi ON i.code = avi.code_intervenant
@@ -48259,7 +48258,7 @@ END;',
         2 => 'ANNEE_ID',
       ),
     ),
-    'EP_DISCIPLINE_FK_IDX' =>
+    'EP_DISCIPLINE_FK_IDX' => 
     array (
       'name' => 'EP_DISCIPLINE_FK_IDX',
       'unique' => false,
@@ -52899,7 +52898,7 @@ END;',
         0 => 'ID',
       ),
     ),
-    'TYPE_AGREMENT_STATUT__UN' =>
+    'TYPE_AGREMENT_STATUT__UN' => 
     array (
       'name' => 'TYPE_AGREMENT_STATUT__UN',
       'unique' => true,

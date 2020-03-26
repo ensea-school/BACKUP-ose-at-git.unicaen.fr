@@ -130,14 +130,14 @@ Cordialement,
         "VALEUR"      => "<h3>Intervenants</h3>
     Contactez votre composante ou bien écrivez à :
         <ul>
-<li><a href=\"mailto:assistance - ose@unicaen . fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges dédiée à l'assistance\">assistance-ose@unicaen.fr</a></li>
+<li><a href=\"mailto:assistance-ose@unicaen . fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges dédiée à l'assistance\">assistance-ose@unicaen.fr</a></li>
 </ul>
 
 
 <h3>Gestionnaires</h3>
     Postez un message sur la liste d'échanges des gestionnaires :
         <ul>
-<li><a href=\"mailto:ose@liste . unicaen . fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges des gestionnaires\">ose@liste.unicaen.fr</a></li>
+<li><a href=\"mailto:ose@liste.unicaen.fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges des gestionnaires\">ose@liste.unicaen.fr</a></li>
 </ul>",
         "DESCRIPTION" => "Contenu de la page \"Contact\"",
     ],

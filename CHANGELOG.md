@@ -9,6 +9,17 @@
   * Les fichiers téléversés ne peuvent plus être modifiés si une date de retour a été saisie. Pour pouvoir modifier à nouveau, il faut d'abord enlever la date de retour.
   * La règle de franchissement de l'étape contrat peut maintenant être personnalisés : soit l'étape est franchie si le projet de contrat est validé, soit il faut en plus qu'une date de retour ait été saisie. 
 
+* Personnalisation
+  * Le message de bienvenue et la page "Contact", auparavant configurables dans le fichier config.local.php, dont maintenant modifiables dans la page Administration / Paramètres généraux.
+
+## Notes de mise à jour
+
+* Dans le fichier config.local.php, supprimer les items suivants de la rubrique etablissement :
+  * messageBienvenue 
+  * contact
+  
+* N'oubliez pas de configurer les nouveaux paramètres généraux de OSE!
+
 # OSE 13.1
 
 ## Correction de bugs

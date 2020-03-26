@@ -1,7 +1,7 @@
 <?php $this->headTitle()->append($title = "Contact") ?>
 
-<h1><?= $this->translate($title); ?></h1>
+    <h1><?= $this->translate($title); ?></h1>
 
 <?php
 
-echo AppConfig::get('etablissement','contact');
+echo Application::$container->get(\Application\Service\ParametresService::class)->get('page_contact');

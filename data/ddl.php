@@ -10273,7 +10273,7 @@
         array (
           'name' => 'VALEUR',
           'type' => 'VARCHAR2',
-          'length' => 200,
+          'length' => 4000,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => true,

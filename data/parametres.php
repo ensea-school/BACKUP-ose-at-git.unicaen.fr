@@ -123,4 +123,37 @@ Cordialement,
 :utilisateur",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
+
+
+    /* Messages informatifs */
+    "page_contact"                       => [
+        "VALEUR"      => "<h3>Intervenants</h3>
+    Contactez votre composante ou bien écrivez à :
+        <ul>
+<li><a href=\"mailto:assistance-ose@unicaen . fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges dédiée à l'assistance\">assistance-ose@unicaen.fr</a></li>
+</ul>
+
+
+<h3>Gestionnaires</h3>
+    Postez un message sur la liste d'échanges des gestionnaires :
+        <ul>
+<li><a href=\"mailto:ose@liste.unicaen.fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges des gestionnaires\">ose@liste.unicaen.fr</a></li>
+</ul>",
+        "DESCRIPTION" => "Contenu de la page \"Contact\"",
+    ],
+
+    "page_accueil" => [
+        "VALEUR"      => "Bienvenue dans l'application de saisie des enseignements de l'université de Caen Normandie.",
+        "DESCRIPTION" => "Message de la page d'accueil une fois connecté",
+    ],
+
+    "connexion_non_autorise" => [
+        "VALEUR"      => "Votre statut ne vous permet pas de vous connecter à OSE.",
+        "DESCRIPTION" => "Message informatif si l'intervenant n'est pas autorisé à se connecter",
+    ],
+
+    "connexion_sans_role_ni_statut" => [
+        "VALEUR"      => "Vous n'êtes pas autorisé(e) à vous connecter à OSE avec ce compte. Nous vous prions de vous rapprocher de votre composante pour en obtenir un valide.",
+        "DESCRIPTION" => "Message informatif si l'utilisateur n'est pas intervenant et n'a aucune affectation",
+    ],
 ];

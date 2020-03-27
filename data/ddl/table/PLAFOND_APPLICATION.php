@@ -1,0 +1,81 @@
+<?php
+
+//@formatter:off
+
+return [
+    'name'        => 'PLAFOND_APPLICATION',
+    'temporary'   => FALSE,
+    'logging'     => TRUE,
+    'commentaire' => NULL,
+    'sequence'    => 'PLAFOND_APPLICATION_ID_SEQ',
+    'columns'     => [
+        'ANNEE_DEBUT_ID'         => [
+            'name'        => 'ANNEE_DEBUT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'ANNEE_FIN_ID'           => [
+            'name'        => 'ANNEE_FIN_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'ID'                     => [
+            'name'        => 'ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'PLAFOND_ETAT_ID'        => [
+            'name'        => 'PLAFOND_ETAT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'PLAFOND_ID'             => [
+            'name'        => 'PLAFOND_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'TYPE_VOLUME_HORAIRE_ID' => [
+            'name'        => 'TYPE_VOLUME_HORAIRE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+    ],
+];
+
+//@formatter:on

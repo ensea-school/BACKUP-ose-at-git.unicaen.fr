@@ -1,0 +1,18 @@
+<?php
+
+//@formatter:off
+
+return [
+    'name'    => 'TBL_CHARGENS_SEUILS_DEF__UN',
+    'table'   => 'TBL_CHARGENS_SEUILS_DEF',
+    'index'   => 'TBL_CHARGENS_SEUILS_DEF__UN',
+    'columns' => [
+        'SCENARIO_ID',
+        'TYPE_INTERVENTION_ID',
+        'STRUCTURE_ID',
+        'GROUPE_TYPE_FORMATION_ID',
+        'ANNEE_ID',
+    ],
+];
+
+//@formatter:on

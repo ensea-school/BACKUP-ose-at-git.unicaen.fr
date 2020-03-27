@@ -1,0 +1,5 @@
+CREATE OR REPLACE PACKAGE "OSE_VALIDATION" AS
+
+  FUNCTION can_devalider ( v validation%rowtype ) RETURN varchar2;
+
+END OSE_VALIDATION;

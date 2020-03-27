@@ -1,0 +1,8 @@
+CREATE OR REPLACE TRIGGER "INTERVENANT_RECHERCHE"
+  BEFORE INSERT OR UPDATE OF NOM_USUEL, NOM_PATRONYMIQUE, PRENOM ON INTERVENANT
+  REFERENCING FOR EACH ROW
+BEGIN
+
+  :NEW.critere_recherche := ose_divers.str_reduce( :NEW.nom_usuel || ' ' || :NEW.nom_patronymique || ' ' || :NEW.prenom );
+
+END;

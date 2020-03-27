@@ -51,7 +51,7 @@ abstract class BddCheckRule
 
     protected function error($error, $sqlRes = null)
     {
-        $rule = str_replace('BddCheck\\', '', get_class($this));
+        $rule = str_replace('BddAdmin\\BddCheck\\', '', get_class($this));
         $this->collector->addError($this->tableName, $this->columnName, compact('rule', 'error', 'sqlRes'));
     }
 }

@@ -46,7 +46,8 @@ class PJPassageDureeVie extends AbstractMigration
 
     protected function after()
     {
-        $bdd = $this->manager->getBdd();
+        $bdd     = $this->manager->getBdd();
+        $console = $this->manager->getOseAdmin()->getConsole();
 
         $sql = '
         UPDATE TYPE_PIECE_JOINTE_STATUT SET DUREE_VIE = (
@@ -56,16 +57,16 @@ class PJPassageDureeVie extends AbstractMigration
         $bdd->exec($sql);
         $this->manager->supprimerSauvegarde('TPJS_AJOUT_DUREE_VIE');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Calcul du tableau de bord piece_jointe_demande");
+        $console->println("Calcul du tableau de bord piece_jointe_demande");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_demande\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Calcul du tableau de bord piece_jointe_fournie");
+        $console->println("Calcul du tableau de bord piece_jointe_fournie");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_fournie\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Calcul du tableau de bord piece_jointe");
+        $console->println("Calcul du tableau de bord piece_jointe");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("");
+        $console->println("");
 
         /* On fournie et on valide de force les PJ qui n'étaient pas tout le temps demandées avant */
         $sql   = '
@@ -119,22 +120,22 @@ class PJPassageDureeVie extends AbstractMigration
                 'FICHIER_ID'      => $fichier['ID'],
             ];
             $bdd->getTable('PIECE_JOINTE_FICHIER')->insert($pjf, $o);
-            $this->manager->getOseAdmin()->getConsole()->print("Insertion des pièces jointes manquantes : $count / " . count($r) . "\r");
+            $console->print("Insertion des pièces jointes manquantes : $count / " . count($r) . "\r");
         }
 
-        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord piece_jointe_demande");
+        $console->println("Nouveau calcul du tableau de bord piece_jointe_demande");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_demande\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord piece_jointe_fournie");
+        $console->println("Nouveau calcul du tableau de bord piece_jointe_fournie");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe_fournie\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord piece_jointe");
+        $console->println("Nouveau calcul du tableau de bord piece_jointe");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'piece_jointe\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Nouveau calcul du tableau de bord workflow");
+        $console->println("Nouveau calcul du tableau de bord workflow");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'workflow\'); END;');
 
-        $this->manager->getOseAdmin()->getConsole()->println("Terminé");
+        $console->println("Terminé");
     }
 
 }

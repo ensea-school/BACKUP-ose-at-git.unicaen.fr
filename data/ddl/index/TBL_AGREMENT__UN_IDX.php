@@ -11,6 +11,7 @@ return [
         'INTERVENANT_ID',
         'STRUCTURE_ID',
         'TO_DELETE',
+        'ANNEE_AGREMENT',
     ],
 ];
 

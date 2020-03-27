@@ -388,7 +388,6 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             WHERE tas.histo_destruction IS NULL
               AND ta.code = e.code
               AND tas.statut_intervenant_id = si.id
-              AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = ''CONTRAT'' THEN

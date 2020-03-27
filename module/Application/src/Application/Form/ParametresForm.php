@@ -298,6 +298,7 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
+        
         $this->add([
             'type'       => 'Select',
             'name'       => 'contrat_regle_franchissement',
@@ -324,6 +325,57 @@ class ParametresForm extends AbstractForm
                 'rows' => 6,
             ],
         ]);
+
+
+        $this->add([
+            'name'       => 'page_contact',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Contenu de la page "Contact"',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+
+        $this->add([
+            'name'       => 'page_accueil',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Message de la page d\'accueil',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'connexion_sans_role_ni_statut',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Message informatif si l\'utilisateur n\'est pas intervenant et n\'a aucune affectation',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'connexion_non_autorise',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Message informatif si l\'intervenant n\'est pas autorisé à se connecter',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
 
         $this->add([
             'name'       => 'submit',

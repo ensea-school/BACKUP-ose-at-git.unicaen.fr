@@ -38,7 +38,7 @@ class Dossier extends AbstractForm
     public function init()
     {
         $hydrator = new DossierHydrator();
-        $hydrator->setServiceDossier( $this->getServiceDossier() );
+        $hydrator->setServiceDossier($this->getServiceDossier());
         $this->setHydrator($hydrator);
 
         $this->dossierFieldset = new DossierFieldset('dossier');
@@ -63,13 +63,7 @@ class Dossier extends AbstractForm
                 'value' => "J'enregistre",
             ],
         ]);
-
     }
-
-
-
-
-
 
 
 
@@ -91,7 +85,7 @@ class Dossier extends AbstractForm
          * Pas de sélection de la France par défaut si le numéro INSEE correspond à une naissance hors France.
          */
         if ($dossier->getNumeroInsee() && !$dossier->getNumeroInseeEstProvisoire()) {
-            if (NumeroINSEEValidator::hasCodeDepartementEtranger($dossier->getNumeroInsee())) {
+            if (substr($dossier->getNumeroInsee(), 5, 2) == '99') {
                 $dossierFieldset->get('paysNaissance')->setValue(null);
             }
         }
@@ -136,45 +130,45 @@ class Dossier extends AbstractForm
         $this->readOnly = $readOnly;
 
         $roElements = [
-            'statut'                    => 'disabled',
-            'nomUsuel'                  => 'readonly',
-            'nomPatronymique'           => 'readonly',
-            'prenom'                    => 'readonly',
-            'civilite'                  => 'disabled',
-            'dateNaissance'             => 'readonly',
-            'paysNaissance'             => 'disabled',
-            'departementNaissance'      => 'disabled',
-            'villeNaissance'            => 'readonly',
-            'numeroInsee'               => 'readonly',
-            'numeroInseeEstProvisoire'  => 'disabled',
-            'adresse'                   => 'readonly',
+            'statut'                   => 'disabled',
+            'nomUsuel'                 => 'readonly',
+            'nomPatronymique'          => 'readonly',
+            'prenom'                   => 'readonly',
+            'civilite'                 => 'disabled',
+            'dateNaissance'            => 'readonly',
+            'paysNaissance'            => 'disabled',
+            'departementNaissance'     => 'disabled',
+            'villeNaissance'           => 'readonly',
+            'numeroInsee'              => 'readonly',
+            'numeroInseeEstProvisoire' => 'disabled',
+            'adresse'                  => 'readonly',
             //'email'                     => 'readonly',
-            'emailPerso'                => 'readonly',
-            'telephone'                 => 'readonly',
-            'premierRecrutement'        => 'disabled',
-            'ribBic'                    => 'readonly',
-            'ribIban'                   => 'readonly',
-            'ribHorsSepa'                   => 'readonly',
+            'emailPerso'               => 'readonly',
+            'telephone'                => 'readonly',
+            'premierRecrutement'       => 'disabled',
+            'ribBic'                   => 'readonly',
+            'ribIban'                  => 'readonly',
+            'ribHorsSepa'              => 'readonly',
         ];
 
-        foreach( $roElements as $roe => $attr ){
+        foreach ($roElements as $roe => $attr) {
             $roe = explode('/', $roe);
-            if (2 == count($roe)){
-                list($e, $se) = $roe;
-            }else{
-                $e = $roe[0];
+            if (2 == count($roe)) {
+                [$e, $se] = $roe;
+            } else {
+                $e  = $roe[0];
                 $se = null;
             }
 
             $element = null;
-            if ($e && $this->dossierFieldset->has($e)){
+            if ($e && $this->dossierFieldset->has($e)) {
                 $element = $this->dossierFieldset->get($e);
-                if ($se && $element->has($se)){
+                if ($se && $element->has($se)) {
                     $element = $element->get($se);
                 }
             }
 
-            if ($element){
+            if ($element) {
                 $element->setAttribute($attr, $readOnly);
             }
         }

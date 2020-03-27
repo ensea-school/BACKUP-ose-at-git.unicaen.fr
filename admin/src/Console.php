@@ -1,6 +1,10 @@
 <?php
 
-class Console
+
+
+
+
+class Console implements \BddAdmin\Logger\LoggerInterface
 {
     const COLOR_BLACK        = '0;30';
     const COLOR_DARK_GRAY    = '1;30';
@@ -31,7 +35,15 @@ class Console
     /**
      * @var array
      */
-    protected $options = null;
+    protected $options         = null;
+
+    protected $logLevel        = 999;
+
+    protected $logCurrentLevel = 0;
+
+    protected $lastMessage     = null;
+
+    protected $lastRewrite     = false;
 
 
 
@@ -108,6 +120,84 @@ class Console
     {
         $this->print($text, $color, $bgColor);
         echo "\n";
+    }
+
+
+
+    public function msg($message, bool $rewrite = false)
+    {
+        if ($this->logCurrentLevel <= $this->logLevel) {
+            if (is_array($message)) {
+                $message = nb2br(var_export($message, true));
+            }
+            if ($rewrite) {
+                if ($this->lastMessage) {
+                    $m = $message . str_pad('', strlen($this->lastMessage) - strlen($message) + 2) . "\r";
+                } else {
+                    $m = $message . "\r";
+                }
+                $this->print($m);
+            } else {
+                $this->println($message);
+            }
+            $this->lastMessage = $message;
+            $this->lastRewrite = $rewrite;
+        }
+    }
+
+
+
+    public function error($e)
+    {
+        if ($e instanceof \Throwable) {
+            $e = $e->getMessage();
+        }
+        if ($this->lastRewrite) $this->println('');
+        $this->println($e, self::COLOR_LIGHT_RED);
+    }
+
+
+
+    public function begin(string $title)
+    {
+        if ($this->lastMessage) {
+            $title .= str_pad('', strlen($this->lastMessage) - strlen($title) + 2);
+        }
+        $this->lastRewrite = false;
+        $this->lastMessage = null;
+
+        $this->logCurrentLevel++;
+        if ($this->logCurrentLevel <= $this->logLevel) {
+            switch ($this->logCurrentLevel) {
+                case 0:
+                    $this->printMainTitle($title);
+                break;
+                case 1:
+                    $this->println($title, self::COLOR_LIGHT_CYAN);
+                break;
+                case 2:
+                    $this->println($title, self::COLOR_LIGHT_PURPLE);
+                break;
+                case 3:
+                    $this->println($title);
+                break;
+            }
+        }
+    }
+
+
+
+    public function end(?string $msg = null)
+    {
+        if ($this->lastMessage && $this->lastRewrite) {
+            $msg .= str_pad('', strlen($this->lastMessage) - strlen($msg) + 2);
+        }
+        if ($msg) {
+            $this->println($msg);
+        } else {
+            $this->println('');
+        }
+        $this->logCurrentLevel--;
     }
 
 

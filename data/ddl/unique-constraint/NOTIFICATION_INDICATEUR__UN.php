@@ -1,0 +1,15 @@
+<?php
+
+//@formatter:off
+
+return [
+    'name'    => 'NOTIFICATION_INDICATEUR__UN',
+    'table'   => 'NOTIFICATION_INDICATEUR',
+    'index'   => 'NOTIFICATION_INDICATEUR__UN',
+    'columns' => [
+        'INDICATEUR_ID',
+        'AFFECTATION_ID',
+    ],
+];
+
+//@formatter:on

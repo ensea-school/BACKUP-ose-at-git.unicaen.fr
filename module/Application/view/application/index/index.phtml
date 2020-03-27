@@ -1,6 +1,7 @@
 <?php
 /* @var $this Application\View\Renderer\PhpRenderer */
 /* @var $context ContextService */
+
 /* @var $documentation string[] */
 
 use Application\Provider\Privilege\Privileges;
@@ -21,7 +22,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
         <h1><span class="appname"><span class="c1">O</span><span class="c2">S</span><span class="c3">E</span></span>
             <small>Organisation des Services d'Enseignement</small>
         </h1>
-        <p class="lead"><?= AppConfig::get('etablissement', 'messageBienvenue') ?></p>
+        <p class="lead"><?= $pageAccueil ?></p>
         <p class="lead">Année <?= $annee ?>.</p>
 
         <?php
@@ -31,14 +32,14 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
                 if ($intervenant->getStatut()->getNonAutorise()) {
 
                     ?><p>
-                    <div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div></p><?php
+                    <div class='alert alert-danger'> <?= $connexionNonAutorise ?></div></p><?php
                 } else {
                     echo $this->tag('div')->html($this->feuilleDeRoute($intervenant)->renderCurrentBtn());
 
 
                     /* Guide à télécharger... */
                     $guideType = $intervenant->getStatut()->estVacataire() ? 'vacataires' : 'permanents';
-                    if (! empty($documentation[$guideType])){
+                    if (!empty($documentation[$guideType])) {
                         echo $this->tag('div', ['class' => 'alert alert-info', 'style' => 'margin-top:1em', 'role' => 'alert'])->html(
                             'Un guide d\'utilisation de OSE vous est proposé. Vous pouvez le télécharger en suivant le lien ci-contre : '
                             . $this->tag('a', ['target' => '__blank', 'href' => $documentation[$guideType]])->html(
@@ -55,8 +56,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
             } elseif ($context->getUtilisateur()->getAffectation()->count() == 0) {
                 ?>
                 <div class="alert alert-danger" role="alert">
-                    Vous n'êtes pas autorisé(e) à vous connecter à OSE avec ce compte. Nous vous prions de vous rapprocher de
-                    votre composante pour en obtenir un valide.
+                    <?= connexionSansRoleNiStatut ?>
                 </div>
                 <?php
             }

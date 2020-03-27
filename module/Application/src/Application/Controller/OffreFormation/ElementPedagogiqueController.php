@@ -144,6 +144,7 @@ class ElementPedagogiqueController extends AbstractController
         $found = $this->getServiceElementPedagogique()->getSearchResultByTerm($params, $term === null ? 'ep.code' : 'gtf.ordre, e.niveau, ep.code');
 
         $result = [];
+        $codeIteration = [];
         foreach ($found as $item) {
             if (null === $term) {
                 if (0 === strpos($item['LIBELLE'], $item['CODE'])) {
@@ -157,6 +158,13 @@ class ElementPedagogiqueController extends AbstractController
                     'extra' => $item['LIBELLE_PE'] ?: '',
                 ];
             } else {
+                $label = $item['CODE'] . ' ' . $item['LIBELLE'];
+                if(in_array($label, $codeIteration))
+                {
+                    continue;
+                }
+                $codeIteration[] = $item['CODE'] . ' ' . $item['LIBELLE'];
+
                 if ($item['NB_CH'] > 1) {
                     $item['LIBELLE_ETAPE'] = 'Enseignement commun à plusieurs parcours';
                 }

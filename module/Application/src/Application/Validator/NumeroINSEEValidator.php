@@ -3,11 +3,12 @@
 namespace Application\Validator;
 
 use Application\Constants;
+use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Departement;
+use Application\Entity\Db\Pays;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
-use LogicException;
 use UnicaenApp\Validator\NumeroINSEE;
 
 /**
@@ -32,14 +33,34 @@ class NumeroINSEEValidator extends NumeroINSEE
     const MSG_DEPT     = 'msgDepartement';
 
     /**
-     * @var ?int
+     * @var string
      */
-    protected $algerieId;
+    protected $value;
 
     /**
-     * @var ?int
+     * @var bool
      */
-    protected $franceId;
+    protected $provisoire = false;
+
+    /**
+     * @var Civilite|null
+     */
+    protected $civilite;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $dateNaissance;
+
+    /**
+     * @var Pays|null
+     */
+    protected $pays;
+
+    /**
+     * @var Departement|null
+     */
+    protected $departement;
 
 
 
@@ -52,20 +73,6 @@ class NumeroINSEEValidator extends NumeroINSEE
             self::MSG_DEPT     => "Le numéro n'est pas cohérent avec le pays et l'éventuel département de naissance saisi",
         ]);
 
-        $this->franceId  = $this->getServicePays()->getIdByLibelle('FRANCE');
-        $this->algerieId = $this->getServicePays()->getIdByLibelle('ALGERIE');
-
-        if (!isset($options['serviceDepartement'])) {
-            throw new LogicException("Service Département non fourni.");
-        }
-
-        if (!isset($options['serviceCivilite'])) {
-            throw new LogicException("Service Civilité non fourni.");
-        }
-
-        $this->setServiceDepartement($options['serviceDepartement']);
-        $this->setServiceCivilite($options['serviceCivilite']);
-
         parent::__construct($options);
     }
 
@@ -77,39 +84,42 @@ class NumeroINSEEValidator extends NumeroINSEE
             return false;
         }
 
-        if (!$this->isValidSexe($value, $context)) {
-            return false;
-        }
-        if (!$this->isValidAnnee($value, $context)) {
-            return false;
-        }
-        if (!$this->isValidMois($value, $context)) {
-            return false;
-        }
-        if (!$this->isValidDepartement($value, $context)) {
-            return false;
-        }
+        $this->value = $value;
+
+        $this->provisoire = $this->getProvisoire();
+
+        $this->civilite = (!empty($context['civilite'])) ?
+            $this->getServiceCivilite()->get((int)$context['civilite']) : null;
+
+        if ($this->civilite && !$this->isValidCivilite()) return false;
+
+        $this->dateNaissance = (!empty($context['dateNaissance'])) ?
+            \DateTime::createFromFormat(Constants::DATE_FORMAT, $context['dateNaissance']) : null;
+
+        if ($this->dateNaissance && !$this->isValidDateNaissance()) return false;
+
+        $this->pays = (!empty($context['paysNaissance'])) ?
+            $this->getServicePays()->get((int)$context['paysNaissance']) : null;
+
+        $this->departement = (!empty($context['departementNaissance'])) ?
+            $this->getServiceDepartement()->get((int)$context['departementNaissance']) : null;
+
+        if ($this->departement && !$this->isValidLieuNaissance()) return false;
 
         return true;
     }
 
 
 
-    private function isValidSexe($value, $context)
+    private function isValidCivilite(): bool
     {
-        if (empty($context['civilite'])) {
-            return true;
-        }
-
-        $civilite = $this->getServiceCivilite()->get((int)$context['civilite']);
-
-        if ($civilite->estUneFemme()) {
-            $sexes = [2, 4]; // femme, personne étrangère de sexe féminin en cours d'immatriculation en France
+        if ($this->civilite->estUneFemme()) {
+            $sexes = [2, 4, 8]; // femme, personne étrangère de sexe féminin ou en cours d'immatriculation en France
         } else {
-            $sexes = [1, 3]; // homme, personne étrangère de sexe masculin en cours d'immatriculation en France
+            $sexes = [1, 3, 7]; // homme, personne étrangère de sexe masculin ou en cours d'immatriculation en France
         }
 
-        $sexe = (int)substr($value, 0, 1);
+        $sexe = (int)substr($this->value, 0, 1);
 
         if (!in_array($sexe, $sexes)) {
             $this->error(self::MSG_CIVILITE);
@@ -122,44 +132,27 @@ class NumeroINSEEValidator extends NumeroINSEE
 
 
 
-    private function isValidAnnee($value, $context)
+    private function isValidDateNaissance(): bool
     {
-        if (empty($context['dateNaissance'])) {
-            return true;
-        }
+        $iAnnee = (int)substr($this->value, 1, 2);
+        $iMois  = (int)substr($this->value, 3, 2);
 
-        $dateNaissance = $context['dateNaissance'];
-        list(, , $annee) = explode('/', $dateNaissance);
+        $mois  = (int)$this->dateNaissance->format('m');
+        $annee = (int)$this->dateNaissance->format('y');
 
-        if (substr($annee, -2) !== substr($value, 1, 2)) {
+        if ($iAnnee !== $annee) {
             $this->error(self::MSG_ANNEE);
 
             return false;
         }
 
-        return true;
-    }
-
-
-
-    private function isValidMois($value, $context)
-    {
-        if (empty($context['dateNaissance'])) {
-            return true;
-        }
-
-        $dateNaissance = $context['dateNaissance'];
-        list(, $mois,) = explode('/', $dateNaissance);
-
-        $moisInsee = (int)substr($value, 3, 2);
-
-        if ($this->hasCodeDepartementEtranger($value)) {
-            if ($moisInsee == 20 || $moisInsee == 99 || ($moisInsee > 30 && $moisInsee < 42) || ($moisInsee > 50 && $moisInsee < 99)) {
+        if ($this->getDepartement() === 99) {
+            if ($iMois == 20 || $iMois == 99 || ($iMois > 30 && $iMois < 42) || ($iMois > 50 && $iMois < 99)) {
                 return true;
             }
         }
 
-        if ((int)$mois !== $moisInsee) {
+        if ($iMois !== $mois) {
             $this->error(self::MSG_MOIS);
 
             return false;
@@ -170,41 +163,118 @@ class NumeroINSEEValidator extends NumeroINSEE
 
 
 
-    private function isValidDepartement($value, $context)
+    private function isValidLieuNaissance(): bool
     {
-        if (empty($context['paysNaissance'])) {
-            return true;
+        $isFrance  = $this->getServicePays()->isFrance($this->pays);
+        $isAlgerie = false;
+        $isMaroc   = false;
+        $isTunisie = false;
+        if (!$isFrance) {
+            $isAlgerie = $this->getServicePays()->isAlgerie($this->pays);
+        }
+        if (!$isAlgerie) {
+            $isMaroc = $this->getServicePays()->isMaroc($this->pays);
+        }
+        if (!$isMaroc) {
+            $isTunisie = $this->getServicePays()->isTunisie($this->pays);
         }
 
-        $paysNaissance  = (int)$context['paysNaissance'];
-        $estNeEnFrance  = $paysNaissance === $this->franceId;
-        $estNeEnAlgerie = $paysNaissance === $this->algerieId;
-
-        if ($estNeEnFrance) {
-            // on doit avoir un code département français valide
-            if (!$this->isValidDepartementFrance($value, $context)) {
-                return false;
-            }
-        } elseif ($estNeEnAlgerie) {
-            // on doit avoir un code département français valide
-            if (!$this->isValidDepartementAlgerie($value, $context)) {
-                return false;
-            }
+        if ($isFrance) {
+            return $this->isValidDepartementFrance();
+        } elseif ($isAlgerie) {
+            return $this->isValidDepartementAlgerie();
+        } elseif ($isMaroc) {
+            return $this->isValidDepartementMaroc();
+        } elseif ($isTunisie) {
+            return $this->isValidDepartementTunisie();
         } else {
-            // on doit avoir un code pays étranger valide
-            if (!$this->isValidDepartementHorsFrance($value)) {
-                return false;
-            }
+            return $this->isValidDepartementHorsFrance();
         }
-
-        return true;
     }
 
 
 
-    private function isValidDepartementHorsFrance($value)
+    private function isValidDepartementFrance()
     {
-        if (!$this->hasCodeDepartementEtranger($value)) {
+        $iDepartement = $this->getDepartement();
+
+        if ($iDepartement === 99) {
+            $this->error(self::MSG_DEPT);
+
+            return false; // département étranger
+        }
+
+        $iCodeDepartement = str_pad((string)$iDepartement, 3, '0', STR_PAD_LEFT);
+        if ($this->departement->getCode() == $iCodeDepartement) return true;
+
+        $ileDeFrance    = [75, 78, 91, 92, 93, 94, 95];
+        $anneeNaissance = (int)$this->dateNaissance->format('Y');
+
+        if ($anneeNaissance <= 1968 && in_array($iDepartement, $ileDeFrance)) {
+            return true; // Pour les personnes nées en seine et oise, département disparu
+        }
+
+        $this->error(self::MSG_DEPT);
+
+        return false;
+    }
+
+
+
+    private function isValidDepartementAlgerie()
+    {
+        $iDepartement = $this->getDepartement();
+
+        $departements = [91, 92, 93, 94, 99];
+
+        if (in_array($iDepartement, $departements)) {
+            return true;
+        }
+
+        $this->error(self::MSG_DEPT);
+
+        return false;
+    }
+
+
+
+    private function isValidDepartementMaroc()
+    {
+        $iDepartement = $this->getDepartement();
+
+        $departements = [95, 99];
+
+        if (in_array($iDepartement, $departements)) {
+            return true;
+        }
+
+        $this->error(self::MSG_DEPT);
+
+        return false;
+    }
+
+
+
+    private function isValidDepartementTunisie()
+    {
+        $iDepartement = $this->getDepartement();
+
+        $departements = [96, 99];
+
+        if (in_array($iDepartement, $departements)) {
+            return true;
+        }
+
+        $this->error(self::MSG_DEPT);
+
+        return false;
+    }
+
+
+
+    private function isValidDepartementHorsFrance()
+    {
+        if (!$this->getDepartement() === 99) {
             $this->error(self::MSG_DEPT);
 
             return false;
@@ -215,126 +285,21 @@ class NumeroINSEEValidator extends NumeroINSEE
 
 
 
-    private function isValidDepartementFrance($value, $context)
+    private function getDepartement()
     {
-        if (empty($context['departementNaissance'])) {
-            return true;
+        $iDepartement = substr(strtoupper($this->value), 5, 2);
+        if ($iDepartement == '2A' || $iDepartement == '2B') {
+            return $iDepartement; // corse
+        }
+        if ($iDepartement == '99') {
+            return 99; // étranger
+        }
+        if ($iDepartement == '97' || $iDepartement == '98') {
+            $iDepartement = substr(strtoupper($this->value), 5, 3);
+
+            return (int)$iDepartement;
         }
 
-        // Si on trouve un code de département en métropole ou outre-mer valide,
-        // on vérifie qu'il est cohérent avec le code du département de naissance saisi
-        if (
-            ($d = $this->getDepartementEnMetropoleValide($value))
-            ||
-            ($d = $this->getDepartementOutreMerValide($value))
-        ) {
-            /* @var $departementNaissance Departement */
-            $departementNaissance = $this->getServiceDepartement()->get($context['departementNaissance'], true);
-            if ($d !== $departementNaissance->getCode()) {
-                $return        = false;
-                $dateNaissance = \DateTime::createFromFormat(Constants::DATE_FORMAT, $context['dateNaissance']);
-                if ($dateNaissance) {
-                    $anneeNaissance = (int)$dateNaissance->format('Y');
-                    if ($anneeNaissance <= 1968) {
-                        if ($departementNaissance->inIleDeFrance() && $d === '075') {
-                            $return = true;
-                        }
-                    }
-                }
-                if (!$return) {
-                    $this->error(self::MSG_DEPT);
-
-                    return false;
-                }
-            }
-        } // Sinon, le code département n'est pas valide
-        else {
-            $this->error(self::MSG_DEPT);
-
-            return false;
-        }
-
-        return true;
-    }
-
-
-
-    /**
-     *
-     * @param string $value
-     *
-     * @return int|string|null
-     */
-    private function getDepartementEnMetropoleValide($value)
-    {
-        $departement = substr($value, 5, 2);
-
-        if (is_numeric($departement)) {
-            $d = (int)$departement;
-            if (1 <= $d && $d <= 95) {
-                return '0' . (string)$departement;
-            }
-        } else {
-            if (in_array($departement, ["2A", "2B"])) {
-                return '0' . $departement;
-            }
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     *
-     * @param string $value
-     *
-     * @return int|null
-     */
-    private function getDepartementOutreMerValide($value)
-    {
-        $departement = substr($value, 5, 3);
-
-        if (is_numeric($departement)) {
-            $d = (int)$departement;
-            if (970 <= $d && $d <= 989) {
-                return $departement;
-            }
-        }
-
-        return null;
-    }
-
-
-
-    private function isValidDepartementAlgerie($value, $context)
-    {
-        $departement = substr($value, 5, 2);
-
-        if (is_numeric($departement)) {
-            $d = (int)$departement;
-            if (in_array($d, [91, 92, 93, 94, 99])) {
-                return '0' . (string)$departement;
-            }
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * Teste si un numéro INSEE possède le code département de naissance associé à un pays étranger.
-     *
-     * @param string Numéro INSEE à tester
-     *
-     * @return bool
-     */
-    static public function hasCodeDepartementEtranger($value)
-    {
-        $departement = substr($value, 5, 2);
-
-        // le code département doit être "99" pour un pays étranger
-        return $departement === '99';
+        return (int)$iDepartement;
     }
 }

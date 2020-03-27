@@ -12,9 +12,10 @@ use UnicaenApp\Util;
  */
 class PaysService extends AbstractEntityService
 {
-    CONST PAYS_FRANCE = 'france';
+    CONST PAYS_FRANCE  = 'france';
     CONST PAYS_ALGERIE = 'algerie';
-
+    CONST PAYS_MAROC   = 'maroc';
+    CONST PAYS_TUNISIE = 'tunisie';
 
     use ParametresServiceAwareTrait;
 
@@ -22,6 +23,7 @@ class PaysService extends AbstractEntityService
      * @var array
      */
     private $idsByLibelle;
+
 
 
     /**
@@ -54,13 +56,13 @@ class PaysService extends AbstractEntityService
     public function getIdByLibelle(string $libelle)
     {
         if (!isset($this->idsByLibelle[$libelle])) {
-            $sql = 'SELECT id FROM pays WHERE ose_divers.str_reduce(libelle_court) = :pays AND histo_destruction IS NULL';
+            $sql = 'SELECT ID FROM PAYS WHERE OSE_DIVERS.str_reduce(LIBELLE_COURT) = :pays AND HISTO_DESTRUCTION IS NULL';
 
             $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
 
             if (isset($res[0]['ID'])) {
                 $this->idsByLibelle[$libelle] = (int)$res[0]['ID'];
-            }else{
+            } else {
                 $this->idsByLibelle[$libelle] = null;
             }
         }
@@ -83,6 +85,42 @@ class PaysService extends AbstractEntityService
 
 
     /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isAlgerie(Pays $pays): bool
+    {
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_ALGERIE);
+    }
+
+
+
+    /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isMaroc(Pays $pays): bool
+    {
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_MAROC);
+    }
+
+
+
+    /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isTunisie(Pays $pays): bool
+    {
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_TUNISIE);
+    }
+
+
+
+    /**
      * Retourne la liste des pays, triés par libellé long.
      *
      * @param QueryBuilder|null $queryBuilder
@@ -91,7 +129,7 @@ class PaysService extends AbstractEntityService
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelleLong");
 
         return parent::getList($qb, $alias);

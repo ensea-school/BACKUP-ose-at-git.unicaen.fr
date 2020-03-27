@@ -3,7 +3,6 @@
 namespace BddAdmin;
 
 
-
 class BddCheck
 {
     use BddAwareTrait;
@@ -37,22 +36,22 @@ class BddCheck
 
 
 
-    public function check( array $rules=null)
+    public function check(array $rules = null)
     {
         $this->errors = [];
 
-        if (null === $rules){
+        if (null === $rules) {
             $rules = [];
-            $rs = scandir(__DIR__ . '/BddCheck');
-            foreach( $rs as $rule ){
-                if (!in_array($rule, ['.','..','BddCheckRule.php'])){
+            $rs    = scandir(__DIR__ . '/BddCheck');
+            foreach ($rs as $rule) {
+                if (!in_array($rule, ['.', '..', 'BddCheckRule.php'])) {
                     $rules[] = substr($rule, 0, -4);
                 }
             }
         }
 
         foreach ($rules as $rule) {
-            $className = 'OseAdmin\\Bdd\\BddCheck\\' . $rule;
+            $className = 'BddAdmin\\BddCheck\\' . $rule;
             $rule      = new $className($this);
             $ds        = $this->bdd->select($rule->sql());
             foreach ($ds as $d) {

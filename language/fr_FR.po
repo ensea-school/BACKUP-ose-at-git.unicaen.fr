@@ -110,7 +110,7 @@ msgstr ""
 "mise en paiement ou des mises en paiement ont été faites."
 
 #: module/Application/src/Application/translate.php:13
-msgid "bdd .EP_CODE__UN"
+msgid "bdd .EP_CODE_UN"
 msgstr ""
 "Un enseignement existe déjà avec le même code. Merci de choisir un autre "
 "code d'enseignement."
@@ -205,7 +205,7 @@ msgstr "Aucune erreur trouvée"
 #~ "Une formation existe déjà avec le même code. Merci de choisir un autre "
 #~ "code de formation."
 
-#~ msgid "OSE.EP_CODE__UN"
+#~ msgid "OSE.EP_CODE_UN"
 #~ msgstr ""
 #~ "Un enseignement existe déjà avec le même code. Merci de choisir un autre "
 #~ "code d'enseignement"

@@ -1,0 +1,81 @@
+<?php
+
+//@formatter:off
+
+return [
+    'name'        => 'HISTO_INTERVENANT_SERVICE',
+    'temporary'   => FALSE,
+    'logging'     => TRUE,
+    'commentaire' => NULL,
+    'sequence'    => 'HISTO_INTERVENANT_SERVI_ID_SEQ',
+    'columns'     => [
+        'HISTO_MODIFICATEUR_ID'  => [
+            'name'        => 'HISTO_MODIFICATEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'HISTO_MODIFICATION'     => [
+            'name'        => 'HISTO_MODIFICATION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'ID'                     => [
+            'name'        => 'ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'INTERVENANT_ID'         => [
+            'name'        => 'INTERVENANT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+        'REFERENTIEL'            => [
+            'name'        => 'REFERENTIEL',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'commentaire' => NULL,
+        ],
+        'TYPE_VOLUME_HORAIRE_ID' => [
+            'name'        => 'TYPE_VOLUME_HORAIRE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
+    ],
+];
+
+//@formatter:on

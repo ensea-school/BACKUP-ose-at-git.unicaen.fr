@@ -103,6 +103,7 @@ class AgrementController extends AbstractController
         $tas = $this->getServiceTblAgrement()->getList($qb);
         /* @var $tas TblAgrement[] */
 
+        $test = false;
         $needStructure = false;
         $hasActions    = false;
         $data          = [];

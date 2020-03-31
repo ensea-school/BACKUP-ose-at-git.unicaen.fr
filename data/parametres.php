@@ -112,7 +112,7 @@ return [
     /* Contrat */
     "contrat_regle_franchissement"       => [
         "VALEUR"      => "validation",
-        "DESCRIPTION" => "Règle de franchissement du contrat (comment considéré que l'étape \"Contrat\" est franchie dans le workflow)",
+        "DESCRIPTION" => "Règle de franchissement du contrat (comment considérer que l'étape \"Contrat\" est franchie dans le workflow)",
     ],
     "contrat_modele_mail"                => [
         "VALEUR"      => "Bonjour :intervenant

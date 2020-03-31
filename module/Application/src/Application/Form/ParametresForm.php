@@ -204,7 +204,7 @@ class ParametresForm extends AbstractForm
             'name'       => 'es_services_csv',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label'         => 'État de sortie pour l\export CSV des services',
+                'label'         => 'État de sortie pour l\'export CSV des services',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -298,7 +298,7 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
-        
+
         $this->add([
             'type'       => 'Select',
             'name'       => 'contrat_regle_franchissement',

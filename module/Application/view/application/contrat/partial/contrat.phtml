@@ -46,7 +46,7 @@ $urlSuppression = $this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)
     ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
     : null;
 
-$disableEmail = (empty($contrat->getIntervenant()->getEmail()))?true:false;
+$disableEmail = (empty($emailIntervenant))?true:false;
 
 if ($urlAjouter) {
     $uploader->setUrl($urlAjouter);

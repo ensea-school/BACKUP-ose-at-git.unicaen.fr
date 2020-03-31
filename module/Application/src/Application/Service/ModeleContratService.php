@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\ModeleContrat;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Unicaen\OpenDocument\Document;
 use Zend\Mail\Message as MailMessage;
 use Zend\Mime\Message;
@@ -22,6 +23,8 @@ use Zend\Mime\Part;
  */
 class ModeleContratService extends AbstractEntityService
 {
+
+    use DossierServiceAwareTrait;
 
     /**
      * @var array
@@ -117,7 +120,10 @@ class ModeleContratService extends AbstractEntityService
         $content  = $document->saveToData();
 
         $subject          = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
-        $emailIntervenant = $contrat->getIntervenant()->getEmail();
+        $intervenant = $contrat->getIntervenant();
+        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $emailPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmail();
 
         $body = new Message();
 

@@ -109,6 +109,11 @@ class ContratController extends AbstractController
         }
         $contrats = $sContrat->getList($qb);
 
+        //Récupération email intervenant (Perso puis unicaen)
+        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $emailPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmail();
+
         /* Récupération des services par contrat et par structure (pour les non contractualisés) */
         $services = [
             'contractualises'     => [],
@@ -128,7 +133,7 @@ class ContratController extends AbstractController
             $services['non-contractualises'][$sid][] = $service;
         }
 
-        return compact('title', 'intervenant', 'contrats', 'services');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant');
     }
 
 

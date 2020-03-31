@@ -81,6 +81,9 @@ abstract class AbstractManagerDdlConstraint extends AbstractManager
 
     public function alter(array $old, array $new)
     {
+        if (isset($old['index'])) {
+            $this->bdd->index()->drop($old['index']);
+        }
         $this->drop($old);
         $this->create($new);
     }

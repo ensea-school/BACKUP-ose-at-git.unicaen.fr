@@ -1,24 +1,32 @@
-# OSE 14 (Alpha)
+# OSE 14
 
 ## Nouveautés
 
 * Améliorations portées au système de gestion des contrats.
   * Le corps de message de l'envoi du ontrat par mail peut maintenant être personnalisé (cf. Paramètres globaux dans le menu Administration).
+  * Le mail est maintenant envoyé à l'adresse mail perso indiquée dans le dossier de l'intrevenant, à défaut sur son mail professionnel d'établissement de sa fiche intervenant
   * L'indicateur 360 resence maintenant les contrats validés qui n'ont aucun fichier téléversé.
   * Un nouvel indicateur 370 liste les contrats validés qui ont des fichiers téléversés, mais sans date de retour.
   * Les fichiers téléversés ne peuvent plus être modifiés si une date de retour a été saisie. Pour pouvoir modifier à nouveau, il faut d'abord enlever la date de retour.
   * La règle de franchissement de l'étape contrat peut maintenant être personnalisés : soit l'étape est franchie si le projet de contrat est validé, soit il faut en plus qu'une date de retour ait été saisie. 
+
+* Gestion de la durée de vie des agréments
+  * A l'instar des pièces justificatives, la notion de premier recrutement a été remplacée par une durée de vie. Un agrément pourra donc être redemandé tous les 5 ans par exemple.
+  * Les règles de gestion des agréments sont maintenant configurables dans l'IHM d'administration des statuts.
 
 * Personnalisation
   * Le message de bienvenue et la page "Contact", auparavant configurables dans le fichier config.local.php, dont maintenant modifiables dans la page Administration / Paramètres généraux.
 
 ## Notes de mise à jour
 
+* Attention : lors de la mise à jour de la base de données, le script vous signalera quelques erreurs dues au fait qu'il existe certains liens d'interdépendances entre objets qui changent simultanément que le système ne gère pas parfaitement.
+Il vous faudra pour y remédier relancer un ./bin/ose update-bdd juste après la mise à jour. Là, les erreurs disparaitront et votre base devrait être parfaitement à jour.
+
+* N'oubliez pas de configurer les nouveaux paramètres généraux de OSE (Administration/Paramètres généraux)!
+
 * Dans le fichier config.local.php, supprimer les items suivants de la rubrique etablissement :
   * messageBienvenue 
   * contact
-  
-* N'oubliez pas de configurer les nouveaux paramètres généraux de OSE!
 
 # OSE 13.1
 

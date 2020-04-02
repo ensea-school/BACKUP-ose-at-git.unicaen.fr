@@ -51,11 +51,7 @@ class MigrationManager
     {
         $filters = \BddAdmin\Ddl\DdlFilters::normalize($filters);
 
-        if (array_key_exists(\BddAdmin\Ddl\Ddl::TABLE, $ref)) {
-            $ref = $ref->get(\BddAdmin\Ddl\Ddl::TABLE);
-        } else {
-            $ref = [];
-        }
+        $ref = (array)$ref->get(\BddAdmin\Ddl\Ddl::TABLE);
 
         /* On ne parse que les tables */
         $oldRef           = $this->getBdd()->table()->get($filters->get(\BddAdmin\Ddl\Ddl::TABLE));

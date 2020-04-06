@@ -56,7 +56,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
             } elseif ($context->getUtilisateur()->getAffectation()->count() == 0) {
                 ?>
                 <div class="alert alert-danger" role="alert">
-                    <?= connexionSansRoleNiStatut ?>
+                    <?= $connexionSansRoleNiStatut ?>
                 </div>
                 <?php
             }

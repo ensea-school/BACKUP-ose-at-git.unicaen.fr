@@ -25,6 +25,15 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
      */
     protected $libelle;
 
+    /**
+     * @var string
+     */
+    protected $siren;
+
+    /**
+     *
+     */
+
 
 
     /**

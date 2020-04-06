@@ -3,23 +3,88 @@
 $fromMaster = true;
 
 $osedir = $oa->getOseDir();
+$bdd = $oa->getBdd();
 
 $c->println("Mise à jour de la table employeur");
     $c->print('Préparation du fichier à partir de la source INSEE');
-    $c->exec([
+  /*  $c->exec([
         "cd $osedir",
         "cd data/employeurs/sources/INSEE",
-        "unzip -o StockUniteLegale_utf8.zip -d ../../extract/",
-        "unzip -o StockEtablissement_utf8.zip -d ../../extract/",
+        "unzip -o StockUniteLegale_utf8.zip -d ../../extract/",//On dezippe
+        "unzip -o StockEtablissement_utf8.zip -d ../../extract/",//On dézippe
         "cd ../../extract/",
-        "cut -d \",\" -f 21,1,22,24,33 StockUniteLegale_utf8.csv > ../prepare/StockUniteLegale.csv",
-        //"rm -f StockUniteLegale_utf8.csv"
-    ]);
+        "cut -d \",\" -f 21,1,22,23,24,25,26,27,33 StockUniteLegale_utf8.csv > ../prepare/StockUniteLegale.csv",//On garde uniquement les colonnes nécessaires
+        "cd ../prepare",
+        "sed -i.bak \"/,C,/d\" StockUniteLegale.csv",//On supprime les unités fermées
+        "sed -i.bak \"/,N$/d\" StockUniteLegale.csv",//On supprimer les unités non employeurs
+        "cp StockUniteLegale.csv ../import/employeurs-import.csv",//On déplace le fichier dans le dossier d'importation
+    ]);*/
 
 
 $c->println("\nFin du traitement des données employeurs", $c::COLOR_LIGHT_GREEN);
 
 
+$file = Config::get('employeur', 'import-file');
+$nbLigne = shell_exec('wc -l ' . $file);
+$c->println("Nombre de ligne à traiter : " . $nbLigne);
+$csvFile = fopen($file, r);
+$row = 0;
+while (($data = fgetcsv($csvFile, 1000, ",")) !== FALSE) {
+
+    $nextId = $bdd->sequenceNextVal('EMPLOYEUR_ID_SEQ');
+    $datetime = new \DateTime();
+    $date =  $datetime->format('y-m-d h:m:s');
+    $sql = "
+        INSERT INTO EMPLOYEUR
+            (ID,SIREN,LIBELLE, HISTO_CREATEUR_ID, HISTO_CREATION, HISTO_MODIFICATEUR_ID,HISTO_MODIFICATION)
+        VALUES ($nextId, '$data[0]', 'Mon entreprise', 1, TO_DATE('2020-04-06 18:03:14', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2020-04-06 18:03:14', 'YYYY-MM-DD HH24:MI:SS'))
+    ";
+
+
+    $bdd->exec($sql);
+
+    $employeur = [
+      "ID" => $bdd->sequenceNextVal('EMPLOYEUR_ID_SEQ'),
+      "LIBELLE" => "puette",
+      "SIREN"   => $data[0]
+    ];
+    $o = ['histo-user-id' => 1];
+    $bdd->getTable('EMPLOYEUR')->insert($employeur, $o );
+    $row++;
+    if($row%1000 == 0)
+    {
+        $c->println($row);
+    }
+}
+      /*  $sql = "INSERT INTO EMPLOYEUR
+               ('ID','LIBELLE', 'SIREN') 
+               VALUES ($data[0], $data[2], $data[0]);
+        $num = count($data);
+        $c->println($num);
+        echo "$num champs à la ligne $row : ";
+        echo "\n";*/
+
+/*        
+                ";*/
+
+$c->println($file);
+die;
+/*
+$data = [];
+while (($data = fgetcsv($csvFile, 1000, ",")) !== FALSE) {
+
+    echo "$num champs à la ligne $row : ";
+    $row++;
+    for ($c=0; $c < $num; $c++) {
+        $sql = "INSERT INTO EMPLOYEUR
+                        ('ID','LIBELLE', 'SIREN') VALUES ($data[0], $data[2], $data[0]);
+                ";
+    }
+    echo "\n";
+}
+//$oa->exec('update-employeur');
+
+*/
 
 
     /*// Récupération des sources

@@ -5,7 +5,7 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="libelle" type="string" column="LIBELLE" length="250" nullable="false"/>
-
+    <field name="siren" type="string" column="SIREN" length="250" nullable="false"/>
     <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>

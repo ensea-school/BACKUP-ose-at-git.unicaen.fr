@@ -1,3 +1,15 @@
+# OSE 14.2
+
+## Correction de bug
+
+Petit bug d'affichage d'un message d'erreur corrigé.
+
+# OSE 14.1
+
+## Correction de bug
+
+Soucis réglés au niveau de la procédure de mise à jour, qui n'exécutait pas certains traitements.
+
 # OSE 14
 
 ## Nouveautés

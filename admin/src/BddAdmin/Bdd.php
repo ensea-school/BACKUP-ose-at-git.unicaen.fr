@@ -780,7 +780,9 @@ class Bdd
         sort($tables);
         foreach ($tables as $table) {
             $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
-            $this->getTable($table)->save($dirname . '/' . $table . '.tbl', $fnc);
+            if (false !== $fnc) {
+                $this->getTable($table)->save($dirname . '/' . $table . '.tbl', $fnc);
+            }
         }
 
         $this->logEnd();
@@ -802,12 +804,15 @@ class Bdd
         $this->create([Ddl::TABLE => $tDdl]);
 
         $tables = array_keys($tDdl);
+
         sort($tables);
 
         foreach ($tables as $table) {
             if (file_exists($dirname . '/' . $table . '.tbl')) {
                 $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
-                $this->getTable($table)->load($dirname . '/' . $table . '.tbl', $fnc);
+                if (false !== $fnc) {
+                    $this->getTable($table)->load($dirname . '/' . $table . '.tbl', $fnc);
+                }
             }
         }
 

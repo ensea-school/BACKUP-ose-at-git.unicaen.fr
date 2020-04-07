@@ -188,12 +188,12 @@ class Table
             $this->getBdd()->logBegin("Sauvegarde de la table " . $this->getName());
         }
 
+        if (file_exists($filename)) unlink($filename);
         if ($count > 0) {
             $buff = fopen($filename, 'w');
             fwrite($buff, $count . "\n");
         } else {
             $buff = null;
-            if (file_exists($filename)) unlink($filename);
         }
 
         $current = 0;

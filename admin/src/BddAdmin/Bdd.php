@@ -756,4 +756,65 @@ class Bdd
 
         return $this;
     }
+
+
+
+    /**
+     * @param DdlFilters|array|null $filters
+     *
+     * @throws Exception
+     */
+    public function save(string $dirname, $filters = [], array $fncs = [])
+    {
+        $this->logBegin("Sauvegarde de la base de données");
+
+        $ddl = $this->getDdl($filters);
+
+        if (!is_dir($dirname)) {
+            mkdir($dirname);
+        }
+
+        $ddl->saveToFile($dirname . '/bdd.ddl');
+
+        $tables = array_keys($ddl->get(Ddl::TABLE));
+        sort($tables);
+        foreach ($tables as $table) {
+            $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
+            $this->getTable($table)->save($dirname . '/' . $table . '.tbl', $fnc);
+        }
+
+        $this->logEnd();
+    }
+
+
+
+    public function load(string $dirname, $filters = [], array $fncs = [])
+    {
+        $this->logBegin("Restauration de la base de données");
+
+        $ddl = new Ddl();
+        $ddl->loadFromFile($dirname . '/bdd.ddl');
+        $ddl->filter($filters);
+
+        $tDdl = $ddl->get(Ddl::TABLE);
+
+        $this->drop();
+        $this->create([Ddl::TABLE => $tDdl]);
+
+        $tables = array_keys($tDdl);
+        sort($tables);
+
+        foreach ($tables as $table) {
+            if (file_exists($dirname . '/' . $table . '.tbl')) {
+                $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
+                $this->getTable($table)->load($dirname . '/' . $table . '.tbl', $fnc);
+            }
+        }
+
+        $this->create($ddl, [Ddl::TABLE => ['excludes' => '%']]);
+
+        $this->logEnd();
+
+        return $this;
+    }
 }

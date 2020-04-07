@@ -176,6 +176,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const STRUCTURES_ADMINISTRATION_VISUALISATION             = 'structures-administration-visualisation';
     const TYPE_INTERVENTION_EDITION                           = 'type-intervention-edition';
     const TYPE_INTERVENTION_VISUALISATION                     = 'type-intervention-visualisation';
+    const TYPE_RESSOURCE_EDITION                              = 'type-ressource-edition';
+    const TYPE_RESSOURCE_VISUALISATION                        = 'type-ressource-visualisation';
     const UNICAEN_TBL_ACTUALISATION                           = 'unicaen-tbl-actualisation';
     const UNICAEN_TBL_ADMIN                                   = 'unicaen-tbl-admin';
     const UNICAEN_TBL_UPDATE_ACTUPROC                         = 'unicaen-tbl-update-actuproc';

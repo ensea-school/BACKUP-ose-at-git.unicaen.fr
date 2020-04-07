@@ -209,6 +209,13 @@ return [
             'edition'       => 'Édition',
         ],
     ],
+    'type-ressource' => [
+        'libelle'    => 'Types de ressources',
+        'privileges' => [
+            'visualisation' => 'Visualisation',
+            'edition'       => 'Édition',
+        ],
+    ],
 
     'unicaen-tbl' => [
         'libelle'    => 'Tableaux de bord',

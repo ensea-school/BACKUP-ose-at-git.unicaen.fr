@@ -152,6 +152,7 @@ class Table
         }
 
         $current = 0;
+        $this->getBdd()->beginTransaction();
         while ($data = $r->next()) {
             $current++;
             if ($current == $count) {
@@ -165,6 +166,7 @@ class Table
                 $this->insert($data);
             }
         }
+        $this->getBdd()->commitTransaction();
 
         if (!$this->getBdd()->isInCopy()) {
             $this->getBdd()->logEnd();
@@ -235,6 +237,7 @@ class Table
         $count   = (int)trim($count);
         $data    = '';
         $current = 0;
+        $this->getBdd()->beginTransaction();
         while (($d = fgets($buff)) !== false) {
             if ($data != '') $data != "\n";
             $data .= $d;
@@ -250,6 +253,7 @@ class Table
                 $data = '';
             }
         }
+        $this->getBdd()->commitTransaction();
 
 
         $this->getBdd()->logMsg("Restauration de la table " . $this->getName() . " Terminée", true);
@@ -423,6 +427,7 @@ class Table
         }
 
         /* Traitement */
+        $this->getBdd()->beginTransaction();
         foreach ($diff as $dr) {
             $old = $dr['old'];
             $new = $dr['new'];
@@ -462,6 +467,7 @@ class Table
                 }
             }
         }
+        $this->getBdd()->commitTransaction();
 
         return $result;
     }

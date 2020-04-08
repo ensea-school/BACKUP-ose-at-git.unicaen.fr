@@ -768,11 +768,14 @@ class Bdd
     {
         $this->logBegin("Sauvegarde de la base de données");
 
-        $ddl = $this->getDdl($filters);
-
         if (!is_dir($dirname)) {
             mkdir($dirname);
         }
+        if (!is_dir($dirname)) {
+            throw new \Exception("Création du répertoire $dirname impossible");
+        }
+
+        $ddl = $this->getDdl($filters);
 
         $ddl->saveToFile($dirname . '/bdd.ddl');
 
@@ -793,6 +796,10 @@ class Bdd
     public function load(string $dirname, $filters = [], array $fncs = [])
     {
         $this->logBegin("Restauration de la base de données");
+
+        if (!file_exists($dirname . '/bdd.ddl')) {
+            throw new \Exception("Le répertoire $dirname ne contient pas de sauvegarde valide de base de données");
+        }
 
         $ddl = new Ddl();
         $ddl->loadFromFile($dirname . '/bdd.ddl');

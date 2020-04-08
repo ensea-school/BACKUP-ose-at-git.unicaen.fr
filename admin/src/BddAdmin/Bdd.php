@@ -825,6 +825,8 @@ class Bdd
 
         $this->create($ddl, [Ddl::TABLE => ['excludes' => '%']]);
 
+        $this->majSequences($ddl);
+
         $this->logEnd();
 
         return $this;

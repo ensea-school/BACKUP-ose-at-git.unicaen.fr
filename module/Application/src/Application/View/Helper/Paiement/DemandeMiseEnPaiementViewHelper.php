@@ -191,10 +191,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
         $h .= $t('tr')->close();
         foreach ($structures as $structure) {
             $sid = $structure->getId();
-            $h .= $t('tr');
-            if ($this->getView()->isAllowed(PrivilegeController::getResourceId('Application\Controller\Budget','engagement'))){
-                $h .= $t('th')->html($t('a',['href' => $this->getView()->url('budget/engagement',['structure'=>$structure->getId()])])->text($structure));
-            }else{
+            $h   .= $t('tr');
+            if ($this->getView()->isAllowed(PrivilegeController::getResourceId('Application\Controller\Budget', 'engagement'))) {
+                $h .= $t('th')->html($t('a', ['href' => $this->getView()->url('budget/engagement', ['structure' => $structure->getId()])])->text($structure));
+            } else {
                 $h .= $t('th')->text($structure);
             }
 
@@ -234,8 +234,8 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 
     public function renderServiceAPayer(ServiceAPayerInterface $serviceAPayer)
     {
-        $out = '<div class="service-a-payer" id="' . $this->getServiceAPayerId($serviceAPayer) . '">';
-        $out .= $this->renderHead($serviceAPayer);
+        $out         = '<div class="service-a-payer" id="' . $this->getServiceAPayerId($serviceAPayer) . '">';
+        $out         .= $this->renderHead($serviceAPayer);
         $typesHeures = $this->getServiceTypeHeures()->getList($this->getServiceTypeHeures()->finderByServiceaPayer($serviceAPayer));
         $colSpan     = 12 / count($typesHeures);
         if ($colSpan > 6) $colSpan = 6;
@@ -322,7 +322,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
                 $title[] = $periode . ' : ' . strip_tags(\UnicaenApp\Util::formattedNumber($heures)) . ' hetd mis en paiement';
             }
             $title = implode('&#13;', $title);
-            $out .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td></tr>';
+            $out   .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td></tr>';
         }
         $out .= '<tfoot>';
 
@@ -422,9 +422,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 
         $misesEnPaiement = $serviceAPayer->getMiseEnPaiement()->filter(function (MiseEnPaiement $miseEnPaiement) use ($typeHeures) {
             return $miseEnPaiement->getTypeHeures() === $typeHeures;
-        }); /* @var $misesEnPaiement MiseEnPaiement[] */
+        });
+        /* @var $misesEnPaiement MiseEnPaiement[] */
         foreach ($misesEnPaiement as $miseEnPaiement) {
-            if (!isset($params['centres-cout'][$miseEnPaiement->getCentreCout()->getId()])){
+            if (!isset($params['centres-cout'][$miseEnPaiement->getCentreCout()->getId()])) {
                 $params['centres-cout'][$miseEnPaiement->getCentreCout()->getId()] = [
                     'libelle'           => (string)$miseEnPaiement->getCentreCout(),
                     'type-ressource-id' => $miseEnPaiement->getCentreCout()->getTypeRessource()->getId(),
@@ -441,7 +442,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
                     ];
                 }
                 $mepBuffer[$pp->getId()]['heures'] += $miseEnPaiement->getHeures(); // mise en buffer pour tri...
-                $params['heures-mep'] += $miseEnPaiement->getHeures();
+                $params['heures-mep']              += $miseEnPaiement->getHeures();
             } else {
                 $domaineFonctionnel = $miseEnPaiement->getDomaineFonctionnel();
 
@@ -458,11 +459,11 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
                     ];
                 }
                 $params['demandes-mep'][$miseEnPaiement->getId()] = $dmepParams;
-                $params['heures-dmep'] += $miseEnPaiement->getHeures();
+                $params['heures-dmep']                            += $miseEnPaiement->getHeures();
             }
         }
         $params['heures-non-dmep'] = (float)$params['heures-total'] - (float)$params['heures-mep'] - (float)$params['heures-dmep'];
-        if (abs($params['heures-non-dmep']) < 0.01) $params['heures-non-dmep'] = 0.0;
+        if (abs($params['heures-non-dmep']) < 0.009) $params['heures-non-dmep'] = 0.0;
 
         // tri du buffer et mise en paramètres
         usort($mepBuffer, function ($a, $b) {

@@ -37,7 +37,7 @@ $deployLocal->setLogger($c);
 
 //$deployLocal->copy($devLocal);
 
-//$devLocal->getTable('ANNEE')->copy($deployLocal);
+$bdd = $oa->getBdd();
 
 $deployLocal->getTable('TAUX_HORAIRE_HETD')->delete(['ID' => 999]);
 

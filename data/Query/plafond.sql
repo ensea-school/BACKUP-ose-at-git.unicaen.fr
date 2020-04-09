@@ -26,7 +26,7 @@ FROM
   JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
   JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
 WHERE
-  fr.heures_compl_fc_majorees > ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 )
+  fr.heures_compl_fc_majorees > ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) + 0.05
   /*i.id*/
 
 UNION ALL
@@ -46,7 +46,7 @@ FROM
   JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
   JOIN statut_intervenant        si ON si.id = i.statut_id
 WHERE
-  fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL > si.plafond_referentiel
+  fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL > si.plafond_referentiel + 0.05
   /*i.id*/
 
 UNION ALL
@@ -82,7 +82,7 @@ FROM
   ) t
   JOIN intervenant i ON i.id = t.intervenant_id
 WHERE
-  t.heures > t.plafond
+  t.heures > t.plafond + 0.05
   /*i.id*/
 GROUP BY
   t.type_volume_horaire_id,
@@ -123,7 +123,7 @@ FROM
   ) t
     JOIN intervenant i ON i.id = t.intervenant_id
 WHERE
-    t.heures > t.plafond
+    t.heures > t.plafond + 0.05
   /*i.id*/
 GROUP BY
   t.type_volume_horaire_id,
@@ -160,7 +160,7 @@ FROM
         sr.histo_destruction IS NULL
   ) t
 WHERE
-    t.heures > t.plafond
+    t.heures > t.plafond + 0.05
   /*i.id*/
 
 UNION ALL
@@ -180,7 +180,7 @@ FROM
   JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
   JOIN statut_intervenant        si ON si.id = i.statut_id
 WHERE
-  fr.total - fr.heures_compl_fc_majorees > si.maximum_hetd
+  fr.total - fr.heures_compl_fc_majorees > si.maximum_hetd + 0.05
   /*i.id*/
 
 UNION ALL
@@ -200,7 +200,7 @@ FROM
   JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
   JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
 WHERE
-  (fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel) > si.plafond_hc_hors_remu_fc
+  (fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel) > si.plafond_hc_hors_remu_fc + 0.05
   /*i.id*/
 
 UNION ALL
@@ -243,7 +243,7 @@ FROM
   ) t
     JOIN statut_intervenant si ON si.id = t.statut_intervenant_id
 WHERE
-  t.heures > si.plafond_hc_fi_hors_ead
+  t.heures > si.plafond_hc_fi_hors_ead + 0.05
 
 
 

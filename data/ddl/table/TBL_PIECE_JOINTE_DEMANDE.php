@@ -20,6 +20,17 @@ return [
             'default'     => NULL,
             'commentaire' => NULL,
         ],
+        'CODE_INTERVENANT'     => [
+            'name'        => 'CODE_INTERVENANT',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 255,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
         'HEURES_POUR_SEUIL'    => [
             'name'        => 'HEURES_POUR_SEUIL',
             'type'        => 'float',

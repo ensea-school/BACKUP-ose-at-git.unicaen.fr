@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Provider\Privilege\Privileges;
@@ -10,8 +11,10 @@ use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape;
+use Zend\Form\Element;
 
 /**
  * Description of ElementPedagogique
@@ -59,6 +62,96 @@ class EtapeService extends AbstractEntityService
 
 
     /**
+     * Retour uniquement les Etapes ayant été reconduites pour l'année universitaire suivante
+     * et possédant des centres de coût à reconduire
+     *
+     * @return string
+     */
+
+    public function getEtapeCentreCoutReconductible($structure)
+    {
+        $annee  = $this->getServiceContext()->getAnnee()->getId();
+
+
+        $sql = '
+        SELECT 
+            count(*) as nb_centre_cout,
+            etape_id,
+            etape_code,
+            etape_libelle
+        FROM 
+            V_RECONDUCTION_CENTRE_COUT 
+        WHERE
+            annee_id = :annee
+            AND structure_id = '  . $structure->getId();
+
+        $sql .= 'GROUP BY
+                   etape_id,
+                   etape_code,
+                   etape_libelle
+                ORDER BY etape_id ASC';
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindParam(':annee', $annee);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $etapes = [];
+        foreach($result as $etape)
+        {
+            $etapes[$etape['ETAPE_CODE']] = $etape;
+        }
+
+        return $etapes;
+    }
+
+
+    /**
+     * Retour uniquement les Etapes ayant été reconduites pour l'année universitaire suivante
+     * et possédant des modulateurs à reconduire
+     *
+     * @return string
+     */
+
+    public function getEtapeModulateurReconductible($structure)
+    {
+        $annee  = $this->getServiceContext()->getAnnee()->getId();
+
+
+        $sql = '
+        SELECT 
+            count(*) as nb_modulateur,
+            etape_id,
+            etape_code,
+            etape_libelle
+        FROM 
+            V_RECONDUCTION_MODULATEUR 
+        WHERE
+            annee_id = :annee
+            AND structure_id = '  . $structure->getId();
+
+        $sql .= 'GROUP BY
+                   etape_id,
+                   etape_code,
+                   etape_libelle
+                ORDER BY etape_id ASC';
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindParam(':annee', $annee);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $etapes = [];
+        foreach($result as $etape)
+        {
+            $etapes[$etape['ETAPE_CODE']] = $etape;
+        }
+
+        return $etapes;
+    }
+
+
+
+
+    /**
      *
      * @param \Application\Entity\NiveauEtape $niveau
      * @param \Doctrine\ORM\QueryBuilder      $qb
@@ -68,7 +161,7 @@ class EtapeService extends AbstractEntityService
      */
     public function finderByNiveau(\Application\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $typeFormationAlias       = $this->getServiceTypeFormation()->getAlias();
         $groupeTypeFormationAlias = $this->getServiceGroupeTypeFormation()->getAlias();
@@ -95,7 +188,7 @@ class EtapeService extends AbstractEntityService
      */
     public function finderByStructure(\Application\Entity\Db\Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $structureService = $this->getServiceStructure();
         $structureAlias   = $structureService->getAlias();
@@ -118,7 +211,7 @@ class EtapeService extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb, $alias);
         if ($cStructure = $this->getServiceContext()->getStructure()) {
@@ -132,7 +225,7 @@ class EtapeService extends AbstractEntityService
 
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.libelle");
 

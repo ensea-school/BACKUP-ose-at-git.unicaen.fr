@@ -9,6 +9,17 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'PIECE_JOINTE_ID_SEQ',
     'columns'     => [
+        'DATE_ARCHIVE'          => [
+            'name'        => 'DATE_ARCHIVE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'commentaire' => NULL,
+        ],
         'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',

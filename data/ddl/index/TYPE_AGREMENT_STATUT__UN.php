@@ -9,7 +9,7 @@ return [
     'columns' => [
         'TYPE_AGREMENT_ID',
         'STATUT_INTERVENANT_ID',
-        'PREMIER_RECRUTEMENT',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

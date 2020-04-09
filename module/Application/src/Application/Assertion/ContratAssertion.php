@@ -20,12 +20,14 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class ContratAssertion extends AbstractAssertion
 {
-    const PRIV_LISTER_FICHIERS = 'contrat-lister-fichiers';
+    const PRIV_LISTER_FICHIERS   = 'contrat-lister-fichiers';
     const PRIV_SUPPRIMER_FICHIER = 'contrat-supprimer-fichier';
-    const PRIV_AJOUTER_FICHIER = 'contrat-ajouter-fichier';
-    const PRIV_EXPORT = 'contrat-export-all';
+    const PRIV_AJOUTER_FICHIER   = 'contrat-ajouter-fichier';
+    const PRIV_EXPORT            = 'contrat-export-all';
 
     use WorkflowServiceAwareTrait;
+
+
 
     /**
      * @param ResourceInterface $entity
@@ -41,7 +43,7 @@ class ContratAssertion extends AbstractAssertion
             self::PRIV_SUPPRIMER_FICHIER,
         ];
 
-        $role        = $this->getRole();
+        $role = $this->getRole();
 
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
@@ -71,7 +73,7 @@ class ContratAssertion extends AbstractAssertion
                         return $this->assertModifierFichier($entity);
 
                     case Privileges::CONTRAT_VISUALISATION:
-                        return $this->assertVisualisation( $entity );
+                        return $this->assertVisualisation($entity);
 
                     case Privileges::CONTRAT_CREATION:
                         return $this->assertCreation($entity);
@@ -110,9 +112,9 @@ class ContratAssertion extends AbstractAssertion
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
-        if ($intervenant){
+        if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $intervenant);
-            $wfOk = $workflowEtape && $workflowEtape->isAtteignable();
+            $wfOk          = $workflowEtape && $workflowEtape->isAtteignable();
             if (!$wfOk) return false;
         }
 
@@ -121,7 +123,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertListerFichiers( Contrat $contrat )
+    protected function assertListerFichiers(Contrat $contrat)
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::CONTRAT_VISUALISATION),
@@ -132,48 +134,49 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertModifierFichier( Contrat $contrat )
+    protected function assertModifierFichier(Contrat $contrat)
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::CONTRAT_DEPOT_RETOUR_SIGNE),
-            $this->assertDepotRetourSigne($contrat)
+            empty($contrat->getDateRetourSigne()),
+            $this->assertDepotRetourSigne($contrat),
         ]);
     }
 
 
 
-    protected function assertVisualisation( Contrat $contrat )
+    protected function assertVisualisation(Contrat $contrat)
     {
         return $this->assertRole($contrat);
     }
 
 
 
-    protected function assertCreation( Contrat $contrat )
+    protected function assertCreation(Contrat $contrat)
     {
         return $this->asserts([
             $this->assertRole($contrat),
-            $this->assertWorkflow($contrat)
+            $this->assertWorkflow($contrat),
         ]);
     }
 
 
 
-    protected function assertValidation( Contrat $contrat )
+    protected function assertValidation(Contrat $contrat)
     {
         return $this->asserts([
             $this->assertRole($contrat),
-            !$contrat->getValidation()
+            !$contrat->getValidation(),
         ]);
     }
 
 
 
-    protected function assertDevalidation( Contrat $contrat )
+    protected function assertDevalidation(Contrat $contrat)
     {
-        if (!$contrat->estUnAvenant()){
+        if (!$contrat->estUnAvenant()) {
             $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut dévalider un contrat que si aucun avenant n'existe
-        }else{
+        } else {
             $devalid = true;
         }
 
@@ -187,54 +190,54 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertSuppression( Contrat $contrat )
+    protected function assertSuppression(Contrat $contrat)
     {
         return $this->asserts([
             $this->assertRole($contrat),
-            !$contrat->getValidation()
+            !$contrat->getValidation(),
         ]);
     }
 
 
 
-    protected function assertGeneration(Contrat $contrat )
+    protected function assertGeneration(Contrat $contrat)
     {
-        if ($contrat->estUnProjet()){
+        if ($contrat->estUnProjet()) {
             return $this->getRole()->hasPrivilege(Privileges::CONTRAT_PROJET_GENERATION);
-        }else{
+        } else {
             return $this->getRole()->hasPrivilege(Privileges::CONTRAT_CONTRAT_GENERATION);
         }
     }
 
 
 
-    protected function assertDepotRetourSigne( Contrat $contrat )
+    protected function assertDepotRetourSigne(Contrat $contrat)
     {
         return $this->asserts([
             $this->assertRole($contrat),
-            !$contrat->estUnProjet()
+            !$contrat->estUnProjet(),
         ]);
     }
 
 
 
-    protected function assertSaisieDateRetour( Contrat $contrat )
+    protected function assertSaisieDateRetour(Contrat $contrat)
     {
         return $this->asserts([
             $this->assertRole($contrat),
-            !$contrat->estUnProjet()
+            !$contrat->estUnProjet(),
         ]);
     }
 
 
 
-    protected function assertRole( Contrat $contrat, $checkStructure=true)
+    protected function assertRole(Contrat $contrat, $checkStructure = true)
     {
-        if ($intervenant = $this->getRole()->getIntervenant()){
+        if ($intervenant = $this->getRole()->getIntervenant()) {
             if (!$this->assertIntervenant($contrat, $intervenant)) return false;
         }
 
-        if ($checkStructure && ($structure = $this->getRole()->getStructure())){
+        if ($checkStructure && ($structure = $this->getRole()->getStructure())) {
             if (!$this->assertStructure($contrat, $structure)) return false;
         }
 
@@ -243,21 +246,21 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenant( Contrat $contrat, Intervenant $intervenant )
+    protected function assertIntervenant(Contrat $contrat, Intervenant $intervenant)
     {
         return $contrat->getIntervenant() == $intervenant;
     }
 
 
 
-    protected function assertStructure( Contrat $contrat, Structure $structure )
+    protected function assertStructure(Contrat $contrat, Structure $structure)
     {
         return $contrat->getStructure() == $structure;
     }
 
 
 
-    protected function assertWorkflow( Contrat $contrat )
+    protected function assertWorkflow(Contrat $contrat)
     {
         $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $contrat->getIntervenant(), $contrat->getStructure());
 

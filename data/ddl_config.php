@@ -6,6 +6,7 @@ return [
         'TYPE_DOTATION',
         'ELEMENT_TAUX_REGIMES_SAVE',
         'TBL_DOSSIER2',
+        'FORMULE_TEST_STRUCTURE',
     ]],
     'materialized-view' => ['includes' => [
 

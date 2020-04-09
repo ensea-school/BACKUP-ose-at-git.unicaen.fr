@@ -4,9 +4,11 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\PieceJointe;
+use Application\Entity\Db\TblPieceJointe;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
@@ -28,6 +30,7 @@ class PieceJointeController extends AbstractController
     use ContextServiceAwareTrait;
     use PieceJointeServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
     use TypePieceJointeSaisieFormAwareTrait;
     use ModifierTypePieceJointeStatutFormAwareTrait;
     use TypePieceJointeServiceAwareTrait;
@@ -60,8 +63,7 @@ class PieceJointeController extends AbstractController
      */
     public function indexAction()
     {
-        $this->initFilters();
-
+        //$this->initFilters();
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -72,15 +74,18 @@ class PieceJointeController extends AbstractController
 
         $title = "Pièces justificatives <small>{$intervenant}</small>";
 
-        $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
         $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
-        $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        $fournies  = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        $demandees = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
+        $synthese  = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
+
+        $annee = $this->getServiceContext()->getAnnee();
 
         $messages = $this->makeMessages($demandees, $fournies);
 
         $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getPeutAvoirContrat();
 
-        return compact('intervenant', 'title', 'demandees', 'heuresPourSeuil', 'fournies', 'messages', 'alertContrat');
+        return compact('intervenant', 'title', 'heuresPourSeuil', 'demandees', 'synthese', 'fournies', 'messages', 'alertContrat', 'annee');
     }
 
 
@@ -107,8 +112,7 @@ class PieceJointeController extends AbstractController
 
 
     /**
-     * @param TypePieceJointe[] $demandees
-     * @param PieceJointe[]     $fournies
+     * @param TblPieceJointe[]     $synthesePiecesJointes
      */
     protected function makeMessages($demandees, $fournies)
     {
@@ -163,8 +167,6 @@ class PieceJointeController extends AbstractController
         return compact('pj');
     }
 
-
-
     public function validerAction()
     {
         $this->initFilters();
@@ -179,6 +181,20 @@ class PieceJointeController extends AbstractController
         $viewModel->setVariable('pj', $pj);
 
         return $viewModel;
+    }
+
+    public function archiverAction()
+    {
+        $this->initFilters();
+        /** @var PieceJointe $pj */
+        $pj = $this->getEvent()->getParam('pieceJointe');
+        $pj = $this->getServicePieceJointe()->archiver($pj);
+        $this->updateTableauxBord($pj->getIntervenant(), true);
+        $viewModel = new ViewModel();
+
+
+        return $viewModel;
+
     }
 
 
@@ -204,10 +220,13 @@ class PieceJointeController extends AbstractController
     public function listerAction()
     {
         $this->initFilters();
-
         $intervenant     = $this->getEvent()->getParam('intervenant');
-        $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
-        $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+        $pj = $this->getEvent()->getParam('pieceJointe');
+        if(empty($pj))
+        {
+            $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
+            $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+        }
 
         return compact('pj');
     }
@@ -432,6 +451,14 @@ class PieceJointeController extends AbstractController
             'agrement',
             'contrat',
         ], $intervenant);
+
+        //Récupérer tous les intervenants avec le même code intervenant
+        $intervenants = $this->getServiceIntervenant()->getIntervenantByCode($intervenant->getCode());
+        //On recalcule le tbl piece_jointe pour tous les intervenants ayant le même code intervenant que l'intervenant de l'année en cours
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'piece_jointe',
+        ], $intervenants);
+
     }
 
 }

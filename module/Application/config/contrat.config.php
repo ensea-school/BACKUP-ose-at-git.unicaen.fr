@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Assertion\ContratAssertion;
+use Application\Controller\Factory\ContratControllerFactory;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -90,6 +91,18 @@ return [
                             ],
                             'defaults'    => [
                                 'action' => 'exporter',
+                            ],
+                        ],
+                    ],
+                    'envoyer-mail'        => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/:contrat/mail',
+                            'constraints' => [
+                                'contrat' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'envoyer-mail',
                             ],
                         ],
                     ],
@@ -217,6 +230,11 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['envoyer-mail'],
+                    'privileges' => [Privileges::CONTRAT_ENVOI_EMAIL],
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
                     'action'     => ['creer'],
                     'privileges' => Privileges::CONTRAT_CREATION,
                     'assertion'  => Assertion\ContratAssertion::class,
@@ -285,6 +303,7 @@ return [
                             Privileges::CONTRAT_VISUALISATION,
                             Privileges::CONTRAT_PROJET_GENERATION,
                             Privileges::CONTRAT_CONTRAT_GENERATION,
+                            Privileges::CONTRAT_ENVOI_EMAIL,
                             ContratAssertion::PRIV_LISTER_FICHIERS,
                             ContratAssertion::PRIV_AJOUTER_FICHIER,
                             ContratAssertion::PRIV_SUPPRIMER_FICHIER,
@@ -318,8 +337,8 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Contrat' => Controller\ContratController::class,
+        'factories' => [
+            'Application\Controller\Contrat' => Controller\Factory\ContratControllerFactory::class,
         ],
     ],
     'service_manager' => [

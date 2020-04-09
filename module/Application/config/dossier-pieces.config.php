@@ -14,8 +14,8 @@ return [
                     'dossier' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/:intervenant/dossier',
-                            'defaults'    => [
+                            'route'    => '/:intervenant/dossier',
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Dossier',
                                 'action'     => 'index',
                             ],
@@ -76,7 +76,7 @@ return [
                 'options'       => [
                     'route'    => '/piece-jointe',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\PieceJointe',
+                        'controller' => 'Application\Controller\PieceJointe',
                     ],
                 ],
                 'may_terminate' => true,
@@ -84,8 +84,8 @@ return [
                     'intervenant'                       => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/intervenant/:intervenant',
-                            'defaults'    => [
+                            'route'    => '/intervenant/:intervenant',
+                            'defaults' => [
                                 'action' => 'index',
                             ],
                         ],
@@ -142,6 +142,19 @@ return [
                                     ],
                                 ],
                             ],
+                            'archiver'   => [
+                                // archiver la PJ
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/archiver/:pieceJointe',
+                                    'constraints' => [
+                                        'pieceJointe' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'archiver',
+                                    ],
+                                ],
+                            ],
                             'fichier'    => [
                                 'type'          => 'Literal',
                                 'options'       => [
@@ -153,9 +166,11 @@ return [
                                         // lister les fichiers d'une PJ
                                         'type'    => 'Segment',
                                         'options' => [
-                                            'route'       => '/lister/:typePieceJointe',
+                                            'route'       => '/lister/:typePieceJointe/:pieceJointe',
                                             'constraints' => [
                                                 'typePieceJointe' => '[0-9]*',
+                                                'pieceJointe'     => '[0-9]*',
+
                                             ],
                                             'defaults'    => [
                                                 'action' => 'lister',
@@ -345,11 +360,11 @@ return [
         'guards'             => [
             PrivilegeController::class => [
                 /* Dossier */
-                [
-                    'controller' => 'Application\Controller\Dossier',
-                    'action'     => ['index'],
-                    'privileges' => [Privileges::DOSSIER_VISUALISATION],
-                    'assertion'  => Assertion\DossierPiecesAssertion::class,
+                [//Créer un droit archivage
+                 'controller' => 'Application\Controller\Dossier',
+                 'action'     => ['index'],
+                 'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                 'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Dossier',
@@ -430,7 +445,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['televerser', 'supprimer'],
+                    'action'     => ['televerser', 'supprimer', 'archiver'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_EDITION,
                     'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
@@ -486,8 +501,8 @@ return [
             Service\TypePieceJointeService::class       => Service\TypePieceJointeService::class,
             Service\TypePieceJointeStatutService::class => Service\TypePieceJointeStatutService::class,
         ],
-        'factories' => [
-            Assertion\DossierPiecesAssertion::class     => \UnicaenAuth\Assertion\AssertionFactory::class,
+        'factories'  => [
+            Assertion\DossierPiecesAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

@@ -112,7 +112,7 @@ return [
             'name'        => 'VALEUR',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 200,
+            'length'      => 4000,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,

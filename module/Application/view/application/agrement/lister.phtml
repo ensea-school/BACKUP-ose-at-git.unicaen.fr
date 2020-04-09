@@ -34,7 +34,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
                 <td class="agrement">
                     <?php
                     if ($agrement = $ta->getAgrement()) {
-                        echo $this->agrement($agrement)->short()->box();
+                        echo $this->agrement($agrement, $ta)->short()->box();
                     } else {
                         echo 'Aucun';
                     }
@@ -42,10 +42,15 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
                 </td>
                 <?php if ($hasActions): ?>
                     <td>
-                        <?php if ($actionUrl): ?>
-                            <a class="btn btn-primary pop-ajax" data-submit-reload="true" data-min-width="13em" data-placement="left"
-                               href="<?= $actionUrl ?>"><?= $actionLabel ?></a>
+                        <?php if (!empty($ta->getAnneeAgrement()) && $ta->getAnnee()->getId() != $ta->getAnneeAgrement()->getId()): ?>
+                            L'agrément ne peut être retiré que l'année de sa décision.
+                        <?php else: ?>
+                            <?php if ($actionUrl): ?>
+                                <a class="btn btn-primary pop-ajax " data-submit-reload="true" data-min-width="13em" data-placement="left"
+                                href="<?= $actionUrl ?>"><?= $actionLabel ?></a>
+                            <?php endif; ?>
                         <?php endif; ?>
+
                     </td>
                 <?php endif; ?>
             </tr>

@@ -18,4 +18,14 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_VH_VISUAL
     ];
 }
 
+if($this->isAllowed(Privileges::getResourceId(Privileges::ODF_MODULATEURS_EDITION)) ||
+    $this->isAllowed(Privileges::getResourceId(Privileges::ODF_CENTRES_COUT_EDITION))){
+    $tabs[] = [
+        'id'    => 'modulateur-cc',
+        'label' => '<span class="glyphicon glyphicon-time"></span> Modulateurs et Centres de coûts',
+        'url'   => $this->url('of/element/modulateurs-centres-couts', ['elementPedagogique' => $element->getId()]),
+    ];
+}
+
+
 echo $this->tabajax($tabs);

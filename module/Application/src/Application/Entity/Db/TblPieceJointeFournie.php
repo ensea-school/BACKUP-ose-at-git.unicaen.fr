@@ -42,6 +42,28 @@ class TblPieceJointeFournie
      */
     private $annee;
 
+    /**
+     * @var integer
+     */
+    private $dureeVie;
+
+    /**
+     * @var varchar
+     */
+    private $codeIntervenant;
+
+    /**
+     * @var integer
+     */
+    private $dateValidite;
+
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    private $dateArchive;
+
+
+
 
 
     /**
@@ -125,5 +147,53 @@ class TblPieceJointeFournie
     {
         return $this->annee;
     }
+
+
+
+    /**
+     * Get dureeVie
+     *
+     * @return integer
+     */
+    public function getDureeVie()
+    {
+        return $this->dureeVie;
+    }
+
+
+
+    /**
+     * Get
+     *
+     * @return string
+     */
+    public function getCodeIntervenant()
+    {
+        return $this->codeIntervenant;
+    }
+
+
+
+    /**
+     * Get dateValidite
+     *
+     * @return integer
+     */
+    public function getDateValidite()
+    {
+        return $this->dateValidite;
+    }
+
+    /**
+     * Get dateArchive
+     *
+     * @return \Application\Entity\Db\Annee
+     */
+    public function getDateArchive()
+    {
+        return $this->dateArchive;
+    }
+
+
 }
 

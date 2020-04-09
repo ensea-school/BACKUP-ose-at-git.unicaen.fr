@@ -37,11 +37,6 @@ class OffreFormationController extends AbstractController
     use ReconductionProcessusAwareTrait;
     use OffreFormationServiceAwareTrait;
 
-    /**
-     * @var Container
-     */
-    protected $sessionContainer;
-
 
 
     public function indexAction()
@@ -142,6 +137,13 @@ class OffreFormationController extends AbstractController
 
 
 
+    public function administrationOffreAction()
+    {
+        return [];
+    }
+
+
+
     public function reconductionAction()
     {
         $this->initFilterHistorique();
@@ -166,7 +168,6 @@ class OffreFormationController extends AbstractController
         if ($request->isPost()) {
             $datas    = $request->getPost();
             $fromPost = true;
-
             //Ajout du mapping des EtapesN et EtapesN1 pour pouvoir reconduire un element pédagogique sur une etape déjà reconduite.
             $datas['mappingEtape'] = $mappingEtape;
             $reconductionProcessus = $this->getProcessusReconduction();
@@ -195,6 +196,111 @@ class OffreFormationController extends AbstractController
             'anneeEnCours'          => $anneeEnCours,
             'reconductionStep'      => $reconductionStep,
             'messageStep'           => $messageStep,
+        ];
+    }
+
+
+
+    public function reconductionCentreCoutAction()
+    {
+        $this->initFilterHistorique();
+        $etapesReconduites = [];
+        [$structure, $niveau, $etape] = $this->getParams();
+
+        //Get role of user
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $this->getServiceStructure()->finderByEnseignement($qb);
+        $this->getServiceStructure()->finderByRole($role, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+
+            $datas = $request->getPost();
+            //Reconduire les centres de coût des EP de l'étape.
+            try {
+                $etapesReconduites   = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
+                $etapesReconduitesCc = [];
+                if (isset($datas['etapes'])) {
+                    foreach ($datas['etapes'] as $code) {
+                        if (array_key_exists($code, $etapesReconduites)) {
+                            $etapesReconduitesCc[$code] = $etapesReconduites[$code];
+                        }
+                    }
+                }
+                $result            = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
+                $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
+
+                $this->flashMessenger()->addSuccessMessage("$result centre(s) de coût(s) ont été reconduit pour l'année prochaine. ");
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+        }
+
+        if (empty($etapesReconduites) && !empty($structure)) {
+            $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
+        }
+
+
+        return [
+            'structures'        => $structures,
+            'structure'         => $structure,
+            'etapesReconduites' => $etapesReconduites,
+        ];
+    }
+
+
+
+    public function reconductionModulateurAction()
+    {
+        $this->initFilterHistorique();
+
+        [$structure, $niveau, $etape] = $this->getParams();
+        $etapesReconduites = [];
+        $role              = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $this->getServiceStructure()->finderByEnseignement($qb);
+        $this->getServiceStructure()->finderByRole($role, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
+
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $datas             = $request->getPost();
+            $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
+            try {
+                $etapesReconduitesCc = [];
+                if (isset($datas['etapes'])) {
+                    foreach ($datas['etapes'] as $code) {
+
+                        if (array_key_exists($code, $etapesReconduites)) {
+                            $etapesReconduitesCc[$code] = $etapesReconduites[$code];
+                        }
+                    }
+                }
+                $result = $this->getProcessusReconduction()->reconduireModulateurFormation($etapesReconduitesCc);
+
+                $this->flashMessenger()->addSuccessMessage("$result modulateur(s) ont été reconduit pour l'année prochaine. ");
+
+                $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+        }
+
+        //Récupération de toutes les étapes éligibles à la reconduction des coûts
+        if (empty($etapesReconduites) && !empty($structure)) {
+            $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
+        }
+
+
+        return [
+            'structures'        => $structures,
+            'etapesReconduites' => $etapesReconduites,
+            'structure'         => $structure,
         ];
     }
 

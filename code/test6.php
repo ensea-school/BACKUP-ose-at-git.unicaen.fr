@@ -7,6 +7,3 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
-
-echo var_export('tes\'
-t');

@@ -2,7 +2,10 @@
 
 namespace Application\Form\StatutIntervenant;
 
+use Application\Entity\Db\TypeAgrementStatut;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\TypeAgrementServiceAwareTrait;
+use Application\Service\Traits\TypeAgrementStatutServiceAwareTrait;
 use Zend\Form\Element\Checkbox;
 use Zend\Form\Element\Csrf;
 use Zend\Form\Element\Number;
@@ -21,6 +24,8 @@ use Application\Filter\StringFromFloat;
 class StatutIntervenantSaisieForm extends AbstractForm
 {
     use TypeIntervenantServiceAwareTrait;
+    use TypeAgrementServiceAwareTrait;
+    use TypeAgrementStatutServiceAwareTrait;
 
 
 
@@ -125,6 +130,46 @@ class StatutIntervenantSaisieForm extends AbstractForm
             ],
             'type'       => 'Text',
         ]);
+
+        //Gestion des agréments de façon dynamique par rapport au contenu de la table type_agrement
+        $qb = $this->getServiceTypeAgrement()->finderByHistorique();
+        $typesAgrement = $this->getServiceTypeAgrement()->getList($qb);
+
+        foreach($typesAgrement as $type)
+        {
+            $this->add([
+                'name'    => $type->getCode(),
+                'options' => [
+                    'label'          => $type->getLibelle(),
+                    'value_options' => [
+                        0 => 'Non',
+                        1 => 'Oui'
+                    ]
+                ],
+                'attributes' => [
+                    'value' => 0,
+                ],
+                'type'    => 'Zend\Form\Element\Radio'
+            ]);
+
+            $this->add([
+                'name'       => $type->getCode() . '-DUREE_VIE',
+                'options'    => [
+                    'suffix' => 'an(s)'
+                ],
+                'attributes' => [
+                    'title' => "Nombre d'annnée de validité de l'agrément",
+                    'value' => '1'
+                ],
+                'type'       => 'Text',
+
+            ]);
+        }
+
+
+
+
+
 
         $this->add([
             'name'       => 'service-statutaire',
@@ -348,6 +393,8 @@ class StatutIntervenantHydrator implements HydratorInterface
 {
 
     use TypeIntervenantServiceAwareTrait;
+    use TypeAgrementServiceAwareTrait;
+    use TypeAgrementStatutServiceAwareTrait;
 
 
 
@@ -387,10 +434,52 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setDepassementSDSHC($data['depassement-sdshc']);
         $object->setChargesPatronales(FloatFromString::run($data['charges-patronales']) / 100);
 
+        //Gestion de la durée de vie des agréments par statut d'intervenant
+        //On récupére les types d'agrement
+        $qb = $this->getServiceTypeAgrement()->finderByHistorique();
+        $typesAgrements = $this->getServiceTypeAgrement()->getList($qb);
+        //Type agrement par statut d'intervenant
+        $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($object);
+        $this->getServiceTypeAgrementStatut()->finderByHistorique($qb);
+        $typesAgrementsStatuts = $this->getServiceTypeAgrementStatut()->getList($qb);
+        $typesAgrementsStatusByCode = [];
+        foreach($typesAgrementsStatuts as $tas)
+        {
+            $typesAgrementsStatusByCode[$tas->getType()->getCode()] = $tas;
+        }
+        //On boucle pour faire ensuite de l'insert, update ou delete
+        foreach($typesAgrements as $ta)
+        {
+            if(array_key_exists($ta->getCode(), $data))
+            {
+                if(!$data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode))
+                {
+                    $tasToDelete = $typesAgrementsStatusByCode[$ta->getCode()];
+                    $object->removeTypeAgrementStatut($tasToDelete);
+                    $this->getServiceTypeAgrementStatut()->delete($tasToDelete);
+                }
+                elseif($data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
+                    $tasToUpdate = $typesAgrementsStatusByCode[$ta->getCode()];
+                    $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
+                    $tasToUpdate->setDureeVie($dureeVie);
+                    $this->getServiceTypeAgrementStatut()->save($tasToUpdate);
+                }
+                elseif($data[$ta->getCode()] && !array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
+                    $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
+                    $tasToCreate = new TypeAgrementStatut();
+                    $tasToCreate->setDureeVie($dureeVie);
+                    $tasToCreate->setObligatoire(1);
+                    $tasToCreate->setType($ta);
+                    $tasToCreate->setStatut($object);
+                    $this->getServiceTypeAgrementStatut()->save($tasToCreate);
+                    $object->addTypeAgrementStatut($tasToCreate);
+
+                }
+            }
+        }
+
         return $object;
     }
-
-
 
     /**
      * Extract values from an object
@@ -426,7 +515,18 @@ class StatutIntervenantHydrator implements HydratorInterface
             'maximum-HETD'                   => StringFromFloat::run($object->getMaximumHETD()),
             'charges-patronales'             => StringFromFloat::run($object->getChargesPatronales() * 100),
             'depassement-sdshc'              => $object->getDepassementSDSHC(),
+
         ];
+
+        $typesAgrementsStatuts = $object->getTypeAgrementStatut();
+        foreach($typesAgrementsStatuts  as $tas)
+        {
+            if(!$tas->getHistoDestruction())
+            {
+                $data[$tas->getType()->getCode()] = 1;
+                $data[$tas->getType()->getCode().'-DUREE_VIE'] = $tas->getDureeVie();
+            }
+        }
 
         return $data;
     }

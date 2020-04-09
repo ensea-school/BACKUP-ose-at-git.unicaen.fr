@@ -204,7 +204,7 @@ class ParametresForm extends AbstractForm
             'name'       => 'es_services_csv',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label'         => 'État de sortie pour l\export CSV des services',
+                'label'         => 'État de sortie pour l\'export CSV des services',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -297,6 +297,85 @@ class ParametresForm extends AbstractForm
                 'data-size' => 20,
             ],
         ]);
+
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_regle_franchissement',
+            'options'    => [
+                'value_options' => [
+                    Parametre::CONTRAT_FRANCHI_VALIDATION  => 'Validation du contrat',
+                    Parametre::CONTRAT_FRANCHI_DATE_RETOUR => 'Validation & saisie de la date de retour du contrat signé',
+                ],
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'contrat_modele_mail',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Corps du mail envoyé aux intervenants lorsqu\'on leur transmet leur contrat',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+
+        $this->add([
+            'name'       => 'page_contact',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Contenu de la page "Contact"',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+
+        $this->add([
+            'name'       => 'page_accueil',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Message de la page d\'accueil',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'connexion_sans_role_ni_statut',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Message informatif si l\'utilisateur n\'est pas intervenant et n\'a aucune affectation',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'connexion_non_autorise',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Message informatif si l\'intervenant n\'est pas autorisé à se connecter',
+
+            ],
+            'attributes' => [
+                'rows' => 6,
+            ],
+        ]);
+
 
         $this->add([
             'name'       => 'submit',

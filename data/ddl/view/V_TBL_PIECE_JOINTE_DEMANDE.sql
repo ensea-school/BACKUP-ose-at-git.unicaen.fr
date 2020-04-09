@@ -19,6 +19,7 @@ WITH i_h AS (
 )
 SELECT
   i.annee_id                      annee_id,
+  i.code code_intervenant,
   i.id                            intervenant_id,
   tpj.id                          type_piece_jointe_id,
   MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
@@ -44,9 +45,6 @@ WHERE
   -- Seuil HETD
   AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
 
-  -- En fonction du premier recrutement ou non
-  AND (tpjs.premier_recrutement = 0 OR COALESCE(i.premier_recrutement,0) = 1)
-
   -- Le RIB n'est demandé QUE s'il est différent!!
   AND CASE
         WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
@@ -57,6 +55,7 @@ WHERE
   AND (tpjs.fc = 0 OR i_h.fc > 0)
 GROUP BY
   i.annee_id,
-  i.id,
+i.id,
+i.code,
   tpj.id,
   tpjs.obligatoire

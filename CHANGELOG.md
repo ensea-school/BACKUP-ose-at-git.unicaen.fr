@@ -1,3 +1,91 @@
+# OSE 14.2
+
+## Correction de bug
+
+Petit bug d'affichage d'un message d'erreur corrigé.
+
+# OSE 14.1
+
+## Correction de bug
+
+Soucis réglés au niveau de la procédure de mise à jour, qui n'exécutait pas certains traitements.
+
+# OSE 14
+
+## Nouveautés
+
+* Améliorations portées au système de gestion des contrats.
+  * Le corps de message de l'envoi du ontrat par mail peut maintenant être personnalisé (cf. Paramètres globaux dans le menu Administration).
+  * Le mail est maintenant envoyé à l'adresse mail perso indiquée dans le dossier de l'intrevenant, à défaut sur son mail professionnel d'établissement de sa fiche intervenant
+  * L'indicateur 360 resence maintenant les contrats validés qui n'ont aucun fichier téléversé.
+  * Un nouvel indicateur 370 liste les contrats validés qui ont des fichiers téléversés, mais sans date de retour.
+  * Les fichiers téléversés ne peuvent plus être modifiés si une date de retour a été saisie. Pour pouvoir modifier à nouveau, il faut d'abord enlever la date de retour.
+  * La règle de franchissement de l'étape contrat peut maintenant être personnalisés : soit l'étape est franchie si le projet de contrat est validé, soit il faut en plus qu'une date de retour ait été saisie. 
+
+* Gestion de la durée de vie des agréments
+  * A l'instar des pièces justificatives, la notion de premier recrutement a été remplacée par une durée de vie. Un agrément pourra donc être redemandé tous les 5 ans par exemple.
+  * Les règles de gestion des agréments sont maintenant configurables dans l'IHM d'administration des statuts.
+
+* Personnalisation
+  * Le message de bienvenue et la page "Contact", auparavant configurables dans le fichier config.local.php, dont maintenant modifiables dans la page Administration / Paramètres généraux.
+
+## Notes de mise à jour
+
+* Attention : lors de la mise à jour de la base de données, le script vous signalera quelques erreurs dues au fait qu'il existe certains liens d'interdépendances entre objets qui changent simultanément que le système ne gère pas parfaitement.
+Il vous faudra pour y remédier relancer un ./bin/ose update-bdd juste après la mise à jour. Là, les erreurs disparaitront et votre base devrait être parfaitement à jour.
+
+* N'oubliez pas de configurer les nouveaux paramètres généraux de OSE (Administration/Paramètres généraux)!
+
+* Dans le fichier config.local.php, supprimer les items suivants de la rubrique etablissement :
+  * messageBienvenue 
+  * contact
+
+# OSE 13.1
+
+## Correction de bugs
+
+* Lors de l'installation de OSE, les taux horaires des heures équivalent TD s'initialisent maintenant bien quelle que soit la configuration du serveur
+* Lors de la saisie de service, un élément remonte maintenant même si on filtre par une composante qui n'est pas la composante porteuse de l'élément
+* Les numéros d'INSEE Corses sont maintenant gérés correctement, de même que les anciens départements français du Maroc et de Tunisie
+* Lors de l'installation de l'application, l'initialisation des données fonctionne à nouveau
+* Le cache des données de pièces jointes (TBL_PIECE_JOINTE) pose problème depuis la V13 avec les version d'Oracle > 11. Un palliatif est intégré à cette nouvelle version.
+
+# OSE 13.0
+
+## Nouveautés
+
+* Gestion de la durée de vie des pièces justificatives :
+  * La notion de "premier recrutement" disparait au profit de la durée de vie de la pièce
+  * Vous pouvez maintenant préciser combien d'années est valable une pièce justificative par statut d'intervenant
+  * Une pièce obligatoire mais jamais fournie sera maintenant systématiquement demandée
+  * Une pièce ancienne mais toujours valable sera affichée dans la fiche actuelle de l'intervenant : inutile de se positionner dans l'année de fourniture de la pièce
+  * Une pièce fournie anciennement mais toujours valide pourra être archivée si l'on souhaite en fournir une nouvelle version
+  
+* Vous pouvez maintenant envoyer par mail le contrat de travail généré (privilège "Envoyer le contrat par mail") à donner aux rôles ad hoc pour donner accès à la fonctionnalité)
+ 
+* Vous pouvez maintenant éditer les centres de coûts et les modulateurs directement sur un élément pédagogique particulier.
+ 
+* Reconduction des centres de coûts et des modulateurs de l'offre de formation
+  * une nouvelle interface d'administration vous permet de reporter les modulateurs d'une formation qui ont été positionnés de l'année en cours à l'année suivante
+  * une nouvelle interface d'administration vous permet de reporter les centres de coûts d'une formation qui ont été positionnés de l'année en cours à l'année suivante
+
+## Correction de bugs
+
+* La page de saisie des services était accessible en écrivant la bonne URL, même si le workflow ne permettait pas d'arriver à cette étape.
+
+## Notes de mise à jour
+
+L'ensemble des tableaux de bord doivent être recalculés.
+Pensez à recalculer les tableaux de bord au moyen de la commande ./bin/ose calcul-tableaux-bord
+
+En ce qui concerne les pièces justificatives, les données demandées uniquement s'il s'agit d'un premier recrutement ont été migrées en données valables 99 ans. A vous de revoir ensuite cette durée de vie si nécessaire.
+
+# OSE 12.2
+
+## Correction de bug
+
+* Depuis la V12, la formule de calcul ne distinguait plus si le service était effectué dans la composante d'affectation de l'intervenant ou dans une autre composante. C'est rétabli. 
+
 # OSE 12.1
 
 ## Correction de bugs

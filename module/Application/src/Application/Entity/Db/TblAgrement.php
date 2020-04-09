@@ -32,7 +32,11 @@ class TblAgrement implements ResourceInterface
      */
     private $obligatoire;
 
+    private $codeIntervenant;
 
+    private $dureeVie;
+
+    private $anneeAgrement;
 
     /**
      * Get id
@@ -54,6 +58,26 @@ class TblAgrement implements ResourceInterface
         return $this->obligatoire;
     }
 
+    public function getCodeIntervenant()
+    {
+        return $this->codeIntervenant;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDureeVie()
+    {
+        return $this->dureeVie;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnneeAgrement()
+    {
+        return $this->anneeAgrement;
+    }
 
 
     /**

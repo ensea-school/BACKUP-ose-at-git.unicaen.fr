@@ -4,6 +4,8 @@ namespace Application\Controller;
 
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\AnneeServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
@@ -14,8 +16,8 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractController
 {
-    use \Application\Service\Traits\ContextServiceAwareTrait;
-    use \Application\Service\Traits\AnneeServiceAwareTrait;
+    use ContextServiceAwareTrait;
+    use AnneeServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use UserContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
@@ -36,9 +38,12 @@ class IndexController extends AbstractController
         ];
 
         $view = new ViewModel([
-            'annee'         => $this->getServiceContext()->getAnnee(),
-            'documentation' => $documentation,
-            'context'       => $this->getServiceContext(),
+            'annee'                     => $this->getServiceContext()->getAnnee(),
+            'documentation'             => $documentation,
+            'context'                   => $this->getServiceContext(),
+            'pageAccueil'               => $this->getServiceParametres()->get('page_accueil'),
+            'connexionNonAutorise'      => $this->getServiceParametres()->get('connexion_non_autorise'),
+            'connexionSansRoleNiStatut' => $this->getServiceParametres()->get('connexion_sans_role_ni_statut'),
         ]);
 
         if ($role && $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_VISUALISATION))) {

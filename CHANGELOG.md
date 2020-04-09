@@ -1,8 +1,15 @@
+# OSE 14.3
+
+## Corrections de bugs
+
+* Petite marge d'erreur de 0,05 HETD autorisée pour les plafonds afin de tenir compte de certains arrondis
+* Possibilité de faire des demandes de mise en paiement de 0,01 HETD
+
 # OSE 14.2
 
 ## Correction de bug
 
-Petit bug d'affichage d'un message d'erreur corrigé.
+* Petit bug d'affichage d'un message d'erreur corrigé.
 
 # OSE 14.1
 

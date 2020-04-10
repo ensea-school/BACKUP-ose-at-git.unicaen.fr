@@ -3,7 +3,39 @@
 namespace Application;
 
 
+use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+
 return [
+    'router'          => [
+        'routes' => [
+            'contrat' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/employeur',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Employeur',
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'creer'               => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/employeur/recherche',
+                            'defaults'    => [
+                                'action' => 'recherche',
+                                ],
+                            ],
+                        ],
+                    ]
+                ],
+
+            ],
+        ],
+
     'console' => [
         'router' => [
             'routes' => [
@@ -26,6 +58,35 @@ return [
         ],
         'invokables' => [
             'Application\Controller\Employeur' => Controller\EmployeurController::class,
+        ],
+    ],
+
+    'bjyauthorize'    => [
+        'guards'             => [
+            PrivilegeController::class => [
+                [
+                    'controller' => 'Application\Controller\Employeur',
+                    'action'     => ['index'],
+                    'privileges' => Privileges::EMPLOYEUR_GESTION,
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'Employeur' => [],
+            ],
+        ],
+        'rule_providers'     => [
+            PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'privileges' => [
+                            Privileges::EMPLOYEUR_GESTION,
+                        ],
+                        'resources'  => 'Contrat',
+                    ],
+                ],
+            ],
         ],
     ],
 

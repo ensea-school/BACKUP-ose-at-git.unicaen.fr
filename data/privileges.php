@@ -355,5 +355,11 @@ return [
             'tests' => 'Tests',
         ],
     ],
+    'employeur' => [
+        'libelle'    => 'Employeurs',
+        'privileges' => [
+            'gestion' => 'Gestion des employeurs',
+        ],
+    ],
 
 ];

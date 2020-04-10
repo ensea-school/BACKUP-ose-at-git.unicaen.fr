@@ -18,24 +18,19 @@ class EmployeurController extends AbstractController
 
     public function indexAction()
     {
-        return [];
+        $critere      = $this->params()->fromPost('critere');
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur( $critere);
+
+
+        return compact('employeurs');
     }
 
-    public function updateEmployeurAction()
+    public function rechercheAction()
     {
 
-
-        $ci = Console::getInstance();
-        $ci->writeLine("Lancement de la mise à jour de la table employeur");
-
-        $employeurService = $this->getServiceEmployeur();
-        $listEmployeurs = $employeurService->getEmployeurs();
-        $file = \AppConfig::get('employeur','import-file');
-        $data = $employeurService->loadEmployeurFromFile($file);
-        $insert = [];
-
-
-
-        exit;
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
+        return compact('employeurs');
     }
+
+
 }

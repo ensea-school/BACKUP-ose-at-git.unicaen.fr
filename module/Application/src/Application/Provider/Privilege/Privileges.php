@@ -177,5 +177,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const UNICAEN_TBL_UPDATE_ACTUPROC                         = 'unicaen-tbl-update-actuproc';
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
+    const EMPLOYEUR_GESTION                                   = 'employeur-gestion';
+
 
 }

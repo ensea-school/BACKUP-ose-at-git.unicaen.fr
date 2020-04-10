@@ -25,22 +25,6 @@ class EmployeurService extends AbstractEntityService
         return 'emp';
     }
 
-    public function loadEmployeurFromFile($file)
-    {
-        $csvFile = fopen($file, r);
-        $data = [];
-        while (($data = fgetcsv($csvFile, 1000, ",")) !== FALSE) {
-            $num = count($data);
-            echo "$num champs à la ligne $row : ";
-            $row++;
-            for ($c=0; $c < $num; $c++) {
-                echo $data[$c];
-            }
-            echo "\n";
-        }
-
-    }
-
     public function getEmployeurs($limit = 100)
     {
         $sql = "
@@ -64,6 +48,43 @@ class EmployeurService extends AbstractEntityService
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         $res = $stmt->fetchAll();
         return $res;
+    }
+
+    public function rechercheEmployeur($criteria = null, $limit = 50)
+    {
+        $employeurs = [];
+
+        $sql = "
+            SELECT 
+                SIREN, LIBELLE 
+            FROM 
+                EMPLOYEUR e 
+            WHERE rownum <= $limit
+        ";
+
+        if(!empty($criteria))
+        {
+            $sql .= "
+             AND (e.LIBELLE LIKE upper('%$criteria%') OR e.SIREN LIKE '%$criteria%')
+            ";
+           /*  $sql .= "
+          AND (regexp_like(LIBELLE, '$criteria', 'i') OR e.SIREN LIKE '%$criteria%')
+         ";*/
+        }
+
+        $sql .= " ORDER BY LIBELLE ASC";
+
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+            while ($r = $stmt->fetch()) {
+                $employeurs[] = [
+                    'libelle'  => $r['SIREN'],
+                    'siren'    => $r['LIBELLE'],
+                ];
+            }
+
+        return $employeurs;
+
     }
 
 }

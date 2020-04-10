@@ -1,0 +1,19 @@
+<?php
+    /* @var $intervenants array */
+?>
+<table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+        <th style="width:18%">Dénomination sociale</th>
+        <th style="width:18%">Siret</th>
+    </tr>
+    </thead>
+    <tbody class="table-hover">
+    <?php foreach($employeurs as $employeur): ?>
+    <tr>
+        <td><?= $employeur['libelle']; ?></td>
+        <td><?= $employeur['siren']; ?></td>
+    </tr>
+    </tbody>
+    <?php endforeach; ?>
+</table>

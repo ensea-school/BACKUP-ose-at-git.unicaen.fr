@@ -18,6 +18,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'A_HEURES_COMPL_FC'          => [
@@ -29,6 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'A_HEURES_COMPL_FC_MAJOREES' => [
@@ -40,6 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'A_HEURES_COMPL_FI'          => [
@@ -51,6 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'A_HEURES_COMPL_REFERENTIEL' => [
@@ -62,6 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'A_SERVICE_FA'               => [
@@ -73,6 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'A_SERVICE_FC'               => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'A_SERVICE_FI'               => [
@@ -95,6 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'A_SERVICE_REFERENTIEL'      => [
@@ -106,6 +114,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'C_HEURES_COMPL_FA'          => [
@@ -117,6 +126,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'C_HEURES_COMPL_FC'          => [
@@ -128,6 +138,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'C_HEURES_COMPL_FC_MAJOREES' => [
@@ -139,6 +150,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'C_HEURES_COMPL_FI'          => [
@@ -150,6 +162,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'C_HEURES_COMPL_REFERENTIEL' => [
@@ -161,6 +174,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'C_SERVICE_FA'               => [
@@ -172,6 +186,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'C_SERVICE_FC'               => [
@@ -183,6 +198,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'C_SERVICE_FI'               => [
@@ -194,6 +210,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'C_SERVICE_REFERENTIEL'      => [
@@ -205,6 +222,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'DEBUG_INFO'                 => [
@@ -216,6 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'HEURES'                     => [
@@ -227,6 +246,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'ID'                         => [
@@ -238,6 +258,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'INTERVENANT_TEST_ID'        => [
@@ -249,6 +270,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'PARAM_1'                    => [
@@ -260,6 +282,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'PARAM_2'                    => [
@@ -271,6 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'PARAM_3'                    => [
@@ -282,6 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'PARAM_4'                    => [
@@ -293,6 +318,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'PARAM_5'                    => [
@@ -304,6 +330,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'PONDERATION_SERVICE_COMPL'  => [
@@ -315,6 +342,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'PONDERATION_SERVICE_DU'     => [
@@ -326,6 +354,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'REFERENTIEL'                => [
@@ -337,6 +366,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'SERVICE_STATUTAIRE'         => [
@@ -348,6 +378,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'STRUCTURE_CODE'             => [
@@ -359,6 +390,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'TAUX_FA'                    => [
@@ -370,6 +402,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 33,
             'commentaire' => NULL,
         ],
         'TAUX_FC'                    => [
@@ -381,6 +414,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 34,
             'commentaire' => NULL,
         ],
         'TAUX_FI'                    => [
@@ -392,6 +426,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 35,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_CODE'     => [
@@ -403,6 +438,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 36,
             'commentaire' => NULL,
         ],
     ],

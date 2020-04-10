@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL'             => [
@@ -29,6 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FA'          => [
@@ -40,6 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FC'          => [
@@ -51,6 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FC_MAJOREES' => [
@@ -62,6 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FI'          => [
@@ -73,6 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_REFERENTIEL' => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'ID'                       => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'           => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'SERVICE_DU'               => [
@@ -117,6 +126,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'SERVICE_FA'               => [
@@ -128,6 +138,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'SERVICE_FC'               => [
@@ -139,6 +150,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'SERVICE_FI'               => [
@@ -150,6 +162,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'SERVICE_REFERENTIEL'      => [
@@ -161,6 +174,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'SOLDE'                    => [
@@ -172,6 +186,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'SOUS_SERVICE'             => [
@@ -183,6 +198,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'TOTAL'                    => [
@@ -194,6 +210,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_CODE'    => [
@@ -205,6 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID'   => [
@@ -216,6 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
     ],

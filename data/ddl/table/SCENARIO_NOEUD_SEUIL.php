@@ -18,6 +18,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'DEDOUBLEMENT'         => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'ID'                   => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'OUVERTURE'            => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'SCENARIO_NOEUD_ID'    => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_ID' => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
     ],

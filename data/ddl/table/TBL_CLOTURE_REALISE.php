@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'CLOTURE'              => [
@@ -29,6 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 2,
             'commentaire' => 'Témoin (0 ou 1 : 1 si clôturé)',
         ],
         'ID'                   => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'       => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'PEUT_CLOTURER_SAISIE' => [
@@ -62,6 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 5,
             'commentaire' => 'Témoin (0 ou 1)',
         ],
         'TO_DELETE'            => [
@@ -73,6 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 6,
             'commentaire' => NULL,
         ],
     ],

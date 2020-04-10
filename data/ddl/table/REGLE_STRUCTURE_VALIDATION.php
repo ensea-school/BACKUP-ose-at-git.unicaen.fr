@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'MESSAGE'                => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'PRIORITE'               => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'    => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID' => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
     ],

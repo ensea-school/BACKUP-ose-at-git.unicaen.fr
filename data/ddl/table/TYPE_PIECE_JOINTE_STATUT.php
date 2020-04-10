@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'ANNEE_FIN_ID'          => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'CHANGEMENT_RIB'        => [
@@ -40,6 +42,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'DUREE_VIE'             => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 4,
             'commentaire' => 'Durée de vie de la pièce jointe',
         ],
         'FC'                    => [
@@ -62,6 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'     => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'        => [
@@ -84,6 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'  => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'     => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID' => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'    => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'ID'                    => [
@@ -139,6 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'           => [
@@ -150,6 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'SEUIL_HETD'            => [
@@ -161,6 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'STATUT_INTERVENANT_ID' => [
@@ -172,6 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID'  => [
@@ -183,6 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
     ],

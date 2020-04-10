@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'ID'               => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'INTERVENANT_CODE' => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'   => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
     ],

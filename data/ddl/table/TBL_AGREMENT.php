@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => 'ID de l\'agrément si agréé',
         ],
         'ANNEE_AGREMENT'   => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'ANNEE_ID'         => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'CODE_INTERVENANT' => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'DUREE_VIE'        => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '1',
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'ID'               => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'   => [
@@ -84,6 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'      => [
@@ -95,6 +102,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => 'Témoin (1 ou 0) pour définir si l\'agrément doit être demandé obligatoirement ou non',
         ],
         'STRUCTURE_ID'     => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'TO_DELETE'        => [
@@ -117,6 +126,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'TYPE_AGREMENT_ID' => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
     ],

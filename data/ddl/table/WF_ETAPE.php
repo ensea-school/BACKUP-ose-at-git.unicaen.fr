@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => 'Code de cette étape',
         ],
         'DESC_NON_FRANCHIE'   => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'DESC_SANS_OBJECTIF'  => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'ID'                  => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'LIBELLE_AUTRES'      => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'LIBELLE_INTERVENANT' => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'         => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'ORDRE'               => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 8,
             'commentaire' => 'Permet d\'ordonner les étapes',
         ],
         'ROUTE'               => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ROUTE_INTERVENANT'   => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
     ],

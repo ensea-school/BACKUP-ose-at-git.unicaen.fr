@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'DATE_MISE_EN_PAIEMENT'      => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'DATE_VALIDATION'            => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'DOMAINE_FONCTIONNEL_ID'     => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_ID'     => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_REF_ID' => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HEURES'                     => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'          => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'             => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'       => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'          => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'      => [
@@ -139,6 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'         => [
@@ -150,6 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'ID'                         => [
@@ -161,6 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'PERIODE_PAIEMENT_ID'        => [
@@ -172,6 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'TYPE_HEURES_ID'             => [
@@ -183,6 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'VALIDATION_ID'              => [
@@ -194,6 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
     ],

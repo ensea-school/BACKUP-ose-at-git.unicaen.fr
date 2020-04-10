@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'CUSTOM_CALCUL_PROC' => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'FEUILLE_DE_ROUTE'   => [
@@ -40,6 +42,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'ORDRE'              => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'SEQUENCE_NAME'      => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TABLE_NAME'         => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'TBL_NAME'           => [
@@ -84,6 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'VIEW_NAME'          => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
     ],

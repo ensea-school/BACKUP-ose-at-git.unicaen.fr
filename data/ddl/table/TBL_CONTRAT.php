@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'EDITE'              => [
@@ -29,6 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 2,
             'commentaire' => 'Nombre de volumes horaires contractualisés',
         ],
         'ID'                 => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'     => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'NBVH'               => [
@@ -62,6 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 5,
             'commentaire' => 'Nombre de volumes horaires contractualisables',
         ],
         'PEUT_AVOIR_CONTRAT' => [
@@ -73,6 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 6,
             'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ],
         'SIGNE'              => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 7,
             'commentaire' => 'Nombre de volumes horaires signés',
         ],
         'STRUCTURE_ID'       => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'TO_DELETE'          => [
@@ -106,6 +114,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 9,
             'commentaire' => NULL,
         ],
     ],

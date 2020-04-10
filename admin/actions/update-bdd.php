@@ -23,6 +23,22 @@ foreach ($ref as $ddlClass => $objects) {
     }
 }
 
+$tablesDep = [
+    Ddl::INDEX,
+    Ddl::PRIMARY_CONSTRAINT,
+    Ddl::REF_CONSTRAINT,
+    Ddl::UNIQUE_CONSTRAINT,
+];
+
+foreach ($tablesDep as $tableDep) {
+    $objects = $bdd->manager($tableDep)->get();
+    foreach ($objects as $obj) {
+        if (in_array($obj['table'], $filters['table']['includes'])) {
+            $filters[$tableDep]['includes'][] = $obj['name'];
+        }
+    }
+}
+
 
 // Initialisation et lancement de la pré-migration
 $mm = new MigrationManager($oa, $bdd);

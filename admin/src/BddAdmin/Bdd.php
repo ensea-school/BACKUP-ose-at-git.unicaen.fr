@@ -301,7 +301,7 @@ class Bdd
 
 
 
-    protected function manager(string $name): ManagerInterface
+    public function manager(string $name): ManagerInterface
     {
         $ddlClass = $this->driver->getDdlClass($name);
 

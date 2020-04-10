@@ -55,10 +55,7 @@ Liste des civilités',
             'commentaire' => NULL,
         ],
     ],
-<<<<<<< HEAD
     'columns-order' => 'ID,SEXE,LIBELLE_COURT,LIBELLE_LONG',
-=======
->>>>>>> f7df416d25d66aefb986e919b4eeb0525a515765
 ];
 
 //@formatter:on

@@ -47,4 +47,7 @@ return [
         'TYPE_VOLUME_HORAIRE_ID_SEQ',
         'ANNEE_ID_SEQ',
     ]],
+    'materialized-view' => ['includes' => [
+
+    ]],
 ];

@@ -4,6 +4,7 @@
 
 * Petite marge d'erreur de 0,05 HETD autorisée pour les plafonds afin de tenir compte de certains arrondis
 * Possibilité de faire des demandes de mise en paiement de 0,01 HETD
+* Les colonnes ne faisant pas partie du Schéma de OSE ne sont plus prise en compte lors des mises à jour.
 
 # OSE 14.2
 

@@ -82,6 +82,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
             c.data_precision  \"precision\",
             c.nullable        \"nullable\",
             c.data_default    \"default\",
+            c.column_id       \"position\",
             ccomm.comments    \"col_commentaire\",
             comm.comments     \"commentaire\",
             s.sequence_name   \"sequence\"
@@ -159,8 +160,27 @@ class TableManager extends AbstractManager implements TableManagerInterface
                 'precision'   => $precision,
                 'nullable'    => $paq['nullable'] == 'Y',
                 'default'     => $default,
+                'position'    => $paq['position'],
                 'commentaire' => $paq['col_commentaire'],
             ];
+        }
+
+        foreach ($data as $table => $tdata) {
+            $colPos    = isset($tdata['columns-order']) ? explode(',', $tdata['columns-order']) : [];
+            $oriColPos = [];
+            foreach ($tdata['columns'] as $cname => $column) {
+                $oriColPos[$column['position']] = $cname;
+            }
+            foreach ($oriColPos as $cname) {
+                if (!in_array($cname, $colPos)) {
+                    $colPos[] = $cname;
+                }
+            }
+            $position = 1;
+            foreach ($colPos as $cname) {
+                $data[$table]['columns'][$cname]['position'] = $position;
+                $position++;
+            }
         }
 
         return $data;
@@ -176,24 +196,12 @@ class TableManager extends AbstractManager implements TableManagerInterface
         }
         $sql .= "TABLE \"" . $data['name'] . "\"\n   (\t";
 
-        $cols = [];
-        if (array_key_exists('columns-order', $data)) {
-            $ordering        = explode(',', $data['columns-order']);
-            $cs              = $data['columns'];
-            $data['columns'] = [];
-            foreach ($ordering as $col) {
-                $col = strtoupper(trim($col));
-                if (isset($cs[$col])) {
-                    $data['columns'][$col] = $cs[$col];
-                    unset($cs[$col]);
-                }
-            }
-            foreach ($cs as $k => $c) {
-                $data['columns'][$k] = $c;
-            }
-        }
-
-        foreach ($data['columns'] as $column) {
+        $cols    = [];
+        $columns = $data['columns'];
+        uasort($columns, function ($a, $b) {
+            return $a['position'] > $b['position'];
+        });
+        foreach ($columns as $column) {
             $cp = ['"' . $column['name'] . '"', $this->makeColumnType($column)];
             if ($column['default'] !== null) {
                 $cp[] = 'DEFAULT ' . $column['default'];

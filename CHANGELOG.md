@@ -1,9 +1,9 @@
 # OSE 14.3
 
- * Correction du bug qui empêchait la DMEP de centièmes d'HETD 
- * Marge d'erreur de 0.05 autirosée pour les plafonds pour faire façe à d'éventuels soucis d'arrondis.
- * Ajout d'un filtre OWNER pour les colonnes de tables
- * Correction problème installation avec composer qui par défault si composer n'est pas disponible sur le serveur, télécharge composer.phar en version 2.0 dev, non compatible pour le moment avec ose.
+* Petite marge d'erreur de 0,05 HETD autorisée pour les plafonds afin de tenir compte de certains arrondis
+* Possibilité de faire des demandes de mise en paiement de 0,01 HETD
+* Les colonnes ne faisant pas partie du Schéma de OSE ne sont plus prise en compte lors des mises à jour.
+* Correction problème installation avec composer qui par défault si composer n'est pas disponible sur le serveur, télécharge composer.phar en version 2.0 dev, non compatible pour le moment avec ose.
 
 # OSE 14
 

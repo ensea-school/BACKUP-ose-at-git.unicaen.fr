@@ -1,9 +1,23 @@
 # OSE 14.3
 
+## Corrections de bugs
+
 * Petite marge d'erreur de 0,05 HETD autorisée pour les plafonds afin de tenir compte de certains arrondis
 * Possibilité de faire des demandes de mise en paiement de 0,01 HETD
 * Les colonnes ne faisant pas partie du Schéma de OSE ne sont plus prise en compte lors des mises à jour.
 * Correction problème installation avec composer qui par défault si composer n'est pas disponible sur le serveur, télécharge composer.phar en version 2.0 dev, non compatible pour le moment avec ose.
+
+# OSE 14.2
+
+## Correction de bug
+
+* Petit bug d'affichage d'un message d'erreur corrigé.
+
+# OSE 14.1
+
+## Correction de bug
+
+* Soucis réglés au niveau de la procédure de mise à jour, qui n'exécutait pas certains traitements.
 
 # OSE 14
 

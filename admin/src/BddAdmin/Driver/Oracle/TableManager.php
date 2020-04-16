@@ -93,6 +93,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
             JOIN all_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name
           WHERE
             t.OWNER = sys_context( 'userenv', 'current_schema' )
+            AND c.OWNER = sys_context( 'userenv', 'current_schema' )
             AND m.mview_name IS NULL 
             $f
           ORDER BY

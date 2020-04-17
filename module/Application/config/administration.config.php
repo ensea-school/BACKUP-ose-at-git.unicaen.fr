@@ -30,6 +30,17 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'administration-centre-cout' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/administration-centre-cout',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Administration',
+                        'action'     => 'administration-centre-cout',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -54,7 +65,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Administration',
-                    'action'     => ['index', 'administration-types'],
+                    'action'     => ['index', 'administration-types', 'administration-centre-cout'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,

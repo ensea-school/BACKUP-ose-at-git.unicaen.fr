@@ -8,6 +8,44 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router'          => [
         'routes' => [
+            'centre-cout-activite' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/centre-cout-activite',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\CentreCout',
+                        'action'     => 'centre-cout-activite',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'delete'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/delete/:CcActivite',
+                            'constraints' => [
+                                'CcActivite' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'centre-cout-activite-delete',
+                            ],
+                        ],
+                    ],
+                    'saisie'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/saisie/[:CcActivite]',
+                            'constraints' => [
+                                'CcActivite' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'centre-cout-activite-saisie',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+
             'centre-cout' => [
                 'type'          => 'Literal',
                 'options'       => [
@@ -78,13 +116,31 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'centre-cout' => [
-                                'label'        => 'Centres de Coûts',
-                                'icon'         => 'fa fa-graduation-cap',
-                                'route'        => 'centre-cout',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                'order'        => 80,
-                                'border-color' => '#BBCF55',
+                            'gestion-centre-cout' => [
+                                'label'          => 'Gestion des centres de coûts',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'administration-centre-cout',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-centre-cout'),
+                                'order'          => 80,
+                                'border - color' => '#111',
+                                'pages' => [
+                                    'centre-cout' => [
+                                        'label'        => 'Edition des centres de coûts',
+                                        'icon'         => 'fa fa-graduation-cap',
+                                        'route'        => 'centre-cout',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
+                                        'order'        => 80,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                    'centre-cout-activite' => [
+                                        'label'        => 'Edition des types activités des centres de coûts',
+                                        'icon'         => 'fa fa-graduation-cap',
+                                        'route'        => 'centre-cout-activite',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
+                                        'order'        => 80,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -97,12 +153,12 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\CentreCout',
-                    'action'     => ['index'],
+                    'action'     => ['index', 'centre-cout-activite'],
                     'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\CentreCout',
-                    'action'     => ['saisie', 'delete', 'saisie-structure', 'delete-structure'],
+                    'action'     => ['saisie', 'delete', 'saisie-structure', 'delete-structure', 'centre-cout-activite-delete', 'centre-cout-activite-saisie'],
                     'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
                 ],
             ],
@@ -120,12 +176,11 @@ return [
             Service\CcActiviteService::class          => Service\CcActiviteService::class,
         ],
     ],
-    'view_helpers'    => [
-    ],
     'form_elements'   => [
         'invokables' => [
             Form\CentreCout\CentreCoutSaisieForm::class          => Form\CentreCout\CentreCoutSaisieForm::class,
             Form\CentreCout\CentreCoutStructureSaisieForm::class => Form\CentreCout\CentreCoutStructureSaisieForm::class,
+            Form\CentreCout\CentreCoutActiviteSaisieForm::class  => Form\CentreCout\CentreCoutActiviteSaisieForm::class,
         ],
     ],
 ];

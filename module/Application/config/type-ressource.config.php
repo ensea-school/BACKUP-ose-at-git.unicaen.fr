@@ -24,7 +24,7 @@ return [
                         'options'       => [
                             'route'       => '/saisie[/:typeRessource]',
                             'constraints' => [
-                                'typeIntervention' => '[0-9]*',
+                                'typeRessource' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'saisie',
@@ -37,7 +37,7 @@ return [
                         'options'       => [
                             'route'       => '/delete[/:typeRessource]',
                             'constraints' => [
-                                'typeIntervention' => '[0-9]*',
+                                'typeRessource' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'delete',
@@ -61,7 +61,7 @@ return [
                                 'route'          => 'administration-type',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-types'),
 
-                                'order'          => 0,
+                                'order'          => 60,
                                 'border - color' => '#111',
                                 'pages' => [
                                     'type-ressource' => [

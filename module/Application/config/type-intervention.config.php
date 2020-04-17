@@ -139,7 +139,7 @@ return [
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-type',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-types'),
-                                'order'          => 0,
+                                'order'          => 60,
                                 'border - color' => '#111',
                                 'pages' => [
                                     'type-intervention' => [

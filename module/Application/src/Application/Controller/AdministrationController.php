@@ -17,4 +17,10 @@ class AdministrationController extends AbstractController
         return [];
     }
 
+    public function administrationTypesAction()
+    {
+        return [];
+    }
+
+
 }

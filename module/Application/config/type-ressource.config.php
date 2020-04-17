@@ -55,13 +55,25 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'type-ressource' => [
-                                'label'        => 'Types de ressources',
-                                'icon'         => 'fa  fa-commenting',
-                                'route'        => 'type-ressource',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeRessource', 'index'),
-                                'order'        => 60,
-                                'border-color' => '#71DFD7',
+                            'gestion-types' => [
+                                'label'          => 'Gestion des types (ressources, etc...)',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'administration-type',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-types'),
+
+                                'order'          => 0,
+                                'border - color' => '#111',
+                                'pages' => [
+                                    'type-ressource' => [
+                                        'label'        => 'Types de ressources',
+                                        'icon'         => 'fa  fa-commenting',
+                                        'route'        => 'type-ressource',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeRessource', 'index'),
+                                        'order'        => 60,
+                                        'border-color' => '#71DFD7',
+                                    ],
+
+                                ],
                             ],
                         ],
                     ],
@@ -100,17 +112,9 @@ return [
             'Application\Controller\TypeRessource' => Controller\TypeRessourceController::class,
         ],
     ],
-    /*'form_elements'   => [
+    'form_elements'   => [
         'invokables' => [
-            Form\TypeIntervention\TypeInterventionSaisieForm::class          => Form\TypeIntervention\TypeInterventionSaisieForm::class,
-            Form\TypeIntervention\TypeInterventionStructureSaisieForm::class => Form\TypeIntervention\TypeInterventionStructureSaisieForm::class,
-            Form\TypeIntervention\TypeInterventionStatutSaisieForm::class => Form\TypeIntervention\TypeInterventionStatutSaisieForm::class,
-            Form\TypeIntervention\TypeInterventionStatutDeleteForm::class => Form\TypeIntervention\TypeInterventionStatutDeleteForm::class,
+            Form\TypeRessource\TypeRessourceSaisieForm::class          => Form\TypeRessource\TypeRessourceSaisieForm::class,
         ],
-    ],*/
-    /*'view_helpers'    => [
-        'invokables' => [
-            'typeInterventionAdmin' => View\Helper\TypeInterventionAdminViewHelper::class,
-        ],
-    ],*/
+    ],
 ];

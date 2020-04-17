@@ -6,6 +6,7 @@ namespace Application\Controller;
 use Application\Entity\Db\TypeRessource;
 use Application\Form\TypeRessource\Traits\TypeRessourceSaisieFormAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 class TypeRessourceController extends AbstractController
 {
@@ -14,23 +15,27 @@ class TypeRessourceController extends AbstractController
 
     public function indexAction()
     {
+        $title = 'Gestion des types de ressources';
+
         $this->em()->getFilters()->enable('historique')->init([
             TypeRessource::class,
         ]);
 
         $listTypesRessources = $this->getServiceTypeRessource()->getList();
 
-        return compact('listTypesRessources');
+        return compact('listTypesRessources', 'title');
     }
 
     public function saisieAction()
     {
-        $typ = $this->getEvent()->getParam('typeIntervention');
-        $form             = $this->getFormTypeRessourceSaisie();
-        $title = 'Édition d\'un type de ressource';
-
         $typeRessource = $this->getEvent()->getParam('typeRessource');
         $form = $this->getFormTypeRessourceSaisie();
+        if (empty($typeRessource)) {
+            $title            = 'Création d\'un nouveau type de ressource';
+            $typeRessource = $this->getServiceTypeRessource()->newEntity();
+        } else {
+            $title = 'Édition d\'un type de ressource';
+        }
 
         $form->bindRequestSave($typeRessource, $this->getRequest(), function (TypeRessource $type) {
             try {
@@ -43,13 +48,20 @@ class TypeRessourceController extends AbstractController
 
         return compact('form', 'title');
 
-
-        return compact();
     }
 
     public function deleteAction()
     {
-        return compact();
+        $typeRessource = $this->getEvent()->getParam('typeRessource');
+
+        try {
+            $this->getServiceTypeRessource()->delete($typeRessource);
+            $this->flashMessenger()->addSuccessMessage("Type de ressource supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel(compact('typeRessource'));
     }
 
 }

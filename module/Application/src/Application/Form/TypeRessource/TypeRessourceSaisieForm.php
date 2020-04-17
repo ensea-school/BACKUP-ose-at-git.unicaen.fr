@@ -37,21 +37,45 @@ class TypeRessourceSaisieForm extends AbstractForm
         $this->add([
             'name' => 'fi',
             'options' => [
-                'label' => 'Fi',
+                'label' => 'FI',
             ],
             'type' => 'Checkbox',
         ]);
         $this->add([
             'name' => 'fa',
             'options' => [
-                'label' => 'Fa ?',
+                'label' => 'FA',
             ],
             'type' => 'Checkbox',
         ]);
         $this->add([
             'name' => 'fc',
             'options' => [
-                'label' => 'Fc',
+                'label' => 'FC',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name' => 'fc_majore',
+            'options' => [
+                'label' => 'FC Majoré',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name' => 'referentiel',
+            'options' => [
+                'label' => 'Référentiel',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name' => 'etablissement',
+            'options' => [
+                'label' => 'Etablissement',
             ],
             'type' => 'Checkbox',
         ]);

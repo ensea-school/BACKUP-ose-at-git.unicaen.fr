@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Application\Form\FonctionReferentiel\TypeInterventionSaisieForm
+ */
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
@@ -21,7 +25,8 @@ echo $this->form()->openTag($form); ?>
     <div class="col-md-3"><?= $this->formControlGroup($form->get('fc_majore')); ?></div>
     <div class="col-md-3"><?= $this->formControlGroup($form->get('referentiel')); ?></div>
 </div>
-<?= $this->formSubmit($form->get('submit')); ?>
 <?= $this->formControlGroup($form->get('security')); ?>
+<?= $this->formSubmit($form->get('submit')); ?>
+
 
 <?= $this->form()->closeTag(); ?>

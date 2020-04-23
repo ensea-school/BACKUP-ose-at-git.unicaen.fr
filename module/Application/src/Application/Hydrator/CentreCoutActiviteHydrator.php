@@ -5,7 +5,7 @@ namespace Application\Hydrator;
 
 use Zend\Hydrator\HydratorInterface;
 
-class CentreCoutActiviteHydratator implements HydratorInterface
+class CentreCoutActiviteHydrator implements HydratorInterface
 {
 
     /**

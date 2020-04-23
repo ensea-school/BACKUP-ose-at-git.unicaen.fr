@@ -22,9 +22,9 @@ return [
                     'delete'           => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/delete/:CcActivite',
+                            'route'       => '/delete/:ccActivite',
                             'constraints' => [
-                                'CcActivite' => '[0-9]*',
+                                'ccActivite' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'centre-cout-activite-delete',
@@ -34,9 +34,9 @@ return [
                     'saisie'           => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/saisie/[:CcActivite]',
+                            'route'       => '/saisie/[:ccActivite]',
                             'constraints' => [
-                                'CcActivite' => '[0-9]*',
+                                'ccActivite' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'centre-cout-activite-saisie',

@@ -142,7 +142,7 @@ class CentreCoutController extends AbstractController
 
     public function centreCoutActiviteSaisieAction()
     {
-        $centreCoutActivite = $this->getEvent()->getParam('CcActivite');
+        $centreCoutActivite = $this->getEvent()->getParam('ccActivite');
         $form = $this->getFormCentreCoutActiviteSaisie();
         if (empty($centreCoutActivite)) {
             $title            = 'Création d\'une nouvelle activité de centre de cout';
@@ -150,10 +150,9 @@ class CentreCoutController extends AbstractController
         } else {
             $title = 'Édition d\'une activité de centre de cout';
         }
-
-        $form->bindRequestSave($centreCoutActivite, $this->getRequest(), function (CcActivite $activite) {
+        $form->bindRequestSave($centreCoutActivite, $this->getRequest(), function (ccActivite $ca) {
             try {
-                $this->getServiceCcActivite()->save($activite);
+                $this->getServiceCcActivite()->save($ca);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -166,7 +165,16 @@ class CentreCoutController extends AbstractController
 
     public function centreCoutActiviteDeleteAction()
     {
+        $centreCoutActivite = $this->getEvent()->getParam('ccActivite');
 
+        try {
+            $this->getServiceCcActivite()->delete($centreCoutActivite);
+            $this->flashMessenger()->addSuccessMessage("Activité supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel(compact('centreCoutActivite'));
     }
 
 

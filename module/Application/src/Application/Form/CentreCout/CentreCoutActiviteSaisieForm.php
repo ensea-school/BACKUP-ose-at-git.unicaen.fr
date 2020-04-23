@@ -2,7 +2,7 @@
 namespace Application\Form\CentreCout;
 
 use Application\Form\AbstractForm;
-use Application\Hydrator\CentreCoutActiviteHydratator;
+use Application\Hydrator\CentreCoutActiviteHydrator;
 use Zend\Form\Element\Csrf;
 
 /**
@@ -15,7 +15,7 @@ class CentreCoutActiviteSaisieForm extends AbstractForm
 
     public function init()
     {
-        $hydrator = new CentreCoutActiviteHydratator();
+        $hydrator = new CentreCoutActiviteHydrator();
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());
@@ -68,14 +68,6 @@ class CentreCoutActiviteSaisieForm extends AbstractForm
             'name' => 'referentiel',
             'options' => [
                 'label' => 'Référentiel',
-            ],
-            'type' => 'Checkbox',
-        ]);
-
-        $this->add([
-            'name' => 'etablissement',
-            'options' => [
-                'label' => 'Etablissement',
             ],
             'type' => 'Checkbox',
         ]);

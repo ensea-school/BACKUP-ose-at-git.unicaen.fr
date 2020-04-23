@@ -39,11 +39,11 @@ $canEdit = true;
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal"
                        data-event="centre-cout-activite-saisie"
-                       href="<?= $this->url('centre-cout-activite/saisie', ['centreCoutActivite' => $activite->getId()]) ?>"
+                       href="<?= $this->url('centre-cout-activite/saisie', ['CcActivite' => $activite->getId()]) ?>"
                        data-submit-reload="true">
                         <span class="glyphicon glyphicon-edit"></span></a>
                     <a class="pop-ajax"
-                       href="<?= $this->url('centre-cout-activite/delete', ['centreCoutActivite' => $activite->getId()]) ?>"
+                       href="<?= $this->url('centre-cout-activite/delete', ['CcActivite' => $activite->getId()]) ?>"
                        title="Supprimer le type d'activité"
                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                        data-confirm="true"

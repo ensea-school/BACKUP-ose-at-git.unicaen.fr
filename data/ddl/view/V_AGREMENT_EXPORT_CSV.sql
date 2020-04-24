@@ -39,7 +39,6 @@ SELECT
   i.prenom                                                                    intervenant_prenom,
 
   si.libelle                                                                  intervenant_statut_libelle,
-  i.premier_recrutement                                                       premier_recrutement,
   d.libelle_court                                                             discipline,
 
   COALESCE(heures_s.service_fi, fr.service_fi)

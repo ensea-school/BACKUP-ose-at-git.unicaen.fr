@@ -416,8 +416,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         SELECT
           id                  intervenant_id,
           annee_id            annee_id,
-          statut_id           statut_intervenant_id,
-          premier_recrutement premier_recrutement
+          statut_id           statut_intervenant_id
         FROM
           intervenant
         )

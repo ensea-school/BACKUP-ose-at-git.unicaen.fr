@@ -192,7 +192,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
     -- O=SI(ET(L$54=0;HC_autorisees="Oui");L22-N22;0)
     WHEN c = 'O' AND v >= 1 THEN
       IF cell('L54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
-        RETURN cell('L', l) - cell('N', l);;
+        RETURN cell('L53') * cell('M', l);
       ELSE
         RETURN 0;
       END IF;

@@ -374,7 +374,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                                                 AND tas.histo_destruction IS NULL
 
               JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                               -- AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
                                                 AND i.statut_id = tas.statut_intervenant_id
 
               JOIN                           i_s ON i_s.intervenant_id = i.id

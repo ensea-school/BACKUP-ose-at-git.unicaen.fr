@@ -22,7 +22,7 @@ if (($url = $tpj->getUrlModeleDoc())) {
 //        $target = "_self";
         $href = $this->basePath($url);
     }
-
+    $href             = str_replace(':annee', (string)$intervenant->getAnnee()->getId(), $href);
     $fileName         = ltrim(strrchr($href, '/'), '/');
     $linksModelesDocs = $this->tag('a', [
         'class' => 'modele-doc',

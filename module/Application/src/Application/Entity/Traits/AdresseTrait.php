@@ -11,47 +11,47 @@ trait AdresseTrait
     /**
      * @var string|null
      */
-    private $addrPrecisions;
+    private $adressePrecisions;
 
     /**
      * @var string|null
      */
-    private $addrNumero;
+    private $adresseNumero;
 
     /**
      * @var AdresseNumeroCompl|null
      */
-    private $addrNumeroCompl;
+    private $adresseNumeroCompl;
 
     /**
      * @var Voirie|null
      */
-    private $addrVoirie;
+    private $adresseVoirie;
 
     /**
      * @var string|null
      */
-    private $addrVoie;
+    private $adresseVoie;
 
     /**
      * @var string|null
      */
-    private $addrLieuDit;
+    private $adresseLieuDit;
 
     /**
      * @var string|null
      */
-    private $addrCodePostal;
+    private $adresseCodePostal;
 
     /**
      * @var string|null
      */
-    private $addrCommune;
+    private $adresseCommune;
 
     /**
      * @var Pays|null
      */
-    private $addrPays;
+    private $adressePays;
 
 
 
@@ -62,23 +62,23 @@ trait AdresseTrait
     {
         $adresse = [];
 
-        if ($this->getAddrPrecisions()) $adresse[] = $this->getAddrPrecisions();
+        if ($this->getAdressePrecisions()) $adresse[] = $this->getAdressePrecisions();
 
         $nv = [];
-        if ($this->getAddrNumero()) $nv[] = $this->getAddrNumero();
-        if ($this->getAddrNumeroCompl()) $nv[] = $this->getAddrNumeroCompl();
-        if ($this->getAddrVoirie()) $nv[] = $this->getAddrVoirie();
-        if ($this->getAddrVoie()) $nv[] = $this->getAddrVoie();
+        if ($this->getAdresseNumero()) $nv[] = $this->getAdresseNumero();
+        if ($this->getAdresseNumeroCompl()) $nv[] = $this->getAdresseNumeroCompl();
+        if ($this->getAdresseVoirie()) $nv[] = $this->getAdresseVoirie();
+        if ($this->getAdresseVoie()) $nv[] = $this->getAdresseVoie();
         if (!empty($nv)) {
             $adresse[] = implode(' ', $nv);
         }
 
-        if ($this->getAddrLieuDit()) $adresse[] = $this->getAddrLieuDit();
+        if ($this->getAdresseLieuDit()) $adresse[] = $this->getAdresseLieuDit();
 
         $cpcp = [];
-        if ($this->getAddrCodePostal()) $cpcp[] = $this->getAddrCodePostal();
-        if ($this->getAddrCommune()) $cpcp[] = $this->getAddrCommune();
-        if ($this->getAddrPays()) $cpcp[] = $this->getAddrPays();
+        if ($this->getAdresseCodePostal()) $cpcp[] = $this->getAdresseCodePostal();
+        if ($this->getAdresseCommune()) $cpcp[] = $this->getAdresseCommune();
+        if ($this->getAdressePays()) $cpcp[] = $this->getAdressePays();
         if (!empty($cpcp)) {
             $adresse[] = implode(' ', $cpcp);
         }
@@ -99,21 +99,21 @@ trait AdresseTrait
     /**
      * @return string|null
      */
-    public function getAddrPrecisions(): ?string
+    public function getAdressePrecisions(): ?string
     {
-        return $this->addrPrecisions;
+        return $this->adressePrecisions;
     }
 
 
 
     /**
-     * @param string|null $addrPrecisions
+     * @param string|null $adressePrecisions
      *
      * @return AdresseTrait
      */
-    public function setAddrPrecisions(?string $addrPrecisions): self
+    public function setAdressePrecisions(?string $adressePrecisions): self
     {
-        $this->addrPrecisions = $addrPrecisions;
+        $this->adressePrecisions = $adressePrecisions;
 
         return $this;
     }
@@ -123,21 +123,21 @@ trait AdresseTrait
     /**
      * @return string|null
      */
-    public function getAddrNumero(): ?string
+    public function getAdresseNumero(): ?string
     {
-        return $this->addrNumero;
+        return $this->adresseNumero;
     }
 
 
 
     /**
-     * @param string|null $addrNumero
+     * @param string|null $adresseNumero
      *
      * @return AdresseTrait
      */
-    public function setAddrNumero(?string $addrNumero): self
+    public function setAdresseNumero(?string $adresseNumero): self
     {
-        $this->addrNumero = $addrNumero;
+        $this->adresseNumero = $adresseNumero;
 
         return $this;
     }
@@ -147,21 +147,21 @@ trait AdresseTrait
     /**
      * @return AdresseNumeroCompl|null
      */
-    public function getAddrNumeroCompl(): ?AdresseNumeroCompl
+    public function getAdresseNumeroCompl(): ?AdresseNumeroCompl
     {
-        return $this->addrNumeroCompl;
+        return $this->adresseNumeroCompl;
     }
 
 
 
     /**
-     * @param AdresseNumeroCompl|null $addrNumeroCompl
+     * @param AdresseNumeroCompl|null $adresseNumeroCompl
      *
      * @return AdresseTrait
      */
-    public function setAddrNumeroCompl(?AdresseNumeroCompl $addrNumeroCompl): self
+    public function setAdresseNumeroCompl(?AdresseNumeroCompl $adresseNumeroCompl): self
     {
-        $this->addrNumeroCompl = $addrNumeroCompl;
+        $this->adresseNumeroCompl = $adresseNumeroCompl;
 
         return $this;
     }
@@ -171,21 +171,21 @@ trait AdresseTrait
     /**
      * @return Voirie|null
      */
-    public function getAddrVoirie(): ?Voirie
+    public function getAdresseVoirie(): ?Voirie
     {
-        return $this->addrVoirie;
+        return $this->adresseVoirie;
     }
 
 
 
     /**
-     * @param Voirie|null $addrVoirie
+     * @param Voirie|null $adresseVoirie
      *
      * @return AdresseTrait
      */
-    public function setAddrVoirie(?Voirie $addrVoirie): self
+    public function setAdresseVoirie(?Voirie $adresseVoirie): self
     {
-        $this->addrVoirie = $addrVoirie;
+        $this->adresseVoirie = $adresseVoirie;
 
         return $this;
     }
@@ -195,21 +195,21 @@ trait AdresseTrait
     /**
      * @return string|null
      */
-    public function getAddrVoie(): ?string
+    public function getAdresseVoie(): ?string
     {
-        return $this->addrVoie;
+        return $this->adresseVoie;
     }
 
 
 
     /**
-     * @param string|null $addrVoie
+     * @param string|null $adresseVoie
      *
      * @return AdresseTrait
      */
-    public function setAddrVoie(?string $addrVoie): self
+    public function setAdresseVoie(?string $adresseVoie): self
     {
-        $this->addrVoie = $addrVoie;
+        $this->adresseVoie = $adresseVoie;
 
         return $this;
     }
@@ -219,21 +219,21 @@ trait AdresseTrait
     /**
      * @return string|null
      */
-    public function getAddrLieuDit(): ?string
+    public function getAdresseLieuDit(): ?string
     {
-        return $this->addrLieuDit;
+        return $this->adresseLieuDit;
     }
 
 
 
     /**
-     * @param string|null $addrLieuDit
+     * @param string|null $adresseLieuDit
      *
      * @return AdresseTrait
      */
-    public function setAddrLieuDit(?string $addrLieuDit): self
+    public function setAdresseLieuDit(?string $adresseLieuDit): self
     {
-        $this->addrLieuDit = $addrLieuDit;
+        $this->adresseLieuDit = $adresseLieuDit;
 
         return $this;
     }
@@ -243,21 +243,21 @@ trait AdresseTrait
     /**
      * @return string|null
      */
-    public function getAddrCodePostal(): ?string
+    public function getAdresseCodePostal(): ?string
     {
-        return $this->addrCodePostal;
+        return $this->adresseCodePostal;
     }
 
 
 
     /**
-     * @param string|null $addrCodePostal
+     * @param string|null $adresseCodePostal
      *
      * @return AdresseTrait
      */
-    public function setAddrCodePostal(?string $addrCodePostal): self
+    public function setAdresseCodePostal(?string $adresseCodePostal): self
     {
-        $this->addrCodePostal = $addrCodePostal;
+        $this->adresseCodePostal = $adresseCodePostal;
 
         return $this;
     }
@@ -267,21 +267,21 @@ trait AdresseTrait
     /**
      * @return string|null
      */
-    public function getAddrCommune(): ?string
+    public function getAdresseCommune(): ?string
     {
-        return $this->addrCommune;
+        return $this->adresseCommune;
     }
 
 
 
     /**
-     * @param string|null $addrCommune
+     * @param string|null $adresseCommune
      *
      * @return AdresseTrait
      */
-    public function setAddrCommune(?string $addrCommune): self
+    public function setAdresseCommune(?string $adresseCommune): self
     {
-        $this->addrCommune = $addrCommune;
+        $this->adresseCommune = $adresseCommune;
 
         return $this;
     }
@@ -291,21 +291,21 @@ trait AdresseTrait
     /**
      * @return Pays|null
      */
-    public function getAddrPays(): ?Pays
+    public function getAdressePays(): ?Pays
     {
-        return $this->addrPays;
+        return $this->adressePays;
     }
 
 
 
     /**
-     * @param Pays|null $addrPays
+     * @param Pays|null $adressePays
      *
      * @return AdresseTrait
      */
-    public function setAddrPays(?Pays $addrPays): self
+    public function setAdressePays(?Pays $adressePays): self
     {
-        $this->addrPays = $addrPays;
+        $this->adressePays = $adressePays;
 
         return $this;
     }

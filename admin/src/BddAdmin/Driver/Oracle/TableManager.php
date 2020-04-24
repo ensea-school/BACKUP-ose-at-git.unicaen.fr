@@ -179,8 +179,10 @@ class TableManager extends AbstractManager implements TableManagerInterface
             }
             $position = 1;
             foreach ($colPos as $cname) {
-                $data[$table]['columns'][$cname]['position'] = $position;
-                $position++;
+                if (isset($data[$table]['columns'][$cname])) {
+                    $data[$table]['columns'][$cname]['position'] = $position;
+                    $position++;
+                }
             }
         }
 

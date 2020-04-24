@@ -1,3 +1,15 @@
+# OSE 15 alpha
+
+## Nouveautés
+
+* Les modèles de pièces justificatives peuvent être téléchargés en fonction de l'année courante (paramètre :annee à ajouter dans l'URL qui sera remplacé dynamiquement par l'année en cours)
+
+## Notes de mise à jour
+
+* Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
+La migration ne sera possible qu'à partir de la version 14.
+Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
+
 # OSE 14.3
 
 ## Corrections de bugs

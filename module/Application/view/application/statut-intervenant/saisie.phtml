@@ -143,5 +143,6 @@ echo $this->form()->openTag($form); ?>
                 console.log('toto');
                 window.location.reload();
             });
+            $(".statut-libelle-<?= $form->get('id')->getValue() ?>").html("<?= $form->get('libelle')->getValue() ?>");
         });
     </script>

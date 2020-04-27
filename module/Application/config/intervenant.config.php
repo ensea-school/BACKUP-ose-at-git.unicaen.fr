@@ -240,6 +240,16 @@ return [
                     ],
                 ],
             ],
+            'validation-volume-horaire-type-intervenant'             => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/validation-vh-ti',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Intervenant',
+                        'action'     => 'validation-volume-horaire-type-intervenant',
+                    ],
+                ],
+            ],
         ],
     ],
     'navigation'      => [
@@ -432,6 +442,13 @@ return [
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_VISUALISATION,
                         Privileges::REFERENTIEL_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['validation-volume-horaire-type-intervenant'],
+                    'privileges' => [
+                        Privileges::MODIF_SERVICE_DU_EDITION,
                     ],
                 ],
             ],

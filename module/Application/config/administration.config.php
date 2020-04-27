@@ -41,6 +41,17 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'administration-intervenant' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/administration-intervenant',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Administration',
+                        'action'     => 'administration-intervenant',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -54,6 +65,64 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
                         'order'    => 7,
                         'pages'    => [
+                            'gestion-intervenant' => [
+                                'label'          => 'Gestion intervenants (Status, PJ,  etc...)',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'administration-intervenant',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-intervenant'),
+                                'order'          => 80,
+                                'border - color' => '#111',
+                                'pages' => [
+                                    'statut-intervenant' => [
+                                        'label'        => 'Edition des status des intervenants',
+                                        'icon'         => 'fa fa-graduation-cap',
+                                        'route'        => 'statut-intervenant',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\StatutIntervenant', 'index'),
+                                        'order'        => 90,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                    'type-piece-jointe-statut' => [
+                                        'label'      => "Pièces justificatives attendues par statut d'intervenant",
+                                        'title'      => "Permet de personnaliser les mièces justificatives à demander en fonction du statut des intervenants",
+                                        'route'      => 'piece-jointe/type-piece-jointe-statut',
+                                        'withtarget' => true,
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
+                                    ],
+                                    'validation-volume-horaire-type-intervenant' => [
+                                        'label'      => "Validation des volumes horaires par type d'intervenant",
+                                        'title'      => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",
+                                        'route'      => 'validation-volume-horaire-type-intervenant',
+                                        'withtarget' => true,
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'validation-volume-horaire-type-intervenant'),
+                                    ],
+                                ],
+                            ],
+                            'gestion-centre-cout' => [
+                                'label'          => 'Gestion des centres de coûts',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'administration-centre-cout',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-centre-cout'),
+                                'order'          => 80,
+                                'border - color' => '#111',
+                                'pages' => [
+                                    'centre-cout' => [
+                                        'label'        => 'Edition des centres de coûts',
+                                        'icon'         => 'fa fa-graduation-cap',
+                                        'route'        => 'centre-cout',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
+                                        'order'        => 80,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                    'centre-cout-activite' => [
+                                        'label'        => 'Edition des types activités des centres de coûts',
+                                        'icon'         => 'fa fa-graduation-cap',
+                                        'route'        => 'centre-cout-activite',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
+                                        'order'        => 80,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -65,7 +134,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Administration',
-                    'action'     => ['index', 'administration-types', 'administration-centre-cout'],
+                    'action'     => ['index', 'administration-types', 'administration-centre-cout', 'administration-intervenant'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,

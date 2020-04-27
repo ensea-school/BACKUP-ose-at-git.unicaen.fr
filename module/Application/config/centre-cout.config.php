@@ -110,44 +110,7 @@ return [
             ],
         ],
     ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'gestion-centre-cout' => [
-                                'label'          => 'Gestion des centres de coûts',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
-                                'route'          => 'administration-centre-cout',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-centre-cout'),
-                                'order'          => 80,
-                                'border - color' => '#111',
-                                'pages' => [
-                                    'centre-cout' => [
-                                        'label'        => 'Edition des centres de coûts',
-                                        'icon'         => 'fa fa-graduation-cap',
-                                        'route'        => 'centre-cout',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                        'order'        => 80,
-                                        'border-color' => '#BBCF55',
-                                    ],
-                                    'centre-cout-activite' => [
-                                        'label'        => 'Edition des types activités des centres de coûts',
-                                        'icon'         => 'fa fa-graduation-cap',
-                                        'route'        => 'centre-cout-activite',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                        'order'        => 80,
-                                        'border-color' => '#BBCF55',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
+
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [

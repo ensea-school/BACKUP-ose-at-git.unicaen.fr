@@ -31,7 +31,7 @@ use Zend\View\Model\ViewModel;
  * Description of IntervenantController
  *
  */
-class IntervenantController extends AbstractController
+class  IntervenantController extends AbstractController
 {
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -369,6 +369,12 @@ class IntervenantController extends AbstractController
         }
 
         return compact('intervenant', 'data');
+    }
+
+    public function validationVolumeHoraireTypeIntervenantAction()
+    {
+
+        return [];
     }
 
 

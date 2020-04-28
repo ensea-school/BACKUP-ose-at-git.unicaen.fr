@@ -30,15 +30,16 @@ CREATE OR REPLACE PACKAGE "OSE_DIVERS" AS
   FUNCTION FORMATTED_RIB (bic VARCHAR2, iban VARCHAR2) RETURN VARCHAR2;
 
   FUNCTION FORMATTED_ADRESSE(
-    no_voie                VARCHAR2,
-    nom_voie               VARCHAR2,
-    batiment               VARCHAR2,
-    mention_complementaire VARCHAR2,
-    localite               VARCHAR2,
-    code_postal            VARCHAR2,
-    ville                  VARCHAR2,
-    pays_libelle           VARCHAR2)
-  RETURN VARCHAR2;
+    precisions VARCHAR2,
+    lieu_dit VARCHAR2,
+    numero VARCHAR2,
+    numero_compl_id NUMERIC,
+    voirie_id NUMERIC,
+    voie VARCHAR2,
+    code_postal VARCHAR2,
+    commune VARCHAR2,
+    pays_id VARCHAR2
+  ) RETURN VARCHAR2;
 
   PROCEDURE CALCUL_FEUILLE_DE_ROUTE( CONDS VARCHAR2 );
 

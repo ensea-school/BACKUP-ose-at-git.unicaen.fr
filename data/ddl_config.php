@@ -5,6 +5,7 @@ return [
     'table'             => ['includes' => [
         'ADRESSE_INTERVENANT',
         'ADRESSE_STRUCTURE',
+        //'DOSSIER',
 
     ]],
     'materialized-view' => ['includes' => [
@@ -20,7 +21,7 @@ return [
 
     ]],
     'sequence'          => ['includes' => [
-        
+
     ]],
     'materialized-view' => ['includes' => [
 

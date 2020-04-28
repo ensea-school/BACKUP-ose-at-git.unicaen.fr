@@ -267,27 +267,76 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     RETURN regexp_replace(bic, '[[:space:]]+', '') || '-' || regexp_replace(iban, '[[:space:]]+', '');
   END;
 
-  FUNCTION FORMATTED_ADRESSE(
-    no_voie                VARCHAR2,
-    nom_voie               VARCHAR2,
-    batiment               VARCHAR2,
-    mention_complementaire VARCHAR2,
-    localite               VARCHAR2,
-    code_postal            VARCHAR2,
-    ville                  VARCHAR2,
-    pays_libelle           VARCHAR2)
-    RETURN VARCHAR2
-  IS
+  FUNCTION FORMATTED_ADRESSE(precisions VARCHAR2, lieu_dit VARCHAR2, numero VARCHAR2, numero_compl_id NUMERIC, voirie_id NUMERIC, voie VARCHAR2, code_postal VARCHAR2, commune VARCHAR2, pays_id VARCHAR2 ) RETURN VARCHAR2 IS
+    a VARCHAR2(4000) DEFAULT '';
+    numeroCompl VARCHAR2(5);
+    voirie VARCHAR2(120);
+    pays varchar2(120);
+    l1 varchar2(1000) DEFAULT '';
+    l2 varchar2(1000) DEFAULT '';
   BEGIN
-    return
-      -- concaténation des éléments non null séparés par ', '
-      trim(trim(',' FROM REPLACE(', ' || NVL(no_voie,'#') || ', ' || NVL(nom_voie,'#') || ', ' || NVL(batiment,'#') || ', ' || NVL(mention_complementaire,'#'), ', #', ''))) ||
-      -- saut de ligne complet
-      chr(13) || chr(10) ||
-      -- concaténation des éléments non null séparés par ', '
-      trim(trim(',' FROM REPLACE(', ' || NVL(localite,'#') || ', ' || NVL(code_postal,'#') || ', ' || NVL(ville,'#') || ', ' || NVL(pays_libelle,'#'), ', #', '')));
-  END;
+    IF numero_compl_id IS NOT NULL THEN
+      SELECT code INTO numeroCompl FROM adresse_numero_compl WHERE id = numero_compl_id;
+    END IF;
+    IF voirie_id IS NOT NULL THEN
+      SELECT libelle INTO voirie FROM voirie WHERE id = voirie_id;
+    END IF;
+    IF pays_id IS NOT NULL THEN
+      SELECT libelle INTO pays FROM pays WHERE id = pays_id;
+      IF STR_REDUCE(pays) = 'france' THEN
+        pays := null;
+      END IF;
+    END IF;
 
+
+    IF precisions IS NOT NULL THEN
+      a := a || trim(precisions);
+    END IF;
+
+    IF lieu_dit IS NOT NULL THEN
+      IF a IS NOT NULL THEN a := a || chr(13) || chr(10); END IF;
+      a := a || trim(lieu_dit);
+    END IF;
+
+    IF numero IS NOT NULL THEN
+      l1 := trim(numero);
+    END IF;
+    IF numeroCompl IS NOT NULL THEN
+      IF l1 IS NOT NULL THEN l1 := l1 || ' '; END IF;
+      l1 := l1 || trim(numeroCompl);
+    END IF;
+    IF voirie IS NOT NULL THEN
+      IF l1 IS NOT NULL THEN l1 := l1 || ' '; END IF;
+      l1 := l1 || trim(voirie);
+    END IF;
+    IF voie IS NOT NULL THEN
+      IF l1 IS NOT NULL THEN l1 := l1 || ' '; END IF;
+      l1 := l1 || trim(voie);
+    END IF;
+    IF l1 IS NOT NULL THEN
+      IF a IS NOT NULL THEN a := a || chr(13) || chr(10); END IF;
+      a := a || l1;
+    END IF;
+
+    IF code_postal IS NOT NULL THEN
+      l2 := trim(code_postal);
+    END IF;
+    IF commune IS NOT NULL THEN
+      IF l2 IS NOT NULL THEN l2 := l2 || ' '; END IF;
+      l2 := l2 || trim(commune);
+    END IF;
+    IF l2 IS NOT NULL THEN
+      IF a IS NOT NULL THEN a := a || chr(13) || chr(10); END IF;
+      a := a || l2;
+    END IF;
+
+    IF pays IS NOT NULL THEN
+      IF a IS NOT NULL THEN a := a || chr(13) || chr(10); END IF;
+      a := a || trim(pays);
+    END IF;
+
+    RETURN a;
+  END;
 
 
   PROCEDURE CALCUL_FEUILLE_DE_ROUTE( CONDS VARCHAR2 ) IS

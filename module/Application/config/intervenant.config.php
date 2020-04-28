@@ -249,6 +249,33 @@ return [
                         'action'     => 'validation-volume-horaire-type-intervenant',
                     ],
                 ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'delete'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/delete/:regleStructureValidation',
+                            'constraints' => [
+                                'regleStructureValidation' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'delete',
+                            ],
+                        ],
+                    ],
+                    'saisie'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/saisie/[:regleStructureValidation]',
+                            'constraints' => [
+                                'regleStructureValidation' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'validation-volume-horaire-type-intervenant-saisie',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
@@ -446,7 +473,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['validation-volume-horaire-type-intervenant'],
+                    'action'     => ['validation-volume-horaire-type-intervenant', 'validation-volume-horaire-type-intervenant-saisie'],
                     'privileges' => [
                         Privileges::MODIF_SERVICE_DU_EDITION,
                     ],

@@ -9,7 +9,8 @@
    
 ## Corrections de bugs
 
-* Dans la gestion des types de statut, mise à jour du libellé du statut lors d'un update. 
+* Dans la gestion des types de statut, mise à jour du libellé du statut lors d'un update.
+* Les heures non payables n'apparaissent désormais plus dans les contrats. 
  
 
 # OSE 14.3

@@ -542,6 +542,7 @@ return [
             Form\Intervenant\ModificationServiceDuForm::class          => Form\Intervenant\ModificationServiceDuForm::class,
             Form\Intervenant\ModificationServiceDuFieldset::class      => Form\Intervenant\ModificationServiceDuFieldset::class,
             Form\Intervenant\MotifModificationServiceDuFieldset::class => Form\Intervenant\MotifModificationServiceDuFieldset::class,
+            Form\Intervenant\RegleStructureValidationForm::class       => Form\Intervenant\RegleStructureValidationForm::class,
         ],
     ],
 ];

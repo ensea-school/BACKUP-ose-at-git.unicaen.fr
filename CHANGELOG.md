@@ -1,3 +1,17 @@
+# OSE 14.4
+
+## Nouveautés
+
+* Nouveaux écrans dans l'administration de OSE : 
+   * Edition possible des types de ressources (paie état, ressources propres etc...)
+   * Edition des régles de validations (volume horaire / type intervenant)
+   * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
+   
+## Corrections de bugs
+
+* Dans la gestion des types de statut, mise à jour du libellé du statut lors d'un update. 
+ 
+
 # OSE 14.3
 
 ## Corrections de bugs

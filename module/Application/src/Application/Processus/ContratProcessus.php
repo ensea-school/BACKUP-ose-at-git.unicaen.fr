@@ -75,6 +75,7 @@ class ContratProcessus extends AbstractProcessus
           i = :intervenant
           AND s.histoDestruction IS NULL
           AND vh.histoDestruction IS NULL
+          AND vh.motifNonPaiement IS NULL
           AND " . ($contrat ? $fContrat : $fNonContrat) . "
           $fStructure
         ";

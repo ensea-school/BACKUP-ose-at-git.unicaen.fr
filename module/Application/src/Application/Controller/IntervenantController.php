@@ -401,13 +401,33 @@ class  IntervenantController extends AbstractController
                 $this->getServiceRegleStructureValidation()->save($rsv);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
+                $message = $this->translate($e);
+
+                if (false !== strpos($message, 'ORA-00001')) {
+                    $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
+                }
+                else{
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                }
             }
         });
 
         return compact('form', 'title');
     }
 
+    public function validationVolumeHoraireTypeIntervenantDeleteAction()
+    {
+        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
+
+        try {
+            $this->getServiceRegleStructureValidation()->delete($regleStructureValidation);
+            $this->flashMessenger()->addSuccessMessage("Règle supprimée avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel(compact('regleStructureValidation'));
+    }
 
 
     /**

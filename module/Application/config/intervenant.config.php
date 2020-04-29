@@ -259,7 +259,7 @@ return [
                                 'regleStructureValidation' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'action' => 'delete',
+                                'action' => 'validation-volume-horaire-type-intervenant-delete',
                             ],
                         ],
                     ],
@@ -473,7 +473,10 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['validation-volume-horaire-type-intervenant', 'validation-volume-horaire-type-intervenant-saisie'],
+                    'action'     => ['validation-volume-horaire-type-intervenant',
+                                     'validation-volume-horaire-type-intervenant-saisie',
+                                     'validation-volume-horaire-type-intervenant-delete',
+                                    ],
                     'privileges' => [
                         Privileges::MODIF_SERVICE_DU_EDITION,
                     ],

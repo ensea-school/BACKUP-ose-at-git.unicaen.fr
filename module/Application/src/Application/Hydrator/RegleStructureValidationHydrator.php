@@ -2,10 +2,15 @@
 
 namespace Application\Hydrator;
 
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Zend\Hydrator\HydratorInterface;
 
 class RegleStructureValidationHydrator implements HydratorInterface
 {
+    use TypeVolumeHoraireServiceAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
+
     /**
      * Hydrate $object with the provided $data.
      *
@@ -18,8 +23,12 @@ class RegleStructureValidationHydrator implements HydratorInterface
     {
         $object->setMessage($data['message']);
         $object->setPriorite($data['priorite']);
-        $object->setTypeVolumeHoraire($data['type-volume-horaire']);
-        $object->setTypeIntervenant($data['type-intervenant']);
+        if (array_key_exists('type-volume-horaire', $data)) {
+            $object->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->get($data['type-volume-horaire']));
+        }
+        if (array_key_exists('type-intervenant', $data)) {
+            $object->setTypeIntervenant($this->getServiceTypeIntervenant()->get($data['type-intervenant']));
+        }
 
         return $object;
     }

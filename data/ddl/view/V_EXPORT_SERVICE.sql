@@ -74,15 +74,15 @@ SELECT
   0                                 heures_compl_fc_majorees,
   0                                 heures_compl_referentiel,
   0                                 total,
-  fr.solde                          solde,
+  COALESCE(fr.solde,0)              solde,
   NULL                              service_ref_formation,
   NULL                              commentaires
 FROM
   volume_horaire                  vh
   JOIN service                     s ON s.id = vh.service_id
-  JOIN v_volume_horaire_etat     vhe ON vhe.volume_horaire_id = vh.id
-  JOIN formule_resultat           fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
+  JOIN v_vol_horaire_etat_multi  vhe ON vhe.volume_horaire_id = vh.id
   JOIN motif_non_paiement        mnp ON mnp.id = vh.motif_non_paiement_id
+  LEFT JOIN formule_resultat      fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL

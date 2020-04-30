@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $csv           \UnicaenApp\View\Model\CsvModel
+ * @return array
  * @var $etatSortie    \Application\Entity\Db\EtatSortie
  * @var $data          array
  * @var $filtres       array
@@ -8,7 +8,7 @@
  * @var $role          \Application\Acl\Role
  * @var $options       array
  *
- * @return array
+ * @var $csv           \UnicaenApp\View\Model\CsvModel
  */
 
 // initialisation
@@ -121,6 +121,15 @@ foreach ($data as $d) {
         'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
     ];
 
+    if ($d['MOTIF_NON_PAIEMENT']) {
+        if (isset($ds['heures-non-payees-libelle'])) {
+            $ds['heures-non-payees-libelle'] .= ', ';
+        } else {
+            $ds['heures-non-payees-libelle'] = '';
+        }
+        $ds['heures-non-payees-libelle'] .= $d['MOTIF_NON_PAIEMENT'];
+    }
+
     if (
         $ds['heures-service-statutaire'] > 0
         && $ds['heures-service-statutaire'] + $ds['heures-service-du-modifie'] == 0
@@ -200,6 +209,7 @@ $head = [
     'element-source-libelle'        => 'Source enseignement',
     'periode-libelle'               => 'Période',
     'heures-non-payees'             => 'Heures non payées',
+    'heures-non-payees-libelle'     => 'Motif de non paiement',
 ];
 uasort($typesIntervention, function ($ti1, $ti2) {
     return $ti1->getOrdre() > $ti2->getOrdre();

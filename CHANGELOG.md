@@ -7,12 +7,14 @@
    * Edition des régles de validations (volume horaire / type intervenant)
    * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
    
+* L'export CSV des services affiche maintenant le motif de non paiement, en plus des heures non payées
+   
 ## Corrections de bugs
 
 * Dans la gestion des types de statut, mise à jour du libellé du statut lors d'un update.
 * Les heures non payables n'apparaissent désormais plus dans les contrats. 
 * Dans l'export CSV du différentiel services / charges, la totalisation des heures de dépassement n'est plus buggée s'il y a plusieurs intervenants 
- 
+
 
 # OSE 14.3
 
@@ -22,6 +24,7 @@
 * Possibilité de faire des demandes de mise en paiement de 0,01 HETD
 * Les colonnes ne faisant pas partie du Schéma de OSE ne sont plus prise en compte lors des mises à jour.
 * Correction problème installation avec composer qui par défault si composer n'est pas disponible sur le serveur, télécharge composer.phar en version 2.0 dev, non compatible pour le moment avec ose.
+* L'export CSV des services est pleinement fonctionnel lorsqu'un interveanant n'a que des heures avec motif de non paiement
 
 # OSE 14.2
 

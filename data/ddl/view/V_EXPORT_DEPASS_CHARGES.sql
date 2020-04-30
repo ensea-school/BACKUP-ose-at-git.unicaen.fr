@@ -79,7 +79,7 @@ SELECT
   c.source                                    source_charges,
   c.heures                                    heures_charges,
   c.groupes                                   groupes_charges,
-  s.heures - COALESCE(c.heures * c.groupes,0) heures_depassement
+  s.heures - (COALESCE(c.heures * c.groupes,0) / COUNT(DISTINCT i.id) OVER (PARTITION BY tvh.id, ep.id, tiv.id)) heures_depassement
 FROM
                                     s
        JOIN annee                   a ON a.id = s.annee_id

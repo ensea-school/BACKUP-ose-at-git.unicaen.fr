@@ -11,6 +11,7 @@
 
 * Dans la gestion des types de statut, mise à jour du libellé du statut lors d'un update.
 * Les heures non payables n'apparaissent désormais plus dans les contrats. 
+* Dans l'export CSV du différentiel services / charges, la totalisation des heures de dépassement n'est plus buggée s'il y a plusieurs intervenants 
  
 
 # OSE 14.3

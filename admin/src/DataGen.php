@@ -312,7 +312,7 @@ class DataGen
             'context' => ['install'],
             'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_AGREMENT_ID'],
             'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND SOURCE_CODE = %s'],
+                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
                 'TYPE_AGREMENT_ID'      => ['transformer' => 'SELECT ID FROM TYPE_AGREMENT WHERE CODE = %s'],
             ],],
         ],
@@ -326,7 +326,7 @@ class DataGen
             'context' => ['install'],
             'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_PIECE_JOINTE_ID'],
             'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND SOURCE_CODE = %s'],
+                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
                 'TYPE_PIECE_JOINTE_ID'  => ['transformer' => 'SELECT ID FROM TYPE_PIECE_JOINTE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
             ],],
         ],

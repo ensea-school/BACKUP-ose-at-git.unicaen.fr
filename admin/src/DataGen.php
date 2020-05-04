@@ -303,7 +303,7 @@ class DataGen
             'context' => ['install'],
             'key'     => ['STATUT_ID', 'PRIVILEGE_ID'],
             'options' => ['columns' => [
-                'STATUT_ID'    => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND SOURCE_CODE = %s'],
+                'STATUT_ID'    => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
                 'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
             ],],
         ],

@@ -18,6 +18,19 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
+            'commentaire' => NULL,
+        ],
+        'CODE_INTERVENANT'     => [
+            'name'        => 'CODE_INTERVENANT',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 255,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'HEURES_POUR_SEUIL'    => [
@@ -29,6 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'ID'                   => [
@@ -40,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'       => [
@@ -51,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'          => [
@@ -62,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'TO_DELETE'            => [
@@ -73,6 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID' => [
@@ -84,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
     ],

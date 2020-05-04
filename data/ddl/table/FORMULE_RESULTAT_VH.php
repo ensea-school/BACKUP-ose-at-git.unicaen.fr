@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FA'          => [
@@ -29,6 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FC'          => [
@@ -40,6 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FC_MAJOREES' => [
@@ -51,6 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FI'          => [
@@ -62,6 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'ID'                       => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'SERVICE_FA'               => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'SERVICE_FC'               => [
@@ -95,6 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'SERVICE_FI'               => [
@@ -106,6 +114,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'TOTAL'                    => [
@@ -117,6 +126,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'VOLUME_HORAIRE_ID'        => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
     ],

@@ -46,8 +46,8 @@ class AgrementService extends AbstractEntityService
      *
      * @param Agrement $entity
      *
-     * @throws \RuntimeException
      * @return mixed
+     * @throws \RuntimeException
      */
     public function save($entity)
     {
@@ -72,7 +72,7 @@ class AgrementService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
 
         return $qb;
@@ -123,7 +123,6 @@ class AgrementService extends AbstractEntityService
                 'intervenant-nom-patronymique' => $d['INTERVENANT_NOM_PATRONYMIQUE'],
                 'intervenant-prenom'           => $d['INTERVENANT_PRENOM'],
                 'intervenant-statut-libelle'   => $d['INTERVENANT_STATUT_LIBELLE'],
-                'premier-recrutement'          => $d['PREMIER_RECRUTEMENT'] == '1' ? 'Oui' : 'Non',
                 'discipline'                   => $d['DISCIPLINE'],
                 'hetd-fi'                      => (float)$d['HETD_FI'],
                 'hetd-fa'                      => (float)$d['HETD_FA'],

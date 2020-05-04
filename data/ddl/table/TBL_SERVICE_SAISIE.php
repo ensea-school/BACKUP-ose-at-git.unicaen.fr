@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'HEURES_REFERENTIEL_PREV' => [
@@ -29,6 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 2,
             'commentaire' => 'NB d\'heures de référentiel prévisionnel',
         ],
         'HEURES_REFERENTIEL_REAL' => [
@@ -40,6 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 3,
             'commentaire' => 'NB d\'heures de référentiel réalisé',
         ],
         'HEURES_SERVICE_PREV'     => [
@@ -51,6 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 4,
             'commentaire' => 'NB d\'heures de service prévisionnel',
         ],
         'HEURES_SERVICE_REAL'     => [
@@ -62,6 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 5,
             'commentaire' => 'NB d\'heures de service réalisé',
         ],
         'ID'                      => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'          => [
@@ -84,6 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_REFERENTIEL' => [
@@ -95,6 +102,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 8,
             'commentaire' => 'Témoin (0 ou 1)',
         ],
         'PEUT_SAISIR_SERVICE'     => [
@@ -106,6 +114,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 9,
             'commentaire' => 'Témoin (0 ou 1)',
         ],
         'TO_DELETE'               => [
@@ -117,6 +126,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 10,
             'commentaire' => NULL,
         ],
     ],

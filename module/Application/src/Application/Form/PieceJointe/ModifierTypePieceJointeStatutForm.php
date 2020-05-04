@@ -35,13 +35,13 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'type' => 'Hidden',
         ]);
 
-        $this->add([
+        /*$this->add([
             'name'    => 'premier-recrutement',
             'options' => [
                 'label' => 'Uniquement en cas de premier recrutement',
             ],
             'type'    => 'Checkbox',
-        ]);
+        ]);*/
 
         $this->add([
             'type'    => 'Checkbox',
@@ -99,6 +99,18 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'attributes' => [
                 'class'            => 'selectpicker',
                 'data-live-search' => 'true',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Number',
+            'name'       => 'duree-vie',
+            'options'    => [
+                'label' => "Durée de vie de la pièce jointe (en année)",
+            ],
+            'attributes' => [
+                'min'   => '1',
+                'value' => '1',
             ],
         ]);
 
@@ -204,9 +216,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'changement-rib'      => [
                 'required' => true,
             ],
-            'premier-recrutement' => [
+            /*'premier-recrutement' => [
                 'required' => true,
-            ],
+            ],*/
             'fc'                  => [
                 'required' => true,
             ],
@@ -215,6 +227,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             ],
             'annee-fin'           => [
                 'required' => false,
+            ],
+            'duree-vie'           => [
+                'required' => true,
             ],
         ];
     }
@@ -234,14 +249,14 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                        $data
-     * @param  \Application\Entity\Db\TypePieceJointeStatut $object
+     * @param array                                        $data
+     * @param \Application\Entity\Db\TypePieceJointeStatut $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-        $object->setPremierRecrutement($data['premier-recrutement']);
+        //$object->setPremierRecrutement($data['premier-recrutement']);
         $object->setChangementRIB($data['changement-rib']);
         $object->setObligatoire($data['typePieceJointe']);
         $object->setSeuilHetd($data['seuil-hetd']);
@@ -252,6 +267,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
             $object->setAnneeFin($this->getServiceAnnee()->get($data['annee-fin']));
         }
         $object->setFC($data['fc']);
+        $object->setDureeVie($data['duree-vie']);
 
         return $object;
     }
@@ -261,7 +277,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\TypePieceJointeStatut $object
+     * @param \Application\Entity\Db\TypePieceJointeStatut $object
      *
      * @return array
      */
@@ -270,11 +286,12 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
         $data = [
             'id'                  => $object->getId(),
             'typePieceJointe'     => $object->getObligatoire(),
-            'premier-recrutement' => $object->getPremierRecrutement(),
+            //'premier-recrutement' => $object->getPremierRecrutement(),
             'seuil-hetd'          => $object->getSeuilHeures(),
-            'premier-recrutement' => $object->getPremierRecrutement(),
+            //'premier-recrutement' => $object->getPremierRecrutement(),
             'changement-rib'      => $object->getChangementRIB(),
             'fc'                  => $object->getFC(),
+            'duree-vie'           => $object->getDureeVie(),
             'annee-debut'         => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
             'annee-fin'           => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
         ];

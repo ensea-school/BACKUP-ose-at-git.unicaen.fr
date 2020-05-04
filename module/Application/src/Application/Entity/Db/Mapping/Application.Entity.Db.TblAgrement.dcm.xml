@@ -5,6 +5,11 @@
             <generator strategy="SEQUENCE"/>
         </id>
         <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
+        <many-to-one field="anneeAgrement" target-entity="Application\Entity\Db\Annee">
+            <join-columns>
+                <join-column name="ANNEE_AGREMENT" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-columns>
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>
@@ -30,5 +35,12 @@
                 <join-column name="AGREMENT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <field name="dureeVie" type="integer" column="DUREE_VIE" nullable="true" >
+            <options>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="true" >
+        </field>
     </entity>
 </doctrine-mapping>

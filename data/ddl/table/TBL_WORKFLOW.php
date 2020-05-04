@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'ATTEIGNABLE'           => [
@@ -29,6 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 2,
             'commentaire' => 'Témoin indiquant si l\'étape est atteignable ou non',
         ],
         'ETAPE_CODE'            => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => 'Code de l\'étape du workflow concernée',
         ],
         'ETAPE_ID'              => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => 'Identifiant de l\'étape concernée',
         ],
         'ID'                    => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'        => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => 'Identifiant de l\'intervenant concerné',
         ],
         'OBJECTIF'              => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 7,
             'commentaire' => 'Objectif de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ],
         'REALISATION'           => [
@@ -95,6 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 8,
             'commentaire' => 'Pourcentage de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ],
         'STATUT_INTERVENANT_ID' => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'          => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => 'null',
+            'position'    => 10,
             'commentaire' => 'Eventuelle structure concernée',
         ],
         'TYPE_INTERVENANT_CODE' => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => 'Code du type d\'intevention (CM / TD / TP, etc)',
         ],
         'TYPE_INTERVENANT_ID'   => [
@@ -139,6 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
     ],

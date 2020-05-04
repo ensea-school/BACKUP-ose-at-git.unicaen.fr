@@ -18,6 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'CONTRAT_ID'             => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'HEURES'                 => [
@@ -40,6 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'      => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'         => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'   => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'      => [
@@ -84,6 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'  => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'     => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HORAIRE_DEBUT'          => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HORAIRE_FIN'            => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'ID'                     => [
@@ -139,6 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'MOTIF_NON_PAIEMENT_ID'  => [
@@ -150,6 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'PERIODE_ID'             => [
@@ -161,6 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'             => [
@@ -172,6 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'SOURCE_CODE'            => [
@@ -183,6 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'SOURCE_ID'              => [
@@ -194,6 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_ID'   => [
@@ -205,6 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID' => [
@@ -216,6 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
     ],

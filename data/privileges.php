@@ -20,6 +20,9 @@ return [
             'types-diplome-visualisation'        => 'Types de diplômes (visualisation)',
             'types-diplome-edition'              => 'Types de diplômes (édition)',
             'reconduction-offre'                 => 'Prolongation de l\'offre l\'année suivante',
+            'reconduction-centre-cout'           => 'Reconduction des centres de coûts de l\'offre de formation',
+            'reconduction-modulateur'            => 'Reconduction des modualteurs de l\'offre de formation',
+
         ],
     ],
 
@@ -145,6 +148,7 @@ return [
             'modeles-edition'          => 'Édition des modèles',
             'projet-generation'        => 'Génération de projet de contrat',
             'contrat-generation'       => 'Génération de contrat',
+            'envoi-email'              => 'Envoyer le contrat par email',
         ],
     ],
 
@@ -330,6 +334,7 @@ return [
         'privileges' => [
             'administration-visualisation' => 'Administration (visualisation)',
             'administration-edition'       => 'Administration (édition)',
+            'administration-reconduction'  => 'Administration (reconduction)',
         ],
     ],
 

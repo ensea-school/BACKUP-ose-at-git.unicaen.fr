@@ -21,6 +21,11 @@ $urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
     ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
     : null;
 
+$urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
+    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()])
+    : null;
+
+
 $urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
     ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
     : null;
@@ -41,6 +46,8 @@ $urlSuppression = $this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)
     ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
     : null;
 
+$disableEmail = (empty($emailIntervenant))?true:false;
+
 if ($urlAjouter) {
     $uploader->setUrl($urlAjouter);
 }
@@ -50,14 +57,36 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
 ?>
 <div class="contrat panel panel-<?= $panel ?>" id="contrat-<?= $contrat->getId() ?>">
     <div class="panel-heading panel-heading-h3">
+        <?php if ($urlExport && $urlEmail): ?>
+            <span class="pull-right">
+                <?php if($disableEmail): ?>
+                    <a class="disabled btn btn-<?= $panel ?>" href="<?= $urlEmail ?>" title="L'intervenant du contrat n'a pas renseigné son email.">
+                <?php endif; ?>
+                <?php if(!$disableEmail): ?>
+                    <a class="btn btn-<?= $panel ?> pop-ajax"
+                       title="Envoyer le contrat par mail"
+                       data-content="Souhaitez vous vraiment envoyer le contrat par email ?"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                       href="<?= $urlEmail ?>">
+                <?php endif; ?>
+                <span class="glyphicon glyphicon-send"></span> Envoyer par mail
+            </a>
+            </span>
+        <?php endif; ?>
         <!-- Lien de téléchargement du fichier -->
         <?php if ($urlExport): ?>
+
             <span class="pull-right">
             <a class="btn btn-<?= $panel ?>" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
                 <span class="glyphicon glyphicon-export"></span> Exporter en PDF
             </a>
             </span>
         <?php endif; ?>
+        <!-- Lien de téléchargement du fichier -->
+
         <h3><?= $contrat->toString() ?> - <?= $contrat->getStructure() ?></h3>
     </div>
 

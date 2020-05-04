@@ -398,10 +398,7 @@ class DossierFieldset extends AbstractFieldset
                 'required'   => true,
                 'validators' => [
                     new NumeroINSEEValidator([
-                        'provisoire'         => $numeroInseeProvisoire,
-                        'france_id'          => self::$franceId,
-                        'serviceDepartement' => $this->getServiceDepartement(),
-                        'serviceCivilite'    => $this->getServiceCivilite(),
+                        'provisoire' => $numeroInseeProvisoire,
                     ]),
                 ],
             ],

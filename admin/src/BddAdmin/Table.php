@@ -140,7 +140,7 @@ class Table
 
 
 
-    public function copy(Bdd $source, callable $fnc = null)
+    public function copy(Bdd $source, ?callable $fnc = null)
     {
         $options = ['types' => $this->makeTypesOptions(), 'fetch' => Bdd::FETCH_EACH];
 
@@ -152,6 +152,7 @@ class Table
         }
 
         $current = 0;
+        $this->getBdd()->beginTransaction();
         while ($data = $r->next()) {
             $current++;
             if ($current == $count) {
@@ -165,6 +166,7 @@ class Table
                 $this->insert($data);
             }
         }
+        $this->getBdd()->commitTransaction();
 
         if (!$this->getBdd()->isInCopy()) {
             $this->getBdd()->logEnd();
@@ -173,6 +175,96 @@ class Table
         }
 
         return $this;
+    }
+
+
+
+    public function save(string $filename, ?callable $fnc = null)
+    {
+        $options = ['types' => $this->makeTypesOptions(), 'fetch' => Bdd::FETCH_EACH];
+
+        $count = (int)$this->getBdd()->select('SELECT count(*) C FROM ' . $this->getName(), [], ['fetch' => Bdd::FETCH_ONE])['C'];
+        $r     = $this->getBdd()->select('SELECT * FROM ' . $this->getName(), [], $options);
+
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logBegin("Sauvegarde de la table " . $this->getName());
+        }
+
+        if (file_exists($filename)) unlink($filename);
+        if ($count > 0) {
+            $buff = fopen($filename, 'w');
+            fwrite($buff, $count . "\n");
+        } else {
+            $buff = null;
+        }
+
+        $current = 0;
+        while ($data = $r->next()) {
+            $current++;
+            if ($current == $count) {
+                $this->getBdd()->logMsg("Sauvegarde de la table " . $this->getName() . " Terminée", true);
+            } else {
+                $val = round($current * 100 / $count, 2);
+                $this->getBdd()->logMsg("Sauvegarde de la table " . $this->getName() . " en cours (" . $val . "%)", true);
+            }
+            if (is_callable($fnc)) $data = $fnc($data);
+            if (null !== $data) {
+                fwrite($buff, serialize($data) . "{<{//#end}>}\n");
+            }
+        }
+
+        if ($buff) fclose($buff);
+
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logEnd();
+        } else {
+            $this->getBdd()->logMsg("\n", true);
+        }
+
+        return $this;
+    }
+
+
+
+    public function load(string $filename, ?callable $fnc = null)
+    {
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logBegin("Restauration de la table " . $this->getName());
+        }
+
+        $buff    = fopen($filename, 'r');
+        $count   = fgets($buff);
+        $count   = (int)trim($count);
+        $data    = '';
+        $current = 0;
+        $this->getBdd()->beginTransaction();
+        while (($d = fgets($buff)) !== false) {
+            if ($data != '') $data != "\n";
+            $data .= $d;
+            if (substr($d, -13) == "{<{//#end}>}\n") {
+                $line = unserialize(substr($data, 0, -12));
+                if (is_callable($fnc)) $line = $fnc($line);
+                $current++;
+                $val = round($current * 100 / $count, 2);
+                $this->getBdd()->logMsg("Restauration de la table " . $this->getName() . " en cours (" . $val . "%)", true);
+                if (null !== $line) {
+                    $this->insert($line);
+                }
+                $data = '';
+            }
+        }
+        $this->getBdd()->commitTransaction();
+
+
+        $this->getBdd()->logMsg("Restauration de la table " . $this->getName() . " Terminée", true);
+
+        fclose($buff);
+
+        if (!$this->getBdd()->isInCopy()) {
+            $this->getBdd()->logEnd();
+        } else {
+            $this->getBdd()->logMsg("\n", true);
+        }
     }
 
 
@@ -335,6 +427,7 @@ class Table
         }
 
         /* Traitement */
+        $this->getBdd()->beginTransaction();
         foreach ($diff as $dr) {
             $old = $dr['old'];
             $new = $dr['new'];
@@ -374,6 +467,7 @@ class Table
                 }
             }
         }
+        $this->getBdd()->commitTransaction();
 
         return $result;
     }

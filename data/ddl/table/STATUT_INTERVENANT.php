@@ -18,6 +18,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'CODE'                           => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_1'                => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_2'                => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_3'                => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_4'                => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'DEPASSEMENT'                    => [
@@ -84,6 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => [
@@ -95,6 +102,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'              => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'                 => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'           => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'              => [
@@ -139,6 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'          => [
@@ -150,6 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'             => [
@@ -161,6 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'ID'                             => [
@@ -172,6 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'LIBELLE'                        => [
@@ -183,6 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'MAXIMUM_HETD'                   => [
@@ -194,6 +210,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'NON_AUTORISE'                   => [
@@ -205,6 +222,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'ORDRE'                          => [
@@ -216,6 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'PEUT_AVOIR_CONTRAT'             => [
@@ -227,6 +246,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'PEUT_CHOISIR_DANS_DOSSIER'      => [
@@ -238,6 +258,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'PEUT_CLOTURER_SAISIE'           => [
@@ -249,6 +270,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_DOSSIER'            => [
@@ -260,6 +282,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_MOTIF_NON_PAIEMENT' => [
@@ -271,6 +294,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_REFERENTIEL'        => [
@@ -282,6 +306,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_SERVICE'            => [
@@ -293,6 +318,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_SERVICE_EXT'        => [
@@ -304,6 +330,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'PLAFOND_HC_FI_HORS_EAD'         => [
@@ -315,6 +342,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '9999',
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'PLAFOND_HC_HORS_REMU_FC'        => [
@@ -326,6 +354,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '9999',
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'PLAFOND_HC_REMU_FC'             => [
@@ -337,6 +366,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '13502',
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'PLAFOND_REFERENTIEL'            => [
@@ -348,6 +378,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'SERVICE_STATUTAIRE'             => [
@@ -359,6 +390,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'TEM_ATV'                        => [
@@ -370,6 +402,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 33,
             'commentaire' => NULL,
         ],
         'TEM_BIATSS'                     => [
@@ -381,6 +414,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 34,
             'commentaire' => NULL,
         ],
         'TITULAIRE'                      => [
@@ -392,6 +426,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 35,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [
@@ -403,6 +438,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 36,
             'commentaire' => NULL,
         ],
     ],

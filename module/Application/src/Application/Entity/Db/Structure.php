@@ -2,10 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectManagerAware;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use UnicaenApp\Service\EntityManagerAwareTrait;
+use Application\Entity\Traits\AdresseTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -16,11 +13,11 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware
+class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
-    use HistoriqueAwareTrait;
+    use AdresseTrait;
     use ImportAwareTrait;
-    use EntityManagerAwareTrait;
+    use HistoriqueAwareTrait;
 
     /**
      * @var string
@@ -181,6 +178,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     }
 
 
+
     /**
      * @return string
      */
@@ -202,6 +200,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
         return $this;
     }
+
 
 
     /**
@@ -392,43 +391,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getResourceId()
     {
         return 'Structure';
-    }
-
-
-
-    /**
-     * @return AdresseStructure|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getAdressePrincipale()
-    {
-        $dql = "
-        SELECT
-          a
-        FROM
-          Application\Entity\Db\AdresseStructure a
-        WHERE
-          a.structure = :structure
-          AND a.principale = true
-          AND a.histoDestruction IS NULL
-        ";
-
-        return $this->getEntityManager()->createQuery($dql)->setParameter('structure', $this)->getOneOrNullResult();
-    }
-
-
-
-    /**
-     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
-     *
-     * @param ObjectManager $objectManager
-     * @param ClassMetadata $classMetadata
-     *
-     * @return void
-     */
-    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
-    {
-        $this->setEntityManager($objectManager);
     }
 
 

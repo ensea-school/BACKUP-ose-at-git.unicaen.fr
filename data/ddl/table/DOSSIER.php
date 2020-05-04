@@ -18,6 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'CIVILITE_ID'                 => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'DATE_NAISSANCE'              => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'DEPT_NAISSANCE_ID'           => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'EMAIL'                       => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'EMAIL_PERSO'                 => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'           => [
@@ -84,6 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'              => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'        => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'           => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'       => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'          => [
@@ -139,6 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'ID'                          => [
@@ -150,6 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'              => [
@@ -161,6 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'NOM_PATRONYMIQUE'            => [
@@ -172,6 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'NOM_USUEL'                   => [
@@ -183,6 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'NUMERO_INSEE'                => [
@@ -194,6 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'NUMERO_INSEE_EST_PROVISOIRE' => [
@@ -205,6 +222,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'PAYS_NAISSANCE_ID'           => [
@@ -216,6 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'PERTE_EMPLOI'                => [
@@ -227,6 +246,7 @@ return [
             'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'PREMIER_RECRUTEMENT'         => [
@@ -238,6 +258,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'PRENOM'                      => [
@@ -249,6 +270,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'RIB'                         => [
@@ -260,6 +282,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'RIB_HORS_SEPA'               => [
@@ -271,6 +294,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'STATUT_ID'                   => [
@@ -282,6 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'TELEPHONE'                   => [
@@ -293,6 +318,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'VILLE_NAISSANCE'             => [
@@ -304,6 +330,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
     ],

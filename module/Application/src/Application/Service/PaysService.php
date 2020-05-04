@@ -12,6 +12,11 @@ use UnicaenApp\Util;
  */
 class PaysService extends AbstractEntityService
 {
+    CONST PAYS_FRANCE  = 'france';
+    CONST PAYS_ALGERIE = 'algerie';
+    CONST PAYS_MAROC   = 'maroc';
+    CONST PAYS_TUNISIE = 'tunisie';
+
     use ParametresServiceAwareTrait;
 
     /**
@@ -51,7 +56,7 @@ class PaysService extends AbstractEntityService
     public function getIdByLibelle(string $libelle)
     {
         if (!isset($this->idsByLibelle[$libelle])) {
-            $sql = 'SELECT ID FROM PAYS WHERE OSE_DIVERS.str_reduce(LIBELLE) = :pays AND HISTO_DESTRUCTION IS NULL';
+            $sql = 'SELECT ID FROM PAYS WHERE OSE_DIVERS.str_reduce(LIBELLE_COURT) = :pays AND HISTO_DESTRUCTION IS NULL';
 
             $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
 
@@ -63,6 +68,53 @@ class PaysService extends AbstractEntityService
         }
 
         return $this->idsByLibelle[$libelle];
+    }
+
+
+    /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isFrance(Pays $pays): bool
+    {
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_FRANCE);
+    }
+
+
+
+    /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isAlgerie(Pays $pays): bool
+    {
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_ALGERIE);
+    }
+
+
+
+    /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isMaroc(Pays $pays): bool
+    {
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_MAROC);
+    }
+
+
+
+    /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isTunisie(Pays $pays): bool
+    {
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_TUNISIE);
     }
 
 

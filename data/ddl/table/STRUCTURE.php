@@ -9,8 +9,8 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'STRUCTURE_ID_SEQ',
     'columns'     => [
-        'ADDR_CODE_POSTAL'      => [
-            'name'        => 'ADDR_CODE_POSTAL',
+        'ADRESSE_CODE_POSTAL'     => [
+            'name'        => 'ADRESSE_CODE_POSTAL',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 15,
@@ -18,10 +18,11 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
-        'ADDR_COMMUNE'          => [
-            'name'        => 'ADDR_COMMUNE',
+        'ADRESSE_COMMUNE'         => [
+            'name'        => 'ADRESSE_COMMUNE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 50,
@@ -29,10 +30,11 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
-        'ADDR_LIEU_DIT'         => [
-            'name'        => 'ADDR_LIEU_DIT',
+        'ADRESSE_LIEU_DIT'        => [
+            'name'        => 'ADRESSE_LIEU_DIT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 60,
@@ -40,10 +42,11 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ADDR_NUMERO'           => [
-            'name'        => 'ADDR_NUMERO',
+        'ADRESSE_NUMERO'          => [
+            'name'        => 'ADRESSE_NUMERO',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 4,
@@ -51,21 +54,23 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
-        'ADDR_NUMERO_COMPL'     => [
-            'name'        => 'ADDR_NUMERO_COMPL',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 1,
+        'ADRESSE_NUMERO_COMPL_ID' => [
+            'name'        => 'ADRESSE_NUMERO_COMPL_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
-        'ADDR_PAYS_ID'          => [
-            'name'        => 'ADDR_PAYS_ID',
+        'ADRESSE_PAYS_ID'         => [
+            'name'        => 'ADRESSE_PAYS_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -73,21 +78,23 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
-        'ADDR_PRECISIONS'       => [
-            'name'        => 'ADDR_PRECISIONS',
+        'ADRESSE_PRECISIONS'      => [
+            'name'        => 'ADRESSE_PRECISIONS',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 120,
+            'length'      => 240,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
-        'ADDR_VOIE'             => [
-            'name'        => 'ADDR_VOIE',
+        'ADRESSE_VOIE'            => [
+            'name'        => 'ADRESSE_VOIE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 60,
@@ -95,10 +102,11 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
-        'ADDR_VOIRIE_ID'        => [
-            'name'        => 'ADDR_VOIRIE_ID',
+        'ADRESSE_VOIRIE_ID'       => [
+            'name'        => 'ADRESSE_VOIRIE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -106,9 +114,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
-        'AFF_ADRESSE_CONTRAT'   => [
+        'AFF_ADRESSE_CONTRAT'     => [
             'name'        => 'AFF_ADRESSE_CONTRAT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -117,9 +126,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 10,
             'commentaire' => NULL,
         ],
-        'CODE'                  => [
+        'CODE'                    => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -128,9 +138,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
-        'ENSEIGNEMENT'          => [
+        'ENSEIGNEMENT'            => [
             'name'        => 'ENSEIGNEMENT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -139,9 +150,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 12,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'     => [
+        'HISTO_CREATEUR_ID'       => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -150,9 +162,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'        => [
+        'HISTO_CREATION'          => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -161,9 +174,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 14,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'  => [
+        'HISTO_DESTRUCTEUR_ID'    => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -172,9 +186,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'     => [
+        'HISTO_DESTRUCTION'       => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -183,9 +198,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID' => [
+        'HISTO_MODIFICATEUR_ID'   => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -194,9 +210,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'    => [
+        'HISTO_MODIFICATION'      => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -205,9 +222,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
+            'position'    => 18,
             'commentaire' => NULL,
         ],
-        'ID'                    => [
+        'ID'                      => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -216,9 +234,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
-        'LIBELLE_COURT'         => [
+        'LIBELLE_COURT'           => [
             'name'        => 'LIBELLE_COURT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -227,9 +246,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
-        'LIBELLE_LONG'          => [
+        'LIBELLE_LONG'            => [
             'name'        => 'LIBELLE_LONG',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -238,9 +258,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
-        'PLAFOND_REFERENTIEL'   => [
+        'PLAFOND_REFERENTIEL'     => [
             'name'        => 'PLAFOND_REFERENTIEL',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -249,9 +270,10 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
-        'SOURCE_CODE'           => [
+        'SOURCE_CODE'             => [
             'name'        => 'SOURCE_CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -260,9 +282,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
-        'SOURCE_ID'             => [
+        'SOURCE_ID'               => [
             'name'        => 'SOURCE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -271,6 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
     ],

@@ -126,6 +126,34 @@ class PieceJointeService extends AbstractEntityService
     }
 
 
+    /**
+     * @param Intervenant $intervenant
+     *
+     * @return mixed $result
+     */
+    public function getPiecesSynthese(Intervenant $intervenant)
+    {
+        $dql = "
+            SELECT 
+              pj
+            FROM 
+              Application\Entity\Db\TblPieceJointe pj
+            WHERE
+              pj.intervenant = :intervenant
+        ";
+
+        $listTblPieceJointe = $this->getEntityManager()->createQuery($dql)->setParameters([
+            'intervenant' => $intervenant->getId(),
+        ])->getResult();
+
+        $result = [];
+        foreach ($listTblPieceJointe as $TblPieceJointe) {
+            $result[$TblPieceJointe->getTypePieceJointe()->getId()] = $TblPieceJointe;
+        }
+
+        return $result;
+    }
+
 
     /**
      * @param Intervenant $intervenant
@@ -144,18 +172,32 @@ class PieceJointeService extends AbstractEntityService
           LEFT JOIN pjf.validation v
           LEFT JOIN pjf.fichier f
         WHERE
-          pjf.intervenant = :intervenant
-        ";
+          pjf.codeIntervenant = :intervenant
+        AND
+          pjf.dateValidite > :annee 
+        AND 
+            pjf.annee <= :annee
+        AND 
+            (pjf.dateArchive IS NULL OR pjf.dateArchive > :annee)  
+        ORDER BY pjf.annee DESC";
+
         $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
-            'intervenant' => $intervenant,
+            'intervenant' => $intervenant->getCode(),
+            'annee'       => $intervenant->getAnnee()->getId(),
         ])->getResult();
+
 
         /* @var $lpjf \Application\Entity\Db\TblPieceJointeFournie[] */
 
         $result = [];
         foreach ($lpjf as $pjf) {
             $pj                              = $pjf->getPieceJointe();
-            $result[$pj->getType()->getId()] = $pj;
+            $pj->annee = $pjf->getAnnee();
+            //Gérer les cas où plusieurs PJ sont éligible mais sans date d'archive, on prend la première uniquement.
+            if(!array_key_exists($pj->getType()->getId(), $result))
+            {
+                $result[$pj->getType()->getId()] = $pj;
+            }
         }
 
         return $result;
@@ -189,6 +231,17 @@ class PieceJointeService extends AbstractEntityService
         $this->getEntityManager()->flush();
 
         return $validation;
+    }
+
+    public function archiver(PieceJointe $pj)
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+        $pj->setDateArchive($annee);
+        $this->getEntityManager()->persist($pj);
+        $this->getEntityManager()->flush();
+
+        return $pj;
+
     }
 
 

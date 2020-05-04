@@ -58,6 +58,8 @@ echo $this->form()->openTag($form); ?>
                         <?= $this->formControlGroup($form->get('TEM-BIATSS')); ?>
                     </div>
                 </div>
+
+
                 <div class="row temoins">
                     <?= $this->formControlGroup($form->get('non-autorise')); ?>
                     <?= $this->formControlGroup($form->get('depassement')); ?>
@@ -71,7 +73,36 @@ echo $this->form()->openTag($form); ?>
                     <?= $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
                     <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
                     <br/>
-                    <?= $this->formControlGroup($form->get('security')); ?>
+                </div>
+
+                <div class="row temoins">
+                    <fieldset>
+                        <legend style="font-size: 14px;font-weight: 700;">Gestion des agréments pour le statut : </legend>
+                        <table class="table table-bordered">
+                            <thead >
+                                <th></th>
+                                <th>Activé</th>
+                                <th>Valable pendant</th>
+                            </thead>
+                            <tbody>
+                            <?php foreach($form->getElements() as $element):  ?>
+                                <?php if(preg_match('#^CONSEIL[A-Z_]+\b(?!-DUREE_VIE)#', $element->getName())): ?>
+
+                                    <tr>
+                                        <td><?= $this->formLabel($form->get($element->getName())); ?></td>
+                                        <td><?= $this->formRadio($form->get($element->getName())); ?></td>
+                                        <td><?= $this->formControlGroup($form->get($element->getName() . '-DUREE_VIE')); ?></td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php endforeach;?>
+                            </tbody>
+                        </table>
+                    </fieldset>
+
+                </div>
+
+                <div class="row">
+                    <?= $this->formElement($form->get('security')); ?>
                     <?php if ($canEdit) echo $this->formSubmit($form->get('submit')); ?>
                     <?php if (($canEdit) && ($form->get('id')->getValue())) { ?>
                         <a class="pop-ajax btn btn-danger" data-event="statut-intervenant-clone"

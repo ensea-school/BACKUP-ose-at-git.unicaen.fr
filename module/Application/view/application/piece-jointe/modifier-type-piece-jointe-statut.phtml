@@ -20,11 +20,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 ?>
 
-    <div class="row">
-        <div class="col-md-12">
-            <?= $this->formControlGroup($form->get('premier-recrutement')); ?>
-        </div>
-    </div>
+
     <div class="row">
         <div class="col-md-12">
             <?= $this->formControlGroup($form->get('typePieceJointe')); ?>
@@ -49,6 +45,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         </div>
         <div class=col-md-4>
             <?= $this->formControlGroup($form->get('annee-fin')); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $this->formControlGroup($form->get('duree-vie')); ?>
         </div>
     </div>
 

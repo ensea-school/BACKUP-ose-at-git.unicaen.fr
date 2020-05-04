@@ -99,7 +99,7 @@ $od->writeVersion($osedir, $version);
 
 // Récupération de Composer
 $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
-$c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
+$c->passthru("cd $osedir;wget https://getcomposer.org/composer-stable.phar; mv composer-stable.phar composer.phar");
 
 // Récupération des dépendances
 $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);

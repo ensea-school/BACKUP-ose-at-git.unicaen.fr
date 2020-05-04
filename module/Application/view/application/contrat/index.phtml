@@ -96,7 +96,7 @@ if ($services['non-contractualises']) {
     <h2>Contrats et avenants</h2>
     <?php foreach ($contrats as $contrat): ?>
 
-        <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()]]) ?>
+        <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant]) ?>
 
     <?php endforeach; ?>
     </div>

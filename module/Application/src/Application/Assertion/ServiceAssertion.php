@@ -13,6 +13,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
@@ -30,6 +31,7 @@ class ServiceAssertion extends AbstractAssertion
     use ContextServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;
     use ValidationServiceAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
 
 
 
@@ -178,9 +180,29 @@ class ServiceAssertion extends AbstractAssertion
                 return $this->assertImportAgenda($role);
 
             break;
+            case 'Application\Controller\Intervenant.services':
+                return $this->assertPageServices($role, $intervenant);
         }
 
         return true;
+    }
+
+
+
+    protected function assertPageServices(Role $role, Intervenant $intervenant = null)
+    {
+        if (!$intervenant) return true;
+
+        $typeVolumehoraireCode = $this->getMvcEvent()->getRouteMatch()->getParam('type-volume-horaire-code');
+        if (!$typeVolumehoraireCode) return true;
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumehoraireCode);
+
+        $wfEtape = $this->getWorkflowEtape($typeVolumeHoraire, 'saisie');
+
+        return $this->asserts([
+            $this->assertIntervenant($role, $intervenant),
+            $this->assertEtapeAtteignable($wfEtape, $intervenant),
+        ]);
     }
 
 

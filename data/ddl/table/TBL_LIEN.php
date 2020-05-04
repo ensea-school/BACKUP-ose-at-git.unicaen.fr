@@ -18,6 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 1,
             'commentaire' => 'Témoin (0 ou 1), 1 si actif',
         ],
         'CHOIX_MAXIMUM'    => [
@@ -29,6 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 2,
             'commentaire' => 'Choix maximum',
         ],
         'CHOIX_MINIMUM'    => [
@@ -40,6 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 3,
             'commentaire' => 'Choix minimum',
         ],
         'ID'               => [
@@ -51,6 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'LIEN_ID'          => [
@@ -62,6 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'MAX_POIDS'        => [
@@ -73,6 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 6,
             'commentaire' => 'Poids maximum pour les fils',
         ],
         'NB_CHOIX'         => [
@@ -84,6 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 7,
             'commentaire' => 'Nombre de choix',
         ],
         'NOEUD_INF_ID'     => [
@@ -95,6 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'NOEUD_SUP_ID'     => [
@@ -106,6 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'POIDS'            => [
@@ -117,6 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 10,
             'commentaire' => 'Poids (1 par défaut)',
         ],
         'SCENARIO_ID'      => [
@@ -128,6 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'SCENARIO_LIEN_ID' => [
@@ -139,6 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'     => [
@@ -150,6 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'TOTAL_POIDS'      => [
@@ -161,6 +174,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
+            'position'    => 14,
             'commentaire' => 'Total de poids des fils',
         ],
         'TO_DELETE'        => [
@@ -172,6 +186,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
+            'position'    => 15,
             'commentaire' => NULL,
         ],
     ],

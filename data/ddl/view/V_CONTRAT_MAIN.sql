@@ -62,9 +62,18 @@ FROM
     civ.libelle_court                                                                             "civilite",
     CASE WHEN civ.sexe = 'F' THEN 'e' ELSE '' END                                                 "e",
     to_char(COALESCE(d.date_naissance,i.date_naissance), 'dd/mm/YYYY')                            "dateNaissance",
-    COALESCE(d.adresse,ose_divers.formatted_adresse(
-        ai.NO_VOIE, ai.NOM_VOIE, ai.BATIMENT, ai.MENTION_COMPLEMENTAIRE, ai.LOCALITE,
-        ai.CODE_POSTAL, ai.VILLE, ai.PAYS_LIBELLE))                 "adresse",
+    COALESCE(
+    ose_divers.formatted_adresse(
+        d.adresse_precisions, d.adresse_lieu_dit,
+        d.adresse_numero, d.adresse_numero_compl_id, d.adresse_voirie_id, d.adresse_voie,
+        d.adresse_code_postal, d.adresse_commune, d.adresse_pays_id
+      ),
+      ose_divers.formatted_adresse(
+        i.adresse_precisions, i.adresse_lieu_dit,
+        i.adresse_numero, i.adresse_numero_compl_id, i.adresse_voirie_id, i.adresse_voie,
+        i.adresse_code_postal, i.adresse_commune, i.adresse_pays_id
+      )
+    ) "adresse",
     COALESCE(d.numero_insee,i.numero_insee)                                                       "numInsee",
     si.libelle                                                                                    "statut",
     replace(ltrim(to_char(COALESCE(fr.total,0), '999999.00')),'.',',')                            "totalHETD",
@@ -75,8 +84,10 @@ FROM
     CASE WHEN s.aff_adresse_contrat = 1 THEN
       ' signé à l''adresse suivante :' || CHR(13) || CHR(10) ||
       s.libelle_court || ' - ' || REPLACE(ose_divers.formatted_adresse(
-        astr.NO_VOIE, astr.NOM_VOIE, null, null, astr.LOCALITE,
-        astr.CODE_POSTAL, astr.VILLE, null), CHR(13), ' - ')
+        s.adresse_precisions, s.adresse_lieu_dit,
+        s.adresse_numero, s.adresse_numero_compl_id, s.adresse_voirie_id, s.adresse_voie,
+        s.adresse_code_postal, s.adresse_commune, s.adresse_pays_id
+      ), CHR(13), ' - ')
     ELSE '' END                                                                                   "exemplaire2",
     replace(ltrim(to_char(COALESCE(hs."serviceTotal",0), '999999.00')),'.',',')                   "serviceTotal",
     CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                              est_contrat,
@@ -90,12 +101,9 @@ FROM
          JOIN annee                 a ON a.id = i.annee_id
          JOIN statut_intervenant   si ON si.id = i.statut_id
          JOIN structure             s ON s.id = c.structure_id
-    LEFT JOIN adresse_structure  astr ON astr.structure_id = s.id AND astr.principale = 1 AND astr.histo_destruction IS NULL
-    LEFT JOIN dossier               d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
+    LEFT JOIN intervenant_dossier   d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
          JOIN civilite            civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
     LEFT JOIN validation            v ON v.id = c.validation_id AND v.histo_destruction IS NULL
-    LEFT JOIN adresse_intervenant  ai ON ai.intervenant_id = i.id AND ai.histo_destruction IS NULL
-
          JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
          JOIN etat_volume_horaire evh ON evh.code = 'valide'
     LEFT JOIN formule_resultat     fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id

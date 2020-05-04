@@ -1503,1991 +1503,2001 @@ return [
         [
             "LIBELLE_LONG" => "VICE-RECTEUR",
             "LIBELLE_COURT" => "VICE-RECTEUR",
-            "SOURCE_CODE" => "090",
-        ],
+            "SOURCE_CODE" => "090"
+        ]
     ],
     "PAYS" => [
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "319",
-            "CODE" => "319",
-            "LIBELLE" => "ACORES,MADERE",
+            "SOURCE_CODE" => "319"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "212",
-            "CODE" => "212",
-            "LIBELLE" => "AFGHANISTAN",
+            "SOURCE_CODE" => "212"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "303",
-            "CODE" => "303",
-            "LIBELLE" => "AFRIQUE DU SUD",
+            "SOURCE_CODE" => "303"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ALA",
-            "CODE" => "ALA",
-            "LIBELLE" => "ALAND, ILES",
+            "SOURCE_CODE" => "ALA"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "125",
-            "CODE" => "125",
-            "LIBELLE" => "ALBANIE",
+            "SOURCE_CODE" => "125"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "352",
-            "CODE" => "352",
-            "LIBELLE" => "ALGERIE",
+            "SOURCE_CODE" => "352"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1990-10-04",
-            "SOURCE_CODE" => "109",
-            "CODE" => "109",
-            "LIBELLE" => "ALLEMAGNE",
+            "SOURCE_CODE" => "109"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "130",
-            "CODE" => "130",
-            "LIBELLE" => "ANDORRE",
+            "SOURCE_CODE" => "130"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "395",
-            "CODE" => "395",
-            "LIBELLE" => "ANGOLA",
+            "SOURCE_CODE" => "395"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "AIA",
-            "CODE" => "AIA",
-            "LIBELLE" => "ANGUILLA",
+            "SOURCE_CODE" => "AIA"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ATA",
-            "CODE" => "ATA",
-            "LIBELLE" => "ANTARCTIQUE",
+            "SOURCE_CODE" => "ATA"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1981-01-01",
-            "SOURCE_CODE" => "441",
-            "CODE" => "441",
-            "LIBELLE" => "ANTIGUA-ET-BARBUDA",
+            "SOURCE_CODE" => "441"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "201",
-            "CODE" => "201",
-            "LIBELLE" => "ARABIE SAOUDITE",
+            "SOURCE_CODE" => "201"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "415",
-            "CODE" => "415",
-            "LIBELLE" => "ARGENTINE",
+            "SOURCE_CODE" => "415"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "252",
-            "CODE" => "252",
-            "LIBELLE" => "ARMENIE",
+            "SOURCE_CODE" => "252"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "146",
-            "CODE" => "146",
-            "LIBELLE" => "ARMENIE",
+            "SOURCE_CODE" => "146"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ABW",
-            "CODE" => "ABW",
-            "LIBELLE" => "ARUBA",
+            "SOURCE_CODE" => "ABW"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "501",
-            "CODE" => "501",
-            "LIBELLE" => "AUSTRALIE",
+            "SOURCE_CODE" => "501"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "990",
-            "CODE" => "990",
-            "LIBELLE" => "AUTRES PAYS",
+            "SOURCE_CODE" => "990"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "110",
-            "CODE" => "110",
-            "LIBELLE" => "AUTRICHE",
+            "SOURCE_CODE" => "110"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "147",
-            "CODE" => "147",
-            "LIBELLE" => "AZERBAIDJAN",
+            "SOURCE_CODE" => "147"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "253",
-            "CODE" => "253",
-            "LIBELLE" => "AZERBAIDJAN",
+            "SOURCE_CODE" => "253"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1973-01-01",
-            "SOURCE_CODE" => "436",
-            "CODE" => "436",
-            "LIBELLE" => "BAHAMAS",
+            "SOURCE_CODE" => "436"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "249",
-            "CODE" => "249",
-            "LIBELLE" => "BAHREIN",
+            "SOURCE_CODE" => "249"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "246",
-            "CODE" => "246",
-            "LIBELLE" => "BANGLADESH",
+            "SOURCE_CODE" => "246"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1966-01-01",
-            "SOURCE_CODE" => "434",
-            "CODE" => "434",
-            "LIBELLE" => "BARBADE",
+            "SOURCE_CODE" => "434"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "131",
-            "CODE" => "131",
-            "LIBELLE" => "BELGIQUE",
+            "SOURCE_CODE" => "131"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "429",
-            "CODE" => "429",
-            "LIBELLE" => "BELIZE",
+            "SOURCE_CODE" => "429"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "327",
-            "CODE" => "327",
-            "LIBELLE" => "BENIN",
+            "SOURCE_CODE" => "327"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "BMU",
-            "CODE" => "BMU",
-            "LIBELLE" => "BERMUDES",
+            "SOURCE_CODE" => "BMU"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "214",
-            "CODE" => "214",
-            "LIBELLE" => "BHOUTAN",
+            "SOURCE_CODE" => "214"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "148",
-            "CODE" => "148",
-            "LIBELLE" => "BIELORUSSIE",
+            "SOURCE_CODE" => "148"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "418",
-            "CODE" => "418",
-            "LIBELLE" => "BOLIVIE",
+            "SOURCE_CODE" => "418"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2010-10-10",
-            "SOURCE_CODE" => "443",
-            "CODE" => "443",
-            "LIBELLE" => "BONAIRE,ST EUSTACHE,SABA",
+            "SOURCE_CODE" => "443"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "118",
-            "CODE" => "118",
-            "LIBELLE" => "BOSNIE-HERZEGOVINE",
+            "SOURCE_CODE" => "118"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "347",
-            "CODE" => "347",
-            "LIBELLE" => "BOTSWANA",
+            "SOURCE_CODE" => "347"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "BVT",
-            "CODE" => "BVT",
-            "LIBELLE" => "BOUVET, ILE",
+            "SOURCE_CODE" => "BVT"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "416",
-            "CODE" => "416",
-            "LIBELLE" => "BRESIL",
+            "SOURCE_CODE" => "416"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "225",
-            "CODE" => "225",
-            "LIBELLE" => "BRUNEI",
+            "SOURCE_CODE" => "225"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "111",
-            "CODE" => "111",
-            "LIBELLE" => "BULGARIE",
+            "SOURCE_CODE" => "111"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "331",
-            "CODE" => "331",
-            "LIBELLE" => "BURKINA",
+            "SOURCE_CODE" => "331"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "321",
-            "CODE" => "321",
-            "LIBELLE" => "BURUNDI",
+            "SOURCE_CODE" => "321"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "CYM",
-            "CODE" => "CYM",
-            "LIBELLE" => "CAIMANES, ILES",
+            "SOURCE_CODE" => "CYM"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "234",
-            "CODE" => "234",
-            "LIBELLE" => "CAMBODGE",
+            "SOURCE_CODE" => "234"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "322",
-            "CODE" => "322",
-            "LIBELLE" => "CAMEROUN",
+            "SOURCE_CODE" => "322"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1960-01-01",
-            "SOURCE_CODE" => "305",
-            "CODE" => "305",
-            "LIBELLE" => "CAMEROUN ET TOGO",
+            "SOURCE_CODE" => "305"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "401",
-            "CODE" => "401",
-            "LIBELLE" => "CANADA",
+            "SOURCE_CODE" => "401"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "396",
-            "CODE" => "396",
-            "LIBELLE" => "CAP-VERT",
+            "SOURCE_CODE" => "396"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "323",
-            "CODE" => "323",
-            "LIBELLE" => "CENTRAFRICAINE (REPUBLIQUE)",
+            "SOURCE_CODE" => "323"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "417",
-            "CODE" => "417",
-            "LIBELLE" => "CHILI",
+            "SOURCE_CODE" => "417"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "216",
-            "CODE" => "216",
-            "LIBELLE" => "CHINE",
+            "SOURCE_CODE" => "216"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "CXR",
-            "CODE" => "CXR",
-            "LIBELLE" => "CHRISTMAS, ILE",
+            "SOURCE_CODE" => "CXR"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1996-03-31",
             "VALIDITE_FIN" => "1996-08-31",
-            "SOURCE_CODE" => "143",
-            "CODE" => "143",
-            "LIBELLE" => "CHYPRE",
+            "SOURCE_CODE" => "143"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "254",
-            "CODE" => "254",
-            "LIBELLE" => "CHYPRE",
+            "SOURCE_CODE" => "254"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "CCK",
-            "CODE" => "CCK",
-            "LIBELLE" => "COCOS (KEELING), ILES",
+            "SOURCE_CODE" => "CCK"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "419",
-            "CODE" => "419",
-            "LIBELLE" => "COLOMBIE",
+            "SOURCE_CODE" => "419"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "397",
-            "CODE" => "397",
-            "LIBELLE" => "COMORES",
+            "SOURCE_CODE" => "397"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "324",
-            "CODE" => "324",
-            "LIBELLE" => "CONGO",
+            "SOURCE_CODE" => "324"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "312",
-            "CODE" => "312",
-            "LIBELLE" => "CONGO, REPUB. DEMOCRATIQUE DU /EX ZAIRE",
+            "SOURCE_CODE" => "312"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "COK",
-            "CODE" => "COK",
-            "LIBELLE" => "COOK, ILES",
+            "SOURCE_CODE" => "COK"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "237",
-            "CODE" => "237",
-            "LIBELLE" => "COREE",
+            "SOURCE_CODE" => "237"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "239",
-            "CODE" => "239",
-            "LIBELLE" => "COREE (REPUBLIQUE DE)",
+            "SOURCE_CODE" => "239"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "238",
-            "CODE" => "238",
-            "LIBELLE" => "COREE (REPUBLIQUE POPULAIRE DEMOCRATIQUE",
+            "SOURCE_CODE" => "238"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "406",
-            "CODE" => "406",
-            "LIBELLE" => "COSTA RICA",
+            "SOURCE_CODE" => "406"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "326",
-            "CODE" => "326",
-            "LIBELLE" => "COTE D'IVOIRE",
+            "SOURCE_CODE" => "326"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "119",
-            "CODE" => "119",
-            "LIBELLE" => "CROATIE",
+            "SOURCE_CODE" => "119"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "407",
-            "CODE" => "407",
-            "LIBELLE" => "CUBA",
+            "SOURCE_CODE" => "407"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2010-10-10",
-            "SOURCE_CODE" => "444",
-            "CODE" => "444",
-            "LIBELLE" => "CURACAO",
+            "SOURCE_CODE" => "444"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "101",
-            "CODE" => "101",
-            "LIBELLE" => "DANEMARK",
+            "SOURCE_CODE" => "101"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "399",
-            "CODE" => "399",
-            "LIBELLE" => "DJIBOUTI",
+            "SOURCE_CODE" => "399"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1978-01-01",
-            "SOURCE_CODE" => "438",
-            "CODE" => "438",
-            "LIBELLE" => "DOMINIQUE",
+            "SOURCE_CODE" => "438"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "301",
-            "CODE" => "301",
-            "LIBELLE" => "EGYPTE",
+            "SOURCE_CODE" => "301"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "414",
-            "CODE" => "414",
-            "LIBELLE" => "EL SALVADOR",
+            "SOURCE_CODE" => "414"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "247",
-            "CODE" => "247",
-            "LIBELLE" => "EMIRATS ARABES UNIS",
+            "SOURCE_CODE" => "247"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "420",
-            "CODE" => "420",
-            "LIBELLE" => "EQUATEUR",
+            "SOURCE_CODE" => "420"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "317",
-            "CODE" => "317",
-            "LIBELLE" => "ERYTHREE",
+            "SOURCE_CODE" => "317"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "134",
-            "CODE" => "134",
-            "LIBELLE" => "ESPAGNE",
+            "SOURCE_CODE" => "134"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "106",
-            "CODE" => "106",
-            "LIBELLE" => "ESTONIE",
+            "SOURCE_CODE" => "106"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "228",
-            "CODE" => "228",
-            "LIBELLE" => "ETATS MALAIS NON FEDERES",
+            "SOURCE_CODE" => "228"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "404",
-            "CODE" => "404",
-            "LIBELLE" => "ETATS-UNIS",
+            "SOURCE_CODE" => "404"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "315",
-            "CODE" => "315",
-            "LIBELLE" => "ETHIOPIE",
+            "SOURCE_CODE" => "315"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "FLK",
-            "CODE" => "FLK",
-            "LIBELLE" => "FALKLAND, ILES (MALVINAS)",
+            "SOURCE_CODE" => "FLK"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "FRO",
-            "CODE" => "FRO",
-            "LIBELLE" => "FEROE, ILES",
+            "SOURCE_CODE" => "FRO"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1970-01-01",
-            "SOURCE_CODE" => "508",
-            "CODE" => "508",
-            "LIBELLE" => "FIDJI",
+            "SOURCE_CODE" => "508"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "105",
-            "CODE" => "105",
-            "LIBELLE" => "FINLANDE",
+            "SOURCE_CODE" => "105"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "100",
-            "CODE" => "100",
-            "LIBELLE" => "FRANCE",
+            "SOURCE_CODE" => "100"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "328",
-            "CODE" => "328",
-            "LIBELLE" => "GABON",
+            "SOURCE_CODE" => "328"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "304",
-            "CODE" => "304",
-            "LIBELLE" => "GAMBIE",
+            "SOURCE_CODE" => "304"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "255",
-            "CODE" => "255",
-            "LIBELLE" => "GEORGIE",
+            "SOURCE_CODE" => "255"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "SGS",
-            "CODE" => "SGS",
-            "LIBELLE" => "GEORGIE DU SUD ET ILES SANDWICH DU SUD",
+            "SOURCE_CODE" => "SGS"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "329",
-            "CODE" => "329",
-            "LIBELLE" => "GHANA",
+            "SOURCE_CODE" => "329"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "133",
-            "CODE" => "133",
-            "LIBELLE" => "GIBRALTAR",
+            "SOURCE_CODE" => "133"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "126",
-            "CODE" => "126",
-            "LIBELLE" => "GRECE",
+            "SOURCE_CODE" => "126"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1974-01-01",
-            "SOURCE_CODE" => "435",
-            "CODE" => "435",
-            "LIBELLE" => "GRENADE",
+            "SOURCE_CODE" => "435"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "430",
-            "CODE" => "430",
-            "LIBELLE" => "GROENLAND",
+            "SOURCE_CODE" => "430"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "GUM",
-            "CODE" => "GUM",
-            "LIBELLE" => "GUAM",
+            "SOURCE_CODE" => "GUM"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "409",
-            "CODE" => "409",
-            "LIBELLE" => "GUATEMALA",
+            "SOURCE_CODE" => "409"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "GGY",
-            "CODE" => "GGY",
-            "LIBELLE" => "GUERNESEY",
+            "SOURCE_CODE" => "GGY"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "330",
-            "CODE" => "330",
-            "LIBELLE" => "GUINEE",
+            "SOURCE_CODE" => "330"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "314",
-            "CODE" => "314",
-            "LIBELLE" => "GUINEE EQUATORIALE",
+            "SOURCE_CODE" => "314"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "392",
-            "CODE" => "392",
-            "LIBELLE" => "GUINEE-BISSAU",
+            "SOURCE_CODE" => "392"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "428",
-            "CODE" => "428",
-            "LIBELLE" => "GUYANA",
+            "SOURCE_CODE" => "428"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "410",
-            "CODE" => "410",
-            "LIBELLE" => "HAITI",
+            "SOURCE_CODE" => "410"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "504",
-            "CODE" => "504",
-            "LIBELLE" => "HAWAII (ILES)",
+            "SOURCE_CODE" => "504"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "HMD",
-            "CODE" => "HMD",
-            "LIBELLE" => "HEARD, ET ILES MCDONALD, ILES",
+            "SOURCE_CODE" => "HMD"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "411",
-            "CODE" => "411",
-            "LIBELLE" => "HONDURAS",
+            "SOURCE_CODE" => "411"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1997-07-01",
-            "SOURCE_CODE" => "230",
-            "CODE" => "230",
-            "LIBELLE" => "HONG-KONG",
+            "SOURCE_CODE" => "230"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "112",
-            "CODE" => "112",
-            "LIBELLE" => "HONGRIE",
+            "SOURCE_CODE" => "112"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "IMN",
-            "CODE" => "IMN",
-            "LIBELLE" => "ILE DE MAN",
+            "SOURCE_CODE" => "IMN"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "320",
-            "CODE" => "320",
-            "LIBELLE" => "ILES PORTUGAISES DE L'OCEAN INDIEN",
+            "SOURCE_CODE" => "320"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "VGB",
-            "CODE" => "VGB",
-            "LIBELLE" => "ILES VIERGES BRITANNIQUES",
+            "SOURCE_CODE" => "VGB"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "VIR",
-            "CODE" => "VIR",
-            "LIBELLE" => "ILES VIERGES DES ETATS-UNIS",
+            "SOURCE_CODE" => "VIR"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "223",
-            "CODE" => "223",
-            "LIBELLE" => "INDE",
+            "SOURCE_CODE" => "223"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "231",
-            "CODE" => "231",
-            "LIBELLE" => "INDONESIE",
+            "SOURCE_CODE" => "231"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "204",
-            "CODE" => "204",
-            "LIBELLE" => "IRAN",
+            "SOURCE_CODE" => "204"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "203",
-            "CODE" => "203",
-            "LIBELLE" => "IRAQ",
+            "SOURCE_CODE" => "203"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "136",
-            "CODE" => "136",
-            "LIBELLE" => "IRLANDE, ou EIRE",
+            "SOURCE_CODE" => "136"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "102",
-            "CODE" => "102",
-            "LIBELLE" => "ISLANDE",
+            "SOURCE_CODE" => "102"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "207",
-            "CODE" => "207",
-            "LIBELLE" => "ISRAEL",
+            "SOURCE_CODE" => "207"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "127",
-            "CODE" => "127",
-            "LIBELLE" => "ITALIE",
+            "SOURCE_CODE" => "127"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "426",
-            "CODE" => "426",
-            "LIBELLE" => "JAMAIQUE",
+            "SOURCE_CODE" => "426"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "217",
-            "CODE" => "217",
-            "LIBELLE" => "JAPON",
+            "SOURCE_CODE" => "217"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "JEY",
-            "CODE" => "JEY",
-            "LIBELLE" => "JERSEY",
+            "SOURCE_CODE" => "JEY"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "222",
-            "CODE" => "222",
-            "LIBELLE" => "JORDANIE",
+            "SOURCE_CODE" => "222"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1991-01-01",
-            "SOURCE_CODE" => "211",
-            "CODE" => "211",
-            "LIBELLE" => "KAMTCHATKA",
+            "SOURCE_CODE" => "211"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "256",
-            "CODE" => "256",
-            "LIBELLE" => "KAZAKHSTAN",
+            "SOURCE_CODE" => "256"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "149",
-            "CODE" => "149",
-            "LIBELLE" => "KAZAKHSTAN",
+            "SOURCE_CODE" => "149"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "332",
-            "CODE" => "332",
-            "LIBELLE" => "KENYA",
+            "SOURCE_CODE" => "332"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "257",
-            "CODE" => "257",
-            "LIBELLE" => "KIRGHIZISTAN",
+            "SOURCE_CODE" => "257"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "150",
-            "CODE" => "150",
-            "LIBELLE" => "KIRGHIZISTAN",
+            "SOURCE_CODE" => "150"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1979-01-01",
-            "SOURCE_CODE" => "513",
-            "CODE" => "513",
-            "LIBELLE" => "KIRIBATI",
+            "SOURCE_CODE" => "513"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2009-01-01",
-            "SOURCE_CODE" => "157",
-            "CODE" => "157",
-            "LIBELLE" => "KOSOVO",
+            "SOURCE_CODE" => "157"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "240",
-            "CODE" => "240",
-            "LIBELLE" => "KOWEIT",
+            "SOURCE_CODE" => "240"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "403",
-            "CODE" => "403",
-            "LIBELLE" => "LABRADOR",
+            "SOURCE_CODE" => "403"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "241",
-            "CODE" => "241",
-            "LIBELLE" => "LAO, REPUB. DEMOCRATIQUE POPULAIRE (LAOS",
+            "SOURCE_CODE" => "241"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "348",
-            "CODE" => "348",
-            "LIBELLE" => "LESOTHO",
+            "SOURCE_CODE" => "348"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "107",
-            "CODE" => "107",
-            "LIBELLE" => "LETTONIE",
+            "SOURCE_CODE" => "107"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "205",
-            "CODE" => "205",
-            "LIBELLE" => "LIBAN",
+            "SOURCE_CODE" => "205"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "302",
-            "CODE" => "302",
-            "LIBELLE" => "LIBERIA",
+            "SOURCE_CODE" => "302"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "316",
-            "CODE" => "316",
-            "LIBELLE" => "LIBYE",
+            "SOURCE_CODE" => "316"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "113",
-            "CODE" => "113",
-            "LIBELLE" => "LIECHTENSTEIN",
+            "SOURCE_CODE" => "113"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "108",
-            "CODE" => "108",
-            "LIBELLE" => "LITUANIE",
+            "SOURCE_CODE" => "108"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "137",
-            "CODE" => "137",
-            "LIBELLE" => "LUXEMBOURG",
+            "SOURCE_CODE" => "137"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "2000-01-01",
-            "SOURCE_CODE" => "232",
-            "CODE" => "232",
-            "LIBELLE" => "MACAO",
+            "SOURCE_CODE" => "232"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "156",
-            "CODE" => "156",
-            "LIBELLE" => "MACEDOINE (EX-REPUBLIQUE YOUGOSLAVE DE)",
+            "SOURCE_CODE" => "156"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "333",
-            "CODE" => "333",
-            "LIBELLE" => "MADAGASCAR",
+            "SOURCE_CODE" => "333"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "227",
-            "CODE" => "227",
-            "LIBELLE" => "MALAISIE",
+            "SOURCE_CODE" => "227"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "334",
-            "CODE" => "334",
-            "LIBELLE" => "MALAWI",
+            "SOURCE_CODE" => "334"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "229",
-            "CODE" => "229",
-            "LIBELLE" => "MALDIVES",
+            "SOURCE_CODE" => "229"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "335",
-            "CODE" => "335",
-            "LIBELLE" => "MALI",
+            "SOURCE_CODE" => "335"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "144",
-            "CODE" => "144",
-            "LIBELLE" => "MALTE",
+            "SOURCE_CODE" => "144"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "218",
-            "CODE" => "218",
-            "LIBELLE" => "MANDCHOURIE",
+            "SOURCE_CODE" => "218"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "MNP",
-            "CODE" => "MNP",
-            "LIBELLE" => "MARIANNES DU NORD, ILES",
+            "SOURCE_CODE" => "MNP"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "350",
-            "CODE" => "350",
-            "LIBELLE" => "MAROC",
+            "SOURCE_CODE" => "350"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1991-01-01",
-            "SOURCE_CODE" => "515",
-            "CODE" => "515",
-            "LIBELLE" => "MARSHALL (ILES)",
+            "SOURCE_CODE" => "515"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "390",
-            "CODE" => "390",
-            "LIBELLE" => "MAURICE",
+            "SOURCE_CODE" => "390"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "336",
-            "CODE" => "336",
-            "LIBELLE" => "MAURITANIE",
+            "SOURCE_CODE" => "336"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "405",
-            "CODE" => "405",
-            "LIBELLE" => "MEXIQUE",
+            "SOURCE_CODE" => "405"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1991-01-01",
-            "SOURCE_CODE" => "516",
-            "CODE" => "516",
-            "LIBELLE" => "MICRONESIE (ETATS FEDERES DE)",
+            "SOURCE_CODE" => "516"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "151",
-            "CODE" => "151",
-            "LIBELLE" => "MOLDAVIE",
+            "SOURCE_CODE" => "151"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "138",
-            "CODE" => "138",
-            "LIBELLE" => "MONACO",
+            "SOURCE_CODE" => "138"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "242",
-            "CODE" => "242",
-            "LIBELLE" => "MONGOLIE",
+            "SOURCE_CODE" => "242"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "120",
-            "CODE" => "120",
-            "LIBELLE" => "MONTENEGRO",
+            "SOURCE_CODE" => "120"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "MSR",
-            "CODE" => "MSR",
-            "LIBELLE" => "MONTSERRAT",
+            "SOURCE_CODE" => "MSR"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "393",
-            "CODE" => "393",
-            "LIBELLE" => "MOZAMBIQUE",
+            "SOURCE_CODE" => "393"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "224",
-            "CODE" => "224",
-            "LIBELLE" => "MYANMAR (BIRMANIE)",
+            "SOURCE_CODE" => "224"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "311",
-            "CODE" => "311",
-            "LIBELLE" => "NAMIBIE",
+            "SOURCE_CODE" => "311"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1968-01-01",
-            "SOURCE_CODE" => "507",
-            "CODE" => "507",
-            "LIBELLE" => "NAURU",
+            "SOURCE_CODE" => "507"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "215",
-            "CODE" => "215",
-            "LIBELLE" => "NEPAL",
+            "SOURCE_CODE" => "215"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "412",
-            "CODE" => "412",
-            "LIBELLE" => "NICARAGUA",
+            "SOURCE_CODE" => "412"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "337",
-            "CODE" => "337",
-            "LIBELLE" => "NIGER",
+            "SOURCE_CODE" => "337"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "338",
-            "CODE" => "338",
-            "LIBELLE" => "NIGERIA",
+            "SOURCE_CODE" => "338"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "NIU",
-            "CODE" => "NIU",
-            "LIBELLE" => "NIUE",
+            "SOURCE_CODE" => "NIU"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "NFK",
-            "CODE" => "NFK",
-            "LIBELLE" => "NORFOLK, ILE",
+            "SOURCE_CODE" => "NFK"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "103",
-            "CODE" => "103",
-            "LIBELLE" => "NORVEGE",
+            "SOURCE_CODE" => "103"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "502",
-            "CODE" => "502",
-            "LIBELLE" => "NOUVELLE-ZELANDE",
+            "SOURCE_CODE" => "502"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "250",
-            "CODE" => "250",
-            "LIBELLE" => "OMAN",
+            "SOURCE_CODE" => "250"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "339",
-            "CODE" => "339",
-            "LIBELLE" => "OUGANDA",
+            "SOURCE_CODE" => "339"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "258",
-            "CODE" => "258",
-            "LIBELLE" => "OUZBEKISTAN",
+            "SOURCE_CODE" => "258"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "152",
-            "CODE" => "152",
-            "LIBELLE" => "OUZBEKISTAN",
+            "SOURCE_CODE" => "152"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "213",
-            "CODE" => "213",
-            "LIBELLE" => "PAKISTAN",
+            "SOURCE_CODE" => "213"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1994-01-01",
-            "SOURCE_CODE" => "517",
-            "CODE" => "517",
-            "LIBELLE" => "PALAOS (REPUBLIQUE DES ILES)",
+            "SOURCE_CODE" => "517"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "261",
-            "CODE" => "261",
-            "LIBELLE" => "PALESTINE (TERRITOIRES GAZA ET JERICHO)",
+            "SOURCE_CODE" => "261"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "413",
-            "CODE" => "413",
-            "LIBELLE" => "PANAMA",
+            "SOURCE_CODE" => "413"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1975-01-01",
-            "SOURCE_CODE" => "510",
-            "CODE" => "510",
-            "LIBELLE" => "PAPOUASIE-NOUVELLE-GUINEE",
+            "SOURCE_CODE" => "510"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "421",
-            "CODE" => "421",
-            "LIBELLE" => "PARAGUAY",
+            "SOURCE_CODE" => "421"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "135",
-            "CODE" => "135",
-            "LIBELLE" => "PAYS-BAS",
+            "SOURCE_CODE" => "135"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "422",
-            "CODE" => "422",
-            "LIBELLE" => "PEROU",
+            "SOURCE_CODE" => "422"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "220",
-            "CODE" => "220",
-            "LIBELLE" => "PHILIPPINES",
+            "SOURCE_CODE" => "220"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "503",
-            "CODE" => "503",
-            "LIBELLE" => "PITCAIRN (ILE)",
+            "SOURCE_CODE" => "503"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "122",
-            "CODE" => "122",
-            "LIBELLE" => "POLOGNE",
+            "SOURCE_CODE" => "122"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "PRI",
-            "CODE" => "PRI",
-            "LIBELLE" => "PORTO RICO",
+            "SOURCE_CODE" => "PRI"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "139",
-            "CODE" => "139",
-            "LIBELLE" => "PORTUGAL",
+            "SOURCE_CODE" => "139"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "221",
-            "CODE" => "221",
-            "LIBELLE" => "POSSESSIONS BRITANNIQUES AU PROCHE-ORIEN",
+            "SOURCE_CODE" => "221"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "313",
-            "CODE" => "313",
-            "LIBELLE" => "PROVINCES ESPAGNOLES D'AFRIQUE",
+            "SOURCE_CODE" => "313"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "248",
-            "CODE" => "248",
-            "LIBELLE" => "QATAR",
+            "SOURCE_CODE" => "248"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1990-10-03",
-            "SOURCE_CODE" => "141",
-            "CODE" => "141",
-            "LIBELLE" => "REPUBLIQUE DEMOCRATIQUE ALLEMANDE",
+            "SOURCE_CODE" => "141"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "408",
-            "CODE" => "408",
-            "LIBELLE" => "REPUBLIQUE DOMINICAINE",
+            "SOURCE_CODE" => "408"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1990-10-03",
-            "SOURCE_CODE" => "142",
-            "CODE" => "142",
-            "LIBELLE" => "REPUBLIQUE FEDERALE D'ALLEMAGNE",
+            "SOURCE_CODE" => "142"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "114",
-            "CODE" => "114",
-            "LIBELLE" => "ROUMANIE",
+            "SOURCE_CODE" => "114"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "132",
-            "CODE" => "132",
-            "LIBELLE" => "ROYAUME-UNI",
+            "SOURCE_CODE" => "132"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "123",
-            "CODE" => "123",
-            "LIBELLE" => "RUSSIE",
+            "SOURCE_CODE" => "123"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "340",
-            "CODE" => "340",
-            "LIBELLE" => "RWANDA",
+            "SOURCE_CODE" => "340"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1997-01-01",
-            "SOURCE_CODE" => "389",
-            "CODE" => "389",
-            "LIBELLE" => "SAHARA OCCIDENTAL",
+            "SOURCE_CODE" => "389"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1996-12-31",
-            "SOURCE_CODE" => "353",
-            "CODE" => "353",
-            "LIBELLE" => "SAHARA OCCIDENTAL",
+            "SOURCE_CODE" => "353"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "BLM",
-            "CODE" => "BLM",
-            "LIBELLE" => "SAINT-BARTHELEMY",
+            "SOURCE_CODE" => "BLM"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1983-01-01",
-            "SOURCE_CODE" => "442",
-            "CODE" => "442",
-            "LIBELLE" => "SAINT-CHRISTOPHE-ET-NIEVES",
+            "SOURCE_CODE" => "442"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "128",
-            "CODE" => "128",
-            "LIBELLE" => "SAINT-MARIN",
+            "SOURCE_CODE" => "128"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1979-01-01",
-            "SOURCE_CODE" => "440",
-            "CODE" => "440",
-            "LIBELLE" => "SAINT-VINCENT-ET-LES GRENADINES",
+            "SOURCE_CODE" => "440"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "306",
-            "CODE" => "306",
-            "LIBELLE" => "SAINTE-HELENE",
+            "SOURCE_CODE" => "306"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1979-01-01",
-            "SOURCE_CODE" => "439",
-            "CODE" => "439",
-            "LIBELLE" => "SAINTE-LUCIE",
+            "SOURCE_CODE" => "439"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1978-01-01",
-            "SOURCE_CODE" => "512",
-            "CODE" => "512",
-            "LIBELLE" => "SALOMON (ILES)",
+            "SOURCE_CODE" => "512"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ASM",
-            "CODE" => "ASM",
-            "LIBELLE" => "SAMOA AMERICAINES",
+            "SOURCE_CODE" => "ASM"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1962-01-01",
-            "SOURCE_CODE" => "506",
-            "CODE" => "506",
-            "LIBELLE" => "SAMOA OCCIDENTALES",
+            "SOURCE_CODE" => "506"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "995",
-            "CODE" => "995",
-            "LIBELLE" => "SANS NATIONALITE",
+            "SOURCE_CODE" => "995"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "394",
-            "CODE" => "394",
-            "LIBELLE" => "SAO TOME-ET-PRINCIPE",
+            "SOURCE_CODE" => "394"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "341",
-            "CODE" => "341",
-            "LIBELLE" => "SENEGAL",
+            "SOURCE_CODE" => "341"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "121",
-            "CODE" => "121",
-            "LIBELLE" => "SERBIE (EX YOUGOSLAVIE)",
+            "SOURCE_CODE" => "121"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "398",
-            "CODE" => "398",
-            "LIBELLE" => "SEYCHELLES",
+            "SOURCE_CODE" => "398"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "209",
-            "CODE" => "209",
-            "LIBELLE" => "SIBERIE",
+            "SOURCE_CODE" => "209"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "342",
-            "CODE" => "342",
-            "LIBELLE" => "SIERRA LEONE",
+            "SOURCE_CODE" => "342"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "226",
-            "CODE" => "226",
-            "LIBELLE" => "SINGAPOUR",
+            "SOURCE_CODE" => "226"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1992-01-01",
-            "SOURCE_CODE" => "117",
-            "CODE" => "117",
-            "LIBELLE" => "SLOVAQUIE",
+            "SOURCE_CODE" => "117"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "145",
-            "CODE" => "145",
-            "LIBELLE" => "SLOVENIE",
+            "SOURCE_CODE" => "145"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "318",
-            "CODE" => "318",
-            "LIBELLE" => "SOMALIE",
+            "SOURCE_CODE" => "318"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "343",
-            "CODE" => "343",
-            "LIBELLE" => "SOUDAN",
+            "SOURCE_CODE" => "343"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1962-01-01",
-            "SOURCE_CODE" => "307",
-            "CODE" => "307",
-            "LIBELLE" => "SOUDAN ANGLO-EGYPTIEN, KENYA, OUGANDA",
+            "SOURCE_CODE" => "307"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2011-07-09",
-            "SOURCE_CODE" => "349",
-            "CODE" => "349",
-            "LIBELLE" => "SOUDAN DU SUD",
+            "SOURCE_CODE" => "349"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "235",
-            "CODE" => "235",
-            "LIBELLE" => "SRI LANKA",
+            "SOURCE_CODE" => "235"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2010-10-10",
-            "SOURCE_CODE" => "445",
-            "CODE" => "445",
-            "LIBELLE" => "ST MARTIN (NEERLANDAISE)",
+            "SOURCE_CODE" => "445"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "104",
-            "CODE" => "104",
-            "LIBELLE" => "SUEDE",
+            "SOURCE_CODE" => "104"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "140",
-            "CODE" => "140",
-            "LIBELLE" => "SUISSE",
+            "SOURCE_CODE" => "140"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1975-01-01",
-            "SOURCE_CODE" => "437",
-            "CODE" => "437",
-            "LIBELLE" => "SURINAME",
+            "SOURCE_CODE" => "437"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "SJM",
-            "CODE" => "SJM",
-            "LIBELLE" => "SVALBARD ET ILE JAN MAYEN",
+            "SOURCE_CODE" => "SJM"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "391",
-            "CODE" => "391",
-            "LIBELLE" => "SWAZILAND",
+            "SOURCE_CODE" => "391"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "206",
-            "CODE" => "206",
-            "LIBELLE" => "SYRIE",
+            "SOURCE_CODE" => "206"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1993-01-01",
-            "SOURCE_CODE" => "259",
-            "CODE" => "259",
-            "LIBELLE" => "TADJIKISTAN",
+            "SOURCE_CODE" => "259"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "153",
-            "CODE" => "153",
-            "LIBELLE" => "TADJIKISTAN",
+            "SOURCE_CODE" => "153"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "236",
-            "CODE" => "236",
-            "LIBELLE" => "TAIWAN",
+            "SOURCE_CODE" => "236"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "325",
-            "CODE" => "325",
-            "LIBELLE" => "TANGER",
+            "SOURCE_CODE" => "325"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "309",
-            "CODE" => "309",
-            "LIBELLE" => "TANZANIE",
+            "SOURCE_CODE" => "309"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "344",
-            "CODE" => "344",
-            "LIBELLE" => "TCHAD",
+            "SOURCE_CODE" => "344"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1993-01-01",
-            "SOURCE_CODE" => "115",
-            "CODE" => "115",
-            "LIBELLE" => "TCHECOSLOVAQUIE",
+            "SOURCE_CODE" => "115"
         ],
         [
             "TEMOIN_UE" => TRUE,
             "VALIDITE_DEBUT" => "1992-01-01",
-            "SOURCE_CODE" => "116",
-            "CODE" => "116",
-            "LIBELLE" => "TCHEQUE (REPUBLIQUE)",
+            "SOURCE_CODE" => "116"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "2014-04-24",
-            "SOURCE_CODE" => "308",
-            "CODE" => "308",
-            "LIBELLE" => "TERR BRIT OCEAN INDIEN",
+            "SOURCE_CODE" => "308"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "432",
-            "CODE" => "432",
-            "LIBELLE" => "TERR. D'USA EN AMERIQUE",
+            "SOURCE_CODE" => "432"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "505",
-            "CODE" => "505",
-            "LIBELLE" => "TERR. DES USA EN OCEANIE",
+            "SOURCE_CODE" => "505"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "427",
-            "CODE" => "427",
-            "LIBELLE" => "TERR. DU ROYAUME-UNI DANS L'ATLANTIQUE",
+            "SOURCE_CODE" => "427"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "402",
-            "CODE" => "402",
-            "LIBELLE" => "TERRE-NEUVE",
+            "SOURCE_CODE" => "402"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "ATF",
-            "CODE" => "ATF",
-            "LIBELLE" => "TERRES AUSTRALES ET ANTARCTI. FRANÇAISES",
+            "SOURCE_CODE" => "ATF"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "2010-10-09",
-            "SOURCE_CODE" => "431",
-            "CODE" => "431",
-            "LIBELLE" => "TERRITOIRE DES PAYS-BAS",
+            "SOURCE_CODE" => "431"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "425",
-            "CODE" => "425",
-            "LIBELLE" => "TERRITOIRES DU ROYAUME-UNI AUX ANTILLES",
+            "SOURCE_CODE" => "425"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "219",
-            "CODE" => "219",
-            "LIBELLE" => "THAILANDE",
+            "SOURCE_CODE" => "219"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "2002-01-01",
-            "SOURCE_CODE" => "262",
-            "CODE" => "262",
-            "LIBELLE" => "TIMOR LESTE",
+            "SOURCE_CODE" => "262"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "345",
-            "CODE" => "345",
-            "LIBELLE" => "TOGO",
+            "SOURCE_CODE" => "345"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1970-01-01",
-            "SOURCE_CODE" => "509",
-            "CODE" => "509",
-            "LIBELLE" => "TONGA",
+            "SOURCE_CODE" => "509"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1960-01-01",
-            "SOURCE_CODE" => "433",
-            "CODE" => "433",
-            "LIBELLE" => "TRINITE-ET-TOBAGO",
+            "SOURCE_CODE" => "433"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "351",
-            "CODE" => "351",
-            "LIBELLE" => "TUNISIE",
+            "SOURCE_CODE" => "351"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1991-01-01",
-            "SOURCE_CODE" => "210",
-            "CODE" => "210",
-            "LIBELLE" => "TURKESTAN RUSSE",
+            "SOURCE_CODE" => "210"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1992-01-01",
             "VALIDITE_FIN" => "1992-12-31",
-            "SOURCE_CODE" => "154",
-            "CODE" => "154",
-            "LIBELLE" => "TURKMENISTAN",
+            "SOURCE_CODE" => "154"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "260",
-            "CODE" => "260",
-            "LIBELLE" => "TURKMENISTAN",
+            "SOURCE_CODE" => "260"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "TCA",
-            "CODE" => "TCA",
-            "LIBELLE" => "TURKS ET CAIQUES, ILES",
+            "SOURCE_CODE" => "TCA"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "208",
-            "CODE" => "208",
-            "LIBELLE" => "TURQUIE",
+            "SOURCE_CODE" => "208"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "124",
-            "CODE" => "124",
-            "LIBELLE" => "TURQUIE D'EUROPE",
+            "SOURCE_CODE" => "124"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1978-01-01",
-            "SOURCE_CODE" => "511",
-            "CODE" => "511",
-            "LIBELLE" => "TUVALU",
+            "SOURCE_CODE" => "511"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "155",
-            "CODE" => "155",
-            "LIBELLE" => "UKRAINE",
+            "SOURCE_CODE" => "155"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "423",
-            "CODE" => "423",
-            "LIBELLE" => "URUGUAY",
+            "SOURCE_CODE" => "423"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1980-01-01",
-            "SOURCE_CODE" => "514",
-            "CODE" => "514",
-            "LIBELLE" => "VANUATU",
+            "SOURCE_CODE" => "514"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "129",
-            "CODE" => "129",
-            "LIBELLE" => "VATICAN, ou SAINT-SIEGE",
+            "SOURCE_CODE" => "129"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "424",
-            "CODE" => "424",
-            "LIBELLE" => "VENEZUELA",
+            "SOURCE_CODE" => "424"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "243",
-            "CODE" => "243",
-            "LIBELLE" => "VIET NAM",
+            "SOURCE_CODE" => "243"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "244",
-            "CODE" => "244",
-            "LIBELLE" => "VIET NAM DU NORD",
+            "SOURCE_CODE" => "244"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1995-10-13",
-            "SOURCE_CODE" => "245",
-            "CODE" => "245",
-            "LIBELLE" => "VIET NAM DU SUD",
+            "SOURCE_CODE" => "245"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "251",
-            "CODE" => "251",
-            "LIBELLE" => "YEMEN",
-        ],
-        [
-            "TEMOIN_UE" => FALSE,
-            "VALIDITE_DEBUT" => "1900-01-01",
-            "VALIDITE_FIN" => "1990-05-22",
-            "SOURCE_CODE" => "202",
-            "CODE" => "202",
-            "LIBELLE" => "YEMEN (REPUBLIQUE ARABE DU)",
+            "SOURCE_CODE" => "251"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
             "VALIDITE_FIN" => "1990-05-22",
-            "SOURCE_CODE" => "233",
-            "CODE" => "233",
-            "LIBELLE" => "YEMEN DEMOCRATIQUE",
+            "SOURCE_CODE" => "202"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "346",
-            "CODE" => "346",
-            "LIBELLE" => "ZAMBIE",
+            "VALIDITE_FIN" => "1990-05-22",
+            "SOURCE_CODE" => "233"
         ],
         [
             "TEMOIN_UE" => FALSE,
             "VALIDITE_DEBUT" => "1900-01-01",
-            "SOURCE_CODE" => "310",
-            "CODE" => "310",
-            "LIBELLE" => "ZIMBABWE",
+            "SOURCE_CODE" => "346"
+        ],
+        [
+            "TEMOIN_UE" => FALSE,
+            "VALIDITE_DEBUT" => "1900-01-01",
+            "SOURCE_CODE" => "310"
+        ]
+    ],
+    "DEPARTEMENT" => [
+        [
+            "LIBELLE_LONG" => "AIN",
+            "LIBELLE_COURT" => "AIN",
+            "SOURCE_CODE" => "001",
+            "CODE" => "001"
+        ],
+        [
+            "LIBELLE_LONG" => "AISNE",
+            "LIBELLE_COURT" => "AISNE",
+            "SOURCE_CODE" => "002",
+            "CODE" => "002"
+        ],
+        [
+            "LIBELLE_LONG" => "ALLIER",
+            "LIBELLE_COURT" => "ALLIER",
+            "SOURCE_CODE" => "003",
+            "CODE" => "003"
+        ],
+        [
+            "LIBELLE_LONG" => "ALPES-DE-HTE-PROVENCE",
+            "LIBELLE_COURT" => "AL.HTE.PR.",
+            "SOURCE_CODE" => "004",
+            "CODE" => "004"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTES-ALPES",
+            "LIBELLE_COURT" => "HTES-ALPES",
+            "SOURCE_CODE" => "005",
+            "CODE" => "005"
+        ],
+        [
+            "LIBELLE_LONG" => "ALPES-MARITIMES",
+            "LIBELLE_COURT" => "ALPES-MAR.",
+            "SOURCE_CODE" => "006",
+            "CODE" => "006"
+        ],
+        [
+            "LIBELLE_LONG" => "ARDECHE",
+            "LIBELLE_COURT" => "ARDECHE",
+            "SOURCE_CODE" => "007",
+            "CODE" => "007"
+        ],
+        [
+            "LIBELLE_LONG" => "ARDENNES",
+            "LIBELLE_COURT" => "ARDENNES",
+            "SOURCE_CODE" => "008",
+            "CODE" => "008"
+        ],
+        [
+            "LIBELLE_LONG" => "ARIEGE",
+            "LIBELLE_COURT" => "ARIEGE",
+            "SOURCE_CODE" => "009",
+            "CODE" => "009"
+        ],
+        [
+            "LIBELLE_LONG" => "AUBE",
+            "LIBELLE_COURT" => "AUBE",
+            "SOURCE_CODE" => "010",
+            "CODE" => "010"
+        ],
+        [
+            "LIBELLE_LONG" => "AUDE",
+            "LIBELLE_COURT" => "AUDE",
+            "SOURCE_CODE" => "011",
+            "CODE" => "011"
+        ],
+        [
+            "LIBELLE_LONG" => "AVEYRON",
+            "LIBELLE_COURT" => "AVEYRON",
+            "SOURCE_CODE" => "012",
+            "CODE" => "012"
+        ],
+        [
+            "LIBELLE_LONG" => "BOUCHES-DU-RHONE",
+            "LIBELLE_COURT" => "BCHES-RHO.",
+            "SOURCE_CODE" => "013",
+            "CODE" => "013"
+        ],
+        [
+            "LIBELLE_LONG" => "CALVADOS",
+            "LIBELLE_COURT" => "CALVADOS",
+            "SOURCE_CODE" => "014",
+            "CODE" => "014"
+        ],
+        [
+            "LIBELLE_LONG" => "CANTAL",
+            "LIBELLE_COURT" => "CANTAL",
+            "SOURCE_CODE" => "015",
+            "CODE" => "015"
+        ],
+        [
+            "LIBELLE_LONG" => "CHARENTE",
+            "LIBELLE_COURT" => "CHARENTE",
+            "SOURCE_CODE" => "016",
+            "CODE" => "016"
+        ],
+        [
+            "LIBELLE_LONG" => "CHARENTE-MARITIME",
+            "LIBELLE_COURT" => "CHAR.-MAR.",
+            "SOURCE_CODE" => "017",
+            "CODE" => "017"
+        ],
+        [
+            "LIBELLE_LONG" => "CHER",
+            "LIBELLE_COURT" => "CHER",
+            "SOURCE_CODE" => "018",
+            "CODE" => "018"
+        ],
+        [
+            "LIBELLE_LONG" => "CORREZE",
+            "LIBELLE_COURT" => "CORREZE",
+            "SOURCE_CODE" => "019",
+            "CODE" => "019"
+        ],
+        [
+            "LIBELLE_LONG" => "COTE D'OR",
+            "LIBELLE_COURT" => "COTE D'OR",
+            "SOURCE_CODE" => "021",
+            "CODE" => "021"
+        ],
+        [
+            "LIBELLE_LONG" => "COTES D'ARMOR",
+            "LIBELLE_COURT" => "COTES ARM.",
+            "SOURCE_CODE" => "022",
+            "CODE" => "022"
+        ],
+        [
+            "LIBELLE_LONG" => "CREUSE",
+            "LIBELLE_COURT" => "CREUSE",
+            "SOURCE_CODE" => "023",
+            "CODE" => "023"
+        ],
+        [
+            "LIBELLE_LONG" => "DORDOGNE",
+            "LIBELLE_COURT" => "DORDOGNE",
+            "SOURCE_CODE" => "024",
+            "CODE" => "024"
+        ],
+        [
+            "LIBELLE_LONG" => "DOUBS",
+            "LIBELLE_COURT" => "DOUBS",
+            "SOURCE_CODE" => "025",
+            "CODE" => "025"
+        ],
+        [
+            "LIBELLE_LONG" => "DROME",
+            "LIBELLE_COURT" => "DROME",
+            "SOURCE_CODE" => "026",
+            "CODE" => "026"
+        ],
+        [
+            "LIBELLE_LONG" => "EURE",
+            "LIBELLE_COURT" => "EURE",
+            "SOURCE_CODE" => "027",
+            "CODE" => "027"
+        ],
+        [
+            "LIBELLE_LONG" => "EURE-ET-LOIR",
+            "LIBELLE_COURT" => "EURE-LOIR",
+            "SOURCE_CODE" => "028",
+            "CODE" => "028"
+        ],
+        [
+            "LIBELLE_LONG" => "FINISTERE",
+            "LIBELLE_COURT" => "FINISTERE",
+            "SOURCE_CODE" => "029",
+            "CODE" => "029"
+        ],
+        [
+            "LIBELLE_LONG" => "CORSE-DU-SUD",
+            "LIBELLE_COURT" => "CORSE-SUD",
+            "SOURCE_CODE" => "02A",
+            "CODE" => "02A"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTE CORSE",
+            "LIBELLE_COURT" => "HAUTE CORSE",
+            "SOURCE_CODE" => "02B",
+            "CODE" => "02B"
+        ],
+        [
+            "LIBELLE_LONG" => "GARD",
+            "LIBELLE_COURT" => "GARD",
+            "SOURCE_CODE" => "030",
+            "CODE" => "030"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTE-GARONNE",
+            "LIBELLE_COURT" => "HTE-GARON.",
+            "SOURCE_CODE" => "031",
+            "CODE" => "031"
+        ],
+        [
+            "LIBELLE_LONG" => "GERS",
+            "LIBELLE_COURT" => "GERS",
+            "SOURCE_CODE" => "032",
+            "CODE" => "032"
+        ],
+        [
+            "LIBELLE_LONG" => "GIRONDE",
+            "LIBELLE_COURT" => "GIRONDE",
+            "SOURCE_CODE" => "033",
+            "CODE" => "033"
+        ],
+        [
+            "LIBELLE_LONG" => "HERAULT",
+            "LIBELLE_COURT" => "HERAULT",
+            "SOURCE_CODE" => "034",
+            "CODE" => "034"
+        ],
+        [
+            "LIBELLE_LONG" => "ILLE-ET-VILAINE",
+            "LIBELLE_COURT" => "ILLE-VIL.",
+            "SOURCE_CODE" => "035",
+            "CODE" => "035"
+        ],
+        [
+            "LIBELLE_LONG" => "INDRE",
+            "LIBELLE_COURT" => "INDRE",
+            "SOURCE_CODE" => "036",
+            "CODE" => "036"
+        ],
+        [
+            "LIBELLE_LONG" => "INDRE-ET-LOIRE",
+            "LIBELLE_COURT" => "INDRE-LOI.",
+            "SOURCE_CODE" => "037",
+            "CODE" => "037"
+        ],
+        [
+            "LIBELLE_LONG" => "ISERE",
+            "LIBELLE_COURT" => "ISERE",
+            "SOURCE_CODE" => "038",
+            "CODE" => "038"
+        ],
+        [
+            "LIBELLE_LONG" => "JURA",
+            "LIBELLE_COURT" => "JURA",
+            "SOURCE_CODE" => "039",
+            "CODE" => "039"
+        ],
+        [
+            "LIBELLE_LONG" => "LANDES",
+            "LIBELLE_COURT" => "LANDES",
+            "SOURCE_CODE" => "040",
+            "CODE" => "040"
+        ],
+        [
+            "LIBELLE_LONG" => "LOIR-ET-CHER",
+            "LIBELLE_COURT" => "LOIR-CHER",
+            "SOURCE_CODE" => "041",
+            "CODE" => "041"
+        ],
+        [
+            "LIBELLE_LONG" => "LOIRE",
+            "LIBELLE_COURT" => "LOIRE",
+            "SOURCE_CODE" => "042",
+            "CODE" => "042"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTE-LOIRE",
+            "LIBELLE_COURT" => "HTE-LOIRE",
+            "SOURCE_CODE" => "043",
+            "CODE" => "043"
+        ],
+        [
+            "LIBELLE_LONG" => "LOIRE-ATLANTIQUE",
+            "LIBELLE_COURT" => "LOIRE-ATL.",
+            "SOURCE_CODE" => "044",
+            "CODE" => "044"
+        ],
+        [
+            "LIBELLE_LONG" => "LOIRET",
+            "LIBELLE_COURT" => "LOIRET",
+            "SOURCE_CODE" => "045",
+            "CODE" => "045"
+        ],
+        [
+            "LIBELLE_LONG" => "LOT",
+            "LIBELLE_COURT" => "LOT",
+            "SOURCE_CODE" => "046",
+            "CODE" => "046"
+        ],
+        [
+            "LIBELLE_LONG" => "LOT-ET-GARONNE",
+            "LIBELLE_COURT" => "LOT-ET-GA.",
+            "SOURCE_CODE" => "047",
+            "CODE" => "047"
+        ],
+        [
+            "LIBELLE_LONG" => "LOZERE",
+            "LIBELLE_COURT" => "LOZERE",
+            "SOURCE_CODE" => "048",
+            "CODE" => "048"
+        ],
+        [
+            "LIBELLE_LONG" => "MAINE-ET-LOIRE",
+            "LIBELLE_COURT" => "MAINE-LOI.",
+            "SOURCE_CODE" => "049",
+            "CODE" => "049"
+        ],
+        [
+            "LIBELLE_LONG" => "MANCHE",
+            "LIBELLE_COURT" => "MANCHE",
+            "SOURCE_CODE" => "050",
+            "CODE" => "050"
+        ],
+        [
+            "LIBELLE_LONG" => "MARNE",
+            "LIBELLE_COURT" => "MARNE",
+            "SOURCE_CODE" => "051",
+            "CODE" => "051"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTE-MARNE",
+            "LIBELLE_COURT" => "HTE-MARNE",
+            "SOURCE_CODE" => "052",
+            "CODE" => "052"
+        ],
+        [
+            "LIBELLE_LONG" => "MAYENNE",
+            "LIBELLE_COURT" => "MAYENNE",
+            "SOURCE_CODE" => "053",
+            "CODE" => "053"
+        ],
+        [
+            "LIBELLE_LONG" => "MEURTHE-ET-MOSELLE",
+            "LIBELLE_COURT" => "MEUR.MOSE.",
+            "SOURCE_CODE" => "054",
+            "CODE" => "054"
+        ],
+        [
+            "LIBELLE_LONG" => "MEUSE",
+            "LIBELLE_COURT" => "MEUSE",
+            "SOURCE_CODE" => "055",
+            "CODE" => "055"
+        ],
+        [
+            "LIBELLE_LONG" => "MORBIHAN",
+            "LIBELLE_COURT" => "MORBIHAN",
+            "SOURCE_CODE" => "056",
+            "CODE" => "056"
+        ],
+        [
+            "LIBELLE_LONG" => "MOSELLE",
+            "LIBELLE_COURT" => "MOSELLE",
+            "SOURCE_CODE" => "057",
+            "CODE" => "057"
+        ],
+        [
+            "LIBELLE_LONG" => "NIEVRE",
+            "LIBELLE_COURT" => "NIEVRE",
+            "SOURCE_CODE" => "058",
+            "CODE" => "058"
+        ],
+        [
+            "LIBELLE_LONG" => "NORD",
+            "LIBELLE_COURT" => "NORD",
+            "SOURCE_CODE" => "059",
+            "CODE" => "059"
+        ],
+        [
+            "LIBELLE_LONG" => "OISE",
+            "LIBELLE_COURT" => "OISE",
+            "SOURCE_CODE" => "060",
+            "CODE" => "060"
+        ],
+        [
+            "LIBELLE_LONG" => "ORNE",
+            "LIBELLE_COURT" => "ORNE",
+            "SOURCE_CODE" => "061",
+            "CODE" => "061"
+        ],
+        [
+            "LIBELLE_LONG" => "PAS-DE-CALAIS",
+            "LIBELLE_COURT" => "PAS-CALAIS",
+            "SOURCE_CODE" => "062",
+            "CODE" => "062"
+        ],
+        [
+            "LIBELLE_LONG" => "PUY-DE-DOME",
+            "LIBELLE_COURT" => "PUY-DOME",
+            "SOURCE_CODE" => "063",
+            "CODE" => "063"
+        ],
+        [
+            "LIBELLE_LONG" => "PYRENEES-ATLANTIQUES",
+            "LIBELLE_COURT" => "PY._ATL.",
+            "SOURCE_CODE" => "064",
+            "CODE" => "064"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTES-PYRENEES",
+            "LIBELLE_COURT" => "HTES-PYR.",
+            "SOURCE_CODE" => "065",
+            "CODE" => "065"
+        ],
+        [
+            "LIBELLE_LONG" => "PYRENEES-ORIENTALES",
+            "LIBELLE_COURT" => "PYR.ORIEN.",
+            "SOURCE_CODE" => "066",
+            "CODE" => "066"
+        ],
+        [
+            "LIBELLE_LONG" => "BAS-RHIN",
+            "LIBELLE_COURT" => "BAS-RHIN",
+            "SOURCE_CODE" => "067",
+            "CODE" => "067"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUT-RHIN",
+            "LIBELLE_COURT" => "HAUT-RHIN",
+            "SOURCE_CODE" => "068",
+            "CODE" => "068"
+        ],
+        [
+            "LIBELLE_LONG" => "RHONE",
+            "LIBELLE_COURT" => "RHONE",
+            "SOURCE_CODE" => "069",
+            "CODE" => "069"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTE-SAONE",
+            "LIBELLE_COURT" => "HTE-SAONE",
+            "SOURCE_CODE" => "070",
+            "CODE" => "070"
+        ],
+        [
+            "LIBELLE_LONG" => "SAONE-ET-LOIRE",
+            "LIBELLE_COURT" => "SAONE-LRE.",
+            "SOURCE_CODE" => "071",
+            "CODE" => "071"
+        ],
+        [
+            "LIBELLE_LONG" => "SARTHE",
+            "LIBELLE_COURT" => "SARTHE",
+            "SOURCE_CODE" => "072",
+            "CODE" => "072"
+        ],
+        [
+            "LIBELLE_LONG" => "SAVOIE",
+            "LIBELLE_COURT" => "SAVOIE",
+            "SOURCE_CODE" => "073",
+            "CODE" => "073"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTE SAVOIE",
+            "LIBELLE_COURT" => "HTE SAVOIE",
+            "SOURCE_CODE" => "074",
+            "CODE" => "074"
+        ],
+        [
+            "LIBELLE_LONG" => "PARIS",
+            "LIBELLE_COURT" => "PARIS",
+            "SOURCE_CODE" => "075",
+            "CODE" => "075"
+        ],
+        [
+            "LIBELLE_LONG" => "SEINE MARITIME",
+            "LIBELLE_COURT" => "SEINE MAR.",
+            "SOURCE_CODE" => "076",
+            "CODE" => "076"
+        ],
+        [
+            "LIBELLE_LONG" => "SEINE-ET-MARNE",
+            "LIBELLE_COURT" => "SEINE-MAR.",
+            "SOURCE_CODE" => "077",
+            "CODE" => "077"
+        ],
+        [
+            "LIBELLE_LONG" => "YVELINES",
+            "LIBELLE_COURT" => "YVELINES",
+            "SOURCE_CODE" => "078",
+            "CODE" => "078"
+        ],
+        [
+            "LIBELLE_LONG" => "DEUX-SEVRES",
+            "LIBELLE_COURT" => "DEUX-SEV.",
+            "SOURCE_CODE" => "079",
+            "CODE" => "079"
+        ],
+        [
+            "LIBELLE_LONG" => "SOMME",
+            "LIBELLE_COURT" => "SOMME",
+            "SOURCE_CODE" => "080",
+            "CODE" => "080"
+        ],
+        [
+            "LIBELLE_LONG" => "TARN",
+            "LIBELLE_COURT" => "TARN",
+            "SOURCE_CODE" => "081",
+            "CODE" => "081"
+        ],
+        [
+            "LIBELLE_LONG" => "TARN-ET-GARONNE",
+            "LIBELLE_COURT" => "TARN-GARO.",
+            "SOURCE_CODE" => "082",
+            "CODE" => "082"
+        ],
+        [
+            "LIBELLE_LONG" => "VAR",
+            "LIBELLE_COURT" => "VAR",
+            "SOURCE_CODE" => "083",
+            "CODE" => "083"
+        ],
+        [
+            "LIBELLE_LONG" => "VAUCLUSE",
+            "LIBELLE_COURT" => "VAUCLUSE",
+            "SOURCE_CODE" => "084",
+            "CODE" => "084"
+        ],
+        [
+            "LIBELLE_LONG" => "VENDEE",
+            "LIBELLE_COURT" => "VENDEE",
+            "SOURCE_CODE" => "085",
+            "CODE" => "085"
+        ],
+        [
+            "LIBELLE_LONG" => "VIENNE",
+            "LIBELLE_COURT" => "VIENNE",
+            "SOURCE_CODE" => "086",
+            "CODE" => "086"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTE-VIENNE",
+            "LIBELLE_COURT" => "HTE-VIENNE",
+            "SOURCE_CODE" => "087",
+            "CODE" => "087"
+        ],
+        [
+            "LIBELLE_LONG" => "VOSGES",
+            "LIBELLE_COURT" => "VOSGES",
+            "SOURCE_CODE" => "088",
+            "CODE" => "088"
+        ],
+        [
+            "LIBELLE_LONG" => "YONNE",
+            "LIBELLE_COURT" => "YONNE",
+            "SOURCE_CODE" => "089",
+            "CODE" => "089"
+        ],
+        [
+            "LIBELLE_LONG" => "TERRITOIRE DE BELFORT",
+            "LIBELLE_COURT" => "TERR. BEL.",
+            "SOURCE_CODE" => "090",
+            "CODE" => "090"
+        ],
+        [
+            "LIBELLE_LONG" => "ESSONNE",
+            "LIBELLE_COURT" => "ESSONNE",
+            "SOURCE_CODE" => "091",
+            "CODE" => "091"
+        ],
+        [
+            "LIBELLE_LONG" => "HAUTS-DE-SEINE",
+            "LIBELLE_COURT" => "HTS-SEINE",
+            "SOURCE_CODE" => "092",
+            "CODE" => "092"
+        ],
+        [
+            "LIBELLE_LONG" => "SEINE-SAINT-DENIS",
+            "LIBELLE_COURT" => "SNE-ST-DE.",
+            "SOURCE_CODE" => "093",
+            "CODE" => "093"
         ],
     ],
     "DISCIPLINE" => [
@@ -4081,7 +4091,7 @@ return [
             "LIBELLE" => "AFT IFTIM",
             "LOCALISATION" => "CAEN",
             "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0142220M",
+            "SOURCE_CODE" => "0142220M"
         ],
         [
             "LIBELLE" => "AFTEC Rennes",
@@ -5275,13 +5285,13 @@ return [
             "LIBELLE" => "ANTENNE IUFM ANTONY IUFM VERSAILLES",
             "LOCALISATION" => "ANTONY",
             "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0922251X",
+            "SOURCE_CODE" => "0922251X"
         ],
         [
             "LIBELLE" => "ANTENNE IUFM ANTONY IUFM VERSAILLES",
             "LOCALISATION" => "ANTONY",
             "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0922252Y",
+            "SOURCE_CODE" => "0922252Y"
         ],
         [
             "LIBELLE" => "ANTENNE IUFM ARRAS IUFM LILLE",
@@ -5623,13 +5633,13 @@ return [
             "LIBELLE" => "ANTENNE IUFM MELUN IUFM CRETEIL",
             "LOCALISATION" => "MELUN",
             "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772297D",
+            "SOURCE_CODE" => "0772297D"
         ],
         [
             "LIBELLE" => "ANTENNE IUFM MELUN IUFM CRETEIL",
             "LOCALISATION" => "MELUN",
             "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772325J",
+            "SOURCE_CODE" => "0772325J"
         ],
         [
             "LIBELLE" => "ANTENNE IUFM MENDE IUFM MONTPELLIER",
@@ -7915,7 +7925,7 @@ return [
             "LIBELLE" => "Centre de Recherche des Cordeliers",
             "LOCALISATION" => "PARIS",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "CRC",
+            "SOURCE_CODE" => "CRC"
         ],
         [
             "LIBELLE" => "Centre d’Enseignement et de Recherche de l’ENSAM d’Angers",
@@ -10537,13 +10547,13 @@ return [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE MAESTRIS BEAUTE",
             "LOCALISATION" => "2D MAESTRI",
             "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0596791L",
+            "SOURCE_CODE" => "0596791L"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE MAESTRIS BEAUTE",
             "LOCALISATION" => "2D MAESTRI",
             "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0596794P",
+            "SOURCE_CODE" => "0596794P"
         ],
         [
             "LIBELLE" => "ECOLE 2D DEGRE PROF.PRIVEE MAESTRIS MARSEILLE",
@@ -10765,19 +10775,19 @@ return [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE",
             "LOCALISATION" => "EA ROUVROY",
             "DEPARTEMENT" => "060",
-            "SOURCE_CODE" => "0601404A",
+            "SOURCE_CODE" => "0601404A"
         ],
         [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE",
-            "LOCALISATION" => "EA NONANT",
-            "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0611021D",
+            "LOCALISATION" => "EA YSSINGE",
+            "DEPARTEMENT" => "043",
+            "SOURCE_CODE" => "0430842G"
         ],
         [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE",
             "LOCALISATION" => "EA S-GERVA",
             "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0611018A",
+            "SOURCE_CODE" => "0611021D"
         ],
         [
             "LIBELLE" => "ECOLE AGRICOLE PRIVEE CENTRE D ENSEIGNEMENT AGRICOLE",
@@ -13267,13 +13277,13 @@ return [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0755466J",
+            "SOURCE_CODE" => "0755466J"
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0755464G",
+            "SOURCE_CODE" => "0755464G"
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
@@ -13285,7 +13295,7 @@ return [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0755467K",
+            "SOURCE_CODE" => "0755467K"
         ],
         [
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE ACADEMIE DE PORT-ROYAL",
@@ -13765,13 +13775,13 @@ return [
             "LIBELLE" => "ECOLE TECHNIQUE PRIVEE OSCELORN",
             "LOCALISATION" => "ET OSCELOR",
             "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0292208T",
+            "SOURCE_CODE" => "0292208T"
         ],
         [
             "LIBELLE" => "ECOLE TECHNIQUE PRIVEE OSCELORN",
             "LOCALISATION" => "ET OSCELOR",
             "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0292186U",
+            "SOURCE_CODE" => "0292186U"
         ],
         [
             "LIBELLE" => "ECOLE TECHNIQUE PRIVEE PAUL LOUIS MERLIN",
@@ -14023,13 +14033,13 @@ return [
             "LIBELLE" => "ECOLE TECHNOLOGIQUE PRIVEE ILEC",
             "LOCALISATION" => "ET ILEC",
             "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060777M",
+            "SOURCE_CODE" => "0060777M"
         ],
         [
             "LIBELLE" => "ECOLE TECHNOLOGIQUE PRIVEE ILEC",
             "LOCALISATION" => "ET ILEC",
             "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0060818G",
+            "SOURCE_CODE" => "0060818G"
         ],
         [
             "LIBELLE" => "ECOLE TECHNOLOGIQUE PRIVEE INTERNATIONAL BUSINESS SCHOOL",
@@ -15775,7 +15785,7 @@ return [
             "LIBELLE" => "Ecole Pratique des Hautes Etudes",
             "LOCALISATION" => "EPHE",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0753486G",
+            "SOURCE_CODE" => "0753486G"
         ],
         [
             "LIBELLE" => "Ecole Sudformadia à Toulouse",
@@ -16159,7 +16169,7 @@ return [
             "LIBELLE" => "Escuela de Ingenierias Industriales",
             "LOCALISATION" => "Ecole",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR1365",
+            "SOURCE_CODE" => "ETR1365"
         ],
         [
             "LIBELLE" => "Etablissement Supérieur Libre CEA Global Campus France",
@@ -20709,13 +20719,13 @@ return [
             "LIBELLE" => "IUP GENIE ENVIRONNEMENT UNIVERSITE BESANCON",
             "LOCALISATION" => "BESANCON",
             "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0251887R",
+            "SOURCE_CODE" => "0251887R"
         ],
         [
             "LIBELLE" => "IUP GENIE ENVIRONNEMENT UNIVERSITE BESANCON",
             "LOCALISATION" => "BESANCON",
             "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0251886P",
+            "SOURCE_CODE" => "0251886P"
         ],
         [
             "LIBELLE" => "IUP GENIE ENVIRONNEMENT UNIVERSITE BESANCON",
@@ -21705,13 +21715,13 @@ return [
             "LIBELLE" => "IUP METIERS INFO COMMUNICATION UNIVERSITE TOULOUSE 2",
             "LOCALISATION" => "TOULOUSE",
             "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0312703V",
+            "SOURCE_CODE" => "0312703V"
         ],
         [
             "LIBELLE" => "IUP METIERS INFO COMMUNICATION UNIVERSITE TOULOUSE 2",
             "LOCALISATION" => "TOULOUSE",
             "DEPARTEMENT" => "031",
-            "SOURCE_CODE" => "0312546Z",
+            "SOURCE_CODE" => "0312546Z"
         ],
         [
             "LIBELLE" => "IUP METIERS INFORM COMMUNIC UNIVERSITE BESANCON",
@@ -21789,13 +21799,13 @@ return [
             "LIBELLE" => "IUP METIERS TRANSP HOTEL TOUR UNIVERSITE PARIS 12",
             "LOCALISATION" => "LIEUSAINT",
             "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772484G",
+            "SOURCE_CODE" => "0772484G"
         ],
         [
             "LIBELLE" => "IUP METIERS TRANSP HOTEL TOUR UNIVERSITE PARIS 12",
             "LOCALISATION" => "LIEUSAINT",
             "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772431Z",
+            "SOURCE_CODE" => "0772431Z"
         ],
         [
             "LIBELLE" => "IUP METIERS TRANSP HOTEL TOUR UNIVERSITE PAU",
@@ -23331,7 +23341,7 @@ return [
             "LIBELLE" => "Institut Vasco Vitoria - Espagne",
             "LOCALISATION" => "VITORIA",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0150",
+            "SOURCE_CODE" => "ETR0150"
         ],
         [
             "LIBELLE" => "Institut d'Etudes Politiques de Paris",
@@ -25203,25 +25213,25 @@ return [
             "LIBELLE" => "LP LYCEE DES METIERS GOURDOU-LESEURRE",
             "LOCALISATION" => "LY GOURDOU",
             "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940140S",
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS GUSTAVE EIFFEL",
-            "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "051",
-            "SOURCE_CODE" => "0510036M",
+            "SOURCE_CODE" => "0940140S"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0770945J",
+            "SOURCE_CODE" => "0770945J"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910632T",
+            "SOURCE_CODE" => "0910632T"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS GUSTAVE EIFFEL",
+            "LOCALISATION" => "LY EIFFEL",
+            "DEPARTEMENT" => "051",
+            "SOURCE_CODE" => "0510036M"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS GUYNEMER",
@@ -25767,43 +25777,43 @@ return [
             "LIBELLE" => "LP LYCEE DES METIERS LES LOMBARDS",
             "LOCALISATION" => "LY LOMBARD",
             "DEPARTEMENT" => "010",
-            "SOURCE_CODE" => "0100039N",
-        ],
-        [
-            "LIBELLE" => "LP LYCEE DES METIERS LOUIS ARMAND",
-            "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080953T",
+            "SOURCE_CODE" => "0100039N"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
             "DEPARTEMENT" => "056",
-            "SOURCE_CODE" => "0561507J",
+            "SOURCE_CODE" => "0561507J"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
             "DEPARTEMENT" => "091",
-            "SOURCE_CODE" => "0910756C",
+            "SOURCE_CODE" => "0910756C"
         ],
         [
-            "LIBELLE" => "LP LYCEE DES METIERS LOUIS BLERIOT",
-            "LOCALISATION" => "LY BLERIOT",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130033R",
+            "LIBELLE" => "LP LYCEE DES METIERS LOUIS ARMAND",
+            "LOCALISATION" => "LY ARMAND",
+            "DEPARTEMENT" => "008",
+            "SOURCE_CODE" => "0080953T"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS BLERIOT",
             "LOCALISATION" => "LY BLERIOT",
             "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0780273Y",
+            "SOURCE_CODE" => "0780273Y"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS BLERIOT",
             "LOCALISATION" => "LY BLERIOT",
             "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920171L",
+            "SOURCE_CODE" => "0920171L"
+        ],
+        [
+            "LIBELLE" => "LP LYCEE DES METIERS LOUIS BLERIOT",
+            "LOCALISATION" => "LY BLERIOT",
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130033R"
         ],
         [
             "LIBELLE" => "LP LYCEE DES METIERS LOUIS DARMANTE",
@@ -27105,55 +27115,49 @@ return [
             "LIBELLE" => "LPO LYCEE DES METIERS LAZARE DE SCHWENDI",
             "LOCALISATION" => "LY SCHWEND",
             "DEPARTEMENT" => "068",
-            "SOURCE_CODE" => "0681817F",
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
-            "LOCALISATION" => "LY CORBUSI",
-            "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0022044L",
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
-            "LOCALISATION" => "LY CORBUSI",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0672198A",
+            "SOURCE_CODE" => "0681817F"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
             "LOCALISATION" => "LY CORBUSI",
             "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0762964J",
+            "SOURCE_CODE" => "0762964J"
         ],
         [
-            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
+            "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
+            "LOCALISATION" => "LY CORBUSI",
             "DEPARTEMENT" => "002",
-            "SOURCE_CODE" => "0021476U",
+            "SOURCE_CODE" => "0022044L"
         ],
         [
-            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY L.VINCI",
-            "DEPARTEMENT" => "006",
-            "SOURCE_CODE" => "0061478Z",
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0382440W",
-        ],
-        [
-            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
-            "LOCALISATION" => "LY D.VINCI",
-            "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0754475G",
+            "LIBELLE" => "LPO LYCEE DES METIERS LE CORBUSIER",
+            "LOCALISATION" => "LY CORBUSI",
+            "DEPARTEMENT" => "067",
+            "SOURCE_CODE" => "0672198A"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
             "LOCALISATION" => "LY D.VINCI",
             "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0770934X",
+            "SOURCE_CODE" => "0770934X"
+        ],
+        [
+            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "075",
+            "SOURCE_CODE" => "0754475G"
+        ],
+        [
+            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
+            "LOCALISATION" => "LY L.VINCI",
+            "DEPARTEMENT" => "006",
+            "SOURCE_CODE" => "0061478Z"
+        ],
+        [
+            "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
+            "LOCALISATION" => "LY D.VINCI",
+            "DEPARTEMENT" => "002",
+            "SOURCE_CODE" => "0021476U"
         ],
         [
             "LIBELLE" => "LPO LYCEE DES METIERS LEONARD DE VINCI",
@@ -30680,38 +30684,38 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
             "LOCALISATION" => "LY LEGTA",
-            "DEPARTEMENT" => "018",
-            "SOURCE_CODE" => "0180585N",
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
-            "LOCALISATION" => "LY LEGTA",
-            "DEPARTEMENT" => "028",
-            "SOURCE_CODE" => "0280706R",
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
-            "LOCALISATION" => "LY LEGTA",
-            "DEPARTEMENT" => "036",
-            "SOURCE_CODE" => "0360600G",
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
-            "LOCALISATION" => "LY LEGTA",
-            "DEPARTEMENT" => "036",
-            "SOURCE_CODE" => "0360017Y",
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
-            "LOCALISATION" => "LY LEGTA",
             "DEPARTEMENT" => "037",
-            "SOURCE_CODE" => "0370781Y",
+            "SOURCE_CODE" => "0370781Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
+            "LOCALISATION" => "LY LEGTA",
+            "DEPARTEMENT" => "036",
+            "SOURCE_CODE" => "0360600G"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
+            "LOCALISATION" => "LY LEGTA",
+            "DEPARTEMENT" => "036",
+            "SOURCE_CODE" => "0360017Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
+            "LOCALISATION" => "LY LEGTA",
+            "DEPARTEMENT" => "018",
+            "SOURCE_CODE" => "0180585N"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
             "LOCALISATION" => "LY LEGTA",
             "DEPARTEMENT" => "041",
-            "SOURCE_CODE" => "0410018X",
+            "SOURCE_CODE" => "0410018X"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LEGTA",
+            "LOCALISATION" => "LY LEGTA",
+            "DEPARTEMENT" => "028",
+            "SOURCE_CODE" => "0280706R"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.AGRICOLE LES BARRES",
@@ -32294,20 +32298,20 @@ return [
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE GENEVIEVE",
             "LOCALISATION" => "LY S-GENEV",
+            "DEPARTEMENT" => "035",
+            "SOURCE_CODE" => "0350783L"
+        ],
+        [
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE MARIE",
+            "LOCALISATION" => "LY S-MARIE",
             "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920889S",
+            "SOURCE_CODE" => "0920875B"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE MARIE",
             "LOCALISATION" => "LY S-MARIE",
             "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0132810J",
-        ],
-        [
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE MARIE",
-            "LOCALISATION" => "LY S-MARIE",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0920875B",
+            "SOURCE_CODE" => "0132810J"
         ],
         [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE STE MARIE LA CROIX",
@@ -36153,25 +36157,25 @@ return [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
             "LOCALISATION" => "LY PASTEUR",
             "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590207E",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
-            "LOCALISATION" => "LY PASTEUR",
-            "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590117G",
+            "SOURCE_CODE" => "0590207E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
             "LOCALISATION" => "LY PASTEUR",
             "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0620095S",
+            "SOURCE_CODE" => "0620095S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
             "LOCALISATION" => "LY PASTEUR",
             "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0670082A",
+            "SOURCE_CODE" => "0670082A"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
+            "LOCALISATION" => "LY PASTEUR",
+            "DEPARTEMENT" => "059",
+            "SOURCE_CODE" => "0590117G"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PAYEN",
@@ -36357,25 +36361,25 @@ return [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
             "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0141555P",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
-            "LOCALISATION" => "LY CURIE",
-            "DEPARTEMENT" => "038",
-            "SOURCE_CODE" => "0382920T",
+            "SOURCE_CODE" => "0141555P"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
             "DEPARTEMENT" => "065",
-            "SOURCE_CODE" => "0650026A",
+            "SOURCE_CODE" => "0650026A"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
             "LOCALISATION" => "LY CURIE",
             "DEPARTEMENT" => "078",
-            "SOURCE_CODE" => "0782567S",
+            "SOURCE_CODE" => "0782567S"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE CURIE",
+            "LOCALISATION" => "LY CURIE",
+            "DEPARTEMENT" => "038",
+            "SOURCE_CODE" => "0382920T"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE MARIE DE CHAMPAGNE",
@@ -37077,25 +37081,25 @@ return [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ROBERT DOISNEAU",
             "LOCALISATION" => "LY DOISNEA",
             "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0693619J",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ROBERT SCHUMAN",
-            "LOCALISATION" => "LY SCHUMAN",
-            "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570057C",
+            "SOURCE_CODE" => "0693619J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ROBERT SCHUMAN",
             "LOCALISATION" => "LY SCHUMAN",
             "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0670020H",
+            "SOURCE_CODE" => "0670020H"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ROBERT SCHUMAN",
             "LOCALISATION" => "LY SCHUMAN",
             "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760058A",
+            "SOURCE_CODE" => "0760058A"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ROBERT SCHUMAN",
+            "LOCALISATION" => "LY SCHUMAN",
+            "DEPARTEMENT" => "057",
+            "SOURCE_CODE" => "0570057C"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE ROBESPIERRE",
@@ -37395,43 +37399,43 @@ return [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR GRIGNARD",
             "LOCALISATION" => "LY GRIGNAR",
             "DEPARTEMENT" => "050",
-            "SOURCE_CODE" => "0501828R",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
-            "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130043B",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
-            "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "025",
-            "SOURCE_CODE" => "0250007X",
+            "SOURCE_CODE" => "0501828R"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
             "DEPARTEMENT" => "053",
-            "SOURCE_CODE" => "0530004S",
+            "SOURCE_CODE" => "0530004S"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "056",
-            "SOURCE_CODE" => "0561607T",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
-            "LOCALISATION" => "LY HUGO",
-            "DEPARTEMENT" => "081",
-            "SOURCE_CODE" => "0810023K",
+            "DEPARTEMENT" => "013",
+            "SOURCE_CODE" => "0130043B"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
             "LOCALISATION" => "LY HUGO",
             "DEPARTEMENT" => "084",
-            "SOURCE_CODE" => "0840016L",
+            "SOURCE_CODE" => "0840016L"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
+            "LOCALISATION" => "LY HUGO",
+            "DEPARTEMENT" => "086",
+            "SOURCE_CODE" => "0860034V"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
+            "LOCALISATION" => "LY HUGO",
+            "DEPARTEMENT" => "056",
+            "SOURCE_CODE" => "0561607T"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
+            "LOCALISATION" => "LY HUGO",
+            "DEPARTEMENT" => "025",
+            "SOURCE_CODE" => "0250007X"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE VICTOR HUGO",
@@ -37748,20 +37752,20 @@ return [
         [
             "LIBELLE" => "LYCEE GENERAL JEAN MONNET",
             "LOCALISATION" => "LY MONNET",
-            "DEPARTEMENT" => "037",
-            "SOURCE_CODE" => "0371417P",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL JEAN MOULIN",
-            "LOCALISATION" => "LY MOULIN",
             "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0331636Z",
+            "SOURCE_CODE" => "0332745E"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
             "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690030H",
+            "SOURCE_CODE" => "0690030H"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL JEAN MOULIN",
+            "LOCALISATION" => "LY MOULIN",
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0331636Z"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL JEAN PUY",
@@ -39207,25 +39211,25 @@ return [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JEAN DE GARGUIER",
             "LOCALISATION" => "LY GERGUIE",
             "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0133822J",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "003",
-            "SOURCE_CODE" => "0030445T",
-        ],
-        [
-            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
-            "DEPARTEMENT" => "037",
-            "SOURCE_CODE" => "0371306U",
+            "SOURCE_CODE" => "0133822J"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
             "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0690550Y",
+            "SOURCE_CODE" => "0690550Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0030445T"
+        ],
+        [
+            "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "DEPARTEMENT" => "037",
+            "SOURCE_CODE" => "0371306U"
         ],
         [
             "LIBELLE" => "LYCEE GENERAL PRIVE SAINT JOSEPH",
@@ -40293,25 +40297,25 @@ return [
             "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
             "DEPARTEMENT" => "068",
-            "SOURCE_CODE" => "0680010S",
+            "SOURCE_CODE" => "0680010S"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
+            "LOCALISATION" => "LY PASCAL",
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490782J"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
             "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760095R",
+            "SOURCE_CODE" => "0760095R"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
             "LOCALISATION" => "LY PASCAL",
             "DEPARTEMENT" => "077",
-            "SOURCE_CODE" => "0772230F",
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT BLAISE PASCAL",
-            "LOCALISATION" => "LY PASCAL",
-            "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0932221J",
+            "SOURCE_CODE" => "0772230F"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT BLANCHE DE CASTILLE",
@@ -41121,31 +41125,31 @@ return [
             "LIBELLE" => "LYCEE POLYVALENT GUILLAUME FICHET",
             "LOCALISATION" => "LY FICHET",
             "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740013M",
-        ],
-        [
-            "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
-            "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "033",
-            "SOURCE_CODE" => "0330028B",
+            "SOURCE_CODE" => "0740013M"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0590011S",
+            "SOURCE_CODE" => "0590011S"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0922398G",
+            "DEPARTEMENT" => "033",
+            "SOURCE_CODE" => "0330028B"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
             "LOCALISATION" => "LY EIFFEL",
             "DEPARTEMENT" => "094",
-            "SOURCE_CODE" => "0940111K",
+            "SOURCE_CODE" => "0940111K"
+        ],
+        [
+            "LIBELLE" => "LYCEE POLYVALENT GUSTAVE EIFFEL",
+            "LOCALISATION" => "LY EIFFEL",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0922398G"
         ],
         [
             "LIBELLE" => "LYCEE POLYVALENT GUY MOLLET",
@@ -43731,25 +43735,25 @@ return [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS N.DAME DE LA PAIX",
             "LOCALISATION" => "LY ND-PAIX",
             "DEPARTEMENT" => "056",
-            "SOURCE_CODE" => "0561606S",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE DAME",
-            "LOCALISATION" => "LY N-DAME",
-            "DEPARTEMENT" => "007",
-            "SOURCE_CODE" => "0070114L",
+            "SOURCE_CODE" => "0561606S"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350807M",
+            "SOURCE_CODE" => "0350807M"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
             "DEPARTEMENT" => "069",
-            "SOURCE_CODE" => "0693375U",
+            "SOURCE_CODE" => "0693375U"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE DAME",
+            "LOCALISATION" => "LY N-DAME",
+            "DEPARTEMENT" => "007",
+            "SOURCE_CODE" => "0070114L"
         ],
         [
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS NOTRE-DAME",
@@ -44287,39 +44291,33 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LY ALBERT",
-            "DEPARTEMENT" => "080",
-            "SOURCE_CODE" => "0800060F",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LY MAZAMET",
-            "DEPARTEMENT" => "081",
-            "SOURCE_CODE" => "0811324Z",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
             "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "049",
-            "SOURCE_CODE" => "0490020F",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL",
-            "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "054",
-            "SOURCE_CODE" => "0542306N",
+            "DEPARTEMENT" => "062",
+            "SOURCE_CODE" => "0622240Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
             "LOCALISATION" => "LP",
             "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0593496E",
+            "SOURCE_CODE" => "0593496E"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
             "LOCALISATION" => "LP",
-            "DEPARTEMENT" => "062",
-            "SOURCE_CODE" => "0622240Y",
+            "DEPARTEMENT" => "085",
+            "SOURCE_CODE" => "0850029V"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "054",
+            "SOURCE_CODE" => "0542306N"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL",
+            "LOCALISATION" => "LP",
+            "DEPARTEMENT" => "049",
+            "SOURCE_CODE" => "0490020F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL",
@@ -44389,27 +44387,15 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY AUBIN",
-            "DEPARTEMENT" => "035",
-            "SOURCE_CODE" => "0350940G",
+            "LOCALISATION" => "LY FAYL",
+            "DEPARTEMENT" => "052",
+            "SOURCE_CODE" => "0520741Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY CHAMBRA",
-            "DEPARTEMENT" => "037",
-            "SOURCE_CODE" => "0370794M",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY MONTOIR",
-            "DEPARTEMENT" => "041",
-            "SOURCE_CODE" => "0410626H",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY ESPALY",
-            "DEPARTEMENT" => "043",
-            "SOURCE_CODE" => "0430111M",
+            "LOCALISATION" => "LY TONNEIN",
+            "DEPARTEMENT" => "047",
+            "SOURCE_CODE" => "0470107L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
@@ -44467,69 +44453,21 @@ return [
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY OLORON",
-            "DEPARTEMENT" => "064",
-            "SOURCE_CODE" => "0640254D",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY ORTHEZ",
-            "DEPARTEMENT" => "064",
-            "SOURCE_CODE" => "0640253C",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY TARBES",
-            "DEPARTEMENT" => "065",
-            "SOURCE_CODE" => "0650138X",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY ERSTEIN",
-            "DEPARTEMENT" => "067",
-            "SOURCE_CODE" => "0671779V",
+            "LOCALISATION" => "LY PERRIER",
+            "DEPARTEMENT" => "071",
+            "SOURCE_CODE" => "0711073F"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
             "LOCALISATION" => "LY MACON",
             "DEPARTEMENT" => "071",
-            "SOURCE_CODE" => "0711120G",
+            "SOURCE_CODE" => "0711120G"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY PERRIER",
-            "DEPARTEMENT" => "071",
-            "SOURCE_CODE" => "0711073F",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY CHAVANO",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0741689J",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY CONTAMI",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740276Y",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY YRIEIX",
-            "DEPARTEMENT" => "087",
-            "SOURCE_CODE" => "0870671G",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY C/YONNE",
-            "DEPARTEMENT" => "089",
-            "SOURCE_CODE" => "0890849P",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
-            "LOCALISATION" => "LY UVEA",
-            "DEPARTEMENT" => "986",
-            "SOURCE_CODE" => "9870033X",
+            "LOCALISATION" => "LY CHAMBRA",
+            "DEPARTEMENT" => "037",
+            "SOURCE_CODE" => "0370794M"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE",
@@ -47277,25 +47215,19 @@ return [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MORETTE",
             "LOCALISATION" => "LY MORETTE",
             "DEPARTEMENT" => "054",
-            "SOURCE_CODE" => "0540086A",
+            "SOURCE_CODE" => "0540086A"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
+            "LOCALISATION" => "LY M/PREUI",
+            "DEPARTEMENT" => "093",
+            "SOURCE_CODE" => "0931739K"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "008",
-            "SOURCE_CODE" => "0080066D",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
-            "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "013",
-            "SOURCE_CODE" => "0130150T",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
-            "LOCALISATION" => "LY MOULIN",
-            "DEPARTEMENT" => "018",
-            "SOURCE_CODE" => "0180026F",
+            "DEPARTEMENT" => "094",
+            "SOURCE_CODE" => "0940143V"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN MOULIN",
@@ -47349,25 +47281,25 @@ return [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN RONDEAU",
             "LOCALISATION" => "LY RONDEAU",
             "DEPARTEMENT" => "072",
-            "SOURCE_CODE" => "0721301Y",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN ROSTAND",
-            "LOCALISATION" => "LY ROSTAND",
-            "DEPARTEMENT" => "016",
-            "SOURCE_CODE" => "0160049S",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN ROSTAND",
-            "LOCALISATION" => "LY ROSTAND",
-            "DEPARTEMENT" => "058",
-            "SOURCE_CODE" => "0580050P",
+            "SOURCE_CODE" => "0721301Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN ROSTAND",
             "LOCALISATION" => "LY ROSTAND",
             "DEPARTEMENT" => "076",
-            "SOURCE_CODE" => "0760082B",
+            "SOURCE_CODE" => "0760082B"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN ROSTAND",
+            "LOCALISATION" => "LY ROSTAND",
+            "DEPARTEMENT" => "016",
+            "SOURCE_CODE" => "0160049S"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL JEAN ROSTAND",
+            "LOCALISATION" => "LY ROSTAND",
+            "DEPARTEMENT" => "058",
+            "SOURCE_CODE" => "0580050P"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL JEAN VICTOR PONCELET",
@@ -47979,31 +47911,31 @@ return [
             "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARAGON",
             "LOCALISATION" => "LY ARAGON",
             "DEPARTEMENT" => "027",
-            "SOURCE_CODE" => "0270027H",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
-            "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "044",
-            "SOURCE_CODE" => "0440352U",
+            "SOURCE_CODE" => "0270027H"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
             "DEPARTEMENT" => "059",
-            "SOURCE_CODE" => "0592712C",
+            "SOURCE_CODE" => "0592712C"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
-            "DEPARTEMENT" => "073",
-            "SOURCE_CODE" => "0731249L",
+            "DEPARTEMENT" => "044",
+            "SOURCE_CODE" => "0440352U"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
             "LOCALISATION" => "LY ARMAND",
             "DEPARTEMENT" => "086",
-            "SOURCE_CODE" => "0860052P",
+            "SOURCE_CODE" => "0860052P"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS ARMAND",
+            "LOCALISATION" => "LY ARMAND",
+            "DEPARTEMENT" => "073",
+            "SOURCE_CODE" => "0731249L"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL LOUIS BLERIOT",
@@ -48609,25 +48541,25 @@ return [
             "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LACAVE",
             "LOCALISATION" => "LY LACAVE",
             "DEPARTEMENT" => "971",
-            "SOURCE_CODE" => "9710418C",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LANGEVIN",
-            "LOCALISATION" => "LY LANGEVI",
-            "DEPARTEMENT" => "030",
-            "SOURCE_CODE" => "0300011Z",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LANGEVIN",
-            "LOCALISATION" => "LY LANGEVI",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "0921677Y",
+            "SOURCE_CODE" => "9710418C"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LANGEVIN",
             "LOCALISATION" => "LY LANGEVI",
             "DEPARTEMENT" => "974",
-            "SOURCE_CODE" => "9740934X",
+            "SOURCE_CODE" => "9740934X"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LANGEVIN",
+            "LOCALISATION" => "LY LANGEVI",
+            "DEPARTEMENT" => "030",
+            "SOURCE_CODE" => "0300011Z"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LANGEVIN",
+            "LOCALISATION" => "LY LANGEVI",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "0921677Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PAUL LAPIE",
@@ -50480,26 +50412,26 @@ return [
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT",
             "LOCALISATION" => "LY S-VINCE",
-            "DEPARTEMENT" => "074",
-            "SOURCE_CODE" => "0740144E",
-        ],
-        [
-            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT DE PAUL",
-            "LOCALISATION" => "LY SVDPAUL",
-            "DEPARTEMENT" => "037",
-            "SOURCE_CODE" => "0370757X",
+            "DEPARTEMENT" => "003",
+            "SOURCE_CODE" => "0030105Y"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT DE PAUL",
             "LOCALISATION" => "LY SVDPAUL",
             "DEPARTEMENT" => "057",
-            "SOURCE_CODE" => "0570241C",
+            "SOURCE_CODE" => "0570241C"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT DE PAUL",
             "LOCALISATION" => "LY SVDPAUL",
             "DEPARTEMENT" => "093",
-            "SOURCE_CODE" => "0930946Y",
+            "SOURCE_CODE" => "0930946Y"
+        ],
+        [
+            "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT VINCENT DE PAUL",
+            "LOCALISATION" => "LY SVDPAUL",
+            "DEPARTEMENT" => "037",
+            "SOURCE_CODE" => "0370757X"
         ],
         [
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT-DOMINIQUE",
@@ -53745,13 +53677,7 @@ return [
             "LIBELLE" => "Maison familiale rurale La Chapelle-d'Andaine",
             "LOCALISATION" => "MFR",
             "DEPARTEMENT" => "061",
-            "SOURCE_CODE" => "0611118J",
-        ],
-        [
-            "LIBELLE" => "Maison familiale rurale de l'Iroise",
-            "LOCALISATION" => "MFR Iroise",
-            "DEPARTEMENT" => "029",
-            "SOURCE_CODE" => "0291601H",
+            "SOURCE_CODE" => "0611118J"
         ],
         [
             "LIBELLE" => "Maison familiale rurale du Val de l'Indre",
@@ -54537,7 +54463,7 @@ return [
             "LIBELLE" => "Sciences Po Paris",
             "LOCALISATION" => "Institut",
             "DEPARTEMENT" => "075",
-            "SOURCE_CODE" => "0753431X",
+            "SOURCE_CODE" => "0753431X"
         ],
         [
             "LIBELLE" => "Seoul National University of Sciences and technology",
@@ -59571,13 +59497,13 @@ return [
             "LIBELLE" => "Université Libre de Bruxelles - Belgique",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0373",
+            "SOURCE_CODE" => "ETR0025"
         ],
         [
             "LIBELLE" => "Université Libre de Bruxelles - Belgique",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0025",
+            "SOURCE_CODE" => "ETR0373"
         ],
         [
             "LIBELLE" => "Université Lietuvos Teises Lituanie",
@@ -60567,13 +60493,13 @@ return [
             "LIBELLE" => "Université Sultan Moulay Slimane",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR1306",
+            "SOURCE_CODE" => "ETR1306"
         ],
         [
             "LIBELLE" => "Université Suor Orsola Benincasa Naples",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR533",
+            "SOURCE_CODE" => "ETR533"
         ],
         [
             "LIBELLE" => "Université Sveti Kliment Chridsk Bulgari",
@@ -60585,13 +60511,13 @@ return [
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0168",
+            "SOURCE_CODE" => "ETR168"
         ],
         [
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR168",
+            "SOURCE_CODE" => "ETR0168"
         ],
         [
             "LIBELLE" => "Université Tampereen  Yliopisto Finlande",
@@ -61323,13 +61249,13 @@ return [
             "LIBELLE" => "Université de Bologne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0363",
+            "SOURCE_CODE" => "ETR0020"
         ],
         [
             "LIBELLE" => "Université de Bologne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0020",
+            "SOURCE_CODE" => "ETR0363"
         ],
         [
             "LIBELLE" => "Université de Bonn - Allemagne",
@@ -61377,13 +61303,13 @@ return [
             "LIBELLE" => "Université de Bucarest - Roumanie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0026",
+            "SOURCE_CODE" => "ETR0400"
         ],
         [
             "LIBELLE" => "Université de Bucarest - Roumanie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0400",
+            "SOURCE_CODE" => "ETR0026"
         ],
         [
             "LIBELLE" => "Université de Budapest",
@@ -61683,13 +61609,13 @@ return [
             "LIBELLE" => "Université de Geneve - Suisse",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0356",
+            "SOURCE_CODE" => "ETR0057"
         ],
         [
             "LIBELLE" => "Université de Geneve - Suisse",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0057",
+            "SOURCE_CODE" => "ETR0356"
         ],
         [
             "LIBELLE" => "Université de Genova - Italie",
@@ -62445,13 +62371,13 @@ return [
             "LIBELLE" => "Université de Sienne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR00407",
+            "SOURCE_CODE" => "ETR0131"
         ],
         [
             "LIBELLE" => "Université de Sienne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0359",
+            "SOURCE_CODE" => "ETR00407"
         ],
         [
             "LIBELLE" => "Université de Sofia - Bulgarie",
@@ -63177,13 +63103,7 @@ return [
             "LIBELLE" => "l'Università Cattolica del Sacro Cuore",
             "LOCALISATION" => "Università",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR1005",
-        ],
-        [
-            "LIBELLE" => "l'Université Libanaise",
-            "LOCALISATION" => "Université",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR997",
+            "SOURCE_CODE" => "ETR1005"
         ],
         [
             "LIBELLE" => "l'Université Yaounde 1",
@@ -67005,7 +66925,7 @@ return [
             "CODE" => "SURNOMBRE",
             "LIBELLE" => "Surnombre",
             "MULTIPLICATEUR" => -1,
-            "DECHARGE" => FALSE,
+            "DECHARGE" => FALSE
         ],
         [
             "CODE" => "SUSP-DISC",
@@ -67139,8 +67059,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 192.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ENS_2ND_DEG",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Enseignant chercheur",
@@ -67166,8 +67085,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 192.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ENS_CH",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Associé à mi-temps",
@@ -67193,8 +67111,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 96.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ASS_MI_TPS",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Ater",
@@ -67220,8 +67137,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ATER",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Ater mi-temps",
@@ -67247,8 +67163,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ATER_MI_TPS",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Enseignant Contractuel CDD",
@@ -67274,8 +67189,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 192.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ENS_CONTRACT_CDD",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Lecteur",
@@ -67301,8 +67215,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 192.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "LECTEUR",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Maître de langues",
@@ -67328,8 +67241,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 192.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "MAITRE_LANG",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "BIATSS",
@@ -67355,8 +67267,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "BIATSS",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Salarié du secteur privé français",
@@ -67382,8 +67293,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "SALAR_PRIVE",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Salarié du secteur public français",
@@ -67409,8 +67319,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "SALAR_PUBLIC",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Auto-entrepreneur, profession libérale ou indépendante",
@@ -67436,8 +67345,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "AUTO_LIBER_INDEP",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Retraité hors Université de Caen",
@@ -67463,8 +67371,7 @@ return [
             "TEM_ATV" => TRUE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "RETR_HORS_UCBN",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Étudiant Université de Caen",
@@ -67490,8 +67397,7 @@ return [
             "TEM_ATV" => TRUE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ETUD_UCBN",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Étudiant hors Université de Caen",
@@ -67517,8 +67423,7 @@ return [
             "TEM_ATV" => TRUE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ETUD_HORS_UCBN",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Sans emploi, non étudiant",
@@ -67544,8 +67449,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "SS_EMPLOI_NON_ETUD",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Autres",
@@ -67571,8 +67475,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "AUTRES",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Non autorisés",
@@ -67598,8 +67501,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "NON_AUTORISE",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Salarié d'une entreprise ou d'un organisme étranger",
@@ -67625,8 +67527,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "SALAR_ETRANGER",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Enseignant hospitalo-universitaire",
@@ -67652,8 +67553,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "HOSPITALO_UNIV",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Intermittent du spectacle",
@@ -67679,8 +67579,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "INTERMITTENT",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Permanent académique à l'ESPE",
@@ -67706,8 +67605,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "PERM_ACA",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Doctorant (réforme 2016)",
@@ -67733,8 +67631,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "DOCTOR",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Intervenant extérieur SUAPS déjà payé entre 09 et 12/2018",
@@ -67760,8 +67657,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "VAC.SUAPS",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Vacataire fonctionnaire au SUAPS",
@@ -67787,8 +67683,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "VACFONCSUAPS",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Vacataire non-fonctionnaire au SUAPS",
@@ -67814,8 +67709,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 9999.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "VACNONFONCSUAPS",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Enseignant Contractuel CDI",
@@ -67841,8 +67735,7 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 192.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ENS_CONTRACT_CDI",
+            "CHARGES_PATRONALES" => 1.0
         ],
         [
             "LIBELLE" => "Enseignant chercheur contractuel",
@@ -67868,17 +67761,15 @@ return [
             "TEM_ATV" => FALSE,
             "PLAFOND_HC_FI_HORS_EAD" => 192.0,
             "TITULAIRE" => FALSE,
-            "CHARGES_PATRONALES" => 1.0,
-            "CODE" => "ENS_CH_CONTRAT",
-        ],
+            "CHARGES_PATRONALES" => 1.0
+        ]
     ],
     "ROLE" => [
         [
             "CODE" => "administrateur",
             "LIBELLE" => "Administrateur",
             "PERIMETRE_ID" => 3,
-            "PEUT_CHANGER_STRUCTURE" => TRUE,
-            "ACCESSIBLE_EXTERIEUR" => FALSE,
+            "PEUT_CHANGER_STRUCTURE" => TRUE
         ],
         [
             "CODE" => "gestionnaire-composante",
@@ -68206,687 +68097,675 @@ return [
         ],
         [
             "ROLE_ID" => "gestionnaire-composante",
-            "PRIVILEGE_ID" => "contrat-contrat-generation",
+            "PRIVILEGE_ID" => "contrat-contrat-generation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modif-service-du-association",
+            "PRIVILEGE_ID" => "modif-service-du-association"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modif-service-du-visualisation",
+            "PRIVILEGE_ID" => "modif-service-du-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modif-service-du-edition",
+            "PRIVILEGE_ID" => "modif-service-du-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-export-paie",
+            "PRIVILEGE_ID" => "mise-en-paiement-export-paie"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-export-csv",
+            "PRIVILEGE_ID" => "mise-en-paiement-export-csv"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-export-pdf",
+            "PRIVILEGE_ID" => "mise-en-paiement-export-pdf"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-demande",
+            "PRIVILEGE_ID" => "mise-en-paiement-demande"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "intervenant-fiche",
+            "PRIVILEGE_ID" => "intervenant-fiche"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-mise-en-paiement",
+            "PRIVILEGE_ID" => "mise-en-paiement-mise-en-paiement"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "intervenant-recherche",
+            "PRIVILEGE_ID" => "intervenant-recherche"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-ecarts",
+            "PRIVILEGE_ID" => "import-ecarts"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-maj",
+            "PRIVILEGE_ID" => "import-maj"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-tbl",
+            "PRIVILEGE_ID" => "import-tbl"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-vues-procedures",
+            "PRIVILEGE_ID" => "import-vues-procedures"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-export-csv",
+            "PRIVILEGE_ID" => "enseignement-export-csv"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-visualisation",
+            "PRIVILEGE_ID" => "enseignement-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "intervenant-calcul-hetd",
+            "PRIVILEGE_ID" => "intervenant-calcul-hetd"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "droit-affectation-edition",
+            "PRIVILEGE_ID" => "droit-affectation-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "droit-affectation-visualisation",
+            "PRIVILEGE_ID" => "droit-affectation-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "droit-privilege-edition",
+            "PRIVILEGE_ID" => "droit-privilege-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "droit-privilege-visualisation",
+            "PRIVILEGE_ID" => "droit-privilege-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "droit-role-edition",
+            "PRIVILEGE_ID" => "droit-role-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "droit-role-visualisation",
+            "PRIVILEGE_ID" => "droit-role-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-centres-cout-edition",
+            "PRIVILEGE_ID" => "odf-centres-cout-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-element-edition",
+            "PRIVILEGE_ID" => "odf-element-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-etape-edition",
+            "PRIVILEGE_ID" => "odf-etape-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-export-csv",
+            "PRIVILEGE_ID" => "odf-export-csv"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-modulateurs-edition",
+            "PRIVILEGE_ID" => "odf-modulateurs-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-taux-mixite-edition",
+            "PRIVILEGE_ID" => "odf-taux-mixite-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-visualisation",
+            "PRIVILEGE_ID" => "odf-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-element-visualisation",
+            "PRIVILEGE_ID" => "odf-element-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-etape-visualisation",
+            "PRIVILEGE_ID" => "odf-etape-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "discipline-edition",
+            "PRIVILEGE_ID" => "discipline-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "discipline-gestion",
+            "PRIVILEGE_ID" => "discipline-gestion"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "discipline-visualisation",
+            "PRIVILEGE_ID" => "discipline-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "intervenant-edition",
+            "PRIVILEGE_ID" => "intervenant-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-devalidation",
+            "PRIVILEGE_ID" => "enseignement-devalidation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-edition",
+            "PRIVILEGE_ID" => "enseignement-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-exterieur",
+            "PRIVILEGE_ID" => "enseignement-exterieur"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-validation",
+            "PRIVILEGE_ID" => "enseignement-validation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "agrement-conseil-academique-edition",
+            "PRIVILEGE_ID" => "agrement-conseil-academique-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "agrement-conseil-academique-visualisation",
+            "PRIVILEGE_ID" => "agrement-conseil-academique-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "agrement-conseil-restreint-edition",
+            "PRIVILEGE_ID" => "agrement-conseil-restreint-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "agrement-conseil-restreint-visualisation",
+            "PRIVILEGE_ID" => "agrement-conseil-restreint-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "referentiel-devalidation",
+            "PRIVILEGE_ID" => "referentiel-devalidation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "referentiel-edition",
+            "PRIVILEGE_ID" => "referentiel-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "referentiel-validation",
+            "PRIVILEGE_ID" => "referentiel-validation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "referentiel-visualisation",
+            "PRIVILEGE_ID" => "referentiel-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "indicateur-abonnement",
+            "PRIVILEGE_ID" => "indicateur-abonnement"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "indicateur-abonnements-edition",
+            "PRIVILEGE_ID" => "indicateur-abonnements-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "indicateur-abonnements-visualisation",
+            "PRIVILEGE_ID" => "indicateur-abonnements-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "indicateur-visualisation",
+            "PRIVILEGE_ID" => "indicateur-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "piece-justificative-devalidation",
+            "PRIVILEGE_ID" => "piece-justificative-devalidation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "piece-justificative-edition",
+            "PRIVILEGE_ID" => "piece-justificative-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "piece-justificative-validation",
+            "PRIVILEGE_ID" => "piece-justificative-validation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "piece-justificative-visualisation",
+            "PRIVILEGE_ID" => "piece-justificative-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "dossier-devalidation",
+            "PRIVILEGE_ID" => "dossier-devalidation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "dossier-edition",
+            "PRIVILEGE_ID" => "dossier-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "dossier-validation",
+            "PRIVILEGE_ID" => "dossier-validation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "dossier-visualisation",
+            "PRIVILEGE_ID" => "dossier-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "motif-non-paiement-edition",
+            "PRIVILEGE_ID" => "motif-non-paiement-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "motif-non-paiement-visualisation",
+            "PRIVILEGE_ID" => "motif-non-paiement-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-creation",
+            "PRIVILEGE_ID" => "contrat-creation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-depot-retour-signe",
+            "PRIVILEGE_ID" => "contrat-depot-retour-signe"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-devalidation",
+            "PRIVILEGE_ID" => "contrat-devalidation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-saisie-date-retour-signe",
+            "PRIVILEGE_ID" => "contrat-saisie-date-retour-signe"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-suppression",
+            "PRIVILEGE_ID" => "contrat-suppression"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-validation",
+            "PRIVILEGE_ID" => "contrat-validation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-visualisation",
+            "PRIVILEGE_ID" => "contrat-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "pilotage-ecarts-etats",
+            "PRIVILEGE_ID" => "pilotage-ecarts-etats"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "pilotage-visualisation",
+            "PRIVILEGE_ID" => "pilotage-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-visualisation",
+            "PRIVILEGE_ID" => "budget-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "agrement-conseil-academique-suppression",
+            "PRIVILEGE_ID" => "agrement-conseil-academique-suppression"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "agrement-conseil-restreint-suppression",
+            "PRIVILEGE_ID" => "agrement-conseil-restreint-suppression"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-edition-engagement-composante",
+            "PRIVILEGE_ID" => "budget-edition-engagement-composante"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-edition-engagement-etablissement",
+            "PRIVILEGE_ID" => "budget-edition-engagement-etablissement"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-export",
+            "PRIVILEGE_ID" => "budget-export"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "piece-justificative-gestion-edition",
+            "PRIVILEGE_ID" => "piece-justificative-gestion-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "piece-justificative-gestion-visualisation",
+            "PRIVILEGE_ID" => "piece-justificative-gestion-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "workflow-dependances-edition",
+            "PRIVILEGE_ID" => "workflow-dependances-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "workflow-dependances-visualisation",
+            "PRIVILEGE_ID" => "workflow-dependances-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "piece-justificative-telechargement",
+            "PRIVILEGE_ID" => "piece-justificative-telechargement"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "cloture-cloture",
+            "PRIVILEGE_ID" => "cloture-cloture"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "cloture-reouverture",
+            "PRIVILEGE_ID" => "cloture-reouverture"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "cloture-edition-services",
+            "PRIVILEGE_ID" => "cloture-edition-services"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "dossier-suppression",
+            "PRIVILEGE_ID" => "dossier-suppression"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "dossier-differences",
+            "PRIVILEGE_ID" => "dossier-differences"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "dossier-purger-differences",
+            "PRIVILEGE_ID" => "dossier-purger-differences"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "indicateur-envoi-mail-intervenants",
+            "PRIVILEGE_ID" => "indicateur-envoi-mail-intervenants"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "parametres-general-edition",
+            "PRIVILEGE_ID" => "parametres-general-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "parametres-general-visualisation",
+            "PRIVILEGE_ID" => "parametres-general-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "parametres-campagnes-saisie-edition",
+            "PRIVILEGE_ID" => "parametres-campagnes-saisie-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "parametres-campagnes-saisie-visualisation",
+            "PRIVILEGE_ID" => "parametres-campagnes-saisie-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-edition",
+            "PRIVILEGE_ID" => "mise-en-paiement-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-visualisation-intervenant",
+            "PRIVILEGE_ID" => "mise-en-paiement-visualisation-intervenant"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "mise-en-paiement-visualisation-gestion",
+            "PRIVILEGE_ID" => "mise-en-paiement-visualisation-gestion"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "parametres-annees-edition",
+            "PRIVILEGE_ID" => "parametres-annees-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "parametres-annees-visualisation",
+            "PRIVILEGE_ID" => "parametres-annees-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "referentiel-admin-edition",
+            "PRIVILEGE_ID" => "referentiel-admin-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "referentiel-admin-visualisation",
+            "PRIVILEGE_ID" => "referentiel-admin-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "intervenant-suppression",
+            "PRIVILEGE_ID" => "intervenant-suppression"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-type-dotation-edition",
+            "PRIVILEGE_ID" => "budget-type-dotation-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-type-dotation-visualisation",
+            "PRIVILEGE_ID" => "budget-type-dotation-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "type-intervention-edition",
+            "PRIVILEGE_ID" => "type-intervention-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "type-intervention-visualisation",
+            "PRIVILEGE_ID" => "type-intervention-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-formation-assiduite-edition",
+            "PRIVILEGE_ID" => "chargens-formation-assiduite-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-formation-effectifs-edition",
+            "PRIVILEGE_ID" => "chargens-formation-effectifs-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-formation-seuils-edition",
+            "PRIVILEGE_ID" => "chargens-formation-seuils-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-formation-visualisation",
+            "PRIVILEGE_ID" => "chargens-formation-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-scenario-composante-edition",
+            "PRIVILEGE_ID" => "chargens-scenario-composante-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-scenario-etablissement-edition",
+            "PRIVILEGE_ID" => "chargens-scenario-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-scenario-visualisation",
+            "PRIVILEGE_ID" => "chargens-seuil-composante-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-seuil-composante-edition",
+            "PRIVILEGE_ID" => "chargens-seuil-composante-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-seuil-composante-visualisation",
+            "PRIVILEGE_ID" => "chargens-seuil-etablissement-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-seuil-etablissement-edition",
+            "PRIVILEGE_ID" => "chargens-seuil-etablissement-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-seuil-etablissement-visualisation",
+            "PRIVILEGE_ID" => "chargens-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-visualisation",
+            "PRIVILEGE_ID" => "chargens-scenario-duplication"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-scenario-duplication",
+            "PRIVILEGE_ID" => "chargens-formation-actif-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-formation-actif-edition",
+            "PRIVILEGE_ID" => "chargens-formation-choix-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-formation-choix-edition",
+            "PRIVILEGE_ID" => "chargens-formation-poids-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-formation-poids-edition",
+            "PRIVILEGE_ID" => "modulateur-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modulateur-edition",
+            "PRIVILEGE_ID" => "modulateur-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modulateur-visualisation",
+            "PRIVILEGE_ID" => "chargens-export-csv"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-export-csv",
+            "PRIVILEGE_ID" => "enseignement-export-pdf"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-export-pdf",
+            "PRIVILEGE_ID" => "intervenant-statut-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "intervenant-statut-edition",
+            "PRIVILEGE_ID" => "intervenant-statut-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "intervenant-statut-visualisation",
+            "PRIVILEGE_ID" => "modif-service-du-export-csv"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modif-service-du-export-csv",
+            "PRIVILEGE_ID" => "agrement-export-csv"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "agrement-export-csv",
+            "PRIVILEGE_ID" => "unicaen-tbl-admin"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "unicaen-tbl-admin",
+            "PRIVILEGE_ID" => "unicaen-tbl-update-actuproc"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "unicaen-tbl-update-actuproc",
+            "PRIVILEGE_ID" => "unicaen-tbl-actualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "unicaen-tbl-actualisation",
+            "PRIVILEGE_ID" => "chargens-depassement-csv"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "chargens-depassement-csv",
+            "PRIVILEGE_ID" => "odf-element-vh-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-element-vh-edition",
+            "PRIVILEGE_ID" => "odf-element-vh-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-element-vh-visualisation",
+            "PRIVILEGE_ID" => "plafonds-gestion-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "plafonds-gestion-edition",
+            "PRIVILEGE_ID" => "plafonds-gestion-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "plafonds-gestion-visualisation",
+            "PRIVILEGE_ID" => "modif-service-du-gestion-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modif-service-du-gestion-edition",
+            "PRIVILEGE_ID" => "modif-service-du-gestion-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "modif-service-du-gestion-visualisation",
+            "PRIVILEGE_ID" => "import-sources-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-sources-edition",
+            "PRIVILEGE_ID" => "import-sources-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-sources-visualisation",
+            "PRIVILEGE_ID" => "import-tables-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-tables-edition",
+            "PRIVILEGE_ID" => "import-tables-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "import-tables-visualisation",
+            "PRIVILEGE_ID" => "contrat-modeles-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-import-intervenant-previsionnel-agenda",
+            "PRIVILEGE_ID" => "contrat-modeles-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "enseignement-import-intervenant-realise-agenda",
+            "PRIVILEGE_ID" => "contrat-projet-generation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-modeles-visualisation",
+            "PRIVILEGE_ID" => "contrat-contrat-generation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-modeles-edition",
+            "PRIVILEGE_ID" => "centres-couts-administration-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-projet-generation",
+            "PRIVILEGE_ID" => "centres-couts-administration-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "contrat-contrat-generation",
+            "PRIVILEGE_ID" => "etat-sortie-administration-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "centres-couts-administration-visualisation",
+            "PRIVILEGE_ID" => "etat-sortie-administration-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "centres-couts-administration-edition",
+            "PRIVILEGE_ID" => "odf-grands-types-diplome-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "etat-sortie-administration-visualisation",
+            "PRIVILEGE_ID" => "odf-grands-types-diplome-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "etat-sortie-administration-edition",
+            "PRIVILEGE_ID" => "odf-types-diplome-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-grands-types-diplome-visualisation",
+            "PRIVILEGE_ID" => "odf-types-diplome-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-grands-types-diplome-edition",
+            "PRIVILEGE_ID" => "motifs-modification-service-du-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-types-diplome-visualisation",
+            "PRIVILEGE_ID" => "motifs-modification-service-du-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-types-diplome-edition",
+            "PRIVILEGE_ID" => "structures-administration-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "motifs-modification-service-du-visualisation",
+            "PRIVILEGE_ID" => "structures-administration-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "motifs-modification-service-du-edition",
+            "PRIVILEGE_ID" => "budget-types-ressources-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "structures-administration-visualisation",
+            "PRIVILEGE_ID" => "budget-types-ressources-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "structures-administration-edition",
+            "PRIVILEGE_ID" => "domaines-fonctionnels-administration-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-types-ressources-visualisation",
+            "PRIVILEGE_ID" => "domaines-fonctionnels-administration-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-types-ressources-edition",
+            "PRIVILEGE_ID" => "budget-cc-activite-visualisation"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "domaines-fonctionnels-administration-visualisation",
+            "PRIVILEGE_ID" => "budget-cc-activite-edition"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "domaines-fonctionnels-administration-edition",
+            "PRIVILEGE_ID" => "formule-tests"
         ],
         [
             "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-cc-activite-visualisation",
+            "PRIVILEGE_ID" => "cloture-edition-services-avec-mep"
         ],
         [
-            "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "budget-cc-activite-edition",
-        ],
-        [
-            "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "formule-tests",
-        ],
-        [
-            "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "cloture-edition-services-avec-mep",
-        ],
-        [
-            "ROLE_ID" => "administrateur",
-            "PRIVILEGE_ID" => "odf-reconduction-offre",
+            "ROLE_ID" => "superviseur-etablissement",
+            "PRIVILEGE_ID" => "modif-service-du-visualisation"
         ],
         [
             "ROLE_ID" => "superviseur-etablissement",
@@ -70604,83 +70483,83 @@ return [
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "BIATSS",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
             "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
             "OBLIGATOIRE" => 1,
-            "PREMIER_RECRUTEMENT" => TRUE,
+            "PREMIER_RECRUTEMENT" => TRUE
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
             "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
             "OBLIGATOIRE" => 1,
-            "PREMIER_RECRUTEMENT" => TRUE,
+            "PREMIER_RECRUTEMENT" => TRUE
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
             "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
             "OBLIGATOIRE" => 1,
-            "PREMIER_RECRUTEMENT" => TRUE,
+            "PREMIER_RECRUTEMENT" => TRUE
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "RETR_HORS_UCBN",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "ETUD_UCBN",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "ETUD_HORS_UCBN",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "SS_EMPLOI_NON_ETUD",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
             "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
             "OBLIGATOIRE" => 1,
-            "PREMIER_RECRUTEMENT" => TRUE,
+            "PREMIER_RECRUTEMENT" => TRUE
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
             "STATUT_INTERVENANT_ID" => "INTERMITTENT",
-            "OBLIGATOIRE" => 1,
+            "OBLIGATOIRE" => 1
         ],
         [
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
             "STATUT_INTERVENANT_ID" => "INTERMITTENT",
             "OBLIGATOIRE" => 1,
-            "PREMIER_RECRUTEMENT" => TRUE,
-        ],
+            "PREMIER_RECRUTEMENT" => TRUE
+        ]
     ],
     "TYPE_PIECE_JOINTE" => [
         [
@@ -70772,7 +70651,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70781,7 +70660,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70790,7 +70669,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70799,7 +70678,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70808,7 +70687,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70817,7 +70696,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70826,7 +70705,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70835,7 +70714,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70844,7 +70723,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70852,7 +70731,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -70861,7 +70740,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -70869,7 +70748,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "DERN_BUL_SALAIR",
@@ -70877,7 +70756,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "ATT_ACT_SAL_900",
@@ -70886,7 +70765,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2014,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -70895,7 +70774,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70904,7 +70783,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -70913,7 +70792,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -70921,7 +70800,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "DERN_BUL_SALAIR",
@@ -70929,7 +70808,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "AUTORIS_CUMUL",
@@ -70937,7 +70816,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -70946,7 +70825,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -70955,7 +70834,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -70964,7 +70843,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -70972,7 +70851,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CONT_TER_ATT_HON",
@@ -70981,7 +70860,7 @@ return [
             "SEUIL_HETD" => 20,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "KBIS",
@@ -70991,7 +70870,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71000,7 +70879,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71009,7 +70888,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71018,7 +70897,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -71026,7 +70905,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "TITRE_PENSION",
@@ -71034,7 +70913,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71043,7 +70922,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71052,7 +70931,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71061,7 +70940,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -71069,7 +70948,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71078,7 +70957,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71086,7 +70965,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71095,7 +70974,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -71103,7 +70982,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_ETUD",
@@ -71111,7 +70990,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71120,7 +70999,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71129,7 +71008,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71138,7 +71017,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71147,7 +71026,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71156,7 +71035,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71165,7 +71044,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71174,7 +71053,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71183,7 +71062,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -71191,7 +71070,7 @@ return [
             "OBLIGATOIRE" => 0,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "PASSEPORT",
@@ -71199,7 +71078,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "ATT_ACT_SAL",
@@ -71207,7 +71086,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71216,7 +71095,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2017,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71224,7 +71103,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71232,7 +71111,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -71240,7 +71119,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => TRUE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "carte_pole_emploi_ou_ct_507h",
@@ -71248,7 +71127,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "AGESSA_GUSO_CC_MA",
@@ -71256,7 +71135,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71265,7 +71144,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71273,7 +71152,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71281,7 +71160,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71290,7 +71169,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71299,7 +71178,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -71308,7 +71187,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "DERN_BUL_SALAIR",
@@ -71316,7 +71195,7 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "AUTORIS_CUMUL",
@@ -71325,7 +71204,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71334,7 +71213,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "FICHRENS",
@@ -71343,7 +71222,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71352,7 +71231,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "RIB",
@@ -71361,7 +71240,7 @@ return [
             "PREMIER_RECRUTEMENT" => FALSE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => TRUE,
+            "CHANGEMENT_RIB" => TRUE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
@@ -71370,7 +71249,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
@@ -71379,7 +71258,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "FICHRENS",
@@ -71388,7 +71267,7 @@ return [
             "PREMIER_RECRUTEMENT" => TRUE,
             "ANNEE_DEBUT_ID" => 2018,
             "FC" => FALSE,
-            "CHANGEMENT_RIB" => FALSE,
+            "CHANGEMENT_RIB" => FALSE
         ],
         [
             "TYPE_PIECE_JOINTE_ID" => "CV",
@@ -71396,8 +71275,8 @@ return [
             "OBLIGATOIRE" => 1,
             "PREMIER_RECRUTEMENT" => FALSE,
             "FC" => TRUE,
-            "CHANGEMENT_RIB" => FALSE,
-        ],
+            "CHANGEMENT_RIB" => FALSE
+        ]
     ],
     "WF_ETAPE_DEP" => [
         [

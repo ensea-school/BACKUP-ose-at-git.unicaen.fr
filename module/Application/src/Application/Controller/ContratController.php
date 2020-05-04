@@ -30,6 +30,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Entity\Db\Contrat;
 use Zend\View\Model\JsonModel;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Description of ContratController
@@ -52,6 +53,16 @@ class ContratController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ModeleContratServiceAwareTrait;
     use ModeleFormAwareTrait;
+
+    private $renderer;
+
+
+
+    public function __construct(PhpRenderer $renderer)
+    {
+
+        $this->renderer = $renderer;
+    }
 
 
 
@@ -98,6 +109,11 @@ class ContratController extends AbstractController
         }
         $contrats = $sContrat->getList($qb);
 
+        //Récupération email intervenant (Perso puis unicaen)
+        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $emailPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmail();
+
         /* Récupération des services par contrat et par structure (pour les non contractualisés) */
         $services = [
             'contractualises'     => [],
@@ -117,7 +133,7 @@ class ContratController extends AbstractController
             $services['non-contractualises'][$sid][] = $service;
         }
 
-        return compact('title', 'intervenant', 'contrats', 'services');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant');
     }
 
 
@@ -323,6 +339,31 @@ class ContratController extends AbstractController
 
 
 
+    public function envoyerMailAction()
+    {
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+            throw new UnAuthorizedException("Interdiction d'envoyer le contrat par email");
+        }
+
+        if (!empty($contrat->getIntervenant()->getEmail())) {
+            //Utilisation ici du parametre email
+            $html  = $this->getServiceParametres()->get('contrat_modele_mail');
+            //Personnalisation des variables
+            $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " ". $contrat->getIntervenant()->getNomUsuel();
+            $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
+            $html = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
+            $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
+            $mail = $this->mail()->send($message);
+
+        }
+
+        return $this->getResponse();
+    }
+
+
+
     /**
      * Dépôt du contrat signé.
      *
@@ -499,7 +540,7 @@ class ContratController extends AbstractController
         $fichier->setNom(Util::reduce($modeleContrat->getLibelle()) . '.odt');
         $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
         if ($modeleContrat->hasFichier()) {
-            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(),-1,0));
+            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(), -1, 0));
         } else {
             $fichier->setContenu(file_get_contents($this->getServiceModeleContrat()->getModeleGeneriqueFile()));
         }

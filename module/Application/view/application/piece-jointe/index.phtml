@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
  * @var $alertContrat boolean
  */
 
-$this->headTitle()->append($intervenant)->append("Pièces justificatives");
+$this->headTitle()->append((string)$intervenant)->append("Pièces justificatives");
 
 $canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
 $canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
@@ -40,13 +40,13 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
                 //Check si piece obligatoire
                 $obligatoire = $pj->isObligatoire();
                 $tpj         = $pj->getTypePieceJointe();
-                if (isset($fournies[$tpj->getId()])) { // qu'elles soient fournies ou non
+                if (isset($fournies[$tpj->getId()]) && $synthese[$tpj->getId()]->getFournie() == 1) { // qu'elles soient fournies ou non
                     $pj = $fournies[$tpj->getId()];
                     unset($restantes[$tpj->getId()]);
                 } else {
                     $pj = null;
                 }
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
+                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire', 'annee'));
             }
             echo '</div>';
 
@@ -64,15 +64,25 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
             }
         }
 
+
         if (!empty($restantes)) {
-            echo '<div class="well">';
-            echo '<h2>Autres pièces fournies</h2>';
-            $obligatoire = false;
+            $html         = '<div class="well">';
+            $html         .= '<h2>Autres pièces fournies</h2>';
+            $obligatoire  = false;
+            $haveRestante = false;
             foreach ($restantes as $tpjId => $pj) { // on liste les pièces fournies mais qui ne sont pas demandées...
-                $tpj = $pj->getType();
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
+                //on affiche la pièce jointe restante uniquement sur l'année où elle a été fourni
+
+                if ($pj->getIntervenant()->getAnnee()->getId() == $annee->getId()) {
+                    $haveRestante = true;
+                    $tpj          = $pj->getType();
+                    $html         .= $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire', 'annee'));
+                }
             }
-            echo '</div>';
+            $html .= '</div>';
+            if ($haveRestante) {
+                echo $html;
+            }
         }
 
         ?>

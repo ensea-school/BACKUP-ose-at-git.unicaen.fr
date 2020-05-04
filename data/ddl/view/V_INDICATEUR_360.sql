@@ -13,7 +13,9 @@ FROM
   JOIN intervenant i ON i.id = c.intervenant_id
   JOIN tbl_workflow w ON w.intervenant_id = i.id AND w.structure_id = c.structure_id AND w.etape_code = 'CONTRAT' AND w.atteignable = 1
   JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL
+  LEFT JOIN contrat_fichier cf ON cf.contrat_id = c.id
+  LEFT JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL
 WHERE
   c.histo_destruction IS NULL
-  AND c.date_retour_signe IS NULL
+  AND f.id IS NULL
 ) t

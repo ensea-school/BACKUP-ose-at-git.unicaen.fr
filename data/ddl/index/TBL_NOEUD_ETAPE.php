@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_NOEUD_NETAPE_IDX',
+    'name'    => 'TBL_NOEUD_ETAPE',
     'unique'  => FALSE,
     'table'   => 'TBL_NOEUD',
     'columns' => [
-        'NOEUD_ETAPE_ID',
+        'ETAPE_ID',
     ],
 ];
 

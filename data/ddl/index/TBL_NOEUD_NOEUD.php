@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_NOEUD_STRUCTURE_IDX',
+    'name'    => 'TBL_NOEUD_NOEUD',
     'unique'  => FALSE,
     'table'   => 'TBL_NOEUD',
     'columns' => [
-        'STRUCTURE_ID',
+        'NOEUD_ID',
     ],
 ];
 

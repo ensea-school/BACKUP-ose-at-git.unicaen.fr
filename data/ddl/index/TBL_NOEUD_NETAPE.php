@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_NOEUD_GTF_IDX',
+    'name'    => 'TBL_NOEUD_NETAPE',
     'unique'  => FALSE,
     'table'   => 'TBL_NOEUD',
     'columns' => [
-        'GROUPE_TYPE_FORMATION_ID',
+        'NOEUD_ETAPE_ID',
     ],
 ];
 

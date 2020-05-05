@@ -154,7 +154,11 @@ class DataGen
             'key'     => 'CODE',
             'options' => ['update' => false, 'delete' => false],
         ],
-
+        [
+            'table'   => 'DOSSIER_CHAMP_AUTRE_TYPE',
+            'context' => ['install', 'update'],
+            'key'     => 'CODE',
+        ],
 
         /* Nomenclatures partiellement paramétrables (certaines colonnes) */
         [
@@ -168,6 +172,12 @@ class DataGen
             'context' => ['install', 'update'],
             'key'     => ['TYPE_VOLUME_HORAIRE_ID', 'TYPE_INTERVENANT_ID'],
             'options' => ['update-ignore-cols' => ['PRIORITE']],
+        ],
+        [
+            'table'   => 'DOSSIER_CHAMP_AUTRE',
+            'context' => ['install', 'update'],
+            'key'     => 'ID',
+            'options' => ['update-ignore-cols' => ['LIBELLE', 'DOSSIER_CHAMP_AUTRE_TYPE_ID', 'CONTENU', 'DESCRIPTION']],
         ],
 
 

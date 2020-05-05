@@ -5,7 +5,7 @@
 return [
     'name'    => 'TBL_PIECE_JOINTE__UN',
     'table'   => 'TBL_PIECE_JOINTE',
-    'index'   => 'TBL_PIECE_JOINTE__UN_IDX',
+    'index'   => 'TBL_PIECE_JOINTE__UN',
     'columns' => [
         'TYPE_PIECE_JOINTE_ID',
         'INTERVENANT_ID',

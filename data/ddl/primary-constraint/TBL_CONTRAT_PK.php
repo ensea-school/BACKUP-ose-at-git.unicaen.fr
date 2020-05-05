@@ -5,7 +5,7 @@
 return [
     'name'    => 'TBL_CONTRAT_PK',
     'table'   => 'TBL_CONTRAT',
-    'index'   => 'TBL_CONTRAT_PK_IDX',
+    'index'   => 'TBL_CONTRAT_PK',
     'columns' => [
         'ID',
     ],

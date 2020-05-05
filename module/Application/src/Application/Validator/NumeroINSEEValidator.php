@@ -196,19 +196,30 @@ class NumeroINSEEValidator extends NumeroINSEE
 
     private function isValidDepartementFrance()
     {
-        $iDepartement = $this->getDepartement();
+        /* Département du numéro INSEE */
+        $iDepartement = strtoupper(str_pad((string)$this->getDepartement(), 3, '0', STR_PAD_LEFT));
 
-        if ($iDepartement === 99) {
+        /* Code du département issu du dossier */
+        $dDepartement = strtoupper(str_pad((string)$this->departement->getCode(), 3, '0', STR_PAD_LEFT));
+
+        /* Année de naissance en int */
+        $anneeNaissance = (int)$this->dateNaissance->format('Y');
+
+        /* Liste des départements d'Île de France */
+        $ileDeFrance = ['075', '078', '091', '092', '093', '094', '095'];
+
+
+        if ($iDepartement == '099') {
             $this->error(self::MSG_DEPT);
 
             return false; // département étranger
         }
 
-        $iCodeDepartement = str_pad((string)$iDepartement, 3, '0', STR_PAD_LEFT);
-        if ($this->departement->getCode() == $iCodeDepartement) return true;
+        if ($dDepartement == $iDepartement) return true; // Impec
 
-        $ileDeFrance    = [75, 78, 91, 92, 93, 94, 95];
-        $anneeNaissance = (int)$this->dateNaissance->format('Y');
+        if ($iDepartement == '020') {
+            if ($dDepartement == '02A' || $dDepartement == '02B') return true; // Corses nés avant 1976 => ancien département unique
+        }
 
         if ($anneeNaissance <= 1968 && in_array($iDepartement, $ileDeFrance)) {
             return true; // Pour les personnes nées en seine et oise, département disparu

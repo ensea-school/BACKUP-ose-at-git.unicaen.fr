@@ -100,4 +100,18 @@ class MaterializedViewManager extends AbstractManager implements MaterializedVie
         $this->drop($oldName);
         $this->create($new);
     }
+
+
+
+    /**
+     * @param string|array $name
+     */
+    public function refresh($name)
+    {
+        if (is_array($name)) {
+            $name = $name['name'];
+        }
+
+        $this->addQuery("BEGIN DBMS_SNAPSHOT.REFRESH( '$name','C'); END;", 'Mise à jour de la vue matérialisée ' . $name);
+    }
 }

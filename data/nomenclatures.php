@@ -99,11 +99,11 @@ return [
     ],
 
     'DOSSIER_CHAMP_AUTRE' => [
-        ['ID' => 1, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1],
-        ['ID' => 2, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1],
-        ['ID' => 3, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1],
-        ['ID' => 4, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1],
-        ['ID' => 5, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1],
+        ['ID' => 1, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 2, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 3, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 4, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 5, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
     ],
 
 

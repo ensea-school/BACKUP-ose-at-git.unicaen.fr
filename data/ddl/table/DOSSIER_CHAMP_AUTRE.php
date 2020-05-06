@@ -69,6 +69,18 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
+        'OBLIGATOIRE'                 => [
+            'name'        => 'OBLIGATOIRE',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 6,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

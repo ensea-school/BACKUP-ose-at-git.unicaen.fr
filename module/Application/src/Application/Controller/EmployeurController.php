@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 
 use Application\Service\Traits\EmployeurServiceAwareTrait;
-use Zend\Console\Console;
 
 /**
  * Description of EmployeurController
@@ -18,8 +17,8 @@ class EmployeurController extends AbstractController
 
     public function indexAction()
     {
-        $critere      = $this->params()->fromPost('critere');
-        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur( $critere);
+        $critere    = $this->params()->fromPost('critere');
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
 
 
         return compact('employeurs');
@@ -28,9 +27,20 @@ class EmployeurController extends AbstractController
     public function rechercheAction()
     {
 
-        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur();
         return compact('employeurs');
     }
+
+    public function rechercheJsonAction()
+    {
+        $critere    = $this->params()->fromPost('critere');
+
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
+        $employeursJson = json_encode($employeurs);
+
+        return $employeursJson;
+    }
+
 
 
 }

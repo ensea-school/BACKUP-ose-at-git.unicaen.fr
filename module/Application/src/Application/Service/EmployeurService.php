@@ -56,7 +56,7 @@ class EmployeurService extends AbstractEntityService
 
         $sql = "
             SELECT 
-                SIREN, LIBELLE 
+                * 
             FROM 
                 EMPLOYEUR e 
             WHERE rownum <= $limit
@@ -65,21 +65,22 @@ class EmployeurService extends AbstractEntityService
         if(!empty($criteria))
         {
             $sql .= "
-             AND (e.LIBELLE LIKE upper('%$criteria%') OR e.SIREN LIKE '%$criteria%')
+             AND (e.RAISON_SOCIALE LIKE upper('%$criteria%') OR e.SIREN LIKE '%$criteria%')
             ";
            /*  $sql .= "
           AND (regexp_like(LIBELLE, '$criteria', 'i') OR e.SIREN LIKE '%$criteria%')
          ";*/
         }
 
-        $sql .= " ORDER BY LIBELLE ASC";
+        $sql .= " ORDER BY RAISON_SOCIALE ASC";
 
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
             while ($r = $stmt->fetch()) {
                 $employeurs[] = [
-                    'libelle'  => $r['SIREN'],
-                    'siren'    => $r['LIBELLE'],
+                    'raison_sociale'  => $r['RAISON_SOCIALE'],
+                    'siren'           => $r['SIREN'],
+                    'nom_commercial'  => $r['NOM_COMMERCIAL'],
                 ];
             }
 

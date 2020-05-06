@@ -23,17 +23,22 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @var string
      */
-    protected $libelle;
+    protected $raisonSociale;
+
+    /**
+     * @var string
+     */
+    protected $nomCommercial;
+
+    /**
+     * @var string
+     */
+    protected $identifiantAssociation;
 
     /**
      * @var string
      */
     protected $siren;
-
-    /**
-     *
-     */
-
 
 
     /**
@@ -46,32 +51,78 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
         return $this->id;
     }
 
-
-
     /**
      * @return string
      */
-    public function getLibelle(): string
+    public function getRaisonSociale()
     {
-        return $this->libelle;
+        return $this->raisonSociale;
     }
 
-
-
     /**
-     * @param string $libelle
-     *
-     * @return Employeur
+     * @param string $raisonSociale
      */
-    public function setLibelle(string $libelle): Employeur
+    public function setRaisonSociale($raisonSociale)
     {
-        $this->libelle = $libelle;
+        $this->raisonSociale = $raisonSociale;
 
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getSiren()
+    {
+        return $this->siren;
+    }
 
-    
+    /**
+     * @param string $siren
+     */
+    public function setSiren($siren)
+    {
+        $this->siren = $siren;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNomCommercial()
+    {
+        return $this->nomCommercial;
+    }
+
+    /**
+     * @param string $nomCommercial
+     */
+    public function setNomCommercial($nomCommercial)
+    {
+        $this->nomCommercial = $nomCommercial;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifiantAssociation()
+    {
+        return $this->identifiantAssociation;
+    }
+
+    /**
+     * @param string $identifiantAssociation
+     */
+    public function setIdentifiantAssociation($identifiantAssociation)
+    {
+        $this->identifiantAssociation = $identifiantAssociation;
+
+        return $this;
+    }
+
     public function __toString()
     {
         return $this->getLibelle();

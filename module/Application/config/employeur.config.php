@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'contrat' => [
+            'employeur' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur',
@@ -20,21 +20,42 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes'  => [
-                    'creer'               => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/employeur/recherche',
-                            'defaults'    => [
-                                'action' => 'recherche',
-                                ],
-                            ],
-                        ],
-                    ]
+            ],
+            'employeur-json' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/employeur/json',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Employeur',
+                        'action'     => 'recherche-json',
+                    ],
                 ],
+                'may_terminate' => true,
+            ],
 
             ],
         ],
+    'navigation'      => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages'    => [
+                            'Employeurs' => [
+                                'border-color' => '#9F491F',
+                                'icon'         => 'glyphicon glyphicon-list-alt',
+                                'label'        => "Employeurs",
+                                'title'        => "Gestion des employeurs",
+                                'route'        => 'employeur',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),//creer un priviege employeur
+                                'order'        => 70,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 
     'console' => [
         'router' => [
@@ -66,7 +87,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Employeur',
-                    'action'     => ['index'],
+                    'action'     => ['index', 'recherche-json'],
                     'privileges' => Privileges::EMPLOYEUR_GESTION,
                 ],
             ],

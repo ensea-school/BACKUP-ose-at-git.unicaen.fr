@@ -12,7 +12,7 @@
 $entityManager = $container->get(\Application\Constants::BDD);
 $options       = ['annee' => '2019 / 2020'];
 
-$data = $entityManager->getConnection()->fetchAll('select * from v_export_service where intervenant_id = 191930');
+$data = $entityManager->getConnection()->fetchAll('select * from v_export_service where intervenant_id = 188294 AND type_volume_horaire_id = 1 AND etat_volume_horaire_id = 1');
 
 // initialisation
 
@@ -56,6 +56,7 @@ $addableColumns    = [
     'heures-compl-fc-majorees',
     'heures-compl-referentiel',
     'total',
+    'heures-non-payees-libelle',
 ];
 
 // récupération des données
@@ -108,6 +109,7 @@ foreach ($data as $d) {
 
         'periode-libelle'              => $d['PERIODE_LIBELLE'],
         'heures-non-payees'            => (float)$d['HEURES_NON_PAYEES'],
+        'heures-non-payees-libelle'    => $d['MOTIF_NON_PAIEMENT'],
 
         // types d'intervention traités en aval
         'heures-ref'                   => (float)$d['HEURES_REF'],
@@ -124,15 +126,6 @@ foreach ($data as $d) {
         'solde'                        => (float)$d['SOLDE'],
         'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
     ];
-
-    if ($d['MOTIF_NON_PAIEMENT']) {
-        if (isset($ds['heures-non-payees-libelle'])) {
-            $ds['heures-non-payees-libelle'] .= ', ';
-        } else {
-            $ds['heures-non-payees-libelle'] = '';
-        }
-        $ds['heures-non-payees-libelle'] .= $d['MOTIF_NON_PAIEMENT'];
-    }
 
     if (
         $ds['heures-service-statutaire'] > 0
@@ -167,7 +160,16 @@ foreach ($data as $d) {
                 if (!isset($res[$sid][$column])) {
                     $res[$sid][$column] = $value;
                 } // pour les types d'intervention non initialisés
-                else $res[$sid][$column] += $value;
+                else {
+                    if (is_numeric($value)) {
+                        $res[$sid][$column] += $value;
+                    } elseif (is_string($value) && $value) {
+                        if (isset($res[$sid][$column]) && $res[$sid][$column]) {
+                            $res[$sid][$column] .= ', ';
+                        }
+                        $res[$sid][$column] .= $value;
+                    }
+                }
             } elseif ($value != $res[$sid][$column]) {
                 $res[$sid][$column] = null;
             }

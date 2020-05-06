@@ -1,10 +1,7 @@
 <?php
     /* @var $intervenants array */
 ?>
-<div id="search-employeur">
-    <label>Recherche employeur : </label>
-    <input id="recherche" type="text" value=""/>
-</div>
+
 <table class="table table-bordered table-condensed">
     <thead>
     <tr>
@@ -23,31 +20,5 @@
     </tbody>
     <?php endforeach; ?>
 </table>
-
-<script type="text/javascript">
-    var liste = [
-        "Draggable",
-        "Droppable",
-        "Resizable",
-        "Selectable",
-        "Sortable"
-    ];
-
-    $('#recherche').autocomplete({
-        source : function(){ // la fonction anonyme permet de maintenir une requête AJAX directement dans le plugin
-            $.ajax({
-                type: "POST",
-                url : 'http://ose-dev.localhost/employeur/json', // on appelle le script JSON
-                dataType : 'json', // on spécifie bien que le type de données est en JSON
-                data : {
-                    critere : $('#recherche').val(), // on donne la chaîne de caractère tapée dans le champ de recherche
-                },
-                success : function(){ // on se prépare à renvoyer les données réceptionnées grâce à l'évènement de succès
-                }
-            });
-        }
-    });
-
-</script>
 
 

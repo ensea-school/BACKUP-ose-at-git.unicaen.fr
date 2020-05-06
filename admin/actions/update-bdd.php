@@ -63,6 +63,8 @@ $dataGen->update();
 $c->println('');
 $mm->migration('post');
 
+// Recalcul des vues matérialisées
+$bdd->refreshMaterializedViews();
 
 // Néttoyage des caches
 $oa->run('clear-cache');

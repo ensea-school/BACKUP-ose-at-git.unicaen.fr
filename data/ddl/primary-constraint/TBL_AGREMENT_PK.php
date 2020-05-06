@@ -5,7 +5,7 @@
 return [
     'name'    => 'TBL_AGREMENT_PK',
     'table'   => 'TBL_AGREMENT',
-    'index'   => 'TBL_AGREMENT_PK_IDX',
+    'index'   => 'TBL_AGREMENT_PK',
     'columns' => [
         'ID',
     ],

@@ -5,7 +5,7 @@
 return [
     'name'    => 'WF_DEPS_BLOQUANTES_PK',
     'table'   => 'WF_DEP_BLOQUANTE',
-    'index'   => 'WF_DEPS_BLOQUANTES_PK_IDX',
+    'index'   => 'WF_DEPS_BLOQUANTES_PK',
     'columns' => [
         'ID',
     ],

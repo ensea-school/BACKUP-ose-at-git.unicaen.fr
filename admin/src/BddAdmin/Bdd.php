@@ -680,6 +680,29 @@ class Bdd
 
 
 
+    public function refreshMaterializedViews($ddl = null)
+    {
+        if (!$ddl) {
+            $ddl = $this->materializedView()->get();
+        } else {
+            $ddl = Ddl::normalize($ddl)->get(Ddl::MATERIALIZED_VIEW);
+            if (!$ddl) $ddl = [];
+        }
+
+        $this->logBegin("Recalcul de toutes les vues matérialisées");
+        foreach ($ddl as $mv) {
+            try {
+                $this->logMsg("Vue matérialisée " . $mv['name'] . " ...", true);
+                $this->materializedView()->refresh($mv);
+            } catch (\Throwable $e) {
+                $this->logError($e);
+            }
+        }
+        $this->logEnd();
+    }
+
+
+
     /**
      * @return array
      * @throws BddCompileException

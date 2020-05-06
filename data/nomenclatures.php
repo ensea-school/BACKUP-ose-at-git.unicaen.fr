@@ -80,6 +80,33 @@ return [
         ],
     ],
 
+    'DOSSIER_CHAMP_AUTRE_TYPE' => [
+        [
+            'ID'      => 1,
+            'CODE'    => 'texte',
+            'LIBELLE' => 'Champ texte simple',
+        ],
+        [
+            'ID'      => 2,
+            'CODE'    => 'select-fixe',
+            'LIBELLE' => 'Liste déroulante à valeurs constantes',
+        ],
+        [
+            'ID'      => 3,
+            'CODE'    => 'select-sql',
+            'LIBELLE' => 'Liste déroulante basée sur une requête SQL',
+        ],
+    ],
+
+    'DOSSIER_CHAMP_AUTRE' => [
+        ['ID' => 1, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 2, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 3, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 4, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 5, 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+    ],
+
+
     'ETAT_VOLUME_HORAIRE' => [
         [
             'ID'      => 1,

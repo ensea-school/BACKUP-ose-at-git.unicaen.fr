@@ -3,6 +3,7 @@
 ## Nouveautés
 
 * Les modèles de pièces justificatives peuvent être téléchargés en fonction de l'année courante (paramètre :annee à ajouter dans l'URL qui sera remplacé dynamiquement par l'année en cours)
+* Les vues matérialisées sont recalculées à chaque mise à jour
 
 ## Notes de mise à jour
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $csv           \UnicaenApp\View\Model\CsvModel
+ * @return array
  * @var $etatSortie    \Application\Entity\Db\EtatSortie
  * @var $data          array
  * @var $filtres       array
@@ -8,7 +8,7 @@
  * @var $role          \Application\Acl\Role
  * @var $options       array
  *
- * @return array
+ * @var $csv           \UnicaenApp\View\Model\CsvModel
  */
 
 // initialisation
@@ -53,6 +53,7 @@ $addableColumns    = [
     'heures-compl-fc-majorees',
     'heures-compl-referentiel',
     'total',
+    'heures-non-payees-libelle',
 ];
 
 // récupération des données
@@ -105,6 +106,8 @@ foreach ($data as $d) {
 
         'periode-libelle'              => $d['PERIODE_LIBELLE'],
         'heures-non-payees'            => (float)$d['HEURES_NON_PAYEES'],
+        'heures-non-payees-libelle'    => $d['MOTIF_NON_PAIEMENT'],
+
         // types d'intervention traités en aval
         'heures-ref'                   => (float)$d['HEURES_REF'],
         'service-fi'                   => (float)$d['SERVICE_FI'],
@@ -154,7 +157,16 @@ foreach ($data as $d) {
                 if (!isset($res[$sid][$column])) {
                     $res[$sid][$column] = $value;
                 } // pour les types d'intervention non initialisés
-                else $res[$sid][$column] += $value;
+                else {
+                    if (is_numeric($value)) {
+                        $res[$sid][$column] += $value;
+                    } elseif (is_string($value) && $value) {
+                        if (isset($res[$sid][$column]) && $res[$sid][$column]) {
+                            $res[$sid][$column] .= ', ';
+                        }
+                        $res[$sid][$column] .= $value;
+                    }
+                }
             } elseif ($value != $res[$sid][$column]) {
                 $res[$sid][$column] = null;
             }
@@ -200,6 +212,7 @@ $head = [
     'element-source-libelle'        => 'Source enseignement',
     'periode-libelle'               => 'Période',
     'heures-non-payees'             => 'Heures non payées',
+    'heures-non-payees-libelle'     => 'Motif de non paiement',
 ];
 uasort($typesIntervention, function ($ti1, $ti2) {
     return $ti1->getOrdre() > $ti2->getOrdre();

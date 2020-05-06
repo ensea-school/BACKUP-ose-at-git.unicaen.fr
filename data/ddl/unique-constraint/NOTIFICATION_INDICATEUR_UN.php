@@ -5,7 +5,7 @@
 return [
     'name'    => 'NOTIFICATION_INDICATEUR_UN',
     'table'   => 'NOTIFICATION_INDICATEUR',
-    'index'   => 'NOTIFICATION_INDICATEUR__UN',
+    'index'   => 'NOTIFICATION_INDICATEUR_UN',
     'columns' => [
         'INDICATEUR_ID',
         'AFFECTATION_ID',

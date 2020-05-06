@@ -5,7 +5,7 @@
 return [
     'name'    => 'SCENARIO_LIEN_SOURCE_UN',
     'table'   => 'SCENARIO_LIEN',
-    'index'   => 'SCENARIO_LIEN_SRC_UN',
+    'index'   => 'SCENARIO_LIEN_SOURCE_UN',
     'columns' => [
         'SOURCE_CODE',
         'HISTO_DESTRUCTION',

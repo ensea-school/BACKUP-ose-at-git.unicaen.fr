@@ -11,6 +11,16 @@ return [
         'routes' => [
             'intervenant'  => [
                 'child_routes' => [
+                    'dossiernew' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/:intervenant/dossiernew',
+                            'defaults' => [
+                                'controller' => 'Application\Controller\Dossier',
+                                'action'     => 'indexnew',
+                            ],
+                        ],
+                    ],
                     'dossier' => [
                         'type'          => 'Segment',
                         'options'       => [
@@ -362,7 +372,7 @@ return [
                 /* Dossier */
                 [//Créer un droit archivage
                  'controller' => 'Application\Controller\Dossier',
-                 'action'     => ['index'],
+                 'action'     => ['index', 'indexnew'],
                  'privileges' => [Privileges::DOSSIER_VISUALISATION],
                  'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],

@@ -1,0 +1,22 @@
+<?php
+
+use Application\Entity\Db\Dossier;
+use Application\Entity\Db\WfEtape;
+
+
+//$nextEtape = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
+
+$this->headTitle()->append("Nom intervenant XXX")->append("Données personnelles");
+
+?>
+    <h1 class="page-header">Données personnelles
+        <small>Nom intervenant XXX</small>
+    </h1>
+<?php
+
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
+
+
+
+//echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

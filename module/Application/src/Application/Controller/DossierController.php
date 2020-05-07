@@ -164,6 +164,10 @@ class DossierController extends AbstractController
         return compact('role', 'form', 'validation', 'canValider', 'canDevalider', 'canSupprimer', 'dossier');
     }
 
+    public function indexnewAction(){
+        return [];
+    }
+
 
 
     public function validerAction()

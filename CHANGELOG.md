@@ -8,7 +8,8 @@
    * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
    
 * L'export CSV des services affiche maintenant le motif de non paiement, en plus des heures non payées
-   
+* Par défaut, les pièces jointes ne sont plus demandées si l'intervenant ne fait que des heures non payables dans son service. Possibilité de les forcer en obligatoire dans l'admin si on le souhaite.   
+
 ## Corrections de bugs
 
 * Dans la gestion des types de statut, mise à jour du libellé du statut lors d'un update.

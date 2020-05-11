@@ -62,6 +62,10 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      */
     private $dureeVie;
 
+    /**
+     * @var boolean
+     */
+    private $obligatoireHNP;
 
 
     /**
@@ -297,6 +301,24 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     public function setDureeVie($dureeVie = null)
     {
         $this->dureeVie = $dureeVie;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isObligatoireHNP()
+    {
+        return $this->obligatoireHNP;
+    }
+
+    /**
+     * @param bool $obligatoireHNP
+     */
+    public function setObligatoireHNP($obligatoireHNP)
+    {
+        $this->obligatoireHNP = $obligatoireHNP;
 
         return $this;
     }

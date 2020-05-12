@@ -7,7 +7,7 @@
    * Edition des régles de validations (volume horaire / type intervenant)
    * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
    
-* L'export CSV des services affiche maintenant le motif de non paiement, en plus des heures non payées
+* L'export CSV des services affiche maintenant les heures non payées avec chaque motif dans des lignes distinctes, ventilées par type d'intervention (CM/TD/TP)
 * Par défaut, les pièces jointes ne sont plus demandées si l'intervenant ne fait que des heures non payables dans son service. Possibilité de les forcer en obligatoire dans l'admin si on le souhaite.   
 
 ## Corrections de bugs

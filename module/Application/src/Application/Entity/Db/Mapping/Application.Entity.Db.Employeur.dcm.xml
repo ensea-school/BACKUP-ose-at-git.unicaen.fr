@@ -4,8 +4,10 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="libelle" type="string" column="LIBELLE" length="250" nullable="false"/>
-
+    <field name="raisonSociale" type="string" column="RAISON_SOCIALE" length="250" nullable="false"/>
+    <field name="nomCommercial" type="string" column="NOM_COMMERCIAL" length="250" nullable="false"/>
+    <field name="siren" type="string" column="SIREN" length="250" nullable="false"/>
+    <field name="identifiantAssociation" type="string" column="IDENTIFIANT_ASSOCIATION" length="250" nullable="false"/>
     <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>

@@ -154,8 +154,6 @@ abstract class AbstractEntityService extends AbstractService
     {
         if (null === $alias) $alias = $this->getAlias();
         if (empty($qb)) {
-            //$qb = $this->getRepo()->createQueryBuilder($alias);
-
             $qb = $this->getEntityManager()->createQueryBuilder();
 
             if (empty($fields)) {

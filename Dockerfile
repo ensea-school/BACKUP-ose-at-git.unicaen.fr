@@ -16,7 +16,8 @@ ENV APACHE_CONF_DIR=/etc/apache2 \
 
 ## Installation de packages requis.
 RUN apt-get update -y
-RUN apt-get install -y unoconv
+RUN apt-get upgrade -y
+RUN apt-get install -y unoconv awk
 
 # Nettoyage
 RUN apt-get autoremove -y && apt-get clean && rm -rf /tmp/* /var/tmp/*

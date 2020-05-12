@@ -1,0 +1,21 @@
+<?php
+
+/* @var $intervenants array */
+$nombre = count($intervenants);
+
+?>
+<?php if (empty($intervenants)): ?>
+
+    <div class="alert alert-info">Aucun intervenant trouvé!</div>
+
+<?php else: ?>
+    <div class="alert alert-success"><?php
+    switch($nombre){
+        case 1:  echo '1 intervenant(e) trouvé(e)'; break;
+        case 21: echo 'plus de 20 intervenants trouvés. Voici les 20 premiers :'; break;
+        default: echo $nombre.' intervenants trouvés';
+    }
+    ?></div>
+    <?= $this->partial('liste', compact('intervenants')); ?>
+
+<?php endif; ?>

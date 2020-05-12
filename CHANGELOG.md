@@ -4,7 +4,7 @@
 
 * Nouveaux écrans dans l'administration de OSE : 
    * Edition possible des types de ressources (paie état, ressources propres etc...)
-   * Edition des régles de validations (volume horaire / type intervenant)
+   * Edition des règles de validations (volume horaire / type intervenant)
    * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
    
 * L'export CSV des services affiche maintenant les heures non payées avec chaque motif dans des lignes distinctes, ventilées par type d'intervention (CM/TD/TP)

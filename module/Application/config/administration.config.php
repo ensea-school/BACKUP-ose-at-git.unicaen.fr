@@ -8,7 +8,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router' => [
         'routes' => [
-            'administration' => [
+            'administration'             => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration',
@@ -19,7 +19,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-type' => [
+            'administration-type'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-type',
@@ -30,13 +30,13 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-centre-cout' => [
+            'administration-financiere'  => [
                 'type'          => 'Literal',
                 'options'       => [
-                    'route'    => '/administration-centre-cout',
+                    'route'    => '/administration-financiere',
                     'defaults' => [
                         'controller' => 'Application\Controller\Administration',
-                        'action'     => 'administration-centre-cout',
+                        'action'     => 'administration-financiere',
                     ],
                 ],
                 'may_terminate' => true,
@@ -55,7 +55,7 @@ return [
         ],
     ],
 
-    'navigation'      => [
+    'navigation'   => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -65,15 +65,15 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
                         'order'    => 7,
                         'pages'    => [
-                            'gestion-intervenant' => [
+                            'gestion-intervenant'       => [
                                 'label'          => 'Gestion intervenants (Status, PJ,  etc...)',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-intervenant',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-intervenant'),
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-intervenant'),
                                 'order'          => 80,
                                 'border - color' => '#111',
-                                'pages' => [
-                                    'statut-intervenant' => [
+                                'pages'          => [
+                                    'statut-intervenant'                         => [
                                         'label'        => 'Edition des statuts des intervenants',
                                         'icon'         => 'fa fa-graduation-cap',
                                         'route'        => 'statut-intervenant',
@@ -81,7 +81,7 @@ return [
                                         'order'        => 90,
                                         'border-color' => '#BBCF55',
                                     ],
-                                    'type-piece-jointe-statut' => [
+                                    'type-piece-jointe-statut'                   => [
                                         'label'      => "Pièces justificatives attendues par statut d'intervenant",
                                         'title'      => "Permet de personnaliser les pièces justificatives à demander en fonction du statut des intervenants",
                                         'route'      => 'piece-jointe/type-piece-jointe-statut',
@@ -97,15 +97,15 @@ return [
                                     ],
                                 ],
                             ],
-                            'gestion-centre-cout' => [
-                                'label'          => 'Gestion des centres de coûts',
+                            'administration-financiere' => [
+                                'label'          => 'Données financières',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
-                                'route'          => 'administration-centre-cout',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-centre-cout'),
+                                'route'          => 'administration-financiere',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-financiere'),
                                 'order'          => 80,
                                 'border - color' => '#111',
-                                'pages' => [
-                                    'centre-cout' => [
+                                'pages'          => [
+                                    'centre-cout'          => [
                                         'label'        => 'Edition des centres de coûts',
                                         'icon'         => 'fa fa-graduation-cap',
                                         'route'        => 'centre-cout',
@@ -121,6 +121,7 @@ return [
                                         'order'        => 80,
                                         'border-color' => '#BBCF55',
                                     ],
+
                                 ],
                             ],
                         ],
@@ -134,7 +135,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Administration',
-                    'action'     => ['index', 'administration-types', 'administration-centre-cout', 'administration-intervenant'],
+                    'action'     => ['index', 'administration-types', 'administration-financiere', 'administration-intervenant'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,

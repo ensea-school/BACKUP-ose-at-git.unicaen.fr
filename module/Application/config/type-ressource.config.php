@@ -19,7 +19,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'saisie'                             => [
+                    'saisie' => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/saisie[/:typeRessource]',
@@ -32,7 +32,7 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'delete'                             => [
+                    'delete' => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/delete[/:typeRessource]',
@@ -55,14 +55,7 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'gestion-types' => [
-                                'label'          => 'Gestion des types (ressources, etc...)',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
-                                'route'          => 'administration-type',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-types'),
-
-                                'order'          => 60,
-                                'border - color' => '#111',
+                            'administration-financiere' => [
                                 'pages' => [
                                     'type-ressource' => [
                                         'label'        => 'Types de ressources',
@@ -72,7 +65,6 @@ return [
                                         'order'        => 60,
                                         'border-color' => '#71DFD7',
                                     ],
-
                                 ],
                             ],
                         ],
@@ -114,7 +106,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\TypeRessource\TypeRessourceSaisieForm::class          => Form\TypeRessource\TypeRessourceSaisieForm::class,
+            Form\TypeRessource\TypeRessourceSaisieForm::class => Form\TypeRessource\TypeRessourceSaisieForm::class,
         ],
     ],
 ];

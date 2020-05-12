@@ -11,6 +11,27 @@
 La migration ne sera possible qu'à partir de la version 14.
 Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
 
+
+# OSE 14.4
+
+## Nouveautés
+
+* Nouveaux écrans dans l'administration de OSE : 
+   * Edition possible des types de ressources (paie état, ressources propres etc...)
+   * Edition des règles de validations (volume horaire / type intervenant)
+   * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
+   
+* L'export CSV des services affiche maintenant les heures non payées avec chaque motif dans des lignes distinctes, ventilées par type d'intervention (CM/TD/TP)
+* Par défaut, les pièces jointes ne sont plus demandées si l'intervenant ne fait que des heures non payables dans son service. Possibilité de les forcer en obligatoire dans l'admin si on le souhaite.   
+
+## Corrections de bugs
+
+* Dans la gestion des types de statut, mise à jour du libellé du statut lors d'un update.
+* Les heures non payables n'apparaissent désormais plus dans les contrats. 
+* Dans l'export CSV du différentiel services / charges, la totalisation des heures de dépassement n'est plus buggée s'il y a plusieurs intervenants 
+* Les numéro INSEE des corses nés avéant 1976 (département 20) sont maintenant correctement pris en compte lors de la validation du dossier
+
+
 # OSE 14.3
 
 ## Corrections de bugs

@@ -12,7 +12,7 @@
 $entityManager = $container->get(\Application\Constants::BDD);
 $options       = ['annee' => '2019 / 2020'];
 
-$data = $entityManager->getConnection()->fetchAll('select * from v_export_service where intervenant_id = 188294 AND type_volume_horaire_id = 1 AND etat_volume_horaire_id = 1');
+$data = $entityManager->getConnection()->fetchAll('select * from v_export_service where intervenant_id = 189558 AND type_volume_horaire_id = 1 AND etat_volume_horaire_id = 1');
 
 // initialisation
 
@@ -44,7 +44,6 @@ $dateColumns       = [
 ];
 $addableColumns    = [
     '__total__',
-    'heures-non-payees',
     'heures-ref',
     'service-fi',
     'service-fa',
@@ -56,24 +55,18 @@ $addableColumns    = [
     'heures-compl-fc-majorees',
     'heures-compl-referentiel',
     'total',
-    'heures-non-payees-libelle',
 ];
 
 // récupération des données
 
+$dateExtraction = new \DateTime();
 foreach ($data as $d) {
-
-    if ((int)$d['HEURES_NON_PAYEES'] === 1) {
-        $d['HEURES_NON_PAYEES'] = $d['HEURES'];
-        $d['HEURES']            = 0;
-    }
-
-
     $sid = $d['SERVICE_ID'] ? $d['SERVICE_ID'] . '_' . $d['PERIODE_ID'] : $d['ID'];
+    $sid .= '_' . $d['MOTIF_NON_PAIEMENT_ID'];
     $ds  = [
         '__total__'                 => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
         'type-etat'                 => $d['TYPE_ETAT'],
-        'date'                      => new \DateTime(),
+        'date'                      => $dateExtraction,
         'service-date-modification' => $d['SERVICE_DATE_MODIFICATION'],
         'annee-libelle'             => (string)$options['annee'],
 
@@ -108,7 +101,6 @@ foreach ($data as $d) {
         'element-source-libelle'        => $d['ELEMENT_SOURCE_LIBELLE'],
 
         'periode-libelle'              => $d['PERIODE_LIBELLE'],
-        'heures-non-payees'            => (float)$d['HEURES_NON_PAYEES'],
         'heures-non-payees-libelle'    => $d['MOTIF_NON_PAIEMENT'],
 
         // types d'intervention traités en aval
@@ -214,7 +206,6 @@ $head = [
     'element-ponderation-compl'     => 'Majoration',
     'element-source-libelle'        => 'Source enseignement',
     'periode-libelle'               => 'Période',
-    'heures-non-payees'             => 'Heures non payées',
     'heures-non-payees-libelle'     => 'Motif de non paiement',
 ];
 uasort($typesIntervention, function ($ti1, $ti2) {

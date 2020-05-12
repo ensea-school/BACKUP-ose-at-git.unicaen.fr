@@ -8,6 +8,9 @@ return [
     "annee_import"                       => [
         "DESCRIPTION" => "Année courante pour l'import",
     ],
+    "annee_minimale_import_odf"          => [
+        "DESCRIPTION" => "Année minimale pour l'import de l'offre de formation (Paramètre éventuellement exploitable pour les filtres d'import)",
+    ],
 
 
     /* IDS */

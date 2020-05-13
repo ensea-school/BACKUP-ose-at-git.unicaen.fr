@@ -1,3 +1,11 @@
+# OSE 14.5 (beta)
+
+## Nouveautés
+
+## Corrections de bugs
+
+* Corrections coquilles dans l'administration.
+
 # OSE 14.4
 
 ## Nouveautés

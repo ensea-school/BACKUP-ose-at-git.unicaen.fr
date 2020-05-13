@@ -1,4 +1,4 @@
-# OSE 15 alpha
+# OSE 15 (alpha)
 
 ## Nouveautés
 
@@ -10,6 +10,13 @@
 * Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
 La migration ne sera possible qu'à partir de la version 14.
 Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
+
+
+# OSE 14.5 (alpha)
+
+## Corrections de bugs
+
+* Lors de l'import de données, l'application ne plante plus si le connecteur INTERVENANT est désactivé
 
 
 # OSE 14.4
@@ -31,7 +38,6 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
 * Dans l'export CSV du différentiel services / charges, la totalisation des heures de dépassement n'est plus buggée s'il y a plusieurs intervenants 
 * Les numéro INSEE des corses nés avéant 1976 (département 20) sont maintenant correctement pris en compte lors de la validation du dossier
 
-
 # OSE 14.3
 
 ## Corrections de bugs
@@ -39,6 +45,8 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
 * Petite marge d'erreur de 0,05 HETD autorisée pour les plafonds afin de tenir compte de certains arrondis
 * Possibilité de faire des demandes de mise en paiement de 0,01 HETD
 * Les colonnes ne faisant pas partie du Schéma de OSE ne sont plus prise en compte lors des mises à jour.
+* Correction problème installation avec composer qui par défault si composer n'est pas disponible sur le serveur, télécharge composer.phar en version 2.0 dev, non compatible pour le moment avec ose.
+* L'export CSV des services est pleinement fonctionnel lorsqu'un interveanant n'a que des heures avec motif de non paiement
 
 # OSE 14.2
 
@@ -50,7 +58,7 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
 
 ## Correction de bug
 
-Soucis réglés au niveau de la procédure de mise à jour, qui n'exécutait pas certains traitements.
+* Soucis réglés au niveau de la procédure de mise à jour, qui n'exécutait pas certains traitements.
 
 # OSE 14
 

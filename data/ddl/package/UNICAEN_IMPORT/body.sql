@@ -45,7 +45,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_IMPORT" AS
       sync := 0;
     END IF;
 
-    SELECT COUNT(*) INTO ok FROM import_tables it WHERE it.table_name = SYNCHRONISATION.table_name AND (it.sync_enabled = 1 OR sync=1) AND rownum = 1;
+    SELECT COUNT(*) INTO ok FROM import_tables it JOIN all_procedures p ON p.object_name = 'UNICAEN_IMPORT_AUTOGEN_PROCS__' AND p.procedure_name = it.table_name WHERE it.table_name = SYNCHRONISATION.table_name AND (it.sync_enabled = 1 OR sync=1) AND rownum = 1;
 
     IF 1 = ok THEN
       z__SYNC_FILRE__z      := SYNCHRONISATION.SYNC_FILRE;

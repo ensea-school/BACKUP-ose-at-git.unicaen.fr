@@ -1,3 +1,9 @@
+# OSE 14.5 (alpha)
+
+## Corrections de bugs
+
+* Lors de l'import de données, l'application ne plante plus si le connecteur INTERVENANT est désactivé
+
 # OSE 14.4
 
 ## Nouveautés

@@ -66,7 +66,7 @@ return [
                         'order'    => 7,
                         'pages'    => [
                             'gestion-intervenant'       => [
-                                'label'          => 'Gestion intervenants (Status, PJ,  etc...)',
+                                'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-intervenant',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-intervenant'),
@@ -114,7 +114,7 @@ return [
                                         'border-color' => '#BBCF55',
                                     ],
                                     'centre-cout-activite' => [
-                                        'label'        => 'Edition des types activités des centres de coûts',
+                                        'label'        => 'Edition des types d\'activités des centres de coûts',
                                         'icon'         => 'fa fa-graduation-cap',
                                         'route'        => 'centre-cout-activite',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),

@@ -148,7 +148,7 @@ class CentreCoutController extends AbstractController
             $title            = 'Création d\'une nouvelle activité de centre de cout';
             $centreCoutActivite = $this->getServiceCcActivite()->newEntity();
         } else {
-            $title = 'Édition d\'une activité de centre de cout';
+            $title = 'Édition d\'un type d\'activité de centre de coût';
         }
         $form->bindRequestSave($centreCoutActivite, $this->getRequest(), function (ccActivite $ca) {
             try {

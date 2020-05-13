@@ -80,7 +80,7 @@ class RegleStructureValidationForm extends AbstractForm
             'options'    => [
                 'label' => 'Priorité',
                 'value_options' => [
-                    'affection'    => 'Affection',
+                    'affection'    => 'Affectation',
                     'enseignement' => 'Enseignement',
                 ],
             ],

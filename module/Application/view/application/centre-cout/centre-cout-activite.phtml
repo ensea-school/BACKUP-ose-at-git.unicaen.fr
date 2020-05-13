@@ -1,13 +1,13 @@
 <?php
 use Application\Provider\Privilege\Privileges;
 
-$this->headTitle()->append("Type activité des centres de coûts");
+$this->headTitle()->append("Types d'activité des centres de coûts");
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION));
 $canEdit = true;
 
 ?>
-<h1 class="page-header">Type d'activite des centres de coûts</h1>
+<h1 class="page-header">Types d'activité des centres de coûts</h1>
 <table class="table table-bordered table-condensed table-hover">
     <thead>
     <tr>

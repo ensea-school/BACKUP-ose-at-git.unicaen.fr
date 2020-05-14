@@ -7,6 +7,7 @@ use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Form\Intervenant\DossierValidation;
+use Application\Form\Intervenant\Traits\DossierAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
@@ -28,7 +29,7 @@ class DossierController extends AbstractController
     use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use ValidationServiceAwareTrait;
-    use \Application\Form\Intervenant\Traits\DossierAwareTrait;
+    use DossierAwareTrait;
     use UserContextServiceAwareTrait;
 
 
@@ -165,7 +166,11 @@ class DossierController extends AbstractController
     }
 
     public function indexnewAction(){
-        return [];
+        $form = $this->getFormIntervenantDossier();
+
+
+
+        return compact('form');
     }
 
 

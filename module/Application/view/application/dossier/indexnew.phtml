@@ -17,6 +17,9 @@ $this->headTitle()->append("Nom intervenant XXX")->append("Données personnelles
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
 
+$this->form()->openTag($form);
+echo $this->partial('application/dossier/partial/formIdentite', compact('form'));
+$this->form()->closeTag();
 
 
 //echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

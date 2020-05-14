@@ -27,7 +27,7 @@ return [
                             'route'    => '/:intervenant/dossier',
                             'defaults' => [
                                 'controller' => 'Application\Controller\Dossier',
-                                'action'     => 'index',
+                                'action'     => 'indexs',
                             ],
                         ],
                         'may_terminate' => true,

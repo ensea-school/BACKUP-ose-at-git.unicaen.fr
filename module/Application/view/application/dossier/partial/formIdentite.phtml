@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $form             \Application\Form\Intervenant\Dossier
+ * @var $canValider       boolean
+ * @var $canDevalider     boolean
+ * @var $canSupprimer     boolean
+ * @var $dossier          Dossier
+ */
+
+//$Dossier = $dossier;
+
+$form->prepare();
+$dossierIdentite = $form->get('DossierIdentite'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+<h3>Identité</h3>
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($dossierIdentite->get('civilite')); ?>
+        <?= $this->formControlGroup($dossierIdentite->get('nomUsuel')); ?>
+        <?= $this->formControlGroup($dossierIdentite->get('nomPatronymique')); ?>
+        <?= $this->formControlGroup($dossierIdentite->get('prenom')); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($dossierIdentite->get('dateNaissance')); ?>
+        <?= $this->formControlGroup($dossierIdentite->get('paysNaissance')); ?>
+        <?= $this->formControlGroup($dossierIdentite->get('departementNaissance')); ?>
+        <?= $this->formControlGroup($dossierIdentite->get('villeNaissance')); ?>
+    </div>
+
+        <?= $this->formHidden($this->form->get('security')); ?>
+
+        <hr/>
+        <?php if (!$form->isReadOnly()): ?>
+            <?= $this->formSubmit($this->form->get('enregistrer')->setAttribute('class', 'btn btn-primary')) ?>
+        <?php endif ?>
+
+

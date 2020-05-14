@@ -4,6 +4,7 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
+use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
@@ -22,7 +23,7 @@ class Dossier extends AbstractForm
     use DossierServiceAwareTrait;
     use ServiceServiceAwareTrait;
 
-    protected $dossierFieldset;
+    protected $dossierIdentiteFieldset;
 
     /**
      * @var boolean
@@ -37,16 +38,16 @@ class Dossier extends AbstractForm
      */
     public function init()
     {
-        $hydrator = new DossierHydrator();
-        $hydrator->setServiceDossier($this->getServiceDossier());
-        $this->setHydrator($hydrator);
+        //$hydrator = new DossierHydrator();
+        //$hydrator->setServiceDossier($this->getServiceDossier());
+        //$this->setHydrator($hydrator);
+        //TODO : Récupérer ici le contexte pour avoir les droits de l'utilisateur et afficher les bonnes parties du formulaire
+        $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
+        $this->dossierIdentiteFieldset->init();
 
-        $this->dossierFieldset = new DossierFieldset('dossier');
-        $this->dossierFieldset->init();
+        $this->setAttribute('id', 'dossier-identite');
 
-        $this->setAttribute('id', 'dossier');
-
-        $this->add($this->dossierFieldset);
+        $this->add($this->dossierIdentiteFieldset);
 
         /**
          * Csrf
@@ -99,14 +100,14 @@ class Dossier extends AbstractForm
      * Redéfinition pour forcer le témoin "premier recrutement" en cas d'absence
      * de l'élément de formulaire.
      */
-    public function setData($data)
+   /* public function setData($data)
     {
         if (!$this->dossierFieldset->has('premierRecrutement')) {
             $data->dossier['premierRecrutement'] = '0';
         }
 
         return parent::setData($data);
-    }
+    }*/
 
 
 

@@ -3,19 +3,10 @@
 namespace Application\Form\Intervenant\Dossier;
 
 use Application\Entity\Db\Dossier as Dossier;
-use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
+use Application\Form\Elements\PaysSelect;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Application\Validator\DepartementNaissanceValidator;
-use Application\Validator\NumeroINSEEValidator;
-use Application\Validator\PaysNaissanceValidator;
-use Application\Constants;
-use Application\Validator\RIBValidator;
-use DoctrineModule\Form\Element\Proxy;
-use DoctrineORMModule\Form\Element\EntitySelect;
-use Zend\Validator\Date as DateValidator;
 
 /**
  * Description of DossierFieldset
@@ -38,9 +29,9 @@ class DossierAdresseFieldset extends AbstractFieldset
     {
         //$hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
 
-        $this
-            ->setObject(new Dossier())
+        $this->setObject(new Dossier())
             ->addElements();
+
         //->setHydrator($hydrator)
     }
 
@@ -54,21 +45,121 @@ class DossierAdresseFieldset extends AbstractFieldset
 
 
         /**
-         * Adresse postale
+         * Précision
          */
         $this->add([
-            'name'       => 'adresse',
+            'name'       => 'precisions',
             'options'    => [
-                'label'         => 'Adresse postale <em>en France</em>',
+                'label'         => 'Précisions',
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
             ],
             'attributes' => [
-                'rows' => 5,
+                'rows' => 2,
             ],
             'type'       => 'Textarea',
         ]);
+
+        /**
+         * Lieu dit
+         */
+        $this->add([
+            'name'       => 'lieuDit',
+            'options'    => [
+                'label'         => 'Lieu dit',
+            ],
+            'type'       => 'Text',
+        ]);
+
+        /**
+         * Numéro
+         */
+        $this->add([
+            'name'       => 'numero',
+            'options'    => [
+                'label'         => '',
+            ],
+            'attributes' => [
+                'placeholder' => 'N°'
+            ],
+            'type'       => 'Text',
+        ]);
+
+        /**
+         * complement
+         */
+        $this->add([
+            'name'       => 'numeroComplement',
+            'options'    => [
+                'label'         => '',
+                'empty_option'              => "Compl.",
+                'value_options'             => ['Bis','Ter'],
+            ],
+            'type'       => 'Select',
+        ]);
+
+        /**
+         * voirie
+         */
+        $this->add([
+            'name'       => 'voirie',
+            'options'    => [
+                'label'         => '',
+                'empty_option'              => "type de voirie",
+                'value_options'             => ['rue','boulevard'],
+            ],
+            'type'       => 'Select',
+        ]);
+        /**
+         * voie
+         */
+        $this->add([
+            'name'       => 'voie',
+            'options'    => [
+                'label'         => '',
+            ],
+            'attributes' => [
+              'placeholder' => 'nom de la voie'
+            ],
+            'type'       => 'Text',
+        ]);
+        /**
+         * Code postal
+         */
+        $this->add([
+            'name'       => 'codePostal',
+            'options'    => [
+                'label'         => '',
+            ],
+            'attributes' => [
+                'placeholder' => 'Code postal'
+            ],
+            'type'       => 'Text',
+        ]);
+
+        /**
+         * Ville
+         */
+        $this->add([
+            'name'       => 'codePostal',
+            'options'    => [
+                'label'         => '',
+            ],
+            'attributes' => [
+                'placeholder' => 'Ville'
+            ],
+            'type'       => 'Text',
+        ]);
+
+        /**
+         * Pays
+         */
+
+        $paysSelect = new \Application\Form\CustomElements\PaysSelect('pays', []);
+        $paysSelect->setLabel("Pays");
+
+        $this->add($paysSelect);
 
 
         return $this;
@@ -84,21 +175,8 @@ class DossierAdresseFieldset extends AbstractFieldset
      */
     public function getInputFilterSpecification()
     {
-        $paysNaissanceId       = (int)$this->get('paysNaissance')->getValue();
-        $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
 
-        // la sélection du département n'est obligatoire que si le pays sélectionné est la France
-        $departementRequired = (self::$franceId === $paysNaissanceId);
-
-        $spec = [
-
-            'adresse'              => [
-                'required' => true,
-            ],
-
-        ];
-
-        return $spec;
+        return [];
     }
 
 

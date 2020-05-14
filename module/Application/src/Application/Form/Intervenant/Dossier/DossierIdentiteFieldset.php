@@ -3,6 +3,7 @@
 namespace Application\Form\Intervenant\Dossier;
 
 use Application\Form\AbstractFieldset;
+use Application\Form\CustomElements\PaysSelect;
 use Application\Form\Intervenant\Dossier;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -12,7 +13,6 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\PaysNaissanceValidator;
 use Application\Constants;
-use DoctrineModule\Form\Element\Proxy;
 use DoctrineORMModule\Form\Element\EntitySelect;
 use Zend\Validator\Date as DateValidator;
 
@@ -40,9 +40,9 @@ class DossierIdentiteFieldset extends AbstractFieldset
     {
         //$hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
 
-          $this
-            ->setObject(new Dossier())
-              ->addElements();
+        $this->setObject(new Dossier())
+            ->addElements();
+
         //->setHydrator($hydrator)
 
     }
@@ -129,21 +129,9 @@ class DossierIdentiteFieldset extends AbstractFieldset
         /**
          * Pays de naissance
          */
-        $paysSelect = new PaysSelect('paysNaissance', [
-            'label'        => 'Pays de naissance',
-            'empty_option' => "(Sélectionnez un pays...)",
-        ]);
-        $paysSelect->getProxy()
-            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelle' => 'ASC']]])
-            ->setObjectManager($this->getServiceContext()->getEntityManager())
-            ->setTargetClass(\Application\Entity\Db\Pays::class);
-        foreach ($paysSelect->getProxy()->getObjects() as $p) {
-            $estFrance = $p->isFrance();
-            if ($estFrance) {
-                self::$franceId = $p->getId();
-            }
-        }
-        $paysSelect->setValue(self::$franceId);
+        $paysSelect = new PaysSelect('paysNaissance');
+        $paysSelect->setLabel("Pays de naissance");
+        $paysSelect->setFranceDefault();
         $this->add($paysSelect);
 
         /**
@@ -229,68 +217,3 @@ class DossierIdentiteFieldset extends AbstractFieldset
         return $spec;
     }
 }
-
-
-
-
-
-/**
- * Select d'entités Pays, avec proxy dédié.
- */
-class PaysSelect extends EntitySelect
-{
-    public function __construct($name = null, $options = [])
-    {
-        parent::__construct($name, $options);
-
-        $this->proxy = new PaysProxy();
-    }
-}
-
-
-
-
-
-/**
- * Proxy pour le select d'entités Pays : customisation des attributs HTML des <option>.
- */
-class PaysProxy extends Proxy
-{
-    use PaysServiceAwareTrait;
-
-
-
-    protected function loadValueOptions()
-    {
-        parent::loadValueOptions();
-
-        foreach ($this->valueOptions as $key => $value) {
-            $id        = $value['value'];
-            $pays      = $this->objects[$id];
-            $estFrance = $pays->isFrance();
-
-            $this->valueOptions[$key]['attributes'] = [
-                'class'      => "pays" . ($estFrance ? " france" : null),
-                'data-debut' => $pays->getValiditeDebut()->format('d/m/Y'),
-                'data-fin'   => $pays->getValiditeFin() ? $pays->getValiditeFin()->format('d/m/Y') : null,
-            ];
-        }
-    }
-
-
-
-    protected function loadObjects()
-    {
-        parent::loadObjects();
-
-        // reformattage du tableau de données : id => Pays
-        $pays = [];
-        foreach ($this->objects as $p) {
-            $pays[$p->getId()] = $p;
-        }
-
-        $this->objects = $pays;
-    }
-}
-
-

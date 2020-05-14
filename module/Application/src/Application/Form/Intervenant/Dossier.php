@@ -4,6 +4,7 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
+use Application\Form\Intervenant\Dossier\DossierAdresseFieldset;
 use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
@@ -24,6 +25,7 @@ class Dossier extends AbstractForm
     use ServiceServiceAwareTrait;
 
     protected $dossierIdentiteFieldset;
+    protected $dossierAdresseFieldset;
 
     /**
      * @var boolean
@@ -44,10 +46,13 @@ class Dossier extends AbstractForm
         //TODO : Récupérer ici le contexte pour avoir les droits de l'utilisateur et afficher les bonnes parties du formulaire
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
+        $this->dossierAdresseFieldset = new DossierAdresseFieldset('DossierAdresse');
+        $this->dossierAdresseFieldset->init();
 
-        $this->setAttribute('id', 'dossier-identite');
+        $this->setAttribute('id', 'dossier');
 
         $this->add($this->dossierIdentiteFieldset);
+        $this->add($this->dossierAdresseFieldset);
 
         /**
          * Csrf

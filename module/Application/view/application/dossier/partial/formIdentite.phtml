@@ -39,12 +39,8 @@ $dossierIdentite = $form->get('DossierIdentite'); /* @var $dossier \Application\
         <?= $this->formControlGroup($dossierIdentite->get('departementNaissance')); ?>
         <?= $this->formControlGroup($dossierIdentite->get('villeNaissance')); ?>
     </div>
+</div>
 
-        <?= $this->formHidden($this->form->get('security')); ?>
 
-        <hr/>
-        <?php if (!$form->isReadOnly()): ?>
-            <?= $this->formSubmit($this->form->get('enregistrer')->setAttribute('class', 'btn btn-primary')) ?>
-        <?php endif ?>
 
 

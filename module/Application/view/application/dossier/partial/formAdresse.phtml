@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $form             \Application\Form\Intervenant\Dossier
+ * @var $canValider       boolean
+ * @var $canDevalider     boolean
+ * @var $canSupprimer     boolean
+ * @var $dossier          Dossier
+ */
+
+//$Dossier = $dossier;
+
+$form->prepare();
+$dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+<h3>Identité</h3>
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($dossierAdresse->get('precisions')); ?>
+        <?= $this->formControlGroup($dossierAdresse->get('lieuDit')); ?>
+        <div class="row">
+            <div class="col-md-2">
+                <?= $this->formControlGroup($dossierAdresse->get('numero')); ?>
+            </div>
+            <div class="col-md-2">
+                <?= $this->formControlGroup($dossierAdresse->get('numeroComplement')); ?>
+            </div>
+            <div class="col-md-4">
+                <?= $this->formControlGroup($dossierAdresse->get('voirie')); ?>
+            </div>
+            <div class="col-md-4">
+                <?= $this->formControlGroup($dossierAdresse->get('voie')); ?>
+            </div>
+        </div>
+        <?= $this->formControlGroup($dossierAdresse->get('pays')); ?>
+
+
+    </div>
+
+</div>
+
+
+

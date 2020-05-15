@@ -78,4 +78,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_IMPORT" AS
     RETURN 0;
   END;
 
+
+  PROCEDURE ADD_SOURCE( code VARCHAR2, libelle VARCHAR2, importable BOOLEAN DEFAULT TRUE ) IS
+    sc NUMERIC;
+    imnp NUMERIC;
+  BEGIN
+    SELECT count(*) into sc FROM source WHERE code = ADD_SOURCE.code;
+    IF sc = 0 THEN
+      IF importable THEN imnp := 1; ELSE imnp := 0; END IF;
+
+      INSERT INTO SOURCE(
+        ID, CODE, LIBELLE, IMPORTABLE
+      ) VALUES (
+        SOURCE_ID_SEQ.NEXTVAL, add_source.code, add_source.libelle, imnp
+      );
+    END IF;
+  END;
+
 END UNICAEN_IMPORT;

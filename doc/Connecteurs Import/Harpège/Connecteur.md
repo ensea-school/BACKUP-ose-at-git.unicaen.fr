@@ -3,6 +3,7 @@
 Le connecteur Harpège permet de synchroniser en import :
   * les pays
   * les départements
+  * les voiries
   * les structures (composantes)
   * les corps et les grades
   * Les intervenants vacataires et permanents
@@ -40,7 +41,7 @@ La liste des sources de OSE est accessible ici (URL pointant vers l'instance de 
 Les pays sont enregistrés dans la table PAYS.
 
 Si vous venez d'installer OSE, alors l'application est livrée avec un jeu de données par défaut, parmi lesquelles une liste des pays.
-Avant d'utiliser votre propre liste de pays issue d'Harpège, vous devez impérativement vider la table PAYS, sans quoi vous vous 
+Avant d'utiliser votre propre liste issue d'Harpège, vous devez impérativement vider la table PAYS, sans quoi vous vous 
 retrouveriez avec des erreurs d'import pour cause de doublons.
 
 ```sql
@@ -56,7 +57,7 @@ Les départements sont enregistrés dans la table DEPARTEMENT.
 
 Comme pour les pays, si vous venez d'installer OSE, alors l'application est livrée avec un jeu de données par défaut, 
 parmi lesquelles une liste des départements.
-Avant d'utiliser votre propre liste de pays issue d'Harpège, vous devez impérativement vider la table DEPARTEMENT, sans quoi vous vous
+Avant d'utiliser votre propre liste issue d'Harpège, vous devez impérativement vider la table DEPARTEMENT, sans quoi vous vous
 retrouveriez avec des erreurs d'import pour cause de doublons.
 
 ```sql
@@ -66,7 +67,23 @@ DELETE FROM DEPARTEMENT;
 Ensuite, créez la vue source [SRC_DEPARTEMENT](SRC_DEPARTEMENT.sql).
 
 
-## Étape 5 : Import des structures
+## Étape 5 : Import des voiries
+
+Les voiries sont enregistrés dans la table VOIRIE.
+
+Comme pour les pays, si vous venez d'installer OSE, alors l'application est livrée avec un jeu de données par défaut, 
+parmi lesquelles une liste des voiries.
+Avant d'utiliser votre propre liste issue d'Harpège, vous devez impérativement vider la table VOIRIE, sans quoi vous vous
+retrouveriez avec des erreurs d'import pour cause de doublons.
+
+```sql
+DELETE FROM VOIRIE;
+```
+
+Ensuite, créez la vue source [SRC_VOIRIE](SRC_VOIRIE.sql).
+
+
+## Étape 6 : Import des structures
 
 Les structures dans OSE matérialisent des composantes ou des départements. Il n'y a qu'un seul niveau de structure dans OSE.
 Les structures portent entres autres l'offre de formation, les intervenants mais aussi les affectations (droits d'accès).
@@ -76,7 +93,7 @@ Créez la vue source [SRC_STRUCTURE](SRC_STRUCTURE.sql).
 Dans cette vue, on importe les structures Harpège de niveau 2 et la structure Université (UNIV) de niveau 1.
 
 
-## Étape 6 : Import des corps et des grades
+## Étape 7 : Import des corps et des grades
 
 Pour chaque corps nous pouvons avoir plusieurs grades.
 
@@ -96,7 +113,7 @@ DELETE FROM CORPS;
 Ensuite, créez la vue source [SRC_CORPS](SRC_CORPS.sql), puis la vue source [SRC_GRADE](SRC_GRADE.sql).
 
 
-## Étape 7 : Import des intervenants
+## Étape 8 : Import des intervenants
 
 Les intervenants peuvent être indifféremment des permanents ou des vacataires.
 

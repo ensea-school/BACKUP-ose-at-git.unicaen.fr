@@ -1,7 +1,11 @@
-# OSE 14.5 (alpha)
+# OSE 14.5 (beta)
+
+## Nouveautés
 
 ## Corrections de bugs
 
+* Corrections coquilles dans l'administration.
+* Correction bug sur la duplication d'un statut d'intervenant (ticket #29553)
 * Lors de l'import de données, l'application ne plante plus si le connecteur INTERVENANT est désactivé
 
 # OSE 14.4

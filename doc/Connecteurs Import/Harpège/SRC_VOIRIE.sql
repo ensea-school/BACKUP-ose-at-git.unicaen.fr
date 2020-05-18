@@ -1,10 +1,10 @@
 CREATE OR REPLACE VIEW SRC_VOIRIE AS
 WITH harpege_query AS (
   SELECT
-    COALESCE(c_voie_tg,c_voie) code,
-    l_voie                     libelle,
-    'Harpege'                  z_source_id,
-    c_voie                     source_code
+    c_voie    code,
+    l_voie    libelle,
+    'Harpege' z_source_id,
+    c_voie    source_code
   FROM
     voirie@harpprod str
 )

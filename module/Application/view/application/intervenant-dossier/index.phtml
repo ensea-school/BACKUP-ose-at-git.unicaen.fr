@@ -1,0 +1,48 @@
+<?php
+
+use Application\Entity\Db\Dossier;
+use Application\Entity\Db\WfEtape;
+
+
+//$nextEtape = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
+$this->headTitle()->append("Nom intervenant XXX")->append("Données personnelles");
+
+?>
+    <h1 class="page-header">Données personnelles
+        <small><?= $intervenant; ?></small>
+    </h1>
+<?php
+
+
+/**
+ * Message Importance des données perso.
+ */
+/*if (!$form->getObject()->getId()){
+    $msg = "Ces données sont indispensables pour éditer %s contrat et mettre en paiement %s heures d'enseignement.";
+    if ($role->getIntervenant()) {
+        $this->messenger()->addMessage(sprintf($msg, 'votre', 'vos'), 'warning');
+    } else {
+        $this->messenger()->addMessage(sprintf($msg, 'le', 'les'), 'warning');
+    }
+}*/
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
+
+echo $this->form()->openTag($form);
+echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form'));
+?>
+<div class="row">
+<?php
+echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form'));
+echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form'));
+echo $this->formHidden($this->form->get('security'));
+echo $this->formSubmit($form->get('submit'));
+?>
+
+
+</div>
+<?php
+
+
+echo $this->form()->closeTag();
+//echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

@@ -5,6 +5,7 @@ namespace Application\Form\Intervenant\Dossier;
 use Application\Form\AbstractFieldset;
 use Application\Form\CustomElements\PaysSelect;
 use Application\Form\Intervenant\Dossier;
+use Application\Form\Intervenant\IntervenantDossier;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
@@ -37,22 +38,6 @@ class DossierIdentiteFieldset extends AbstractFieldset
      * allows to perform various operations (add elements...)
      */
     public function init()
-    {
-        //$hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
-
-        $this->setObject(new Dossier())
-            ->addElements();
-
-        //->setHydrator($hydrator)
-
-    }
-
-
-
-    /**
-     * @return self
-     */
-    private function addElements()
     {
         /**
          * Id
@@ -98,16 +83,18 @@ class DossierIdentiteFieldset extends AbstractFieldset
         /**
          * Civilité
          */
-        $civilite = new EntitySelect('civilite', [
-            'label'        => 'Civilité',
-            'empty_option' => "(Sélectionnez une civilité...)",
+        $this->add([
+            'name'       => 'civilite',
+            'options'    => [
+                'label' => 'Civilité',
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Select',
         ]);
-        $civilite->getProxy()
-            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
-            ->setObjectManager($this->getServiceContext()->getEntityManager())
-            ->setTargetClass(\Application\Entity\Db\Civilite::class);
-        $this->add($civilite);
 
+        $this->get('civilite')
+            ->setValueOptions(['' => '(Sélectionnez une civilité...)'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceCivilite()->getList()));
 
         /**
          * Date de naissance
@@ -129,23 +116,48 @@ class DossierIdentiteFieldset extends AbstractFieldset
         /**
          * Pays de naissance
          */
-        $paysSelect = new PaysSelect('paysNaissance');
-        $paysSelect->setLabel("Pays de naissance");
-        $paysSelect->setFranceDefault();
-        $this->add($paysSelect);
+        $this->add([
+            'name'       => 'paysNaissance',
+            'options'    => [
+                'label' => 'Pays de naissance',
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Select',
+        ]);
+
+        $this->get('paysNaissance')
+            ->setValueOptions(['' => 'Sélectionnez un pays...'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
 
         /**
          * Département de naissance
          */
-        $departementSelect = new EntitySelect('departementNaissance', [
+        /**
+         * Pays de naissance
+         */
+        $this->add([
+            'name'       => 'departementNaissance',
+            'options'    => [
+                'label' => 'Département de naissance',
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Select',
+        ]);
+
+        $this->get('departementNaissance')
+            ->setValueOptions(['' => 'Sélectionnez un département...'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));
+
+        /*$departementSelect = new EntitySelect('departementNaissance', [
             'label'        => 'Département de naissance',
             'empty_option' => "(Sélectionnez un département...)",
-        ]);
-        $departementSelect->getProxy()
+        ]);*/
+
+        /*$departementSelect->getProxy()
             ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['code' => 'ASC']]])
             ->setObjectManager($this->getServiceContext()->getEntityManager())
             ->setTargetClass(\Application\Entity\Db\Departement::class);
-        $this->add($departementSelect);
+        $this->add($departementSelect);*/
 
         /**
          * Ville de naissance
@@ -160,8 +172,8 @@ class DossierIdentiteFieldset extends AbstractFieldset
 
 
         return $this;
-    }
 
+    }
 
 
     /**
@@ -177,7 +189,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
 
-        $spec = [
+        /*$spec = [
             'nomUsuel'             => [
                 'required' => true,
             ],
@@ -212,7 +224,9 @@ class DossierIdentiteFieldset extends AbstractFieldset
                 'required' => true,
             ],
 
-        ];
+        ];*/
+
+        $spec = [];
 
         return $spec;
     }

@@ -1,21 +1,24 @@
 <?php
 
-namespace Application\Form\Intervenant\Dossier;
+namespace Application\Form\Adresse;
 
-use Application\Entity\Db\Dossier as Dossier;
 use Application\Form\AbstractFieldset;
 use Application\Form\Elements\PaysSelect;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Application\Service\Traits\VoirieServiceAwareTrait;
 
 /**
- * Description of DossierFieldset
+ * Description of AdresseFieldset
  *
  */
-class DossierAdresseFieldset extends AbstractFieldset
+class AdresseFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
+    use PaysServiceAwareTrait;
+    use VoirieServiceAwareTrait;
 
     static private $franceId;
 
@@ -27,12 +30,7 @@ class DossierAdresseFieldset extends AbstractFieldset
      */
     public function init()
     {
-        //$hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
-
-        $this->setObject(new Dossier())
-            ->addElements();
-
-        //->setHydrator($hydrator)
+        $this->addElements();
     }
 
 
@@ -107,10 +105,13 @@ class DossierAdresseFieldset extends AbstractFieldset
             'options'    => [
                 'label'         => '',
                 'empty_option'              => "type de voirie",
-                'value_options'             => ['rue','boulevard'],
             ],
             'type'       => 'Select',
         ]);
+
+        $this->get('voirie')
+            ->setValueOptions(['' => 'Type de voirie'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList()));
+
         /**
          * voie
          */
@@ -142,7 +143,7 @@ class DossierAdresseFieldset extends AbstractFieldset
          * Ville
          */
         $this->add([
-            'name'       => 'codePostal',
+            'name'       => 'ville',
             'options'    => [
                 'label'         => '',
             ],
@@ -156,11 +157,19 @@ class DossierAdresseFieldset extends AbstractFieldset
          * Pays
          */
 
-        $paysSelect = new \Application\Form\CustomElements\PaysSelect('pays', []);
-        $paysSelect->setLabel("Pays");
 
-        $this->add($paysSelect);
+        $this->add([
+            'name'       => 'pays',
+            'options'    => [
+                'label' => 'Pays',
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Select',
+        ]);
 
+        $this->get('pays')
+            ->setValueOptions(['' => 'Sélectionnez un pays...'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
 
         return $this;
     }

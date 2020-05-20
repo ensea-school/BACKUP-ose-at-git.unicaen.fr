@@ -24,7 +24,7 @@ use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 
-class DossierController extends AbstractController
+class IntervenantDossierController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use ServiceServiceAwareTrait;
@@ -54,121 +54,7 @@ class DossierController extends AbstractController
         ]);
     }
 
-
-
-    /**
-     * Modification du dossier d'un intervenant.
-     *
-     * @return ViewModel
-     * @throws RuntimeException
-     */
-    public function indexAction()
-    {
-        $this->initFilters();
-
-        /* Initialisation */
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        /* @var $intervenant Intervenant */
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-        $iPrec = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
-
-        $validation = $this->getServiceDossier()->getValidation($intervenant);
-        $form       = $this->getFormIntervenantDossier();
-
-        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-
-        $privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
-        $privValider   = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_VALIDATION));
-        $privDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_DEVALIDATION));
-        $privSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));
-
-        $canValider   = !$validation && $dossier->getId() && $privValider;
-        $canDevalider = $validation && $privDevalider;
-        $canEdit      = !$validation && $privEdit;
-        $canSupprimer = !$validation && $dossier->getId() && $privSupprimer;
-
-        $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;
-
-        /* Mise en place du formulaires */
-        $form->personnaliser($intervenant, $lastHETD);
-        $form->bind($intervenant);
-        // le formulaire est en lecture seule si les données ont été validées ou si on n'a pas le droit de le modifier!!
-        $form->setReadOnly(!$canEdit);
-
-        /* Affichage de messages informatifs*/
-
-        /* Si l'intervenant a effectué des heures avant */
-        if ($lastHETD > 0) {
-            $hetd = Util::formattedFloat(
-                $lastHETD,
-                NumberFormatter::DECIMAL,
-                2);
-            $this->flashMessenger()->addInfoMessage(
-                $role->getIntervenant() ?
-                    sprintf("Vous avez effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
-                    : sprintf("L'intervenant a effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
-            );
-        }
-
-        /* Si les données personnelles ont été saisies et/ou validées */
-        if ($dossier->getId() && $validation) {
-            $v = $validation->getHistoCreateur() . " le " . $validation->getHistoCreation()->format(Constants::DATE_FORMAT);
-            if ($role->getIntervenant()) {
-                $this->flashMessenger()->addInfoMessage("Vos données personnelles ont été saisies et validées par $v.");
-            } else {
-                $this->flashMessenger()->addInfoMessage("Les données personnelles de $intervenant ont été saisies et validées par $v.");
-            }
-        } elseif ($dossier->getId()) {
-            if ($role->getIntervenant()) {
-                $this->flashMessenger()->addInfoMessage("Vos données personnelles ont été saisies.");
-            } else {
-                $this->flashMessenger()->addInfoMessage("Les données personnelles de $intervenant ont été saisies.");
-            }
-        }
-
-
-        /* Action d'enregistrement du dossier */
-        if ($this->params()->fromPost('enregistrer') && $canEdit && $this->getRequest()->isPost()) {
-            if ($validation) {
-                throw new \LogicException('Il est impossible de modifier des données personnelles si elles ont été validées.');
-            }
-
-            $data = $this->getRequest()->getPost();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $lastDossierId = $dossier->getId();
-                try {
-                    $this->getServiceDossier()->enregistrerDossier($dossier);
-                    $this->updateTableauxBord($intervenant);
-                    $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-
-                // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
-                // au statut choisi dans le dossier.
-                if ($role->getIntervenant()) {
-                    $this->serviceUserContext->setNextSelectedIdentityRole($dossier->getStatut()->getRoleId());
-                }
-
-                if (!$lastDossierId && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
-                    $nextEtape = $this->getServiceWorkflow()->getNextEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
-                    if ($nextEtape && $url = $nextEtape->getUrl()) {
-                        return $this->redirect()->toUrl($url);
-                    }
-                }
-
-                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
-            }
-        }
-
-        return compact('role', 'form', 'validation', 'canValider', 'canDevalider', 'canSupprimer', 'dossier');
-    }
-
-    public function indexnewAction(){
+    public function indexAction(){
         $this->initFilters();
 
         /* Initialisation */
@@ -182,18 +68,18 @@ class DossierController extends AbstractController
 
         $form = $this->getFormIntervenantDossier();
 
-       /* $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (IntervenantDossier $id) {
+        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $id) {
             try {
                 $this->getServiceIntervenantDossier()->save($id);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-        });*/
+        });
 
 
 
-        return compact('form', 'role', 'intervenant');
+            return compact('form', 'role', 'intervenant');
     }
 
 

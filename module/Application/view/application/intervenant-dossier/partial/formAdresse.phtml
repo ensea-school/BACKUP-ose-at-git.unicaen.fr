@@ -25,9 +25,10 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
         width: auto;
     }
 </style>
-<h3>Identité</h3>
-<div class="row">
+
+
     <div class="col-md-6">
+        <h3>Adresse</h3>
         <?= $this->formControlGroup($dossierAdresse->get('precisions')); ?>
         <?= $this->formControlGroup($dossierAdresse->get('lieuDit')); ?>
         <div class="row">
@@ -49,7 +50,7 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
 
     </div>
 
-</div>
+
 
 
 

@@ -2,7 +2,9 @@
 
 namespace Application;
 
+use Application\Entity\Db\Service;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\IntervenantDossierService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
@@ -14,10 +16,10 @@ return [
                     'dossiernew' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/:intervenant/dossiernew',
+                            'route'    => '/:intervenant/intervenant-dossier',
                             'defaults' => [
-                                'controller' => 'Application\Controller\Dossier',
-                                'action'     => 'indexnew',
+                                'controller' => 'Application\Controller\IntervenantDossier',
+                                'action'     => 'index',
                             ],
                         ],
                     ],
@@ -27,7 +29,7 @@ return [
                             'route'    => '/:intervenant/dossier',
                             'defaults' => [
                                 'controller' => 'Application\Controller\Dossier',
-                                'action'     => 'indexs',
+                                'action'     => 'index',
                             ],
                         ],
                         'may_terminate' => true,
@@ -404,6 +406,13 @@ return [
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
                 ],
 
+                [//Créer un droit archivage
+                 'controller' => 'Application\Controller\IntervenantDossier',
+                 'action'     => ['index'],
+                 'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                 'assertion'  => Assertion\DossierPiecesAssertion::class,
+                ],
+
 
                 /* Interface de configuration des PJ */
                 [
@@ -498,15 +507,18 @@ return [
     'controllers'     => [
         'factories'  => [
             'Application\Controller\Dossier' => Controller\Factory\DossierControllerFactory::class,
+            'Application\Controller\IntervenantDossier' => Controller\Factory\IntervenantDossierControllerFactory::class
         ],
         'invokables' => [
             'Application\Controller\PieceJointe' => Controller\PieceJointeController::class,
+
         ],
     ],
     'service_manager' => [
         'invokables' => [
             Service\TblPieceJointeService::class        => Service\TblPieceJointeService::class,
             Service\DossierService::class               => Service\DossierService::class,
+            IntervenantDossierService::class            => IntervenantDossierService::class,
             Service\PieceJointeService::class           => Service\PieceJointeService::class,
             Service\TypePieceJointeService::class       => Service\TypePieceJointeService::class,
             Service\TypePieceJointeStatutService::class => Service\TypePieceJointeStatutService::class,

@@ -4,8 +4,13 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
+use Application\Form\Adresse\AdresseFieldset;
+use Application\Form\Intervenant\Dossier\DossierContactFieldset;
+use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
+use Application\Hydrator\IntervenantDossierHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
+use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
@@ -15,14 +20,17 @@ use Zend\Form\Element\Csrf;
  * Formulaire de modification du dossier d'un intervenant extérieur.
  *
  */
-class Dossier extends AbstractForm
+class IntervenantDossier extends AbstractForm
 {
     use StatutIntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
     use DossierServiceAwareTrait;
     use ServiceServiceAwareTrait;
+    use IntervenantDossierServiceAwareTrait;
 
-    protected $dossierFieldset;
+    protected $dossierIdentiteFieldset;
+    protected $dossierAdresseFieldset;
+    protected $dossierContactFiedlset;
 
     /**
      * @var boolean
@@ -37,16 +45,21 @@ class Dossier extends AbstractForm
      */
     public function init()
     {
-        $hydrator = new DossierHydrator();
-        $hydrator->setServiceDossier($this->getServiceDossier());
+        $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
-
-        $this->dossierFieldset = new DossierFieldset('dossier');
-        $this->dossierFieldset->init();
+        //TODO : Récupérer ici le contexte pour avoir les droits de l'utilisateur et afficher les bonnes parties du formulaire
+        $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
+        $this->dossierIdentiteFieldset->init();
+        $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
+        $this->dossierAdresseFieldset->init();
+        $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact');
+        $this->dossierContactFiedlset->init();
 
         $this->setAttribute('id', 'dossier');
 
-        $this->add($this->dossierFieldset);
+        $this->add($this->dossierIdentiteFieldset);
+        $this->add($this->dossierAdresseFieldset);
+        $this->add($this->dossierContactFiedlset);
 
         /**
          * Csrf
@@ -57,10 +70,11 @@ class Dossier extends AbstractForm
          * Submit
          */
         $this->add([
-            'name'       => 'enregistrer',
+            'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [
-                'value' => "J'enregistre",
+                'value' => "Enregistrer",
+                'class' => 'btn btn-primary',
             ],
         ]);
     }
@@ -99,14 +113,14 @@ class Dossier extends AbstractForm
      * Redéfinition pour forcer le témoin "premier recrutement" en cas d'absence
      * de l'élément de formulaire.
      */
-    public function setData($data)
+   /* public function setData($data)
     {
         if (!$this->dossierFieldset->has('premierRecrutement')) {
             $data->dossier['premierRecrutement'] = '0';
         }
 
         return parent::setData($data);
-    }
+    }*/
 
 
 

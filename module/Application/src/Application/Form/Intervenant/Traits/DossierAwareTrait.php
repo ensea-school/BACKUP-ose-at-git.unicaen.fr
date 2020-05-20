@@ -3,6 +3,7 @@
 namespace Application\Form\Intervenant\Traits;
 
 use Application\Form\Intervenant\Dossier;
+use Application\Form\Intervenant\IntervenantDossier;
 
 /**
  * Description of DossierAwareTrait
@@ -43,6 +44,6 @@ trait DossierAwareTrait
             return $this->formIntervenantDossier;
         }
 
-        return \Application::$container->get('FormElementManager')->get(Dossier::class);
+        return \Application::$container->get('FormElementManager')->get(IntervenantDossier::class);
     }
 }

@@ -4,29 +4,26 @@ namespace Application\Service;
 
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
-use Application\Form\Intervenant\IntervenantDossier;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 
 /**
  * Description of Dossier
  *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
- *
- * @method Dossier get($id)
- * @method Dossier[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method Dossier newEntity()
+ * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  */
-class DossierService extends AbstractEntityService
+
+class IntervenantDossierService extends AbstractEntityService
 {
     use IntervenantServiceAwareTrait;
     use ValidationServiceAwareTrait;
 
     /**
-     * @var Dossier[]
+     * @var IntervenantDossier[]
      */
     private $dcache = [];
 
@@ -52,7 +49,7 @@ class DossierService extends AbstractEntityService
      */
     public function getAlias()
     {
-        return 'd';
+        return 'id';
     }
 
 
@@ -70,32 +67,13 @@ class DossierService extends AbstractEntityService
 
         $qb = $this->finderByIntervenant($intervenant);
         $this->finderByHistorique($qb);
-        foreach ($this->getList($qb) as $dossier) {
-            return $dossier;
+        foreach ($this->getList($qb) as $intervenantDossier) {
+            return $intervenantDossier;
         }
         $intervenantDossier = $this->newEntity()->fromIntervenant($intervenant);
         $this->dcache[$intervenant->getId()] = $intervenantDossier;
 
         return $intervenantDossier;
-    }
-
-
-
-    /**
-     * Enregistrement d'un dossier.
-     *
-     * NB: tout le travail est déjà fait via un formulaire en fait!
-     * Cette méthode existe surtout pour déclencher l'événement de workflow.
-     *
-     * @param \Application\Entity\Db\Dossier $dossier
-     */
-    public function enregistrerDossier(Dossier $dossier)
-    {
-        $this->getEntityManager()->persist($this->getServiceContext()->getUtilisateur());
-        $this->getEntityManager()->persist($dossier);
-        $this->getEntityManager()->persist($dossier->getIntervenant());
-
-        $this->getEntityManager()->flush();
     }
 
 

@@ -54,6 +54,7 @@ class DossierHydrator implements HydratorInterface
      */
     public function extract($intervenant)
     {
+        $var = '';
         return [
             'dossier' => $this->getServiceDossier()->getByIntervenant($intervenant),
         ];

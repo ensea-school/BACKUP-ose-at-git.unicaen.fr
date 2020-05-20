@@ -43,6 +43,15 @@ class DossierPiecesAssertion extends AbstractAssertion
                     break;
                 }
             break;
+            case "Application\Controller\IntervenantDossier":
+                switch ($action) {
+                    case 'index':
+                        if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
+
+                        return $this->assertDossierEdition($intervenant);
+                    break;
+                }
+            break;
             case 'Application\Controller\PieceJointe':
                 switch ($action) {
                     case 'index':

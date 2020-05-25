@@ -14,13 +14,20 @@ retrouviez dans OSE les données dont vous avez besoin.
   
   !! MV_UNICAEN_STRUCTURE_CODES à voir quoi en faire
   
-## Étape 1 : Mise en place du DbLink
+## Mise en place du DbLink
 
 Le lien avec Harpège se fait au moyen d'un DbLink que vous devrez créer.
 Dans cet exemple, le DbLink s'appellera `harpprod`.
 
+
+## Création de la vue SRC_HARPEGE_STRUCTURE_CODES
+
+La vue `SRC_HARPEGE_STRUCTURE_CODES` liste les structures Harpège et pour chacune d'entres elles associé sa structure de niveau 2.
+Elle ne correspond à aucune table OSE et ne contient aucune donnée à importer. Elle est néanmoins indispensable au bon fonctionnement du connecteur.
+
+Créez la vue [SRC_HARPEGE_STRUCTURE_CODES](SRC_HARPEGE_STRUCTURE_CODES.sql).
     
-## Étape 2 : Déclaration du connecteur dans OSE  
+## Déclaration du connecteur dans OSE  
 
 OSE doit lister toutes ses sources de données.
 Il faut donc y ajouter Harpège : 
@@ -36,7 +43,7 @@ La liste des sources de OSE est accessible ici (URL pointant vers l'instance de 
 [https://\<votre ose\>/demo/import/sources](https://ose.unicaen.fr/demo/import/sources)
 
 
-## Étape 3 : Import des pays
+## Import des pays
 
 Les pays sont enregistrés dans la table PAYS.
 
@@ -51,7 +58,7 @@ DELETE FROM PAYS;
 Ensuite, créez la vue source [SRC_PAYS](SRC_PAYS.sql).
 
 
-## Étape 4 : Import des départements
+## Import des départements
 
 Les départements sont enregistrés dans la table DEPARTEMENT.
 
@@ -67,7 +74,7 @@ DELETE FROM DEPARTEMENT;
 Ensuite, créez la vue source [SRC_DEPARTEMENT](SRC_DEPARTEMENT.sql).
 
 
-## Étape 5 : Import des voiries
+## Import des voiries
 
 Les voiries sont enregistrés dans la table VOIRIE.
 
@@ -83,7 +90,7 @@ DELETE FROM VOIRIE;
 Ensuite, créez la vue source [SRC_VOIRIE](SRC_VOIRIE.sql).
 
 
-## Étape 6 : Import des structures
+## Import des structures
 
 Les structures dans OSE matérialisent des composantes ou des départements. Il n'y a qu'un seul niveau de structure dans OSE.
 Les structures portent entres autres l'offre de formation, les intervenants mais aussi les affectations (droits d'accès).
@@ -93,7 +100,7 @@ Créez la vue source [SRC_STRUCTURE](SRC_STRUCTURE.sql).
 Dans cette vue, on importe les structures Harpège de niveau 2 et la structure Université (UNIV) de niveau 1.
 
 
-## Étape 7 : Import des corps et des grades
+## Import des corps et des grades
 
 Pour chaque corps nous pouvons avoir plusieurs grades.
 
@@ -113,7 +120,7 @@ DELETE FROM CORPS;
 Ensuite, créez la vue source [SRC_CORPS](SRC_CORPS.sql), puis la vue source [SRC_GRADE](SRC_GRADE.sql).
 
 
-## Étape 8 : Import des intervenants
+## Import des intervenants
 
 Les intervenants peuvent être indifféremment des permanents ou des vacataires.
 

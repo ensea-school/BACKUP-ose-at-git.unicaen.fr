@@ -115,6 +115,10 @@ return [
             'LIBELLE'      => 'Université Lumière Lyon 2',
             'PACKAGE_NAME' => 'FORMULE_LYON2',
         ],
+        8 => [
+            'LIBELLE'      => 'Université Jean Monnet (Saint-Étienne)',
+            'PACKAGE_NAME' => 'FORMULE_ST_ETIENNE',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

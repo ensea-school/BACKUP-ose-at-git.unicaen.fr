@@ -119,6 +119,10 @@ return [
             'LIBELLE'      => 'Université Jean Monnet (Saint-Étienne)',
             'PACKAGE_NAME' => 'FORMULE_ST_ETIENNE',
         ],
+        8 => [
+            'LIBELLE'      => 'Université Côté d\'azur',
+            'PACKAGE_NAME' => 'FORMULE_COTE_AZUR',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

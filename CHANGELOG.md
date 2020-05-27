@@ -2,6 +2,12 @@
 
 ## Nouveautés
 
+* Nouvelles formules de calcul :
+  * Université Jean Monnet (Saint-Étienne)
+  * Université Côté d'azur (Nice)
+  * Université Rennes 2
+  * INSA de Lyon
+
 ## Corrections de bugs
 
 * Corrections coquilles dans l'administration.
@@ -16,7 +22,7 @@
    * Edition possible des types de ressources (paie état, ressources propres etc...)
    * Edition des règles de validations (volume horaire / type intervenant)
    * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
-   
+
 * L'export CSV des services affiche maintenant les heures non payées avec chaque motif dans des lignes distinctes, ventilées par type d'intervention (CM/TD/TP)
 * Par défaut, les pièces jointes ne sont plus demandées si l'intervenant ne fait que des heures non payables dans son service. Possibilité de les forcer en obligatoire dans l'admin si on le souhaite.   
 

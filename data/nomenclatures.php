@@ -127,6 +127,10 @@ return [
             'LIBELLE'      => 'Université Rennes 2',
             'PACKAGE_NAME' => 'FORMULE_RENNES2',
         ],
+        11 => [
+            'LIBELLE'      => 'INSA de Lyon',
+            'PACKAGE_NAME' => 'FORMULE_INSA_LYON',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

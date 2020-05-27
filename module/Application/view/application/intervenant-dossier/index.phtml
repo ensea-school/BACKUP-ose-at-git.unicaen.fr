@@ -29,18 +29,48 @@ $this->headTitle()->append("Nom intervenant XXX")->append("Données personnelles
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
 
 echo $this->form()->openTag($form);
-echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form'));
 ?>
 <div class="row">
-<?php
-echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form'));
-echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form'));
-echo $this->formHidden($this->form->get('security'));
-echo $this->formSubmit($form->get('submit'));
-?>
 
-
+    <div class="col-md-12">
+        <?php
+            echo $this->formControlGroup($form->get('statut'));
+        ?>
+    </div>
 </div>
+<h3>Identité</h3>
+<div class="row">
+    <?php
+        echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form'));
+    ?>
+</div>
+<div class="row">
+    <?php
+        echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form'));
+        echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form'));
+    ?>
+</div>
+<div class="row">
+    <?php
+    echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form'));
+    echo $this->partial('application/intervenant-dossier/partial/formBancaire', compact('form'));
+    ?>
+</div>
+<div class="row">
+    <?php
+    echo $this->partial('application/intervenant-dossier/partial/formEmployeur', compact('form'));
+    echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form'));
+    ?>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <?php
+        echo $this->formHidden($this->form->get('security'));
+        echo $this->formSubmit($form->get('submit'));
+        ?>
+    </div>
+</div>
+
 <?php
 
 

@@ -189,44 +189,45 @@ class DossierIdentiteFieldset extends AbstractFieldset
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
 
-        /*$spec = [
+        $spec = [
             'nomUsuel'             => [
-                'required' => true,
+                'required' => false,
+                'readonly' => true
             ],
             'nomPatronymique'      => [
                 'required' => false,
             ],
             'prenom'               => [
-                'required' => true,
+                'required' => false,
             ],
             'civilite'             => [
-                'required' => true,
+                'required' => false,
             ],
             'dateNaissance'        => [
-                'required'   => true,
+                'required'   => false,
+                'allow_empty' => true,
                 'validators' => [
                     new DateValidator(['format' => Constants::DATE_FORMAT]),
                 ],
             ],
             'paysNaissance'        => [
-                'required'   => true,
+                'required'   => false,
+                'allow_empty' => true,
                 'validators' => [
                     new PaysNaissanceValidator(['service' => $this->getServicePays()]),
                 ],
             ],
             'departementNaissance' => [
-                'required'   => $departementRequired,
+                'required'   => false,//$departementRequired,
                 'validators' => [
                     new DepartementNaissanceValidator(),
                 ],
             ],
             'villeNaissance'       => [
-                'required' => true,
+                'required' => false,
             ],
 
-        ];*/
-
-        $spec = [];
+        ];
 
         return $spec;
     }

@@ -4,9 +4,14 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
+use Application\Form\Element\StatutIntervenantSelect;
+use Application\Form\Employeur\EmployeurFieldset;
 use Application\Form\Adresse\AdresseFieldset;
+use Application\Form\Intervenant\Dossier\DossierAutresFieldset;
+use Application\Form\Intervenant\Dossier\DossierBancaireFieldset;
 use Application\Form\Intervenant\Dossier\DossierContactFieldset;
 use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
+use Application\Form\Intervenant\Dossier\DossierInseeFieldset;
 use Application\Hydrator\IntervenantDossierHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
@@ -31,6 +36,10 @@ class IntervenantDossier extends AbstractForm
     protected $dossierIdentiteFieldset;
     protected $dossierAdresseFieldset;
     protected $dossierContactFiedlset;
+    protected $dossierInseeFiedlset;
+    protected $dossierBancaireFieldset;
+    protected $dossierEmployeurFieldset;
+    protected $dossierAutresFiedlset;
 
     /**
      * @var boolean
@@ -54,12 +63,46 @@ class IntervenantDossier extends AbstractForm
         $this->dossierAdresseFieldset->init();
         $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact');
         $this->dossierContactFiedlset->init();
+        $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee');
+        $this->dossierInseeFiedlset->init();
+        $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');
+        $this->dossierBancaireFieldset->init();
+        $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
+        $this->dossierEmployeurFieldset->init();
+        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres');
+        $this->dossierAutresFiedlset->init();
 
         $this->setAttribute('id', 'dossier');
 
         $this->add($this->dossierIdentiteFieldset);
         $this->add($this->dossierAdresseFieldset);
         $this->add($this->dossierContactFiedlset);
+        $this->add($this->dossierInseeFiedlset);
+        $this->add($this->dossierBancaireFieldset);
+        $this->add($this->dossierEmployeurFieldset);
+        $this->add($this->dossierAutresFiedlset);
+
+        /**
+         * Select pour Statut intervenant customisé
+         */
+        $statut = new StatutIntervenantSelect('statut', [
+            'label'        => "Quel est votre statut ?",
+            'empty_option' => "(Sélectionnez...)",
+            'value'        => '',
+        ]);
+
+        $statut->getProxy()
+            ->setFindMethod([
+                'name'   => 'findBy',
+                'params' => [
+                    'criteria' => ['peutChoisirDansDossier' => true],
+                    'orderBy'  => ['ordre' => 'ASC'],
+                ],
+            ])
+            ->setObjectManager($this->getServiceContext()->getEntityManager())
+            ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
+
+        $this->add($statut);
 
         /**
          * Csrf
@@ -200,7 +243,13 @@ class IntervenantDossier extends AbstractForm
      */
     public function getInputFilterSpecification()
     {
-        return [];
+        $spec = [
+            'statut'       => [
+                'required' => false,
+            ],
+        ];
+
+        return $spec;
     }
 
 }

@@ -12,7 +12,7 @@
 //$Dossier = $dossier;
 
 $form->prepare();
-$dossierContact = $form->get('DossierContact');
+$dossierBancaire = $form->get('DossierBancaire');
 ?>
 
 <style>
@@ -28,11 +28,10 @@ $dossierContact = $form->get('DossierContact');
 
 
     <div class="col-md-6">
-        <h3>Contact</h3>
-        <?= $this->formControlGroup($dossierContact->get('emailEtablissement')); ?>
-        <?= $this->formControlGroup($dossierContact->get('emailPersonnel')); ?>
-        <?= $this->formControlGroup($dossierContact->get('telephoneProfessionnel')); ?>
-        <?= $this->formControlGroup($dossierContact->get('telephonePersonnel')); ?>
+        <h3>Coordonnées bancaires</h3>
+        <?= $this->formControlGroup($dossierBancaire->get('ribBic')); ?>
+        <?= $this->formControlGroup($dossierBancaire->get('ribIban')); ?>
+        <?= $this->formControlGroup($dossierBancaire->get('ribHorsSepa')); ?>
     </div>
 
 

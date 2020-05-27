@@ -40,6 +40,7 @@ class IntervenantDossierHydrator implements HydratorInterface
         $data['DossierIdentite'] = [
             'nomUsuel' => $object->getNomUsuel(),
             'prenom' => $object->getNomUsuel(),
+            ''
         ];
 
         return $data;

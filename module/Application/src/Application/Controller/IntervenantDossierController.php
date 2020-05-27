@@ -77,9 +77,7 @@ class IntervenantDossierController extends AbstractController
             }
         });
 
-
-
-            return compact('form', 'role', 'intervenant');
+        return compact('form', 'role', 'intervenant');
     }
 
 

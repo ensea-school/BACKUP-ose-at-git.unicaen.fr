@@ -185,7 +185,38 @@ class AdresseFieldset extends AbstractFieldset
     public function getInputFilterSpecification()
     {
 
-        return [];
+        $spec = [
+            'precisions'             => [
+                'required' => false,
+            ],
+            'lieuDit'      => [
+                'required' => false,
+            ],
+            'numero'               => [
+                'required' => false,
+            ],
+            'numeroComplement'             => [
+                'required' => false,
+            ],
+            'voirie'             => [
+                'required' => false,
+            ],
+            'voie'             => [
+                'required' => false,
+            ],
+            'codePostal'             => [
+                'required' => false,
+            ],
+            'ville'             => [
+                'required' => false,
+            ],
+            'pays'             => [
+                'required' => false,
+            ],
+
+        ];
+
+        return $spec;
     }
 
 

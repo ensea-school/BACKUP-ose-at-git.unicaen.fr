@@ -12,7 +12,7 @@
 //$Dossier = $dossier;
 
 $form->prepare();
-$dossierContact = $form->get('DossierContact');
+$dossierInsee = $form->get('DossierInsee');
 ?>
 
 <style>
@@ -28,11 +28,10 @@ $dossierContact = $form->get('DossierContact');
 
 
     <div class="col-md-6">
-        <h3>Contact</h3>
-        <?= $this->formControlGroup($dossierContact->get('emailEtablissement')); ?>
-        <?= $this->formControlGroup($dossierContact->get('emailPersonnel')); ?>
-        <?= $this->formControlGroup($dossierContact->get('telephoneProfessionnel')); ?>
-        <?= $this->formControlGroup($dossierContact->get('telephonePersonnel')); ?>
+        <h3>Insee</h3>
+        <?= $this->formControlGroup($dossierInsee->get('numeroInsee')); ?>
+        <?= $this->formControlGroup($dossierInsee->get('numeroInseeEstProvisoire')); ?>
+
     </div>
 
 

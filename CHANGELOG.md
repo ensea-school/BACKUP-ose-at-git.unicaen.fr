@@ -1,4 +1,4 @@
-# OSE 14.5 (beta)
+# OSE 14.5
 
 ## Nouveautés
 

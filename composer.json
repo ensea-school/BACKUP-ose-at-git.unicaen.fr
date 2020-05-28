@@ -18,7 +18,7 @@
         "unicaen/code"           : "3.0.0",
         "unicaen/import"         : "3.0.1",
         "unicaen/tbl"            : "3.0.2",
-        "unicaen/open-document"  : "3.0.1",
+        "unicaen/open-document"  : "3.0.2",
         "ocramius/proxy-manager" : "2.2.3"
     },
     "require-dev": {

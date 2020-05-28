@@ -1,4 +1,8 @@
-# OSE 15 (alpha)
+# OSE 16 (à venir)
+Objectif : Connecteur Export OSE => Logiciel RH
+
+# OSE 15 (en développement) 
+Objectif : Doubles statuts & refonte des données personnelles
 
 ## Nouveautés
 
@@ -12,10 +16,20 @@ La migration ne sera possible qu'à partir de la version 14.
 Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
 
 
-# OSE 14.5 (alpha)
+# OSE 14.5
+
+## Nouveautés
+
+* Nouvelles formules de calcul :
+  * Université Jean Monnet (Saint-Étienne)
+  * Université Côté d'azur (Nice)
+  * Université Rennes 2
+  * INSA de Lyon
 
 ## Corrections de bugs
 
+* Corrections coquilles dans l'administration.
+* Correction bug sur la duplication d'un statut d'intervenant (ticket #29553)
 * Lors de l'import de données, l'application ne plante plus si le connecteur INTERVENANT est désactivé
 
 

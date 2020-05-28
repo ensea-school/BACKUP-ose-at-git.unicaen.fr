@@ -78,12 +78,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      */
     private $departementNaissance;
 
-
-    /**
-     * @var string|null
-     */
-    private $villeNaissance;
-
     /**
      * @var Pays|null
      */
@@ -427,28 +421,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
         return $this;
     }
-
-
-    /**
-     * @return string|null
-     */
-    public function getVilleNaissance(): ?string
-    {
-        return $this->villeNaissance;
-    }
-
-
-
-    /**
-     * @param string|null $villeNaissance
-     */
-    public function setVilleNaissance(?string $villeNaissance): IntervenantDossierDossier
-    {
-        $this->villeNaissance = $villeNaissance;
-
-        return $this;
-    }
-
 
 
     /**

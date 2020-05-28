@@ -148,17 +148,6 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->get('departementNaissance')
             ->setValueOptions(['' => 'Sélectionnez un département...'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));
 
-        /*$departementSelect = new EntitySelect('departementNaissance', [
-            'label'        => 'Département de naissance',
-            'empty_option' => "(Sélectionnez un département...)",
-        ]);*/
-
-        /*$departementSelect->getProxy()
-            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['code' => 'ASC']]])
-            ->setObjectManager($this->getServiceContext()->getEntityManager())
-            ->setTargetClass(\Application\Entity\Db\Departement::class);
-        $this->add($departementSelect);*/
-
         /**
          * Ville de naissance
          */

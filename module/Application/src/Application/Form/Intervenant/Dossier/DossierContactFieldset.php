@@ -42,6 +42,12 @@ class DossierContactFieldset extends AbstractFieldset
             'name'    => 'emailEtablissement',
             'options' => [
                 'label' => 'Mail établissement',
+
+            ],
+            'attributes' => [
+                //'placeholder' => "Email établissement",
+                'class' => 'form-control'
+
             ],
             'type'    => Email::class,
         ]);
@@ -53,6 +59,11 @@ class DossierContactFieldset extends AbstractFieldset
             'name'    => 'emailPersonnel',
             'options' => [
                 'label' => 'Mail personnel',
+            ],
+            'attributes' => [
+                //'placeholder' => "Email établissement",
+                'class' => 'form-control'
+
             ],
             'type'    => Email::class
         ]);

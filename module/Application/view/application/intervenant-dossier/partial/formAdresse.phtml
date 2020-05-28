@@ -45,6 +45,14 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                 <?= $this->formControlGroup($dossierAdresse->get('voie')); ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-4">
+                <?= $this->formControlGroup($dossierAdresse->get('codePostal')); ?>
+            </div>
+            <div class="col-md-8">
+                <?= $this->formControlGroup($dossierAdresse->get('ville')); ?>
+            </div>
+        </div>
         <?= $this->formControlGroup($dossierAdresse->get('pays')); ?>
 
 

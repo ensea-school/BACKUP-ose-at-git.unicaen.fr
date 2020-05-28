@@ -126,6 +126,10 @@ Cordialement,
 :utilisateur",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
+    "contrat_modele_mail_objet"          => [
+        "VALEUR"      => "Contrat :intervenant",
+        "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
+    ],
 
 
     /* Messages informatifs */

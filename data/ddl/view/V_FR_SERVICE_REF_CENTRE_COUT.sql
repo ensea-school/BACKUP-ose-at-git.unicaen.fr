@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_FR_SERVICE_REF_CENTRE_COUT AS
 SELECT
-  frsr.id formule_resultat_serv_ref_id, cc.id
+  frsr.id formule_resultat_serv_ref_id, cc.id centre_cout_id
 FROM
   formule_resultat_service_ref   frsr
   JOIN service_referentiel    sr ON sr.id = frsr.service_referentiel_id

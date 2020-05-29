@@ -16,6 +16,13 @@ La migration ne sera possible qu'à partir de la version 14.
 Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
 
 
+# OSE 14.6 (en développement)
+
+## Corrections de bugs
+
+* Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
+
+
 # OSE 14.5
 
 ## Nouveautés

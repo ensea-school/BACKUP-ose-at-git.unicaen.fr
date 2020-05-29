@@ -1,3 +1,10 @@
+# OSE 14.6 (alpha)
+
+## Corrections de bugs
+
+* Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
+
+
 # OSE 14.5
 
 ## Nouveautés

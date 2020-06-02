@@ -354,7 +354,9 @@ class ContratController extends AbstractController
             $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " ". $contrat->getIntervenant()->getNomUsuel();
             $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
             $html = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
-            $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
+            $subject = $this->getServiceParametres()->get('contrat_modele_mail_objet');
+            $subject = str_replace(':intervenant', $vIntervenant, $subject);
+            $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $subject);
             $mail = $this->mail()->send($message);
 
         }

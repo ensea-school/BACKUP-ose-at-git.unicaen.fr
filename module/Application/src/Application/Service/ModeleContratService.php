@@ -112,7 +112,7 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    public function prepareMail(Contrat $contrat, String $htmlContent)
+    public function prepareMail(Contrat $contrat, String $htmlContent, String $subject = null)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             $contrat->getStructure()->getCode(),
@@ -122,7 +122,10 @@ class ModeleContratService extends AbstractEntityService
         $document = $this->generer($contrat, false);
         $content  = $document->saveToData();
 
-        $subject          = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
+        if(empty($subject))
+        {
+            $subject          = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
+        }
         $intervenant = $contrat->getIntervenant();
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';

@@ -77,6 +77,28 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const DOSSIER_SUPPRESSION                                 = 'dossier-suppression';
     const DOSSIER_VALIDATION                                  = 'dossier-validation';
     const DOSSIER_VISUALISATION                               = 'dossier-visualisation';
+    const DOSSIER_IDENTITE_SUITE_VISUALISATION                = 'dossier-identite-suite-visualisation';
+    const DOSSIER_IDENTITE_SUITE_EDITION                      = 'dossier-identite-suite-edition';
+    const DOSSIER_ADRESSE_VISUALISATION                       = 'dossier-adresse-visualisation';
+    const DOSSIER_ADRESSE_EDITION                             = 'dossier-adresse-edition';
+    const DOSSIER_CONTACT_VISUALISATION                       = 'dossier-contact-visualisation';
+    const DOSSIER_CONTACT_EDITION                             = 'dossier-contact-edition';
+    const DOSSIER_INSEE_VISUALISATION                         = 'dossier-insee-visualisation';
+    const DOSSIER_INSEE_EDITION                               = 'dossier-insee-edition';
+    const DOSSIER_BANQUE_VISUALISATION                        = 'dossier-banque-visualisation';
+    const DOSSIER_BANQUE_EDITION                              = 'dossier-banque-edition';
+    const DOSSIER_EMPLOYEUR_VISUALISATION                     = 'dossier-employeur-visualisation';
+    const DOSSIER_EMPLOYEUR_EDITION                           = 'dossier-employeur-edition';
+    const DOSSIER_CHAMP_AUTRE_1_VISUALISATION                 = 'dossier-champ-autre-1-visualisation';
+    const DOSSIER_CHAMP_AUTRE_1_EDITION                       = 'dossier-champ-autre-1-edition';
+    const DOSSIER_CHAMP_AUTRE_2_VISUALISATION                 = 'dossier-champ-autre-2-visualisation';
+    const DOSSIER_CHAMP_AUTRE_2_EDITION                       = 'dossier-champ-autre-2-edition';
+    const DOSSIER_CHAMP_AUTRE_3_VISUALISATION                 = 'dossier-champ-autre-3-visualisation';
+    const DOSSIER_CHAMP_AUTRE_3_EDITION                       = 'dossier-champ-autre-3-edition';
+    const DOSSIER_CHAMP_AUTRE_4_VISUALISATION                 = 'dossier-champ-autre-4-visualisation';
+    const DOSSIER_CHAMP_AUTRE_4_EDITION                       = 'dossier-champ-autre-4-edition';
+    const DOSSIER_CHAMP_AUTRE_5_VISUALISATION                 = 'dossier-champ-autre-5-visualisation';
+    const DOSSIER_CHAMP_AUTRE_5_EDITION                       = 'dossier-champ-autre-5-edition';
     const DROIT_AFFECTATION_EDITION                           = 'droit-affectation-edition';
     const DROIT_AFFECTATION_VISUALISATION                     = 'droit-affectation-visualisation';
     const ENSEIGNEMENT_DEVALIDATION                           = 'enseignement-devalidation';
@@ -182,6 +204,5 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
     const EMPLOYEUR_GESTION                                   = 'employeur-gestion';
-
 
 }

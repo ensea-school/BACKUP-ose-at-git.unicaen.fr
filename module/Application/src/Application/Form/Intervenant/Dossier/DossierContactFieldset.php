@@ -35,6 +35,8 @@ class DossierContactFieldset extends AbstractFieldset
      */
     private function addElements()
     {
+        //$privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::class));
+
         /**
          * Mail établissement
          */
@@ -62,7 +64,7 @@ class DossierContactFieldset extends AbstractFieldset
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
-                'class' => 'form-control'
+                'class' => 'form-control left-border-none'
 
             ],
             'type'    => Email::class
@@ -76,6 +78,11 @@ class DossierContactFieldset extends AbstractFieldset
             'options' => [
                 'label' => 'Téléphone professionnel',
             ],
+            'attributes' => [
+                //'placeholder' => "Email établissement",
+                'class' => 'form-control left-border-none'
+
+            ],
             'type'    => Tel::class,
         ]);
 
@@ -86,6 +93,11 @@ class DossierContactFieldset extends AbstractFieldset
             'name'    => 'telephonePersonnel',
             'options' => [
                 'label' => 'Téléphone personnel',
+            ],
+            'attributes' => [
+                //'placeholder' => "Email établissement",
+                'class' => 'form-control left-border-none'
+
             ],
             'type'    => Tel::class,
         ]);

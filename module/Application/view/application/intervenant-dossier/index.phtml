@@ -6,7 +6,7 @@ use Application\Entity\Db\WfEtape;
 
 //$nextEtape = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
 $this->headTitle()->append("Nom intervenant XXX")->append("Données personnelles");
-
+$fieldsets = $form->getFieldsets();
 ?>
     <h1 class="page-header">Données personnelles
         <small><?= $intervenant; ?></small>
@@ -38,12 +38,15 @@ echo $this->form()->openTag($form);
         ?>
     </div>
 </div>
+<?php if(in_array('DossierIdentite', $fieldsets)): ?>
+
 <h3>Identité</h3>
 <div class="row">
     <?php
         echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form'));
     ?>
 </div>
+<?php endif; ?>
 <div class="row">
     <?php
         echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form'));

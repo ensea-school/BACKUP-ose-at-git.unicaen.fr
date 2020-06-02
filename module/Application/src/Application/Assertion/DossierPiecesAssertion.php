@@ -50,6 +50,7 @@ class DossierPiecesAssertion extends AbstractAssertion
 
                         return $this->assertDossierEdition($intervenant);
                     break;
+
                 }
             break;
             case 'Application\Controller\PieceJointe':
@@ -95,6 +96,24 @@ class DossierPiecesAssertion extends AbstractAssertion
         return true;
     }
 
+    /*assertion refonte dossier*/
+
+    protected function assertPrivilege($privilege, $subPrivilege = null)
+    {
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+
+        switch ($privilege) {
+            case Privileges::DOSSIER_IDENTITE_SUITE_EDITION:
+                return $this->assertEditionDossierContact($intervenant);
+            break;
+        }
+    }
+
+    protected function assertEditionDossierContact(Intervenant $intervenant)
+    {
+        return true;
+    }
+
 
 
     protected function assertDossierEdition(Intervenant $intervenant = null)
@@ -104,6 +123,11 @@ class DossierPiecesAssertion extends AbstractAssertion
         }
 
         return true;
+    }
+
+    protected function assertDossierIdentiteEdition(Intervenant $intervenant = null)
+    {
+
     }
 
 

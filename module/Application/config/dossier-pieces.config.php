@@ -374,7 +374,7 @@ return [
                 /* Dossier */
                 [//Créer un droit archivage
                  'controller' => 'Application\Controller\Dossier',
-                 'action'     => ['index', 'indexnew'],
+                 'action'     => ['index'],
                  'privileges' => [Privileges::DOSSIER_VISUALISATION],
                  'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
@@ -409,7 +409,7 @@ return [
                 [//Créer un droit archivage
                  'controller' => 'Application\Controller\IntervenantDossier',
                  'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_SUITE_EDITION],
                  'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
 

@@ -54,6 +54,8 @@ class IntervenantDossier extends AbstractForm
      */
     public function init()
     {
+
+
         $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
         //TODO : Récupérer ici le contexte pour avoir les droits de l'utilisateur et afficher les bonnes parties du formulaire

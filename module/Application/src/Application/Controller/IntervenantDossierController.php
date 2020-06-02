@@ -64,13 +64,28 @@ class IntervenantDossierController extends AbstractController
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
+        /* Récupération du dossier de l'intervenant */
         $intervenantDossier = $this->getServiceIntervenantDossier()->getByIntervenant($intervenant);
+        /* Priviliege */
+            $privEditIdentite = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_IDENTITE_SUITE_EDITION));
+        /*$privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
+        $privValider   = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_VALIDATION));
+        $privDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_DEVALIDATION));
+        $privSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));*/
 
+        /* Initialisation du formulaire */
         $form = $this->getFormIntervenantDossier();
-
-        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $id) {
+        if(!$privEditIdentite)
+        {
+            $form->remove('DossierIdentite');
+        }
+        /* Traitement du formulaire */
+        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $intervenantDossier) use ($intervenant) {
             try {
-                $this->getServiceIntervenantDossier()->save($id);
+                /* Sauvegarde du dossier de l'intervenant */
+                $this->getServiceIntervenantDossier()->save($intervenantDossier);
+                /* Recalcul des tableaux de bord nécessaires */
+                $this->updateTableauxBord($intervenant);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -209,5 +224,10 @@ class IntervenantDossierController extends AbstractController
             'dossier',
             'piece_jointe_demande',
         ], $intervenant);
+    }
+
+    private function personnaliser()
+    {
+
     }
 }

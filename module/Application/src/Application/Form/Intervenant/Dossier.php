@@ -24,7 +24,7 @@ class Dossier extends AbstractForm
 
     protected $dossierFieldset;
 
-    /**
+    /**w
      * @var boolean
      */
     protected $readOnly;

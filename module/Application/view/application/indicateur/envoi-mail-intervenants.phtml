@@ -23,6 +23,8 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
 </div>
 <?= $this->formControlGroup($this->form->get('subject')->setLabel("Objet du mail")) ?>
 <?= $this->formControlGroup($this->form->get('body')->setLabel("Corps du mail")->setAttributes(['rows' => 15, 'id' => 'body'])) ?>
+<?= $this->formControlGroup($this->form->get('copy')->setLabel("Recevoir une copie de l'email envoyé")) ?>
+
 
 <?php if (!empty($sansMail)): ?>
     <div class="alert alert-warning">

@@ -2,7 +2,7 @@
 
 ## Nouveautés
 
-* Lors de l'envoi d'email aux intervenants via les indicateurs, possiblité d'en demander une copie par email pour avoir un traçabilité. Le mail en copie contiendra en plus la liste des personnes / emails qui ont reçu celui-ci et la liste des intervenants qui n'ont pas pu être contacté faute d'email renseigné.
+* Lors de l'envoi d'email aux intervenants via les indicateurs, possiblité d'en demander une copie par email pour avoir un traçabilité. Le mail en copie contiendra en plus la liste des personnes / emails qui ont reçu celui-ci
 * L'expéditeur de l'email du contrat est maintenant celui qui a réalisé l'action d'envoi (en lieu et place de nepasrepondre@unicaen.fr) 
 * L'objet de l'email du contrat est maintenant personnalisable dans Administration > Paramètres généraux
 

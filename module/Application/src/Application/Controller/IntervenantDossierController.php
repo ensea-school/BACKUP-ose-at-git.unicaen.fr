@@ -74,7 +74,7 @@ class IntervenantDossierController extends AbstractController
         $privSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));*/
 
         /* Initialisation du formulaire */
-        $form = $this->getFormIntervenantDossier();
+        $form = $this->getFormIntervenantDossier($intervenant);
         if(!$privEditIdentite)
         {
             $form->remove('DossierIdentite');

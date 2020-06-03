@@ -2,6 +2,7 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use Application\Form\Element\StatutIntervenantSelect;
@@ -13,6 +14,7 @@ use Application\Form\Intervenant\Dossier\DossierContactFieldset;
 use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
 use Application\Form\Intervenant\Dossier\DossierInseeFieldset;
 use Application\Hydrator\IntervenantDossierHydrator;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
@@ -20,6 +22,7 @@ use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use Zend\Form\Element\Csrf;
+use Zend\Form\Fieldset;
 
 /**
  * Formulaire de modification du dossier d'un intervenant extérieur.
@@ -56,6 +59,13 @@ class IntervenantDossier extends AbstractForm
     {
 
 
+
+
+        $serviceAuthorize = $this->getServiceContext()->getAuthorize();
+        $role = $this->getServiceContext()->getUtilisateur()->getRoles();
+
+        $canDoThat = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION));
+
         $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
         //TODO : Récupérer ici le contexte pour avoir les droits de l'utilisateur et afficher les bonnes parties du formulaire
@@ -69,6 +79,10 @@ class IntervenantDossier extends AbstractForm
         $this->dossierInseeFiedlset->init();
         $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');
         $this->dossierBancaireFieldset->init();
+        if(!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION)))
+        {
+            $this->setReadOnly($this->dossierBancaireFieldset);
+        }
         $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
         $this->dossierEmployeurFieldset->init();
         $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres');
@@ -184,9 +198,18 @@ class IntervenantDossier extends AbstractForm
      *
      * @return Dossier
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(Fieldset $fieldset)
     {
-        $this->readOnly = $readOnly;
+        //TODO : Gérer le cas des checkbox disable au lieu de readonly
+        $elements = $fieldset->getElements();
+
+        foreach($elements as $element)
+        {
+            $element->setAttribute('readonly', 1);
+        }
+
+        return $this;
+       /* $this->readOnly = $readOnly;
 
         $roElements = [
             'statut'                   => 'disabled',
@@ -231,7 +254,7 @@ class IntervenantDossier extends AbstractForm
                 $element->setAttribute($attr, $readOnly);
             }
         }
-
+*/
         return $this;
     }
 

@@ -1,15 +1,8 @@
 <?php
 
-/**
- * @var $this             \Application\View\Renderer\PhpRenderer
- * @var $form             \Application\Form\Intervenant\Dossier
- * @var $canValider       boolean
- * @var $canDevalider     boolean
- * @var $canSupprimer     boolean
- * @var $dossier          Dossier
- */
+use Application\Assertion\IntervenantDossierAssertion;
 
-//$Dossier = $dossier;
+$viewIban = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IBAN);
 
 $form->prepare();
 $dossierBancaire = $form->get('DossierBancaire');
@@ -29,9 +22,18 @@ $dossierBancaire = $form->get('DossierBancaire');
 
     <div class="col-md-6">
         <h3>Coordonnées bancaires</h3>
-        <?= $this->formControlGroup($dossierBancaire->get('ribBic')); ?>
-        <?= $this->formControlGroup($dossierBancaire->get('ribIban')); ?>
-        <?= $this->formControlGroup($dossierBancaire->get('ribHorsSepa')); ?>
+        <?php
+        if($viewIban)
+        {
+            echo $this->formControlGroup($dossierBancaire->get('ribBic'));
+            echo $this->formControlGroup($dossierBancaire->get('ribIban'));
+            echo $this->formControlGroup($dossierBancaire->get('ribHorsSepa'));
+        }else{
+            echo 'Coordonnées bancaires non visibles';
+        }
+
+        ?>
+
     </div>
 
 

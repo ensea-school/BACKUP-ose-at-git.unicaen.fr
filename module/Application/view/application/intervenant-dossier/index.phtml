@@ -1,7 +1,6 @@
 <?php
 
-use Application\Entity\Db\Dossier;
-use Application\Entity\Db\WfEtape;
+use Application\Assertion\IntervenantDossierAssertion;
 
 
 //$nextEtape = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
@@ -38,7 +37,6 @@ echo $this->form()->openTag($form);
         ?>
     </div>
 </div>
-<?php if(in_array('DossierIdentite', $fieldsets)): ?>
 
 <h3>Identité</h3>
 <div class="row">
@@ -46,7 +44,6 @@ echo $this->form()->openTag($form);
         echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form'));
     ?>
 </div>
-<?php endif; ?>
 <div class="row">
     <?php
         echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form'));
@@ -55,8 +52,8 @@ echo $this->form()->openTag($form);
 </div>
 <div class="row">
     <?php
-    echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form'));
-    echo $this->partial('application/intervenant-dossier/partial/formBancaire', compact('form'));
+    echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form', 'intervenant'));
+    echo $this->partial('application/intervenant-dossier/partial/formBancaire', compact('form', 'intervenant'));
     ?>
 </div>
 <div class="row">

@@ -5,8 +5,10 @@ namespace Application\Hydrator;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Traits\DepartementAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
@@ -21,6 +23,7 @@ use Zend\Hydrator\HydratorInterface;
 class IntervenantDossierHydrator implements HydratorInterface
 {
     use IntervenantDossierServiceAwareTrait;
+    use ContextServiceAwareTrait;
     use CiviliteServiceAwareTrait;
     use PaysServiceAwareTrait;
     use DepartementServiceAwareTrait;
@@ -48,9 +51,11 @@ class IntervenantDossierHydrator implements HydratorInterface
      */
     public function extract($object)
     {
+        $serviceAuthorize = $this->getServiceContext()->getAuthorize();
+        $canEditIban = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION));
         /* Extract fieldset dossier identite */
         $data['DossierIdentite'] = [
-            'nomUsuel'             => $object->getNomUsuel(),
+            'nomUsuel'             => ($canEditIban)?$object->getNomUsuel():'xxxxxxxxxxxxx',
             'nomPatronymique'      => $object->getNomPatronymique(),
             'prenom'               => $object->getNomUsuel(),
             'civilite'             => $object->getCivilite()->getId(),
@@ -98,8 +103,14 @@ class IntervenantDossierHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
 
+        //Sécurisation de l'hydratation de l'object pour ne pas mettre à jour les valeurs si on a pas le privilege
+        $serviceAuthorize = $this->getServiceContext()->getAuthorize();
+        $canEditIban = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION));
         /* @var $object IntervenantDossier*/
-        $object->setNomUsuel($data['DossierIdentite']['nomUsuel']);
+        if($canEditIban)
+        {
+            $object->setNomUsuel($data['DossierIdentite']['nomUsuel']);
+        }
         $object->setNomPatronymique($data['DossierIdentite']['nomPatronymique']);
         $object->setPrenom($data['DossierIdentite']['prenom']);
         //Civilite

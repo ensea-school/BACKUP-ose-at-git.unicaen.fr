@@ -61,7 +61,8 @@ class DossierInseeFieldset extends AbstractFieldset
 
     public function getInputFilterSpecification()
     {
-        $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
+        //$numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
+        $numeroInseeProvisoire = true;
 
         $spec = [
             'numeroInsee'          => [
@@ -72,7 +73,12 @@ class DossierInseeFieldset extends AbstractFieldset
                     ]),
                 ],
             ],
+            'numeroInseeEstProvisoire'          => [
+                'required'   => false,
+            ],
         ];
+
+        return $spec;
         return [];
     }
 }

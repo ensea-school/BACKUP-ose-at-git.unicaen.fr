@@ -63,6 +63,7 @@ class DossierBancaireFieldset extends AbstractFieldset
         $spec = [
             'ribBic' => [
                 'required'   => false,
+                'readonly' => true,
                 'filters'    => [
                     ['name' => 'StringTrim'],
                     ['name' => 'StringToUpper'],

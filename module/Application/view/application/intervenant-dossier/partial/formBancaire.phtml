@@ -23,14 +23,14 @@ $dossierBancaire = $form->get('DossierBancaire');
     <div class="col-md-6">
         <h3>Coordonnées bancaires</h3>
         <?php
-        if($viewIban)
-        {
+       /* if($viewIban)
+        {*/
             echo $this->formControlGroup($dossierBancaire->get('ribBic'));
             echo $this->formControlGroup($dossierBancaire->get('ribIban'));
             echo $this->formControlGroup($dossierBancaire->get('ribHorsSepa'));
-        }else{
+       /* }else{
             echo 'Coordonnées bancaires non visibles';
-        }
+        }*/
 
         ?>
 

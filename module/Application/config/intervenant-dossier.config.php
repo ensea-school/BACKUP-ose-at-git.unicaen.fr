@@ -5,6 +5,7 @@ namespace Application;
 use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\Service;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\AdresseNumeroComplService;
 use Application\Service\IntervenantDossierService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -184,8 +185,9 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-                Service\DossierService::class               => Service\DossierService::class,
+            Service\DossierService::class               => Service\DossierService::class,
             IntervenantDossierService::class            => IntervenantDossierService::class,
+            AdresseNumeroComplService::class            => AdresseNumeroComplService::class,
         ],
         'factories'  => [
             Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,

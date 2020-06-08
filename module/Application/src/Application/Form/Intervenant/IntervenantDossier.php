@@ -2,7 +2,6 @@
 
 namespace Application\Form\Intervenant;
 
-use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use Application\Form\Element\StatutIntervenantSelect;
@@ -20,7 +19,7 @@ use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Application\Validator\NumeroINSEEValidator;
+use Zend\Form\Element;
 use Zend\Form\Element\Csrf;
 use Zend\Form\Fieldset;
 
@@ -37,17 +36,34 @@ class IntervenantDossier extends AbstractForm
     use IntervenantDossierServiceAwareTrait;
 
     protected $dossierIdentiteFieldset;
+
     protected $dossierAdresseFieldset;
+
     protected $dossierContactFiedlset;
+
     protected $dossierInseeFiedlset;
+
     protected $dossierBancaireFieldset;
+
     protected $dossierEmployeurFieldset;
+
     protected $dossierAutresFiedlset;
+
+    protected $serviceAuthorize;
 
     /**
      * @var boolean
      */
     protected $readOnly;
+
+
+
+    public function __construct($name = null, $options = [])
+    {
+        $this->serviceAuthorize = $this->getServiceContext()->getAuthorize();
+
+        parent::__construct($name, $options);
+    }
 
 
 
@@ -59,16 +75,13 @@ class IntervenantDossier extends AbstractForm
     {
 
 
-
-
         $serviceAuthorize = $this->getServiceContext()->getAuthorize();
-        $role = $this->getServiceContext()->getUtilisateur()->getRoles();
+        $role             = $this->getServiceContext()->getUtilisateur()->getRoles();
 
         $canDoThat = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION));
 
         $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
-        //TODO : Récupérer ici le contexte pour avoir les droits de l'utilisateur et afficher les bonnes parties du formulaire
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
@@ -77,10 +90,12 @@ class IntervenantDossier extends AbstractForm
         $this->dossierContactFiedlset->init();
         $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee');
         $this->dossierInseeFiedlset->init();
+        if (!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_EDITION))) {
+            $this->setReadOnly($this->dossierInseeFiedlset);
+        }
         $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');
         $this->dossierBancaireFieldset->init();
-        if(!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION)))
-        {
+        if (!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION))) {
             $this->setReadOnly($this->dossierBancaireFieldset);
         }
         $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
@@ -140,6 +155,20 @@ class IntervenantDossier extends AbstractForm
 
 
 
+    public function isValid()
+    {
+
+        if (!$this->serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_VISUALISATION))) {
+            $inputFilterSpecification = $this->getInputFilter()->get('DossierBancaire')->remove('ribIban');
+            $inputFilterSpecification = $this->getInputFilter()->get('DossierBancaire')->remove('ribBic');
+            $inputFilterSpecification = $this->getInputFilter()->get('DossierBancaire')->remove('ribHorsSepa');
+        }
+
+        return parent::isValid();
+    }
+
+
+
     public function personnaliser(Intervenant $intervenant, $lastHETD = 0)
     {
         $dossier         = $this->getServiceDossier()->getByIntervenant($intervenant);
@@ -172,15 +201,14 @@ class IntervenantDossier extends AbstractForm
      * Redéfinition pour forcer le témoin "premier recrutement" en cas d'absence
      * de l'élément de formulaire.
      */
-   /* public function setData($data)
-    {
-        if (!$this->dossierFieldset->has('premierRecrutement')) {
-            $data->dossier['premierRecrutement'] = '0';
-        }
+    /* public function setData($data)
+     {
+         if (!$this->dossierFieldset->has('premierRecrutement')) {
+             $data->dossier['premierRecrutement'] = '0';
+         }
 
-        return parent::setData($data);
-    }*/
-
+         return parent::setData($data);
+     }*/
 
 
     /**
@@ -191,8 +219,6 @@ class IntervenantDossier extends AbstractForm
         return $this->readOnly;
     }
 
-
-
     /**
      * @param boolean $readOnly
      *
@@ -200,61 +226,17 @@ class IntervenantDossier extends AbstractForm
      */
     public function setReadOnly(Fieldset $fieldset)
     {
-        //TODO : Gérer le cas des checkbox disable au lieu de readonly
         $elements = $fieldset->getElements();
+        /* @var $element Element */
 
-        foreach($elements as $element)
-        {
-            $element->setAttribute('readonly', 1);
-        }
-
-        return $this;
-       /* $this->readOnly = $readOnly;
-
-        $roElements = [
-            'statut'                   => 'disabled',
-            'nomUsuel'                 => 'readonly',
-            'nomPatronymique'          => 'readonly',
-            'prenom'                   => 'readonly',
-            'civilite'                 => 'disabled',
-            'dateNaissance'            => 'readonly',
-            'paysNaissance'            => 'disabled',
-            'departementNaissance'     => 'disabled',
-            'villeNaissance'           => 'readonly',
-            'numeroInsee'              => 'readonly',
-            'numeroInseeEstProvisoire' => 'disabled',
-            'adresse'                  => 'readonly',
-            //'email'                     => 'readonly',
-            'emailPerso'               => 'readonly',
-            'telephone'                => 'readonly',
-            'premierRecrutement'       => 'disabled',
-            'ribBic'                   => 'readonly',
-            'ribIban'                  => 'readonly',
-            'ribHorsSepa'              => 'readonly',
-        ];
-
-        foreach ($roElements as $roe => $attr) {
-            $roe = explode('/', $roe);
-            if (2 == count($roe)) {
-                [$e, $se] = $roe;
+        foreach ($elements as $element) {
+            if ($element instanceof Element\Checkbox) {
+                $element->setAttribute('disabled', 1);
             } else {
-                $e  = $roe[0];
-                $se = null;
-            }
-
-            $element = null;
-            if ($e && $this->dossierFieldset->has($e)) {
-                $element = $this->dossierFieldset->get($e);
-                if ($se && $element->has($se)) {
-                    $element = $element->get($se);
-                }
-            }
-
-            if ($element) {
-                $element->setAttribute($attr, $readOnly);
+                $element->setAttribute('readonly', 1);
             }
         }
-*/
+
         return $this;
     }
 
@@ -269,7 +251,7 @@ class IntervenantDossier extends AbstractForm
     public function getInputFilterSpecification()
     {
         $spec = [
-            'statut'       => [
+            'statut' => [
                 'required' => false,
             ],
         ];

@@ -4,6 +4,7 @@ namespace Application\Form\Adresse;
 
 use Application\Form\AbstractFieldset;
 use Application\Form\Elements\PaysSelect;
+use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
@@ -19,6 +20,7 @@ class AdresseFieldset extends AbstractFieldset
     use StatutIntervenantServiceAwareTrait;
     use PaysServiceAwareTrait;
     use VoirieServiceAwareTrait;
+    use AdresseNumeroComplServiceAwareTrait;
 
     static private $franceId;
 
@@ -96,6 +98,10 @@ class AdresseFieldset extends AbstractFieldset
             ],
             'type'       => 'Select',
         ]);
+
+        $this->get('numeroComplement')
+            ->setValueOptions(['' => 'Compl.'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceAdresseNumeroCompl()->getList()));
+
 
         /**
          * voirie

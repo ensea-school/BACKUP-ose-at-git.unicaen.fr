@@ -518,7 +518,6 @@ return [
         'invokables' => [
             Service\TblPieceJointeService::class        => Service\TblPieceJointeService::class,
             Service\DossierService::class               => Service\DossierService::class,
-            IntervenantDossierService::class            => IntervenantDossierService::class,
             Service\PieceJointeService::class           => Service\PieceJointeService::class,
             Service\TypePieceJointeService::class       => Service\TypePieceJointeService::class,
             Service\TypePieceJointeStatutService::class => Service\TypePieceJointeStatutService::class,

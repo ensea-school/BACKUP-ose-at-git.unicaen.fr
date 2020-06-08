@@ -21,19 +21,13 @@ $dossierInsee = $form->get('DossierInsee');
 </style>
 
 
-    <div class="col-md-6">
-        <h3>Insee</h3>
-        <?php
-            if($viewInsee)
-            {
-                echo $this->formControlGroup($dossierInsee->get('numeroInsee'));
-                echo $this->formControlGroup($dossierInsee->get('numeroInseeEstProvisoire'));
-            }
-            else{
-                echo 'Insee non visible';
-            }
-        ?>
-    </div>
+<div class="col-md-6">
+    <h3>Insee</h3>
+    <?php
+    echo $this->formControlGroup($dossierInsee->get('numeroInsee'));
+    echo $this->formControlGroup($dossierInsee->get('numeroInseeEstProvisoire'));
+    ?>
+</div>
 
 
 

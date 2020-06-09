@@ -18,6 +18,13 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
 
 # OSE 14.6 (en développement)
 
+## Nouveautés
+
+* Lors de l'envoi d'email aux intervenants via les indicateurs, possiblité d'en demander une copie par email pour avoir un traçabilité. Le mail en copie contiendra en plus la liste des personnes / emails qui ont reçu celui-ci
+* L'expéditeur de l'email du contrat est maintenant celui qui a réalisé l'action d'envoi (en lieu et place de nepasrepondre@unicaen.fr) 
+* L'objet de l'email du contrat est maintenant personnalisable dans Administration > Paramètres généraux
+* Lors de l'envoi du mail du contrat,  les sauts à ligne manuels du modèle de mail sont remplacés par des <br/> html pour respecter la mise en page.
+
 ## Corrections de bugs
 
 * Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
@@ -48,7 +55,7 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
    * Edition possible des types de ressources (paie état, ressources propres etc...)
    * Edition des règles de validations (volume horaire / type intervenant)
    * Edition des types d'activites des centres de coûts (pilotage, enseignement, accueil etc..)
-   
+
 * L'export CSV des services affiche maintenant les heures non payées avec chaque motif dans des lignes distinctes, ventilées par type d'intervention (CM/TD/TP)
 * Par défaut, les pièces jointes ne sont plus demandées si l'intervenant ne fait que des heures non payables dans son service. Possibilité de les forcer en obligatoire dans l'admin si on le souhaite.   
 

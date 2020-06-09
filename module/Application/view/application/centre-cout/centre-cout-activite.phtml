@@ -1,0 +1,90 @@
+<?php
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Types d'activité des centres de coûts");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION));
+$canEdit = true;
+
+?>
+<h1 class="page-header">Types d'activité des centres de coûts</h1>
+<table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+        <th>Code</th>
+        <th>Libellé</th>
+        <th>FA</th>
+        <th>FI</th>
+        <th>FC</th>
+        <th>FC Majorée</th>
+        <th>Référentiel</th>
+        <?php if ($canEdit): ?>
+            <th>Actions</th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables">
+    <?php foreach ($listeActivites as $activite): ?>
+        <tr class="champ-triable" data-id="<?= $activite->getId() ?>">
+            <td>
+                <?= $activite->getCode() ?>&nbsp;
+            </td>
+            <td><?= $activite->getLibelle() ?></td>
+            <td><?= ($activite->getFi())?'OUI':'NON'; ?></td>
+            <td><?= ($activite->getFa())?'OUI':'NON'; ?></td>
+            <td><?= ($activite->getFc())?'OUI':'NON'; ?></td>
+            <td><?= ($activite->getFcMajorees())?'OUI':'NON'; ?></td>
+            <td><?= ($activite->getReferentiel())?'OUI':'NON'; ?></td>
+            <?php if ($canEdit): ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <a class="ajax-modal"
+                       data-event="centre-cout-activite-saisie"
+                       href="<?= $this->url('centre-cout-activite/saisie', ['ccActivite' => $activite->getId()]) ?>"
+                       data-submit-reload="true">
+                        <span class="glyphicon glyphicon-edit"></span></a>
+                    <a class="pop-ajax"
+                       href="<?= $this->url('centre-cout-activite/delete', ['ccActivite' => $activite->getId()]) ?>"
+                       title="Supprimer le type d'activité"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="centre-cout-activite-saisie"
+       href="<?= $this->url('centre-cout-activite/saisie') ?>"
+       title="Ajouter un type d'activité">
+        <span class="glyphicon glyphicon-plus"></span>
+        Ajouter un type d'activité</a>
+<?php endif; ?>
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("centre-cout-activite-saisie", function (event, data) {
+            window.location.reload();
+        });
+    });
+</script>
+<style>
+    .triables {
+        align: left;
+    }
+
+    .champ-triable tr {
+        align: left;
+    }
+
+    .tbl-tis {
+        margin-bottom: 1px;
+    }
+</style>

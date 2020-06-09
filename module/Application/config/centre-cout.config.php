@@ -8,6 +8,44 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router'          => [
         'routes' => [
+            'centre-cout-activite' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/centre-cout-activite',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\CentreCout',
+                        'action'     => 'centre-cout-activite',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'delete'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/delete/:ccActivite',
+                            'constraints' => [
+                                'ccActivite' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'centre-cout-activite-delete',
+                            ],
+                        ],
+                    ],
+                    'saisie'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/saisie/[:ccActivite]',
+                            'constraints' => [
+                                'ccActivite' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'centre-cout-activite-saisie',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+
             'centre-cout' => [
                 'type'          => 'Literal',
                 'options'       => [
@@ -72,37 +110,18 @@ return [
             ],
         ],
     ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'centre-cout' => [
-                                'label'        => 'Centres de Coûts',
-                                'icon'         => 'fa fa-graduation-cap',
-                                'route'        => 'centre-cout',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                'order'        => 80,
-                                'border-color' => '#BBCF55',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
+
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\CentreCout',
-                    'action'     => ['index'],
+                    'action'     => ['index', 'centre-cout-activite'],
                     'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\CentreCout',
-                    'action'     => ['saisie', 'delete', 'saisie-structure', 'delete-structure'],
+                    'action'     => ['saisie', 'delete', 'saisie-structure', 'delete-structure', 'centre-cout-activite-delete', 'centre-cout-activite-saisie'],
                     'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
                 ],
             ],
@@ -120,12 +139,11 @@ return [
             Service\CcActiviteService::class          => Service\CcActiviteService::class,
         ],
     ],
-    'view_helpers'    => [
-    ],
     'form_elements'   => [
         'invokables' => [
             Form\CentreCout\CentreCoutSaisieForm::class          => Form\CentreCout\CentreCoutSaisieForm::class,
             Form\CentreCout\CentreCoutStructureSaisieForm::class => Form\CentreCout\CentreCoutStructureSaisieForm::class,
+            Form\CentreCout\CentreCoutActiviteSaisieForm::class  => Form\CentreCout\CentreCoutActiviteSaisieForm::class,
         ],
     ],
 ];

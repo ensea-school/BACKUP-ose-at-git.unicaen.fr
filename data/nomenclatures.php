@@ -135,35 +135,51 @@ return [
     ],
 
     'FORMULE' => [
-        1 => [
+        1  => [
             'LIBELLE'      => 'Université de Caen',
             'PACKAGE_NAME' => 'FORMULE_UNICAEN',
         ],
-        2 => [
+        2  => [
             'LIBELLE'      => 'Université de Montpellier',
             'PACKAGE_NAME' => 'FORMULE_MONTPELLIER',
         ],
-        3 => [
+        3  => [
             'LIBELLE'      => 'Université Le Havre Normandie',
             'PACKAGE_NAME' => 'FORMULE_ULHN',
         ],
-        4 => [
+        4  => [
             'LIBELLE'      => 'Université de Nanterre',
             'PACKAGE_NAME' => 'FORMULE_NANTERRE',
         ],
-        5 => [
+        5  => [
             'LIBELLE'           => 'Université de Bretagne Occidentale',
             'PACKAGE_NAME'      => 'FORMULE_UBO',
             'I_PARAM_1_LIBELLE' => 'EC/Associé/Docteur',
             'I_PARAM_2_LIBELLE' => 'Lecteur/ATER',
         ],
-        6 => [
+        6  => [
             'LIBELLE'      => 'Ensicaen',
             'PACKAGE_NAME' => 'FORMULE_ENSICAEN',
         ],
-        7 => [
+        7  => [
             'LIBELLE'      => 'Université Lumière Lyon 2',
             'PACKAGE_NAME' => 'FORMULE_LYON2',
+        ],
+        8  => [
+            'LIBELLE'      => 'Université Jean Monnet (Saint-Étienne)',
+            'PACKAGE_NAME' => 'FORMULE_ST_ETIENNE',
+        ],
+        9  => [
+            'LIBELLE'      => 'Université Côté d\'azur',
+            'PACKAGE_NAME' => 'FORMULE_COTE_AZUR',
+        ],
+        10 => [
+            'LIBELLE'      => 'Université Rennes 2',
+            'PACKAGE_NAME' => 'FORMULE_RENNES2',
+        ],
+        11 => [
+            'LIBELLE'      => 'INSA de Lyon',
+            'PACKAGE_NAME' => 'FORMULE_INSA_LYON',
         ],
     ],
 

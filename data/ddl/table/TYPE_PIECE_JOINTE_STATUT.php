@@ -165,6 +165,17 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
+        'OBLIGATOIRE_HNP'       => [
+            'name'        => 'OBLIGATOIRE_HNP',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => TRUE,
+            'default'     => '0',
+            'commentaire' => 'Piece jointe obligatoire même si les heures sont non payables',
+        ],
         'SEUIL_HETD'            => [
             'name'        => 'SEUIL_HETD',
             'type'        => 'int',

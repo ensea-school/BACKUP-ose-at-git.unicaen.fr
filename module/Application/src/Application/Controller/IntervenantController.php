@@ -2,11 +2,13 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\RegleStructureValidation;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Service\Recherche;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
+use Application\Form\Intervenant\Traits\RegleStructureValidationFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Processus\Traits\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
@@ -16,6 +18,7 @@ use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -31,7 +34,7 @@ use Zend\View\Model\ViewModel;
  * Description of IntervenantController
  *
  */
-class IntervenantController extends AbstractController
+class  IntervenantController extends AbstractController
 {
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -49,6 +52,8 @@ class IntervenantController extends AbstractController
     use ValidationServiceAwareTrait;
     use PlafondProcessusAwareTrait;
     use FormuleResultatServiceAwareTrait;
+    use RegleStructureValidationServiceAwareTrait;
+    use RegleStructureValidationFormAwareTrait;
 
 
 
@@ -371,6 +376,58 @@ class IntervenantController extends AbstractController
         return compact('intervenant', 'data');
     }
 
+    public function validationVolumeHoraireTypeIntervenantAction()
+    {
+        $serviceRVS = $this->getServiceRegleStructureValidation();
+        $listeRsv = $serviceRVS->getList();
+        return compact('listeRsv');
+
+    }
+
+    public function validationVolumeHoraireTypeIntervenantSaisieAction()
+    {
+        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
+        $form = $this->getFormRegleStructureValidationSaisie();
+
+        if (empty($regleStructureValidation)) {
+            $title      = 'Création d\'une nouvelle régle';
+            $regleStructureValidation = $this->getServiceRegleStructureValidation()->newEntity();
+        } else {
+            $title = 'Édition d\'une règle';
+        }
+
+        $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
+            try {
+                $this->getServiceRegleStructureValidation()->save($rsv);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $message = $this->translate($e);
+
+                if (false !== strpos($message, 'ORA-00001')) {
+                    $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
+                }
+                else{
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                }
+            }
+        });
+
+        return compact('form', 'title');
+    }
+
+    public function validationVolumeHoraireTypeIntervenantDeleteAction()
+    {
+        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
+
+        try {
+            $this->getServiceRegleStructureValidation()->delete($regleStructureValidation);
+            $this->flashMessenger()->addSuccessMessage("Règle supprimée avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel(compact('regleStructureValidation'));
+    }
 
 
     /**

@@ -19,7 +19,7 @@ if ($c->hasOption('oseappli-pwd')) {
     $pwd1 = $c->getOption('oseappli-pwd');
 } else {
     $c->println("\n" . 'Choix d\'un mot de passe pour l\'utilisateur système oseappli', $c::COLOR_LIGHT_CYAN);
-    $c->println("Veuillez saisir un mot de passe :");
+    $c->println("Veuillez saisir un mot de passe (au minimum 6 caractères) :");
     $pwd1 = $c->getSilentInput();
 
     $c->println("Veuillez saisir à nouveau le même mot de passe :");

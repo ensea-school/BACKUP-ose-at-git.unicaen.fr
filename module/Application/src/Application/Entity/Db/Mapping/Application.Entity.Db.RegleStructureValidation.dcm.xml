@@ -3,6 +3,7 @@
   <entity name="Application\Entity\Db\RegleStructureValidation" table="REGLE_STRUCTURE_VALIDATION">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
+      <sequence-generator sequence-name="REGLE_STRUCTURE_VALIDAT_ID_SEQ" allocation-size="1"/>
     </id>
     <field name="priorite" type="string" column="PRIORITE" length="20" nullable="false"/>
     <field name="message" type="string" column="MESSAGE" length="500" nullable="true"/>

@@ -1,6 +1,8 @@
 <?php
 
 namespace Application\Service;
+
+use Application\Entity\Db\CcActivite;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -18,7 +20,7 @@ class CcActiviteService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\CcActivite::class;
+        return CcActivite::class;
     }
 
     /**
@@ -33,7 +35,7 @@ class CcActiviteService extends AbstractEntityService
 
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery();
+        [$qb, $alias] = $this->initQuery();
 
         $qb->addOrderBy("$alias.libelle");
 

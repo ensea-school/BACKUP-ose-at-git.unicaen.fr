@@ -35,14 +35,6 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'type' => 'Hidden',
         ]);
 
-        /*$this->add([
-            'name'    => 'premier-recrutement',
-            'options' => [
-                'label' => 'Uniquement en cas de premier recrutement',
-            ],
-            'type'    => 'Checkbox',
-        ]);*/
-
         $this->add([
             'type'    => 'Checkbox',
             'name'    => 'typePieceJointe',
@@ -111,6 +103,14 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'attributes' => [
                 'min'   => '1',
                 'value' => '1',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Checkbox',
+            'name'       => 'obligatoire-hnp',
+            'options'    => [
+                'label' => "Pièce jointe obligatoire même si les heures sont non payables",
             ],
         ]);
 
@@ -216,10 +216,10 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'changement-rib'      => [
                 'required' => true,
             ],
-            /*'premier-recrutement' => [
-                'required' => true,
-            ],*/
             'fc'                  => [
+                'required' => true,
+            ],
+            'obligatoire-hnp'      => [
                 'required' => true,
             ],
             'annee-debut'         => [
@@ -268,6 +268,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
         }
         $object->setFC($data['fc']);
         $object->setDureeVie($data['duree-vie']);
+        $object->setObligatoireHNP($data['obligatoire-hnp']);
 
         return $object;
     }
@@ -294,6 +295,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
             'duree-vie'           => $object->getDureeVie(),
             'annee-debut'         => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
             'annee-fin'           => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
+            'obligatoire-hnp'      => $object->isObligatoireHNP(),
         ];
 
         return $data;

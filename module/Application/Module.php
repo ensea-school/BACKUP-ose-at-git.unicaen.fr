@@ -49,6 +49,14 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         );
 
         $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'injectRouteEntitiesInEvent'], -90);
+
+        /** @var $userContext \UnicaenAuth\Service\UserContext */
+        $userContext = \Application::$container->get('UnicaenAuth\Service\UserContext');
+        $adapter     = \Application::$container->get('ZfcUser\Authentication\Adapter\AdapterChain');
+
+        $adapter->getEventManager()->attach('logout', function ($e) use ($userContext) {
+            $userContext->setSelectedIdentityRole(null);
+        });
     }
 
 

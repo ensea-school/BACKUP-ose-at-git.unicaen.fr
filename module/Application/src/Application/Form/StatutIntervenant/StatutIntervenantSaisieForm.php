@@ -282,6 +282,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
      */
     public function getInputFilterSpecification()
     {
+
         return [
             'libelle'                => [
                 'required' => true,
@@ -433,50 +434,55 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
         $object->setChargesPatronales(FloatFromString::run($data['charges-patronales']) / 100);
-
-        //Gestion de la durée de vie des agréments par statut d'intervenant
-        //On récupére les types d'agrement
-        $qb = $this->getServiceTypeAgrement()->finderByHistorique();
-        $typesAgrements = $this->getServiceTypeAgrement()->getList($qb);
-        //Type agrement par statut d'intervenant
-        $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($object);
-        $this->getServiceTypeAgrementStatut()->finderByHistorique($qb);
-        $typesAgrementsStatuts = $this->getServiceTypeAgrementStatut()->getList($qb);
-        $typesAgrementsStatusByCode = [];
-        foreach($typesAgrementsStatuts as $tas)
+        //Uniquement si le statut intervenant existe déjà en base.
+        if(!empty($data['id']))
         {
-            $typesAgrementsStatusByCode[$tas->getType()->getCode()] = $tas;
-        }
-        //On boucle pour faire ensuite de l'insert, update ou delete
-        foreach($typesAgrements as $ta)
-        {
-            if(array_key_exists($ta->getCode(), $data))
+            //Gestion de la durée de vie des agréments par statut d'intervenant
+            //On récupére les types d'agrement
+            $qb = $this->getServiceTypeAgrement()->finderByHistorique();
+            $typesAgrements = $this->getServiceTypeAgrement()->getList($qb);
+            //Type agrement par statut d'intervenant
+            $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($object);
+            $this->getServiceTypeAgrementStatut()->finderByHistorique($qb);
+            $typesAgrementsStatuts = $this->getServiceTypeAgrementStatut()->getList($qb);
+            $typesAgrementsStatusByCode = [];
+            foreach($typesAgrementsStatuts as $tas)
             {
-                if(!$data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode))
+                $typesAgrementsStatusByCode[$tas->getType()->getCode()] = $tas;
+            }
+            //On boucle pour faire ensuite de l'insert, update ou delete
+            foreach($typesAgrements as $ta)
+            {
+                if(array_key_exists($ta->getCode(), $data))
                 {
-                    $tasToDelete = $typesAgrementsStatusByCode[$ta->getCode()];
-                    $object->removeTypeAgrementStatut($tasToDelete);
-                    $this->getServiceTypeAgrementStatut()->delete($tasToDelete);
-                }
-                elseif($data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
-                    $tasToUpdate = $typesAgrementsStatusByCode[$ta->getCode()];
-                    $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
-                    $tasToUpdate->setDureeVie($dureeVie);
-                    $this->getServiceTypeAgrementStatut()->save($tasToUpdate);
-                }
-                elseif($data[$ta->getCode()] && !array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
-                    $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
-                    $tasToCreate = new TypeAgrementStatut();
-                    $tasToCreate->setDureeVie($dureeVie);
-                    $tasToCreate->setObligatoire(1);
-                    $tasToCreate->setType($ta);
-                    $tasToCreate->setStatut($object);
-                    $this->getServiceTypeAgrementStatut()->save($tasToCreate);
-                    $object->addTypeAgrementStatut($tasToCreate);
+                    if(!$data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode))
+                    {
+                        $tasToDelete = $typesAgrementsStatusByCode[$ta->getCode()];
+                        $object->removeTypeAgrementStatut($tasToDelete);
+                        $this->getServiceTypeAgrementStatut()->delete($tasToDelete);
+                    }
+                    elseif($data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
+                        $tasToUpdate = $typesAgrementsStatusByCode[$ta->getCode()];
+                        $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
+                        $tasToUpdate->setDureeVie($dureeVie);
+                        $this->getServiceTypeAgrementStatut()->save($tasToUpdate);
+                    }
+                    elseif($data[$ta->getCode()] && !array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
+                        $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
+                        $tasToCreate = new TypeAgrementStatut();
+                        $tasToCreate->setDureeVie($dureeVie);
+                        $tasToCreate->setObligatoire(1);
+                        $tasToCreate->setType($ta);
+                        $tasToCreate->setStatut($object);
+                        $this->getServiceTypeAgrementStatut()->save($tasToCreate);
+                        $object->addTypeAgrementStatut($tasToCreate);
 
+                    }
                 }
             }
         }
+
+
 
         return $object;
     }

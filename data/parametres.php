@@ -8,6 +8,9 @@ return [
     "annee_import"                       => [
         "DESCRIPTION" => "Année courante pour l'import",
     ],
+    "annee_minimale_import_odf"          => [
+        "DESCRIPTION" => "Année minimale pour l'import de l'offre de formation (Paramètre éventuellement exploitable pour les filtres d'import)",
+    ],
 
 
     /* IDS */
@@ -121,6 +124,10 @@ Veuillez trouver en pièce jointe votre contrat à jour.
 
 Cordialement,
 :utilisateur",
+        "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
+    ],
+    "contrat_modele_mail_objet"          => [
+        "VALEUR"      => "Contrat :intervenant",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
 

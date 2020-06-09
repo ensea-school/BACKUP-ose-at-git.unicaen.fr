@@ -10,8 +10,6 @@ use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
  */
 class RegleStructureValidation
 {
-    use TypeVolumeHoraireAwareTrait;
-    use TypeIntervenantAwareTrait;
 
     /**
      * @var integer
@@ -28,7 +26,16 @@ class RegleStructureValidation
      */
     protected $message;
 
+    /**
+     * @var TypeVolumeHoraire
+     */
 
+    protected $typeVolumeHoraire;
+
+    /**
+     * @var TypeIntervenant
+     */
+    protected $typeIntervenant;
 
     /**
      * @return int
@@ -96,6 +103,47 @@ class RegleStructureValidation
     public function setMessage($message)
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+
+    /**
+     * @return TypeVolumeHoraire
+     */
+    public function getTypeVolumeHoraire()
+    {
+        return $this->typeVolumeHoraire;
+    }
+
+
+
+    /**
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     */
+    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire)
+    {
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return TypeIntervenant
+     */
+    public function getTypeIntervenant()
+    {
+        return $this->typeIntervenant;
+    }
+
+    /**
+     * @param TypeIntervenant $typeIntervenant
+     */
+    public function setTypeIntervenant(TypeIntervenant $typeIntervenant)
+    {
+        $this->typeIntervenant = $typeIntervenant;
 
         return $this;
     }

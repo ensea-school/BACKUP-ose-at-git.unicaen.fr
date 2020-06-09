@@ -315,6 +315,16 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'contrat_modele_mail_objet',
+            'type'       => 'Text',
+            'options'    => [
+                'label' => 'Objet du mail',
+
+            ],
+
+        ]);
+
+        $this->add([
             'name'       => 'contrat_modele_mail',
             'type'       => 'Textarea',
             'options'    => [

@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\ModeleContrat;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Unicaen\OpenDocument\Document;
 use Zend\Mail\Message as MailMessage;
@@ -25,6 +26,8 @@ class ModeleContratService extends AbstractEntityService
 {
 
     use DossierServiceAwareTrait;
+    use ContextServiceAwareTrait;
+
 
     /**
      * @var array
@@ -109,7 +112,7 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    public function prepareMail(Contrat $contrat, String $htmlContent)
+    public function prepareMail(Contrat $contrat, String $htmlContent, String $subject = null)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             $contrat->getStructure()->getCode(),
@@ -119,7 +122,10 @@ class ModeleContratService extends AbstractEntityService
         $document = $this->generer($contrat, false);
         $content  = $document->saveToData();
 
-        $subject          = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
+        if(empty($subject))
+        {
+            $subject          = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
+        }
         $intervenant = $contrat->getIntervenant();
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
@@ -133,6 +139,16 @@ class ModeleContratService extends AbstractEntityService
         $text->charset = 'utf-8';
         $body->addPart($text);
 
+        //From on met le mail de l'utilisateur qui envoie le contrat
+        $emailFrom = $this->getServiceContext()->getUtilisateur()->getEmail();
+        $nameFrom =  $this->getServiceContext()->getUtilisateur()->getDisplayName();
+        if(empty($emailFrom))
+        {
+            //Si pas d'email utilisateur on met la config par défault pour le from
+            $emailFrom = \AppConfig::get('mail', 'from');
+            $nameFrom = "Application OSE";
+        }
+
         //Contrat en pièce jointe
         $attachment              = new Part($content);
         $attachment->type        = 'application/pdf';
@@ -144,7 +160,7 @@ class ModeleContratService extends AbstractEntityService
         $message     = new MailMessage();
         $messageType = 'multipart/related';
         $message->setEncoding('UTF-8')
-            ->setFrom(\AppConfig::get('mail', 'from'), "Application OSE")
+            ->setFrom($emailFrom, $nameFrom)
             ->setSubject($subject)
             ->addTo($emailIntervenant)
             ->setBody($body)

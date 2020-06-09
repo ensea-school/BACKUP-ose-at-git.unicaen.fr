@@ -41,6 +41,7 @@ echo $this->form()->openTag($form); ?>
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-4">
+                        <?= $this->formHidden($form->get('id')); ?>
                         <?= $this->formControlGroup($form->get('type-intervenant')); ?>
                     </div>
                     <div class="col-md-8">
@@ -74,33 +75,36 @@ echo $this->form()->openTag($form); ?>
                     <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
                     <br/>
                 </div>
+                <!--Uniquement si le statut existe déjà en base (avec un id)-->
+                <?php if (empty($form->get('id')->getValue())): ?>
+                    <div class="row temoins hidden" >
+                <?php else: ?>
+                    <div class="row temoins" >
+                <?php endif; ?>
+                        <fieldset>
+                            <legend style="font-size: 14px;font-weight: 700;">Gestion des agréments pour le statut : </legend>
+                            <table class="table table-bordered">
+                                <thead >
+                                    <th></th>
+                                    <th>Activé</th>
+                                    <th>Valable pendant</th>
+                                </thead>
+                                <tbody>
+                                <?php foreach($form->getElements() as $element):  ?>
+                                    <?php if(preg_match('#^CONSEIL[A-Z_]+\b(?!-DUREE_VIE)#', $element->getName())): ?>
 
-                <div class="row temoins">
-                    <fieldset>
-                        <legend style="font-size: 14px;font-weight: 700;">Gestion des agréments pour le statut : </legend>
-                        <table class="table table-bordered">
-                            <thead >
-                                <th></th>
-                                <th>Activé</th>
-                                <th>Valable pendant</th>
-                            </thead>
-                            <tbody>
-                            <?php foreach($form->getElements() as $element):  ?>
-                                <?php if(preg_match('#^CONSEIL[A-Z_]+\b(?!-DUREE_VIE)#', $element->getName())): ?>
+                                        <tr>
+                                            <td><?= $this->formLabel($form->get($element->getName())); ?></td>
+                                            <td><?= $this->formRadio($form->get($element->getName())); ?></td>
+                                            <td><?= $this->formControlGroup($form->get($element->getName() . '-DUREE_VIE')); ?></td>
+                                        </tr>
+                                    <?php endif; ?>
+                                <?php endforeach;?>
+                                </tbody>
+                            </table>
+                        </fieldset>
 
-                                    <tr>
-                                        <td><?= $this->formLabel($form->get($element->getName())); ?></td>
-                                        <td><?= $this->formRadio($form->get($element->getName())); ?></td>
-                                        <td><?= $this->formControlGroup($form->get($element->getName() . '-DUREE_VIE')); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-                            <?php endforeach;?>
-                            </tbody>
-                        </table>
-                    </fieldset>
-
-                </div>
-
+                    </div>
                 <div class="row">
                     <?= $this->formElement($form->get('security')); ?>
                     <?php if ($canEdit) echo $this->formSubmit($form->get('submit')); ?>
@@ -140,8 +144,8 @@ echo $this->form()->openTag($form); ?>
     <script type="text/javascript">
         $(function () {
             $("body").on("statut-intervenant-clone", function (event, data) {
-                console.log('toto');
                 window.location.reload();
             });
+            $(".statut-libelle-<?= $form->get('id')->getValue() ?>").html("<?= $form->get('libelle')->getValue() ?>");
         });
     </script>

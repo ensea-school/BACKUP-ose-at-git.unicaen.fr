@@ -331,27 +331,6 @@ return [
                             ],
                         ],
                     ],
-                    'administration' => [
-                        'pages' => [
-                            'dossier-pj' => [
-                                'icon'         => 'glyphicon glyphicon-file',
-                                'label'        => "Dossiers et pièces justificatives",
-                                'route'        => 'piece-jointe/configuration',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'configuration'),
-                                'order'        => 90,
-                                'border-color' => '#A22CAE',
-                                'pages'        => [
-                                    'type-piece-jointe-statut' => [
-                                        'label'      => "Pièces justificatives attendues par statut d'intervenant",
-                                        'title'      => "Permet de personnaliser les mièces justificatives à demander en fonction du statut des intervenants",
-                                        'route'      => 'piece-jointe/type-piece-jointe-statut',
-                                        'withtarget' => true,
-                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
                 ],
             ],
         ],

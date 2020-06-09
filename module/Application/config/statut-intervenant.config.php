@@ -78,26 +78,7 @@ return [
             ],
         ],
     ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'statut-intervenant' => [
-                                'label'        => 'Statuts des intervenants',
-                                'icon'         => 'fa fa-graduation-cap',
-                                'route'        => 'statut-intervenant',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\StatutIntervenant', 'index'),
-                                'order'        => 90,
-                                'border-color' => '#BBCF55',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
+
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [

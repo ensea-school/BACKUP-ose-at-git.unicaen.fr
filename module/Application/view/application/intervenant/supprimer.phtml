@@ -8,7 +8,7 @@
 if ($intervenant) {
     echo $this->tag('div', [
         'id'       => 'int-suppr-div',
-        'data-url' => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getRouteParam()]),
+        'data-url' => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getId()]),
     ])->open();
 }
 
@@ -52,21 +52,19 @@ if ($data) {
 
     </script>
     <?php
-
-}else{
+} else {
 
     ?>
     <script>
 
-        window.setTimeout(function(){
+        window.setTimeout(function () {
 
             window.location.href = <?= json_encode($this->url('intervenant/rechercher')); ?>
 
-        }, 2000 );
+        }, 2000);
 
     </script>
     <?php
-
 }
 
 if ($intervenant) echo '</div>';

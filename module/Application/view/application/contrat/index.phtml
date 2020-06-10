@@ -10,8 +10,8 @@ use Application\Provider\Privilege\Privileges;
  */
 
 $hasContrat = false;
-foreach( $contrats as $contrat ){
-    if (!$contrat->estUnProjet()){
+foreach ($contrats as $contrat) {
+    if (!$contrat->estUnProjet()) {
         $hasContrat = true;
     }
 }
@@ -21,7 +21,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Contrat/avenant
 $this->messenger()->addMessagesFromFlashMessenger();
 if ($services['non-contractualises']) {
     $this->messenger()->addMessage('Des heures prévisionnelles d\'enseignement validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'danger');
-}else{
+} else {
     $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
 }
 
@@ -68,7 +68,7 @@ if ($services['non-contractualises']) {
                     <td>
                         <?php if ($canCreer): ?>
                             <a class="btn btn-primary"
-                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getRouteParam(), 'structure' => $structure->getId()]); ?>">
+                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
                                 <span class="glyphicon glyphicon-file"></span> Créer un
                                 projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                             </a>
@@ -84,7 +84,8 @@ if ($services['non-contractualises']) {
                                       data-toggle="collapse"
                                 >Afficher/masquer</a></small>
                         </p>
-                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>" id="details-enseignements-structure-<?= $sid ?>">
+                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
+                             id="details-enseignements-structure-<?= $sid ?>">
                             <?= $this->serviceListe($servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
                         </div>
                     </td>
@@ -93,12 +94,12 @@ if ($services['non-contractualises']) {
         </table>
     <?php endif; ?>
     <div class="well">
-    <h2>Contrats et avenants</h2>
-    <?php foreach ($contrats as $contrat): ?>
+        <h2>Contrats et avenants</h2>
+        <?php foreach ($contrats as $contrat): ?>
 
-        <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant]) ?>
+            <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant]) ?>
 
-    <?php endforeach; ?>
+        <?php endforeach; ?>
     </div>
 <?php else: ?>
     <p>Aucun contrat/avenant trouvé.</p>

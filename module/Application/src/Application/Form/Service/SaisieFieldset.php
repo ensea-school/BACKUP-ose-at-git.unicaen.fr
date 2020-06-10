@@ -123,7 +123,7 @@ class SaisieFieldset extends AbstractFieldset
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         if ($this->has('intervenant') && $this->getServiceLocalContext()->getIntervenant()) {
             $this->get('intervenant')->setValue([
-                'id'    => $this->getServiceLocalContext()->getIntervenant()->getRouteParam(),
+                'id'    => $this->getServiceLocalContext()->getIntervenant()->getId(),
                 'label' => (string)$this->getServiceLocalContext()->getIntervenant(),
             ]);
         }
@@ -212,8 +212,8 @@ class SaisieFieldset extends AbstractFieldset
             $canSaisieExterieur = $this->getServiceAuthorize()->isAllowed($this->getIntervenant(), Privileges::ENSEIGNEMENT_EXTERIEUR);
             $this->remove('intervenant');
             $this->add([
-                'name' => 'intervenant-id',
-                'type' => 'Hidden',
+                'name'       => 'intervenant-id',
+                'type'       => 'Hidden',
                 'attributes' => [
                     'value' => $this->getIntervenant()->getId(),
                 ],
@@ -251,16 +251,16 @@ class SaisieFieldsetHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array   $data
-     * @param  Service $object
+     * @param array   $data
+     * @param Service $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
         $intervenant = isset($data['intervenant']['id']) ? $data['intervenant']['id'] : null;
-        if ($intervenant){
-            $object->setIntervenant( $this->getServiceIntervenant()->getBySourceCode($intervenant));
+        if ($intervenant) {
+            $object->setIntervenant($this->getServiceIntervenant()->getBySourceCode($intervenant));
         }
 
         if (isset($data['element-pedagogique']) && $data['element-pedagogique'] instanceof ElementPedagogique) {
@@ -283,7 +283,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Service $object
+     * @param Service $object
      *
      * @return array
      */
@@ -297,7 +297,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
 
         if ($object->getIntervenant()) {
             $data['intervenant'] = [
-                'id'    => $object->getIntervenant()->getRouteParam(),
+                'id'    => $object->getIntervenant()->getId(),
                 'label' => (string)$object->getIntervenant(),
             ];
         } else {

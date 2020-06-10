@@ -29,9 +29,9 @@ if ($typeVolumeHoraire->isPrevu()) {
     $title     = 'Constatation des enseignements réalisés';
 }
 
-$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getRouteParam()], ['query' => ['menu' => 1]]);
+$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
-$btnNextUrl = $this->url('workflow/feuille-de-route-btn-next', ['intervenant' => $intervenant->getRouteParam(), 'wfEtapeCode' => $nextEtape]);
+$btnNextUrl = $this->url('workflow/feuille-de-route-btn-next', ['intervenant' => $intervenant->getId(), 'wfEtapeCode' => $nextEtape]);
 
 $this->headTitle()->append($intervenant->getNomUsuel())->append($title);
 $title .= ' <small>' . $intervenant . '</small>';

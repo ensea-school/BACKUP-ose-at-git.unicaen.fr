@@ -29,35 +29,35 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
     </div>
 
     <a
-        href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
-        class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
-        data-title="Clôture des services réalisés"
-        data-content="
+            href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
+            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
+            data-title="Clôture des services réalisés"
+            data-content="
             <p class='lead text-danger'><strong>Attention!</strong></p>
             <p>Confirmez-vous avoir saisi la totalité de vos services réalisés (enseignements et référentiel),
                 quelle que soit la composante d'intervention ?</p>
             <p>Cliquer sur &OpenCurlyDoubleQuote;Je clôture&CloseCurlyDoubleQuote; vous empêchera de revenir sur votre saisie.</p>
         "
-        data-confirm="true"
-        data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Je clôture mes services"
-        data-submit-reload="true"
+            data-confirm="true"
+            data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Je clôture mes services"
+            data-submit-reload="true"
     ><?= $this->translate('J\'ai terminé la saisie de la totalité de mon service réalisé') ?></a>
     <br/><br/>
 
 <?php elseif (!$isSelf && !$isCloture): ?>
 
     <a
-        href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
-        class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
-        data-title="Clôture des services réalisés"
-        data-content="
+            href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
+            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
+            data-title="Clôture des services réalisés"
+            data-content="
             <p class='lead text-danger'><strong>Attention!</strong></p>
             <p>Confirmez-vous vouloir clôturer les services réalisés de <?= $cloture->getIntervenant() ?>
             quelle que soit la composante d'intervention ?</p>
         "
-        data-confirm="true"
-        data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Clôture des services"
-        data-submit-reload="true"
+            data-confirm="true"
+            data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Clôture des services"
+            data-submit-reload="true"
     ><?= $this->translate('L\'intervenant a terminé la saisie de la totalité de son service réalisé') ?></a>
     <br/><br/>
 
@@ -73,22 +73,23 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
             <?php if ($cloture->getIntervenant()->hasMiseEnPaiement()): ?>
                 <p><strong>Vous ne pouvez plus modifier le service réalisé car outre la clôture de saisie,
                         des demandes de mise en paiement et/ou des mises en paiement ont été faites.
-                        Pour pouvoir modifier à nouveau le service, toutes les demandes de mise en paiement ET toutes les mises en paiement
+                        Pour pouvoir modifier à nouveau le service, toutes les demandes de mise en paiement ET toutes les
+                        mises en paiement
                         doivent être supprimées.
                     </strong></p>
             <?php endif; ?>
         <?php endif; ?>
         <?php if ($canDecloturer): ?>
             <a
-                href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
-                class="pop-ajax btn-decloturer-saisie btn btn-danger"
-                data-content="
+                    href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
+                    class="pop-ajax btn-decloturer-saisie btn btn-danger"
+                    data-content="
             <p class='lead text-danger'><strong>Attention!</strong></p>
             <p>Êtes-vous sûr de vouloir supprimer la clôture des services réalisés ?</p>
         "
-                data-confirm="true"
-                data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Oui, supprimer la clôture"
-                data-submit-reload="true"
+                    data-confirm="true"
+                    data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Oui, supprimer la clôture"
+                    data-submit-reload="true"
             >Supprimer la clôture</a>
         <?php endif; ?>
         <div style="clear:both"></div>

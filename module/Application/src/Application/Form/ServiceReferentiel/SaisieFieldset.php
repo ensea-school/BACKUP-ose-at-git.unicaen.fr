@@ -164,7 +164,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 
     public function getFonctions()
     {
-        $fncs = $this->getServiceFonctionReferentiel()->getList();
+        $fncs      = $this->getServiceFonctionReferentiel()->getList();
         $fonctions = [];
         foreach ($fncs as $id => $fonction) {
             if ($fonction->getFille()->count() > 0) {
@@ -190,7 +190,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
         $cl = $this->getServiceLocalContext();
         if ($this->has('intervenant') && $cl->getIntervenant()) {
             $this->get('intervenant')->setValue([
-                'id'    => $cl->getIntervenant()->getRouteParam(),
+                'id'    => $cl->getIntervenant()->getId(),
                 'label' => (string)$cl->getIntervenant(),
             ]);
         }
@@ -344,8 +344,8 @@ class SaisieFieldsetHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  ServiceReferentiel $object
+     * @param array              $data
+     * @param ServiceReferentiel $object
      *
      * @return object
      */
@@ -379,7 +379,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  ServiceReferentiel $object
+     * @param ServiceReferentiel $object
      *
      * @return array
      */
@@ -393,7 +393,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
 
         if ($object->getIntervenant()) {
             $data['intervenant'] = [
-                'id'    => $object->getIntervenant()->getRouteParam(),
+                'id'    => $object->getIntervenant()->getId(),
                 'label' => (string)$object->getIntervenant(),
             ];
         } else {

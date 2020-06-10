@@ -18,9 +18,9 @@ $canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUS
 $canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
 $canDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
 
-$infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getRouteParam()]);
+$infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getId()]);
 
-$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getRouteParam()], ['query' => ['menu' => 1]]);
+$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 ?>
     <h1 class="page-header"><?= $title ?></h1>

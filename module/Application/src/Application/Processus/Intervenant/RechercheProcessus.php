@@ -33,7 +33,7 @@ class RechercheProcessus
         WITH vrec AS (
         SELECT
           i.id,
-          i.source_code,
+          i.code,
           i.nom_usuel,
           i.nom_patronymique,
           i.prenom,
@@ -53,7 +53,7 @@ class RechercheProcessus
         
         SELECT
           null id,
-          i.source_code,
+          i.code,
           i.nom_usuel,
           i.nom_patronymique,
           i.prenom,
@@ -96,13 +96,13 @@ class RechercheProcessus
         try {
             $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
             while ($r = $stmt->fetch()) {
-                $intervenants[$r['SOURCE_CODE']] = [
+                $intervenants[$r['CODE']] = [
                     'civilite'         => $r['CIVILITE'],
                     'nom'              => $r['NOM_USUEL'],
                     'prenom'           => $r['PRENOM'],
                     'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
                     'structure'        => $r['STRUCTURE'],
-                    'numero-personnel' => $r['SOURCE_CODE'],
+                    'numero-personnel' => $r['CODE'],
                 ];
             }
         } catch (\Exception $e) {

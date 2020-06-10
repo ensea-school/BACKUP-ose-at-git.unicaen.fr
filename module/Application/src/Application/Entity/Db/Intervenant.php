@@ -313,18 +313,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
 
-    /**
-     * retourne le paramètre de route
-     *
-     * @return string
-     */
-    public function getRouteParam()
-    {
-        return $this->getCode();
-    }
-
-
-
     public function getAdresseIdentite(): ?string
     {
         $identite = [];

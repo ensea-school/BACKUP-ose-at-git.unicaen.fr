@@ -1,5 +1,5 @@
 <?php
-    /* @var $intervenants array */
+/* @var $intervenants array */
 ?>
 <table class="table table-bordered table-condensed">
     <thead>
@@ -14,9 +14,11 @@
     </tr>
     </thead>
     <tbody class="table-hover">
-    <?php foreach($intervenants as $sourceCode => $intervenant): ?>
+    <?php foreach ($intervenants
+
+    as $code => $intervenant): ?>
     <tr>
-        <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => $sourceCode]); ?>">
+        <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => $code]); ?>">
                 <span class="glyphicon glyphicon-eye-open"></span> Fiche
             </a></td>
         <td><?= $intervenant['civilite'] ?></td>

@@ -68,7 +68,7 @@ class  IntervenantController extends AbstractController
                     return $this->redirect()->toUrl($url);
                 }
             } else {
-                return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getRouteParam()]);
+                return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
             }
         }
 
@@ -376,21 +376,25 @@ class  IntervenantController extends AbstractController
         return compact('intervenant', 'data');
     }
 
+
+
     public function validationVolumeHoraireTypeIntervenantAction()
     {
         $serviceRVS = $this->getServiceRegleStructureValidation();
-        $listeRsv = $serviceRVS->getList();
-        return compact('listeRsv');
+        $listeRsv   = $serviceRVS->getList();
 
+        return compact('listeRsv');
     }
+
+
 
     public function validationVolumeHoraireTypeIntervenantSaisieAction()
     {
         $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-        $form = $this->getFormRegleStructureValidationSaisie();
+        $form                     = $this->getFormRegleStructureValidationSaisie();
 
         if (empty($regleStructureValidation)) {
-            $title      = 'Création d\'une nouvelle régle';
+            $title                    = 'Création d\'une nouvelle régle';
             $regleStructureValidation = $this->getServiceRegleStructureValidation()->newEntity();
         } else {
             $title = 'Édition d\'une règle';
@@ -405,8 +409,7 @@ class  IntervenantController extends AbstractController
 
                 if (false !== strpos($message, 'ORA-00001')) {
                     $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
-                }
-                else{
+                } else {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
@@ -414,6 +417,8 @@ class  IntervenantController extends AbstractController
 
         return compact('form', 'title');
     }
+
+
 
     public function validationVolumeHoraireTypeIntervenantDeleteAction()
     {
@@ -428,6 +433,7 @@ class  IntervenantController extends AbstractController
 
         return new MessengerViewModel(compact('regleStructureValidation'));
     }
+
 
 
     /**

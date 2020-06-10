@@ -78,7 +78,7 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'numero',
             'options'    => [
-                'label'         => '',
+                'label'         => 'N°',
             ],
             'attributes' => [
                 'placeholder' => 'N°'
@@ -92,7 +92,7 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'numeroComplement',
             'options'    => [
-                'label'         => '',
+                'label'         => 'Compl.',
                 'empty_option'              => "Compl.",
                 'value_options'             => ['Bis','Ter'],
             ],
@@ -109,7 +109,7 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'voirie',
             'options'    => [
-                'label'         => '',
+                'label'         => 'Voirie',
                 'empty_option'              => "type de voirie",
             ],
             'type'       => 'Select',
@@ -124,7 +124,7 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'voie',
             'options'    => [
-                'label'         => '',
+                'label'         => 'Voie',
             ],
             'attributes' => [
               'placeholder' => 'nom de la voie'
@@ -137,7 +137,7 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'codePostal',
             'options'    => [
-                'label'         => '',
+                'label'         => 'Code postal',
             ],
             'attributes' => [
                 'placeholder' => 'Code postal'
@@ -151,7 +151,7 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'ville',
             'options'    => [
-                'label'         => '',
+                'label'         => 'Ville',
             ],
             'attributes' => [
                 'placeholder' => 'Ville'

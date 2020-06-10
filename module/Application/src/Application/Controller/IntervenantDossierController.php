@@ -5,23 +5,18 @@ namespace Application\Controller;
 use Application\Constants;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\WfEtape;
 use Application\Form\Intervenant\DossierValidation;
-use Application\Form\Intervenant\IntervenantDossier;
-use Application\Form\Intervenant\Traits\DossierAwareTrait;
-use Application\Provider\Privilege\Privileges;
+use Application\Form\Intervenant\Traits\IntervenantDossierForm;
+use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use RuntimeException;
-use NumberFormatter;
-use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
-use Zend\View\Model\ViewModel;
+
 
 
 class IntervenantDossierController extends AbstractController
@@ -31,7 +26,7 @@ class IntervenantDossierController extends AbstractController
     use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use ValidationServiceAwareTrait;
-    use DossierAwareTrait;
+    use IntervenantDossierFormAwareTrait;
     use UserContextServiceAwareTrait;
     use IntervenantDossierServiceAwareTrait;
 
@@ -67,18 +62,16 @@ class IntervenantDossierController extends AbstractController
         /* Récupération du dossier de l'intervenant */
         $intervenantDossier = $this->getServiceIntervenantDossier()->getByIntervenant($intervenant);
         /* Priviliege */
-            $privEditIdentite = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_IDENTITE_SUITE_EDITION));
+            //$privEditIdentite = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_IDENTITE_SUITE_EDITION));
         /*$privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
         $privValider   = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_VALIDATION));
         $privDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_DEVALIDATION));
         $privSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));*/
 
         /* Initialisation du formulaire */
-        $form = $this->getFormIntervenantDossier($intervenant);
-        if(!$privEditIdentite)
-        {
-            $form->remove('DossierIdentite');
-        }
+        $form = $this->getIntervenantDossierForm($intervenant);
+
+
         /* Traitement du formulaire */
         $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $intervenantDossier) use ($intervenant) {
             try {
@@ -92,7 +85,7 @@ class IntervenantDossierController extends AbstractController
             }
         });
 
-        return compact('form', 'role', 'intervenant');
+        return compact('form', 'role', 'intervenant', 'intervenantDossier');
     }
 
 

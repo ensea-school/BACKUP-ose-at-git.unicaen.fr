@@ -3,7 +3,10 @@
 namespace Application;
 
 use Application\Assertion\IntervenantDossierAssertion;
-use Application\Entity\Db\Service;
+use Application\Form\Intervenant\Factory\IntervenantDossierFactory;
+use Application\Form\Intervenant\Factory\IntervenantDossierFormFactory;
+use Application\Form\Intervenant\IntervenantDossier;
+use Application\Form\Intervenant\IntervenantDossierForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AdresseNumeroComplService;
 use Application\Service\IntervenantDossierService;
@@ -13,11 +16,11 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant'  => [
+            'intervenant' => [
                 'child_routes' => [
                     'dossiernew' => [
-                        'type'          => 'Segment',
-                        'options'       => [
+                        'type'    => 'Segment',
+                        'options' => [
                             'route'    => '/:intervenant/intervenant-dossier',
                             'defaults' => [
                                 'controller' => 'Application\Controller\IntervenantDossier',
@@ -25,7 +28,7 @@ return [
                             ],
                         ],
                     ],
-                    'dossier' => [
+                    'dossier'    => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'    => '/:intervenant/dossier',
@@ -91,9 +94,9 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'intervenant'    => [
+                    'intervenant' => [
                         'pages' => [
-                            'dossier'               => [
+                            'dossier' => [
                                 'label'        => "Données personnelles",
                                 'title'        => "Saisir les données personnelles d'un intervenant vacataire",
                                 'route'        => 'intervenant/dossier',
@@ -151,8 +154,8 @@ return [
                 [//Créer un droit archivage
                  'controller' => 'Application\Controller\IntervenantDossier',
                  'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_SUITE_EDITION],
-                 'assertion'  => Assertion\IntervenantDossierAssertion::class,
+                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_SUITE_EDITION, Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION],
+                 'assertion'  => IntervenantDossierAssertion::class,
                 ],
 
             ],
@@ -167,30 +170,40 @@ return [
                 'allow' => [
                     [
                         'privileges' => [
+                            IntervenantDossierAssertion::PRIV_VIEW_IDENTITE,
+                            IntervenantDossierAssertion::PRIV_EDIT_IDENTITE,
+                            IntervenantDossierAssertion::PRIV_EDIT_ADRESSE,
+                            IntervenantDossierAssertion::PRIV_VIEW_ADRESSE,
+                            IntervenantDossierAssertion::PRIV_EDIT_CONTACT,
+                            IntervenantDossierAssertion::PRIV_VIEW_CONTACT,
+                            IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR,
+                            IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR,
+                            IntervenantDossierAssertion::PRIV_EDIT_INSEE,
                             IntervenantDossierAssertion::PRIV_VIEW_INSEE,
+                            IntervenantDossierAssertion::PRIV_EDIT_IBAN,
                             IntervenantDossierAssertion::PRIV_VIEW_IBAN,
 
                         ],
                         'resources'  => ['Intervenant'],
-                        'assertion'  => Assertion\IntervenantDossierAssertion::class,
+                        'assertion'  => IntervenantDossierAssertion::class,
                     ],
                 ],
             ],
         ],
     ],
     'controllers'     => [
-        'factories'  => [
-            'Application\Controller\IntervenantDossier' => Controller\Factory\IntervenantDossierControllerFactory::class
+        'factories' => [
+            'Application\Controller\IntervenantDossier' => Controller\Factory\IntervenantDossierControllerFactory::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            Service\DossierService::class               => Service\DossierService::class,
-            IntervenantDossierService::class            => IntervenantDossierService::class,
-            AdresseNumeroComplService::class            => AdresseNumeroComplService::class,
+            Service\DossierService::class    => Service\DossierService::class,
+            IntervenantDossierService::class => IntervenantDossierService::class,
+            AdresseNumeroComplService::class => AdresseNumeroComplService::class,
         ],
         'factories'  => [
-            Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class
         ],
     ],
     'view_helpers'    => [
@@ -199,8 +212,11 @@ return [
         ],
     ],
     'form_elements'   => [
-        'invokables' => [
-            Form\Intervenant\IntervenantDossier::class                           => Form\Intervenant\IntervenantDossier::class,
+        'factories' => [
+            IntervenantDossierForm::class => IntervenantDossierFormFactory::class,
         ],
+        /*'invokables' => [
+            Form\Intervenant\IntervenantDossier::class => Form\Intervenant\IntervenantDossier::class,
+        ],*/
     ],
 ];

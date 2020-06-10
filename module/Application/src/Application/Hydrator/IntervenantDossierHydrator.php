@@ -3,6 +3,7 @@
 namespace Application\Hydrator;
 
 
+use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
@@ -45,6 +46,7 @@ class IntervenantDossierHydrator implements HydratorInterface
         $serviceAuthorize = $this->getServiceContext()->getAuthorize();
         $this->canViewBancaire = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_VISUALISATION));
         $this->canViewNumeroInsee = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_VISUALISATION));
+        $this->canViewIdentite = $serviceAuthorize->isAllowed(Privileges::getResourceId(IntervenantDossierAssertion::PRIV_VIEW_IDENTITE));
     }
 
 

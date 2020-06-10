@@ -19,9 +19,18 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class IntervenantDossierAssertion extends AbstractAssertion
 {
     //Constantes privilieges personnalisés
+    const PRIV_EDIT_IDENTITE = 'dossier-edit-identite';
+    const PRIV_VIEW_IDENTITE = 'dossier-view-identite';
+    const PRIV_EDIT_ADRESSE = 'dossier-edit-adresse';
+    const PRIV_VIEW_ADRESSE = 'dossier-view-adresse';
+    const PRIV_EDIT_CONTACT = 'dossier-edit-contact';
+    const PRIV_VIEW_CONTACT = 'dossier-view-contact';
     const PRIV_VIEW_IBAN   = 'dossier-voir-iban';
-    const PRIV_VIEW_INSEE = 'dossier-voir-insee';
     const PRIV_EDIT_IBAN  = 'dossier-edit-iban';
+    const PRIV_EDIT_INSEE = 'dossier-edit-insee';
+    const PRIV_VIEW_INSEE = 'dossier-voir-insee';
+    const PRIV_EDIT_EMPLOYEUR = 'dossier-edit-employeur';
+    const PRIV_VIEW_EMPLOYEUR = 'dossier-voir-employeur';
     //Constantes utiles
     const CODE_TYPE_PERMANENT = 'P';
 
@@ -37,9 +46,18 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEntity(ResourceInterface $entity, $privilege = null)
     {
         $localPrivs = [
-            self::PRIV_VIEW_IBAN,
+            self::PRIV_VIEW_IDENTITE,
+            self::PRIV_EDIT_IDENTITE,
+            self::PRIV_EDIT_ADRESSE,
+            self::PRIV_VIEW_ADRESSE,
+            self::PRIV_EDIT_CONTACT,
+            self::PRIV_VIEW_CONTACT,
+            self::PRIV_EDIT_INSEE,
             self::PRIV_VIEW_INSEE,
+            self::PRIV_VIEW_IBAN,
             self::PRIV_EDIT_IBAN,
+            self::PRIV_VIEW_EMPLOYEUR,
+            self::PRIV_EDIT_EMPLOYEUR,
         ];
 
         $role = $this->getRole();
@@ -54,6 +72,14 @@ class IntervenantDossierAssertion extends AbstractAssertion
                         return $this->assertViewIban($entity);
                     case self::PRIV_VIEW_INSEE:
                         return $this->assertViewInsee($entity);
+                    case self::PRIV_EDIT_IDENTITE:
+                        return $this->assertEditIdentite($entity);
+                    case self::PRIV_VIEW_IDENTITE:
+                        return $this->assertViewIdentite($entity);
+                    case self::PRIV_EDIT_ADRESSE:
+                        return $this->assertEditAdresse($entity);
+                    case self::PRIV_VIEW_ADRESSE:
+                        return $this->assertViewAdresse($entity);
                     case Privileges::DOSSIER_BANQUE_EDITION:
                         return $this->assertEditIban($entity);
 
@@ -61,6 +87,18 @@ class IntervenantDossierAssertion extends AbstractAssertion
             break;
         }
     }
+
+    public function assertPrivilege($privilege, $subPrivilege = null)
+    {
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+
+        switch ($privilege) {
+            case self::PRIV_VIEW_IDENTITE:
+                return $this->assertViewIdentite();
+            break;
+        }
+    }
+
 
 
     protected function assertViewIban(Intervenant $intervenant)
@@ -89,6 +127,43 @@ class IntervenantDossierAssertion extends AbstractAssertion
             ($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
         ]);
     }
+
+    protected function assertEditIdentite()
+    {
+
+        //rajouter test si dossier valider ou non
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_EDITION)
+        ]);
+    }
+    protected function assertViewIdentite()
+    {
+        //rajouter test si dossier valider ou non
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION)
+        ]);
+    }
+    protected function assertEditAdresse()
+    {
+
+        //rajouter test si dossier valider ou non
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_EDITION)
+        ]);
+    }
+
+    protected function assertViewAdresse()
+    {
+        //rajouter test si dossier valider ou non
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION)
+        ]);
+    }
+
     /**
      * @param string $controller
      * @param string $action

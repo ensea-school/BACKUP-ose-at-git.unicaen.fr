@@ -2,6 +2,7 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use Application\Form\Element\StatutIntervenantSelect;
@@ -27,7 +28,7 @@ use Zend\Form\Fieldset;
  * Formulaire de modification du dossier d'un intervenant extérieur.
  *
  */
-class IntervenantDossier extends AbstractForm
+class IntervenantDossierForm extends AbstractForm
 {
     use StatutIntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -51,6 +52,8 @@ class IntervenantDossier extends AbstractForm
 
     protected $serviceAuthorize;
 
+    protected $intervenant;
+
     /**
      * @var boolean
      */
@@ -58,11 +61,11 @@ class IntervenantDossier extends AbstractForm
 
 
 
-    public function __construct($name = null, $options = [])
+    public function __construct(Intervenant $intervenant)
     {
         $this->serviceAuthorize = $this->getServiceContext()->getAuthorize();
-
-        parent::__construct($name, $options);
+        $this->intervenant = $intervenant;
+        parent::__construct('IntervenantDossierForm', []);
     }
 
 
@@ -77,22 +80,32 @@ class IntervenantDossier extends AbstractForm
 
         $serviceAuthorize = $this->getServiceContext()->getAuthorize();
         $role             = $this->getServiceContext()->getUtilisateur()->getRoles();
-
-        $canDoThat = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION));
-
         $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
+
+
+
+        if(!$serviceAuthorize->isAllowed($this->intervenant,IntervenantDossierAssertion::PRIV_EDIT_IDENTITE) ||
+           !$serviceAuthorize->isAllowed($this->intervenant,IntervenantDossierAssertion::PRIV_VIEW_IDENTITE))
+        {
+            $this->setReadOnly($this->dossierIdentiteFieldset);
+        }
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
+        if(!$serviceAuthorize->isAllowed($this->intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE) ||
+           !$serviceAuthorize->isAllowed($this->intervenant, IntervenantDossierAssertion::PRIV_VIEW_ADRESSE))
+        {
+            $this->setReadOnly($this->dossierAdresseFieldset);
+        }
         $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact');
         $this->dossierContactFiedlset->init();
         $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee');
         $this->dossierInseeFiedlset->init();
-        if (!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_EDITION))) {
+        /*if (!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_EDITION))) {
             $this->setReadOnly($this->dossierInseeFiedlset);
-        }
+        }*/
         $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');
         $this->dossierBancaireFieldset->init();
         if (!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION))) {
@@ -230,7 +243,8 @@ class IntervenantDossier extends AbstractForm
         /* @var $element Element */
 
         foreach ($elements as $element) {
-            if ($element instanceof Element\Checkbox) {
+            if ($element instanceof Element\Checkbox ||
+                $element instanceof Element\Select) {
                 $element->setAttribute('disabled', 1);
             } else {
                 $element->setAttribute('readonly', 1);
@@ -239,6 +253,14 @@ class IntervenantDossier extends AbstractForm
 
         return $this;
     }
+
+    public function setIntervenant(Intervenant $intervenant)
+    {
+        $this->intervenant = $intervenant;
+        return $this;
+    }
+
+
 
 
 

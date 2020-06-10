@@ -1,30 +1,14 @@
 <?php
 
-/**
- * @var $this             \Application\View\Renderer\PhpRenderer
- * @var $form             \Application\Form\Intervenant\Dossier
- * @var $canValider       boolean
- * @var $canDevalider     boolean
- * @var $canSupprimer     boolean
- * @var $dossier          Dossier
- */
+use Application\Assertion\IntervenantDossierAssertion;
 
-//$Dossier = $dossier;
+$viewIdentite = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
 
 $form->prepare();
-$dossierIdentite = $form->get('DossierIdentite'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
+$dossierIdentite = $form->get('DossierIdentite');
+
+
 ?>
-
-<style>
-    div.rib-part {
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    div.rib-part input {
-        width: auto;
-    }
-</style>
 
 <div class="col-md-6">
 
@@ -34,11 +18,15 @@ $dossierIdentite = $form->get('DossierIdentite'); /* @var $dossier \Application\
     <?= $this->formControlGroup($dossierIdentite->get('prenom')); ?>
 </div>
 <div class="col-md-6">
-    <?= $this->formControlGroup($dossierIdentite->get('dateNaissance')); ?>
-    <?= $this->formControlGroup($dossierIdentite->get('paysNaissance')); ?>
-    <?= $this->formControlGroup($dossierIdentite->get('departementNaissance')); ?>
-    <?= $this->formControlGroup($dossierIdentite->get('villeNaissance')); ?>
-    </div>
+    <?php
+
+        echo $this->formControlGroup($dossierIdentite->get('dateNaissance'));
+        echo $this->formControlGroup($dossierIdentite->get('paysNaissance'));
+        echo $this->formControlGroup($dossierIdentite->get('departementNaissance'));
+        echo $this->formControlGroup($dossierIdentite->get('villeNaissance'));
+    ?>
+
+</div>
 
 
 

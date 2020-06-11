@@ -466,7 +466,7 @@ class  IntervenantController extends AbstractController
             $container->recents = [];
         }
 
-        if (count($container->recents) > 4 && !isset($container->recents[$intervenant->getSourceCode()])) {
+        if (count($container->recents) > 4 && !isset($container->recents[$intervenant->getCode()])) {
             $prem = (int)date('U');
             foreach ($container->recents as $i) {
                 $horo = $i['__horo_ajout__'];
@@ -482,7 +482,7 @@ class  IntervenantController extends AbstractController
             }
         }
 
-        $container->recents[$intervenant->getSourceCode()] = [
+        $container->recents[$intervenant->getCode()] = [
             'civilite'         => $intervenant->getCivilite() ? $intervenant->getCivilite()->getLibelleLong() : null,
             'nom'              => $intervenant->getNomUsuel(),
             'prenom'           => $intervenant->getPrenom(),

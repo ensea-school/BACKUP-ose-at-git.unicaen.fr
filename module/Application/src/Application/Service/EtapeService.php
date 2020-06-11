@@ -70,7 +70,7 @@ class EtapeService extends AbstractEntityService
 
     public function getEtapeCentreCoutReconductible($structure)
     {
-        $annee  = $this->getServiceContext()->getAnnee()->getId();
+        $annee = $this->getServiceContext()->getAnnee()->getId();
 
 
         $sql = '
@@ -83,7 +83,7 @@ class EtapeService extends AbstractEntityService
             V_RECONDUCTION_CENTRE_COUT 
         WHERE
             annee_id = :annee
-            AND structure_id = '  . $structure->getId();
+            AND structure_id = ' . $structure->getId();
 
         $sql .= 'GROUP BY
                    etape_id,
@@ -96,13 +96,13 @@ class EtapeService extends AbstractEntityService
         $stmt->execute();
         $result = $stmt->fetchAll();
         $etapes = [];
-        foreach($result as $etape)
-        {
+        foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;
         }
 
         return $etapes;
     }
+
 
 
     /**
@@ -114,7 +114,7 @@ class EtapeService extends AbstractEntityService
 
     public function getEtapeModulateurReconductible($structure)
     {
-        $annee  = $this->getServiceContext()->getAnnee()->getId();
+        $annee = $this->getServiceContext()->getAnnee()->getId();
 
 
         $sql = '
@@ -127,7 +127,7 @@ class EtapeService extends AbstractEntityService
             V_RECONDUCTION_MODULATEUR 
         WHERE
             annee_id = :annee
-            AND structure_id = '  . $structure->getId();
+            AND structure_id = ' . $structure->getId();
 
         $sql .= 'GROUP BY
                    etape_id,
@@ -140,14 +140,12 @@ class EtapeService extends AbstractEntityService
         $stmt->execute();
         $result = $stmt->fetchAll();
         $etapes = [];
-        foreach($result as $etape)
-        {
+        foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;
         }
 
         return $etapes;
     }
-
 
 
 
@@ -236,20 +234,20 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
-     * @param string $sourceCode
+     * @param string $code
      * @param Annee  $annee
      *
      * @return Etape
      */
-    public function getBySourceCode($sourceCode, Annee $annee = null)
+    public function getByCode($code, Annee $annee = null)
     {
-        if (null == $sourceCode) return null;
+        if (null == $code) return null;
 
         if (!$annee) {
             $annee = $this->getServiceContext()->getAnnee();
         }
 
-        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
+        return $this->getRepo()->findOneBy(['code' => $code, 'annee' => $annee->getId()]);
     }
 
 

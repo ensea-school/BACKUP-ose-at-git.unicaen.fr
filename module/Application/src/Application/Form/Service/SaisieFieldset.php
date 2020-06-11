@@ -260,7 +260,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
     {
         $intervenant = isset($data['intervenant']['id']) ? $data['intervenant']['id'] : null;
         if ($intervenant) {
-            $object->setIntervenant($this->getServiceIntervenant()->getBySourceCode($intervenant));
+            $object->setIntervenant($this->getServiceIntervenant()->get($intervenant));
         }
 
         if (isset($data['element-pedagogique']) && $data['element-pedagogique'] instanceof ElementPedagogique) {

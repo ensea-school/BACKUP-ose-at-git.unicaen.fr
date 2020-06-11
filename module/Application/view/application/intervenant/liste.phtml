@@ -18,7 +18,7 @@
 
     as $code => $intervenant): ?>
     <tr>
-        <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => $code]); ?>">
+        <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $code]); ?>">
                 <span class="glyphicon glyphicon-eye-open"></span> Fiche
             </a></td>
         <td><?= $intervenant['civilite'] ?></td>

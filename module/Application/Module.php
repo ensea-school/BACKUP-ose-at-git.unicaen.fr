@@ -83,7 +83,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
                         if ($role && $role->getIntervenant()) {
                             $e->setParam($name, $role->getIntervenant());
                         } else {
-                            $entity = $entityService->getBySourceCode($value);
+                            $entity = $entityService->getByRouteParam($value);
                             $e->setParam($name, $entity);
                         }
                     break;

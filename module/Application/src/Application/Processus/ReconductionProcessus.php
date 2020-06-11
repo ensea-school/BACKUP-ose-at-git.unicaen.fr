@@ -3,7 +3,6 @@
 namespace Application\Processus;
 
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
-use Application\Entity\Db\ElementModulateur;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
@@ -13,7 +12,6 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
-use BddAdmin\Bdd;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 
@@ -94,8 +92,8 @@ class ReconductionProcessus extends AbstractProcessus
                 } else {
                     //Check si l'étape reconduite n'a pas déjà été supprimé
                     $etapeEnCours   = $this->etapeService->get($idEtape);
-                    $etapeReconduit = $this->getServiceEtape()->getBySourceCode(
-                        $etapeEnCours->getSourceCode(),
+                    $etapeReconduit = $this->getServiceEtape()->getByCode(
+                        $etapeEnCours->getCode(),
                         $this->contextService->getAnneeSuivante()
                     );
                     if (!$etapeReconduit) {
@@ -123,8 +121,8 @@ class ReconductionProcessus extends AbstractProcessus
                     foreach ($datas['element'][$idEtape] as $idElement) {
                         $elementEnCours = $this->elementPedagogiqueService->get($idElement);
                         //Check si element reconduit n'a pas était déjà supprimmé
-                        $elementReconduit = $this->elementPedagogiqueService->getBySourceCode(
-                            $elementEnCours->getSourceCode(),
+                        $elementReconduit = $this->elementPedagogiqueService->getByCode(
+                            $elementEnCours->getCode(),
                             $this->contextService->getAnneeSuivante());
                         //Si élément n'a jamais existé en base création d'un nouvelle entité.
                         if (!$elementReconduit) {
@@ -205,8 +203,8 @@ class ReconductionProcessus extends AbstractProcessus
     public function reconduireCCFormation($etapes)
     {
         //Récupération des étapes dont il faut reconduire les cc
-        $etapes_codes  = array_keys($etapes);
-        $sql           = '
+        $etapes_codes = array_keys($etapes);
+        $sql          = '
         SELECT 
             *            
         FROM 
@@ -222,7 +220,7 @@ class ReconductionProcessus extends AbstractProcessus
         foreach ($ccepN as $key => $value) {
             //Récupération de la dernière incrémentation ID CCEP
             $nextSequence = $this->getNextSequence('CENTRE_COUT_EP_ID_SEQ');
-            $stmt = $connection->insert('centre_cout_ep',
+            $stmt         = $connection->insert('centre_cout_ep',
                 ['id'                     => $nextSequence,
                  'centre_cout_id'         => $value['CENTRE_COUT_ID'],
                  'element_pedagogique_id' => $value['NEW_EP_ID'],
@@ -234,7 +232,6 @@ class ReconductionProcessus extends AbstractProcessus
                 ]);
 
             $nbCCReconduit++;
-
         }
 
         return $nbCCReconduit;
@@ -272,7 +269,7 @@ class ReconductionProcessus extends AbstractProcessus
                  'histo_createur_id'     => $this->getServiceContext()->getUtilisateur()->getId(),
                  'histo_modificateur_id' => $this->getServiceContext()->getUtilisateur()->getId(),
                 ]);
-                $nbMReconduit++;
+            $nbMReconduit++;
         }
 
         return $nbMReconduit;

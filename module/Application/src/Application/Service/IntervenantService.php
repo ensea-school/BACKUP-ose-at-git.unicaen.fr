@@ -25,7 +25,7 @@ use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
  * @method Intervenant get($id)
- * @method Intervenant[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Intervenant[] getList(QueryBuilder $qb = null, $alias = null)
  * @method Intervenant newEntity()
  */
 class IntervenantService extends AbstractEntityService
@@ -54,19 +54,160 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
+     * Retourne l'intervenant en fonction des paramètres de route transmis :
+     * - soit code:<i>CODE</i>
+     * - soit <i>ID</i>
+     *
+     * @param string $routeParam
+     *
+     * @return Intervenant|null
+     */
+    public function getByRouteParam(string $routeParam): ?Intervenant
+    {
+        $code        = null;
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
+        $statutId    = null;
+        $structureId = $this->getServiceContext()->getStructure(true);
+        if ($structureId) $structureId->getId();
+
+        if (0 === strpos($routeParam, 'code:')) {
+            // liste des intervenants filtrée par code
+            $code  = substr($routeParam, 5);
+            $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
+        } else {
+            // liste ds intervenants par ID (1 seul)
+            $bones = $this->getBones(['ID' => (int)$routeParam]);
+            if (isset($bones[0]['ANNEE_ID']) && $bones[0]['ANNEE_ID'] != $anneeId) {
+                $code     = $bones[0]['CODE'];
+                $statutId = (int)$bones[0]['STATUT_ID'];
+                $nbones   = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
+                if (!empty($nbones)) {
+                    $bones = $nbones;
+                }
+            }
+        }
+
+        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
+    }
+
+
+
+    /**
      * Retourne l'intervenant de l'année précédente
      *
      * @param Intervenant $intervenant
+     * @param int         $anneeDiff
      *
-     * @return Intervenant
+     * @return Intervenant|null
      */
-    public function getPrecedent(Intervenant $intervenant)
+    public function getPrecedent(Intervenant $intervenant, int $anneeDiff = -1): ?Intervenant
     {
-        return $this->getBySourceCode(
-            $intervenant->getSourceCode(),
-            $this->getServiceContext()->getAnneePrecedente(),
-            false
-        );
+        $code        = $intervenant->getCode();
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId() + $anneeDiff;
+        $statutId    = $intervenant->getStatut() ? $intervenant->getStatut()->getId() : null;
+        $structureId = $intervenant->getStructure() ? $intervenant->getStructure()->getId() : null;
+
+        $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
+
+        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
+    }
+
+
+
+    public function getByCode(string $code): ?Intervenant
+    {
+        return $this->getByRouteParam('code:' . $code);
+    }
+
+
+
+    /**
+     *
+     * @param string $sourceCode
+     * @param Annee  $annee
+     *
+     * @return Intervenant|null
+     */
+    public function getByUtilisateurCode($utilisateurCode, Annee $annee = null, $autoImport = true): ?Intervenant
+    {
+        return $this->getByColumn('utilisateurCode', 'UTILISATEUR_CODE', $utilisateurCode, $annee, $autoImport);
+    }
+
+
+
+    private function getBones(array $params): array
+    {
+        $psql = '';
+        foreach ($params as $param => $val) {
+            $psql .= " AND i.$param = :$param";
+        }
+        $isql = "
+          SELECT 
+            i.ID, i.CODE, i.ANNEE_ID, i.STATUT_ID, i.STRUCTURE_ID, i.HISTO_DESTRUCTION, rownum POIDS
+          FROM 
+            intervenant i
+            JOIN statut_intervenant si ON si.id = i.statut_id 
+          WHERE 
+            1=1
+            $psql
+          ORDER BY
+            si.ORDRE
+        ";
+
+        return $this->getEntityManager()->getConnection()->fetchAll($isql, $params);
+    }
+
+
+
+    private function bestIntervenantByBones(array $bones, ?string $code, ?int $anneeId, ?int $statutId, ?int $structureId): ?Intervenant
+    {
+        $count = count($bones);
+        if (0 == $count) {
+            // rien si aucun intervenant ne correspond
+            return null;
+        }
+        if ($count == 1) {
+            // si on l'a trouvé, alors on retourne l'entité
+            return $this->get($bones[0]['ID']);
+        }
+
+        $iDef = $this->getIntervenantIdParDefaut($code, $anneeId);
+
+        $poidMin = 999999999999999;
+        // on calcule le poids : plus c'est gros moins c'est interessant.
+        foreach ($bones as $i => $data) {
+            if ($data['HISTO_DESTRUCTION']) $bones[$i]['POIDS'] += 1000000;
+            if ($statutId && $data['STATUT_ID'] && $data['STATUT_ID'] != $statutId) $bones[$i]['POIDS'] += 100000;
+            if ($iDef && $data['ID'] != $iDef) $bones[$i]['POIDS'] += 10000;
+            if ($structureId && $data['STRUCTURE_ID'] && $data['STRUCTURE_ID'] != $structureId) $bones[$i]['POIDS'] += 1000;
+
+            if ($bones[$i]['POIDS'] < $poidMin) $poidMin = $bones[$i]['POIDS'];
+        }
+
+        foreach ($bones as $i => $data) {
+            if ($data['POIDS'] == $poidMin) {
+                // on retourne le plus petit poids
+                return $this->get($data['ID']);
+            }
+        }
+
+        // Sinon rien, mais c'est improbable!
+        return null;
+    }
+
+
+
+    private function getIntervenantIdParDefaut(string $code, int $anneeId): ?int
+    {
+        if (!$code || !$anneeId) return null;
+
+        $sql  = "SELECT intervenant_id FROM intervenant_par_defaut WHERE intervenant_code = :code AND annee_id = :annee";
+        $iDef = $this->getEntityManager()->getConnection()->fetchAll($sql, ['code' => $code, 'annee' => $anneeId]);
+        if (isset($iDef[0]['INTERVENANT_ID'])) {
+            return (int)$iDef[0]['INTERVENANT_ID'];
+        }
+
+        return null;
     }
 
 
@@ -108,7 +249,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return Intervenant
      */
-    public function getBy($attribute, $column, $value, Annee $annee = null, $autoImport = true)
+    protected function getByColumn($attribute, $column, $value, Annee $annee = null, $autoImport = true)
     {
         if (null == $value) return null;
 
@@ -126,7 +267,6 @@ class IntervenantService extends AbstractEntityService
             $ip->execMaj('INTERVENANT', $column, $value, $ip::A_INSERT);
             $id = $this->getId($column, $value, $annee->getId());
             if (!empty($id)) {
-                $ip->execMaj('ADRESSE_INTERVENANT', 'INTERVENANT_ID', $id, $ip::A_ALL);
                 $ip->execMaj('AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $id, $ip::A_ALL);
             }
 
@@ -142,42 +282,12 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
+     * @param            $intervenantCode
+     * @param Annee|null $annee
      *
-     * @param string $sourceCode
-     * @param Annee  $annee
-     *
-     * @return Intervenant|null
+     * @return Intervenant[]
      */
-    public function getBySourceCode($sourceCode, Annee $annee = null, $autoImport = true)
-    {
-        return $this->getBy('sourceCode', 'SOURCE_CODE', $sourceCode, $annee, $autoImport);
-    }
-
-    public function getByCodeIntervenant($codeIntervenant)
-    {
-        $findParams = ['code' => $codeIntervenant];
-        $repo       = $this->getRepo();
-
-        $intervenants = $repo->findBy($findParams);
-
-        return $intervenants;
-    }
-
-
-
-    /**
-     *
-     * @param string $sourceCode
-     * @param Annee  $annee
-     *
-     * @return Intervenant|null
-     */
-    public function getByUtilisateurCode($utilisateurCode, Annee $annee = null, $autoImport = true)
-    {
-        return $this->getBy('utilisateurCode', 'UTILISATEUR_CODE', $utilisateurCode, $annee, $autoImport);
-    }
-
-    public function getIntervenantByCode($intervenantCode, Annee $annee = null)
+    public function getIntervenantsByCode($intervenantCode, Annee $annee = null)
     {
         $findParams = ['code' => (string)$intervenantCode];
         $repo       = $this->getRepo();
@@ -205,7 +315,7 @@ class IntervenantService extends AbstractEntityService
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
         $serviceMIS->join($this->getServiceMiseEnPaiement(), $qb, 'miseEnPaiement');
@@ -227,8 +337,8 @@ class IntervenantService extends AbstractEntityService
      *
      * @param Intervenant $entity
      *
-     * @throws \RuntimeException
      * @return Intervenant
+     * @throws \RuntimeException
      */
     public function save($entity)
     {
@@ -248,7 +358,7 @@ class IntervenantService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.nomUsuel, $alias.prenom");
 
@@ -268,7 +378,7 @@ class IntervenantService extends AbstractEntityService
      */
     public function finderByType(TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $sStatut = $this->getServiceStatutIntervenant();
 
         $this->join($sStatut, $qb, 'statut', false, $alias);
@@ -315,11 +425,10 @@ class IntervenantService extends AbstractEntityService
                 'INDIC_MODIF_DOSSIER',
                 'AGREMENT',
                 'CONTRAT',
-                'DOSSIER',
+                'INTERVENANT_DOSSIER',
                 'MODIFICATION_SERVICE_DU',
                 'PIECE_JOINTE',
                 'SERVICE_REFERENTIEL',
-                'ADRESSE_INTERVENANT',
                 'AFFECTATION_RECHERCHE',
                 'SERVICE',
                 'VALIDATION',

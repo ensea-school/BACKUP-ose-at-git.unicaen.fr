@@ -20,7 +20,7 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercher($critere, $limit = 50)
+    public function rechercher($critere, $limit = 50, string $key = ':CODE')
     {
         if (strlen($critere) < 2) return [];
 
@@ -34,6 +34,7 @@ class RechercheProcessus
         SELECT
           i.id,
           i.code,
+          i.statut_id,
           i.nom_usuel,
           i.nom_patronymique,
           i.prenom,
@@ -54,6 +55,7 @@ class RechercheProcessus
         SELECT
           null id,
           i.code,
+          i.statut_id,
           i.nom_usuel,
           i.nom_patronymique,
           i.prenom,
@@ -86,7 +88,7 @@ class RechercheProcessus
             $orc[] = '(' . $sqlCri . ')';
         }
         if ($criCode) {
-            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
+            $orc[] = 'code LIKE \'%' . $criCode . '%\'';
         }
         $orc = implode(' OR ', $orc);
         $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
@@ -96,7 +98,7 @@ class RechercheProcessus
         try {
             $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
             while ($r = $stmt->fetch()) {
-                $intervenants[$r['CODE']] = [
+                $intervenants[$this->makeKey($r, $key)] = [
                     'civilite'         => $r['CIVILITE'],
                     'nom'              => $r['NOM_USUEL'],
                     'prenom'           => $r['PRENOM'],
@@ -106,7 +108,7 @@ class RechercheProcessus
                 ];
             }
         } catch (\Exception $e) {
-            return $this->rechercherLocalement($critere, $limit);
+            return $this->rechercherLocalement($critere, $limit, $key);
         }
 
         return $intervenants;
@@ -120,7 +122,7 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercherLocalement($critere, $limit = 50)
+    public function rechercherLocalement($critere, $limit = 50, string $key = ':CODE')
     {
         if (strlen($critere) < 2) return [];
 
@@ -133,7 +135,8 @@ class RechercheProcessus
         WITH vrec AS (
         SELECT
           i.id,
-          i.source_code,
+          i.code,
+          i.statut_id,
           i.nom_usuel,
           i.nom_patronymique,
           i.prenom,
@@ -168,7 +171,7 @@ class RechercheProcessus
             $orc[] = '(' . $sqlCri . ')';
         }
         if ($criCode) {
-            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
+            $orc[] = 'code LIKE \'%' . $criCode . '%\'';
         }
         $orc = implode(' OR ', $orc);
         $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
@@ -178,13 +181,13 @@ class RechercheProcessus
         try {
             $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
             while ($r = $stmt->fetch()) {
-                $intervenants[$r['SOURCE_CODE']] = [
+                $intervenants[$this->makeKey($r, $key)] = [
                     'civilite'         => $r['CIVILITE'],
                     'nom'              => $r['NOM_USUEL'],
                     'prenom'           => $r['PRENOM'],
                     'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
                     'structure'        => $r['STRUCTURE'],
-                    'numero-personnel' => $r['SOURCE_CODE'],
+                    'numero-personnel' => $r['CODE'],
                 ];
             }
         } catch (\Exception $e) {
@@ -194,4 +197,15 @@ class RechercheProcessus
         return $intervenants;
     }
 
+
+
+    protected function makeKey(array $data, string $key): string
+    {
+        $resKey = $key;
+        foreach ($data as $k => $v) {
+            $resKey = str_replace(':' . $k, $v, $resKey);
+        }
+
+        return $resKey;
+    }
 }

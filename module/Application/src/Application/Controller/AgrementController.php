@@ -305,7 +305,7 @@ class AgrementController extends AbstractController
         //@alecourtes : Récupérer les intervenants avec le même code car l'agrement peut être valide
         //plusieurs années pour plusieurs intervenants avec un même code
 
-        $listeIntervenants = $this->getServiceIntervenant()->getByCodeIntervenant($intervenant->getCode());
+        $listeIntervenants = $this->getServiceIntervenant()->getIntervenantsByCode($intervenant->getCode());
         if (empty($listeIntervenants)) {
             $listeIntervenants[] = $intervenant;
         }

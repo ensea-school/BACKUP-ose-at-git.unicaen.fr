@@ -340,7 +340,7 @@ class RechercheFormHydrator implements HydratorInterface
 
         switch ($classname) {
             case Intervenant::class:
-                return $this->getServiceIntervenant()->getBySourceCode($id);
+                return $this->getServiceIntervenant()->getByRouteParam($id);
 
             case NiveauEtape::class:
                 return $this->getServiceNiveauEtape()->get();

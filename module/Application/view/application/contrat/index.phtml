@@ -16,7 +16,7 @@ foreach ($contrats as $contrat) {
     }
 }
 
-$this->headTitle()->append($intervenant->getNomUsuel())->append("Contrat/avenant");
+$this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 
 $this->messenger()->addMessagesFromFlashMessenger();
 if ($services['non-contractualises']) {
@@ -25,11 +25,7 @@ if ($services['non-contractualises']) {
     $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
 }
 
-?>
-
-<h1 class="page-header"><?= $title ?></h1>
-
-<?= $this->messenger() ?>
+$this->messenger() ?>
 
 <style>
     th.structure, td.structure {

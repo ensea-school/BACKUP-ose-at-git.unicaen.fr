@@ -6,14 +6,8 @@
  * @var $typeVolumehoraire \Application\Entity\Db\TypeVolumeHoraire
  */
 
-$this->headTitle()->append($intervenant->getNomUsuel())->append($title);
 
-?>
-    <h1 class="page-header">
-        <?= $title ?>
-        <small><?= $intervenant ?></small>
-    </h1>
-<?php
+$this->intervenant($intervenant)->renderTitle($title);
 
 $wells = [
     'non-valides' => 'Enseignements non validés',

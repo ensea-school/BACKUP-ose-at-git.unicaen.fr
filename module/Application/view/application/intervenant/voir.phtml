@@ -5,15 +5,7 @@ use Application\Provider\Privilege\Privileges;
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $role \Application\Acl\Role */
 
-$this->headTitle()->append($intervenant->getNomUsuel())->append("Fiche");
-
-?>
-
-    <h1 class="page-header"><?= $intervenant ?>
-        <small><?= $intervenant->getStatut()->getTypeIntervenant() ?></small>
-    </h1>
-
-<?php
+$this->intervenant($intervenant)->renderTitle('Fiche');
 
 $tabs = [
     [

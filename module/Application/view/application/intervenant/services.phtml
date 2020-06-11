@@ -33,13 +33,7 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
 
 $btnNextUrl = $this->url('workflow/feuille-de-route-btn-next', ['intervenant' => $intervenant->getId(), 'wfEtapeCode' => $nextEtape]);
 
-$this->headTitle()->append($intervenant->getNomUsuel())->append($title);
-$title .= ' <small>' . $intervenant . '</small>';
-
-
-?>
-    <h1 class="page-header"><?= $title; ?></h1>
-<?php
+$this->intervenant($intervenant)->renderTitle($title);
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 

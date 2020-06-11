@@ -122,4 +122,19 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
         return $out;
     }
+
+
+
+    public function renderTitle(?string $title)
+    {
+        $title       = 'tt' . $title;
+        $intervenant = $this->getIntervenant();
+
+        //echo $intervenant . ' <small>' . $intervenant->getStatut() . '</small>';
+
+        $this->getView()->headTitle()->append($intervenant->getNomUsuel())->append($title);
+        $title .= ' <small>' . $intervenant . '</small>';
+
+        echo $this->getView()->tag('h1', ['class' => 'page-header'])->html($title);
+    }
 }

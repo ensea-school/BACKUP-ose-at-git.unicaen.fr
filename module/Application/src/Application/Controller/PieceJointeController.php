@@ -455,7 +455,7 @@ class PieceJointeController extends AbstractController
         ], $intervenant);
 
         //Récupérer tous les intervenants avec le même code intervenant
-        $intervenants = $this->getServiceIntervenant()->getIntervenantsByCode($intervenant->getCode());
+        $intervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
         //On recalcule le tbl piece_jointe pour tous les intervenants ayant le même code intervenant que l'intervenant de l'année en cours
         $this->getServiceWorkflow()->calculerTableauxBord([
             'piece_jointe',

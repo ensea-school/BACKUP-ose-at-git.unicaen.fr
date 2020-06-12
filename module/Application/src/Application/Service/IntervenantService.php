@@ -165,7 +165,9 @@ class IntervenantService extends AbstractEntityService
         }
         $isql = "
           SELECT 
-            i.ID, i.CODE, i.ANNEE_ID, i.STATUT_ID, i.STRUCTURE_ID, i.HISTO_DESTRUCTION, rownum POIDS
+            i.ID, i.CODE, i.ANNEE_ID, i.STATUT_ID, i.STRUCTURE_ID, i.HISTO_DESTRUCTION,
+            si.libelle STATUT_LIBELLE, 
+            rownum POIDS
           FROM 
             intervenant i
             JOIN statut_intervenant si ON si.id = i.statut_id 
@@ -265,14 +267,13 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
-     * @param            $intervenantCode
-     * @param Annee|null $annee
+     * @param $intervenant Intervenant
      *
      * @return Intervenant[]
      */
-    public function getIntervenantsByCode($intervenantCode, Annee $annee = null)
+    public function getIntervenants(Intervenant $intervenant): array
     {
-        $findParams = ['code' => (string)$intervenantCode];
+        $findParams = ['code' => $intervenant->getCode(), 'annee' => $intervenant->getAnnee()];
         $repo       = $this->getRepo();
 
         $result = $repo->findBy($findParams);

@@ -121,8 +121,12 @@ class ContextService extends AbstractService
     public function getIntervenant()
     {
         if (false === $this->intervenant || $this->serviceUserContext->getNextSelectedIdentityRole()) {
-            $utilisateurCode   = $this->getConnecteurLdap()->getUtilisateurCourantCode();
-            $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
+            $utilisateurCode = $this->getConnecteurLdap()->getUtilisateurCourantCode();
+            if ($utilisateurCode) {
+                $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
+            } else {
+                return null;
+            }
         }
 
         return $this->intervenant;

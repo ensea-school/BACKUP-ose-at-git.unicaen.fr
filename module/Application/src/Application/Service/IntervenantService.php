@@ -116,7 +116,15 @@ class IntervenantService extends AbstractEntityService
 
     public function getByCode(string $code): ?Intervenant
     {
-        return $this->getByRouteParam('code:' . $code);
+        $code        = null;
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
+        $statutId    = null;
+        $structureId = $this->getServiceContext()->getStructure(true);
+        if ($structureId) $structureId->getId();
+
+        $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
+
+        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
     }
 
 
@@ -128,9 +136,23 @@ class IntervenantService extends AbstractEntityService
      *
      * @return Intervenant|null
      */
-    public function getByUtilisateurCode($utilisateurCode, Annee $annee = null, $autoImport = true): ?Intervenant
+    public function getByUtilisateurCode(string $utilisateurCode): ?Intervenant
     {
-        return $this->getByColumn('utilisateurCode', 'UTILISATEUR_CODE', $utilisateurCode, $annee, $autoImport);
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
+        $statutId    = null;
+        $structureId = $this->getServiceContext()->getStructure(true);
+        if ($structureId) $structureId->getId();
+
+        $bones = $this->getBones(['UTILISATEUR_CODE' => $utilisateurCode, 'ANNEE_ID' => $anneeId]);
+        $code  = null;
+        foreach ($bones as $bone) {
+            if (!$code) $code = $bone['CODE'];
+            if ($code != $bone['CODE']) {
+                throw new \Exception('Intervenants différents retournés');
+            }
+        }
+
+        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
     }
 
 
@@ -238,45 +260,6 @@ class IntervenantService extends AbstractEntityService
         } else {
             return null;
         }
-    }
-
-
-
-    /**
-     *
-     * @param string $sourceCode
-     * @param Annee  $annee
-     *
-     * @return Intervenant
-     */
-    protected function getByColumn($attribute, $column, $value, Annee $annee = null, $autoImport = true)
-    {
-        if (null == $value) return null;
-
-        if (!$annee) {
-            $annee = $this->getServiceContext()->getAnnee();
-        }
-
-        $findParams = [$attribute => (string)$value, 'annee' => $annee->getId()];
-        $repo       = $this->getRepo();
-
-        $result = $repo->findOneBy($findParams);
-        if (!$result && $autoImport) {
-            $ip = $this->getProcessusImport();
-
-            $ip->execMaj('INTERVENANT', $column, $value, $ip::A_INSERT);
-            $id = $this->getId($column, $value, $annee->getId());
-            if (!empty($id)) {
-                $ip->execMaj('AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $id, $ip::A_ALL);
-            }
-
-            $result = $repo->findOneBy($findParams); // on retente
-            if ($result) {
-                $this->getServiceWorkflow()->calculerTableauxBord([], $result);
-            }
-        }
-
-        return $result;
     }
 
 

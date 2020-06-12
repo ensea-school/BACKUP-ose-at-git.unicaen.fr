@@ -3,6 +3,7 @@
 namespace Application\View\Helper\Intervenant;
 
 use Application\Constants;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
@@ -15,6 +16,7 @@ use Application\Entity\Db\Traits\IntervenantAwareTrait;
 class IntervenantViewHelper extends AbstractHtmlElement
 {
     use IntervenantAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 
@@ -127,8 +129,14 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
     public function renderTitle(?string $title)
     {
-        $title       = 'tt' . $title;
+        $title       = $title;
         $intervenant = $this->getIntervenant();
+
+        if ($this->getServiceContext()->getIntervenant() == $intervenant) {
+
+        } else {
+
+        }
 
         //echo $intervenant . ' <small>' . $intervenant->getStatut() . '</small>';
 

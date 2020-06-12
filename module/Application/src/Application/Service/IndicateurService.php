@@ -71,7 +71,7 @@ class IndicateurService extends AbstractEntityService
         /* Filtrage par structure, si nécessaire */
         if (!$structure) {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($role){
+            if ($role) {
                 $structure = $role->getStructure();
             }
         }
@@ -86,12 +86,12 @@ class IndicateurService extends AbstractEntityService
 
 
     /**
-     * @param integer|Indicateur   $indicateur Indicateur concerné
-     * @param Structure|null $structure
+     * @param integer|Indicateur $indicateur Indicateur concerné
+     * @param Structure|null     $structure
      */
     public function getCount(Indicateur $indicateur, Structure $structure = null)
     {
-        $key = $indicateur->getNumero().'_'.($structure ? $structure->getId() : '0');
+        $key = $indicateur->getNumero() . '_' . ($structure ? $structure->getId() : '0');
 
         if (!isset($this->countCache[$key])) {
             $qb = $this->getBaseQueryBuilder($indicateur, $structure);
@@ -117,7 +117,7 @@ class IndicateurService extends AbstractEntityService
         $qb->join('indicateur.intervenant', 'intervenant');
 
         $qb->addSelect('indicateur');
-        $qb->addSelect('partial intervenant.{id, nomUsuel, prenom, email, code, sourceCode}');
+        $qb->addSelect('partial intervenant.{id, nomUsuel, prenom, emailPerso, emailPro, code}');
 
         $qb->addSelect('partial structure.{id, libelleCourt, libelleLong}');
         $qb->leftJoin('indicateur.structure', 'structure');
@@ -183,7 +183,7 @@ class IndicateurService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.type, $alias.ordre");
 
@@ -201,7 +201,7 @@ class IndicateurService extends AbstractEntityService
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->andWhere("$alias.enabled = 1");
 

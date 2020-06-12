@@ -482,15 +482,27 @@ class  IntervenantController extends AbstractController
             }
         }
 
-        $container->recents[$intervenant->getCode()] = [
-            'civilite'         => $intervenant->getCivilite() ? $intervenant->getCivilite()->getLibelleLong() : null,
-            'nom'              => $intervenant->getNomUsuel(),
-            'prenom'           => $intervenant->getPrenom(),
-            'date-naissance'   => $intervenant->getDateNaissance(),
-            'structure'        => (string)$intervenant->getStructure(),
-            'numero-personnel' => $intervenant->getSourceCode(),
-            '__horo_ajout__'   => (int)date('U'),
-        ];
+        if (isset($container->recents[$intervenant->getCode()])) {
+            $container->recents[$intervenant->getCode()] = [
+                'civilite'         => $intervenant->getCivilite() ? $intervenant->getCivilite()->getLibelleLong() : null,
+                'nom'              => $intervenant->getNomUsuel(),
+                'prenom'           => $intervenant->getPrenom(),
+                'date-naissance'   => $intervenant->getDateNaissance(),
+                'structure'        => (string)$intervenant->getStructure(),
+                'statut'           => (string)$intervenant->getStatut(),
+                'numero-personnel' => $intervenant->getSourceCode(),
+                '__horo_ajout__'   => (int)date('U'),
+            ];
+        } else {
+            if ($container->recents[$intervenant->getCode()]['statut'] && !is_array($container->recents[$intervenant->getCode()]['statut'])) {
+                $container->recents[$intervenant->getCode()]['statut'] = [$container->recents[$intervenant->getCode()]['statut']];
+            }
+            if (is_array($container->recents[$intervenant->getCode()]['statut'])) {
+                $container->recents[$intervenant->getCode()]['statut'][] = (string)$intervenant->getStatut();
+            } else {
+                $container->recents[$intervenant->getCode()]['statut'] = (string)$intervenant->getStatut();
+            }
+        }
 
         uasort($container->recents, function ($a, $b) {
             return $a['nom'] . ' ' . $a['prenom'] > $b['nom'] . ' ' . $b['prenom'];

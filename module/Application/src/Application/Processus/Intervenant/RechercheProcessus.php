@@ -22,96 +22,11 @@ class RechercheProcessus
      */
     public function rechercher($critere, $limit = 50, string $key = ':CODE')
     {
-        if (strlen($critere) < 2) return [];
-
-        $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
-
-        $critere  = Util::reduce($critere);
-        $criteres = explode('_', $critere);
-
-        $sql     = '
-        WITH vrec AS (
-        SELECT
-          i.id,
-          i.code,
-          i.statut_id,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          i.critere_recherche critere,
-          i.annee_id
-        FROM
-          intervenant i
-          LEFT JOIN structure s ON s.id = i.structure_id
-          LEFT JOIN civilite c ON c.id = i.civilite_id
-        WHERE
-          i.histo_destruction IS NULL
-          
-        UNION ALL
-        
-        SELECT
-          null id,
-          i.code,
-          i.statut_id,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          i.critere_recherche critere,
-          i.annee_id
-        FROM
-          src_intervenant i
-          LEFT JOIN structure s ON s.id = i.structure_id
-          LEFT JOIN civilite c ON c.id = i.civilite_id
-        )
-        SELECT * FROM vrec WHERE 
-          rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
-        $sqlCri  = '';
-        $criCode = 0;
-
-        foreach ($criteres as $c) {
-            $cc = (int)$c;
-            if (0 === $cc) {
-                if ($sqlCri != '') $sqlCri .= ' AND ';
-                $sqlCri .= 'critere LIKE q\'[%' . $c . '%]\'';
-            } else {
-                $criCode = $cc;
-            }
-        }
-        $orc = [];
-        if ($sqlCri != '') {
-            $orc[] = '(' . $sqlCri . ')';
-        }
-        if ($criCode) {
-            $orc[] = 'code LIKE \'%' . $criCode . '%\'';
-        }
-        $orc = implode(' OR ', $orc);
-        $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
-
-        $intervenants = [];
-
         try {
-            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-            while ($r = $stmt->fetch()) {
-                $intervenants[$this->makeKey($r, $key)] = [
-                    'civilite'         => $r['CIVILITE'],
-                    'nom'              => $r['NOM_USUEL'],
-                    'prenom'           => $r['PRENOM'],
-                    'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
-                    'structure'        => $r['STRUCTURE'],
-                    'numero-personnel' => $r['CODE'],
-                ];
-            }
+            return $this->rechercheGenerique($critere, $limit, $key, false);
         } catch (\Exception $e) {
-            return $this->rechercherLocalement($critere, $limit, $key);
+            return $this->rechercheGenerique($critere, $limit, $key, true);
         }
-
-        return $intervenants;
     }
 
 
@@ -124,15 +39,14 @@ class RechercheProcessus
      */
     public function rechercherLocalement($critere, $limit = 50, string $key = ':CODE')
     {
-        if (strlen($critere) < 2) return [];
+        return $this->rechercheGenerique($critere, $limit, $key, true);
+    }
 
-        $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
 
-        $critere  = Util::reduce($critere);
-        $criteres = explode('_', $critere);
 
-        $sql     = '
-        WITH vrec AS (
+    private function sqlLocale(): string
+    {
+        return "
         SELECT
           i.id,
           i.code,
@@ -143,58 +57,43 @@ class RechercheProcessus
           i.date_naissance,
           s.libelle_court structure,
           c.libelle_long civilite,
+          si.libelle statut,
           i.critere_recherche critere,
           i.annee_id
         FROM
           intervenant i
           LEFT JOIN structure s ON s.id = i.structure_id
           LEFT JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
         WHERE
           i.histo_destruction IS NULL
-        )
-        SELECT * FROM vrec WHERE 
-          rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
-        $sqlCri  = '';
-        $criCode = 0;
+        ";
+    }
 
-        foreach ($criteres as $c) {
-            $cc = (int)$c;
-            if (0 === $cc) {
-                if ($sqlCri != '') $sqlCri .= ' AND ';
-                $sqlCri .= 'critere LIKE q\'[%' . $c . '%]\'';
-            } else {
-                $criCode = $cc;
-            }
-        }
-        $orc = [];
-        if ($sqlCri != '') {
-            $orc[] = '(' . $sqlCri . ')';
-        }
-        if ($criCode) {
-            $orc[] = 'code LIKE \'%' . $criCode . '%\'';
-        }
-        $orc = implode(' OR ', $orc);
-        $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
 
-        $intervenants = [];
 
-        try {
-            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-            while ($r = $stmt->fetch()) {
-                $intervenants[$this->makeKey($r, $key)] = [
-                    'civilite'         => $r['CIVILITE'],
-                    'nom'              => $r['NOM_USUEL'],
-                    'prenom'           => $r['PRENOM'],
-                    'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
-                    'structure'        => $r['STRUCTURE'],
-                    'numero-personnel' => $r['CODE'],
-                ];
-            }
-        } catch (\Exception $e) {
-            // à traiter si la vue source intervenant n'existe pas!!
-        }
-
-        return $intervenants;
+    private function sqlSource(): string
+    {
+        return "
+        SELECT
+          null id,
+          i.code,
+          i.statut_id,
+          i.nom_usuel,
+          i.nom_patronymique,
+          i.prenom,
+          i.date_naissance,
+          s.libelle_court structure,
+          c.libelle_long civilite,
+          si.libelle statut,
+          i.critere_recherche critere,
+          i.annee_id
+        FROM
+          src_intervenant i
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
+        ";
     }
 
 
@@ -208,4 +107,81 @@ class RechercheProcessus
 
         return $resKey;
     }
+
+
+
+    private function rechercheGenerique($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
+    {
+        if (strlen($critere) < 2) return [];
+
+        $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
+
+        $critere  = Util::reduce($critere);
+        $criteres = explode('_', $critere);
+
+        $sqlSource = '';
+        if (!$onlyLocale) {
+            $sqlSource = ' UNION ALL ' . $this->sqlSource();
+        }
+
+        $sql     = '
+        WITH vrec AS (
+            ' . $this->sqlLocale() . '
+            ' . $sqlSource . '  
+        )
+        SELECT * FROM vrec WHERE 
+          rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
+        $sqlCri  = '';
+        $criCode = 0;
+
+        foreach ($criteres as $c) {
+            $cc = (int)$c;
+            if (0 === $cc) {
+                if ($sqlCri != '') $sqlCri .= ' AND ';
+                $sqlCri .= 'critere LIKE q\'[%' . $c . '%]\'';
+            } else {
+                $criCode = $cc;
+            }
+        }
+        $orc = [];
+        if ($sqlCri != '') {
+            $orc[] = '(' . $sqlCri . ')';
+        }
+        if ($criCode) {
+            $orc[] = 'code LIKE \'%' . $criCode . '%\'';
+        }
+        $orc = implode(' OR ', $orc);
+        $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
+
+        $intervenants = [];
+
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while ($r = $stmt->fetch()) {
+            $k = $this->makeKey($r, $key);
+            if (!isset($intervenants[$k])) {
+                $intervenants[$k] = [
+                    'civilite'         => $r['CIVILITE'],
+                    'nom'              => $r['NOM_USUEL'],
+                    'prenom'           => $r['PRENOM'],
+                    'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
+                    'structure'        => $r['STRUCTURE'],
+                    'statut'           => $r['STATUT'],
+                    'numero-personnel' => $r['CODE'],
+                ];
+            } else {
+                if ($intervenants[$k]['statut'] && !is_array($intervenants[$k]['statut'])) {
+                    $intervenants[$k]['statut'] = [$intervenants[$k]['statut']];
+                }
+                if (is_array($intervenants[$k]['statut'])) {
+                    $intervenants[$k]['statut'][] = $r['STATUT'];
+                } else {
+                    $intervenants[$k]['statut'] = $r['STATUT'];
+                }
+            }
+        }
+
+        return $intervenants;
+    }
+
 }

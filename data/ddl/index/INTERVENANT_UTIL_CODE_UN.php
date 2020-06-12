@@ -10,6 +10,7 @@ return [
         'UTILISATEUR_CODE',
         'ANNEE_ID',
         'STATUT_ID',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

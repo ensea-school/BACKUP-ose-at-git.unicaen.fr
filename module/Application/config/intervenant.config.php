@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant'             => [
+            'intervenant'                                => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/intervenant',
@@ -54,6 +54,15 @@ return [
                             'route'    => '/:intervenant/fiche',
                             'defaults' => [
                                 'action' => 'fiche',
+                            ],
+                        ],
+                    ],
+                    'creer'                   => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/creer',
+                            'defaults' => [
+                                'action' => 'saisir',
                             ],
                         ],
                     ],
@@ -220,7 +229,7 @@ return [
                     ],
                 ],
             ],
-            'modification-service-du' => [
+            'modification-service-du'                    => [
                 'type'         => 'Literal',
                 'options'      => [
                     'route'    => '/modification-service-du',
@@ -240,7 +249,7 @@ return [
                     ],
                 ],
             ],
-            'validation-volume-horaire-type-intervenant'             => [
+            'validation-volume-horaire-type-intervenant' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/validation-vh-ti',
@@ -251,7 +260,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'delete'           => [
+                    'delete' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/delete/:regleStructureValidation',
@@ -263,7 +272,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisie'           => [
+                    'saisie' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie/[:regleStructureValidation]',
@@ -476,7 +485,7 @@ return [
                     'action'     => ['validation-volume-horaire-type-intervenant',
                                      'validation-volume-horaire-type-intervenant-saisie',
                                      'validation-volume-horaire-type-intervenant-delete',
-                                    ],
+                    ],
                     'privileges' => [
                         Privileges::MODIF_SERVICE_DU_EDITION,
                     ],
@@ -516,10 +525,10 @@ return [
     ],
     'service_manager' => [
         'factories'  => [
-            Service\IntervenantService::class     => Service\Factory\IntervenantServiceFactory::class,
-            Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
-            Assertion\ModificationServiceDuAssertion::class  => \UnicaenAuth\Assertion\AssertionFactory::class,
-            Assertion\IntervenantAssertion::class            => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Service\IntervenantService::class               => Service\Factory\IntervenantServiceFactory::class,
+            Processus\IntervenantProcessus::class           => Processus\Factory\IntervenantProcessusFactory::class,
+            Assertion\ModificationServiceDuAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\IntervenantAssertion::class           => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
             Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,

@@ -11,7 +11,19 @@ if ($errors) {
     echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
 }
 
-echo $this->formControlGroup($form->get('montant-indemnite-fc'));
+echo $this->formControlGroup($form->get('civilite'));
+echo $this->formControlGroup($form->get('nomUsuel'));
+echo $this->formControlGroup($form->get('nomPatronymique'));
+echo $this->formControlGroup($form->get('prenom'));
+echo $this->formControlGroup($form->get('dateNaissance'));
+echo $this->formControlGroup($form->get('statut'));
+echo $this->formControlGroup($form->get('structure'));
+echo $this->formControlGroup($form->get('discipline'));
+echo $this->formControlGroup($form->get('grade'));
+echo $this->formControlGroup($form->get('montantIndemniteFc'));
+echo $this->formControlGroup($form->get('code'));
+echo $this->formControlGroup($form->get('utilisateurCode'));
+
 echo $this->formRow($form->get('submit'));
 echo $this->formHidden($form->get('id'));
 

@@ -3,6 +3,7 @@
 namespace Application\View\Helper\Intervenant;
 
 use Application\Constants;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
@@ -138,7 +139,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
         //echo $intervenant . ' <small>' . $intervenant->getStatut() . '</small>';
 
-        $canAddIntervenant = false; // à poursuivre
+        $canAddIntervenant = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
 
         $this->getView()->headTitle()->append($intervenant->getNomUsuel())->append($title);
         $title .= ' <small>' . $intervenant . '</small>';

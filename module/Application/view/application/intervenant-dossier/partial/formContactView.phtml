@@ -1,0 +1,93 @@
+<?php
+
+
+use Application\Assertion\IntervenantDossierAssertion;
+
+$viewContact = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_CONTACT);
+
+/**
+ * @var \Application\Entity\Db\IntervenantDossier $intervenantDossier
+ */
+
+//$Dossier = $dossier;
+
+$form->prepare();
+$dossierContact = $form->get('DossierContact');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+
+    <div class="col-md-6">
+        <h3>Contact</h3>
+        <div class="form-group">
+            <?= $this->formLabel($dossierContact->get('emailEtablissement')); ?>
+            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <?php
+                if(!empty($intervenantDossier->getEmailPro()))
+                {
+                    echo ($viewContact)?$intervenantDossier->getEmailPro():'**********@*****.com';
+                }
+                else{
+                    echo 'NON RENSEIGNE';
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <?= $this->formLabel($dossierContact->get('emailPersonnel')); ?>
+            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <?php
+                if(!empty($intervenantDossier->getEmailPerso()))
+                {
+                    echo ($viewContact)?$intervenantDossier->getEmailPerso():'**********@*****.com';
+                }
+                else{
+                    echo 'NON RENSEIGNE';
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <?= $this->formLabel($dossierContact->get('telephoneProfessionnel')); ?>
+            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <?php
+                if(!empty($intervenantDossier->getTelPro()))
+                {
+                    echo ($viewContact)?$intervenantDossier->getTelPro():'** ** ** ** **';
+                }
+                else{
+                    echo 'NON RENSEIGNE';
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <?= $this->formLabel($dossierContact->get('telephonePersonnel')); ?>
+            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <?php
+                if(!empty($intervenantDossier->getTelPerso()))
+                {
+                    echo ($viewContact)?$intervenantDossier->getTelPerso():'** ** ** ** **';
+                }
+                else{
+                    echo 'NON RENSEIGNE';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+
+
+
+
+

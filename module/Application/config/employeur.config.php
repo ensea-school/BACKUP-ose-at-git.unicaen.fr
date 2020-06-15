@@ -8,9 +8,9 @@ use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
-    'router'          => [
+    'router'     => [
         'routes' => [
-            'employeur' => [
+            'employeur'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur',
@@ -21,7 +21,18 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'employeur-json' => [
+            'employeur-search' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/employeur-search',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Employeur',
+                        'action'     => 'recherche',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'employeur-json'   => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur/json',
@@ -33,14 +44,14 @@ return [
                 'may_terminate' => true,
             ],
 
-            ],
         ],
-    'navigation'      => [
+    ],
+    'navigation' => [
         'default' => [
             'home' => [
                 'pages' => [
                     'administration' => [
-                        'pages'    => [
+                        'pages' => [
                             'Employeurs' => [
                                 'border-color' => '#9F491F',
                                 'icon'         => 'glyphicon glyphicon-list-alt',
@@ -73,23 +84,28 @@ return [
         ],
     ],
 
-    'controllers'        => [
-        'factories' => [
-            'Application\Controller\Employeur' => Controller\Factory\EmployeurControllerFactory::class
+    'controllers' => [
+        'factories'  => [
+            'Application\Controller\Employeur' => Controller\Factory\EmployeurControllerFactory::class,
         ],
         'invokables' => [
             'Application\Controller\Employeur' => Controller\EmployeurController::class,
         ],
     ],
 
-    'bjyauthorize'    => [
+    'bjyauthorize' => [
         'guards'             => [
-            PrivilegeController::class => [
+            PrivilegeController::class      => [
                 [
                     'controller' => 'Application\Controller\Employeur',
                     'action'     => ['index', 'recherche-json'],
                     'privileges' => Privileges::EMPLOYEUR_GESTION,
                 ],
+            ],
+            'BjyAuthorize\Guard\Controller' => [
+                [
+                    'controller' => 'Application\Controller\Employeur',
+                    'roles'      => ['user']],
             ],
         ],
         'resource_providers' => [

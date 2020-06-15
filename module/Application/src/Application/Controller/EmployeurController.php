@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 
 use Application\Service\Traits\EmployeurServiceAwareTrait;
+use Zend\View\Model\JsonModel;
 
 /**
  * Description of EmployeurController
@@ -24,23 +25,32 @@ class EmployeurController extends AbstractController
         return compact('employeurs');
     }
 
+
+
     public function rechercheAction()
     {
 
-        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur();
-        return compact('employeurs');
+
+        /*$this->em()->getFilters()->enable('historique')->init([
+            Employeur::class,
+        ]);*/
+        $term = $this->params()->fromQuery('term');
+
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($term);
+
+        return new JsonModel($employeurs);
     }
+
+
 
     public function rechercheJsonAction()
     {
-        $critere    = $this->params()->fromPost('critere');
+        $critere = $this->params()->fromPost('critere');
 
-        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
+        $employeurs     = $this->getServiceEmployeur()->rechercheEmployeur($critere);
         $employeursJson = json_encode($employeurs);
 
         return $employeursJson;
     }
-
-
 
 }

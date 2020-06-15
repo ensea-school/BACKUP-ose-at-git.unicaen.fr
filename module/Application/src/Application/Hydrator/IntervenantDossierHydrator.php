@@ -2,15 +2,13 @@
 
 namespace Application\Hydrator;
 
-
-use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\StatutIntervenant;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
+use Application\Service\Traits\EmployeurServiceAwareTrait;
 use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
@@ -31,9 +29,7 @@ class IntervenantDossierHydrator implements HydratorInterface
     use AdresseNumeroComplServiceAwareTrait;
     use VoirieServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
-
-    protected $canViewBancaire;
-    protected $canEditBancaire;
+    use EmployeurServiceAwareTrait;
 
 
     /**
@@ -43,10 +39,6 @@ class IntervenantDossierHydrator implements HydratorInterface
     public function __construct(StatutIntervenant $defaultStatut = null)
     {
         $this->setDefaultStatut($defaultStatut);
-        $serviceAuthorize = $this->getServiceContext()->getAuthorize();
-        $this->canViewBancaire = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_VISUALISATION));
-        $this->canViewNumeroInsee = $serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_VISUALISATION));
-        $this->canViewIdentite = $serviceAuthorize->isAllowed(Privileges::getResourceId(IntervenantDossierAssertion::PRIV_VIEW_IDENTITE));
     }
 
 
@@ -63,7 +55,7 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         /* Extract fieldset dossier identite */
         $data['DossierIdentite'] = [
-            'nomUsuel'             =>$object->getNomUsuel(),
+            'nomUsuel'             => $object->getNomUsuel(),
             'nomPatronymique'      => $object->getNomPatronymique(),
             'prenom'               => $object->getNomUsuel(),
             'civilite'             => $object->getCivilite()->getId(),
@@ -96,15 +88,23 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         /* Extract fiedlset dossier insee */
         $data['DossierInsee'] = [
-            'numeroInsee'              => ($this->canViewNumeroInsee)?$object->getNumeroInsee():$this->offendData($object->getNumeroInsee(),5),
+            'numeroInsee'              => $object->getNumeroInsee(),
             'numeroInseeEstProvisoire' => $object->getNumeroInseeProvisoire(),
         ];
 
         /* Extract fiedlset dossier bancaire */
         $data['DossierBancaire'] = [
             'ribBic'      => $object->getBIC(),
-            'ribIban'     => ($this->canViewBancaire)?$object->getIBAN():$this->offendData($object->getIBAN(),5),
+            'ribIban'     => $object->getIBAN(),
             'ribHorsSepa' => $object->isRibHorsSepa(),
+        ];
+
+        /* Extract fiedlset dossier bancaire*/
+        $data['DossierEmployeur'] = [
+            'employeur' => [
+                'id'    => $object->getEmployeur()->getId(),
+                'label' => $object->getEmployeur()->getRaisonSociale(),
+            ],
         ];
 
         /* Extract statut intervenant */
@@ -130,73 +130,84 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         /* @var $object IntervenantDossier */
         //Hydratation de l'indentité
-        $object->setNomUsuel($data['DossierIdentite']['nomUsuel']);
-        $object->setNomPatronymique($data['DossierIdentite']['nomPatronymique']);
-        $object->setPrenom($data['DossierIdentite']['prenom']);
-        //Civilite
-        if (!empty($data['DossierIdentite']['civilite'])) {
-            $civilite = $this->getServiceCivilite()->get($data['DossierIdentite']['civilite']);
-            $object->setCivilite($civilite);
-        }
-        //Date de naissance
-        if (!empty($data['DossierIdentite']['dateNaissance'])) {
-            $dateNaissance = \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateNaissance']);
-            $object->setDateNaissance($dateNaissance);
-        }
-        //Pays de naissance
-        if (!empty($data['DossierIdentite']['paysNaissance'])) {
-            $paysNaissance = $this->getServicePays()->get($data['DossierIdentite']['paysNaissance']);
-            $object->setPaysNaissance($paysNaissance);
-        }
-        //Departement de naissance
-        if (!empty($data['DossierIdentite']['departementNaissance'])) {
-            $departementNaissance = $this->getServiceDepartement()->get($data['DossierIdentite']['departementNaissance']);
-            $object->setDepartementNaissance($departementNaissance);
+        if (isset($data['DossierIdentite'])) {
+
+            $object->setNomUsuel($data['DossierIdentite']['nomUsuel']);
+            $object->setNomPatronymique($data['DossierIdentite']['nomPatronymique']);
+            $object->setPrenom($data['DossierIdentite']['prenom']);
+            //Civilite
+            if (!empty($data['DossierIdentite']['civilite'])) {
+                $civilite = $this->getServiceCivilite()->get($data['DossierIdentite']['civilite']);
+                $object->setCivilite($civilite);
+            }
+            //Date de naissance
+            if (!empty($data['DossierIdentite']['dateNaissance'])) {
+                $dateNaissance = \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateNaissance']);
+                $object->setDateNaissance($dateNaissance);
+            }
+            //Pays de naissance
+            if (!empty($data['DossierIdentite']['paysNaissance'])) {
+                $paysNaissance = $this->getServicePays()->get($data['DossierIdentite']['paysNaissance']);
+                $object->setPaysNaissance($paysNaissance);
+            }
+            //Departement de naissance
+            if (!empty($data['DossierIdentite']['departementNaissance'])) {
+                $departementNaissance = $this->getServiceDepartement()->get($data['DossierIdentite']['departementNaissance']);
+                $object->setDepartementNaissance($departementNaissance);
+            }
+            $object->setCommuneNaissance($data['DossierIdentite']['villeNaissance']);
         }
         //Hydratation de l'adresse
-        $object->setCommuneNaissance($data['DossierIdentite']['villeNaissance']);
-        $object->setAdressePrecisions($data['DossierAdresse']['precisions']);
-        $object->setAdresseLieuDit($data['DossierAdresse']['lieuDit']);
-        $object->setAdresseNumero($data['DossierAdresse']['numero']);
-        /* Complement de numéro de voie */
-        if (!empty($data['DossierAdresse']['numeroComplement'])) {
-            $numeroComplement = $this->getServiceAdresseNumeroCompl()->get($data['DossierAdresse']['numeroComplement']);
-            $object->setAdresseNumeroCompl($numeroComplement);
-        }
-        /* Voirie */
-        if (!empty($data['DossierAdresse']['voirie'])) {
-            $voirie = $this->getServiceVoirie()->get($data['DossierAdresse']['voirie']);
-            $object->setAdresseVoirie($voirie);
-        }
+        if (isset($data['DossierAdresse'])) {
 
-        $object->setAdresseVoie($data['DossierAdresse']['voie']);
-        $object->setAdresseCodePostal($data['DossierAdresse']['codePostal']);
-        $object->setAdresseCommune($data['DossierAdresse']['ville']);
-        /* Pays adresse */
-        if (!empty($data['DossierAdresse']['pays'])) {
-            $paysAdresse = $this->getServicePays()->get($data['DossierAdresse']['pays']);
-            $object->setAdressePays($paysAdresse);
+            $object->setAdressePrecisions($data['DossierAdresse']['precisions']);
+            $object->setAdresseLieuDit($data['DossierAdresse']['lieuDit']);
+            $object->setAdresseNumero($data['DossierAdresse']['numero']);
+            /* Complement de numéro de voie */
+            if (!empty($data['DossierAdresse']['numeroComplement'])) {
+                $numeroComplement = $this->getServiceAdresseNumeroCompl()->get($data['DossierAdresse']['numeroComplement']);
+                $object->setAdresseNumeroCompl($numeroComplement);
+            }
+            /* Voirie */
+            if (!empty($data['DossierAdresse']['voirie'])) {
+                $voirie = $this->getServiceVoirie()->get($data['DossierAdresse']['voirie']);
+                $object->setAdresseVoirie($voirie);
+            }
+
+            $object->setAdresseVoie($data['DossierAdresse']['voie']);
+            $object->setAdresseCodePostal($data['DossierAdresse']['codePostal']);
+            $object->setAdresseCommune($data['DossierAdresse']['ville']);
+            /* Pays adresse */
+            if (!empty($data['DossierAdresse']['pays'])) {
+                $paysAdresse = $this->getServicePays()->get($data['DossierAdresse']['pays']);
+                $object->setAdressePays($paysAdresse);
+            }
         }
         //Hydratation de contact
-        $object->setEmailPerso($data['DossierContact']['emailPersonnel']);
-        $object->setEmailPro($data['DossierContact']['emailEtablissement']);
-        $object->setTelPro($data['DossierContact']['telephoneProfessionnel']);
-        $object->setTelPerso($data['DossierContact']['telephonePersonnel']);
+        if (isset($data['DossierContact'])) {
+
+            $object->setEmailPerso($data['DossierContact']['emailPersonnel']);
+            $object->setEmailPro($data['DossierContact']['emailEtablissement']);
+            $object->setTelPro($data['DossierContact']['telephoneProfessionnel']);
+            $object->setTelPerso($data['DossierContact']['telephonePersonnel']);
+        }
+
 
         //Hydratation de INSEE
-        if($this->canViewNumeroInsee)
-        {
+        if (isset($data['DossierInsee'])) {
             $object->setNumeroInsee($data['DossierInsee']['numeroInsee']);
             $object->setNumeroInseeProvisoire($data['DossierInsee']['numeroInseeEstProvisoire']);
         }
 
         //Hydratation de Iban
-        if($this->canViewBancaire)
-        {   //$object->setIBAN($data['DossierBancaire']['ribIban']);*/
+        if (isset($data['DossierBancaire'])) {
             $object->setIBAN($data['DossierBancaire']['ribIban']);
             $object->setBIC($data['DossierBancaire']['ribBic']);
             $object->setRibHorsSepa($data['DossierBancaire']['ribHorsSepa']);
         }
+
+        $employeur = $this->getServiceEmployeur()->get($data['DossierEmployeur']['employeur']['id']);
+        $object->setEmployeur($employeur);
 
         //Hydratation statut
         if (!empty($data['statut'])) {
@@ -227,11 +238,14 @@ class IntervenantDossierHydrator implements HydratorInterface
         return $this;
     }
 
+
+
     private function offendData($data, $length = 0)
     {
-        $lengthData = strlen($data);
+        $lengthData   = strlen($data);
         $offendedData = substr($data, 0, $length);
         $offendedData = str_pad($offendedData, $lengthData, 'X');
+
         return $offendedData;
     }
 }

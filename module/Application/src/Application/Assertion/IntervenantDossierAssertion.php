@@ -7,7 +7,10 @@ use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Provider\Privilege\Privileges;
+
+// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -19,23 +22,25 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class IntervenantDossierAssertion extends AbstractAssertion
 {
     //Constantes privilieges personnalisés
-    const PRIV_EDIT_IDENTITE = 'dossier-edit-identite';
-    const PRIV_VIEW_IDENTITE = 'dossier-view-identite';
-    const PRIV_EDIT_ADRESSE = 'dossier-edit-adresse';
-    const PRIV_VIEW_ADRESSE = 'dossier-view-adresse';
-    const PRIV_EDIT_CONTACT = 'dossier-edit-contact';
-    const PRIV_VIEW_CONTACT = 'dossier-view-contact';
-    const PRIV_VIEW_IBAN   = 'dossier-voir-iban';
-    const PRIV_EDIT_IBAN  = 'dossier-edit-iban';
-    const PRIV_EDIT_INSEE = 'dossier-edit-insee';
-    const PRIV_VIEW_INSEE = 'dossier-voir-insee';
+    const PRIV_EDIT_IDENTITE  = 'dossier-edit-identite';
+    const PRIV_VIEW_IDENTITE  = 'dossier-view-identite';
+    const PRIV_EDIT_ADRESSE   = 'dossier-edit-adresse';
+    const PRIV_VIEW_ADRESSE   = 'dossier-view-adresse';
+    const PRIV_EDIT_CONTACT   = 'dossier-edit-contact';
+    const PRIV_VIEW_CONTACT   = 'dossier-view-contact';
+    const PRIV_VIEW_IBAN      = 'dossier-voir-iban';
+    const PRIV_EDIT_IBAN      = 'dossier-edit-iban';
+    const PRIV_EDIT_INSEE     = 'dossier-edit-insee';
+    const PRIV_VIEW_INSEE     = 'dossier-voir-insee';
     const PRIV_EDIT_EMPLOYEUR = 'dossier-edit-employeur';
     const PRIV_VIEW_EMPLOYEUR = 'dossier-voir-employeur';
+    const PRIV_CAN_VALIDE     = 'dossier-peut-valider';
+    const PRIV_CAN_DEVALIDE   = 'dossier-peut-devalider';
     //Constantes utiles
     const CODE_TYPE_PERMANENT = 'P';
 
-
     use WorkflowServiceAwareTrait;
+    use IntervenantDossierServiceAwareTrait;
 
     /**
      * @param ResourceInterface $entity
@@ -58,6 +63,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
             self::PRIV_EDIT_IBAN,
             self::PRIV_VIEW_EMPLOYEUR,
             self::PRIV_EDIT_EMPLOYEUR,
+            self::PRIV_CAN_VALIDE,
+            self::PRIV_CAN_DEVALIDE,
         ];
 
         $role = $this->getRole();
@@ -70,8 +77,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case self::PRIV_VIEW_IBAN:
                         return $this->assertViewIban($entity);
-                    case self::PRIV_VIEW_INSEE:
-                        return $this->assertViewInsee($entity);
                     case self::PRIV_EDIT_IDENTITE:
                         return $this->assertEditIdentite($entity);
                     case self::PRIV_VIEW_IDENTITE:
@@ -80,13 +85,28 @@ class IntervenantDossierAssertion extends AbstractAssertion
                         return $this->assertEditAdresse($entity);
                     case self::PRIV_VIEW_ADRESSE:
                         return $this->assertViewAdresse($entity);
-                    case Privileges::DOSSIER_BANQUE_EDITION:
+                    case self::PRIV_EDIT_CONTACT:
+                        return $this->assertEditContact($entity);
+                    case self::PRIV_VIEW_CONTACT:
+                        return $this->assertViewContact($entity);
+                    case self::PRIV_EDIT_INSEE:
+                        return $this->assertEditInsee($entity);
+                    case self::PRIV_VIEW_INSEE:
+                        return $this->assertViewInsee($entity);
+                    case self::PRIV_EDIT_IBAN:
                         return $this->assertEditIban($entity);
-
+                    case self::PRIV_VIEW_IBAN:
+                        return $this->assertViewIban($entity);
+                    case self::PRIV_CAN_VALIDE:
+                        return $this->assertCanValidate($entity);
+                    case self::PRIV_CAN_DEVALIDE:
+                        return $this->assertCanDevalidate($entity);
                 }
             break;
         }
     }
+
+
 
     public function assertPrivilege($privilege, $subPrivilege = null)
     {
@@ -101,68 +121,172 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewIban(Intervenant $intervenant)
-    {
-        $statut = $intervenant->getStatut();
-        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-        ////On affiche le fieldset IBAN uniquement si on a le droit visualisation et que l'on est vacataire
-        return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
-            ($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
-        ]);
-    }
-
-    protected function assertEditIban()
-    {
-        return $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_EDITION);
-    }
-
-    protected function assertViewInsee(Intervenant $intervenant)
-    {
-        $statut = $intervenant->getStatut();
-        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-        //On affiche le fieldset INSEE uniquement si on a le droit visualisation et que l'on est vacataire
-        return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
-            ($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
-        ]);
-    }
-
-    protected function assertEditIdentite()
+    protected function assertEditIdentite(Intervenant $intervenant)
     {
 
         //rajouter test si dossier valider ou non
         return $this->asserts([
+            !$this->getServiceIntervenantDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_EDITION)
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_EDITION),
         ]);
     }
+
+
+
     protected function assertViewIdentite()
     {
         //rajouter test si dossier valider ou non
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION)
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION),
         ]);
     }
-    protected function assertEditAdresse()
+
+
+
+    protected function assertEditAdresse(Intervenant $intervenant)
     {
 
         //rajouter test si dossier valider ou non
         return $this->asserts([
+            !$this->getServiceIntervenantDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_EDITION)
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_EDITION),
         ]);
     }
+
+
 
     protected function assertViewAdresse()
     {
         //rajouter test si dossier valider ou non
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION)
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
         ]);
     }
+
+
+
+    protected function assertEditContact(Intervenant $intervenant)
+    {
+
+        //rajouter test si dossier valider ou non
+        return $this->asserts([
+            !$this->getServiceIntervenantDossier()->getValidation($intervenant),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_EDITION),
+        ]);
+    }
+
+
+
+    protected function assertViewContact()
+    {
+        //rajouter test si dossier valider ou non
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
+        ]);
+    }
+
+
+
+    protected function assertEditInsee(Intervenant $intervenant)
+    {
+        $statut              = $intervenant->getStatut();
+        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
+
+        //On affiche le fieldset INSEE uniquement si on a le droit visualisation et que l'on est vacataire
+        return $this->asserts([
+            !$this->getServiceIntervenantDossier()->getValidation($intervenant),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_EDITION)
+            //($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
+        ]);
+    }
+
+
+
+    protected function assertViewInsee(Intervenant $intervenant)
+    {
+        $statut              = $intervenant->getStatut();
+        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
+
+        //On affiche le fieldset INSEE uniquement si on a le droit visualisation et que l'on est vacataire
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
+            //($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
+        ]);
+    }
+
+
+
+    protected function assertEditIban(Intervenant $intervenant)
+    {
+        return $this->asserts([
+            !$this->getServiceIntervenantDossier()->getValidation($intervenant),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_EDITION)
+            //($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
+        ]);
+    }
+
+
+
+    protected function assertViewIban(Intervenant $intervenant)
+    {
+        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
+
+        ////On affiche le fieldset IBAN uniquement si on a le droit visualisation et que l'on est vacataire
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
+            ($typeIntervenantCode != self::CODE_TYPE_PERMANENT),
+        ]);
+    }
+
+
+
+    protected function assertCanValidate(Intervenant $intervenant)
+    {
+
+        $isComplete = $this->getServiceIntervenantDossier()->isComplete($intervenant);
+        $isValidate = $this->getServiceIntervenantDossier()->getValidation($intervenant);
+
+        return $this->asserts([
+            $isComplete,
+            !$isValidate,
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
+        ]);
+
+        return $isComplete;
+    }
+
+
+
+    protected function assertCanDevalidate(Intervenant $intervenant)
+    {
+
+        $isComplete = $this->getServiceIntervenantDossier()->isComplete($intervenant);
+        $isValidate = $this->getServiceIntervenantDossier()->getValidation($intervenant);
+
+        return $this->asserts([
+            $isValidate,
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
+        ]);
+
+        return $isComplete;
+    }
+
+
 
     /**
      * @param string $controller
@@ -180,15 +304,17 @@ class IntervenantDossierAssertion extends AbstractAssertion
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
+
                         return $this->assertDossierEdition($intervenant);
                     break;
                 }
             break;
-
         }
 
         return true;
     }
+
+
 
     protected function assertDossierEdition(Intervenant $intervenant = null)
     {
@@ -198,6 +324,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
         return true;
     }
+
+
 
     protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
     {
@@ -211,10 +339,13 @@ class IntervenantDossierAssertion extends AbstractAssertion
         return true;
     }
 
+
+
     protected function assertPriv($privilege)
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;
+
         return $role->hasPrivilege($privilege);
     }
 }

@@ -16,7 +16,6 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
  *
  * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  */
-
 class IntervenantDossierService extends AbstractEntityService
 {
     use IntervenantServiceAwareTrait;
@@ -61,7 +60,7 @@ class IntervenantDossierService extends AbstractEntityService
      */
     public function getByIntervenant(Intervenant $intervenant)
     {
-        if (isset($this->dcache[$intervenant->getId()])){
+        if (isset($this->dcache[$intervenant->getId()])) {
             return $this->dcache[$intervenant->getId()];
         }
 
@@ -70,7 +69,7 @@ class IntervenantDossierService extends AbstractEntityService
         foreach ($this->getList($qb) as $intervenantDossier) {
             return $intervenantDossier;
         }
-        $intervenantDossier = $this->newEntity()->fromIntervenant($intervenant);
+        $intervenantDossier                  = $this->newEntity()->fromIntervenant($intervenant);
         $this->dcache[$intervenant->getId()] = $intervenantDossier;
 
         return $intervenantDossier;
@@ -124,6 +123,15 @@ class IntervenantDossierService extends AbstractEntityService
         }
 
         return $validation;
+    }
+
+
+
+    public function isComplete(Intervenant $intervenant)
+    {
+        $intervenantDossier = $this->getByIntervenant($intervenant);
+
+        return true;
     }
 
 

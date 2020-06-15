@@ -14,8 +14,8 @@ return [
             'intervenant'  => [
                 'child_routes' => [
                     'dossiernew' => [
-                        'type'          => 'Segment',
-                        'options'       => [
+                        'type'    => 'Segment',
+                        'options' => [
                             'route'    => '/:intervenant/intervenant-dossier',
                             'defaults' => [
                                 'controller' => 'Application\Controller\IntervenantDossier',
@@ -23,10 +23,10 @@ return [
                             ],
                         ],
                     ],
-                    'dossier' => [
+                    'dossier'    => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/:intervenant/dossier',
+                            'route'    => '/:intervenant/intervenant-dossier',
                             'defaults' => [
                                 'controller' => 'Application\Controller\Dossier',
                                 'action'     => 'index',
@@ -506,8 +506,8 @@ return [
     ],
     'controllers'     => [
         'factories'  => [
-            'Application\Controller\Dossier' => Controller\Factory\DossierControllerFactory::class,
-            'Application\Controller\IntervenantDossier' => Controller\Factory\IntervenantDossierControllerFactory::class
+            'Application\Controller\Dossier'            => Controller\Factory\DossierControllerFactory::class,
+            'Application\Controller\IntervenantDossier' => Controller\Factory\IntervenantDossierControllerFactory::class,
         ],
         'invokables' => [
             'Application\Controller\PieceJointe' => Controller\PieceJointeController::class,

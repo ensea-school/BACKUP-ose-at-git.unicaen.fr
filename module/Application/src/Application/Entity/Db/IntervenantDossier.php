@@ -37,7 +37,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      */
     protected $id;
 
-
     /**
      * @var \Application\Entity\Db\StatutIntervenant
      */
@@ -158,6 +157,8 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      */
     protected $intervenant;
 
+
+
     /**
      * @return int|null
      */
@@ -165,6 +166,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     {
         return $this->id;
     }
+
 
 
     /**
@@ -228,6 +230,8 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
         $this->setEntityManager($objectManager);
     }
 
+
+
     /**
      * Get statut
      *
@@ -245,7 +249,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      *
      * @param StatutIntervenant $statut
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setStatut(StatutIntervenant $statut = null)
     {
@@ -269,7 +273,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $nomUsuel
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setNomUsuel(?string $nomUsuel): IntervenantDossier
     {
@@ -293,7 +297,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $prenom
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setPrenom(?string $prenom): IntervenantDossier
     {
@@ -317,7 +321,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param \DateTime|null $dateNaissance
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setDateNaissance(?\DateTime $dateNaissance): IntervenantDossier
     {
@@ -341,7 +345,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $nomPatronymique
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setNomPatronymique(?string $nomPatronymique): IntervenantDossier
     {
@@ -365,7 +369,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $communeNaissance
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setCommuneNaissance(?string $communeNaissance): IntervenantDossier
     {
@@ -389,7 +393,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param Pays|null $paysNaissance
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setPaysNaissance(?Pays $paysNaissance): IntervenantDossier
     {
@@ -413,7 +417,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param Departement|null $departementNaissance
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setDepartementNaissance(?Departement $departementNaissance): IntervenantDossier
     {
@@ -421,6 +425,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
         return $this;
     }
+
 
 
     /**
@@ -436,9 +441,9 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param Pays|null $paysNationalite
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
-    public function setPaysNationalite(?Pays $paysNationalite): IntervenantDossierDossier
+    public function setPaysNationalite(?Pays $paysNationalite): IntervenantDossier
     {
         $this->paysNationalite = $paysNationalite;
 
@@ -460,7 +465,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $telPro
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setTelPro(?string $telPro): IntervenantDossier
     {
@@ -484,7 +489,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $telPerso
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setTelPerso(?string $telPerso): IntervenantDossier
     {
@@ -508,7 +513,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $emailPro
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setEmailPro(?string $emailPro): IntervenantDossier
     {
@@ -532,7 +537,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $emailPerso
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setEmailPerso(?string $emailPerso): IntervenantDossier
     {
@@ -556,7 +561,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $numeroInsee
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setNumeroInsee(?string $numeroInsee): IntervenantDossier
     {
@@ -580,7 +585,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param bool|null $numeroInseeProvisoire
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setNumeroInseeProvisoire(?bool $numeroInseeProvisoire): IntervenantDossier
     {
@@ -604,7 +609,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $IBAN
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setIBAN(?string $IBAN): IntervenantDossier
     {
@@ -628,7 +633,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $BIC
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setBIC(?string $BIC): IntervenantDossier
     {
@@ -652,7 +657,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param bool $ribHorsSepa
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setRibHorsSepa(bool $ribHorsSepa): IntervenantDossier
     {
@@ -676,7 +681,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $autre1
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setAutre1(?string $autre1): IntervenantDossier
     {
@@ -700,7 +705,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $autre2
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setAutre2(?string $autre2): IntervenantDossier
     {
@@ -724,7 +729,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $autre3
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setAutre3(?string $autre3): IntervenantDossier
     {
@@ -748,7 +753,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $autre4
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setAutre4(?string $autre4): IntervenantDossier
     {
@@ -772,7 +777,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @param string|null $autre5
      *
-     *@return IntervenantDossier
+     * @return IntervenantDossier
      */
     public function setAutre5(?string $autre5): IntervenantDossier
     {
@@ -780,6 +785,8 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
         return $this;
     }
+
+
 
     /**
      * @param Intervenant|null $intervenant
@@ -796,12 +803,14 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
 
     /**
-     *@return IntervenantDossier|null
+     * @return IntervenantDossier|null
      */
     public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;
     }
+
+
 
     /**
      *
@@ -825,9 +834,9 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setTelPerso($intervenant->getTelPerso())
             ->setTelPro($intervenant->getTelPro())
             ->setStatut($intervenant->getStatut());
-            //->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()))
-            //TODO refactor complet de l'adresse
-            //->setAdresse($intervenant->getAdresse(false));
+        //->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()))
+        //TODO refactor complet de l'adresse
+        //->setAdresse($intervenant->getAdresse(false));
 
         return $this;
     }

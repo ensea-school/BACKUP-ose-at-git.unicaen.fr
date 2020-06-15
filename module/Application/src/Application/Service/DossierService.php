@@ -4,10 +4,10 @@ namespace Application\Service;
 
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
-use Application\Form\Intervenant\IntervenantDossier;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 
@@ -64,7 +64,7 @@ class DossierService extends AbstractEntityService
      */
     public function getByIntervenant(Intervenant $intervenant)
     {
-        if (isset($this->dcache[$intervenant->getId()])){
+        if (isset($this->dcache[$intervenant->getId()])) {
             return $this->dcache[$intervenant->getId()];
         }
 
@@ -73,7 +73,7 @@ class DossierService extends AbstractEntityService
         foreach ($this->getList($qb) as $dossier) {
             return $dossier;
         }
-        $intervenantDossier = $this->newEntity()->fromIntervenant($intervenant);
+        $intervenantDossier                  = $this->newEntity()->fromIntervenant($intervenant);
         $this->dcache[$intervenant->getId()] = $intervenantDossier;
 
         return $intervenantDossier;
@@ -146,6 +146,15 @@ class DossierService extends AbstractEntityService
         }
 
         return $validation;
+    }
+
+
+
+    public function isComplete(Intervenant $intervenant)
+    {
+        $intervenantDossier = $this->getByIntervenant($intervenant);
+
+        return true;
     }
 
 

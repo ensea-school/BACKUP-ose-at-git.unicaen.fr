@@ -18,28 +18,18 @@ return [
         'routes' => [
             'intervenant' => [
                 'child_routes' => [
-                    'dossiernew' => [
-                        'type'    => 'Segment',
-                        'options' => [
+                    'dossier' => [
+                        'type'          => 'Segment',
+                        'options'       => [
                             'route'    => '/:intervenant/intervenant-dossier',
                             'defaults' => [
                                 'controller' => 'Application\Controller\IntervenantDossier',
                                 'action'     => 'index',
                             ],
                         ],
-                    ],
-                    'dossier'    => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'    => '/:intervenant/dossier',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Dossier',
-                                'action'     => 'index',
-                            ],
-                        ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'valider'            => [
+                            'valider' => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/valider',
@@ -48,7 +38,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'devalider'          => [
+                            /*'devalider'          => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/devalider',
@@ -83,7 +73,7 @@ return [
                                         'action' => 'purger-differences',
                                     ],
                                 ],
-                            ],
+                            ],*/
                         ],
                     ],
                 ],
@@ -117,7 +107,7 @@ return [
         'guards'             => [
             PrivilegeController::class => [
                 /* Dossier */
-                [//Créer un droit archivage
+                /*[//Créer un droit archivage
                  'controller' => 'Application\Controller\Dossier',
                  'action'     => ['index'],
                  'privileges' => [Privileges::DOSSIER_VISUALISATION],
@@ -142,13 +132,14 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Dossier',
-                    'action'     => ['devalider'],
-                    'privileges' => [Privileges::DOSSIER_DEVALIDATION],
-                ],
-                [
-                    'controller' => 'Application\Controller\Dossier',
                     'action'     => ['supprimer'],
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
+                ],*/
+                [
+                    'controller' => 'Application\Controller\IntervenantDossier',
+                    'action'     => ['valider', 'devalider'],
+                    'privileges' => [Privileges::DOSSIER_VALIDATION],
+                    'assertion'  => IntervenantDossierAssertion::class,
                 ],
 
                 [//Créer un droit archivage
@@ -182,6 +173,9 @@ return [
                             IntervenantDossierAssertion::PRIV_VIEW_INSEE,
                             IntervenantDossierAssertion::PRIV_EDIT_IBAN,
                             IntervenantDossierAssertion::PRIV_VIEW_IBAN,
+                            IntervenantDossierAssertion::PRIV_CAN_VALIDE,
+                            IntervenantDossierAssertion::PRIV_CAN_DEVALIDE,
+
 
                         ],
                         'resources'  => ['Intervenant'],
@@ -203,7 +197,7 @@ return [
             AdresseNumeroComplService::class => AdresseNumeroComplService::class,
         ],
         'factories'  => [
-            Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class
+            Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

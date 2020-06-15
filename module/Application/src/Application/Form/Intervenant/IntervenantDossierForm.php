@@ -2,7 +2,6 @@
 
 namespace Application\Form\Intervenant;
 
-use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use Application\Form\Element\StatutIntervenantSelect;
@@ -17,7 +16,6 @@ use Application\Hydrator\IntervenantDossierHydrator;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Zend\Form\Element;
@@ -34,7 +32,7 @@ class IntervenantDossierForm extends AbstractForm
     use ContextServiceAwareTrait;
     use DossierServiceAwareTrait;
     use ServiceServiceAwareTrait;
-    use IntervenantDossierServiceAwareTrait;
+    use DossierServiceAwareTrait;
 
     protected $dossierIdentiteFieldset;
 
@@ -64,7 +62,7 @@ class IntervenantDossierForm extends AbstractForm
     public function __construct(Intervenant $intervenant)
     {
         $this->serviceAuthorize = $this->getServiceContext()->getAuthorize();
-        $this->intervenant = $intervenant;
+        $this->intervenant      = $intervenant;
         parent::__construct('IntervenantDossierForm', []);
     }
 
@@ -80,39 +78,24 @@ class IntervenantDossierForm extends AbstractForm
 
         $serviceAuthorize = $this->getServiceContext()->getAuthorize();
         $role             = $this->getServiceContext()->getUtilisateur()->getRoles();
-        $hydrator = new IntervenantDossierHydrator();
+        $hydrator         = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
 
-
-
-        if(!$serviceAuthorize->isAllowed($this->intervenant,IntervenantDossierAssertion::PRIV_EDIT_IDENTITE) ||
-           !$serviceAuthorize->isAllowed($this->intervenant,IntervenantDossierAssertion::PRIV_VIEW_IDENTITE))
-        {
-            $this->setReadOnly($this->dossierIdentiteFieldset);
-        }
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
-        if(!$serviceAuthorize->isAllowed($this->intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE) ||
-           !$serviceAuthorize->isAllowed($this->intervenant, IntervenantDossierAssertion::PRIV_VIEW_ADRESSE))
-        {
-            $this->setReadOnly($this->dossierAdresseFieldset);
-        }
+
         $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact');
         $this->dossierContactFiedlset->init();
         $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee');
         $this->dossierInseeFiedlset->init();
-        /*if (!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_EDITION))) {
-            $this->setReadOnly($this->dossierInseeFiedlset);
-        }*/
         $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');
         $this->dossierBancaireFieldset->init();
-        if (!$serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_EDITION))) {
-            $this->setReadOnly($this->dossierBancaireFieldset);
-        }
+
         $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
         $this->dossierEmployeurFieldset->init();
+
         $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres');
         $this->dossierAutresFiedlset->init();
 
@@ -232,6 +215,8 @@ class IntervenantDossierForm extends AbstractForm
         return $this->readOnly;
     }
 
+
+
     /**
      * @param boolean $readOnly
      *
@@ -254,13 +239,14 @@ class IntervenantDossierForm extends AbstractForm
         return $this;
     }
 
+
+
     public function setIntervenant(Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
+
         return $this;
     }
-
-
 
 
 

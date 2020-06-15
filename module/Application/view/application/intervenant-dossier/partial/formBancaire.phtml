@@ -1,9 +1,5 @@
 <?php
 
-use Application\Assertion\IntervenantDossierAssertion;
-
-$viewIban = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IBAN);
-
 $form->prepare();
 $dossierBancaire = $form->get('DossierBancaire');
 ?>

@@ -1,9 +1,5 @@
 <?php
 
-use Application\Assertion\IntervenantDossierAssertion;
-
-$viewInsee = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_INSEE);
-
 
 $form->prepare();
 $dossierInsee = $form->get('DossierInsee');

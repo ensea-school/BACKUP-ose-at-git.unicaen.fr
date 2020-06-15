@@ -2,21 +2,22 @@
 
 namespace Application\Controller;
 
+use Application\Assertion\IntervenantDossierAssertion;
 use Application\Constants;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\Traits\IntervenantDossierForm;
 use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
-
 
 
 class IntervenantDossierController extends AbstractController
@@ -28,8 +29,7 @@ class IntervenantDossierController extends AbstractController
     use ValidationServiceAwareTrait;
     use IntervenantDossierFormAwareTrait;
     use UserContextServiceAwareTrait;
-    use IntervenantDossierServiceAwareTrait;
-
+    use DossierServiceAwareTrait;
 
 
     /**
@@ -49,7 +49,10 @@ class IntervenantDossierController extends AbstractController
         ]);
     }
 
-    public function indexAction(){
+
+
+    public function indexAction()
+    {
         $this->initFilters();
 
         /* Initialisation */
@@ -60,13 +63,13 @@ class IntervenantDossierController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
         /* Récupération du dossier de l'intervenant */
-        $intervenantDossier = $this->getServiceIntervenantDossier()->getByIntervenant($intervenant);
+        $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         /* Priviliege */
-            //$privEditIdentite = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_IDENTITE_SUITE_EDITION));
-        /*$privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
-        $privValider   = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_VALIDATION));
-        $privDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_DEVALIDATION));
-        $privSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));*/
+        $privileges['edit']      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
+        $privileges['valider']   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
+        $privileges['devalider'] = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
+        $privileges['supprimer'] = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));
 
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
@@ -76,7 +79,7 @@ class IntervenantDossierController extends AbstractController
         $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $intervenantDossier) use ($intervenant) {
             try {
                 /* Sauvegarde du dossier de l'intervenant */
-                $this->getServiceIntervenantDossier()->save($intervenantDossier);
+                $this->getServiceDossier()->save($intervenantDossier);
                 /* Recalcul des tableaux de bord nécessaires */
                 $this->updateTableauxBord($intervenant);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
@@ -85,7 +88,22 @@ class IntervenantDossierController extends AbstractController
             }
         });
 
-        return compact('form', 'role', 'intervenant', 'intervenantDossier');
+        $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
+        $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;
+
+        if ($lastHETD > 0) {
+            $hetd = Util::formattedFloat(
+                $lastHETD,
+                NumberFormatter::DECIMAL,
+                2);
+            $this->flashMessenger()->addInfoMessage(
+                $role->getIntervenant() ?
+                    sprintf("Vous avez effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
+                    : sprintf("L'intervenant a effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
+            );
+        }
+
+        return compact('form', 'role', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation', 'privileges');
     }
 
 
@@ -94,15 +112,15 @@ class IntervenantDossierController extends AbstractController
     {
         $this->initFilters();
 
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $dossier     = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $validation  = $this->getServiceDossier()->getValidation($intervenant);
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $validation         = $this->getServiceDossier()->getValidation($intervenant);
         if ($validation) {
             throw new \Exception('Ce dossier a déjà été validé par ' . $validation->getHistoCreateur() . ' le ' . $validation->getHistoCreation()->format(Constants::DATE_FORMAT));
         }
         try {
-            $this->getServiceValidation()->validerDossier($dossier);
+            $this->getServiceValidation()->validerDossier($intervenantDossier);
             $this->updateTableauxBord($intervenant, true);
             $this->flashMessenger()->addSuccessMessage("Validation <strong>enregistrée</strong> avec succès.");
         } catch (\Exception $e) {
@@ -218,6 +236,8 @@ class IntervenantDossierController extends AbstractController
             'piece_jointe_demande',
         ], $intervenant);
     }
+
+
 
     private function personnaliser()
     {

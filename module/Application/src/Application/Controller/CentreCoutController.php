@@ -2,8 +2,11 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\CcActivite;
 use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\CentreCoutStructure;
+use Application\Form\CentreCout\Traits\CentreCoutActiviteSaisieFormAwareTrait;
+use Application\Service\Traits\CcActiviteServiceAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\CentreCoutStructureServiceAwareTrait;
 use Application\Form\CentreCout\Traits\CentreCoutSaisieFormAwareTrait;
@@ -16,7 +19,8 @@ class CentreCoutController extends AbstractController
     use CentreCoutStructureServiceAwareTrait;
     use CentreCoutSaisieFormAwareTrait;
     use CentreCoutStructureSaisieFormAwareTrait;
-
+    use CcActiviteServiceAwareTrait;
+    use CentreCoutActiviteSaisieFormAwareTrait;
 
 
     public function indexAction()
@@ -124,4 +128,55 @@ class CentreCoutController extends AbstractController
 
         return new MessengerViewModel(compact('centreCoutStructure'));
     }
+
+    public function centreCoutActiviteAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            CcActivite::class
+        ]);
+
+        $listeActivites = $this->getServiceCcActivite()->getList();
+
+        return compact('listeActivites');
+    }
+
+    public function centreCoutActiviteSaisieAction()
+    {
+        $centreCoutActivite = $this->getEvent()->getParam('ccActivite');
+        $form = $this->getFormCentreCoutActiviteSaisie();
+        if (empty($centreCoutActivite)) {
+            $title            = 'Création d\'une nouvelle activité de centre de cout';
+            $centreCoutActivite = $this->getServiceCcActivite()->newEntity();
+        } else {
+            $title = 'Édition d\'un type d\'activité de centre de coût';
+        }
+        $form->bindRequestSave($centreCoutActivite, $this->getRequest(), function (ccActivite $ca) {
+            try {
+                $this->getServiceCcActivite()->save($ca);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        });
+
+        return compact('form', 'title');
+
+    }
+
+    public function centreCoutActiviteDeleteAction()
+    {
+        $centreCoutActivite = $this->getEvent()->getParam('ccActivite');
+
+        try {
+            $this->getServiceCcActivite()->delete($centreCoutActivite);
+            $this->flashMessenger()->addSuccessMessage("Activité supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel(compact('centreCoutActivite'));
+    }
+
+
+
 }

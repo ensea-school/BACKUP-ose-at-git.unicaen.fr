@@ -72,7 +72,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
                        data-id="<?php echo $ti->getId() ?>"
                        onclick="injecte(this); ">
                            <?php
-                           echo '<span class="badge">'.$ti->getTypeIntervenant()->getLibelle().'</span> '.$ti->getLibelle();
+                           echo '<span class="badge">'.$ti->getTypeIntervenant()->getLibelle().'</span><span class="statut-libelle-'.$ti->getId().'"> '.$ti->getLibelle() . '</span>';
                            if ($canEdit) {
                                echo '<span class="pull-right glyphicon glyphicon-move"';
                                 echo 'title = "Vous pouvez trier les champs en déplaçant les lignes" ></span >&nbsp';

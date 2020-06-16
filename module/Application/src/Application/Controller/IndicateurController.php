@@ -17,6 +17,7 @@ use Application\Service\Traits\NotificationIndicateurServiceAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Zend\Form\Element\Checkbox;
 use Zend\Router\Http\TreeRouteStack;
 use Zend\View\Renderer\PhpRenderer;
 use Exception;
@@ -230,6 +231,7 @@ class IndicateurController extends AbstractController
         $form->add((new Text('nombre'))->setValue(count($emails)));
         $form->add((new Text('subject'))->setValue($subject));
         $form->add((new Textarea('body'))->setValue($body));
+        $form->add((new Checkbox('copy'))->setValue(1));
         $form->add((new Hidden('intervenants'))->setValue($intervenantsStringIds));
         $form->getInputFilter()->get('subject')->setRequired(true);
         $form->getInputFilter()->get('body')->setRequired(true);
@@ -238,6 +240,13 @@ class IndicateurController extends AbstractController
             $post = $this->getRequest()->getPost();
             if ($form->setData($post)->isValid()) {
                 $mailer->send($emails, $post);
+                if($post['copy'])
+                {
+                    //envoi une copie du mail à l'utilisateur si il l'a demandé
+                    $utilisateur = $this->getServiceContext()->getUtilisateur();
+                    $emailUtilisateur[ $utilisateur->getEmail()] = $utilisateur->getDisplayName();
+                    $mailer->sendCopyEmail($emailUtilisateur, $emails, $post);
+                }
                 $count   = count($intervenants);
                 $pluriel = $count > 1 ? 's' : '';
                 $this->flashMessenger()->addSuccessMessage("Le mail a été envoyé à $count intervenant$pluriel");
@@ -398,6 +407,18 @@ class IndicateurIntervenantsMailer
     {
         // corps au format HTML
         $html          = $data['body'];
+        if(!empty($data['emailsIntervenant']))
+        {
+            $htmlLog = "<br/><br/>------------------------------------------------ <br/><br/>";
+            $htmlLog = "<p>Email envoyé au(x) destinataire(s) suivant(s) : <br/>";
+
+            foreach($data['emailsIntervenant'] as $email => $name)
+            {
+                $htmlLog .= $name . " / " . $email . "<br/>";
+            }
+            $htmlLog .= "</p>";
+            $html .= $htmlLog;
+        }
         $part          = new MimePart($html);
         $part->type    = Mime::TYPE_HTML;
         $part->charset = 'UTF-8';
@@ -454,5 +475,17 @@ class IndicateurIntervenantsMailer
         ]);
 
         return $html;
+    }
+
+    public function sendCopyEmail($emailsUtilisateur, $emailsIntervenant, $data, $logs = null)
+    {
+        $data['emailsIntervenant'] = $emailsIntervenant;
+        $message = $this->createMessage($data);
+        $message->setSubject('COPIE | ' . $data['subject']);
+        foreach($emailsUtilisateur as $email => $name)
+        {
+            $message->setTo($email, $name);
+        }
+        $this->controller->mail()->send($message);
     }
 }

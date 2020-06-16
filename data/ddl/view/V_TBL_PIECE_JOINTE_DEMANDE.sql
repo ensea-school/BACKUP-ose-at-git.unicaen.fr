@@ -2,7 +2,8 @@ CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
 WITH i_h AS (
   SELECT
     s.intervenant_id,
-    sum(vh.heures) heures,
+    SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NULL THEN vh.heures ELSE 0 END) heures,
+    SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NOT NULL THEN vh.heures ELSE 0 END) heures_non_payables,
     sum(ep.taux_fc) fc
   FROM
          service               s
@@ -13,7 +14,6 @@ WITH i_h AS (
     JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id -- Service sur l'établissement
   WHERE
     s.histo_destruction IS NULL
-    AND vh.motif_non_paiement_id IS NULL -- pas de motif de non paiement
   GROUP BY
     s.intervenant_id
 )
@@ -42,8 +42,9 @@ WHERE
   -- Gestion de l'historique
   i.histo_destruction IS NULL
 
-  -- Seuil HETD
-  AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
+  -- Seuil HETD ou PJ obligatoire meme avec des heures non payables
+  AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,0) OR (COALESCE(i_h.heures_non_payables,0) > 0 AND tpjs.obligatoire_hnp = 1 ))
+
 
   -- Le RIB n'est demandé QUE s'il est différent!!
   AND CASE
@@ -55,7 +56,7 @@ WHERE
   AND (tpjs.fc = 0 OR i_h.fc > 0)
 GROUP BY
   i.annee_id,
-i.id,
-i.code,
+  i.id,
+  i.code,
   tpj.id,
   tpjs.obligatoire

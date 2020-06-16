@@ -9,6 +9,7 @@ use Application\Form\Intervenant\IntervenantDossier;
 use Application\Form\Intervenant\IntervenantDossierForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AdresseNumeroComplService;
+use Application\Service\DossierAutreService;
 use Application\Service\IntervenantDossierService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -16,7 +17,8 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant' => [
+
+            'intervenant'   => [
                 'child_routes' => [
                     'dossier' => [
                         'type'          => 'Segment',
@@ -77,6 +79,17 @@ return [
                         ],
                     ],
                 ],
+            ],
+            'dossier-autre' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/dossier-autre',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\IntervenantDossier',
+                        'action'     => 'dossier-autre-info',
+                    ],
+                ],
+                'may_terminate' => true,
             ],
         ],
     ],
@@ -149,6 +162,13 @@ return [
                  'assertion'  => IntervenantDossierAssertion::class,
                 ],
 
+                [
+                    'controller' => 'Application\Controller\IntervenantDossier',
+                    'action'     => ['dossier-autre-info'],
+                    'privileges' => [Privileges::DOSSIER_VALIDATION],
+                    'assertion'  => IntervenantDossierAssertion::class,
+                ],
+
             ],
         ],
         'resource_providers' => [
@@ -195,6 +215,7 @@ return [
             Service\DossierService::class    => Service\DossierService::class,
             IntervenantDossierService::class => IntervenantDossierService::class,
             AdresseNumeroComplService::class => AdresseNumeroComplService::class,
+            DossierAutreService::class       => DossierAutreService::class,
         ],
         'factories'  => [
             Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,

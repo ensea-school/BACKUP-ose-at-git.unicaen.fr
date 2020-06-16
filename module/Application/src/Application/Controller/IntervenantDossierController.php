@@ -7,10 +7,10 @@ use Application\Constants;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\DossierValidation;
-use Application\Form\Intervenant\Traits\IntervenantDossierForm;
 use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -30,6 +30,7 @@ class IntervenantDossierController extends AbstractController
     use IntervenantDossierFormAwareTrait;
     use UserContextServiceAwareTrait;
     use DossierServiceAwareTrait;
+    use DossierAutreServiceAwareTrait;
 
 
     /**
@@ -225,6 +226,15 @@ class IntervenantDossierController extends AbstractController
         } else {
             return compact('intervenant');
         }
+    }
+
+
+
+    public function dossierAutreInfoAction()
+    {
+        $dossierAutreList = $this->getServiceDossierAutre()->getList();
+
+        return [];
     }
 
 

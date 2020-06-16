@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'INTERVENANT_DOSSIER_ID_SEQ',
     'columns'     => [
         'ADRESSE_CODE_POSTAL'      => [
             'name'        => 'ADRESSE_CODE_POSTAL',

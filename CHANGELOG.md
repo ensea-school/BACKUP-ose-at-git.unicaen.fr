@@ -2,7 +2,7 @@
 Objectif : Connecteur Export OSE => Logiciel RH
 
 # OSE 15 (en développement) 
-Objectif : Doubles statuts & refonte des données personnelles
+Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés
 

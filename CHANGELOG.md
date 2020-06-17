@@ -5,7 +5,7 @@
 * Lors de l'envoi d'email aux intervenants via les indicateurs, possiblité d'en demander une copie par email pour avoir un traçabilité. Le mail en copie contiendra en plus la liste des personnes / emails qui ont reçu celui-ci
 * L'expéditeur de l'email du contrat est maintenant celui qui a réalisé l'action d'envoi (en lieu et place de nepasrepondre@unicaen.fr) 
 * L'objet de l'email du contrat est maintenant personnalisable dans Administration > Paramètres généraux
-* Ajout du paramétre :annee pour la personnalisation du corps de l'email du contrat
+* Ajout du paramétre :annee pour la personnalisation du corps de l'email du contrat.
 * Lors de l'envoi du mail du contrat,  les sauts à ligne manuels du modèle de mail sont remplacés par des <br/> html pour respecter la mise en page.
 
 ## Corrections de bugs

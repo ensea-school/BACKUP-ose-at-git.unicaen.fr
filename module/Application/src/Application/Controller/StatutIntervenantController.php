@@ -7,9 +7,11 @@ use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
+use Application\Provider\Role\RoleProviderAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use UnicaenAuth\Service\Traits\RoleServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 class StatutIntervenantController extends AbstractController
@@ -18,8 +20,7 @@ class StatutIntervenantController extends AbstractController
     use StatutIntervenantSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
-
-
+    use RoleProviderAwareTrait;
 
     public function indexAction()
     {
@@ -59,7 +60,9 @@ class StatutIntervenantController extends AbstractController
                 $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
                     try {
                         $this->getServiceStatutIntervenant()->save($si);
+                        //Unset cache statutsInfo et Regénére le cache
                         unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                        $this->getProviderRole()->getStatutsInfo();
                         $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                     } catch (\Exception $e) {
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -69,10 +72,8 @@ class StatutIntervenantController extends AbstractController
                 $form->bind($statutIntervenant);
                 $form->readOnly();
             }
-        }
-        catch(\Exception $e)
-        {
-            var_dump($e);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
 
@@ -87,13 +88,15 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenant    = $this->getEvent()->getParam('statutIntervenant');
         $newStatutIntervenant = $statutIntervenant->dupliquer();
         $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
-        $form                 = $this->getFormStatutIntervenantSaisie();
-        $title                = 'Duplication d\'un statut d\'intervenant';
+        $form  = $this->getFormStatutIntervenantSaisie();
+        $title = 'Duplication d\'un statut d\'intervenant';
 
         $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
             try {
                 $this->getServiceStatutIntervenant()->save($si);
+                //unset uniquement si cache statusInfo existe
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                $this->getProviderRole()->getStatutsInfo();
                 $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -124,6 +127,7 @@ class StatutIntervenantController extends AbstractController
             try {
                 $this->getServiceStatutIntervenant()->delete($statutIntervenant);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                $this->getProviderRole()->getStatutsInfo();
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

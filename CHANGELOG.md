@@ -11,6 +11,7 @@
 ## Corrections de bugs
 
 * Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
+* Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant
 
 
 # OSE 14.5

@@ -379,7 +379,7 @@ class ServiceReferentielService extends AbstractEntityService
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $evhValide = $this->getServiceEtatVolumeHoraire()->getSaisi();
 
-        $intervenantPrec = $this->getServiceIntervenant()->getPrecedent();
+        $intervenantPrec = $this->getServiceIntervenant()->getPrecedent($intervenant);
 
         $sVolumeHoraireReferentiel = $this->getServiceVolumeHoraireReferentiel();
 

@@ -261,11 +261,12 @@ class  IntervenantController extends AbstractController
 
     public function saisirAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $title       = "Saisie d'un intervenant";
-        $form        = $this->getFormIntervenantEdition();
-        $errors      = [];
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant  = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $title        = "Saisie d'un intervenant";
+        $form         = $this->getFormIntervenantEdition();
+        $errors       = [];
+        $actionDetail = $this->params()->fromRoute('action-detail');
 
         $isNew = !$intervenant;
         if (!$intervenant) {
@@ -275,6 +276,13 @@ class  IntervenantController extends AbstractController
             $intervenant->setAnnee($this->getServiceContext()->getAnnee());
             $intervenant->setSource($this->getServiceSource()->getOse());
             $intervenant->setCode(uniqid('OSE'));
+        }
+
+        if ($actionDetail == 'dupliquer') {
+            $intervenant = $intervenant->dupliquer();
+            $intervenant->setSource($this->getServiceSource()->getOse());
+            $intervenant->setSourceCode(null);
+            $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
         }
 
         $canEdit = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION);

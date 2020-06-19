@@ -62,7 +62,8 @@ return [
                         'options' => [
                             'route'    => '/creer',
                             'defaults' => [
-                                'action' => 'saisir',
+                                'action'        => 'saisir',
+                                'action-detail' => 'creer',
                             ],
                         ],
                     ],
@@ -71,7 +72,18 @@ return [
                         'options' => [
                             'route'    => '/:intervenant/saisir',
                             'defaults' => [
-                                'action' => 'saisir',
+                                'action'        => 'saisir',
+                                'action-detail' => 'saisir',
+                            ],
+                        ],
+                    ],
+                    'dupliquer'               => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/dupliquer',
+                            'defaults' => [
+                                'action'        => 'saisir',
+                                'action-detail' => 'dupliquer',
                             ],
                         ],
                     ],

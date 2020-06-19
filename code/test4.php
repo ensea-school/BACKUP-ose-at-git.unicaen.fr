@@ -9,4 +9,7 @@
  */
 
 
-return $controller->redirect()->toRoute('intervenant/voir', ['intervenant' => 51987], ['query' => ['tab' => 'edition']]);
+/* @var $intervenant \Application\Entity\Db\Intervenant */
+$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(578);
+
+$ni = $intervenant->dupliquer();

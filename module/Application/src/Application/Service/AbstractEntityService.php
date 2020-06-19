@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\StatutIntervenant;
 use Doctrine\ORM\EntityRepository;
 use Zend\Hydrator\HydratorInterface;
 use Zend\Hydrator\ObjectProperty;
@@ -322,7 +323,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      *
-     * @return array
+     * @return StatutIntervenant[]|array
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {

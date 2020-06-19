@@ -7,8 +7,6 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
- 
 
-$utilisateur = $controller->dentity()['db'];
 
-var_dump($utilisateur);
+return $controller->redirect()->toRoute('intervenant/voir', ['intervenant' => 51987], ['query' => ['tab' => 'edition']]);

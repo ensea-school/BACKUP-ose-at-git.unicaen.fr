@@ -125,7 +125,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var bool|null
      */
-    protected $numeroInseeProvisoire;
+    protected $numeroInseeProvisoire = false;
 
     /**
      * @var string|null

@@ -220,7 +220,7 @@ return [
             'length'      => 60,
             'scale'       => NULL,
             'precision'   => NULL,
-            'nullable'    => TRUE,
+            'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 3,
             'commentaire' => NULL,

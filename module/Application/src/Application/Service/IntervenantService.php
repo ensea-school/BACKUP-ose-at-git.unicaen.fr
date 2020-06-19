@@ -68,7 +68,7 @@ class IntervenantService extends AbstractEntityService
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
         $structureId = $this->getServiceContext()->getStructure(true);
-        if ($structureId) $structureId->getId();
+        if ($structureId) $structureId = $structureId->getId();
 
         if (0 === strpos($routeParam, 'code:')) {
             // liste des intervenants filtrée par code
@@ -120,7 +120,7 @@ class IntervenantService extends AbstractEntityService
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
         $structureId = $this->getServiceContext()->getStructure(true);
-        if ($structureId) $structureId->getId();
+        if ($structureId) $structureId = $structureId->getId();
 
         $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
 
@@ -141,7 +141,7 @@ class IntervenantService extends AbstractEntityService
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
         $structureId = $this->getServiceContext()->getStructure(true);
-        if ($structureId) $structureId->getId();
+        if ($structureId) $structureId = $structureId->getId();
 
         $bones = $this->getBones(['UTILISATEUR_CODE' => $utilisateurCode, 'ANNEE_ID' => $anneeId]);
         $code  = null;
@@ -328,6 +328,9 @@ class IntervenantService extends AbstractEntityService
     {
         if (!$entity->getSource()) {
             $entity->setSource($this->getServiceSource()->getOse());
+        }
+        if (!$entity->getAnnee()) {
+            $entity->setAnnee($this->getServiceContext()->getAnnee());
         }
 
         return parent::save($entity);

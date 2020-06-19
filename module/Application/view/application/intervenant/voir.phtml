@@ -4,6 +4,7 @@ use Application\Provider\Privilege\Privileges;
 
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $role \Application\Acl\Role */
+/* @var $tab string */
 
 $this->intervenant($intervenant)->renderTitle('Fiche');
 
@@ -34,4 +35,4 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSI
     ];
 }
 
-echo $this->tabajax($tabs);
+echo $this->tabajax($tabs, $tab);

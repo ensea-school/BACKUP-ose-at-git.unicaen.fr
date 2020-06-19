@@ -509,6 +509,7 @@ return [
                         'privileges' => [
                             Privileges::CLOTURE_CLOTURE,
                             Privileges::CLOTURE_REOUVERTURE,
+                            Privileges::INTERVENANT_EDITION,
                         ],
                         'resources'  => ['Validation', 'Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,
@@ -533,6 +534,7 @@ return [
         'invokables' => [
             Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
             Service\CiviliteService::class                   => Service\CiviliteService::class,
+            Service\GradeService::class                      => Service\GradeService::class,
             Service\StatutIntervenantService::class          => Service\StatutIntervenantService::class,
             Service\TypeIntervenantService::class            => Service\TypeIntervenantService::class,
         ],
@@ -545,8 +547,11 @@ return [
         ],
     ],
     'form_elements'   => [
+        'factories'  => [
+            Form\Intervenant\EditionForm::class => Form\Intervenant\Factory\EditionFormFactory::class,
+        ],
         'invokables' => [
-            Form\Intervenant\EditionForm::class                        => Form\Intervenant\EditionForm::class,
+
             Form\Intervenant\HeuresCompForm::class                     => Form\Intervenant\HeuresCompForm::class,
             Form\Intervenant\ModificationServiceDuForm::class          => Form\Intervenant\ModificationServiceDuForm::class,
             Form\Intervenant\ModificationServiceDuFieldset::class      => Form\Intervenant\ModificationServiceDuFieldset::class,

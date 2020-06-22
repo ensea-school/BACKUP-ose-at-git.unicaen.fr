@@ -67,8 +67,6 @@ class Context extends Params
         $argSources  = isset($arguments[2]) ? $arguments[2] : null;
 
         switch (true) {
-            case ($method = 'FromRoute') === substr($name, $length = -9):
-            break;
             case ($method = 'FromQuery') === substr($name, $length = -9):
             break;
             case ($method = 'FromPost') === substr($name, $length = -8):

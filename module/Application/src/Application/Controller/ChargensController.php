@@ -239,7 +239,7 @@ class ChargensController extends AbstractController
         ]);
 
         /** @var Scenario $scenario */
-        $scenario = $this->context()->scenarioFromRoute();
+        $scenario = $this->params()->fromRoute('scenario');
 
         $filtre = $this->getFormChargensScenarioFiltre();
         if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
@@ -268,7 +268,7 @@ class ChargensController extends AbstractController
         ]);
 
         /** @var Scenario $scenario */
-        $scenario = $this->context()->scenarioFromRoute();
+        $scenario = $this->params()->fromRoute('scenario');
 
 
         $typeIntervention    = stringToInt($this->params()->fromPost('typeIntervention'));
@@ -300,7 +300,7 @@ class ChargensController extends AbstractController
     public function seuilCalcHeuresAction()
     {
         /** @var Scenario $scenario */
-        $scenario = $this->context()->scenarioFromRoute();
+        $scenario = $this->params()->fromRoute('scenario');
 
         $provider = $this->getProviderChargens();
         $provider->setScenario($scenario);
@@ -320,7 +320,7 @@ class ChargensController extends AbstractController
         ]);
 
         /** @var Scenario $scenario */
-        $scenario = $this->context()->scenarioFromRoute();
+        $scenario = $this->params()->fromRoute('scenario');
 
         $filtre = $this->getFormChargensScenarioFiltre();
         if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
@@ -352,7 +352,7 @@ class ChargensController extends AbstractController
     public function exportCsvAction()
     {
         /** @var Scenario $scenario */
-        $scenario = $this->context()->scenarioFromRoute();
+        $scenario = $this->params()->fromRoute('scenario');
 
         $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();

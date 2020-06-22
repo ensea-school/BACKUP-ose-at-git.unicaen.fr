@@ -237,6 +237,53 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
+     * Permet de définit une fiche intervenant comme celle étant à consulter par défaut
+     *
+     * @param Intervenant $intervenant
+     * @param bool        $definir
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function definirParDefaut(Intervenant $intervenant, bool $definir = true)
+    {
+        if ($definir) {
+            $idParDefaut = $this->getIntervenantIdParDefaut($intervenant->getCode(), $intervenant->getAnnee()->getId());
+            if ($idParDefaut) {
+                $sql = "DELETE FROM INTERVENANT_PAR_DEFAUT WHERE intervenant_id = :id";
+                $this->getEntityManager()->getConnection()->executeUpdate($sql, ['id' => $idParDefaut]);
+            }
+            $sql = "INSERT INTO INTERVENANT_PAR_DEFAUT (id, annee_id, intervenant_code, intervenant_id) VALUES (INTERVENANT_PAR_DEFAUT_ID_SEQ.NEXTVAL, :annee, :code, :id)";
+            $this->getEntityManager()->getConnection()->executeUpdate($sql, [
+                'annee' => $intervenant->getAnnee()->getId(),
+                'code'  => $intervenant->getCode(),
+                'id'    => $intervenant->getId(),
+            ]);
+        } else {
+            $sql = "DELETE FROM INTERVENANT_PAR_DEFAUT WHERE annee_id = :annee AND intervenant_code = :code";
+            $this->getEntityManager()->getConnection()->executeUpdate($sql, [
+                'annee' => $intervenant->getAnnee()->getId(),
+                'code'  => $intervenant->getCode(),
+            ]);
+        }
+    }
+
+
+
+    /**
+     * Permet de savoir si oui ou non cette fiche intervenant est définie comme étant celle par défaut.
+     *
+     * @param Intervenant $intervenant
+     *
+     * @return bool
+     */
+    public function estDefiniParDefaut(Intervenant $intervenant): bool
+    {
+        return $this->getIntervenantIdParDefaut($intervenant->getCode(), $intervenant->getAnnee()->getId()) === $intervenant->getId();
+    }
+
+
+
+    /**
      * Retourne les identifiants des données concernés
      *
      * @param string|string[]|null $sourceCode

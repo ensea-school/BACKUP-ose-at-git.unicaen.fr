@@ -96,6 +96,15 @@ return [
                             ],
                         ],
                     ],
+                    'definir-par-defaut'      => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/definir-par-defaut',
+                            'defaults' => [
+                                'action' => 'definir-par-defaut',
+                            ],
+                        ],
+                    ],
                     'voir-heures-comp'        => [
                         'type'    => 'Segment',
                         'options' => [
@@ -441,7 +450,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['saisir'],
+                    'action'     => ['saisir', 'definir-par-defaut'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
                     ],

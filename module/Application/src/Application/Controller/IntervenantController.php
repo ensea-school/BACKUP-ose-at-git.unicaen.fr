@@ -121,6 +121,19 @@ class  IntervenantController extends AbstractController
 
 
 
+    public function definirParDefautAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
+        $this->getServiceIntervenant()->definirParDefaut($intervenant, !$definiParDefaut);
+        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
+
+        return compact('definiParDefaut');
+    }
+
+
+
     public function servicesAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -261,12 +274,13 @@ class  IntervenantController extends AbstractController
 
     public function saisirAction()
     {
-        $role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant  = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $title        = "Saisie d'un intervenant";
-        $form         = $this->getFormIntervenantEdition();
-        $errors       = [];
-        $actionDetail = $this->params()->fromRoute('action-detail');
+        $role            = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant     = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $title           = "Saisie d'un intervenant";
+        $form            = $this->getFormIntervenantEdition();
+        $errors          = [];
+        $actionDetail    = $this->params()->fromRoute('action-detail');
+        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
 
         $isNew = !$intervenant;
         if (!$intervenant) {
@@ -315,7 +329,7 @@ class  IntervenantController extends AbstractController
             }
         }
 
-        return compact('intervenant', 'form', 'errors', 'title');
+        return compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut');
     }
 
 

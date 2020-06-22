@@ -274,13 +274,17 @@ class  IntervenantController extends AbstractController
 
     public function saisirAction()
     {
-        $role            = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant     = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $title           = "Saisie d'un intervenant";
-        $form            = $this->getFormIntervenantEdition();
-        $errors          = [];
-        $actionDetail    = $this->params()->fromRoute('action-detail');
-        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant  = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $title        = "Saisie d'un intervenant";
+        $form         = $this->getFormIntervenantEdition();
+        $errors       = [];
+        $actionDetail = $this->params()->fromRoute('action-detail');
+        if ($intervenant) {
+            $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
+        } else {
+            $definiParDefaut = false;
+        }
 
         $isNew = !$intervenant;
         if (!$intervenant) {

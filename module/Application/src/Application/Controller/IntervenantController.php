@@ -271,7 +271,7 @@ class  IntervenantController extends AbstractController
         $isNew = !$intervenant;
         if (!$intervenant) {
             $intervenant = $this->getServiceIntervenant()->newEntity();
-            $intervenant->setStructure($this->getServiceContext()->getStructure(true));
+            $intervenant->setStructure($this->getServiceContext()->getStructure());
             $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
             $intervenant->setAnnee($this->getServiceContext()->getAnnee());
             $intervenant->setSource($this->getServiceSource()->getOse());

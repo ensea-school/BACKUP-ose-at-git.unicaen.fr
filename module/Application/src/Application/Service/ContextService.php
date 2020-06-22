@@ -85,6 +85,11 @@ class ContextService extends AbstractService
      */
     protected $parametres;
 
+    /**
+     * @var bool
+     */
+    protected $inInit = false;
+
 
 
     /**
@@ -404,7 +409,7 @@ class ContextService extends AbstractService
      */
     public function getStructure($checkInRole = true)
     {
-        if ($checkInRole) {
+        if ($checkInRole && !$this->isInInit()) {
             $role = $this->getSelectedIdentityRole();
             if ($role && $role->getStructure()) {
                 return $role->getStructure();
@@ -472,4 +477,29 @@ class ContextService extends AbstractService
 
         return count($res) == 1;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isInInit(): bool
+    {
+        return $this->inInit;
+    }
+
+
+
+    /**
+     * @param bool $inInit
+     *
+     * @return ContextService
+     */
+    public function setInInit(bool $inInit): ContextService
+    {
+        $this->inInit = $inInit;
+
+        return $this;
+    }
+
 }

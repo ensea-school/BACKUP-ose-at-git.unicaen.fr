@@ -67,7 +67,7 @@ class IntervenantService extends AbstractEntityService
         $code        = null;
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
-        $structureId = $this->getServiceContext()->getStructure(true);
+        $structureId = $this->getServiceContext()->getStructure();
         if ($structureId) $structureId = $structureId->getId();
 
         if (0 === strpos($routeParam, 'code:')) {
@@ -119,7 +119,7 @@ class IntervenantService extends AbstractEntityService
         $code        = null;
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
-        $structureId = $this->getServiceContext()->getStructure(true);
+        $structureId = $this->getServiceContext()->getStructure();
         if ($structureId) $structureId = $structureId->getId();
 
         $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
@@ -140,7 +140,7 @@ class IntervenantService extends AbstractEntityService
     {
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
-        $structureId = $this->getServiceContext()->getStructure(true);
+        $structureId = $this->getServiceContext()->getStructure();
         if ($structureId) $structureId = $structureId->getId();
 
         $bones = $this->getBones(['UTILISATEUR_CODE' => $utilisateurCode, 'ANNEE_ID' => $anneeId]);

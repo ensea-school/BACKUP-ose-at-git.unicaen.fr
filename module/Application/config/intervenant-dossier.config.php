@@ -10,6 +10,7 @@ use Application\Form\Intervenant\IntervenantDossierForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AdresseNumeroComplService;
 use Application\Service\DossierAutreService;
+use Application\Service\DossierAutreTypeService;
 use Application\Service\IntervenantDossierService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -90,6 +91,34 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
+                'child_routes'  => [
+                    'saisie' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/saisie[/:dossierAutre]',
+                            'constraints' => [
+                                'dossierAutre' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'dossier-autre-saisie',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'delete' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/delete[/:dossierAutre]',
+                            'constraints' => [
+                                'dossierAutre' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'dossier-autre-delete',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ],
             ],
         ],
     ],
@@ -164,7 +193,7 @@ return [
 
                 [
                     'controller' => 'Application\Controller\IntervenantDossier',
-                    'action'     => ['dossier-autre-info'],
+                    'action'     => ['dossier-autre-info', 'dossier-autre-saisie'],
                     'privileges' => [Privileges::DOSSIER_VALIDATION],
                     'assertion'  => IntervenantDossierAssertion::class,
                 ],
@@ -216,6 +245,7 @@ return [
             IntervenantDossierService::class => IntervenantDossierService::class,
             AdresseNumeroComplService::class => AdresseNumeroComplService::class,
             DossierAutreService::class       => DossierAutreService::class,
+            DossierAutreTypeService::class   => DossierAutreTypeService::class,
         ],
         'factories'  => [
             Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
@@ -227,11 +257,11 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories' => [
+        'factories'  => [
             IntervenantDossierForm::class => IntervenantDossierFormFactory::class,
         ],
-        /*'invokables' => [
-            Form\Intervenant\IntervenantDossier::class => Form\Intervenant\IntervenantDossier::class,
-        ],*/
+        'invokables' => [
+            Form\Intervenant\AutresForm::class => Form\Intervenant\AutresForm::class,
+        ],
     ],
 ];

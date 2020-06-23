@@ -69,7 +69,7 @@ $fieldsets = $form->getFieldsets();
         } else {
             echo $this->partial('application/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier'));
         }
-        if ($editAdresse) {
+        if ($editContact) {
             echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form', 'intervenant', 'intervenantDossier'));
         } else {
             echo $this->partial('application/intervenant-dossier/partial/formContactView', compact('form', 'intervenant', 'intervenantDossier'));
@@ -136,11 +136,8 @@ $fieldsets = $form->getFieldsets();
     </div>
 
     <?php
-
-
     echo $this->form()->closeTag();
     echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
-
     ?>
     <?php if ($intervenantDossierValidation): ?>
 </div>

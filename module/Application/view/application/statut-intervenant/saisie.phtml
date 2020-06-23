@@ -73,25 +73,40 @@ echo $this->form()->openTag($form); ?>
                     <?= $this->formControlGroup($form->get('peut-cloturer-saisie')); ?>
                     <?= $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
                     <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
+
                     <br/>
                 </div>
+                <div class="row temoins">
+                    <fieldset>
+                        <legend style="font-size: 14px;font-weight: 700;">Activation des champs additionnels du dossier
+                            intervenant :
+                        </legend>
+                        <?= $this->formControlGroup($form->get('autre_1')); ?>
+                        <?= $this->formControlGroup($form->get('autre_2')); ?>
+                        <?= $this->formControlGroup($form->get('autre_3')); ?>
+                        <?= $this->formControlGroup($form->get('autre_4')); ?>
+                        <?= $this->formControlGroup($form->get('autre_5')); ?>
+                    </fieldset>
+                    <br/>
+                </div>
+
                 <!--Uniquement si le statut existe déjà en base (avec un id)-->
                 <?php if (empty($form->get('id')->getValue())): ?>
-                    <div class="row temoins hidden" >
-                <?php else: ?>
-                    <div class="row temoins" >
-                <?php endif; ?>
+                <div class="row temoins hidden">
+                    <?php else: ?>
+                    <div class="row temoins">
+                        <?php endif; ?>
                         <fieldset>
-                            <legend style="font-size: 14px;font-weight: 700;">Gestion des agréments pour le statut : </legend>
+                            <legend style="font-size: 14px;font-weight: 700;">Gestion des agréments pour le statut :</legend>
                             <table class="table table-bordered">
-                                <thead >
-                                    <th></th>
-                                    <th>Activé</th>
-                                    <th>Valable pendant</th>
+                                <thead>
+                                <th></th>
+                                <th>Activé</th>
+                                <th>Valable pendant</th>
                                 </thead>
                                 <tbody>
-                                <?php foreach($form->getElements() as $element):  ?>
-                                    <?php if(preg_match('#^CONSEIL[A-Z_]+\b(?!-DUREE_VIE)#', $element->getName())): ?>
+                                <?php foreach ($form->getElements() as $element): ?>
+                                    <?php if (preg_match('#^CONSEIL[A-Z_]+\b(?!-DUREE_VIE)#', $element->getName())): ?>
 
                                         <tr>
                                             <td><?= $this->formLabel($form->get($element->getName())); ?></td>
@@ -99,53 +114,53 @@ echo $this->form()->openTag($form); ?>
                                             <td><?= $this->formControlGroup($form->get($element->getName() . '-DUREE_VIE')); ?></td>
                                         </tr>
                                     <?php endif; ?>
-                                <?php endforeach;?>
+                                <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </fieldset>
 
                     </div>
-                <div class="row">
-                    <?= $this->formElement($form->get('security')); ?>
-                    <?php if ($canEdit) echo $this->formSubmit($form->get('submit')); ?>
-                    <?php if (($canEdit) && ($form->get('id')->getValue())) { ?>
-                        <a class="pop-ajax btn btn-danger" data-event="statut-intervenant-clone"
-                           href="<?php echo $this->url('statut-intervenant/delete', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
-                           title="Supprimer le statut d'intervenant"
-                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                           data-confirm="true" data-confirm-button="Oui"
-                           data-cancel-button="Non"
-                           data-submit-reload="true">
-                            <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
-                        <a class="ajax-modal btn btn-warning" data-event="statut-intervenant-clone"
-                           href="<?php echo $this->url('statut-intervenant/clone', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
-                           title="Dupliquer le statut d'intervenant">
-                            <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
-                    <?php } ?>
+                    <div class="row">
+                        <?= $this->formElement($form->get('security')); ?>
+                        <?php if ($canEdit) echo $this->formSubmit($form->get('submit')); ?>
+                        <?php if (($canEdit) && ($form->get('id')->getValue())) { ?>
+                            <a class="pop-ajax btn btn-danger" data-event="statut-intervenant-clone"
+                               href="<?php echo $this->url('statut-intervenant/delete', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
+                               title="Supprimer le statut d'intervenant"
+                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                               data-confirm="true" data-confirm-button="Oui"
+                               data-cancel-button="Non"
+                               data-submit-reload="true">
+                                <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                            <a class="ajax-modal btn btn-warning" data-event="statut-intervenant-clone"
+                               href="<?php echo $this->url('statut-intervenant/clone', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
+                               title="Dupliquer le statut d'intervenant">
+                                <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <?= $this->formControlGroup($form->get('service-statutaire')); ?>
+                    <?= $this->formControlGroup($form->get('plafond-referentiel')); ?>
+                    <?= $this->formControlGroup($form->get('maximum-HETD')); ?>
+                    <?= $this->formControlGroup($form->get('charges-patronales')); ?>
+                    <?= $this->formControlGroup($form->get('plafond-h-h-c')); ?>
+                    <?= $this->formControlGroup($form->get('plafond-hc-fi-hors-ead')); ?>
+                    <?= $this->formControlGroup($form->get('plafond-h-c')); ?>
                 </div>
             </div>
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('service-statutaire')); ?>
-                <?= $this->formControlGroup($form->get('plafond-referentiel')); ?>
-                <?= $this->formControlGroup($form->get('maximum-HETD')); ?>
-                <?= $this->formControlGroup($form->get('charges-patronales')); ?>
-                <?= $this->formControlGroup($form->get('plafond-h-h-c')); ?>
-                <?= $this->formControlGroup($form->get('plafond-hc-fi-hors-ead')); ?>
-                <?= $this->formControlGroup($form->get('plafond-h-c')); ?>
-            </div>
         </div>
-    </div>
 
 
-    <?php
-    echo $this->form()->closeTag();
-    echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-    ?>
-    <script type="text/javascript">
-        $(function () {
-            $("body").on("statut-intervenant-clone", function (event, data) {
-                window.location.reload();
+        <?php
+        echo $this->form()->closeTag();
+        echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+        ?>
+        <script type="text/javascript">
+            $(function () {
+                $("body").on("statut-intervenant-clone", function (event, data) {
+                    window.location.reload();
+                });
+                $(".statut-libelle-<?= $form->get('id')->getValue() ?>").html("<?= $form->get('libelle')->getValue() ?>");
             });
-            $(".statut-libelle-<?= $form->get('id')->getValue() ?>").html("<?= $form->get('libelle')->getValue() ?>");
-        });
-    </script>
+        </script>

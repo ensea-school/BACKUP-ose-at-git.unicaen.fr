@@ -4,9 +4,12 @@ namespace Application\Controller;
 
 use Application\Assertion\IntervenantDossierAssertion;
 use Application\Constants;
+use Application\Entity\Db\DossierAutre;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TypeRessource;
 use Application\Form\Intervenant\DossierValidation;
+use Application\Form\Intervenant\Traits\AutresFormAwareTrait;
 use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -30,6 +33,8 @@ class IntervenantDossierController extends AbstractController
     use IntervenantDossierFormAwareTrait;
     use UserContextServiceAwareTrait;
     use DossierServiceAwareTrait;
+    use DossierAutreServiceAwareTrait;
+    use AutresFormAwareTrait;
     use DossierAutreServiceAwareTrait;
 
 
@@ -231,6 +236,38 @@ class IntervenantDossierController extends AbstractController
 
 
     public function dossierAutreInfoAction()
+    {
+        $dossierAutreListe = $this->getServiceDossierAutre()->getList();
+
+        return compact('dossierAutreListe');
+    }
+
+
+
+    public function dossierAutreSaisieAction()
+    {
+        $dossierAutreList = $this->getServiceDossierAutre()->getList();
+        $dossierAutre     = $this->getEvent()->getParam('dossierAutre');
+        $form             = $this->getAutresForm();
+        $title            = 'Édition d\'un type de ressource';
+
+        $form->bindRequestSave($dossierAutre, $this->getRequest(), function (DossierAutre $autre) {
+            try {
+                $this->getServiceDossierAutre()->save($autre);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        });
+
+        return compact('form', 'title');
+
+        return [];
+    }
+
+
+
+    public function dossierAutreDeleteAction()
     {
         $dossierAutreList = $this->getServiceDossierAutre()->getList();
 

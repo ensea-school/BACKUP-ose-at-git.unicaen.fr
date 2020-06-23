@@ -88,6 +88,13 @@ return [
                                         'withtarget' => true,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
                                     ],
+                                    'gestion-champs-autres-dossier-intervenant'  => [
+                                        'label'      => "Gestion des champs personnalisés pour le dossier intervenant",
+                                        'title'      => "Editer et modifier les 5 champs personnalisables pour les dossiers des intervenant",
+                                        'route'      => 'dossier-autre',
+                                        'withtarget' => true,
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\IntervenantDossier', 'dossier-autre-info'),
+                                    ],
                                     'validation-volume-horaire-type-intervenant' => [
                                         'label'      => "Règles de validation par type d'intervenant",
                                         'title'      => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",

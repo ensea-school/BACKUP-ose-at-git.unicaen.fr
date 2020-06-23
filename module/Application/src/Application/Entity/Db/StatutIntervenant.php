@@ -19,43 +19,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     protected $code;
 
-
-
-    /**
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond à un intervenant permanent.
-     *
-     * @return bool
-     */
-    public function estPermanent()
-    {
-        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond aux vacataires.
-     *
-     * @return bool
-     */
-    public function estVacataire()
-    {
-        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
-    }
-
-
-
     /**
      * @var boolean
      */
@@ -210,6 +173,42 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      * @var string|null
      */
     protected $codesCorresp4;
+
+    /**
+     * @var boolean
+     */
+    protected $needAutre1;
+
+    /**
+     * @var boolean
+     */
+    protected $needAutre2;
+
+    /**
+     * @var boolean
+     */
+    protected $needAutre3;
+
+    /**
+     * @var boolean
+     */
+    protected $needAutre4;
+
+    /**
+     * @var boolean
+     */
+    protected $needAutre5;
+
+
+
+    /**
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 
 
 
@@ -1109,6 +1108,165 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         $this->codesCorresp4 = $codesCorresp4;
 
         return $this;
+    }
+
+
+
+    /**
+     * Indique si ce statut correspond à un intervenant permanent.
+     *
+     * @return bool
+     */
+    public function estPermanent()
+    {
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
+    }
+
+
+
+    /**
+     * Indique si ce statut correspond aux vacataires.
+     *
+     * @return bool
+     */
+    public function estVacataire()
+    {
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
+    }
+
+
+
+    /**
+     * @param boolean $needAutre1
+     *
+     * @return $this StatutIntervenant
+     */
+
+    public function setNeedAutre1($needAutre1)
+    {
+        $this->needAutre1 = $needAutre1;
+
+        return $this;
+    }
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+
+    public function isNeededAutre1()
+    {
+        return $this->needAutre1;
+    }
+
+
+
+    /**
+     * @param boolean $needAutre2
+     *
+     * @return $this StatutIntervenant
+     */
+
+    public function setNeedAutre2($needAutre2)
+    {
+        $this->needAutre2 = $needAutre2;
+
+        return $this;
+    }
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+
+    public function isNeededAutre2()
+    {
+        return $this->needAutre2;
+    }
+
+
+
+    /**
+     * @param boolean $needAutre3
+     *
+     * @return $this StatutIntervenant
+     */
+
+    public function setNeedAutre3($needAutre3)
+    {
+        $this->needAutre3 = $needAutre3;
+
+        return $this;
+    }
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+
+    public function isNeededAutre3()
+    {
+        return $this->needAutre3;
+    }
+
+
+
+    /**
+     * @param boolean $needAutre4
+     *
+     * @return $this StatutIntervenant
+     */
+
+    public function setNeedAutre4($needAutre4)
+    {
+        $this->needAutre4 = $needAutre4;
+
+        return $this;
+    }
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+
+    public function isNeededAutre4()
+    {
+        return $this->needAutre4;
+    }
+
+
+
+    /**
+     * @param boolean $needAutre5
+     *
+     * @return $this StatutIntervenant
+     */
+
+    public function setNeedAutre5($needAutre5)
+    {
+        $this->needAutre5 = $needAutre5;
+
+        return $this;
+    }
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+
+    public function isNeededAutre5()
+    {
+        return $this->needAutre5;
     }
 
 }

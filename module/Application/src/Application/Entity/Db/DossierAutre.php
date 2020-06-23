@@ -114,7 +114,7 @@ class DossierAutre
     /**
      * @return string
      */
-    public function getContenu(): string
+    public function getContenu(): ?string
     {
         return $this->contenu;
     }
@@ -126,7 +126,7 @@ class DossierAutre
      *
      * @return DossierAutre $this
      */
-    public function setContenu(string $contenu): DossierAutre
+    public function setContenu(?string $contenu): DossierAutre
     {
         $this->contenu = $contenu;
 

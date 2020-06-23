@@ -1,1 +1,72 @@
-Dossier autre infos
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+//$this->headTitle()->append($title);
+
+/**
+ * @var $autre \Application\Entity\Db\DossierAutre
+ */
+
+//$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_RESSOURCE_EDITION));
+$canEdit = 1;
+
+?>
+<h1 class="page-header">Gestion des dossiers autres</h1>
+
+<table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+        <th>Champs N°</th>
+        <th>Libellé</th>
+        <th>Obligatoire</th>
+        <th>Type</th>
+        <th>description</th>
+        <?php if ($canEdit): ?>
+            <th>Actions</th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables">
+    <?php foreach ($dossierAutreListe as $autre): ?>
+        <tr class="champ-triable" data-id="<?= $autre->getId() ?>">
+            <td><?= $autre->getId() ?></td>
+            <td><?= $autre->getLibelle() ?></td>
+            <td><?= ($autre->isObligatoire()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= $autre->getType()->getLibelle() ?></td>
+            <td><?= $autre->getDescription() ?></td>
+            <?php if ($canEdit): ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <a class="ajax-modal"
+                       data-event="dossier-autre-saisie"
+                       href="<?= $this->url('dossier-autre/saisie', ['dossierAutre' => $autre->getId()]) ?>"
+                       data-submit-reload="true">
+                        <span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("dossier-autre-saisie", function (event, data) {
+            window.location.reload();
+        });
+    });
+</script>
+<style>
+    .triables {
+        align: left;
+    }
+
+    .champ-triable tr {
+        align: left;
+    }
+
+    .tbl-tis {
+        margin-bottom: 1px;
+    }
+</style>

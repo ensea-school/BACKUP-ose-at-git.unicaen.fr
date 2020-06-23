@@ -11,8 +11,9 @@
 ## Corrections de bugs
 
 * Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
-* Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant
-* Correction sur les agréments restreints qui n'étaient plus demandés par composante
+* Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant (Ticket #30189)
+* Correction sur les agréments restreints qui n'étaient plus demandés par composante (Tickets #30278 et #29825)
+* Suppression des caractéres spéciaux dans les noms des fichiers pièces jointes et contrats (Ticket #29565)
 
 
 # OSE 14.5

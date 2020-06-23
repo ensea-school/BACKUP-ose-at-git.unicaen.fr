@@ -30,6 +30,7 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
 
 * Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
 * Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant
+* Correction sur les agréments restreints qui n'étaient plus demandés par composante
 
 
 # OSE 14.5

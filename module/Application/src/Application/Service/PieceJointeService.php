@@ -126,6 +126,7 @@ class PieceJointeService extends AbstractEntityService
     }
 
 
+
     /**
      * @param Intervenant $intervenant
      *
@@ -155,6 +156,7 @@ class PieceJointeService extends AbstractEntityService
     }
 
 
+
     /**
      * @param Intervenant $intervenant
      *
@@ -162,7 +164,7 @@ class PieceJointeService extends AbstractEntityService
      */
     public function getPiecesFournies(Intervenant $intervenant)
     {
-        $dql  = "
+        $dql = "
         SELECT
           pjf, pj, tpj, v, f        
         FROM
@@ -191,11 +193,10 @@ class PieceJointeService extends AbstractEntityService
 
         $result = [];
         foreach ($lpjf as $pjf) {
-            $pj                              = $pjf->getPieceJointe();
+            $pj        = $pjf->getPieceJointe();
             $pj->annee = $pjf->getAnnee();
             //Gérer les cas où plusieurs PJ sont éligible mais sans date d'archive, on prend la première uniquement.
-            if(!array_key_exists($pj->getType()->getId(), $result))
-            {
+            if (!array_key_exists($pj->getType()->getId(), $result)) {
                 $result[$pj->getType()->getId()] = $pj;
             }
         }
@@ -233,6 +234,8 @@ class PieceJointeService extends AbstractEntityService
         return $validation;
     }
 
+
+
     public function archiver(PieceJointe $pj)
     {
         $annee = $this->getServiceContext()->getAnnee();
@@ -241,7 +244,6 @@ class PieceJointeService extends AbstractEntityService
         $this->getEntityManager()->flush();
 
         return $pj;
-
     }
 
 
@@ -298,7 +300,7 @@ class PieceJointeService extends AbstractEntityService
 
         foreach ($files as $file) {
             $path          = $file['tmp_name'];
-            $nomFichier    = $file['name'];
+            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
             $typeFichier   = $file['type'];
             $tailleFichier = $file['size'];
 

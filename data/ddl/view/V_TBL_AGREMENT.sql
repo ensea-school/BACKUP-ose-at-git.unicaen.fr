@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
 WITH i_s AS (
   SELECT
     fr.intervenant_id,
-    ep.structure_id
+    ep.structure_id ep_structure_id
   FROM
     formule_resultat fr
     JOIN type_volume_horaire  tvh ON tvh.code = 'PREVU' AND tvh.id = fr.type_volume_horaire_id
@@ -89,7 +89,7 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
       NVL(a.id, avi.agrement_id)                  agrement_id,
       tas.duree_vie                               duree_vie,
       RANK() OVER(
-        PARTITION BY i.code,i.annee_id ORDER BY
+        PARTITION BY i.code,i.annee_id,i_s.ep_structure_id ORDER BY
         CASE
         WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
         THEN NULL
@@ -106,11 +106,13 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
       JOIN                           i_s ON i_s.intervenant_id = i.id
 
       LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
+                                        AND a.structure_id = i_s.ep_structure_id
                                         AND a.intervenant_id = i.id
                                         AND a.histo_destruction IS NULL
 
       LEFT JOIN                      avi ON i.code = avi.code_intervenant
                                         AND tas.type_agrement_id = avi.type_agrement
+                                        AND a.id = avi.agrement_id
                                         AND i.annee_id < avi.date_validite
                                         AND i.annee_id >= avi.annee_id
 

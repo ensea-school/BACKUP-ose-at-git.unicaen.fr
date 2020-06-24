@@ -6,14 +6,31 @@ Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés
 
-* Les modèles de pièces justificatives peuvent être téléchargés en fonction de l'année courante (paramètre :annee à ajouter dans l'URL qui sera remplacé dynamiquement par l'année en cours)
 * Les vues matérialisées sont recalculées à chaque mise à jour
+* Possibilité pour un intervenant d'avoir simultanément plusieurs statuts
+  * Le nouveau statut peut être ajouté dans l'application ou bien être fourni via le connecteur IMPORT
+  * La bascule d'un statut à un autre e fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
+  * Pour chaque statut, l'intervenant a une fiche distincte, avec des services distincts, etc. Les pièces justificatives et les agréments sont communs.
+* Possibilité de créer un nouvel intervenant local au moyen d'une IHM
+* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignirer celui fourni par le connecteur
+* Possibilité de forcer le statut d'un intervenant dans OSE et d'ignorer celui fourni par le connecteur (même pour un permanent)
 
 ## Notes de mise à jour
 
 * Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
 La migration ne sera possible qu'à partir de la version 14.
 Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
+
+
+# OSE 14.7 (en développement)
+
+## Nouveautés
+
+* Les modèles de pièces justificatives peuvent être téléchargés en fonction de l'année courante (paramètre :annee à ajouter dans l'URL qui sera remplacé dynamiquement par l'année en cours)
+
+## Corrections de bugs
+
+* Correction sur les agréments restreints qui n'étaient plus demandés par composante (Tickets #30278 et #29825)
 
 
 # OSE 14.6
@@ -30,7 +47,6 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
 
 * Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
 * Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant (Ticket #30189)
-* Correction sur les agréments restreints qui n'étaient plus demandés par composante (Tickets #30278 et #29825)
 * Suppression des caractéres spéciaux dans les noms des fichiers pièces jointes et contrats (Ticket #29565)
 * Possibilité de réduire le nombre d'heures se service si on a dépassé un plafond bloquant.
 

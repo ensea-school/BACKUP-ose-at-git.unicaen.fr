@@ -18,6 +18,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Zend\Hydrator\ClassMethods;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -125,7 +126,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var bool|null
      */
-    protected $numeroInseeProvisoire;
+    protected $numeroInseeProvisoire = false;
 
     /**
      * @var string|null
@@ -309,18 +310,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function getResourceId()
     {
         return 'Intervenant';
-    }
-
-
-
-    /**
-     * retourne le paramètre de route
-     *
-     * @return string
-     */
-    public function getRouteParam()
-    {
-        return $this->getCode();
     }
 
 
@@ -1398,4 +1387,16 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         return $validations;
     }
 
+
+
+    public function dupliquer()
+    {
+        $intervenant = new Intervenant();
+
+        $hydrator = new ClassMethods();
+        $data     = $hydrator->extract($this);
+        $hydrator->hydrate($data, $intervenant);
+
+        return $intervenant;
+    }
 }

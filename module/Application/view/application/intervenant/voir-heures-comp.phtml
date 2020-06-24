@@ -10,7 +10,6 @@ $totalService =
     + (float)vn($data, 'SERVICE_FC')
     + (float)vn($data, 'SERVICE_REFERENTIEL');
 
-$this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.");
 
 function vn(array $array, $key, $type = 's')
 {
@@ -34,6 +33,8 @@ function vn(array $array, $key, $type = 's')
     return null;
 }
 
+$this->intervenant($intervenant)->renderTitle('Calcul HETD');
+
 ?>
 
 <style>
@@ -41,9 +42,6 @@ function vn(array $array, $key, $type = 's')
         background-color: #eee
     }
 </style>
-<h1 class="page-header"><?= $intervenant ?>
-    <small><?= $intervenant->getStatut()->getTypeIntervenant() ?></small>
-</h1>
 <?= $this->form()->openTag($form->prepare()); ?>
 <div class="row">
     <div class="col-sm-4"><?= $this->formControlGroup($form->get('type-volume-horaire')); ?></div>

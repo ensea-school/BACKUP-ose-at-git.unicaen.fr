@@ -30,6 +30,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const BUDGET_TYPES_RESSOURCES_VISUALISATION               = 'budget-types-ressources-visualisation';
     const BUDGET_VISUALISATION                                = 'budget-visualisation';
     const CENTRES_COUTS_ADMINISTRATION_EDITION                = 'centres-couts-administration-edition';
+    const CENTRES_COUTS_ADMINISTRATION_RECONDUCTION           = 'centres-couts-administration-reconduction';
     const CENTRES_COUTS_ADMINISTRATION_VISUALISATION          = 'centres-couts-administration-visualisation';
     const CHARGENS_DEPASSEMENT_CSV                            = 'chargens-depassement-csv';
     const CHARGENS_EXPORT_CSV                                 = 'chargens-export-csv';
@@ -54,10 +55,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const CLOTURE_EDITION_SERVICES_AVEC_MEP                   = 'cloture-edition-services-avec-mep';
     const CLOTURE_REOUVERTURE                                 = 'cloture-reouverture';
     const CONTRAT_CONTRAT_GENERATION                          = 'contrat-contrat-generation';
-    const CONTRAT_ENVOI_EMAIL                                 = 'contrat-envoi-email';
     const CONTRAT_CREATION                                    = 'contrat-creation';
     const CONTRAT_DEPOT_RETOUR_SIGNE                          = 'contrat-depot-retour-signe';
     const CONTRAT_DEVALIDATION                                = 'contrat-devalidation';
+    const CONTRAT_ENVOI_EMAIL                                 = 'contrat-envoi-email';
     const CONTRAT_MODELES_EDITION                             = 'contrat-modeles-edition';
     const CONTRAT_MODELES_VISUALISATION                       = 'contrat-modeles-visualisation';
     const CONTRAT_PROJET_GENERATION                           = 'contrat-projet-generation';
@@ -70,15 +71,38 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const DISCIPLINE_VISUALISATION                            = 'discipline-visualisation';
     const DOMAINES_FONCTIONNELS_ADMINISTRATION_EDITION        = 'domaines-fonctionnels-administration-edition';
     const DOMAINES_FONCTIONNELS_ADMINISTRATION_VISUALISATION  = 'domaines-fonctionnels-administration-visualisation';
+    const DOSSIER_ADRESSE_EDITION                             = 'dossier-adresse-edition';
+    const DOSSIER_ADRESSE_VISUALISATION                       = 'dossier-adresse-visualisation';
+    const DOSSIER_BANQUE_EDITION                              = 'dossier-banque-edition';
+    const DOSSIER_BANQUE_VISUALISATION                        = 'dossier-banque-visualisation';
+    const DOSSIER_CHAMP_AUTRE_1_EDITION                       = 'dossier-champ-autre-1-edition';
+    const DOSSIER_CHAMP_AUTRE_1_VISUALISATION                 = 'dossier-champ-autre-1-visualisation';
+    const DOSSIER_CHAMP_AUTRE_2_EDITION                       = 'dossier-champ-autre-2-edition';
+    const DOSSIER_CHAMP_AUTRE_2_VISUALISATION                 = 'dossier-champ-autre-2-visualisation';
+    const DOSSIER_CHAMP_AUTRE_3_EDITION                       = 'dossier-champ-autre-3-edition';
+    const DOSSIER_CHAMP_AUTRE_3_VISUALISATION                 = 'dossier-champ-autre-3-visualisation';
+    const DOSSIER_CHAMP_AUTRE_4_EDITION                       = 'dossier-champ-autre-4-edition';
+    const DOSSIER_CHAMP_AUTRE_4_VISUALISATION                 = 'dossier-champ-autre-4-visualisation';
+    const DOSSIER_CHAMP_AUTRE_5_EDITION                       = 'dossier-champ-autre-5-edition';
+    const DOSSIER_CHAMP_AUTRE_5_VISUALISATION                 = 'dossier-champ-autre-5-visualisation';
+    const DOSSIER_CONTACT_EDITION                             = 'dossier-contact-edition';
+    const DOSSIER_CONTACT_VISUALISATION                       = 'dossier-contact-visualisation';
     const DOSSIER_DEVALIDATION                                = 'dossier-devalidation';
     const DOSSIER_DIFFERENCES                                 = 'dossier-differences';
     const DOSSIER_EDITION                                     = 'dossier-edition';
+    const DOSSIER_EMPLOYEUR_EDITION                           = 'dossier-employeur-edition';
+    const DOSSIER_EMPLOYEUR_VISUALISATION                     = 'dossier-employeur-visualisation';
+    const DOSSIER_IDENTITE_SUITE_EDITION                      = 'dossier-identite-suite-edition';
+    const DOSSIER_IDENTITE_SUITE_VISUALISATION                = 'dossier-identite-suite-visualisation';
+    const DOSSIER_INSEE_EDITION                               = 'dossier-insee-edition';
+    const DOSSIER_INSEE_VISUALISATION                         = 'dossier-insee-visualisation';
     const DOSSIER_PURGER_DIFFERENCES                          = 'dossier-purger-differences';
     const DOSSIER_SUPPRESSION                                 = 'dossier-suppression';
     const DOSSIER_VALIDATION                                  = 'dossier-validation';
     const DOSSIER_VISUALISATION                               = 'dossier-visualisation';
     const DROIT_AFFECTATION_EDITION                           = 'droit-affectation-edition';
     const DROIT_AFFECTATION_VISUALISATION                     = 'droit-affectation-visualisation';
+    const EMPLOYEUR_GESTION                                   = 'employeur-gestion';
     const ENSEIGNEMENT_DEVALIDATION                           = 'enseignement-devalidation';
     const ENSEIGNEMENT_EDITION                                = 'enseignement-edition';
     const ENSEIGNEMENT_EXPORT_CSV                             = 'enseignement-export-csv';
@@ -104,7 +128,9 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INDICATEUR_ABONNEMENTS_VISUALISATION                = 'indicateur-abonnements-visualisation';
     const INDICATEUR_ENVOI_MAIL_INTERVENANTS                  = 'indicateur-envoi-mail-intervenants';
     const INDICATEUR_VISUALISATION                            = 'indicateur-visualisation';
+    const INTERVENANT_AJOUT_STATUT                            = 'intervenant-ajout-statut';
     const INTERVENANT_CALCUL_HETD                             = 'intervenant-calcul-hetd';
+    const INTERVENANT_CREATION                                = 'intervenant-creation';
     const INTERVENANT_EDITION                                 = 'intervenant-edition';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
@@ -138,13 +164,13 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const ODF_ELEMENT_VISUALISATION                           = 'odf-element-visualisation';
     const ODF_ETAPE_EDITION                                   = 'odf-etape-edition';
     const ODF_ETAPE_VISUALISATION                             = 'odf-etape-visualisation';
-    const ODF_RECONDUCTION_OFFRE                              = 'odf-reconduction-offre';
-    const ODF_RECONDUCTION_CENTRE_COUT                        = 'odf-reconduction-centre-cout';
-    const ODF_RECONDUCTION_MODULATEUR                         = 'odf-reconduction-modulateur';
     const ODF_EXPORT_CSV                                      = 'odf-export-csv';
     const ODF_GRANDS_TYPES_DIPLOME_EDITION                    = 'odf-grands-types-diplome-edition';
     const ODF_GRANDS_TYPES_DIPLOME_VISUALISATION              = 'odf-grands-types-diplome-visualisation';
     const ODF_MODULATEURS_EDITION                             = 'odf-modulateurs-edition';
+    const ODF_RECONDUCTION_CENTRE_COUT                        = 'odf-reconduction-centre-cout';
+    const ODF_RECONDUCTION_MODULATEUR                         = 'odf-reconduction-modulateur';
+    const ODF_RECONDUCTION_OFFRE                              = 'odf-reconduction-offre';
     const ODF_TAUX_MIXITE_EDITION                             = 'odf-taux-mixite-edition';
     const ODF_TYPES_DIPLOME_EDITION                           = 'odf-types-diplome-edition';
     const ODF_TYPES_DIPLOME_VISUALISATION                     = 'odf-types-diplome-visualisation';
@@ -183,7 +209,5 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const UNICAEN_TBL_UPDATE_ACTUPROC                         = 'unicaen-tbl-update-actuproc';
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
-    const EMPLOYEUR_GESTION                                   = 'employeur-gestion';
-
 
 }

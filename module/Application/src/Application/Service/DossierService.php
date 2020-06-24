@@ -63,7 +63,7 @@ class DossierService extends AbstractEntityService
      */
     public function getByIntervenant(Intervenant $intervenant)
     {
-        if (isset($this->dcache[$intervenant->getId()])){
+        if (isset($this->dcache[$intervenant->getId()])) {
             return $this->dcache[$intervenant->getId()];
         }
 
@@ -72,7 +72,7 @@ class DossierService extends AbstractEntityService
         foreach ($this->getList($qb) as $dossier) {
             return $dossier;
         }
-        $dossier = $this->newEntity()->fromIntervenant($intervenant);
+        $dossier                             = $this->newEntity()->fromIntervenant($intervenant);
         $this->dcache[$intervenant->getId()] = $dossier;
 
         return $dossier;
@@ -109,11 +109,8 @@ class DossierService extends AbstractEntityService
      */
     public function intervenantVacataireAnneesPrecedentes(Intervenant $intervenant, $x = 1)
     {
-        $sourceCode = $intervenant->getSourceCode();
-
         for ($i = 1; $i <= $x; $i++) {
-            $annee = $this->getServiceContext()->getAnneeNmoins($i);
-            $iPrec = $this->getServiceIntervenant()->getBySourceCode($sourceCode, $annee);
+            $iPrec = $this->getServiceIntervenant()->getPrecedent($intervenant, -$i);
 
             if ($iPrec && $iPrec->getStatut()->estVacataire() && $iPrec->getStatut()->getPeutSaisirService()) {
                 return $iPrec;

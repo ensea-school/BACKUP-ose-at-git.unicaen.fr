@@ -1,26 +1,34 @@
 <?php
-    /* @var $recents []  */
+/* @var $recents [] */
 ?>
 <h1 class="page-header">Rechercher un intervenant</h1>
 
 <div style="padding:1em">
-<div class="intervenant-recherche">
-    <div class="critere">
-        Saisissez le nom suivi éventuellement du prénom (2 lettres au moins) :<br />
-        <input id="critere" class="form-control input" type="text" style="width:15em;display:inline" />
-        <span class="loading" id="intervenant-recherche-loading" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <div class="intervenant-recherche">
+        <div class="critere">
+            Saisissez le nom suivi éventuellement du prénom (2 lettres au moins) :<br/>
+            <input id="critere" class="form-control input" type="text" style="width:15em;display:inline"/>
+            <span class="loading" id="intervenant-recherche-loading" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+        <div class="recherche" data-url="<?= $this->url('intervenant/recherche') ?>">
+
+        </div>
     </div>
-    <div class="recherche" data-url="<?= $this->url('intervenant/recherche') ?>">
 
-    </div>
-</div>
+    <?php
 
-<?php
+    if (!empty($recents)) {
+        echo '<h3>Fiches récemment consultées :</h3>';
+        echo $this->partial('liste', ['intervenants' => $recents]);
+    }
 
-if (! empty($recents)){
-    echo '<h3>Fiches récemment consultées :</h3>';
-    echo $this->partial('liste', ['intervenants' => $recents]);
-}
 
-?>
+    $canAddIntervenant = $this->isAllowed(\Application\Provider\Privilege\Privileges::getResourceId(\Application\Provider\Privilege\Privileges::INTERVENANT_CREATION));
+
+    if ($canAddIntervenant) {
+        $url = $this->url('intervenant/creer');
+        echo $this->tag('a', ['class' => 'btn btn-primary', 'href' => $url])->html("Ajout d'un nouvel intervenant");
+    }
+
+    ?>
 </div>

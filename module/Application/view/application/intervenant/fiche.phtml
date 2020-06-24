@@ -4,17 +4,17 @@
 
 echo $this->intervenant($intervenant);
 
-$urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getRouteParam()]);
+$urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getId()]);
 
 ?>
     <script>
         $(function () {
             $('#feuille-de-route-refresh').popAjax({
                 change: function (event, popAjax) {
-                    if (0 == popAjax.popDiv.find('.alert-danger').length){
+                    if (0 == popAjax.popDiv.find('.alert-danger').length) {
                         window.location.reload();
 
-                    }else{
+                    } else {
                         console.log(popAjax.popDiv);
                         popAjax.popDiv.find('.popover-content').append(
                             '<button onclick="window.location.reload();" type="button" class="btn btn-primary">J\'ai lu, recharger la page</button>'

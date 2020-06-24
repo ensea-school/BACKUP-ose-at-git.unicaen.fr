@@ -262,8 +262,8 @@ class RechercheFormHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array  $data
-     * @param  object $object
+     * @param array  $data
+     * @param object $object
      *
      * @return object
      */
@@ -306,7 +306,7 @@ class RechercheFormHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Service\Recherche $object
+     * @param \Application\Entity\Service\Recherche $object
      *
      * @return array
      */
@@ -316,7 +316,7 @@ class RechercheFormHydrator implements HydratorInterface
             'type-intervenant'    => $object->getTypeIntervenant() ? $object->getTypeIntervenant()->getId() : null,
             'structure-aff'       => $object->getStructureAff() ? $object->getStructureAff()->getId() : null,
             'intervenant'         => [
-                'id'    => $object->getIntervenant() ? $object->getIntervenant()->getRouteParam() : null,
+                'id'    => $object->getIntervenant() ? $object->getIntervenant()->getId() : null,
                 'label' => $object->getIntervenant() ? (string)$object->getIntervenant() : null,
             ],
             'element-pedagogique' => [
@@ -340,7 +340,7 @@ class RechercheFormHydrator implements HydratorInterface
 
         switch ($classname) {
             case Intervenant::class:
-                return $this->getServiceIntervenant()->getBySourceCode($id);
+                return $this->getServiceIntervenant()->getByRouteParam($id);
 
             case NiveauEtape::class:
                 return $this->getServiceNiveauEtape()->get();

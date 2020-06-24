@@ -17,29 +17,38 @@ class RechercheController extends AbstractController
     use IntervenantProcessusAwareTrait;
 
 
+
     public function intervenantFindAction()
     {
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel([]);
         }
 
-        $res = $this->getProcessusIntervenant()->recherche()->rechercher($term);
+        $res = $this->getProcessusIntervenant()->recherche()->rechercherLocalement($term, 50, ':ID');
 
         $result = [];
         foreach ($res as $key => $r) {
-            $feminin         = $r['civilite'] != 'Monsieur';
+            $feminin = $r['civilite'] == 'Madame';
 
-            $civilite        = $feminin ? 'M<sup>me</sup>' : 'M.';
-            $nom             = strtoupper($r['nom']);
-            $prenom          = ucfirst($r['prenom']);
-            $naissance       = 'né'.($feminin ? 'e' : '').' le '.$r['date-naissance']->format(Constants::DATE_FORMAT);
-            $numeroPersonnel = 'N°'.$r['numero-personnel'];
-            $structure       = $r['structure'];
+            $details = [];
+            if ($r['civilite']) {
+                $details['civilite'] = $feminin ? 'M<sup>me</sup>' : 'M.';
+            }
+            $details['nom']       = strtoupper($r['nom']);
+            $details['prenom']    = ucfirst($r['prenom']);
+            $details['naissance'] = 'né' . ($feminin ? 'e' : '') . ' le ' . $r['date-naissance']->format(Constants::DATE_FORMAT);
+            $details['code']      = 'N°' . $r['numero-personnel'];
+            if ($r['structure']) {
+                $details['structure'] = $r['structure'];
+            }
+            if ($r['statut']) {
+                $details['statut'] = $r['statut'];
+            }
 
             $result[$key] = [
-                'id'       => $r['numero-personnel'],
-                'label'    => "$nom $prenom",
-                'extra'    => "<small>($civilite, $naissance, $numeroPersonnel, $structure)</small>",
+                'id'    => $key,
+                'label' => $details['nom'] . ' ' . $details['prenom'],
+                'extra' => "<small>(" . implode(', ', $details) . ")</small>",
             ];
         }
 

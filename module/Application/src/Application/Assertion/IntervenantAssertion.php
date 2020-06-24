@@ -21,6 +21,8 @@ class IntervenantAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
 
+
+
     /* ---- Routage général ---- */
     public function __invoke(array $page) // gestion des visibilités de menus
     {
@@ -37,7 +39,7 @@ class IntervenantAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, $privilege = null)
     {
-        $role        = $this->getRole();
+        $role = $this->getRole();
 
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
@@ -50,6 +52,8 @@ class IntervenantAssertion extends AbstractAssertion
                     case Privileges::CLOTURE_CLOTURE:
                     case Privileges::CLOTURE_REOUVERTURE:
                         return $this->assertCloture($entity);
+                    case Privileges::INTERVENANT_EDITION:
+                        return $this->assertEdition($entity);
                 }
             break;
             case $entity instanceof Validation:
@@ -83,20 +87,32 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertCloture( Intervenant $intervenant=null )
+    protected function assertCloture(Intervenant $intervenant = null)
     {
         return $this->asserts([
             $intervenant,
-            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant)
+            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
         ]);
     }
 
 
 
-    protected function assertReouverture( Intervenant $intervenant=null )
+    protected function assertEdition(Intervenant $intervenant = null)
+    {
+        $role = $this->getRole();
+        if ($role instanceof Role && $role->getStructure() && $intervenant->getStructure()) {
+            return $role->getStructure() == $intervenant->getStructure();
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertReouverture(Intervenant $intervenant = null)
     {
         $hasNoDMEP = false;
-        if ($intervenant){
+        if ($intervenant) {
             $dmepEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
             $hasNoDMEP = !$dmepEtape || $dmepEtape->getFranchie() == 0;
         }
@@ -104,7 +120,7 @@ class IntervenantAssertion extends AbstractAssertion
         return $this->asserts([
             $hasNoDMEP,
             $intervenant,
-            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant)
+            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
         ]);
     }
 

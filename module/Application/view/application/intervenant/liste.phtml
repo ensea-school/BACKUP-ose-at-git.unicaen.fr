@@ -1,28 +1,37 @@
 <?php
-    /* @var $intervenants array */
+/* @var $intervenants array */
 ?>
 <table class="table table-bordered table-condensed">
     <thead>
     <tr>
         <th style="width:1%">&nbsp;</th>
-        <th style="width:10%">Civilité</th>
-        <th style="width:18%">Nom</th>
-        <th style="width:18%">Prénom</th>
-        <th style="width:18%">Structure</th>
-        <th style="width:18%">Date de naissance</th>
+        <th style="width:5%">Civilité</th>
+        <th style="width:15%">Nom</th>
+        <th style="width:15%">Prénom</th>
+        <th style="width:15%">Structure</th>
+        <th style="width:15%">Statut</th>
+        <th style="width:15%">Date de naissance</th>
         <th style="width:10%">N° personnel</th>
     </tr>
     </thead>
     <tbody class="table-hover">
-    <?php foreach($intervenants as $sourceCode => $intervenant): ?>
+    <?php foreach ($intervenants
+
+    as $code => $intervenant): ?>
     <tr>
-        <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => $sourceCode]); ?>">
+        <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $code]); ?>">
                 <span class="glyphicon glyphicon-eye-open"></span> Fiche
             </a></td>
         <td><?= $intervenant['civilite'] ?></td>
         <td><?= $intervenant['nom'] ?></td>
         <td><?= $intervenant['prenom'] ?></td>
         <td><?= $intervenant['structure'] ?></td>
+        <td><?php if (is_array($intervenant['statut'])): ?>
+                <abbr title="<?= implode("\n", $intervenant['statut']) ?>">Multiples</abbr>
+            <?php else: ?>
+                <?= $intervenant['statut'] ?>
+            <?php endif; ?>
+        </td>
         <td><?= $intervenant['date-naissance']->format(\Application\Constants::DATE_FORMAT) ?></td>
         <td><?= $intervenant['numero-personnel'] ?></td>
     </tr>

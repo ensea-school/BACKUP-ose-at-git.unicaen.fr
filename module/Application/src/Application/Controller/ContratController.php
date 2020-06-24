@@ -111,8 +111,8 @@ class ContratController extends AbstractController
 
         //Récupération email intervenant (Perso puis unicaen)
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $emailPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmail();
+        $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmail();
 
         /* Récupération des services par contrat et par structure (pour les non contractualisés) */
         $services = [
@@ -169,7 +169,7 @@ class ContratController extends AbstractController
             }
         }
 
-        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getRouteParam()]);
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
     }
 
 
@@ -349,18 +349,17 @@ class ContratController extends AbstractController
 
         if (!empty($contrat->getIntervenant()->getEmail())) {
             //Utilisation ici du parametre email
-            $html  = $this->getServiceParametres()->get('contrat_modele_mail');
+            $html = $this->getServiceParametres()->get('contrat_modele_mail');
             //Ajout pour transformer les sauts de lignes en html <br/>
             $html = nl2br($html);
             //Personnalisation des variables
-            $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " ". $contrat->getIntervenant()->getNomUsuel();
+            $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
             $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
-            $html = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
-            $subject = $this->getServiceParametres()->get('contrat_modele_mail_objet');
-            $subject = str_replace(':intervenant', $vIntervenant, $subject);
-            $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $subject);
-            $mail = $this->mail()->send($message);
-
+            $html         = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
+            $subject      = $this->getServiceParametres()->get('contrat_modele_mail_objet');
+            $subject      = str_replace(':intervenant', $vIntervenant, $subject);
+            $message      = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $subject);
+            $mail         = $this->mail()->send($message);
         }
 
         return $this->getResponse();

@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant'             => [
+            'intervenant'                                => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/intervenant',
@@ -57,12 +57,33 @@ return [
                             ],
                         ],
                     ],
+                    'creer'                   => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/creer',
+                            'defaults' => [
+                                'action'        => 'saisir',
+                                'action-detail' => 'creer',
+                            ],
+                        ],
+                    ],
                     'saisir'                  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/saisir',
                             'defaults' => [
-                                'action' => 'saisir',
+                                'action'        => 'saisir',
+                                'action-detail' => 'saisir',
+                            ],
+                        ],
+                    ],
+                    'dupliquer'               => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/dupliquer',
+                            'defaults' => [
+                                'action'        => 'saisir',
+                                'action-detail' => 'dupliquer',
                             ],
                         ],
                     ],
@@ -72,6 +93,15 @@ return [
                             'route'    => '/:intervenant/supprimer',
                             'defaults' => [
                                 'action' => 'supprimer',
+                            ],
+                        ],
+                    ],
+                    'definir-par-defaut'      => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/definir-par-defaut',
+                            'defaults' => [
+                                'action' => 'definir-par-defaut',
                             ],
                         ],
                     ],
@@ -220,7 +250,7 @@ return [
                     ],
                 ],
             ],
-            'modification-service-du' => [
+            'modification-service-du'                    => [
                 'type'         => 'Literal',
                 'options'      => [
                     'route'    => '/modification-service-du',
@@ -240,7 +270,7 @@ return [
                     ],
                 ],
             ],
-            'validation-volume-horaire-type-intervenant'             => [
+            'validation-volume-horaire-type-intervenant' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/validation-vh-ti',
@@ -251,7 +281,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'delete'           => [
+                    'delete' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/delete/:regleStructureValidation',
@@ -263,7 +293,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisie'           => [
+                    'saisie' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie/[:regleStructureValidation]',
@@ -420,7 +450,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['saisir'],
+                    'action'     => ['saisir', 'definir-par-defaut'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
                     ],
@@ -476,7 +506,7 @@ return [
                     'action'     => ['validation-volume-horaire-type-intervenant',
                                      'validation-volume-horaire-type-intervenant-saisie',
                                      'validation-volume-horaire-type-intervenant-delete',
-                                    ],
+                    ],
                     'privileges' => [
                         Privileges::MODIF_SERVICE_DU_EDITION,
                     ],
@@ -500,6 +530,7 @@ return [
                         'privileges' => [
                             Privileges::CLOTURE_CLOTURE,
                             Privileges::CLOTURE_REOUVERTURE,
+                            Privileges::INTERVENANT_EDITION,
                         ],
                         'resources'  => ['Validation', 'Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,
@@ -516,14 +547,15 @@ return [
     ],
     'service_manager' => [
         'factories'  => [
-            Service\IntervenantService::class     => Service\Factory\IntervenantServiceFactory::class,
-            Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
-            Assertion\ModificationServiceDuAssertion::class  => \UnicaenAuth\Assertion\AssertionFactory::class,
-            Assertion\IntervenantAssertion::class            => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Service\IntervenantService::class               => Service\Factory\IntervenantServiceFactory::class,
+            Processus\IntervenantProcessus::class           => Processus\Factory\IntervenantProcessusFactory::class,
+            Assertion\ModificationServiceDuAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\IntervenantAssertion::class           => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
             Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
             Service\CiviliteService::class                   => Service\CiviliteService::class,
+            Service\GradeService::class                      => Service\GradeService::class,
             Service\StatutIntervenantService::class          => Service\StatutIntervenantService::class,
             Service\TypeIntervenantService::class            => Service\TypeIntervenantService::class,
         ],
@@ -536,8 +568,11 @@ return [
         ],
     ],
     'form_elements'   => [
+        'factories'  => [
+            Form\Intervenant\EditionForm::class => Form\Intervenant\Factory\EditionFormFactory::class,
+        ],
         'invokables' => [
-            Form\Intervenant\EditionForm::class                        => Form\Intervenant\EditionForm::class,
+
             Form\Intervenant\HeuresCompForm::class                     => Form\Intervenant\HeuresCompForm::class,
             Form\Intervenant\ModificationServiceDuForm::class          => Form\Intervenant\ModificationServiceDuForm::class,
             Form\Intervenant\ModificationServiceDuFieldset::class      => Form\Intervenant\ModificationServiceDuFieldset::class,

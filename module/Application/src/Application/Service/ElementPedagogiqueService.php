@@ -165,20 +165,20 @@ where rang = 1
 
     /**
      *
-     * @param string $sourceCode
+     * @param string $code
      * @param Annee  $annee
      *
      * @return ElementPedagogique
      */
-    public function getBySourceCode($sourceCode, Annee $annee = null)
+    public function getByCode($code, Annee $annee = null)
     {
-        if (null == $sourceCode) return null;
+        if (null == $code) return null;
 
         if (!$annee) {
             $annee = $this->getServiceContext()->getAnnee();
         }
 
-        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
+        return $this->getRepo()->findOneBy(['code' => $code, 'annee' => $annee->getId()]);
     }
 
 

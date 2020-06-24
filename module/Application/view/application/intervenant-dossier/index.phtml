@@ -93,7 +93,7 @@ $fieldsets = $form->getFieldsets();
     <div class="row">
         <?php
         echo $this->partial('application/intervenant-dossier/partial/formEmployeur', compact('form', 'intervenant', 'intervenantDossier'));
-        echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier'));
+        echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier', 'champsAutres'));
         ?>
     </div>
     <div class="row">

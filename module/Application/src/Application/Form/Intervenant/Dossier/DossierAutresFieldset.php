@@ -4,6 +4,7 @@ namespace Application\Form\Intervenant\Dossier;
 
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\DossierAutreServiceAwareTrait;
 
 /**
  * Description of DossierAutresFieldset
@@ -12,6 +13,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 class DossierAutresFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
+    use DossierAutreServiceAwareTrait;
 
     public function init()
     {
@@ -19,68 +21,44 @@ class DossierAutresFieldset extends AbstractFieldset
     }
 
 
+
     private function addElements()
     {
-        $this->add([
-            'name'       => 'autre1',
-            'options'    => [
-                'label'              => 'Autre N°1',
-            ],
-            'type'       => 'Text',
-        ]);
+        $champsAutres = $this->getServiceDossierAutre()->getList();
 
-        $this->add([
-            'name'       => 'autre2',
-            'options'    => [
-                'label'              => 'Autre N°2',
-            ],
-            'type'       => 'Text',
-        ]);
+        foreach ($champsAutres as $champ) {
+            $this->add([
+                'name'    => 'champ-autre-' . $champ->getId(),
+                'options' => [
+                    'label' => $champ->getLibelle(),
+                ],
+                'type'    => 'Text',//pour le moment on force le champs en type input
+            ]);
+        }
 
-        $this->add([
-            'name'       => 'autre3',
-            'options'    => [
-                'label'              => 'Autre N°3',
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'autre4',
-            'options'    => [
-                'label'              => 'Autre N°4',
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'autre5',
-            'options'    => [
-                'label'              => 'Autre N°5',
-            ],
-            'type'       => 'Text',
-        ]);
 
         return $this;
     }
+
+
 
     public function getInputFilterSpecification()
     {
         $spec = [
             'autre1' => [
-                'required'   => false,
+                'required' => false,
             ],
             'autre2' => [
-                'required'   => false,
+                'required' => false,
             ],
             'autre3' => [
-                'required'   => false,
+                'required' => false,
             ],
             'autre4' => [
-                'required'   => false,
+                'required' => false,
             ],
             'autre5' => [
-                'required'   => false,
+                'required' => false,
             ],
         ];
 

@@ -7,6 +7,7 @@ use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
+use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
@@ -18,6 +19,7 @@ class StatutIntervenantController extends AbstractController
     use StatutIntervenantSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
+    use DossierAutreServiceAwareTrait;
 
 
     public function indexAction()
@@ -41,6 +43,7 @@ class StatutIntervenantController extends AbstractController
 
             $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
             $form              = $this->getFormStatutIntervenantSaisie();
+            $champsAutres      = $this->getServiceDossierAutre()->getList();
             if (empty($statutIntervenant)) {
                 $title             = 'Création d\'un nouveau statut d\'intervenant';
                 $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
@@ -73,7 +76,7 @@ class StatutIntervenantController extends AbstractController
         }
 
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'champsAutres');
     }
 
 

@@ -76,20 +76,6 @@ echo $this->form()->openTag($form); ?>
 
                     <br/>
                 </div>
-                <div class="row temoins">
-                    <fieldset>
-                        <legend style="font-size: 14px;font-weight: 700;">Activation des champs additionnels du dossier
-                            intervenant :
-                        </legend>
-                        <?= $this->formControlGroup($form->get('autre_1')); ?>
-                        <?= $this->formControlGroup($form->get('autre_2')); ?>
-                        <?= $this->formControlGroup($form->get('autre_3')); ?>
-                        <?= $this->formControlGroup($form->get('autre_4')); ?>
-                        <?= $this->formControlGroup($form->get('autre_5')); ?>
-                    </fieldset>
-                    <br/>
-                </div>
-
                 <!--Uniquement si le statut existe déjà en base (avec un id)-->
                 <?php if (empty($form->get('id')->getValue())): ?>
                 <div class="row temoins hidden">
@@ -120,6 +106,84 @@ echo $this->form()->openTag($form); ?>
                         </fieldset>
 
                     </div>
+                    <div class="row temoins">
+                        <fieldset>
+                            <legend style="font-size: 14px;font-weight: 700;">Paramétrage des modules du dossier
+                                intervenant :
+                            </legend>
+                            <table class="table table-bordered">
+                                <thead>
+                                <th>Activer</th>
+                                <th>Module</th>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><?= $this->formElement($form->get('dossier-identite')); ?></td>
+                                    <td><?= $form->get('dossier-identite')->getLabel(); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><?= $this->formElement($form->get('dossier-adresse')); ?></td>
+                                    <td><?= $form->get('dossier-adresse')->getLabel(); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><?= $this->formElement($form->get('dossier-contact')); ?></td>
+                                    <td><?= $form->get('dossier-contact')->getLabel(); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><?= $this->formElement($form->get('dossier-insee')); ?></td>
+                                    <td><?= $form->get('dossier-insee')->getLabel(); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><?= $this->formElement($form->get('dossier-iban')); ?></td>
+                                    <td><?= $form->get('dossier-iban')->getLabel(); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><?= $this->formElement($form->get('dossier-employeur')); ?></td>
+                                    <td><?= $form->get('dossier-employeur')->getLabel(); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><?= $this->formElement($form->get('dossier-autre')); ?></td>
+                                    <td><?= $form->get('dossier-autre')->getLabel(); ?></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </fieldset>
+                        <br/>
+                    </div>
+                    <div class="row temoins">
+                        <fieldset>
+                            <legend style="font-size: 14px;font-weight: 700;">Activation des champs personnalisables du
+                                dossier
+                                intervenant :
+                            </legend>
+                            <table class="table table-bordered">
+                                <thead>
+                                <th>Activer</th>
+                                <th>Libellé</th>
+                                <th>Obligatoire</th>
+                                <th>Description</th>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($champsAutres as $champ): ?>
+                                    <tr>
+                                        <td><?= $this->formElement($form->get('champ-autre-' . $champ->getId())); ?></td>
+                                        <td><?= $champ->getLibelle(); ?></td>
+                                        <td><?= ($champ->isObligatoire()) ? 'OUI' : 'NON'; ?></td>
+                                        <td><?= $champ->getDescription(); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </fieldset>
+                        <br/>
+                    </div>
+
+
                     <div class="row">
                         <?= $this->formElement($form->get('security')); ?>
                         <?php if ($canEdit) echo $this->formSubmit($form->get('submit')); ?>

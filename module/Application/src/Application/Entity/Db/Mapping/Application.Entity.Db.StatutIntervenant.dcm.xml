@@ -39,12 +39,23 @@
         <field name="temAtv" type="boolean" column="TEM_ATV" nullable="false"/>
         <field name="temBiatss" type="boolean" column="TEM_BIATSS" nullable="false"/>
         <field name="depassementSDSHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
-        <field name="needAutre1" type="boolean" column="NEED_AUTRE_1" nullable="false"/>
-        <field name="needAutre2" type="boolean" column="NEED_AUTRE_2" nullable="false"/>
-        <field name="needAutre3" type="boolean" column="NEED_AUTRE_3" nullable="false"/>
-        <field name="needAutre4" type="boolean" column="NEED_AUTRE_4" nullable="false"/>
-        <field name="needAutre5" type="boolean" column="NEED_AUTRE_5" nullable="false"/>
-
+        <field name="dossierIdentite" type="boolean" column="DOSSIER_IDENTITE" nullable="false"/>
+        <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
+        <field name="dossierContact" type="boolean" column="DOSSIER_CONTACT" nullable="false"/>
+        <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>
+        <field name="dossierIban" type="boolean" column="DOSSIER_IBAN" nullable="false"/>
+        <field name="dossierEmployeur" type="boolean" column="DOSSIER_EMPLOYEUR" nullable="false"/>
+        <field name="dossierAutre" type="boolean" column="DOSSIER_AUTRE" nullable="false"/>
+        <many-to-many field="champsAutres" target-entity="Application\Entity\Db\DossierAutre" fetch="EXTRA_LAZY">
+            <join-table name="DOSSIER_CHAMP_AUTRE_PAR_STATUT">
+                <join-columns>
+                    <join-column name="STATUT_ID" referenced-column-name="ID"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="DOSSIER_CHAMP_AUTRE_ID" referenced-column-name="ID"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
         <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
             <join-columns>
                 <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>

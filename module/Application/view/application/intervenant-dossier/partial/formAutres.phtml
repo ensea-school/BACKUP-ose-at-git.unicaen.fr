@@ -27,16 +27,13 @@ $dossierInsee = $form->get('DossierAutres');
 </style>
 
 
-    <div class="col-md-6">
-        <h3>Autres</h3>
-        <?= $this->formControlGroup($dossierInsee->get('autre1')); ?>
-        <?= $this->formControlGroup($dossierInsee->get('autre2')); ?>
-        <?= $this->formControlGroup($dossierInsee->get('autre3')); ?>
-        <?= $this->formControlGroup($dossierInsee->get('autre4')); ?>
-        <?= $this->formControlGroup($dossierInsee->get('autre5')); ?>
-
-
-    </div>
+<div class="col-md-6">
+    <h3>Autres</h3>
+    <?php foreach ($champsAutres as $champ): ?>
+        <?= $this->formControlGroup($dossierInsee->get('champ-autre-' . $champ->getId())); ?>
+    <?php endforeach; ?>
+    
+</div>
 
 
 

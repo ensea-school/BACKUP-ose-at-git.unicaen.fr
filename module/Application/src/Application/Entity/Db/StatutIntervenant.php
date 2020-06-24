@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use phpDocumentor\Reflection\Types\Integer;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenAuth\Entity\Db\Privilege;
@@ -175,29 +176,44 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     protected $codesCorresp4;
 
     /**
-     * @var boolean
+     * @var \Doctrine\Common\Collections\Collection
      */
-    protected $needAutre1;
+    protected $champsAutres;
 
     /**
      * @var boolean
      */
-    protected $needAutre2;
+    protected $dossierIdentite;
 
     /**
      * @var boolean
      */
-    protected $needAutre3;
+    protected $dossierAdresse;
 
     /**
      * @var boolean
      */
-    protected $needAutre4;
+    protected $dossierContact;
 
     /**
      * @var boolean
      */
-    protected $needAutre5;
+    protected $dossierInsee;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierIban;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierEmployeur;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierAutre;
 
 
 
@@ -1113,6 +1129,174 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
+     * @return boolean
+     */
+    public function getDossierIdentite()
+    {
+        return $this->dossierIdentite;
+    }
+
+
+
+    /**
+     * @param integer $dossierIdentite
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierIdentite(int $dossierIdentite): StatutIntervenant
+    {
+        $this->dossierIdentite = $dossierIdentite;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierAdresse()
+    {
+        return $this->dossierAdresse;
+    }
+
+
+
+    /**
+     * @param integer $dossierAdresse
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierAdresse(int $dossierAdresse): StatutIntervenant
+    {
+        $this->dossierAdresse = $dossierAdresse;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierContact()
+    {
+        return $this->dossierContact;
+    }
+
+
+
+    /**
+     * @param integer $dossierContact
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierContact(int $dossierContact): StatutIntervenant
+    {
+        $this->dossierContact = $dossierContact;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierInsee()
+    {
+        return $this->dossierInsee;
+    }
+
+
+
+    /**
+     * @param integer $dossierInsee
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierInsee(int $dossierInsee): StatutIntervenant
+    {
+        $this->dossierInsee = $dossierInsee;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierIban()
+    {
+        return $this->dossierIban;
+    }
+
+
+
+    /**
+     * @param integer $dossierIban
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierIban(int $dossierIban): StatutIntervenant
+    {
+        $this->dossierIban = $dossierIban;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierEmployeur()
+    {
+        return $this->dossierEmployeur;
+    }
+
+
+
+    /**
+     * @param integer $dossierEmployeur
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierEmployeur(int $dossierEmployeur): StatutIntervenant
+    {
+        $this->dossierEmployeur = $dossierEmployeur;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierAutre()
+    {
+        return $this->dossierAutre;
+    }
+
+
+
+    /**
+     * @param integer $dossierAutre
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierAutre(int $dossierAutre): StatutIntervenant
+    {
+        $this->dossierAutre = $dossierAutre;
+
+        return $this;
+    }
+
+
+
+    /**
      * Indique si ce statut correspond à un intervenant permanent.
      *
      * @return bool
@@ -1137,14 +1321,17 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
-     * @param boolean $needAutre1
+     * Add champ autre
      *
-     * @return $this StatutIntervenant
+     * @param \Application\Entity\Db\DossierAutre $champAutre
+     *
+     * @return StatutIntervenant
      */
-
-    public function setNeedAutre1($needAutre1)
+    public function addChampAutre(DossierAutre $champAutre)
     {
-        $this->needAutre1 = $needAutre1;
+        if (!$this->champsAutres->contains($champAutre)) {
+            $this->champsAutres[] = $champAutre;
+        }
 
         return $this;
     }
@@ -1152,121 +1339,27 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
+     * Remove champ autre
      *
-     * @return boolean
+     * @param \Application\Entity\Db\DossierAutre $champAutre
      */
-
-    public function isNeededAutre1()
+    public function removeChampAutre(DossierAutre $champAutre)
     {
-        return $this->needAutre1;
+        if ($this->champsAutres->contains($champAutre)) {
+            $this->champsAutres->removeElement($champAutre);
+        }
     }
 
 
 
     /**
-     * @param boolean $needAutre2
+     * Get champs autres
      *
-     * @return $this StatutIntervenant
+     * @return \Doctrine\Common\Collections\Collection
      */
-
-    public function setNeedAutre2($needAutre2)
+    public function getChampsAutres()
     {
-        $this->needAutre2 = $needAutre2;
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return boolean
-     */
-
-    public function isNeededAutre2()
-    {
-        return $this->needAutre2;
-    }
-
-
-
-    /**
-     * @param boolean $needAutre3
-     *
-     * @return $this StatutIntervenant
-     */
-
-    public function setNeedAutre3($needAutre3)
-    {
-        $this->needAutre3 = $needAutre3;
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return boolean
-     */
-
-    public function isNeededAutre3()
-    {
-        return $this->needAutre3;
-    }
-
-
-
-    /**
-     * @param boolean $needAutre4
-     *
-     * @return $this StatutIntervenant
-     */
-
-    public function setNeedAutre4($needAutre4)
-    {
-        $this->needAutre4 = $needAutre4;
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return boolean
-     */
-
-    public function isNeededAutre4()
-    {
-        return $this->needAutre4;
-    }
-
-
-
-    /**
-     * @param boolean $needAutre5
-     *
-     * @return $this StatutIntervenant
-     */
-
-    public function setNeedAutre5($needAutre5)
-    {
-        $this->needAutre5 = $needAutre5;
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return boolean
-     */
-
-    public function isNeededAutre5()
-    {
-        return $this->needAutre5;
+        return $this->champsAutres;
     }
 
 }

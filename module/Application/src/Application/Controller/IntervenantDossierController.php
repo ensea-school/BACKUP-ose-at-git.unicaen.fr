@@ -78,7 +78,8 @@ class IntervenantDossierController extends AbstractController
         $privileges['supprimer'] = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));
 
         /* Initialisation du formulaire */
-        $form = $this->getIntervenantDossierForm($intervenant);
+        $form         = $this->getIntervenantDossierForm($intervenant);
+        $champsAutres = $this->getServiceDossierAutre()->getList();
 
 
         /* Traitement du formulaire */
@@ -109,7 +110,7 @@ class IntervenantDossierController extends AbstractController
             );
         }
 
-        return compact('form', 'role', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation', 'privileges');
+        return compact('form', 'role', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation', 'privileges', 'champsAutres');
     }
 
 

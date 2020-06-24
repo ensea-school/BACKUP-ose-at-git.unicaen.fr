@@ -1,4 +1,4 @@
-# OSE 14.6 (alpha)
+# OSE 14.6
 
 ## Nouveautés
 
@@ -14,7 +14,7 @@
 * Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant (Ticket #30189)
 * Correction sur les agréments restreints qui n'étaient plus demandés par composante (Tickets #30278 et #29825)
 * Suppression des caractéres spéciaux dans les noms des fichiers pièces jointes et contrats (Ticket #29565)
-
+* Possibilité de réduire le nombre d'heures se service si on a dépassé un plafond bloquant.
 
 # OSE 14.5
 

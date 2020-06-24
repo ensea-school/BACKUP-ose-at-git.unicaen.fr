@@ -86,6 +86,7 @@ class VolumeHoraireController extends AbstractController
         }
 
         $volumeHoraireListe = new VolumeHoraireListe($service);
+        $hDeb               = $volumeHoraireListe->getHeures();
         $vhlph              = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
         $vhlph->hydrate($this->params()->fromQuery() + $this->params()->fromPost(), $volumeHoraireListe);
@@ -97,17 +98,20 @@ class VolumeHoraireController extends AbstractController
         $form->setViewMNP($canViewMNP);
         $form->setEditMNP($canEditMNP);
         $form->build();
-        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) {
+        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb) {
             try {
                 $service = $vhl->getService();
                 $this->getProcessusPlafond()->beginTransaction();
                 $this->getServiceService()->save($service);
-                $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire());
+                $hFin = $vhl->getHeures();
+                $this->updateTableauxBord($service->getIntervenant());
+                if (!$this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire(), $hFin < $hDeb)) {
+                    $this->updateTableauxBord($service->getIntervenant());
+                }
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-            $this->updateTableauxBord($service->getIntervenant());
         });
 
         return compact('form');
@@ -136,7 +140,7 @@ class VolumeHoraireController extends AbstractController
             $this->getProcessusPlafond()->beginTransaction();
             $this->getServiceService()->save($service);
             $this->updateTableauxBord($service->getIntervenant());
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $volumeHoraireListe->getTypeVolumeHoraire());
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $volumeHoraireListe->getTypeVolumeHoraire(), true);
             $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));

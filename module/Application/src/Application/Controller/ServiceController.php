@@ -443,7 +443,7 @@ class ServiceController extends AbstractController
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, true);
         }
 
         return new MessengerViewModel;
@@ -492,7 +492,7 @@ class ServiceController extends AbstractController
 
         $form->get('service')->setIntervenant($intervenant);
         $form->get('service')->removeUnusedElements();
-
+        $hDeb    = $entity->getVolumeHoraireListe()->getHeures();
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -508,8 +508,11 @@ class ServiceController extends AbstractController
                     } catch (\Exception $e) {
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
                     }
-                    $this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire);
+                    $hFin = $entity->getVolumeHoraireListe()->getHeures();
                     $this->updateTableauxBord($entity->getIntervenant());
+                    if (!$this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                        $this->updateTableauxBord($entity->getIntervenant());
+                    }
                 }
             } else {
                 $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');

@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'INTERVENANT_PAR_DEFAUT_ID_SEQ',
     'columns'     => [
         'ANNEE_ID'         => [
             'name'        => 'ANNEE_ID',

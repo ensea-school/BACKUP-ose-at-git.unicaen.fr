@@ -16,20 +16,23 @@ La migration ne sera possible qu'à partir de la version 14.
 Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
 
 
-# OSE 14.6 (en développement)
+# OSE 14.6
 
 ## Nouveautés
 
 * Lors de l'envoi d'email aux intervenants via les indicateurs, possiblité d'en demander une copie par email pour avoir un traçabilité. Le mail en copie contiendra en plus la liste des personnes / emails qui ont reçu celui-ci
 * L'expéditeur de l'email du contrat est maintenant celui qui a réalisé l'action d'envoi (en lieu et place de nepasrepondre@unicaen.fr) 
 * L'objet de l'email du contrat est maintenant personnalisable dans Administration > Paramètres généraux
-* Ajout du paramétre :annee pour la personnalisation du corps de l'email du contrat
+* Ajout du paramètre :annee pour la personnalisation du corps de l'email du contrat.
 * Lors de l'envoi du mail du contrat,  les sauts à ligne manuels du modèle de mail sont remplacés par des <br/> html pour respecter la mise en page.
 
 ## Corrections de bugs
 
 * Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
-* Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant
+* Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant (Ticket #30189)
+* Correction sur les agréments restreints qui n'étaient plus demandés par composante (Tickets #30278 et #29825)
+* Suppression des caractéres spéciaux dans les noms des fichiers pièces jointes et contrats (Ticket #29565)
+* Possibilité de réduire le nombre d'heures se service si on a dépassé un plafond bloquant.
 
 
 # OSE 14.5

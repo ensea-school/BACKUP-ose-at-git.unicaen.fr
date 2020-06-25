@@ -51,10 +51,6 @@ class StatutIntervenantController extends AbstractController
             }
 
             $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-            if ($statutIntervenant->getSource()->getImportable()) {
-                $canEdit = false; // Si la source est synchronisable alors pas d'édition possible
-            }
-
             if ($canEdit) {
                 $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
                     try {
@@ -69,9 +65,7 @@ class StatutIntervenantController extends AbstractController
                 $form->bind($statutIntervenant);
                 $form->readOnly();
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             var_dump($e);
         }
 
@@ -87,8 +81,8 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenant    = $this->getEvent()->getParam('statutIntervenant');
         $newStatutIntervenant = $statutIntervenant->dupliquer();
         $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
-        $form                 = $this->getFormStatutIntervenantSaisie();
-        $title                = 'Duplication d\'un statut d\'intervenant';
+        $form  = $this->getFormStatutIntervenantSaisie();
+        $title = 'Duplication d\'un statut d\'intervenant';
 
         $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
             try {

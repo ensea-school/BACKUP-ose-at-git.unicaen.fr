@@ -4,6 +4,7 @@ namespace Application\Form\StatutIntervenant;
 
 use Application\Entity\Db\TypeAgrementStatut;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementStatutServiceAwareTrait;
 use Zend\Form\Element\Checkbox;
@@ -26,6 +27,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
     use TypeIntervenantServiceAwareTrait;
     use TypeAgrementServiceAwareTrait;
     use TypeAgrementStatutServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
 
@@ -132,34 +134,33 @@ class StatutIntervenantSaisieForm extends AbstractForm
         ]);
 
         //Gestion des agréments de façon dynamique par rapport au contenu de la table type_agrement
-        $qb = $this->getServiceTypeAgrement()->finderByHistorique();
+        $qb            = $this->getServiceTypeAgrement()->finderByHistorique();
         $typesAgrement = $this->getServiceTypeAgrement()->getList($qb);
 
-        foreach($typesAgrement as $type)
-        {
+        foreach ($typesAgrement as $type) {
             $this->add([
-                'name'    => $type->getCode(),
-                'options' => [
-                    'label'          => $type->getLibelle(),
+                'name'       => $type->getCode(),
+                'options'    => [
+                    'label'         => $type->getLibelle(),
                     'value_options' => [
                         0 => 'Non',
-                        1 => 'Oui'
-                    ]
+                        1 => 'Oui',
+                    ],
                 ],
                 'attributes' => [
                     'value' => 0,
                 ],
-                'type'    => 'Zend\Form\Element\Radio'
+                'type'       => 'Zend\Form\Element\Radio',
             ]);
 
             $this->add([
                 'name'       => $type->getCode() . '-DUREE_VIE',
                 'options'    => [
-                    'suffix' => 'an(s)'
+                    'suffix' => 'an(s)',
                 ],
                 'attributes' => [
                     'title' => "Nombre d'annnée de validité de l'agrément",
-                    'value' => '1'
+                    'value' => '1',
                 ],
                 'type'       => 'Text',
 
@@ -167,8 +168,17 @@ class StatutIntervenantSaisieForm extends AbstractForm
         }
 
 
-
-
+        for ($i = 1; $i < 5; $i++) {
+            if ($plib = $this->getServiceParametres()->get("statut_intervenant_codes_corresp_$i" . "_libelle")) {
+                $this->add([
+                    'name'    => "codes-corresp-$i",
+                    'options' => [
+                        'label' => $plib,
+                    ],
+                    'type'    => 'Text',
+                ]);
+            }
+        }
 
 
         $this->add([
@@ -434,41 +444,40 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
         $object->setChargesPatronales(FloatFromString::run($data['charges-patronales']) / 100);
+        for ($i = 1; $i < 5; $i++) {
+            if (array_key_exists('codes-corresp-' . $i, $data)) {
+                $function = 'setCodesCorresp' . $i;
+                $object->$function($data['codes-corresp-' . $i]);
+            }
+        }
         //Uniquement si le statut intervenant existe déjà en base.
-        if(!empty($data['id']))
-        {
+        if (!empty($data['id'])) {
             //Gestion de la durée de vie des agréments par statut d'intervenant
             //On récupére les types d'agrement
-            $qb = $this->getServiceTypeAgrement()->finderByHistorique();
+            $qb             = $this->getServiceTypeAgrement()->finderByHistorique();
             $typesAgrements = $this->getServiceTypeAgrement()->getList($qb);
             //Type agrement par statut d'intervenant
             $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($object);
             $this->getServiceTypeAgrementStatut()->finderByHistorique($qb);
-            $typesAgrementsStatuts = $this->getServiceTypeAgrementStatut()->getList($qb);
+            $typesAgrementsStatuts      = $this->getServiceTypeAgrementStatut()->getList($qb);
             $typesAgrementsStatusByCode = [];
-            foreach($typesAgrementsStatuts as $tas)
-            {
+            foreach ($typesAgrementsStatuts as $tas) {
                 $typesAgrementsStatusByCode[$tas->getType()->getCode()] = $tas;
             }
             //On boucle pour faire ensuite de l'insert, update ou delete
-            foreach($typesAgrements as $ta)
-            {
-                if(array_key_exists($ta->getCode(), $data))
-                {
-                    if(!$data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode))
-                    {
+            foreach ($typesAgrements as $ta) {
+                if (array_key_exists($ta->getCode(), $data)) {
+                    if (!$data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)) {
                         $tasToDelete = $typesAgrementsStatusByCode[$ta->getCode()];
                         $object->removeTypeAgrementStatut($tasToDelete);
                         $this->getServiceTypeAgrementStatut()->delete($tasToDelete);
-                    }
-                    elseif($data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
+                    } elseif ($data[$ta->getCode()] && array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)) {
                         $tasToUpdate = $typesAgrementsStatusByCode[$ta->getCode()];
-                        $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
+                        $dureeVie    = $data[$ta->getCode() . '-DUREE_VIE'];
                         $tasToUpdate->setDureeVie($dureeVie);
                         $this->getServiceTypeAgrementStatut()->save($tasToUpdate);
-                    }
-                    elseif($data[$ta->getCode()] && !array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)){
-                        $dureeVie = $data[$ta->getCode().'-DUREE_VIE'];
+                    } elseif ($data[$ta->getCode()] && !array_key_exists($ta->getCode(), $typesAgrementsStatusByCode)) {
+                        $dureeVie    = $data[$ta->getCode() . '-DUREE_VIE'];
                         $tasToCreate = new TypeAgrementStatut();
                         $tasToCreate->setDureeVie($dureeVie);
                         $tasToCreate->setObligatoire(1);
@@ -476,16 +485,16 @@ class StatutIntervenantHydrator implements HydratorInterface
                         $tasToCreate->setStatut($object);
                         $this->getServiceTypeAgrementStatut()->save($tasToCreate);
                         $object->addTypeAgrementStatut($tasToCreate);
-
                     }
                 }
             }
         }
 
 
-
         return $object;
     }
+
+
 
     /**
      * Extract values from an object
@@ -521,16 +530,17 @@ class StatutIntervenantHydrator implements HydratorInterface
             'maximum-HETD'                   => StringFromFloat::run($object->getMaximumHETD()),
             'charges-patronales'             => StringFromFloat::run($object->getChargesPatronales() * 100),
             'depassement-sdshc'              => $object->getDepassementSDSHC(),
-
         ];
+        for ($i = 1; $i < 5; $i++) {
+            $function                    = 'getCodesCorresp' . $i;
+            $data['codes-corresp-' . $i] = $object->$function();
+        }
 
         $typesAgrementsStatuts = $object->getTypeAgrementStatut();
-        foreach($typesAgrementsStatuts  as $tas)
-        {
-            if(!$tas->getHistoDestruction())
-            {
-                $data[$tas->getType()->getCode()] = 1;
-                $data[$tas->getType()->getCode().'-DUREE_VIE'] = $tas->getDureeVie();
+        foreach ($typesAgrementsStatuts as $tas) {
+            if (!$tas->getHistoDestruction()) {
+                $data[$tas->getType()->getCode()]                = 1;
+                $data[$tas->getType()->getCode() . '-DUREE_VIE'] = $tas->getDureeVie();
             }
         }
 

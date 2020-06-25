@@ -381,6 +381,7 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
       JOIN                      avi ON i.code = avi.intervenant_code
       									AND avi.type_agrement_id = tas.type_agrement_id
                                         AND i.annee_id < avi.annee_id + tas.duree_vie
+                                        AND i.annee_id >= avi.annee_id
 
     WHERE
       ta.code = ''CONSEIL_ACADEMIQUE'')

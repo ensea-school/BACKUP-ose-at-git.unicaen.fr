@@ -26,7 +26,7 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V
 ## Corrections de bugs
 
 * Lors de la suppression d'une formation dans l'offre de formation complémentaire, les chemin pédagogiques associés sont également supprimés.
-
+* Les lignes de service avec 0 heures ne s'afficheront désormais plus (sauf si on est en réalisé qu'on a du prévisionnel validé).
 
 # OSE 14.7
 

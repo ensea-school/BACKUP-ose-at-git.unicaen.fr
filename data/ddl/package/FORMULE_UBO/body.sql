@@ -918,7 +918,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
     feuille.delete;
 
     IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
-      ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire;
+      ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire + ose_formule.intervenant.heures_service_modifie;
     END IF;
 
     -- transmission des résultats aux volumes horaires et volumes horaires référentiel

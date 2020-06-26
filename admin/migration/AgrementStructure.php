@@ -147,7 +147,7 @@ class AgrementStructure extends AbstractMigration
                                 AGREMENT
                               SET 
                                 HISTO_DESTRUCTION = TO_DATE('2020 - 01 - 01', 'YYYY - MM - DD'),
-                                HISTO_DESTRUCTEUR_ID = HISTO_CREATEUR_ID 
+                                HISTO_DESTRUCTEUR_ID = " . $this->manager->getOseAdmin()->getOseAppliId() . " 
                               WHERE ID = $agrementId";
                         $bdd->exec($sqlDelete);
                     }

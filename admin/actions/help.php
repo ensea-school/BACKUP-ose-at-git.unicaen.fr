@@ -27,6 +27,8 @@ $actionsDev = [
     "update-ddl"            => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",
     "update-bdd-data"       => "Mise à jour des données de la base de données",
     "update-bdd-privileges" => "Mise à jour des privilèges de la base de données",
+    "test"                  => "Script de tests divers",
+    "test-migration"        => "Script de test de migration. Paramètres : [before|after nom_du_script_de_migration]",
 ];
 
 if ((getenv('APPLICATION_ENV') ?: 'dev') == 'dev') {

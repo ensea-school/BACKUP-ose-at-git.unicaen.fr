@@ -37,7 +37,7 @@ class AgrementStructure extends AbstractMigration
 
     protected function before()
     {
-        $this->manager->sauvegarderTable('AGREMENT', 'SAVE_AGREMENT');
+
     }
 
 
@@ -51,6 +51,10 @@ class AgrementStructure extends AbstractMigration
         $console->println("------------------------------------------------------------------");
         $console->println("Nouveau calcul du tableau de bord agrement");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'agrement\'); END;');
+
+        $tacrId = (int)$bdd->select("SELECT id FROM type_agrement WHERE code = 'CONSEIL_RESTREINT'")[0]['ID'];
+
+        $bdd->exec("alter trigger AGREMENT_CK disable");
 
         //On récupère les agrements de type conseil restreint sans structure
         $agrementsToRecreate = [];
@@ -73,7 +77,7 @@ class AgrementStructure extends AbstractMigration
         $agrements = $bdd->select($sql);
         //Nombre d'agréments concernés
         $nbAgrement = count($agrements);
-        $console->println("Il y a $nbAgrement a corrigé");
+        $console->println("Il y a $nbAgrement a corriger");
         $nbAgrementCorrige = 0;
         //On commence le traitement de chaque agrément qui pose problème
         foreach ($agrements as $agrement) {
@@ -93,7 +97,7 @@ class AgrementStructure extends AbstractMigration
                                     TBL_AGREMENT ta
                                  WHERE
                                  ta.intervenant_id = $intervenantId
-                                 AND ta.type_agrement_id = 1
+                                 AND ta.type_agrement_id = $tacrId
                                  AND ta.agrement_id IS NULL";
 
                 $agrements = $bdd->select($sqlAgrement);
@@ -117,7 +121,6 @@ class AgrementStructure extends AbstractMigration
                                         CONTRAT c 
                                     WHERE 
                                         c.intervenant_id = $intervenantId
-                                        AND c.type_contrat_id = 1
                                         AND c.histo_destruction IS NULL";
 
                     $contrats = $bdd->select($sqlContrats);
@@ -140,7 +143,7 @@ class AgrementStructure extends AbstractMigration
                 } else {
                     //Sinon je fais un soft delete de l'agrement
                     //on met une date précise pour retrouver facilement
-                    $console->println("Suppression de l'agrément id : $agrementId car aucune structure n'a pu être identifié", $console::COLOR_LIGHT_RED);
+                    $console->println("Suppression de l'agrément id : $agrementId car aucune structure n'a pu être identifiée", $console::COLOR_LIGHT_RED);
                     $agrementsToRecreate [] = $agrement;
                     $sqlDelete              = "UPDATE 
                                 AGREMENT
@@ -156,14 +159,16 @@ class AgrementStructure extends AbstractMigration
         }
 
         if (!empty($agrementsToRecreate)) {
-            $console->println("Seulement $nbAgrementCorrige sur $nbAgrement on été corrigé", $console::COLOR_LIGHT_RED);
-            $console->println("Liste des agréments restreints qu'il faut refaire manuellement : ", $console::COLOR_LIGHT_RED);
+            $console->println("Seulement $nbAgrementCorrige sur $nbAgrement on été corrigés", $console::COLOR_LIGHT_RED);
+            $console->println("Les intervenants suivants nécessitent une intervention manuelle de votre part : il faut saisir à nouveau leurs agréments du conseil restreint : ", $console::COLOR_LIGHT_RED);
             foreach ($agrementsToRecreate as $value) {
                 $console->println($value['PRENOM'] . " " . $value['NOM_USUEL'] . " (id : " . $value['INTERVENANT_ID'] . " / code : " . $value['CODE_INTERVENANT'] . ")", $console::COLOR_LIGHT_RED);
             }
         } else {
             $console->println("Les $nbAgrement agrements restreints sans structure on été corrigé.", $console::COLOR_LIGHT_GREEN);
         }
+
+        $bdd->exec("alter trigger AGREMENT_CK enable");
 
         //On recalcule les tableaux de bord agrement et workflow pour tout remettre d'équerre
         $console->println("------------------------------------------------------------------");
@@ -172,9 +177,6 @@ class AgrementStructure extends AbstractMigration
 
         $console->println("Nouveau calcul du tableau de bord workflow");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'workflow\'); END;');
-
-        //On supprimme la table de sauvegarde temporaire.
-        //$this->manager->supprimerSauvegarde('SAVE_AGREMENT');
 
         $console->println("Terminé");
     }

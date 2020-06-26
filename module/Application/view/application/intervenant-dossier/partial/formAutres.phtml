@@ -26,13 +26,13 @@ $dossierInsee = $form->get('DossierAutres');
     }
 </style>
 
-
+<!-- Fiedlset Autres -->
 <div class="col-md-6">
     <h3>Autres</h3>
     <?php foreach ($champsAutres as $champ): ?>
         <?= $this->formControlGroup($dossierInsee->get('champ-autre-' . $champ->getId())); ?>
     <?php endforeach; ?>
-    
+
 </div>
 
 

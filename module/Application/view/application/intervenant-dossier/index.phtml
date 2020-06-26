@@ -16,6 +16,19 @@ $nextEtape = '';
 $this->headTitle()->append("Nom intervenant XXX")->append("Données personnelles");
 $fieldsets = $form->getFieldsets();
 ?>
+
+
+<style>
+    .row.display-flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .row.display-flex > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
 <h1 class="page-header">Données personnelles
     <small><?= $intervenant; ?></small>
 </h1>
@@ -51,18 +64,22 @@ $fieldsets = $form->getFieldsets();
             ?>
         </div>
     </div>
+    <div class="row  display-flex">
+        <?php if ($fieldsetRules['fieldset-identite']): ?>
 
-    <h3>Identité</h3>
-    <div class="row">
-        <?php
-        if ($editIdentite) {
-            echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier'));
-        } else {
-            echo $this->partial('application/intervenant-dossier/partial/formIdentiteView', compact('form', 'intervenant', 'intervenantDossier'));
-        }
-        ?>
-    </div>
-    <div class="row">
+
+            <?php
+
+            if ($editIdentite) {
+                echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier'));
+            } else {
+                echo $this->partial('application/intervenant-dossier/partial/formIdentiteView', compact('form', 'intervenant', 'intervenantDossier'));
+            }
+            ?>
+
+        <?php endif; ?>
+
+
         <?php
         if ($editAdresse) {
             echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier'));
@@ -75,8 +92,8 @@ $fieldsets = $form->getFieldsets();
             echo $this->partial('application/intervenant-dossier/partial/formContactView', compact('form', 'intervenant', 'intervenantDossier'));
         }
         ?>
-    </div>
-    <div class="row">
+
+
         <?php
         if ($editInsee) {
             echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form', 'intervenant', 'intervenantDossier'));
@@ -89,13 +106,14 @@ $fieldsets = $form->getFieldsets();
             echo $this->partial('application/intervenant-dossier/partial/formBancaireView', compact('form', 'intervenant', 'intervenantDossier'));
         }
         ?>
-    </div>
-    <div class="row">
+
+
         <?php
         echo $this->partial('application/intervenant-dossier/partial/formEmployeur', compact('form', 'intervenant', 'intervenantDossier'));
         echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier', 'champsAutres'));
         ?>
     </div>
+
     <div class="row">
         <div class="col-md-12">
             <?php
@@ -134,6 +152,7 @@ $fieldsets = $form->getFieldsets();
             <?php endif ?>
         </div>
     </div>
+
 
     <?php
     echo $this->form()->closeTag();

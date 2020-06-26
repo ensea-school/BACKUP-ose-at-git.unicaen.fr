@@ -9,22 +9,26 @@ $dossierIdentite = $form->get('DossierIdentite');
 
 
 ?>
+<!-- Fiedlset Identite -->
+<div class="col-md-12">
+    <h3>Identite</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $this->formControlGroup($dossierIdentite->get('civilite')); ?>
+            <?= $this->formControlGroup($dossierIdentite->get('nomUsuel')); ?>
+            <?= $this->formControlGroup($dossierIdentite->get('nomPatronymique')); ?>
+            <?= $this->formControlGroup($dossierIdentite->get('prenom')); ?>
+        </div>
+        <div class="col-md-6">
+            <?php
 
-<div class="col-md-6">
-
-    <?= $this->formControlGroup($dossierIdentite->get('civilite')); ?>
-    <?= $this->formControlGroup($dossierIdentite->get('nomUsuel')); ?>
-    <?= $this->formControlGroup($dossierIdentite->get('nomPatronymique')); ?>
-    <?= $this->formControlGroup($dossierIdentite->get('prenom')); ?>
-</div>
-<div class="col-md-6">
-    <?php
-
-        echo $this->formControlGroup($dossierIdentite->get('dateNaissance'));
-        echo $this->formControlGroup($dossierIdentite->get('paysNaissance'));
-        echo $this->formControlGroup($dossierIdentite->get('departementNaissance'));
-        echo $this->formControlGroup($dossierIdentite->get('villeNaissance'));
-    ?>
+            echo $this->formControlGroup($dossierIdentite->get('dateNaissance'));
+            echo $this->formControlGroup($dossierIdentite->get('paysNaissance'));
+            echo $this->formControlGroup($dossierIdentite->get('departementNaissance'));
+            echo $this->formControlGroup($dossierIdentite->get('villeNaissance'));
+            ?>
+        </div>
+    </div>
 
 </div>
 

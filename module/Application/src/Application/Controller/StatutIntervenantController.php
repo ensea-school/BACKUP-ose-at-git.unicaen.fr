@@ -87,8 +87,9 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenant    = $this->getEvent()->getParam('statutIntervenant');
         $newStatutIntervenant = $statutIntervenant->dupliquer();
         $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
-        $form  = $this->getFormStatutIntervenantSaisie();
-        $title = 'Duplication d\'un statut d\'intervenant';
+        $form         = $this->getFormStatutIntervenantSaisie();
+        $title        = 'Duplication d\'un statut d\'intervenant';
+        $champsAutres = $this->getServiceDossierAutre()->getList();
 
         $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
             try {
@@ -101,7 +102,7 @@ class StatutIntervenantController extends AbstractController
         });
 
         $viewModel = new ViewModel();
-        $viewModel->setVariables(compact('form', 'title'));
+        $viewModel->setVariables(compact('form', 'title', 'champsAutres'));
         $viewModel->setTemplate('application/statut-intervenant/saisie');
 
         return $viewModel;

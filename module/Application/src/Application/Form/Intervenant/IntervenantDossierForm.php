@@ -75,11 +75,14 @@ class IntervenantDossierForm extends AbstractForm
     public function init()
     {
 
+        $statutIntervenant = $this->intervenant->getStatut();
 
+        $haveContact      = $statutIntervenant->getDossierContact();
         $serviceAuthorize = $this->getServiceContext()->getAuthorize();
         $role             = $this->getServiceContext()->getUtilisateur()->getRoles();
         $hydrator         = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
+
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
 

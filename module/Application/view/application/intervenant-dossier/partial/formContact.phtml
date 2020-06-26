@@ -26,38 +26,38 @@ $dossierContact = $form->get('DossierContact');
     }
 </style>
 
-
-    <div class="col-md-6">
-        <h3>Contact</h3>
-        <div class="form-group">
-            <?= $this->formLabel($dossierContact->get('emailEtablissement')); ?>
-            <div class="input-group">
-                <span class="input-group-addon transparent"><span class="glyphicon glyphicon-envelope"></span></span>
-                <?= $this->formElement($dossierContact->get('emailEtablissement')); ?>
-            </div>
-        </div>
-        <div class="form-group">
-            <?= $this->formLabel($dossierContact->get('emailPersonnel')); ?>
-            <div class="input-group">
-                <span class="input-group-addon transparent"><span class="glyphicon glyphicon-envelope"></span></span>
-                <?= $this->formElement($dossierContact->get('emailPersonnel')); ?>
-            </div>
-        </div>
-        <div class="form-group">
-            <?= $this->formLabel($dossierContact->get('telephoneProfessionnel')); ?>
-            <div class="input-group">
-                <span class="input-group-addon transparent"><span class="glyphicon glyphicon-phone"></span></span>
-                <?= $this->formElement($dossierContact->get('telephoneProfessionnel')); ?>
-            </div>
-        </div>
-        <div class="form-group">
-            <?= $this->formLabel($dossierContact->get('telephonePersonnel')); ?>
-            <div class="input-group">
-                <span class="input-group-addon transparent"><span class="glyphicon glyphicon-phone"></span></span>
-                <?= $this->formElement($dossierContact->get('telephonePersonnel')); ?>
-            </div>
+<!-- Fiedlset Contact -->
+<div class="col-md-6">
+    <h3>Contact</h3>
+    <div class="form-group">
+        <?= $this->formLabel($dossierContact->get('emailEtablissement')); ?>
+        <div class="input-group">
+            <span class="input-group-addon transparent"><span class="glyphicon glyphicon-envelope"></span></span>
+            <?= $this->formElement($dossierContact->get('emailEtablissement')); ?>
         </div>
     </div>
+    <div class="form-group">
+        <?= $this->formLabel($dossierContact->get('emailPersonnel')); ?>
+        <div class="input-group">
+            <span class="input-group-addon transparent"><span class="glyphicon glyphicon-envelope"></span></span>
+            <?= $this->formElement($dossierContact->get('emailPersonnel')); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <?= $this->formLabel($dossierContact->get('telephoneProfessionnel')); ?>
+        <div class="input-group">
+            <span class="input-group-addon transparent"><span class="glyphicon glyphicon-phone"></span></span>
+            <?= $this->formElement($dossierContact->get('telephoneProfessionnel')); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <?= $this->formLabel($dossierContact->get('telephonePersonnel')); ?>
+        <div class="input-group">
+            <span class="input-group-addon transparent"><span class="glyphicon glyphicon-phone"></span></span>
+            <?= $this->formElement($dossierContact->get('telephonePersonnel')); ?>
+        </div>
+    </div>
+</div>
 
 
 

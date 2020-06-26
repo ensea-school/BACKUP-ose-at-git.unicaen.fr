@@ -60,16 +60,24 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
         $object->setChargesPatronales(FloatFromString::run($data['charges-patronales']) / 100);
-        
-        $champsAutres = [];
-        /* Gestion des champs autres */
-        foreach ($data as $key => $value) {
-            if (strpos($key, 'champ-autre-') !== false) {
-                $id = str_replace('champ-autre-', '', $key);
-                if ($data[$key]) {
-                    $object->addChampAutre($this->getServiceDossierAutre()->get($id));
-                } else {
-                    $object->removeChampAutre($this->getServiceDossierAutre()->get($id));
+        $object->setDossierIdentite($data['dossier-identite']);
+        $object->setDossierAdresse($data['dossier-adresse']);
+        $object->setDossierContact($data['dossier-contact']);
+        $object->setDossierInsee($data['dossier-insee']);
+        $object->setDossierIban($data['dossier-iban']);
+        $object->setDossierEmployeur($data['dossier-employeur']);
+
+        if (!empty($data['id'])) {
+            $champsAutres = [];
+            /* Gestion des champs autres */
+            foreach ($data as $key => $value) {
+                if (strpos($key, 'champ-autre-') !== false) {
+                    $id = str_replace('champ-autre-', '', $key);
+                    if ($data[$key]) {
+                        $object->addChampAutre($this->getServiceDossierAutre()->get($id));
+                    } else {
+                        $object->removeChampAutre($this->getServiceDossierAutre()->get($id));
+                    }
                 }
             }
         }
@@ -161,17 +169,15 @@ class StatutIntervenantHydrator implements HydratorInterface
             'dossier-insee'                  => $object->getDossierInsee(),
             'dossier-iban'                   => $object->getDossierIban(),
             'dossier-employeur'              => $object->getDossierEmployeur(),
-            'dossier-autre'                  => $object->getDossierAutre(),
-
-
         ];
 
         /*Gestion des champs autres*/
         $champsAutres = $object->getChampsAutres();
-
-        foreach ($champsAutres as $champ) {
-            $key        = 'champ-autre-' . $champ->getId();
-            $data[$key] = 1;
+        if (!empty($champsAutres)) {
+            foreach ($champsAutres as $champ) {
+                $key        = 'champ-autre-' . $champ->getId();
+                $data[$key] = 1;
+            }
         }
 
         $typesAgrementsStatuts = $object->getTypeAgrementStatut();

@@ -75,8 +75,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
         switch (true) {
             case $entity instanceof Intervenant:
                 switch ($privilege) {
-                    case self::PRIV_VIEW_IBAN:
-                        return $this->assertViewIban($entity);
                     case self::PRIV_EDIT_IDENTITE:
                         return $this->assertEditIdentite($entity);
                     case self::PRIV_VIEW_IDENTITE:

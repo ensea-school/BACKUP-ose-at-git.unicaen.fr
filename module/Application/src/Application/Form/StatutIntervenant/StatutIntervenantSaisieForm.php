@@ -54,7 +54,6 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'dossier-insee'                  => "Information INSEE",
             'dossier-iban'                   => "Information bancaire (IBAN, BIC)",
             'dossier-employeur'              => "Information employeur",
-            'dossier-autre'                  => "Information personnalisée (champs autres)",
         ];
 
         foreach ($cases as $key => $label) {

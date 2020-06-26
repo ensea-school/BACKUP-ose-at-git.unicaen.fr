@@ -71,7 +71,16 @@ class IntervenantDossierController extends AbstractController
         /* Récupération du dossier de l'intervenant */
         $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
-        /* Priviliege */
+        /* Règles pour afficher ou non les fieldsets */
+        $fieldsetRules           = [
+            'fieldset-identite'  => $intervenant->getStatut()->getDossierIdentite(),
+            'fiedlset-adresse'   => $intervenant->getStatut()->getDossierAdresse(),
+            'fiedlset-contact'   => $intervenant->getStatut()->getDossierContact(),
+            'fiedlset-iban'      => $intervenant->getStatut()->getDossierIban(),
+            'fiedlset-insee'     => $intervenant->getStatut()->getDossierInsee(),
+            'fiedlset-employeur' => $intervenant->getStatut()->getDossierEmployeur(),
+
+        ];
         $privileges['edit']      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
         $privileges['valider']   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
         $privileges['devalider'] = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
@@ -110,7 +119,7 @@ class IntervenantDossierController extends AbstractController
             );
         }
 
-        return compact('form', 'role', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation', 'privileges', 'champsAutres');
+        return compact('form', 'role', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation', 'privileges', 'champsAutres', 'fieldsetRules');
     }
 
 

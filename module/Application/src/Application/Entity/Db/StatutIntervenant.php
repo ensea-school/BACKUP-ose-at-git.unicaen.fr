@@ -210,12 +210,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     protected $dossierEmployeur;
 
-    /**
-     * @var boolean
-     */
-    protected $dossierAutre;
-
-
+    
 
     /**
      *
@@ -1266,30 +1261,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     public function setDossierEmployeur(int $dossierEmployeur): StatutIntervenant
     {
         $this->dossierEmployeur = $dossierEmployeur;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getDossierAutre()
-    {
-        return $this->dossierAutre;
-    }
-
-
-
-    /**
-     * @param integer $dossierAutre
-     *
-     * @return StatutIntervenant
-     */
-    public function setDossierAutre(int $dossierAutre): StatutIntervenant
-    {
-        $this->dossierAutre = $dossierAutre;
 
         return $this;
     }

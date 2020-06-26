@@ -27,6 +27,7 @@ $dossierIdentite = $form->get('DossierIdentite');
     }
 </style>
 
+<!-- Fiedlset Identite -->
 
 <div class="col-md-6">
 
@@ -34,14 +35,11 @@ $dossierIdentite = $form->get('DossierIdentite');
         <?= $this->formLabel($dossierIdentite->get('civilite')); ?>
         <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
             <?php
-                if(!empty($intervenantDossier->getCivilite()))
-                {
-                    echo $intervenantDossier->getCivilite()->getLibelleCourt();
-
-                }
-                else{
-                    echo 'NON RENSEIGNE';
-                }
+            if (!empty($intervenantDossier->getCivilite())) {
+                echo $intervenantDossier->getCivilite()->getLibelleCourt();
+            } else {
+                echo 'NON RENSEIGNE';
+            }
             ?>
         </div>
     </div>
@@ -49,12 +47,9 @@ $dossierIdentite = $form->get('DossierIdentite');
         <?= $this->formLabel($dossierIdentite->get('nomUsuel')); ?>
         <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
             <?php
-            if(!empty($intervenantDossier->getNomUsuel()))
-            {
+            if (!empty($intervenantDossier->getNomUsuel())) {
                 echo $intervenantDossier->getNomUsuel();
-
-            }
-            else{
+            } else {
                 echo 'NON RENSEIGNE';
             }
             ?>
@@ -64,12 +59,9 @@ $dossierIdentite = $form->get('DossierIdentite');
         <?= $this->formLabel($dossierIdentite->get('nomPatronymique')); ?>
         <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
             <?php
-            if(!empty($intervenantDossier->getNomPatronymique()))
-            {
+            if (!empty($intervenantDossier->getNomPatronymique())) {
                 echo $intervenantDossier->getNomPatronymique();
-
-            }
-            else{
+            } else {
                 echo 'NON RENSEIGNE';
             }
             ?>
@@ -79,12 +71,9 @@ $dossierIdentite = $form->get('DossierIdentite');
         <?= $this->formLabel($dossierIdentite->get('prenom')); ?>
         <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
             <?php
-            if(!empty($intervenantDossier->getPrenom()))
-            {
+            if (!empty($intervenantDossier->getPrenom())) {
                 echo $intervenantDossier->getPrenom();
-
-            }
-            else{
+            } else {
                 echo 'NON RENSEIGNE';
             }
             ?>
@@ -94,71 +83,63 @@ $dossierIdentite = $form->get('DossierIdentite');
 </div>
 <div class="col-md-6">
 
-        <div class="form-group">
-                <?= $this->formLabel($dossierIdentite->get('dateNaissance')); ?>
-            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
-                <?php
-                    if(!empty($dossierIdentite->get('dateNaissance')->getValue())){
-                        echo ($viewIdentite)?$dossierIdentite->get('dateNaissance')->getValue():'**/**/****';
-                    }
-                    else{
-                        echo 'NON RENSEIGNE';
-                    }
-                ?>
-            </div>
+    <div class="form-group">
+        <?= $this->formLabel($dossierIdentite->get('dateNaissance')); ?>
+        <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+            <?php
+            if (!empty($dossierIdentite->get('dateNaissance')->getValue())) {
+                echo ($viewIdentite) ? $dossierIdentite->get('dateNaissance')->getValue() : '**/**/****';
+            } else {
+                echo 'NON RENSEIGNE';
+            }
+            ?>
         </div>
-        <div class="form-group">
-            <?= $this->formLabel($dossierIdentite->get('paysNaissance')); ?>
-            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
-                <?php
-                    if(!empty($intervenantDossier->getPaysNaissance()))
-                    {
-                        echo ($viewIdentite)?$intervenantDossier->getPaysNaissance()->getLibelle():'*******************';
-                    }
-                    else{
-                        echo 'NON RENSEIGNE';
-                    }
-
-
-                 ?>
-            </div>
-        </div>
-        <div class="form-group">
-            <?= $this->formLabel($dossierIdentite->get('departementNaissance')); ?>
-            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
-                <?php
-                if(!empty($intervenantDossier->getDepartementNaissance()))
-                {
-                    echo ($viewIdentite)?$intervenantDossier->getDepartementNaissance()->getLibelle():'*******************';
-                }
-                else{
-                    echo 'NON RENSEIGNE';
-                }
-
-
-                ?>
-            </div>
-        </div>
-        <div class="form-group">
-            <?= $this->formLabel($dossierIdentite->get('villeNaissance')); ?>
-            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
-                <?php
-                if(!empty($intervenantDossier->getCommuneNaissance()))
-                {
-                    echo ($viewIdentite)?$intervenantDossier->getCommuneNaissance():'*******************';
-                }
-                else{
-                    echo 'NON RENSEIGNE';
-                }
-
-
-                ?>
-            </div>
-        </div>
-
-
-
     </div>
+    <div class="form-group">
+        <?= $this->formLabel($dossierIdentite->get('paysNaissance')); ?>
+        <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+            <?php
+            if (!empty($intervenantDossier->getPaysNaissance())) {
+                echo ($viewIdentite) ? $intervenantDossier->getPaysNaissance()->getLibelle() : '*******************';
+            } else {
+                echo 'NON RENSEIGNE';
+            }
+
+
+            ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <?= $this->formLabel($dossierIdentite->get('departementNaissance')); ?>
+        <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+            <?php
+            if (!empty($intervenantDossier->getDepartementNaissance())) {
+                echo ($viewIdentite) ? $intervenantDossier->getDepartementNaissance()->getLibelle() : '*******************';
+            } else {
+                echo 'NON RENSEIGNE';
+            }
+
+
+            ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <?= $this->formLabel($dossierIdentite->get('villeNaissance')); ?>
+        <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+            <?php
+            if (!empty($intervenantDossier->getCommuneNaissance())) {
+                echo ($viewIdentite) ? $intervenantDossier->getCommuneNaissance() : '*******************';
+            } else {
+                echo 'NON RENSEIGNE';
+            }
+
+
+            ?>
+        </div>
+    </div>
+
+
+</div>
 
 
 

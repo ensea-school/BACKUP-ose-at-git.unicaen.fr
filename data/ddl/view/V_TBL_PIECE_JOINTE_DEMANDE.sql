@@ -43,7 +43,7 @@ WHERE
   i.histo_destruction IS NULL
 
   -- Seuil HETD ou PJ obligatoire meme avec des heures non payables
-  AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,0) OR (COALESCE(i_h.heures_non_payables,0) > 0 AND tpjs.obligatoire_hnp = 1 ))
+  AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1) OR (COALESCE(i_h.heures_non_payables,0) > 0 AND tpjs.obligatoire_hnp = 1 ))
 
 
   -- Le RIB n'est demandé QUE s'il est différent!!

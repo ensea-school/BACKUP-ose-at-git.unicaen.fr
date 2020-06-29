@@ -4,10 +4,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_EVENT" AS
     p unicaen_tbl.t_params;
   BEGIN
     p := UNICAEN_TBL.make_params('INTERVENANT_ID', ON_AFTER_FORMULE_CALC.intervenant_id);
-/*
-    UNICAEN_TBL.CALCULER( 'agrement', p );
-    UNICAEN_TBL.CALCULER( 'paiement', p );
-    UNICAEN_TBL.CALCULER( 'workflow', p );*/
   END;
 
 END OSE_EVENT;

@@ -34,7 +34,6 @@ class VolumeHoraireController extends AbstractController
     use SaisieCalendaireAwareTrait;
 
 
-
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -86,7 +85,6 @@ class VolumeHoraireController extends AbstractController
         }
 
         $volumeHoraireListe = new VolumeHoraireListe($service);
-        $hDeb               = $volumeHoraireListe->getHeures();
         $vhlph              = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
         $vhlph->hydrate($this->params()->fromQuery() + $this->params()->fromPost(), $volumeHoraireListe);
@@ -95,20 +93,23 @@ class VolumeHoraireController extends AbstractController
         $canViewMNP = $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
         $canEditMNP = $canViewMNP && $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
 
+        $hDeb = $volumeHoraireListe->getHeures();
+
         $form->setViewMNP($canViewMNP);
         $form->setEditMNP($canEditMNP);
         $form->build();
-        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb) {
+        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb, $volumeHoraireListe) {
             try {
                 $service = $vhl->getService();
                 $this->getProcessusPlafond()->beginTransaction();
                 $this->getServiceService()->save($service);
-                $hFin = $vhl->getHeures();
+                $hFin = $volumeHoraireListe->getHeures();
                 $this->updateTableauxBord($service->getIntervenant());
                 if (!$this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire(), $hFin < $hDeb)) {
                     $this->updateTableauxBord($service->getIntervenant());
+                } else {
+                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 }
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }

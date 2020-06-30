@@ -59,6 +59,13 @@ class IntervenantDossierController extends AbstractController
 
     public function indexAction()
     {
+
+        /**
+         * TODO :
+         * Remettre en place les bon required et les validator
+         * Sortir la gestion des champs autres de ce controller
+         *
+         */
         $this->initFilters();
 
         /* Initialisation */
@@ -69,26 +76,30 @@ class IntervenantDossierController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
         /* Récupération du dossier de l'intervenant */
+        $service                      = $this->getServiceDossier();
         $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
+        $intervenantDossierStatut     = $intervenantDossier->getStatut();
+        $intervenantDossierCompletude = $this->getServiceDossier()->isComplete($intervenant);
+
+        /* Initialisation du formulaire */
+        $form         = $this->getIntervenantDossierForm($intervenant);
+        $champsAutres = $intervenant->getStatut()->getChampsAutres();
         /* Règles pour afficher ou non les fieldsets */
         $fieldsetRules           = [
             'fieldset-identite'  => $intervenant->getStatut()->getDossierIdentite(),
-            'fiedlset-adresse'   => $intervenant->getStatut()->getDossierAdresse(),
-            'fiedlset-contact'   => $intervenant->getStatut()->getDossierContact(),
-            'fiedlset-iban'      => $intervenant->getStatut()->getDossierIban(),
-            'fiedlset-insee'     => $intervenant->getStatut()->getDossierInsee(),
-            'fiedlset-employeur' => $intervenant->getStatut()->getDossierEmployeur(),
+            'fieldset-adresse'   => $intervenant->getStatut()->getDossierAdresse(),
+            'fieldset-contact'   => $intervenant->getStatut()->getDossierContact(),
+            'fieldset-iban'      => $intervenant->getStatut()->getDossierIban(),
+            'fieldset-insee'     => $intervenant->getStatut()->getDossierInsee(),
+            'fieldset-employeur' => $intervenant->getStatut()->getDossierEmployeur(),
+            'fieldset-autres'    => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
 
         ];
         $privileges['edit']      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
         $privileges['valider']   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
         $privileges['devalider'] = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
         $privileges['supprimer'] = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));
-
-        /* Initialisation du formulaire */
-        $form         = $this->getIntervenantDossierForm($intervenant);
-        $champsAutres = $this->getServiceDossierAutre()->getList();
 
 
         /* Traitement du formulaire */
@@ -119,7 +130,18 @@ class IntervenantDossierController extends AbstractController
             );
         }
 
-        return compact('form', 'role', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation', 'privileges', 'champsAutres', 'fieldsetRules');
+        return compact(
+            ['form',
+             'role',
+             'intervenant',
+             'intervenantDossier',
+             'intervenantDossierValidation',
+             'intervenantDossierStatut',
+             'intervenantDossierCompletude',
+             'privileges',
+             'champsAutres',
+             'fieldsetRules']
+        );
     }
 
 
@@ -256,10 +278,9 @@ class IntervenantDossierController extends AbstractController
 
     public function dossierAutreSaisieAction()
     {
-        $dossierAutreList = $this->getServiceDossierAutre()->getList();
-        $dossierAutre     = $this->getEvent()->getParam('dossierAutre');
-        $form             = $this->getAutresForm();
-        $title            = 'Édition d\'un type de ressource';
+        $dossierAutre = $this->getEvent()->getParam('dossierAutre');
+        $form         = $this->getAutresForm();
+        $title        = 'Édition d\'un type de ressource';
 
         $form->bindRequestSave($dossierAutre, $this->getRequest(), function (DossierAutre $autre) {
             try {

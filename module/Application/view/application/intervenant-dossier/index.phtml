@@ -3,13 +3,14 @@
 
 use Application\Assertion\IntervenantDossierAssertion;
 
-$editIdentite = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
-$editAdresse  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
-$editContact  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_CONTACT);
-$editInsee    = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_INSEE);
-$editIban     = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IBAN);
-$canValider   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
-$canValider   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
+$editIdentite  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
+$editAdresse   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
+$editContact   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_CONTACT);
+$editInsee     = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_INSEE);
+$editIban      = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IBAN);
+$editEmployeur = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR);
+$canValider    = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
+$canValider    = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
 
 //$nextEtape    = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
 $nextEtape = '';
@@ -42,14 +43,14 @@ $fieldsets = $form->getFieldsets();
     /**
      * Message Importance des données perso.
      */
-    /*if (!$form->getObject()->getId()){
+    if (!$form->getObject()->getId()) {
         $msg = "Ces données sont indispensables pour éditer %s contrat et mettre en paiement %s heures d'enseignement.";
         if ($role->getIntervenant()) {
             $this->messenger()->addMessage(sprintf($msg, 'votre', 'vos'), 'warning');
         } else {
             $this->messenger()->addMessage(sprintf($msg, 'le', 'les'), 'warning');
         }
-    }*/
+    }
 
 
     echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
@@ -59,105 +60,121 @@ $fieldsets = $form->getFieldsets();
     <div class="row">
 
         <div class="col-md-12">
+            <p class="bg-info" style="padding:15px;">
+                Pour commencer à remplir vos données personnelles vous devez choisir obligatoirement un statut.
+            </p>
             <?php
             echo $this->formControlGroup($form->get('statut'));
             ?>
         </div>
     </div>
-    <div class="row  display-flex">
-        <?php if ($fieldsetRules['fieldset-identite']): ?>
-
+    <?php if (empty($intervenantDossierStatut)): ?>
+    <div class="row  display-flex hidden">
+        <?php else: ?>
+        <div class="row  display-flex">
+            <?php endif; ?>
 
             <?php
-
-            if ($editIdentite) {
-                echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier'));
-            } else {
-                echo $this->partial('application/intervenant-dossier/partial/formIdentiteView', compact('form', 'intervenant', 'intervenantDossier'));
+            /*Fiedlset identite*/
+            if ($fieldsetRules['fieldset-identite']) {
+                if ($editIdentite) {
+                    echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                } else {
+                    echo $this->partial('application/intervenant-dossier/partial/formIdentiteView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                }
             }
-            ?>
-
-        <?php endif; ?>
-
-
-        <?php
-        if ($editAdresse) {
-            echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier'));
-        } else {
-            echo $this->partial('application/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier'));
-        }
-        if ($editContact) {
-            echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form', 'intervenant', 'intervenantDossier'));
-        } else {
-            echo $this->partial('application/intervenant-dossier/partial/formContactView', compact('form', 'intervenant', 'intervenantDossier'));
-        }
-        ?>
-
-
-        <?php
-        if ($editInsee) {
-            echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form', 'intervenant', 'intervenantDossier'));
-        } else {
-            echo $this->partial('application/intervenant-dossier/partial/formInseeView', compact('form', 'intervenant', 'intervenantDossier'));
-        }
-        if ($editIban) {
-            echo $this->partial('application/intervenant-dossier/partial/formBancaire', compact('form', 'intervenant', 'intervenantDossier'));
-        } else {
-            echo $this->partial('application/intervenant-dossier/partial/formBancaireView', compact('form', 'intervenant', 'intervenantDossier'));
-        }
-        ?>
-
-
-        <?php
-        echo $this->partial('application/intervenant-dossier/partial/formEmployeur', compact('form', 'intervenant', 'intervenantDossier'));
-        echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier', 'champsAutres'));
-        ?>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <?php
-            echo $this->formHidden($this->form->get('security'));
-            if ($privileges['edit']) {
-                echo $this->formSubmit($form->get('submit'));
+            /*Fieldset Adresse*/
+            if ($fieldsetRules['fieldset-adresse']) {
+                if ($editAdresse) {
+                    echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                } else {
+                    echo $this->partial('application/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                }
+            }
+            /*Fieldset Contact*/
+            if ($fieldsetRules['fieldset-contact']) {
+                if ($editContact) {
+                    echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                } else {
+                    echo $this->partial('application/intervenant-dossier/partial/formContactView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                }
+            }
+            /*Fiedlset Insee*/
+            if ($fieldsetRules['fieldset-insee']) {
+                if ($editInsee) {
+                    echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                } else {
+                    echo $this->partial('application/intervenant-dossier/partial/formInseeView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                }
+            }
+            if ($fieldsetRules['fieldset-iban']) {
+                if ($editIban) {
+                    echo $this->partial('application/intervenant-dossier/partial/formBancaire', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                } else {
+                    echo $this->partial('application/intervenant-dossier/partial/formBancaireView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                }
+            }
+            /*Fiedlset Employeur*/
+            if ($fieldsetRules['fieldset-employeur']) {
+                if ($editEmployeur) {
+                    echo $this->partial('application/intervenant-dossier/partial/formEmployeur', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                } else {
+                    echo $this->partial('application/intervenant-dossier/partial/formEmployeurView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                }
+            }
+            /*Fieldset Autres*/
+            if ($fieldsetRules['fieldset-autres']) {
+                echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier', 'champsAutres', 'intervenantDossierCompletude'));
             }
 
             ?>
-            <?php if ($privileges['valider']): ?>
-                <a class="valider-dossier btn btn-success pop-ajax"
-                   href="<?= $this->url('intervenant/dossier/valider', [], [], true) ?>"
-                   title="Valider les données personnelles"
-                   data-content="Confirmez-vous cette validation ?"
-                   data-confirm="true"
-                   data-confirm-button="Je confirme"
-                   data-cancel-button="Non"
-                   data-submit-reload="true"
-                >
-                    <span class="glyphicon glyphicon-thumbs-up"></span> Je valide les données
-                </a>
-            <?php endif ?>
-            <!-- actions de dévalidation du dossier -->
-            <?php if ($privileges['devalider']): ?>
-                <a class="devalider-dossier btn btn-danger pop-ajax"
-                   href="<?= $this->url('intervenant/dossier/devalider', [], [], true) ?>"
-                   title="Dévalider les données personnelles"
-                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
-                   data-confirm="true"
-                   data-confirm-button="Oui"
-                   data-cancel-button="Non"
-                   data-submit-reload="true"
-                >
-                    <span class="glyphicon glyphicon-thumbs-down"></span> Je dévalide les données
-                </a>
-            <?php endif ?>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <?php
+                echo $this->formHidden($this->form->get('security'));
+                if ($privileges['edit']) {
+                    echo $this->formSubmit($form->get('submit'));
+                }
+
+                ?>
+                <?php if ($privileges['valider']): ?>
+                    <a class="valider-dossier btn btn-success pop-ajax"
+                       href="<?= $this->url('intervenant/dossier/valider', [], [], true) ?>"
+                       title="Valider les données personnelles"
+                       data-content="Confirmez-vous cette validation ?"
+                       data-confirm="true"
+                       data-confirm-button="Je confirme"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-thumbs-up"></span> Je valide les données
+                    </a>
+                <?php endif ?>
+                <!-- actions de dévalidation du dossier -->
+                <?php if ($privileges['devalider']): ?>
+                    <a class="devalider-dossier btn btn-danger pop-ajax"
+                       href="<?= $this->url('intervenant/dossier/devalider', [], [], true) ?>"
+                       title="Dévalider les données personnelles"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-thumbs-down"></span> Je dévalide les données
+                    </a>
+                <?php endif ?>
+            </div>
+        </div>
+
+
+        <?php
+        echo $this->form()->closeTag();
+        echo "<br/>";
+        echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+        ?>
+        <?php if ($intervenantDossierValidation): ?>
     </div>
-
-
-    <?php
-    echo $this->form()->closeTag();
-    echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
-    ?>
-    <?php if ($intervenantDossierValidation): ?>
-</div>
 <?php endif; ?>

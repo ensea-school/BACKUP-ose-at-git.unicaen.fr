@@ -5,6 +5,7 @@ namespace Application\Form\Intervenant\Dossier;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 
 /**
  * Description of DossierAutresFieldset
@@ -14,6 +15,7 @@ class DossierAutresFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
 
     public function init()
     {
@@ -24,9 +26,9 @@ class DossierAutresFieldset extends AbstractFieldset
 
     private function addElements()
     {
-        $champsAutres = $this->getServiceDossierAutre()->getList();
 
-        foreach ($champsAutres as $champ) {
+        $listChampsAutres = $this->getOption('listChampsAutres');
+        foreach ($listChampsAutres as $champ) {
             $this->add([
                 'name'    => 'champ-autre-' . $champ->getId(),
                 'options' => [

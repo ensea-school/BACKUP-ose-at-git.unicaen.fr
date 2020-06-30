@@ -8,6 +8,7 @@ use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\EmployeurServiceAwareTrait;
 use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
@@ -21,7 +22,7 @@ use Zend\Hydrator\HydratorInterface;
  */
 class IntervenantDossierHydrator implements HydratorInterface
 {
-    use IntervenantDossierServiceAwareTrait;
+    use DossierServiceAwareTrait;
     use ContextServiceAwareTrait;
     use CiviliteServiceAwareTrait;
     use PaysServiceAwareTrait;
@@ -100,15 +101,28 @@ class IntervenantDossierHydrator implements HydratorInterface
         ];
 
         /* Extract fiedlset dossier bancaire*/
-        $data['DossierEmployeur'] = [
-            'employeur' => [
-                'id'    => $object->getEmployeur()->getId(),
-                'label' => $object->getEmployeur()->getRaisonSociale(),
-            ],
-        ];
+        if (array_key_exists('DossierEmployeur', $data)) {
+            $data['DossierEmployeur'] = [
+                'employeur' => [
+                    'id'    => $object->getEmployeur()->getId(),
+                    'label' => $object->getEmployeur()->getRaisonSociale(),
+                ],
+            ];
+        }
 
         /* Extract statut intervenant */
-        $data['statut'] = $object->getStatut()->getId();
+
+        $data['statut'] = (!empty($object->getStatut())) ? $object->getStatut()->getId() : '';
+
+        /* Extract Champs autres */
+        /* Il faudra penser à gérer les champs de type select*/
+        $data['DossierAutres'] = [
+            'champ-autre-1' => $object->getAutre1(),
+            'champ-autre-2' => $object->getAutre2(),
+            'champ-autre-3' => $object->getAutre3(),
+            'champ-autre-4' => $object->getAutre4(),
+            'champ-autre-5' => $object->getAutre5(),
+        ];
 
 
         return $data;
@@ -206,13 +220,26 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setRibHorsSepa($data['DossierBancaire']['ribHorsSepa']);
         }
 
-        $employeur = $this->getServiceEmployeur()->get($data['DossierEmployeur']['employeur']['id']);
-        $object->setEmployeur($employeur);
+        if (isset($data['DossierEmployeur'])) {
+            $employeur = $this->getServiceEmployeur()->get($data['DossierEmployeur']['employeur']['id']);
+            $object->setEmployeur($employeur);
+        }
 
         //Hydratation statut
         if (!empty($data['statut'])) {
             $statut = $this->getServiceStatutIntervenant()->get($data['statut']);
             $object->setStatut($statut);
+        } else {
+            $object->setStatut(null);
+        }
+
+        //Hydratation des champs autres
+        if (isset($data['DossierAutres'])) {
+            $object->setAutre1((isset($data['DossierAutres']['champ-autre-1'])) ? $data['DossierAutres']['champ-autre-1'] : '');
+            $object->setAutre2((isset($data['DossierAutres']['champ-autre-2'])) ? $data['DossierAutres']['champ-autre-2'] : '');
+            $object->setAutre3((isset($data['DossierAutres']['champ-autre-3'])) ? $data['DossierAutres']['champ-autre-3'] : '');
+            $object->setAutre4((isset($data['DossierAutres']['champ-autre-4'])) ? $data['DossierAutres']['champ-autre-4'] : '');
+            $object->setAutre5((isset($data['DossierAutres']['champ-autre-5'])) ? $data['DossierAutres']['champ-autre-5'] : '');
         }
 
         return $object;

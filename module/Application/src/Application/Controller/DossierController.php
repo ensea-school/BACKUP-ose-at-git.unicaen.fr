@@ -12,7 +12,6 @@ use Application\Form\Intervenant\Traits\DossierAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -33,8 +32,6 @@ class DossierController extends AbstractController
     use ValidationServiceAwareTrait;
     use DossierAwareTrait;
     use UserContextServiceAwareTrait;
-    use IntervenantDossierServiceAwareTrait;
-
 
 
     /**
@@ -168,7 +165,10 @@ class DossierController extends AbstractController
         return compact('role', 'form', 'validation', 'canValider', 'canDevalider', 'canSupprimer', 'dossier');
     }
 
-    public function indexnewAction(){
+
+
+    public function indexnewAction()
+    {
         $this->initFilters();
 
         /* Initialisation */
@@ -182,15 +182,14 @@ class DossierController extends AbstractController
 
         $form = $this->getFormIntervenantDossier();
 
-       /* $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (IntervenantDossier $id) {
-            try {
-                $this->getServiceIntervenantDossier()->save($id);
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        });*/
-
+        /* $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (IntervenantDossier $id) {
+             try {
+                 $this->getServiceIntervenantDossier()->save($id);
+                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+             } catch (\Exception $e) {
+                 $this->flashMessenger()->addErrorMessage($this->translate($e));
+             }
+         });*/
 
 
         return compact('form', 'role', 'intervenant');

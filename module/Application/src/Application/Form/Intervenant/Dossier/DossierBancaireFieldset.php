@@ -5,6 +5,7 @@ namespace Application\Form\Intervenant\Dossier;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Validator\RIBValidator;
+use UnicaenApp\Validator\RIB;
 
 /**
  * Description of DossierBancaireFieldset
@@ -18,6 +19,8 @@ class DossierBancaireFieldset extends AbstractFieldset
     {
         $this->addElements();
     }
+
+
 
     private function addElements()
     {
@@ -54,16 +57,17 @@ class DossierBancaireFieldset extends AbstractFieldset
         ]);
 
 
-
         return $this;
     }
+
+
 
     public function getInputFilterSpecification()
     {
         $spec = [
             'ribBic' => [
                 'required'   => false,
-                'readonly' => true,
+                'readonly'   => true,
                 'filters'    => [
                     ['name' => 'StringTrim'],
                     ['name' => 'StringToUpper'],
@@ -85,6 +89,10 @@ class DossierBancaireFieldset extends AbstractFieldset
                 'validators' => [
                     new RIBValidator(),
                 ],
+            ],
+
+            'ribHorsSepa' => [
+                'required' => false,
             ],
         ];
 

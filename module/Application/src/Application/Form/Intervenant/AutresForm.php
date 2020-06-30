@@ -26,6 +26,7 @@ class AutresForm extends AbstractForm
         $hydrator = new DossierAutreHydrator();
         $this->setHydrator($hydrator);
 
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->add([
             'name'    => 'libelle',

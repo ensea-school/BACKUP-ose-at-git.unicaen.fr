@@ -91,15 +91,17 @@ class IntervenantDossierForm extends AbstractForm
 
         $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact');
         $this->dossierContactFiedlset->init();
+
         $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee');
         $this->dossierInseeFiedlset->init();
+
         $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');
         $this->dossierBancaireFieldset->init();
 
         $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
         $this->dossierEmployeurFieldset->init();
 
-        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres');
+        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $statutIntervenant->getChampsAutres()]);
         $this->dossierAutresFiedlset->init();
 
         $this->setAttribute('id', 'dossier');
@@ -156,12 +158,6 @@ class IntervenantDossierForm extends AbstractForm
 
     public function isValid()
     {
-
-        if (!$this->serviceAuthorize->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_BANQUE_VISUALISATION))) {
-            $inputFilterSpecification = $this->getInputFilter()->get('DossierBancaire')->remove('ribIban');
-            $inputFilterSpecification = $this->getInputFilter()->get('DossierBancaire')->remove('ribBic');
-            $inputFilterSpecification = $this->getInputFilter()->get('DossierBancaire')->remove('ribHorsSepa');
-        }
 
         return parent::isValid();
     }

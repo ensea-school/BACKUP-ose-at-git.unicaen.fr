@@ -4,7 +4,6 @@ namespace Application;
 
 use Application\Entity\Db\Service;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\IntervenantDossierService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
@@ -317,7 +316,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'intervenant'    => [
+                    'intervenant' => [
                         'pages' => [
                             'dossier'               => [
                                 'label'        => "Données personnelles",

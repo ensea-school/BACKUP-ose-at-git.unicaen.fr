@@ -20,6 +20,7 @@ class DossierInseeFieldset extends AbstractFieldset
     }
 
 
+
     private function addElements()
     {
         $this->add([
@@ -59,13 +60,14 @@ class DossierInseeFieldset extends AbstractFieldset
         return $this;
     }
 
+
+
     public function getInputFilterSpecification()
     {
-        //$numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
-        $numeroInseeProvisoire = true;
-
+        $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
+        
         $spec = [
-            'numeroInsee'          => [
+            'numeroInsee'              => [
                 'required'   => false,
                 'validators' => [
                     new NumeroINSEEValidator([
@@ -73,12 +75,13 @@ class DossierInseeFieldset extends AbstractFieldset
                     ]),
                 ],
             ],
-            'numeroInseeEstProvisoire'          => [
-                'required'   => false,
+            'numeroInseeEstProvisoire' => [
+                'required' => false,
             ],
         ];
 
         return $spec;
+
         return [];
     }
 }

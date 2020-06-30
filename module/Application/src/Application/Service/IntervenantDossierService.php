@@ -129,9 +129,54 @@ class IntervenantDossierService extends AbstractEntityService
 
     public function isComplete(Intervenant $intervenant)
     {
+
         $intervenantDossier = $this->getByIntervenant($intervenant);
 
-        return true;
+
+        $completude = [
+            'dossier'          => false,
+            'dossierIdentite'  => false,
+            'dossierAdresse'   => false,
+            'dossierContact'   => false,
+            'dossierInsee'     => false,
+            'dossierIban'      => false,
+            'dossierEmployeur' => false,
+            'dossierAutres'    => false,
+        ];
+        //Complétude de l'identite
+
+        $completudeDossierIdentie = ($intervenantDossier->getCivilite() &&
+            $intervenantDossier->getNomUsuel() &&
+            $intervenantDossier->getPrenom()) ? true : false;
+
+        //Complétude de l'adresse
+        $completudeAdressePart1 = (($intervenantDossier->getAdressePrecisions() ||
+            $intervenantDossier->getAdresseLieuDit() ||
+            ($intervenantDossier->getAdresseVoie() && $intervenantDossier->getAdresseNumero()))) ? true : false;
+
+        $completudeAdressePart2 = ($intervenantDossier->getAdresseCommune() &&
+            $intervenantDossier->getAdresseCodePostal()) ? true : false;
+
+        if ($completudeAdressePart1 && $completudeAdressePart2) {
+            $completudeDossierAdresse = true;
+        }
+
+        //Complétude de contact
+        $completudeDossierContact = (($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) &&
+            ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro)) ? true : false;
+
+        $completude = [
+            'dossier'          => false,
+            'dossierIdentite'  => $completudeDossierIdentie,
+            'dossierAdresse'   => $completudeDossierAdresse,
+            'dossierContact'   => $completudeDossierContact,
+            'dossierInsee'     => false,
+            'dossierIban'      => false,
+            'dossierEmployeur' => false,
+            'dossierAutres'    => false,
+        ];
+
+        return $completude;
     }
 
 

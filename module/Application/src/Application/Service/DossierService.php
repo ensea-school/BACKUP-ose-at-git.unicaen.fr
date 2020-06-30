@@ -152,9 +152,73 @@ class DossierService extends AbstractEntityService
 
     public function isComplete(Intervenant $intervenant)
     {
+
         $intervenantDossier = $this->getByIntervenant($intervenant);
 
-        return true;
+
+        $completude = [
+            'dossier'          => false,
+            'dossierIdentite'  => false,
+            'dossierAdresse'   => false,
+            'dossierContact'   => false,
+            'dossierInsee'     => false,
+            'dossierIban'      => false,
+            'dossierEmployeur' => false,
+            'dossierAutres'    => false,
+        ];
+        //Complétude de l'identite
+
+        $completudeDossierIdentie = ($intervenantDossier->getCivilite() &&
+            $intervenantDossier->getNomUsuel() &&
+            $intervenantDossier->getPrenom()) ? true : false;
+
+        //Complétude de l'adresse
+        $completudeAdressePart1 = (($intervenantDossier->getAdressePrecisions() ||
+            $intervenantDossier->getAdresseLieuDit() ||
+            ($intervenantDossier->getAdresseVoie() && $intervenantDossier->getAdresseNumero()))) ? true : false;
+
+        $completudeAdressePart2 = ($intervenantDossier->getAdresseCommune() &&
+            $intervenantDossier->getAdresseCodePostal() &&
+            $intervenantDossier->getAdressePays()) ? true : false;
+
+        if ($completudeAdressePart1 && $completudeAdressePart2) {
+            $completudeDossierAdresse = true;
+        }
+
+        //Complétude de contact
+        $completudeDossierContact = (($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) &&
+            ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro)) ? true : false;
+
+        //Complétude Insee
+        $completudeDossierInsee = ($intervenantDossier->getNumeroInsee()) ? true : false;
+
+        //Complétude Iban
+        $completudeDossierIban = true;
+        //Complètude Employeur
+        $completudeDossierEmployeur = false;
+        //Complétude Autres
+        $completudeDossierAutre = true;
+
+        $completudeDossier = ($completudeDossierIdentie &&
+            $completudeDossierAdresse &&
+            $completudeDossierContact &&
+            $completudeDossierInsee &&
+            $completudeDossierIban &&
+            $completudeDossierEmployeur &&
+            $completudeDossierAutre) ? true : false;
+
+        $completude = [
+            'dossier'          => $completudeDossier,
+            'dossierIdentite'  => $completudeDossierIdentie,
+            'dossierAdresse'   => $completudeDossierAdresse,
+            'dossierContact'   => $completudeDossierContact,
+            'dossierInsee'     => $completudeDossierInsee,
+            'dossierIban'      => $completudeDossierIban,
+            'dossierEmployeur' => $completudeDossierEmployeur,
+            'dossierAutres'    => $completudeDossierAutre,
+        ];
+
+        return $completude;
     }
 
 

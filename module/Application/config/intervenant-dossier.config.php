@@ -105,19 +105,6 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'delete' => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/delete[/:dossierAutre]',
-                            'constraints' => [
-                                'dossierAutre' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'dossier-autre-delete',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
                 ],
             ],
         ],
@@ -216,12 +203,22 @@ return [
                             IntervenantDossierAssertion::PRIV_VIEW_ADRESSE,
                             IntervenantDossierAssertion::PRIV_EDIT_CONTACT,
                             IntervenantDossierAssertion::PRIV_VIEW_CONTACT,
-                            IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR,
-                            IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR,
                             IntervenantDossierAssertion::PRIV_EDIT_INSEE,
                             IntervenantDossierAssertion::PRIV_VIEW_INSEE,
-                            IntervenantDossierAssertion::PRIV_EDIT_IBAN,
                             IntervenantDossierAssertion::PRIV_VIEW_IBAN,
+                            IntervenantDossierAssertion::PRIV_EDIT_IBAN,
+                            IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR,
+                            IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR,
+                            IntervenantDossierAssertion::PRIV_VIEW_AUTRE1,
+                            IntervenantDossierAssertion::PRIV_EDIT_AUTRE1,
+                            IntervenantDossierAssertion::PRIV_VIEW_AUTRE2,
+                            IntervenantDossierAssertion::PRIV_EDIT_AUTRE2,
+                            IntervenantDossierAssertion::PRIV_VIEW_AUTRE3,
+                            IntervenantDossierAssertion::PRIV_EDIT_AUTRE3,
+                            IntervenantDossierAssertion::PRIV_VIEW_AUTRE4,
+                            IntervenantDossierAssertion::PRIV_EDIT_AUTRE4,
+                            IntervenantDossierAssertion::PRIV_VIEW_AUTRE5,
+                            IntervenantDossierAssertion::PRIV_EDIT_AUTRE5,
                             IntervenantDossierAssertion::PRIV_CAN_VALIDE,
                             IntervenantDossierAssertion::PRIV_CAN_DEVALIDE,
 
@@ -242,7 +239,6 @@ return [
     'service_manager' => [
         'invokables' => [
             Service\DossierService::class    => Service\DossierService::class,
-            IntervenantDossierService::class => IntervenantDossierService::class,
             AdresseNumeroComplService::class => AdresseNumeroComplService::class,
             DossierAutreService::class       => DossierAutreService::class,
             DossierAutreTypeService::class   => DossierAutreTypeService::class,

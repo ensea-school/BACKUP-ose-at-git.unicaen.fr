@@ -41,65 +41,65 @@ class DossierContactFieldset extends AbstractFieldset
          * Mail établissement
          */
         $this->add([
-            'name'    => 'emailEtablissement',
-            'options' => [
+            'name'       => 'emailEtablissement',
+            'options'    => [
                 'label' => 'Mail établissement',
 
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
-                'class' => 'form-control'
+                'class' => 'form-control',
 
             ],
-            'type'    => Email::class,
+            'type'       => Email::class,
         ]);
 
         /**
          * Mail personnel
          */
         $this->add([
-            'name'    => 'emailPersonnel',
-            'options' => [
+            'name'       => 'emailPersonnel',
+            'options'    => [
                 'label' => 'Mail personnel',
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
-                'class' => 'form-control left-border-none'
+                'class' => 'form-control left-border-none',
 
             ],
-            'type'    => Email::class
+            'type'       => Email::class,
         ]);
 
         /**
          * Téléphone professionnel
          */
         $this->add([
-            'name'    => 'telephoneProfessionnel',
-            'options' => [
+            'name'       => 'telephoneProfessionnel',
+            'options'    => [
                 'label' => 'Téléphone professionnel',
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
-                'class' => 'form-control left-border-none'
+                'class' => 'form-control left-border-none',
 
             ],
-            'type'    => Tel::class,
+            'type'       => Tel::class,
         ]);
 
         /**
          * Téléphone personnel
          */
         $this->add([
-            'name'    => 'telephonePersonnel',
-            'options' => [
+            'name'       => 'telephonePersonnel',
+            'options'    => [
                 'label' => 'Téléphone personnel',
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
-                'class' => 'form-control left-border-none'
+                'class' => 'form-control left-border-none',
 
             ],
-            'type'    => Tel::class,
+            'type'       => Tel::class,
         ]);
 
         return $this;
@@ -116,17 +116,36 @@ class DossierContactFieldset extends AbstractFieldset
     public function getInputFilterSpecification()
     {
         $spec = [
-            'emailEtablissement'             => [
-                'required' => false,
+            'emailEtablissement'     => [
+                'required'   => false,
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    ['name' => 'EmailAddress'],
+                ],
             ],
-            'emailPersonnel'      => [
-                'required' => false,
+            'emailPersonnel'         => [
+                'required'   => false,
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    ['name' => 'EmailAddress'],
+                ],
             ],
-            'telephoneProfessionnel'               => [
+            'telephoneProfessionnel' => [
                 'required' => false,
+                'filters'  => [
+                    ['name' => 'StringTrim'],
+                ],
+
             ],
-            'telephonePersonnel'             => [
+            'telephonePersonnel'     => [
                 'required' => false,
+                'filters'  => [
+                    ['name' => 'StringTrim'],
+                ],
             ],
 
         ];

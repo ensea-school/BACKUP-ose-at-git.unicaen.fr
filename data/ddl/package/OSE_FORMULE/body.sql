@@ -833,13 +833,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
 
 
-  PROCEDURE CALCULER_TBL( PARAMS UNICAEN_TBL.T_PARAMS ) IS
+  PROCEDURE CALCULER_TBL(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL) IS
     intervenant_id NUMERIC;
     TYPE r_cursor IS REF CURSOR;
     diff_cur r_cursor;
   BEGIN
-    OPEN diff_cur FOR 'WITH interv AS (SELECT id intervenant_id, intervenant.* FROM intervenant)
-    SELECT intervenant_id FROM interv WHERE ' || unicaen_tbl.PARAMS_TO_CONDS( params );
+    OPEN diff_cur FOR 'SELECT id FROM intervenant WHERE '
+      || unicaen_tbl.MAKE_WHERE( CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, value );
     LOOP
       FETCH diff_cur INTO intervenant_id; EXIT WHEN diff_cur%NOTFOUND;
       BEGIN

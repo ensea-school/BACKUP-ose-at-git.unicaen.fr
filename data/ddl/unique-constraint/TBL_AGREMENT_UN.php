@@ -10,7 +10,6 @@ return [
         'TYPE_AGREMENT_ID',
         'INTERVENANT_ID',
         'STRUCTURE_ID',
-        'TO_DELETE',
         'ANNEE_AGREMENT',
     ],
 ];

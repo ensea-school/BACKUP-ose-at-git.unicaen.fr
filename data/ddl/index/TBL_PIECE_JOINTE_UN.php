@@ -3,12 +3,12 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_SERVICE_SAISIE_UN',
+    'name'    => 'TBL_PIECE_JOINTE_UN',
     'unique'  => TRUE,
-    'table'   => 'TBL_SERVICE_SAISIE',
+    'table'   => 'TBL_PIECE_JOINTE',
     'columns' => [
+        'TYPE_PIECE_JOINTE_ID',
         'INTERVENANT_ID',
-        'TO_DELETE',
     ],
 ];
 

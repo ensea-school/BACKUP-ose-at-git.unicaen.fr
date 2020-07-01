@@ -69,18 +69,6 @@ return [
             'position'    => 5,
             'commentaire' => 'Témoin (0 ou 1)',
         ],
-        'TO_DELETE'            => [
-            'name'        => 'TO_DELETE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 6,
-            'commentaire' => NULL,
-        ],
     ],
 ];
 

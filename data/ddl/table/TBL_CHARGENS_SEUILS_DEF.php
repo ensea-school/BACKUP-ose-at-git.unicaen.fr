@@ -81,18 +81,6 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'TO_DELETE'                => [
-            'name'        => 'TO_DELETE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 7,
-            'commentaire' => NULL,
-        ],
         'TYPE_INTERVENTION_ID'     => [
             'name'        => 'TYPE_INTERVENTION_ID',
             'type'        => 'int',

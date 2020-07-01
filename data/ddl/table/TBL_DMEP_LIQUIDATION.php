@@ -57,18 +57,6 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'TO_DELETE'         => [
-            'name'        => 'TO_DELETE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 5,
-            'commentaire' => NULL,
-        ],
         'TYPE_RESSOURCE_ID' => [
             'name'        => 'TYPE_RESSOURCE_ID',
             'type'        => 'int',

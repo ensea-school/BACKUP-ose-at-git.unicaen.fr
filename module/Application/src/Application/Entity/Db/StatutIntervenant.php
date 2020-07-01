@@ -210,7 +210,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     protected $dossierEmployeur;
 
-    
+
 
     /**
      *
@@ -1331,6 +1331,19 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     public function getChampsAutres()
     {
         return $this->champsAutres;
+    }
+
+
+
+    public function getStatutSelectable($criteria = [])
+    {
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\StatutIntervenant')->createQueryBuilder('s');
+        foreach ($criteria as $key => $value) {
+            $qb->orWhere($key, $value);
+        }
+        $qb->orderBy('ordre', 'ASC');
+
+        return $qb->getQuery()->getResult();
     }
 
 }

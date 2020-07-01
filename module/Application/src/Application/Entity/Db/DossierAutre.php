@@ -66,7 +66,7 @@ class DossierAutre
     /**
      * @return string
      */
-    public function getLibelle(): string
+    public function getLibelle(): ?string
     {
         return $this->libelle;
     }
@@ -78,7 +78,7 @@ class DossierAutre
      *
      * @return DossierAutre $this
      */
-    public function setLibelle(string $libelle): DossierAutre
+    public function setLibelle(?string $libelle): DossierAutre
     {
         $this->libelle = $libelle;
 
@@ -90,7 +90,7 @@ class DossierAutre
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -102,7 +102,7 @@ class DossierAutre
      *
      * @return DossierAutre $this
      */
-    public function setDescription(string $description): DossierAutre
+    public function setDescription(?string $description): DossierAutre
     {
         $this->description = $description;
 

@@ -127,8 +127,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INDICATEUR_ABONNEMENTS_VISUALISATION                = 'indicateur-abonnements-visualisation';
     const INDICATEUR_ENVOI_MAIL_INTERVENANTS                  = 'indicateur-envoi-mail-intervenants';
     const INDICATEUR_VISUALISATION                            = 'indicateur-visualisation';
+    const INTERVENANT_CREATION                                = 'intervenant-creation';
     const INTERVENANT_CALCUL_HETD                             = 'intervenant-calcul-hetd';
     const INTERVENANT_EDITION                                 = 'intervenant-edition';
+    const INTERVENANT_AJOUT_STATUT                            = 'intervenant-ajout-statut';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';

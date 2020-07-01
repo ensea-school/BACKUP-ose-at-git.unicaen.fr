@@ -59,10 +59,10 @@ class IntervenantDossierHydrator implements HydratorInterface
             'nomUsuel'             => $object->getNomUsuel(),
             'nomPatronymique'      => $object->getNomPatronymique(),
             'prenom'               => $object->getNomUsuel(),
-            'civilite'             => $object->getCivilite()->getId(),
+            'civilite'             => ($object->getCivilite()) ? $object->getCivilite()->getId() : '',
             'dateNaissance'        => $object->getDateNaissance(),
-            'paysNaissance'        => $object->getPaysNaissance()->getId(),
-            'departementNaissance' => $object->getDepartementNaissance()->getId(),
+            'paysNaissance'        => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
+            'departementNaissance' => ($object->getDepartementNaissance()) ? $object->getDepartementNaissance()->getId() : '',
             'villeNaissance'       => $object->getCommuneNaissance(),
         ];
 
@@ -71,12 +71,12 @@ class IntervenantDossierHydrator implements HydratorInterface
             'precisions'       => $object->getAdressePrecisions(),
             'lieuDit'          => $object->getAdresseLieuDit(),
             'numero'           => $object->getAdresseNumero(),
-            'numeroComplement' => $object->getAdresseNumeroCompl()->getId(),
-            'voirie'           => $object->getAdresseVoirie()->getId(),
+            'numeroComplement' => ($object->getAdresseNumeroCompl()) ? $object->getAdresseNumeroCompl()->getId() : '',
+            'voirie'           => ($object->getAdresseVoirie()) ? $object->getAdresseVoirie()->getId() : '',
             'voie'             => $object->getAdresseVoie(),
             'codePostal'       => $object->getAdresseCodePostal(),
             'ville'            => $object->getAdresseCommune(),
-            'pays'             => $object->getAdressePays()->getId(),
+            'pays'             => ($object->getAdressePays()) ? $object->getAdressePays()->getId() : '',
         ];
 
         /* Extract fieldset dossier contact */
@@ -101,7 +101,7 @@ class IntervenantDossierHydrator implements HydratorInterface
         ];
 
         /* Extract fiedlset dossier bancaire*/
-        if (array_key_exists('DossierEmployeur', $data)) {
+        if ($object->getEmployeur()) {
             $data['DossierEmployeur'] = [
                 'employeur' => [
                     'id'    => $object->getEmployeur()->getId(),

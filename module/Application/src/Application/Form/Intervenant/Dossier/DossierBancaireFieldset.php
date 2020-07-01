@@ -27,7 +27,8 @@ class DossierBancaireFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'ribBic',
             'options'    => [
-                'label' => 'BIC',
+                'label'         => 'BIC <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
                 'size'      => 11,
@@ -39,7 +40,8 @@ class DossierBancaireFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'ribIban',
             'options'    => [
-                'label' => 'IBAN',
+                'label'         => 'IBAN <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
                 'size'      => 34,

@@ -31,26 +31,28 @@ $dossierEmployeur = $form->get('DossierEmployeur');
 
 <!-- Fiedlset Employeur -->
 <div class="col-md-6">
-    <h3>
-        Employeur
+    <div class="panel-heading">
+        EMPLOYEUR
         <?php if (!$intervenantDossierCompletude['dossierEmployeur']): ?>
             <small><span class="label label-warning">A compléter</span></small>
         <?php else: ?>
             <small><span class="label label-success">Complet</span></small>
         <?php endif; ?>
-    </h3>
-    <div class="form-group">
-        <?= $this->formLabel($dossierEmployeur->get('employeur')); ?>
-        <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
-            <?php
-            if (!empty($intervenantDossier->getEmployeur())) {
-                $employeur = $intervenantDossier->getEmployeur()->getRaisonSociale();
-                $siren     = $intervenantDossier->getEmployeur()->getSiren();
-                echo ($viewEmployeur) ? $employeur . '(SIRET : ' . $siren . ')' : '***************';
-            } else {
-                echo 'NON RENSEIGNE';
-            }
-            ?>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <?= $this->formLabel($dossierEmployeur->get('employeur')); ?>
+            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <?php
+                if (!empty($intervenantDossier->getEmployeur())) {
+                    $employeur = $intervenantDossier->getEmployeur()->getRaisonSociale();
+                    $siren     = $intervenantDossier->getEmployeur()->getSiren();
+                    echo ($viewEmployeur) ? $employeur . '(SIRET : ' . $siren . ')' : '***************';
+                } else {
+                    echo 'NON RENSEIGNE';
+                }
+                ?>
+            </div>
         </div>
     </div>
 </div>

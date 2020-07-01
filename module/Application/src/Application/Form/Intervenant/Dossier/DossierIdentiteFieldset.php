@@ -53,7 +53,8 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'    => 'nomUsuel',
             'options' => [
-                'label' => 'Nom usuel',
+                'label'         => 'Nom usuel <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],
             ],
             'type'    => 'Text',
         ]);
@@ -64,7 +65,8 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'    => 'nomPatronymique',
             'options' => [
-                'label' => 'Nom de naissance',
+                'label'         => 'Nom de naissance <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],
             ],
             'type'    => 'Text',
         ]);
@@ -75,8 +77,8 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'    => 'prenom',
             'options' => [
-                'label' => 'Prénom',
-            ],
+                'label'         => 'Prénom <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],],
             'type'    => 'Text',
         ]);
 
@@ -86,7 +88,8 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'civilite',
             'options'    => [
-                'label' => 'Civilité',
+                'label'         => 'Civilité <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
             ],
@@ -102,7 +105,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'dateNaissance',
             'options'    => [
-                'label'         => 'Date de naissance',
+                'label'         => 'Date de naissance <span class="text-danger">*</span>',
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
@@ -119,8 +122,10 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'paysNaissance',
             'options'    => [
-                'label' => 'Pays de naissance',
-            ],
+                'label'         => 'Pays de naissance <span class="text-danger">*</span>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],],
             'attributes' => [
             ],
             'type'       => 'Select',
@@ -138,8 +143,10 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'departementNaissance',
             'options'    => [
-                'label' => 'Département de naissance',
-            ],
+                'label'         => 'Département de naissance <span class="text-danger">*</span>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],],
             'attributes' => [
             ],
             'type'       => 'Select',
@@ -154,15 +161,17 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'    => 'villeNaissance',
             'options' => [
-                'label' => 'Ville de naissance',
-            ],
+                'label'         => 'Ville de naissance <span class="text-danger">*</span>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],],
             'type'    => 'Text',
         ]);
 
 
         return $this;
-
     }
+
 
 
     /**
@@ -173,7 +182,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
      */
     public function getInputFilterSpecification()
     {
-        $paysNaissanceId       = (int)$this->get('paysNaissance')->getValue();
+        $paysNaissanceId = (int)$this->get('paysNaissance')->getValue();
 
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
@@ -181,7 +190,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $spec = [
             'nomUsuel'             => [
                 'required' => false,
-                'readonly' => true
+                'readonly' => true,
             ],
             'nomPatronymique'      => [
                 'required' => false,
@@ -193,16 +202,16 @@ class DossierIdentiteFieldset extends AbstractFieldset
                 'required' => false,
             ],
             'dateNaissance'        => [
-                'required'   => false,
+                'required'    => false,
                 'allow_empty' => true,
-                'validators' => [
+                'validators'  => [
                     new DateValidator(['format' => Constants::DATE_FORMAT]),
                 ],
             ],
             'paysNaissance'        => [
-                'required'   => false,
+                'required'    => false,
                 'allow_empty' => true,
-                'validators' => [
+                'validators'  => [
                     new PaysNaissanceValidator(['service' => $this->getServicePays()]),
                 ],
             ],

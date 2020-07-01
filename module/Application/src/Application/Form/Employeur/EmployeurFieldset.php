@@ -31,17 +31,11 @@ class EmployeurFieldset extends AbstractFieldset
             ->setAutocompleteSource($this->getUrl(
                 'employeur-search'
             ))
-            ->setLabel('Employeurs :');
+            ->setLabel('Employeurs <span class="text-danger">*</span>:')
+            ->setLabelOption('disable_html_escape', true);
+
         $this->add($employeur);
 
-
-        /* $this->add([
-             'name'    => 'employeur',
-             'options' => [
-                 'label' => 'Employeur',
-             ],
-             'type'    => 'Text',
-         ]);*/
 
         return $this;
     }

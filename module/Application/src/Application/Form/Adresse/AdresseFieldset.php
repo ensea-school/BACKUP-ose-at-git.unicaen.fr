@@ -65,11 +65,11 @@ class AdresseFieldset extends AbstractFieldset
          * Lieu dit
          */
         $this->add([
-            'name'       => 'lieuDit',
-            'options'    => [
-                'label'         => 'Lieu dit',
+            'name'    => 'lieuDit',
+            'options' => [
+                'label' => 'Lieu dit',
             ],
-            'type'       => 'Text',
+            'type'    => 'Text',
         ]);
 
         /**
@@ -78,10 +78,10 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'numero',
             'options'    => [
-                'label'         => 'N°',
+                'label' => 'N°',
             ],
             'attributes' => [
-                'placeholder' => 'N°'
+                'placeholder' => 'N°',
             ],
             'type'       => 'Text',
         ]);
@@ -90,13 +90,13 @@ class AdresseFieldset extends AbstractFieldset
          * complement
          */
         $this->add([
-            'name'       => 'numeroComplement',
-            'options'    => [
+            'name'    => 'numeroComplement',
+            'options' => [
                 'label'         => 'Compl.',
-                'empty_option'              => "Compl.",
-                'value_options'             => ['Bis','Ter'],
+                'empty_option'  => "Compl.",
+                'value_options' => ['Bis', 'Ter'],
             ],
-            'type'       => 'Select',
+            'type'    => 'Select',
         ]);
 
         $this->get('numeroComplement')
@@ -107,12 +107,12 @@ class AdresseFieldset extends AbstractFieldset
          * voirie
          */
         $this->add([
-            'name'       => 'voirie',
-            'options'    => [
-                'label'         => 'Voirie',
-                'empty_option'              => "type de voirie",
+            'name'    => 'voirie',
+            'options' => [
+                'label'        => 'Voirie',
+                'empty_option' => "type de voirie",
             ],
-            'type'       => 'Select',
+            'type'    => 'Select',
         ]);
 
         $this->get('voirie')
@@ -124,10 +124,10 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'voie',
             'options'    => [
-                'label'         => 'Voie',
+                'label' => 'Voie',
             ],
             'attributes' => [
-              'placeholder' => 'nom de la voie'
+                'placeholder' => 'nom de la voie',
             ],
             'type'       => 'Text',
         ]);
@@ -137,10 +137,12 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'codePostal',
             'options'    => [
-                'label'         => 'Code postal',
-            ],
+                'label'         => 'Code postal <span class="text-danger">*</span>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],],
             'attributes' => [
-                'placeholder' => 'Code postal'
+                'placeholder' => 'Code postal',
             ],
             'type'       => 'Text',
         ]);
@@ -151,10 +153,12 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'ville',
             'options'    => [
-                'label'         => 'Ville',
-            ],
+                'label'         => 'Ville <span class="text-danger">*</span>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],],
             'attributes' => [
-                'placeholder' => 'Ville'
+                'placeholder' => 'Ville',
             ],
             'type'       => 'Text',
         ]);
@@ -167,8 +171,10 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'pays',
             'options'    => [
-                'label' => 'Pays',
-            ],
+                'label'         => 'Pays <span class="text-danger">*</span>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],],
             'attributes' => [
             ],
             'type'       => 'Select',
@@ -192,28 +198,28 @@ class AdresseFieldset extends AbstractFieldset
     {
 
         $spec = [
-            'precisions'             => [
+            'precisions'       => [
                 'required' => false,
             ],
-            'lieuDit'      => [
+            'lieuDit'          => [
                 'required' => false,
             ],
-            'numero'               => [
+            'numero'           => [
                 'required' => false,
             ],
-            'numeroComplement'             => [
+            'numeroComplement' => [
                 'required' => false,
             ],
-            'voirie'             => [
+            'voirie'           => [
                 'required' => false,
             ],
             'voie'             => [
                 'required' => false,
             ],
-            'codePostal'             => [
+            'codePostal'       => [
                 'required' => false,
             ],
-            'ville'             => [
+            'ville'            => [
                 'required' => false,
             ],
             'pays'             => [
@@ -224,8 +230,5 @@ class AdresseFieldset extends AbstractFieldset
 
         return $spec;
     }
-
-
-
 
 }

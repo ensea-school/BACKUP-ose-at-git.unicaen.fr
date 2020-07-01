@@ -87,12 +87,12 @@ class IntervenantDossierController extends AbstractController
         $champsAutres = $intervenant->getStatut()->getChampsAutres();
         /* Règles pour afficher ou non les fieldsets */
         $fieldsetRules           = [
-            'fieldset-identite'  => $intervenant->getStatut()->getDossierIdentite(),
-            'fieldset-adresse'   => $intervenant->getStatut()->getDossierAdresse(),
-            'fieldset-contact'   => $intervenant->getStatut()->getDossierContact(),
-            'fieldset-iban'      => $intervenant->getStatut()->getDossierIban(),
-            'fieldset-insee'     => $intervenant->getStatut()->getDossierInsee(),
-            'fieldset-employeur' => $intervenant->getStatut()->getDossierEmployeur(),
+            'fieldset-identite'  => $intervenantDossier->getStatut()->getDossierIdentite(),
+            'fieldset-adresse'   => $intervenantDossier->getStatut()->getDossierAdresse(),
+            'fieldset-contact'   => $intervenantDossier->getStatut()->getDossierContact(),
+            'fieldset-iban'      => $intervenantDossier->getStatut()->getDossierIban(),
+            'fieldset-insee'     => $intervenantDossier->getStatut()->getDossierInsee(),
+            'fieldset-employeur' => $intervenantDossier->getStatut()->getDossierEmployeur(),
             'fieldset-autres'    => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
 
         ];

@@ -58,14 +58,24 @@ $fieldsets = $form->getFieldsets();
     echo $this->form()->openTag($form);
     ?>
     <div class="row">
-
         <div class="col-md-12">
-            <p class="bg-info" style="padding:15px;">
-                Pour commencer à remplir vos données personnelles vous devez choisir obligatoirement un statut.
-            </p>
-            <?php
-            echo $this->formControlGroup($form->get('statut'));
-            ?>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    STATUT
+                    <?php if (!$intervenantDossierCompletude['dossierIdentite']): ?>
+                        <small><span class="label label-warning">A compléter</span></small>
+                    <?php else: ?>
+                        <small><span class="label label-success">Complet</span></small>
+                    <?php endif; ?>
+                </div>
+                <div class="panel-body">
+
+                    <?php
+                    echo $this->formControlGroup($form->get('statut'));
+                    ?>
+                    
+                </div>
+            </div>
         </div>
     </div>
     <?php if (empty($intervenantDossierStatut)): ?>

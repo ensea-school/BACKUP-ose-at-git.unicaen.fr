@@ -26,7 +26,7 @@ class DossierInseeFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'numeroInsee',
             'options'    => [
-                'label'              => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> (clé incluse)',
+                'label'              => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> (clé incluse) <span class="text-danger">*</span>',
                 'use_hidden_element' => false,
                 'checked_value'      => 1,
                 'unchecked_value'    => 0,
@@ -46,7 +46,7 @@ class DossierInseeFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'numeroInseeEstProvisoire',
             'options'    => [
-                'label'         => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> provisoire',
+                'label'         => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> provisoire ',
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
@@ -65,7 +65,7 @@ class DossierInseeFieldset extends AbstractFieldset
     public function getInputFilterSpecification()
     {
         $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
-        
+
         $spec = [
             'numeroInsee'              => [
                 'required'   => false,

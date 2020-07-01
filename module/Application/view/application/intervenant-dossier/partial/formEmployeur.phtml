@@ -29,18 +29,23 @@ $dossierInsee = $form->get('DossierEmployeur');
 
 <!-- Fiedlset Employeur -->
 <div class="col-md-6">
-    <h3>
-        Employeur
-        <?php if (!$intervenantDossierCompletude['dossierEmployeur']): ?>
-            <small><span class="label label-warning">A compléter</span></small>
-        <?php else: ?>
-            <small><span class="label label-success">Complet</span></small>
-        <?php endif; ?>
-    </h3>
-    <?= $this->formControlGroup($dossierInsee->get('employeur')); ?>
-
-
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            EMPLOYEUR
+            <?php if (!$intervenantDossierCompletude['dossierEmployeur']): ?>
+                <small><span class="label label-warning">A compléter</span></small>
+            <?php else: ?>
+                <small><span class="label label-success">Complet</span></small>
+            <?php endif; ?>
+        </div>
+        <div class="panel-body">
+            <?= $this->formControlGroup($dossierInsee->get('employeur')); ?>
+        </div>
+    </div>
 </div>
+
+
+
 
 
 

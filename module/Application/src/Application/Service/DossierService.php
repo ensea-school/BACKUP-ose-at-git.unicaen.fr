@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
@@ -39,7 +40,7 @@ class DossierService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return Dossier::class;
+        return IntervenantDossier::class;
     }
 
 
@@ -63,7 +64,7 @@ class DossierService extends AbstractEntityService
      */
     public function getByIntervenant(Intervenant $intervenant)
     {
-        if (isset($this->dcache[$intervenant->getId()])){
+        if (isset($this->dcache[$intervenant->getId()])) {
             return $this->dcache[$intervenant->getId()];
         }
 
@@ -109,11 +110,11 @@ class DossierService extends AbstractEntityService
      */
     public function intervenantVacataireAnneesPrecedentes(Intervenant $intervenant, $x = 1)
     {
-        $sourceCode = $intervenant->getSourceCode();
+
 
         for ($i = 1; $i <= $x; $i++) {
-            $annee = $this->getServiceContext()->getAnneeNmoins($i);
-            $iPrec = $this->getServiceIntervenant()->getBySourceCode($sourceCode, $annee);
+
+            $iPrec = $this->getServiceIntervenant()->getPrecedent($intervenant, -$i);
 
             if ($iPrec && $iPrec->getStatut()->estVacataire() && $iPrec->getStatut()->getPeutSaisirService()) {
                 return $iPrec;
@@ -180,9 +181,7 @@ class DossierService extends AbstractEntityService
             $intervenantDossier->getAdresseCodePostal() &&
             $intervenantDossier->getAdressePays()) ? true : false;
 
-        if ($completudeAdressePart1 && $completudeAdressePart2) {
-            $completudeDossierAdresse = true;
-        }
+        $completudeDossierAdresse = ($completudeAdressePart1 && $completudeAdressePart2) ? true : false;
 
         //Complétude de contact
         $completudeDossierContact = (($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) &&
@@ -194,7 +193,7 @@ class DossierService extends AbstractEntityService
         //Complétude Iban
         $completudeDossierIban = true;
         //Complètude Employeur
-        $completudeDossierEmployeur = false;
+        $completudeDossierEmployeur = true;
         //Complétude Autres
         $completudeDossierAutre = true;
 

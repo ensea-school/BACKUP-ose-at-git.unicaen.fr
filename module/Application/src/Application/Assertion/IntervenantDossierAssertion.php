@@ -3,7 +3,6 @@
 namespace Application\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
@@ -45,8 +44,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     const PRIV_VIEW_AUTRE5    = 'dossier-voir-autre5';
     const PRIV_CAN_VALIDE     = 'dossier-peut-valider';
     const PRIV_CAN_DEVALIDE   = 'dossier-peut-devalider';
-    //Constantes utiles
-    const CODE_TYPE_PERMANENT = 'P';
 
     use WorkflowServiceAwareTrait;
     use DossierServiceAwareTrait;
@@ -97,47 +94,47 @@ class IntervenantDossierAssertion extends AbstractAssertion
                     case self::PRIV_EDIT_IDENTITE:
                         return $this->assertEditIdentite($entity);
                     case self::PRIV_VIEW_IDENTITE:
-                        return $this->assertViewIdentite($entity);
+                        return $this->assertViewIdentite();
                     case self::PRIV_EDIT_ADRESSE:
                         return $this->assertEditAdresse($entity);
                     case self::PRIV_VIEW_ADRESSE:
-                        return $this->assertViewAdresse($entity);
+                        return $this->assertViewAdresse();
                     case self::PRIV_EDIT_CONTACT:
                         return $this->assertEditContact($entity);
                     case self::PRIV_VIEW_CONTACT:
-                        return $this->assertViewContact($entity);
+                        return $this->assertViewContact();
                     case self::PRIV_EDIT_INSEE:
                         return $this->assertEditInsee($entity);
                     case self::PRIV_VIEW_INSEE:
-                        return $this->assertViewInsee($entity);
+                        return $this->assertViewInsee();
                     case self::PRIV_EDIT_IBAN:
                         return $this->assertEditIban($entity);
                     case self::PRIV_VIEW_IBAN:
-                        return $this->assertViewIban($entity);
+                        return $this->assertViewIban();
                     case self::PRIV_EDIT_EMPLOYEUR:
                         return $this->assertEditEmployeur($entity);
                     case self::PRIV_VIEW_EMPLOYEUR:
-                        return $this->assertViewEmployeur($entity);
+                        return $this->assertViewEmployeur();
                     case self::PRIV_EDIT_AUTRE1:
                         return $this->assertEditAutre1($entity);
                     case self::PRIV_VIEW_AUTRE1:
-                        return $this->assertViewAutre1($entity);
+                        return $this->assertViewAutre1();
                     case self::PRIV_EDIT_AUTRE2:
                         return $this->assertEditAutre2($entity);
                     case self::PRIV_VIEW_AUTRE2:
-                        return $this->assertViewAutre2($entity);
+                        return $this->assertViewAutre2();
                     case self::PRIV_EDIT_AUTRE3:
                         return $this->assertEditAutre3($entity);
                     case self::PRIV_VIEW_AUTRE3:
-                        return $this->assertViewAutre3($entity);
+                        return $this->assertViewAutre3();
                     case self::PRIV_EDIT_AUTRE4:
                         return $this->assertEditAutre4($entity);
                     case self::PRIV_VIEW_AUTRE4:
-                        return $this->assertViewAutre4($entity);
+                        return $this->assertViewAutre4();
                     case self::PRIV_EDIT_AUTRE5:
                         return $this->assertEditAutre5($entity);
                     case self::PRIV_VIEW_AUTRE5:
-                        return $this->assertViewAutre5($entity);
+                        return $this->assertViewAutre5();
                     case self::PRIV_CAN_VALIDE:
                         return $this->assertCanValidate($entity);
                     case self::PRIV_CAN_DEVALIDE:
@@ -149,23 +146,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    public function assertPrivilege($privilege, $subPrivilege = null)
-    {
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-        switch ($privilege) {
-            case self::PRIV_VIEW_IDENTITE:
-                return $this->assertViewIdentite();
-            break;
-        }
-    }
-
-
-
     protected function assertEditIdentite(Intervenant $intervenant)
     {
-
-        //rajouter test si dossier valider ou non
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
@@ -178,7 +160,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
     protected function assertViewIdentite()
     {
-        //rajouter test si dossier valider ou non
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION),
@@ -189,8 +170,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
     protected function assertEditAdresse(Intervenant $intervenant)
     {
-
-        //rajouter test si dossier valider ou non
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
@@ -203,7 +182,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
     protected function assertViewAdresse()
     {
-        //rajouter test si dossier valider ou non
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
@@ -215,7 +193,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditContact(Intervenant $intervenant)
     {
 
-        //rajouter test si dossier valider ou non
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
@@ -228,7 +205,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
     protected function assertViewContact()
     {
-        //rajouter test si dossier valider ou non
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
@@ -239,31 +215,23 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
     protected function assertEditInsee(Intervenant $intervenant)
     {
-        $statut              = $intervenant->getStatut();
-        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
 
-        //On affiche le fieldset INSEE uniquement si on a le droit visualisation et que l'on est vacataire
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_EDITION)
-            //($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_EDITION),
         ]);
     }
 
 
 
-    protected function assertViewInsee(Intervenant $intervenant)
+    protected function assertViewInsee()
     {
-        $statut              = $intervenant->getStatut();
-        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-
-        //On affiche le fieldset INSEE uniquement si on a le droit visualisation et que l'on est vacataire
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
-            //($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
+
         ]);
     }
 
@@ -275,22 +243,17 @@ class IntervenantDossierAssertion extends AbstractAssertion
             !$this->getServiceDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_EDITION)
-            //($typeIntervenantCode != self::CODE_TYPE_PERMANENT)
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_EDITION),
         ]);
     }
 
 
 
-    protected function assertViewIban(Intervenant $intervenant)
+    protected function assertViewIban()
     {
-        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-
-        ////On affiche le fieldset IBAN uniquement si on a le droit visualisation et que l'on est vacataire
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
-            ($typeIntervenantCode != self::CODE_TYPE_PERMANENT),
         ]);
     }
 
@@ -308,10 +271,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewEmployeur(Intervenant $intervenant)
+    protected function assertViewEmployeur()
     {
-        $typeIntervenantCode = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EMPLOYEUR_VISUALISATION),
@@ -332,7 +293,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre1(Intervenant $intervenant)
+    protected function assertViewAutre1()
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -354,7 +315,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre2(Intervenant $intervenant)
+    protected function assertViewAutre2()
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -376,7 +337,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre3(Intervenant $intervenant)
+    protected function assertViewAutre3()
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -398,7 +359,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre4(Intervenant $intervenant)
+    protected function assertViewAutre4()
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -420,7 +381,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre5(Intervenant $intervenant)
+    protected function assertViewAutre5()
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -436,7 +397,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $completudeDossier = $this->getServiceDossier()->isComplete($intervenant);
         $isValidate        = $this->getServiceDossier()->getValidation($intervenant);
 
-
         return $this->asserts([
             $completudeDossier['dossier'],
             !$isValidate,
@@ -451,7 +411,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertCanDevalidate(Intervenant $intervenant)
     {
 
-        $isComplete = $this->getServiceDossier()->isComplete($intervenant);
         $isValidate = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([

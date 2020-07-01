@@ -87,11 +87,11 @@ class IntervenantDossierService extends AbstractEntityService
      */
     public function intervenantVacataireAnneesPrecedentes(Intervenant $intervenant, $x = 1)
     {
-        $sourceCode = $intervenant->getSourceCode();
+
 
         for ($i = 1; $i <= $x; $i++) {
-            $annee = $this->getServiceContext()->getAnneeNmoins($i);
-            $iPrec = $this->getServiceIntervenant()->getBySourceCode($sourceCode, $annee);
+
+            $iPrec = $this->getServiceIntervenant()->getPrecedent($intervenant, -$i);   ///getBySourceCode($sourceCode, $annee);
 
             if ($iPrec && $iPrec->getStatut()->estVacataire() && $iPrec->getStatut()->getPeutSaisirService()) {
                 return $iPrec;

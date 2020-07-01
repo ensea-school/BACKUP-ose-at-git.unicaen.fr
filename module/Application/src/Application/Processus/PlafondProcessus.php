@@ -58,11 +58,11 @@ class PlafondProcessus implements EntityManagerAwareInterface
     public function endTransaction(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, bool $diminution = false): bool
     {
         $hasBloquant = $this->controle($intervenant, $typeVolumeHoraire, true);
-        if ($hasBloquant && $!$diminution) {
-        $this->getEntityManager()->rollback();
-    } else {
-        $this->getEntityManager()->commit();
-    }
+        if ($hasBloquant && !$diminution) {
+            $this->getEntityManager()->rollback();
+        } else {
+            $this->getEntityManager()->commit();
+        }
 
         return $hasBloquant;
     }

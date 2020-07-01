@@ -123,6 +123,7 @@ class IntervenantDossierForm extends AbstractForm
             'value'        => '',
         ]);
 
+
         $statut->getProxy()
             ->setFindMethod([
                 'name'   => 'findBy',
@@ -133,6 +134,13 @@ class IntervenantDossierForm extends AbstractForm
             ])
             ->setObjectManager($this->getServiceContext()->getEntityManager())
             ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
+
+        //Si le statut de l'intervenant n'est pas dans la liste des statuts sélectionnable on le rajoute à la main
+
+        $statutValues = $statut->getValueOptions();
+        $statut->setOptions([$statutIntervenant]);
+        $statutValues = $statut->getValueOptions();
+
 
         $this->add($statut);
 

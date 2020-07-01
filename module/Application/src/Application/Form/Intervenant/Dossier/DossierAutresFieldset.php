@@ -32,10 +32,18 @@ class DossierAutresFieldset extends AbstractFieldset
             $this->add([
                 'name'    => 'champ-autre-' . $champ->getId(),
                 'options' => [
-                    'label' => $champ->getLibelle(),
+                    'label'         => $champ->getLibelle(),
+                    'label_options' => ['disable_html_escape' => true],
                 ],
                 'type'    => 'Text',//pour le moment on force le champs en type input
             ]);
+            $champAutreElement = $this->get('champ-autre-' . $champ->getId());
+            if (!empty($champ->getDescription())) {
+                $champAutreElement->setAttribute('info_icon', $champ->getDescription());
+            }
+            if ($champ->isObligatoire()) {
+                $champAutreElement->setLabel($champ->getLibelle() . ' <span class="text-danger">*</span>');
+            }
         }
 
 

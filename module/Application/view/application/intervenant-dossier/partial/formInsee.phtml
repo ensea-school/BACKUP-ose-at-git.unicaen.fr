@@ -18,17 +18,22 @@ $dossierInsee = $form->get('DossierInsee');
 
 <!-- Fiedlset Insee -->
 <div class="col-md-6">
-    <h3>
-        Insee
-        <?php if (!$intervenantDossierCompletude['dossierInsee']): ?>
-            <small><span class="label label-warning">A compléter</span></small>
-        <?php else: ?>
-            <small><span class="label label-success">Complet</span></small>
-        <?php endif; ?>
-    </h3> <?php
-    echo $this->formControlGroup($dossierInsee->get('numeroInsee'));
-    echo $this->formControlGroup($dossierInsee->get('numeroInseeEstProvisoire'));
-    ?>
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            INSEE
+            <?php if (!$intervenantDossierCompletude['dossierInsee']): ?>
+                <small><span class="label label-warning">A compléter</span></small>
+            <?php else: ?>
+                <small><span class="label label-success">Complet</span></small>
+            <?php endif; ?>
+        </div>
+        <div class="panel-body">
+            <?php
+            echo $this->formControlGroup($dossierInsee->get('numeroInsee'));
+            echo $this->formControlGroup($dossierInsee->get('numeroInseeEstProvisoire'));
+            ?>
+        </div>
+    </div>
 </div>
 
 

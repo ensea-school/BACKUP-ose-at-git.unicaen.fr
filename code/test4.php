@@ -7,8 +7,9 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
- 
 
-$utilisateur = $controller->dentity()['db'];
 
-var_dump($utilisateur);
+/* @var $intervenant \Application\Entity\Db\Intervenant */
+$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(578);
+
+$ni = $intervenant->dupliquer();

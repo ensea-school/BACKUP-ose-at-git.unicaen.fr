@@ -41,6 +41,8 @@ return [
             'recherche'            => 'Recherche',
             'fiche'                => 'Visualisation de la fiche',
             'calcul-hetd'          => 'Calcul HETD',
+            'creation'             => 'Création',
+            'ajout-statut'         => 'Ajout d\'un nouveau statut',
             'edition'              => 'Edition',
             'suppression'          => 'Suppression',
             'statut-edition'       => 'Statuts (Édition)',
@@ -231,7 +233,7 @@ return [
             'edition'       => 'Édition',
         ],
     ],
-    'type-ressource' => [
+    'type-ressource'    => [
         'libelle'    => 'Types de ressources',
         'privileges' => [
             'visualisation' => 'Visualisation',
@@ -383,7 +385,7 @@ return [
         ],
     ],
 
-    'formule' => [
+    'formule'   => [
         'libelle'    => 'Formule de calcul',
         'privileges' => [
             'tests' => 'Tests',

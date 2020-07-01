@@ -284,7 +284,7 @@ class Ligne extends AbstractViewHelper
             'type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId(),
         ];
         if ($this->getListe()->getIntervenant()) {
-            $query['intervenant'] = $this->getListe()->getIntervenant()->getRouteParam();
+            $query['intervenant'] = $this->getListe()->getIntervenant()->getId();
         }
         $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => $query]);
 

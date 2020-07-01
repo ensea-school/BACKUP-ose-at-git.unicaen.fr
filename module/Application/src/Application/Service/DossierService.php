@@ -4,7 +4,6 @@ namespace Application\Service;
 
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
@@ -40,7 +39,7 @@ class DossierService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return IntervenantDossier::class;
+        return Dossier::class;
     }
 
 
@@ -60,11 +59,11 @@ class DossierService extends AbstractEntityService
     /**
      * @param Intervenant $intervenant
      *
-     * @return IntervenantDossier|null
+     * @return Dossier|null
      */
     public function getByIntervenant(Intervenant $intervenant)
     {
-        if (isset($this->dcache[$intervenant->getId()])) {
+        if (isset($this->dcache[$intervenant->getId()])){
             return $this->dcache[$intervenant->getId()];
         }
 
@@ -73,10 +72,10 @@ class DossierService extends AbstractEntityService
         foreach ($this->getList($qb) as $dossier) {
             return $dossier;
         }
-        $intervenantDossier                  = $this->newEntity()->fromIntervenant($intervenant);
-        $this->dcache[$intervenant->getId()] = $intervenantDossier;
+        $dossier                             = $this->newEntity()->fromIntervenant($intervenant);
+        $this->dcache[$intervenant->getId()] = $dossier;
 
-        return $intervenantDossier;
+        return $dossier;
     }
 
 

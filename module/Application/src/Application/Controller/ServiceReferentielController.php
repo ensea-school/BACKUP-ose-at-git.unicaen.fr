@@ -60,7 +60,7 @@ class ServiceReferentielController extends AbstractController
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
         $viewHelperParams      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                  = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant           = $this->context()->intervenantFromRoute();
+        $intervenant           = $this->params()->fromRoute('intervenant');
         $viewModel             = new \Zend\View\Model\ViewModel();
 
         if (!$intervenant) {

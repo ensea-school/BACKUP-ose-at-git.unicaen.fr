@@ -776,3 +776,41 @@ td .alert {
 .seuils-dedoublement td span.aucun {
     color:darkgrey;
 }
+
+
+
+.intervenant-statuts {
+    margin-top: 5px;
+    font-size: 12pt;
+    height: 50px;
+    min-height: 50px;
+}
+
+.intervenant-statuts .navbar-brand {
+    font-size: 10pt;
+}
+
+.intervenant-statuts .navbar-nav li a {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.intervenant-statuts .navbar-brand {
+    padding-top: 13px;
+    padding-bottom: 4px;
+    height: 50px;
+}
+
+.intervenant-statuts .navbar-toggle {
+    margin-top: 1px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.intervenant-statuts span.type-intervenant {
+    font-size: 10pt;
+}
+
+.intervenant-statuts li.ajout-intervenant{
+    padding-top: 10px;
+}

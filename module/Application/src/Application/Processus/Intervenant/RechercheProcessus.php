@@ -20,96 +20,13 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercher($critere, $limit = 50)
+    public function rechercher($critere, $limit = 50, string $key = ':CODE')
     {
-        if (strlen($critere) < 2) return [];
-
-        $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
-
-        $critere  = Util::reduce($critere);
-        $criteres = explode('_', $critere);
-
-        $sql     = '
-        WITH vrec AS (
-        SELECT
-          i.id,
-          i.source_code,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          i.critere_recherche critere,
-          i.annee_id
-        FROM
-          intervenant i
-          LEFT JOIN structure s ON s.id = i.structure_id
-          LEFT JOIN civilite c ON c.id = i.civilite_id
-        WHERE
-          i.histo_destruction IS NULL
-          
-        UNION ALL
-        
-        SELECT
-          null id,
-          i.source_code,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          i.critere_recherche critere,
-          i.annee_id
-        FROM
-          src_intervenant i
-          LEFT JOIN structure s ON s.id = i.structure_id
-          LEFT JOIN civilite c ON c.id = i.civilite_id
-        )
-        SELECT * FROM vrec WHERE 
-          rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
-        $sqlCri  = '';
-        $criCode = 0;
-
-        foreach ($criteres as $c) {
-            $cc = (int)$c;
-            if (0 === $cc) {
-                if ($sqlCri != '') $sqlCri .= ' AND ';
-                $sqlCri .= 'critere LIKE q\'[%' . $c . '%]\'';
-            } else {
-                $criCode = $cc;
-            }
-        }
-        $orc = [];
-        if ($sqlCri != '') {
-            $orc[] = '(' . $sqlCri . ')';
-        }
-        if ($criCode) {
-            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
-        }
-        $orc = implode(' OR ', $orc);
-        $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
-
-        $intervenants = [];
-
         try {
-            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-            while ($r = $stmt->fetch()) {
-                $intervenants[$r['SOURCE_CODE']] = [
-                    'civilite'         => $r['CIVILITE'],
-                    'nom'              => $r['NOM_USUEL'],
-                    'prenom'           => $r['PRENOM'],
-                    'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
-                    'structure'        => $r['STRUCTURE'],
-                    'numero-personnel' => $r['SOURCE_CODE'],
-                ];
-            }
+            return $this->rechercheGenerique($critere, $limit, $key, false);
         } catch (\Exception $e) {
-            return $this->rechercherLocalement($critere, $limit);
+            return $this->rechercheGenerique($critere, $limit, $key, true);
         }
-
-        return $intervenants;
     }
 
 
@@ -120,7 +37,80 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercherLocalement($critere, $limit = 50)
+    public function rechercherLocalement($critere, $limit = 50, string $key = ':CODE')
+    {
+        return $this->rechercheGenerique($critere, $limit, $key, true);
+    }
+
+
+
+    private function sqlLocale(): string
+    {
+        return "
+        SELECT
+          i.id,
+          i.code,
+          i.statut_id,
+          i.nom_usuel,
+          i.nom_patronymique,
+          i.prenom,
+          i.date_naissance,
+          s.libelle_court structure,
+          c.libelle_long civilite,
+          si.libelle statut,
+          i.critere_recherche critere,
+          i.annee_id
+        FROM
+          intervenant i
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
+        WHERE
+          i.histo_destruction IS NULL
+        ";
+    }
+
+
+
+    private function sqlSource(): string
+    {
+        return "
+        SELECT
+          null id,
+          i.code,
+          i.statut_id,
+          i.nom_usuel,
+          i.nom_patronymique,
+          i.prenom,
+          i.date_naissance,
+          s.libelle_court structure,
+          c.libelle_long civilite,
+          si.libelle statut,
+          i.critere_recherche critere,
+          i.annee_id
+        FROM
+          src_intervenant i
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
+        ";
+    }
+
+
+
+    protected function makeKey(array $data, string $key): string
+    {
+        $resKey = $key;
+        foreach ($data as $k => $v) {
+            $resKey = str_replace(':' . $k, $v, $resKey);
+        }
+
+        return $resKey;
+    }
+
+
+
+    private function rechercheGenerique($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
     {
         if (strlen($critere) < 2) return [];
 
@@ -129,25 +119,15 @@ class RechercheProcessus
         $critere  = Util::reduce($critere);
         $criteres = explode('_', $critere);
 
+        $sqlSource = '';
+        if (!$onlyLocale) {
+            $sqlSource = ' UNION ALL ' . $this->sqlSource();
+        }
+
         $sql     = '
         WITH vrec AS (
-        SELECT
-          i.id,
-          i.source_code,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          i.critere_recherche critere,
-          i.annee_id
-        FROM
-          intervenant i
-          LEFT JOIN structure s ON s.id = i.structure_id
-          LEFT JOIN civilite c ON c.id = i.civilite_id
-        WHERE
-          i.histo_destruction IS NULL
+            ' . $this->sqlLocale() . '
+            ' . $sqlSource . '  
         )
         SELECT * FROM vrec WHERE 
           rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
@@ -168,27 +148,37 @@ class RechercheProcessus
             $orc[] = '(' . $sqlCri . ')';
         }
         if ($criCode) {
-            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
+            $orc[] = 'code LIKE \'%' . $criCode . '%\'';
         }
         $orc = implode(' OR ', $orc);
         $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
 
         $intervenants = [];
 
-        try {
-            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-            while ($r = $stmt->fetch()) {
-                $intervenants[$r['SOURCE_CODE']] = [
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while ($r = $stmt->fetch()) {
+            $k = $this->makeKey($r, $key);
+            if (!isset($intervenants[$k])) {
+                $intervenants[$k] = [
                     'civilite'         => $r['CIVILITE'],
                     'nom'              => $r['NOM_USUEL'],
                     'prenom'           => $r['PRENOM'],
                     'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
                     'structure'        => $r['STRUCTURE'],
-                    'numero-personnel' => $r['SOURCE_CODE'],
+                    'statut'           => $r['STATUT'],
+                    'numero-personnel' => $r['CODE'],
                 ];
+            } else {
+                if ($intervenants[$k]['statut'] && !is_array($intervenants[$k]['statut'])) {
+                    $intervenants[$k]['statut'] = [$intervenants[$k]['statut']];
+                }
+                if (is_array($intervenants[$k]['statut'])) {
+                    $intervenants[$k]['statut'][] = $r['STATUT'];
+                } else {
+                    $intervenants[$k]['statut'] = $r['STATUT'];
+                }
             }
-        } catch (\Exception $e) {
-            // à traiter si la vue source intervenant n'existe pas!!
         }
 
         return $intervenants;

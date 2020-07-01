@@ -143,7 +143,7 @@ class ElementPedagogiqueController extends AbstractController
         // fetch
         $found = $this->getServiceElementPedagogique()->getSearchResultByTerm($params, $term === null ? 'ep.code' : 'gtf.ordre, e.niveau, ep.code');
 
-        $result = [];
+        $result        = [];
         $codeIteration = [];
         foreach ($found as $item) {
             if (null === $term) {
@@ -159,8 +159,7 @@ class ElementPedagogiqueController extends AbstractController
                 ];
             } else {
                 $label = $item['CODE'] . ' ' . $item['LIBELLE'];
-                if(in_array($label, $codeIteration))
-                {
+                if (in_array($label, $codeIteration)) {
                     continue;
                 }
                 $codeIteration[] = $item['CODE'] . ' ' . $item['LIBELLE'];
@@ -197,7 +196,7 @@ class ElementPedagogiqueController extends AbstractController
 
     public function getPeriodeAction()
     {
-        $elementPedagogique = $this->context()->elementPedagogiqueFromRoute();
+        $elementPedagogique = $this->params()->fromRoute('elementPedagogique');
         $code               = null;
         if ($elementPedagogique) {
             if ($periode = $elementPedagogique->getPeriode()) {
@@ -287,10 +286,8 @@ class ElementPedagogiqueController extends AbstractController
         if ($request->isPost()) {
             $datasPost = $request->getPost();
             //Modulateur
-            foreach($datasPost as $name => $value)
-            {
-                if(strstr($name, 'modulateur'))
-                {
+            foreach ($datasPost as $name => $value) {
+                if (strstr($name, 'modulateur')) {
                     $element = $this->getServiceElementModulateur()->addElementModulateur($element, $datasPost[$name]);
                 }
             }

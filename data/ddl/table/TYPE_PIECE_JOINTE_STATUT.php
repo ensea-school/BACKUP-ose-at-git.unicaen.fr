@@ -174,6 +174,7 @@ return [
             'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => '0',
+            'position'    => 14,
             'commentaire' => 'Piece jointe obligatoire même si les heures sont non payables',
         ],
         'SEUIL_HETD'            => [
@@ -185,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'STATUT_INTERVENANT_ID' => [
@@ -197,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID'  => [
@@ -209,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
     ],

@@ -30,6 +30,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const BUDGET_TYPES_RESSOURCES_VISUALISATION               = 'budget-types-ressources-visualisation';
     const BUDGET_VISUALISATION                                = 'budget-visualisation';
     const CENTRES_COUTS_ADMINISTRATION_EDITION                = 'centres-couts-administration-edition';
+    const CENTRES_COUTS_ADMINISTRATION_RECONDUCTION           = 'centres-couts-administration-reconduction';
     const CENTRES_COUTS_ADMINISTRATION_VISUALISATION          = 'centres-couts-administration-visualisation';
     const CHARGENS_DEPASSEMENT_CSV                            = 'chargens-depassement-csv';
     const CHARGENS_EXPORT_CSV                                 = 'chargens-export-csv';
@@ -54,10 +55,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const CLOTURE_EDITION_SERVICES_AVEC_MEP                   = 'cloture-edition-services-avec-mep';
     const CLOTURE_REOUVERTURE                                 = 'cloture-reouverture';
     const CONTRAT_CONTRAT_GENERATION                          = 'contrat-contrat-generation';
-    const CONTRAT_ENVOI_EMAIL                                 = 'contrat-envoi-email';
     const CONTRAT_CREATION                                    = 'contrat-creation';
     const CONTRAT_DEPOT_RETOUR_SIGNE                          = 'contrat-depot-retour-signe';
     const CONTRAT_DEVALIDATION                                = 'contrat-devalidation';
+    const CONTRAT_ENVOI_EMAIL                                 = 'contrat-envoi-email';
     const CONTRAT_MODELES_EDITION                             = 'contrat-modeles-edition';
     const CONTRAT_MODELES_VISUALISATION                       = 'contrat-modeles-visualisation';
     const CONTRAT_PROJET_GENERATION                           = 'contrat-projet-generation';

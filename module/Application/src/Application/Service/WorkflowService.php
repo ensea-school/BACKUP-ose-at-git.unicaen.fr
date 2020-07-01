@@ -83,7 +83,7 @@ class WorkflowService extends AbstractService
      */
     public function getEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
-        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
         $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
         if ($fdr) {
@@ -108,7 +108,7 @@ class WorkflowService extends AbstractService
      */
     public function getNextEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
-        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
         $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
         $isCurrent = false;
@@ -135,7 +135,7 @@ class WorkflowService extends AbstractService
      */
     public function getPreviousAccessibleEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
-        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
         $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
         $isCurrent = false;
@@ -162,7 +162,7 @@ class WorkflowService extends AbstractService
      */
     public function getNextAccessibleEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
-        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
         $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
         $isCurrent = false;
@@ -198,7 +198,7 @@ class WorkflowService extends AbstractService
 
     /**
      * @param Intervenant|null $intervenant
-     * @param Structure|null         $structure
+     * @param Structure|null   $structure
      *
      * @return WorkflowEtape|null
      */
@@ -218,7 +218,7 @@ class WorkflowService extends AbstractService
     /**
      *
      * @param Intervenant|null $intervenant
-     * @param Structure|null         $structure
+     * @param Structure|null   $structure
      *
      * @return WorkflowEtape[]
      */
@@ -255,7 +255,7 @@ class WorkflowService extends AbstractService
                     $we->setStructure($structure);
                     $we->setEtape($e->getEtape());
 
-                    $url = $this->getUrl($e->getEtape()->getRoute(), ['intervenant' => $intervenant->getRouteParam()]);
+                    $url = $this->getUrl($e->getEtape()->getRoute(), ['intervenant' => $intervenant->getId()]);
                     $we->setUrl($url);
 
                     $this->feuillesDeRoute[$iid][$sid][$eid] = $we;
@@ -287,48 +287,49 @@ class WorkflowService extends AbstractService
      * @return int
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function calculerTousTableauxBord($beforeTrigger=null, $afterTrigger=null)
+    public function calculerTousTableauxBord($beforeTrigger = null, $afterTrigger = null)
     {
-        $sql = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
-        $tbls = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $sql    = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
+        $tbls   = $this->getEntityManager()->getConnection()->fetchAll($sql);
         $result = true;
-        foreach( $tbls as $tbl ){
+        foreach ($tbls as $tbl) {
             $begin = microtime(true);
-            $tbl = $tbl['TBL_NAME'];
-            $sql = 'BEGIN UNICAEN_TBL.CALCULER(\''.$tbl.'\'); END;';
-            if (is_callable($beforeTrigger)){
+            $tbl   = $tbl['TBL_NAME'];
+            $sql   = 'BEGIN UNICAEN_TBL.CALCULER(\'' . $tbl . '\'); END;';
+            if (is_callable($beforeTrigger)) {
                 $beforeTrigger([
                     'tableau-bord' => $tbl,
                 ]);
             }
-            try{
+            try {
                 $this->getEntityManager()->getConnection()->exec($sql);
-                if (is_callable($afterTrigger)){
+                if (is_callable($afterTrigger)) {
                     $afterTrigger([
                         'tableau-bord' => $tbl,
-                        'result' => true,
-                        'duree' => microtime(true) - $begin,
+                        'result'       => true,
+                        'duree'        => microtime(true) - $begin,
                     ]);
                 }
-            }catch(\Exception $e){
-                if (is_callable($afterTrigger)){
+            } catch (\Exception $e) {
+                if (is_callable($afterTrigger)) {
                     $afterTrigger([
                         'tableau-bord' => $tbl,
-                        'result' => false,
-                        'exception' => $e,
-                        'duree' => microtime(true) - $begin,
+                        'result'       => false,
+                        'exception'    => $e,
+                        'duree'        => microtime(true) - $begin,
                     ]);
                 }
                 $result = false;
             }
         }
+
         return $result;
     }
 
 
 
     /**
-     * @param array                                        $tableauxBords
+     * @param array                            $tableauxBords
      * @param Intervenant|Intervenant[]|string $intervenant
      */
     public function calculerTableauxBord($tableauxBords = [], $intervenant): array
@@ -385,7 +386,7 @@ class WorkflowService extends AbstractService
                         $dep,
                         $params
                     );
-                }catch(\Exception $e ){
+                } catch (\Exception $e) {
                     $errors[$dep] = $e;
                 }
             }
@@ -491,14 +492,14 @@ class WorkflowService extends AbstractService
     /**
      * Generates a url given the name of a route.
      *
-     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
-     *
-     * @param  string            $name               Name of the route
-     * @param  array             $params             Parameters for the link
-     * @param  array|Traversable $options            Options for the route
-     * @param  bool              $reuseMatchedParams Whether to reuse matched parameters
+     * @param string            $name               Name of the route
+     * @param array             $params             Parameters for the link
+     * @param array|Traversable $options            Options for the route
+     * @param bool              $reuseMatchedParams Whether to reuse matched parameters
      *
      * @return string Url                         For the link href attribute
+     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
+     *
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {

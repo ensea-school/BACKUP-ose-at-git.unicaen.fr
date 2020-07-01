@@ -4,23 +4,16 @@ use Application\Provider\Privilege\Privileges;
 
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $role \Application\Acl\Role */
+/* @var $tab string */
 
-$this->headTitle()->append($intervenant->getNomUsuel())->append("Fiche");
-
-?>
-
-    <h1 class="page-header"><?= $intervenant ?>
-        <small><?= $intervenant->getStatut()->getTypeIntervenant() ?></small>
-    </h1>
-
-<?php
+$this->intervenant($intervenant)->renderTitle('Fiche');
 
 $tabs = [
     [
         'id'            => 'fiche',
         'label'         => '<span class="glyphicon glyphicon-eye-open"></span> Fiche',
         'content'       => $this->partial('application/intervenant/fiche.phtml', compact('intervenant', 'role')),
-        'url'           => $this->url('intervenant/fiche', ['intervenant' => $intervenant->getRouteParam()]),
+        'url'           => $this->url('intervenant/fiche', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ],
 ];
@@ -29,7 +22,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
     $tabs[] = [
         'id'    => 'edition',
         'label' => '<span class="glyphicon glyphicon-pencil"></span> Édition',
-        'url'   => $this->url('intervenant/saisir', ['intervenant' => $intervenant->getRouteParam()]),
+        'url'   => $this->url('intervenant/saisir', ['intervenant' => $intervenant->getId()]),
     ];
 }
 
@@ -37,9 +30,9 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSI
     $tabs[] = [
         'id'            => 'suppression',
         'label'         => '<span class="glyphicon glyphicon-trash"></span> Suppression',
-        'url'           => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getRouteParam()]),
+        'url'           => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];
 }
 
-echo $this->tabajax($tabs);
+echo $this->tabajax($tabs, $tab);

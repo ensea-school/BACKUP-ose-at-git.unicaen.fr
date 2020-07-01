@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 $canPurge = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_PURGER_DIFFERENCES));
 
 if ($canPurge) {
-    $urlPurge = $this->url('intervenant/dossier/purger-differences', ['intervenant' => $this->intervenant->getRouteParam()]);
+    $urlPurge = $this->url('intervenant/dossier/purger-differences', ['intervenant' => $this->intervenant->getId()]);
 } else {
     $urlPurge = null;
 }
@@ -62,7 +62,7 @@ if ($canPurge) {
     </a>
 
     <a class="btn btn-warning"
-       href="<?= $this->url('intervenant/dossier', ['intervenant' => $intervenant->getRouteParam()]) ?>"
+       href="<?= $this->url('intervenant/dossier', ['intervenant' => $intervenant->getId()]) ?>"
     >Voir les données personnelles de <?= $intervenant ?></a>
 
 <?php if ($canPurge): ?>

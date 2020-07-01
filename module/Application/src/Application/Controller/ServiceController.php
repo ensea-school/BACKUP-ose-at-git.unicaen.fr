@@ -443,7 +443,7 @@ class ServiceController extends AbstractController
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, true);
         }
 
         return new MessengerViewModel;

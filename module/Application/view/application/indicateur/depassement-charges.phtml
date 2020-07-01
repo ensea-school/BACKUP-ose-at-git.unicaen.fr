@@ -10,7 +10,7 @@ use Application\Entity\Db\Intervenant;
  * @var $idcs        IndicateurDepassementCharges[]
  */
 
-$servicesUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getRouteParam()]);
+$servicesUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()]);
 
 ?>
 <h1 class="page-header"><?= $title ?></h1>

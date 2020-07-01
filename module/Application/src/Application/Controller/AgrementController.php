@@ -102,7 +102,7 @@ class AgrementController extends AbstractController
 
         $tas = $this->getServiceTblAgrement()->getList($qb);
 
-        $test = false;
+        $test          = false;
         $needStructure = false;
         $hasActions    = false;
         $data          = [];
@@ -113,14 +113,14 @@ class AgrementController extends AbstractController
 
                 $params      = [
                     'agrement'    => $a->getId(),
-                    'intervenant' => $ta->getIntervenant()->getRouteParam(),
+                    'intervenant' => $ta->getIntervenant()->getId(),
                 ];
                 $actionUrl   = $this->url()->fromRoute('intervenant/agrement/supprimer', $params);
                 $actionLabel = '<span class="glyphicon glyphicon-trash"></span> Retirer l\'agrément';
             } elseif (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
                 $params = [
                     'typeAgrement' => $ta->getTypeAgrement()->getId(),
-                    'intervenant'  => $ta->getIntervenant()->getRouteParam(),
+                    'intervenant'  => $ta->getIntervenant()->getId(),
                 ];
                 if ($ta->getStructure()) $params['structure'] = $ta->getStructure()->getId();
 
@@ -305,10 +305,7 @@ class AgrementController extends AbstractController
         //@alecourtes : Récupérer les intervenants avec le même code car l'agrement peut être valide
         //plusieurs années pour plusieurs intervenants avec un même code
 
-        $listeIntervenants = $this->getServiceIntervenant()->getByCodeIntervenant($intervenant->getCode());
-        if (empty($listeIntervenants)) {
-            $listeIntervenants[] = $intervenant;
-        }
+        $listeIntervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
         $this->getServiceWorkflow()->calculerTableauxBord([
             'agrement',
             'contrat',

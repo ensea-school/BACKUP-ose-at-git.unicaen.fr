@@ -38,7 +38,7 @@ foreach ($dirs as $i => $dir) {
 
         echo ($i + 1) . '/' . (count($dirs) - 2) . ' ... ' . $code . ' - ';
 
-        $intervenant = $si->getBySourceCode($code);
+        $intervenant = $si->getByCode($code);
 
         if ($intervenant) {
             try {

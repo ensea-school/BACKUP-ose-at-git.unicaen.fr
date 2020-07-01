@@ -10,19 +10,18 @@
  * @var $hasActions    boolean
  */
 
-$this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $typeAgrement");
+$title = "Agrément par " . $typeAgrement->toString(true);
+$this->intervenant($intervenant)->renderTitle($title);
 
-?>
-
-<h1 class="page-header"><?= sprintf("Agrément par %s <small>%s</small>", $typeAgrement->toString(true), $intervenant) ?></h1>
-
-<?php if (!empty($data)): ?>
+if (!empty($data)): ?>
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
-            <?php if ($needStructure): ?><th style="width: 100px">Composante</th><?php endif; ?>
+            <?php if ($needStructure): ?>
+                <th style="width: 100px">Composante</th><?php endif; ?>
             <th>Agrément</th>
-            <?php if ($hasActions): ?><th style="width:1px">Action</th><?php endif; ?>
+            <?php if ($hasActions): ?>
+                <th style="width:1px">Action</th><?php endif; ?>
         </tr>
         </thead>
         <tbody>
@@ -46,8 +45,9 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
                             L'agrément ne peut être retiré que l'année de sa décision.
                         <?php else: ?>
                             <?php if ($actionUrl): ?>
-                                <a class="btn btn-primary pop-ajax " data-submit-reload="true" data-min-width="13em" data-placement="left"
-                                href="<?= $actionUrl ?>"><?= $actionLabel ?></a>
+                                <a class="btn btn-primary pop-ajax " data-submit-reload="true" data-min-width="13em"
+                                   data-placement="left"
+                                   href="<?= $actionUrl ?>"><?= $actionLabel ?></a>
                             <?php endif; ?>
                         <?php endif; ?>
 
@@ -63,6 +63,5 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
 <?php endif; ?>
 
 
-
-    <hr/>
-    <?= $this->feuilleDeRoute($intervenant)->renderNav($typeAgrement->getCode()); ?>
+<hr/>
+<?= $this->feuilleDeRoute($intervenant)->renderNav($typeAgrement->getCode()); ?>

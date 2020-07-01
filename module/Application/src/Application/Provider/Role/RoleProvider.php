@@ -101,13 +101,14 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
     protected function makeRoles()
     {
+        $this->getServiceContext()->setInInit(true);
         $roles                  = [];
         $r                      = new Role();
         $roles[$r->getRoleId()] = $r;
 
         $intervenant = $this->getServiceContext()->getIntervenant();
         $utilisateur = $this->getServiceContext()->getUtilisateur();
-        $structure   = $this->getServiceContext()->getStructure(false);
+        $structure   = $this->getServiceContext()->getStructure();
 
         // chargement des rôles métiers
 
@@ -187,6 +188,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             }
             $roles[$statut['role-id']] = $role;
         }
+
+        $this->getServiceContext()->setInInit(false);
 
         return $roles;
     }

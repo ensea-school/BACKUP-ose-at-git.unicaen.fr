@@ -1,9 +1,13 @@
 <?php
 
-/* @var $intervenant \Application\Entity\Db\Intervenant */
-/* @var $form Application\Form\Intervenant\IntervenantForm */
-/* @var $errors array */
-
+/**
+ * @var $this            \Application\View\Renderer\PhpRenderer
+ * @var $intervenant     \Application\Entity\Db\Intervenant
+ * @var $form            Application\Form\Intervenant\IntervenantForm
+ * @var $changed         bool
+ * @var $errors          array
+ * @var $definiParDefaut bool
+ */
 
 echo $this->form()->openTag($form->prepare());
 
@@ -11,8 +15,114 @@ if ($errors) {
     echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
 }
 
-echo $this->formControlGroup($form->get('montant-indemnite-fc'));
-echo $this->formRow($form->get('submit'));
-echo $this->formHidden($form->get('id'));
+?>
+    <div>&nbsp;</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Données indispensables</div>
+                <div class="panel-body">
+                    <?php
+                    echo $this->formControlGroup($form->get('nomUsuel'));
+                    echo $this->formControlGroup($form->get('prenom'));
+                    echo $this->formControlGroup($form->get('dateNaissance'));
+                    echo $this->formControlGroup($form->get('code'));
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Nomenclatures</div>
+                <div class="panel-body">
+                    <?php
+                    echo $this->formControlGroup($form->get('statut'));
+                    echo $this->formControlGroup($form->get('structure'));
+                    echo $this->formControlGroup($form->get('discipline'));
+                    echo $this->formControlGroup($form->get('grade'));
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Divers</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4"><?= $this->formControlGroup($form->get('civilite')); ?></div>
+                        <div class="col-md-8"><?= $this->formControlGroup($form->get('nomPatronymique')); ?></div>
+                    </div>
+                    <?php
+                    echo $this->formControlGroup($form->get('montantIndemniteFc'));
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Liens avec le système d'information</div>
+                <div class="panel-body">
+                    <?php
 
+                    echo $this->formControlGroup($form->get('utilisateurCode'));
+                    ?>
+                    <div class="row">
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('source')); ?></div>
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('sourceCode')); ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('syncStatut')); ?></div>
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('syncStructure')); ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $(function ()
+        {
+            $.widget("ose.formIntervenantEdition", {
+
+                _create: function ()
+                {
+                    var that = this;
+
+                    this.getStatutElement().change(function () {
+                        that.getSyncStatutElement().prop("checked", false);
+                    });
+
+                    this.getStructureElement().change(function () {
+                        that.getSyncStructureElement().prop("checked", false);
+                    });
+
+                },
+
+                getStatutElement: function () { return this.element.find('select[name="statut"]'); },
+                getSyncStatutElement: function () { return this.element.find('input[name="syncStatut"]'); },
+                getStructureElement: function () { return this.element.find('select[name="structure"]'); },
+                getSyncStructureElement: function () { return this.element.find('input[name="syncStructure"]'); }
+            });
+
+            WidgetInitializer.add('form-intervenant-edition', 'formIntervenantEdition');
+        })
+        ;
+
+    </script>
+
+
+<?php
+echo $this->formSubmit($form->get('submit'));
+
+if ($intervenant->getId()) {
+    echo ' ' . $this->tag('a', [
+            'href'  => $this->url('intervenant/definir-par-defaut', ['intervenant' => $intervenant->getId()]),
+            'title' => 'Définir par défaut',
+            'class' => 'btn btn-info pop-ajax' . ($definiParDefaut ? ' active' : ''),
+        ])->html('Définir par défaut');
+}
+
+echo $this->formHidden($form->get('id'));
 echo $this->form()->closeTag();

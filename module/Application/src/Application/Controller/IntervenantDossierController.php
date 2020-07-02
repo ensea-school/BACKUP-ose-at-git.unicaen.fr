@@ -125,9 +125,9 @@ class IntervenantDossierController extends AbstractController
             );
         }
         //Si on vient de poster le form alors on redirige pour rafraichir le form après le bindRequestSave
-        /*if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
             return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
-        }*/
+        }
 
 
         return compact(

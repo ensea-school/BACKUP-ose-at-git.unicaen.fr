@@ -213,7 +213,9 @@ SELECT
   sens.id                           structure_ens_id,
   gtf.id                            groupe_type_formation_id,
   tf.id                             type_formation_id,
-  ose_divers.niveau_formation_id_calc( gtf.id, gtf.pertinence_niveau, etp.niveau ) niveau_formation_id,
+  CASE
+    WHEN 1 <> gtf.pertinence_niveau OR etp.niveau IS NULL OR etp.niveau < 1 OR gtf.id < 1 THEN NULL
+    ELSE gtf.id * 256 + niveau END  niveau_formation_id,
   etp.id                            etape_id,
   ep.id                             element_pedagogique_id,
   t.periode_id                      periode_id,

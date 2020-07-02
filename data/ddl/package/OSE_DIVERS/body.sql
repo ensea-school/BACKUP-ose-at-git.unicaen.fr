@@ -149,13 +149,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
       );
   END;
 
-
-  FUNCTION NIVEAU_FORMATION_ID_CALC( gtf_id NUMERIC, gtf_pertinence_niveau NUMERIC, niveau NUMERIC DEFAULT NULL ) RETURN NUMERIC AS
-  BEGIN
-    IF 1 <> gtf_pertinence_niveau OR niveau IS NULL OR niveau < 1 OR gtf_id < 1 THEN RETURN NULL; END IF;
-    RETURN gtf_id * 256 + niveau;
-  END;
-
   FUNCTION STR_REDUCE( str VARCHAR2 ) RETURN VARCHAR2 IS
   BEGIN
     RETURN RTRIM(utl_raw.cast_to_varchar2((nlssort(str, 'nls_sort=binary_ai'))),CHR(0));

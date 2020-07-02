@@ -20,6 +20,8 @@ FROM
     LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
   WHERE
     mep.histo_destruction IS NULL
+    /*@INTERVENANT_ID=i.id*/
+    /*@ANNEE_ID=i.annee_id*/
 
   UNION ALL
 
@@ -37,6 +39,8 @@ FROM
 
   WHERE
     mep.histo_destruction IS NULL
+    /*@INTERVENANT_ID=i.id*/
+    /*@ANNEE_ID=i.annee_id*/
 
 ) t1
 GROUP BY

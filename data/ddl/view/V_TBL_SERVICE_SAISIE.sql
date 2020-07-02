@@ -20,6 +20,8 @@ FROM
   LEFT JOIN type_volume_horaire tvhrs ON tvhrs.id = vhr.type_volume_horaire_id
 WHERE
   i.histo_destruction IS NULL
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/
 GROUP BY
   i.annee_id,
   i.id,

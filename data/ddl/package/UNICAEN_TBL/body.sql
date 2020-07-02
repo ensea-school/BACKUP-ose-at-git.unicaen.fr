@@ -1,20 +1,5 @@
 CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
-  PROCEDURE DEMANDE_CALCUL( TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2 ) IS
-  BEGIN
-    INSERT INTO tbl_dems (
-      ID,
-      TBL_NAME,
-      PARAM, VALUE
-    ) VALUES (
-      TBL_DEMS_ID_SEQ.NEXTVAL,
-      TBL_NAME,
-      PARAM, VALUE
-    );
-  END;
-
-
-
   FUNCTION MAKE_WHERE(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL, alias VARCHAR2 DEFAULT NULL) RETURN VARCHAR2 IS
     res VARCHAR2(120) DEFAULT '';
   BEGIN
@@ -30,7 +15,62 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       RETURN res || param || ' IS NULL';
     END IF;
 
-    RETURN res || param || ' = ' || value;
+    RETURN res || param || ' = q''[' || value || ']''';
+  END;
+
+
+
+  FUNCTION QUERY_APPLY_PARAM( sqlQuery VARCHAR2, param VARCHAR2, value VARCHAR2) RETURN CLOB IS
+    pos NUMERIC;
+    paramLen NUMERIC;
+    paramComm VARCHAR2(200);
+    debComm NUMERIC;
+    endComm NUMERIC;
+    debReal NUMERIC;
+    realParam VARCHAR2(80);
+    realValue VARCHAR2(120);
+    q CLOB;
+  BEGIN
+    q := sqlQuery;
+
+    IF param IS NULL THEN
+      RETURN q;
+    END IF;
+
+    paramlen := length(param);
+
+    IF value IS NULL THEN
+      realValue := ' IS NULL';
+    ELSE
+      BEGIN
+        realValue := TO_NUMBER(value);
+      EXCEPTION
+      WHEN VALUE_ERROR THEN
+        realValue := 'q''[' || value || ']''';
+      END;
+
+      realValue := '=' || realValue;
+    END IF;
+
+    LOOP
+      pos := instr(q,'/*@' || param,1,1);
+      EXIT WHEN pos = 0;
+
+      debComm := pos-1;
+      endComm := instr(q,'*/',pos,1);
+      paramComm := substr(q,debComm, endComm-debComm);
+
+      debReal := instr(paramComm,'=',1,1);
+
+      realParam := trim(substr(paramComm,debReal+1));
+
+      --realParam := 'AND ' || substr(q,pos + paramLen + 4,endComm-pos - paramLen - 4);
+      realParam := 'AND ' || realParam || realValue;
+
+
+      q := substr(q,1,debComm) || realParam || substr(q,endComm+2);
+    END LOOP;
+    RETURN q;
   END;
 
 
@@ -62,6 +102,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       ;
     END IF;
 
+  END;
+
+
+
+  PROCEDURE DEMANDE_CALCUL( TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2 ) IS
+  BEGIN
+    INSERT INTO tbl_dems (
+      ID,
+      TBL_NAME,
+      PARAM, VALUE
+    ) VALUES (
+      TBL_DEMS_ID_SEQ.NEXTVAL,
+      TBL_NAME,
+      PARAM, VALUE
+    );
   END;
 
 

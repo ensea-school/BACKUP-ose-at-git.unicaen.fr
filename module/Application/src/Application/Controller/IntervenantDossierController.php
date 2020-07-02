@@ -76,17 +76,13 @@ class IntervenantDossierController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
         /* Récupération du dossier de l'intervenant */
-        $service                      = $this->getServiceDossier();
         $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $intervenantDossierStatut     = $intervenantDossier->getStatut();
         $intervenantDossierCompletude = $this->getServiceDossier()->isComplete($intervenant);
-
-        /* Initialisation du formulaire */
-        $form         = $this->getIntervenantDossierForm($intervenant);
-        $champsAutres = $intervenant->getStatut()->getChampsAutres();
+        $champsAutres                 = $intervenantDossier->getStatut()->getChampsAutres();
         /* Règles pour afficher ou non les fieldsets */
-        $fieldsetRules           = [
+        $fieldsetRules = [
             'fieldset-identite'  => $intervenantDossier->getStatut()->getDossierIdentite(),
             'fieldset-adresse'   => $intervenantDossier->getStatut()->getDossierAdresse(),
             'fieldset-contact'   => $intervenantDossier->getStatut()->getDossierContact(),
@@ -94,19 +90,17 @@ class IntervenantDossierController extends AbstractController
             'fieldset-insee'     => $intervenantDossier->getStatut()->getDossierInsee(),
             'fieldset-employeur' => $intervenantDossier->getStatut()->getDossierEmployeur(),
             'fieldset-autres'    => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
-
         ];
-        $privileges['edit']      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
-        $privileges['valider']   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
-        $privileges['devalider'] = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
-        $privileges['supprimer'] = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));
 
-
+        /* Initialisation du formulaire */
+        $form = $this->getIntervenantDossierForm($intervenant);
         /* Traitement du formulaire */
+
         $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $intervenantDossier) use ($intervenant) {
             try {
                 /* Sauvegarde du dossier de l'intervenant */
                 $this->getServiceDossier()->save($intervenantDossier);
+
                 /* Recalcul des tableaux de bord nécessaires */
                 $this->updateTableauxBord($intervenant);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
@@ -114,6 +108,7 @@ class IntervenantDossierController extends AbstractController
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
+
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
         $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;
@@ -129,6 +124,11 @@ class IntervenantDossierController extends AbstractController
                     : sprintf("L'intervenant a effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
             );
         }
+        //Si on vient de poster le form alors on redirige pour rafraichir le form après le bindRequestSave
+        /*if ($this->getRequest()->isPost()) {
+            return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
+        }*/
+
 
         return compact(
             ['form',
@@ -138,7 +138,6 @@ class IntervenantDossierController extends AbstractController
              'intervenantDossierValidation',
              'intervenantDossierStatut',
              'intervenantDossierCompletude',
-             'privileges',
              'champsAutres',
              'fieldsetRules']
         );

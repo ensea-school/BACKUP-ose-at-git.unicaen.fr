@@ -174,14 +174,14 @@ return [
                 [//Créer un droit archivage
                  'controller' => 'Application\Controller\IntervenantDossier',
                  'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_SUITE_EDITION, Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION],
+                 'privileges' => [Privileges::DOSSIER_VISUALISATION],
                  'assertion'  => IntervenantDossierAssertion::class,
                 ],
 
                 [
                     'controller' => 'Application\Controller\IntervenantDossier',
                     'action'     => ['dossier-autre-info', 'dossier-autre-saisie'],
-                    'privileges' => [Privileges::DOSSIER_VALIDATION],
+                    'privileges' => [Privileges::INTERVENANT_STATUT_EDITION],
                     'assertion'  => IntervenantDossierAssertion::class,
                 ],
 
@@ -221,6 +221,8 @@ return [
                             IntervenantDossierAssertion::PRIV_EDIT_AUTRE5,
                             IntervenantDossierAssertion::PRIV_CAN_VALIDE,
                             IntervenantDossierAssertion::PRIV_CAN_DEVALIDE,
+                            IntervenantDossierAssertion::PRIV_CAN_EDIT,
+                            IntervenantDossierAssertion::PRIV_CAN_SUPPRIME,
 
 
                         ],

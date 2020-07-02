@@ -81,7 +81,5 @@ class DossierInseeFieldset extends AbstractFieldset
         ];
 
         return $spec;
-
-        return [];
     }
 }

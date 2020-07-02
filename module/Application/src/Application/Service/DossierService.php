@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\Utilisateur;
@@ -12,7 +11,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 
 /**
- * Description of Dossier
+ * Description of Intervenant Dossier
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
@@ -60,7 +59,7 @@ class DossierService extends AbstractEntityService
     /**
      * @param Intervenant $intervenant
      *
-     * @return Dossier|null
+     * @return IntervenantDossier|null
      */
     public function getByIntervenant(Intervenant $intervenant)
     {
@@ -87,9 +86,9 @@ class DossierService extends AbstractEntityService
      * NB: tout le travail est déjà fait via un formulaire en fait!
      * Cette méthode existe surtout pour déclencher l'événement de workflow.
      *
-     * @param \Application\Entity\Db\Dossier $dossier
+     * @param \Application\Entity\Db\IntervenantDossier $dossier
      */
-    public function enregistrerDossier(Dossier $dossier)
+    public function enregistrerDossier(IntervenantDossier $dossier)
     {
         $this->getEntityManager()->persist($this->getServiceContext()->getUtilisateur());
         $this->getEntityManager()->persist($dossier);
@@ -185,17 +184,30 @@ class DossierService extends AbstractEntityService
 
         //Complétude de contact
         $completudeDossierContact = (($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) &&
-            ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro)) ? true : false;
+            ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro())) ? true : false;
 
         //Complétude Insee
         $completudeDossierInsee = ($intervenantDossier->getNumeroInsee()) ? true : false;
 
         //Complétude Iban
-        $completudeDossierIban = true;
+
+        $completudeDossierIban = (($intervenantDossier->getIBAN() && $intervenantDossier->getBIC()) || $intervenantDossier->isRibHorsSepa()) ? true : false;
         //Complètude Employeur
-        $completudeDossierEmployeur = true;
+        $completudeDossierEmployeur = ($intervenantDossier->getEmployeur()) ? true : false;
         //Complétude Autres
+        $statut                 = $intervenantDossier->getStatut();
+        $champsAutres           = $intervenantDossier->getStatut()->getChampsAutres();
+        $statutChampsAutres     = ($intervenantDossier->getStatut()) ? $intervenantDossier->getStatut()->getChampsAutres() : [];
+        $count                  = count($champsAutres);
         $completudeDossierAutre = true;
+        foreach ($statutChampsAutres as $champ) {
+            $method      = 'getAutre' . $champ->getId();
+            $obligatoire = $champ->isObligatoire();
+            if (empty($intervenantDossier->$method()) && $champ->isObligatoire()) {
+                $completudeDossierAutre = false;
+                break;
+            }
+        }
 
         $completudeDossier = ($completudeDossierIdentie &&
             $completudeDossierAdresse &&
@@ -205,16 +217,14 @@ class DossierService extends AbstractEntityService
             $completudeDossierEmployeur &&
             $completudeDossierAutre) ? true : false;
 
-        $completude = [
-            'dossier'          => $completudeDossier,
-            'dossierIdentite'  => $completudeDossierIdentie,
-            'dossierAdresse'   => $completudeDossierAdresse,
-            'dossierContact'   => $completudeDossierContact,
-            'dossierInsee'     => $completudeDossierInsee,
-            'dossierIban'      => $completudeDossierIban,
-            'dossierEmployeur' => $completudeDossierEmployeur,
-            'dossierAutres'    => $completudeDossierAutre,
-        ];
+        $completude = ['dossier'          => $completudeDossier,
+                       'dossierIdentite'  => $completudeDossierIdentie,
+                       'dossierAdresse'   => $completudeDossierAdresse,
+                       'dossierContact'   => $completudeDossierContact,
+                       'dossierInsee'     => $completudeDossierInsee,
+                       'dossierIban'      => $completudeDossierIban,
+                       'dossierEmployeur' => $completudeDossierEmployeur,
+                       'dossierAutres'    => $completudeDossierAutre,];
 
         return $completude;
     }
@@ -229,7 +239,8 @@ class DossierService extends AbstractEntityService
      *
      * @return $this
      */
-    public function purgerDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
+    public
+    function purgerDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->update(\Application\Entity\Db\IndicModifDossier::class, 't')

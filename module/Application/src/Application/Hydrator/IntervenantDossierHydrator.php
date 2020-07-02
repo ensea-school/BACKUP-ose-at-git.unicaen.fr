@@ -112,7 +112,7 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         /* Extract statut intervenant */
 
-        $data['statut'] = (!empty($object->getStatut())) ? $object->getStatut()->getId() : '';
+        $data['DossierStatut']['statut'] = (!empty($object->getStatut())) ? $object->getStatut()->getId() : '';
 
         /* Extract Champs autres */
         /* Il faudra penser à gérer les champs de type select*/
@@ -141,7 +141,7 @@ class IntervenantDossierHydrator implements HydratorInterface
     {
 
         //Sécurisation de l'hydratation de l'object pour ne pas mettre à jour les valeurs si on a pas le privilege
-
+        $var = "";
         /* @var $object IntervenantDossier */
         //Hydratation de l'indentité
         if (isset($data['DossierIdentite'])) {
@@ -226,8 +226,8 @@ class IntervenantDossierHydrator implements HydratorInterface
         }
 
         //Hydratation statut
-        if (!empty($data['statut'])) {
-            $statut = $this->getServiceStatutIntervenant()->get($data['statut']);
+        if (!empty($data['DossierStatut']['statut'])) {
+            $statut = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
             $object->setStatut($statut);
         } else {
             $object->setStatut(null);

@@ -44,6 +44,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     const PRIV_VIEW_AUTRE5    = 'dossier-voir-autre5';
     const PRIV_CAN_VALIDE     = 'dossier-peut-valider';
     const PRIV_CAN_DEVALIDE   = 'dossier-peut-devalider';
+    const PRIV_CAN_EDIT       = 'dossier-peut-editer';
+    const PRIV_CAN_SUPPRIME   = 'dossier-peut-supprimer';
 
     use WorkflowServiceAwareTrait;
     use DossierServiceAwareTrait;
@@ -81,6 +83,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
             self::PRIV_EDIT_AUTRE5,
             self::PRIV_CAN_VALIDE,
             self::PRIV_CAN_DEVALIDE,
+            self::PRIV_CAN_EDIT,
+            self::PRIV_CAN_SUPPRIME,
         ];
 
         $role = $this->getRole();
@@ -139,6 +143,10 @@ class IntervenantDossierAssertion extends AbstractAssertion
                         return $this->assertCanValidate($entity);
                     case self::PRIV_CAN_DEVALIDE:
                         return $this->assertCanDevalidate($entity);
+                    case self::PRIV_CAN_EDIT:
+                        return $this->assertCanEdit($entity);
+                    case self::PRIV_CAN_SUPPRIME:
+                        return $this->assertCanSupprime();
                 }
             break;
         }
@@ -402,8 +410,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
             !$isValidate,
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
         ]);
-
-        return $isComplete;
     }
 
 
@@ -415,10 +421,31 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
         return $this->asserts([
             $isValidate,
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_DEVALIDATION),
         ]);
+    }
 
-        return $isComplete;
+
+
+    protected function assertCanEdit(Intervenant $intervenant)
+    {
+
+        $isValidate = $this->getServiceDossier()->getValidation($intervenant);
+
+        return $this->asserts([
+            !$isValidate,
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
+        ]);
+    }
+
+
+
+    protected function assertCanSupprime()
+    {
+
+        return $this->asserts([
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_SUPPRESSION),
+        ]);
     }
 
 

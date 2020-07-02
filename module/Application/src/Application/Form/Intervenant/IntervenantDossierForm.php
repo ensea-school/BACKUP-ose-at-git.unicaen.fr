@@ -12,6 +12,7 @@ use Application\Form\Intervenant\Dossier\DossierBancaireFieldset;
 use Application\Form\Intervenant\Dossier\DossierContactFieldset;
 use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
 use Application\Form\Intervenant\Dossier\DossierInseeFieldset;
+use Application\Form\Intervenant\Dossier\DossierStatutFieldset;
 use Application\Hydrator\IntervenantDossierHydrator;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -77,11 +78,11 @@ class IntervenantDossierForm extends AbstractForm
 
         $statutIntervenant = $this->intervenant->getStatut();
 
-        $haveContact      = $statutIntervenant->getDossierContact();
-        $serviceAuthorize = $this->getServiceContext()->getAuthorize();
-        $role             = $this->getServiceContext()->getUtilisateur()->getRoles();
-        $hydrator         = new IntervenantDossierHydrator();
+        $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
+
+        $this->dossierStatutFieldset = new DossierStatutFieldset('DossierStatut', ['statutIntervenant' => $statutIntervenant]);
+        $this->dossierStatutFieldset->init();
 
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
@@ -104,8 +105,10 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $statutIntervenant->getChampsAutres()]);
         $this->dossierAutresFiedlset->init();
 
+
         $this->setAttribute('id', 'dossier');
 
+        $this->add($this->dossierStatutFieldset);
         $this->add($this->dossierIdentiteFieldset);
         $this->add($this->dossierAdresseFieldset);
         $this->add($this->dossierContactFiedlset);
@@ -117,32 +120,31 @@ class IntervenantDossierForm extends AbstractForm
         /**
          * Select pour Statut intervenant customisé
          */
-        $statut = new StatutIntervenantSelect('statut', [
-            'label'        => "Quel est votre statut ?",
-            'empty_option' => "(Sélectionnez...)",
-            'value'        => '',
-        ]);
+        /* $statut = new StatutIntervenantSelect('statut', [
+             'label' => "Quel est votre statut ?",
+             'value' => '',
+         ]);
 
 
-        $statut->getProxy()
-            ->setFindMethod([
-                'name'   => 'findBy',
-                'params' => [
-                    'criteria' => ['peutChoisirDansDossier' => true],
-                    'orderBy'  => ['ordre' => 'ASC'],
-                ],
-            ])
-            ->setObjectManager($this->getServiceContext()->getEntityManager())
-            ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
+         $statut->getProxy()
+             ->setFindMethod([
+                 'name'   => 'findBy',
+                 'params' => [
+                     'criteria' => ['peutChoisirDansDossier' => true],
+                     'orderBy'  => ['ordre' => 'ASC'],
+                 ],
+             ])
+             ->setObjectManager($this->getServiceContext()->getEntityManager())
+             ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
 
-        //Si le statut de l'intervenant n'est pas dans la liste des statuts sélectionnable on le rajoute à la main
+         //Si le statut de l'intervenant n'est pas dans la liste des statuts sélectionnable on le rajoute à la main
 
-        $statutValues = $statut->getValueOptions();
-        $statut->setOptions([$statutIntervenant]);
-        $statutValues = $statut->getValueOptions();
+         $statutValues = $statut->getValueOptions();
+         $statut->setOptions([$statutIntervenant]);
+         $statutValues = $statut->getValueOptions();
 
 
-        $this->add($statut);
+         $this->add($statut);*/
 
         /**
          * Csrf
@@ -176,15 +178,6 @@ class IntervenantDossierForm extends AbstractForm
     {
         $dossier         = $this->getServiceDossier()->getByIntervenant($intervenant);
         $dossierFieldset = $this->get('dossier');
-        /* @var $dossierFieldset DossierFieldset */
-
-        if ($lastHETD > 0) {
-            /**
-             * Si l'intervenant était un vacataire connu l'année précédente, alors
-             * la question "Avez-vous exercé une activité..." est retirée puisque la réponse est forcément OUI.
-             */
-            $dossierFieldset->remove('premierRecrutement');
-        }
 
         /**
          * Pas de sélection de la France par défaut si le numéro INSEE correspond à une naissance hors France.

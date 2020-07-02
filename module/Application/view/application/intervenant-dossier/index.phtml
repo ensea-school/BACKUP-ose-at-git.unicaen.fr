@@ -10,7 +10,9 @@ $editInsee     = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRI
 $editIban      = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IBAN);
 $editEmployeur = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR);
 $canValider    = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
-$canValider    = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
+$canDevalider  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
+$canEdit       = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_EDIT);
+$canSupprimer  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
 
 //$nextEtape    = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
 $nextEtape = '';
@@ -58,26 +60,9 @@ $fieldsets = $form->getFieldsets();
     echo $this->form()->openTag($form);
     ?>
     <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    STATUT
-                    <?php if (!$intervenantDossierCompletude['dossierIdentite']): ?>
-                        <small><span class="label label-warning">A compléter</span></small>
-                    <?php else: ?>
-                        <small><span class="label label-success">Complet</span></small>
-                    <?php endif; ?>
-                </div>
-                <div class="panel-body">
-
-                    <?php
-                    echo $this->formControlGroup($form->get('statut'));
-                    ?>
-                    
-                </div>
-            </div>
-        </div>
+        <?= $this->partial('application/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude')); ?>
     </div>
+
     <?php if (empty($intervenantDossierStatut)): ?>
     <div class="row  display-flex hidden">
         <?php else: ?>
@@ -144,12 +129,12 @@ $fieldsets = $form->getFieldsets();
             <div class="col-md-12">
                 <?php
                 echo $this->formHidden($this->form->get('security'));
-                if ($privileges['edit']) {
+                if ($canEdit) {
                     echo $this->formSubmit($form->get('submit'));
                 }
 
                 ?>
-                <?php if ($privileges['valider']): ?>
+                <?php if ($canValider): ?>
                     <a class="valider-dossier btn btn-success pop-ajax"
                        href="<?= $this->url('intervenant/dossier/valider', [], [], true) ?>"
                        title="Valider les données personnelles"
@@ -163,7 +148,7 @@ $fieldsets = $form->getFieldsets();
                     </a>
                 <?php endif ?>
                 <!-- actions de dévalidation du dossier -->
-                <?php if ($privileges['devalider']): ?>
+                <?php if ($canDevalider): ?>
                     <a class="devalider-dossier btn btn-danger pop-ajax"
                        href="<?= $this->url('intervenant/dossier/devalider', [], [], true) ?>"
                        title="Dévalider les données personnelles"
@@ -174,6 +159,21 @@ $fieldsets = $form->getFieldsets();
                        data-submit-reload="true"
                     >
                         <span class="glyphicon glyphicon-thumbs-down"></span> Je dévalide les données
+                    </a>
+                <?php endif ?>
+
+                <!-- actions de suppression du dossier -->
+                <?php if ($canSupprimer): ?>
+                    <a class="supprimer-dossier btn btn-danger pop-ajax"
+                       href="<?= $this->url('intervenant/dossier/supprimer', [], [], true) ?>"
+                       title="Suppression des données personnelles"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression de toutes les données personnelles ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-thumbs-down"></span> Je supprime les données
                     </a>
                 <?php endif ?>
             </div>

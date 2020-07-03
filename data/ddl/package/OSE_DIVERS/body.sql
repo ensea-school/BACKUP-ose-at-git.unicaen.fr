@@ -160,6 +160,16 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     RETURN 0;
   END;
 
+  FUNCTION GET_VIEW_QUERY( view_name VARCHAR2 ) RETURN CLOB IS
+    vlong long;
+  BEGIN
+    SELECT text into vlong
+    FROM   ALL_VIEWS
+    WHERE  view_name = GET_VIEW_QUERY.view_name;
+
+    RETURN to_clob(vlong);
+  END;
+
   FUNCTION LIKED( haystack VARCHAR2, needle VARCHAR2 ) RETURN NUMERIC IS
   BEGIN
     RETURN CASE WHEN STR_REDUCE(haystack) LIKE STR_REDUCE(needle) THEN 1 ELSE 0 END;

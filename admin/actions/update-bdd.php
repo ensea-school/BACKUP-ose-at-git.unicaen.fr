@@ -54,9 +54,9 @@ $bdd->alter($ref, $filters, true);
 $bdd->majSequences($ref);
 
 // Reconstruction des TBL
-$this->logBegin("Reconstruction de tous les tableaux de bord");
+$c->begin("Reconstruction de tous les tableaux de bord");
 $oa->exec('UnicaenTbl build-procedures');
-$this->logEnd();
+$c->end();
 
 
 // Mise à jour des données

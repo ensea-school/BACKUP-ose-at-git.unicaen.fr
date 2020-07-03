@@ -63,18 +63,20 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   FUNCTION MAKE_INTERVENANT_QUERY RETURN CLOB IS
     query CLOB;
   BEGIN
-     EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.intervenant_query FROM DUAL' INTO query;
+    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.intervenant_query FROM DUAL' INTO query;
+    --query := REPLACE( query, 'V_FORMULE_INTERVENANT', '(' || GET_VIEW_INTERVENANT || ')');
 
-     RETURN query;
+    RETURN query;
   END;
 
 
   FUNCTION MAKE_VOLUME_HORAIRE_QUERY RETURN CLOB IS
     query CLOB;
   BEGIN
-     EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.volume_horaire_query FROM DUAL' INTO query;
+    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.volume_horaire_query FROM DUAL' INTO query;
+    --query := REPLACE( query, 'V_FORMULE_VOLUME_HORAIRE', '(' || GET_VIEW_VOLUME_HORAIRE || ')');
 
-     RETURN query;
+    RETURN query;
   END;
 
 
@@ -133,7 +135,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     intervenant.total      := NULL;
     intervenant.solde      := NULL;
 
-    query := MAKE_INTERVENANT_QUERY;
+    query := MAKE_INTERVENANT_QUERY();
     OPEN cur FOR query;
 
     LOOP

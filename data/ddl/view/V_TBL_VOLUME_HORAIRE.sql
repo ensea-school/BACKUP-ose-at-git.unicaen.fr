@@ -52,3 +52,5 @@ FROM
   LEFT JOIN has_cp                                ON has_cp.etape_id = etp.id
 WHERE
   i.histo_destruction IS NULL
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/

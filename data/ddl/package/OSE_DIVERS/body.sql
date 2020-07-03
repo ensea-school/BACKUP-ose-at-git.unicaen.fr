@@ -12,11 +12,24 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
       FROM tbl
       WHERE tbl_name <> 'formule' -- TROP LONG !!
       ORDER BY ordre
-    )
-    LOOP
+    )LOOP
       UNICAEN_TBL.CALCULER(d.tbl_name);
       dbms_output.put_line('Calcul du tableau de bord "' || d.tbl_name || '" effectué');
       COMMIT;
+    END LOOP;
+  END;
+
+
+
+  PROCEDURE CALCUL_FEUILLE_DE_ROUTE( INTERVENANT_ID NUMERIC ) IS
+  BEGIN
+    FOR d IN (
+      SELECT   tbl_name
+      FROM     tbl
+      WHERE    feuille_de_route = 1
+      ORDER BY ordre
+    ) LOOP
+      UNICAEN_TBL.CALCULER(d.tbl_name,'INTERVENANT_ID',intervenant_id);
     END LOOP;
   END;
 
@@ -103,20 +116,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     RETURN res;
   END;
 
-  FUNCTION implode(i_query VARCHAR2, i_seperator VARCHAR2 DEFAULT ',') RETURN VARCHAR2 AS
-    l_return CLOB:='';
-    l_temp CLOB;
-    TYPE r_cursor is REF CURSOR;
-    rc r_cursor;
-  BEGIN
-    OPEN rc FOR i_query;
-    LOOP
-      FETCH rc INTO L_TEMP;
-      EXIT WHEN RC%NOTFOUND;
-      l_return:=l_return||L_TEMP||i_seperator;
-    END LOOP;
-    RETURN RTRIM(l_return,i_seperator);
-  END;
 
   PROCEDURE intervenant_horodatage_service( INTERVENANT_ID NUMERIC, TYPE_VOLUME_HORAIRE_ID NUMERIC, REFERENTIEL NUMERIC, HISTO_MODIFICATEUR_ID NUMERIC, HISTO_MODIFICATION DATE ) AS
   BEGIN
@@ -148,13 +147,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
         intervenant_horodatage_service.HISTO_MODIFICATION
 
       );
-  END;
-
-
-  FUNCTION NIVEAU_FORMATION_ID_CALC( gtf_id NUMERIC, gtf_pertinence_niveau NUMERIC, niveau NUMERIC DEFAULT NULL ) RETURN NUMERIC AS
-  BEGIN
-    IF 1 <> gtf_pertinence_niveau OR niveau IS NULL OR niveau < 1 OR gtf_id < 1 THEN RETURN NULL; END IF;
-    RETURN gtf_id * 256 + niveau;
   END;
 
   FUNCTION STR_REDUCE( str VARCHAR2 ) RETURN VARCHAR2 IS
@@ -259,13 +251,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     INSERT INTO SYNC_LOG( id, date_sync, message ) VALUES ( sync_log_id_seq.nextval, systimestamp, msg );
   END;
 
-  FUNCTION FORMATTED_RIB (bic VARCHAR2, iban VARCHAR2) RETURN VARCHAR2 IS
-  BEGIN
-    if bic is null and iban is null then
-      return null;
-    end if;
-    RETURN regexp_replace(bic, '[[:space:]]+', '') || '-' || regexp_replace(iban, '[[:space:]]+', '');
-  END;
+
 
   FUNCTION FORMATTED_ADRESSE(precisions VARCHAR2, lieu_dit VARCHAR2, numero VARCHAR2, numero_compl_id NUMERIC, voirie_id NUMERIC, voie VARCHAR2, code_postal VARCHAR2, commune VARCHAR2, pays_id VARCHAR2 ) RETURN VARCHAR2 IS
     a VARCHAR2(4000) DEFAULT '';
@@ -336,29 +322,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     END IF;
 
     RETURN a;
-  END;
-
-
-  PROCEDURE CALCUL_FEUILLE_DE_ROUTE( CONDS VARCHAR2 ) IS
-  BEGIN
-    FOR d IN (
-      SELECT   tbl_name
-      FROM     tbl
-      WHERE    feuille_de_route = 1
-      ORDER BY ordre
-    ) LOOP
-      UNICAEN_TBL.CALCULER(d.tbl_name,CONDS);
-    END LOOP;
-  END;
-
-
-
-  FUNCTION GET_TRIGGER_BODY( TRIGGER_NAME VARCHAR2 ) RETURN VARCHAR2 IS
-    vlong long;
-  BEGIN
-    SELECT trigger_body INTO vlong FROM all_triggers WHERE trigger_name = GET_TRIGGER_BODY.TRIGGER_NAME;
-
-    RETURN substr(vlong, 1, 32767);
   END;
 
 END OSE_DIVERS;

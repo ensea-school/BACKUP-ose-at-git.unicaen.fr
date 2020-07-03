@@ -105,18 +105,6 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'TO_DELETE'          => [
-            'name'        => 'TO_DELETE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 9,
-            'commentaire' => NULL,
-        ],
     ],
 ];
 

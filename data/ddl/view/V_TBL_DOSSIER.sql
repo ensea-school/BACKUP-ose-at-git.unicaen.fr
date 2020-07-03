@@ -17,3 +17,5 @@ FROM
                               AND v.histo_destruction IS NULL
 WHERE
   i.histo_destruction IS NULL
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/

@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CHARGENS__UN',
+    'name'    => 'TBL_CHARGENS_UN',
     'unique'  => TRUE,
     'table'   => 'TBL_CHARGENS',
     'columns' => [

@@ -53,6 +53,11 @@ $bdd->alter($ref, $filters, true);
 // Mise à jour des séquences
 $bdd->majSequences($ref);
 
+// Reconstruction des TBL
+$this->logBegin("Reconstruction de tous les tableaux de bord");
+$oa->exec('UnicaenTbl build-procedures');
+$this->logEnd();
+
 
 // Mise à jour des données
 $dataGen = new DataGen($oa);

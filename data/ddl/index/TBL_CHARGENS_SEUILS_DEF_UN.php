@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CHARGENS_SEUILS_DEF__UN',
+    'name'    => 'TBL_CHARGENS_SEUILS_DEF_UN',
+    'unique'  => TRUE,
     'table'   => 'TBL_CHARGENS_SEUILS_DEF',
-    'index'   => 'TBL_CHARGENS_SEUILS_DEF__UN',
     'columns' => [
         'SCENARIO_ID',
         'TYPE_INTERVENTION_ID',

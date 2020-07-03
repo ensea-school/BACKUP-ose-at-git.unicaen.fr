@@ -32,6 +32,8 @@ WITH t AS (
 
   WHERE
     i.histo_destruction IS NULL
+    /*@INTERVENANT_ID=i.id*/
+    /*@ANNEE_ID=i.annee_id*/
     AND NOT (si.peut_avoir_contrat = 0 AND evh.code = 'valide')
 
   UNION ALL
@@ -65,6 +67,8 @@ WITH t AS (
 
   WHERE
     i.histo_destruction IS NULL
+    /*@INTERVENANT_ID=i.id*/
+    /*@ANNEE_ID=i.annee_id*/
     AND NOT (si.peut_avoir_contrat = 0 AND evh.code = 'valide')
 )
 SELECT

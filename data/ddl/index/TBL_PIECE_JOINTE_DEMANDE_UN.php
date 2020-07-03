@@ -3,12 +3,12 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CLOTURE_REALISE_UN',
+    'name'    => 'TBL_PIECE_JOINTE_DEMANDE_UN',
     'unique'  => TRUE,
-    'table'   => 'TBL_CLOTURE_REALISE',
+    'table'   => 'TBL_PIECE_JOINTE_DEMANDE',
     'columns' => [
+        'TYPE_PIECE_JOINTE_ID',
         'INTERVENANT_ID',
-        'TO_DELETE',
     ],
 ];
 

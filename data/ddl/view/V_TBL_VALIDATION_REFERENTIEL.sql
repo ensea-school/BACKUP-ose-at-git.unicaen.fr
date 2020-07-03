@@ -22,3 +22,5 @@ FROM
   LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
 WHERE
   s.histo_destruction IS NULL
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/

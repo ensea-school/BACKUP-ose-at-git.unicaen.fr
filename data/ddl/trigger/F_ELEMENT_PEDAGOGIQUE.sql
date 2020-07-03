@@ -11,6 +11,6 @@ CREATE OR REPLACE TRIGGER "F_ELEMENT_PEDAGOGIQUE"
     WHERE (s.element_pedagogique_id = :NEW.id
     OR s.element_pedagogique_id     = :OLD.id)
     AND s.histo_destruction IS NULL
-    ) LOOP UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+    ) LOOP UNICAEN_TBL.DEMANDE_CALCUL('formule', 'INTERVENANT_ID', p.intervenant_id );
 END LOOP;
 END;

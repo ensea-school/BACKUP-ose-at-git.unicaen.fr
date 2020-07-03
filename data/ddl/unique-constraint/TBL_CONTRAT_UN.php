@@ -9,7 +9,6 @@ return [
     'columns' => [
         'INTERVENANT_ID',
         'STRUCTURE_ID',
-        'TO_DELETE',
     ],
 ];
 

@@ -69,18 +69,6 @@ return [
             'position'    => 5,
             'commentaire' => '1 Si l\'intervenant a un dossier, 0 sinon',
         ],
-        'TO_DELETE'           => [
-            'name'        => 'TO_DELETE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 6,
-            'commentaire' => NULL,
-        ],
         'VALIDATION_ID'       => [
             'name'        => 'VALIDATION_ID',
             'type'        => 'int',

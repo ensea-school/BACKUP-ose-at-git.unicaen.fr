@@ -13,6 +13,7 @@ WITH i_s AS (
     JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
   WHERE
     frs.total > 0
+    /*@INTERVENANT_ID=fr.intervenant_id*/
 ),
 avi AS (
     SELECT
@@ -68,7 +69,10 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
                                         AND i.annee_id >= avi.annee_id
 
     WHERE
-      ta.code = 'CONSEIL_ACADEMIQUE')
+      ta.code = 'CONSEIL_ACADEMIQUE'
+      /*@INTERVENANT_ID=i.id*/
+      /*@ANNEE_ID=i.annee_id*/
+  )
 WHERE
   rank = 1
 
@@ -115,6 +119,9 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
 
 
     WHERE
-      ta.code = 'CONSEIL_RESTREINT')
+      ta.code = 'CONSEIL_RESTREINT'
+      /*@INTERVENANT_ID=i.id*/
+      /*@ANNEE_ID=i.annee_id*/
+  )
 WHERE
   rank = 1

@@ -37,6 +37,8 @@ FROM (
         SUM(CASE WHEN fichier_id IS NULL THEN 0 ELSE 1 END) fichier
       FROM
         tbl_piece_jointe_fournie pjf
+      WHERE
+        1=1
       GROUP BY
         pjf.annee_id,
         pjf.intervenant_id,

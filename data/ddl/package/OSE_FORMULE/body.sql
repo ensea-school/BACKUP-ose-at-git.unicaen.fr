@@ -35,6 +35,49 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   t_res t_resultats;
   formule_definition formule%rowtype;
   in_calculer_tout BOOLEAN DEFAULT false;
+  view_intervenant clob;
+  view_volume_horaire clob;
+
+
+
+  FUNCTION GET_VIEW_INTERVENANT RETURN CLOB IS
+  BEGIN
+    IF view_intervenant IS NULL THEN
+      view_intervenant := ose_divers.GET_VIEW_QUERY('V_FORMULE_INTERVENANT');
+    END IF;
+
+    RETURN view_intervenant;
+  END;
+
+
+  FUNCTION GET_VIEW_VOLUME_HORAIRE RETURN CLOB IS
+  BEGIN
+    IF view_volume_horaire IS NULL THEN
+      view_volume_horaire := ose_divers.GET_VIEW_QUERY('V_FORMULE_VOLUME_HORAIRE');
+    END IF;
+
+    RETURN view_volume_horaire;
+  END;
+
+
+  FUNCTION MAKE_INTERVENANT_QUERY RETURN CLOB IS
+    query CLOB;
+  BEGIN
+    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.intervenant_query FROM DUAL' INTO query;
+    --query := REPLACE( query, 'V_FORMULE_INTERVENANT', '(' || GET_VIEW_INTERVENANT || ')');
+
+    RETURN query;
+  END;
+
+
+  FUNCTION MAKE_VOLUME_HORAIRE_QUERY RETURN CLOB IS
+    query CLOB;
+  BEGIN
+    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.volume_horaire_query FROM DUAL' INTO query;
+    --query := REPLACE( query, 'V_FORMULE_VOLUME_HORAIRE', '(' || GET_VIEW_VOLUME_HORAIRE || ')');
+
+    RETURN query;
+  END;
 
 
 
@@ -92,7 +135,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     intervenant.total      := NULL;
     intervenant.solde      := NULL;
 
-    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.intervenant_query FROM DUAL' INTO query;
+    query := MAKE_INTERVENANT_QUERY();
     OPEN cur FOR query;
 
     LOOP
@@ -224,7 +267,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   BEGIN
     all_volumes_horaires.delete;
 
-    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.volume_horaire_query FROM DUAL' INTO query;
+    query := MAKE_VOLUME_HORAIRE_QUERY();
     OPEN cur FOR query;
 
     LOOP
@@ -833,13 +876,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
 
 
-  PROCEDURE CALCULER_TBL( PARAMS UNICAEN_TBL.T_PARAMS ) IS
+  PROCEDURE CALCULER_TBL(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL) IS
     intervenant_id NUMERIC;
     TYPE r_cursor IS REF CURSOR;
     diff_cur r_cursor;
   BEGIN
-    OPEN diff_cur FOR 'WITH interv AS (SELECT id intervenant_id, intervenant.* FROM intervenant)
-    SELECT intervenant_id FROM interv WHERE ' || unicaen_tbl.PARAMS_TO_CONDS( params );
+    OPEN diff_cur FOR 'SELECT id FROM intervenant WHERE '
+      || unicaen_tbl.MAKE_WHERE( CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, value );
     LOOP
       FETCH diff_cur INTO intervenant_id; EXIT WHEN diff_cur%NOTFOUND;
       BEGIN

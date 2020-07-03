@@ -105,6 +105,18 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
+        'PARAMETRES'          => [
+            'name'        => 'PARAMETRES',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 500,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 9,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

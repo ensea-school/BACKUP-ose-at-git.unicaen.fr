@@ -363,7 +363,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_intervenant fi
+      V_FORMULE_INTERVENANT fi
     ';
   END;
 
@@ -380,7 +380,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_volume_horaire fvh
+      V_FORMULE_VOLUME_HORAIRE fvh
     ORDER BY
       ordre';
   END;

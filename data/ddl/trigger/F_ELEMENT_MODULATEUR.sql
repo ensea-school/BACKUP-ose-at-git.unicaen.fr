@@ -17,7 +17,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', 'INTERVENANT_ID', p.intervenant_id );
 
   END LOOP;
 

@@ -9,7 +9,6 @@ return [
     'columns' => [
         'SERVICE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
-        'TO_DELETE',
     ],
 ];
 

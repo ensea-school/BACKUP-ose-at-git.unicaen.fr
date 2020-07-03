@@ -329,7 +329,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
   PROCEDURE CALCULER( INTERVENANT_ID NUMERIC ) IS
   BEGIN
-    CALCULER_TBL(unicaen_tbl.make_params('intervenant_id', INTERVENANT_ID));
+    CALCULER_TBL('INTERVENANT_ID', INTERVENANT_ID);
   END;
 
 
@@ -337,17 +337,17 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   PROCEDURE CALCULER_TOUT( ANNEE_ID NUMERIC DEFAULT NULL ) IS
   BEGIN
     IF ANNEE_ID IS NULL THEN
-      CALCULER_TBL(unicaen_tbl.make_params());
+      CALCULER_TBL();
     ELSE
-      CALCULER_TBL(unicaen_tbl.make_params('annee_id', ANNEE_ID));
+      CALCULER_TBL('ANNEE_ID', ANNEE_ID);
     END IF;
   END;
 
 
 
 
-  FUNCTION MAKE_V_TBL_WORKFLOW(PARAMS UNICAEN_TBL.T_PARAMS) RETURN CLOB IS
-    p CLOB;
+  FUNCTION MAKE_V_TBL_WORKFLOW(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL) RETURN CLOB IS
+    p VARCHAR2(30);
     dems CLOB;
     intervenant CLOB;
     dossier CLOB;
@@ -360,8 +360,6 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     cloture CLOB;
     contrat CLOB;
   BEGIN
-    p := unicaen_tbl.params_to_conds(params);
-
     dems := '
         WHEN e.code = ''DONNEES_PERSO_SAISIE'' OR e.code = ''DONNEES_PERSO_VALIDATION'' THEN
           si.peut_saisir_dossier
@@ -410,18 +408,13 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
     intervenant := '
       SELECT
-        *
+        id                  intervenant_id,
+        annee_id            annee_id,
+        statut_id           statut_intervenant_id
       FROM
-        (
-        SELECT
-          id                  intervenant_id,
-          annee_id            annee_id,
-          statut_id           statut_intervenant_id
-        FROM
-          intervenant
-        )
+        intervenant
       WHERE
-        ' || p || '
+        ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, value) || '
     ';
 
 
@@ -447,7 +440,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             UNION SELECT ''DONNEES_PERSO_VALIDATION'' code FROM dual
           ) e ON 1=1
         WHERE
-          ' || p || '
+          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
           AND d.peut_saisir_dossier = 1
     ';
 
@@ -474,7 +467,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             UNION SELECT ''SERVICE_SAISIE_REALISE''         code FROM dual
           ) e ON 1=1
         WHERE
-          ' || p || '
+          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
           AND (tss.peut_saisir_service = 1 OR tss.peut_saisir_referentiel = 1)
     ';
 
@@ -494,7 +487,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_validation_enseignement tve
           JOIN type_volume_horaire tvh ON tvh.id = tve.type_volume_horaire_id
         WHERE
-          ' || p || '
+          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
           AND tve.auto_validation = 0
         GROUP BY
           tve.intervenant_id,
@@ -518,7 +511,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_validation_referentiel tvr
           JOIN type_volume_horaire tvh ON tvh.id = tvr.type_volume_horaire_id
         WHERE
-          ' || p || '
+          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
           AND tvr.auto_validation = 0
         GROUP BY
           tvr.intervenant_id,
@@ -551,7 +544,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           FROM
             tbl_piece_jointe
           WHERE
-            ' || p || '
+            ' || unicaen_tbl.MAKE_WHERE(param, value) || '
             AND demandee > 0
             AND obligatoire = 1
           GROUP BY
@@ -580,7 +573,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_agrement a
           JOIN type_agrement ta ON ta.id = a.type_agrement_id
         WHERE
-          ' || p || '
+          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
     ';
 
 
@@ -595,7 +588,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         FROM
           tbl_cloture_realise c
         WHERE
-          ' || p || '
+          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
           AND c.peut_cloturer_saisie = 1
     ';
 
@@ -625,7 +618,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             FROM
               tbl_paiement
             WHERE
-              ' || p || '
+              ' || unicaen_tbl.MAKE_WHERE(param, value) || '
             GROUP BY
               annee_id,
               intervenant_id,
@@ -656,7 +649,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_contrat c
           JOIN parametre p on p.nom = ''contrat_regle_franchissement''
         WHERE
-          ' || p || '
+          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
           AND peut_avoir_contrat = 1
           AND nbvh > 0
     ';
@@ -698,7 +691,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
 
 
-  PROCEDURE CALCULER_TBL( PARAMS UNICAEN_TBL.T_PARAMS ) IS
+  PROCEDURE CALCULER_TBL( param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL ) IS
     TYPE t_v_tbl_workflow IS RECORD(
       annee_id              NUMERIC,
       intervenant_id        NUMERIC,
@@ -737,7 +730,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     u BOOLEAN;
   BEGIN
     INITIALISATION;
-    OPEN c FOR 'SELECT * FROM tbl_workflow WHERE ' || unicaen_tbl.PARAMS_TO_CONDS( params );
+    OPEN c FOR 'SELECT * FROM tbl_workflow WHERE ' || unicaen_tbl.MAKE_WHERE(param, value);
     LOOP
       FETCH c INTO t; EXIT WHEN c%NOTFOUND;
       IF NOT intervenants.exists(t.intervenant_id) THEN
@@ -764,7 +757,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     END LOOP;
     CLOSE c;
 
-    OPEN c FOR MAKE_V_TBL_WORKFLOW(params);
+    OPEN c FOR MAKE_V_TBL_WORKFLOW(param, value);
     LOOP
       FETCH c INTO v; EXIT WHEN c%NOTFOUND;
 
@@ -817,7 +810,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     FROM
       wf_dep_bloquante wdb
       JOIN tbl_workflow v ON v.id= wdb.tbl_workflow_id
-    WHERE ' || unicaen_tbl.PARAMS_TO_CONDS( params, 'v' );
+    WHERE ' || unicaen_tbl.MAKE_WHERE( param, value, 'v' );
     LOOP
       FETCH c INTO wdb; EXIT WHEN c%NOTFOUND;
       we_ec := MAKE_FR_ETAPE_INDEX( wdb.etape_id, wdb.structure_id );

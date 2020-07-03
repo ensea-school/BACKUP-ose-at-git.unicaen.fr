@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CHARGENS__UN',
+    'name'    => 'TBL_CHARGENS_UN',
     'table'   => 'TBL_CHARGENS',
-    'index'   => 'TBL_CHARGENS__UN',
+    'index'   => 'TBL_CHARGENS_UN',
     'columns' => [
         'ANNEE_ID',
         'NOEUD_ID',

@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_PJF_UN',
+    'name'    => 'TBL_PIECE_JOINTE_FOURNIE_UN',
+    'unique'  => TRUE,
     'table'   => 'TBL_PIECE_JOINTE_FOURNIE',
-    'index'   => 'TBL_PJF_UN',
     'columns' => [
         'TYPE_PIECE_JOINTE_ID',
         'INTERVENANT_ID',

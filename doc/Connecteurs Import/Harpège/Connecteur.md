@@ -12,8 +12,6 @@ Le connecteur Harpège permet de synchroniser en import :
 Les vues qui vont sont fournies ci-dessous ne représentent qu'un exemple. Il vous revient de les adapter à vos besoins afin que vous
 retrouviez dans OSE les données dont vous avez besoin. 
   
-  !! MV_UNICAEN_STRUCTURE_CODES à voir quoi en faire
-  
 ## Mise en place du DbLink
 
 Le lien avec Harpège se fait au moyen d'un DbLink que vous devrez créer.
@@ -137,3 +135,17 @@ Les données en sortie sont préparées pour être exploitées par la vue source
 
 [SRC_INTERVENANT](SRC_INTERVENANT.sql)
 
+La vue SRC_INTERVENANT remplit plusieurs rôles :
+* Elle récupère les valeurs identifiantes pour les champs faisant références à d'autres tables à l'aide des valeurs (champs z_*) transmises à cet effet par la vue matérialisée
+* Elle se charge de ne synchroniser les colonnes STATUT_ID et STRUCTURE_ID que si ces dernières sont synchronisables (les colonnes SYNC_* l'indiquant).
+* Si les données personnelles sont saisies, alors le statut de l'intervenant sera celui renseigné par l'intervenant dans son dossier.
+* La vue source synchronise les données des deux dernières années. 
+* Pour l'année n-1, le statut ainsi que la structure de l'intervenant ne sont pas synchronisés.
+
+## Import des affectations de recherche
+
+Les affectations de recherche peuvent être intégrées à OSE.
+
+En voici la vue source.
+
+[SRC_AFFECTATION_RECHERCHE](SRC_AFFECTATION_RECHERCHE.sql)

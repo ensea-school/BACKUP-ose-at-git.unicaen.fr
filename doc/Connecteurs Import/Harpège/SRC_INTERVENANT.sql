@@ -1,37 +1,59 @@
 CREATE OR REPLACE FORCE VIEW SRC_INTERVENANT AS
-WITH srci as (
-SELECT
-  i.code,
-  c.id civilite_id,
-  i.nom_usuel, i.prenom, i.nom_patronymique,
+WITH srci AS (
+SELECT DISTINCT
+  i.code                                     code,
+  i.utilisateur_code                         utilisateur_code,
+  s.id                                       structure_id,
+  COALESCE(si.id,sautre.id)                  statut_id,  -- à tester
+  i.z_grade_id                               grade_id,
+  COALESCE( d.id, d99.id )                   discipline_id,
+  c.id                                       civilite_id,
+  i.nom_usuel                                nom_usuel,
+  i.prenom                                   prenom,
   COALESCE(i.date_naissance,TO_DATE('2099-01-01','YYYY-MM-DD')) date_naissance,
-  pnaiss.id pays_naissance_id,
-  dep.id departement_naissance_id,
-  i.commune_naissance,
-  pnat.id pays_nationalite_id,
-  i.tel_pro, i.tel_mobile, i.email,
-  si.id statut_id, si.source_code statut_code,
-  s.id structure_id,
-  src.id source_id, i.source_code,
-  i.numero_insee, i.numero_insee_provisoire,
-  i.iban, i.bic,
-  g.id grade_id,
-  NVL( d.id, d99.id ) discipline_id,
-  i.critere_recherche,
-  COALESCE (si.ordre,99999) ordre,
-  MIN(COALESCE (si.ordre,99999)) OVER (PARTITION BY i.source_code) min_ordre
+  i.nom_patronymique                         nom_patronymique,
+  i.commune_naissance                        commune_naissance,
+  pnaiss.id                                  pays_naissance_id,
+  dep.id                                     departement_naissance_id,
+  pnat.id                                    pays_nationalite_id,
+  i.tel_pro                                  tel_pro,
+  i.tel_perso                                tel_perso,
+  i.email_pro                                email_pro,
+  i.email_perso                              email_perso,
+  i.adresse_precisions                       adresse_precisions,
+  i.adresse_numero                           adresse_numero,
+  anc.id                                     adresse_numero_compl_id,
+  v.id                                       adresse_voirie_id,
+  i.adresse_voie                             adresse_voie,
+  i.adresse_lieu_dit                         adresse_lieu_dit,
+  i.adresse_code_postal                      adresse_code_postal,
+  i.adresse_commune                          adresse_commune,
+  padr.id                                    adresse_pays_id,
+  i.numero_insee                             numero_insee,
+  i.numero_insee_provisoire                  numero_insee_provisoire,
+  i.iban                                     iban,
+  i.bic                                      bic,
+  i.rib_hors_sepa                            rib_hors_sepa,
+  i.autre_1                                  autre_1,
+  i.autre_2                                  autre_2,
+  i.autre_3                                  autre_3,
+  i.autre_4                                  autre_4,
+  i.autre_5                                  autre_5,
+  empl.id                                    employeur_id,
+  i.critere_recherche                        critere_recherche,
+  src.id                                     source_id,
+  i.code || '-' || COALESCE(si.id,sautre.id) source_code
 FROM
-            mv_intervenant i
-       JOIN source        src ON src.code = 'Harpege'
-  LEFT JOIN civilite        c ON c.libelle_court = i.z_civilite_id
-  LEFT JOIN structure       s ON s.source_code = i.z_structure_id
-  LEFT JOIN statut_intervenant si ON si.source_code = i.z_statut_id
-  LEFT JOIN grade           g ON g.source_code = i.z_grade_id
-  LEFT JOIN pays       pnaiss ON pnaiss.source_code = i.z_pays_naissance_id
-  LEFT JOIN pays         pnat ON pnat.source_code = i.z_pays_nationalite_id
-  LEFT JOIN departement   dep ON dep.source_code = i.z_departement_naissance_id
-  LEFT JOIN discipline d99 ON d99.source_code = '99'
-  LEFT JOIN discipline d ON
+            mv_intervenant          i
+       JOIN source                src ON src.code = 'Harpege'
+  LEFT JOIN structure               s ON s.source_code = i.z_structure_id
+  LEFT JOIN statut_intervenant sautre ON sautre.code = 'AUTRES' AND sautre.histo_destruction IS NULL
+  LEFT JOIN statut_intervenant     si ON
+    i.z_statut_id_contrat_trav IS NOT NULL AND (',' || si.codes_corresp_1 || ',' LIKE '%,' || i.z_statut_id_contrat_trav || ',%')
+    OR (i.z_statut_id_type_pop IS NOT NULL AND ',' || si.codes_corresp_2 || ',' LIKE '%,' || i.z_statut_id_type_pop || ',%')
+  LEFT JOIN grade                   g ON g.source_code = i.z_grade_id
+  LEFT JOIN discipline            d99 ON d99.source_code = '99'
+  LEFT JOIN discipline              d ON
     d.histo_destruction IS NULL
     AND 1 = CASE WHEN -- si rien n'ac été défini
 
@@ -56,60 +78,111 @@ FROM
       AND ',' || NVL(d.CODES_CORRESP_4,'') || ',' LIKE  '%,' || i.z_discipline_id_dis2deg || ',%'
 
     THEN 1 ELSE 0 END END -- fin du test
+  LEFT JOIN civilite               c ON c.libelle_court = i.z_civilite_id
+  LEFT JOIN pays              pnaiss ON pnaiss.source_code = i.z_pays_naissance_id
+  LEFT JOIN departement          dep ON dep.source_code = i.z_departement_naissance_id
+  LEFT JOIN pays                pnat ON pnat.source_code = i.z_pays_nationalite_id
+  LEFT JOIN adresse_numero_compl anc ON anc.code = i.z_adresse_numero_compl_id
+  LEFT JOIN voirie                 v ON v.source_code = i.z_adresse_voirie_id
+  LEFT JOIN pays                padr ON padr.source_code = i.z_adresse_pays_id
+  LEFT JOIN employeur           empl ON empl.source_code = i.z_employeur_id
 )
 SELECT
-  i.code code, lpad(i.code, 8, '0') utilisateur_code,
-  i.civilite_id,
-  i.nom_usuel, i.prenom, i.nom_patronymique,
-  i.date_naissance,
-  i.pays_naissance_id,
-  i.departement_naissance_id,
-  i.commune_naissance,
-  i.pays_nationalite_id,
-  i.tel_pro, i.tel_mobile, i.email,
-  COALESCE(
-    isai.statut_id,
-    CASE WHEN i.statut_code = 'AUTRES' AND d.statut_id IS NOT NULL THEN d.statut_id ELSE i.statut_id END
-  ) statut_id,
-  i. structure_id,
-  i.source_id, i.source_code,
-  i.numero_insee, i.numero_insee_provisoire,
-  i.iban, i.bic,
-  i.grade_id,
-  i.discipline_id,
   unicaen_import.get_current_annee annee_id,
-  i.critere_recherche
+  srci.code,
+  srci.utilisateur_code,
+  CASE WHEN i.sync_structure = 0 THEN COALESCE(i.structure_id,srci.structure_id) ELSE srci.structure_id END structure_id,
+  CASE WHEN i.sync_statut = 0 THEN COALESCE(i.statut_id,d.statut_id,srci.statut_id) ELSE COALESCE(d.statut_id, srci.statut_id) END statut_id,
+  srci.grade_id,
+  srci.discipline_id,
+  srci.civilite_id,
+  srci.nom_usuel,
+  srci.prenom,
+  srci.date_naissance,
+  srci.nom_patronymique,
+  srci.commune_naissance,
+  srci.pays_naissance_id,
+  srci.departement_naissance_id,
+  srci.pays_nationalite_id,
+  srci.tel_pro,
+  srci.tel_perso,
+  srci.email_pro,
+  srci.email_perso,
+  srci.adresse_precisions,
+  srci.adresse_numero,
+  srci.adresse_numero_compl_id,
+  srci.adresse_voirie_id,
+  srci.adresse_voie,
+  srci.adresse_lieu_dit,
+  srci.adresse_code_postal,
+  srci.adresse_commune,
+  srci.adresse_pays_id,
+  srci.numero_insee,
+  srci.numero_insee_provisoire,
+  srci.iban,
+  srci.bic,
+  srci.rib_hors_sepa,
+  srci.autre_1,
+  srci.autre_2,
+  srci.autre_3,
+  srci.autre_4,
+  srci.autre_5,
+  srci.employeur_id,
+  srci.critere_recherche,
+  srci.source_id,
+  srci.source_code
 FROM
-  srci i
-  LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = unicaen_import.get_current_annee
-  LEFT JOIN intervenant_saisie  isai ON isai.intervenant_id = i2.id
-  LEFT JOIN dossier               d  ON d.intervenant_id = i2.id AND d.histo_destruction IS NULL
-WHERE
-  i.ordre = i.min_ordre
+  srci
+  LEFT JOIN intervenant i ON i.source_code = srci.source_code AND i.annee_id = unicaen_import.get_current_annee AND i.histo_destruction IS NULL
+  LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
 
 UNION ALL
 
 SELECT
-  i.code code, lpad(i.code, 8, '0') utilisateur_code,
-  i.civilite_id,
-  i.nom_usuel, i.prenom, i.nom_patronymique,
-  i.date_naissance,
-  i.pays_naissance_id,
-  i.departement_naissance_id,
-  i.commune_naissance,
-  i.pays_nationalite_id,
-  i.tel_pro, i.tel_mobile, i.email,
-  COALESCE(i2.statut_id,i.statut_id) statut_id,
-  COALESCE(i2.structure_id,i.structure_id) structure_id,
-  i.source_id, i.source_code,
-  i.numero_insee, i.numero_insee_provisoire,
-  i.iban, i.bic,
-  i.grade_id,
-  i.discipline_id,
-  unicaen_import.get_current_annee - 1 annee_id,
-  i.critere_recherche
+  unicaen_import.get_current_annee - 1       annee_id,
+  srci.code,
+  srci.utilisateur_code,
+  COALESCE(i.structure_id,srci.structure_id) structure_id,
+  COALESCE(i.statut_id,srci.statut_id)       statut_id,
+  srci.grade_id,
+  srci.discipline_id,
+  srci.civilite_id,
+  srci.nom_usuel,
+  srci.prenom,
+  srci.date_naissance,
+  srci.nom_patronymique,
+  srci.commune_naissance,
+  srci.pays_naissance_id,
+  srci.departement_naissance_id,
+  srci.pays_nationalite_id,
+  srci.tel_pro,
+  srci.tel_perso,
+  srci.email_pro,
+  srci.email_perso,
+  srci.adresse_precisions,
+  srci.adresse_numero,
+  srci.adresse_numero_compl_id,
+  srci.adresse_voirie_id,
+  srci.adresse_voie,
+  srci.adresse_lieu_dit,
+  srci.adresse_code_postal,
+  srci.adresse_commune,
+  srci.adresse_pays_id,
+  srci.numero_insee,
+  srci.numero_insee_provisoire,
+  srci.iban,
+  srci.bic,
+  srci.rib_hors_sepa,
+  srci.autre_1,
+  srci.autre_2,
+  srci.autre_3,
+  srci.autre_4,
+  srci.autre_5,
+  srci.employeur_id,
+  srci.critere_recherche,
+  srci.source_id,
+  srci.source_code
 FROM
-  srci i
-  LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = unicaen_import.get_current_annee - 1
-WHERE
-  i.ordre = i.min_ordre;
+  srci
+  LEFT JOIN intervenant i ON i.source_code = srci.source_code AND i.annee_id = unicaen_import.get_current_annee -1 AND i.histo_destruction IS NULL
+;

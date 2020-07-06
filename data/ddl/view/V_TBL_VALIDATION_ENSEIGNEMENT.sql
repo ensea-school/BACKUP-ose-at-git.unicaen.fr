@@ -24,3 +24,5 @@ FROM
 WHERE
   s.histo_destruction IS NULL
   AND NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/

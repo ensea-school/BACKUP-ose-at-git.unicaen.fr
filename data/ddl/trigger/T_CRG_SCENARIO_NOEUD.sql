@@ -5,9 +5,9 @@ CREATE OR REPLACE TRIGGER "T_CRG_SCENARIO_NOEUD"
   IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF DELETING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', unicaen_tbl.make_params('noeud_id', :OLD.noeud_id, 'scenario_id', :OLD.scenario_id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'noeud_id', :OLD.noeud_id );
   ELSE
-    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', unicaen_tbl.make_params('noeud_id', :NEW.noeud_id, 'scenario_id', :NEW.scenario_id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'noeud_id', :NEW.noeud_id );
   END IF;
 
 END;

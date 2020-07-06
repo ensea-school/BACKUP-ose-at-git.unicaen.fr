@@ -1,6 +1,8 @@
 CREATE OR REPLACE FORCE VIEW V_NIVEAU_FORMATION AS
 SELECT DISTINCT
-  ose_divers.niveau_formation_id_calc( gtf.id, gtf.pertinence_niveau, e.niveau ) id,
+  CASE
+    WHEN 1 <> gtf.pertinence_niveau OR e.niveau IS NULL OR e.niveau < 1 OR gtf.id < 1 THEN NULL
+    ELSE gtf.id * 256 + niveau END id,
   gtf.libelle_court || e.niveau code,
   gtf.libelle_long,
   e.niveau,
@@ -11,6 +13,8 @@ FROM
   JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id AND gtf.histo_destruction IS NULL
 WHERE
   e.histo_destruction IS NULL
-  AND ose_divers.niveau_formation_id_calc( gtf.id, gtf.pertinence_niveau, e.niveau ) IS NOT NULL
+  AND CASE
+    WHEN 1 <> gtf.pertinence_niveau OR e.niveau IS NULL OR e.niveau < 1 OR gtf.id < 1 THEN NULL
+    ELSE gtf.id * 256 + niveau END IS NOT NULL
 ORDER BY
   gtf.libelle_long, e.niveau

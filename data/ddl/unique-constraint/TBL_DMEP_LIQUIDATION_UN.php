@@ -10,7 +10,6 @@ return [
         'ANNEE_ID',
         'TYPE_RESSOURCE_ID',
         'STRUCTURE_ID',
-        'TO_DELETE',
     ],
 ];
 

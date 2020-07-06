@@ -13,7 +13,6 @@ return [
         'SERVICE_ID',
         'VOLUME_HORAIRE_ID',
         'VALIDATION_ID',
-        'TO_DELETE',
     ],
 ];
 

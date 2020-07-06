@@ -5,9 +5,11 @@ CREATE OR REPLACE TRIGGER "T_CRG_ETAPE"
   IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF DELETING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'etape_id = ' || :OLD.id || ' OR etape_ens_id = ' || :OLD.id );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'etape_id', :OLD.id );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'etape_ens_id', :OLD.id );
   ELSE
-    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'etape_id = ' || :NEW.id || ' OR etape_ens_id = ' || :NEW.id );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'etape_id', :NEW.id );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'etape_ens_id', :NEW.id );
   END IF;
 
 END;

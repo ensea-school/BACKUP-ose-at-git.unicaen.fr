@@ -10,7 +10,6 @@ return [
         'INTERVENANT_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'STRUCTURE_ID',
-        'TO_DELETE',
     ],
 ];
 

@@ -21,7 +21,7 @@ FROM
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
 
-       JOIN intervenant                       i ON i.id = fr.intervenant_id
+       JOIN intervenant                       i ON i.id = fr.intervenant_id /*@INTERVENANT_ID=i.id*/ /*@ANNEE_ID=a.annee_id*/
        JOIN service                           s ON s.id = frs.service_id
   LEFT JOIN element_pedagogique              ep ON ep.id = s.element_pedagogique_id
   LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_id = frs.id
@@ -51,7 +51,7 @@ FROM
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
 
-       JOIN intervenant                       i ON i.id = fr.intervenant_id
+       JOIN intervenant                       i ON i.id = fr.intervenant_id /*@INTERVENANT_ID=i.id*/ /*@ANNEE_ID=a.annee_id*/
        JOIN service_referentiel               s ON s.id = frs.service_referentiel_id
   LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                AND mep.histo_destruction IS NULL

@@ -942,13 +942,13 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
     RETURN '
     SELECT
       fi.*,
-      CASE WHEN si.source_code IN (''ENS_CH'',''ASS_MI_TPS'',''ENS_CH_LRU'',''DOCTOR'') THEN ''oui'' ELSE ''non'' END param_1,
-	    CASE WHEN si.source_code IN (''LECTEUR'',''ATER'') THEN ''oui'' ELSE ''non'' END param_2,
+      CASE WHEN si.code IN (''ENS_CH'',''ASS_MI_TPS'',''ENS_CH_LRU'',''DOCTOR'') THEN ''oui'' ELSE ''non'' END param_1,
+	    CASE WHEN si.code IN (''LECTEUR'',''ATER'') THEN ''oui'' ELSE ''non'' END param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_intervenant fi
+      V_FORMULE_INTERVENANT fi
       JOIN intervenant i ON i.id = fi.intervenant_id
       JOIN statut_intervenant si ON si.id = i.statut_id
     ';
@@ -967,7 +967,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_volume_horaire fvh
+      V_FORMULE_VOLUME_HORAIRE fvh
     ORDER BY
       ordre';
   END;

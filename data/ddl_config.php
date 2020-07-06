@@ -18,7 +18,7 @@ return [
 
     ]],
     'trigger'           => ['includes' => [
-
+        'F_CONTRAT', 'F_CONTRAT_S',
     ]],
     'sequence'          => ['includes' => [
 

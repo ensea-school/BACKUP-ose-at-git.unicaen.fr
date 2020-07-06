@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_VALIDATION_REFERENTIEL__UN',
+    'name'    => 'TBL_VALIDATION_REFERENTIEL_UN',
+    'unique'  => TRUE,
     'table'   => 'TBL_VALIDATION_REFERENTIEL',
-    'index'   => 'TBL_VALIDATION_REFERENTIEL__UN',
     'columns' => [
         'INTERVENANT_ID',
         'STRUCTURE_ID',
@@ -13,7 +13,6 @@ return [
         'SERVICE_REFERENTIEL_ID',
         'VOLUME_HORAIRE_REF_ID',
         'VALIDATION_ID',
-        'TO_DELETE',
     ],
 ];
 

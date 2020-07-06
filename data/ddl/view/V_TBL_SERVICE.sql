@@ -39,6 +39,7 @@ FROM
                                                  AND v.histo_destruction IS NULL
 WHERE
   s.histo_destruction IS NULL
+  /*@INTERVENANT_ID=s.intervenant_id*/
 )
 SELECT
   i.annee_id                                                                                annee_id,
@@ -68,6 +69,10 @@ FROM
   JOIN intervenant                              i ON i.id = t.intervenant_id
   JOIN statut_intervenant                      si ON si.id = i.statut_id
   JOIN type_intervenant                        ti ON ti.id = si.type_intervenant_id
+WHERE
+  1=1
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/
 GROUP BY
   i.annee_id,
   i.id,

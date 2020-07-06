@@ -65,7 +65,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
             'name'    => 'nomPatronymique',
             'options' => [
-                'label'         => 'Nom de naissance <span class="text-danger">*</span>',
+                'label'         => 'Nom de naissance',
                 'label_options' => ['disable_html_escape' => true],
             ],
             'type'    => 'Text',
@@ -131,15 +131,16 @@ class DossierIdentiteFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+
         $this->get('paysNaissance')
             ->setValueOptions(['' => 'Sélectionnez un pays...'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
 
+
         /**
          * Département de naissance
-         */
-        /**
-         * Pays de naissance
-         */
+         */ /**
+     * Pays de naissance
+     */ {
         $this->add([
             'name'       => 'departementNaissance',
             'options'    => [
@@ -148,9 +149,11 @@ class DossierIdentiteFieldset extends AbstractFieldset
                     'disable_html_escape' => true,
                 ],],
             'attributes' => [
+                'info_icon' => "Uniquement si votre pays de naissance est la France.",
             ],
             'type'       => 'Select',
         ]);
+    }
 
         $this->get('departementNaissance')
             ->setValueOptions(['' => 'Sélectionnez un département...'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));

@@ -60,7 +60,13 @@ $fieldsets = $form->getFieldsets();
     echo $this->form()->openTag($form);
     ?>
     <div class="row">
-        <?= $this->partial('application/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude')); ?>
+        <?php
+        if ($canEdit) {
+            echo $this->partial('application/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+        } else {
+            echo $this->partial('application/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+        }
+        ?>
     </div>
 
     <?php if (empty($intervenantDossierStatut)): ?>
@@ -188,3 +194,30 @@ $fieldsets = $form->getFieldsets();
         <?php if ($intervenantDossierValidation): ?>
     </div>
 <?php endif; ?>
+
+
+    <script type="text/javascript">
+        $(function () {
+
+            manageDepartementNaissance();
+
+            function manageDepartementNaissance()
+            {
+                var selectPays = $("select[name='DossierIdentite[paysNaissance]']");
+                var selectDept = $("select[name='DossierIdentite[departementNaissance]']");
+                var emptyDept = $("option[value='']", selectDept);
+
+                selectPays.change(function () {
+                    if ($("option:selected", selectPays).html() == 'FRANCE') {
+                        selectDept.removeProp('disabled').parent().show();
+                        emptyDept.html("(Sélectionnez un département...)");
+                    } else {
+                        selectDept.prop('disabled', 'disabled');
+                        emptyDept.html("(Aucun)").prop('selected', 'selected');
+                    }
+                });
+
+                selectPays.change();
+            }
+        });
+    </script>

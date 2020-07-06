@@ -141,7 +141,6 @@ class IntervenantDossierHydrator implements HydratorInterface
     {
 
         //Sécurisation de l'hydratation de l'object pour ne pas mettre à jour les valeurs si on a pas le privilege
-        $var = "";
         /* @var $object IntervenantDossier */
         //Hydratation de l'indentité
         if (isset($data['DossierIdentite'])) {
@@ -163,6 +162,10 @@ class IntervenantDossierHydrator implements HydratorInterface
             if (!empty($data['DossierIdentite']['paysNaissance'])) {
                 $paysNaissance = $this->getServicePays()->get($data['DossierIdentite']['paysNaissance']);
                 $object->setPaysNaissance($paysNaissance);
+            }
+            //Si pays n'est pas France alors null pour département
+            if ($paysNaissance->getLibelle() == 'FRANCE') {
+                $object->setDepartementNaissance(null);
             }
             //Departement de naissance
             if (!empty($data['DossierIdentite']['departementNaissance'])) {
@@ -211,6 +214,8 @@ class IntervenantDossierHydrator implements HydratorInterface
         if (isset($data['DossierInsee'])) {
             $object->setNumeroInsee($data['DossierInsee']['numeroInsee']);
             $object->setNumeroInseeProvisoire($data['DossierInsee']['numeroInseeEstProvisoire']);
+        } else {
+            $object->setNumeroInseeProvisoire(false);
         }
 
         //Hydratation de Iban

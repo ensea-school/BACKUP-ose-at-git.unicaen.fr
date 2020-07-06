@@ -95,14 +95,14 @@ class IntervenantDossierController extends AbstractController
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
         /* Traitement du formulaire */
+        
 
-        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $intervenantDossier) use ($intervenant) {
+        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $intervenantDossier) {
             try {
                 /* Sauvegarde du dossier de l'intervenant */
                 $this->getServiceDossier()->save($intervenantDossier);
-
                 /* Recalcul des tableaux de bord nécessaires */
-                $this->updateTableauxBord($intervenant);
+                $this->updateTableauxBord($intervenantDossier->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

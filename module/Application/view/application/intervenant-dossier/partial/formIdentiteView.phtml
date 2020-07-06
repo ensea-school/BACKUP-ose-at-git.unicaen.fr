@@ -120,20 +120,22 @@ $dossierIdentite = $form->get('DossierIdentite');
                             ?>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <?= $this->formLabel($dossierIdentite->get('departementNaissance')); ?>
-                        <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
-                            <?php
-                            if (!empty($intervenantDossier->getDepartementNaissance())) {
-                                echo ($viewIdentite) ? $intervenantDossier->getDepartementNaissance()->getLibelle() : '*******************';
-                            } else {
-                                echo 'NON RENSEIGNE';
-                            }
+                    <?php if ($intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE'): ?>
+                        <div class="form-group">
+                            <?= $this->formLabel($dossierIdentite->get('departementNaissance')); ?>
+                            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                                <?php
+                                if (!empty($intervenantDossier->getDepartementNaissance())) {
+                                    echo ($viewIdentite) ? $intervenantDossier->getDepartementNaissance()->getLibelle() : '*******************';
+                                } else {
+                                    echo 'NON RENSEIGNE';
+                                }
 
 
-                            ?>
+                                ?>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                     <div class="form-group">
                         <?= $this->formLabel($dossierIdentite->get('villeNaissance')); ?>
                         <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">

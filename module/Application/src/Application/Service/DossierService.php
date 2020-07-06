@@ -166,10 +166,13 @@ class DossierService extends AbstractEntityService
             'dossierAutres'    => false,
         ];
         //Complétude de l'identite
-
         $completudeDossierIdentie = ($intervenantDossier->getCivilite() &&
             $intervenantDossier->getNomUsuel() &&
-            $intervenantDossier->getPrenom()) ? true : false;
+            $intervenantDossier->getPrenom() &&
+            $intervenantDossier->getDateNaissance() &&
+            $intervenantDossier->getPaysNaissance() &&
+            (($intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE') ? $intervenantDossier->getDepartementNaissance() : true) &&
+            $intervenantDossier->getCommuneNaissance()) ? true : false;
 
         //Complétude de l'adresse
         $completudeAdressePart1 = (($intervenantDossier->getAdressePrecisions() ||

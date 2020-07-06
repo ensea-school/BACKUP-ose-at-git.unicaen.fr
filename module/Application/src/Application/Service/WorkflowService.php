@@ -329,8 +329,8 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param array                            $tableauxBords
-     * @param Intervenant|Intervenant[]|string $intervenant
+     * @param array           $tableauxBords
+     * @param Intervenant|int $intervenant
      */
     public function calculerTableauxBord($tableauxBords = [], $intervenant): array
     {
@@ -366,26 +366,14 @@ class WorkflowService extends AbstractService
 
         foreach ($deps as $dep => $null) {
             if (isset($tbls[$dep])) {
-                if (is_array($intervenant)) {
-                    $params = 'INTERVENANT_ID IN (';
-                    $c      = 0;
-                    foreach ($intervenant as $i) {
-                        $c++;
-                        if ($c > 1) $params .= ',';
-                        $params .= $i->getId();
-                    }
-                    $params .= ')';
-                } elseif ($intervenant instanceof \Application\Entity\Db\Intervenant) {
-                    $params = ['intervenant_id' => $intervenant->getId()];
+                if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+                    $value = $intervenant->getId();
                 } else {
-                    $params = 'INTERVENANT_ID IN (' . $intervenant . ')';
+                    $value = $intervenant;
                 }
 
                 try {
-                    $this->getServiceTableauBord()->calculer(
-                        $dep,
-                        $params
-                    );
+                    $this->getServiceTableauBord()->calculer($dep, 'INTERVENANT_ID', $value);
                 } catch (\Exception $e) {
                     $errors[$dep] = $e;
                 }

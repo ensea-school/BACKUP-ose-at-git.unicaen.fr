@@ -45,7 +45,7 @@ $dossierContact = $form->get('DossierContact');
                     if (!empty($intervenantDossier->getEmailPro())) {
                         echo ($viewContact) ? $intervenantDossier->getEmailPro() : '**********@*****.com';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
@@ -57,7 +57,7 @@ $dossierContact = $form->get('DossierContact');
                     if (!empty($intervenantDossier->getEmailPerso())) {
                         echo ($viewContact) ? $intervenantDossier->getEmailPerso() : '**********@*****.com';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
@@ -69,7 +69,7 @@ $dossierContact = $form->get('DossierContact');
                     if (!empty($intervenantDossier->getTelPro())) {
                         echo ($viewContact) ? $intervenantDossier->getTelPro() : '** ** ** ** **';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
@@ -81,7 +81,7 @@ $dossierContact = $form->get('DossierContact');
                     if (!empty($intervenantDossier->getTelPerso())) {
                         echo ($viewContact) ? $intervenantDossier->getTelPerso() : '** ** ** ** **';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>

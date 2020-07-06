@@ -42,7 +42,7 @@ $dossierBancaire = $form->get('DossierBancaire');
                     if (!empty($intervenantDossier->getBIC())) {
                         echo ($viewIban) ? $intervenantDossier->getBIC() : '*************';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
@@ -54,7 +54,7 @@ $dossierBancaire = $form->get('DossierBancaire');
                     if (!empty($intervenantDossier->getIBAN())) {
                         echo ($viewIban) ? $intervenantDossier->getIBAN() : '**************************';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>

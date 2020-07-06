@@ -97,7 +97,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
         ]);
 
         $this->get('civilite')
-            ->setValueOptions(['' => '(Sélectionnez une civilité...)'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceCivilite()->getList()));
+            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceCivilite()->getList()));
 
         /**
          * Date de naissance
@@ -133,7 +133,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
 
 
         $this->get('paysNaissance')
-            ->setValueOptions(['' => 'Sélectionnez un pays...'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
 
 
         /**
@@ -156,7 +156,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
     }
 
         $this->get('departementNaissance')
-            ->setValueOptions(['' => 'Sélectionnez un département...'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));
+            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));
 
         /**
          * Ville de naissance

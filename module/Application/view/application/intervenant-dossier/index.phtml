@@ -14,6 +14,13 @@ $canDevalider  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRI
 $canEdit       = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_EDIT);
 $canSupprimer  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
 
+$pourcentageComplet = 100;
+foreach ($intervenantDossierCompletude as $value) {
+    if (!$value) {
+        $pourcentageComplet -= floor(100 / count($intervenantDossierCompletude));
+    }
+}
+
 //$nextEtape    = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
 $nextEtape = '';
 $this->headTitle()->append("Nom intervenant XXX")->append("Données personnelles");
@@ -59,6 +66,20 @@ $fieldsets = $form->getFieldsets();
 
     echo $this->form()->openTag($form);
     ?>
+    <!--Progression du dossier-->
+    <div class="row">
+        <div class="col-md-12">
+            Vos données personnelles sont complétées à :
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width: <?= $pourcentageComplet; ?>%">
+                    Complet à <?= $pourcentageComplet; ?>%
+                </div>
+                <div class="progress-bar progress-bar-warning" style="width: <?= 100 - $pourcentageComplet; ?>%">
+
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <?php
         if ($canEdit) {
@@ -68,6 +89,7 @@ $fieldsets = $form->getFieldsets();
         }
         ?>
     </div>
+
 
     <?php if (empty($intervenantDossierStatut)): ?>
     <div class="row  display-flex hidden">
@@ -210,10 +232,10 @@ $fieldsets = $form->getFieldsets();
                 selectPays.change(function () {
                     if ($("option:selected", selectPays).html() == 'FRANCE') {
                         selectDept.removeProp('disabled').parent().show();
-                        emptyDept.html("(Sélectionnez un département...)");
+                        emptyDept.html("- NON RENSEIGNÉ -");
                     } else {
                         selectDept.prop('disabled', 'disabled');
-                        emptyDept.html("(Aucun)").prop('selected', 'selected');
+                        emptyDept.html("- NON RENSEIGNÉ -").prop('selected', 'selected');
                     }
                 });
 

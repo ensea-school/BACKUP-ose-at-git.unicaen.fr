@@ -149,29 +149,27 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setNomPatronymique($data['DossierIdentite']['nomPatronymique']);
             $object->setPrenom($data['DossierIdentite']['prenom']);
             //Civilite
-            if (!empty($data['DossierIdentite']['civilite'])) {
-                $civilite = $this->getServiceCivilite()->get($data['DossierIdentite']['civilite']);
-                $object->setCivilite($civilite);
-            }
+            $civilite = (!empty($data['DossierIdentite']['civilite'])) ?
+                $this->getServiceCivilite()->get($data['DossierIdentite']['civilite']) : null;
+            $object->setCivilite($civilite);
             //Date de naissance
-            if (!empty($data['DossierIdentite']['dateNaissance'])) {
-                $dateNaissance = \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateNaissance']);
-                $object->setDateNaissance($dateNaissance);
-            }
+            $dateNaissance = (!empty($data['DossierIdentite']['dateNaissance'])) ?
+                \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateNaissance']) : null;
+            $object->setDateNaissance($dateNaissance);
+
             //Pays de naissance
-            if (!empty($data['DossierIdentite']['paysNaissance'])) {
-                $paysNaissance = $this->getServicePays()->get($data['DossierIdentite']['paysNaissance']);
-                $object->setPaysNaissance($paysNaissance);
-            }
+            $paysNaissance = (!empty($data['DossierIdentite']['paysNaissance'])) ?
+                $this->getServicePays()->get($data['DossierIdentite']['paysNaissance']) : null;
+            $object->setPaysNaissance($paysNaissance);
             //Si pays n'est pas France alors null pour département
-            if ($paysNaissance->getLibelle() == 'FRANCE') {
+            if (!is_null($paysNaissance) && $paysNaissance->getLibelle() == 'FRANCE') {
                 $object->setDepartementNaissance(null);
             }
             //Departement de naissance
-            if (!empty($data['DossierIdentite']['departementNaissance'])) {
-                $departementNaissance = $this->getServiceDepartement()->get($data['DossierIdentite']['departementNaissance']);
-                $object->setDepartementNaissance($departementNaissance);
-            }
+            $departementNaissance = (!empty($data['DossierIdentite']['departementNaissance'])) ?
+                $this->getServiceDepartement()->get($data['DossierIdentite']['departementNaissance']) : null;
+            $object->setDepartementNaissance($departementNaissance);
+
             $object->setCommuneNaissance($data['DossierIdentite']['villeNaissance']);
         }
         //Hydratation de l'adresse
@@ -181,24 +179,22 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setAdresseLieuDit($data['DossierAdresse']['lieuDit']);
             $object->setAdresseNumero($data['DossierAdresse']['numero']);
             /* Complement de numéro de voie */
-            if (!empty($data['DossierAdresse']['numeroComplement'])) {
-                $numeroComplement = $this->getServiceAdresseNumeroCompl()->get($data['DossierAdresse']['numeroComplement']);
-                $object->setAdresseNumeroCompl($numeroComplement);
-            }
+            $numeroComplement = (!empty($data['DossierAdresse']['numeroComplement'])) ?
+                $this->getServiceAdresseNumeroCompl()->get($data['DossierAdresse']['numeroComplement']) : null;
+            $object->setAdresseNumeroCompl($numeroComplement);
+
             /* Voirie */
-            if (!empty($data['DossierAdresse']['voirie'])) {
-                $voirie = $this->getServiceVoirie()->get($data['DossierAdresse']['voirie']);
-                $object->setAdresseVoirie($voirie);
-            }
+            $voirie = (!empty($data['DossierAdresse']['voirie'])) ?
+                $this->getServiceVoirie()->get($data['DossierAdresse']['voirie']) : null;
+            $object->setAdresseVoirie($voirie);
 
             $object->setAdresseVoie($data['DossierAdresse']['voie']);
             $object->setAdresseCodePostal($data['DossierAdresse']['codePostal']);
             $object->setAdresseCommune($data['DossierAdresse']['ville']);
             /* Pays adresse */
-            if (!empty($data['DossierAdresse']['pays'])) {
-                $paysAdresse = $this->getServicePays()->get($data['DossierAdresse']['pays']);
-                $object->setAdressePays($paysAdresse);
-            }
+            $paysAdresse = (!empty($data['DossierAdresse']['pays'])) ?
+                $this->getServicePays()->get($data['DossierAdresse']['pays']) : null;
+            $object->setAdressePays($paysAdresse);
         }
         //Hydratation de contact
         if (isset($data['DossierContact'])) {
@@ -225,10 +221,13 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setRibHorsSepa($data['DossierBancaire']['ribHorsSepa']);
         }
 
+        //Hydratation de employeur
         if (isset($data['DossierEmployeur'])) {
-            $employeur = $this->getServiceEmployeur()->get($data['DossierEmployeur']['employeur']['id']);
+            $employeur = (!empty($data['DossierEmployeur']['employeur']['id'])) ?
+                $this->getServiceEmployeur()->get($data['DossierEmployeur']['employeur']['id']) : null;
             $object->setEmployeur($employeur);
         }
+
 
         //Hydratation statut
         if (!empty($data['DossierStatut']['statut'])) {

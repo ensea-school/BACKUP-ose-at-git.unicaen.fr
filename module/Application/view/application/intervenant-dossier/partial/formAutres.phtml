@@ -57,7 +57,7 @@ $dossierAutres = $form->get('DossierAutres');
                                     $viewAutre = $this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()));
                                     echo ($viewAutre) ? $intervenantDossier->$method() : '***************';
                                 } else {
-                                    echo 'NON RENSEIGNE';
+                                    echo '- NON RENSEIGNÉ -';
                                 }
                                 ?>
                             </div>

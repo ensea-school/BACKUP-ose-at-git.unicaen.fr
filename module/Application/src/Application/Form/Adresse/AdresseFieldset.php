@@ -181,7 +181,7 @@ class AdresseFieldset extends AbstractFieldset
         ]);
 
         $this->get('pays')
-            ->setValueOptions(['' => 'Sélectionnez un pays...'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
 
         return $this;
     }

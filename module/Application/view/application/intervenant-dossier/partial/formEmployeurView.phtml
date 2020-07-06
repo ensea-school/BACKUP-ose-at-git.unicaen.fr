@@ -50,7 +50,7 @@ $dossierEmployeur = $form->get('DossierEmployeur');
                         $siren     = $intervenantDossier->getEmployeur()->getSiren();
                         echo ($viewEmployeur) ? $employeur . '(SIRET : ' . $siren . ')' : '***************';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>

@@ -42,7 +42,7 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                     if (!empty($intervenantDossier->getAdressePrecisions())) {
                         echo ($viewAdresse) ? $intervenantDossier->getAdressePrecisions() : '*******************';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
@@ -54,7 +54,7 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                     if (!empty($intervenantDossier->getAdresseLieuDit())) {
                         echo ($viewAdresse) ? $intervenantDossier->getAdresseLieuDit() : '*******************';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
@@ -137,7 +137,7 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                         if (!empty($intervenantDossier->getAdresseCommune())) {
                             echo ($viewAdresse) ? $intervenantDossier->getAdresseCommune() : '***';
                         } else {
-                            echo 'NON RENSEIGNE';
+                            echo '- NON RENSEIGNÉ -';
                         }
                         ?>
                     </div>
@@ -150,7 +150,7 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                     if (!empty($intervenantDossier->getAdressePays())) {
                         echo ($viewAdresse) ? $intervenantDossier->getAdressePays()->getLibelle() : '*******************';
                     } else {
-                        echo 'NON RENSEIGNE';
+                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>

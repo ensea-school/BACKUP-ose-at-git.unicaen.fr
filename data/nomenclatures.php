@@ -466,6 +466,11 @@ return [
             'LIBELLE'    => 'OSE',
             'IMPORTABLE' => false,
         ],
+        [
+            'CODE'       => 'Calcul',
+            'LIBELLE'    => 'Calculée',
+            'IMPORTABLE' => true,
+        ],
     ],
 
     'TAUX_HORAIRE_HETD' => [

@@ -81,7 +81,9 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
   <tr>
     <td>AFFECTATION</td><td></td><td></td><td></td><td></td><td></td><td>Affectation des utilisateurs à des rôles</td>
   </tr>
+  <tr>
   | AFFECTATION_RECHERCHE |        |             | Oui     |       |        | Affectations de recherche des intervenants |
+  </tr>
 </table>
 
 | Table                 | Apogée | FCA Manager | Harpège | Sifac | Calcul | Description | 

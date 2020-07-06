@@ -124,11 +124,16 @@ Ensuite, créez la vue source [SRC_CORPS](SRC_CORPS.sql), puis la vue source [SR
 
 Les intervenants peuvent être indifféremment des permanents ou des vacataires.
 
+Compte tenu de la masse des données et pour des raisons d'optimisation aussi bien que de lisibilité, la vue source va s'appuyer sur une vue matérialisée qui va lui "préparer" le travail.
 
--- Liste de tous les intervenants pouvant potentiellement saisir des services dans OSE
--- La table "chercheur" est parcourue car chez nous les comptes d'accès au système d'information sont listés dans cette table.
--- Nous retrouvons donc ici tous les comptes d'accès au système d'information valides hormis des comptes invités pour usages spécifiques
--- car tout le monde peut potentiellement déclarer des services.
--- Dans cette vue, on synchronise toutes les données des intervenants de l'année en cours, et la plupart des données des intervenants de l'année prédédente
+L'ensemble de la population active dans Harpège (ou plus exactement les individus actifs 6 mois avant leur date de début et 400 jours après leur date de fin d'activité)
+se retrouve dans ce connecteur.
 
+Voici la vue matérialisée qui remonte les données d'Harpège :
+
+[MV_INTERVENANT](MV_INTERVENANT.sql)
+
+Les données en sortie sont préparées pour être exploitées par la vue source.
+
+[SRC_INTERVENANT](SRC_INTERVENANT.sql)
 

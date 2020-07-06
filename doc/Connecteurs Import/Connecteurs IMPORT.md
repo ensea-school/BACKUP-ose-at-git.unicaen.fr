@@ -65,6 +65,16 @@ En voici la liste :
 
 Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuvent fournir :
 
+<table>
+  <tr>
+    <td>One</td>
+    <td>Two</td>
+  </tr>
+  <tr>
+    <td colspan="2">Three</td>
+  </tr>
+</table>
+
 | Table                 | Apogée | FCA Manager | Harpège | Sifac | Calcul | Description | 
 | --------------------- | ------ | ----------- | ------- | ----- | ------ | ----------- |
 | _Données "RH"_ |

@@ -75,67 +75,348 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <th>Calcul</th>
     <th>Description</th>
   </tr>
+  
   <tr>
     <th colspan="50">Données "RH"</th>
   </tr>
   <tr>
-    <td>AFFECTATION</td>
+    <td>AFFECTATION</td> <!-- Table -->
     <td></td> <!-- Apogée -->
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
     <td>Affectation des utilisateurs à des rôles</td> <!-- Description -->
   </tr>
   <tr>
-  | AFFECTATION_RECHERCHE |        |             | Oui     |       |        | Affectations de recherche des intervenants |
+    <td>AFFECTATION_RECHERCHE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Affectations de recherche des intervenants</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>GRADE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des grades</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>INTERVENANT</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Intervenants (vacataires et permanents)</td> <!-- Description -->
+  </tr>
+  
+  <tr>
+    <th colspan="50">Nomenclatures diverses</th>
+  </tr>
+  <tr>
+    <td>CORPS</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des corps</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>DEPARTEMENT</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des départements</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>DISCIPLINE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des disciplines (sections CNU, disc. second degré, etc)</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>EMPLOYEUR</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des employeurs</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>ETABLISSEMENT</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des établissements</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>PAYS</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des pays</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>STRUCTURE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des structures</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>VOIRIE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des voiries</td> <!-- Description -->
+  </tr>
+  
+  <tr>
+    <th colspan="50">Données comptables</th>
+  </tr>
+  <tr>
+    <td>CENTRE_COUT</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td>Oui</td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des centres de coûts</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>CENTRE_COUT_EP</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Relation n <=> nentre les centres de coûts et les éléments pédagogiques</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>CENTRE_COUT_STRUCTURE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td>Oui</td> <!-- Calcul -->
+    <td>Relation n <=> nentre les centres de coûts et les structures</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>DOMAINE_FONCTIONNEL</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td>Oui</td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des domaines fonctionnels</td> <!-- Description -->
+  </tr>
+  
+  <tr>
+    <th colspan="50">Données décrivant l'offre de formation</th>
+  </tr>
+  <tr>
+    <td>CHEMIN_PEDAGOGIQUE</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Relation n <=> n entre les étapes et les éléments pédagogiques</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>EFFECTIFS</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Effectifs étudiants par élément péagogique</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>EFFECTIFS_ETAPE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Effectifs étudiants par étape</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>ELEMENT_PEDAGOGIQUE</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des éléments pédagogiques</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>ELEMENT_TAUX_REGIMES</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Taux FI/FC/FA par élément pédagogique</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>ETAPE</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des étapes</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>GROUPE_TYPE_FORMATION</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des groupes de types de formation (License, Master, DU, etc.)</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>LIEN</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liens entre deux noeuds</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>NOEUD</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Noeuds formant les arbres d'une formation, situés entre les étapes et les éléments pédagogiques</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>SCENARIO_LIEN</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Paramétrage des liens</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>SCENARIO_NOEUD</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Paramétrage des noeuds</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>TYPE_FORMATION</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des types de formation</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>VOLUME_HORAIRE_ENS</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td>Oui</td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Charge d'enseingement</td> <!-- Description -->
+  </tr>
+  
+  <tr>
+    <th colspan="50">Données liées aux services d'enseignement</th>
+  </tr>
+  <tr>
+    <td>SERVICE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Lignes de service intervenant (enseignement)</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>SERVICE_REFERENTIEL</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Lignes de service intervenant (référentiel)</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>TYPE_INTERVENTION_EP</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td>Oui</td> <!-- Calcul -->
+    <td>Relation n <=> n spécifiant quels types d'intervention sont pertinents par élément pédagogique</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>TYPE_MODULATEUR_EP</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td>Oui</td> <!-- Calcul -->
+    <td>Relation n <=> n spécifiant quels types de modulateurs sont pertinents par élément pédagogique</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>VOLUME_HORAIRE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Volumes horaires (grain fin de la saisie de service : heures d'enseignement)</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>VOLUME_HORAIRE_CHARGE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Table non exploitée : à ignorer</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>VOLUME_HORAIRE_REF</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Volumes horaires (grain fin de la saisie de service : heures de référentiel)</td> <!-- Description -->
   </tr>
 </table>
-
-| Table                 | Apogée | FCA Manager | Harpège | Sifac | Calcul | Description | 
-| --------------------- | ------ | ----------- | ------- | ----- | ------ | ----------- |
-| _Données "RH"_ |
-| AFFECTATION           |        |             |         |       |        | Affectation des utilisateurs à des rôles |				 
-| AFFECTATION_RECHERCHE |        |             | Oui     |       |        | Affectations de recherche des intervenants |	 
-| GRADE 				|        |             | Oui     |       |        | Liste des grades |
-| INTERVENANT 			|        |             | Oui     |       |        | Intervenants |
-|  |
-| _Nomenclatures diverses_ |
-| CORPS 				|        |             | Oui     |       |        | Liste des corps |
-| DEPARTEMENT 			|        |             | Oui     |       |        | Liste des départements |
-| DISCIPLINE 			|        |             |         |       |        | Liste des disciplines (sections CNU, disc. second degré, etc) |
-| EMPLOYEUR 			|        |             |         |       |        | Liste des employeurs |
-| ETABLISSEMENT 		| Oui    |             |         |       |        | Liste des établissements |
-| PAYS 				    |        |             | Oui     |       |        | Liste des pays |
-| STRUCTURE 			|        |             | Oui     |       |        | Liste des structures |
-| VOIRIE 				|        |             | Oui     |       |        | Liste des voiries |
-|  |
-| <td colspan=3> _Données comptables_ |
-| CENTRE_COUT 			|        |             |         | Oui   |        | Liste des centres de coûts |
-| CENTRE_COUT_EP 		|        |             |         |       |        | Relation n <=> nentre les centres de coûts et les éléments pédagogiques |
-| CENTRE_COUT_STRUCTURE |        |             |         |       | Oui    | Relation n <=> nentre les centres de coûts et les structures  |
-| DOMAINE_FONCTIONNEL 	|        |             |         | Oui   |        | Liste des domaines fonctionnels |
-|  |
-| <td colspan=3>_Données décrivant l'offre de formation_ |
-| CHEMIN_PEDAGOGIQUE 	| Oui    | Oui         |         |       |        | Relation n <=> n entre les étapes et les éléments pédagogiques |
-| EFFECTIFS 			| Oui    |             |         |       |        | Effectifs étudiants par élément péagogique |
-| EFFECTIFS_ETAPE 		|        |             |         |       |        | Effectifs étudiants par étape |
-| ELEMENT_PEDAGOGIQUE 	| Oui    | Oui         |         |       |        | Liste des éléments pédagogiques |
-| ELEMENT_TAUX_REGIMES 	|        |             |         |       |        | Taux FI/FC/FA par élément pédagogique |
-| ETAPE 				| Oui    | Oui         |         |       |        | Liste des étapes |
-| GROUPE_TYPE_FORMATION | Oui    |             |         |       |        | Liste des groupes de types de formation (License, Master, DU, etc.) |
-| LIEN 					| Oui    |             |         |       |        | Liens entre deux noeuds |
-| NOEUD 				| Oui    |             |         |       |        | Noeuds formant les arbres d'une formation, situés entre les étapes et les éléments pédagogiques |
-| SCENARIO_LIEN 	    | Oui    |             |         |       |        | Paramétrage des liens |
-| SCENARIO_NOEUD 	    | Oui    |             |         |       |        | Paramétrage des noeuds |
-| TYPE_FORMATION 		| Oui    |             |         |       |        | Liste des types de formation |
-|  |
-<td colspan=5>_Données liées aux services d'enseignement_ |
-| SERVICE 			    |        |             |         |       |        | Lignes de service intervenant (enseignement) |
-| SERVICE_REFERENTIEL   |        |             |         |       |        | Lignes de service intervenant (référentiel) |
-| TYPE_INTERVENTION_EP 	|        |             |         |       | Oui    | Relation n <=> n spécifiant quels types d'intervention sont pertinents par élément pédagogique |
-| TYPE_MODULATEUR_EP 	|        |             |         |       | Oui    | Relation n <=> n spécifiant quels types de modulateurs sont pertinents par élément pédagogique |
-| VOLUME_HORAIRE 		|        |             |         |       |        | Volumes horaires (grain fin de la saisie de service : heures d'enseignement) |
-| VOLUME_HORAIRE_CHARGE |        |             |         |       |        | Table non exploitée : à ignorer |
-| VOLUME_HORAIRE_ENS 	| Oui    |             |         |       |        | Charge d'enseingement |
-| VOLUME_HORAIRE_REF    |        |             |         |       |        | Volumes horaires (grain fin de la saisie de service : heures de référentiel) |

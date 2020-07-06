@@ -67,11 +67,20 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
 
 <table>
   <tr>
-    <td>One</td>
-    <td>Two</td>
+    <th>Table</th>
+    <th>Apogée</th>
+    <th>FCA Manager</th> 
+    <th>Harpège</th>
+    <th>Sifac</th>
+    <th>Calcul</th>
+    <th>Description</th>
+    <th>Two</th>
   </tr>
   <tr>
-    <td colspan="2">Three</td>
+    <th colspan="50">Données "RH"</th>
+  </tr>
+  <tr>
+    <td>AFFECTATION</td><td></td><td></td><td></td><td></td><td></td><td>Affectation des utilisateurs à des rôles</td>
   </tr>
 </table>
 

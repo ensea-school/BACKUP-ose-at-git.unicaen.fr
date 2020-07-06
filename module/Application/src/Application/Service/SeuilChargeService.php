@@ -36,7 +36,6 @@ class SeuilChargeService extends AbstractEntityService
     use TableauBordServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -66,7 +65,7 @@ class SeuilChargeService extends AbstractEntityService
 
 
     /**
-     * @param Scenario|integer                       $scenario
+     * @param Scenario|integer                 $scenario
      * @param Structure|integer|null           $structure
      * @param GroupeTypeFormation|integer|null $groupeTypeFormation
      * @param TypeIntervention|integer         $typeIntervention
@@ -92,11 +91,11 @@ class SeuilChargeService extends AbstractEntityService
 
 
     /**
-     * @param Scenario|integer                       $scenario
+     * @param Scenario|integer                 $scenario
      * @param Structure|integer|null           $structure
      * @param GroupeTypeFormation|integer|null $groupeTypeFormation
      * @param TypeIntervention|integer         $typeIntervention
-     * @param integer|null                           $dedoublement
+     * @param integer|null                     $dedoublement
      *
      * @return self
      */
@@ -142,28 +141,15 @@ class SeuilChargeService extends AbstractEntityService
      *
      * @param SeuilCharge $entity
      *
-     * @throws \RuntimeException
      * @return self
+     * @throws \RuntimeException
      */
     public function save($entity)
     {
         parent::save($entity);
 
-        $params = [
-            'TYPE_INTERVENTION_ID' => $entity->getTypeIntervention()->getId(),
-            'ANNEE_ID' => $entity->getAnnee()->getId(),
-        ];
-
-        if ($entity->getStructure()){
-            $params['STRUCTURE_ID'] = $entity->getStructure()->getId();
-        }
-
-        if ($entity->getGroupeTypeFormation()){
-            $params['GROUPE_TYPE_FORMATION_ID'] = $entity->getGroupeTypeFormation()->getId();
-        }
-
-        $this->getServiceTableauBord()->calculer('chargens_seuils_def', $params);
-        $this->getServiceTableauBord()->calculer('chargens', $params);
+        $this->getServiceTableauBord()->calculer('chargens_seuils_def', 'ANNEE_ID', $entity->getAnnee()->getId());
+        $this->getServiceTableauBord()->calculer('chargens', 'ANNEE_ID', $entity->getAnnee()->getId());
 
         return $entity;
     }
@@ -349,7 +335,7 @@ class SeuilChargeService extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
         if ($cStructure = $this->getServiceContext()->getStructure()) {

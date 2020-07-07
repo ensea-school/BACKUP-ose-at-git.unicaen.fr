@@ -54,24 +54,6 @@ class DossierAutresFieldset extends AbstractFieldset
 
     public function getInputFilterSpecification()
     {
-        $spec = [
-            'autre1' => [
-                'required' => false,
-            ],
-            'autre2' => [
-                'required' => false,
-            ],
-            'autre3' => [
-                'required' => false,
-            ],
-            'autre4' => [
-                'required' => false,
-            ],
-            'autre5' => [
-                'required' => false,
-            ],
-        ];
-
-        return $spec;
+        return [];
     }
 }

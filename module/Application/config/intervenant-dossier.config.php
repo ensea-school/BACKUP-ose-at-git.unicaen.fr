@@ -9,9 +9,6 @@ use Application\Form\Intervenant\IntervenantDossier;
 use Application\Form\Intervenant\IntervenantDossierForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AdresseNumeroComplService;
-use Application\Service\DossierAutreService;
-use Application\Service\DossierAutreTypeService;
-use Application\Service\IntervenantDossierService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
@@ -19,7 +16,7 @@ return [
     'router'          => [
         'routes' => [
 
-            'intervenant'   => [
+            'intervenant' => [
                 'child_routes' => [
                     'dossier' => [
                         'type'          => 'Segment',
@@ -32,7 +29,7 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'valider' => [
+                            'valider'   => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/valider',
@@ -41,7 +38,7 @@ return [
                                     ],
                                 ],
                             ],
-                            /*'devalider'          => [
+                            'devalider' => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/devalider',
@@ -50,7 +47,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'supprimer'          => [
+                            'supprimer' => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/supprimer',
@@ -59,7 +56,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'differences'        => [
+                            /*'differences'        => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/differences',
@@ -76,34 +73,8 @@ return [
                                         'action' => 'purger-differences',
                                     ],
                                 ],
-                            ],*/
+                            ]*/
                         ],
-                    ],
-                ],
-            ],
-            'dossier-autre' => [
-                'type'          => 'Literal',
-                'options'       => [
-                    'route'    => '/dossier-autre',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\IntervenantDossier',
-                        'action'     => 'dossier-autre-info',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'saisie' => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/saisie[/:dossierAutre]',
-                            'constraints' => [
-                                'dossierAutre' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'dossier-autre-saisie',
-                            ],
-                        ],
-                        'may_terminate' => true,
                     ],
                 ],
             ],
@@ -136,55 +107,37 @@ return [
         'guards'             => [
             PrivilegeController::class => [
                 /* Dossier */
-                /*[//Créer un droit archivage
-                 'controller' => 'Application\Controller\Dossier',
-                 'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION],
-                 'assertion'  => Assertion\DossierPiecesAssertion::class,
+                [
+                    'controller' => 'Application\Controller\IntervenantDossier',
+                    'action'     => ['index'],
+                    'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                    'assertion'  => IntervenantDossierAssertion::class,
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => 'Application\Controller\IntervenantDossier',
                     'action'     => ['differences'],
                     'privileges' => [Privileges::DOSSIER_DIFFERENCES],
-                    'assertion'  => Assertion\DossierPiecesAssertion::class,
+                    'assertion'  => IntervenantDossierAssertion::class,
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => 'Application\Controller\IntervenantDossier',
                     'action'     => ['purger-differences'],
                     'privileges' => [Privileges::DOSSIER_PURGER_DIFFERENCES],
-                    'assertion'  => Assertion\DossierPiecesAssertion::class,
+                    'assertion'  => IntervenantDossierAssertion::class,
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => 'Application\Controller\IntervenantDossier',
                     'action'     => ['valider'],
                     'privileges' => [Privileges::DOSSIER_VALIDATION],
+                    'assertion'  => IntervenantDossierAssertion::class,
+
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => 'Application\Controller\IntervenantDossier',
                     'action'     => ['supprimer'],
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
-                ],*/
-                [
-                    'controller' => 'Application\Controller\IntervenantDossier',
-                    'action'     => ['valider', 'devalider'],
-                    'privileges' => [Privileges::DOSSIER_VALIDATION],
                     'assertion'  => IntervenantDossierAssertion::class,
                 ],
-
-                [//Créer un droit archivage
-                 'controller' => 'Application\Controller\IntervenantDossier',
-                 'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION],
-                 'assertion'  => IntervenantDossierAssertion::class,
-                ],
-
-                [
-                    'controller' => 'Application\Controller\IntervenantDossier',
-                    'action'     => ['dossier-autre-info', 'dossier-autre-saisie'],
-                    'privileges' => [Privileges::INTERVENANT_STATUT_EDITION],
-                    'assertion'  => IntervenantDossierAssertion::class,
-                ],
-
             ],
         ],
         'resource_providers' => [
@@ -242,8 +195,6 @@ return [
         'invokables' => [
             Service\DossierService::class    => Service\DossierService::class,
             AdresseNumeroComplService::class => AdresseNumeroComplService::class,
-            DossierAutreService::class       => DossierAutreService::class,
-            DossierAutreTypeService::class   => DossierAutreTypeService::class,
         ],
         'factories'  => [
             Assertion\IntervenantDossierAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
@@ -255,11 +206,8 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories'  => [
+        'factories' => [
             IntervenantDossierForm::class => IntervenantDossierFormFactory::class,
-        ],
-        'invokables' => [
-            Form\Intervenant\AutresForm::class => Form\Intervenant\AutresForm::class,
         ],
     ],
 ];

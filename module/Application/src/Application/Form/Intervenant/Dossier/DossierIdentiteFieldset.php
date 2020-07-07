@@ -135,6 +135,12 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->get('paysNaissance')
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
 
+        //Set France par défault si INSEE France
+        $idFrance = $this->getServicePays()->getIdByLibelle('FRANCE');
+        if ($idFrance) {
+            $this->get('paysNaissance')->setValue($idFrance);
+        }
+
 
         /**
          * Département de naissance

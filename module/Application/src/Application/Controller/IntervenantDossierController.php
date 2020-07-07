@@ -2,16 +2,12 @@
 
 namespace Application\Controller;
 
-use Application\Assertion\IntervenantDossierAssertion;
 use Application\Constants;
-use Application\Entity\Db\DossierAutre;
-use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TypeRessource;
+use Application\Entity\Db\IntervenantDossier;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\Traits\AutresFormAwareTrait;
 use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
@@ -60,12 +56,6 @@ class IntervenantDossierController extends AbstractController
     public function indexAction()
     {
 
-        /**
-         * TODO :
-         * Remettre en place les bon required et les validator
-         * Sortir la gestion des champs autres de ce controller
-         *
-         */
         $this->initFilters();
 
         /* Initialisation */
@@ -95,15 +85,13 @@ class IntervenantDossierController extends AbstractController
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
         /* Traitement du formulaire */
-        
-
-        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (\Application\Entity\Db\IntervenantDossier $intervenantDossier) {
+        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (IntervenantDossier $intervenantDossier) {
             try {
                 /* Sauvegarde du dossier de l'intervenant */
                 $this->getServiceDossier()->save($intervenantDossier);
                 /* Recalcul des tableaux de bord nécessaires */
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
@@ -128,7 +116,6 @@ class IntervenantDossierController extends AbstractController
         if ($this->getRequest()->isPost()) {
             return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
         }
-
 
         return compact(
             ['form',
@@ -159,7 +146,7 @@ class IntervenantDossierController extends AbstractController
         try {
             $this->getServiceValidation()->validerDossier($intervenantDossier);
             $this->updateTableauxBord($intervenant, true);
-            $this->flashMessenger()->addSuccessMessage("Validation <strong>enregistrée</strong> avec succès.");
+            $this->flashMessenger()->addSuccessMessage("Validation des données personnelles <strong>enregistrée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
@@ -179,7 +166,7 @@ class IntervenantDossierController extends AbstractController
         try {
             $this->getServiceValidation()->delete($validation);
             $this->updateTableauxBord($intervenant, true);
-            $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
+            $this->flashMessenger()->addSuccessMessage("Validation des données personnelles <strong>supprimée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
@@ -200,7 +187,7 @@ class IntervenantDossierController extends AbstractController
         try {
             $this->getServiceDossier()->delete($dossier);
             $this->updateTableauxBord($intervenant);
-            $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
+            $this->flashMessenger()->addSuccessMessage("Suppression des données personnelles <strong>effectuée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
@@ -210,100 +197,57 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function differencesAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
+    /* public function differencesAction()
+     {
+         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $dql = "
-        SELECT
-          vi
-        FROM
-          " . IndicModifDossier::class . " vi
-        WHERE
-          vi.histoDestruction IS NULL
-          AND vi.intervenant = :intervenant
-        ORDER BY
-          vi.attrName, vi.histoCreation
-        ";
+         $dql = "
+         SELECT
+           vi
+         FROM
+           " . IndicModifDossier::class . " vi
+         WHERE
+           vi.histoDestruction IS NULL
+           AND vi.intervenant = :intervenant
+         ORDER BY
+           vi.attrName, vi.histoCreation
+         ";
 
-        // refetch intervenant avec jointures
-        $query = $this->em()->createQuery($dql);
-        $query->setParameter('intervenant', $intervenant);
+         // refetch intervenant avec jointures
+         $query = $this->em()->createQuery($dql);
+         $query->setParameter('intervenant', $intervenant);
 
-        $differences = $query->getResult();
-        $title       = "Historique des modifications d'informations importantes dans les données personnelles";
+         $differences = $query->getResult();
+         $title       = "Historique des modifications d'informations importantes dans les données personnelles";
 
-        return compact('title', 'intervenant', 'differences');
-    }
-
-
-
-    public function purgerDifferencesAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-
-        if ($this->getRequest()->isPost()) {
-            try {
-                $utilisateur = $this->getServiceContext()->getUtilisateur();
-                $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
-
-                $this->flashMessenger()->addSuccessMessage(sprintf(
-                    "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
-                    $intervenant));
-
-                $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-
-            return new MessengerViewModel();
-        } else {
-            return compact('intervenant');
-        }
-    }
+         return compact('title', 'intervenant', 'differences');
+     }
 
 
 
-    public function dossierAutreInfoAction()
-    {
-        $dossierAutreListe = $this->getServiceDossierAutre()->getList();
+     public function purgerDifferencesAction()
+     {
+         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        return compact('dossierAutreListe');
-    }
+         if ($this->getRequest()->isPost()) {
+             try {
+                 $utilisateur = $this->getServiceContext()->getUtilisateur();
+                 $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
 
+                 $this->flashMessenger()->addSuccessMessage(sprintf(
+                     "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
+                     $intervenant));
 
+                 $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
+             } catch (\Exception $e) {
+                 $this->flashMessenger()->addErrorMessage($this->translate($e));
+             }
 
-    public function dossierAutreSaisieAction()
-    {
-        $dossierAutre = $this->getEvent()->getParam('dossierAutre');
-        $form         = $this->getAutresForm();
-        $title        = 'Édition d\'un type de ressource';
-
-        $form->bindRequestSave($dossierAutre, $this->getRequest(), function (DossierAutre $autre) {
-            try {
-                $this->getServiceDossierAutre()->save($autre);
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        });
-
-        return compact('form', 'title');
-
-        return [];
-    }
-
-
-
-    public function dossierAutreDeleteAction()
-    {
-        $dossierAutreList = $this->getServiceDossierAutre()->getList();
-
-        return [];
-    }
-
+             return new MessengerViewModel();
+         } else {
+             return compact('intervenant');
+         }
+     }*/
 
 
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
@@ -314,10 +258,4 @@ class IntervenantDossierController extends AbstractController
         ], $intervenant);
     }
 
-
-
-    private function personnaliser()
-    {
-
-    }
 }

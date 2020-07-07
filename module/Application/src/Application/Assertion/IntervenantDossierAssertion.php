@@ -146,7 +146,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
                     case self::PRIV_CAN_EDIT:
                         return $this->assertCanEdit($entity);
                     case self::PRIV_CAN_SUPPRIME:
-                        return $this->assertCanSupprime();
+                        return $this->assertCanSupprime($entity);
                 }
             break;
         }
@@ -440,10 +440,13 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertCanSupprime()
+    protected function assertCanSupprime(Intervenant $intervenant)
     {
 
+        $isValidate = $this->getServiceDossier()->getValidation($intervenant);
+
         return $this->asserts([
+            !$isValidate,
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_SUPPRESSION),
         ]);
     }

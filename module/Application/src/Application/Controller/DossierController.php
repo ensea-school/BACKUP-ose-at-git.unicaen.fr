@@ -167,36 +167,6 @@ class DossierController extends AbstractController
 
 
 
-    public function indexnewAction()
-    {
-        $this->initFilters();
-
-        /* Initialisation */
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        /* @var $intervenant Intervenant */
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-        $intervenantDossier = $this->getServiceIntervenantDossier()->getByIntervenant($intervenant);
-
-        $form = $this->getFormIntervenantDossier();
-
-        /* $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (IntervenantDossier $id) {
-             try {
-                 $this->getServiceIntervenantDossier()->save($id);
-                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-             } catch (\Exception $e) {
-                 $this->flashMessenger()->addErrorMessage($this->translate($e));
-             }
-         });*/
-
-
-        return compact('form', 'role', 'intervenant');
-    }
-
-
-
     public function validerAction()
     {
         $this->initFilters();

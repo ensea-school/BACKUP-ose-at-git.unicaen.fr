@@ -47,6 +47,8 @@ return [
             'suppression'          => 'Suppression',
             'statut-edition'       => 'Statuts (Édition)',
             'statut-visualisation' => 'Statuts (Visualisation)',
+            'autres-visualisation' => 'Champs autres (Visualisation)',
+            'autres-edition'       => 'Champs autres (Edition)',
         ],
     ],
 

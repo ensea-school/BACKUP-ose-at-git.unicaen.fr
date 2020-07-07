@@ -12,10 +12,10 @@ use UnicaenApp\Util;
  */
 class PaysService extends AbstractEntityService
 {
-    CONST PAYS_FRANCE  = 'france';
-    CONST PAYS_ALGERIE = 'algerie';
-    CONST PAYS_MAROC   = 'maroc';
-    CONST PAYS_TUNISIE = 'tunisie';
+    const PAYS_FRANCE  = 'france';
+    const PAYS_ALGERIE = 'algerie';
+    const PAYS_MAROC   = 'maroc';
+    const PAYS_TUNISIE = 'tunisie';
 
     use ParametresServiceAwareTrait;
 
@@ -69,6 +69,7 @@ class PaysService extends AbstractEntityService
 
         return $this->idsByLibelle[$libelle];
     }
+
 
 
     /**

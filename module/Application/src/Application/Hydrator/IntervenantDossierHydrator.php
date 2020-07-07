@@ -156,7 +156,6 @@ class IntervenantDossierHydrator implements HydratorInterface
             $dateNaissance = (!empty($data['DossierIdentite']['dateNaissance'])) ?
                 \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateNaissance']) : null;
             $object->setDateNaissance($dateNaissance);
-
             //Pays de naissance
             $paysNaissance = (!empty($data['DossierIdentite']['paysNaissance'])) ?
                 $this->getServicePays()->get($data['DossierIdentite']['paysNaissance']) : null;

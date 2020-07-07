@@ -91,9 +91,9 @@ return [
                                     'gestion-champs-autres-dossier-intervenant'  => [
                                         'label'      => "Gestion des champs personnalisés pour le dossier intervenant",
                                         'title'      => "Editer et modifier les 5 champs personnalisables pour les dossiers des intervenant",
-                                        'route'      => 'dossier-autre',
+                                        'route'      => 'autres-infos',
                                         'withtarget' => true,
-                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\IntervenantDossier', 'dossier-autre-info'),
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\Autres', 'index'),
                                     ],
                                     'validation-volume-horaire-type-intervenant' => [
                                         'label'      => "Règles de validation par type d'intervenant",

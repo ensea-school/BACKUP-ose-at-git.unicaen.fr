@@ -158,7 +158,7 @@ $fieldsets = $form->getFieldsets();
                 <?php
                 echo $this->formHidden($this->form->get('security'));
                 if ($canEdit) {
-                    echo $this->formSubmit($form->get('submit'));
+                    echo $this->formSubmit($form->get('submit-button'));
                 }
 
                 ?>
@@ -219,9 +219,12 @@ $fieldsets = $form->getFieldsets();
 
 
     <script type="text/javascript">
+
         $(function () {
 
             manageDepartementNaissance();
+
+
 
             function manageDepartementNaissance()
             {
@@ -241,5 +244,10 @@ $fieldsets = $form->getFieldsets();
 
                 selectPays.change();
             }
+
+            $("select[name='DossierStatut[statut]']").change(function () {
+                $("form[id='dossier']").submit();
+            });
+
         });
     </script>

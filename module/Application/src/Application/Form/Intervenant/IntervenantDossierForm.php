@@ -4,7 +4,6 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
-use Application\Form\Element\StatutIntervenantSelect;
 use Application\Form\Employeur\EmployeurFieldset;
 use Application\Form\Adresse\AdresseFieldset;
 use Application\Form\Intervenant\Dossier\DossierAutresFieldset;
@@ -14,14 +13,11 @@ use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
 use Application\Form\Intervenant\Dossier\DossierInseeFieldset;
 use Application\Form\Intervenant\Dossier\DossierStatutFieldset;
 use Application\Hydrator\IntervenantDossierHydrator;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Zend\Form\Element;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Fieldset;
 
 /**
  * Formulaire de modification du dossier d'un intervenant extérieur.
@@ -49,34 +45,25 @@ class IntervenantDossierForm extends AbstractForm
 
     protected $dossierAutresFiedlset;
 
-    protected $serviceAuthorize;
-
     protected $intervenant;
-
-    /**
-     * @var boolean
-     */
-    protected $readOnly;
 
 
 
     public function __construct(Intervenant $intervenant)
     {
-        $this->serviceAuthorize = $this->getServiceContext()->getAuthorize();
-        $this->intervenant      = $intervenant;
+        $this->intervenant = $intervenant;
         parent::__construct('IntervenantDossierForm', []);
     }
 
 
 
-    /**
-     * This function is automatically called when creating element with factory. It
-     * allows to perform various operations (add elements...)
-     */
     public function init()
     {
 
-        $statutIntervenant = $this->intervenant->getStatut();
+        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
+        $statutIntervenant  = $this->intervenant->getStatut();
+
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
@@ -102,7 +89,7 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
         $this->dossierEmployeurFieldset->init();
 
-        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $statutIntervenant->getChampsAutres()]);
+        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $dossierIntervenant->getStatut()->getChampsAutres()]);
         $this->dossierAutresFiedlset->init();
 
 
@@ -118,35 +105,6 @@ class IntervenantDossierForm extends AbstractForm
         $this->add($this->dossierAutresFiedlset);
 
         /**
-         * Select pour Statut intervenant customisé
-         */
-        /* $statut = new StatutIntervenantSelect('statut', [
-             'label' => "Quel est votre statut ?",
-             'value' => '',
-         ]);
-
-
-         $statut->getProxy()
-             ->setFindMethod([
-                 'name'   => 'findBy',
-                 'params' => [
-                     'criteria' => ['peutChoisirDansDossier' => true],
-                     'orderBy'  => ['ordre' => 'ASC'],
-                 ],
-             ])
-             ->setObjectManager($this->getServiceContext()->getEntityManager())
-             ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
-
-         //Si le statut de l'intervenant n'est pas dans la liste des statuts sélectionnable on le rajoute à la main
-
-         $statutValues = $statut->getValueOptions();
-         $statut->setOptions([$statutIntervenant]);
-         $statutValues = $statut->getValueOptions();
-
-
-         $this->add($statut);*/
-
-        /**
          * Csrf
          */
         $this->add(new Csrf('security'));
@@ -155,7 +113,7 @@ class IntervenantDossierForm extends AbstractForm
          * Submit
          */
         $this->add([
-            'name'       => 'submit',
+            'name'       => 'submit-button',
             'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
@@ -170,73 +128,6 @@ class IntervenantDossierForm extends AbstractForm
     {
 
         return parent::isValid();
-    }
-
-
-
-    public function personnaliser(Intervenant $intervenant, $lastHETD = 0)
-    {
-        $dossier         = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $dossierFieldset = $this->get('dossier');
-
-        /**
-         * Pas de sélection de la France par défaut si le numéro INSEE correspond à une naissance hors France.
-         */
-        if ($dossier->getNumeroInsee() && !$dossier->getNumeroInseeEstProvisoire()) {
-            if (substr($dossier->getNumeroInsee(), 5, 2) == '99') {
-                $dossierFieldset->get('paysNaissance')->setValue(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-
-    /**
-     * Redéfinition pour forcer le témoin "premier recrutement" en cas d'absence
-     * de l'élément de formulaire.
-     */
-    /* public function setData($data)
-     {
-         if (!$this->dossierFieldset->has('premierRecrutement')) {
-             $data->dossier['premierRecrutement'] = '0';
-         }
-
-         return parent::setData($data);
-     }*/
-
-
-    /**
-     * @return boolean
-     */
-    public function isReadOnly()
-    {
-        return $this->readOnly;
-    }
-
-
-
-    /**
-     * @param boolean $readOnly
-     *
-     * @return Dossier
-     */
-    public function setReadOnly(Fieldset $fieldset)
-    {
-        $elements = $fieldset->getElements();
-        /* @var $element Element */
-
-        foreach ($elements as $element) {
-            if ($element instanceof Element\Checkbox ||
-                $element instanceof Element\Select) {
-                $element->setAttribute('disabled', 1);
-            } else {
-                $element->setAttribute('readonly', 1);
-            }
-        }
-
-        return $this;
     }
 
 
@@ -258,13 +149,7 @@ class IntervenantDossierForm extends AbstractForm
      */
     public function getInputFilterSpecification()
     {
-        $spec = [
-            'statut' => [
-                'required' => false,
-            ],
-        ];
-
-        return $spec;
+        return [];
     }
 
 }

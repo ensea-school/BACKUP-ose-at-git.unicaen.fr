@@ -54,7 +54,12 @@ class DossierStatutFieldset extends AbstractFieldset
 
     public function getInputFilterSpecification()
     {
-    
-        return [];
+        $spec = [
+            'statut' => [
+                'required' => true,
+            ],
+        ];
+
+        return $spec;
     }
 }

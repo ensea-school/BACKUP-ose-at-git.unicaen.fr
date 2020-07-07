@@ -8,8 +8,8 @@ use Application\Provider\Privilege\Privileges;
  * @var $autre \Application\Entity\Db\DossierAutre
  */
 
-//$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_RESSOURCE_EDITION));
-$canEdit = 1;
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AUTRES_EDITION));
+
 
 ?>
 <h1 class="page-header">Gestion des dossiers autres</h1>
@@ -39,7 +39,7 @@ $canEdit = 1;
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal"
                        data-event="dossier-autre-saisie"
-                       href="<?= $this->url('dossier-autre/saisie', ['dossierAutre' => $autre->getId()]) ?>"
+                       href="<?= $this->url('autres-infos/saisie', ['dossierAutre' => $autre->getId()]) ?>"
                        data-submit-reload="true">
                         <span class="glyphicon glyphicon-edit"></span></a>
                 </td>

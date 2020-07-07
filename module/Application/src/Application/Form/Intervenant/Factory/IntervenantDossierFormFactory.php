@@ -9,18 +9,20 @@ use Psr\Container\ContainerInterface;
 /**
  * Description of ModeleFormFactory
  *
- * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ * @author LE COURTES Antony <antony.lecourtes at unicaen.fr>
  */
 class IntervenantDossierFormFactory
 {
 
     protected $options;
 
+
+
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $form      = new IntervenantDossierForm( $options['intervenant']);
+        $form = new IntervenantDossierForm($options['intervenant']);
+
         return $form;
     }
-
 
 }

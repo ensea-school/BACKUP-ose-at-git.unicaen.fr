@@ -98,6 +98,24 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td>Affectations de recherche des intervenants</td> <!-- Description -->
   </tr>
   <tr>
+    <td>CORPS</td> <!-- Table -->
+     <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des corps</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>EMPLOYEUR</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des employeurs</td> <!-- Description -->
+  </tr>
+  <tr>
     <td>GRADE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
@@ -116,17 +134,9 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td>Intervenants (vacataires et permanents)</td> <!-- Description -->
   </tr>
   
+  
   <tr>
     <th colspan="50">Nomenclatures diverses</th>
-  </tr>
-  <tr>
-    <td>CORPS</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td>Oui</td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des corps</td> <!-- Description -->
   </tr>
   <tr>
     <td>DEPARTEMENT</td> <!-- Table -->
@@ -145,15 +155,6 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des disciplines (sections CNU, disc. second degré, etc)</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>EMPLOYEUR</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des employeurs</td> <!-- Description -->
   </tr>
   <tr>
     <td>ETABLISSEMENT</td> <!-- Table -->
@@ -191,6 +192,7 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Calcul -->
     <td>Liste des voiries</td> <!-- Description -->
   </tr>
+  
   
   <tr>
     <th colspan="50">Données comptables</th>
@@ -231,6 +233,7 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Calcul -->
     <td>Liste des domaines fonctionnels</td> <!-- Description -->
   </tr>
+  
   
   <tr>
     <th colspan="50">Données décrivant l'offre de formation</th>
@@ -352,6 +355,7 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Calcul -->
     <td>Charge d'enseingement</td> <!-- Description -->
   </tr>
+  
   
   <tr>
     <th colspan="50">Données liées aux services d'enseignement</th>

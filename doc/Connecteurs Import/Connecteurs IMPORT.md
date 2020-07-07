@@ -65,7 +65,7 @@ En voici la liste :
 
 Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuvent fournir :
 
-<table cellpadding="1">
+<table cellpadding="1" style="padding:1px">
   <tr>
     <th>Table</th>
     <th>Apogée</th>

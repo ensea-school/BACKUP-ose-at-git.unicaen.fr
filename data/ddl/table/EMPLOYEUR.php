@@ -132,8 +132,8 @@ return [
         'SIREN'                   => [
             'name'        => 'SIREN',
             'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 250,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,

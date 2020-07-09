@@ -38,7 +38,6 @@ class AgrementController extends AbstractController
     use WorkflowServiceAwareTrait;
 
 
-
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
@@ -306,9 +305,11 @@ class AgrementController extends AbstractController
         //plusieurs années pour plusieurs intervenants avec un même code
 
         $listeIntervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'agrement',
-            'contrat',
-        ], $listeIntervenants);
+        foreach ($listeIntervenants as $objectIntervenant) {
+            $this->getServiceWorkflow()->calculerTableauxBord([
+                'agrement',
+                'contrat',
+            ], $objectIntervenant);
+        }
     }
 }

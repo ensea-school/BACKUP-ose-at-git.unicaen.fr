@@ -38,7 +38,6 @@ class PieceJointeController extends AbstractController
     use WorkflowServiceAwareTrait;
 
 
-
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
@@ -457,9 +456,11 @@ class PieceJointeController extends AbstractController
         //Récupérer tous les intervenants avec le même code intervenant
         $intervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
         //On recalcule le tbl piece_jointe pour tous les intervenants ayant le même code intervenant que l'intervenant de l'année en cours
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'piece_jointe',
-        ], $intervenants);
+        foreach ($intervenants as $objectIntervenant) {
+            $this->getServiceWorkflow()->calculerTableauxBord([
+                'piece_jointe',
+            ], $objectIntervenant);
+        }
     }
 
 }

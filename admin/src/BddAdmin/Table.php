@@ -526,6 +526,7 @@ class Table
                 || false !== strpos($where, ' NOT ')
                 || false !== strpos($where, '<')
                 || false !== strpos($where, '>')
+                || false !== strpos($where, 'LIKE')
             )
         ) {
             return ' WHERE ' . $where;

@@ -12,7 +12,10 @@ Le connecteur FCA Manager est découpé en deux parties.
 La première s'installe directement sur FCA Manager.
 La seconde exploite la partie FCA Manager du connecteur et fournie les vues sources nécessaires pour les opérations de synchronisation. 
 
-## Première partie : installation de la partie Apogée du connecteur
+## Installation de la partie Apogée du connecteur
+
+Il faut d'abord installer la partie FCA Manager du connecteur.
+
 [Partie FCA Manager du connecteur](FCAManager-OSE-lisezMoi.md)
   
 ## Mise en place du DbLink

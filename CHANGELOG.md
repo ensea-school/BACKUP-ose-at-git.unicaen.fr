@@ -21,7 +21,7 @@ Objectif : Doubles statuts et refonte des données personnelles
 La migration ne sera possible qu'à partir de la version 14.
 Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
 
-# OSE 14.8 (en développement)
+# OSE 14.8
 
 ## Corrections de bugs
 

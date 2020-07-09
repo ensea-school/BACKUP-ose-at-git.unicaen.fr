@@ -20,7 +20,7 @@ Dans cet exemple, le DbLink s'appellera `sifacp`.
 ## Déclaration du connecteur dans OSE  
 
 OSE doit lister toutes ses sources de données.
-Il faut donc y ajouter Harpège : 
+Il faut donc y ajouter Sifac : 
 
 ```sql
 BEGIN

@@ -1,10 +1,22 @@
-
 # Mécanisme
 
 L'import de données se passe au niveau de la base de données.
 
 Toutes les données exploitées par l'application doivent être enregistrées dans sa base de données.
 Ceci implique donc d'y importer les données et de les synchroniser à intervalle régulier afin de les maintenir à jour.
+
+Le module Import de OSE se charge se faire le lien avec la base de données du logiciel.
+Pour cela, il génère des vues différentielles.
+Ces dernières permettent de déterminer les différences entre les données fournies par les vues sources et les tables correspondantes.
+Il gérère également des procédures de mise à jour qui vont se baser sur les vues différentielles pour mettre à jour OSE.
+En cas de modification d'une vue source, il faut donc procéder à la mise à jour des vues et procédures d'import.
+
+Une interface d'administration (menu Administration / Import) vous permettra de :
+- visualiser le différentiel des données entre vos sources et OSE, et de mettre à jour l'application au cas par cas
+- gérer vos différentes sources de données
+- visualiser (page Branchement) les tables synchronisables de OSE et leurs spécifications (utile de nouveaux connecteurs une l'adaptation de ceux existants)
+- mettre à jour les vues et les procédures d'import
+
 
 Un certain nombre de tables de la base de données sont importables, c'est-à-dire qu'elles possèdent deux colonnes, SOURCE_ID et SOURCE_CODE qui permettent respectivement de
 * Savoir quelle est la source de la donnée (SOURCE_ID faisant référence à SOURCE.ID, donc l'identifiant de la source).
@@ -19,6 +31,21 @@ OSE permet de faire quatre opérations d'importation :
 * UPDATE : mise à jour d'une donnée
 * DELETE : pour supprimer une donnée (sachant que dans OSE les données ne sont pas réellement supprimées, mais historisées avec un horodatage)
 * UNDELETE : pour restaurer une donnée qui avait été supprimée
+
+# Informations sur l'architecture des connecteurs.
+
+Un connecteur est composé d'au moins deux parties :
+1. la requête qui va permettre de remonter les données selon le schéma OSE
+   Cette requête peut s'apppuyer le cas échéant sur d'autres dispositifs (vues matérialisées, scripts de peuplement de tables, etc)
+   Pour les identifiants, si le champ fait référence à une autre table, alors on pourra fournir une valeur qui permettra de retrouver ensuite l'identifiant OSE.
+   On utilisera donc pour convention z_ + nom du champ pour signaler que la données transmise n'est pas celle attendue.
+   Cette requête peut éventuellement être intégrée directement dans la vue source.
+1. la vue source, qui fournit à OSE les données nécessaires.
+   Si des champs z_* existent, il convient alors de les exploiter pour retrouver l'identifiant OSE correspondant à leur contenu.
+   Cela se fait le plus souvent à l'aide d'une jointure.
+   Par exemple, on donne U10 dans z_structure_id. Or U10 est le code de la composante IAE.
+   Donc on retourne structure.id si structure.source_code = z_structure_id à l'aide d'une jointure à gauche.
+
 
 # Sources de données
 
@@ -56,14 +83,18 @@ Par ailleurs, OSE ne gère pas le dédoublonnage des données sources. A vous, d
 
 Il existe déjà plusieurs connecteurs. Ceux-ci vous sont fournis à titre d'exemple.
 Ils devront être adaptés aux spécifités de votre système d'information.
+Les connecteurs ne seront pas "écrasés" ou impactés par les futures mises à jour de OSE.
 
 En voici la liste :
 
 * [Harpège](Harpège/Connecteur.md) pour les données RH et diverses
 * [Sifac](Sifac/Connecteur.md) pour les données comptables
-* [Apogée](Sifac/Connecteur.md) pour l'offre de formation
+* [Apogée](Apogée/Connecteur.md) pour l'offre de formation
+* [FCA Manager](FCA Manager/Connecteur.md) également pour l'offre de formation
+* [Calcul](Calcul/Connecteur.md) pour des données essentiellement liées à l'offre de formation
 
-Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuvent fournir :
+Et voici ci-dessous la matrice des connecteurs qui reprend, table par table, ce qu'ils peuvent fournir.
+Les tables sont présentées dans l'ordre où il faut les traiter.
 
 <table cellpadding="1" style="padding:1px">
   <tr>
@@ -75,6 +106,66 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <th>Calcul</th>
     <th>Description</th>
   </tr>
+  
+  
+  <tr>
+    <th colspan="50">Nomenclatures diverses</th>
+  </tr>
+  <tr>
+    <td>PAYS</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des pays</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>DEPARTEMENT</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des départements</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>VOIRIE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des voiries</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>ETABLISSEMENT</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des établissements</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>STRUCTURE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des structures</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>DISCIPLINE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des disciplines (sections CNU, disc. second degré, etc)</td> <!-- Description -->
+  </tr>
+  
   
   <tr>
     <th colspan="50">Données "RH"</th>
@@ -89,13 +180,13 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td>Affectation des utilisateurs à des rôles</td> <!-- Description -->
   </tr>
   <tr>
-    <td>AFFECTATION_RECHERCHE</td> <!-- Table -->
+    <td>EMPLOYEUR</td> <!-- Table -->
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
-    <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Harpège -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
-    <td>Affectations de recherche des intervenants</td> <!-- Description -->
+    <td>Liste des employeurs. Un mécanisme spécifique vous offre la possibilité de bénéficier dans OSE de la liste de tous les employeurs issue de la base SIRENE</td> <!-- Description -->
   </tr>
   <tr>
     <td>CORPS</td> <!-- Table -->
@@ -105,15 +196,6 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des corps</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>EMPLOYEUR</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des employeurs</td> <!-- Description -->
   </tr>
   <tr>
     <td>GRADE</td> <!-- Table -->
@@ -133,69 +215,28 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Calcul -->
     <td>Intervenants (vacataires et permanents)</td> <!-- Description -->
   </tr>
-  
-  
   <tr>
-    <th colspan="50">Nomenclatures diverses</th>
-  </tr>
-  <tr>
-    <td>DEPARTEMENT</td> <!-- Table -->
+    <td>AFFECTATION_RECHERCHE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
-    <td>Liste des départements</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>DISCIPLINE</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des disciplines (sections CNU, disc. second degré, etc)</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>ETABLISSEMENT</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des établissements</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>PAYS</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td>Oui</td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des pays</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>STRUCTURE</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td>Oui</td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des structures</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>VOIRIE</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td>Oui</td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des voiries</td> <!-- Description -->
+    <td>Affectations de recherche des intervenants</td> <!-- Description -->
   </tr>
   
   
   <tr>
     <th colspan="50">Données comptables</th>
+  </tr>
+  <tr>
+    <td>DOMAINE_FONCTIONNEL</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td>Oui</td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des domaines fonctionnels</td> <!-- Description -->
   </tr>
   <tr>
     <td>CENTRE_COUT</td> <!-- Table -->
@@ -224,19 +265,46 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td>Oui</td> <!-- Calcul -->
     <td>Relation n <=> nentre les centres de coûts et les structures</td> <!-- Description -->
   </tr>
-  <tr>
-    <td>DOMAINE_FONCTIONNEL</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td>Oui</td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des domaines fonctionnels</td> <!-- Description -->
-  </tr>
   
   
   <tr>
     <th colspan="50">Données décrivant l'offre de formation</th>
+  </tr>
+  <tr>
+    <td>GROUPE_TYPE_FORMATION</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des groupes de types de formation (License, Master, DU, etc.)</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>TYPE_FORMATION</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des types de formation</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>ETAPE</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des étapes</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>ELEMENT_PEDAGOGIQUE</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liste des éléments pédagogiques</td> <!-- Description -->
   </tr>
   <tr>
     <td>CHEMIN_PEDAGOGIQUE</td> <!-- Table -->
@@ -247,6 +315,15 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Calcul -->
     <td>Relation n <=> n entre les étapes et les éléments pédagogiques</td> <!-- Description -->
   </tr>
+  <tr>
+    <td>VOLUME_HORAIRE_ENS</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td>Oui</td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Charge d'enseingement</td> <!-- Description -->
+  </tr>  
   <tr>
     <td>EFFECTIFS</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
@@ -266,49 +343,13 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td>Effectifs étudiants par étape</td> <!-- Description -->
   </tr>
   <tr>
-    <td>ELEMENT_PEDAGOGIQUE</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td>Oui</td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des éléments pédagogiques</td> <!-- Description -->
-  </tr>
-  <tr>
     <td>ELEMENT_TAUX_REGIMES</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
+    <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Taux FI/FC/FA par élément pédagogique</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>ETAPE</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td>Oui</td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des étapes</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>GROUPE_TYPE_FORMATION</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des groupes de types de formation (License, Master, DU, etc.)</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>LIEN</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liens entre deux noeuds</td> <!-- Description -->
   </tr>
   <tr>
     <td>NOEUD</td> <!-- Table -->
@@ -317,7 +358,25 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Harpège -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
-    <td>Noeuds formant les arbres d'une formation, situés entre les étapes et les éléments pédagogiques</td> <!-- Description -->
+    <td>Noeuds formant les arbres d'une formation, situés entre les étapes et les éléments pédagogiques. Nécessaire uniquement pour le module Charges.</td> <!-- Description -->
+  </tr>
+    <tr>
+    <td>LIEN</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Liens entre deux noeuds. Nécessaire uniquement pour le module Charges.</td> <!-- Description -->
+  </tr>  
+  <tr>
+    <td>SCENARIO_NOEUD</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Paramétrage des noeuds. Utile uniquement pour le module Charges.</td> <!-- Description -->
   </tr>
   <tr>
     <td>SCENARIO_LIEN</td> <!-- Table -->
@@ -326,36 +385,9 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Harpège -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
-    <td>Paramétrage des liens</td> <!-- Description -->
+    <td>Paramétrage des liens. Utile uniquement pour le module Charges.</td> <!-- Description -->
   </tr>
-  <tr>
-    <td>SCENARIO_NOEUD</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Paramétrage des noeuds</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>TYPE_FORMATION</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Liste des types de formation</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>VOLUME_HORAIRE_ENS</td> <!-- Table -->
-    <td>Oui</td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td>Oui</td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Charge d'enseingement</td> <!-- Description -->
-  </tr>
-  
+      
   
   <tr>
     <th colspan="50">Données liées aux services d'enseignement</th>
@@ -379,6 +411,24 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td>Lignes de service intervenant (référentiel)</td> <!-- Description -->
   </tr>
   <tr>
+    <td>VOLUME_HORAIRE</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Volumes horaires (grain fin de la saisie de service : heures d'enseignement)</td> <!-- Description -->
+  </tr>
+  <tr>
+    <td>VOLUME_HORAIRE_REF</td> <!-- Table -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Volumes horaires (grain fin de la saisie de service : heures de référentiel)</td> <!-- Description -->
+  </tr>  
+  <tr>
     <td>TYPE_INTERVENTION_EP</td> <!-- Table -->
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
@@ -397,15 +447,6 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td>Relation n <=> n spécifiant quels types de modulateurs sont pertinents par élément pédagogique</td> <!-- Description -->
   </tr>
   <tr>
-    <td>VOLUME_HORAIRE</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Volumes horaires (grain fin de la saisie de service : heures d'enseignement)</td> <!-- Description -->
-  </tr>
-  <tr>
     <td>VOLUME_HORAIRE_CHARGE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
@@ -413,14 +454,5 @@ Et voici la matrice des connecteurs qui reprend, table par table, ce qu'ils peuv
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Table non exploitée : à ignorer</td> <!-- Description -->
-  </tr>
-  <tr>
-    <td>VOLUME_HORAIRE_REF</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
-    <td></td> <!-- FCA Manager -->
-    <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td></td> <!-- Calcul -->
-    <td>Volumes horaires (grain fin de la saisie de service : heures de référentiel)</td> <!-- Description -->
   </tr>
 </table>

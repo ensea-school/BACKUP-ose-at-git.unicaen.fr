@@ -6,20 +6,38 @@ Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés
 
-* Les vues matérialisées sont recalculées à chaque mise à jour
+* Refonte complète de la gestion des données personnelles
+  * Gestion des employeurs (avec utilisation possible de la base SIRENE)
+  * Possibilité d'enregistrer un dossier incomplet, avec gestion du taux de complétude
+  * Masquage des données sensibles (mise en conformité RGPD)
+  * Possibilité d'ajouter des champs supplémentaires
+  * Nouveau format pour les adresses
+  * Paramétrage des conditions de remplissage des mails et téléphones personnels (oblitatoires si pas de mail/tél pro ou bien tout le temps)
 * Possibilité pour un intervenant d'avoir simultanément plusieurs statuts
   * Le nouveau statut peut être ajouté dans l'application ou bien être fourni via le connecteur IMPORT
   * La bascule d'un statut à un autre e fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
   * Pour chaque statut, l'intervenant a une fiche distincte, avec des services distincts, etc. Les pièces justificatives et les agréments sont communs.
 * Possibilité de créer un nouvel intervenant local au moyen d'une IHM
-* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignirer celui fourni par le connecteur
+* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celui fourni par le connecteur
 * Possibilité de forcer le statut d'un intervenant dans OSE et d'ignorer celui fourni par le connecteur (même pour un permanent)
+* Les vues matérialisées sont recalculées à chaque mise à jour
+* Amélioration importante des performances pour le calcul des tableaux de bord intermédiaires
+* Adaptations du connecteur Harpège
 
 ## Notes de mise à jour
 
 * Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
 La migration ne sera possible qu'à partir de la version 14.
-Si vous êtes sur une version antérieurs à la 14, merci de migrer d'abord en V14.x AVANT de migrer vers la 15.
+Si vous êtes sur une version antérieurs à la 14, merci de migrer en V14.x **AVANT** de migrer vers la 15.
+
+* La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier ceux visant les tables INTERVERNANT et STRUCTURE.
+Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
+
+# OSE 14.9 (en développement)
+
+## Nouveautés
+
+* Intégration (en cours) de la formule de calcul de Poitiers.
 
 # OSE 14.8
 

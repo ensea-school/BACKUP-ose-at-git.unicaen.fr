@@ -1,3 +1,6 @@
+**ATTENTION** : cette docmuentation est adaptée à la future version 15 de OSE.
+Pour la V14 de OSE, les vues sources sont plutôt à récupérer dans l'ancienne version de la documentation : [Ancienne documentation](https://git.unicaen.fr/open-source/OSE/-/tree/b14/connecteurs)
+
 # Mécanisme
 
 L'import de données se passe au niveau de la base de données.

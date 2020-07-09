@@ -134,6 +134,13 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\IntervenantDossier',
+                    'action'     => ['devalider'],
+                    'privileges' => [Privileges::DOSSIER_DEVALIDATION],
+                    'assertion'  => IntervenantDossierAssertion::class,
+
+                ],
+                [
+                    'controller' => 'Application\Controller\IntervenantDossier',
                     'action'     => ['supprimer'],
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
                     'assertion'  => IntervenantDossierAssertion::class,

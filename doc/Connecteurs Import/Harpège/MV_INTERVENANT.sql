@@ -105,7 +105,7 @@ SELECT DISTINCT
   initcap(individu.nom_patronymique)                            nom_patronymique,
   COALESCE(commune.libelle_commune,individu.ville_de_naissance) commune_naissance,
   individu.c_pays_naissance                                     z_pays_naissance_id,
-  individu.c_dept_naissance                                     z_dep_naissance_id,
+  individu.c_dept_naissance                                     z_departement_naissance_id,
   individu.c_pays_nationnalite                                  z_pays_nationalite_id,
 
   /* Coordonnées */

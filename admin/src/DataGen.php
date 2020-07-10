@@ -541,6 +541,38 @@ class DataGen
 
 
 
+    public function IMPORT_TABLES()
+    {
+        $bdd = $this->oseAdmin->getBdd();
+
+        $tables = [];
+        $sql    = "
+        select 
+          t.table_name
+        from 
+          user_tables t
+          JOIN user_tab_cols c ON c.table_name = t.table_name
+          LEFT JOIN user_mviews m ON m.mview_name = t.table_name
+        WHERE 
+          c.column_name IN ('SOURCE_CODE','SOURCE_ID','HISTO_CREATION','HISTO_CREATEUR_ID','HISTO_MODIFICATION','HISTO_MODIFICATEUR_ID','HISTO_DESTRUCTION','HISTO_DESTRUCTEUR_ID')
+            AND m.mview_name IS NULL
+        GROUP BY
+          t.table_name
+        HAVING
+          count(*) = 8";
+        $d      = $bdd->select($sql);
+        foreach ($d as $t) {
+            $tables[] = [
+                "TABLE_NAME"   => $t['TABLE_NAME'],
+                "SYNC_ENABLED" => false,
+            ];
+        }
+
+        return $tables;
+    }
+
+
+
     public function ETAT_SORTIE()
     {
         return require $this->oseAdmin->getOseDir() . 'data/etats_sortie.php';

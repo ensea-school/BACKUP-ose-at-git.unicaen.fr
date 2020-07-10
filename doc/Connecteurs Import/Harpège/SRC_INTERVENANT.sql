@@ -5,7 +5,7 @@ SELECT DISTINCT
   i.utilisateur_code                         utilisateur_code,
   s.id                                       structure_id,
   COALESCE(si.id,sautre.id)                  statut_id,  -- à tester
-  i.z_grade_id                               grade_id,
+  g.id                                       grade_id,
   COALESCE( d.id, d99.id )                   discipline_id,
   c.id                                       civilite_id,
   i.nom_usuel                                nom_usuel,

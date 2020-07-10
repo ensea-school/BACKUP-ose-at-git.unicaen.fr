@@ -259,7 +259,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
         //$object->setPremierRecrutement($data['premier-recrutement']);
         $object->setChangementRIB($data['changement-rib']);
         $object->setObligatoire($data['typePieceJointe']);
-        $object->setSeuilHetd($data['seuil-hetd']);
+        $object->setSeuilHetd((empty($data['seuil-hetd'])?null:$data['seuil-hetd']));
         if (array_key_exists('annee-debut', $data)) {
             $object->setAnneeDebut($this->getServiceAnnee()->get($data['annee-debut']));
         }

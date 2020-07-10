@@ -34,7 +34,6 @@ class VolumeHoraireController extends AbstractController
     use SaisieCalendaireAwareTrait;
 
 
-
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -94,20 +93,26 @@ class VolumeHoraireController extends AbstractController
         $canViewMNP = $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
         $canEditMNP = $canViewMNP && $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
 
+        $hDeb = $volumeHoraireListe->getHeures();
+
         $form->setViewMNP($canViewMNP);
         $form->setEditMNP($canEditMNP);
         $form->build();
-        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) {
+        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb, $volumeHoraireListe) {
             try {
                 $service = $vhl->getService();
                 $this->getProcessusPlafond()->beginTransaction();
                 $this->getServiceService()->save($service);
-                $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire());
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                $hFin = $volumeHoraireListe->getHeures();
+                $this->updateTableauxBord($service->getIntervenant());
+                if (!$this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire(), $hFin < $hDeb)) {
+                    $this->updateTableauxBord($service->getIntervenant());
+                } else {
+                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                }
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-            $this->updateTableauxBord($service->getIntervenant());
         });
 
         return compact('form');
@@ -136,7 +141,7 @@ class VolumeHoraireController extends AbstractController
             $this->getProcessusPlafond()->beginTransaction();
             $this->getServiceService()->save($service);
             $this->updateTableauxBord($service->getIntervenant());
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $volumeHoraireListe->getTypeVolumeHoraire());
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $volumeHoraireListe->getTypeVolumeHoraire(), true);
             $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));

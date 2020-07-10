@@ -141,7 +141,7 @@ class ServiceReferentielController extends AbstractController
         if (!$this->isAllowed($assertionEntity, Privileges::REFERENTIEL_EDITION)) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
-
+        $hDeb    = $entity->getVolumeHoraireReferentielListe()->getHeures();
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -155,8 +155,11 @@ class ServiceReferentielController extends AbstractController
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
-                $this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire);
+                $hFin = $entity->getVolumeHoraireReferentielListe()->getHeures();
                 $this->updateTableauxBord($intervenant);
+                if (!$this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire, $hFin < $hDeb)) {
+                    $this->updateTableauxBord($intervenant);
+                }
             } else {
                 $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
             }
@@ -254,7 +257,7 @@ class ServiceReferentielController extends AbstractController
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, true);
         }
 
         return new MessengerViewModel;

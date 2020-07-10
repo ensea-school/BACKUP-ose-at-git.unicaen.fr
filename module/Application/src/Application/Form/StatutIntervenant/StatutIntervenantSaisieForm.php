@@ -200,7 +200,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
                 'suffix' => 'HETD',
             ],
             'attributes' => [
-                'title' => "Nombre maximal d'heures de service (en équivalent TD) autorisées pour l'intervenant",
+                'title' => "Nombre maximal d'heures (en équivalent TD) autorisées pour l'intervenant, service et complémentaire",
             ],
             'type'       => 'Text',
         ]);
@@ -406,7 +406,6 @@ class StatutIntervenantHydrator implements HydratorInterface
     use TypeIntervenantServiceAwareTrait;
     use TypeAgrementServiceAwareTrait;
     use TypeAgrementStatutServiceAwareTrait;
-
 
 
     /**

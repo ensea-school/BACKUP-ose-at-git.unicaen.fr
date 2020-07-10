@@ -307,7 +307,8 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     /**
      * Get cheminPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|CheminPedagogique[]
+     *
      */
     public function getCheminPedagogique()
     {

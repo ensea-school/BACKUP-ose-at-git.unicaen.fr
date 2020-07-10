@@ -86,10 +86,19 @@
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('contrat_modele_mail_objet')); ?>
                         <?= $this->formControlGroup($form->get('contrat_modele_mail')); ?>
+
                     </div>
 
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('contrat_regle_franchissement')); ?>
+                        <p style="font-size:0.9em;">
+                            Dans le corps de l'email ci-contre, vous pouvez utiliser les variables dynamiques suivantes :
+                        <ul style="font-size:0.9em;">
+                            <li><strong>:intervenant :</strong> nom de l'intervenant</li>
+                            <li><strong>:utilisateur :</strong> nom de l'utilisateur qui envoie l'email</li>
+                            <li><strong>:annee :</strong> année universitaire du contrat (ex : 2019/2020)</li>
+                        </ul>
+                        </p>
                     </div>
                 </div>
             </div>

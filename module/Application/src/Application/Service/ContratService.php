@@ -28,7 +28,6 @@ class ContratService extends AbstractEntityService
     use FichierServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -87,7 +86,7 @@ class ContratService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.intervenant, $alias.typeContrat, $alias.numeroAvenant");
 
@@ -107,7 +106,7 @@ class ContratService extends AbstractEntityService
      */
     public function finderByValidation($validation, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         if ($validation instanceof \Application\Entity\Db\Validation) {
             $qb
@@ -173,7 +172,7 @@ class ContratService extends AbstractEntityService
 
         foreach ($files as $file) {
             $path          = $file['tmp_name'];
-            $nomFichier    = $file['name'];
+            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
             $typeFichier   = $file['type'];
             $tailleFichier = $file['size'];
 

@@ -7,9 +7,11 @@ use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
+use Application\Provider\Role\RoleProviderAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use UnicaenAuth\Service\Traits\RoleServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 class StatutIntervenantController extends AbstractController
@@ -56,6 +58,7 @@ class StatutIntervenantController extends AbstractController
                     try {
                         $this->getServiceStatutIntervenant()->save($si);
                         unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                        unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                         $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                     } catch (\Exception $e) {
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -66,7 +69,7 @@ class StatutIntervenantController extends AbstractController
                 $form->readOnly();
             }
         } catch (\Exception $e) {
-            var_dump($e);
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
 
@@ -88,6 +91,7 @@ class StatutIntervenantController extends AbstractController
             try {
                 $this->getServiceStatutIntervenant()->save($si);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -118,6 +122,7 @@ class StatutIntervenantController extends AbstractController
             try {
                 $this->getServiceStatutIntervenant()->delete($statutIntervenant);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

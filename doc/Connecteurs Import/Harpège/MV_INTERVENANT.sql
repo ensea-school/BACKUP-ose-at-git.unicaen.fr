@@ -145,7 +145,8 @@ SELECT DISTINCT
   CAST(NULL AS varchar2(255))                                   z_employeur_id,
 
   /* Chaîne de caractères "réduite" pour optimiser les recherches */
-  utl_raw.cast_to_varchar2((nlssort(to_char(individu.nom_usuel || ' ' || individu.nom_patronymique || ' ' || individu.prenom), 'nls_sort=binary_ai'))) critere_recherche
+  utl_raw.cast_to_varchar2((nlssort(to_char(individu.nom_usuel || ' ' || individu.nom_patronymique || ' ' || individu.prenom), 'nls_sort=binary_ai'))) critere_recherche,
+  date_fin
 FROM
                                          i
        JOIN individu@harpprod            individu           ON individu.no_individu           = i.code

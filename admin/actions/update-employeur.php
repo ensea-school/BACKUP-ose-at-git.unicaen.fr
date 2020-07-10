@@ -33,6 +33,7 @@ $nbFiles   = count($listFiles);
 $i         = 1;
 $c->println("Nombre de fichier à charger : $nbFiles", $c::COLOR_LIGHT_GREEN);
 $tableEmployeur = $bdd->getTable('EMPLOYEUR');
+
 foreach ($listFiles as $file) {
     $num = str_replace('.csv', '', $file);
     $c->println("Chargement du fichier N° $i sur $nbFiles");
@@ -95,6 +96,7 @@ foreach ($listFiles as $file) {
         $data['NOM_COMMERCIAL']          = $nomCommercial;
         $data['SOURCE_ID']               = $oseSource;
         $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
+        $data['CRITERE_RECHERCHE']       = reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren);
         $datas[]                         = $data;
         $options['histo-user-id']        = $oseId;
         $options['where']                = 'SIREN LIKE \'' . $num . '%\'';
@@ -105,5 +107,26 @@ foreach ($listFiles as $file) {
 }
 $c->println("Fin de mise à jour des données employeurs", $c::COLOR_LIGHT_GREEN);
 
+
+function reduce($str, $encoding = 'UTF-8')
+{
+    $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ€@()…,<>/?€%!":’\'';
+    $to   = 'aaaaaacdeeeeiiiioooooouuuuynaaaaaacdeeeeiiiioooooouuuuynea_______________';
+
+    $rstr = '';
+    $ok   = true;
+    $len  = mb_strlen($str, $encoding);
+    for ($i = 0; $i < $len; $i++) {
+        $char = mb_substr($str, $i, 1, $encoding);
+        $pos  = mb_strpos($from, $char, 0, $encoding);
+        if (false === $pos) {
+            $rstr .= $char;
+        } else {
+            $rstr .= mb_substr($to, $pos, 1, $encoding);
+        }
+    }
+
+    return strtolower($rstr);
+}
 
 

@@ -75,11 +75,8 @@ class EmployeurService extends AbstractEntityService
 
         if (!empty($criteria)) {
             $sql .= "
-             AND (e.RAISON_SOCIALE LIKE upper('%$criteria%') OR e.SIREN LIKE '%$criteria%')
+             AND (e.CRITERE_RECHERCHE LIKE lower('%$criteria%'))
             ";
-            /*  $sql .= "
-           AND (regexp_like(LIBELLE, '$criteria', 'i') OR e.SIREN LIKE '%$criteria%')
-          ";*/
         }
 
         $sql .= " ORDER BY RAISON_SOCIALE ASC";
@@ -87,12 +84,7 @@ class EmployeurService extends AbstractEntityService
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while ($r = $stmt->fetch()) {
-            $siren = $r['SIREN'];
-            /*$employeurs[]         = [
-                'raison_sociale' => $r['RAISON_SOCIALE'],
-                'siren'          => $r['SIREN'],
-                'nom_commercial' => $r['NOM_COMMERCIAL'],
-            ];*/
+            $siren                = $r['SIREN'];
             $employeurs[$r['ID']] = [
                 'id'    => $r['ID'],
                 'label' => $r['RAISON_SOCIALE'],

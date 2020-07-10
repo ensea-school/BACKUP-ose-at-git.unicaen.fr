@@ -508,7 +508,7 @@ return [
             'CUSTOM_CALCUL_PROC' => 'OSE_FORMULE.CALCULER_TBL',
             'ORDRE'              => 1,
             'FEUILLE_DE_ROUTE'   => true,
-            'PARAMS'             => 'INTERVENANT_ID,ANNEE_ID',
+            'PARAMETRES'         => 'INTERVENANT_ID,ANNEE_ID',
         ],
         [
             'TBL_NAME'           => 'chargens',
@@ -669,7 +669,7 @@ return [
             'CUSTOM_CALCUL_PROC' => 'OSE_WORKFLOW.CALCULER_TBL',
             'ORDRE'              => 15,
             'FEUILLE_DE_ROUTE'   => true,
-            'PARAMS'             => 'INTERVENANT_ID,ANNEE_ID',
+            'PARAMETRES'         => 'INTERVENANT_ID,ANNEE_ID',
         ],
     ],
 

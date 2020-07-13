@@ -32,7 +32,11 @@ En cas d'erreur, l'application vous affichera les enregistrements qui ont posé 
 Il existe une vue différentielle par table synchronisée.
 Ces vues sont nommées V_DIFF_*nom-de-la-table*
 
-Par exemple, select * from v_diff_pays va vous afficher le différentiel existant entre la vue source et la table PAYS.
+Par exemple, 
+```sql
+SELECT * from V_DIFF_PAYS
+```
+va vous afficher le différentiel existant entre la vue source et la table PAYS.
 Attention : ce différentiel ne prend en compte que les données synchronisables. Si vous ajoutez un pays à la main dans la base de données avec OSE comme source, celui-ci n'apparaitra pas dans cette vue.
 
 Dans cette vue, vous retrouverez le colonnes suivantes :

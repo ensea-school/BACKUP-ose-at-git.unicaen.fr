@@ -12,4 +12,9 @@ retrouviez dans OSE les données dont vous avez besoin.
 
 Créez la vue [SRC_TYPE_INTERVENTION_EP](SRC_TYPE_INTERVENTION_EP.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
 Créez la vue [SRC_TYPE_MODULATEUR_EP](SRC_TYPE_MODULATEUR_EP.sql). 
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).

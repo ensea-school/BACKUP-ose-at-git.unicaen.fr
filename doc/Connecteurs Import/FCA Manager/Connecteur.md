@@ -51,6 +51,8 @@ de la vue [SRC_HARPEGE_STRUCTURE_CODES](../Harpège/SRC_HARPEGE_STRUCTURE_CODES.
 
 Créez la vue [SRC_ETAPE](SRC_ETAPE.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des éléments pédagogiques
 
 FCA Manager ne connait pas la notion de discipline ou de section CNU.
@@ -75,10 +77,16 @@ issus de FCA Manager.
 
 Créez la vue [SRC_ELEMENT_PEDAGOGIQUE](SRC_ELEMENT_PEDAGOGIQUE.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des chemins pédagogiques
 
 Créez la vue [SRC_CHEMIN_PEDAGOGIQUE](SRC_CHEMIN_PEDAGOGIQUE.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des volumes horaires d'enseignement
 
 Créez la vue [SRC_VOLUME_HORAIRE_ENS](SRC_VOLUME_HORAIRE_ENS.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).

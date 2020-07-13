@@ -55,6 +55,7 @@ DELETE FROM PAYS;
 
 Ensuite, créez la vue source [SRC_PAYS](SRC_PAYS.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Import des départements
 
@@ -70,6 +71,8 @@ DELETE FROM DEPARTEMENT;
 ```
 
 Ensuite, créez la vue source [SRC_DEPARTEMENT](SRC_DEPARTEMENT.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 
 ## Import des voiries
@@ -87,6 +90,8 @@ DELETE FROM VOIRIE;
 
 Ensuite, créez la vue source [SRC_VOIRIE](SRC_VOIRIE.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 
 ## Import des structures
 
@@ -97,6 +102,7 @@ Créez la vue source [SRC_STRUCTURE](SRC_STRUCTURE.sql).
 
 Dans cette vue, on importe les structures Harpège de niveau 2 et la structure Université (UNIV) de niveau 1.
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Import des corps et des grades
 
@@ -117,6 +123,7 @@ DELETE FROM CORPS;
 
 Ensuite, créez la vue source [SRC_CORPS](SRC_CORPS.sql), puis la vue source [SRC_GRADE](SRC_GRADE.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Import des intervenants
 
@@ -142,6 +149,8 @@ La vue SRC_INTERVENANT remplit plusieurs rôles :
 * La vue source synchronise les données des deux dernières années. 
 * Pour l'année n-1, le statut ainsi que la structure de l'intervenant ne sont pas synchronisés.
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Import des affectations de recherche
 
 Les affectations de recherche peuvent être intégrées à OSE.
@@ -149,3 +158,5 @@ Les affectations de recherche peuvent être intégrées à OSE.
 En voici la vue source.
 
 [SRC_AFFECTATION_RECHERCHE](SRC_AFFECTATION_RECHERCHE.sql)
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).

@@ -37,6 +37,7 @@ La vue source ne sert ici qu'à en récupérer les libellés de SIFAC.
 
 [SRC_DOMAINE_FONCTIONNEL](SRC_DOMAINE_FONCTIONNEL.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 
 ## Import des centres de coûts et des EOTP
@@ -57,6 +58,8 @@ Du code du centre de coûts nous déduisons également l'unité budgétaire. Cet
 de savoir à quelle composante il peut être associé.
 
 Créez la vue [SRC_CENTRE_COUT](SRC_CENTRE_COUT.sql). 
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 
 ## Import de la relation centres de coûts / structures
@@ -79,3 +82,5 @@ Notez que dans cette vue import, la source de données n'est pas Sifac puisque l
 Source "Calcul" à bien distinguer de la source "OSE", cette dernière signifiant que la donnée a été directement saisie dans OSE, sans qu'elle ne soit importée.
 
 Créez la vue [SRC_CENTRE_COUT_STRUCTURE](SRC_CENTRE_COUT_STRUCTURE.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).

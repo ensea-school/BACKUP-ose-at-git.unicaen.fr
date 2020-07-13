@@ -61,30 +61,43 @@ DELETE FROM ETABLISSEMENT;
 
 Créez ensuite la vue [SRC_ETABLISSEMENT](SRC_ETABLISSEMENT.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des groupes de types de formation
 
 Créez la vue [SRC_GROUPE_TYPE_FORMATION](SRC_GROUPE_TYPE_FORMATION.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Récupération des types de formation
 
 Créez la vue [SRC_TYPE_FORMATION](SRC_TYPE_FORMATION.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des étapes
 
 Créez la vue [SRC_ETAPE](SRC_ETAPE.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Récupération des éléments pédagogiques
 
 Créez la vue [SRC_ELEMENT_PEDAGOGIQUE](SRC_ELEMENT_PEDAGOGIQUE.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des chemins pédagogiques
 
 Créez la vue [SRC_CHEMIN_PEDAGOGIQUE](SRC_CHEMIN_PEDAGOGIQUE.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Récupération des volumes horaires d'enseignement
 
 Créez la vue [SRC_VOLUME_HORAIRE_ENS](SRC_VOLUME_HORAIRE_ENS.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Récupération des taux de régimes par élément pédagogique
 
@@ -94,10 +107,13 @@ Nous avons fait ce choix, car des taux de régimes doivent être aussi stables q
 
 Créez la vue [SRC_ELEMENT_TAUX_REGIMES](SRC_ELEMENT_TAUX_REGIMES.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Récupération des effectifs
 
 Créez la vue [SRC_EFFECTIFS](SRC_EFFECTIFS.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Récupération des noeuds
 
@@ -106,10 +122,16 @@ charges de OSE. Dans le cas contraire, il vous est inutile de vous en occuper.
 
 Créez la vue [SRC_NOEUD](SRC_NOEUD.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des liens
 
 Créez la vue [SRC_LIEN](SRC_LIEN.sql).
 
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des paramétrages par scénario pour les liens
 
 Créez la vue [SRC_SCENARIO_LIEN](SRC_SCENARIO_LIEN.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).

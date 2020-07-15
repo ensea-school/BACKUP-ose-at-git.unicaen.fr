@@ -2,25 +2,6 @@ CREATE MATERIALIZED VIEW MV_INTERVENANT AS
 WITH
 i AS (
   SELECT
-    ca.no_dossier_pers                                 code,
-    ct.c_type_contrat_trav                             z_statut_id_contrat_trav,
-    NULL                                               z_statut_id_type_pop,
-    ca.c_section_cnu                                   z_discipline_id_cnu,
-    ca.c_sous_section_cnu                              z_discipline_id_sous_cnu,
-    ca.c_specialite_cnu                                z_discipline_id_spe_cnu,
-    ca.c_disc_second_degre                             z_discipline_id_dis2deg,
-    MAX(COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav)) date_fin
-  FROM
-    contrat_avenant@harpprod ca
-    JOIN contrat_travail@harpprod ct ON ct.no_dossier_pers = ca.no_dossier_pers AND ct.no_contrat_travail = ca.no_contrat_travail
-  WHERE -- on sélectionne les données même 6 mois avant et plus d'un an après
-    SYSDATE BETWEEN ca.d_deb_contrat_trav-184 AND COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav,SYSDATE)+400
-  GROUP BY
-    ca.no_dossier_pers, ct.c_type_contrat_trav, ca.c_section_cnu, ca.c_sous_section_cnu, ca.c_specialite_cnu, ca.c_disc_second_degre
-
-  UNION ALL
-
-  SELECT
     a.no_dossier_pers                                  code,
     NULL                                               z_statut_id_contrat_trav,
     c.c_type_population                                z_statut_id_type_pop,
@@ -28,16 +9,37 @@ i AS (
     psc.c_sous_section_cnu                             z_discipline_id_sous_cnu,
     psc.c_specialite_cnu                               z_discipline_id_spe_cnu,
     pss.c_disc_second_degre                            z_discipline_id_dis2deg,
-    MAX(a.d_fin_affectation)                           date_fin
+    MAX(a.d_fin_affectation)                           date_fin,
+    30                                                 poids
   FROM
     affectation@harpprod a
     LEFT JOIN carriere@harpprod c ON c.no_dossier_pers = a.no_dossier_pers AND c.no_seq_carriere = a.no_seq_carriere
     LEFT JOIN periodes_sp_cnu@harpprod    psc                ON psc.no_dossier_pers = a.no_dossier_pers AND psc.no_seq_carriere = a.no_seq_carriere AND COALESCE(a.d_fin_affectation,SYSDATE) BETWEEN COALESCE(psc.d_deb,a.d_fin_affectation,SYSDATE) AND COALESCE(psc.d_fin,a.d_fin_affectation,SYSDATE)
     LEFT JOIN periodes_sp_sd_deg@harpprod pss                ON pss.no_dossier_pers = a.no_dossier_pers AND pss.no_seq_carriere = a.no_seq_carriere AND COALESCE(a.d_fin_affectation,SYSDATE) BETWEEN COALESCE(pss.d_deb,a.d_fin_affectation,SYSDATE) AND COALESCE(pss.d_fin,a.d_fin_affectation,SYSDATE)
   WHERE -- on sélectionne les données même 6 mois avant et plus d'un an après
-    SYSDATE BETWEEN a.d_deb_affectation-184 AND COALESCE(a.d_fin_affectation,SYSDATE)+400
+    SYSDATE BETWEEN a.d_deb_affectation-184 AND COALESCE(a.d_fin_affectation,SYSDATE)+1
   GROUP BY
     a.no_dossier_pers, c.c_type_population, psc.c_section_cnu, psc.c_sous_section_cnu, psc.c_specialite_cnu, pss.c_disc_second_degre
+    
+  UNION ALL
+
+  SELECT
+    ca.no_dossier_pers                                 code,
+    ct.c_type_contrat_trav                             z_statut_id_contrat_trav,
+    NULL                                               z_statut_id_type_pop,
+    ca.c_section_cnu                                   z_discipline_id_cnu,
+    ca.c_sous_section_cnu                              z_discipline_id_sous_cnu,
+    ca.c_specialite_cnu                                z_discipline_id_spe_cnu,
+    ca.c_disc_second_degre                             z_discipline_id_dis2deg,
+    MAX(COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav)) date_fin,
+    20                                                 poids
+  FROM
+    contrat_avenant@harpprod ca
+    JOIN contrat_travail@harpprod ct ON ct.no_dossier_pers = ca.no_dossier_pers AND ct.no_contrat_travail = ca.no_contrat_travail
+  WHERE -- on sélectionne les données même 6 mois avant et plus d'un an après
+    SYSDATE BETWEEN ca.d_deb_contrat_trav-184 AND COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav,SYSDATE)+1
+  GROUP BY
+    ca.no_dossier_pers, ct.c_type_contrat_trav, ca.c_section_cnu, ca.c_sous_section_cnu, ca.c_specialite_cnu, ca.c_disc_second_degre
 
   UNION ALL
 
@@ -49,11 +51,12 @@ i AS (
     ch.c_sous_section_cnu                              z_discipline_id_sous_cnu,
     NULL                                               z_discipline_id_spe_cnu,
     ch.c_disc_second_degre                             z_discipline_id_dis2deg,
-    ch.d_fin_str_trav                                  date_fin
+    ch.d_fin_str_trav                                  date_fin,
+    10                                                 poids
   FROM
     chercheur@harpprod ch
   WHERE -- on sélectionne les données même 6 mois avant et plus d'un an après
-    SYSDATE BETWEEN ch.d_deb_str_trav-184 AND COALESCE(ch.d_fin_str_trav,SYSDATE)+400
+    SYSDATE BETWEEN ch.d_deb_str_trav-184 AND COALESCE(ch.d_fin_str_trav,SYSDATE)+1
 ),
 comptes (no_individu, rank_compte, nombre_comptes, IBAN, BIC) AS (
   SELECT -- récupération des comptes en banque
@@ -143,10 +146,8 @@ SELECT DISTINCT
 
   /* Employeur */
   CAST(NULL AS varchar2(255))                                   z_employeur_id,
-
-  /* Chaîne de caractères "réduite" pour optimiser les recherches */
-  utl_raw.cast_to_varchar2((nlssort(to_char(individu.nom_usuel || ' ' || individu.nom_patronymique || ' ' || individu.prenom), 'nls_sort=binary_ai'))) critere_recherche,
-  date_fin
+  i.date_fin,
+  i.poids
 FROM
                                          i
        JOIN individu@harpprod            individu           ON individu.no_individu           = i.code

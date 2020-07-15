@@ -123,7 +123,7 @@ DELETE FROM CORPS;
 
 Ensuite, créez la vue source [SRC_CORPS](SRC_CORPS.sql), puis la vue source [SRC_GRADE](SRC_GRADE.sql).
 
-[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+[Activez-les, puis tentez les synchronisations](../activer-synchroniser.md).
 
 ## Import des intervenants
 

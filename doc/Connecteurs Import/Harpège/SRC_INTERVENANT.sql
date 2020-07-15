@@ -40,10 +40,9 @@ WITH srci AS (
     i.autre_4                                  autre_4,
     i.autre_5                                  autre_5,
     empl.id                                    employeur_id,
-    i.critere_recherche                        critere_recherche,
     src.id                                     source_id,
     i.code || '-' || COALESCE(si.id,sautre.id) source_code
-    ,RANK() OVER (PARTITION BY i.code || '-' || COALESCE(si.id,sautre.id) ORDER BY i.poids DESC, i.date_fin DESC) filtre1
+    ,ROW_NUMBER() OVER (PARTITION BY i.code || '-' || COALESCE(si.id,sautre.id) ORDER BY i.poids DESC, i.date_fin DESC) filtre1
   FROM
               mv_intervenant          i
          JOIN source                src ON src.code = 'Harpege'
@@ -129,7 +128,6 @@ SELECT
   srci.autre_4,
   srci.autre_5,
   srci.employeur_id,
-  srci.critere_recherche,
   srci.source_id,
   srci.source_code
 FROM
@@ -182,7 +180,6 @@ SELECT
   srci.autre_4,
   srci.autre_5,
   srci.employeur_id,
-  srci.critere_recherche,
   srci.source_id,
   srci.source_code
 FROM

@@ -213,6 +213,29 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'type'       => 'Text',
         ]);
 
+        $this->add([
+            'name'       => 'plafond-referentiel-service',
+            'options'    => [
+                'label'  => "Plafond du référentiel en service",
+                'suffix' => 'HETD',
+            ],
+            'attributes' => [
+                'title' => "Nombre maximal d'heures de référentiel autorisées en service pour l'intervenant",
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
+            'name'       => 'plafond-referentiel-hc',
+            'options'    => [
+                'label'  => "Plafond du référentiel en HC",
+                'suffix' => 'HETD',
+            ],
+            'attributes' => [
+                'title' => "Nombre maximal d'heures de référentiel autorisées en heures complémentaires pour l'intervenant",
+            ],
+            'type'       => 'Text',
+        ]);
 
         $this->add([
             'name'       => 'plafond-h-h-c',
@@ -405,6 +428,8 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setLibelle($data['libelle']);
         $object->setDepassement($data['depassement']);
         $object->setPlafondReferentiel(isset($data['plafond-referentiel']) ? FloatFromString::run($data['plafond-referentiel']) : 0);
+        $object->setPlafondReferentielService(isset($data['plafond-referentiel-service']) ? FloatFromString::run($data['plafond-referentiel-service']) : 9999);
+        $object->setPlafondReferentielHc(isset($data['plafond-referentiel-hc']) ? FloatFromString::run($data['plafond-referentiel-hc']) : 9999);
         $object->setServiceStatutaire(FloatFromString::run($data['service-statutaire']));
         if (array_key_exists('type-intervenant', $data)) {
             $object->setTypeIntervenant($this->getServiceTypeIntervenant()->get($data['type-intervenant']));
@@ -488,6 +513,8 @@ class StatutIntervenantHydrator implements HydratorInterface
             'depassement'                    => $object->getDepassement(),
             'service-statutaire'             => StringFromFloat::run($object->getServiceStatutaire()),
             'plafond-referentiel'            => StringFromFloat::run($object->getPlafondReferentiel()),
+            'plafond-referentiel-service'    => StringFromFloat::run($object->getPlafondReferentielService()),
+            'plafond-referentiel-hc'         => StringFromFloat::run($object->getPlafondReferentielHc()),
             'peut-choisir-dans-dossier'      => $object->getPeutChoisirDansDossier(),
             'peut-saisir-dossier'            => $object->getPeutSaisirDossier(),
             'non-autorise'                   => $object->getNonAutorise(),

@@ -18,7 +18,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     use ImportAwareTrait;
 
 
-
     /**
      *
      * @return string
@@ -73,6 +72,16 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
      * @var float
      */
     protected $plafondReferentiel;
+
+    /**
+     * @var float
+     */
+    protected $plafondReferentielService = 9999;
+
+    /**
+     * @var float
+     */
+    protected $plafondReferentielHc = 9999;
 
     /**
      * @var float
@@ -607,6 +616,54 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     public function getPlafondReferentiel()
     {
         return $this->plafondReferentiel;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getPlafondReferentielService(): float
+    {
+        return $this->plafondReferentielService;
+    }
+
+
+
+    /**
+     * @param float $plafondReferentielService
+     *
+     * @return StatutIntervenant
+     */
+    public function setPlafondReferentielService(float $plafondReferentielService): StatutIntervenant
+    {
+        $this->plafondReferentielService = $plafondReferentielService;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getPlafondReferentielHc(): float
+    {
+        return $this->plafondReferentielHc;
+    }
+
+
+
+    /**
+     * @param float $plafondReferentielHc
+     *
+     * @return StatutIntervenant
+     */
+    public function setPlafondReferentielHc(float $plafondReferentielHc): StatutIntervenant
+    {
+        $this->plafondReferentielHc = $plafondReferentielHc;
+
+        return $this;
     }
 
 

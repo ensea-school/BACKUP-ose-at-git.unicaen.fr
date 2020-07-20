@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 
 use Application\Entity\Db\DossierAutre;
+use Application\Form\Intervenant\Traits\AutresFormAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\DossierAutreTypeServiceAwareTrait;
 
@@ -12,6 +13,7 @@ class AutresController extends AbstractController
 
     use DossierAutreServiceAwareTrait;
     use DossierAutreTypeServiceAwareTrait;
+    use AutresFormAwareTrait;
 
     public function indexAction()
     {

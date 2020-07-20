@@ -2,8 +2,6 @@
 
 namespace Application\Form\Intervenant;
 
-;
-
 use Application\Form\AbstractForm;
 use Application\Hydrator\DossierAutreHydrator;
 use Application\Service\Traits\DossierAutreTypeServiceAwareTrait;

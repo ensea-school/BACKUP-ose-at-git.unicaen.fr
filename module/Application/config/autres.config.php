@@ -2,11 +2,11 @@
 
 namespace Application;
 
+use Application\Form\Intervenant\AutresForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\DossierAutreService;
 use Application\Service\DossierAutreTypeService;
 use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router' => [
@@ -69,7 +69,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\Intervenant\AutresForm::class => Form\Intervenant\AutresForm::class,
+            AutresForm::class => AutresForm::class,
         ],
     ],
 ];

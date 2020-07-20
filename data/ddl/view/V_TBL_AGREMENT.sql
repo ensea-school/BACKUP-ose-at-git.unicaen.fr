@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
 WITH i_s AS (
   SELECT
     fr.intervenant_id,
-    ep.structure_id
+    ep.structure_id structure_id
   FROM
     formule_resultat fr
     JOIN type_volume_horaire  tvh ON tvh.code = 'PREVU' AND tvh.id = fr.type_volume_horaire_id
@@ -17,21 +17,21 @@ WITH i_s AS (
 ),
 avi AS (
     SELECT
-        i.code                code_intervenant,
+        i.code                intervenant_code,
         i.annee_id            annee_id,
-        a.type_agrement_id    type_agrement,
-        a.id             agrement_id,
-        tas.duree_vie         duree_vie,
-        i.annee_id+duree_vie date_validite
+        a.type_agrement_id    type_agrement_id,
+        a.id                  agrement_id,
+        a.structure_id        structure_id
     FROM intervenant i
-    JOIN type_agrement_statut tas ON tas.statut_intervenant_id = i.statut_id
-    JOIN agrement a ON a.intervenant_id = i.id AND tas.type_agrement_id = a.type_agrement_id AND a.histo_destruction IS NULL
+    	JOIN agrement a ON a.intervenant_id = i.id
+    WHERE
+    	a.histo_destruction IS NULL
 )
-SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE" FROM (
     SELECT
       i.annee_id                     annee_id,
       CASE
-        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        WHEN COALESCE (avi.agrement_id,0) = 0
         THEN NULL
         ELSE NVL(avi.annee_id, i.annee_id) END   annee_agrement,
       tas.type_agrement_id                       type_agrement_id,
@@ -39,12 +39,12 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
       i.code                                     code_intervenant,
       null                                       structure_id,
       tas.obligatoire                            obligatoire,
-      NVL(a.id, avi.agrement_id)                 agrement_id,
+      avi.agrement_id			                 agrement_id,
       tas.duree_vie                              duree_vie,
       RANK() OVER(
         PARTITION BY i.code,i.annee_id ORDER BY
         CASE
-        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        WHEN COALESCE (avi.agrement_id,0) = 0
         THEN NULL
         ELSE NVL(avi.annee_id, i.annee_id) END DESC
       ) rank
@@ -58,15 +58,11 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
 
       JOIN                           i_s ON i_s.intervenant_id = i.id
 
-
-      LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
-                                        AND a.intervenant_id = i.id
-                                        AND a.histo_destruction IS NULL
-
-      LEFT JOIN                      avi ON i.code = avi.code_intervenant
-                                        AND tas.type_agrement_id = avi.type_agrement
-                                        AND i.annee_id < avi.date_validite
+      LEFT JOIN                      avi ON i.code = avi.intervenant_code
+      							                		AND avi.type_agrement_id = tas.type_agrement_id
+                                        AND i.annee_id < avi.annee_id + tas.duree_vie
                                         AND i.annee_id >= avi.annee_id
+
 
     WHERE
       ta.code = 'CONSEIL_ACADEMIQUE'
@@ -77,24 +73,24 @@ WHERE
   rank = 1
 
 UNION ALL
-SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE","RANK" FROM (
+SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE" FROM (
     SELECT
       i.annee_id                                  annee_id,
       CASE
-        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        WHEN COALESCE (avi.agrement_id,0) = 0
         THEN NULL
         ELSE NVL(avi.annee_id, i.annee_id) END    annee_agrement,
       tas.type_agrement_id                        type_agrement_id,
       i.id                                        intervenant_id,
       i.code                                      code_intervenant,
-      a.structure_id                            structure_id,
+      i_s.structure_id							  structure_id,
       tas.obligatoire                             obligatoire,
-      NVL(a.id, avi.agrement_id)                  agrement_id,
+      avi.agrement_id 			                  agrement_id,
       tas.duree_vie                               duree_vie,
       RANK() OVER(
-        PARTITION BY i.code,i.annee_id ORDER BY
+        PARTITION BY i.code,i.annee_id,i_s.structure_id ORDER BY
         CASE
-        WHEN NVL(NVL(a.id, avi.agrement_id),0) = 0
+        WHEN COALESCE (avi.agrement_id,0) = 0
         THEN NULL
         ELSE NVL(avi.annee_id, i.annee_id) END DESC
       ) rank
@@ -108,13 +104,10 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
 
       JOIN                           i_s ON i_s.intervenant_id = i.id
 
-      LEFT JOIN agrement               a ON a.type_agrement_id = ta.id
-                                        AND a.intervenant_id = i.id
-                                        AND a.histo_destruction IS NULL
-
-      LEFT JOIN                      avi ON i.code = avi.code_intervenant
-                                        AND tas.type_agrement_id = avi.type_agrement
-                                        AND i.annee_id < avi.date_validite
+      LEFT JOIN                      avi ON i.code = avi.intervenant_code
+        							                	AND avi.type_agrement_id = tas.type_agrement_id
+										                    AND COALESCE(avi.structure_id,0) = COALESCE(i_s.structure_id,0)
+                                        AND i.annee_id < avi.annee_id + tas.duree_vie
                                         AND i.annee_id >= avi.annee_id
 
 

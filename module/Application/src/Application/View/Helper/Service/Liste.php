@@ -305,9 +305,28 @@ class Liste extends AbstractViewHelper
 
     public function renderLigne(Service $service, $details = false, $show = true)
     {
-        $tvhPrevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $evhSaisi = $this->getServiceEtatVolumeHoraire()->getSaisi();
+        $tvhPrevu   = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $tvhRealise = $this->getServiceTypeVolumeHoraire()->getRealise();
+        $evhSaisi   = $this->getServiceEtatVolumeHoraire()->getSaisi();
+        $evhValide  = $this->getServiceEtatVolumeHoraire()->getValide();
 
+        $heures             = 0;
+        $volumeHoraireListe = $service->getVolumeHoraireListe();
+        if ($this->isInRealise()) {
+            $volumeHoraireListe->setTypeVolumeHoraire($tvhPrevu);
+            $volumeHoraireListe->setEtatVolumeHoraire($evhValide);
+            $heures += $volumeHoraireListe->getHeures();
+            $volumeHoraireListe->setTypeVolumeHoraire($tvhRealise);
+            $volumeHoraireListe->setEtatVolumeHoraire($evhSaisi);
+            $heures += $volumeHoraireListe->getHeures();
+        } else {
+            $volumeHoraireListe->setTypeVolumeHoraire($tvhPrevu);
+            $volumeHoraireListe->setEtatVolumeHoraire($evhSaisi);
+            $heures += $volumeHoraireListe->getHeures();
+        }
+        if ($heures == 0) {
+            return ''; // on n'affiche pas les lignes de services avec 0 heures
+        }
         $ligneView = $this->getView()->serviceLigne($this, $service);
         $attribs   = [
             'id'       => 'service-' . $service->getId() . '-ligne',
@@ -321,9 +340,6 @@ class Liste extends AbstractViewHelper
         $out .= '</tr>';
         $out .= '<tr class="volume-horaire" id="service-' . $service->getId() . '-volume-horaire-tr"' . ($details ? '' : ' style="display:none"') . '>';
         if ($this->isInRealise()) {
-            $tvhRealise = $this->getServiceTypeVolumeHoraire()->getRealise();
-            $evhValide  = $this->getServiceEtatVolumeHoraire()->getValide();
-
             $vhlViewHelper = $this->getVhlViewHelper($service, $tvhPrevu, $evhValide);
             $vhlViewHelper->setReadOnly(true);
             $out .= '<td class="volume-horaire" style="padding-left:5em" id="service-' . $service->getId() . '-volume-horaire-td" colspan="999">';

@@ -111,6 +111,38 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'statut_intervenant_codes_corresp_1_libelle',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Libellé 1 des correspondances',
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'statut_intervenant_codes_corresp_2_libelle',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Libellé 2 des correspondances',
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'statut_intervenant_codes_corresp_3_libelle',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Libellé 3 des correspondances',
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'statut_intervenant_codes_corresp_4_libelle',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Libellé 4 des correspondances',
+            ],
+        ]);
+
+        $this->add([
             'type'       => 'Select',
             'name'       => 'domaine_fonctionnel_ens_ext',
             'options'    => [
@@ -315,9 +347,9 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'contrat_modele_mail_objet',
-            'type'       => 'Text',
-            'options'    => [
+            'name'    => 'contrat_modele_mail_objet',
+            'type'    => 'Text',
+            'options' => [
                 'label' => 'Objet du mail',
 
             ],

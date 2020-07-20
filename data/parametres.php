@@ -2,40 +2,40 @@
 
 return [
     /* Années */
-    "annee"                              => [
+    "annee"                                      => [
         "DESCRIPTION" => "Année universitaire en cours pour la saisie des services",
     ],
-    "annee_import"                       => [
+    "annee_import"                               => [
         "DESCRIPTION" => "Année courante pour l'import",
     ],
-    "annee_minimale_import_odf"          => [
+    "annee_minimale_import_odf"                  => [
         "DESCRIPTION" => "Année minimale pour l'import de l'offre de formation (Paramètre éventuellement exploitable pour les filtres d'import)",
     ],
 
 
     /* IDS */
-    "etablissement"                      => [
+    "etablissement"                              => [
         "VALEUR"      => "0141408E",
         "DESCRIPTION" => "Identifiant de l'établissement courant",
         "QUERY"       => 'SELECT id valeur FROM etablissement WHERE source_code = :valeur AND histo_destruction IS NULL',
     ],
-    "structure_univ"                     => [
+    "structure_univ"                             => [
         "DESCRIPTION" => "Composante représentant l'université (utile éventuellement pour la formule de calcul)",
     ],
-    "oseuser"                            => [
+    "oseuser"                                    => [
         "DESCRIPTION" => "Utilisateur OSE",
     ],
-    "formule"                            => [
+    "formule"                                    => [
         "VALEUR"      => "FORMULE_UNICAEN",
         "DESCRIPTION" => "Formule de calcul",
         "QUERY"       => 'SELECT id valeur FROM formule WHERE package_name = :valeur',
     ],
-    "domaine_fonctionnel_ens_ext"        => [
+    "domaine_fonctionnel_ens_ext"                => [
         "VALEUR"      => "D102",
         "DESCRIPTION" => "Domaine fonctionnel à privilégier pour les enseignements pris à l'extérieur",
         "QUERY"       => 'SELECT id valeur FROM domaine_fonctionnel WHERE source_code = :valeur AND histo_destruction IS NULL',
     ],
-    "scenario_charges_services"          => [
+    "scenario_charges_services"                  => [
         "VALEUR"      => "Initial",
         "DESCRIPTION" => "Scénario utilisé pour confronter les charges d'enseignement aux services des intervenants",
         "QUERY"       => 'SELECT id valeur FROM scenario WHERE libelle = :valeur AND histo_destruction IS NULL',
@@ -43,22 +43,22 @@ return [
 
 
     /* Etats de sortie */
-    "es_winpaie"                         => [
+    "es_winpaie"                                 => [
         "VALEUR"      => "winpaie",
         "DESCRIPTION" => "État de sortie pour l'extraction Winpaie",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    "es_services_pdf"                    => [
+    "es_services_pdf"                            => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition PDF des services",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    "es_services_csv"                    => [
+    "es_services_csv"                            => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition CSV des services",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    "es_etat_paiement"                   => [
+    "es_etat_paiement"                           => [
         "VALEUR"      => "etat_paiement",
         "DESCRIPTION" => "État de sortie pour les états de paiement",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
@@ -66,58 +66,77 @@ return [
 
 
     /* Semestriel / calendaire */
-    "modalite_services_prev_ens"         => [
+    "modalite_services_prev_ens"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (prévisionnel, enseignements)",
     ],
-    "modalite_services_prev_ref"         => [
+    "modalite_services_prev_ref"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (prévisionnel, référentiel)",
     ],
-    "modalite_services_real_ens"         => [
+    "modalite_services_real_ens"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (réalisé, enseignements)",
     ],
-    "modalite_services_real_ref"         => [
+    "modalite_services_real_ref"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (réalisé, référentiel)",
     ],
 
 
     /* Documentations */
-    "doc-intervenant-vacataires"         => [
+    "doc-intervenant-vacataires"                 => [
         "DESCRIPTION" => "URL de la documentation OSE pour les vacataires",
     ],
-    "doc-intervenant-permanents"         => [
+    "doc-intervenant-permanents"                 => [
         "DESCRIPTION" => "URL de la documentation OSE pour les permanents",
     ],
 
 
     /* Disciplines */
-    "discipline_codes_corresp_1_libelle" => [
+    "discipline_codes_corresp_1_libelle"         => [
         "VALEUR"      => "Section(s) CNU Apogée",
         "DESCRIPTION" => "Libellé de la liste 1 des correspondances de codes des disciplines",
     ],
-    "discipline_codes_corresp_2_libelle" => [
+    "discipline_codes_corresp_2_libelle"         => [
         "VALEUR"      => "Section(s) CNU Harpège",
         "DESCRIPTION" => "Libellé de la liste 2 des correspondances de codes des disciplines",
     ],
-    "discipline_codes_corresp_3_libelle" => [
+    "discipline_codes_corresp_3_libelle"         => [
         "VALEUR"      => "Spécialité Harpège",
         "DESCRIPTION" => "Libellé de la liste 3 des correspondances de codes des disciplines",
     ],
-    "discipline_codes_corresp_4_libelle" => [
+    "discipline_codes_corresp_4_libelle"         => [
         "VALEUR"      => "Discipline du 2nd degré",
         "DESCRIPTION" => "Libellé de la liste 4 des correspondances de codes des disciplines",
     ],
 
 
+    /* Disciplines */
+    "statut_intervenant_codes_corresp_1_libelle" => [
+        "VALEUR"      => "Types de contrats Harpège",
+        "DESCRIPTION" => "Libellé de la liste 1 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
+    ],
+    "statut_intervenant_codes_corresp_2_libelle" => [
+        "VALEUR"      => "Types de population Harpège",
+        "DESCRIPTION" => "Libellé de la liste 2 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
+    ],
+    "statut_intervenant_codes_corresp_3_libelle" => [
+        "VALEUR"      => null,
+        "DESCRIPTION" => "Libellé de la liste 3 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
+    ],
+    "statut_intervenant_codes_corresp_4_libelle" => [
+        "VALEUR"      => null,
+        "DESCRIPTION" => "Libellé de la liste 4 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
+    ],
+
+
     /* Contrat */
-    "contrat_regle_franchissement"       => [
+    "contrat_regle_franchissement"               => [
         "VALEUR"      => "validation",
         "DESCRIPTION" => "Règle de franchissement du contrat (comment considérer que l'étape \"Contrat\" est franchie dans le workflow)",
     ],
-    "contrat_modele_mail"                => [
+    "contrat_modele_mail"                        => [
         "VALEUR"      => "Bonjour :intervenant
 
 Veuillez trouver en pièce jointe votre contrat à jour.
@@ -126,14 +145,14 @@ Cordialement,
 :utilisateur",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
-    "contrat_modele_mail_objet"          => [
+    "contrat_modele_mail_objet"                  => [
         "VALEUR"      => "Contrat :intervenant",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
 
 
     /* Messages informatifs */
-    "page_contact"                       => [
+    "page_contact"                               => [
         "VALEUR"      => "<h3>Intervenants</h3>
     Contactez votre composante ou bien écrivez à :
         <ul>

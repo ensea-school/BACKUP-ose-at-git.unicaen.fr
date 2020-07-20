@@ -8,9 +8,11 @@ use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
+use Application\Provider\Role\RoleProviderAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use UnicaenAuth\Service\Traits\RoleServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 class StatutIntervenantController extends AbstractController
@@ -19,7 +21,7 @@ class StatutIntervenantController extends AbstractController
     use StatutIntervenantSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
-    use DossierAutreServiceAwareTrait;
+
 
 
     public function indexAction()
@@ -43,7 +45,6 @@ class StatutIntervenantController extends AbstractController
 
             $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
             $form              = $this->getFormStatutIntervenantSaisie();
-            $champsAutres      = $this->getServiceDossierAutre()->getList();
             if (empty($statutIntervenant)) {
                 $title             = 'Création d\'un nouveau statut d\'intervenant';
                 $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
@@ -53,15 +54,12 @@ class StatutIntervenantController extends AbstractController
             }
 
             $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-            /* if ($statutIntervenant->getSource()->getImportable()) {
-                 $canEdit = false; // Si la source est synchronisable alors pas d'édition possible
-             }*/
-
             if ($canEdit) {
                 $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
                     try {
                         $this->getServiceStatutIntervenant()->save($si);
                         unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                        unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                         $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                     } catch (\Exception $e) {
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -72,11 +70,11 @@ class StatutIntervenantController extends AbstractController
                 $form->readOnly();
             }
         } catch (\Exception $e) {
-            var_dump($e);
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
 
-        return compact('form', 'title', 'champsAutres');
+        return compact('form', 'title');
     }
 
 
@@ -95,6 +93,7 @@ class StatutIntervenantController extends AbstractController
             try {
                 $this->getServiceStatutIntervenant()->save($si);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -102,7 +101,7 @@ class StatutIntervenantController extends AbstractController
         });
 
         $viewModel = new ViewModel();
-        $viewModel->setVariables(compact('form', 'title', 'champsAutres'));
+        $viewModel->setVariables(compact('form', 'title'));
         $viewModel->setTemplate('application/statut-intervenant/saisie');
 
         return $viewModel;
@@ -125,6 +124,7 @@ class StatutIntervenantController extends AbstractController
             try {
                 $this->getServiceStatutIntervenant()->delete($statutIntervenant);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

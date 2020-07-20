@@ -1,12 +1,14 @@
-INTERFACAGE ENTRE APOGEE ET OSE
+# INTERFACAGE ENTRE APOGEE ET OSE
 Auteur : Bruno Bernard bruno.bernard@unicaen.fr
--------------------------------
 
 L'importation de données d'Apogée vers OSE s'effectue via un dblink entre les deux bases Oracle.
 OSE va lire des tables et vues créées dans la base Apogée.
 Ces tables dans la base Apogée sont rafraîchies régulièrement, par exemple midi et soir pour permettre que les modifications effectuées dans Apogée soient répercutées la demi-journée suivante dans OSE.
 
-Le script Apogee-OSE-createTables.sql crée les 7 tables et les 3 vues OSE_****** dans la base Apogée :
+En voici le schéma général :
+[Architecture connecteurs OSE.png]: Architecture connecteurs OSE.png
+
+Le script [Apogee-OSE-createTables.sql](Apogee-OSE-createTables.sql) crée les 7 tables et les 3 vues OSE_****** dans la base Apogée :
 create table ose_groupe_type_formation : Regroupements des types de formations
 create table ose_type_formation        : Correspondance entre les types de formations Apogee et les groupes de types de formations
 create table ose_etape                 : Une etape OSE est assimilable a une VET Apogee
@@ -18,7 +20,7 @@ create table ose_element_pedagogique   : Les feuilles de l'arbre sont les elemen
 create table ose_element_effectifs     : Effectifs par annee par element pedagogique et par regime d'inscription
 create table ose_volume_horaire_ens    : Volumes horaires et nombre de groupes ouverts pour enseignement, par type de groupe
 
-Le script Apogee-OSE-export.sql alimente les tables OSE_****** dans la base Apogée.
+Le script [Apogee-OSE-export.sql](Apogee-OSE-export.sql) alimente les tables OSE_****** dans la base Apogée.
 Il doit être adapté à chaque établissement.
 
 La table ose_groupe_type_formation permet :

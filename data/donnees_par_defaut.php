@@ -3,12 +3,6 @@
 //@formatter:off
 
 return [
-    "IMPORT_TABLES" => [
-        [
-            "TABLE_NAME" => "VOLUME_HORAIRE_REF",
-            "SYNC_ENABLED" => FALSE,
-        ],
-    ],
     "CORPS" => [
         [
             "LIBELLE_LONG" => "INSP.D'ACADEMIE/INSP.PEDAG. REGIONAL",

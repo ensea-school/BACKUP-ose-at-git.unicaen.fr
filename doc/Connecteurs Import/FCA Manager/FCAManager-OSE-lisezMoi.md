@@ -63,6 +63,6 @@ Cette vue permet d'associer à chaque enseignement ses volumes horaires par type
 ATTENTION : les volumes horaires envoyés correspondent au cumul des horaires des intervenants d'un enseignement de FCA Manager. Ce n'est donc pas le volume horaire défini sur l'enseignement qui est utilisé. (cf cours avec plusieurs intervenants pendant la même séance)
 
 
-Le script FCAManager-OSE.sql crée les vues dédiées à l'outil OSE dans la base FCA Manager.
-Le script FCAManager-controles.sql contient quelques requêtes notamment pour déceler des incohérences entre les vues lors des associations étapes/élèments
+Le script [FCAManager-controles.sql](FCAManager-OSE-export.sql) crée les vues dédiées à l'outil OSE dans la base FCA Manager.
+Le script [FCAManager-controles.sql](FCAManager-controles.sql) contient quelques requêtes notamment pour déceler des incohérences entre les vues lors des associations étapes/élèments
 

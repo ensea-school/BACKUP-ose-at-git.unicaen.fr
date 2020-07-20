@@ -169,7 +169,7 @@ class ContratController extends AbstractController
             }
         }
 
-        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getRouteParam()]);
     }
 
 
@@ -355,7 +355,8 @@ class ContratController extends AbstractController
             //Personnalisation des variables
             $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
             $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
-            $html         = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
+            $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
+            $html         = str_replace([':intervenant', ':utilisateur', ':annee'], [$vIntervenant, $vUtilisateur, $vAnnee], $html);
             $subject      = $this->getServiceParametres()->get('contrat_modele_mail_objet');
             $subject      = str_replace(':intervenant', $vIntervenant, $subject);
             $message      = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $subject);

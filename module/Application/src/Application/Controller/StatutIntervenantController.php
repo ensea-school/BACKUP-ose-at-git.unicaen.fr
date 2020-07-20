@@ -21,8 +21,7 @@ class StatutIntervenantController extends AbstractController
     use StatutIntervenantSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
-
-
+    use DossierAutreServiceAwareTrait;
 
     public function indexAction()
     {
@@ -45,6 +44,7 @@ class StatutIntervenantController extends AbstractController
 
             $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
             $form              = $this->getFormStatutIntervenantSaisie();
+            $champsAutres      = $this->getServiceDossierAutre()->getList();
             if (empty($statutIntervenant)) {
                 $title             = 'Création d\'un nouveau statut d\'intervenant';
                 $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
@@ -74,7 +74,7 @@ class StatutIntervenantController extends AbstractController
         }
 
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'champsAutres');
     }
 
 

@@ -69,7 +69,7 @@ class IntervenantDossierController extends AbstractController
         $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $intervenantDossierStatut     = $intervenantDossier->getStatut();
-        $intervenantDossierCompletude = $this->getServiceDossier()->isComplete($intervenant);
+        $intervenantDossierCompletude = $this->getServiceDossier()->isComplete($intervenantDossier);
         $champsAutres                 = $intervenantDossier->getStatut()->getChampsAutres();
         /* Règles pour afficher ou non les fieldsets */
         $fieldsetRules = [
@@ -88,6 +88,8 @@ class IntervenantDossierController extends AbstractController
         $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (IntervenantDossier $intervenantDossier) {
             try {
                 /* Sauvegarde du dossier de l'intervenant */
+                $completude = $this->getServiceDossier()->getTauxCompletude($intervenantDossier);
+                $intervenantDossier->setCompletude($completude);
                 $this->getServiceDossier()->save($intervenantDossier);
                 /* Recalcul des tableaux de bord nécessaires */
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());

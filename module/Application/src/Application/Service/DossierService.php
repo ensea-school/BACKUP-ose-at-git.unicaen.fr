@@ -149,11 +149,8 @@ class DossierService extends AbstractEntityService
 
 
 
-    public function isComplete(Intervenant $intervenant)
+    public function isComplete(IntervenantDossier $intervenantDossier)
     {
-
-        $intervenantDossier = $this->getByIntervenant($intervenant);
-
 
         $completude = [
             'dossier'          => false,
@@ -230,6 +227,22 @@ class DossierService extends AbstractEntityService
                        'dossierAutres'    => $completudeDossierAutre,];
 
         return $completude;
+    }
+
+
+
+    public function getTauxCompletude(IntervenantDossier $intervenantDossier)
+    {
+        $completude = $this->isComplete($intervenantDossier);
+        //calcul du taux
+        $tauxCompletude = 100;
+        foreach ($completude as $value) {
+            if (!$value) {
+                $tauxCompletude -= floor(100 / count($completude));
+            }
+        }
+
+        return $tauxCompletude;
     }
 
 

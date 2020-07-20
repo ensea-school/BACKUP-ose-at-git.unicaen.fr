@@ -402,8 +402,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertCanValidate(Intervenant $intervenant)
     {
 
-        $completudeDossier = $this->getServiceDossier()->isComplete($intervenant);
-        $isValidate        = $this->getServiceDossier()->getValidation($intervenant);
+        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $completudeDossier  = $this->getServiceDossier()->isComplete($intervenantDossier);
+        $isValidate         = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([
             $completudeDossier['dossier'],

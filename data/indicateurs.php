@@ -275,7 +275,7 @@ return [
         'TYPE'              => 'Contrat / avenant',
         'ENABLED'           => true,
         'LIBELLE_PLURIEL'   => '%s contrats  <i>envoyés par e-mail</i> sont en attente de retour',
-        'LIBELLE_SINGULIER' => '%s contrats  <i>envoyés par e-mail</i> est en attente de retour',
+        'LIBELLE_SINGULIER' => '%s contrat  <i>envoyé par e-mail</i> est en attente de retour',
         'MESSAGE'           => null,
         'ROUTE'             => 'intervenant/contrat',
         'TEM_DISTINCT'      => false,

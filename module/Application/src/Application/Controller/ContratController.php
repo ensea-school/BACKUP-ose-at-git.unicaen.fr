@@ -31,6 +31,7 @@ use Application\Entity\Db\Contrat;
 use Zend\View\Model\JsonModel;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Zend\View\Renderer\PhpRenderer;
+use DateTime;
 
 /**
  * Description of ContratController
@@ -341,6 +342,9 @@ class ContratController extends AbstractController
 
     public function envoyerMailAction()
     {
+        /**
+         * @var Contrat $contrat
+         */
         $contrat = $this->getEvent()->getParam('contrat');
 
         if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
@@ -352,6 +356,7 @@ class ContratController extends AbstractController
             $html = $this->getServiceParametres()->get('contrat_modele_mail');
             //Ajout pour transformer les sauts de lignes en html <br/>
             $html = nl2br($html);
+
             //Personnalisation des variables
             $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
             $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
@@ -360,7 +365,15 @@ class ContratController extends AbstractController
             $subject      = $this->getServiceParametres()->get('contrat_modele_mail_objet');
             $subject      = str_replace(':intervenant', $vIntervenant, $subject);
             $message      = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $subject);
-            $mail         = $this->mail()->send($message);
+            try {
+                $mail           = $this->mail()->send($message);
+                $dateEnvoiEmail = new DateTime();
+                $contrat->setDateEnvoiEmail($dateEnvoiEmail);
+                $this->getServiceContrat()->save($contrat);
+                $this->flashMessenger()->addSuccessMessage('Contrat bien envoyé par email');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
         }
 
         return $this->getResponse();

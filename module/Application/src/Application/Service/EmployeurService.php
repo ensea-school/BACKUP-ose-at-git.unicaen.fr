@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use UnicaenApp\Util;
+
 class EmployeurService extends AbstractEntityService
 {
 
@@ -64,6 +66,7 @@ class EmployeurService extends AbstractEntityService
     public function rechercheEmployeur($criteria = null, $limit = 50)
     {
         $employeurs = [];
+        $criteria   = Util::reduce($criteria);
 
         $sql = "
             SELECT 
@@ -75,8 +78,7 @@ class EmployeurService extends AbstractEntityService
 
         if (!empty($criteria)) {
             $sql .= "
-             AND (e.CRITERE_RECHERCHE LIKE lower('%$criteria%'))
-            ";
+             AND e.CRITERE_RECHERCHE LIKE '%$criteria%'";
         }
 
         $sql .= " ORDER BY RAISON_SOCIALE ASC";
@@ -88,6 +90,7 @@ class EmployeurService extends AbstractEntityService
             $employeurs[$r['ID']] = [
                 'id'    => $r['ID'],
                 'label' => $r['RAISON_SOCIALE'],
+                'siren' => $siren,
                 'extra' => "<small>($siren)</small>",
             ];
         }

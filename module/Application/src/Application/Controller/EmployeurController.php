@@ -19,7 +19,7 @@ class EmployeurController extends AbstractController
     public function indexAction()
     {
         $critere    = $this->params()->fromPost('critere');
-        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere, 1000);
 
 
         return compact('employeurs');

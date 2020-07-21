@@ -38,6 +38,8 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 ## Nouveautés
 
 * Intégration (en cours) de la formule de calcul de Poitiers.
+* Stockage de la date d'envoi par e-mail du contrat
+* Nouvel indicateur 361 permettant de suivre les retours de contrats envoyés par email
 
 # OSE 14.8
 
@@ -76,7 +78,6 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant (Ticket #30189)
 * Suppression des caractéres spéciaux dans les noms des fichiers pièces jointes et contrats (Ticket #29565)
 * Possibilité de réduire le nombre d'heures se service si on a dépassé un plafond bloquant.
-
 
 # OSE 14.5
 

@@ -2,19 +2,16 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\ElementPedagogique;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape;
-use Zend\Form\Element;
 
 /**
  * Description of ElementPedagogique
@@ -22,7 +19,7 @@ use Zend\Form\Element;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
  * @method Etape get($id)
- * @method Etape[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Etape[] getList(QueryBuilder $qb = null, $alias = null)
  */
 class EtapeService extends AbstractEntityService
 {
@@ -33,6 +30,7 @@ class EtapeService extends AbstractEntityService
     use GroupeTypeFormationServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use CheminPedagogiqueServiceAwareTrait;
 
 
 
@@ -70,7 +68,7 @@ class EtapeService extends AbstractEntityService
 
     public function getEtapeCentreCoutReconductible($structure)
     {
-        $annee  = $this->getServiceContext()->getAnnee()->getId();
+        $annee = $this->getServiceContext()->getAnnee()->getId();
 
 
         $sql = '
@@ -83,7 +81,7 @@ class EtapeService extends AbstractEntityService
             V_RECONDUCTION_CENTRE_COUT 
         WHERE
             annee_id = :annee
-            AND structure_id = '  . $structure->getId();
+            AND structure_id = ' . $structure->getId();
 
         $sql .= 'GROUP BY
                    etape_id,
@@ -96,13 +94,13 @@ class EtapeService extends AbstractEntityService
         $stmt->execute();
         $result = $stmt->fetchAll();
         $etapes = [];
-        foreach($result as $etape)
-        {
+        foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;
         }
 
         return $etapes;
     }
+
 
 
     /**
@@ -114,7 +112,7 @@ class EtapeService extends AbstractEntityService
 
     public function getEtapeModulateurReconductible($structure)
     {
-        $annee  = $this->getServiceContext()->getAnnee()->getId();
+        $annee = $this->getServiceContext()->getAnnee()->getId();
 
 
         $sql = '
@@ -127,7 +125,7 @@ class EtapeService extends AbstractEntityService
             V_RECONDUCTION_MODULATEUR 
         WHERE
             annee_id = :annee
-            AND structure_id = '  . $structure->getId();
+            AND structure_id = ' . $structure->getId();
 
         $sql .= 'GROUP BY
                    etape_id,
@@ -140,14 +138,12 @@ class EtapeService extends AbstractEntityService
         $stmt->execute();
         $result = $stmt->fetchAll();
         $etapes = [];
-        foreach($result as $etape)
-        {
+        foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;
         }
 
         return $etapes;
     }
-
 
 
 
@@ -309,6 +305,15 @@ class EtapeService extends AbstractEntityService
     {
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cette formation.');
+        }
+
+        foreach ($entity->getCheminPedagogique() as $cp) {
+            if ($cp->estNonHistorise()) {
+                /* @var $cp \Application\Entity\Db\CheminPedagogique */
+                $cp->getElementPedagogique()->removeCheminPedagogique($cp);
+                $entity->removeCheminPedagogique($cp);
+                $this->getServiceCheminPedagogique()->delete($cp);
+            }
         }
 
         return parent::delete($entity, $softDelete);

@@ -97,7 +97,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
         <ul style="list-style-type: none">
             <li><span class="glyphicon glyphicon-thumbs-up"></span> Créé
                 le <?= $contrat->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
-                par <?= $this->utilisateur($contrat->getHistoModificateur()) ?></li>
+                par <?= $this->utilisateur($contrat->getHistoCreateur()) ?></li>
             <?php if ($validation): ?>
                 <li><span class="glyphicon glyphicon-thumbs-up"></span> Validé
                     le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>

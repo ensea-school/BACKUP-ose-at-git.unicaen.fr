@@ -309,7 +309,8 @@ class Etape implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceIn
     /**
      * Get cheminPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|CheminPedagogique[]
+     *
      */
     public function getCheminPedagogique()
     {

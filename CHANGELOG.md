@@ -1,3 +1,32 @@
+# OSE 14.9 (en développement)
+
+## Nouveautés
+
+* Intégration (en cours) de la formule de calcul de Poitiers.
+* Stockage de la date d'envoi par e-mail du contrat
+* Nouvel indicateur 361 permettant de suivre les retours de contrats envoyés par email
+
+# OSE 14.8
+
+## Corrections de bugs
+
+* Lors de la suppression d'une formation dans l'offre de formation complémentaire, les chemin pédagogiques associés sont également supprimés.
+* Les lignes de service avec 0 heures ne s'afficheront désormais plus (sauf si on est en réalisé qu'on a du prévisionnel validé).
+* Formule de Brest : s'il y a une décharge, les heures de modif de service sont maintenant retranchées su service dû.
+* Les plafonds bloquants fonctionnent de nouveau si on modifie un volume horaire individuel
+* Les pièces jsutificatives sont de nouveau demandées si aucun service n'ai saisi
+
+# OSE 14.7
+
+## Nouveautés
+
+* Les modèles de pièces justificatives peuvent être téléchargés en fonction de l'année courante (paramètre :annee à ajouter dans l'URL qui sera remplacé dynamiquement par l'année en cours)
+
+## Corrections de bugs
+
+* Correction sur les agréments restreints qui n'étaient plus demandés par composante (Tickets #30278 et #29825)
+
+
 # OSE 14.6
 
 ## Nouveautés
@@ -5,16 +34,16 @@
 * Lors de l'envoi d'email aux intervenants via les indicateurs, possiblité d'en demander une copie par email pour avoir un traçabilité. Le mail en copie contiendra en plus la liste des personnes / emails qui ont reçu celui-ci
 * L'expéditeur de l'email du contrat est maintenant celui qui a réalisé l'action d'envoi (en lieu et place de nepasrepondre@unicaen.fr) 
 * L'objet de l'email du contrat est maintenant personnalisable dans Administration > Paramètres généraux
-* Ajout du paramétre :annee pour la personnalisation du corps de l'email du contrat.
+* Ajout du paramètre :annee pour la personnalisation du corps de l'email du contrat.
 * Lors de l'envoi du mail du contrat,  les sauts à ligne manuels du modèle de mail sont remplacés par des <br/> html pour respecter la mise en page.
 
 ## Corrections de bugs
 
 * Fiabilisation des demandes de mise en paiement de référentiel (message d'erreur qui appraissait parfois résolu)
 * Problème de gestion de cache lors de la création d'un nouveau statut d'intervenant (Ticket #30189)
-* Correction sur les agréments restreints qui n'étaient plus demandés par composante (Tickets #30278 et #29825)
 * Suppression des caractéres spéciaux dans les noms des fichiers pièces jointes et contrats (Ticket #29565)
 * Possibilité de réduire le nombre d'heures se service si on a dépassé un plafond bloquant.
+
 
 # OSE 14.5
 

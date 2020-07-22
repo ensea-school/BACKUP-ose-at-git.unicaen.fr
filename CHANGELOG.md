@@ -5,6 +5,7 @@
 * Intégration (en cours) de la formule de calcul de Poitiers.
 * Stockage de la date d'envoi par e-mail du contrat
 * Nouvel indicateur 361 permettant de suivre les retours de contrats envoyés par email
+* Piece justificative : forcer la durée de vie à 1 si la case "Uniquement en cas de changement de RIB" est cochée par l'utilisateur pour éviter les mauvais paramétrages des pièces jointes
 
 # OSE 14.8
 

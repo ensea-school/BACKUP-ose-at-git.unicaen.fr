@@ -21,43 +21,43 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
 
 
-    <div class="row">
-        <div class="col-md-12">
-            <?= $this->formControlGroup($form->get('typePieceJointe')); ?>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('typePieceJointe')); ?>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <?= $this->formControlGroup($form->get('changement-rib')); ?>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('changement-rib')); ?>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <?= $this->formControlGroup($form->get('fc')); ?>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('fc')); ?>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <?= $this->formControlGroup($form->get('obligatoire-hnp')); ?>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('obligatoire-hnp')); ?>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <?= $this->formControlGroup($form->get('seuil-hetd')); ?>
-        </div>
-        <div class=col-md-4>
-            <?= $this->formControlGroup($form->get('annee-debut')); ?>
-        </div>
-        <div class=col-md-4>
-            <?= $this->formControlGroup($form->get('annee-fin')); ?>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <?= $this->formControlGroup($form->get('seuil-hetd')); ?>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <?= $this->formControlGroup($form->get('duree-vie')); ?>
-        </div>
+    <div class=col-md-4>
+        <?= $this->formControlGroup($form->get('annee-debut')); ?>
+    </div>
+    <div class=col-md-4>
+        <?= $this->formControlGroup($form->get('annee-fin')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <?= $this->formControlGroup($form->get('duree-vie')); ?>
+    </div>
 
-    </div>
+</div>
 
 <?= $this->formSubmit($form->get('submit')); ?>
 
@@ -83,3 +83,22 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->formRow($form->get('security'));
 echo $this->formHidden($form->get('id'));
 echo $this->form()->closeTag();
+
+?>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("input[name='changement-rib']").change(function () {
+            var dureeVie = $("input[name='duree-vie']")
+            if (this.checked) {
+                dureeVie.val('1');
+                dureeVie.attr('disabled', 'disabled');
+            } else {
+                dureeVie.removeAttr('disabled');
+            }
+        })
+    });
+
+</script>

@@ -459,3 +459,145 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Table non exploitée : à ignorer</td> <!-- Description -->
   </tr>
 </table>
+
+# Filtres et traitements
+
+La synchronisation peut se faire de plusieurs manières :
+1. soit par le biais du CRON (commande `./bin/ose synchronisation <nom_du_job>`)
+1. soit dans la page Administration/Synchronisation/Différentiel
+1. soit en base de données (`unicaen_import.synchroniser('<NOM_TABLE>');`);
+
+Pour configurer les filtres et traitements antérieurs/postérieurs, allez sur OSE dans Administration/Synchronisation/Tables.
+
+## Filtres automatiques
+
+Les filtres permettent de ne synchroniser qu'une partie des données sans prendre en compte le reste du différentiel.
+Ils sont appliqués sur les deux premières manières présentées ci-dessus.
+
+### Création d'un filtre
+
+Un filtre correcpond à une partie de requête SQL portant sur une vue différentielle.
+
+Par exemple, pour ne lister que le différentiel des étapes dont l'année est supérieure à 2019, on fait :
+
+```sql
+SELECT * FROM v_diff_etape WHERE annee_id > 2019;
+```
+
+Le filtre est ici `WHERE annee_id > 2019`.
+
+### Utilisation pour contrôler la synchronisation de l'offre de formation
+
+Prenons l'exemple d'une offre de formation importée à la fois d'Apogée et de FCA Manager.
+Dans OSE ainsi que dans FCA Manager, l'offre de formation est annualisée. Ce n'est pas la cas dans Apogée.
+Il peut donc être utile de "figer" l'offre de formation issue d'Apogée afin que les changements d'offre ne soient pas 
+systématiquement répercutés sur l'année en cours. Pour se faire, on peut définit une année minimale d'import de l'offre de formation
+et toutes les données venant d'Apogée ne seront pas synchronisées si les données sont antérieures.
+
+#### Définition de l'année minimale d'import des données d'offre de formation
+
+En base de données, dans la table PARAMETRE, il existe le paramètre `annee_minimale_import_odf`.
+
+Vous pouvez définir comme suit l'année minimale d'import de l'offre de formation :
+```sql
+UPDATE PARAMETRE SET VALEUR = '2020' WHERE NOM = 'annee_minimale_import_odf'; 
+```
+
+#### Mise en place des filtres
+
+Reste à exploiter ce paramètre pour filtrer les données import ne venant pas de FCA Manager.
+Bien entendu, les filtres ci-dessous vous sont fournis à titre indicatif. Il vous revient de les adapter à vos besoins.
+
+- Groupes de type de formation (table GROUPE_TYPE_FORMATION) et types de formation (TYPE_FORMATION)
+
+Un même filtre est appliqué pour ces deux tables.
+La synchro ne se fait que si l'année d'import comfigurée dans les paramètres généraux est supérieure à l'année minimale d'import d'ODF.
+
+```sql
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+WHERE OSE_PARAMETRE.GET_ANNEE_IMPORT >= to_number(amio.valeur)
+```
+
+- Etapes, éléments, effectifs et noeuds (tables ETAPE, ELEMENT_PEDAGOGIQUE, EFFECTIFS et NOEUD)
+
+Ces tables sont annualisées.
+On synchronise toutes les données issues de FCA Manager et les autres données si leur année n'est pas inférieure à l'année 
+d'import ou à l'année minimale d'import de l'ODF.
+
+```sql
+JOIN source ON source.code = 'FCAManager'
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+WHERE 
+    (annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND annee_id >= to_number(amio.valeur))
+    OR source_id = source.id
+```
+
+- Chemins pédagogiques et volumes horaires d'enseignement (tables CHEMIN_PEDAGOGIQUE et VOLUME_HORAIRE_ENS)
+
+Ces tables ne sont pas annualisées. En revanche on peut se baser sur l'année de l'élément pédagogique dont elles dépendent.
+Le principe des filtre reste le même que ci-dessus.
+
+```sql
+JOIN source ON source.code = 'FCAManager'
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
+WHERE 
+    (ep.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND ep.annee_id >= to_number(amio.valeur)) 
+    OR v_diff_chemin_pedagogique.source_id = source.id
+```
+
+- Liens et scénarios par liens (tables LIEN et SCENARIO_LIEN)
+
+Ces tables ne sont pas annualisées.
+Dans ce cas, on se base sur le `SOURCE_CODE` dont la valeur débute par l'année universitaire (exemple : `2018_{}MD22ENTB_M.DM240`).
+
+
+```sql
+JOIN source ON source.code = 'FCAManager'
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+WHERE 
+  (SUBSTR(source_code,0,4) >= to_char(OSE_PARAMETRE.GET_ANNEE_IMPORT) AND SUBSTR(source_code,0,4) >= amio.valeur)
+  OR source_id = source.id
+```
+
+- Taux de répartition FI/A/FC (ELEMENT_TAUX_REGIMES)
+
+Dans OSE, on peut affecter das taux de répartition FI/FA/FC aux éléments pédagogiques.
+Ceci peut se faire directement dans le logiciel.
+On peut aussi, comme ce qui se fait à Caen, pré-calculer ces taux sur la base des effectifs de l'année précédente.  
+
+On les initialise une fois sans jamais les mettre à jour (sauf si c'est "forcé" manuellement).
+Du coup, on fait toutes les actions d'import sauf `update`.
+
+```sql
+JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+WHERE IMPORT_ACTION IN ('delete','insert','undelete') 
+   OR (ep.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND ep.annee_id >= to_number(amio.valeur))
+```
+
+
+## Traitement automatiques
+
+Préalablement ou après une opération de synchronisation, il est parfois nécessaire de déclencher des opérations (mise à jour d'une vue matérialisée, etc.).
+
+Pour le préalable, il y a les traitements antérieurs.
+Pour l'après, il y a les traitements postérieurs.
+
+Attention : ces traitements ne se déclenchent que si la syncro se fait par le biais de la commande `./bin/ose synchronisation <nom_du_job>`.
+Cela concerne donc le job CRON de synvchronisation.
+
+Voici deux traitements qu'il est fortement conseillé de déclencher automatiquement :
+
+- Table INTERVENANT : mise à jour de la vue matérialisée MV_INTERVENANT avant la synchro :
+
+```sql
+UNICAEN_IMPORT.REFRESH_MV('MV_INTERVENANT');
+```
+
+- Table NOEUD : mise à jour de tableaux de bord après la synchro :
+
+```sql
+UNICAEN_IMPORT.REFRESH_MV('TBL_NOEUD');
+UNICAEN_TBL.CALCULER('chargens');
+```

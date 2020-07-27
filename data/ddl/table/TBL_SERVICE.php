@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_CODE'       => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID'         => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'VALIDE'                         => [
@@ -246,7 +246,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 20,
             'commentaire' => 'Nombre de volumes horaires validés',
         ],
     ],

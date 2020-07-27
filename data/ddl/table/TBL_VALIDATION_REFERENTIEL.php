@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'VALIDATION_ID'          => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => 'Si validé',
         ],
         'VOLUME_HORAIRE_REF_ID'  => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
     ],

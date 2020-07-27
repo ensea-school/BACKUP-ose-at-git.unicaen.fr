@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'VALIDE'                 => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => 'Nombre de volumes horaires validés',
         ],
     ],

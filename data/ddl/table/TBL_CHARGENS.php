@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_ID'     => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
     ],

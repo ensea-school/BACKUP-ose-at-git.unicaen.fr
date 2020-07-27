@@ -257,16 +257,16 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Harpège -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
-    <td>Relation n <=> nentre les centres de coûts et les éléments pédagogiques</td> <!-- Description -->
+    <td>Relation n <=> n entre les centres de coûts et les éléments pédagogiques</td> <!-- Description -->
   </tr>
   <tr>
     <td>CENTRE_COUT_STRUCTURE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
-    <td></td> <!-- Sifac -->
-    <td>Oui</td> <!-- Calcul -->
-    <td>Relation n <=> nentre les centres de coûts et les structures</td> <!-- Description -->
+    <td>Oui</td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Relation n <=> n entre les centres de coûts et les structures</td> <!-- Description -->
   </tr>
   
   

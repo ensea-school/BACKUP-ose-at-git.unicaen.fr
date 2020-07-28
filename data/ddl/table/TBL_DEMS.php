@@ -9,19 +9,6 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'TBL_DEMS_ID_SEQ',
     'columns'     => [
-        'PARAM'       => [
-            'name'        => 'PARAM',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 30,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 1,
-            'commentaire' => NULL,
-        ],
-
         'ID'       => [
             'name'        => 'ID',
             'type'        => 'int',
@@ -31,7 +18,19 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 1,
+            'commentaire' => NULL,
+        ],
+        'PARAM'    => [
+            'name'        => 'PARAM',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 30,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'TBL_NAME' => [
@@ -43,10 +42,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
-        'VALUE'       => [
+        'VALUE'    => [
             'name'        => 'VALUE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -55,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
     ],

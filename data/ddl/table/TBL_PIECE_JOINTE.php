@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'VALIDEE'              => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 10,
+            'position'    => 9,
             'commentaire' => 'Témoin (1 si la PJ est validée)',
         ],
     ],

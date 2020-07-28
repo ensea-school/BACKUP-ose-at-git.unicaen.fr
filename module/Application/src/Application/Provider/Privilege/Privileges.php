@@ -159,6 +159,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION        = 'motifs-modification-service-du-visualisation';
     const ODF_CENTRES_COUT_EDITION                            = 'odf-centres-cout-edition';
     const ODF_ELEMENT_EDITION                                 = 'odf-element-edition';
+    const ODF_ELEMENT_SYNCHRONISATION                         = 'odf-element-synchronisation';
     const ODF_ELEMENT_VH_EDITION                              = 'odf-element-vh-edition';
     const ODF_ELEMENT_VH_VISUALISATION                        = 'odf-element-vh-visualisation';
     const ODF_ELEMENT_VISUALISATION                           = 'odf-element-visualisation';

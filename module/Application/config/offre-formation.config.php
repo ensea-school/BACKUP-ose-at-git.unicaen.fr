@@ -3,7 +3,6 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
-use Application\Service\OffreFormationService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
@@ -86,7 +85,7 @@ return [
                         ],
                         'may_terminate' => false,
                         'child_routes'  => [
-                            'voir'           => [
+                            'voir'            => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/voir/:elementPedagogique',
@@ -94,14 +93,14 @@ return [
                                     'defaults'    => ['action' => 'voir'],
                                 ],
                             ],
-                            'ajouter'        => [
+                            'ajouter'         => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'    => '/ajouter',
                                     'defaults' => ['action' => 'saisir'],
                                 ],
                             ],
-                            'modifier'       => [
+                            'modifier'        => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/modifier/:elementPedagogique',
@@ -109,7 +108,7 @@ return [
                                     'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
-                            'supprimer'      => [
+                            'supprimer'       => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/supprimer/:elementPedagogique',
@@ -117,14 +116,14 @@ return [
                                     'defaults'    => ['action' => 'supprimer'],
                                 ],
                             ],
-                            'search'         => [
+                            'search'          => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/search',
                                     'defaults' => ['action' => 'search'],
                                 ],
                             ],
-                            'get-periode'    => [
+                            'get-periode'     => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/get-periode/:elementPedagogique',
@@ -132,7 +131,7 @@ return [
                                     'defaults'    => ['action' => 'getPeriode'],
                                 ],
                             ],
-                            'volume-horaire' => [
+                            'volume-horaire'  => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/volume-horaire/:elementPedagogique',
@@ -141,6 +140,18 @@ return [
                                     ],
                                     'defaults'    => [
                                         'action' => 'volume-horaire',
+                                    ],
+                                ],
+                            ],
+                            'synchronisation' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/synchronisation/:elementPedagogique',
+                                    'constraints' => [
+                                        'elementPedagogique' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'synchronisation',
                                     ],
                                 ],
                             ],
@@ -381,6 +392,11 @@ return [
                     'action'     => ['saisir', 'supprimer'],
                     'privileges' => Privileges::ODF_ELEMENT_EDITION,
                 ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
+                    'action'     => ['synchronisation'],
+                    'privileges' => Privileges::ODF_ELEMENT_SYNCHRONISATION,
+                ],
                 /* Modulateurs */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Modulateur',
@@ -441,6 +457,11 @@ return [
                     [
                         'privileges' => Privileges::ODF_ELEMENT_VH_EDITION,
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'VolumeHoraireEns', 'TypeIntervention'],
+                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
+                    ],
+                    [
+                        'privileges' => Privileges::ODF_ELEMENT_SYNCHRONISATION,
+                        'resources'  => ['ElementPedagogique'],
                         'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
                 ],

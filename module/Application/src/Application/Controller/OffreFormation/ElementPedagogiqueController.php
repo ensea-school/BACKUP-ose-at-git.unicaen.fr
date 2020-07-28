@@ -32,7 +32,6 @@ class ElementPedagogiqueController extends AbstractController
     use CentreCoutEpServiceAwareTrait;
 
 
-
     public function voirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -307,5 +306,13 @@ class ElementPedagogiqueController extends AbstractController
         return [
             'form' => $form,
         ];
+    }
+
+
+
+    public function synchronisationAction()
+    {
+        
+        return $this->redirect()->toRoute('of/element/voir', [], ['query' => ['modal' => 1]], true);
     }
 }

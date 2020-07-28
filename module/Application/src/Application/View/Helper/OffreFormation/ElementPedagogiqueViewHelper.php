@@ -18,7 +18,6 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
     use ElementPedagogiqueAwareTrait;
 
 
-
     /**
      *
      * @param Entity $elementPedagogique
@@ -102,15 +101,15 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
 
         $html = $this->renderDescription();
 
-
-        if ($this->getView()->isAllowed($entity,Privileges::ODF_ELEMENT_EDITION)){
-            $buttons = '';
+        $buttons = '';
+        if ($this->getView()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/element/modifier', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/element/supprimer', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
-            $html .= "<div class=\"actions\">$buttons</div>";
         }
-
-        $html .= $this->getView()->historique($entity);
+        if ($this->getView()->isAllowed($entity, Privileges::ODF_ELEMENT_SYNCHRONISATION)) {
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/element/synchronisation', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-synchronisation"><span class="glyphicon glyphicon-refresh"></span> Synchronisation</a>';
+        }
+        if ($buttons) $html .= "<div class=\"actions\">$buttons</div>";
 
         return $html;
     }
@@ -125,9 +124,9 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
         if (!$content) $content = (string)$element;
 
         $default = [
-            'href'       => $this->getView()->url('of/element/voir', ['elementPedagogique' => $element->getId()]),
-            'class'      => ['element-pedagogique-link', 'ajax-modal'],
-            'id'         => $element->getId(),
+            'href'  => $this->getView()->url('of/element/voir', ['elementPedagogique' => $element->getId()]),
+            'class' => ['element-pedagogique-link', 'ajax-modal'],
+            'id'    => $element->getId(),
         ];
 
         if ($element->getHistoDestruction()) {
@@ -136,7 +135,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
         }
 
         $tag = 'a';
-        if (! $this->getView()->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_VISUALISATION))) $tag = 'span';
+        if (!$this->getView()->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_VISUALISATION))) $tag = 'span';
 
         return "<$tag " . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . "</$tag>";
     }

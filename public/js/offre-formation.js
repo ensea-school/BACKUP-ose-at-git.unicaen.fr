@@ -90,7 +90,7 @@ $.widget("ose.elementPedagogiqueRecherche", {
             var option = $('<option>');
             option.val(data[i].id);
             option.text(data[i].label);
-            option.data('subtext',data[i].extra);
+            option.data('subtext', data[i].extra);
             select.append(option);
         }
         select.val(value);
@@ -150,8 +150,6 @@ $.widget("ose.elementPedagogiqueRecherche", {
 
 })
 ;
-
-
 
 
 
@@ -282,8 +280,6 @@ $.widget("ose.etapeModulateurs", {
 
 
 
-
-
 /**
  * etapeSaisie
  */
@@ -345,6 +341,12 @@ $.widget("ose.elementPedagogiqueSaisie", {
         window.location.reload();
     },
 
+    onSynchronisation: function (event)
+    {
+        console.log('test');
+        window.location.reload();
+    },
+
 });
 
 $(function ()
@@ -360,6 +362,12 @@ $(function ()
         event.div.modal('hide'); // ferme la fenêtre modale
         event.div.find('.element-pedagogique-saisie').elementPedagogiqueSaisie();
         event.div.find('.element-pedagogique-saisie').elementPedagogiqueSaisie('onModifier', event);
+    });
+    $("body").on("element-pedagogique-synchronisation", function (event, data)
+    {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        event.div.find('.element-pedagogique-synchronisation').elementPedagogiqueSaisie();
+        event.div.find('.element-pedagogique-synchronisation').elementPedagogiqueSaisie('onSynchronisation', event);
     });
     $("body").on("element-pedagogique-supprimer", function (event, data)
     {

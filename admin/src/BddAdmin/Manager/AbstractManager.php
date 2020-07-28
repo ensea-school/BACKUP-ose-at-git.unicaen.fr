@@ -35,7 +35,7 @@ abstract class AbstractManager implements ManagerInterface
         }
 
         $res = trim(implode("\n", $s));
-        if ('/' == substr($res, -1)) {
+        if ('/' == substr($res, -1) && '*' != substr($res, -2, 1)) {
             $res = trim(substr($res, 0, -1));
         }
 

@@ -312,7 +312,9 @@ class ElementPedagogiqueController extends AbstractController
 
     public function synchronisationAction()
     {
-        
+        $element = $this->getEvent()->getParam('elementPedagogique');
+        $this->getServiceElementPedagogique()->synchronisation($element);
+
         return $this->redirect()->toRoute('of/element/voir', [], ['query' => ['modal' => 1]], true);
     }
 }

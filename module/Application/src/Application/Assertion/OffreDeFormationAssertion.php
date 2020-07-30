@@ -123,6 +123,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertElementPedagogiqueSynchronisation(Role $role, ElementPedagogique $elementPedagogique)
     {
         return $this->asserts([
+            $elementPedagogique->getSource()->getImportable(),
             $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
         ]);
     }

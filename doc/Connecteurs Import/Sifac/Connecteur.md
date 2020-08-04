@@ -35,6 +35,15 @@ END;
 La liste des domaines fonctionnels est écrite directement dans la requête.
 La vue source ne sert ici qu'à en récupérer les libellés de SIFAC.
 
+Si vous venez d'installer OSE, alors l'application est livrée avec un jeu de données par défaut, parmi lesquelles une liste des domaines fonctionnels.
+Avant d'utiliser votre propre liste, vous devez impérativement vider la table DOMAINE_FONCTIONNEL, sans quoi vous vous 
+retrouveriez avec des erreurs d'import pour cause de doublons.
+
+```sql
+DELETE FROM DOMAINE_FONCTIONNEL;
+```
+
+
 [SRC_DOMAINE_FONCTIONNEL](SRC_DOMAINE_FONCTIONNEL.sql).
 
 [Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).

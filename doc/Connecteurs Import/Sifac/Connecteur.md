@@ -39,9 +39,17 @@ Si vous venez d'installer OSE, alors l'application est livrée avec un jeu de do
 Avant d'utiliser votre propre liste, vous devez impérativement vider la table DOMAINE_FONCTIONNEL, sans quoi vous vous 
 retrouveriez avec des erreurs d'import pour cause de doublons.
 
+Attention également : les fonctions référentielles devront probablement être purgées également, car ces dernières dépendent également des domaines fonctionnels.
+Pensez donc à purger au préalable la nomenclature des fonctions référentielles en prenant bien garde de les sauvegarder si vous l'aviez déjà configurée!
+
 ```sql
+
+-- ATTENTION à bien sauvegarder cette table si vous avez déjà personnalisé vos fonctions référentielles, sans quoi votre travail sera perdu!
+DELETE FROM FONCTION_REFERENTIEL;
+
 DELETE FROM DOMAINE_FONCTIONNEL;
 ```
+
 
 
 [SRC_DOMAINE_FONCTIONNEL](SRC_DOMAINE_FONCTIONNEL.sql).

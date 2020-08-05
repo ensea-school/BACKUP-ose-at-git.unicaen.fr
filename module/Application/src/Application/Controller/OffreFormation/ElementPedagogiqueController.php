@@ -7,12 +7,14 @@ use Application\Entity\Db\ElementPedagogique;
 use Application\Filter\FloatFromString;
 use Application\Form\OffreFormation\Traits\ElementModulateurCentreCoutFormAwareTrait;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
+use Application\Form\OffreFormation\Traits\ElementPedagogiqueSynchronisationFormAwareTrait;
 use Application\Form\OffreFormation\Traits\VolumeHoraireEnsFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
 
 
@@ -30,6 +32,8 @@ class ElementPedagogiqueController extends AbstractController
     use ElementModulateurCentreCoutFormAwareTrait;
     use ElementModulateurServiceAwareTrait;
     use CentreCoutEpServiceAwareTrait;
+    use ElementPedagogiqueSynchronisationFormAwareTrait;
+    use StructureServiceAwareTrait;
 
 
     public function voirAction()
@@ -316,5 +320,28 @@ class ElementPedagogiqueController extends AbstractController
         $this->getServiceElementPedagogique()->synchronisation($element);
 
         return $this->redirect()->toRoute('of/element/voir', [], ['query' => ['modal' => 1]], true);
+    }
+
+
+
+    public function synchronisationParCodeAction()
+    {
+        $title = 'Import d\'un nouvel élément pédagogique';
+
+        if (!$this->getRequest()->isPost()) {
+            $structure = $this->params()->fromQuery('structure');
+            if ($structure) $structure = $this->getServiceStructure()->get($structure);
+            $form = $this->getFormOffreFormationElementPedagogiqueSynchronisation();
+            $form->setStructure($this->getServiceContext()->getStructure(true) ?: $structure);
+            $form->populate();
+
+            return compact('form', 'title');
+        } else {
+            $form = null;
+            $code = $this->params()->fromPost('code');
+            $this->getServiceElementPedagogique()->synchronisation($code);
+
+            return compact('form', 'title');
+        }
     }
 }

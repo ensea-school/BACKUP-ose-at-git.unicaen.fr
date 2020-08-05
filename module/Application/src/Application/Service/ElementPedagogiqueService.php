@@ -410,6 +410,13 @@ where rang = 1
 
 
 
+    /**
+     * $element = CODE de l'élément ou entité ElementPedagogique
+     *
+     * @param string|ElementPedagogique $element
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function synchronisation($element)
     {
         if (is_string($element)) {

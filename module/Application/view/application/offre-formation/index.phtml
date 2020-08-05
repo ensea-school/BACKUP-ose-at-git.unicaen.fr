@@ -78,7 +78,7 @@ $this->headTitle()->append("Offre de formation");
 $canExport      = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
 $canViewEtape   = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
 $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
-
+$canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_SYNCHRONISATION));
 ?>
 <style>
     ul.navigation-etape {
@@ -215,10 +215,23 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
                     Enseignements <?= $compl ?>
                     <!--------------- Bouton d'ajout d'élément pédagogique --------------->
                     <?php
+                    if ($canSyncElement && $structure) {
+                        $attrs = [
+                            'href'       => $this->url('of/element/synchronisation-par-code', [], ['query' => ['structure' => $structure->getId()]]),
+                            'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'pull-right', 'btn-xs'],
+                            'data-event' => 'element-pedagogique-synchronisation',
+                            'title'      => 'Importer ou synchroniser un enseignement',
+                        ];
+                        echo $this->tag('a', $attrs)->html('<span class="glyphicon glyphicon-refresh"></span> Import élément');
+                    }
                     if ($canEditElement) {
-                        echo $this->elementPedagogique()->renderAjouterLink(
-                            '<span class="glyphicon glyphicon-plus"></span> Nouvel enseignement',
-                            ['class' => 'pull-right btn-xs']);
+                        $attrs = [
+                            'href'       => $this->url('of/element/ajouter'),
+                            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'pull-right', 'btn-xs'],
+                            'data-event' => 'element-pedagogique-ajouter',
+                            'title'      => 'Ajouter un enseignement',
+                        ];
+                        echo $this->tag('a', $attrs)->html('<span class="glyphicon glyphicon-plus"></span> Nouvel enseignement');
                     }
                     if ($canExport) {
                         $params      = [
@@ -229,9 +242,9 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
                         $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
 
                         ?>
-                            <a class="pull-right btn btn-default btn-xs" href="<?= $urlExportOf ?>">
-                                <span class="glyphicon glyphicon-export"></span> Télécharger (CSV)
-                            </a>
+                        <a class="pull-right btn btn-default btn-xs" href="<?= $urlExportOf ?>">
+                            <span class="glyphicon glyphicon-export"></span> Télécharger (CSV)
+                        </a>
                         <?php
                     }
 

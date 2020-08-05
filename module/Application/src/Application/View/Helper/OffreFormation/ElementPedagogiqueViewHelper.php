@@ -139,20 +139,4 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
 
         return "<$tag " . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . "</$tag>";
     }
-
-
-
-    public function renderAjouterLink($content = '', $attributes = [])
-    {
-        if (!$content) $content = '<span class="glyphicon glyphicon-plus"></span> Ajouter un enseignement';
-
-        $default = [
-            'href'       => $this->getView()->url('of/element/ajouter'),
-            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
-            'data-event' => 'element-pedagogique-ajouter',
-            'title'      => 'Ajouter un enseignement',
-        ];
-
-        return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';
-    }
 }

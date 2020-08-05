@@ -85,7 +85,7 @@ return [
                         ],
                         'may_terminate' => false,
                         'child_routes'  => [
-                            'voir'            => [
+                            'voir'                     => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/voir/:elementPedagogique',
@@ -93,14 +93,14 @@ return [
                                     'defaults'    => ['action' => 'voir'],
                                 ],
                             ],
-                            'ajouter'         => [
+                            'ajouter'                  => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'    => '/ajouter',
                                     'defaults' => ['action' => 'saisir'],
                                 ],
                             ],
-                            'modifier'        => [
+                            'modifier'                 => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/modifier/:elementPedagogique',
@@ -108,7 +108,7 @@ return [
                                     'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
-                            'supprimer'       => [
+                            'supprimer'                => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/supprimer/:elementPedagogique',
@@ -116,14 +116,14 @@ return [
                                     'defaults'    => ['action' => 'supprimer'],
                                 ],
                             ],
-                            'search'          => [
+                            'search'                   => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/search',
                                     'defaults' => ['action' => 'search'],
                                 ],
                             ],
-                            'get-periode'     => [
+                            'get-periode'              => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/get-periode/:elementPedagogique',
@@ -131,7 +131,7 @@ return [
                                     'defaults'    => ['action' => 'getPeriode'],
                                 ],
                             ],
-                            'volume-horaire'  => [
+                            'volume-horaire'           => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/volume-horaire/:elementPedagogique',
@@ -143,7 +143,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'synchronisation' => [
+                            'synchronisation'          => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/synchronisation/:elementPedagogique',
@@ -152,6 +152,15 @@ return [
                                     ],
                                     'defaults'    => [
                                         'action' => 'synchronisation',
+                                    ],
+                                ],
+                            ],
+                            'synchronisation-par-code' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/synchronisation-par-code',
+                                    'defaults' => [
+                                        'action' => 'synchronisation-par-code',
                                     ],
                                 ],
                             ],
@@ -394,7 +403,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action'     => ['synchronisation'],
+                    'action'     => ['synchronisation', 'synchronisation-par-code'],
                     'privileges' => Privileges::ODF_ELEMENT_SYNCHRONISATION,
                 ],
                 /* Modulateurs */
@@ -505,6 +514,7 @@ return [
             Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class       => Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class,
             Form\OffreFormation\EtapeSaisie::class                               => Form\OffreFormation\EtapeSaisie::class,
             Form\OffreFormation\ElementPedagogiqueSaisie::class                  => Form\OffreFormation\ElementPedagogiqueSaisie::class,
+            Form\OffreFormation\ElementPedagogiqueSynchronisationForm::class     => Form\OffreFormation\ElementPedagogiqueSynchronisationForm::class,
             Form\OffreFormation\EtapeModulateursSaisie::class                    => Form\OffreFormation\EtapeModulateursSaisie::class,
             Form\OffreFormation\ElementModulateurCCSaisie::class                 => Form\OffreFormation\ElementModulateurCCSaisie::class,
             Form\OffreFormation\ElementModulateursFieldset::class                => Form\OffreFormation\ElementModulateursFieldset::class,

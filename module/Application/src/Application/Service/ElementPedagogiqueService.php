@@ -25,7 +25,6 @@ class ElementPedagogiqueService extends AbstractEntityService
     use SourceServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -407,6 +406,49 @@ where rang = 1
         $this->getEntityManager()->refresh($elementPedagogique);
 
         return $this;
+    }
+
+
+
+    /**
+     * $element = CODE de l'élément ou entité ElementPedagogique
+     *
+     * @param string|ElementPedagogique $element
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function synchronisation($element)
+    {
+        if (is_string($element)) {
+            $code  = $element;
+            $annee = (int)$this->getServiceContext()->getAnnee()->getId();
+        } elseif ($element instanceof ElementPedagogique) {
+            $code  = $element->getCode();
+            $annee = (int)$element->getAnnee()->getId();
+        }
+
+        if ($code) {
+            $c = $this->getEntityManager()->getConnection();
+
+            $plsql = "
+            DECLARE
+              element_id NUMERIC;
+            BEGIN
+              unicaen_import.synchronisation('ELEMENT_PEDAGOGIQUE', 'WHERE code =''' || " . $c->quote($code) . " || ''' AND annee_id = ' || " . $annee . ");
+              BEGIN  
+                SELECT id INTO element_id FROM element_pedagogique ep WHERE code = " . $c->quote($code) . " AND ep.annee_id = " . $annee . " AND histo_destruction IS NULL;
+            
+                unicaen_import.synchronisation('CHEMIN_PEDAGOGIQUE', 'WHERE element_pedagogique_id = ' || element_id);
+                unicaen_import.synchronisation('VOLUME_HORAIRE_ENS', 'WHERE element_pedagogique_id = ' || element_id);
+                unicaen_import.synchronisation('TYPE_INTERVENTION_EP', 'WHERE element_pedagogique_id = ' || element_id);
+                unicaen_import.synchronisation('TYPE_MODULATEUR_EP', 'WHERE element_pedagogique_id = ' || element_id);
+                unicaen_import.synchronisation('CENTRE_COUT_EP', 'WHERE element_pedagogique_id = ' || element_id);
+              EXCEPTION WHEN NO_DATA_FOUND THEN
+                RETURN;
+              END;
+            END;";
+            $c->exec($plsql);
+        }
     }
 
 

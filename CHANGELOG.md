@@ -23,6 +23,8 @@ Objectif : Doubles statuts et refonte des données personnelles
 * Les vues matérialisées sont recalculées à chaque mise à jour
 * Amélioration importante des performances pour le calcul des tableaux de bord intermédiaires
 * Adaptations du connecteur Harpège
+* Possibilité d'importer un uniquement élément pédagogique depuis la page "Offre de formation"
+* Possibilité de mettre à jour par synchronisation et manuellement un élément pédagogique spécifique par déclenchement d'import
 
 ## Notes de mise à jour
 

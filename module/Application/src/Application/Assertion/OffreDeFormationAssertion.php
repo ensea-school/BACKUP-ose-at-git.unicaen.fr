@@ -49,6 +49,8 @@ class OffreDeFormationAssertion extends AbstractAssertion
                         return $this->assertElementPedagogiqueSaisieTauxMixite($role, $entity);
                     case Privileges::ODF_ELEMENT_VH_EDITION:
                         return $this->assertElementPedagogiqueSaisieVH($role, $entity);
+                    case Privileges::ODF_ELEMENT_SYNCHRONISATION:
+                        return $this->assertElementPedagogiqueSynchronisation($role, $entity);
                 }
             break;
             case $entity instanceof Etape:
@@ -113,6 +115,16 @@ class OffreDeFormationAssertion extends AbstractAssertion
         return $this->asserts([
             $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
             $this->assertSourceSaisie($elementPedagogique->getSource(), $elementPedagogique->getAnnee()),
+        ]);
+    }
+
+
+
+    protected function assertElementPedagogiqueSynchronisation(Role $role, ElementPedagogique $elementPedagogique)
+    {
+        return $this->asserts([
+            $elementPedagogique->getSource()->getImportable(),
+            $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
         ]);
     }
 
@@ -247,7 +259,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertSourceSaisie(Source $source, Annee $annee)
     {
-        if ($annee->getId() < $this->getServiceContext()->getAnneeImport()->getId()){
+        if ($annee->getId() < $this->getServiceContext()->getAnneeImport()->getId()) {
             return true;
         };
 

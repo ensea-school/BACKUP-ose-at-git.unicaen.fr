@@ -8,6 +8,7 @@ return [
             'export-csv'                         => 'Export CSV',
             'element-visualisation'              => 'Enseignements - Visualisation',
             'element-edition'                    => 'Enseignements - Édition',
+            'element-synchronisation'            => 'Enseignements - Synchronisation',
             'etape-visualisation'                => 'Formations - Visualisation',
             'etape-edition'                      => 'Formations - Édition',
             'centres-cout-edition'               => 'Centres de coûts - Édition',

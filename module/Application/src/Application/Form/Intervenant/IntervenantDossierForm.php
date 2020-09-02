@@ -9,6 +9,7 @@ use Application\Form\Adresse\AdresseFieldset;
 use Application\Form\Intervenant\Dossier\DossierAutresFieldset;
 use Application\Form\Intervenant\Dossier\DossierBancaireFieldset;
 use Application\Form\Intervenant\Dossier\DossierContactFieldset;
+use Application\Form\Intervenant\Dossier\DossierIdentiteComplementaireFieldset;
 use Application\Form\Intervenant\Dossier\DossierIdentiteFieldset;
 use Application\Form\Intervenant\Dossier\DossierInseeFieldset;
 use Application\Form\Intervenant\Dossier\DossierStatutFieldset;
@@ -74,6 +75,9 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
 
+        $this->dossierIdentiteComplementaireFieldset = new DossierIdentiteComplementaireFieldset('DossierIdentiteComplementaire');
+        $this->dossierIdentiteComplementaireFieldset->init();
+
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
 
@@ -97,12 +101,14 @@ class IntervenantDossierForm extends AbstractForm
 
         $this->add($this->dossierStatutFieldset);
         $this->add($this->dossierIdentiteFieldset);
+        $this->add($this->dossierIdentiteComplementaireFieldset);
         $this->add($this->dossierAdresseFieldset);
         $this->add($this->dossierContactFiedlset);
         $this->add($this->dossierInseeFiedlset);
         $this->add($this->dossierBancaireFieldset);
         $this->add($this->dossierEmployeurFieldset);
         $this->add($this->dossierAutresFiedlset);
+        
 
         /**
          * Csrf

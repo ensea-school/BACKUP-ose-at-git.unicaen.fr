@@ -159,8 +159,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_EDITION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_EDITION),
         ]);
     }
 
@@ -170,7 +170,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_SUITE_VISUALISATION),
+            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_VISUALISATION),
         ]);
     }
 
@@ -403,7 +403,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
 
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $completudeDossier  = $this->getServiceDossier()->isComplete($intervenantDossier);
+        $completudeDossier  = $this->getServiceDossier()->getCompletude($intervenantDossier);
         $isValidate         = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([

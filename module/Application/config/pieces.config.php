@@ -2,7 +2,6 @@
 
 namespace Application;
 
-use Application\Entity\Db\Service;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -315,7 +314,7 @@ return [
                 [//Créer un droit archivage
                  'controller' => 'Application\Controller\IntervenantDossier',
                  'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_SUITE_EDITION],
+                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_EDITION],
                  'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
 

@@ -78,8 +78,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const DOSSIER_SUPPRESSION                                 = 'dossier-suppression';
     const DOSSIER_VALIDATION                                  = 'dossier-validation';
     const DOSSIER_VISUALISATION                               = 'dossier-visualisation';
-    const DOSSIER_IDENTITE_SUITE_VISUALISATION                = 'dossier-identite-suite-visualisation';
-    const DOSSIER_IDENTITE_SUITE_EDITION                      = 'dossier-identite-suite-edition';
+    const DOSSIER_IDENTITE_VISUALISATION                      = 'dossier-identite-visualisation';
+    const DOSSIER_IDENTITE_EDITION                            = 'dossier-identite-edition';
     const DOSSIER_ADRESSE_VISUALISATION                       = 'dossier-adresse-visualisation';
     const DOSSIER_ADRESSE_EDITION                             = 'dossier-adresse-edition';
     const DOSSIER_CONTACT_VISUALISATION                       = 'dossier-contact-visualisation';

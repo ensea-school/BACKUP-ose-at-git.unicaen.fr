@@ -29,9 +29,6 @@ class DossierIdentiteFieldset extends AbstractFieldset
     use DepartementServiceAwareTrait;
     use CiviliteServiceAwareTrait;
 
-    static private $franceId;
-
-
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -99,84 +96,6 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->get('civilite')
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceCivilite()->getList()));
 
-        /**
-         * Date de naissance
-         */
-        $this->add([
-            'name'       => 'dateNaissance',
-            'options'    => [
-                'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
-            ],
-            'type'       => 'UnicaenApp\Form\Element\Date',
-        ]);
-
-        /**
-         * Pays de naissance
-         */
-        $this->add([
-            'name'       => 'paysNaissance',
-            'options'    => [
-                'label'         => 'Pays de naissance <span class="text-danger">*</span>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],],
-            'attributes' => [
-            ],
-            'type'       => 'Select',
-        ]);
-
-
-        $this->get('paysNaissance')
-            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
-
-        //Set France par défault si INSEE France
-        $idFrance = $this->getServicePays()->getIdByLibelle('FRANCE');
-        if ($idFrance) {
-            $this->get('paysNaissance')->setValue($idFrance);
-        }
-
-
-        /**
-         * Département de naissance
-         */ /**
-     * Pays de naissance
-     */ {
-        $this->add([
-            'name'       => 'departementNaissance',
-            'options'    => [
-                'label'         => 'Département de naissance <span class="text-danger">*</span>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],],
-            'attributes' => [
-                'info_icon' => "Uniquement si votre pays de naissance est la France.",
-            ],
-            'type'       => 'Select',
-        ]);
-    }
-
-        $this->get('departementNaissance')
-            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));
-
-        /**
-         * Ville de naissance
-         */
-        $this->add([
-            'name'    => 'villeNaissance',
-            'options' => [
-                'label'         => 'Ville de naissance <span class="text-danger">*</span>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],],
-            'type'    => 'Text',
-        ]);
-
 
         return $this;
     }
@@ -191,46 +110,19 @@ class DossierIdentiteFieldset extends AbstractFieldset
      */
     public function getInputFilterSpecification()
     {
-        $paysNaissanceId = (int)$this->get('paysNaissance')->getValue();
-
-        // la sélection du département n'est obligatoire que si le pays sélectionné est la France
-        $departementRequired = (self::$franceId === $paysNaissanceId);
 
         $spec = [
-            'nomUsuel'             => [
+            'nomUsuel'        => [
                 'required' => false,
                 'readonly' => true,
             ],
-            'nomPatronymique'      => [
+            'nomPatronymique' => [
                 'required' => false,
             ],
-            'prenom'               => [
+            'prenom'          => [
                 'required' => false,
             ],
-            'civilite'             => [
-                'required' => false,
-            ],
-            'dateNaissance'        => [
-                'required'    => false,
-                'allow_empty' => true,
-                'validators'  => [
-                    new DateValidator(['format' => Constants::DATE_FORMAT]),
-                ],
-            ],
-            'paysNaissance'        => [
-                'required'    => false,
-                'allow_empty' => true,
-                'validators'  => [
-                    new PaysNaissanceValidator(['service' => $this->getServicePays()]),
-                ],
-            ],
-            'departementNaissance' => [
-                'required'   => false,//$departementRequired,
-                'validators' => [
-                    new DepartementNaissanceValidator(),
-                ],
-            ],
-            'villeNaissance'       => [
+            'civilite'        => [
                 'required' => false,
             ],
 

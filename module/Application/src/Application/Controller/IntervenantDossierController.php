@@ -34,14 +34,6 @@ class IntervenantDossierController extends AbstractController
     use DossierAutreServiceAwareTrait;
 
 
-    /**
-     * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
-     * éventuelles
-     * (services sur des enseignements fermés, etc.)
-     *
-     * @see \Application\ORM\Filter\HistoriqueFilter
-     */
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -55,7 +47,6 @@ class IntervenantDossierController extends AbstractController
 
     public function indexAction()
     {
-
         $this->initFilters();
 
         /* Initialisation */
@@ -69,36 +60,39 @@ class IntervenantDossierController extends AbstractController
         $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $intervenantDossierStatut     = $intervenantDossier->getStatut();
-        $intervenantDossierCompletude = $this->getServiceDossier()->isComplete($intervenantDossier);
+        $intervenantDossierCompletude = $this->getServiceDossier()->getCompletude($intervenantDossier);
         $champsAutres                 = $intervenantDossier->getStatut()->getChampsAutres();
         /* Règles pour afficher ou non les fieldsets */
         $fieldsetRules = [
-            'fieldset-identite'  => $intervenantDossier->getStatut()->getDossierIdentite(),
-            'fieldset-adresse'   => $intervenantDossier->getStatut()->getDossierAdresse(),
-            'fieldset-contact'   => $intervenantDossier->getStatut()->getDossierContact(),
-            'fieldset-iban'      => $intervenantDossier->getStatut()->getDossierIban(),
-            'fieldset-insee'     => $intervenantDossier->getStatut()->getDossierInsee(),
-            'fieldset-employeur' => $intervenantDossier->getStatut()->getDossierEmployeur(),
-            'fieldset-autres'    => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
+            'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
+            'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
+            'fieldset-contact'                 => $intervenantDossier->getStatut()->getDossierContact(),
+            'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierIban(),
+            'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
+            'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
+            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
         ];
 
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
-        /* Traitement du formulaire */
-        $form->bindRequestSave($intervenantDossier, $this->getRequest(), function (IntervenantDossier $intervenantDossier) {
-            try {
-                /* Sauvegarde du dossier de l'intervenant */
-                $completude = $this->getServiceDossier()->getTauxCompletude($intervenantDossier);
+        $form->bind($intervenantDossier);
+
+        //si on vient de post
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                /* Traitement du formulaire */
+                $completude = $this->getServiceDossier()->isComplete($intervenantDossier);
                 $intervenantDossier->setCompletude($completude);
-                $this->getServiceDossier()->save($intervenantDossier);
+                $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
                 /* Recalcul des tableaux de bord nécessaires */
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            } else {
+                $this->flashMessenger()->addErrorMessage("Vos données n'ont pas été enregistré, veuillez vérifier les erreurs.");
             }
-        });
-
+        }
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
         $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;
@@ -113,10 +107,6 @@ class IntervenantDossierController extends AbstractController
                     sprintf("Vous avez effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
                     : sprintf("L'intervenant a effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
             );
-        }
-        //Si on vient de poster le form alors on redirige pour rafraichir le form après le bindRequestSave
-        if ($this->getRequest()->isPost()) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
         }
 
         return compact(
@@ -158,7 +148,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function devaliderAction()
+    public
+    function devaliderAction()
     {
         $this->initFilters();
 
@@ -178,7 +169,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function supprimerAction()
+    public
+    function supprimerAction()
     {
         $this->initFilters();
 
@@ -252,12 +244,12 @@ class IntervenantDossierController extends AbstractController
      }*/
 
 
-    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    private
+    function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'dossier',
             'piece_jointe_demande',
         ], $intervenant);
     }
-
 }

@@ -183,7 +183,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     /**
      * @var boolean
      */
-    protected $dossierIdentite;
+    protected $dossierIdentiteComplementaire;
 
     /**
      * @var boolean
@@ -1126,21 +1126,21 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return boolean
      */
-    public function getDossierIdentite()
+    public function getDossierIdentiteComplementaire()
     {
-        return $this->dossierIdentite;
+        return $this->dossierIdentiteComplementaire;
     }
 
 
 
     /**
-     * @param integer $dossierIdentite
+     * @param integer $dossierIdentiteComplementaire
      *
      * @return StatutIntervenant
      */
-    public function setDossierIdentite(int $dossierIdentite): StatutIntervenant
+    public function setDossierIdentiteComplementaire(int $dossierIdentiteComplementaire): StatutIntervenant
     {
-        $this->dossierIdentite = $dossierIdentite;
+        $this->dossierIdentiteComplementaire = $dossierIdentiteComplementaire;
 
         return $this;
     }

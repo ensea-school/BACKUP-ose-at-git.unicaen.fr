@@ -33,18 +33,6 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DISABLE'                     => [
-            'name'        => 'DISABLE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 3,
-            'commentaire' => NULL,
-        ],
         'DOSSIER_CHAMP_AUTRE_TYPE_ID' => [
             'name'        => 'DOSSIER_CHAMP_AUTRE_TYPE_ID',
             'type'        => 'int',

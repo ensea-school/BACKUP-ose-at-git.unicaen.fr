@@ -153,8 +153,8 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'DOSSIER_IDENTITE'               => [
-            'name'        => 'DOSSIER_IDENTITE',
+        'DOSSIER_IDENTITE_COMP'               => [
+            'name'        => 'DOSSIER_IDENTITE_COMP',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

@@ -5,7 +5,9 @@ namespace Application\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Provider\Privilege\Privileges;
+
+// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -19,7 +21,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class DossierPiecesAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
-
 
 
     /**
@@ -50,7 +51,6 @@ class DossierPiecesAssertion extends AbstractAssertion
 
                         return $this->assertDossierEdition($intervenant);
                     break;
-
                 }
             break;
             case 'Application\Controller\PieceJointe':
@@ -78,7 +78,7 @@ class DossierPiecesAssertion extends AbstractAssertion
                     break;
                 }
             break;
-         }
+        }
 
         return true;
     }
@@ -96,6 +96,8 @@ class DossierPiecesAssertion extends AbstractAssertion
         return true;
     }
 
+
+
     /*assertion refonte dossier*/
 
     protected function assertPrivilege($privilege, $subPrivilege = null)
@@ -103,11 +105,13 @@ class DossierPiecesAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         switch ($privilege) {
-            case Privileges::DOSSIER_IDENTITE_SUITE_EDITION:
+            case Privileges::DOSSIER_IDENTITE_EDITION:
                 return $this->assertEditionDossierContact($intervenant);
             break;
         }
     }
+
+
 
     protected function assertEditionDossierContact(Intervenant $intervenant)
     {
@@ -124,6 +128,8 @@ class DossierPiecesAssertion extends AbstractAssertion
 
         return true;
     }
+
+
 
     protected function assertDossierIdentiteEdition(Intervenant $intervenant = null)
     {
@@ -161,6 +167,7 @@ class DossierPiecesAssertion extends AbstractAssertion
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;
+
         return $role->hasPrivilege($privilege);
     }
 }

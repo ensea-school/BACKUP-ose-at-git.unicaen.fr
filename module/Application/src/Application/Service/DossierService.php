@@ -8,6 +8,7 @@ use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 
 /**
@@ -23,6 +24,7 @@ class DossierService extends AbstractEntityService
 {
     use IntervenantServiceAwareTrait;
     use ValidationServiceAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
 
     /**
      * @var Dossier[]
@@ -149,27 +151,29 @@ class DossierService extends AbstractEntityService
 
 
 
-    public function isComplete(IntervenantDossier $intervenantDossier)
+    public function getCompletude(IntervenantDossier $intervenantDossier)
     {
+        $statutIntervenantDossier = $intervenantDossier->getStatut();
 
-        $completude = [
-            'dossier'          => false,
-            'dossierIdentite'  => false,
-            'dossierAdresse'   => false,
-            'dossierContact'   => false,
-            'dossierInsee'     => false,
-            'dossierIban'      => false,
-            'dossierEmployeur' => false,
-            'dossierAutres'    => false,
-        ];
+        $completudeDossierIdentieComplementaire = true;
+        $completudeDossierAdresse               = true;
+        $completudeDossierContact               = true;
+        $completudeDossierInsee                 = true;
+        $completudeDossierIban                  = true;
+        $completudeDossierEmployeur             = true;
+        $completudeDossierAutre                 = true;
+
         //Complétude de l'identite
-        $completudeDossierIdentie = ($intervenantDossier->getCivilite() &&
+        $completudeDossierIdentite = ($intervenantDossier->getCivilite() &&
             $intervenantDossier->getNomUsuel() &&
-            $intervenantDossier->getPrenom() &&
-            $intervenantDossier->getDateNaissance() &&
-            $intervenantDossier->getPaysNaissance() &&
-            (($intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE') ? $intervenantDossier->getDepartementNaissance() : true) &&
-            $intervenantDossier->getCommuneNaissance()) ? true : false;
+            $intervenantDossier->getPrenom()) ? true : false;
+
+        if ($statutIntervenantDossier->getDossierIdentiteComplementaire()) {
+            $completudeDossierIdentieComplementaire = ($intervenantDossier->getDateNaissance() &&
+                $intervenantDossier->getPaysNaissance() &&
+                (($intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE') ? $intervenantDossier->getDepartementNaissance() : true) &&
+                $intervenantDossier->getCommuneNaissance()) ? true : false;
+        }
 
         //Complétude de l'adresse
         $completudeAdressePart1 = (($intervenantDossier->getAdressePrecisions() ||
@@ -180,26 +184,36 @@ class DossierService extends AbstractEntityService
             $intervenantDossier->getAdresseCodePostal() &&
             $intervenantDossier->getAdressePays()) ? true : false;
 
-        $completudeDossierAdresse = ($completudeAdressePart1 && $completudeAdressePart2) ? true : false;
+        if ($statutIntervenantDossier->getDossierAdresse()) {
+            $completudeDossierAdresse = ($completudeAdressePart1 && $completudeAdressePart2) ? true : false;
+        }
 
         //Complétude de contact
-        $completudeDossierContact = (($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) &&
-            ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro())) ? true : false;
+        if ($statutIntervenantDossier->getDossierContact()) {
+            $completudeDossierContact = (($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) &&
+                ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro())) ? true : false;
+        }
 
         //Complétude Insee
-        $completudeDossierInsee = ($intervenantDossier->getNumeroInsee()) ? true : false;
+        if ($statutIntervenantDossier->getDossierInsee()) {
+            $completudeDossierInsee = ($intervenantDossier->getNumeroInsee()) ? true : false;
+        }
 
         //Complétude Iban
+        if ($statutIntervenantDossier->getDossierIban()) {
+            $completudeDossierIban = (($intervenantDossier->getIBAN() && $intervenantDossier->getBIC()) || $intervenantDossier->isRibHorsSepa()) ? true : false;
+        }
 
-        $completudeDossierIban = (($intervenantDossier->getIBAN() && $intervenantDossier->getBIC()) || $intervenantDossier->isRibHorsSepa()) ? true : false;
         //Complètude Employeur
-        $completudeDossierEmployeur = ($intervenantDossier->getEmployeur()) ? true : false;
+        if ($statutIntervenantDossier->getDossierEmployeur()) {
+            $completudeDossierEmployeur = ($intervenantDossier->getEmployeur()) ? true : false;
+        }
+
         //Complétude Autres
-        $statut                 = $intervenantDossier->getStatut();
-        $champsAutres           = $intervenantDossier->getStatut()->getChampsAutres();
-        $statutChampsAutres     = ($intervenantDossier->getStatut()) ? $intervenantDossier->getStatut()->getChampsAutres() : [];
-        $count                  = count($champsAutres);
-        $completudeDossierAutre = true;
+        $statut             = $intervenantDossier->getStatut();
+        $champsAutres       = $intervenantDossier->getStatut()->getChampsAutres();
+        $statutChampsAutres = ($intervenantDossier->getStatut()) ? $intervenantDossier->getStatut()->getChampsAutres() : [];
+        $count              = count($champsAutres);
         foreach ($statutChampsAutres as $champ) {
             $method      = 'getAutre' . $champ->getId();
             $obligatoire = $champ->isObligatoire();
@@ -209,7 +223,8 @@ class DossierService extends AbstractEntityService
             }
         }
 
-        $completudeDossier = ($completudeDossierIdentie &&
+        $completudeDossier = ($completudeDossierIdentite &&
+            $completudeDossierIdentieComplementaire &&
             $completudeDossierAdresse &&
             $completudeDossierContact &&
             $completudeDossierInsee &&
@@ -217,16 +232,32 @@ class DossierService extends AbstractEntityService
             $completudeDossierEmployeur &&
             $completudeDossierAutre) ? true : false;
 
-        $completude = ['dossier'          => $completudeDossier,
-                       'dossierIdentite'  => $completudeDossierIdentie,
-                       'dossierAdresse'   => $completudeDossierAdresse,
-                       'dossierContact'   => $completudeDossierContact,
-                       'dossierInsee'     => $completudeDossierInsee,
-                       'dossierIban'      => $completudeDossierIban,
-                       'dossierEmployeur' => $completudeDossierEmployeur,
-                       'dossierAutres'    => $completudeDossierAutre,];
+        $completude = ['dossier'                       => $completudeDossier,
+                       'dossierIdentite'               => $completudeDossierIdentite,
+                       'dossierIdentiteComplementaire' => $completudeDossierIdentieComplementaire,
+                       'dossierAdresse'                => $completudeDossierAdresse,
+                       'dossierContact'                => $completudeDossierContact,
+                       'dossierInsee'                  => $completudeDossierInsee,
+                       'dossierIban'                   => $completudeDossierIban,
+                       'dossierEmployeur'              => $completudeDossierEmployeur,
+                       'dossierAutres'                 => $completudeDossierAutre,];
 
         return $completude;
+    }
+
+
+
+    public function isComplete(IntervenantDossier $intervenantDossier)
+    {
+        $completude = $this->getCompletude($intervenantDossier);
+
+        foreach ($completude as $v) {
+            if ($v === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

@@ -90,33 +90,36 @@ class AdresseFieldset extends AbstractFieldset
          * complement
          */
         $this->add([
-            'name'    => 'numeroComplement',
-            'options' => [
+            'name'       => 'numeroComplement',
+            'options'    => [
                 'label'         => 'Compl.',
-                'empty_option'  => "Compl.",
-                'value_options' => ['Bis', 'Ter'],
+                'empty_option'  => ' ',
+                'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getServiceAdresseNumeroCompl()->getList()),
             ],
-            'type'    => 'Select',
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
         ]);
-
-        $this->get('numeroComplement')
-            ->setValueOptions(['' => 'Compl.'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceAdresseNumeroCompl()->getList()));
 
 
         /**
          * voirie
          */
         $this->add([
-            'name'    => 'voirie',
-            'options' => [
-                'label'        => 'Voirie',
-                'empty_option' => "type de voirie",
+            'name'       => 'voirie',
+            'options'    => [
+                'label'         => 'Voirie',
+                'empty_option'  => ' ',
+                'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList()),
             ],
-            'type'    => 'Select',
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
         ]);
-
-        $this->get('voirie')
-            ->setValueOptions(['' => 'Type de voirie'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList()));
 
         /**
          * voie
@@ -176,12 +179,15 @@ class AdresseFieldset extends AbstractFieldset
                     'disable_html_escape' => true,
                 ],],
             'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
             'type'       => 'Select',
         ]);
 
         $this->get('pays')
-            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+
 
         return $this;
     }

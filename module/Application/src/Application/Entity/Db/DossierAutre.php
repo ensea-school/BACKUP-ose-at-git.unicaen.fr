@@ -34,12 +34,6 @@ class DossierAutre
     protected $obligatoire;
 
     /**
-     * @var integer
-     */
-
-    protected $disable;
-
-    /**
      * @var DossierAutreType
      */
     protected $type;
@@ -156,31 +150,7 @@ class DossierAutre
 
         return $this;
     }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function isDisable(): bool
-    {
-        return $this->disable;
-    }
-
-
-
-    /**
-     * @param int $disable
-     *
-     * @return DossierAutre $this
-     */
-    public function setDisable(int $disable): DossierAutre
-    {
-        $this->disable = $disable;
-
-        return $this;
-    }
-
+    
 
 
     /**

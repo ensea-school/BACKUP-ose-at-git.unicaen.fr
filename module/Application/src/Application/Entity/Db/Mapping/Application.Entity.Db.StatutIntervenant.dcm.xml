@@ -39,7 +39,7 @@
         <field name="temAtv" type="boolean" column="TEM_ATV" nullable="false"/>
         <field name="temBiatss" type="boolean" column="TEM_BIATSS" nullable="false"/>
         <field name="depassementSDSHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
-        <field name="dossierIdentite" type="boolean" column="DOSSIER_IDENTITE" nullable="false"/>
+        <field name="dossierIdentiteComplementaire" type="boolean" column="DOSSIER_IDENTITE_COMP" nullable="false"/>
         <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
         <field name="dossierContact" type="boolean" column="DOSSIER_CONTACT" nullable="false"/>
         <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>

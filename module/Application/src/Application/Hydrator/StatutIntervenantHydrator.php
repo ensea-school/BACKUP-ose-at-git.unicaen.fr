@@ -60,7 +60,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
         $object->setChargesPatronales(FloatFromString::run($data['charges-patronales']) / 100);
-        $object->setDossierIdentite($data['dossier-identite']);
+        $object->setDossierIdentiteComplementaire($data['dossier-identite-complementaire']);
         $object->setDossierAdresse($data['dossier-adresse']);
         $object->setDossierContact($data['dossier-contact']);
         $object->setDossierInsee($data['dossier-insee']);
@@ -146,36 +146,36 @@ class StatutIntervenantHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'                             => $object->getId(),
-            'libelle'                        => $object->getLibelle(),
-            'depassement'                    => $object->getDepassement(),
-            'service-statutaire'             => StringFromFloat::run($object->getServiceStatutaire()),
-            'plafond-referentiel'            => StringFromFloat::run($object->getPlafondReferentiel()),
-            'peut-choisir-dans-dossier'      => $object->getPeutChoisirDansDossier(),
-            'peut-saisir-dossier'            => $object->getPeutSaisirDossier(),
-            'non-autorise'                   => $object->getNonAutorise(),
-            'peut-saisir-service'            => $object->getPeutSaisirService(),
-            'peut-saisir-referentiel'        => $object->getPeutSaisirReferentiel(),
-            'peut-saisir-motif-non-paiement' => $object->getPeutSaisirMotifNonPaiement(),
-            'peut-avoir-contrat'             => $object->getPeutAvoirContrat(),
-            'peut-cloturer-saisie'           => $object->getPeutCloturerSaisie(),
-            'peut-saisir-service-ext'        => $object->getPeutSaisirServiceExt(),
-            'TEM-ATV'                        => $object->getTemAtv(),
-            'TEM-BIATSS'                     => $object->getTemBiatss(),
-            'type-intervenant'               => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
-            'code'                           => $object->getCode(),
-            'plafond-h-h-c'                  => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
-            'plafond-h-c'                    => StringFromFloat::run($object->getPlafondHcRemuFc()),
-            'plafond-hc-fi-hors-ead'         => StringFromFloat::run($object->getPlafondHcFiHorsEad()),
-            'maximum-HETD'                   => StringFromFloat::run($object->getMaximumHETD()),
-            'charges-patronales'             => StringFromFloat::run($object->getChargesPatronales() * 100),
-            'depassement-sdshc'              => $object->getDepassementSDSHC(),
-            'dossier-identite'               => $object->getDossierIdentite(),
-            'dossier-adresse'                => $object->getDossierAdresse(),
-            'dossier-contact'                => $object->getDossierContact(),
-            'dossier-insee'                  => $object->getDossierInsee(),
-            'dossier-iban'                   => $object->getDossierIban(),
-            'dossier-employeur'              => $object->getDossierEmployeur(),
+            'id'                              => $object->getId(),
+            'libelle'                         => $object->getLibelle(),
+            'depassement'                     => $object->getDepassement(),
+            'service-statutaire'              => StringFromFloat::run($object->getServiceStatutaire()),
+            'plafond-referentiel'             => StringFromFloat::run($object->getPlafondReferentiel()),
+            'peut-choisir-dans-dossier'       => $object->getPeutChoisirDansDossier(),
+            'peut-saisir-dossier'             => $object->getPeutSaisirDossier(),
+            'non-autorise'                    => $object->getNonAutorise(),
+            'peut-saisir-service'             => $object->getPeutSaisirService(),
+            'peut-saisir-referentiel'         => $object->getPeutSaisirReferentiel(),
+            'peut-saisir-motif-non-paiement'  => $object->getPeutSaisirMotifNonPaiement(),
+            'peut-avoir-contrat'              => $object->getPeutAvoirContrat(),
+            'peut-cloturer-saisie'            => $object->getPeutCloturerSaisie(),
+            'peut-saisir-service-ext'         => $object->getPeutSaisirServiceExt(),
+            'TEM-ATV'                         => $object->getTemAtv(),
+            'TEM-BIATSS'                      => $object->getTemBiatss(),
+            'type-intervenant'                => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
+            'code'                            => $object->getCode(),
+            'plafond-h-h-c'                   => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
+            'plafond-h-c'                     => StringFromFloat::run($object->getPlafondHcRemuFc()),
+            'plafond-hc-fi-hors-ead'          => StringFromFloat::run($object->getPlafondHcFiHorsEad()),
+            'maximum-HETD'                    => StringFromFloat::run($object->getMaximumHETD()),
+            'charges-patronales'              => StringFromFloat::run($object->getChargesPatronales() * 100),
+            'depassement-sdshc'               => $object->getDepassementSDSHC(),
+            'dossier-identite-complementaire' => $object->getDossierIdentiteComplementaire(),
+            'dossier-adresse'                 => $object->getDossierAdresse(),
+            'dossier-contact'                 => $object->getDossierContact(),
+            'dossier-insee'                   => $object->getDossierInsee(),
+            'dossier-iban'                    => $object->getDossierIban(),
+            'dossier-employeur'               => $object->getDossierEmployeur(),
         ];
 
         /*Gestion des champs autres*/

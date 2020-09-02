@@ -58,7 +58,7 @@ class IntervenantDossierHydrator implements HydratorInterface
         $data['DossierIdentite'] = [
             'nomUsuel'             => $object->getNomUsuel(),
             'nomPatronymique'      => $object->getNomPatronymique(),
-            'prenom'               => $object->getNomUsuel(),
+            'prenom'               => $object->getPrenom(),
             'civilite'             => ($object->getCivilite()) ? $object->getCivilite()->getId() : '',
             'dateNaissance'        => $object->getDateNaissance(),
             'paysNaissance'        => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
@@ -66,7 +66,16 @@ class IntervenantDossierHydrator implements HydratorInterface
             'villeNaissance'       => $object->getCommuneNaissance(),
         ];
 
+        $data['DossierIdentiteComplementaire'] = [
+            'dateNaissance'        => $object->getDateNaissance(),
+            'paysNaissance'        => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
+            'departementNaissance' => ($object->getDepartementNaissance()) ? $object->getDepartementNaissance()->getId() : '',
+            'villeNaissance'       => $object->getCommuneNaissance(),
+        ];
+
+
         /* Extract fieldset dossier identite */
+        $idFrance               = $this->getServicePays()->getIdByLibelle('FRANCE');
         $data['DossierAdresse'] = [
             'precisions'       => $object->getAdressePrecisions(),
             'lieuDit'          => $object->getAdresseLieuDit(),
@@ -76,7 +85,7 @@ class IntervenantDossierHydrator implements HydratorInterface
             'voie'             => $object->getAdresseVoie(),
             'codePostal'       => $object->getAdresseCodePostal(),
             'ville'            => $object->getAdresseCommune(),
-            'pays'             => ($object->getAdressePays()) ? $object->getAdressePays()->getId() : '',
+            'pays'             => ($object->getAdressePays()) ? $object->getAdressePays()->getId() : $idFrance,
         ];
 
         /* Extract fieldset dossier contact */
@@ -139,8 +148,7 @@ class IntervenantDossierHydrator implements HydratorInterface
 
     public function hydrate(array $data, $object)
     {
-
-        //Sécurisation de l'hydratation de l'object pour ne pas mettre à jour les valeurs si on a pas le privilege
+        $var = '';
         /* @var $object IntervenantDossier */
         //Hydratation de l'indentité
         if (isset($data['DossierIdentite'])) {
@@ -152,24 +160,27 @@ class IntervenantDossierHydrator implements HydratorInterface
             $civilite = (!empty($data['DossierIdentite']['civilite'])) ?
                 $this->getServiceCivilite()->get($data['DossierIdentite']['civilite']) : null;
             $object->setCivilite($civilite);
+        }
+        //hydratation de l'identité complémentaire
+        if (isset($data['DossierIdentiteComplementaire'])) {
             //Date de naissance
-            $dateNaissance = (!empty($data['DossierIdentite']['dateNaissance'])) ?
-                \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateNaissance']) : null;
+            $dateNaissance = (!empty($data['DossierIdentiteComplementaire']['dateNaissance'])) ?
+                \DateTime::createFromFormat('d/m/Y', $data['DossierIdentiteComplementaire']['dateNaissance']) : null;
             $object->setDateNaissance($dateNaissance);
             //Pays de naissance
-            $paysNaissance = (!empty($data['DossierIdentite']['paysNaissance'])) ?
-                $this->getServicePays()->get($data['DossierIdentite']['paysNaissance']) : null;
+            $paysNaissance = (!empty($data['DossierIdentiteComplementaire']['paysNaissance'])) ?
+                $this->getServicePays()->get($data['DossierIdentiteComplementaire']['paysNaissance']) : null;
             $object->setPaysNaissance($paysNaissance);
             //Si pays n'est pas France alors null pour département
             if (!is_null($paysNaissance) && $paysNaissance->getLibelle() == 'FRANCE') {
                 $object->setDepartementNaissance(null);
             }
             //Departement de naissance
-            $departementNaissance = (!empty($data['DossierIdentite']['departementNaissance'])) ?
-                $this->getServiceDepartement()->get($data['DossierIdentite']['departementNaissance']) : null;
+            $departementNaissance = (!empty($data['DossierIdentiteComplementaire']['departementNaissance'])) ?
+                $this->getServiceDepartement()->get($data['DossierIdentiteComplementaire']['departementNaissance']) : null;
             $object->setDepartementNaissance($departementNaissance);
 
-            $object->setCommuneNaissance($data['DossierIdentite']['villeNaissance']);
+            $object->setCommuneNaissance($data['DossierIdentiteComplementaire']['villeNaissance']);
         }
         //Hydratation de l'adresse
         if (isset($data['DossierAdresse'])) {
@@ -178,12 +189,12 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setAdresseLieuDit($data['DossierAdresse']['lieuDit']);
             $object->setAdresseNumero($data['DossierAdresse']['numero']);
             /* Complement de numéro de voie */
-            $numeroComplement = (!empty($data['DossierAdresse']['numeroComplement'])) ?
+            $numeroComplement = (!empty(trim($data['DossierAdresse']['numeroComplement']))) ?
                 $this->getServiceAdresseNumeroCompl()->get($data['DossierAdresse']['numeroComplement']) : null;
             $object->setAdresseNumeroCompl($numeroComplement);
 
             /* Voirie */
-            $voirie = (!empty($data['DossierAdresse']['voirie'])) ?
+            $voirie = (!empty(trim($data['DossierAdresse']['voirie']))) ?
                 $this->getServiceVoirie()->get($data['DossierAdresse']['voirie']) : null;
             $object->setAdresseVoirie($voirie);
 
@@ -268,14 +279,4 @@ class IntervenantDossierHydrator implements HydratorInterface
         return $this;
     }
 
-
-
-    private function offendData($data, $length = 0)
-    {
-        $lengthData   = strlen($data);
-        $offendedData = substr($data, 0, $length);
-        $offendedData = str_pad($offendedData, $lengthData, 'X');
-
-        return $offendedData;
-    }
 }

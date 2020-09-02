@@ -35,9 +35,9 @@ $dossierEmployeur = $form->get('DossierEmployeur');
         <div class="panel-heading">
             EMPLOYEUR
             <?php if (!$intervenantDossierCompletude['dossierEmployeur']): ?>
-                <small><span class="label label-warning">A compléter</span></small>
+                <span class="label label-warning">A compléter</span>
             <?php else: ?>
-                <small><span class="label label-success">Complet</span></small>
+                <span class="label label-success">Complet</span>
             <?php endif; ?>
         </div>
         <div class="panel-body">

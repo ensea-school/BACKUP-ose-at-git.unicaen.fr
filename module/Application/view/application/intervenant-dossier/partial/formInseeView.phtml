@@ -29,9 +29,9 @@ $dossierInsee = $form->get('DossierInsee');
         <div class="panel-heading">
             INSEE
             <?php if (!$intervenantDossierCompletude['dossierInsee']): ?>
-                <small><span class="label label-warning">A compléter</span></small>
+                <span class="label label-warning">A compléter</span>
             <?php else: ?>
-                <small><span class="label label-success">Complet</span></small>
+                <span class="label label-success">Complet</span>
             <?php endif; ?>
         </div>
         <div class="panel-body">

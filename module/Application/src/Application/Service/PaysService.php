@@ -72,6 +72,13 @@ class PaysService extends AbstractEntityService
 
 
 
+    public function getByLibelle(string $libelle)
+    {
+        return $this->getRepo()->findOneBy(['libelle' => $libelle]);
+    }
+
+
+
     /**
      * @param Pays $pays
      *

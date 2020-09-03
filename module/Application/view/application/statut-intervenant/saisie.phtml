@@ -191,6 +191,32 @@ echo $this->form()->openTag($form); ?>
                             </fieldset>
                             <br/>
                         </div>
+                        <!--Régles sur les informations contact du dossier intervenant-->
+                        <div class="row temoins">
+                            <fieldset>
+                                <legend style="font-size: 14px;font-weight: 700;">Règles sur les informations de contact du
+                                    dossier intervenant :
+                                </legend>
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <th>Activer</th>
+                                    <th>Description</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><?= $this->formElement($form->get('dossier-email-perso')); ?></td>
+                                        <td><?= $form->get('dossier-email-perso')->getLabel(); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td><?= $this->formElement($form->get('dossier-tel-perso')); ?></td>
+                                        <td><?= $form->get('dossier-tel-perso')->getLabel(); ?></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </fieldset>
+                            <br/>
+                        </div>
 
 
                         <div class="row">

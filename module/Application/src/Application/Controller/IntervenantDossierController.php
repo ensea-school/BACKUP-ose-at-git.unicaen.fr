@@ -50,8 +50,7 @@ class IntervenantDossierController extends AbstractController
         $this->initFilters();
 
         /* Initialisation */
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        /* @var $intervenant Intervenant */
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -59,20 +58,6 @@ class IntervenantDossierController extends AbstractController
         /* Récupération du dossier de l'intervenant */
         $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
-        $intervenantDossierStatut     = $intervenantDossier->getStatut();
-        $intervenantDossierCompletude = $this->getServiceDossier()->getCompletude($intervenantDossier);
-        $champsAutres                 = $intervenantDossier->getStatut()->getChampsAutres();
-        /* Règles pour afficher ou non les fieldsets */
-        $fieldsetRules = [
-            'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
-            'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
-            'fieldset-contact'                 => $intervenantDossier->getStatut()->getDossierContact(),
-            'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierIban(),
-            'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
-            'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
-            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
-        ];
-
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
         $form->bind($intervenantDossier);
@@ -86,13 +71,31 @@ class IntervenantDossierController extends AbstractController
                 $completude = $this->getServiceDossier()->isComplete($intervenantDossier);
                 $intervenantDossier->setCompletude($completude);
                 $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
-                /* Recalcul des tableaux de bord nécessaires */
+                //Recalcul des tableaux de bord nécessaires
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
+                /*On reinitialise le formulaire car le statut du dossier a
+                pu être changé donc les règles d'affichage ne sont plus les mêmes*/
+                $form = $this->getIntervenantDossierForm($intervenant);
+                $form->bind($intervenantDossier);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
             } else {
                 $this->flashMessenger()->addErrorMessage("Vos données n'ont pas été enregistré, veuillez vérifier les erreurs.");
             }
         }
+
+        $intervenantDossierStatut = $intervenantDossier->getStatut();
+        //Règles pour afficher ou non les fieldsets
+        $champsAutres                 = $intervenantDossier->getStatut()->getChampsAutres();
+        $fieldsetRules                = [
+            'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
+            'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
+            'fieldset-contact'                 => $intervenantDossier->getStatut()->getDossierContact(),
+            'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierIban(),
+            'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
+            'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
+            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
+        ];
+        $intervenantDossierCompletude = $this->getServiceDossier()->getCompletude($intervenantDossier);
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
         $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;

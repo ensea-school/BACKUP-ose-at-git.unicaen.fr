@@ -190,8 +190,21 @@ class DossierService extends AbstractEntityService
 
         //Complétude de contact
         if ($statutIntervenantDossier->getDossierContact()) {
-            $completudeDossierContact = (($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) &&
-                ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro())) ? true : false;
+            $completudeEmail = true;
+            $completudeTel   = true;
+            if ($statutIntervenantDossier->getDossierEmailPerso()) {
+                $completudeEmail = ($intervenantDossier->getEmailPerso() && $intervenantDossier->getEmailPro()) ? true : false;
+            } else {
+                $completudeEmail = ($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) ? true : false;
+            }
+
+            if ($statutIntervenantDossier->getDossierTelPerso()) {
+                $completudeTel = ($intervenantDossier->getTelPerso() && $intervenantDossier->getTelPro()) ? true : false;
+            } else {
+                $completudeTel = ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro()) ? true : false;
+            }
+
+            $completudeDossierContact = ($completudeTel && $completudeEmail) ? true : false;
         }
 
         //Complétude Insee

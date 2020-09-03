@@ -66,6 +66,8 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setDossierInsee($data['dossier-insee']);
         $object->setDossierIban($data['dossier-iban']);
         $object->setDossierEmployeur($data['dossier-employeur']);
+        $object->setDossierEmailPerso($data['dossier-email-perso']);
+        $object->setDossierTelPerso($data['dossier-tel-perso']);
 
         for ($i = 1; $i < 5; $i++) {
             if (array_key_exists('codes-corresp-' . $i, $data)) {
@@ -176,6 +178,8 @@ class StatutIntervenantHydrator implements HydratorInterface
             'dossier-insee'                   => $object->getDossierInsee(),
             'dossier-iban'                    => $object->getDossierIban(),
             'dossier-employeur'               => $object->getDossierEmployeur(),
+            'dossier-email-perso'             => $object->getDossierEmailPerso(),
+            'dossier-tel-perso'               => $object->getDossierTelPerso(),
         ];
 
         /*Gestion des champs autres*/

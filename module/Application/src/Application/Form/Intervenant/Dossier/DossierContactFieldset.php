@@ -3,6 +3,7 @@
 namespace Application\Form\Intervenant\Dossier;
 
 use Application\Constants;
+use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
@@ -35,7 +36,6 @@ class DossierContactFieldset extends AbstractFieldset
      */
     private function addElements()
     {
-        //$privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::class));
 
         /**
          * Mail établissement
@@ -43,7 +43,7 @@ class DossierContactFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'emailEtablissement',
             'options'    => [
-                'label'         => 'Mail établissement <span class="text-danger">*</span>',
+                'label'         => 'E-mail professionnel <span class="text-danger">*</span>',
                 'label_options' => ['disable_html_escape' => true],
 
             ],
@@ -62,7 +62,8 @@ class DossierContactFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'emailPersonnel',
             'options'    => [
-                'label' => 'Mail personnel',
+                'label'         => 'E-mail personnel',
+                'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
@@ -79,12 +80,13 @@ class DossierContactFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'telephoneProfessionnel',
             'options'    => [
-                'label' => 'Téléphone professionnel',
+                'label'         => 'Téléphone professionnel <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],
+
             ],
             'attributes' => [
-                //'placeholder' => "Email établissement",
-                'class' => 'form-control left-border-none',
-
+                'class'     => 'form-control left-border-none',
+                'info_icon' => "Si vous n'avez pas de téléphone professionnel vous devez renseigner le champs téléphone personnel.",
             ],
             'type'       => Tel::class,
         ]);
@@ -95,7 +97,8 @@ class DossierContactFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'telephonePersonnel',
             'options'    => [
-                'label' => 'Téléphone personnel',
+                'label'         => 'Téléphone personnel',
+                'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
@@ -105,7 +108,19 @@ class DossierContactFieldset extends AbstractFieldset
             'type'       => Tel::class,
         ]);
 
-        return $this;
+        //Gestion des labels selon les règles du statut intervenant sur les données contact
+        $statutDossierIntervenant = $this->getOption('statutDossierIntervenant');
+        /**
+         * @var $statutDossierIntervenant StatutIntervenant
+         */
+        if ($statutDossierIntervenant->getDossierTelPerso()) {
+            $this->get('telephonePersonnel')->setLabel('Téléphone personnel <span class="text-danger">*</span>');
+            $this->get('telephoneProfessionnel')->removeAttribute('info_icon');
+        }
+        if ($statutDossierIntervenant->getDossierEmailPerso()) {
+            $this->get('emailPersonnel')->setLabel('E-mail personnel <span class="text-danger">*</span>');
+            $this->get('emailEtablissement')->removeAttribute('info_icon');
+        }
     }
 
 

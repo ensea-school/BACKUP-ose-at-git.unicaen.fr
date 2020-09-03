@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Service\StatutIntervenantService;
 use phpDocumentor\Reflection\Types\Integer;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -209,6 +210,16 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      * @var boolean
      */
     protected $dossierEmployeur;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierEmailPerso;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierTelPerso;
 
 
 
@@ -1261,6 +1272,52 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     public function setDossierEmployeur(int $dossierEmployeur): StatutIntervenant
     {
         $this->dossierEmployeur = $dossierEmployeur;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierEmailPerso()
+    {
+        return $this->dossierEmailPerso;
+    }
+
+
+
+    /**
+     * @param integer $dossierEmailPerso
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierEmailPerso(int $dossierEmailPerso): StatutIntervenant
+    {
+        $this->dossierEmailPerso = $dossierEmailPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierTelPerso()
+    {
+        return $this->dossierTelPerso;
+    }
+
+
+
+    /**
+     * @param integer $dossierTelPerso
+     */
+    public function setDossierTelPerso(int $dossierTelPerso): StatutIntervenant
+    {
+        $this->dossierTelPerso = $dossierTelPerso;
 
         return $this;
     }

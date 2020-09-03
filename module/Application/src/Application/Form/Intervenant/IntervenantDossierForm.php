@@ -81,7 +81,7 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
 
-        $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact');
+        $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact', ['statutDossierIntervenant' => $dossierIntervenant->getStatut()]);
         $this->dossierContactFiedlset->init();
 
         $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee');
@@ -108,7 +108,7 @@ class IntervenantDossierForm extends AbstractForm
         $this->add($this->dossierBancaireFieldset);
         $this->add($this->dossierEmployeurFieldset);
         $this->add($this->dossierAutresFiedlset);
-        
+
 
         /**
          * Csrf

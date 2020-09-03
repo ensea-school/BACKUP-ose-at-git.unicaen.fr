@@ -83,6 +83,25 @@ class StatutIntervenantSaisieForm extends AbstractForm
             ]);
         }
 
+        //Gestion des règles informations contact sur le dossier intervenant
+        $this->add([
+            'name'    => 'dossier-email-perso',
+            'options' => [
+                'label'              => "Email personnel obligatoire pour compléter le dossier intervenant",
+                'use_hidden_element' => true,
+            ],
+            'type'    => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name'    => 'dossier-tel-perso',
+            'options' => [
+                'label'              => "Téléphone personnel obligatoire pour compléter le dossier intervenant",
+                'use_hidden_element' => true,
+            ],
+            'type'    => 'Checkbox',
+        ]);
+
         $this->add([
             'name'       => 'id',
             'options'    => [

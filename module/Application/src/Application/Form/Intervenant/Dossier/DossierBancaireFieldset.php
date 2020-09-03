@@ -51,11 +51,13 @@ class DossierBancaireFieldset extends AbstractFieldset
         ]);
 
         $this->add([
-            'name'    => 'ribHorsSepa',
-            'options' => [
+            'name'       => 'ribHorsSepa',
+            'options'    => [
                 'label' => 'RIB hors zone SEPA',
             ],
-            'type'    => 'Checkbox',
+            'attributes' => [
+            ],
+            'type'       => 'Checkbox',
         ]);
 
 

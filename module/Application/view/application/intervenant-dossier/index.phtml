@@ -254,25 +254,18 @@ $fieldsets = $form->getFieldsets();
 
                 selectPays.change(function () {
                     if ($("option:selected", selectPays).html() == 'FRANCE') {
-                        console.log('FRANCE');
                         selectDept.removeProp('disabled')
-                        selectDept.parent().removeClass('disabled')
-                        selectDept.parent().next('button').addClass('disabled')
+                        selectDept.siblings('button').removeClass('disabled')
 
-                        emptyDept.html("- NON RENSEIGNÉ -").prop('selected', 'selected')
                     } else {
-                        console.log('NOT FRANCE')
+
                         selectDept.prop('disabled', 'disabled')
-                        selectDept.parent().next().siblings('button').addClass('boite')
-                        selectDept.parent().next('button').addClass('disabled')
-
-
-                        console.log('change');
+                        selectDept.siblings('button').addClass('disabled')
                         emptyDept.html("- NON RENSEIGNÉ -").prop('selected', 'selected')
                     }
                 });
 
-                //selectPays.change();
+                selectPays.change();
             }
 
             $("select[name='DossierStatut[statut]']").change(function () {

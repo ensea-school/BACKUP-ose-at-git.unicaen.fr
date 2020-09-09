@@ -10,6 +10,9 @@
         <field name="description" type="string" column="DESCRIPTION" length="3000" nullable="true"/>
         <field name="contenu" type="text" column="CONTENU" nullable="true"/>
         <field name="obligatoire" type="integer" column="OBLIGATOIRE" nullable="false"/>
+        <field name="jsonValue" type="string" column="JSON_VALUE" nullable="true"/>
+        <field name="sqlValue" type="string" column="SQL_VALUE" nullable="true"/>
+
         <many-to-one field="type" target-entity="Application\Entity\Db\DossierAutreType">
             <join-columns>
                 <join-column name="DOSSIER_CHAMP_AUTRE_TYPE_ID" referenced-column-name="ID"/>

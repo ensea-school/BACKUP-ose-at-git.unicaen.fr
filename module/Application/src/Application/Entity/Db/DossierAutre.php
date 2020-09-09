@@ -38,6 +38,16 @@ class DossierAutre
      */
     protected $type;
 
+    /**
+     * @var string
+     */
+    protected $jsonValue;
+
+    /**
+     * @var string
+     */
+    protected $sqlValue;
+
 
 
     public function __toString()
@@ -150,7 +160,7 @@ class DossierAutre
 
         return $this;
     }
-    
+
 
 
     /**
@@ -171,6 +181,54 @@ class DossierAutre
     public function setType(DossierAutreType $type): DossierAutre
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getJsonValue(): ?string
+    {
+        return $this->jsonValue;
+    }
+
+
+
+    /**
+     * @param $jsonValue string
+     *
+     * @return DossierAutre $this
+     */
+    public function setJsonValue(string $jsonValue): DossierAutre
+    {
+        $this->jsonValue = $jsonValue;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getSqlValue(): ?string
+    {
+        return $this->sqlValue;
+    }
+
+
+
+    /**
+     * @param $sqlValue string
+     *
+     * @return DossierAutre $this
+     */
+    public function setSqlValue(string $sqlValue): DossierAutre
+    {
+        $this->sqlValue = $sqlValue;
 
         return $this;
     }

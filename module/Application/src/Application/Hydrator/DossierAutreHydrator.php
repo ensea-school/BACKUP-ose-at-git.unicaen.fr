@@ -26,6 +26,8 @@ class DossierAutreHydrator implements HydratorInterface
         $object->setDescription($data['description']);
         $object->setObligatoire($data['obligatoire']);
         $object->setType($this->getServiceDossierAutreType()->get($data['type']));
+        $object->setJsonValue($data['json-value']);
+        $object->setSqlValue($data['sql-value']);
 
 
         return $object;
@@ -48,6 +50,8 @@ class DossierAutreHydrator implements HydratorInterface
             'description' => $object->getDescription(),
             'type'        => $object->getType()->getId(),
             'obligatoire' => $object->isObligatoire(),
+            'json-value'  => $object->getJsonValue(),
+            'sql-value'   => $object->getSqlValue(),
         ];
 
         return $data;

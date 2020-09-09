@@ -29,7 +29,7 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'valider'   => [
+                            'valider'            => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/valider',
@@ -38,7 +38,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'devalider' => [
+                            'devalider'          => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/devalider',
@@ -47,7 +47,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'supprimer' => [
+                            'supprimer'          => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/supprimer',
@@ -56,7 +56,7 @@ return [
                                     ],
                                 ],
                             ],
-                            /*'differences'        => [
+                            'differences'        => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/differences',
@@ -73,7 +73,7 @@ return [
                                         'action' => 'purger-differences',
                                     ],
                                 ],
-                            ]*/
+                            ],
                         ],
                     ],
                 ],

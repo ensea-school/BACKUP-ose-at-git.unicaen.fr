@@ -232,35 +232,6 @@ class DossierController extends AbstractController
 
 
 
-    public function differencesAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-
-        $dql = "
-        SELECT
-          vi
-        FROM
-          " . IndicModifDossier::class . " vi
-        WHERE
-          vi.histoDestruction IS NULL
-          AND vi.intervenant = :intervenant
-        ORDER BY
-          vi.attrName, vi.histoCreation
-        ";
-
-        // refetch intervenant avec jointures
-        $query = $this->em()->createQuery($dql);
-        $query->setParameter('intervenant', $intervenant);
-
-        $differences = $query->getResult();
-        $title       = "Historique des modifications d'informations importantes dans les données personnelles";
-
-        return compact('title', 'intervenant', 'differences');
-    }
-
-
-
     public function purgerDifferencesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');

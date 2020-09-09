@@ -24,7 +24,12 @@ class AutresForm extends AbstractForm
         $hydrator = new DossierAutreHydrator();
         $this->setHydrator($hydrator);
 
-        $this->setAttribute('action', $this->getCurrentUrl());
+
+        $this->setAttributes([
+            'action' => $this->getCurrentUrl(),
+            'class'  => 'autres-saisir',
+        ]);
+
 
         $this->add([
             'name'    => 'libelle',
@@ -58,6 +63,31 @@ class AutresForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'Textarea',
+            'name'       => 'json-value',
+            'options'    => [
+                'label' => "Liste des choix possibles",
+            ],
+            'attributes' => [
+                'id'   => 'json-value',
+                'rows' => '20',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Textarea',
+            'name'       => 'sql-value',
+            'options'    => [
+                'label' => "Liste des choix possibles",
+            ],
+            'attributes' => [
+                'id'   => 'sql-value',
+                'rows' => '20',
+            ],
+        ]);
+
+
+        $this->add([
             'name' => 'id',
             'type' => 'Hidden',
         ]);
@@ -68,6 +98,7 @@ class AutresForm extends AbstractForm
             'attributes' => [
                 'value' => 'Appliquer',
                 'class' => 'btn btn-primary',
+                'id'    => 'btn-save',
             ],
         ]);
 

@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Constants;
+use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Form\Intervenant\DossierValidation;
@@ -190,6 +191,34 @@ class IntervenantDossierController extends AbstractController
         }
 
         return new MessengerViewModel;
+    }
+
+
+
+    public function differencesAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $dql = "
+        SELECT
+          vi
+        FROM
+          " . IndicModifDossier::class . " vi
+        WHERE
+          vi.histoDestruction IS NULL
+          AND vi.intervenant = :intervenant
+        ORDER BY
+          vi.attrName, vi.histoCreation
+        ";
+
+        // refetch intervenant avec jointures
+        $query = $this->em()->createQuery($dql);
+        $query->setParameter('intervenant', $intervenant);
+
+        $differences = $query->getResult();
+        $title       = "Historique des modifications d'informations importantes dans les données personnelles";
+
+        return compact('title', 'intervenant', 'differences');
     }
 
 

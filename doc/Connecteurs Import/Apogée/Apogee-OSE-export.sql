@@ -330,7 +330,7 @@ with
       connect_by_isleaf                        as isleaf
     from relations rel
       start with rel.noeud_sup_id is null
-      connect by prior rel.annee_id = rel.annee_id and prior rel.noeud_inf_id = rel.noeud_sup_id
+      connect by nocycle prior rel.annee_id = rel.annee_id and prior rel.noeud_inf_id = rel.noeud_sup_id
   ),
   branches_inutiles as (
     select distinct

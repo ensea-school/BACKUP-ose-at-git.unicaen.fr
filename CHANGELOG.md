@@ -7,6 +7,10 @@
 * Nouvel indicateur 361 permettant de suivre les retours de contrats envoyés par email
 * Piece justificative : forcer la durée de vie à 1 si la case "Uniquement en cas de changement de RIB" est cochée par l'utilisateur pour éviter les mauvais paramétrages des pièces jointes
 
+## Corrections de bugs
+
+* Dans l'écran contrat du vacataire, l'action "envoyer par mail", n'envoyer pas le contrat par mail si l'intervenant n'avait pas d'email établissement.
+
 # OSE 14.8
 
 ## Corrections de bugs

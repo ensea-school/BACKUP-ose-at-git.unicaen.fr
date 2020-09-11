@@ -1,5 +1,7 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $form Application\Form\Intervenant\HeuresCompForm */
 /* @var $data array */
@@ -11,6 +13,9 @@ $totalService =
     + (float)vn($data, 'SERVICE_REFERENTIEL');
 
 $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.");
+
+$canPutInTest = $this->isAllowed(Privileges::getResourceId(Privileges::FORMULE_TESTS));
+
 
 function vn(array $array, $key, $type = 's')
 {
@@ -36,20 +41,20 @@ function vn(array $array, $key, $type = 's')
 
 ?>
 
-<style>
-    th {
-        background-color: #eee
-    }
-</style>
-<h1 class="page-header"><?= $intervenant ?>
-    <small><?= $intervenant->getStatut()->getTypeIntervenant() ?></small>
-</h1>
+    <style>
+        th {
+            background-color: #eee
+        }
+    </style>
+    <h1 class="page-header"><?= $intervenant ?>
+        <small><?= $intervenant->getStatut()->getTypeIntervenant() ?></small>
+    </h1>
 <?= $this->form()->openTag($form->prepare()); ?>
-<div class="row">
-    <div class="col-sm-4"><?= $this->formControlGroup($form->get('type-volume-horaire')); ?></div>
-    <div class="col-sm-4"><?= $this->formControlGroup($form->get('etat-volume-horaire')); ?></div>
-    <div class="col-sm-2"><label>&nbsp;</label><br/><?= $this->formRow($form->get('submit')); ?></div>
-</div>
+    <div class="row">
+        <div class="col-sm-4"><?= $this->formControlGroup($form->get('type-volume-horaire')); ?></div>
+        <div class="col-sm-4"><?= $this->formControlGroup($form->get('etat-volume-horaire')); ?></div>
+        <div class="col-sm-2"><label>&nbsp;</label><br/><?= $this->formRow($form->get('submit')); ?></div>
+    </div>
 <?= $this->form()->closeTag(); ?>
 
 <?php if ($intervenant->estPermanent()): ?>
@@ -88,7 +93,7 @@ function vn(array $array, $key, $type = 's')
 <?php endif; ?>
 
 
-<h2>Heures effectives d'enseignement</h2>
+    <h2>Heures effectives d'enseignement</h2>
 <?php if (count($data['s']) > 0): ?>
     <table class="table table-bordered table-condensed table-extra-condensed">
         <tr>
@@ -196,65 +201,78 @@ function vn(array $array, $key, $type = 's')
     </table>
 <?php endif; ?>
 
-<h2>Totaux HETD</h2>
-<div class="row">
-    <div class="col-sm-4">Service FI</div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FI') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4">+ Service FA</div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FA') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4">+ Service FC</div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FC') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4">+ référentiel</div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_REFERENTIEL') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4">= Service assuré</div>
-    <div class="col-sm-2 nombre"><span class="label label-info"
-                                       style="font-size:12pt"><?= vn($data, 'SERVICE_TOTAL') ?></span>
+    <h2>Totaux HETD</h2>
+    <div class="row">
+        <div class="col-sm-4">Service FI</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FI') ?></div>
     </div>
-</div>
-<div class="row">&nbsp;</div>
-<div class="row">
-    <div class="col-sm-4"><abbr title="Heures complémentaires (formation initiale)">HC FI</abbr></div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FI') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4"><abbr title="Heures complémentaires (formation en apprentissage)">+ HC FA</abbr></div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FA') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4"><abbr title="Heures complémentaires (formation continue)">+ HC FC</abbr></div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4"><abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">+ Rémunération FC
-            D714-60</abbr></div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC_MAJOREES') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4"><abbr title="Heures complémentaires (référentiel)">+ HC Référentiel</abbr></div>
-    <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_REFERENTIEL') ?></div>
-</div>
-<div class="row">
-    <div class="col-sm-4">= Heures complémentaires</div>
-    <div class="col-sm-2 nombre"><span class="label label-info"
-                                       style="font-size:12pt"><?= vn($data, 'HEURES_COMPL_TOTAL') ?></span>
+    <div class="row">
+        <div class="col-sm-4">+ Service FA</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FA') ?></div>
     </div>
-</div>
-<br/>
-<div class="row">
-    <div class="col-sm-4">Solde</div>
-    <div class="col-sm-2 nombre"><span class="label label-<?php $hs = (float)vn($data, 'SOLDE', 'f');
-        if ($hs == 0) {
-            echo 'info';
-        } elseif ($hs < 0) echo 'danger';
-        else echo 'warning'; ?>"
-                                       style="font-size:12pt"><?= vn($data, 'SOLDE') ?></span>
+    <div class="row">
+        <div class="col-sm-4">+ Service FC</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FC') ?></div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-sm-4">+ référentiel</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_REFERENTIEL') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">= Service assuré</div>
+        <div class="col-sm-2 nombre"><span class="label label-info"
+                                           style="font-size:12pt"><?= vn($data, 'SERVICE_TOTAL') ?></span>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (formation initiale)">HC FI</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FI') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (formation en apprentissage)">+ HC FA</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FA') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (formation continue)">+ HC FC</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">+
+                Rémunération FC
+                D714-60</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC_MAJOREES') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (référentiel)">+ HC Référentiel</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_REFERENTIEL') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">= Heures complémentaires</div>
+        <div class="col-sm-2 nombre"><span class="label label-info"
+                                           style="font-size:12pt"><?= vn($data, 'HEURES_COMPL_TOTAL') ?></span>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-4">Solde</div>
+        <div class="col-sm-2 nombre"><span class="label label-<?php $hs = (float)vn($data, 'SOLDE', 'f');
+            if ($hs == 0) {
+                echo 'info';
+            } elseif ($hs < 0) echo 'danger';
+            else echo 'warning'; ?>"
+                                           style="font-size:12pt"><?= vn($data, 'SOLDE') ?></span>
+        </div>
+    </div>
+<?php
+
+if ($canPutInTest) {
+    echo $this->tag('a', [
+        'class' => 'btn btn-default',
+        'href'  => $this->url('formule-calcul/test/creer-from-reel', [
+            'intervenant'       => $intervenant->getRouteParam(),
+            'typeVolumeHoraire' => $form->get('type-volume-horaire')->getValue(),
+            'etatVolumeHoraire' => $form->get('etat-volume-horaire')->getValue(),
+        ]),
+    ])->text('Reporter les données de cet intervenant dans l\'interface de test de formule');
+}

@@ -29,14 +29,14 @@ return [
                     'test' => [
                         'type'          => 'Literal',
                         'options'       => [
-                            'route'       => '/test',
-                            'defaults'    => [
+                            'route'    => '/test',
+                            'defaults' => [
                                 'action' => 'test',
                             ],
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'saisir'      => [
+                            'saisir'          => [
                                 'type'          => 'Segment',
                                 'options'       => [
                                     'route'       => '/saisir[/:formuleTestIntervenant]',
@@ -49,7 +49,7 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
-                            'enregistrement'      => [
+                            'enregistrement'  => [
                                 'type'          => 'Segment',
                                 'options'       => [
                                     'route'       => '/enregistrement[/:formuleTestIntervenant]',
@@ -62,7 +62,7 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
-                            'supprimer'   => [
+                            'supprimer'       => [
                                 'type'          => 'Segment',
                                 'options'       => [
                                     'route'       => '/supprimer/:formuleTestIntervenant',
@@ -75,6 +75,21 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
+                            'creer-from-reel' => [
+                                'type'          => 'Segment',
+                                'options'       => [
+                                    'route'       => '/creer-from-reel/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
+                                    'constraints' => [
+                                        'typeVolumeHoraire' => '[0-9]*',
+                                        'etatVolumeHoraire' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'test-creer-from-reel',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+
                         ],
                     ],
                 ],
@@ -124,7 +139,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Formule',
-                    'action'     => ['test', 'test-saisir', 'test-enregistrement', 'test-supprimer'],
+                    'action'     => ['test', 'test-saisir', 'test-enregistrement', 'test-supprimer', 'test-creer-from-reel'],
                     'privileges' => [Privileges::FORMULE_TESTS],
                 ],
             ],

@@ -8,37 +8,13 @@
  * @var $viewFile   string
  */
 
-$sql = "
-SELECT
-  w.annee_id,
-  w.intervenant_id,
-  si.source_code statut_intervenant,
-  s.libelle_court structure,
-  w.etape_code,
-  w.atteignable,
-  w.objectif,
-  w.realisation
-FROM
-  tbl_workflow w
-  JOIN wf_etape e ON e.id = w.etape_id
-  JOIN statut_intervenant si ON si.id = w.statut_intervenant_id
-  LEFT JOIN structure s ON s.id = w.structure_id
-ORDER BY
-  w.intervenant_id,
-  e.ordre
-";
+$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(164270);
+
+$tvh = $container->get(\Application\Service\TypeVolumeHoraireService::class)->getPrevu();
+$evh = $container->get(\Application\Service\EtatVolumeHoraireService::class)->getSaisi();
+
+/* @var $ftis \Application\Service\FormuleTestIntervenantService */
+$ftis = $container->get(\Application\Service\FormuleTestIntervenantService::class);
 
 
-/** @var $em \Doctrine\ORM\EntityManager */
-$em = $container->get(\Application\Constants::BDD);
-
-$ids      = $em->getConnection()->query($sql);
-$feuilles = [];
-
-foreach ($ids as $id) {
-    $intervenant = (int)$id['INTERVENANT_ID'];
-    unset($id['INTERVENANT_ID']);
-    $feuilles[$intervenant][] = $id;
-}
-
-var_dump($feuilles);
+$ftis->creerDepuisIntervenant($intervenant, $tvh, $evh);

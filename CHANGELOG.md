@@ -45,6 +45,11 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Possibilité de tranférer une fiche de service vers la page de test des formules de calcul
 * Possibilité d'exporter et d'importer sous forme de fichier un test de formule de calcul
 * Formule de calcul de l'Université de Poitiers
+* Piece justificative : forcer la durée de vie à 1 si la case "Uniquement en cas de changement de RIB" est cochée par l'utilisateur pour éviter les mauvais paramétrages des pièces jointes
+
+## Corrections de bugs
+
+* Dans l'écran contrat du vacataire, l'action "envoyer par mail", n'envoyait pas le contrat par mail si l'intervenant n'avait pas d'email établissement.
 
 # OSE 14.8
 

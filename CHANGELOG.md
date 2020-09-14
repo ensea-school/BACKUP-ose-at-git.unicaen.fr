@@ -42,6 +42,8 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Intégration (en cours) de la formule de calcul de Poitiers.
 * Stockage de la date d'envoi par e-mail du contrat
 * Nouvel indicateur 361 permettant de suivre les retours de contrats envoyés par email
+* Possibilité de tranférer une fiche de service vers la page de test des formules de calcul
+* Possibilité d'exporter et d'importer sous forme de fichier un test de formule de calcul
 
 # OSE 14.8
 

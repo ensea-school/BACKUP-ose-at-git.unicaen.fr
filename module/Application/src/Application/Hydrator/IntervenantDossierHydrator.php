@@ -210,7 +210,7 @@ class IntervenantDossierHydrator implements HydratorInterface
         if (isset($data['DossierContact'])) {
 
             $object->setEmailPerso($data['DossierContact']['emailPersonnel']);
-            $object->setEmailPro($data['DossierContact']['emailEtablissement']);
+            //$object->setEmailPro($data['DossierContact']['emailEtablissement']);
             $object->setTelPro($data['DossierContact']['telephoneProfessionnel']);
             $object->setTelPerso($data['DossierContact']['telephonePersonnel']);
         }

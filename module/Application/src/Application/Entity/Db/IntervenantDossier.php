@@ -650,6 +650,24 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
 
     /**
+     * Renvoi le RIB : concaténation du BIC et IBAN si les deux sont renseignés
+     *
+     * @return string|null
+     */
+    public function getRib(): ?string
+    {
+        $rib = '';
+
+        if ($this->BIC && $this->IBAN) {
+            $rib = $this->BIC . ' ' . $this->IBAN;
+        }
+
+        return $rib;
+    }
+
+
+
+    /**
      * @return bool
      */
     public function isRibHorsSepa(): bool

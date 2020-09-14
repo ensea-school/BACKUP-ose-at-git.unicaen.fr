@@ -4,7 +4,6 @@
  * @var $form  \Application\Form\TypeRessource\TypeRessourceSaisieForm
  */
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/import/ace-builds-master/src-min/ace.js');
 
 
 echo $this->form()->openTag($form); ?>
@@ -26,9 +25,9 @@ echo $this->form()->openTag($form); ?>
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#json" aria-controls="json" role="tab"
-                                                      data-toggle="tab">Valeurs manuelles</a></li>
+                >Valeurs manuelles</a></li>
             <li role="presentation"><a href="#sql" aria-controls="sql" role="tab"
-                                       data-toggle="tab">Valeurs via SQL</a></li>
+                >Valeurs via SQL</a></li>
         </ul>
 
         <div class="tab-content">
@@ -64,12 +63,13 @@ echo $this->form()->openTag($form); ?>
 
 <script>
 
+
     $(function ()
     {
 
         $.widget("ose.dossierAutres", {
-            optionValuesEditor: null,
-            requeteEditor: null,
+            jsonValueEditor: null,
+            sqlValueEditor: null,
 
             save: function ()
             {
@@ -92,11 +92,15 @@ echo $this->form()->openTag($form); ?>
                 var that = this;
 
                 that.element.find('#btn-save').click(function () { that.save();});
-                
+                that.element.find('.nav a').click(function (e) {
+                    e.preventDefault();
+                    $('a[href="' + $(this).attr('href') + '"]').tab('show');
+                    return false;
+                })
+
                 var options = {
                     minLines: 15, maxLines: 40,
                 };
-                console.log('widget');
                 that.jsonValueEditor = ace.edit("json-value");
                 that.jsonValueEditor.setTheme("ace/theme/github");
                 that.jsonValueEditor.getSession().setMode("ace/mode/json");
@@ -113,6 +117,7 @@ echo $this->form()->openTag($form); ?>
 
         WidgetInitializer.add('autres-saisir', 'dossierAutres');
     });
+
 
 </script>
 <style>

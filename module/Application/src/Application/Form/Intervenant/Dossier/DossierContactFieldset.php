@@ -43,15 +43,14 @@ class DossierContactFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'emailEtablissement',
             'options'    => [
-                'label'         => 'E-mail professionnel <span class="text-danger">*</span>',
+                'label'         => 'E-mail établissement',
                 'label_options' => ['disable_html_escape' => true],
 
             ],
             'attributes' => [
-                //'placeholder' => "Email établissement",
                 'class'     => 'form-control',
-                'info_icon' => "Si vous n'avez pas d'email établissement vous devez renseigner le champs email personnel.",
-
+                'info_icon' => "Non modifiable. Si vous n'avez pas d'email établissement vous devez renseigner le champs email personnel.",
+                'disabled'  => 'disabled',
             ],
             'type'       => Email::class,
         ]);

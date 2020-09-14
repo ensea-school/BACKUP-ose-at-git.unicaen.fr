@@ -7,6 +7,8 @@ use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Zend\Form\Element\Select;
+use Zend\Form\Element\Text;
 
 /**
  * Description of DossierAutresFieldset
@@ -38,12 +40,13 @@ class DossierAutresFieldset extends AbstractFieldset
         foreach ($listChampsAutres as $champ) {
 
             $this->add([
-                'name'    => 'champ-autre-' . $champ->getId(),
-                'options' => [
+                'name'     => 'champ-autre-' . $champ->getId(),
+                'required' => false,
+                'options'  => [
                     'label'         => $champ->getLibelle(),
                     'label_options' => ['disable_html_escape' => true],
                 ],
-                'type'    => ($champ->getType()->getCode() == 'texte') ? 'text' : 'select',
+                'type'     => ($champ->getType()->getCode() == 'texte') ? 'text' : 'select',
             ]);
 
             if ($champ->getType()->getCode() == self::SELECT_SQL) {
@@ -80,6 +83,22 @@ class DossierAutresFieldset extends AbstractFieldset
 
     public function getInputFilterSpecification()
     {
-        return [];
+        $specs    = [];
+        $elements = $this->getElements();
+        foreach ($elements as $element) {
+            /**
+             * @var $element Select
+             */
+            $type = $element->getAttribute('type');
+            if ($type == 'select') {
+                $specs [$element->getAttribute('name')] =
+                    [
+                        'required'    => false,
+                        'allow_empty' => true,
+                    ];
+            }
+        }
+
+        return $specs;
     }
 }

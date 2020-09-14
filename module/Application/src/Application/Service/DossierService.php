@@ -2,12 +2,14 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 
@@ -25,6 +27,8 @@ class DossierService extends AbstractEntityService
     use IntervenantServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
+    use SourceServiceAwareTrait;
+
 
     /**
      * @var Dossier[]
@@ -299,8 +303,7 @@ class DossierService extends AbstractEntityService
      *
      * @return $this
      */
-    public
-    function purgerDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
+    public function purgerDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->update(\Application\Entity\Db\IndicModifDossier::class, 't')
@@ -317,5 +320,96 @@ class DossierService extends AbstractEntityService
         $qb->getQuery()->execute();
 
         return $this;
+    }
+
+
+
+    /**
+     * Methode qui compare les données de la fiche intervenant et celle du dossier intervenant pour alimenter
+     * la table INDIC_MODIF_DOSSIER (
+     *
+     * @param Intervenant        $intervenant
+     * @param IntervenantDossier $intervenantDossier
+     *
+     * @return boolean
+     */
+
+    public function updateIndicModifDossier(Intervenant $intervenant, IntervenantDossier $intervenantDossier): bool
+    {
+
+
+        $indicModifDossierCollection = $intervenant->getIndicModifDossier();
+        $indicModifDossierInProgress = [];
+        $sourceOse                   = $this->getServiceSource()->getOse()->getCode();
+        $sourceIntervenant           = $intervenant->getSource()->getCode();
+        $em                          = $this->getEntityManager();
+
+        /**
+         * @var $indicModifDossier IndicModifDossier
+         */
+        foreach ($indicModifDossierCollection as $indicModifDossier) {
+            if (!$indicModifDossier->getHistoDestruction()) {
+                $indicModifDossierInProgress[$indicModifDossier->getAttrName()] = $indicModifDossier;
+            }
+        }
+
+        $newDatas                     = [];
+        $oldDatas                     = [];
+        $newDatas['NOM_PATRONYMIQUE'] = ($intervenantDossier->getNomPatronymique()) ? $intervenantDossier->getNomPatronymique() : '(aucun)';
+        $newDatas['NOM_USUEL']        = ($intervenantDossier->getNomUsuel()) ? $intervenantDossier->getNomUsuel() : '(aucun)';
+        $newDatas['CIVILITE']         = ($intervenantDossier->getCivilite()) ? $intervenantDossier->getCivilite()->getLibelleCourt() : '(aucunà';
+        $newDatas['PRENOM']           = ($intervenantDossier->getPrenom()) ? $intervenantDossier->getPrenom() : '(aucun)';
+        $newDatas['DATE_NAISSANCE']   = ($intervenantDossier->getDateNaissance()) ? $intervenantDossier->getDateNaissance()->format('d/m/Y') : '(aucun)';
+        $newDatas['RIB']              = $intervenantDossier->getRib();
+        $intervenantDossierAdresse    = $intervenantDossier->getAdresse();
+        $newDatas['ADRESSE']          = (!empty($intervenantDossierAdresse)) ? $intervenantDossierAdresse : '(aucun)';
+
+        $oldDatas['NOM_PATRONYMIQUE'] = ($intervenant->getNomPatronymique()) ? $intervenant->getNomPatronymique() : '(aucun)';
+        $oldDatas['NOM_USUEL']        = ($intervenant->getNomUsuel()) ? $intervenant->getNomUsuel() : '(aucun)';
+        $oldDatas['CIVILITE']         = ($intervenant->getCivilite()) ? $intervenant->getCivilite()->getLibelleCourt() : '(aucun)';
+        $oldDatas['PRENOM']           = ($intervenant->getPrenom()) ? $intervenant->getPrenom() : '(aucun)';
+        $oldDatas['DATE_NAISSANCE']   = ($intervenant->getDateNaissance()) ? $intervenant->getDateNaissance()->format('d/m/Y') : '(aucun)';
+        $oldDatas['RIB']              = $intervenant->getRib();
+        $intervenantAdresse           = $intervenant->getAdresse();
+        $oldDatas['ADRESSE']          = (!empty($intervenantAdresse)) ? $intervenantAdresse : '(aucun)';
+
+        //On calcule les champs différents
+        $diffDatas = array_diff_assoc($newDatas, $oldDatas);
+        //On calcule les champs identiques
+        $equalDatas = array_intersect_assoc($newDatas, $oldDatas);
+
+        if (!empty($diffDatas)) {
+            foreach ($diffDatas as $field => $value) {
+                {
+                    if (trim(strtolower($newDatas[$field])) <> trim(strtolower($oldDatas[$field])) && !empty($newDatas[$field])) {
+                        $indicModifDossierField = (array_key_exists($field, $indicModifDossierInProgress)) ? $indicModifDossierInProgress[$field] : new IndicModifDossier();
+                        $indicModifDossierField->setAttrName($field);
+                        $estCreationDossier = (array_key_exists($field, $indicModifDossierInProgress)) ? 0 : 1;
+                        $indicModifDossierField->setAttrOldValue($oldDatas[$field])
+                            ->setAttrNewValue($newDatas[$field])
+                            ->setAttrOldSourceName($sourceIntervenant)
+                            ->setAttrNewSourceName($sourceOse)
+                            ->setEstCreationDossier($estCreationDossier)
+                            ->setIntervenant($intervenant);
+                        $em->persist($indicModifDossierField);
+                    }
+                }
+            }
+        }
+
+        //On historise les éventuelles entrées dans IndicModifDossier si les différences n'existent plus
+        if (!empty($equalDatas)) {
+            foreach ($equalDatas as $field => $value) {
+                if (array_key_exists($field, $indicModifDossierInProgress)) {
+                    $indicModifDossierField = $indicModifDossierInProgress[$field];
+                    $indicModifDossierField->historiser();
+                    $em->persist($indicModifDossierField);
+                }
+            }
+        }
+
+        $this->getEntityManager()->flush();
+
+        return true;
     }
 }

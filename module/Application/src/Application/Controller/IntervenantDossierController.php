@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Constants;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantDossier;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\Traits\AutresFormAwareTrait;
 use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
@@ -72,6 +71,8 @@ class IntervenantDossierController extends AbstractController
                 $completude = $this->getServiceDossier()->isComplete($intervenantDossier);
                 $intervenantDossier->setCompletude($completude);
                 $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
+                //Alimentation de la table INDIC_MODIF_DOSSIER
+                $this->getServiceDossier()->updateIndicModifDossier($intervenant, $intervenantDossier);
                 //Recalcul des tableaux de bord nécessaires
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
                 /*On reinitialise le formulaire car le statut du dossier a
@@ -223,61 +224,33 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    /* public function differencesAction()
-     {
-         $intervenant = $this->getEvent()->getParam('intervenant');
+    public function purgerDifferencesAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
 
-         $dql = "
-         SELECT
-           vi
-         FROM
-           " . IndicModifDossier::class . " vi
-         WHERE
-           vi.histoDestruction IS NULL
-           AND vi.intervenant = :intervenant
-         ORDER BY
-           vi.attrName, vi.histoCreation
-         ";
+        if ($this->getRequest()->isPost()) {
+            try {
+                $utilisateur = $this->getServiceContext()->getUtilisateur();
+                $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
 
-         // refetch intervenant avec jointures
-         $query = $this->em()->createQuery($dql);
-         $query->setParameter('intervenant', $intervenant);
+                $this->flashMessenger()->addSuccessMessage(sprintf(
+                    "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
+                    $intervenant));
 
-         $differences = $query->getResult();
-         $title       = "Historique des modifications d'informations importantes dans les données personnelles";
+                $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
 
-         return compact('title', 'intervenant', 'differences');
-     }
+            return new MessengerViewModel();
+        } else {
+            return compact('intervenant');
+        }
+    }
 
 
 
-     public function purgerDifferencesAction()
-     {
-         $intervenant = $this->getEvent()->getParam('intervenant');
-
-         if ($this->getRequest()->isPost()) {
-             try {
-                 $utilisateur = $this->getServiceContext()->getUtilisateur();
-                 $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
-
-                 $this->flashMessenger()->addSuccessMessage(sprintf(
-                     "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
-                     $intervenant));
-
-                 $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
-             } catch (\Exception $e) {
-                 $this->flashMessenger()->addErrorMessage($this->translate($e));
-             }
-
-             return new MessengerViewModel();
-         } else {
-             return compact('intervenant');
-         }
-     }*/
-
-
-    private
-    function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'dossier',

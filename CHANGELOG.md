@@ -9,7 +9,7 @@
 
 ## Corrections de bugs
 
-* Dans l'écran contrat du vacataire, l'action "envoyer par mail", n'envoyer pas le contrat par mail si l'intervenant n'avait pas d'email établissement.
+* Dans l'écran contrat du vacataire, l'action "envoyer par mail", n'envoyait pas le contrat par mail si l'intervenant n'avait pas d'email établissement.
 
 # OSE 14.8
 

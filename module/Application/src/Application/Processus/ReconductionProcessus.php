@@ -67,7 +67,7 @@ class ReconductionProcessus extends AbstractProcessus
     public function reconduction($datas)
     {
         if (empty($datas['element']) && empty($datas['etape'])) {
-            Throw new \Exception('Aucune donnée à reconduire');
+            throw new \Exception('Aucune donnée à reconduire');
         }
 
         if (empty($datas['etape'])) {
@@ -85,7 +85,7 @@ class ReconductionProcessus extends AbstractProcessus
             foreach ($etapes as $idEtape) {
                 if (in_array($idEtape, $etapeManquante)) {
                     if (!array_key_exists($idEtape, $datas['mappingEtape'])) {
-                        Throw new \Exception('Impossible de reconduire les éléments sélectionné');
+                        throw new \Exception('Impossible de reconduire les éléments sélectionné');
                     }
                     $idEtapeN1      = $datas['mappingEtape'][$idEtape];
                     $etapeReconduit = $this->etapeService->get($idEtapeN1);
@@ -157,7 +157,6 @@ class ReconductionProcessus extends AbstractProcessus
                             $cheminReconduit = $this->cheminPedagogiqueService->newEntity();
                             $cheminReconduit->setElementPedagogique($elementReconduit);
                             $cheminReconduit->setEtape($etapeReconduit);
-                            $cheminReconduit->setSourceCode($chemin->getSourceCode());
                             $cheminReconduit->setSource($chemin->getSource());
                             $cheminReconduit->setOrdre($chemin->getOrdre());
                             $em->persist($cheminReconduit);
@@ -183,7 +182,7 @@ class ReconductionProcessus extends AbstractProcessus
                 unset($etapeEnCours, $etapeReconduit);
             }
         } else {
-            Throw new \Exception('Aucune donnée à reconduire');
+            throw new \Exception('Aucune donnée à reconduire');
         }
 
         return true;

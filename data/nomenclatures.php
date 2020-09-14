@@ -181,6 +181,12 @@ return [
             'LIBELLE'      => 'INSA de Lyon',
             'PACKAGE_NAME' => 'FORMULE_INSA_LYON',
         ],
+        12 => [
+            'LIBELLE'           => 'Université de Poitiers',
+            'PACKAGE_NAME'      => 'FORMULE_POITIERS',
+            'I_PARAM_1_LIBELLE' => 'Heures max. référentiel en service',
+            'I_PARAM_2_LIBELLE' => 'Heures max. référentiel en HC',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

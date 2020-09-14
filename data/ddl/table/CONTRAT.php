@@ -33,6 +33,17 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
+        'DATE_ENVOI_EMAIL'     => [
+            'name'        => 'DATE_ENVOI_EMAIL',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'commentaire' => 'Date envoi du contrat par email',
+        ],
         'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',

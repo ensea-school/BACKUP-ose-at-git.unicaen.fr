@@ -3,6 +3,8 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Formule;
+use Application\Service\Traits\ParametresServiceAwareTrait;
+
 
 /**
  * Description of FormuleService
@@ -16,6 +18,8 @@ use Application\Entity\Db\Formule;
  */
 class FormuleService extends AbstractEntityService
 {
+    use ParametresServiceAwareTrait;
+
 
     /**
      * retourne la classe des entités
@@ -35,8 +39,21 @@ class FormuleService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'formule';
+    }
+
+
+
+    /**
+     * @return Formule
+     */
+    public function getCurrent(): Formule
+    {
+        $formuleId = $this->getServiceParametres()->get('formule');
+
+        return $this->get($formuleId);
     }
 
 }

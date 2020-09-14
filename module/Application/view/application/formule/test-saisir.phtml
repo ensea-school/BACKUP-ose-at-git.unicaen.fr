@@ -258,7 +258,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     <?= $lf->output('cHeuresComplAPayer') ?>
                 </tr>
             </table>
-            <button class="enregistrer btn btn-primary">Enregistrer les données et recalculer les HETD</button>
+            <button class="enregistrer btn btn-primary">Enregistrer et recalculer les HETD</button>
+            <button class="exporter btn btn-default">Télécharger</button>
+            <input type="file" id="importbtn" class="importer">
         </div>
     </div>
 
@@ -645,6 +647,11 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         value = that.variableToValue($(this).data('default'), type);
                     }
 
+                    if ('structureCode' == name) {
+                        if (value) that.ajoutStructure($(this), value);
+                        console.log(name, value);
+                    }
+
                     $(this).val(value);
 
                     if ('typeInterventionCode' == name) {
@@ -698,6 +705,43 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 this.changementFormule(data.formule);
 
                 this.id = data.id;
+            },
+
+
+
+            exporter: function ()
+            {
+                content = this.getData();
+                filename = content.libelle;
+                content = JSON.stringify(content);
+
+                var a = document.createElement('a');
+                var blob = new Blob([content], {'type': 'text/json'});
+                a.href = window.URL.createObjectURL(blob);
+                a.download = 'Test de formule ' + filename + '.json';
+                a.click();
+            },
+
+
+
+            importer: function ()
+            {
+                var that = this;
+                var input = document.getElementById('importbtn');
+                var file = input.files[0];
+
+                var reader = new FileReader();
+
+                // Closure to capture the file information.
+                reader.onload = (function () {
+                    return function (e) {
+                        var data = JSON.parse(e.target.result);
+                        that.setData(data);
+                    };
+                })(file);
+
+                // Read in the image file as a data URL.
+                reader.readAsText(file);
             },
 
 
@@ -794,9 +838,11 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
 
 
-            ajoutStructure: function (element)
+            ajoutStructure: function (element, structure, noPrompt)
             {
-                var structure = prompt("Ajout d'une nouvelle structure");
+                if (noPrompt === true) {
+                    structure = prompt("Ajout d'une nouvelle structure");
+                }
 
                 if (structure && -1 === this.structures.indexOf(structure)) {
                     this.structures.push(structure);
@@ -822,6 +868,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
             affDebugInfo: function (data)
             {
+                if (!data) return;
+
                 var h = '';
 
                 h += '<div class="debug-info-table"><table class="table table-bordered table-condensed table-extra-condensed debug-table">';
@@ -913,6 +961,15 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 this.element.find(".enregistrer").click(function () {
                     that.save(true);
                 });
+
+                this.element.find(".exporter").click(function () {
+                    that.exporter();
+                });
+
+                this.element.find(".importer").change(function () {
+                    that.importer();
+                });
+
 
                 this.element.find("#affRes").change(function () {
                     switch ($(this).val()) {

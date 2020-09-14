@@ -13,6 +13,8 @@
         <field name="libelle" type="string" column="LIBELLE" length="128" nullable="false"/>
         <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
         <field name="plafondReferentiel" type="float" column="PLAFOND_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+        <field name="plafondReferentielService" type="float" column="PLAFOND_REFERENTIEL_SERVICE" precision="126" scale="0" nullable="false"/>
+        <field name="plafondReferentielHc" type="float" column="PLAFOND_REFERENTIEL_HC" precision="126" scale="0" nullable="false"/>
         <field name="plafondHcHorsRemuFc" type="float" column="PLAFOND_HC_HORS_REMU_FC" precision="126" scale="0" nullable="false"/>
         <field name="plafondHcRemuFc" type="float" column="PLAFOND_HC_REMU_FC" precision="126" scale="0" nullable="false"/>
         <field name="plafondHcFiHorsEad" type="float" column="PLAFOND_HC_FI_HORS_EAD" precision="126" scale="0" nullable="false"/>

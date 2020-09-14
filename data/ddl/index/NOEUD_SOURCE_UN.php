@@ -8,6 +8,7 @@ return [
     'table'   => 'NOEUD',
     'columns' => [
         'SOURCE_CODE',
+        'ANNEE_ID',
         'HISTO_DESTRUCTION',
     ],
 ];

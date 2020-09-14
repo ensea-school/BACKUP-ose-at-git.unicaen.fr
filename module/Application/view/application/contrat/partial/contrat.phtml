@@ -9,9 +9,10 @@ use Application\Provider\Privilege\Privileges;
  * @var $services \Application\Entity\Db\Service[]
  */
 
-$validation  = $contrat->getValidation();
-$retourSigne = $contrat->getDateRetourSigne();
-$uploader    = $this->uploader();
+$validation     = $contrat->getValidation();
+$retourSigne    = $contrat->getDateRetourSigne();
+$dateEnvoiEmail = $contrat->getDateEnvoiEmail();
+$uploader       = $this->uploader();
 
 $urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
     ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
@@ -101,6 +102,11 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                 <li><span class="glyphicon glyphicon-thumbs-up"></span> Validé
                     le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                     par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
+            <?php endif; ?>
+            <?php if ($dateEnvoiEmail): ?>
+                <li><span class="glyphicon glyphicon-thumbs-up"></span> Envoyé par email
+                    le <?= $dateEnvoiEmail->format(\Application\Constants::DATE_FORMAT) ?>
+                </li>
             <?php endif; ?>
             <?php if ($retourSigne): ?>
                 <li><span class="glyphicon glyphicon-thumbs-up"></span> Retourné signé

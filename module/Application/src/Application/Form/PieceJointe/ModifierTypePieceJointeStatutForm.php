@@ -23,7 +23,6 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
     use TypePieceJointeStatutServiceAwareTrait;
 
 
-
     public function init()
     {
         $hydrator = new TypePieceJointeStatutHydrator();
@@ -101,15 +100,17 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
                 'label' => "Durée de vie de la pièce jointe (en année)",
             ],
             'attributes' => [
-                'min'   => '1',
-                'value' => '1',
+                'min'       => '1',
+                'value'     => '1',
+                'class'     => 'form-control',
+                'info_icon' => "Si vous avez coché 'Uniquement en cas de changement de RIB', la durée de vie sera automatiquement à 1",
             ],
         ]);
 
         $this->add([
-            'type'       => 'Checkbox',
-            'name'       => 'obligatoire-hnp',
-            'options'    => [
+            'type'    => 'Checkbox',
+            'name'    => 'obligatoire-hnp',
+            'options' => [
                 'label' => "Pièce jointe obligatoire même si les heures sont non payables",
             ],
         ]);
@@ -195,10 +196,10 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'typePieceJointe'     => [
+            'typePieceJointe' => [
                 'required' => true,
             ],
-            'seuil-hetd'          => [
+            'seuil-hetd'      => [
                 'required'   => false,
                 'validators' => [
                     [
@@ -213,22 +214,22 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
                     ],
                 ],
             ],
-            'changement-rib'      => [
+            'changement-rib'  => [
                 'required' => true,
             ],
-            'fc'                  => [
+            'fc'              => [
                 'required' => true,
             ],
-            'obligatoire-hnp'      => [
+            'obligatoire-hnp' => [
                 'required' => true,
             ],
-            'annee-debut'         => [
+            'annee-debut'     => [
                 'required' => false,
             ],
-            'annee-fin'           => [
+            'annee-fin'       => [
                 'required' => false,
             ],
-            'duree-vie'           => [
+            'duree-vie'       => [
                 'required' => true,
             ],
         ];
@@ -245,7 +246,6 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     use AnneeServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
@@ -259,7 +259,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
         //$object->setPremierRecrutement($data['premier-recrutement']);
         $object->setChangementRIB($data['changement-rib']);
         $object->setObligatoire($data['typePieceJointe']);
-        $object->setSeuilHetd((empty($data['seuil-hetd'])?null:$data['seuil-hetd']));
+        $object->setSeuilHetd((empty($data['seuil-hetd']) ? null : $data['seuil-hetd']));
         if (array_key_exists('annee-debut', $data)) {
             $object->setAnneeDebut($this->getServiceAnnee()->get($data['annee-debut']));
         }
@@ -285,17 +285,17 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'                  => $object->getId(),
-            'typePieceJointe'     => $object->getObligatoire(),
+            'id'              => $object->getId(),
+            'typePieceJointe' => $object->getObligatoire(),
             //'premier-recrutement' => $object->getPremierRecrutement(),
-            'seuil-hetd'          => $object->getSeuilHeures(),
+            'seuil-hetd'      => $object->getSeuilHeures(),
             //'premier-recrutement' => $object->getPremierRecrutement(),
-            'changement-rib'      => $object->getChangementRIB(),
-            'fc'                  => $object->getFC(),
-            'duree-vie'           => $object->getDureeVie(),
-            'annee-debut'         => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
-            'annee-fin'           => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
-            'obligatoire-hnp'      => $object->isObligatoireHNP(),
+            'changement-rib'  => $object->getChangementRIB(),
+            'fc'              => $object->getFC(),
+            'duree-vie'       => $object->getDureeVie(),
+            'annee-debut'     => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
+            'annee-fin'       => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
+            'obligatoire-hnp' => $object->isObligatoireHNP(),
         ];
 
         return $data;

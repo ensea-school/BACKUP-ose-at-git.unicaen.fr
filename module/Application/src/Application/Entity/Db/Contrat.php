@@ -54,6 +54,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $dateRetourSigne;
 
     /**
+     * @var \DateTime
+     */
+    private $dateEnvoiEmail;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $fichier;
@@ -354,6 +359,34 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     public function getDateRetourSigne()
     {
         return $this->dateRetourSigne;
+    }
+
+
+
+    /**
+     * Set dateEnvoiEmail
+     *
+     * @param \DateTime $dateEnvoiEmail
+     *
+     * @return Contrat
+     */
+    public function setDateEnvoiEmail($dateEnvoiEmail)
+    {
+        $this->dateEnvoiEmail = $dateEnvoiEmail;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get dateEnvoiEmail
+     *
+     * @return \DateTime
+     */
+    public function getDateEnvoiEmail()
+    {
+        return $this->dateEnvoiEmail;
     }
 
 

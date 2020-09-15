@@ -18,7 +18,6 @@ FROM
        JOIN statut_intervenant          si ON si.id = i.statut_id
        JOIN type_intervenant            ti ON ti.id = si.type_intervenant_id
 WHERE
-  i.histo_destruction IS NULL
-  AND i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )
+  i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )
 GROUP BY
   i.id, i.annee_id, i.structure_id, ti.code, s.code, si.service_statutaire, si.depassement_service_du_sans_hc

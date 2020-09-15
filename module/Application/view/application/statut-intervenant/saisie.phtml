@@ -241,6 +241,8 @@ echo $this->form()->openTag($form); ?>
                     <div class="col-md-3">
                         <?= $this->formControlGroup($form->get('service-statutaire')); ?>
                         <?= $this->formControlGroup($form->get('plafond-referentiel')); ?>
+                        <?= $this->formControlGroup($form->get('plafond-referentiel-service')); ?>
+                        <?= $this->formControlGroup($form->get('plafond-referentiel-hc')); ?>
                         <?= $this->formControlGroup($form->get('maximum-HETD')); ?>
                         <?= $this->formControlGroup($form->get('charges-patronales')); ?>
                         <?= $this->formControlGroup($form->get('plafond-h-h-c')); ?>

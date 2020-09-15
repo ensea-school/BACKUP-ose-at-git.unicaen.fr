@@ -27,7 +27,6 @@ class FormuleController extends AbstractController
     use ParametresServiceAwareTrait;
 
 
-
     public function testAction()
     {
         $fti = $this->getServiceFormuleTestIntervenant()->getList();
@@ -143,6 +142,21 @@ class FormuleController extends AbstractController
         $result['data'] = $formuleTestIntervenant->toArray();
 
         return new JsonModel($result);
+    }
+
+
+
+    public function testCreerFromReelAction()
+    {
+        $intervenant       = $this->getEvent()->getParam('intervenant');
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
+
+        $formuleTestIntervenant = $this->getServiceFormuleTestIntervenant()->creerDepuisIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+
+        $url = $this->url()->fromRoute('formule-calcul/test/saisir', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]);
+
+        return $this->redirect()->toUrl($url);
     }
 
 

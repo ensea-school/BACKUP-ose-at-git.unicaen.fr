@@ -21,6 +21,43 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     protected $code;
 
+
+
+    /**
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+
+
+
+    /**
+     * Indique si ce statut correspond à un intervenant permanent.
+     *
+     * @return bool
+     */
+    public function estPermanent()
+    {
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
+    }
+
+
+
+    /**
+     * Indique si ce statut correspond aux vacataires.
+     *
+     * @return bool
+     */
+    public function estVacataire()
+    {
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
+    }
+
+
+
     /**
      * @var boolean
      */
@@ -40,6 +77,16 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      * @var float
      */
     protected $plafondReferentiel;
+
+    /**
+     * @var float
+     */
+    protected $plafondReferentielService = 9999;
+
+    /**
+     * @var float
+     */
+    protected $plafondReferentielHc = 9999;
 
     /**
      * @var float
@@ -674,6 +721,54 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     public function getPlafondReferentiel()
     {
         return $this->plafondReferentiel;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getPlafondReferentielService(): float
+    {
+        return $this->plafondReferentielService;
+    }
+
+
+
+    /**
+     * @param float $plafondReferentielService
+     *
+     * @return StatutIntervenant
+     */
+    public function setPlafondReferentielService(float $plafondReferentielService): StatutIntervenant
+    {
+        $this->plafondReferentielService = $plafondReferentielService;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getPlafondReferentielHc(): float
+    {
+        return $this->plafondReferentielHc;
+    }
+
+
+
+    /**
+     * @param float $plafondReferentielHc
+     *
+     * @return StatutIntervenant
+     */
+    public function setPlafondReferentielHc(float $plafondReferentielHc): StatutIntervenant
+    {
+        $this->plafondReferentielHc = $plafondReferentielHc;
+
+        return $this;
     }
 
 

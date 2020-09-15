@@ -8,6 +8,7 @@ return [
     'index'   => 'NOEUD_SOURCE_UN',
     'columns' => [
         'SOURCE_CODE',
+        'ANNEE_ID',
         'HISTO_DESTRUCTION',
     ],
 ];

@@ -21,43 +21,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     protected $code;
 
-
-
-    /**
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond à un intervenant permanent.
-     *
-     * @return bool
-     */
-    public function estPermanent()
-    {
-        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond aux vacataires.
-     *
-     * @return bool
-     */
-    public function estVacataire()
-    {
-        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
-    }
-
-
-
     /**
      * @var boolean
      */

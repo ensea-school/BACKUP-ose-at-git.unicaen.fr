@@ -5,7 +5,6 @@ namespace Application\Form\Intervenant\Dossier;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Application\Validator\NumeroINSEEValidator;
 
 /**
  * Description of DossierStatutFieldset

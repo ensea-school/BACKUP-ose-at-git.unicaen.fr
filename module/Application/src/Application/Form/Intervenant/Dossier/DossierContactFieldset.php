@@ -2,15 +2,11 @@
 
 namespace Application\Form\Intervenant\Dossier;
 
-use Application\Constants;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Validator\DepartementNaissanceValidator;
-use Application\Validator\PaysNaissanceValidator;
 use Zend\Form\Element\Email;
 use Zend\Form\Element\Tel;
-use Zend\Validator\Date as DateValidator;
 
 /**
  * Description of DossierContactFieldset

@@ -2,13 +2,11 @@
 
 namespace Application\Form\Intervenant\Dossier;
 
-use Application\Entity\Db\DossierAutre;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Zend\Form\Element\Select;
-use Zend\Form\Element\Text;
 
 /**
  * Description of DossierAutresFieldset

@@ -4,7 +4,6 @@ namespace Application\Form\Intervenant\Dossier;
 
 use Application\Form\AbstractFieldset;
 use Application\Form\CustomElements\PaysSelect;
-use Application\Form\Intervenant\Dossier;
 use Application\Form\Intervenant\IntervenantDossier;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -14,7 +13,6 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\PaysNaissanceValidator;
 use Application\Constants;
-use DoctrineORMModule\Form\Element\EntitySelect;
 use Zend\Validator\Date as DateValidator;
 
 /**
@@ -72,13 +70,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 
         $this->get('paysNaissance')
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
-
-        //Set France par défault si INSEE France
-        /* $idFrance = $this->getServicePays()->getIdByLibelle('FRANCE');
-         if ($idFrance) {
-             $this->get('paysNaissance')->setValue($idFrance);
-         }*/
-
+        
 
         /**
          * Département de naissance

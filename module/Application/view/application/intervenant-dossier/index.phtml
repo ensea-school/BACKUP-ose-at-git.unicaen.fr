@@ -24,7 +24,6 @@ foreach ($intervenantDossierCompletude as $value) {
 }
 
 $nextEtape = $intervenantDossierValidation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
-$nextEtape = '';
 $this->headTitle()->append($intervenant->getPrenom() . " " . $intervenant->getNomUsuel())->append("Données personnelles");
 $fieldsets = $form->getFieldsets();
 ?>

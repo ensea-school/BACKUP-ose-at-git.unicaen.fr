@@ -67,7 +67,7 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                     ?>
                 </div>
             </div>
-            <?php if ($intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE'): ?>
+            <?php if ($intervenantDossier->getPaysNaissance() && $intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE'): ?>
                 <div class="form-group">
                     <?= $this->formLabel($dossierIdentiteComplementaire->get('departementNaissance')); ?>
                     <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">

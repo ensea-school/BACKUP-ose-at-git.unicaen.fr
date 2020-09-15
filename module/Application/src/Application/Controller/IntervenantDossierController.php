@@ -80,6 +80,8 @@ class IntervenantDossierController extends AbstractController
                 $form = $this->getIntervenantDossierForm($intervenant);
                 $form->bind($intervenantDossier);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
+
+                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
             } else {
                 $this->flashMessenger()->addErrorMessage("Vos données n'ont pas été enregistré, veuillez vérifier les erreurs.");
             }
@@ -153,8 +155,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function devaliderAction()
+    public function devaliderAction()
     {
         $this->initFilters();
 
@@ -174,8 +175,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function supprimerAction()
+    public function supprimerAction()
     {
         $this->initFilters();
 

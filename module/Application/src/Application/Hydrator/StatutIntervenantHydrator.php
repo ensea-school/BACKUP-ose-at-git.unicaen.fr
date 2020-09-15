@@ -38,6 +38,8 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setLibelle($data['libelle']);
         $object->setDepassement($data['depassement']);
         $object->setPlafondReferentiel(isset($data['plafond-referentiel']) ? FloatFromString::run($data['plafond-referentiel']) : 0);
+        $object->setPlafondReferentielService(isset($data['plafond-referentiel-service']) ? FloatFromString::run($data['plafond-referentiel-service']) : 9999);
+        $object->setPlafondReferentielHc(isset($data['plafond-referentiel-hc']) ? FloatFromString::run($data['plafond-referentiel-hc']) : 9999);
         $object->setServiceStatutaire(FloatFromString::run($data['service-statutaire']));
         if (array_key_exists('type-intervenant', $data)) {
             $object->setTypeIntervenant($this->getServiceTypeIntervenant()->get($data['type-intervenant']));
@@ -68,6 +70,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setDossierEmployeur($data['dossier-employeur']);
         $object->setDossierEmailPerso($data['dossier-email-perso']);
         $object->setDossierTelPerso($data['dossier-tel-perso']);
+
 
         for ($i = 1; $i < 5; $i++) {
             if (array_key_exists('codes-corresp-' . $i, $data)) {
@@ -153,6 +156,8 @@ class StatutIntervenantHydrator implements HydratorInterface
             'depassement'                     => $object->getDepassement(),
             'service-statutaire'              => StringFromFloat::run($object->getServiceStatutaire()),
             'plafond-referentiel'             => StringFromFloat::run($object->getPlafondReferentiel()),
+            'plafond-referentiel-service'     => StringFromFloat::run($object->getPlafondReferentielService()),
+            'plafond-referentiel-hc'          => StringFromFloat::run($object->getPlafondReferentielHc()),
             'peut-choisir-dans-dossier'       => $object->getPeutChoisirDansDossier(),
             'peut-saisir-dossier'             => $object->getPeutSaisirDossier(),
             'non-autorise'                    => $object->getNonAutorise(),

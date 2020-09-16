@@ -41,18 +41,24 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 ## Nouveautés
 
-* Intégration (en cours) de la formule de calcul de Poitiers.
+* Intégration de la formule de calcul de Poitiers.
 * Stockage de la date d'envoi par e-mail du contrat
 * Nouvel indicateur 361 permettant de suivre les retours de contrats envoyés par email
 * Possibilité de tranférer une fiche de service vers la page de test des formules de calcul
 * Possibilité d'exporter et d'importer sous forme de fichier un test de formule de calcul
-* Formule de calcul de l'Université de Poitiers
 * Piece justificative : forcer la durée de vie à 1 si la case "Uniquement en cas de changement de RIB" est cochée par l'utilisateur pour éviter les mauvais paramétrages des pièces jointes
 
 ## Corrections de bugs
 
 * Dans l'écran contrat du vacataire, l'action "envoyer par mail", n'envoyait pas le contrat par mail si l'intervenant n'avait pas d'email établissement.
 
+## Notes de mise à jour
+
+* Lors de la mise à jour, vous rencontrerez deux erreurs :
+  * lors de la modification de l'indicateur 361
+  * lors de l'ajout d'une contrainte sur la table NOEUD
+
+Il vous faudra éxécuter `./bin/ose update-bdd` juste après la MAJ pour corriger ces erreurs.
 
 
 # OSE 14.8

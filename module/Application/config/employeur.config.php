@@ -8,9 +8,9 @@ use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
-    'router'          => [
+    'router' => [
         'routes' => [
-            'employeur' => [
+            'employeur'      => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur',
@@ -33,29 +33,9 @@ return [
                 'may_terminate' => true,
             ],
 
-            ],
-        ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages'    => [
-                            'Employeurs' => [
-                                'border-color' => '#9F491F',
-                                'icon'         => 'glyphicon glyphicon-list-alt',
-                                'label'        => "Employeurs",
-                                'title'        => "Gestion des employeurs",
-                                'route'        => 'employeur',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),//creer un priviege employeur
-                                'order'        => 70,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
         ],
     ],
+    
 
     'console' => [
         'router' => [
@@ -73,22 +53,22 @@ return [
         ],
     ],
 
-    'controllers'        => [
-        'factories' => [
-            'Application\Controller\Employeur' => Controller\Factory\EmployeurControllerFactory::class
+    'controllers' => [
+        'factories'  => [
+            'Application\Controller\Employeur' => Controller\Factory\EmployeurControllerFactory::class,
         ],
         'invokables' => [
             'Application\Controller\Employeur' => Controller\EmployeurController::class,
         ],
     ],
 
-    'bjyauthorize'    => [
+    'bjyauthorize' => [
         'guards'             => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Employeur',
                     'action'     => ['index', 'recherche-json'],
-                    'privileges' => Privileges::EMPLOYEUR_GESTION,
+                    'privileges' => Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                 ],
             ],
         ],
@@ -102,7 +82,7 @@ return [
                 'allow' => [
                     [
                         'privileges' => [
-                            Privileges::EMPLOYEUR_GESTION,
+                            Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                         ],
                         'resources'  => 'Contrat',
                     ],

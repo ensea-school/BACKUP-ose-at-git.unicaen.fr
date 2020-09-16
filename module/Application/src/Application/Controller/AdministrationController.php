@@ -38,4 +38,11 @@ class AdministrationController extends AbstractController
         return [];
     }
 
+
+
+    public function administrationReferentielCommunAction()
+    {
+        return [];
+    }
+
 }

@@ -310,7 +310,12 @@ class Liste extends AbstractViewHelper
         $evhSaisi   = $this->getServiceEtatVolumeHoraire()->getSaisi();
         $evhValide  = $this->getServiceEtatVolumeHoraire()->getValide();
 
-        $heures             = 0;
+        $heures = 0;
+        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
+            // Si on n'est pas en semestriel, donc en calendaire, alors on ajoute une heure fictive afin d'afficher
+            // tout le temps la ligne
+            $heures++;
+        }
         $volumeHoraireListe = $service->getVolumeHoraireListe();
         if ($this->isInRealise()) {
             $volumeHoraireListe->setTypeVolumeHoraire($tvhPrevu);

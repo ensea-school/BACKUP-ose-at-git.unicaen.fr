@@ -53,6 +53,13 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 * Dans l'écran contrat du vacataire, l'action "envoyer par mail", n'envoyait pas le contrat par mail si l'intervenant n'avait pas d'email établissement.
 
+## Notes de mise à jour
+
+* Lors de la mise à jour, vous rencontrerez deux erreurs :
+  * lors de la modification de l'indicateur 361
+  * lors de l'ajout d'une contrainte sur la table NOEUD
+
+Il vous faudra éxécuter `./bin/ose update-bdd` juste après la MAJ pour corriger ces erreurs.
 
 
 # OSE 14.8

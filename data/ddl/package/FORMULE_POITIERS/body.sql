@@ -647,7 +647,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
     FROM
       v_formule_intervenant fi
       JOIN intervenant i ON i.id = fi.intervenant_id
-      JOIN statut_intervenant si ON si.id = fi.statut_id
+      JOIN statut_intervenant si ON si.id = i.statut_id
     ';
   END;
 

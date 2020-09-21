@@ -39,6 +39,6 @@ class AutresController extends AbstractController
             }
         });
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'dossierAutre');
     }
 }

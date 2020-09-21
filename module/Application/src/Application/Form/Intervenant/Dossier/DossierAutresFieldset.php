@@ -35,41 +35,44 @@ class DossierAutresFieldset extends AbstractFieldset
     {
 
         $listChampsAutres = $this->getOption('listChampsAutres');
-        foreach ($listChampsAutres as $champ) {
+        if ($listChampsAutres) {
 
-            $this->add([
-                'name'     => 'champ-autre-' . $champ->getId(),
-                'required' => false,
-                'options'  => [
-                    'label'         => $champ->getLibelle(),
-                    'label_options' => ['disable_html_escape' => true],
-                ],
-                'type'     => ($champ->getType()->getCode() == 'texte') ? 'text' : 'select',
-            ]);
+            foreach ($listChampsAutres as $champ) {
 
-            if ($champ->getType()->getCode() == self::SELECT_SQL) {
-                if (!empty($champ->getSqlValue())) {
-                    $datas = ['' => '- NON RENSEIGNÉ -'] + $this->getServiceDossierAutre()->getValueOptionsBySql($champ);
-                    $this->get('champ-autre-' . $champ->getId())
-                        ->setValueOptions($datas);
+                $this->add([
+                    'name'     => 'champ-autre-' . $champ->getId(),
+                    'required' => false,
+                    'options'  => [
+                        'label'         => $champ->getLibelle(),
+                        'label_options' => ['disable_html_escape' => true],
+                    ],
+                    'type'     => ($champ->getType()->getCode() == 'texte') ? 'text' : 'select',
+                ]);
+
+                if ($champ->getType()->getCode() == self::SELECT_SQL) {
+                    if (!empty($champ->getSqlValue())) {
+                        $datas = ['' => '- NON RENSEIGNÉ -'] + $this->getServiceDossierAutre()->getValueOptionsBySql($champ);
+                        $this->get('champ-autre-' . $champ->getId())
+                            ->setValueOptions($datas);
+                    }
                 }
-            }
 
-            if ($champ->getType()->getCode() == self::SELECT_FIXE) {
-                if (!empty($champ->getJsonValue())) {
-                    $datas = ['' => '- NON RENSEIGNÉ -'] + $this->getServiceDossierAutre()->getValueOptionByJson($champ);
-                    $this->get('champ-autre-' . $champ->getId())
-                        ->setValueOptions($datas);
+                if ($champ->getType()->getCode() == self::SELECT_FIXE) {
+                    if (!empty($champ->getJsonValue())) {
+                        $datas = ['' => '- NON RENSEIGNÉ -'] + $this->getServiceDossierAutre()->getValueOptionByJson($champ);
+                        $this->get('champ-autre-' . $champ->getId())
+                            ->setValueOptions($datas);
+                    }
                 }
-            }
 
-            $champAutreElement = $this->get('champ-autre-' . $champ->getId());
+                $champAutreElement = $this->get('champ-autre-' . $champ->getId());
 
-            if (!empty($champ->getDescription())) {
-                $champAutreElement->setAttribute('info_icon', $champ->getDescription());
-            }
-            if ($champ->isObligatoire()) {
-                $champAutreElement->setLabel($champ->getLibelle() . ' <span class="text-danger">*</span>');
+                if (!empty($champ->getDescription())) {
+                    $champAutreElement->setAttribute('info_icon', $champ->getDescription());
+                }
+                if ($champ->isObligatoire()) {
+                    $champAutreElement->setLabel($champ->getLibelle() . ' <span class="text-danger">*</span>');
+                }
             }
         }
 

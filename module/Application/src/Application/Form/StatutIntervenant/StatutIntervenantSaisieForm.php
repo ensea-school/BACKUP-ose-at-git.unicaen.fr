@@ -72,15 +72,17 @@ class StatutIntervenantSaisieForm extends AbstractForm
         }
 
         $champsAutres = $this->getServiceDossierAutre()->getList();
-        foreach ($champsAutres as $autre) {
-            $this->add([
-                'name'    => 'champ-autre-' . $autre->getId(),
-                'options' => [
-                    'label'              => $autre->getLibelle(),
-                    'use_hidden_element' => true,
-                ],
-                'type'    => 'Checkbox',
-            ]);
+        if ($champsAutres) {
+            foreach ($champsAutres as $autre) {
+                $this->add([
+                    'name'    => 'champ-autre-' . $autre->getId(),
+                    'options' => [
+                        'label'              => $autre->getLibelle(),
+                        'use_hidden_element' => true,
+                    ],
+                    'type'    => 'Checkbox',
+                ]);
+            }
         }
 
         //Gestion des règles informations contact sur le dossier intervenant

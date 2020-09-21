@@ -1431,7 +1431,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     public function removeChampAutre(DossierAutre $champAutre)
     {
-        if ($this->champsAutres->contains($champAutre)) {
+        if ($this->champsAutres) {
             $this->champsAutres->removeElement($champAutre);
         }
     }

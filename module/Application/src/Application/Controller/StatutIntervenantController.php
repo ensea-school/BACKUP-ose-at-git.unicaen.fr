@@ -38,7 +38,6 @@ class StatutIntervenantController extends AbstractController
 
     public function saisieAction()
     {
-        /* @var $statutIntervenant StatutIntervenant */
         try {
 
 

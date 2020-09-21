@@ -4,7 +4,7 @@
  * @var $form  \Application\Form\TypeRessource\TypeRessourceSaisieForm
  */
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-
+$type = $dossierAutre->getType()->getId();
 
 echo $this->form()->openTag($form); ?>
 
@@ -24,27 +24,34 @@ echo $this->form()->openTag($form); ?>
     <div class="col-md-12">
 
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#json" aria-controls="json" role="tab"
+            <li role="presentation" class="<?= ($type != '3') ? 'active' : ''; ?>"><a href="#json" aria-controls="json"
+                                                                                      role="tab"
                 >Valeurs manuelles</a></li>
-            <li role="presentation"><a href="#sql" aria-controls="sql" role="tab"
-                >Valeurs via SQL</a></li>
+            <li role="presentation" class="<?= ($type == '3') ? 'active' : ''; ?>"><a href="#sql" aria-controls="sql"
+                                                                                      role="tab"
+                >Valeurs via SQL </a></li>
         </ul>
 
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="json">
+            <div role="tabpanel" class="tab-pane <?= ($type != '3') ? 'active' : ''; ?>"
+                 id="json">
                 <div class="panel panel-default json-value">
                     <div class="panel-heading" role="tab">
-                        <label>Valeurs sous forme JSON</label>
+                        <label>Valeurs sous forme JSON<br/>
+                            <small style="font-weight:normal">Format : { "0":"VALUE1" , "1":"VALUE2" ...}</small></label>
                     </div>
                     <div class="panel-body">
                         <?= $this->formTextarea($form->get('json-value')) ?>
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="sql">
+            <div role="tabpanel" class="tab-pane <?= ($dossierAutre->getType()->getId() == '3') ? 'active' : ''; ?>"
+                 id="sql">
                 <div class="panel panel-default sql-value">
                     <div class="panel-heading" role="tab">
-                        <label>Valeurs sous forme SQL</label>
+                        <label>Valeurs sous forme SQL<br/> <small style="font-weight:normal">Format : SELECT
+                                votre_champs as VALUE_OPTION FROM
+                                votre_table</small></label>
                     </div>
                     <div class="panel-body">
                         <?= $this->formTextarea($form->get('sql-value')) ?>

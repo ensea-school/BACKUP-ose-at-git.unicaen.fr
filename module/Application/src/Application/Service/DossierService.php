@@ -230,13 +230,14 @@ class DossierService extends AbstractEntityService
         $statut             = $intervenantDossier->getStatut();
         $champsAutres       = $intervenantDossier->getStatut()->getChampsAutres();
         $statutChampsAutres = ($intervenantDossier->getStatut()) ? $intervenantDossier->getStatut()->getChampsAutres() : [];
-        $count              = count($champsAutres);
-        foreach ($statutChampsAutres as $champ) {
-            $method      = 'getAutre' . $champ->getId();
-            $obligatoire = $champ->isObligatoire();
-            if (empty($intervenantDossier->$method()) && $champ->isObligatoire()) {
-                $completudeDossierAutre = false;
-                break;
+        if ($statutChampsAutres) {
+            foreach ($statutChampsAutres as $champ) {
+                $method      = 'getAutre' . $champ->getId();
+                $obligatoire = $champ->isObligatoire();
+                if (empty($intervenantDossier->$method()) && $champ->isObligatoire()) {
+                    $completudeDossierAutre = false;
+                    break;
+                }
             }
         }
 

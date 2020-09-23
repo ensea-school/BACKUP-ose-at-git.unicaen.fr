@@ -35,7 +35,11 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer en V14.x **A
 * La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier ceux visant les tables INTERVERNANT et STRUCTURE.
 Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
 
+# OSE 14.10
 
+## Corrections de bugs
+
+* Lors de la modification du référentiel réalisé, l'horodatage (nom et date de modification) n'impacte plus le référentiel prévisionnel.
 
 # OSE 14.9
 

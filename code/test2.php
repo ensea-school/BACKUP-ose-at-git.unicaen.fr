@@ -8,13 +8,13 @@
  * @var $viewFile   string
  */
 
-$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(164270);
 
-$tvh = $container->get(\Application\Service\TypeVolumeHoraireService::class)->getPrevu();
-$evh = $container->get(\Application\Service\EtatVolumeHoraireService::class)->getSaisi();
+/** @var \Application\Service\FichierService $fs */
+$fs = $container->get(\Application\Service\FichierService::class);
 
-/* @var $ftis \Application\Service\FormuleTestIntervenantService */
-$ftis = $container->get(\Application\Service\FormuleTestIntervenantService::class);
+$fichier = $fs->get(87124);
+//var_dump($fichier);
+$fs->save($fichier);
 
-
-$ftis->creerDepuisIntervenant($intervenant, $tvh, $evh);
+//var_dump(stream_get_contents($fichier->getContenu()));
+//var_dump($fs->getFichierFilename($fichier));

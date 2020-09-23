@@ -90,6 +90,8 @@ $c->exec([
     "mkdir cache/Doctrine",
     "chmod 777 cache/Doctrine",
     "chmod 777 cache",
+    "mkdir data/fichiers",
+    "chmod 777 data/fichiers",
     "mkdir log",
     "chmod 777 log",
     "chmod +7 bin/ose",

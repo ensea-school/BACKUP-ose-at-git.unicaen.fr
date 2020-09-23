@@ -8,9 +8,11 @@ use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\Traits\AutresFormAwareTrait;
 use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -32,6 +34,8 @@ class IntervenantDossierController extends AbstractController
     use DossierAutreServiceAwareTrait;
     use AutresFormAwareTrait;
     use DossierAutreServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
     protected function initFilters()
@@ -246,6 +250,20 @@ class IntervenantDossierController extends AbstractController
         } else {
             return compact('intervenant');
         }
+    }
+
+
+
+    public function calculCompletudeDossierAction()
+    {
+
+        $anneeId       = $this->getRequest()->getParam('annee');
+        $intervenantId = $this->getRequest()->getParam('intervenant');
+
+        $intervenant = $this->getServiceIntervenant()->get($intervenantId);
+        $annee       = $this->getServiceAnnee()->get($anneeId);
+
+        $serviceDossier = $this->getServiceDossier()->updateCompletudeByAnnee($annee, $intervenant);
     }
 
 

@@ -830,9 +830,9 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Get completude
      *
-     * @return integer
+     * @return integer|null
      */
-    public function getCompletude(): int
+    public function getCompletude(): ?int
     {
         return $this->completude;
     }

@@ -2,12 +2,15 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
+use Application\Service\Traits\AnneeServiceAwareTrait;
+use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
@@ -25,9 +28,11 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 class DossierService extends AbstractEntityService
 {
     use IntervenantServiceAwareTrait;
+    use IntervenantDossierServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
     use SourceServiceAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
     /**
@@ -151,6 +156,58 @@ class DossierService extends AbstractEntityService
         }
 
         return $validation;
+    }
+
+
+
+    /**
+     * Recalcule la complétude du dossier intervenant pour tous les intervenants d'une année ou un intervenant donné
+     *
+     * @param Annee       $annee
+     * @param Intervenant $intervenant
+     *
+     * @return Validation
+     */
+
+    public function updateCompletudeByAnnee(?Annee $annee = null, ?Intervenant $intervenant = null)
+    {
+        try {
+            $intervenants = [];
+            if ($intervenant instanceof Intervenant) {
+                //Calcul de la complétude du dossier pour un intervenant
+                $intervenants[] = $intervenant;
+            } elseif ($annee instanceof Annee) {
+                //Calcul de la complétude pour une année complète
+                $serviceIntervenant = $this->getServiceIntervenant();
+                $qb                 = $serviceIntervenant->finderByAnnee($annee);
+                $serviceIntervenant->finderByHistorique($qb);
+                $intervenants = $serviceIntervenant->getList($qb);
+            }
+
+            foreach ($intervenants as $intervenant) {
+                //On récupére le dossier de l'intervenant
+                $intervenantDossier = $this->getByIntervenant($intervenant);
+                //On regarde si le dossier est déjà validé
+                $validation = $this->getValidation($intervenant);
+                if ($validation) {
+                    //Si les données personnelles sont déjà validés on force la complétude à 1
+                    $isComplete = 1;
+                } else {
+                    $isComplete = $this->isComplete($intervenantDossier);
+                }
+                //Si la complétude a changé alors on set la complétude et on persist/flush
+                if ($isComplete <> $intervenantDossier->getCompletude()) {
+                    $intervenantDossier->setCompletude($isComplete);
+                    $this->getEntityManager()->persist($intervenantDossier);
+                    $this->getEntityManager()->flush();
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+
+
+        return true;
     }
 
 

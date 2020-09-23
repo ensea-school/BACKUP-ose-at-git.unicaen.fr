@@ -217,7 +217,6 @@ class Bdd
     {
         if ($this->debug) {
             echo $sql;
-            var_dump($params);
         } else {
             $this->driver->exec($sql, $params, $types);
         }

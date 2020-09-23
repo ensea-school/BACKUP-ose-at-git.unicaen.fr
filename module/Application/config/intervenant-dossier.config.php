@@ -80,6 +80,22 @@ return [
             ],
         ],
     ],
+    'console'         => [
+        'router' => [
+            'routes' => [
+                'calcul-completude-dossier' => [
+                    'options' => [
+                        'route'    => 'calcul-completude-dossier [--annee=] [--intervenant=]',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\IntervenantDossier',
+                            'action'     => 'calcul-completude-dossier',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ]
+    ,
     'navigation'      => [
         'default' => [
             'home' => [

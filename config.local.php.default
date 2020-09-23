@@ -269,7 +269,7 @@ return [
     /* Fichiers */
     'fichiers'      => [
         /* file => dans le système de fichiers par défaut, bdd => en base de données par défaut */
-        'stockage' => 'file',
+        'stockage' => 'bdd',
 
         /* Répertoire où seront stockés les fichiers (pièces justificatives, contrats déposés, etc.
          * A savoir : le répertoire par défaut data/fichiers est ignoré par GIT.

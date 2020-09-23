@@ -1194,7 +1194,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     {
         $result = $this->histoService->filter(function (HistoIntervenantService $histoService) use ($typeVolumeHoraire, $referentiel) {
             return
-                ($histoService->getTypeVolumeHoraire() == $typeVolumeHoraire || $histoService->getTypeVolumeHoraire() === null)
+                ($histoService->getTypeVolumeHoraire() == $typeVolumeHoraire)
                 && $histoService->getReferentiel() == $referentiel;
         });
         if ($result->count() == 1) { // un seul résultat
@@ -1447,7 +1447,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
      */
     public function getAdressePrincipale()
     {
-        $adresses = $this->getAdresse()->filter(function(AdresseIntervenant $adresse){
+        $adresses = $this->getAdresse()->filter(function (AdresseIntervenant $adresse) {
             return $adresse->estNonHistorise();
         });
 

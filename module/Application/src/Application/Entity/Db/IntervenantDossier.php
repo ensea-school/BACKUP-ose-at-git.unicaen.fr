@@ -108,7 +108,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     protected $numeroInsee;
 
     /**
-     * @var bool|null
+     * @var integer
      */
     protected $numeroInseeProvisoire;
 
@@ -578,9 +578,9 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
 
     /**
-     * @return bool|null
+     * @return integer
      */
-    public function getNumeroInseeProvisoire(): ?bool
+    public function getNumeroInseeProvisoire(): ?int
     {
         return $this->numeroInseeProvisoire;
     }
@@ -588,12 +588,13 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
 
     /**
-     * @param bool|null $numeroInseeProvisoire
+     * @param integer $numeroInseeProvisoire
      *
      * @return IntervenantDossier
      */
-    public function setNumeroInseeProvisoire(?bool $numeroInseeProvisoire): IntervenantDossier
+    public function setNumeroInseeProvisoire(?int $numeroInseeProvisoire): IntervenantDossier
     {
+
         $this->numeroInseeProvisoire = $numeroInseeProvisoire;
 
         return $this;

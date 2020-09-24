@@ -132,6 +132,7 @@ class MigrationDossier extends AbstractMigration
             'ADRESSE_PRECISIONS'       => '',
             'ADRESSE_VOIE'             => '',
             'ADRESSE_VOIRIE_ID'        => '',
+            'COMPLETUDE'               => '',
         ];
 
 
@@ -180,7 +181,9 @@ class MigrationDossier extends AbstractMigration
                 $intervenantDossier['ADRESSE_CODE_POSTAL'] = $adresseCodePostal;
                 $intervenantDossier['ADRESSE_PAYS_ID']     = $idFrance;
             }
-            $datasIntervenantDossier[] = $intervenantDossier;
+            //On met par défault la complétude du dossier à 1
+            $intervenantDossier['COMPLETUDE'] = 1;
+            $datasIntervenantDossier[]        = $intervenantDossier;
         }
         //On ne delete pas
         $options['delete']       = false;
@@ -188,9 +191,6 @@ class MigrationDossier extends AbstractMigration
         $tableIntervenantDossier = $bdd->getTable('INTERVENANT_DOSSIER');
         //On merge toutes les données
         $tableIntervenantDossier->merge($datasIntervenantDossier, 'ID', $options);
-        //Recalcule le tableau de bord des dossier
-        $console->println("Calcul du tableau de bord TBL_DOSSIER");
-        $bdd->exec('BEGIN unicaen_tbl.calculer(\'dossier\'); END;');
         //Reste à faire de recalculer la complétude des dossiers 2019 et 2020 au minimum
         $console->println("Recalcul de la complétude des dossiers pour l'année 2019");
         $annee = '2019';
@@ -198,6 +198,9 @@ class MigrationDossier extends AbstractMigration
         $console->println("Recalcul de la complétude des dossiers pour l'année 2020");
         $annee = '2020';
         $oa->exec("calcul-completude-dossier --annee=$annee");
+        //Recalcule le tableau de bord des dossier
+        $console->println("Calcul du tableau de bord TBL_DOSSIER");
+        $bdd->exec('BEGIN unicaen_tbl.calculer(\'dossier\'); END;');
         $console->println("Terminé");
         $console->println("Fin de la migration des dossiers V15");
     }

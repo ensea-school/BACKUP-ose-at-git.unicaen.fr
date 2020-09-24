@@ -35,7 +35,9 @@ while ($fichier = $f->next()) {
             mkdir(dirname($filename));
         }
         file_put_contents($filename, $contenu);
-        $bdd->getTable('FICHIER')->update(['CONTENU' => null], ['ID' => $id]);
+        if (file_exists($filename)) {
+            $bdd->getTable('FICHIER')->update(['CONTENU' => null], ['ID' => $id]);
+        }
     }
 }
 

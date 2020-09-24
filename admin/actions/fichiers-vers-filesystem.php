@@ -14,7 +14,7 @@ if (!$conf['stockage'] == 'file') {
 $dir = $conf['dir'];
 if (substr($dir, -1) != '/') $dir .= '/';
 
-$f     = $bdd->select('SELECT ID, CONTENU FROM FICHIER WHERE CONTENU IS NOT NULL AND ID < 1002', [], ['fetch' => $bdd::FETCH_EACH]);
+$f     = $bdd->select('SELECT ID, CONTENU FROM FICHIER WHERE CONTENU IS NOT NULL', [], ['fetch' => $bdd::FETCH_EACH]);
 $count = (int)$bdd->select('SELECT COUNT(*) c FROM FICHIER WHERE CONTENU IS NOT NULL', [], ['fetch' => $bdd::FETCH_ONE])['C'];
 $i     = 0;
 $c->begin("Transfert du contenu des fichiers de la base de données vers le système de fichiers");

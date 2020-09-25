@@ -377,13 +377,14 @@ class Table
 
     public function merge(array $data, $key, array $options = []): array
     {
-        $result = ['insert' => 0, 'update' => 0, 'delete' => 0];
+        $result = ['insert' => 0, 'update' => 0, 'delete' => 0, 'soft-delete' => 0];
 
         /* Initialisation */
         $defaultOptions = [
             'where'              => null,
             'key'                => $key,
             'delete'             => true,
+            'soft-delete'        => false,
             'insert'             => true,
             'update'             => true,
             'update-cols'        => [],
@@ -437,7 +438,14 @@ class Table
                     $this->insert($new, $traitementOptions);
                     $result['insert']++;
                 }
-            } elseif (empty($new)) { // DELETE
+            } elseif (empty($new) && $options['soft-delete'] && !empty($options['histo-user-id'])) { // SOFT DELETE
+                //On ne delete pas mais on historise
+                $new                         = $old;
+                $new['HISTO_DESTRUCTEUR_ID'] = $options['histo-user-id'];
+                $new['HISTO_DESTRUCTION']    = new \DateTime();
+                $this->update($new, $this->makeKeyArray($old, $key), $traitementOptions);
+                $result['soft-delete']++;
+            } elseif (empty($new) && !$options['soft-delete']) { // DELETE
                 if ($options['delete']) {
                     $this->delete($this->makeKeyArray($old, $key));
                     $result['delete']++;
@@ -526,6 +534,7 @@ class Table
                 || false !== strpos($where, ' NOT ')
                 || false !== strpos($where, '<')
                 || false !== strpos($where, '>')
+                || false !== strpos($where, 'LIKE')
             )
         ) {
             return ' WHERE ' . $where;

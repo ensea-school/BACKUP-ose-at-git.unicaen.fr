@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\ServiceReferentiel;
@@ -24,6 +25,7 @@ class Liste extends AbstractViewHelper
     use TypeVolumeHoraireServiceAwareTrait;
     use ServiceReferentielServiceAwareTrait;
     use LocalContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
     /**
      *
@@ -214,25 +216,25 @@ class Liste extends AbstractViewHelper
                 'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
-            $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
-            $out .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-            $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
-            $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary referentiel-prevu-to-realise">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
+            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
+            $out     .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+            $out     .= '<div class="modal-dialog modal-md">';
+            $out     .= '<div class="modal-content">';
+            $out     .= '<div class="modal-header">';
+            $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+            $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-body">';
+            $out     .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+            $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-footer">';
+            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-realise">OK</button>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
         } elseif ($this->prevuToPrevu && $this->getServiceServiceReferentiel()->getPrevusFromPrevusData($this->prevuToPrevu)) {
             $attribs = [
                 'class'       => 'btn btn-warning referentiel-prevu-to-prevu-show',
@@ -242,24 +244,25 @@ class Liste extends AbstractViewHelper
                 //'href'          => $this->getAddUrl(),
                 'title'       => "Initialiser le service référentiel prévisionnel avec le service référentiel prévisionnel validé l'année dernière",
             ];
-            $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévu ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
-            $out .= '<div class="modal fade" id="referentiel-prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-            $out .= '<h4 class="modal-title">Reporter ici le service prévisionnel validé de l\'année précédente.</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service prévisionnel validé de l\'an dernier ?</p>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getRouteParam() . '">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
+            $source  = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'))->getLibelle();
+            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+            $out     .= '<div class="modal fade" id="referentiel-prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+            $out     .= '<div class="modal-dialog modal-md">';
+            $out     .= '<div class="modal-content">';
+            $out     .= '<div class="modal-header">';
+            $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+            $out     .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-body">';
+            $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-footer">';
+            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getRouteParam() . '">OK</button>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
         }
         $attribs = [
             'class'      => 'ajax-modal services btn btn-primary',
@@ -267,7 +270,7 @@ class Liste extends AbstractViewHelper
             'href'       => $this->getAddUrl(),
             'title'      => 'Ajouter une nouvelle fonction',
         ];
-        $out .= '<a ' . $this->htmlAttribs($attribs) . '><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
+        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
 
         return $out;
     }
@@ -276,7 +279,7 @@ class Liste extends AbstractViewHelper
 
     public function mustRenderLigne(ServiceReferentiel $service)
     {
-        $vhSum = 0;
+        $vhSum  = 0;
         $vhSum2 = 0;
 
         $vhs = $service->getVolumeHoraireReferentiel();
@@ -334,11 +337,11 @@ class Liste extends AbstractViewHelper
 
         $typesInterventionDisplayed = 0;
         $out                        = '';
-        $out .= '<tr>';
-        $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de référentiel :</th>\n";
-        $out .= "<td id=\"total-referentiel\" style=\"text-align:right\" colspan=\"" . $typesInterventionDisplayed . "\">" . \UnicaenApp\Util::formattedNumber($data['total_general']) . "</td>\n";
-        $out .= "<td>&nbsp;</td>\n";
-        $out .= "</tr>\n";
+        $out                        .= '<tr>';
+        $out                        .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de référentiel :</th>\n";
+        $out                        .= "<td id=\"total-referentiel\" style=\"text-align:right\" colspan=\"" . $typesInterventionDisplayed . "\">" . \UnicaenApp\Util::formattedNumber($data['total_general']) . "</td>\n";
+        $out                        .= "<td>&nbsp;</td>\n";
+        $out                        .= "</tr>\n";
 
         return $out;
     }
@@ -389,7 +392,7 @@ class Liste extends AbstractViewHelper
                 'total_general' => 0,
             ];
             foreach ($this->getServices() as $service) {
-                $h = $service->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire($this->getTypeVolumehoraire())->getHeures();
+                $h                     = $service->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire($this->getTypeVolumehoraire())->getHeures();
                 $data['total_general'] += $h;
             }
             $this->totaux = $data;

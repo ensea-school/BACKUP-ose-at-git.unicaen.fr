@@ -82,6 +82,10 @@ return [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (réalisé, référentiel)",
     ],
+    "report_service"                     => [
+        "VALEUR"      => "PREVU",
+        "DESCRIPTION" => "Report du service de l'année précédente",
+    ],
 
 
     /* Documentations */

@@ -3,6 +3,7 @@
 namespace Application\Form;
 
 use Application\Entity\Db\Parametre;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
@@ -30,7 +31,6 @@ class ParametresForm extends AbstractForm
     use StructureServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
     use FormuleServiceAwareTrait;
-
 
 
     public function init()
@@ -298,6 +298,20 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'report_service',
+            'options'    => [
+                'value_options' => [
+                    TypeVolumeHoraire::CODE_PREVU   => 'Se baser sur le prévisionnel validé de l\'année prédédente',
+                    TypeVolumeHoraire::CODE_REALISE => 'Se baser sur le réalisé validé de l\'année prédédente',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
 
         $this->add([
             'type'       => 'Select',
@@ -315,9 +329,9 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'contrat_modele_mail_objet',
-            'type'       => 'Text',
-            'options'    => [
+            'name'    => 'contrat_modele_mail_objet',
+            'type'    => 'Text',
+            'options' => [
                 'label' => 'Objet du mail',
 
             ],

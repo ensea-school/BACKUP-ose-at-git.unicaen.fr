@@ -37,9 +37,14 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 # OSE 14.10
 
+## Nouveautés
+
+* Report des services de l'année précédente : on peut paramétrer si on veut initialiser à partir du prévisionnel ou bien à partir du réalisé.
+
 ## Corrections de bugs
 
 * Lors de la modification du référentiel réalisé, l'horodatage (nom et date de modification) n'impacte plus le référentiel prévisionnel.
+* Bug de division par 0 sur la formule de calcul de Poitiers
 
 # OSE 14.9
 

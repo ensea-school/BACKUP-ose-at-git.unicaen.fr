@@ -74,6 +74,7 @@ class EmployeurService extends AbstractEntityService
             FROM 
                 EMPLOYEUR e 
             WHERE rownum <= $limit
+            AND HISTO_DESTRUCTION IS NULL
         ";
 
         if (!empty($criteria)) {

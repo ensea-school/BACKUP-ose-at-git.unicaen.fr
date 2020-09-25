@@ -8,7 +8,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router' => [
         'routes' => [
-            'administration'             => [
+            'administration'                    => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration',
@@ -19,7 +19,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-type'        => [
+            'administration-type'               => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-type',
@@ -30,7 +30,18 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-financiere'  => [
+            'administration-referentiel-commun' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/administration-referentiel-commun',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Administration',
+                        'action'     => 'administration-referentiel-commun',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'administration-financiere'         => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-financiere',
@@ -41,7 +52,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-intervenant' => [
+            'administration-intervenant'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-intervenant',
@@ -55,7 +66,7 @@ return [
         ],
     ],
 
-    'navigation'   => [
+    'navigation' => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -65,7 +76,34 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
                         'order'    => 7,
                         'pages'    => [
-                            'gestion-intervenant'       => [
+                            'gestion-referentiel-commun' => [
+                                'label'          => 'Gestion référentiels communs',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'administration-referentiel-commun',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-referentiel-commun'),
+                                'order'          => 80,
+                                'border - color' => '#111',
+                                'pages'          => [
+                                    'voirie'     => [
+                                        'label'        => 'Gestion des voiries',
+                                        'icon'         => 'fa fa-graduation-cap',
+                                        'route'        => 'voirie',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
+                                        'order'        => 800,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                    'Employeurs' => [
+                                        'border-color' => '#9F491F',
+                                        'icon'         => 'glyphicon glyphicon-list-alt',
+                                        'label'        => "Gestion des employeurs",
+                                        'title'        => "Gestion des employeurs",
+                                        'route'        => 'employeur',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
+                                        'order'        => 70,
+                                    ],
+                                ],
+                            ],
+                            'gestion-intervenant'        => [
                                 'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-intervenant',
@@ -104,7 +142,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'administration-financiere' => [
+                            'administration-financiere'  => [
                                 'label'          => 'Données financières',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-financiere',
@@ -137,12 +175,13 @@ return [
             ],
         ],
     ],
+
     'bjyauthorize' => [
         'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Administration',
-                    'action'     => ['index', 'administration-types', 'administration-financiere', 'administration-intervenant'],
+                    'action'     => ['index', 'administration-types', 'administration-financiere', 'administration-intervenant', 'administration-referentiel-commun'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,
@@ -157,6 +196,8 @@ return [
                         Privileges::DROIT_AFFECTATION_VISUALISATION,
                         Privileges::PARAMETRES_GENERAL_VISUALISATION,
                         Privileges::REFERENTIEL_ADMIN_VISUALISATION,
+                        Privileges::REFERENTIEL_COMMUN_VOIRIE_VISUALISATION,
+                        Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                         Privileges::TYPE_INTERVENTION_VISUALISATION,
                         Privileges::TYPE_RESSOURCE_VISUALISATION,
                         Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,

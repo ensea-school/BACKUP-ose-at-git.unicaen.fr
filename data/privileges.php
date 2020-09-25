@@ -388,16 +388,19 @@ return [
         ],
     ],
 
-    'formule'   => [
+    'formule'            => [
         'libelle'    => 'Formule de calcul',
         'privileges' => [
             'tests' => 'Tests',
         ],
     ],
-    'employeur' => [
-        'libelle'    => 'Employeurs',
+    'referentiel-commun' => [
+        'libelle'    => 'Référentiels communs',
         'privileges' => [
-            'gestion' => 'Gestion des employeurs',
+            'voirie-visualisation'    => 'Visualisation voiries',
+            'voirie-edition'          => 'Édition voiries',
+            'employeur-visualisation' => 'Visualisation employeurs',
+            'employeur-edition'       => 'Édition employeurs',
         ],
     ],
 

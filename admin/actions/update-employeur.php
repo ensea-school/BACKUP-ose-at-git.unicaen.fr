@@ -96,10 +96,14 @@ foreach ($listFiles as $file) {
         $data['NOM_COMMERCIAL']          = $nomCommercial;
         $data['SOURCE_ID']               = $oseSource;
         $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
+        $data['HISTO_DESTRUCTEUR_ID']    = null;
+        $data['HISTO_DESTRUCTION']       = null;
+        $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
         $data['CRITERE_RECHERCHE']       = reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren);
         $datas[]                         = $data;
         $options['histo-user-id']        = $oseId;
         $options['where']                = 'SIREN LIKE \'' . $num . '%\'';
+        $options['soft-delete']          = true;
     }
     $i++;
 

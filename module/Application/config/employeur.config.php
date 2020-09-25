@@ -46,27 +46,7 @@ return [
 
         ],
     ],
-    'navigation' => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'Employeurs' => [
-                                'border-color' => '#9F491F',
-                                'icon'         => 'glyphicon glyphicon-list-alt',
-                                'label'        => "Employeurs",
-                                'title'        => "Gestion des employeurs",
-                                'route'        => 'employeur',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),//creer un priviege employeur
-                                'order'        => 70,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
+
 
     'console' => [
         'router' => [
@@ -99,7 +79,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Employeur',
                     'action'     => ['index', 'recherche-json'],
-                    'privileges' => Privileges::EMPLOYEUR_GESTION,
+                    'privileges' => Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                 ],
             ],
             'BjyAuthorize\Guard\Controller' => [
@@ -118,7 +98,7 @@ return [
                 'allow' => [
                     [
                         'privileges' => [
-                            Privileges::EMPLOYEUR_GESTION,
+                            Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                         ],
                         'resources'  => 'Contrat',
                     ],

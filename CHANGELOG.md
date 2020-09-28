@@ -39,12 +39,14 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 ## Nouveautés
 
-* Report des services de l'année précédente : on peut paramétrer si on veut initialiser à partir du prévisionnel ou bien à partir du réalisé.
+* Report des services de l'année précédente : on peut paramétrer si on veut initialiser à partir du prévisionnel ou bien à partir du réalisé. Cela de configure dans les paramétrages généraux de l'application.
+* Demandes de mises en paiement : il est maintenant possible d'assicoer à une mise ne paiement un centre de coûts de la composante d'affectation de l'intervenant plutôt que la composante d'enseignement. Un paralétrage général permet de choisir dans quel mode OSE doit fonctionner.
 
 ## Corrections de bugs
 
 * Lors de la modification du référentiel réalisé, l'horodatage (nom et date de modification) n'impacte plus le référentiel prévisionnel.
 * Bug de division par 0 sur la formule de calcul de Poitiers
+* La vue V_INDICATEUR_361 se crée maintenant correctement
 
 # OSE 14.9
 

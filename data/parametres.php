@@ -82,9 +82,15 @@ return [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (réalisé, référentiel)",
     ],
+
+    /* Divers */
     "report_service"                     => [
         "VALEUR"      => "PREVU",
         "DESCRIPTION" => "Report du service de l'année précédente",
+    ],
+    "centres_couts_paye"                 => [
+        "VALEUR"      => "enseignement",
+        "DESCRIPTION" => "Centres de coûts utilisés pour la paye",
     ],
 
 

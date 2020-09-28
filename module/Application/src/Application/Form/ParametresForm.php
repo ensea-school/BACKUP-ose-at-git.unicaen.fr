@@ -315,6 +315,21 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type'       => 'Select',
+            'name'       => 'centres_couts_paye',
+            'options'    => [
+                'value_options' => [
+                    'enseignement' => 'Utiliser les centres de coûts de la composante d\'enseignement',
+                    'affectation'  => 'Utiliser les centres de coûts de la composante d\'affectation de l\'intervenant',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
             'name'       => 'contrat_regle_franchissement',
             'options'    => [
                 'value_options' => [

@@ -39,7 +39,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 ## Nouveautés
 
-* Report des services de l'année précédente : on peut paramétrer si on veut initialiser à partir du prévisionnel ou bien à partir du réalisé. Cela de configure dans les paramétrages généraux de l'application.
+* Report des services de l'année précédente : on peut paramétrer si on veut initialiser à partir du prévisionnel ou bien à partir du réalisé. Cela se configure dans les paramétrages généraux de l'application.
 * Demandes de mises en paiement : il est maintenant possible d'associer à une mise en paiement un centre de coûts de la composante d'affectation de l'intervenant plutôt que la composante d'enseignement. Un paramétrage général permet de choisir dans quel mode OSE doit fonctionner.
 
 ## Corrections de bugs

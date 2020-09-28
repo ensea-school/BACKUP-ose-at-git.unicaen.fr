@@ -8,7 +8,7 @@ $oseSource = $oa->getSourceOseId();
 $oseId     = $oa->getOseAppliId();
 $c->println("Mise à jour de la table employeur");
 
-
+ini_set('memory_limit', '1024M');
 $importDirectory = Config::get('employeur', 'import-directory');
 $importArchive   = Config::get('employeur', 'import-archive');
 //On vérifier que le fichier est présent
@@ -36,6 +36,7 @@ $tableEmployeur = $bdd->getTable('EMPLOYEUR');
 
 foreach ($listFiles as $file) {
     $num = str_replace('.csv', '', $file);
+
     $c->println("Chargement du fichier N° $i sur $nbFiles");
     $csvFile = fopen($importDirectory . $file, "r");
     $row     = 0;

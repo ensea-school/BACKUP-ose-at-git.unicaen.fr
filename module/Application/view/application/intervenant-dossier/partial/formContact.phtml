@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $form             \Application\Form\Intervenant\Dossier
+ * @var $canValider       boolean
+ * @var $canDevalider     boolean
+ * @var $canSupprimer     boolean
+ * @var $dossier          Dossier
+ */
+
+//$Dossier = $dossier;
+
+$form->prepare();
+$dossierContact = $form->get('DossierContact');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+<!-- Fiedlset Contact -->
+<div class="col-md-6 ">
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            CONTACT
+            <?php if (!$intervenantDossierCompletude['dossierContact']): ?>
+                <span class="label label-warning">A compléter</span>
+            <?php else: ?>
+                <span class="label label-success">Complet</span>
+            <?php endif; ?>
+        </div>
+        <div class="panel-body">
+            <?php
+            echo $this->formControlGroup($dossierContact->get('emailEtablissement'));
+            echo $this->formControlGroup($dossierContact->get('emailPersonnel'));
+            echo $this->formControlGroup($dossierContact->get('telephoneProfessionnel'));
+            echo $this->formControlGroup($dossierContact->get('telephonePersonnel'));
+            ?>
+        </div>
+    </div>
+</div>
+
+
+
+
+

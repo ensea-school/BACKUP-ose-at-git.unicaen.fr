@@ -1,0 +1,78 @@
+<?php
+
+use Application\Assertion\IntervenantDossierAssertion;
+
+
+/**
+ * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $form             \Application\Form\Intervenant\Dossier
+ * @var $canValider       boolean
+ * @var $canDevalider     boolean
+ * @var $canSupprimer     boolean
+ * @var $dossier          Dossier
+ */
+
+//$Dossier = $dossier;
+
+$form->prepare();
+$dossierAutres = $form->get('DossierAutres');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+<!-- Fiedlset Autres -->
+<?php if (count($champsAutres) > 0): ?>
+
+    <div class="col-md-6">
+        <div class="panel panel-default ">
+
+            <div class="panel-heading">
+                AUTRES
+                <?php if (!$intervenantDossierCompletude['dossierAutres']): ?>
+                    <span class="label label-warning">A compléter</span>
+                <?php else: ?>
+                    <span class="label label-success">Complet</span>
+                <?php endif; ?>
+
+            </div>
+            <div class="panel-body">
+                <?php foreach ($champsAutres as $champ): ?>
+                    <?php if (!$this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champ->getId()))): ?>
+                        <div class="form-group">
+                            <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ->getId()),); ?>
+                            <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                                <?php
+                                $method = 'getAutre' . $champ->getId();
+                                $value  = $intervenantDossier->$method();
+                                if (!empty($intervenantDossier->$method())) {
+                                    $viewAutre = $this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()));
+                                    echo ($viewAutre) ? $intervenantDossier->$method() : '***************';
+                                } else {
+                                    echo '- NON RENSEIGNÉ -';
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <?php echo $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ->getId())); ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+
+
+
+

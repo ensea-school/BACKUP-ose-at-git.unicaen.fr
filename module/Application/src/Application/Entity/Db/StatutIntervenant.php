@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Application\Service\StatutIntervenantService;
+use phpDocumentor\Reflection\Types\Integer;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenAuth\Entity\Db\Privilege;
@@ -18,42 +20,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      * @var string|null
      */
     protected $code;
-
-
-    /**
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond à un intervenant permanent.
-     *
-     * @return bool
-     */
-    public function estPermanent()
-    {
-        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond aux vacataires.
-     *
-     * @return bool
-     */
-    public function estVacataire()
-    {
-        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
-    }
-
-
 
     /**
      * @var boolean
@@ -219,6 +185,62 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      * @var string|null
      */
     protected $codesCorresp4;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $champsAutres;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierIdentiteComplementaire;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierAdresse;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierContact;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierInsee;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierIban;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierEmployeur;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierEmailPerso;
+
+    /**
+     * @var boolean
+     */
+    protected $dossierTelPerso;
+
+
+
+    /**
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 
 
 
@@ -1166,6 +1188,277 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         $this->codesCorresp4 = $codesCorresp4;
 
         return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierIdentiteComplementaire()
+    {
+        return $this->dossierIdentiteComplementaire;
+    }
+
+
+
+    /**
+     * @param integer $dossierIdentiteComplementaire
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierIdentiteComplementaire(int $dossierIdentiteComplementaire): StatutIntervenant
+    {
+        $this->dossierIdentiteComplementaire = $dossierIdentiteComplementaire;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierAdresse()
+    {
+        return $this->dossierAdresse;
+    }
+
+
+
+    /**
+     * @param integer $dossierAdresse
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierAdresse(int $dossierAdresse): StatutIntervenant
+    {
+        $this->dossierAdresse = $dossierAdresse;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierContact()
+    {
+        return $this->dossierContact;
+    }
+
+
+
+    /**
+     * @param integer $dossierContact
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierContact(int $dossierContact): StatutIntervenant
+    {
+        $this->dossierContact = $dossierContact;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierInsee()
+    {
+        return $this->dossierInsee;
+    }
+
+
+
+    /**
+     * @param integer $dossierInsee
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierInsee(int $dossierInsee): StatutIntervenant
+    {
+        $this->dossierInsee = $dossierInsee;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierIban()
+    {
+        return $this->dossierIban;
+    }
+
+
+
+    /**
+     * @param integer $dossierIban
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierIban(int $dossierIban): StatutIntervenant
+    {
+        $this->dossierIban = $dossierIban;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierEmployeur()
+    {
+        return $this->dossierEmployeur;
+    }
+
+
+
+    /**
+     * @param integer $dossierEmployeur
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierEmployeur(int $dossierEmployeur): StatutIntervenant
+    {
+        $this->dossierEmployeur = $dossierEmployeur;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierEmailPerso()
+    {
+        return $this->dossierEmailPerso;
+    }
+
+
+
+    /**
+     * @param integer $dossierEmailPerso
+     *
+     * @return StatutIntervenant
+     */
+    public function setDossierEmailPerso(int $dossierEmailPerso): StatutIntervenant
+    {
+        $this->dossierEmailPerso = $dossierEmailPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDossierTelPerso()
+    {
+        return $this->dossierTelPerso;
+    }
+
+
+
+    /**
+     * @param integer $dossierTelPerso
+     */
+    public function setDossierTelPerso(int $dossierTelPerso): StatutIntervenant
+    {
+        $this->dossierTelPerso = $dossierTelPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Indique si ce statut correspond à un intervenant permanent.
+     *
+     * @return bool
+     */
+    public function estPermanent()
+    {
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
+    }
+
+
+
+    /**
+     * Indique si ce statut correspond aux vacataires.
+     *
+     * @return bool
+     */
+    public function estVacataire()
+    {
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
+    }
+
+
+
+    /**
+     * Add champ autre
+     *
+     * @param \Application\Entity\Db\DossierAutre $champAutre
+     *
+     * @return StatutIntervenant
+     */
+    public function addChampAutre(DossierAutre $champAutre)
+    {
+        if (!$this->champsAutres->contains($champAutre)) {
+            $this->champsAutres[] = $champAutre;
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove champ autre
+     *
+     * @param \Application\Entity\Db\DossierAutre $champAutre
+     */
+    public function removeChampAutre(DossierAutre $champAutre)
+    {
+        if ($this->champsAutres) {
+            $this->champsAutres->removeElement($champAutre);
+        }
+    }
+
+
+
+    /**
+     * Get champs autres
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChampsAutres()
+    {
+        return $this->champsAutres;
+    }
+
+
+
+    public function getStatutSelectable($criteria = [])
+    {
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\StatutIntervenant')->createQueryBuilder('s');
+        foreach ($criteria as $key => $value) {
+            $qb->orWhere($key, $value);
+        }
+        $qb->orderBy('ordre', 'ASC');
+
+        return $qb->getQuery()->getResult();
     }
 
 }

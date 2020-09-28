@@ -7,6 +7,7 @@ use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
+use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Provider\Role\RoleProviderAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -20,8 +21,7 @@ class StatutIntervenantController extends AbstractController
     use StatutIntervenantSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
-
-
+    use DossierAutreServiceAwareTrait;
 
     public function indexAction()
     {
@@ -38,12 +38,12 @@ class StatutIntervenantController extends AbstractController
 
     public function saisieAction()
     {
-        /* @var $statutIntervenant StatutIntervenant */
         try {
 
 
             $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
             $form              = $this->getFormStatutIntervenantSaisie();
+            $champsAutres      = $this->getServiceDossierAutre()->getList();
             if (empty($statutIntervenant)) {
                 $title             = 'Création d\'un nouveau statut d\'intervenant';
                 $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
@@ -73,7 +73,7 @@ class StatutIntervenantController extends AbstractController
         }
 
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'champsAutres');
     }
 
 
@@ -84,8 +84,9 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenant    = $this->getEvent()->getParam('statutIntervenant');
         $newStatutIntervenant = $statutIntervenant->dupliquer();
         $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
-        $form  = $this->getFormStatutIntervenantSaisie();
-        $title = 'Duplication d\'un statut d\'intervenant';
+        $form         = $this->getFormStatutIntervenantSaisie();
+        $title        = 'Duplication d\'un statut d\'intervenant';
+        $champsAutres = $this->getServiceDossierAutre()->getList();
 
         $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
             try {

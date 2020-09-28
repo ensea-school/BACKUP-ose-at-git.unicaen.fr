@@ -244,6 +244,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $validation;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $indicModifDossier;
+
+    /**
      * Cache
      *
      * @var bool
@@ -828,6 +833,24 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
+     * Renvoi le RIB : concaténation du BIC et IBAN si les deux sont renseignés
+     *
+     * @return string|null
+     */
+    public function getRib(): ?string
+    {
+        $rib = '';
+
+        if ($this->BIC && $this->IBAN) {
+            $rib = $this->BIC . ' ' . $this->IBAN;
+        }
+
+        return $rib;
+    }
+
+
+
+    /**
      * @return bool
      */
     public function isRibHorsSepa(): bool
@@ -1359,6 +1382,28 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function getServiceReferentiel()
     {
         return $this->serviceReferentiel;
+    }
+
+
+
+    /**
+     * Get IndicModifDossier
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIndicModifDossier()
+    {
+        if (null === $this->indicModifDossier) {
+            return null;
+        }
+
+        $filter = function (IndicModifDossier $indicModifDossier) {
+            return ($indicModifDossier->estHistorise()) ? false : true;
+        };
+
+        // return $this->indicModifDossier;
+
+        return $this->indicModifDossier->filter($filter);
     }
 
 

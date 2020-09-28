@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Mpdf\Shaper\Indic;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -54,6 +55,8 @@ class IndicModifDossier implements HistoriqueAwareInterface
      */
     private $intervenant;
 
+
+
     /**
      * Get attrName
      *
@@ -63,6 +66,22 @@ class IndicModifDossier implements HistoriqueAwareInterface
     {
         return $this->attrName;
     }
+
+
+
+    /**
+     * Set attrName
+     *
+     * @return IndicModifDossier
+     */
+    public function setAttrName(string $attrName): IndicModifDossier
+    {
+        $this->attrName = $attrName;
+
+        return $this;
+    }
+
+
 
     /**
      * Get attrOldSourceName
@@ -74,6 +93,24 @@ class IndicModifDossier implements HistoriqueAwareInterface
         return $this->attrOldSourceName;
     }
 
+
+
+    /**
+     * Set attrOldSourceName
+     *
+     * @param string $source
+     *
+     * @return IndicModifDossier
+     */
+    public function setAttrOldSourceName(string $source): IndicModifDossier
+    {
+        $this->attrOldSourceName = $source;
+
+        return $this;
+    }
+
+
+
     /**
      * Get attrOldValue
      *
@@ -83,6 +120,24 @@ class IndicModifDossier implements HistoriqueAwareInterface
     {
         return $this->attrOldValue;
     }
+
+
+
+    /**
+     * Set attrOldValue
+     *
+     * @param string|null $oldValue
+     *
+     * @return IndicModifDossier
+     */
+    public function setAttrOldValue(?string $oldValue): IndicModifDossier
+    {
+        $this->attrOldValue = $oldValue;
+
+        return $this;
+    }
+
+
 
     /**
      * Get attrNewSourceName
@@ -94,6 +149,24 @@ class IndicModifDossier implements HistoriqueAwareInterface
         return $this->attrNewSourceName;
     }
 
+
+
+    /**
+     * Set attrNewSourceName
+     *
+     * @param string $source
+     *
+     * @return IndicModifDossier
+     */
+    public function setAttrNewSourceName(string $source): IndicModifDossier
+    {
+        $this->attrNewSourceName = $source;
+
+        return $this;
+    }
+
+
+
     /**
      * Get attrNewValue
      *
@@ -103,6 +176,24 @@ class IndicModifDossier implements HistoriqueAwareInterface
     {
         return $this->attrNewValue;
     }
+
+
+
+    /**
+     * Set attrNewValue
+     *
+     * @param string $newValue
+     *
+     * @return IndicModifDossier
+     */
+    public function setAttrNewValue(string $newValue): IndicModifDossier
+    {
+        $this->attrNewValue = $newValue;
+
+        return $this;
+    }
+
+
 
     /**
      * Get estCreationDossier
@@ -114,6 +205,24 @@ class IndicModifDossier implements HistoriqueAwareInterface
         return $this->estCreationDossier;
     }
 
+
+
+    /**
+     * Set estCreationDossier
+     *
+     * @param boolean $estCreationDossier
+     *
+     * @return IndicModifDossier
+     */
+    public function setEstCreationDossier(bool $estCreationDossier): IndicModifDossier
+    {
+        $this->estCreationDossier = $estCreationDossier;
+
+        return $this;
+    }
+
+
+
     /**
      * Get id
      *
@@ -124,6 +233,8 @@ class IndicModifDossier implements HistoriqueAwareInterface
         return $this->id;
     }
 
+
+
     /**
      * Get intervenant
      *
@@ -133,5 +244,22 @@ class IndicModifDossier implements HistoriqueAwareInterface
     {
         return $this->intervenant;
     }
+
+
+
+    /**
+     * Set intervenant
+     *
+     * @param Intervenant $intervenant
+     *
+     * @return IndicModifDossier
+     */
+    public function setIntervenant(Intervenant $intervenant): IndicModifDossier
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
+    }
+
 }
 

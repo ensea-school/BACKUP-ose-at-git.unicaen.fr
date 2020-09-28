@@ -231,7 +231,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertRole(Contrat $contrat, $checkStructure = true)
+    protected function  assertRole(Contrat $contrat, $checkStructure = true)
     {
         if ($intervenant = $this->getRole()->getIntervenant()) {
             if (!$this->assertIntervenant($contrat, $intervenant)) return false;

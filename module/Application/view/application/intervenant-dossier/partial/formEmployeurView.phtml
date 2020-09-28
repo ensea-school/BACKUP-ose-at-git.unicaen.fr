@@ -1,0 +1,64 @@
+<?php
+
+use Application\Assertion\IntervenantDossierAssertion;
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $form               \Application\Form\Intervenant\Dossier
+ * @var $intervenantDossier \Application\Entity\Db\IntervenantDossier
+ * @var $canValider         boolean
+ * @var $canDevalider       boolean
+ * @var $canSupprimer       boolean
+ * @var $dossier            Dossier
+ */
+$viewEmployeur = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR);
+$form->prepare();
+$dossierEmployeur = $form->get('DossierEmployeur');
+
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+
+<!-- Fiedlset Employeur -->
+<div class="col-md-6">
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            EMPLOYEUR
+            <?php if (!$intervenantDossierCompletude['dossierEmployeur']): ?>
+                <span class="label label-warning">A compléter</span>
+            <?php else: ?>
+                <span class="label label-success">Complet</span>
+            <?php endif; ?>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <?= $this->formLabel($dossierEmployeur->get('employeur')); ?>
+                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                    <?php
+                    if (!empty($intervenantDossier->getEmployeur())) {
+                        $employeur = $intervenantDossier->getEmployeur()->getRaisonSociale();
+                        $siren     = $intervenantDossier->getEmployeur()->getSiren();
+                        echo ($viewEmployeur) ? $employeur . '(SIRET : ' . $siren . ')' : '***************';
+                    } else {
+                        echo '- NON RENSEIGNÉ -';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,41 @@
+<?php
+
+use Application\Assertion\IntervenantDossierAssertion;
+
+$viewIdentiteComplementaire = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
+
+$form->prepare();
+$dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
+
+
+?>
+<!-- Fiedlset Identite Complementaire -->
+<div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            IDENTITÉ COMPLEMENTAIRE
+            <?php if (!$intervenantDossierCompletude['dossierIdentiteComplementaire']): ?>
+                <span class="label label-warning">A compléter</span>
+            <?php else: ?>
+                <span class="label label-success">Complet</span>
+            <?php endif; ?>
+        </div>
+        <div class="panel-body">
+
+            <?php
+            echo $this->formControlGroup($dossierIdentiteComplementaire->get('dateNaissance'));
+            echo $this->formControlGroup($dossierIdentiteComplementaire->get('paysNaissance'));
+            echo $this->formControlGroup($dossierIdentiteComplementaire->get('departementNaissance'));
+            echo $this->formControlGroup($dossierIdentiteComplementaire->get('villeNaissance'));
+            ?>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

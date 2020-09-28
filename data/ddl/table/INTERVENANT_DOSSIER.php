@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'INTERVENANT_DOSSIER_ID_SEQ',
     'columns'     => [
         'ADRESSE_CODE_POSTAL'      => [
             'name'        => 'ADRESSE_CODE_POSTAL',
@@ -512,6 +512,18 @@ return [
             'default'     => NULL,
             'position'    => 42,
             'commentaire' => NULL,
+        ],
+        'COMPLETUDE'                => [
+            'name'        => 'COMPLETUDE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => 0,
+            'position'    => 43,
+            'commentaire' => 'Etat avancement du dossier',
         ],
     ],
 ];

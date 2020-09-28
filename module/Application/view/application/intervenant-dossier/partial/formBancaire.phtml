@@ -1,0 +1,44 @@
+<?php
+
+$form->prepare();
+$dossierBancaire = $form->get('DossierBancaire');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+<!-- Fiedlset Bancaire -->
+<div class="col-md-6">
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            COORDONNÉES BANCAIRES
+            <?php if (!$intervenantDossierCompletude['dossierIban']): ?>
+                <span class="label label-warning">A compléter</span>
+            <?php else: ?>
+                <span class="label label-success">Complet</span>
+            <?php endif; ?>
+        </div>
+        <div class="panel-body">
+            <?php
+
+            echo $this->formControlGroup($dossierBancaire->get('ribBic'));
+            echo $this->formControlGroup($dossierBancaire->get('ribIban'));
+            echo $this->formControlGroup($dossierBancaire->get('ribHorsSepa'));
+
+            ?>
+
+        </div>
+    </div>
+</div>
+
+
+
+

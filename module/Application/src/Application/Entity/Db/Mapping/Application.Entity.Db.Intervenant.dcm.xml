@@ -81,7 +81,7 @@
         <many-to-one field="employeur" target-entity="Application\Entity\Db\Employeur">
             <join-column name="EMPLOYEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true" />
+        <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-column name="SOURCE_ID" referenced-column-name="ID"/>
@@ -107,20 +107,28 @@
         <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant"/>
         <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant"/>
         <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant"/>
-        <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService" mapped-by="intervenant"/>
-        <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
-        <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu" mapped-by="intervenant">
+        <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService"
+                     mapped-by="intervenant"/>
+        <one-to-many field="miseEnPaiementIntervenantStructure"
+                     target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
+        <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu"
+                     mapped-by="intervenant">
             <cascade>
                 <cascade-persist/>
             </cascade>
         </one-to-many>
-        <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="intervenant" fetch="EXTRA_LAZY"/>
+        <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="intervenant"
+                     fetch="EXTRA_LAZY"/>
         <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant"/>
-        <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
+        <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel"
+                     mapped-by="intervenant">
             <cascade>
                 <cascade-persist/>
             </cascade>
         </one-to-many>
         <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant"/>
+        <one-to-many field="indicModifDossier" target-entity="Application\Entity\Db\IndicModifDossier"
+                     mapped-by="intervenant"/>
+
     </entity>
 </doctrine-mapping>

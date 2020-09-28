@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use UnicaenApp\Util;
+
 class EmployeurService extends AbstractEntityService
 {
 
@@ -16,14 +18,19 @@ class EmployeurService extends AbstractEntityService
         return \Application\Entity\Db\Employeur::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'emp';
     }
+
+
 
     public function getEmployeurs($limit = 100)
     {
@@ -32,9 +39,12 @@ class EmployeurService extends AbstractEntityService
         ";
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        $res = $stmt->fetchAll();
+        $res  = $stmt->fetchAll();
+
         return $res;
     }
+
+
 
     public function getEmployeursIntervenants()
     {
@@ -46,13 +56,17 @@ class EmployeurService extends AbstractEntityService
         ";
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        $res = $stmt->fetchAll();
+        $res  = $stmt->fetchAll();
+
         return $res;
     }
+
+
 
     public function rechercheEmployeur($criteria = null, $limit = 50)
     {
         $employeurs = [];
+        $criteria   = Util::reduce($criteria);
 
         $sql = "
             SELECT 
@@ -60,32 +74,30 @@ class EmployeurService extends AbstractEntityService
             FROM 
                 EMPLOYEUR e 
             WHERE rownum <= $limit
+            AND HISTO_DESTRUCTION IS NULL
         ";
 
-        if(!empty($criteria))
-        {
+        if (!empty($criteria)) {
             $sql .= "
-             AND (e.RAISON_SOCIALE LIKE upper('%$criteria%') OR e.SIREN LIKE '%$criteria%')
-            ";
-           /*  $sql .= "
-          AND (regexp_like(LIBELLE, '$criteria', 'i') OR e.SIREN LIKE '%$criteria%')
-         ";*/
+             AND e.CRITERE_RECHERCHE LIKE '%$criteria%'";
         }
 
         $sql .= " ORDER BY RAISON_SOCIALE ASC";
 
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-            while ($r = $stmt->fetch()) {
-                $employeurs[] = [
-                    'raison_sociale'  => $r['RAISON_SOCIALE'],
-                    'siren'           => $r['SIREN'],
-                    'nom_commercial'  => $r['NOM_COMMERCIAL'],
-                ];
-            }
+        while ($r = $stmt->fetch()) {
+            $siren                = $r['SIREN'];
+            $employeurs[$r['ID']] = [
+                'id'    => $r['ID'],
+                'label' => $r['RAISON_SOCIALE'],
+                'siren' => $siren,
+                'extra' => "<small>($siren)</small>",
+            ];
+        }
+
 
         return $employeurs;
-
     }
 
 }

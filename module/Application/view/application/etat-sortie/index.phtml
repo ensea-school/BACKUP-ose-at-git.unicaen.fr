@@ -27,7 +27,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_AD
         <tr>
             <td><?= $etatSortie->getCode(); ?></td>
             <td><?= $etatSortie->getLibelle(); ?></td>
-            <td style="white-space: nowrap">
+            <td style=" white-space: nowrap">
                 <?php if ($canEdit): ?>
                     <a href="<?= $this->url('etat-sortie/saisir', ['etatSortie' => $etatSortie->getId()]) ?>">
                         <span class="glyphicon glyphicon-pencil"></span>

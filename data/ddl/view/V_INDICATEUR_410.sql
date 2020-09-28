@@ -9,5 +9,6 @@ FROM
   JOIN intervenant i ON i.id = d.intervenant_id
 WHERE
   d.dossier_id IS NOT NULL
+  AND d.completude = 1
   AND d.validation_id IS NULL
   AND d.peut_saisir_dossier = 1

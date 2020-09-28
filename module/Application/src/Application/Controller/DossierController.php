@@ -7,6 +7,8 @@ use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Form\Intervenant\DossierValidation;
+use Application\Form\Intervenant\IntervenantDossier;
+use Application\Form\Intervenant\Traits\DossierAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
@@ -28,9 +30,8 @@ class DossierController extends AbstractController
     use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use ValidationServiceAwareTrait;
-    use \Application\Form\Intervenant\Traits\DossierAwareTrait;
+    use DossierAwareTrait;
     use UserContextServiceAwareTrait;
-
 
 
     /**
@@ -227,35 +228,6 @@ class DossierController extends AbstractController
         }
 
         return new MessengerViewModel;
-    }
-
-
-
-    public function differencesAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-
-        $dql = "
-        SELECT
-          vi
-        FROM
-          " . IndicModifDossier::class . " vi
-        WHERE
-          vi.histoDestruction IS NULL
-          AND vi.intervenant = :intervenant
-        ORDER BY
-          vi.attrName, vi.histoCreation
-        ";
-
-        // refetch intervenant avec jointures
-        $query = $this->em()->createQuery($dql);
-        $query->setParameter('intervenant', $intervenant);
-
-        $differences = $query->getResult();
-        $title       = "Historique des modifications d'informations importantes dans les données personnelles";
-
-        return compact('title', 'intervenant', 'differences');
     }
 
 

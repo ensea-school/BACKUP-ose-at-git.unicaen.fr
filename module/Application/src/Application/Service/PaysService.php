@@ -12,10 +12,10 @@ use UnicaenApp\Util;
  */
 class PaysService extends AbstractEntityService
 {
-    CONST PAYS_FRANCE  = 'france';
-    CONST PAYS_ALGERIE = 'algerie';
-    CONST PAYS_MAROC   = 'maroc';
-    CONST PAYS_TUNISIE = 'tunisie';
+    const PAYS_FRANCE  = 'france';
+    const PAYS_ALGERIE = 'algerie';
+    const PAYS_MAROC   = 'maroc';
+    const PAYS_TUNISIE = 'tunisie';
 
     use ParametresServiceAwareTrait;
 
@@ -56,7 +56,7 @@ class PaysService extends AbstractEntityService
     public function getIdByLibelle(string $libelle)
     {
         if (!isset($this->idsByLibelle[$libelle])) {
-            $sql = 'SELECT ID FROM PAYS WHERE OSE_DIVERS.str_reduce(LIBELLE_COURT) = :pays AND HISTO_DESTRUCTION IS NULL';
+            $sql = 'SELECT ID FROM PAYS WHERE OSE_DIVERS.str_reduce(LIBELLE) = :pays AND HISTO_DESTRUCTION IS NULL';
 
             $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
 
@@ -69,6 +69,14 @@ class PaysService extends AbstractEntityService
 
         return $this->idsByLibelle[$libelle];
     }
+
+
+
+    public function getByLibelle(string $libelle)
+    {
+        return $this->getRepo()->findOneBy(['libelle' => $libelle]);
+    }
+
 
 
     /**

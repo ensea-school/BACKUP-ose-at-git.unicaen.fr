@@ -11,6 +11,7 @@ $actions    = [
     "notifier-indicateurs"      => "Envoi des mails relatifs aux indicateurs",
     "synchronisation"           => "<job> : Effectue la synchronisation des données pour le <job> transmis",
     "chargens-calcul-effectifs" => "Calcul des effectifs du module Charges",
+    "calcul-completude-dossier" => "Permet de recalculer la complétude des dossiers pour une année donnée",
     "calcul-tableaux-bord"      => "Recalcule tous les tableaux de bord de calculs itermédiaires",
     "formule-calcul"            => "Calcul de toutes les heures complémentaires à l'aide de la formule",
     "creer-utilisateur"         => "Création d'un nouvel utilisateur de OSE. Possibilité de créer une fiche intervenant dans la foulée",

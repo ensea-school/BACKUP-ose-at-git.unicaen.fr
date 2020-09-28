@@ -175,38 +175,6 @@ class DossierFieldset extends AbstractFieldset
         /**
          * Numéro INSEE
          */
-        $this->add([
-            'name'       => 'numeroInsee',
-            'options'    => [
-                'label'              => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> (clé incluse)',
-                'use_hidden_element' => false,
-                'checked_value'      => 1,
-                'unchecked_value'    => 0,
-                'label_options'      => [
-                    'disable_html_escape' => true,
-                ],
-            ],
-            'attributes' => [
-                'info_icon' => "Numéro INSEE (sécurité sociale) avec la clé de contrôle",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        /**
-         * Numéro INSEE provisoire
-         */
-        $this->add([
-            'name'       => 'numeroInseeEstProvisoire',
-            'options'    => [
-                'label'         => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> provisoire',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-            ],
-            'attributes' => [
-            ],
-            'type'       => 'Checkbox',
-        ]);
 
         /**
          * Adresse postale
@@ -360,7 +328,7 @@ class DossierFieldset extends AbstractFieldset
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
 
-        $spec = [
+       $spec = [
             'nomUsuel'             => [
                 'required' => true,
             ],

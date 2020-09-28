@@ -9,68 +9,6 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant'  => [
-                'child_routes' => [
-                    'dossier' => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'    => '/:intervenant/dossier',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Dossier',
-                                'action'     => 'index',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                        'child_routes'  => [
-                            'valider'            => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/valider',
-                                    'defaults' => [
-                                        'action' => 'valider',
-                                    ],
-                                ],
-                            ],
-                            'devalider'          => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/devalider',
-                                    'defaults' => [
-                                        'action' => 'devalider',
-                                    ],
-                                ],
-                            ],
-                            'supprimer'          => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/supprimer',
-                                    'defaults' => [
-                                        'action' => 'supprimer',
-                                    ],
-                                ],
-                            ],
-                            'differences'        => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/differences',
-                                    'defaults' => [
-                                        'action' => 'differences',
-                                    ],
-                                ],
-                            ],
-                            'purger-differences' => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/purger-differences',
-                                    'defaults' => [
-                                        'action' => 'purger-differences',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
             'piece-jointe' => [
                 'type'          => 'Literal',
                 'options'       => [
@@ -305,7 +243,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'intervenant'    => [
+                    'intervenant' => [
                         'pages' => [
                             'dossier'               => [
                                 'label'        => "Données personnelles",
@@ -371,6 +309,13 @@ return [
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => ['supprimer'],
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
+                ],
+
+                [//Créer un droit archivage
+                 'controller' => 'Application\Controller\IntervenantDossier',
+                 'action'     => ['index'],
+                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_EDITION],
+                 'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
 
 
@@ -466,10 +411,12 @@ return [
     ],
     'controllers'     => [
         'factories'  => [
-            'Application\Controller\Dossier' => Controller\Factory\DossierControllerFactory::class,
+            'Application\Controller\Dossier'            => Controller\Factory\DossierControllerFactory::class,
+            'Application\Controller\IntervenantDossier' => Controller\Factory\IntervenantDossierControllerFactory::class,
         ],
         'invokables' => [
             'Application\Controller\PieceJointe' => Controller\PieceJointeController::class,
+
         ],
     ],
     'service_manager' => [

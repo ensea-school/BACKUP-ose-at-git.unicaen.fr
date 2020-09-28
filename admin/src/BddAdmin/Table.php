@@ -441,7 +441,7 @@ class Table
             } elseif (empty($new) && $options['soft-delete'] && !empty($options['histo-user-id'])) { // SOFT DELETE
                 //On ne delete pas mais on historise
                 $new                         = $old;
-                $new['HISTO_DESTRUCTEUR_ID'] = $options['histo-user-id'];
+                $new['HISTO_DESTRUCTEUR_ID'] = $traitementOptions['histo-user-id'];
                 $new['HISTO_DESTRUCTION']    = new \DateTime();
                 $this->update($new, $this->makeKeyArray($old, $key), $traitementOptions);
                 $result['soft-delete']++;

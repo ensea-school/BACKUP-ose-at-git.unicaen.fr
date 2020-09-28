@@ -77,7 +77,7 @@ return [
                         'order'    => 7,
                         'pages'    => [
                             'gestion-referentiel-commun' => [
-                                'label'          => 'Gestion référentiels communs',
+                                'label'          => 'Gestion dictonnaires de données',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-referentiel-commun',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-referentiel-commun'),

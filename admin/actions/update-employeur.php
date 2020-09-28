@@ -94,6 +94,7 @@ foreach ($listFiles as $file) {
         $data['SIREN']                   = $siren;
         $data['RAISON_SOCIALE']          = $raisonSociale;
         $data['NOM_COMMERCIAL']          = $nomCommercial;
+        $data['SOURCE_CODE']             = $siren;
         $data['SOURCE_ID']               = $oseSource;
         $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
         $data['HISTO_DESTRUCTEUR_ID']    = null;

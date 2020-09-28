@@ -19,4 +19,4 @@ WHERE
   c.histo_destruction IS NULL
   AND f.id IS NULL
   AND c.date_envoi_email IS NOT NULL
-) t;
+) t

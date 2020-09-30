@@ -745,7 +745,7 @@ class Bdd
 
 
 
-    public function copy(Bdd $source, callable $fnc = null): self
+    public function copy(Bdd $source, array $fncs = []): self
     {
         if ($this->getLogger() && !$source->getLogger()) {
             $source->setLogger($this->getLogger());
@@ -753,7 +753,14 @@ class Bdd
 
         $this->logBegin("Duplication d'une base de données");
 
-        $tDdl = $source->table()->get();
+        $excludes = [];
+        foreach ($fncs as $table => $fnc) {
+            if (false === $fnc) {
+                $excludes[] = $table;
+            }
+        }
+        $tDdl = $source->table()->get(null, $excludes);
+
         $this->drop();
         $this->create([Ddl::TABLE => $tDdl]);
         $this->inCopy = true;
@@ -765,7 +772,10 @@ class Bdd
         sort($tables);
 
         foreach ($tables as $table) {
-            $this->getTable($table)->copy($source, $fnc);
+            $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
+            if (false !== $fnc) {
+                $this->getTable($table)->copy($source, $fnc);
+            }
         }
         $this->logMsg('');
         $this->logEnd("Copie terminée");

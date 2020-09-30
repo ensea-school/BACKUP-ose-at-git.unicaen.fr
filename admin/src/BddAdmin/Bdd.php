@@ -807,6 +807,14 @@ class Bdd
             throw new \Exception("Création du répertoire $dirname impossible");
         }
 
+        foreach ($fncs as $table => $fnc) {
+            if (false === $fnc) {
+                if (!isset($filters['table']['excludes'])) {
+                    $filters['table']['excludes'] = [];
+                }
+                $filters['table']['excludes'][] = $table;
+            }
+        }
         $ddl = $this->getDdl($filters);
 
         $ddl->saveToFile($dirname . '/bdd.ddl');

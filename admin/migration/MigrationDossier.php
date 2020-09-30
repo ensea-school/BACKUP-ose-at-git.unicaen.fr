@@ -23,7 +23,6 @@ class MigrationDossier extends AbstractMigration
 
     public function utile(): bool
     {
-        return true;
         $bdd                     = $this->manager->getBdd();
         $tableIntervenantDossier = $bdd->getTable('INTERVENANT_DOSSIER');
         //Si table intervenant_dossier n'est pas vide, c'est que la migration

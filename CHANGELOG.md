@@ -35,6 +35,12 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer en V14.x **A
 * La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier ceux visant les tables INTERVERNANT et STRUCTURE.
 Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
 
+# OSE 14.11
+
+## Corrections de bugs
+
+* Sur l'écran paramétrage d'un centre de coût d'un élément pédagogique (offre de formation), ne proposer que les centres de coûts de la composante d'appartenance de l'ELP. (Ticket #28958)
+
 # OSE 14.10
 
 ## Nouveautés

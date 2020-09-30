@@ -23,13 +23,15 @@ class MigrationDossier extends AbstractMigration
 
     public function utile(): bool
     {
-        $bdd                     = $this->manager->getBdd();
-        $tableIntervenantDossier = $bdd->getTable('INTERVENANT_DOSSIER');
-        //Si table intervenant_dossier n'est pas vide, c'est que la migration
-        //a déjà eu lieu donc on ne lance pas la migration
-        $intervenantDossier = $tableIntervenantDossier->select();
-        if ($intervenantDossier) {
-            return false;
+        $bdd = $this->manager->getBdd();
+        if ($this->manager->hasOldTable('INTERVENANT_DOSSIER')) {
+            $tableIntervenantDossier = $bdd->getTable('INTERVENANT_DOSSIER');
+            //Si table intervenant_dossier n'est pas vide, c'est que la migration
+            //a déjà eu lieu donc on ne lance pas la migration
+            $intervenantDossier = $tableIntervenantDossier->select();
+            if ($intervenantDossier) {
+                return false;
+            }
         }
 
         return true;

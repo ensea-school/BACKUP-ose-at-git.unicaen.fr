@@ -42,7 +42,7 @@ class MigrationPays extends AbstractMigration
         $bdd     = $this->manager->getBdd();
         $console = $this->manager->getOseAdmin()->getConsole();
         $console->println("Renommage de la colonne LIBELLE_LONG en LIBELLE dans la table PAYS");
-        $sql = "RENAME COLUMN PAYS.LIBELLE_LONG TO LIBELLE";
+        $sql = "ALTER TABLE PAYS RENAME COLUMN LIBELLE_LONG TO LIBELLE";
         $console->println($sql);
         $bdd->exec($sql);
         $console->println("Renommage de la colonne effectué");

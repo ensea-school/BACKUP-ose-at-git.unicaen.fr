@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Zend\Loader\StandardAutoloader;
 
 /**
  * Description of StatutIntervenant
@@ -68,6 +69,31 @@ class StatutIntervenantService extends AbstractEntityService
 
 
 
+    public function getStatutSelectable(StatutIntervenant $statutIntervenant, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $var = '';
+        $qb->orWhere("$alias.peutChoisirDansDossier = 1");
+        if ($statutIntervenant instanceof StatutIntervenant) {
+            $qb->orWhere($alias . ' =  :statutIntervenant');
+        }
+        $qb->addOrderBy("$alias.ordre");
+        $qb->setParameter('statutIntervenant', $statutIntervenant);
+
+        $entities    = $qb->getQuery()->execute();
+        $result      = [];
+        $entityClass = $this->getEntityClass();
+        foreach ($entities as $entity) {
+            if ($entity instanceof $entityClass) {
+                $result[$entity->getId()] = $entity;
+            }
+        }
+
+        return $result;
+    }
+
+
+
     /**
      * @param QueryBuilder|null $qb
      * @param null              $alias
@@ -89,7 +115,7 @@ class StatutIntervenantService extends AbstractEntityService
      */
     public function fetchMaxOrdre(): int
     {
-        $sql = 'SELECT MAX(ORDRE) MAX_ORDRE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL';
+        $sql = 'SELECT MAX(ORDRE) MAX_ORDRE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS null';
 
         $res = $this->getEntityManager()->getConnection()->fetchColumn($sql, [], 0);
 

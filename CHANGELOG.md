@@ -35,7 +35,24 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer en V14.x **A
 * La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier ceux visant les tables INTERVERNANT et STRUCTURE.
 Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
 
+# OSE 14.11
 
+## Corrections de bugs
+
+* Sur l'écran paramétrage d'un centre de coût d'un élément pédagogique (offre de formation), ne proposer que les centres de coûts de la composante d'appartenance de l'ELP. (Ticket #28958)
+
+# OSE 14.10
+
+## Nouveautés
+
+* Report des services de l'année précédente : on peut paramétrer si on veut initialiser à partir du prévisionnel ou bien à partir du réalisé. Cela se configure dans les paramétrages généraux de l'application.
+* Demandes de mises en paiement : il est maintenant possible d'associer à une mise en paiement un centre de coûts de la composante d'affectation de l'intervenant plutôt que la composante d'enseignement. Un paramétrage général permet de choisir dans quel mode OSE doit fonctionner.
+
+## Corrections de bugs
+
+* Lors de la modification du référentiel réalisé, l'horodatage (nom et date de modification) n'impacte plus le référentiel prévisionnel.
+* Bug de division par 0 sur la formule de calcul de Poitiers
+* La vue V_INDICATEUR_361 se crée maintenant correctement
 
 # OSE 14.9
 

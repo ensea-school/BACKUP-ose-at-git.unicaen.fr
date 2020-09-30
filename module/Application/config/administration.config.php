@@ -77,7 +77,7 @@ return [
                         'order'    => 7,
                         'pages'    => [
                             'gestion-referentiel-commun' => [
-                                'label'          => 'Gestion référentiels communs',
+                                'label'          => 'Gestion dictonnaires de données',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-referentiel-commun',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-referentiel-commun'),
@@ -125,6 +125,13 @@ return [
                                         'route'      => 'piece-jointe/type-piece-jointe-statut',
                                         'withtarget' => true,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
+                                    ],
+                                    'gestion-champs-autres-dossier-intervenant'  => [
+                                        'label'      => "Gestion des champs personnalisés pour le dossier intervenant",
+                                        'title'      => "Editer et modifier les 5 champs personnalisables pour les dossiers des intervenant",
+                                        'route'      => 'autres-infos',
+                                        'withtarget' => true,
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\Autres', 'index'),
                                     ],
                                     'validation-volume-horaire-type-intervenant' => [
                                         'label'      => "Règles de validation par type d'intervenant",

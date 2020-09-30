@@ -84,6 +84,16 @@ Pas de paramètre pour cette commande.
 
 Pas de paramètre pour cette commande.
 
+### ```update-employeur``` : Charge la liste d'employeurs en base de données 
+
+Cette commande charge (update/insert/soft-delete) la table employeur de la base de données à partir d'un fichier source INSEE fourni.
+
+Important : l'archive employeur.tar.gz fourni par CAEN doit être déposée dans /data/employeur/import
+
+Note : Le premier chargement à vide peut prendre quelques dizaines de minutes, les suivants seront plus rapides car uniquement le delta sera modifié en base.
+
+Pas de paramètre pour cette commande.
+
 ### ```test-bdd``` : Test d'accès à la base de données
 
 Affiche si la base de données est accessible ou non.

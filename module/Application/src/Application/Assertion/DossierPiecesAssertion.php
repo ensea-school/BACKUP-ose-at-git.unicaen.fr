@@ -5,7 +5,9 @@ namespace Application\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Provider\Privilege\Privileges;
+
+// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -21,7 +23,6 @@ class DossierPiecesAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
 
 
-
     /**
      * @param string $controller
      * @param string $action
@@ -35,6 +36,15 @@ class DossierPiecesAssertion extends AbstractAssertion
 
         switch ($controller) {
             case "Application\Controller\Dossier":
+                switch ($action) {
+                    case 'index':
+                        if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
+
+                        return $this->assertDossierEdition($intervenant);
+                    break;
+                }
+            break;
+            case "Application\Controller\IntervenantDossier":
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
@@ -68,7 +78,7 @@ class DossierPiecesAssertion extends AbstractAssertion
                     break;
                 }
             break;
-         }
+        }
 
         return true;
     }
@@ -88,6 +98,28 @@ class DossierPiecesAssertion extends AbstractAssertion
 
 
 
+    /*assertion refonte dossier*/
+
+    protected function assertPrivilege($privilege, $subPrivilege = null)
+    {
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+
+        switch ($privilege) {
+            case Privileges::DOSSIER_IDENTITE_EDITION:
+                return $this->assertEditionDossierContact($intervenant);
+            break;
+        }
+    }
+
+
+
+    protected function assertEditionDossierContact(Intervenant $intervenant)
+    {
+        return true;
+    }
+
+
+
     protected function assertDossierEdition(Intervenant $intervenant = null)
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
@@ -95,6 +127,13 @@ class DossierPiecesAssertion extends AbstractAssertion
         }
 
         return true;
+    }
+
+
+
+    protected function assertDossierIdentiteEdition(Intervenant $intervenant = null)
+    {
+
     }
 
 
@@ -128,6 +167,7 @@ class DossierPiecesAssertion extends AbstractAssertion
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;
+
         return $role->hasPrivilege($privilege);
     }
 }

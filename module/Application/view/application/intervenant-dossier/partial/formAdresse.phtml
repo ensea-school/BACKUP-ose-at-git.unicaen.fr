@@ -1,0 +1,55 @@
+<?php
+
+
+$form->prepare();
+$dossierAdresse = $form->get('DossierAdresse');
+?>
+
+<!-- Fiedlset Adresse -->
+<div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            ADRESSE
+            <?php if (!$intervenantDossierCompletude['dossierAdresse']): ?>
+                <span class="label label-warning">A compléter</span>
+            <?php else: ?>
+                <span class="label label-success">Complet</span>
+            <?php endif; ?>
+        </div>
+        <div class="panel-body">
+
+            <?= $this->formControlGroup($dossierAdresse->get('precisions')); ?>
+            <?= $this->formControlGroup($dossierAdresse->get('lieuDit')); ?>
+            <div class="row">
+                <div class="col-md-2">
+                    <?= $this->formControlGroup($dossierAdresse->get('numero')); ?>
+                </div>
+                <div class="col-md-2">
+                    <?= $this->formControlGroup($dossierAdresse->get('numeroComplement')); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($dossierAdresse->get('voirie')); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($dossierAdresse->get('voie')); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($dossierAdresse->get('codePostal')); ?>
+                </div>
+                <div class="col-md-8">
+                    <?= $this->formControlGroup($dossierAdresse->get('ville')); ?>
+                </div>
+            </div>
+            <?= $this->formControlGroup($dossierAdresse->get('pays')); ?>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+

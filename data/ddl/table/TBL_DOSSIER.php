@@ -81,6 +81,18 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
+        'COMPLETUDE'       => [
+            'name'        => 'COMPLETUDE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

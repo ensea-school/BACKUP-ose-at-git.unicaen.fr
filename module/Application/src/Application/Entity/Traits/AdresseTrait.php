@@ -262,8 +262,6 @@ trait AdresseTrait
         return $this;
     }
 
-
-
     /**
      * @return string|null
      */

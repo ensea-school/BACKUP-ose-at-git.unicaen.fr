@@ -21,7 +21,18 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'employeur-json' => [
+            'employeur-search' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/employeur-search',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Employeur',
+                        'action'     => 'recherche',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'employeur-json'   => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur/json',
@@ -35,7 +46,8 @@ return [
 
         ],
     ],
-    
+
+
 
     'console' => [
         'router' => [
@@ -64,12 +76,17 @@ return [
 
     'bjyauthorize' => [
         'guards'             => [
-            PrivilegeController::class => [
+            PrivilegeController::class      => [
                 [
                     'controller' => 'Application\Controller\Employeur',
                     'action'     => ['index', 'recherche-json'],
                     'privileges' => Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                 ],
+            ],
+            'BjyAuthorize\Guard\Controller' => [
+                [
+                    'controller' => 'Application\Controller\Employeur',
+                    'roles'      => ['user']],
             ],
         ],
         'resource_providers' => [

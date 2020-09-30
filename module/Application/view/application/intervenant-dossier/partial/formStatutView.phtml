@@ -1,0 +1,46 @@
+<?php
+
+
+$form->prepare();
+$dossierStatut = $form->get('DossierStatut');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+<!-- Fiedlset Insee -->
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            STATUT
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <?= $this->formLabel($dossierStatut->get('statut')); ?>
+                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                    <?php
+                    if (!empty($intervenantDossier->getStatut())) {
+                        echo $intervenantDossier->getStatut()->getLibelle();
+                    } else {
+                        echo 'NON RENSEIGNE';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

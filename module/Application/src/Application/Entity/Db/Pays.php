@@ -57,8 +57,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
         return $this->id;
     }
 
-
-
     /**
      * @param int|null $id
      *

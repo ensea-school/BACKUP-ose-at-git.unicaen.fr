@@ -49,13 +49,20 @@ class MigrationColonnes extends AbstractMigration
             $bdd->exec($sql);
             $console->println("Renommage de la colonne effectué");
         }
-        if ($this->manager->hasOldColumn('PAYS', 'SOURCE_CODE')
-            && $this->manager->hasNewColumn('PAYS', 'CODE')) {
-            $console->println("Renommage de la colonne SOURCE_CODE en CODE dans la table PAYS");
-            $sql = "ALTER TABLE PAYS RENAME COLUMN SOURCE_CODE TO CODE";
+        //Creation de la colonne code (NOT NULL)
+        if ($this->manager->hasNewColumn('PAYS', 'CODE')) {
+            $console->println("Création d'un champs CODE dans la table PAYS");
+            $sql = 'ALTER TABLE PAYS ADD CODE VARCHAR2(15)';
             $console->println($sql);
             $bdd->exec($sql);
-            $console->println("Renommage de la colonne effectué");
+            $console->println("UPDATE values du champs code");
+            $sql = 'UPDATE PAYS SET CODE = SOURCE_CODE';
+            $console->println($sql);
+            $bdd->exec($sql);
+            $console->println("Alter table champs code pour être not null");
+            $sql = 'ALTER TABLE PAYS MODIFY CODE NOT NULL';
+            $console->println($sql);
+            $bdd->exec($sql);
         }
         //Renommage des colonnes de la table DEPATREMENT
         if ($this->manager->hasOldColumn('DEPARTEMENT', 'LIBELLE_COURT')

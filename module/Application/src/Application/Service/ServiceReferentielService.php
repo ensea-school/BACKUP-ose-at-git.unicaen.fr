@@ -7,6 +7,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
@@ -33,7 +34,7 @@ class ServiceReferentielService extends AbstractEntityService
     use EtatVolumeHoraireServiceAwareTrait;
     use VolumeHoraireReferentielServiceAwareTrait;
     use SourceServiceAwareTrait;
-
+    use ParametresServiceAwareTrait;
 
 
     /**
@@ -377,6 +378,7 @@ class ServiceReferentielService extends AbstractEntityService
     public function getPrevusFromPrevusData(Intervenant $intervenant)
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
         $evhValide = $this->getServiceEtatVolumeHoraire()->getSaisi();
 
         $intervenantPrec = $this->getServiceIntervenant()->getPrecedent($intervenant);
@@ -395,7 +397,7 @@ class ServiceReferentielService extends AbstractEntityService
         $this->getServiceFonctionReferentiel()->finderByHistorique($qb); // pour éviter que des fonctions devenues historiques ne soient reconduites
         $this->getServiceStructure()->finderByHistorique($qb); // idem pour les structures anciennes!!
         $sVolumeHoraireReferentiel->finderByHistorique($qb);
-        $sVolumeHoraireReferentiel->finderByTypeVolumeHoraire($tvhPrevu, $qb);
+        $sVolumeHoraireReferentiel->finderByTypeVolumeHoraire($tvhSource, $qb);
         $sVolumeHoraireReferentiel->finderByEtatVolumeHoraire($evhValide, $qb);
 
         $s = $this->getList($qb);

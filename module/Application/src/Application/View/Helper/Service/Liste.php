@@ -10,6 +10,7 @@ use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\Service;
@@ -32,6 +33,7 @@ class Liste extends AbstractViewHelper
     use IntervenantServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
     use IntervenantAwareTrait;
+    use ParametresServiceAwareTrait;
 
     /**
      *
@@ -266,16 +268,17 @@ class Liste extends AbstractViewHelper
                     //'href'          => $this->getAddUrl(),
                     'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
                 ];
-                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévu ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+                $source  = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'))->getLibelle();
+                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
                 $out     .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
                 $out     .= '<div class="modal-dialog modal-md">';
                 $out     .= '<div class="modal-content">';
                 $out     .= '<div class="modal-header">';
                 $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-                $out     .= '<h4 class="modal-title">Reporter ici le service prévisionnel validé de l\'année précédente.</h4>';
+                $out     .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
                 $out     .= '</div>';
                 $out     .= '<div class="modal-body">';
-                $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service prévisionnel validé de l\'an dernier ?</p>';
+                $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
                 $out     .= '<div class="alert alert-info" id="prevu-to-prevu-attente" style="display:none">';
                 $out     .= '<img src="' . $this->getView()->basePath() . '/images/wait.gif" alt="Attente..."/>';
                 $out     .= '<div>Reprise des enseignements de l\'année dernière en cours... Merci de patienter.</div>';
@@ -310,7 +313,12 @@ class Liste extends AbstractViewHelper
         $evhSaisi   = $this->getServiceEtatVolumeHoraire()->getSaisi();
         $evhValide  = $this->getServiceEtatVolumeHoraire()->getValide();
 
-        $heures             = 0;
+        $heures = 0;
+        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
+            // Si on n'est pas en semestriel, donc en calendaire, alors on ajoute une heure fictive afin d'afficher
+            // tout le temps la ligne
+            $heures++;
+        }
         $volumeHoraireListe = $service->getVolumeHoraireListe();
         if ($this->isInRealise()) {
             $volumeHoraireListe->setTypeVolumeHoraire($tvhPrevu);

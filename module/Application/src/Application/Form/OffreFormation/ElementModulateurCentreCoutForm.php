@@ -2,6 +2,7 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\Traits\ElementModulateursFieldsetAwareTrait;
@@ -67,13 +68,12 @@ class ElementModulateurCentreCoutForm extends AbstractForm
         //Formulaire partie Modulateur de l'élément pédagogique en cours
         $typeModulateurs = $this->getServiceTypeModulateur()->finderByElementPedagogique($elementPedagogique)->getQuery()->getResult();
         if (!empty($typeModulateurs)) {
-            foreach($typeModulateurs as $typeModulateur)
-            {
+            foreach ($typeModulateurs as $typeModulateur) {
                 $values = $typeModulateur->getModulateur();
                 foreach ($values as $value) {
                     $modulateursValues[$typeModulateur->getCode()][$value->getCode()] = $value->getLibelle();
                 }
-                $selectName = 'modulateur-' . $typeModulateur->getCode();
+                $selectName       = 'modulateur-' . $typeModulateur->getCode();
                 $selectModulateur = new Select($selectName);
                 $selectModulateur->setLabel($typeModulateur->getLibelle() . " : ");
                 $selectModulateur->setValueOptions(['' => '(Aucun)'] + $modulateursValues[$typeModulateur->getCode()]);
@@ -97,7 +97,7 @@ class ElementModulateurCentreCoutForm extends AbstractForm
         }
         $typeHeuresEp = $elementPedagogique->getTypeHeures()->getValues();
         foreach ($typeHeuresEp as $typeHeures) {
-            $selectCentreCout = $this->createSelectElementCentreCout($typeHeures);
+            $selectCentreCout = $this->createSelectElementCentreCout($typeHeures, $elementPedagogique);
             if (array_key_exists($typeHeures->getCode(), $centresCoutsValues)) {
                 $selectCentreCout->setValue($centresCoutsValues[$typeHeures->getCode()]);
             }
@@ -113,11 +113,12 @@ class ElementModulateurCentreCoutForm extends AbstractForm
 
 
 
-    private function createSelectElementCentreCout(\Application\Entity\Db\TypeHeures $th)
+    private function createSelectElementCentreCout(\Application\Entity\Db\TypeHeures $th, ElementPedagogique $elementPedagogique)
     {
-        //retrieve centre cout by types heures
-        $qb           = $this->getServiceCentreCout()->finderByTypeHeures($th);
-        $centresCouts = $qb->getQuery()->execute();
+        $filter       = function (CentreCout $centreCout) use ($th) {
+            return $centreCout->getTypeHeures()->contains($th);
+        };
+        $centresCouts = $elementPedagogique->getStructure()->getCentreCout()->filter($filter);
         $valueOptions = [];
         foreach ($centresCouts as $centreCout) {
             $valueOptions[$centreCout->getCode()] = $centreCout->getCode() . ' - ' . $centreCout->getLibelle();

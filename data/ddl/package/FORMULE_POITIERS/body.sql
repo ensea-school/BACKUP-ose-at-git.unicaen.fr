@@ -306,11 +306,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
     -- AJ=SI(AI$35<i_param_1;AI20;AI20/AI$35*i_param_1)
+    -- Modifié!!!
     WHEN c = 'AJ' AND v >= 1 THEN
       IF cell('AI35') < i.param_1 THEN
         RETURN cell('AI',l);
       ELSE
-        RETURN cell('AI',l) / cell('AI35') * i.param_1;
+        IF cell('AI35') = 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN cell('AI',l) / cell('AI35') * i.param_1;
+        END IF;
       END IF;
 
 
@@ -647,7 +652,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
     FROM
       v_formule_intervenant fi
       JOIN intervenant i ON i.id = fi.intervenant_id
-      JOIN statut_intervenant si ON si.id = fi.statut_id
+      JOIN statut_intervenant si ON si.id = i.statut_id
     ';
   END;
 

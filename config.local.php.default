@@ -265,4 +265,17 @@ return [
         'tmp-dir' => __DIR__ . '/cache/', // par défaut dans le répertoire cache de OSE
     ],
 
+
+    /* Fichiers */
+    'fichiers'      => [
+        /* file => dans le système de fichiers par défaut, bdd => en base de données par défaut */
+        'stockage' => 'bdd',
+
+        /* Répertoire où seront stockés les fichiers (pièces justificatives, contrats déposés, etc.
+         * A savoir : le répertoire par défaut data/fichiers est ignoré par GIT.
+         * Il est nécessaire de prévoir une sauvegarde de ce répertoire.
+         * IMPORTANT : ce répertoire doit être accéssible en lecture/écriture par l'utilisateur www-data d'Apache.
+         */
+        'dir'      => __DIR__ . '/data/fichiers',
+    ],
 ];

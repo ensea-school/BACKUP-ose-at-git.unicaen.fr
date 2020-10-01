@@ -15,7 +15,7 @@ $settings = [
 
     'enable_privileges' => true,
 
-    'entity_manager_name' => 'doctrine.entitymanager.orm_default', // nom du gestionnaire d'entités à utiliser
+    'entity_manager_name'    => 'doctrine.entitymanager.orm_default', // nom du gestionnaire d'entités à utiliser
 
     /**
      * Classes représentant les entités rôle et privilège.
@@ -32,37 +32,37 @@ $settings = [
     /**
      * Attribut LDAP utilisé pour le username des utilisateurs
      */
-    'ldap_username' => strtolower(AppConfig::get('ldap', 'loginAttribute')),
+    'ldap_username'          => strtolower(AppConfig::get('ldap', 'loginAttribute')),
 
     /**
      * Configuration de l'authentification locale.
      */
-    'local' => [
+    'local'                  => [
         /**
          * Possibilité ou non de s'authentifier à l'aide d'un compte local.
          */
-        'enabled' => !AppConfig::get('ldap', 'actif', true),
+        'enabled' => false,//!AppConfig::get('ldap', 'actif', true),
     ],
 
     /**
      * Configuration de l'authentification LDAP.
      */
-    'ldap' => [
+    'ldap'                   => [
         /**
          * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
          */
-        'enabled' => AppConfig::get('ldap', 'actif', true),
+        'enabled' => true,//AppConfig::get('ldap', 'actif', true),
     ],
 
     /**
      * Configuration de l'authentification Shibboleth.
      */
-    'shibboleth' => [
+    'shibboleth'             => [
         /**
          * Affichage ou non du formulaire d'authentification via l'annuaire LDAP.
          * NB: en réalité cela permet aussi l'authentification avec un compte local.
          */
-        'enable' => false,
+        'enable'     => false,
 
         /**
          * URL de déconnexion.

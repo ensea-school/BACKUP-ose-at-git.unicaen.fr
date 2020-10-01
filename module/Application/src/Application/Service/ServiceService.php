@@ -21,6 +21,7 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
@@ -60,6 +61,7 @@ class ServiceService extends AbstractEntityService
     use ValidationServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
     use SourceServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
     /**
      *
@@ -608,7 +610,7 @@ class ServiceService extends AbstractEntityService
             foreach ($o['heures'] as $heures) {
                 $volumeHoraire = $this->getServiceVolumeHoraire()->newEntity();
                 //@formatter:off
-                $volumeHoraire->setTypeVolumeHoraire( $heures['type-volume-horaire'] );
+                $volumeHoraire->setTypeVolumeHoraire( $typeVolumeHoraire );
                 $volumeHoraire->setPeriode          ( $heures['periode']             );
                 $volumeHoraire->setTypeIntervention ( $heures['type-intervention']   );
                 $volumeHoraire->setHeures           ( $heures['heures']              );
@@ -629,6 +631,7 @@ class ServiceService extends AbstractEntityService
     public function getPrevusFromPrevusData(Intervenant $intervenant)
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
         $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
 
         $intervenantPrec = $this->getServiceIntervenant()->getPrecedent($intervenant);
@@ -647,7 +650,7 @@ class ServiceService extends AbstractEntityService
         $this->finderByHistorique($qb);
         $this->finderByIntervenant($intervenantPrec, $qb);
         $sVolumeHoraire->finderByHistorique($qb);
-        $sVolumeHoraire->finderByTypeVolumeHoraire($tvhPrevu, $qb);
+        $sVolumeHoraire->finderByTypeVolumeHoraire($tvhSource, $qb);
         $sVolumeHoraire->finderByEtatVolumeHoraire($evhValide, $qb);
 
         $s = $this->getList($qb);
@@ -656,7 +659,7 @@ class ServiceService extends AbstractEntityService
         foreach ($s as $service) {
 
             /* @var $service \Application\Entity\Db\Service */
-            $service->setTypeVolumeHoraire($tvhPrevu);
+            $service->setTypeVolumeHoraire($tvhSource);
             $oldElement = $service->getElementPedagogique();
             $newElement = $oldElement ? $this->getServiceElementPedagogique()->getByCode(
                 $oldElement->getCode(),

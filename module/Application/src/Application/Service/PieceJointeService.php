@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\TblPieceJointeDemande;
+use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Entity\Db\TypePieceJointe;
@@ -22,6 +23,7 @@ class PieceJointeService extends AbstractEntityService
 {
     use TypeValidationServiceAwareTrait;
     use ValidationServiceAwareTrait;
+    use FichierServiceAwareTrait;
 
     /**
      * @var float[]
@@ -313,7 +315,7 @@ class PieceJointeService extends AbstractEntityService
 
             $pj->addFichier($fichier);
 
-            $this->getEntityManager()->persist($fichier);
+            $this->getServiceFichier()->save($fichier);
 
 
             if ($deleteFiles) {
@@ -340,7 +342,7 @@ class PieceJointeService extends AbstractEntityService
     public function supprimerFichier(Fichier $fichier, PieceJointe $pj)
     {
         $pj->removeFichier($fichier);
-        $this->getEntityManager()->remove($fichier);
+        $this->getServiceFichier()->delete($fichier);
 
         if (!count($pj->getFichier())) {
             $this->delete($pj);

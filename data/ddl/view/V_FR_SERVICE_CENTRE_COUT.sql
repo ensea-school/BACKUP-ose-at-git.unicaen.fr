@@ -1,14 +1,18 @@
-CREATE OR REPLACE FORCE VIEW V_FR_SERVICE_CENTRE_COUT AS
+CREATE OR REPLACE FORCE VIEW V_FR_SERVICE_CENTRE_COUT ("FORMULE_RESULTAT_SERVICE_ID", "CENTRE_COUT_ID") AS
 SELECT
   frs.id formule_resultat_service_id, cc.id centre_cout_id
 FROM
   formule_resultat_service   frs
+  JOIN parametre               p ON p.nom = 'centres_couts_paye'
   JOIN service                 s ON s.id = frs.service_id
+  JOIN intervenant             i ON i.id = s.intervenant_id
+  JOIN statut_intervenant     si ON si.id = i.statut_id
+  JOIN type_intervenant       ti ON ti.id = si.type_intervenant_id
   JOIN element_pedagogique    ep ON ep.id = s.element_pedagogique_id
   JOIN centre_cout            cc ON cc.histo_destruction IS NULL
 
   JOIN centre_cout_structure ccs ON ccs.centre_cout_id = cc.id
-                                AND ccs.structure_id = ep.structure_id
+                                AND ccs.structure_id = CASE WHEN p.valeur = 'enseignement' OR ti.code = 'E' THEN ep.structure_id ELSE COALESCE(i.structure_id,ep.structure_id) END
                                 AND ccs.histo_destruction IS NULL
 
   JOIN cc_activite             a ON a.id = cc.activite_id
@@ -27,7 +31,7 @@ WHERE
 UNION
 
 SELECT
-  frs.id formule_resultat_service_id, cc.id
+  frs.id formule_resultat_service_id, cc.id centre_cout_id
 FROM
   formule_resultat_service   frs
   JOIN service                 s ON s.id = frs.service_id

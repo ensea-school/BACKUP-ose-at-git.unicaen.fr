@@ -192,13 +192,39 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
 
 
+    -- =SI(I9=0;2/3;SI(I8="Oui";1                                                                       ;SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))))
+    -- I8= TP vaut TD
+    -- I9 = i.heures_service_statutaire
+    -- I15 = i.service_du
+    -- I26:I35 = Somme des CM I=CM, J=TD, K=TP
+    -- K26:K35 = Somme des TP
+    WHEN c = 'tauxTPService' AND v >= 1 THEN
+      IF i.heures_service_statutaire = 0  OR LOWER(i.param_2)='oui' THEN
+        RETURN 2/3;
+      ELSE
+        -- SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35))))
+        IF LOWER(i.param_1)='oui' THEN
+          RETURN 1;
+        ELSE
+          -- SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))
+          IF cell('sTP') <= 384 THEN
+            RETURN 1;
+          ELSE
+            --(384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)
+            RETURN (384+((cell('sTP')-384)*(2/3)))/cell('sTP');
+          END IF;
+        END IF;
+      END IF;
+
+
+
     -- =SI(I9=0;2/3;SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))))
     -- I8= TP vaut TD
     -- I9 = i.heures_service_statutaire
     -- I15 = i.service_du
     -- I26:I35 = Somme des CM I=CM, J=TD, K=TP
     -- K26:K35 = Somme des TP
-    WHEN c = 'tauxTP' AND v >= 1 THEN
+    WHEN c = 'tauxTPCompl' AND v >= 1 THEN
       IF i.heures_service_statutaire = 0  OR LOWER(i.param_2)='oui' THEN
         RETURN 2/3;
       ELSE
@@ -226,7 +252,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
     WHEN c = 'tauxServiceDu' AND v >= 1 THEN
       IF vh.type_intervention_code = 'TP' THEN
-        RETURN cell('tauxTP');
+        RETURN cell('tauxTPService');
       ELSE
         RETURN vh.taux_service_du;
       END IF;
@@ -235,7 +261,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
     WHEN c = 'tauxServiceCompl' AND v >= 1 THEN
       IF vh.type_intervention_code = 'TP' THEN
-        RETURN cell('tauxTP');
+        RETURN cell('tauxTPCompl');
       ELSE
         RETURN vh.taux_service_compl;
       END IF;

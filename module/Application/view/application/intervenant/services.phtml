@@ -99,11 +99,7 @@ echo $formuleTotauxHetd;
             <?php if ($services !== false): ?>$('.service-liste').serviceListe({
                 'heures-change-exists': function ()
                 {
-                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
-                    $('#sidebar').load('<?= $menuUrl; ?>');
 
-                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
-                    $('#feuille-de-route-btn-next').refresh();
                 },
                 'heures-change': function ()
                 {
@@ -112,6 +108,12 @@ echo $formuleTotauxHetd;
 
                     // on met à jour l'horodatage des services !!
                     $("#s-horodatage").refresh();
+
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?= $menuUrl; ?>');
+
+                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                    $('#feuille-de-route-btn-next').refresh();
                 }
             });<?php endif; ?>
 
@@ -119,11 +121,7 @@ echo $formuleTotauxHetd;
             <?php if ($servicesReferentiel !== false): ?>$('.service-referentiel-liste').serviceReferentielListe({
                 'heures-change-exists': function ()
                 {
-                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
-                    $('#sidebar').load('<?= $menuUrl; ?>');
 
-                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
-                    $('#feuille-de-route-btn-next').refresh();
                 },
                 'heures-change': function ()
                 {
@@ -132,6 +130,12 @@ echo $formuleTotauxHetd;
 
                     // on met à jour l'horodatage des services !!
                     $("#sr-horodatage").refresh();
+
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?= $menuUrl; ?>');
+
+                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                    $('#feuille-de-route-btn-next').refresh();
                 }
             });<?php endif; ?>
 

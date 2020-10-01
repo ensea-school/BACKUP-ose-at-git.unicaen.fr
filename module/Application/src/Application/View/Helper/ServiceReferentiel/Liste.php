@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\ServiceReferentiel;
@@ -24,6 +25,7 @@ class Liste extends AbstractViewHelper
     use TypeVolumeHoraireServiceAwareTrait;
     use ServiceReferentielServiceAwareTrait;
     use LocalContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
     /**
      *
@@ -242,16 +244,17 @@ class Liste extends AbstractViewHelper
                 //'href'          => $this->getAddUrl(),
                 'title'       => "Initialiser le service référentiel prévisionnel avec le service référentiel prévisionnel validé l'année dernière",
             ];
-            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévu ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+            $source  = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'))->getLibelle();
+            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
             $out     .= '<div class="modal fade" id="referentiel-prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
             $out     .= '<div class="modal-dialog modal-md">';
             $out     .= '<div class="modal-content">';
             $out     .= '<div class="modal-header">';
             $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-            $out     .= '<h4 class="modal-title">Reporter ici le service prévisionnel validé de l\'année précédente.</h4>';
+            $out     .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
             $out     .= '</div>';
             $out     .= '<div class="modal-body">';
-            $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service prévisionnel validé de l\'an dernier ?</p>';
+            $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
             $out     .= '</div>';
             $out     .= '<div class="modal-footer">';
             $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';

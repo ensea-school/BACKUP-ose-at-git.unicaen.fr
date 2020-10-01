@@ -9,7 +9,4 @@ public/vendor/unicaen/*
 public/unicaen/*
 public/.gitignore
 composer.phar
-/data/employeurs/sources/INSEE/*.zip
-/data/employeurs/prepare/*.*
-/data/employeurs/extract/*.*
-/data/employeurs/import/*.*
+data/fichiers

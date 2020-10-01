@@ -185,7 +185,7 @@ class ContratService extends AbstractEntityService
 
             $contrat->addFichier($fichier);
 
-            $this->getEntityManager()->persist($fichier);
+            $this->getServiceFichier()->save($fichier);
             $instances[] = $fichier;
 
             if ($deleteFiles) {

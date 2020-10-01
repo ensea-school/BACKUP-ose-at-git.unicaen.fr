@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Service\Traits\FichierServiceAwareTrait;
 use DateTime;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -15,7 +16,11 @@ use UnicaenApp\Controller\Plugin\Upload\UploadedFileInterface;
 class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFileInterface
 {
     use HistoriqueAwareTrait;
+    use FichierServiceAwareTrait;
 
+    /**
+     *
+     */
     const RESOURCE_ID = 'Fichier';
 
     /**
@@ -58,6 +63,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
      */
     private $validation;
 
+
+
     /**
      *
      */
@@ -65,6 +72,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     {
         $this->pieceJointe = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+
 
     /**
      * Représentation littérale de cet objet.
@@ -74,8 +83,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     public function __toString()
     {
         $string = sprintf("%s - Fichier '%s'",
-                $this->getTypeMime(),
-                $this->getNom());
+            $this->getTypeMime(),
+            $this->getNom());
 
         if ($this->getValidation()) {
             $string .= $this->getValidation();
@@ -84,10 +93,13 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $string;
     }
 
+
+
     /**
      * Set url
      *
      * @param string $url
+     *
      * @return Fichier
      */
     public function setUrl($url)
@@ -96,6 +108,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
         return $this;
     }
+
+
 
     /**
      * Get url
@@ -107,10 +121,13 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this->url;
     }
 
+
+
     /**
      * Set contenu
      *
      * @param string $contenu
+     *
      * @return self
      */
     public function setContenu($contenu)
@@ -120,20 +137,29 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this;
     }
 
+
+
     /**
      * Get contenu
      *
      * @return string
      */
-    public function getContenu()
+    public function getContenu($onlyBdd = false)
     {
-        return $this->contenu;
+        if ($onlyBdd || !$this->getId()) {
+            return $this->contenu;
+        } else {
+            return $this->getServiceFichier()->getFichierContenu($this);
+        }
     }
+
+
 
     /**
      * Set nom
      *
      * @param string $nom
+     *
      * @return Fichier
      */
     public function setNom($nom)
@@ -142,6 +168,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
         return $this;
     }
+
+
 
     /**
      * Get nom
@@ -153,10 +181,13 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this->nom;
     }
 
+
+
     /**
      * Set taille
      *
      * @param float $taille
+     *
      * @return Fichier
      */
     public function setTaille($taille)
@@ -165,6 +196,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
         return $this;
     }
+
+
 
     /**
      * Get taille
@@ -175,6 +208,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     {
         return $this->taille;
     }
+
+
 
     /**
      * Get taille
@@ -188,6 +223,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $f->filter($this->getTaille());
     }
 
+
+
     /**
      * Get id
      *
@@ -198,10 +235,13 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this->id;
     }
 
+
+
     /**
      * Set typeMime
      *
      * @param string $typeMime
+     *
      * @return self
      */
     public function setTypeMime($typeMime = null)
@@ -210,6 +250,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
         return $this;
     }
+
+
 
     /**
      * Get typeMime
@@ -221,10 +263,13 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this->type;
     }
 
+
+
     /**
      * Set description
      *
      * @param string $description
+     *
      * @return self
      */
     public function setDescription($description = null)
@@ -233,6 +278,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
         return $this;
     }
+
+
 
     /**
      * Get description
@@ -244,6 +291,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this->description;
     }
 
+
+
     /**
      * Retourne la date de dépôt du fichier.
      *
@@ -254,10 +303,13 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this->getHistoModification();
     }
 
+
+
     /**
      * Set validation
      *
      * @param \Application\Entity\Db\Validation $validation
+     *
      * @return Fichier
      */
     public function setValidation(\Application\Entity\Db\Validation $validation = null)
@@ -266,6 +318,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
         return $this;
     }
+
+
 
     /**
      * Get validation
@@ -277,6 +331,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
         return $this->validation;
     }
 
+
+
     /**
      * Get pieceJointe
      *
@@ -286,6 +342,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     {
         return $this->pieceJointe;
     }
+
+
 
     /**
      * Returns the string identifier of the Resource

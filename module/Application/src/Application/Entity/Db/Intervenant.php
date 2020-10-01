@@ -1274,7 +1274,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     {
         $result = $this->histoService->filter(function (HistoIntervenantService $histoService) use ($typeVolumeHoraire, $referentiel) {
             return
-                ($histoService->getTypeVolumeHoraire() == $typeVolumeHoraire || $histoService->getTypeVolumeHoraire() === null)
+                ($histoService->getTypeVolumeHoraire() == $typeVolumeHoraire)
                 && $histoService->getReferentiel() == $referentiel;
         });
         if ($result->count() == 1) { // un seul résultat

@@ -9,8 +9,8 @@ return [
 
     ]],
     'materialized-view' => ['includes' => [
-
-    ]],
+        
+    ], 'excludes'                      => ['MV_EXT_SERVICE']],
     'view'              => ['includes' => [
 
     ]],
@@ -21,9 +21,6 @@ return [
         'F_CONTRAT', 'F_CONTRAT_S',
     ]],
     'sequence'          => ['includes' => [
-
-    ]],
-    'materialized-view' => ['includes' => [
 
     ]],
 ];

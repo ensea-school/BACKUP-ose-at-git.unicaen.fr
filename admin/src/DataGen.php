@@ -450,7 +450,7 @@ class DataGen
         foreach ($data as $i => $line) {
             foreach ($line as $col => $val) {
                 if (isset($ddl['columns'][$col]) && $ddl['columns'][$col]['type'] == \BddAdmin\Bdd::TYPE_DATE && !empty($val) && is_string($val)) {
-                    $data[$i][$col] = \DateTime::createFromFormat('Y-m-d', $val);
+                    $data[$i][$col] = \DateTime::createFromFormat('Y-m-d H:i:s', $val);
                 }
             }
 
@@ -492,8 +492,8 @@ class DataGen
     {
         $annees = [];
         for ($a = 1950; $a < 2100; $a++) {
-            $dateDebut = \DateTime::createFromFormat('Y-m-d:H:i:s', $a . '-09-01:00:00:00');
-            $dateFin   = \DateTime::createFromFormat('Y-m-d:H:i:s', ($a + 1) . '-08-31:00:00:00');
+            $dateDebut = \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-09-01 00:00:00');
+            $dateFin   = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
 
             $anneeRef = $this->getAnneeCourante();
             $active   = ($a >= $anneeRef && $a < $anneeRef + 3);

@@ -1,4 +1,4 @@
 <?php
 
-$bdd = $oa->getBdd();
 
+$oa->exec('UnicaenTbl build-procedures');

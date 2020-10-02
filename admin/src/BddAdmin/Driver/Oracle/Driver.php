@@ -67,7 +67,7 @@ class Driver implements DriverInterface
             throw $this->sendException($error);
         }
 
-        $this->exec('ALTER SESSION SET NLS_DATE_FORMAT = \'yyyy-mm-dd\'');
+        $this->exec('ALTER SESSION SET NLS_DATE_FORMAT = \'yyyy-mm-dd hh24:mi:ss\'');
         $this->exec('ALTER SESSION SET NLS_TIMESTAMP_TZ_FORMAT = \'yyyy-mm-dd"T"hh24:mi:ss\'');
         $this->exec('ALTER SESSION SET NLS_NUMERIC_CHARACTERS=". "');
 
@@ -335,10 +335,8 @@ class Driver implements DriverInterface
             case Bdd::TYPE_STRING:
                 return (string)$variable;
             case Bdd::TYPE_DATE:
-                $date = \DateTime::createFromFormat('Y-m-d', $variable);
+                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $variable);
                 if ($date instanceof \DateTime) {
-                    $date->setTime(0, 0, 0);
-
                     return $date;
                 } else {
                     return $variable;

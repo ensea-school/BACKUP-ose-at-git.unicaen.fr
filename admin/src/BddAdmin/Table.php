@@ -455,8 +455,8 @@ class Table
                 foreach ($old as $c => $ov) {
                     $newc = isset($new[$c]) ? $new[$c] : null;
                     $oldc = isset($old[$c]) ? $old[$c] : null;
-                    if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d');
-                    if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d');
+                    if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d H:i:s');
+                    if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d H:i:s');
                     if ($newc != $oldc && array_key_exists($c, $new) && $c != 'ID') {
                         $ok = empty($options['update-cols']); // OK par défaut si une liste n'a pas été établie manuellement
 
@@ -507,7 +507,7 @@ class Table
         foreach ($keyArray as $v) {
             if ($keyVal != '') $keyVal .= '_';
             if ($v instanceof \DateTime) {
-                $keyVal .= $v->format('Y-m-d');
+                $keyVal .= $v->format('Y-m-d-H-i-s');
             } else {
                 $keyVal .= (string)$v;
             }

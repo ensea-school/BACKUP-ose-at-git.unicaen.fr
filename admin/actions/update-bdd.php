@@ -41,8 +41,7 @@ foreach ($tablesDep as $tableDep) {
 
 
 // Initialisation et lancement de la pré-migration
-$mm = new MigrationManager($oa, $bdd);
-$mm->initTablesDef($ref, $filters);
+$mm = new MigrationManager($oa, $ref, $filters);
 $mm->migration('pre');
 
 

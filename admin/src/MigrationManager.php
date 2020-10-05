@@ -1,8 +1,8 @@
 <?php
 
-
-
-
+use BddAdmin\Bdd;
+use BddAdmin\Ddl\Ddl;
+use BddAdmin\Ddl\DdlFilters;
 
 class MigrationManager
 {
@@ -12,9 +12,19 @@ class MigrationManager
     protected $oseAdmin;
 
     /**
-     * @var array
+     * @var Ddl
      */
-    protected $tablesDiff = [];
+    protected $ref;
+
+    /**
+     * @var Ddl
+     */
+    protected $old;
+
+    /**
+     * @var DdlFilters
+     */
+    protected $filters;
 
     /**
      * @var array
@@ -23,9 +33,12 @@ class MigrationManager
 
 
 
-    public function __construct(OseAdmin $oseAdmin)
+    public function __construct(OseAdmin $oseAdmin, Ddl $ref, $filters = [])
     {
         $this->oseAdmin = $oseAdmin;
+        $this->ref      = $ref;
+        $this->filtres  = DdlFilters::normalize($filters);
+        $this->old      = $oseAdmin->getBdd()->getDdl($filters);
     }
 
 
@@ -40,62 +53,54 @@ class MigrationManager
 
 
 
-    public function getBdd(): \BddAdmin\Bdd
+    public function getBdd(): Bdd
     {
         return $this->oseAdmin->getBdd();
     }
 
 
 
-    public function initTablesDef(\BddAdmin\Ddl\Ddl $ref, $filters = [])
+    /**
+     * Détermine si un objet existe dans la base de données avant migration
+     *
+     * @param string $type
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function has(string $type, string $name): bool
     {
-        $filters = \BddAdmin\Ddl\DdlFilters::normalize($filters);
-
-        $ref = (array)$ref->get(\BddAdmin\Ddl\Ddl::TABLE);
-
-        /* On ne parse que les tables */
-        $oldRef           = $this->getBdd()->table()->get($filters->get(\BddAdmin\Ddl\Ddl::TABLE));
-        $this->tablesDiff = [];
-        if (isset($oldRef) && is_array($oldRef)) {
-            foreach ($oldRef as $table => $ddl) {
-                $this->tablesDiff[$table]['old'] = $ddl;
-            }
-        }
-        if ($ref) {
-            foreach ($ref as $table => $ddl) {
-                $this->tablesDiff[$table]['new'] = $ddl;
-            }
-        }
-    }
-
-
-
-    public function getTableDiff(string $tableName): ?array
-    {
-        if (!array_key_exists($tableName, $this->tablesDiff)) {
-            return null;
-        }
-        $tableDiff = $this->tablesDiff[$tableName];
-        if (!isset($tableDiff['old'])) $tableDiff['old'] = [];
-        if (!isset($tableDiff['new'])) $tableDiff['new'] = [];
-
-        return $tableDiff;
+        return isset($this->old->get($type)[$name]);
     }
 
 
 
     /**
-     * Détermine si une table existe dans la base de données avant migration
-     *
-     * @param string $tableName
+     * @param string $type
+     * @param string $Name
      *
      * @return bool
      */
-    public function hasTable(string $tableName): bool
+    public function hasNew(string $type, string $Name): bool
     {
-        $d = $this->getTableDiff($tableName);
+        return !isset($this->old->get($type)[$Name]) && isset($this->ref->get($type)[$Name]);
+    }
 
-        return isset($d['old']['columns']);
+
+
+    /**
+     * @param string $type
+     * @param string $Name
+     *
+     * @return bool
+     */
+    public function hasOld(string $type, string $Name): bool
+    {
+        if (Ddl::TABLE == $type) {
+            return $this->tableRealExists($Name) && !isset($this->ref->get(Ddl::TABLE)[$Name]);
+        } else {
+            return isset($this->old->get($type)[$Name]) && !isset($this->ref->get($type)[$Name]);
+        }
     }
 
 
@@ -110,41 +115,7 @@ class MigrationManager
      */
     public function hasColumn(string $tableName, string $columnName): bool
     {
-        $d = $this->getTableDiff($tableName);
-
-        return isset($d['old']['columns'][$columnName]);
-    }
-
-
-
-    /**
-     * Détermine si une table doit être ajoutée
-     *
-     * @param string $tableName
-     *
-     * @return bool
-     */
-    public function hasNewTable(string $tableName): bool
-    {
-        $d = $this->getTableDiff($tableName);
-
-        return isset($d['new']['columns']) && !isset($d['old']['columns']);
-    }
-
-
-
-    /**
-     * Détermine si une table doit être supprimée
-     *
-     * @param string $tableName
-     *
-     * @return bool
-     */
-    public function hasOldTable(string $tableName): bool
-    {
-        $d = $this->getTableDiff($tableName);
-
-        return isset($d['old']['columns']) && !isset($d['new']['columns']);
+        return isset($this->old->get(Ddl::TABLE)[$tableName]['columns'][$columnName]);
     }
 
 
@@ -159,9 +130,10 @@ class MigrationManager
      */
     public function hasNewColumn(string $tableName, string $columnName): bool
     {
-        $d = $this->getTableDiff($tableName);
+        $old = $this->old->get(DDl::TABLE);
+        $new = $this->ref->get(Ddl::TABLE);
 
-        return isset($d['new']['columns'][$columnName]) && !isset($d['old']['columns'][$columnName]);
+        return isset($new[$tableName]['columns'][$columnName]) && !isset($old[$tableName]['columns'][$columnName]);
     }
 
 
@@ -176,9 +148,10 @@ class MigrationManager
      */
     public function hasOldColumn(string $tableName, string $columnName): bool
     {
-        $d = $this->getTableDiff($tableName);
+        $old = $this->old->get(DDl::TABLE);
+        $new = $this->ref->get(Ddl::TABLE);
 
-        return isset($d['old']['columns'][$columnName]) && !isset($d['new']['columns'][$columnName]);
+        return !isset($new[$tableName]['columns'][$columnName]) && isset($old[$tableName]['columns'][$columnName]);
     }
 
 
@@ -186,7 +159,7 @@ class MigrationManager
     protected function tableRealExists($tableName): bool
     {
         $sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME = :tableName";
-        $tn  = $this->getBdd()->select($sql, compact('tableName'), ['fetch' => \BddAdmin\Bdd::FETCH_ONE]);
+        $tn  = $this->getBdd()->select($sql, compact('tableName'), ['fetch' => Bdd::FETCH_ONE]);
 
         return isset($tn['TABLE_NAME']) && $tn['TABLE_NAME'] == $tableName;
     }

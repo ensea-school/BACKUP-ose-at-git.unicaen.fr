@@ -2,7 +2,6 @@
 
 use BddAdmin\Ddl\Ddl;
 
-$bdd     = $oa->getBdd();
 $prepost = $c->getArg()[2];
 $action  = $c->getArg()[3];
 
@@ -19,6 +18,5 @@ foreach ($ref as $ddlClass => $objects) {
     }
 }
 
-$mm = new MigrationManager($oa, $bdd);
-$mm->initTablesDef($ref, $filters);
+$mm = new MigrationManager($oa, $ref, $filters);
 $mm->migration($prepost, $action);

@@ -19,8 +19,6 @@ class IndexesContraintesDoublons extends AbstractMigration
 
     public function utile(): bool
     {
-        return true;
-
         return $this->manager->hasOld('index', 'CORPS_SRC_UN')
             && $this->manager->hasOld('index', 'TBL_AGR_INTERVENANT_FK_IDX');
     }

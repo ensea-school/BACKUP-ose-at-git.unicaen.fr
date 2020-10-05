@@ -111,7 +111,7 @@ class IntervenantDossierController extends AbstractController
         if ($lastHETD > 0) {
             $hetd = Util::formattedFloat(
                 $lastHETD,
-                NumberFormatter::DECIMAL,
+                \NumberFormatter::DECIMAL,
                 2);
             $this->flashMessenger()->addInfoMessage(
                 $role->getIntervenant() ?

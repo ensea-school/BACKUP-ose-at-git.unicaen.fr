@@ -117,6 +117,7 @@ class AdresseFieldset extends AbstractFieldset
             'attributes' => [
                 'class'            => 'selectpicker',
                 'data-live-search' => 'true',
+                'data-size'        => 10,
             ],
             'type'       => 'Select',
         ]);

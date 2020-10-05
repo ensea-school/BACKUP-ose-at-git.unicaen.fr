@@ -121,15 +121,15 @@ class IntervenantDossierController extends AbstractController
         }
 
         return compact(
-            ['form',
-             'role',
-             'intervenant',
-             'intervenantDossier',
-             'intervenantDossierValidation',
-             'intervenantDossierStatut',
-             'intervenantDossierCompletude',
-             'champsAutres',
-             'fieldsetRules']
+            'form',
+            'role',
+            'intervenant',
+            'intervenantDossier',
+            'intervenantDossierValidation',
+            'intervenantDossierStatut',
+            'intervenantDossierCompletude',
+            'champsAutres',
+            'fieldsetRules'
         );
     }
 

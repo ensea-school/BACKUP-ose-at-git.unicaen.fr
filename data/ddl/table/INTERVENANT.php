@@ -469,7 +469,7 @@ return [
             'name'        => 'NUMERO_INSEE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 15,
+            'length'      => 20,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,

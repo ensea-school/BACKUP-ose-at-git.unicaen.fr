@@ -19,6 +19,8 @@ class IndexesContraintesDoublons extends AbstractMigration
 
     public function utile(): bool
     {
+        return true;
+
         return $this->manager->hasOld('index', 'CORPS_SRC_UN')
             && $this->manager->hasOld('index', 'TBL_AGR_INTERVENANT_FK_IDX');
     }
@@ -62,6 +64,16 @@ class IndexesContraintesDoublons extends AbstractMigration
         $bdd->index()->drop('TBL_NOEUD_NETAPE_IDX');
         $bdd->index()->drop('TBL_NOEUD_NOEUD_IDX');
         $bdd->index()->drop('TBL_NOEUD_STRUCTURE_IDX');
+
+        $bdd->exec('UPDATE INTERVENANT SET NUMERO_INSEE_PROVISOIRE = 0 WHERE NUMERO_INSEE_PROVISOIRE IS NULL');
+        $bdd->exec('DELETE FROM type_intervention_ep WHERE id IN (
+          SELECT max(id) 
+          FROM type_intervention_ep 
+          WHERE histo_destruction IS NOT NULL
+          GROUP BY source_code, histo_destruction 
+          HAVING count(*) > 1
+          )'
+        );
     }
 
 

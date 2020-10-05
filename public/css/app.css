@@ -49,7 +49,9 @@ body.test div#contenu-principal {
 }
 
 
-
+.dropdown-menu.open {
+    z-index: 1040;
+}
 
 
 /* FIN */

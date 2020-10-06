@@ -59,13 +59,10 @@ class MigrationDossier extends AbstractMigration
 
     protected function after()
     {
-        $oa      = $this->manager->getOseAdmin();
-        $bdd     = $this->manager->getBdd();
-        $console = $this->manager->getOseAdmin()->getConsole();
-
-        /*TEMPORAIRE : récupération des ID déjà utilisé dans intervenant_dossier dans mon cas en dev ou la table n'est pas vide*/
-        $intervenantForbidden = ['51957'];
-
+        $oa                 = $this->manager->getOseAdmin();
+        $bdd                = $this->manager->getBdd();
+        $console            = $this->manager->getOseAdmin()->getConsole();
+        $nbDossierMigration = 0;
 
         //Get id pays FRANCE
         $sql      = "SELECT id FROM PAYS WHERE libelle = 'FRANCE'";
@@ -82,19 +79,8 @@ class MigrationDossier extends AbstractMigration
             d.histo_destruction IS NULL
         ";
 
-        /*$sql = "
-        SELECT
-            *
-        FROM
-            DOSSIER d
-        JOIN VALIDATION v ON v.intervenant_id = d.intervenant_id
-        JOIN TYPE_VALIDATION tv ON tv.id = v.type_validation_id
-        WHERE
-            d.histo_destruction IS NULL
-            AND tv.code = 'DONNEES_PERSO_PAR_COMP'
-        ";*/
-
-        $dossiers = $bdd->select($sql);
+        $dossiers           = $bdd->select($sql);
+        $nbDossierToMigrate = count($dossiers);
 
         $console->println("Nombre de dossier à migrer : " . count($dossiers));
 
@@ -138,13 +124,11 @@ class MigrationDossier extends AbstractMigration
 
 
         $datasIntervenantDossier = [];
+        $console->begin("Début de migration des dossiers intervenants");
         foreach ($dossiers as $dossier) {
-            /*if (in_array($dossier['INTERVENANT_ID'], $intervenantForbidden)) {
-                //TEMPORAIRE : Pour ne pas toucher à certain intervenant que j'utilise actuellement. A supprimer avant de pousser le code
-                $console->println("Intervenant à ne pas modifier", $console::COLOR_RED);
-                continue;
-            }*/
-            $console->println("Migration du dossier ID : " . $dossier['ID'], $console::COLOR_GREEN);
+            $nbDossierMigration++;
+            $console->msg('Migration du dossier ID Transfert ' . $dossier['ID'] . ' / ' . $nbDossierMigration . ' sur ' . $nbDossierToMigrate, true);
+            //$console->println("Migration du dossier ID : " . $dossier['ID'], $console::COLOR_GREEN);
             $intervenantDossier = [];
             //On traite dans un premier ce qu'on a pu mapper entre ancien dossier et nouveau dossier
             foreach ($mappingDossierToIntervenantDossier as $newColumn => $oldColumn) {
@@ -186,12 +170,15 @@ class MigrationDossier extends AbstractMigration
             $intervenantDossier['COMPLETUDE'] = 1;
             $datasIntervenantDossier[]        = $intervenantDossier;
         }
+
         //On ne delete pas
         $options['delete']       = false;
         $options['update']       = false;
         $tableIntervenantDossier = $bdd->getTable('INTERVENANT_DOSSIER');
         //On merge toutes les données
         $tableIntervenantDossier->merge($datasIntervenantDossier, 'ID', $options);
+        $console->end("Fin de migration des dossiers intervenants");
+        $console->println("Nombre de dossiers migrés : " . $nbDossierMigration);
         //Reste à faire de recalculer la complétude des dossiers 2019 et 2020 au minimum
         $console->println("Recalcul de la complétude des dossiers pour l'année 2019");
         $annee = '2019';

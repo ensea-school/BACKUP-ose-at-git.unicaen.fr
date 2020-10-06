@@ -25,7 +25,7 @@ return [
             'name'        => 'ADRESSE_COMMUNE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 50,
+            'length'      => 100,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,

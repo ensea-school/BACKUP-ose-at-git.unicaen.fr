@@ -853,7 +853,7 @@ class Bdd
         $tables = array_keys($tDdl);
 
         sort($tables);
-
+        $this->inCopy = true;
         foreach ($tables as $table) {
             if (file_exists($dirname . '/' . $table . '.tbl')) {
                 $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
@@ -862,7 +862,7 @@ class Bdd
                 }
             }
         }
-
+        $this->inCopy = false;
         $this->create($ddl, [Ddl::TABLE => ['excludes' => '%']]);
 
         $this->majSequences($ddl);

@@ -89,6 +89,10 @@ class Driver implements DriverInterface
 
     private function execStatement($sql, array $params = [], array $types = [])
     {
+        if ($this->bdd->isInCopy() && 0 === strpos($sql, 'INSERT INTO')) {
+            $sql = 'INSERT /*+ APPEND */ INTO' . substr($sql, strlen('INSERT INTO'));
+        }
+
         foreach ($params as $name => $val) {
             if (is_bool($val)) {
                 $params[$name] = $val ? 1 : 0;

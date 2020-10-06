@@ -127,7 +127,7 @@ class MigrationDossier extends AbstractMigration
         $console->begin("Début de migration des dossiers intervenants");
         foreach ($dossiers as $dossier) {
             $nbDossierMigration++;
-            $console->msg('Migration du dossier ID Transfert ' . $dossier['ID'] . ' / ' . $nbDossierMigration / $nbDossierToMigrate, true);
+            $console->msg('Migration du dossier ID Transfert ' . $dossier['ID'] . ' / ' . $nbDossierMigration . ' sur ' . $nbDossierToMigrate, true);
             //$console->println("Migration du dossier ID : " . $dossier['ID'], $console::COLOR_GREEN);
             $intervenantDossier = [];
             //On traite dans un premier ce qu'on a pu mapper entre ancien dossier et nouveau dossier
@@ -177,15 +177,15 @@ class MigrationDossier extends AbstractMigration
         $tableIntervenantDossier = $bdd->getTable('INTERVENANT_DOSSIER');
         //On merge toutes les données
         $tableIntervenantDossier->merge($datasIntervenantDossier, 'ID', $options);
-        $console->println("Nombre de dossiers migrés : " . $nbDossierMigration);
         $console->end("Fin de migration des dossiers intervenants");
+        $console->println("Nombre de dossiers migrés : " . $nbDossierMigration);
         //Reste à faire de recalculer la complétude des dossiers 2019 et 2020 au minimum
         $console->println("Recalcul de la complétude des dossiers pour l'année 2019");
         $annee = '2019';
         $oa->exec("calcul-completude-dossier --annee=$annee");
         $console->println("Recalcul de la complétude des dossiers pour l'année 2020");
         $annee = '2020';
-        $oa->exec("calcul - completude - dossier--annee = $annee");
+        $oa->exec("calcul-completude-dossier --annee=$annee");
         //Recalcule le tableau de bord des dossier
         $console->println("Calcul du tableau de bord TBL_DOSSIER");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'dossier\'); END;');

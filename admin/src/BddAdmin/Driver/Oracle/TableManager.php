@@ -172,6 +172,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
             foreach ($tdata['columns'] as $cname => $column) {
                 $oriColPos[$column['position']] = $cname;
             }
+            ksort($oriColPos);
             foreach ($oriColPos as $cname) {
                 if (!in_array($cname, $colPos)) {
                     $colPos[] = $cname;

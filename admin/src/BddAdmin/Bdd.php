@@ -807,6 +807,12 @@ class Bdd
             throw new \Exception("Création du répertoire $dirname impossible");
         }
 
+        // On supprime les fichiers existants s'il y en a
+        $files = array_diff(scandir($dirname), ['.', '..']);
+        foreach ($files as $file) {
+            unlink("$dirname/$file");
+        }
+
         foreach ($fncs as $table => $fnc) {
             if (false === $fnc) {
                 if (!isset($filters['table']['excludes'])) {

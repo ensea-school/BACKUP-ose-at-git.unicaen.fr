@@ -40,9 +40,7 @@ $fieldsets = $form->getFieldsets();
         flex-direction: column;
     }
 </style>
-<h1 class="page-header">Données personnelles
-    <small><?= $intervenant; ?></small>
-</h1>
+<?php $this->intervenant($intervenant)->renderTitle('Données personnelles'); ?>
 
 <?php if ($intervenantDossierValidation): ?>
 <div class="bg-success" style="padding:10px;">

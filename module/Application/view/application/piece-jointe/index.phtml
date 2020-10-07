@@ -23,7 +23,7 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
 $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 ?>
-    <h1 class="page-header"><?= $title ?></h1>
+    <h1 class="page-header"><?= $this->intervenant($intervenant)->renderTitle('Pièces justificatives'); ?></h1>
 
     <div class="piece-jointe">
         <div class="infos" data-url="<?= $infosUrl ?>">

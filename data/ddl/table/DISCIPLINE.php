@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_2'       => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_3'       => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_4'       => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'     => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'        => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'     => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID' => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 10,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'ID'                    => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE_COURT'         => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'LIBELLE_LONG'          => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'SOURCE_CODE'           => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'SOURCE_ID'             => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
     ],

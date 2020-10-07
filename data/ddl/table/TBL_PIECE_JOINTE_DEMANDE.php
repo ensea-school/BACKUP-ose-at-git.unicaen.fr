@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'CODE_INTERVENANT'     => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HEURES_POUR_SEUIL'    => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'ID'                   => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'       => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'          => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
     ],

@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'DISPLAY_NAME'         => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'EMAIL'                => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'PASSWORD'             => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => 'null',
-            'position'    => 6,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'STATE'                => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'USERNAME'             => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
     ],

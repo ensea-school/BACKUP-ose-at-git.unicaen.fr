@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'ELEMENT_PEDAGOGIQUE_HISTO'      => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 2,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'ELEMENT_PEDAGOGIQUE_ID'         => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ELEMENT_PEDAGOGIQUE_PERIODE_ID' => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'ETAPE_HISTO'                    => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 5,
+            'position'    => 13,
             'commentaire' => 'Témoin (1 si l\'étape est supprimée)',
         ],
         'ETAPE_ID'                       => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HAS_HEURES_MAUVAISE_PERIODE'    => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 14,
             'commentaire' => 'Témoin (1 si heures saisies au mauvais semestre)',
         ],
         'HEURES'                         => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 8,
+            'position'    => 20,
             'commentaire' => 'NB d\'heures saisi',
         ],
         'ID'                             => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'                 => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'INTERVENANT_STRUCTURE_ID'       => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'NBVH'                           => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 12,
+            'position'    => 7,
             'commentaire' => 'Nombre de volumes horaires saisis',
         ],
         'PEUT_SAISIR_SERVICE'            => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'                     => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'                   => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_CODE'          => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID'         => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'VALIDE'                         => [
@@ -246,7 +246,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 20,
+            'position'    => 8,
             'commentaire' => 'Nombre de volumes horaires validés',
         ],
     ],

@@ -18,7 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 1,
+            'position'    => 4,
             'commentaire' => 'Témoin indiquant si l\'indicateur est actif ou non',
         ],
         'ID'                => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE_PLURIEL'   => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'LIBELLE_SINGULIER' => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'MESSAGE'           => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'NUMERO'            => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 6,
+            'position'    => 5,
             'commentaire' => 'Numero unique pérenne user-friendly',
         ],
         'ORDRE'             => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '100',
-            'position'    => 7,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'ROUTE'             => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'TEM_DISTINCT'      => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 9,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'TEM_NOT_STRUCTURE' => [
@@ -126,7 +126,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 10,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'TYPE'              => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 2,
             'commentaire' => 'Type de l\'indicateur (alerte, info, etc.)',
         ],
     ],

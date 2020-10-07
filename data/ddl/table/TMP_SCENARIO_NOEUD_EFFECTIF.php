@@ -18,7 +18,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'ETAPE_ID'          => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'SCENARIO_NOEUD_ID' => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'TYPE_HEURES_ID'    => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
     ],

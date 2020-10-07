@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'ID'                     => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'         => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 4,
+            'position'    => 7,
             'commentaire' => 'Nombre de volumes horaires',
         ],
         'PEUT_SAISIR_SERVICE'    => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 4,
             'commentaire' => 'Témoin (1=peut saisir du référentiel)',
         ],
         'STRUCTURE_ID'           => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'VALIDE'                 => [

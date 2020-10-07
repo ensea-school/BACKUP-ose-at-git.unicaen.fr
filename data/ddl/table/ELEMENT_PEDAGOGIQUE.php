@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'CODE'                  => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'DISCIPLINE_ID'         => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'ETAPE_ID'              => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'FA'                    => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'FC'                    => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 6,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'FI'                    => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'        => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 9,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'  => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'     => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID' => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'    => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 13,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'ID'                    => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE'               => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'PERIODE_ID'            => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 5,
             'commentaire' => 'Un élément pédagogique ne peut avoir qu\'une et une seule période.',
         ],
         'SOURCE_CODE'           => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'SOURCE_ID'             => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'          => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'TAUX_FA'               => [
@@ -246,7 +246,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 20,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TAUX_FC'               => [
@@ -258,7 +258,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'TAUX_FI'               => [
@@ -270,7 +270,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 22,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'TAUX_FOAD'             => [
@@ -282,7 +282,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
     ],

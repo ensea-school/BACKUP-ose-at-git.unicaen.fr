@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'ANNEE_FIN_ID'                  => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'CODE'                          => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'             => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'                => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 5,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'          => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'             => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'         => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'            => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE'                       => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'ORDRE'                         => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'REGLE_FC'                      => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'REGLE_FOAD'                    => [
@@ -174,7 +174,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 14,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'TAUX_HETD_COMPLEMENTAIRE'      => [
@@ -186,7 +186,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 15,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'TAUX_HETD_SERVICE'             => [
@@ -198,7 +198,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 16,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_MAQUETTE_ID' => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'VISIBLE'                       => [
@@ -222,7 +222,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'VISIBLE_EXTERIEUR'             => [

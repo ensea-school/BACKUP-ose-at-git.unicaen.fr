@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'SYNC_ENABLED'     => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 2,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'SYNC_FILTRE'      => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'SYNC_HOOK_AFTER'  => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'SYNC_HOOK_BEFORE' => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'TABLE_NAME'       => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
     ],

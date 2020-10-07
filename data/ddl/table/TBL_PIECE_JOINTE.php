@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'DEMANDEE'             => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 2,
+            'position'    => 5,
             'commentaire' => 'Témoin (1 si la PJ est demandée)',
         ],
         'FOURNIE'              => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 3,
+            'position'    => 6,
             'commentaire' => 'Témoin (1 si la PJ est fournie)',
         ],
         'HEURES_POUR_SEUIL'    => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 4,
+            'position'    => 8,
             'commentaire' => 'NB d\'heures de seuil pour la demande',
         ],
         'ID'                   => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'       => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'          => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 7,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID' => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'VALIDEE'              => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 7,
             'commentaire' => 'Témoin (1 si la PJ est validée)',
         ],
     ],

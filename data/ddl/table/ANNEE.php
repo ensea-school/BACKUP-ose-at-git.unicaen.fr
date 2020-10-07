@@ -18,7 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 1,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'DATE_DEBUT' => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'DATE_FIN'   => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'ID'         => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE'    => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'TAUX_HETD'  => [

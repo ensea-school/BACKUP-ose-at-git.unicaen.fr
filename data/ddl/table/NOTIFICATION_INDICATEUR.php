@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 6,
             'commentaire' => 'Identifiant du personnel',
         ],
         'DATE_ABONNEMENT' => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 4,
             'commentaire' => 'Date d\'abonnement à cette notification',
         ],
         'DATE_DERN_NOTIF' => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => 'Eventuelle date de dernière notification',
         ],
         'FREQUENCE'       => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 3,
             'commentaire' => 'Fréquence de notification en secondes (60*60*24=jour, 60*60*24*7=semaine, etc.)',
         ],
         'ID'              => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INDICATEUR_ID'   => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 2,
             'commentaire' => 'Identifiant de l\'indicateur',
         ],
         'IN_HOME'         => [

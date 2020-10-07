@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 7,
             'commentaire' => 'ID de l\'agrément si agréé',
         ],
         'ANNEE_AGREMENT'   => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'ANNEE_ID'         => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'CODE_INTERVENANT' => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'DUREE_VIE'        => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 5,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'ID'               => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'   => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'      => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 6,
             'commentaire' => 'Témoin (1 ou 0) pour définir si l\'agrément doit être demandé obligatoirement ou non',
         ],
         'STRUCTURE_ID'     => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TYPE_AGREMENT_ID' => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
     ],

@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_REFERENTIEL' => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 2,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'ID'                       => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'SERVICE_REFERENTIEL'      => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 4,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TOTAL'                    => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'VOLUME_HORAIRE_REF_ID'    => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
     ],

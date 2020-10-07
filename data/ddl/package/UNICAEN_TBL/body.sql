@@ -998,12 +998,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           i.id intervenant_id,
           si.peut_saisir_dossier,
           d.id dossier_id,
-          v.id validation_id
+          v.id validation_id,
+          d.completude completude
         FROM
                     intervenant         i
                JOIN statut_intervenant si ON si.id = i.statut_id
-          LEFT JOIN dossier             d ON d.intervenant_id = i.id
-                                      AND d.histo_destruction IS NULL
+          LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id
+                                         AND d.histo_destruction IS NULL
 
                JOIN type_validation tv ON tv.code = ''DONNEES_PERSO_PAR_COMP''
           LEFT JOIN validation       v ON v.intervenant_id = i.id
@@ -1030,12 +1031,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.PEUT_SAISIR_DOSSIER             = v.PEUT_SAISIR_DOSSIER
         AND COALESCE(t.DOSSIER_ID,0)          = COALESCE(v.DOSSIER_ID,0)
         AND COALESCE(t.VALIDATION_ID,0)       = COALESCE(v.VALIDATION_ID,0)
+        AND COALESCE(t.COMPLETUDE,0)          = COALESCE(v.COMPLETUDE,0)
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
       v.PEUT_SAISIR_DOSSIER,
       v.DOSSIER_ID,
-      v.VALIDATION_ID
+      v.VALIDATION_ID,
+      v.COMPLETUDE
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_DOSSIER t ON
@@ -1496,10 +1499,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.VALIDATION_ID,0)        = COALESCE(v.VALIDATION_ID,0)
         AND COALESCE(t.FICHIER_ID,0)           = COALESCE(v.FICHIER_ID,0)
         AND t.PIECE_JOINTE_ID                  = v.PIECE_JOINTE_ID
-        AND t.CODE_INTERVENANT                 = v.CODE_INTERVENANT
-        AND COALESCE(t.DATE_ARCHIVE,0)         = COALESCE(v.DATE_ARCHIVE,0)
-        AND COALESCE(t.DATE_VALIDITE,0)        = COALESCE(v.DATE_VALIDITE,0)
         AND t.DUREE_VIE                        = v.DUREE_VIE
+        AND t.CODE_INTERVENANT                 = v.CODE_INTERVENANT
+        AND COALESCE(t.DATE_VALIDITE,0)        = COALESCE(v.DATE_VALIDITE,0)
+        AND COALESCE(t.DATE_ARCHIVE,0)         = COALESCE(v.DATE_ARCHIVE,0)
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.TYPE_PIECE_JOINTE_ID,
@@ -1507,10 +1510,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.VALIDATION_ID,
       v.FICHIER_ID,
       v.PIECE_JOINTE_ID,
+      v.DUREE_VIE,
       v.CODE_INTERVENANT,
-      v.DATE_ARCHIVE,
       v.DATE_VALIDITE,
-      v.DUREE_VIE
+      v.DATE_ARCHIVE
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PIECE_JOINTE_FOURNIE t ON

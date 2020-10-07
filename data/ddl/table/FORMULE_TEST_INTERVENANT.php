@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'A_SERVICE_DU'                   => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 2,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'C_SERVICE_DU'                   => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'DEBUG_INFO'                     => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'ETAT_VOLUME_HORAIRE_ID'         => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'FORMULE_ID'                     => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_MODIFIE'         => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 8,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_STATUTAIRE'      => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'ID'                             => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE'                        => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'PARAM_1'                        => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'PARAM_2'                        => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'PARAM_3'                        => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'PARAM_4'                        => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'PARAM_5'                        => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'STRUCTURE_CODE'                 => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_SERVICE_COMPL'       => [
@@ -222,7 +222,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 18,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_SERVICE_DU'          => [
@@ -234,7 +234,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 19,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'TAUX_CM_SERVICE_COMPL'          => [
@@ -246,7 +246,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1.5',
-            'position'    => 20,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'TAUX_CM_SERVICE_DU'             => [
@@ -258,7 +258,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1.5',
-            'position'    => 21,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'TAUX_TP_SERVICE_COMPL'          => [
@@ -270,7 +270,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '2/3',
-            'position'    => 22,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'TAUX_TP_SERVICE_DU'             => [
@@ -282,7 +282,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 23,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [
@@ -294,7 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 24,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID'         => [
@@ -306,7 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 25,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
     ],

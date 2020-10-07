@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => 'Code de cette étape',
         ],
         'DESC_NON_FRANCHIE'   => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'DESC_SANS_OBJECTIF'  => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'ID'                  => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE_AUTRES'      => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'LIBELLE_INTERVENANT' => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'         => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'ORDRE'               => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 8,
+            'position'    => 3,
             'commentaire' => 'Permet d\'ordonner les étapes',
         ],
         'ROUTE'               => [

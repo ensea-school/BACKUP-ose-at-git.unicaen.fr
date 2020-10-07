@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'ASSIDUITE'                => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 14,
             'commentaire' => 'Taux d\'assiduité en % (entre 0 et 1)',
         ],
         'DEDOUBLEMENT'             => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 13,
             'commentaire' => 'Seuil de dédoublement',
         ],
         'EFFECTIF'                 => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 15,
             'commentaire' => 'Effectifs',
         ],
         'ELEMENT_PEDAGOGIQUE_ID'   => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'ETAPE_ENS_ID'             => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ETAPE_ID'                 => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'GROUPES'                  => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 17,
             'commentaire' => 'Nombre de groupes calculé',
         ],
         'GROUPE_TYPE_FORMATION_ID' => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HETD'                     => [
@@ -126,7 +126,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 19,
             'commentaire' => 'HETD réelles calculées',
         ],
         'HEURES'                   => [
@@ -138,7 +138,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 18,
             'commentaire' => 'Heures réelles calculées',
         ],
         'HEURES_ENS'               => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 16,
             'commentaire' => 'Heures d\'enseignement (charges par groupe)',
         ],
         'ID'                       => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'NOEUD_ID'                 => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'OUVERTURE'                => [
@@ -186,7 +186,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 12,
             'commentaire' => 'Seuil d\'ouverture',
         ],
         'SCENARIO_ID'              => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'             => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'TYPE_HEURES_ID'           => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_ID'     => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
     ],

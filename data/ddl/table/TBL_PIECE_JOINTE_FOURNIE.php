@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'CODE_INTERVENANT'     => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'DATE_ARCHIVE'         => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'DATE_VALIDITE'        => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'DUREE_VIE'            => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 5,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'FICHIER_ID'           => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'       => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'PIECE_JOINTE_ID'      => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID' => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'VALIDATION_ID'        => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
     ],

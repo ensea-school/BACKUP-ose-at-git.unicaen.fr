@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'EDITE'              => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 2,
+            'position'    => 7,
             'commentaire' => 'Nombre de volumes horaires contractualisés',
         ],
         'ID'                 => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'     => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'NBVH'               => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => 'Nombre de volumes horaires contractualisables',
         ],
         'PEUT_AVOIR_CONTRAT' => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 6,
+            'position'    => 4,
             'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ],
         'SIGNE'              => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => 'Nombre de volumes horaires signés',
         ],
         'STRUCTURE_ID'       => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
     ],

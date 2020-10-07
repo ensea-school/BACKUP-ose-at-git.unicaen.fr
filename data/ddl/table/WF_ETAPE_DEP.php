@@ -18,7 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 1,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'ETAPE_PREC_ID'       => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'ID'                  => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'INTEGRALE'           => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'LOCALE'              => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 6,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE'         => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'PARTIELLE'           => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 8,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID' => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
     ],

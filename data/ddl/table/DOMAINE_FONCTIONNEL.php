@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'        => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 2,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'  => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'     => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID' => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'    => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'ID'                    => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE'               => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'SOURCE_CODE'           => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'SOURCE_ID'             => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
     ],

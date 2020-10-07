@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'TAUX_HETD_COMPLEMENTAIRE' => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TAUX_HETD_SERVICE'        => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
     ],

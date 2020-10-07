@@ -18,7 +18,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'DEDOUBLEMENT'         => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 2,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'ID'                   => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'OUVERTURE'            => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_ID' => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
     ],

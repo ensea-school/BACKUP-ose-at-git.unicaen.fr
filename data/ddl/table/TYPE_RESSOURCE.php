@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'ETABLISSEMENT'         => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 2,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'FA'                    => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'FC'                    => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'FC_MAJOREES'           => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'FI'                    => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'     => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'        => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 8,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'  => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'     => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID' => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'    => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 12,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'ID'                    => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'LIBELLE'               => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'REFERENTIEL'           => [
@@ -186,7 +186,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
     ],

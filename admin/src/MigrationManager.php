@@ -61,6 +61,30 @@ class MigrationManager
 
 
     /**
+     * Retourne la nouvelle DDL de la base de données
+     *
+     * @return Ddl
+     */
+    public function getRef(): Ddl
+    {
+        return $this->ref;
+    }
+
+
+
+    /**
+     * Retourne ll'ancienne DDL de la base de données
+     *
+     * @return Ddl
+     */
+    public function getOld(): Ddl
+    {
+        return $this->old;
+    }
+
+
+
+    /**
      * Détermine si un objet existe dans la base de données avant migration
      *
      * @param string $type

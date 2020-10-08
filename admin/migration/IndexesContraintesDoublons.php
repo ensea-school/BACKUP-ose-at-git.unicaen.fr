@@ -49,11 +49,6 @@ class IndexesContraintesDoublons extends AbstractMigration
         $bdd->uniqueConstraint()->drop('TBL_VALIDATION_ENSEIGNEMENT_UN');
         $bdd->uniqueConstraint()->drop('AFFECTATION_SOURCE_UN');
 
-        $bdd->refConstraint()->drop('DOSSIER_HCFK');
-        $bdd->refConstraint()->drop('DOSSIER_HDFK');
-        $bdd->refConstraint()->drop('DOSSIER_HMFK');
-        $bdd->refConstraint()->drop('DOSSIER_INTERVENANT_FK');
-
         $bdd->index()->drop('CORPS_SOURCE_UN');
         $bdd->index()->drop('DISCIPLINE_SOURCE_UN');
         $bdd->index()->drop('TBL_NOEUD_ANNEE_IDX');

@@ -39,6 +39,22 @@ $fieldsets = $form->getFieldsets();
         display: flex;
         flex-direction: column;
     }
+
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+
+    div.readonly {
+        display: block;
+        background-color: #eee;
+        padding: 5px;
+        height: 30px;
+    }
 </style>
 <?php $this->intervenant($intervenant)->renderTitle('Données personnelles'); ?>
 
@@ -90,7 +106,7 @@ $fieldsets = $form->getFieldsets();
     <div class="row">
         <?php
         if ($canEdit) {
-            echo $this->partial('application/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+            echo $this->partial('application/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude',));
         } else {
             echo $this->partial('application/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
         }
@@ -254,11 +270,12 @@ $fieldsets = $form->getFieldsets();
                         selectDept.removeProp('disabled')
                         selectDept.siblings('button').removeClass('disabled')
 
+
                     } else {
 
                         selectDept.prop('disabled', 'disabled')
                         selectDept.siblings('button').addClass('disabled')
-                        emptyDept.html("- NON RENSEIGNÉ -").prop('selected', 'selected')
+                        emptyDept.html("(Sélectionnez un département)").prop('selected', 'selected')
                     }
                 });
 
@@ -266,6 +283,8 @@ $fieldsets = $form->getFieldsets();
             }
 
             $("select[name='DossierStatut[statut]']").change(function () {
+                var action = $("form[id='dossier']").attr('action');
+                $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
                 $("form[id='dossier']").submit();
             });
 

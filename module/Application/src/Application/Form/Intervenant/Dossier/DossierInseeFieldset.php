@@ -65,6 +65,14 @@ class DossierInseeFieldset extends AbstractFieldset
 
     public function getInputFilterSpecification()
     {
+        $dossierIdentiteComplementaireFieldset = $this->getOption('dossierIdentiteComplementaireFieldset');
+        $dossierIdentiteFieldset               = $this->getOption('dossierIdentiteFieldset');
+        $departementDeNaissance                = $dossierIdentiteComplementaireFieldset->get('departementNaissance')->getValue();
+        $paysDeNaissance                       = $dossierIdentiteComplementaireFieldset->get('paysNaissance')->getValue();
+        $dateDeNaissance                       = $dossierIdentiteComplementaireFieldset->get('dateNaissance')->getValue();
+        $civilite                              = $dossierIdentiteFieldset->get('civilite')->getValue();
+
+
         $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
 
         $spec = [
@@ -72,7 +80,11 @@ class DossierInseeFieldset extends AbstractFieldset
                 'required'   => false,
                 'validators' => [
                     new NumeroINSEEValidator([
-                        'provisoire' => $numeroInseeProvisoire,
+                        'provisoire'             => $numeroInseeProvisoire,
+                        'departementDeNaissance' => $departementDeNaissance,
+                        'paysDeNaissance'        => $paysDeNaissance,
+                        'dateDeNaissance'        => $dateDeNaissance,
+                        'civilite'               => $civilite,
                     ]),
                 ],
             ],
@@ -80,6 +92,7 @@ class DossierInseeFieldset extends AbstractFieldset
                 'required' => false,
             ],
         ];
+
 
         return $spec;
     }

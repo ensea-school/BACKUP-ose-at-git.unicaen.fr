@@ -21,7 +21,7 @@ return [
                     'dossier' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/:intervenant/intervenant-dossier',
+                            'route'    => '/:intervenant/dossier',
                             'defaults' => [
                                 'controller' => 'Application\Controller\IntervenantDossier',
                                 'action'     => 'index',
@@ -29,7 +29,16 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'valider'            => [
+                            'change-statut-dossier' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/change-statut-dossier',
+                                    'defaults' => [
+                                        'action' => 'change-statut-dossier',
+                                    ],
+                                ],
+                            ],
+                            'valider'               => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/valider',
@@ -38,7 +47,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'devalider'          => [
+                            'devalider'             => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/devalider',
@@ -47,7 +56,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'supprimer'          => [
+                            'supprimer'             => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/supprimer',
@@ -56,7 +65,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'differences'        => [
+                            'differences'           => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/differences',
@@ -65,7 +74,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'purger-differences' => [
+                            'purger-differences'    => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/purger-differences',
@@ -125,7 +134,7 @@ return [
                 /* Dossier */
                 [
                     'controller' => 'Application\Controller\IntervenantDossier',
-                    'action'     => ['index'],
+                    'action'     => ['index', 'change-statut-dossier'],
                     'privileges' => [Privileges::DOSSIER_VISUALISATION],
                     'assertion'  => IntervenantDossierAssertion::class,
                 ],

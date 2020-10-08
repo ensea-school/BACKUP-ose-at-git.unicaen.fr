@@ -69,8 +69,8 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 
 
         $this->get('paysNaissance')
-            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
-        
+            ->setValueOptions(['' => '(Sélectionnez un pays)'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+
 
         /**
          * Département de naissance
@@ -92,7 +92,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 
 
         $this->get('departementNaissance')
-            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));
+            ->setValueOptions(['' => '(Sélectionnez un département)'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDepartement()->getList()));
 
         /**
          * Ville de naissance

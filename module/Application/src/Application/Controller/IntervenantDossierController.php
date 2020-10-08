@@ -14,6 +14,7 @@ use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Util;
@@ -36,6 +37,7 @@ class IntervenantDossierController extends AbstractController
     use DossierAutreServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use AnneeServiceAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
 
 
     protected function initFilters()
@@ -70,6 +72,7 @@ class IntervenantDossierController extends AbstractController
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
+            $valid = $form->isValid();
             if ($form->isValid()) {
                 /* Traitement du formulaire */
                 $completude = $this->getServiceDossier()->isComplete($intervenantDossier);
@@ -120,6 +123,7 @@ class IntervenantDossierController extends AbstractController
             );
         }
 
+
         return compact(
             'form',
             'role',
@@ -131,6 +135,33 @@ class IntervenantDossierController extends AbstractController
             'champsAutres',
             'fieldsetRules'
         );
+    }
+
+
+
+    public function changeStatutDossierAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $data        = $this->getRequest()->getPost();
+            $role        = $this->getServiceContext()->getSelectedIdentityRole();
+            $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+            if (!$intervenant) {
+                throw new \LogicException('Intervenant non précisé ou inexistant');
+            }
+            $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+            $completude         = $this->getServiceDossier()->isComplete($intervenantDossier);
+            $intervenantDossier->setCompletude($completude);
+            $statutIntervenant = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
+            if ($statutIntervenant) {
+                $intervenantDossier->setStatut($statutIntervenant);
+            }
+            $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
+            $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
+
+            return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
+        }
+
+        return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
     }
 
 

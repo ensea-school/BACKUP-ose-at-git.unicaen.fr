@@ -2,6 +2,7 @@
 
 namespace Application\Form\Intervenant\Dossier;
 
+use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
@@ -42,8 +43,17 @@ class DossierStatutFieldset extends AbstractFieldset
 
         $statutIntervenant = $this->getOption('statutIntervenant');
 
-        $this->get('statut')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatutIntervenant()->getStatutSelectable($statutIntervenant)));
+        //Si statut intervenant n'est pas selectionnable dans la liste alors liste en lecture seule
+        /**
+         * @var StatutIntervenant $statutIntervenant
+         */
+        if ($statutIntervenant->getPeutChoisirDansDossier() || $statutIntervenant->getCode() == 'AUTRES') {
+            $this->get('statut')
+                ->setValueOptions(['' => '(Sélectionnez un statut)'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceStatutIntervenant()->getStatutSelectable($statutIntervenant)));
+        } else {
+            $this->get('statut')
+                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions([$statutIntervenant]));
+        }
 
 
         return $this;

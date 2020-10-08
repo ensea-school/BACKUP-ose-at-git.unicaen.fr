@@ -2,6 +2,7 @@
 
 namespace Application\Form\Intervenant\Dossier;
 
+use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -104,15 +105,19 @@ class DossierContactFieldset extends AbstractFieldset
         ]);
 
         //Gestion des labels selon les règles du statut intervenant sur les données contact
-        $statutDossierIntervenant = $this->getOption('statutDossierIntervenant');
+        $dossierIntervenant       = $this->getOption('dossierIntervenant');
+        $statutDossierIntervenant = $dossierIntervenant->getStatut();
+
         /**
          * @var $statutDossierIntervenant StatutIntervenant
+         * @var $dossierIntervenant       IntervenantDossier
          */
+
         if ($statutDossierIntervenant->getDossierTelPerso()) {
             $this->get('telephonePersonnel')->setLabel('Téléphone personnel <span class="text-danger">*</span>');
             $this->get('telephoneProfessionnel')->removeAttribute('info_icon');
         }
-        if ($statutDossierIntervenant->getDossierEmailPerso()) {
+        if ($statutDossierIntervenant->getDossierEmailPerso() || empty($dossierIntervenant->getEmailPro())) {
             $this->get('emailPersonnel')->setLabel('E-mail personnel <span class="text-danger">*</span>');
             $this->get('emailEtablissement')->removeAttribute('info_icon');
         }

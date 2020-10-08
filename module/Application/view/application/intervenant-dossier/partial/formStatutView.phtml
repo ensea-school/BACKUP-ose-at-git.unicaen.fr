@@ -25,12 +25,10 @@ $dossierStatut = $form->get('DossierStatut');
         <div class="panel-body">
             <div class="form-group">
                 <?= $this->formLabel($dossierStatut->get('statut')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getStatut())) {
                         echo $intervenantDossier->getStatut()->getLibelle();
-                    } else {
-                        echo 'NON RENSEIGNE';
                     }
                     ?>
                 </div>

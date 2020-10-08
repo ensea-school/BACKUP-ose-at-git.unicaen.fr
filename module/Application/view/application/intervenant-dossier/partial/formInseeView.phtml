@@ -12,17 +12,6 @@ $form->prepare();
 $dossierInsee = $form->get('DossierInsee');
 ?>
 
-<style>
-    div.rib-part {
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    div.rib-part input {
-        width: auto;
-    }
-</style>
-
 <!-- Fiedlset Insee -->
 <div class="col-md-6">
     <div class="panel panel-default ">
@@ -37,24 +26,20 @@ $dossierInsee = $form->get('DossierInsee');
         <div class="panel-body">
             <div class="form-group">
                 <?= $this->formLabel($dossierInsee->get('numeroInsee')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getNumeroInsee())) {
                         echo ($viewInsee) ? $intervenantDossier->getNumeroInsee() : '*************************';
-                    } else {
-                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
             </div>
             <div class="form-group">
                 <?= $this->formLabel($dossierInsee->get('numeroInseeEstProvisoire')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if ($viewInsee) {
                         echo ($intervenantDossier->getNumeroInseeProvisoire()) ? 'OUI' : 'NON';
-                    } else {
-                        echo '***';
                     }
                     ?>
                 </div>

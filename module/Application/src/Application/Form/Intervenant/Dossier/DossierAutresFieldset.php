@@ -51,7 +51,7 @@ class DossierAutresFieldset extends AbstractFieldset
 
                 if ($champ->getType()->getCode() == self::SELECT_SQL) {
                     if (!empty($champ->getSqlValue())) {
-                        $datas = ['' => '- NON RENSEIGNÉ -'] + $this->getServiceDossierAutre()->getValueOptionsBySql($champ);
+                        $datas = ['' => '(Sélectionnez ' . $champ->getLibelle() . ')'] + $this->getServiceDossierAutre()->getValueOptionsBySql($champ);
                         $this->get('champ-autre-' . $champ->getId())
                             ->setValueOptions($datas);
                     }

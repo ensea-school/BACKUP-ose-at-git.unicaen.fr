@@ -273,7 +273,7 @@ class Driver implements DriverInterface
             'types' => [],
         ];
         $options        = array_merge($defaultOptions, $options);
-        $result         = oci_fetch_array($statement, OCI_ASSOC);
+        $result         = oci_fetch_array($statement, OCI_ASSOC + OCI_RETURN_NULLS + OCI_RETURN_LOBS);
         if (false == $result) {
             oci_free_statement($statement);
         } else {

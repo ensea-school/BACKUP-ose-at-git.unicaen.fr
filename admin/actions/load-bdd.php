@@ -18,3 +18,5 @@ $dir = $c->getInput('dir');
 
 
 $bdd->load($dir);
+
+$bdd->majSequences();

@@ -4,7 +4,7 @@
 
 
 
-class MigrationIntervenants extends AbstractMigration
+class MigrationStructures extends AbstractMigration
 {
     protected $contexte = self::CONTEXTE_ALL;
 
@@ -12,14 +12,16 @@ class MigrationIntervenants extends AbstractMigration
 
     public function description(): string
     {
-        return "Migration des intervenants";
+        return "Migration des structures";
     }
 
 
 
     public function utile(): bool
     {
-        return $this->manager->hasOldColumn('INTERVENANT', 'NUMERO_INSEE_CLE');
+        return false;
+
+        return $this->manager->hasOld('table', 'ADRESSE_STRUCTURE');
     }
 
 
@@ -38,21 +40,9 @@ class MigrationIntervenants extends AbstractMigration
     protected function before()
     {
         $bdd = $this->manager->getBdd();
-        $c   = (int)$bdd->select('SELECT count(*) cc FROM intervenant WHERE code IS NULL')[0]['CC'];
-        if ($c > 0) {
-            $this->manager->getOseAdmin()->getConsole()->printDie(
-                'La colonne INTERVENANT.CODE comporte des valeurs NULL :'
-                . ' ceci ne peut plus être permis par la version 15 de OSE.'
-                . ' Veuillez renseigner manuellement cette colonne,'
-                . ' puis retentez la mise à jour de la base de données (./bin/ose update-bdd)'
-            );
-        }
 
-        $this->manager->sauvegarderTable('INTERVENANT', 'INTERVENANT_SAVE');
-        $this->manager->sauvegarderTable('ADRESSE_INTERVENANT', 'ADRESSE_INTERVENANT_SAVE');
-
-
-        $bdd->exec('UPDATE INTERVENANT SET NUMERO_INSEE_PROVISOIRE = 0 WHERE NUMERO_INSEE_PROVISOIRE IS NULL');
+        $this->manager->sauvegarderTable('STRUCTURE', 'STRUCTURE_SAVE');
+        $this->manager->sauvegarderTable('ADRESSE_STRUCTURE', 'ADRESSE_STRUCTURE_SAVE');
     }
 
 
@@ -91,7 +81,7 @@ class MigrationIntervenants extends AbstractMigration
         $bdd->logBegin("\nConversion des adresses dans le nouveau format");
         $intervenants = $bdd->select($sql, []);
         $count        = count($intervenants);
-        $iTable       = $bdd->getTable('INTERVENANT');
+        $sTable       = $bdd->getTable('STRUCTURE');
         foreach ($intervenants as $ind => $i) {
             [$numVoie, $numVoieCompl] = $this->decoupageNumVoie($i['NO_VOIE']);
 
@@ -114,9 +104,10 @@ class MigrationIntervenants extends AbstractMigration
                 'ADRESSE_PAYS_ID'          => $i['ADRESSE_PAYS_ID'],
             ];
             try {
-                $iTable->update($data, ['ID' => $i['ID']]);
+                $sTable->update($data, ['ID' => $i['ID']]);
             } catch (\Exception $e) {
                 $bdd->logError($e);
+                var_dump($data);
             }
         }
 
@@ -125,8 +116,8 @@ class MigrationIntervenants extends AbstractMigration
         $bdd->trigger()->enable('INTERVENANT_CK');
 
         $bdd->logEnd('Adresses transférées');
-        $this->manager->supprimerSauvegarde('INTERVENANT_SAVE');
-        $this->manager->supprimerSauvegarde('ADRESSE_INTERVENANT_SAVE');
+        $this->manager->supprimerSauvegarde('STRUCTURE_SAVE');
+        $this->manager->supprimerSauvegarde('ADRESSE_STRUCTURE_SAVE');
     }
 
 

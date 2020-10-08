@@ -11,17 +11,6 @@ $form->prepare();
 $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
 ?>
 
-<style>
-    div.rib-part {
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    div.rib-part input {
-        width: auto;
-    }
-</style>
-
 <!-- Fiedlset Adresse -->
 <div class="col-md-6">
     <div class="panel panel-default">
@@ -37,24 +26,20 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
 
             <div class="form-group">
                 <?= $this->formLabel($dossierAdresse->get('precisions')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getAdressePrecisions())) {
                         echo ($viewAdresse) ? $intervenantDossier->getAdressePrecisions() : '*******************';
-                    } else {
-                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
             </div>
             <div class="form-group">
                 <?= $this->formLabel($dossierAdresse->get('lieuDit')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getAdresseLieuDit())) {
                         echo ($viewAdresse) ? $intervenantDossier->getAdresseLieuDit() : '*******************';
-                    } else {
-                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
@@ -65,12 +50,10 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                 <div class="col-md-2">
                     <?= $this->formLabel($dossierAdresse->get('numero')); ?>
 
-                    <div style="display:block;background-color:#eee;padding:5px;">
+                    <div class="readonly">
                         <?php
                         if (!empty($intervenantDossier->getAdresseNumero())) {
                             echo ($viewAdresse) ? $intervenantDossier->getAdresseNumero() : '***';
-                        } else {
-                            echo 'NR';
                         }
                         ?>
                     </div>
@@ -79,12 +62,10 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                 <div class="col-md-2">
                     <?= $this->formLabel($dossierAdresse->get('numeroComplement')); ?>
 
-                    <div style="display:block;background-color:#eee;padding:5px;">
+                    <div class="readonly">
                         <?php
                         if (!empty($intervenantDossier->getAdresseNumeroCompl())) {
                             echo ($viewAdresse) ? $intervenantDossier->getAdresseNumeroCompl()->getLibelle() : '***';
-                        } else {
-                            echo 'NR';
                         }
                         ?>
                     </div>
@@ -92,12 +73,10 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                 <div class="col-md-4">
                     <?= $this->formLabel($dossierAdresse->get('voirie')); ?>
 
-                    <div style="display:block;background-color:#eee;padding:5px;">
+                    <div class="readonly">
                         <?php
                         if (!empty($intervenantDossier->getAdresseVoirie())) {
                             echo ($viewAdresse) ? $intervenantDossier->getAdresseVoirie()->getLibelle() : '***';
-                        } else {
-                            echo 'NR';
                         }
                         ?>
                     </div>
@@ -105,12 +84,10 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                 <div class="col-md-4">
                     <?= $this->formLabel($dossierAdresse->get('voie')); ?>
 
-                    <div style="display:block;background-color:#eee;padding:5px;">
+                    <div class="readonly">
                         <?php
                         if (!empty($intervenantDossier->getAdresseVoie())) {
                             echo ($viewAdresse) ? $intervenantDossier->getAdresseVoie() : '***';
-                        } else {
-                            echo 'NR';
                         }
                         ?>
                     </div>
@@ -120,24 +97,20 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                 <div class="col-md-4">
                     <?= $this->formLabel($dossierAdresse->get('codePostal')); ?>
 
-                    <div style="display:block;background-color:#eee;padding:5px;">
+                    <div class="readonly">
                         <?php
                         if (!empty($intervenantDossier->getAdresseCodePostal())) {
                             echo ($viewAdresse) ? $intervenantDossier->getAdresseCodePostal() : '***';
-                        } else {
-                            echo 'NR';
                         }
                         ?>
                     </div>
                 </div>
                 <div class="col-md-8">
                     <?= $this->formLabel($dossierAdresse->get('ville')); ?>
-                    <div style="display:block;background-color:#eee;padding:5px;">
+                    <div class="readonly">
                         <?php
                         if (!empty($intervenantDossier->getAdresseCommune())) {
                             echo ($viewAdresse) ? $intervenantDossier->getAdresseCommune() : '***';
-                        } else {
-                            echo '- NON RENSEIGNÉ -';
                         }
                         ?>
                     </div>
@@ -145,12 +118,10 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
             </div>
             <div class="form-group">
                 <?= $this->formLabel($dossierAdresse->get('pays')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getAdressePays())) {
                         echo ($viewAdresse) ? $intervenantDossier->getAdressePays()->getLibelle() : '*******************';
-                    } else {
-                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>

@@ -18,6 +18,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Application\Validator\NumeroINSEEValidator;
 use Zend\Form\Element\Csrf;
 
 /**
@@ -81,10 +82,17 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
 
-        $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact', ['statutDossierIntervenant' => $dossierIntervenant->getStatut()]);
+        $options                      = [
+            'dossierIntervenant' => $dossierIntervenant,
+        ];
+        $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact', $options);
         $this->dossierContactFiedlset->init();
 
-        $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee');
+        $options                    = [
+            'dossierIdentiteComplementaireFieldset' => $this->dossierIdentiteComplementaireFieldset,
+            'dossierIdentiteFieldset'               => $this->dossierIdentiteFieldset,
+        ];
+        $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee', $options);
         $this->dossierInseeFiedlset->init();
 
         $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');

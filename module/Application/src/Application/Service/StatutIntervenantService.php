@@ -72,20 +72,22 @@ class StatutIntervenantService extends AbstractEntityService
     public function getStatutSelectable(StatutIntervenant $statutIntervenant, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        $var = '';
-        $qb->orWhere("$alias.peutChoisirDansDossier = 1");
-        if ($statutIntervenant instanceof StatutIntervenant) {
-            $qb->orWhere($alias . ' =  :statutIntervenant');
-        }
-        $qb->addOrderBy("$alias.ordre");
-        $qb->setParameter('statutIntervenant', $statutIntervenant);
+        $qb->andWhere("$alias.peutChoisirDansDossier = 1");
+        $qb->addOrderBy("$alias.code");
 
         $entities    = $qb->getQuery()->execute();
         $result      = [];
         $entityClass = $this->getEntityClass();
         foreach ($entities as $entity) {
             if ($entity instanceof $entityClass) {
-                $result[$entity->getId()] = $entity;
+                /**
+                 * @var StatutIntervenant $entity
+                 */
+                //Je prends le statut si il n'est pas détruit ou si l'intervenant a ce statut
+                if (is_null($entity->getHistoDestruction()) ||
+                    $statutIntervenant->getCode() == $entity->getCode()) {
+                    $result[] = $entity;
+                }
             }
         }
 

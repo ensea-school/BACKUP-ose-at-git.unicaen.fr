@@ -21,6 +21,11 @@ $dossierStatut = $form->get('DossierStatut');
     <div class="panel panel-default ">
         <div class="panel-heading">
             STATUT
+            <?php if (!$intervenantDossierCompletude['dossierStatut']): ?>
+                <span class="label label-warning">A compléter</span>
+            <?php else: ?>
+                <span class="label label-success">Complet</span>
+            <?php endif; ?>
         </div>
         <div class="panel-body">
             <?php

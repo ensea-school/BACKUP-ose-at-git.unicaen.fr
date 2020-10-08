@@ -882,6 +882,8 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setPaysNaissance($intervenant->getPaysNaissance())
             ->setDepartementNaissance($intervenant->getDepartementNaissance())
             ->setNumeroInsee($intervenant->getNumeroInsee())
+            ->setNumeroInseeProvisoire($intervenant->getNumeroInseeProvisoire())
+            ->setEmailPro($intervenant->getEmailPro())
             ->setEmailPerso($intervenant->getEmailPerso())
             ->setTelPerso($intervenant->getTelPerso())
             ->setTelPro($intervenant->getTelPro())

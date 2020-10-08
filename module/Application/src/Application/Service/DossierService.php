@@ -223,6 +223,12 @@ class DossierService extends AbstractEntityService
         $completudeDossierIban                  = true;
         $completudeDossierEmployeur             = true;
         $completudeDossierAutre                 = true;
+        $completudeDossierStatut                = true;
+
+        //Complétude du statut
+        if ($statutIntervenantDossier->getCode() == 'AUTRES') {
+            $completudeDossierStatut = false;
+        }
 
         //Complétude de l'identite
         $completudeDossierIdentite = ($intervenantDossier->getCivilite() &&
@@ -305,7 +311,8 @@ class DossierService extends AbstractEntityService
             $completudeDossierInsee &&
             $completudeDossierIban &&
             $completudeDossierEmployeur &&
-            $completudeDossierAutre) ? true : false;
+            $completudeDossierAutre &&
+            $completudeDossierStatut) ? true : false;
 
         $completude = ['dossier'                       => $completudeDossier,
                        'dossierIdentite'               => $completudeDossierIdentite,
@@ -315,7 +322,9 @@ class DossierService extends AbstractEntityService
                        'dossierInsee'                  => $completudeDossierInsee,
                        'dossierIban'                   => $completudeDossierIban,
                        'dossierEmployeur'              => $completudeDossierEmployeur,
-                       'dossierAutres'                 => $completudeDossierAutre,];
+                       'dossierAutres'                 => $completudeDossierAutre,
+                       'dossierStatut'                 => $completudeDossier,
+        ];
 
         return $completude;
     }

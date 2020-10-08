@@ -68,7 +68,7 @@ class NumeroINSEEValidator extends NumeroINSEE
     {
         $this->messageTemplates = array_merge($this->messageTemplates, [
             self::MSG_CIVILITE => "Le numéro n'est pas cohérent avec la civilité saisie",
-            self::MSG_ANNEE    => "Le numéro n'est pas cohérent avec l'année de naissance saisi",
+            self::MSG_ANNEE    => "Le numéro n'est pas cohérent avec l'année de naissance saisie",
             self::MSG_MOIS     => "Le numéro n'est pas cohérent avec le mois de naissance saisi",
             self::MSG_DEPT     => "Le numéro n'est pas cohérent avec le pays et l'éventuel département de naissance saisi",
         ]);
@@ -80,29 +80,33 @@ class NumeroINSEEValidator extends NumeroINSEE
 
     public function isValid($value, $context = null)
     {
-        if (!parent::isValid($value)) {
-            return false;
-        }
+        /* if (!parent::isValid($value)) {
+             return false;
+         }*/
 
-        $this->value = $value;
+        $this->value            = $value;
+        $departementDeNaissance = $this->getOption('departementDeNaissance');
+        $dateDeNaissance        = $this->getOption('dateDeNaissance');
+        $paysDeNaissance        = $this->getOption('paysDeNaissance');
+        $civilite               = $this->getOption('civilite');
 
         $this->provisoire = $this->getProvisoire();
 
-        $this->civilite = (!empty($context['civilite'])) ?
-            $this->getServiceCivilite()->get((int)$context['civilite']) : null;
+        $this->civilite = (!empty($civilite)) ?
+            $this->getServiceCivilite()->get((int)$civilite) : null;
 
         if ($this->civilite && !$this->isValidCivilite()) return false;
 
-        $this->dateNaissance = (!empty($context['dateNaissance'])) ?
-            \DateTime::createFromFormat(Constants::DATE_FORMAT, $context['dateNaissance']) : null;
+        $this->dateNaissance = (!empty($dateDeNaissance)) ?
+            \DateTime::createFromFormat(Constants::DATE_FORMAT, $dateDeNaissance) : null;
 
         if ($this->dateNaissance && !$this->isValidDateNaissance()) return false;
 
-        $this->pays = (!empty($context['paysNaissance'])) ?
-            $this->getServicePays()->get((int)$context['paysNaissance']) : null;
+        $this->pays = (!empty($paysDeNaissance)) ?
+            $this->getServicePays()->get((int)$paysDeNaissance) : null;
 
-        $this->departement = (!empty($context['departementNaissance'])) ?
-            $this->getServiceDepartement()->get((int)$context['departementNaissance']) : null;
+        $this->departement = (!empty($departementDeNaissance)) ?
+            $this->getServiceDepartement()->get((int)$departementDeNaissance) : null;
 
         if ($this->departement && !$this->isValidLieuNaissance()) return false;
 

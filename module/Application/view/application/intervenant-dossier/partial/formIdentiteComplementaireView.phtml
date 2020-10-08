@@ -16,17 +16,6 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
 
 ?>
 
-<style>
-    div.rib-part {
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    div.rib-part input {
-        width: auto;
-    }
-</style>
-
 <!-- Fiedlset Identite -->
 
 <div class="col-md-6">
@@ -43,24 +32,20 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
 
             <div class="form-group">
                 <?= $this->formLabel($dossierIdentiteComplementaire->get('dateNaissance')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($dossierIdentiteComplementaire->get('dateNaissance')->getValue())) {
                         echo ($viewIdentite) ? $dossierIdentiteComplementaire->get('dateNaissance')->getValue() : '**/**/****';
-                    } else {
-                        echo '- NON RENSEIGNÉ -';
                     }
                     ?>
                 </div>
             </div>
             <div class="form-group">
                 <?= $this->formLabel($dossierIdentiteComplementaire->get('paysNaissance')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getPaysNaissance())) {
                         echo ($viewIdentite) ? $intervenantDossier->getPaysNaissance()->getLibelle() : '*******************';
-                    } else {
-                        echo '- NON RENSEIGNÉ -';
                     }
 
 
@@ -70,27 +55,21 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
             <?php if ($intervenantDossier->getPaysNaissance() && $intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE'): ?>
                 <div class="form-group">
                     <?= $this->formLabel($dossierIdentiteComplementaire->get('departementNaissance')); ?>
-                    <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                    <div class="input-group cold-md-6 readonly">
                         <?php
                         if (!empty($intervenantDossier->getDepartementNaissance())) {
                             echo ($viewIdentite) ? $intervenantDossier->getDepartementNaissance()->getLibelle() : '*******************';
-                        } else {
-                            echo '- NON RENSEIGNÉ -';
                         }
-
-
                         ?>
                     </div>
                 </div>
             <?php endif; ?>
             <div class="form-group">
                 <?= $this->formLabel($dossierIdentiteComplementaire->get('villeNaissance')); ?>
-                <div class="input-group cold-md-6" style="display:block;background-color:#eee;padding:5px;">
+                <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getCommuneNaissance())) {
                         echo ($viewIdentite) ? $intervenantDossier->getCommuneNaissance() : '*******************';
-                    } else {
-                        echo '- NON RENSEIGNÉ -';
                     }
 
 

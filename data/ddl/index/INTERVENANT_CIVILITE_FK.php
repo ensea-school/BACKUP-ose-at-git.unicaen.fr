@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'    => 'INTERVENANTS_CIVILITES_FK',
+    'name'    => 'INTERVENANT_CIVILITE_FK',
     'unique'  => FALSE,
     'table'   => 'INTERVENANT',
     'columns' => [

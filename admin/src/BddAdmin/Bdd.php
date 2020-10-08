@@ -608,11 +608,11 @@ class Bdd
 
 
     /**
-     * @param Bdd|array        $ddl
+     * @param Bdd|Ddl|array    $ddl
      * @param DdlFilters|array $filters
      * @param bool             $inverse
      *
-     * @return array
+     * @return DdlDiff
      * @throws \Exception
      */
     public function diff($ddl, $filters = [], bool $inverse = false): DdlDiff
@@ -642,6 +642,49 @@ class Bdd
             $this->logMsg($label . " (opération $c/$cc) ...", true);
             $object  = $this->manager($ddlName);
             $queries = $this->alterDdlObject($object, $action, $old[$ddlName] ?: [], $new[$ddlName] ?: []);
+            if (!empty($queries)) {
+                $diff->set($changement, $queries);
+            }
+        }
+        $this->logEnd();
+
+        return $diff;
+    }
+
+
+
+    /**
+     * @param Bdd|Ddl|array    $src
+     * @param Bdd|Ddl|array    $dest
+     * @param DdlFilters|array $filters
+     *
+     * @return DdlDiff
+     * @throws \Exception
+     */
+    public function diff2($src, $dest, $filters = []): DdlDiff
+    {
+        $this->logBegin('Génération du différentiel de DDLs');
+        if ($src instanceof self) {
+            $src = $src->getDdl($filters);
+        } else {
+            $src = Ddl::normalize($src)->filter($filters);
+        }
+
+        if ($dest instanceof self) {
+            $dest = $dest->getDdl($filters);
+        } else {
+            $dest = Ddl::normalize($dest)->filter($filters);
+        }
+
+        $diff = new DdlDiff();
+        $cc   = count($this->changements);
+        $c    = 0;
+        foreach ($this->changements as $changement => $label) {
+            $c++;
+            [$ddlName, $action] = explode('.', $changement);
+            $this->logMsg($label . " (opération $c/$cc) ...", true);
+            $object  = $this->manager($ddlName);
+            $queries = $this->alterDdlObject($object, $action, $src[$ddlName] ?: [], $dest[$ddlName] ?: []);
             if (!empty($queries)) {
                 $diff->set($changement, $queries);
             }

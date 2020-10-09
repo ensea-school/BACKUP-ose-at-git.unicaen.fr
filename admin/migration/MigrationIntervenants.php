@@ -86,8 +86,7 @@ class MigrationIntervenants extends AbstractMigration
         $bdd->trigger()->disable('F_INTERVENANT');
         $bdd->trigger()->disable('F_INTERVENANT_S');
         $bdd->trigger()->disable('INTERVENANT_CK');
-        //$intervenants = $bdd->select($sql, [], ['fetch' => $bdd::FETCH_EACH]);
-        //while ($i = $intervenants->next()) {
+
         $bdd->logBegin("\nConversion des adresses dans le nouveau format");
         $intervenants = $bdd->select($sql, []);
         $count        = count($intervenants);
@@ -137,13 +136,11 @@ class MigrationIntervenants extends AbstractMigration
         $compl = null;
 
         $compls = [
-            'BIS' => 2,
-            'Bis' => 2,
-            'bis' => 2,
-
-            'TER' => 3,
-            'Ter' => 3,
-            'ter' => 3,
+            'QUINQUIES' => 5,
+            'QUIN'      => 5,
+            'quin'      => 5,
+            'Quinquies' => 5,
+            'quinquies' => 5,
 
             'QUATER' => 4,
             'QUA'    => 4,
@@ -151,11 +148,13 @@ class MigrationIntervenants extends AbstractMigration
             'Quater' => 4,
             'quater' => 4,
 
-            'QUINQUIES' => 5,
-            'QUIN'      => 5,
-            'quin'      => 5,
-            'Quinquies' => 5,
-            'quinquies' => 5,
+            'BIS' => 2,
+            'Bis' => 2,
+            'bis' => 2,
+
+            'TER' => 3,
+            'Ter' => 3,
+            'ter' => 3,
 
             'B' => 2,
             'b' => 2,

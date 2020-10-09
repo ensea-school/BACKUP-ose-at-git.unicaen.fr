@@ -203,7 +203,10 @@ class TableManager extends AbstractManager implements TableManagerInterface
         $cols    = [];
         $columns = $data['columns'];
         uasort($columns, function ($a, $b) {
-            return $a['position'] > $b['position'];
+            $apos = isset($a['position']) ? $a['position'] : 1;
+            $bpos = isset($b['position']) ? $b['position'] : 1;
+
+            return $apos > $bpos;
         });
         foreach ($columns as $column) {
             $cp = ['"' . $column['name'] . '"', $this->makeColumnType($column)];

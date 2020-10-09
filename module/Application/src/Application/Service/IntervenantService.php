@@ -16,7 +16,6 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
-use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 
 
 /**
@@ -31,13 +30,11 @@ use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 class IntervenantService extends AbstractEntityService
 {
     use StatutIntervenantServiceAwareTrait;
-    use ImportProcessusAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use SourceServiceAwareTrait;
     use AnneeServiceAwareTrait;
-
 
 
     /**

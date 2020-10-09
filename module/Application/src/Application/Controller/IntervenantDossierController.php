@@ -20,6 +20,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
+use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 
 
 class IntervenantDossierController extends AbstractController
@@ -38,6 +39,7 @@ class IntervenantDossierController extends AbstractController
     use IntervenantServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
+    use ImportProcessusAwareTrait;
 
 
     protected function initFilters()
@@ -179,6 +181,9 @@ class IntervenantDossierController extends AbstractController
         }
         try {
             $this->getServiceValidation()->validerDossier($intervenantDossier);
+            if ($intervenant->getSourceCode() && $intervenant->getSource()->getImportable()) {
+                $this->getProcessusImport()->execMaj('INTERVENANT', 'SOURCE_CODE', $intervenant->getSourceCode());
+            }
             $this->updateTableauxBord($intervenant, true);
             $this->flashMessenger()->addSuccessMessage("Validation des données personnelles <strong>enregistrée</strong> avec succès.");
         } catch (\Exception $e) {

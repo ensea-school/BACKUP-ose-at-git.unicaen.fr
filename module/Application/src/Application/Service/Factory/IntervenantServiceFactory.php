@@ -25,7 +25,6 @@ class IntervenantServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $service = new IntervenantService;
-        $service->setProcessusImport($container->get(ImportProcessus::class));
 
         return $service;
     }

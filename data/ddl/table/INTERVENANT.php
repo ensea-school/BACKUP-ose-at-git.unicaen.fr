@@ -49,7 +49,7 @@ return [
             'name'        => 'ADRESSE_NUMERO',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 4,
+            'length'      => 10,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,

@@ -179,7 +179,6 @@ class MigrationDossier extends AbstractMigration
         //Recalcule le tableau de bord des dossier
         $console->println("Calcul du tableau de bord TBL_DOSSIER");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'dossier\'); END;');
-        $this->manager->supprimerSauvegarde('DOSSIER');
         $console->println("Terminé");
         $console->println("Fin de la migration des dossiers V15");
     }

@@ -6,7 +6,7 @@ return [
         'ADRESSE_INTERVENANT',
         'ADRESSE_STRUCTURE',
         'INTERVENANT_SAISIE',
-        //'DOSSIER',
+        'DOSSIER',
 
     ]],
     'materialized-view' => ['includes' => [

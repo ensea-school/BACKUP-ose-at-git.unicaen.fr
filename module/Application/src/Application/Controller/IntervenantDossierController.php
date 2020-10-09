@@ -154,11 +154,11 @@ class IntervenantDossierController extends AbstractController
             $statutIntervenant = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
             if ($statutIntervenant) {
                 $intervenantDossier->setStatut($statutIntervenant);
+                $this->getServiceDossier()->save($intervenantDossier);
+                $intervenant->setStatut($statutIntervenant);
+                $intervenant->setSyncStatut(false);
+                $this->getServiceIntervenant()->save($intervenant);
             }
-            $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
-            $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
-
-            return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
         }
 
         return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));

@@ -23,18 +23,7 @@ class MigrationDossier extends AbstractMigration
 
     public function utile(): bool
     {
-        $bdd = $this->manager->getBdd();
-        if ($this->manager->hasOld('table', 'INTERVENANT_DOSSIER')) {
-            $tableIntervenantDossier = $bdd->getTable('INTERVENANT_DOSSIER');
-            //Si table intervenant_dossier n'est pas vide, c'est que la migration
-            //a déjà eu lieu donc on ne lance pas la migration
-            $intervenantDossier = $tableIntervenantDossier->select();
-            if ($intervenantDossier) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->manager->hasOld('table', 'DOSSIER');
     }
 
 
@@ -52,7 +41,7 @@ class MigrationDossier extends AbstractMigration
 
     protected function before()
     {
-
+        $this->manager->sauvegarderTable('DOSSIER', 'DOSSIER_SAVE');
     }
 
 
@@ -190,6 +179,7 @@ class MigrationDossier extends AbstractMigration
         //Recalcule le tableau de bord des dossier
         $console->println("Calcul du tableau de bord TBL_DOSSIER");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'dossier\'); END;');
+        $this->manager->supprimerSauvegarde('DOSSIER');
         $console->println("Terminé");
         $console->println("Fin de la migration des dossiers V15");
     }

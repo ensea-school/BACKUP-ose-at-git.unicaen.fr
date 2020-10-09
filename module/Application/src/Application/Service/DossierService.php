@@ -257,8 +257,6 @@ class DossierService extends AbstractEntityService
 
         //Complétude de contact
         if ($statutIntervenantDossier->getDossierContact()) {
-            $completudeEmail = true;
-            $completudeTel   = true;
             if ($statutIntervenantDossier->getDossierEmailPerso()) {
                 $completudeEmail = ($intervenantDossier->getEmailPerso() && $intervenantDossier->getEmailPro()) ? true : false;
             } else {
@@ -323,7 +321,7 @@ class DossierService extends AbstractEntityService
                        'dossierIban'                   => $completudeDossierIban,
                        'dossierEmployeur'              => $completudeDossierEmployeur,
                        'dossierAutres'                 => $completudeDossierAutre,
-                       'dossierStatut'                 => $completudeDossier,
+                       'dossierStatut'                 => $completudeDossierStatut,
         ];
 
         return $completude;

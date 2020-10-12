@@ -75,7 +75,7 @@ class MigrationPrivileges extends AbstractMigration
 
         foreach ($statutsIntervenant as $statut) {
             $statutId = $statut['ID'];
-            $console->println("Insertion privliege dossier pour le statut : " . $statut['LIBELLE'], $console::COLOR_LIGHT_GREEN);
+            $console->println("Insertion priviliege dossier pour le statut : " . $statut['LIBELLE'], $console::COLOR_LIGHT_GREEN);
             foreach ($privileges as $privilege) {
                 $privilegeId = $privilege['ID'];
                 try {

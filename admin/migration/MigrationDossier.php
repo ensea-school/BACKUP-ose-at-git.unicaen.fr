@@ -63,7 +63,7 @@ class MigrationDossier extends AbstractMigration
         SELECT
             * 
         FROM
-            DOSSIER d
+            DOSSIER_SAVE d
         WHERE
             d.histo_destruction IS NULL
         ";

@@ -887,10 +887,19 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setEmailPerso($intervenant->getEmailPerso())
             ->setTelPerso($intervenant->getTelPerso())
             ->setTelPro($intervenant->getTelPro())
-            ->setStatut($intervenant->getStatut());
+            ->setStatut($intervenant->getStatut())
+            ->setAdressePrecisions($intervenant->getAdressePrecisions())
+            ->setAdresseCodePostal($intervenant->getAdresseCodePostal())
+            ->setAdresseCommune($intervenant->getAdresseCommune())
+            ->setAdresseLieuDit($intervenant->getAdresseLieuDit())
+            ->setAdresseNumero($intervenant->getAdresseNumero())
+            ->setAdresseNumeroCompl($intervenant->getAdresseNumeroCompl())
+            ->setAdressePays($intervenant->getAdressePays())
+            ->setAdresseVoie($intervenant->getAdresseVoie())
+            ->setAdresseVoirie($intervenant->getAdresseVoirie());
+
         //->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()))
         //TODO refactor complet de l'adresse
-        //->setAdresse($intervenant->getAdresse(false));
 
         return $this;
     }

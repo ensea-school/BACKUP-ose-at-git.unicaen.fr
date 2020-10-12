@@ -23,7 +23,7 @@ class MigrationDossier extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasOld('table', 'DOSSIER');
+        return $this->manager->hasNew('table', 'DOSSIER_CHAMP_AUTRE');
     }
 
 

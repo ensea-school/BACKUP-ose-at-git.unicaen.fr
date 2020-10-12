@@ -92,7 +92,7 @@ SELECT
   srci.code,
   srci.utilisateur_code,
   CASE WHEN i.sync_structure = 0 THEN COALESCE(i.structure_id,srci.structure_id) ELSE srci.structure_id END structure_id,
-  CASE WHEN i.sync_statut = 0 THEN COALESCE(i.statut_id,d.statut_id,srci.statut_id) ELSE COALESCE(d.statut_id, srci.statut_id) END statut_id,
+  CASE WHEN i.sync_statut = 0 THEN COALESCE(i.statut_id,srci.statut_id) ELSE srci.statut_id END statut_id,
   srci.grade_id,
   srci.discipline_id,
   srci.civilite_id,

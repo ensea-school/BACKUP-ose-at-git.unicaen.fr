@@ -98,6 +98,13 @@ class LdapConnecteur extends AbstractService
 
 
 
+    public function isActif(): bool
+    {
+        return \AppConfig::get('ldap', 'actif', true);
+    }
+
+
+
     /**
      * @param string $critere
      *
@@ -106,7 +113,7 @@ class LdapConnecteur extends AbstractService
     public function rechercheUtilisateurs($critere)
     {
         $result = [];
-        if (($username = $critere) && \AppConfig::get('ldap', 'actif', true)) {
+        if (($username = $critere) && $this->isActif()) {
             $foundUsers = $this->mapperPeople->findAllByNameOrUsername($username, $this->getUtilisateurLogin(), $this->getUtilisateurFiltre());
             /* @var $foundUsers People[] */
 
@@ -129,11 +136,11 @@ class LdapConnecteur extends AbstractService
     private function getPeopleExtra(AbstractEntity $people)
     {
         $masque = $this->getUtilisateurExtraMasque();
-        $attrs = $this->getUtilisateurExtraAttributes();
+        $attrs  = $this->getUtilisateurExtraAttributes();
 
         $attrsVals = [];
-        foreach( $attrs as $attr ){
-            $attrsVals[$attr] = $this->getPeopleAttribute($people,$attr);
+        foreach ($attrs as $attr) {
+            $attrsVals[$attr] = $this->getPeopleAttribute($people, $attr);
         }
 
         return vsprintf($masque, $attrsVals);
@@ -141,18 +148,17 @@ class LdapConnecteur extends AbstractService
 
 
 
-    private function getPeopleAttribute( AbstractEntity $ldapPeople, string $attribute )
+    private function getPeopleAttribute(AbstractEntity $ldapPeople, string $attribute)
     {
-        try{
-            $val = $ldapPeople->getData(strtolower($attribute) );
-            if (is_array($val)) $val = implode(',',$val);
-        }catch(\Exception $e ){
+        try {
+            $val = $ldapPeople->getData(strtolower($attribute));
+            if (is_array($val)) $val = implode(',', $val);
+        } catch (\Exception $e) {
             $val = null;
         }
 
         return $val;
     }
-
 
 
 
@@ -165,7 +171,7 @@ class LdapConnecteur extends AbstractService
      *
      * @return Utilisateur
      */
-    public function getUtilisateur($login, $autoInsert = true)
+    public function getUtilisateur(string $login, bool $autoInsert = true): ?Utilisateur
     {
         if ($user = $this->getServiceUtilisateur()->getRepo()->findOneBy(['username' => $login])) return $user; // si on le trouve alors c'est OK
         if ($user = $this->mapperUser->findByUsername($login)) return $user; // si on le trouve alors c'est OK
@@ -191,6 +197,53 @@ class LdapConnecteur extends AbstractService
 
 
     /**
+     * Enregistre un people dans la BDD et retourne l'enregistrement correspondant. S'il existe déjà alors il est simplement
+     * retourné...
+     *
+     * @param string  $login
+     * @param boolean $autoInsert
+     *
+     * @return Utilisateur
+     */
+    public function getUtilisateurFromCode(string $code, bool $autoInsert = true): ?Utilisateur
+    {
+        if ($user = $this->getServiceUtilisateur()->getRepo()->findOneBy(['code' => $code])) return $user; // si on le trouve alors c'est OK
+
+        if ($this->isActif()) {
+            $ldapUser = $this->mapperPeople->findOneByNoIndividu($code);
+            if ($ldapUser) {
+                $login = $this->getPeopleAttribute($ldapUser, $this->getUtilisateurLogin());
+
+                return $this->getUtilisateur($login, $autoInsert);
+            }
+        }
+        
+        return null;
+    }
+
+
+
+    public function getCodeFromLogin(string $login): ?string
+    {
+        $code = null;
+
+        $u = $this->getUtilisateur($login);
+        if ($u) {
+            $code = $u->getCode();
+        }
+
+        if (!$code && $this->isActif()) {
+            $ldapUser = $this->mapperPeople->findOneByUsername($login);
+
+            $code = $this->getPeopleAttribute($ldapUser, $this->getUtilisateurCode());
+        }
+
+        return $code;
+    }
+
+
+
+    /**
      * @return Utilisateur
      */
     public function getUtilisateurCourant()
@@ -211,13 +264,13 @@ class LdapConnecteur extends AbstractService
 
         $ldapUser = $this->serviceUserContext->getLdapUser();
 
-        if ($ldapUser){
+        if ($ldapUser) {
             // si utilisateur_code_filtre présent : regexp pour recupérer une valeur précise d'un attribut multivalué,
             // par exemple l'attribut étiqueté supannRefId
             $utilisateurCodeFiltre = $this->getUtilisateurCodeFiltre();
 
             if ($utilisateurCodeFiltre != '') {
-                $utilisateurCourantCode = $this->getPeopleAttribute($ldapUser,$this->getUtilisateurCode());
+                $utilisateurCourantCode = $this->getPeopleAttribute($ldapUser, $this->getUtilisateurCode());
 
                 // si attribut multivalué, valeurs séparées par de virgules -> transformation en array
                 $utilisateurCourantCodeArr = explode(',', $utilisateurCourantCode);
@@ -228,7 +281,7 @@ class LdapConnecteur extends AbstractService
                     }
                 }
             } else {
-                return $this->getPeopleAttribute($ldapUser,$this->getUtilisateurCode());
+                return $this->getPeopleAttribute($ldapUser, $this->getUtilisateurCode());
             }
         }
 
@@ -316,9 +369,9 @@ class LdapConnecteur extends AbstractService
     {
         return $this->utilisateurCodeFiltre;
     }
- 
- 
- 
+
+
+
     /**
      * @param string $utilisateurCodeFiltre
      *
@@ -327,7 +380,7 @@ class LdapConnecteur extends AbstractService
     public function setUtilisateurCodeFiltre(string $utilisateurCodeFiltre): LdapConnecteur
     {
         $this->utilisateurCodeFiltre = $utilisateurCodeFiltre;
- 
+
         return $this;
     }
 

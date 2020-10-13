@@ -22,6 +22,7 @@ use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -58,7 +59,7 @@ class  IntervenantController extends AbstractController
     use RegleStructureValidationFormAwareTrait;
     use StatutIntervenantServiceAwareTrait;
     use SourceServiceAwareTrait;
-
+    use UtilisateurServiceAwareTrait;
 
 
     public function indexAction()
@@ -316,6 +317,17 @@ class  IntervenantController extends AbstractController
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
                     $form->protection($intervenant);
+                    if ($form->get('login')->getValue() && $form->get('password')->getValue()) {
+                        $nom           = $intervenant->getNomUsuel();
+                        $prenom        = $intervenant->getPrenom();
+                        $dateNaissance = $intervenant->getDateNaissance();
+                        $login         = $form->get('login')->getValue();
+                        $password      = $form->get('password')->getValue();
+                        $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
+                        $utilisateur->setCode($intervenant->getCode());
+                        $this->getServiceUtilisateur()->save($utilisateur);
+                        $intervenant->setUtilisateurCode($utilisateur->getCode());
+                    }
                     $this->getServiceIntervenant()->save($intervenant);
                     $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
                     $form->get('id')->setValue($intervenant->getId()); // transmet le nouvel ID

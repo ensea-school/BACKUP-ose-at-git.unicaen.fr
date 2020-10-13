@@ -2,6 +2,7 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
@@ -18,6 +19,8 @@ use Application\Service\Traits\GradeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Source;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
@@ -67,7 +70,7 @@ class EditionForm extends AbstractForm
 
     public function init()
     {
-        $hydrator = new GenericHydrator($this->getServiceSource()->getEntityManager(), $this->hydratorElements);
+        $hydrator = new EditionFormHydrator($this->getServiceSource()->getEntityManager(), $this->hydratorElements);
         $this->setHydrator($hydrator);
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->setAttribute('class', 'form-intervenant-edition no-intranavigation');
@@ -203,12 +206,43 @@ class EditionForm extends AbstractForm
             ],
         ]);
 
+        $utilisateur = new SearchAndSelect('utilisateur');
+        $utilisateur->setRequired(false)
+            ->setSelectionRequired(false)
+            ->setAutocompleteSource(
+                $this->getUrl('recherche', ['action' => 'utilisateurFind'])
+            )
+            ->setLabel("Utilisateur")
+            ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
+
+        $this->add($utilisateur);
+
         $this->add([
-            'name'    => 'utilisateurCode',
+            'name'    => 'login',
             'type'    => 'Text',
             'options' => [
-                'label' => 'Identifiant LDAP éventuel (' . \AppConfig::get('ldap', 'utilisateurCode', 'supannEmpId') . ')',
+                'label' => 'Login',
             ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'password',
+            'type'    => 'Password',
+            'options' => [
+                'label' => 'Mot de passe',
+            ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'prenom',
+            'type'    => 'Text',
+            'options' => [
+                'label'         => 'Prénom <span class="text-danger">*</span>',
+                'label_options' => ['disable_html_escape' => true],
+            ],
+
         ]);
 
         $this->add([
@@ -407,10 +441,72 @@ class EditionForm extends AbstractForm
             'discipline'         => ['required' => false],
             'grade'              => ['required' => false],
             'code'               => ['required' => true],
-            'utilisateurCode'    => ['required' => false],
+            'utilisateur'        => ['required' => false],
+            'login'              => ['required' => false],
+            'password'           => ['required' => false],
             'source'             => ['required' => false],
             'sourceCode'         => ['required' => false],
             'montantIndemniteFc' => ['required' => false],
         ];
+    }
+}
+
+
+
+
+
+class EditionFormHydrator extends GenericHydrator
+{
+    use UtilisateurServiceAwareTrait;
+    use LdapConnecteurAwareTrait;
+
+    protected $noGenericParse = ['utilisateur', 'creerUtilisateur'];
+
+
+
+    /**
+     * @param array                              $data
+     * @param \Application\Entity\Db\Intervenant $object
+     *
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        parent::hydrate($data, $object);
+
+        $login = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
+        if ($login) {
+            $code = $this->getConnecteurLdap()->getCodeFromLogin($login);
+        } else {
+            $code = null;
+        }
+
+        $object->setUtilisateurCode($code);
+    }
+
+
+
+    /**
+     * @param \Application\Entity\Db\Intervenant $object
+     *
+     * @return array
+     */
+    public function extract($object)
+    {
+        $res = parent::extract($object);
+
+        $res['creerUtilisateur'] = !$object->getId() && !\AppConfig::get('cas', 'actif');
+
+        if ($code = $object->getUtilisateurCode()) {
+            $utilisateur = $this->getConnecteurLdap()->getUtilisateurFromCode($code, false);
+            if ($utilisateur) {
+                $res['utilisateur'] = [
+                    'id'    => $utilisateur->getUsername(),
+                    'label' => (string)$utilisateur,
+                ];
+            }
+        }
+
+        return $res;
     }
 }

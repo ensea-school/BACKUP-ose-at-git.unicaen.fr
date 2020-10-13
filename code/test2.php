@@ -8,21 +8,5 @@
  * @var $viewFile   string
  */
 
-/**
- * @var $si \Application\Service\IntervenantService
- */
-$si = $container->get(\Application\Service\IntervenantService::class);
-
-$routeParams = [
-    'code:OSE5ea29a39d99a0',
-    '51954',
-    '51965',
-    '39778',
-    '45xc',
-];
-
-foreach ($routeParams as $routeParam) {
-    $i = $si->getByRouteParam($routeParam);
-    var_dump($routeParam . ' = ' . ($i ? $i->getId() . ':' : '- NULL -') . $i);
-}
-
+$sql = 'update intervenant set utilisateur_code = \'dd\' where id = 196998;';
+$container->get(\Application\Constants::BDD)->getConnection()->execute($sql);

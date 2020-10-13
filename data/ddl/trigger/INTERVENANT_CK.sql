@@ -36,4 +36,16 @@ BEGIN
   IF cs > 0 THEN
     raise_application_error(-20101, 'Un intervenant ne peut pas avoir deux fois le même statut le même année');
   END IF;
+
+  -- On ne peut pas assicoer un même login à plusieurs intervenants
+  SELECT COUNT(*) INTO cs FROM INTERVENANT WHERE
+    id <> :NEW.id AND histo_destruction IS NULL
+    AND code <> :NEW.code
+    AND annee_id = :NEW.annee_id
+    AND utilisateur_code = :NEW.utilisateur_code
+  ;
+  IF cs > 0 THEN
+    raise_application_error(-20101, 'L''utilisateur est déjà utilisé pour un autre intervenant. Merci d''en choisir un autre.');
+  END IF;
+
 END;

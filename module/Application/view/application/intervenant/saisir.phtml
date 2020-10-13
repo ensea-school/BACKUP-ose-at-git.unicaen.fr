@@ -64,10 +64,31 @@ if ($errors) {
             <div class="panel panel-default">
                 <div class="panel-heading">Liens avec le système d'information</div>
                 <div class="panel-body">
-                    <?php
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#exists-user" aria-controls="exists-user"
+                                                                          role="tab" data-toggle="tab">Compte existant</a>
+                                </li>
+                                <li role="presentation"><a href="#new-user" aria-controls=new-user" role="tab"
+                                                           data-toggle="tab">Créer un nouveau compte</a></li>
+                            </ul>
 
-                    echo $this->formControlGroup($form->get('utilisateurCode'));
-                    ?>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="exists-user">
+                                    <?= $this->formControlGroup($form->get('utilisateur')); ?>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="new-user">
+                                    <div class="row">
+                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('login')); ?></div>
+                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('password')); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6"><?= $this->formControlGroup($form->get('source')); ?></div>
                         <div class="col-md-6"><?= $this->formControlGroup($form->get('sourceCode')); ?></div>

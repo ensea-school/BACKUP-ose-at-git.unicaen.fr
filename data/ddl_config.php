@@ -11,17 +11,17 @@ return [
     ]],
     'materialized-view' => ['includes' => [
 
-    ], //'excludes'                      => ['MV_EXT_SERVICE']],
-                            'view'     => ['includes' => [
+    ], 'excludes'                      => ['MV_EXT_SERVICE']],
+    'view'              => ['includes' => [
 
-                            ]],
-                            'package'  => ['includes' => [
+    ]],
+    'package'           => ['includes' => [
 
-                            ]],
-                            'trigger'  => ['includes' => [
-                                'F_CONTRAT', 'F_CONTRAT_S', 'INDIC_TRG_MODIF_DOSSIER',
-                            ]],
-                            'sequence' => ['includes' => [
+    ]],
+    'trigger'           => ['includes' => [
+        'F_CONTRAT', 'F_CONTRAT_S', 'INDIC_TRG_MODIF_DOSSIER',
+    ]],
+    'sequence'          => ['includes' => [
 
-                            ]],
-    ];
+    ]],
+];

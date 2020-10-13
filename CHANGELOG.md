@@ -18,6 +18,8 @@ Objectif : Doubles statuts et refonte des données personnelles
   * La bascule d'un statut à un autre e fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
   * Pour chaque statut, l'intervenant a une fiche distincte, avec des services distincts, etc. Les pièces justificatives et les agréments sont communs.
 * Possibilité de créer un nouvel intervenant local au moyen d'une IHM
+  * Possibilité d'associer un utilisateur LDAP à un intervenant nouvellement créé
+  * Possibilité de créer directement dans le formulaire INTERVENANT un nouvel utilisateur avec saisie de login/MDP.
 * Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celui fourni par le connecteur
 * Possibilité de forcer le statut d'un intervenant dans OSE et d'ignorer celui fourni par le connecteur (même pour un permanent)
 * Les vues matérialisées sont recalculées à chaque mise à jour

@@ -74,7 +74,6 @@ class IntervenantDossierController extends AbstractController
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
-            $valid = $form->isValid();
             if ($form->isValid()) {
                 /* Traitement du formulaire */
                 $completude = $this->getServiceDossier()->isComplete($intervenantDossier);

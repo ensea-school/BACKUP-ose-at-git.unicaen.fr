@@ -56,7 +56,8 @@ class AdresseFieldset extends AbstractFieldset
                 ],
             ],
             'attributes' => [
-                'rows' => 2,
+                'class' => 'dossierElement',
+                'rows'  => 2,
             ],
             'type'       => 'Textarea',
         ]);
@@ -65,11 +66,14 @@ class AdresseFieldset extends AbstractFieldset
          * Lieu dit
          */
         $this->add([
-            'name'    => 'lieuDit',
-            'options' => [
+            'name'       => 'lieuDit',
+            'options'    => [
                 'label' => 'Lieu dit',
             ],
-            'type'    => 'Text',
+            'attributes' => [
+                'class' => 'dossierElement',
+            ],
+            'type'       => 'Text',
         ]);
 
         /**
@@ -81,6 +85,7 @@ class AdresseFieldset extends AbstractFieldset
                 'label' => 'N°',
             ],
             'attributes' => [
+                'class'       => 'dossierElement',
                 'placeholder' => 'N°',
             ],
             'type'       => 'Text',
@@ -97,7 +102,7 @@ class AdresseFieldset extends AbstractFieldset
                 'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getServiceAdresseNumeroCompl()->getList()),
             ],
             'attributes' => [
-                'class'            => 'selectpicker',
+                'class'            => 'selectpicker dossierElement',
                 'data-live-search' => 'true',
             ],
             'type'       => 'Select',
@@ -115,7 +120,7 @@ class AdresseFieldset extends AbstractFieldset
                 'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList()),
             ],
             'attributes' => [
-                'class'            => 'selectpicker',
+                'class'            => 'selectpicker dossierElement',
                 'data-live-search' => 'true',
                 'data-size'        => 10,
             ],
@@ -131,6 +136,7 @@ class AdresseFieldset extends AbstractFieldset
                 'label' => 'Voie',
             ],
             'attributes' => [
+                'class'       => 'dossierElement',
                 'placeholder' => 'nom de la voie',
             ],
             'type'       => 'Text',
@@ -146,6 +152,7 @@ class AdresseFieldset extends AbstractFieldset
                     'disable_html_escape' => true,
                 ],],
             'attributes' => [
+                'class'       => 'dossierElement',
                 'placeholder' => 'Code postal',
             ],
             'type'       => 'Text',
@@ -162,6 +169,7 @@ class AdresseFieldset extends AbstractFieldset
                     'disable_html_escape' => true,
                 ],],
             'attributes' => [
+                'class'       => 'dossierElement',
                 'placeholder' => 'Ville',
             ],
             'type'       => 'Text',
@@ -180,7 +188,7 @@ class AdresseFieldset extends AbstractFieldset
                     'disable_html_escape' => true,
                 ],],
             'attributes' => [
-                'class'            => 'selectpicker',
+                'class'            => 'selectpicker dossierElement',
                 'data-live-search' => 'true',
             ],
             'type'       => 'Select',

@@ -92,10 +92,11 @@ class NumeroINSEEValidator extends NumeroINSEE
 
         $this->provisoire = $this->getProvisoire();
 
-        $this->civilite = (!empty($civilite)) ?
+        //Désactivation du test civilité sur l'insee (cas personnes changeant de sexe)
+        /*$this->civilite = (!empty($civilite)) ?
             $this->getServiceCivilite()->get((int)$civilite) : null;
 
-        if ($this->civilite && !$this->isValidCivilite()) return false;
+        if ($this->civilite && !$this->isValidCivilite()) return false;*/
 
         $this->dateNaissance = (!empty($dateDeNaissance)) ?
             \DateTime::createFromFormat(Constants::DATE_FORMAT, $dateDeNaissance) : null;

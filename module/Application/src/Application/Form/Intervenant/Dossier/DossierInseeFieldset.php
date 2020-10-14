@@ -35,6 +35,7 @@ class DossierInseeFieldset extends AbstractFieldset
                 ],
             ],
             'attributes' => [
+                'class'     => 'dossierElement',
                 'info_icon' => "Numéro INSEE (sécurité sociale) avec la clé de contrôle",
                 'maxlength' => '15',
             ],
@@ -53,6 +54,7 @@ class DossierInseeFieldset extends AbstractFieldset
                 ],
             ],
             'attributes' => [
+                'class' => 'dossierElement',
             ],
             'type'       => 'Checkbox',
         ]);

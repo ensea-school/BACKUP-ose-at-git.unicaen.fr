@@ -48,35 +48,44 @@ class DossierIdentiteFieldset extends AbstractFieldset
          * Nom usuel
          */
         $this->add([
-            'name'    => 'nomUsuel',
-            'options' => [
+            'name'       => 'nomUsuel',
+            'options'    => [
                 'label'         => 'Nom usuel <span class="text-danger">*</span>',
                 'label_options' => ['disable_html_escape' => true],
             ],
-            'type'    => 'Text',
+            'attributes' => [
+                'class' => 'dossierElement',
+            ],
+            'type'       => 'Text',
         ]);
 
         /**
          * Nom patro
          */
         $this->add([
-            'name'    => 'nomPatronymique',
-            'options' => [
+            'name'       => 'nomPatronymique',
+            'options'    => [
                 'label'         => 'Nom de naissance',
                 'label_options' => ['disable_html_escape' => true],
             ],
-            'type'    => 'Text',
+            'attributes' => [
+                'class' => 'dossierElement',
+            ],
+            'type'       => 'Text',
         ]);
 
         /**
          * Prénom
          */
         $this->add([
-            'name'    => 'prenom',
-            'options' => [
+            'name'       => 'prenom',
+            'options'    => [
                 'label'         => 'Prénom <span class="text-danger">*</span>',
                 'label_options' => ['disable_html_escape' => true],],
-            'type'    => 'Text',
+            'attributes' => [
+                'class' => 'dossierElement',
+            ],
+            'type'       => 'Text',
         ]);
 
         /**
@@ -89,6 +98,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
                 'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
+                'class' => 'dossierElement',
             ],
             'type'       => 'Select',
         ]);

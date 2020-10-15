@@ -47,6 +47,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 ## Corrections de bugs
 
 * Sur l'écran paramétrage d'un centre de coût d'un élément pédagogique (offre de formation), ne proposer que les centres de coûts de la composante d'appartenance de l'ELP. (Ticket #28958)
+* L'indicateur 340 était inopérant
 
 # OSE 14.10
 

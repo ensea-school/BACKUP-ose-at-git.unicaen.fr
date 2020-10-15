@@ -38,13 +38,14 @@ return [
     'intervenant' => [
         'libelle'    => 'Intervenant',
         'privileges' => [
-            'recherche'            => 'Recherche',
-            'fiche'                => 'Visualisation de la fiche',
-            'calcul-hetd'          => 'Calcul HETD',
-            'edition'              => 'Edition',
-            'suppression'          => 'Suppression',
-            'statut-edition'       => 'Statuts (Édition)',
-            'statut-visualisation' => 'Statuts (Visualisation)',
+            'recherche'              => 'Recherche',
+            'fiche'                  => 'Visualisation de la fiche',
+            'calcul-hetd'            => 'Calcul HETD',
+            'edition'                => 'Edition',
+            'suppression'            => 'Suppression',
+            'statut-edition'         => 'Statuts (Édition)',
+            'statut-visualisation'   => 'Statuts (Visualisation)',
+            'regles-validation-type' => 'Règles validation par type intervenant',
         ],
     ],
 
@@ -209,7 +210,7 @@ return [
             'edition'       => 'Édition',
         ],
     ],
-    'type-ressource' => [
+    'type-ressource'    => [
         'libelle'    => 'Types de ressources',
         'privileges' => [
             'visualisation' => 'Visualisation',

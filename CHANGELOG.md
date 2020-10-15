@@ -42,6 +42,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 ## Nouveautés
 
 * Suppression du contrôle de la civilité sur le numéro INSEE dans les données personnelles
+* Ajout d'un nouveau privilège pour "Règles de validation par type d'intervenant" dans l'administration de OSE (Ticket #32637)
 
 ## Corrections de bugs
 

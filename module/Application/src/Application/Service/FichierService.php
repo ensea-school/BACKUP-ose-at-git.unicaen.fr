@@ -51,9 +51,9 @@ class FichierService extends AbstractEntityService
      *
      * @return mixed
      */
-    public function save($entity)
+    public function save($entity, ?string $forceStockage = null)
     {
-        $stockage = self::getConfigStockage();
+        $stockage = $forceStockage ?: self::getConfigStockage();
         if (self::STOCKAGE_FILE == $stockage) {
             $contenuBdd = $entity->getContenu(true);
             if (is_resource($contenuBdd)) {

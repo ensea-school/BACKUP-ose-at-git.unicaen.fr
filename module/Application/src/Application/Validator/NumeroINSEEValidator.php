@@ -88,10 +88,10 @@ class NumeroINSEEValidator extends NumeroINSEE
 
         $this->provisoire = $this->getProvisoire();
 
-        $this->civilite = (!empty($context['civilite'])) ?
+        /*$this->civilite = (!empty($context['civilite'])) ?
             $this->getServiceCivilite()->get((int)$context['civilite']) : null;
 
-        if ($this->civilite && !$this->isValidCivilite()) return false;
+        if ($this->civilite && !$this->isValidCivilite()) return false;*/
 
         $this->dateNaissance = (!empty($context['dateNaissance'])) ?
             \DateTime::createFromFormat(Constants::DATE_FORMAT, $context['dateNaissance']) : null;

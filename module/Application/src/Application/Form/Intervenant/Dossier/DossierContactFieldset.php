@@ -45,7 +45,7 @@ class DossierContactFieldset extends AbstractFieldset
 
             ],
             'attributes' => [
-                'class'     => 'form-control',
+                'class'     => 'form-control dossierElement',
                 'info_icon' => "Non modifiable. Si vous n'avez pas d'email établissement vous devez renseigner le champs email personnel.",
                 'disabled'  => 'disabled',
             ],
@@ -63,7 +63,7 @@ class DossierContactFieldset extends AbstractFieldset
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
-                'class'     => 'form-control left-border-none',
+                'class'     => 'form-control left-border-none dossierElement',
                 'info_icon' => "Si vous renseignez une adresse mail perso, celle-ci sera utilisée pour vous contacter.",
 
             ],
@@ -81,7 +81,7 @@ class DossierContactFieldset extends AbstractFieldset
 
             ],
             'attributes' => [
-                'class'     => 'form-control left-border-none',
+                'class'     => 'form-control left-border-none dossierElement',
                 'info_icon' => "Si vous n'avez pas de téléphone professionnel vous devez renseigner le champs téléphone personnel.",
             ],
             'type'       => Tel::class,
@@ -98,7 +98,7 @@ class DossierContactFieldset extends AbstractFieldset
             ],
             'attributes' => [
                 //'placeholder' => "Email établissement",
-                'class' => 'form-control left-border-none',
+                'class' => 'form-control left-border-none dossierElement',
 
             ],
             'type'       => Tel::class,

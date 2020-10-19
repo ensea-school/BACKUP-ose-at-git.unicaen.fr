@@ -254,7 +254,8 @@ $fieldsets = $form->getFieldsets();
     <script type="text/javascript">
 
         $(function () {
-
+            var dataModificated = 0;
+            var messageDataModificated = "Vous souhaitez changer de statut, mais vos données personnelles ont été modifié, si vous n'enregistrez pas au préalable, elles seront perdues. Souhaitez vous continuer ?"
             manageDepartementNaissance();
 
 
@@ -283,10 +284,29 @@ $fieldsets = $form->getFieldsets();
             }
 
             $("select[name='DossierStatut[statut]']").change(function () {
-                var action = $("form[id='dossier']").attr('action');
-                $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
-                $("form[id='dossier']").submit();
+                if (dataModificated) {
+                    if (!confirm(messageDataModificated)) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                    } else {
+                        var action = $("form[id='dossier']").attr('action');
+                        $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
+                        $("form[id='dossier']").submit();
+                    }
+                } else {
+                    var action = $("form[id='dossier']").attr('action');
+                    $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
+                    $("form[id='dossier']").submit();
+                }
             });
 
-        });
+
+
+            $(".dossierElement").change(function () {
+                dataModificated = 1;
+            })
+
+
+        })
+        ;
     </script>

@@ -33,6 +33,7 @@ class DossierBancaireFieldset extends AbstractFieldset
             'attributes' => [
                 'size'      => 11,
                 'maxlength' => 11,
+                'class'     => 'dossierElement',
             ],
             'type'       => 'Text',
         ]);
@@ -46,6 +47,7 @@ class DossierBancaireFieldset extends AbstractFieldset
             'attributes' => [
                 'size'      => 34,
                 'maxlength' => 34,
+                'class'     => 'dossierElement',
             ],
             'type'       => 'Text',
         ]);
@@ -56,6 +58,7 @@ class DossierBancaireFieldset extends AbstractFieldset
                 'label' => 'RIB hors zone SEPA',
             ],
             'attributes' => [
+                'class' => 'dossierElement',
             ],
             'type'       => 'Checkbox',
         ]);

@@ -40,13 +40,16 @@ class DossierAutresFieldset extends AbstractFieldset
             foreach ($listChampsAutres as $champ) {
 
                 $this->add([
-                    'name'     => 'champ-autre-' . $champ->getId(),
-                    'required' => false,
-                    'options'  => [
+                    'name'       => 'champ-autre-' . $champ->getId(),
+                    'required'   => false,
+                    'options'    => [
                         'label'         => $champ->getLibelle(),
                         'label_options' => ['disable_html_escape' => true],
                     ],
-                    'type'     => ($champ->getType()->getCode() == 'texte') ? 'text' : 'select',
+                    'attributes' => [
+                        'class' => 'dossierElement',
+                    ],
+                    'type'       => ($champ->getType()->getCode() == 'texte') ? 'text' : 'select',
                 ]);
 
                 if ($champ->getType()->getCode() == self::SELECT_SQL) {

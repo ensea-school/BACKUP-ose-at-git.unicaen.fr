@@ -46,6 +46,8 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
             ],
             'attributes' => [
                 'placeholder' => "jj/mm/aaaa",
+                'class'       => 'dossierElement',
+
             ],
             'type'       => 'UnicaenApp\Form\Element\Date',
         ]);
@@ -61,7 +63,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
                     'disable_html_escape' => true,
                 ],],
             'attributes' => [
-                'class'            => 'selectpicker',
+                'class'            => 'selectpicker dossierElement',
                 'data-live-search' => 'true',
             ],
             'type'       => 'Select',
@@ -84,7 +86,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
                 ],],
             'attributes' => [
                 'info_icon'        => "Uniquement si votre pays de naissance est la France.",
-                'class'            => 'selectpicker',
+                'class'            => 'selectpicker dossierElement',
                 'data-live-search' => 'true',
             ],
             'type'       => 'Select',
@@ -98,13 +100,16 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
          * Ville de naissance
          */
         $this->add([
-            'name'    => 'villeNaissance',
-            'options' => [
+            'name'       => 'villeNaissance',
+            'options'    => [
                 'label'         => 'Ville de naissance <span class="text-danger">*</span>',
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],],
-            'type'    => 'Text',
+            'attributes' => [
+                'class' => 'dossierElement',
+            ],
+            'type'       => 'Text',
         ]);
 
 

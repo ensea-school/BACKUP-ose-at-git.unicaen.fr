@@ -39,9 +39,15 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 # OSE 14.11
 
+## Nouveautés
+
+* Suppression du contrôle de la civilité sur le numéro INSEE dans les données personnelles
+* Ajout d'un nouveau privilège pour "Règles de validation par type d'intervenant" dans l'administration de OSE (Ticket #32637)
+
 ## Corrections de bugs
 
 * Sur l'écran paramétrage d'un centre de coût d'un élément pédagogique (offre de formation), ne proposer que les centres de coûts de la composante d'appartenance de l'ELP. (Ticket #28958)
+* L'indicateur 340 était inopérant
 
 # OSE 14.10
 

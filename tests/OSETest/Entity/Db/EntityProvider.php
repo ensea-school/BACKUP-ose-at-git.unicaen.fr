@@ -5,6 +5,7 @@ namespace OSETest\Entity\Db;
 use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Corps;
 use Application\Entity\Db\Etablissement;
+use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\RegimeSecu;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
@@ -142,6 +143,8 @@ class EntityProvider
      */
     private $periode;
 
+
+
     /**
      *
      * @param EntityManager $entityManager
@@ -171,14 +174,19 @@ class EntityProvider
         $this->newEntities = new SplStack();
     }
 
+
+
     /**
      * @var string
      */
     protected $testClassName;
 
+
+
     /**
      *
      * @param string $className
+     *
      * @return self
      */
     public function setTestClassName($className)
@@ -187,6 +195,8 @@ class EntityProvider
 
         return $this;
     }
+
+
 
     /**
      * SUpprime du gestionnaire d'entité les éventuelles nouvelles instances d'entités créées.
@@ -205,8 +215,7 @@ class EntityProvider
                 // 'DELETE FROM V_ELEMENT_TYPE_INTERVENTION WHERE ELEMENT_PEDAGOGIQUE_ID = ?' with params [17970]:
                 // ORA-01752: cannot delete from view without exactly one key-preserved table
                 $entity->setHistoDestruction(new \DateTime());
-            }
-            else {
+            } else {
                 $this->getEntityManager()->remove($entity);
             }
             $this->newEntities->next();
@@ -218,6 +227,7 @@ class EntityProvider
 
         return $this;
     }
+
 
 
     /**
@@ -240,6 +250,8 @@ class EntityProvider
         return $this->annee;
     }
 
+
+
     /**
      * Recherche et retourne l'Etablissement par défaut.
      *
@@ -260,6 +272,8 @@ class EntityProvider
         return $this->etablissement;
     }
 
+
+
     /**
      * Recherche et retourne la première Civilite trouvée.
      *
@@ -268,7 +282,7 @@ class EntityProvider
     public function getCivilite()
     {
         if (null === $this->civilite) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Civilite')->createQueryBuilder("c");
+            $qb             = $this->getEntityManager()->getRepository('Application\Entity\Db\Civilite')->createQueryBuilder("c");
             $this->civilite = $qb->getQuery()->setMaxResults(1)->getSingleResult();
             if (!$this->civilite) {
                 throw new RuntimeException("Aucune civilité trouvée.");
@@ -277,6 +291,8 @@ class EntityProvider
 
         return $this->civilite;
     }
+
+
 
     /**
      * Retourne à chaque appel une nouvelle instance de Structure persistée.
@@ -287,6 +303,8 @@ class EntityProvider
     {
         return null;
     }
+
+
 
     /**
      * Recherche et retourne la structure racine, i.e. qui n'a aucun structure mère.
@@ -308,21 +326,24 @@ class EntityProvider
         return $this->structureRacine;
     }
 
+
+
     /**
      * Retourne :
      * - soit une Structure d'enseignement quelconque ;
      * - soit à chaque appel une nouvelle instance de Structure d'enseignement persistée.
      *
      * @param boolean $quelconque
+     *
      * @return Structure
      */
     public function getStructureEns($quelconque = true)
     {
         if ($quelconque) {
             if (null === $this->structureEns) {
-                $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Structure')->createQueryBuilder("s")
-                        ->join("s.type", "ts")
-                        ->andWhere("ts.enseignement = 1");
+                $qb                 = $this->getEntityManager()->getRepository('Application\Entity\Db\Structure')->createQueryBuilder("s")
+                    ->join("s.type", "ts")
+                    ->andWhere("ts.enseignement = 1");
                 $this->structureEns = $qb->getQuery()->setMaxResults(1)->getSingleResult();
                 if (!$this->structureEns) {
                     throw new RuntimeException("Structure d'enseignement quelconque introuvable.");
@@ -342,10 +363,12 @@ class EntityProvider
     }
 
 
+
     /**
      * Retourne à chaque appel une nouvelle instance de StatutIntervenant persistée.
      *
      * @param boolean $permanent
+     *
      * @return StatutIntervenant
      */
     public function getStatutIntervenant($permanent = true)
@@ -360,10 +383,13 @@ class EntityProvider
         return $statut;
     }
 
+
+
     /**
      * Recherche et retourne le StatutIntervenant correspondant au code spécifié.
      *
      * @param string $sourceCode Code "source" du statut, ex: StatutIntervenant::SALAR_PRIVE
+     *
      * @return StatutIntervenant
      */
     public function getStatutIntervenantByCode($sourceCode)
@@ -374,7 +400,7 @@ class EntityProvider
 
         if (!isset($this->statuts[$sourceCode])) {
             $this->statuts[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\StatutIntervenant')
-                    ->findOneBySourceCode($sourceCode);
+                ->findOneBySourceCode($sourceCode);
             if (!$this->statuts[$sourceCode]) {
                 throw new RuntimeException("Statut intervenant introuvable avec le code '$sourceCode'.");
             }
@@ -382,6 +408,8 @@ class EntityProvider
 
         return $this->statuts[$sourceCode];
     }
+
+
 
     /**
      * Retourne une nouvelle instance UNIQUE de Corps.
@@ -399,6 +427,8 @@ class EntityProvider
 
         return $this->corps;
     }
+
+
 
     /**
      * Retourne une nouvelle instance UNIQUE de RegimeSecu.
@@ -418,12 +448,14 @@ class EntityProvider
     }
 
 
+
     /**
      * Retourne à chaque appel une nouvelle instance de Service.
      *
-     * @param Intervenant $intervenant
-     * @param Structure $structureEns
+     * @param Intervenant        $intervenant
+     * @param Structure          $structureEns
      * @param ElementPedagogique $ep
+     *
      * @return Service
      */
     public function getService(Intervenant $intervenant, Structure $structureEns = null, ElementPedagogique $ep = null)
@@ -442,27 +474,32 @@ class EntityProvider
         return $service;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de VolumeHoraire.
      *
-     * @param Service $v
-     * @param float $heures
+     * @param Service          $v
+     * @param float            $heures
      * @param TypeIntervention $typeIntervention
+     *
      * @return VolumeHoraire
      */
     public function getVolumeHoraire(Service $v, $heures, TypeIntervention $typeIntervention = null, Periode $periode = null)
     {
         $vh = Asset::newVolumeHoraire(
-                $v,
-                $typeIntervention ?: $this->getTypeIntervention(),
-                $periode ?: $this->getPeriode(),
-                $heures);
+            $v,
+            $typeIntervention ?: $this->getTypeIntervention(),
+            $periode ?: $this->getPeriode(),
+            $heures);
         $this->getEntityManager()->persist($vh);
 
         $this->newEntities->push($vh);
 
         return $vh;
     }
+
+
 
     /**
      * Recherche et retourne un TypeIntervention quelconque.
@@ -472,7 +509,7 @@ class EntityProvider
     public function getTypeIntervention()
     {
         if (null === $this->typeIntervention) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervention')->createQueryBuilder("ti");
+            $qb                     = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervention')->createQueryBuilder("ti");
             $this->typeIntervention = $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
             if (!$this->typeIntervention) {
                 throw new RuntimeException("TypeIntervention quelconque introuvable.");
@@ -482,10 +519,13 @@ class EntityProvider
         return $this->typeIntervention;
     }
 
+
+
     /**
      * Recherche et retourne le TypeIntervention correspondant au code spécifié.
      *
      * @param string $code Code du TypeIntervention, ex: TypeIntervention::CODE_PIECE_JOINTE
+     *
      * @return TypeIntervention
      */
     public function getTypeInterventionByCode($code)
@@ -496,7 +536,7 @@ class EntityProvider
 
         if (!isset($this->typesIntervention[$code])) {
             $this->typesIntervention[$code] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervention')
-                    ->findOneByCode($code);
+                ->findOneByCode($code);
             if (!$this->typesIntervention[$code]) {
                 throw new RuntimeException("TypeIntervention introuvable avec le code '$code'.");
             }
@@ -504,6 +544,8 @@ class EntityProvider
 
         return $this->typesIntervention[$code];
     }
+
+
 
     /**
      * Recherche et retourne une Periode quelconque.
@@ -524,6 +566,8 @@ class EntityProvider
         return $this->periode;
     }
 
+
+
     /**
      * Recherche et retourne une Etape quelconque.
      *
@@ -532,7 +576,7 @@ class EntityProvider
     public function getEtape()
     {
         if (null === $this->etape) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Etape')->createQueryBuilder("e");
+            $qb          = $this->getEntityManager()->getRepository('Application\Entity\Db\Etape')->createQueryBuilder("e");
             $this->etape = $qb->getQuery()->setMaxResults(1)->getSingleResult();
             if (!$this->etape) {
                 throw new RuntimeException("Etape quelconque introuvable.");
@@ -541,6 +585,8 @@ class EntityProvider
 
         return $this->etape;
     }
+
+
 
     /**
      * Retourne à chaque appel une nouvelle instance de ElementPedagogique persistée.
@@ -561,11 +607,14 @@ class EntityProvider
         return $ep;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de ServiceReferentiel persistée.
      *
      * @param Intervenant $intervenant
-     * @param Structure $structure
+     * @param Structure   $structure
+     *
      * @return ServiceReferentiel
      */
     public function getServiceReferentiel(Intervenant $intervenant, Structure $structure = null)
@@ -583,6 +632,8 @@ class EntityProvider
         return $service;
     }
 
+
+
     /**
      * Recherche et retourne une FonctionReferentiel quelconque.
      *
@@ -591,7 +642,7 @@ class EntityProvider
     public function getFonctionReferentiel()
     {
         if (null === $this->fonction) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\FonctionReferentiel')->createQueryBuilder("fr");
+            $qb             = $this->getEntityManager()->getRepository('Application\Entity\Db\FonctionReferentiel')->createQueryBuilder("fr");
             $this->fonction = $qb->getQuery()->setMaxResults(1)->getSingleResult();
             if (!$this->fonction) {
                 throw new RuntimeException("Fonction Referentiel quelconque introuvable.");
@@ -600,6 +651,8 @@ class EntityProvider
 
         return $this->fonction;
     }
+
+
 
     /**
      * Recherche et retourne le TypeVolumeHoraire "Prévu".
@@ -610,7 +663,7 @@ class EntityProvider
     {
         if (null === $this->typeVolumeHoraire) {
             $this->typeVolumeHoraire = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeVolumeHoraire')
-                    ->findOneByCode($code = TypeVolumeHoraire::CODE_PREVU);
+                ->findOneByCode($code = TypeVolumeHoraire::CODE_PREVU);
             if (!$this->typeVolumeHoraire) {
                 throw new RuntimeException(sprintf("Type de volume horaire '%s' introuvable.", $code));
             }
@@ -618,6 +671,8 @@ class EntityProvider
 
         return $this->typeVolumeHoraire;
     }
+
+
 
     /**
      * Retourne à chaque appel une nouvelle instance de TypePieceJointe persistée.
@@ -635,18 +690,21 @@ class EntityProvider
         return $type;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de TypePieceJointeStatut persistée.
      *
      * @param StatutIntervenant $statut
-     * @param TypePieceJointe $type
+     * @param TypePieceJointe   $type
+     *
      * @return TypePieceJointeStatut
      */
     public function getTypePieceJointeStatut(StatutIntervenant $statut, TypePieceJointe $type = null)
     {
         $tpjs = Asset::newTypePieceJointeStatut(
-                $statut,
-                $type ?: $this->getTypePieceJointe());
+            $statut,
+            $type ?: $this->getTypePieceJointe());
 
         $this->getEntityManager()->persist($tpjs);
 
@@ -655,14 +713,17 @@ class EntityProvider
         return $tpjs;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de PieceJointe persistée.
      *
-     * @param TypePieceJointe $type
-     * @param Dossier $dossier
+     * @param TypePieceJointe    $type
+     * @param IntervenantDossier $dossier
+     *
      * @return PieceJointe
      */
-    public function getPieceJointe(TypePieceJointe $type, Dossier $dossier = null)
+    public function getPieceJointe(TypePieceJointe $type, IntervenantDossier $dossier = null)
     {
         $pj = Asset::newPieceJointe($type, $dossier);
 
@@ -672,6 +733,8 @@ class EntityProvider
 
         return $pj;
     }
+
+
 
     /**
      * Retourne à chaque appel une nouvelle instance de Fichier persistée.
@@ -689,6 +752,8 @@ class EntityProvider
         return $fichier;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de TypeAgrement persistée.
      *
@@ -705,18 +770,21 @@ class EntityProvider
         return $type;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de TypeAgrementStatut persistée.
      *
      * @param StatutIntervenant $statut
-     * @param TypeAgrement $type
+     * @param TypeAgrement      $type
+     *
      * @return TypeAgrementStatut
      */
     public function getTypeAgrementStatut(StatutIntervenant $statut, TypeAgrement $type = null)
     {
         $tas = Asset::newTypeAgrementStatut(
-                $statut,
-                $type ?: $this->getTypeAgrement());
+            $statut,
+            $type ?: $this->getTypeAgrement());
 
         $this->getEntityManager()->persist($tas);
 
@@ -725,21 +793,24 @@ class EntityProvider
         return $tas;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance d'AgrementService persistée.
      *
      * @param TypeAgrement $type
-     * @param Intervenant $intervenant
-     * @param Structure $structure
+     * @param Intervenant  $intervenant
+     * @param Structure    $structure
+     *
      * @return Agrement
      */
     public function getAgrement(TypeAgrement $type, Intervenant $intervenant, Structure $structure = null)
     {
         $a = Asset::newAgrement(
-                $type,
-                $intervenant,
-                $structure ?: $intervenant->getStructure(),
-                $this->getAnnee());
+            $type,
+            $intervenant,
+            $structure ?: $intervenant->getStructure(),
+            $this->getAnnee());
 
         $this->getEntityManager()->persist($a);
 
@@ -747,6 +818,8 @@ class EntityProvider
 
         return $a;
     }
+
+
 
     /**
      * Retourne à chaque appel une nouvelle instance de Validation persistée.
@@ -764,10 +837,13 @@ class EntityProvider
         return $validation;
     }
 
+
+
     /**
      * Recherche et retourne le TypeValidation correspondant au code spécifié.
      *
      * @param string $sourceCode Code du TypeValidation, ex: TypeValidation::CODE_PIECE_JOINTE
+     *
      * @return TypeValidation
      */
     public function getTypeValidationByCode($sourceCode)
@@ -778,7 +854,7 @@ class EntityProvider
 
         if (!isset($this->typesValidation[$sourceCode])) {
             $this->typesValidation[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeValidation')
-                    ->findOneByCode($sourceCode);
+                ->findOneByCode($sourceCode);
             if (!$this->typesValidation[$sourceCode]) {
                 throw new RuntimeException("TypeValidation introuvable avec le code '$sourceCode'.");
             }
@@ -787,10 +863,13 @@ class EntityProvider
         return $this->typesValidation[$sourceCode];
     }
 
+
+
     /**
      * Recherche et retourne le TypeAgrement correspondant au code spécifié.
      *
      * @param string $sourceCode Code du TypeAgrement, ex: TypeAgrement::CODE_CONSEIL_RESTREINT
+     *
      * @return TypeAgrement
      */
     public function getTypeAgrementByCode($sourceCode)
@@ -801,7 +880,7 @@ class EntityProvider
 
         if (!isset($this->typesAgrement[$sourceCode])) {
             $this->typesAgrement[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeAgrement')
-                    ->findOneByCode($sourceCode);
+                ->findOneByCode($sourceCode);
             if (!$this->typesAgrement[$sourceCode]) {
                 throw new RuntimeException("TypeAgrement introuvable avec le code '$sourceCode'.");
             }
@@ -810,20 +889,23 @@ class EntityProvider
         return $this->typesAgrement[$sourceCode];
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de Contrat persistée.
      *
      * @param TypeContrat $type
      * @param Intervenant $intervenant
-     * @param Structure $structure
+     * @param Structure   $structure
+     *
      * @return Contrat
      */
     public function getContrat(TypeContrat $type, Intervenant $intervenant, Structure $structure = null)
     {
         $a = Asset::newContrat(
-                $type,
-                $intervenant,
-                $structure ?: $intervenant->getStructure());
+            $type,
+            $intervenant,
+            $structure ?: $intervenant->getStructure());
 
         $this->getEntityManager()->persist($a);
 
@@ -832,10 +914,13 @@ class EntityProvider
         return $a;
     }
 
+
+
     /**
      * Retourne à chaque appel une nouvelle instance de TypeContrat persistée.
      *
      * @param boolean $avenant
+     *
      * @return TypeContrat
      */
     public function getTypeContrat($avenant = false)
@@ -844,7 +929,7 @@ class EntityProvider
 
         if (!isset($this->typesContrat[$code])) {
             $this->typesContrat[$code] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeContrat')
-                    ->findOneByCode($code);
+                ->findOneByCode($code);
             if (!$this->typesContrat[$code]) {
                 throw new RuntimeException("TypeContrat introuvable avec le code '$code'.");
             }

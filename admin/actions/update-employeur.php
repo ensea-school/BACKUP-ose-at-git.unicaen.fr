@@ -37,7 +37,7 @@ $tableEmployeur = $bdd->getTable('EMPLOYEUR');
 foreach ($listFiles as $file) {
     $num = str_replace('.csv', '', $file);
 
-    $c->println("Chargement du fichier N° $i sur $nbFiles");
+    $c->println("Chargement du fichier employeur N° $i sur $nbFiles");
     $csvFile = fopen($importDirectory . $file, "r");
     $row     = 0;
     $datas   = [];

@@ -53,8 +53,8 @@ class MigrationPrivileges extends AbstractMigration
               *
             FROM statut_intervenant si 
             WHERE 
-                si.histo_destruction IS NULL
-            AND si.peut_saisir_dossier = 1";
+                si.histo_destruction IS NULL";
+
 
         $statutsIntervenant = $bdd->select($sqlStatut);
 

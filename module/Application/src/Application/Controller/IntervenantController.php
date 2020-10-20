@@ -15,6 +15,7 @@ use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
@@ -60,6 +61,7 @@ class  IntervenantController extends AbstractController
     use StatutIntervenantServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
+    use DossierServiceAwareTrait;
 
 
     public function indexAction()
@@ -275,6 +277,8 @@ class  IntervenantController extends AbstractController
 
     public function saisirAction()
     {
+        $statutAutres = $this->getServiceStatutIntervenant()->getAutres();
+
         $role         = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant  = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $title        = "Saisie d'un intervenant";
@@ -291,7 +295,7 @@ class  IntervenantController extends AbstractController
         if (!$intervenant) {
             $intervenant = $this->getServiceIntervenant()->newEntity();
             $intervenant->setStructure($this->getServiceContext()->getStructure());
-            $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
+            $intervenant->setStatut($statutAutres);
             $intervenant->setAnnee($this->getServiceContext()->getAnnee());
             $intervenant->setSource($this->getServiceSource()->getOse());
             $intervenant->setCode(uniqid('OSE'));
@@ -307,6 +311,8 @@ class  IntervenantController extends AbstractController
         $canEdit = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION);
         $form->setReadOnly(!$canEdit);
         $form->bind($intervenant);
+
+        $ancienStatut = $intervenant->getStatut();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -329,6 +335,13 @@ class  IntervenantController extends AbstractController
                         $intervenant->setUtilisateurCode($utilisateur->getCode());
                     }
                     $this->getServiceIntervenant()->save($intervenant);
+                    if ($intervenant->getStatut() != $ancienStatut) {
+                        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+                        if ($dossier->getId()) { // Il y a un dossier
+                            $dossier->setStatut($intervenant->getStatut());
+                            $this->getServiceDossier()->save($dossier); // On sauvegarde le dossier
+                        }
+                    }
                     $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
                     $form->get('id')->setValue($intervenant->getId()); // transmet le nouvel ID
                     if ($isNew) {

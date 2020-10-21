@@ -25,8 +25,7 @@ if (!file_exists($importFilePath)) {
 //On vérifie que le répertoire import contient uniquement l'archive et aucun autre CSV
 $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
 if (count($listFiles) > 0) {
-    $c->println("Merci de supprimer les fichiers CSV présents dans le dossier $importDirectory", $c::COLOR_LIGHT_RED);
-    exit;
+    $c->printDie("Merci de supprimer les fichiers CSV présents dans le dossier $importDirectory");
 }
 //Extraction du PharData
 $phar = new PharData($importFilePath);

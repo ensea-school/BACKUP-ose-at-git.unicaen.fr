@@ -9,20 +9,21 @@ $oseId     = $oa->getOseAppliId();
 $c->println("Mise à jour de la table employeur");
 
 ini_set('memory_limit', '1024M');
-$importDirectory = $osedir . 'data/employeurs/import/';
+$importDirectory = $osedir . 'cache/employeurs/';
 $importArchive   = 'employeurs.tar.gz';
 $importFilePath  = $importDirectory . $importArchive;
-exec('wget http://ose.unicaen.fr/employeurs.tar.gz -O ' . $importFilePath);
+mkdir($importDirectory);
+if (file_exists($importFilePath)) {
+    unlink($importFilePath);
+}
+$c->exec("cd $importDirectory;wget https://ose.unicaen.fr/employeurs.tar.gz");
 
 //On vérifier que le fichier est présent
-if (!is_file($importFilePath)) {
-    $c->println("L'archive $importArchive manquante", $c::COLOR_LIGHT_RED);
-    exit;
+if (!file_exists($importFilePath)) {
+    $c->printDie("L'archive $importArchive manquante");
 }
 //On vérifie que le répertoire import contient uniquement l'archive et aucun autre CSV
-{
-    $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
-}
+$listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
 if (count($listFiles) > 0) {
     $c->println("Merci de supprimer les fichiers CSV présents dans le dossier $importDirectory", $c::COLOR_LIGHT_RED);
     exit;
@@ -116,7 +117,7 @@ foreach ($listFiles as $file) {
 }
 exec('cd ' . $importDirectory . ' && rm -rf *.csv');
 $c->println("Fin de mise à jour des données employeurs", $c::COLOR_LIGHT_GREEN);
-
+unlink($importFilePath);
 
 function reduce($str, $encoding = 'UTF-8')
 {

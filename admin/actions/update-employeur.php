@@ -9,10 +9,13 @@ $oseId     = $oa->getOseAppliId();
 $c->println("Mise à jour de la table employeur");
 
 ini_set('memory_limit', '1024M');
-$importDirectory = Config::get('employeur', 'import-directory');
-$importArchive   = Config::get('employeur', 'import-archive');
+$importDirectory = $osedir . 'data/employeurs/import/';
+$importArchive   = 'employeurs.tar.gz';
+$importFilePath  = $importDirectory . $importArchive;
+exec('wget http://ose.unicaen.fr/employeurs.tar.gz -O ' . $importFilePath);
+
 //On vérifier que le fichier est présent
-if (!is_file($importDirectory . $importArchive)) {
+if (!is_file($importFilePath)) {
     $c->println("L'archive $importArchive manquante", $c::COLOR_LIGHT_RED);
     exit;
 }
@@ -25,7 +28,7 @@ if (count($listFiles) > 0) {
     exit;
 }
 //Extraction du PharData
-$phar = new PharData($importDirectory . $importArchive);
+$phar = new PharData($importFilePath);
 $phar->extractTo($importDirectory);
 //récupération de la liste des fichiers CSV
 $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
@@ -111,6 +114,7 @@ foreach ($listFiles as $file) {
 
     $tableEmployeur->merge($datas, 'SIREN', $options);
 }
+exec('cd ' . $importDirectory . ' && rm -rf *.csv');
 $c->println("Fin de mise à jour des données employeurs", $c::COLOR_LIGHT_GREEN);
 
 

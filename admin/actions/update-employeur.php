@@ -16,7 +16,7 @@ mkdir($importDirectory);
 if (file_exists($importFilePath)) {
     unlink($importFilePath);
 }
-$c->exec("cd $importDirectory;wget https://ose.unicaen.fr/employeurs.tar.gz");
+$c->exec("cd $importDirectory;wget https://ose.unicaen.fr/employeurs.tar.gz;rm -rf *.csv");
 
 //On vérifier que le fichier est présent
 if (!file_exists($importFilePath)) {

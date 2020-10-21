@@ -42,6 +42,9 @@ class MigrationDossier extends AbstractMigration
     protected function before()
     {
         $this->manager->sauvegarderTable('DOSSIER', 'DOSSIER_SAVE');
+
+        $bdd = $this->manager->getBdd();
+        $bdd->exec("TRUNCATE TABLE TBL_DOSSIER"); // On supprime le contenu du de cette table pour éviter les erreurs de clés étrangères à la migration
     }
 
 

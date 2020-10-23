@@ -1,7 +1,7 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
-# OSE 15 (en développement) 
+# OSE 15 BETA
 Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés
@@ -36,6 +36,8 @@ Si vous êtes sur une version antérieurs à la 14, merci de migrer en V14.x **A
 
 * La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier ceux visant les tables INTERVERNANT et STRUCTURE.
 Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
+
+* Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
 
 # OSE 14.11
 

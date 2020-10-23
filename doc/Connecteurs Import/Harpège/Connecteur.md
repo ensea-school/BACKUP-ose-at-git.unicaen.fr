@@ -151,6 +151,25 @@ La vue SRC_INTERVENANT remplit plusieurs rôles :
 
 [Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
+### Cas des intervenants ne remontant plus par le connecteur mais ayant des données de saisies dans OSE.
+
+Il se peut que certains intervenants disparaissent d'Harpège, car leur date de fin d'affectation est passée par exemple.
+Ceci peut poser problème si ces derniers ont des informations saisies dans OSE.
+Pour éviter que la synchronisation ne supprime ces intervenants, il est nécessaire d'ajouter le filtre suivant :
+
+```sql
+WHERE import_action <> 'delete' OR (
+      (NOT exists(SELECT intervenant_id FROM intervenant_dossier WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
+  AND (NOT exists(SELECT intervenant_id FROM service WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
+)
+```
+pour la table INTERVENANT.
+
+Filtre à saisir dans Administration / Synchronisation / Tables / Table INTERVENANT / Modification / Champ "Filtre".
+
+Le filtre laisse passer toutes les opérations, sauf la destruction si l'intervenant a un dossier et/ou des services de saisis.
+Ces deux tests suffisent généralement, car il s'agit des deux premières étapes du workflow. A adapter le cas échéant.
+
 ## Import des affectations de recherche
 
 Les affectations de recherche peuvent être intégrées à OSE.

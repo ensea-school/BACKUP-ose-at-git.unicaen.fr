@@ -476,7 +476,7 @@ Ils sont appliqués sur les deux premières manières présentées ci-dessus.
 
 ### Création d'un filtre
 
-Un filtre correcpond à une partie de requête SQL portant sur une vue différentielle.
+Un filtre correspond à une partie de requête SQL portant sur une vue différentielle.
 
 Par exemple, pour ne lister que le différentiel des étapes dont l'année est supérieure à 2019, on fait :
 

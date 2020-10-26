@@ -172,13 +172,6 @@ class MigrationDossier extends AbstractMigration
         $console->println("Nombre de dossiers migrés : " . $nbDossierMigration);
         //Mise à jour sequence
         $bdd->majSequences($this->manager->getRef());
-        //Reste à faire de recalculer la complétude des dossiers 2019 et 2020 au minimum
-        $console->println("Recalcul de la complétude des dossiers pour l'année 2019");
-        $annee = '2019';
-        $oa->exec("calcul-completude-dossier --annee=$annee");
-        $console->println("Recalcul de la complétude des dossiers pour l'année 2020");
-        $annee = '2020';
-        $oa->exec("calcul-completude-dossier --annee=$annee");
         //Recalcule le tableau de bord des dossier
         $console->println("Calcul du tableau de bord TBL_DOSSIER");
         $bdd->exec('BEGIN unicaen_tbl.calculer(\'dossier\'); END;');

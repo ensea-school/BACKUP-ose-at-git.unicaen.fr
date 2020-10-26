@@ -6,6 +6,7 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
+use Application\Entity\Db\TblDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
@@ -160,150 +161,30 @@ class DossierService extends AbstractEntityService
 
 
 
-    /**
-     * Recalcule la complétude du dossier intervenant pour tous les intervenants d'une année ou un intervenant donné
-     *
-     * @param Annee       $annee
-     * @param Intervenant $intervenant
-     *
-     * @return Validation
-     */
-
-    public function updateCompletudeByAnnee(?Annee $annee = null, ?Intervenant $intervenant = null)
-    {
-        try {
-            $intervenants = [];
-            if ($intervenant instanceof Intervenant) {
-                //Calcul de la complétude du dossier pour un intervenant
-                $intervenants[] = $intervenant;
-            } elseif ($annee instanceof Annee) {
-                //Calcul de la complétude pour une année complète
-                $serviceIntervenant = $this->getServiceIntervenant();
-                $qb                 = $serviceIntervenant->finderByAnnee($annee);
-                $serviceIntervenant->finderByHistorique($qb);
-                $intervenants = $serviceIntervenant->getList($qb);
-            }
-
-            foreach ($intervenants as $intervenant) {
-                //On récupére le dossier de l'intervenant
-                $intervenantDossier = $this->getByIntervenant($intervenant);
-                //On regarde si le dossier est déjà validé
-                $validation = $this->getValidation($intervenant);
-                if ($validation) {
-                    //Si les données personnelles sont déjà validés on force la complétude à 1
-                    $isComplete = 1;
-                } else {
-                    $isComplete = $this->isComplete($intervenantDossier);
-                }
-                //Si la complétude a changé alors on set la complétude et on persist/flush
-                if ($isComplete <> $intervenantDossier->getCompletude()) {
-                    $intervenantDossier->setCompletude($isComplete);
-                    $this->getEntityManager()->persist($intervenantDossier);
-                    $this->getEntityManager()->flush();
-                }
-            }
-        } catch (\Exception $e) {
-            $e->getMessage();
-        }
-
-
-        return true;
-    }
-
-
-
     public function getCompletude(IntervenantDossier $intervenantDossier)
     {
-        $statutIntervenantDossier = $intervenantDossier->getStatut();
 
-        $completudeDossierIdentieComplementaire = true;
-        $completudeDossierAdresse               = true;
-        $completudeDossierContact               = true;
-        $completudeDossierInsee                 = true;
-        $completudeDossierIban                  = true;
-        $completudeDossierEmployeur             = true;
-        $completudeDossierAutre                 = true;
-        $completudeDossierStatut                = true;
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\TblDossier')->createQueryBuilder('tbld');
+        $qb->where("tbld.intervenant = :intervenant");
+        $qb->setParameter('intervenant', $intervenantDossier->getIntervenant());
+        $tblDossierIntervenant = $qb->getQuery()->setMaxResults(1)->getSingleResult();;
+        /**
+         * @var TblDossier $tblDossierIntervenant
+         */
 
-        //Complétude du statut
-        if ($statutIntervenantDossier->getCode() == 'AUTRES') {
-            $completudeDossierStatut = false;
-        }
+        $completudeDossierIdentite               = $tblDossierIntervenant->getCompletudeIdentite();
+        $completudeDossierIdentiteComplementaire = $tblDossierIntervenant->getCompletudeIdentiteComp();
+        $completudeDossierAdresse                = $tblDossierIntervenant->getCompletudeAdresse();
+        $completudeDossierContact                = $tblDossierIntervenant->getCompletudeContact();
+        $completudeDossierInsee                  = $tblDossierIntervenant->getCompletudeInsee();
+        $completudeDossierIban                   = $tblDossierIntervenant->getCompletudeIban();
+        $completudeDossierEmployeur              = $tblDossierIntervenant->getCompletudeEmployeur();
+        $completudeDossierAutre                  = $tblDossierIntervenant->getCompletudeAutres();
+        $completudeDossierStatut                 = $tblDossierIntervenant->getCompletudeStatut();
 
-        //Complétude de l'identite
-        $completudeDossierIdentite = ($intervenantDossier->getCivilite() &&
-            $intervenantDossier->getNomUsuel() &&
-            $intervenantDossier->getPrenom()) ? true : false;
-
-        if ($statutIntervenantDossier->getDossierIdentiteComplementaire()) {
-            $completudeDossierIdentieComplementaire = ($intervenantDossier->getDateNaissance() &&
-                $intervenantDossier->getPaysNaissance() &&
-                (($intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE') ? $intervenantDossier->getDepartementNaissance() : true) &&
-                $intervenantDossier->getCommuneNaissance()) ? true : false;
-        }
-
-        //Complétude de l'adresse
-        $completudeAdressePart1 = (($intervenantDossier->getAdressePrecisions() ||
-            $intervenantDossier->getAdresseLieuDit() ||
-            ($intervenantDossier->getAdresseVoie() && $intervenantDossier->getAdresseNumero()))) ? true : false;
-
-        $completudeAdressePart2 = ($intervenantDossier->getAdresseCommune() &&
-            $intervenantDossier->getAdresseCodePostal() &&
-            $intervenantDossier->getAdressePays()) ? true : false;
-
-        if ($statutIntervenantDossier->getDossierAdresse()) {
-            $completudeDossierAdresse = ($completudeAdressePart1 && $completudeAdressePart2) ? true : false;
-        }
-
-        //Complétude de contact
-        if ($statutIntervenantDossier->getDossierContact()) {
-            if ($statutIntervenantDossier->getDossierEmailPerso()) {
-                $completudeEmail = ($intervenantDossier->getEmailPerso() && $intervenantDossier->getEmailPro()) ? true : false;
-            } else {
-                $completudeEmail = ($intervenantDossier->getEmailPerso() || $intervenantDossier->getEmailPro()) ? true : false;
-            }
-
-            if ($statutIntervenantDossier->getDossierTelPerso()) {
-                $completudeTel = ($intervenantDossier->getTelPerso() && $intervenantDossier->getTelPro()) ? true : false;
-            } else {
-                $completudeTel = ($intervenantDossier->getTelPerso() || $intervenantDossier->getTelPro()) ? true : false;
-            }
-
-            $completudeDossierContact = ($completudeTel && $completudeEmail) ? true : false;
-        }
-
-        //Complétude Insee
-        if ($statutIntervenantDossier->getDossierInsee()) {
-            $completudeDossierInsee = ($intervenantDossier->getNumeroInsee()) ? true : false;
-        }
-
-        //Complétude Iban
-        if ($statutIntervenantDossier->getDossierIban()) {
-            $completudeDossierIban = (($intervenantDossier->getIBAN() && $intervenantDossier->getBIC()) || $intervenantDossier->isRibHorsSepa()) ? true : false;
-        }
-
-        //Complètude Employeur
-        if ($statutIntervenantDossier->getDossierEmployeur()) {
-            $completudeDossierEmployeur = ($intervenantDossier->getEmployeur()) ? true : false;
-        }
-
-        //Complétude Autres
-        $statut             = $intervenantDossier->getStatut();
-        $champsAutres       = $intervenantDossier->getStatut()->getChampsAutres();
-        $statutChampsAutres = ($intervenantDossier->getStatut()) ? $intervenantDossier->getStatut()->getChampsAutres() : [];
-        if ($statutChampsAutres) {
-            foreach ($statutChampsAutres as $champ) {
-                $method      = 'getAutre' . $champ->getId();
-                $obligatoire = $champ->isObligatoire();
-                if (empty($intervenantDossier->$method()) && $champ->isObligatoire()) {
-                    $completudeDossierAutre = false;
-                    break;
-                }
-            }
-        }
 
         $completudeDossier = ($completudeDossierIdentite &&
-            $completudeDossierIdentieComplementaire &&
+            $completudeDossierIdentiteComplementaire &&
             $completudeDossierAdresse &&
             $completudeDossierContact &&
             $completudeDossierInsee &&
@@ -314,7 +195,7 @@ class DossierService extends AbstractEntityService
 
         $completude = ['dossier'                       => $completudeDossier,
                        'dossierIdentite'               => $completudeDossierIdentite,
-                       'dossierIdentiteComplementaire' => $completudeDossierIdentieComplementaire,
+                       'dossierIdentiteComplementaire' => $completudeDossierIdentiteComplementaire,
                        'dossierAdresse'                => $completudeDossierAdresse,
                        'dossierContact'                => $completudeDossierContact,
                        'dossierInsee'                  => $completudeDossierInsee,
@@ -340,22 +221,6 @@ class DossierService extends AbstractEntityService
         }
 
         return true;
-    }
-
-
-
-    public function getTauxCompletude(IntervenantDossier $intervenantDossier)
-    {
-        $completude = $this->isComplete($intervenantDossier);
-        //calcul du taux
-        $tauxCompletude = 100;
-        foreach ($completude as $value) {
-            if (!$value) {
-                $tauxCompletude -= floor(100 / count($completude));
-            }
-        }
-
-        return $tauxCompletude;
     }
 
 

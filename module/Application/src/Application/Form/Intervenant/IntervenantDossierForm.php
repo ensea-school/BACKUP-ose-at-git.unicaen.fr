@@ -64,13 +64,18 @@ class IntervenantDossierForm extends AbstractForm
 
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
         $statutIntervenant  = $this->intervenant->getStatut();
+        $intervenant        = $dossierIntervenant->getIntervenant();
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
         $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
 
-        $this->dossierStatutFieldset = new DossierStatutFieldset('DossierStatut', ['statutIntervenant' => $statutIntervenant]);
+
+        $this->dossierStatutFieldset = new DossierStatutFieldset('DossierStatut', [
+            'statutIntervenant' => $statutIntervenant,
+            'intervenant'       => $intervenant,
+        ]);
         $this->dossierStatutFieldset->init();
 
         $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');

@@ -64,8 +64,14 @@ class IntervenantDossierController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
         /* Récupération du dossier de l'intervenant */
-        $intervenantDossier           = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+        /*Si dossier n'a pas encore d'id alors on le save et on calcule la completude*/
+        if (!$intervenantDossier->getId()) {
+            $this->getServiceDossier()->save($intervenantDossier);
+            $this->updateTableauxBord($intervenantDossier->getIntervenant());
+        }
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
+        //$tblDossierIntervenant        = $this->getServiceDossier()->getCompletude($intervenantDossier);
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
         $form->bind($intervenantDossier);
@@ -76,8 +82,6 @@ class IntervenantDossierController extends AbstractController
             $form->setData($data);
             if ($form->isValid()) {
                 /* Traitement du formulaire */
-                $completude = $this->getServiceDossier()->isComplete($intervenantDossier);
-                $intervenantDossier->setCompletude($completude);
                 $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
                 //Alimentation de la table INDIC_MODIF_DOSSIER
                 $this->getServiceDossier()->updateIndicModifDossier($intervenant, $intervenantDossier);
@@ -88,8 +92,7 @@ class IntervenantDossierController extends AbstractController
                 $form = $this->getIntervenantDossierForm($intervenant);
                 $form->bind($intervenantDossier);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
-
-                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
+                //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
             } else {
                 $this->flashMessenger()->addErrorMessage("Vos données n'ont pas été enregistré, veuillez vérifier les erreurs.");
             }
@@ -150,15 +153,14 @@ class IntervenantDossierController extends AbstractController
                 throw new \LogicException('Intervenant non précisé ou inexistant');
             }
             $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $completude         = $this->getServiceDossier()->isComplete($intervenantDossier);
-            $intervenantDossier->setCompletude($completude);
-            $statutIntervenant = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
+            $statutIntervenant  = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
             if ($statutIntervenant) {
                 $intervenantDossier->setStatut($statutIntervenant);
                 $this->getServiceDossier()->save($intervenantDossier);
                 $intervenant->setStatut($statutIntervenant);
                 $intervenant->setSyncStatut(false);
                 $this->getServiceIntervenant()->save($intervenant);
+                $this->updateTableauxBord($intervenant);
             }
         }
 
@@ -285,20 +287,6 @@ class IntervenantDossierController extends AbstractController
         } else {
             return compact('intervenant');
         }
-    }
-
-
-
-    public function calculCompletudeDossierAction()
-    {
-
-        $anneeId       = $this->getRequest()->getParam('annee');
-        $intervenantId = $this->getRequest()->getParam('intervenant');
-
-        $intervenant = $this->getServiceIntervenant()->get($intervenantId);
-        $annee       = $this->getServiceAnnee()->get($anneeId);
-
-        $serviceDossier = $this->getServiceDossier()->updateCompletudeByAnnee($annee, $intervenant);
     }
 
 

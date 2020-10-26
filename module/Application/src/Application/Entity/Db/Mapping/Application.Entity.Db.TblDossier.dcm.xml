@@ -40,5 +40,16 @@
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <field name="completudeIdentite" type="boolean" column="COMPLETUDE_IDENTITE" nullable="false"/>
+        <field name="completudeIdentiteComp" type="boolean" column="COMPLETUDE_IDENTITE_COMP" nullable="false"/>
+        <field name="completudeContact" type="boolean" column="COMPLETUDE_CONTACT" nullable="false"/>
+        <field name="completudeAdresse" type="boolean" column="COMPLETUDE_ADRESSE" nullable="false"/>
+        <field name="completudeInsee" type="boolean" column="COMPLETUDE_INSEE" nullable="false"/>
+        <field name="completudeIban" type="boolean" column="COMPLETUDE_IBAN" nullable="false"/>
+        <field name="completudeEmployeur" type="boolean" column="COMPLETUDE_EMPLOYEUR" nullable="false"/>
+        <field name="completudeAutres" type="boolean" column="COMPLETUDE_AUTRES" nullable="false"/>
+        <field name="completudeStatut" type="boolean" column="COMPLETUDE_STATUT" nullable="false"/>
+
+
     </entity>
 </doctrine-mapping>

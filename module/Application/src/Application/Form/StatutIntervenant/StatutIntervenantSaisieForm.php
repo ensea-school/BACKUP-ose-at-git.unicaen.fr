@@ -89,7 +89,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->add([
             'name'    => 'dossier-email-perso',
             'options' => [
-                'label'              => "Email personnel obligatoire pour compléter le dossier intervenant",
+                'label'              => "Email personnel obligatoire même si l'email établissement est renseigné.",
                 'use_hidden_element' => true,
             ],
             'type'    => 'Checkbox',
@@ -98,7 +98,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->add([
             'name'    => 'dossier-tel-perso',
             'options' => [
-                'label'              => "Téléphone personnel obligatoire pour compléter le dossier intervenant",
+                'label'              => "Téléphone personnel obligatoire même si le téléphone pro est renseigné.",
                 'use_hidden_element' => true,
             ],
             'type'    => 'Checkbox',

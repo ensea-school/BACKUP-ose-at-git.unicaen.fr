@@ -213,18 +213,6 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE'               => [
-            'name'        => 'COMPLETUDE',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 43,
-            'commentaire' => 'Etat avancement du dossier',
-        ],
         'DATE_NAISSANCE'           => [
             'name'        => 'DATE_NAISSANCE',
             'type'        => 'date',

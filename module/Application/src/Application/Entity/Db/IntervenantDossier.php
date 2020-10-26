@@ -157,11 +157,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      */
     protected $intervenant;
 
-    /**
-     * @var integer|null
-     */
-    protected $completude;
-
 
 
     /**
@@ -808,34 +803,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
         $this->autre5 = $autre5;
 
         return $this;
-    }
-
-
-
-    /**
-     * Set completude
-     *
-     * @param integer $completude
-     *
-     * @return IntervenantDossier
-     */
-    public function setCompletude(int $completude): IntervenantDossier
-    {
-        $this->completude = $completude;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get completude
-     *
-     * @return integer|null
-     */
-    public function getCompletude(): ?int
-    {
-        return $this->completude;
     }
 
 

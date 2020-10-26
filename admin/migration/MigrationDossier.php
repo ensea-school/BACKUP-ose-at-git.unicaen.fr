@@ -111,7 +111,6 @@ class MigrationDossier extends AbstractMigration
             'ADRESSE_PRECISIONS'       => '',
             'ADRESSE_VOIE'             => '',
             'ADRESSE_VOIRIE_ID'        => '',
-            'COMPLETUDE'               => '',
         ];
 
 
@@ -158,9 +157,7 @@ class MigrationDossier extends AbstractMigration
                 $intervenantDossier['ADRESSE_CODE_POSTAL'] = $adresseCodePostal;
                 $intervenantDossier['ADRESSE_PAYS_ID']     = $idFrance;
             }
-            //On met par défault la complétude du dossier à 1
-            $intervenantDossier['COMPLETUDE'] = 1;
-            $datasIntervenantDossier[]        = $intervenantDossier;
+            $datasIntervenantDossier[] = $intervenantDossier;
         }
 
         //On ne delete pas

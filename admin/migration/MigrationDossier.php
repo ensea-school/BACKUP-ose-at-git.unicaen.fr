@@ -83,6 +83,7 @@ class MigrationDossier extends AbstractMigration
             'DEPARTEMENT_NAISSANCE_ID' => 'DEPT_NAISSANCE_ID',
             'EMAIL_PERSO'              => 'EMAIL_PERSO',
             'EMAIL_PRO'                => 'EMAIL',
+            'TEL_PRO'                  => 'TELEPHONE',
             'ID'                       => 'ID',
             'INTERVENANT_ID'           => 'INTERVENANT_ID',
             'NOM_PATRONYMIQUE'         => 'NOM_PATRONYMIQUE',

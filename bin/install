@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$c  = new Console();
+$c = new Console();
 $c->setInputOptions([
     'version:',
     'config-file:',
@@ -12,10 +12,10 @@ $od = new OseDeploy($c);
 
 $c->printMainTitle("Installation de OSE", 13);
 $c->check([
-    'git'        => 'Gestionnaire de versions',
-    'php'        => 'Langage PHP',
-    'wget'       => 'Téléchargement en ligne de commande',
-    'unoconv'    => ['description' =>'Convertisseur OpenDocument vers PDF', 'facultatif' => false],
+    'git'     => 'Gestionnaire de versions',
+    'php'     => 'Langage PHP',
+    'wget'    => 'Téléchargement en ligne de commande',
+    'unoconv' => ['description' => 'Convertisseur OpenDocument vers PDF', 'facultatif' => false],
 ]);
 
 if (!$od->checkPhpModules([
@@ -31,16 +31,16 @@ if (!$od->checkPhpModules([
     'bcmath'       => 'BCMath',
     'gd'           => 'GD',
     'oci8'         => 'OCI8 (Pilote Oracle)',
-])){
+])) {
     $c->printDie('Un ou plusieurs modules PHP sont manquants. Merci de les installer pour poursuivre l\'installation de OSE');
 };
 
 // Mise en place de la clé SSH
 $c->println("\nTest de connexion au serveur GitLab hébergeant OSE", $c::COLOR_LIGHT_CYAN);
 if (!$od->gitlabIsReachable()) {
-    $c->printDie($od::OSE_ORIGIN." est inaccessible.");
-}else{
-    $c->println("URL Gitlab (".$od::OSE_ORIGIN.") accessible", $c::COLOR_LIGHT_GREEN);
+    $c->printDie($od::OSE_ORIGIN . " est inaccessible.");
+} else {
+    $c->println("URL Gitlab (" . $od::OSE_ORIGIN . ") accessible", $c::COLOR_LIGHT_GREEN);
 }
 
 
@@ -103,7 +103,7 @@ $od->writeVersion($osedir, $version);
 $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
 $c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
 $c->println("\nPasser composer sur la version stable en cours et non la dev", $c::COLOR_LIGHT_CYAN);
-$c->passthru("cd $osedir;php composer.phar  self-update");
+$c->passthru("cd $osedir;php composer.phar  self-update --1");
 // Récupération des dépendances
 $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
 $c->passthru("cd $osedir;php composer.phar install");
@@ -120,19 +120,19 @@ $c->println('Liens mis en place', $c::COLOR_LIGHT_GREEN);
 //." paramètres d'accès pour que OSE initialialise la base de données :");
 
 $configFile = $c->getOption('config-file');
-if ($configFile && !file_exists($configFile)){
-    $configFile = getcwd().'/'.$configFile;
+if ($configFile && !file_exists($configFile)) {
+    $configFile = getcwd() . '/' . $configFile;
 }
-if ($configFile && !file_exists($configFile)){
+if ($configFile && !file_exists($configFile)) {
     $c->println("Le fichier de configuration $configFile est introuvable. A sa place, un nouveau fichier de configuration ser créé sur la base de celui par défaut.");
     $configFile = null;
 }
-if ($configFile){
+if ($configFile) {
     $configFile = realpath($configFile);
-}else{
-    $configFile = $osedir.'/config.local.php.default';
+} else {
+    $configFile = $osedir . '/config.local.php.default';
 }
-copy($configFile, $osedir.'/config.local.php');
+copy($configFile, $osedir . '/config.local.php');
 
 
 // Génération des proxies pour l'ORM Doctrine
@@ -157,12 +157,15 @@ $c->println("Pour la suite, merci de vous reporter au guide de l'administrateur 
 $c->println('');
 
 
+
+
+
 /************************************************************
  *                      Classes utiles                      *
  ************************************************************/
 class OseDeploy
 {
-    const OSE_ORIGIN = 'https://git.unicaen.fr/open-source/OSE.git';
+    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
     const MIN_VERSION = 9; // version minimum installable
 
     /**
@@ -238,10 +241,9 @@ class OseDeploy
 
 
 
-
     public function checkPhpModules(array $modules)
     {
-        $len = 60;
+        $len    = 60;
         $result = true;
 
         $this->console->println("Contrôle d'existance des modules PHP nécessaires", $this->console::COLOR_LIGHT_CYAN);
@@ -428,7 +430,7 @@ class Console
     /**
      * @var array
      */
-    protected $options=false;
+    protected $options = false;
 
 
 
@@ -564,29 +566,30 @@ class Console
 
     public function getOption(string $option)
     {
-        if (!is_array($this->options)){
-            if (is_array($this->inputOptions)){
+        if (!is_array($this->options)) {
+            if (is_array($this->inputOptions)) {
                 $this->options = getopt('', $this->inputOptions);
-            }else{
+            } else {
                 return null;
             }
         }
 
-        if (isset($this->options[$option])){
+        if (isset($this->options[$option])) {
             return $this->options[$option];
-        }else{
+        } else {
             return null;
         }
     }
 
 
 
-    public function getInput($option=null)
+    public function getInput($option = null)
     {
-        if ($option){
+        if ($option) {
             $optionParam = $this->getOption($option);
-            if (null !== $optionParam){
+            if (null !== $optionParam) {
                 $this->println($optionParam);
+
                 return $optionParam;
             }
         }
@@ -596,11 +599,11 @@ class Console
 
 
 
-    public function getSilentInput($option=null)
+    public function getSilentInput($option = null)
     {
-        if ($option){
+        if ($option) {
             $optionParam = $this->getOption($option);
-            if (null !== $optionParam){
+            if (null !== $optionParam) {
                 return $optionParam;
             }
         }

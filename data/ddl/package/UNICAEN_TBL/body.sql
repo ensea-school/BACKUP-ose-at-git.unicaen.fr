@@ -1,175 +1,164 @@
 CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
-  FUNCTION MAKE_WHERE(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL, alias VARCHAR2 DEFAULT NULL) RETURN VARCHAR2 IS
-    res VARCHAR2(120) DEFAULT '';
-  BEGIN
-    IF param IS NULL THEN
-      RETURN '1=1';
-    END IF;
+    FUNCTION MAKE_WHERE(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL,
+                        alias VARCHAR2 DEFAULT NULL) RETURN VARCHAR2 IS
+        res VARCHAR2(120) DEFAULT '';
+    BEGIN
+        IF param IS NULL THEN
+            RETURN '1=1';
+        END IF;
 
-    IF alias IS NOT NULL THEN
-      res := alias || '.';
-    END IF;
+        IF alias IS NOT NULL THEN
+            res := alias || '.';
+        END IF;
 
-    IF value IS NULL THEN
-      RETURN res || param || ' IS NULL';
-    END IF;
+        IF value IS NULL THEN
+            RETURN res || param || ' IS NULL';
+        END IF;
 
-    RETURN res || param || ' = q''[' || value || ']''';
-  END;
-
-
-
-  FUNCTION QUERY_APPLY_PARAM( sqlQuery VARCHAR2, param VARCHAR2, value VARCHAR2) RETURN CLOB IS
-    pos NUMERIC;
-    paramLen NUMERIC;
-    paramComm VARCHAR2(200);
-    debComm NUMERIC;
-    endComm NUMERIC;
-    debReal NUMERIC;
-    realParam VARCHAR2(80);
-    realValue VARCHAR2(120);
-    q CLOB;
-  BEGIN
-    q := sqlQuery;
-
-    IF param IS NULL THEN
-      RETURN q;
-    END IF;
-
-    paramlen := length(param);
-
-    IF value IS NULL THEN
-      realValue := ' IS NULL';
-    ELSE
-      BEGIN
-        realValue := TO_NUMBER(value);
-      EXCEPTION
-      WHEN VALUE_ERROR THEN
-        realValue := 'q''[' || value || ']''';
-      END;
-
-      realValue := '=' || realValue;
-    END IF;
-
-    LOOP
-      pos := instr(q,'/*@' || param,1,1);
-      EXIT WHEN pos = 0;
-
-      debComm := pos-1;
-      endComm := instr(q,'*/',pos,1);
-      paramComm := substr(q,debComm, endComm-debComm);
-
-      debReal := instr(paramComm,'=',1,1);
-
-      realParam := trim(substr(paramComm,debReal+1));
-
-      --realParam := 'AND ' || substr(q,pos + paramLen + 4,endComm-pos - paramLen - 4);
-      realParam := 'AND ' || realParam || realValue;
+        RETURN res || param || ' = q''[' || value || ']''';
+    END;
 
 
-      q := substr(q,1,debComm) || realParam || substr(q,endComm+2);
-    END LOOP;
-    RETURN q;
-  END;
+    FUNCTION QUERY_APPLY_PARAM(sqlQuery VARCHAR2, param VARCHAR2, value VARCHAR2) RETURN CLOB IS
+        pos       NUMERIC;
+        paramLen  NUMERIC;
+        paramComm VARCHAR2(200);
+        debComm   NUMERIC;
+        endComm   NUMERIC;
+        debReal   NUMERIC;
+        realParam VARCHAR2(80);
+        realValue VARCHAR2(120);
+        q         CLOB;
+    BEGIN
+        q := sqlQuery;
+
+        IF param IS NULL THEN
+            RETURN q;
+        END IF;
+
+        paramlen := length(param);
+
+        IF value IS NULL THEN
+            realValue := ' IS NULL';
+        ELSE
+            BEGIN
+                realValue := TO_NUMBER(value);
+            EXCEPTION
+                WHEN VALUE_ERROR THEN
+                    realValue := 'q''[' || value || ']''';
+            END;
+
+            realValue := '=' || realValue;
+        END IF;
+
+        LOOP
+            pos := instr(q, '/*@' || param, 1, 1);
+            EXIT WHEN pos = 0;
+
+            debComm := pos - 1;
+            endComm := instr(q, '*/', pos, 1);
+            paramComm := substr(q, debComm, endComm - debComm);
+
+            debReal := instr(paramComm, '=', 1, 1);
+
+            realParam := trim(substr(paramComm, debReal + 1));
+
+            --realParam := 'AND ' || substr(q,pos + paramLen + 4,endComm-pos - paramLen - 4);
+            realParam := 'AND ' || realParam || realValue;
 
 
-
-  PROCEDURE CALCULER( TBL_NAME VARCHAR2 ) IS
-  BEGIN
-    ANNULER_DEMANDES( TBL_NAME );
-    CALCULER(TBL_NAME, null, null);
-  END;
+            q := substr(q, 1, debComm) || realParam || substr(q, endComm + 2);
+        END LOOP;
+        RETURN q;
+    END;
 
 
-
-  PROCEDURE CALCULER( TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2 ) IS
-    calcul_proc varchar2(30);
-  BEGIN
-    IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
-
-    SELECT custom_calcul_proc INTO calcul_proc FROM tbl WHERE tbl_name = CALCULER.TBL_NAME;
-
-    UNICAEN_TBL.CALCUL_PROC_PARAM := PARAM;
-    UNICAEN_TBL.CALCUL_PROC_VALUE := VALUE;
-    IF calcul_proc IS NOT NULL THEN
-      EXECUTE IMMEDIATE
-        'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAM,UNICAEN_TBL.CALCUL_PROC_VALUE); END;'
-      ;
-    ELSE
-      EXECUTE IMMEDIATE
-        'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(UNICAEN_TBL.CALCUL_PROC_PARAM,UNICAEN_TBL.CALCUL_PROC_VALUE); END;'
-      ;
-    END IF;
-
-  END;
+    PROCEDURE CALCULER(TBL_NAME VARCHAR2) IS
+    BEGIN
+        ANNULER_DEMANDES(TBL_NAME);
+        CALCULER(TBL_NAME, null, null);
+    END;
 
 
+    PROCEDURE CALCULER(TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2) IS
+        calcul_proc varchar2(30);
+    BEGIN
+        IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
 
-  PROCEDURE DEMANDE_CALCUL( TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2 ) IS
-  BEGIN
-    INSERT INTO tbl_dems (
-      ID,
-      TBL_NAME,
-      PARAM, VALUE
-    ) VALUES (
-      TBL_DEMS_ID_SEQ.NEXTVAL,
-      TBL_NAME,
-      PARAM, VALUE
-    );
-  END;
+        SELECT custom_calcul_proc INTO calcul_proc FROM tbl WHERE tbl_name = CALCULER.TBL_NAME;
 
+        UNICAEN_TBL.CALCUL_PROC_PARAM := PARAM;
+        UNICAEN_TBL.CALCUL_PROC_VALUE := VALUE;
+        IF calcul_proc IS NOT NULL THEN
+            EXECUTE IMMEDIATE
+                    'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAM,UNICAEN_TBL.CALCUL_PROC_VALUE); END;';
+        ELSE
+            EXECUTE IMMEDIATE
+                    'BEGIN UNICAEN_TBL.C_' || TBL_NAME ||
+                    '(UNICAEN_TBL.CALCUL_PROC_PARAM,UNICAEN_TBL.CALCUL_PROC_VALUE); END;';
+        END IF;
 
-
-  PROCEDURE ANNULER_DEMANDES IS
-  BEGIN
-    DELETE FROM tbl_dems;
-  END;
-
+    END;
 
 
-  PROCEDURE ANNULER_DEMANDES( TBL_NAME VARCHAR2 ) IS
-  BEGIN
-    DELETE FROM tbl_dems WHERE tbl_name = ANNULER_DEMANDES.tbl_name;
-  END;
+    PROCEDURE DEMANDE_CALCUL(TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2) IS
+    BEGIN
+        INSERT INTO tbl_dems (ID,
+                              TBL_NAME,
+                              PARAM, VALUE)
+        VALUES (TBL_DEMS_ID_SEQ.NEXTVAL,
+                TBL_NAME,
+                PARAM, VALUE);
+    END;
 
 
-
-  FUNCTION HAS_DEMANDES RETURN BOOLEAN IS
-    has_dems NUMERIC;
-  BEGIN
-    SELECT count(*) INTO has_dems from tbl_dems where rownum = 1;
-
-    RETURN has_dems = 1;
-  END;
+    PROCEDURE ANNULER_DEMANDES IS
+    BEGIN
+        DELETE FROM tbl_dems;
+    END;
 
 
-
-  PROCEDURE CALCULER_DEMANDES IS
-  BEGIN
-    FOR d IN (
-      SELECT DISTINCT tbl_name, param, value FROM tbl_dems
-    ) LOOP
-      calculer( d.tbl_name, d.param, d.value );
-    END LOOP;
-
-    IF HAS_DEMANDES THEN -- pour les boucles !!
-      CALCULER_DEMANDES;
-    END IF;
-  END;
+    PROCEDURE ANNULER_DEMANDES(TBL_NAME VARCHAR2) IS
+    BEGIN
+        DELETE FROM tbl_dems WHERE tbl_name = ANNULER_DEMANDES.tbl_name;
+    END;
 
 
+    FUNCTION HAS_DEMANDES RETURN BOOLEAN IS
+        has_dems NUMERIC;
+    BEGIN
+        SELECT count(*) INTO has_dems from tbl_dems where rownum = 1;
 
-  -- AUTOMATIC GENERATION --
+        RETURN has_dems = 1;
+    END;
 
-  PROCEDURE C_AGREMENT(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_AGREMENT%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'WITH i_s AS (
+
+    PROCEDURE CALCULER_DEMANDES IS
+    BEGIN
+        FOR d IN (
+            SELECT DISTINCT tbl_name, param, value FROM tbl_dems
+            )
+            LOOP
+                calculer(d.tbl_name, d.param, d.value);
+            END LOOP;
+
+        IF HAS_DEMANDES THEN -- pour les boucles !!
+            CALCULER_DEMANDES;
+        END IF;
+    END;
+
+
+    -- AUTOMATIC GENERATION --
+
+    PROCEDURE C_AGREMENT(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_AGREMENT%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'WITH i_s AS (
           SELECT
             fr.intervenant_id,
             ep.structure_id structure_id
@@ -289,15 +278,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         WHERE
           rank = 1';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                     = v.ANNEE_ID
@@ -320,44 +309,42 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.CODE_INTERVENANT,
       v.DUREE_VIE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_AGREMENT t ON
             t.TYPE_AGREMENT_ID             = v.TYPE_AGREMENT_ID
         AND t.INTERVENANT_ID               = v.INTERVENANT_ID
         AND COALESCE(t.STRUCTURE_ID,0)     = COALESCE(v.STRUCTURE_ID,0)
         AND COALESCE(t.ANNEE_AGREMENT,0)   = COALESCE(v.ANNEE_AGREMENT,0)
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_AGREMENT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_AGREMENT values d;
-      ELSIF
-            d.TYPE_AGREMENT_ID IS NULL
-        AND d.INTERVENANT_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-        AND d.ANNEE_AGREMENT IS NULL
-      THEN
-        DELETE FROM TBL_AGREMENT WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_AGREMENT SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_AGREMENT_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_AGREMENT values d;
+            ELSIF
+                    d.TYPE_AGREMENT_ID IS NULL
+                    AND d.INTERVENANT_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+                    AND d.ANNEE_AGREMENT IS NULL
+            THEN
+                DELETE FROM TBL_AGREMENT WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_AGREMENT SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_CHARGENS(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_CHARGENS%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'WITH t AS (
+    PROCEDURE C_CHARGENS(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_CHARGENS%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'WITH t AS (
         SELECT
           n.annee_id                        annee_id,
           n.noeud_id                        noeud_id,
@@ -450,15 +437,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         FROM
           t';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                             = v.ANNEE_ID
@@ -499,7 +486,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES,
       v.HETD
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_CHARGENS t ON
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.NOEUD_ID                             = v.NOEUD_ID
@@ -512,43 +499,41 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
         AND t.GROUPE_TYPE_FORMATION_ID             = v.GROUPE_TYPE_FORMATION_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_CHARGENS_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CHARGENS values d;
-      ELSIF
-            d.ANNEE_ID IS NULL
-        AND d.NOEUD_ID IS NULL
-        AND d.SCENARIO_ID IS NULL
-        AND d.TYPE_HEURES_ID IS NULL
-        AND d.TYPE_INTERVENTION_ID IS NULL
-        AND d.ELEMENT_PEDAGOGIQUE_ID IS NULL
-        AND d.ETAPE_ID IS NULL
-        AND d.ETAPE_ENS_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-        AND d.GROUPE_TYPE_FORMATION_ID IS NULL
-      THEN
-        DELETE FROM TBL_CHARGENS WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_CHARGENS SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_CHARGENS_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_CHARGENS values d;
+            ELSIF
+                    d.ANNEE_ID IS NULL
+                    AND d.NOEUD_ID IS NULL
+                    AND d.SCENARIO_ID IS NULL
+                    AND d.TYPE_HEURES_ID IS NULL
+                    AND d.TYPE_INTERVENTION_ID IS NULL
+                    AND d.ELEMENT_PEDAGOGIQUE_ID IS NULL
+                    AND d.ETAPE_ID IS NULL
+                    AND d.ETAPE_ENS_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+                    AND d.GROUPE_TYPE_FORMATION_ID IS NULL
+            THEN
+                DELETE FROM TBL_CHARGENS WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_CHARGENS SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_CHARGENS_SEUILS_DEF(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_CHARGENS_SEUILS_DEF%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT
+    PROCEDURE C_CHARGENS_SEUILS_DEF(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_CHARGENS_SEUILS_DEF%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT
           sta.annee_id,
           sta.scenario_id,
           s.structure_id,
@@ -594,15 +579,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         WHERE
           COALESCE(sc1.dedoublement, sc2.dedoublement, sc3.dedoublement, sc4.dedoublement, 1) <> 1';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                             = v.ANNEE_ID
@@ -619,7 +604,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.TYPE_INTERVENTION_ID,
       v.DEDOUBLEMENT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_CHARGENS_SEUILS_DEF t ON
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.SCENARIO_ID                          = v.SCENARIO_ID
@@ -627,38 +612,36 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.GROUPE_TYPE_FORMATION_ID             = v.GROUPE_TYPE_FORMATION_ID
         AND t.TYPE_INTERVENTION_ID                 = v.TYPE_INTERVENTION_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_CHARGENS_SEUILS_DEF_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CHARGENS_SEUILS_DEF values d;
-      ELSIF
-            d.ANNEE_ID IS NULL
-        AND d.SCENARIO_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-        AND d.GROUPE_TYPE_FORMATION_ID IS NULL
-        AND d.TYPE_INTERVENTION_ID IS NULL
-      THEN
-        DELETE FROM TBL_CHARGENS_SEUILS_DEF WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_CHARGENS_SEUILS_DEF SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_CHARGENS_SEUILS_DEF_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_CHARGENS_SEUILS_DEF values d;
+            ELSIF
+                    d.ANNEE_ID IS NULL
+                    AND d.SCENARIO_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+                    AND d.GROUPE_TYPE_FORMATION_ID IS NULL
+                    AND d.TYPE_INTERVENTION_ID IS NULL
+            THEN
+                DELETE FROM TBL_CHARGENS_SEUILS_DEF WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_CHARGENS_SEUILS_DEF SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_CLOTURE_REALISE(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_CLOTURE_REALISE%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'WITH t AS (
+    PROCEDURE C_CLOTURE_REALISE(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_CLOTURE_REALISE%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'WITH t AS (
           SELECT
             i.annee_id              annee_id,
             i.id                    intervenant_id,
@@ -690,15 +673,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           intervenant_id,
           peut_cloturer_saisie';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                         = v.ANNEE_ID
@@ -711,38 +694,36 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.PEUT_CLOTURER_SAISIE,
       v.CLOTURE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_CLOTURE_REALISE t ON
             t.INTERVENANT_ID                   = v.INTERVENANT_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_CLOTURE_REALISE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CLOTURE_REALISE values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-      THEN
-        DELETE FROM TBL_CLOTURE_REALISE WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_CLOTURE_REALISE SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_CLOTURE_REALISE_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_CLOTURE_REALISE values d;
+            ELSIF
+                d.INTERVENANT_ID IS NULL
+            THEN
+                DELETE FROM TBL_CLOTURE_REALISE WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_CLOTURE_REALISE SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_CONTRAT(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_CONTRAT%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'WITH t AS (
+    PROCEDURE C_CONTRAT(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_CONTRAT%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'WITH t AS (
           SELECT
             i.annee_id                                                                annee_id,
             i.id                                                                      intervenant_id,
@@ -830,15 +811,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           peut_avoir_contrat,
           structure_id';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                       = v.ANNEE_ID
@@ -857,40 +838,38 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.EDITE,
       v.SIGNE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_CONTRAT t ON
             t.INTERVENANT_ID                 = v.INTERVENANT_ID
         AND COALESCE(t.STRUCTURE_ID,0)       = COALESCE(v.STRUCTURE_ID,0)
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_CONTRAT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CONTRAT values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-      THEN
-        DELETE FROM TBL_CONTRAT WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_CONTRAT SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_CONTRAT_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_CONTRAT values d;
+            ELSIF
+                    d.INTERVENANT_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+            THEN
+                DELETE FROM TBL_CONTRAT WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_CONTRAT SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_DMEP_LIQUIDATION(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_DMEP_LIQUIDATION%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT
+    PROCEDURE C_DMEP_LIQUIDATION(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_DMEP_LIQUIDATION%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT
           annee_id,
           type_ressource_id,
           structure_id,
@@ -937,15 +916,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         GROUP BY
           annee_id, type_ressource_id, structure_id';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                      = v.ANNEE_ID
@@ -958,120 +937,240 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.STRUCTURE_ID,
       v.HEURES
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_DMEP_LIQUIDATION t ON
             t.ANNEE_ID                      = v.ANNEE_ID
         AND t.TYPE_RESSOURCE_ID             = v.TYPE_RESSOURCE_ID
         AND t.STRUCTURE_ID                  = v.STRUCTURE_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_DMEP_LIQUIDATION_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_DMEP_LIQUIDATION values d;
-      ELSIF
-            d.ANNEE_ID IS NULL
-        AND d.TYPE_RESSOURCE_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-      THEN
-        DELETE FROM TBL_DMEP_LIQUIDATION WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_DMEP_LIQUIDATION SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_DMEP_LIQUIDATION_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_DMEP_LIQUIDATION values d;
+            ELSIF
+                    d.ANNEE_ID IS NULL
+                    AND d.TYPE_RESSOURCE_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+            THEN
+                DELETE FROM TBL_DMEP_LIQUIDATION WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_DMEP_LIQUIDATION SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_DOSSIER(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_DOSSIER%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT
+    PROCEDURE C_DOSSIER(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_DOSSIER%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT
           i.annee_id,
           i.id intervenant_id,
           si.peut_saisir_dossier,
           d.id dossier_id,
           v.id validation_id,
-          d.completude completude
+          /*Complétude statut*/
+          CASE WHEN si.code = ''AUTRES'' THEN 0
+          ELSE 1 END completude_statut,
+          /*Complétude identité*/
+          CASE WHEN
+            (
+              d.civilite_id IS NOT NULL
+              AND d.nom_usuel IS NOT NULL
+              AND d.prenom IS NOT NULL
+            ) THEN 1 ELSE 0 END completude_identite,
+           /*Complétude identité complémentaire*/
+          CASE WHEN si.dossier_identite_comp = 0 THEN 1
+          ELSE
+          	  	CASE WHEN
+          	  	(
+          	  	   d.date_naissance IS NOT NULL
+        		   AND NOT (OSE_DIVERS.str_reduce(pn.LIBELLE) = ''france'' AND d.departement_naissance_id IS NULL)
+                   AND d.commune_naissance IS NOT NULL
+          	  	) THEN 1 ELSE 0 END
+           END completude_identite_comp,
+           /*Complétude contact*/
+           CASE WHEN si.dossier_contact = 0 THEN 1
+           ELSE
+           (
+                CASE WHEN
+                (
+                  (CASE WHEN si.dossier_email_perso = 1 THEN
+                     CASE WHEN d.email_perso IS NOT NULL THEN 1 ELSE 0 END
+                   ELSE
+                     CASE WHEN d.email_pro IS NOT NULL OR d.email_perso IS NOT NULL THEN 1 ELSE 0 END
+                   END) = 1
+                   AND
+                  (CASE WHEN si.dossier_tel_perso = 1 THEN
+              	     CASE WHEN d.tel_perso IS NOT NULL AND d.tel_pro IS NOT NULL THEN 1 ELSE 0 END
+                   ELSE
+              	     CASE WHEN d.tel_pro IS NOT NULL OR d.tel_perso IS NOT NULL THEN 1 ELSE 0 END
+                   END) = 1
+                ) THEN 1 ELSE 0 END
+           ) END completude_contact,
+           /*Complétude adresse*/
+           CASE WHEN si.dossier_adresse = 0 THEN 1
+           ELSE
+           (
+            	CASE WHEN
+        	    (
+        	       d.adresse_precisions IS NOT NULL
+        	       OR d.adresse_lieu_dit IS NOT NULL
+        	       OR (d.adresse_voie IS NOT NULL AND d.adresse_numero IS NOT NULL)
+        	    ) AND
+        	    (
+        		   d.adresse_commune IS NOT NULL
+        	       AND d.adresse_code_postal IS NOT NULL
+        	    ) THEN 1 ELSE 0 END
+            ) END completude_adresse,
+             /*Complétude INSEE*/
+             CASE WHEN si.dossier_insee = 0 THEN 1
+             ELSE
+             (
+             	CASE WHEN
+             	(
+             	d.numero_insee IS NOT NULL OR COALESCE(d.numero_insee_provisoire,0) = 1
+             	) THEN 1 ELSE 0 END
+             ) END completude_insee,
+             /*Complétude IBAN*/
+             CASE WHEN si.dossier_iban = 0 THEN 1
+             ELSE
+             (
+             	CASE WHEN
+             	(
+             		(d.iban IS NOT NULL
+            		AND d.bic IS NOT NULL)
+            		OR COALESCE(d.rib_hors_sepa,0) = 1
+             	) THEN 1 ELSE 0 END
+             ) END completude_iban,
+             /*Complétude employeur*/
+             CASE WHEN si.dossier_employeur = 0 THEN 1
+             ELSE
+             (
+             	CASE WHEN
+             	(
+             		d.employeur_id IS NOT NULL
+             	) THEN 1 ELSE 0 END
+             ) END completude_employeur,
+             /*Complétude champs autres*/
+             CASE WHEN
+             (
+               NOT (d.autre_1 IS NULL AND COALESCE(dca1.obligatoire,0) = 1)
+               AND NOT (d.autre_2 IS NULL AND COALESCE(dca2.obligatoire,0) = 1)
+               AND NOT (d.autre_3 IS NULL AND COALESCE(dca3.obligatoire,0) = 1)
+               AND NOT (d.autre_4 IS NULL AND COALESCE(dca4.obligatoire,0) = 1)
+               AND NOT (d.autre_5 IS NULL AND COALESCE(dca5.obligatoire,0) = 1)
+             ) THEN 1 ELSE 0 END completude_autres
+
         FROM
                     intervenant         i
                JOIN statut_intervenant si ON si.id = i.statut_id
           LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id
                                          AND d.histo_destruction IS NULL
+          LEFT JOIN pays               pn ON pn.id = d.pays_naissance_id
 
                JOIN type_validation tv ON tv.code = ''DONNEES_PERSO_PAR_COMP''
           LEFT JOIN validation       v ON v.intervenant_id = i.id
                                       AND v.type_validation_id = tv.id
                                       AND v.histo_destruction IS NULL
+          /*Champs autre 1*/
+          LEFT JOIN dossier_champ_autre_par_statut dcas1 ON dcas1.dossier_champ_autre_id = 1 AND dcas1.statut_id = si.id
+          LEFT JOIN dossier_champ_autre dca1 ON dca1.id = 1 AND dcas1.dossier_champ_autre_id = dca1.id
+         /*Champs autre 2*/
+          LEFT JOIN dossier_champ_autre_par_statut dcas2 ON dcas2.dossier_champ_autre_id = 2 AND dcas2.statut_id = si.id
+          LEFT JOIN dossier_champ_autre dca2 ON dca2.id = 2 AND dcas2.dossier_champ_autre_id = dca2.id
+         /*Champs autre 3*/
+          LEFT JOIN dossier_champ_autre_par_statut dcas3 ON dcas3.dossier_champ_autre_id = 3 AND dcas3.statut_id = si.id
+          LEFT JOIN dossier_champ_autre dca3 ON dca3.id = 3 AND dcas3.dossier_champ_autre_id = dca3.id
+         /*Champs autre 4*/
+          LEFT JOIN dossier_champ_autre_par_statut dcas4 ON dcas4.dossier_champ_autre_id = 4 AND dcas4.statut_id = si.id
+          LEFT JOIN dossier_champ_autre dca4 ON dca4.id = 4 AND dcas4.dossier_champ_autre_id = dca4.id
+         /*Champs autre 5*/
+          LEFT JOIN dossier_champ_autre_par_statut dcas5 ON dcas5.dossier_champ_autre_id = 5 AND dcas5.statut_id = si.id
+          LEFT JOIN dossier_champ_autre dca5 ON dca5.id = 5 AND dcas5.dossier_champ_autre_id = dca5.id
         WHERE
           i.histo_destruction IS NULL
-          /*@INTERVENANT_ID=i.id*/
+           /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
-      CASE WHEN
-            t.ANNEE_ID                        = v.ANNEE_ID
-        AND t.INTERVENANT_ID                  = v.INTERVENANT_ID
-        AND t.PEUT_SAISIR_DOSSIER             = v.PEUT_SAISIR_DOSSIER
-        AND COALESCE(t.DOSSIER_ID,0)          = COALESCE(v.DOSSIER_ID,0)
-        AND COALESCE(t.VALIDATION_ID,0)       = COALESCE(v.VALIDATION_ID,0)
-        AND COALESCE(t.COMPLETUDE,0)          = COALESCE(v.COMPLETUDE,0)
-      THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
+      v.DOSSIER_ID,
+      CASE WHEN
+            t.ANNEE_ID                             = v.ANNEE_ID
+        AND COALESCE(t.DOSSIER_ID,0)               = COALESCE(v.DOSSIER_ID,0)
+        AND t.INTERVENANT_ID                       = v.INTERVENANT_ID
+        AND t.PEUT_SAISIR_DOSSIER                  = v.PEUT_SAISIR_DOSSIER
+        AND COALESCE(t.VALIDATION_ID,0)            = COALESCE(v.VALIDATION_ID,0)
+        AND COALESCE(t.COMPLETUDE_IDENTITE,0)      = COALESCE(v.COMPLETUDE_IDENTITE,0)
+        AND COALESCE(t.COMPLETUDE_IDENTITE_COMP,0) = COALESCE(v.COMPLETUDE_IDENTITE_COMP,0)
+        AND COALESCE(t.COMPLETUDE_CONTACT,0)       = COALESCE(v.COMPLETUDE_CONTACT,0)
+        AND COALESCE(t.COMPLETUDE_ADRESSE,0)       = COALESCE(v.COMPLETUDE_ADRESSE,0)
+        AND COALESCE(t.COMPLETUDE_INSEE,0)         = COALESCE(v.COMPLETUDE_INSEE,0)
+        AND COALESCE(t.COMPLETUDE_IBAN,0)          = COALESCE(v.COMPLETUDE_IBAN,0)
+        AND COALESCE(t.COMPLETUDE_EMPLOYEUR,0)     = COALESCE(v.COMPLETUDE_EMPLOYEUR,0)
+        AND COALESCE(t.COMPLETUDE_AUTRES,0)        = COALESCE(v.COMPLETUDE_AUTRES,0)
+        AND COALESCE(t.COMPLETUDE_STATUT,0)        = COALESCE(v.COMPLETUDE_STATUT,0)
+      THEN -1 ELSE t.ID END ID,
       v.INTERVENANT_ID,
       v.PEUT_SAISIR_DOSSIER,
-      v.DOSSIER_ID,
       v.VALIDATION_ID,
-      v.COMPLETUDE
+      v.COMPLETUDE_IDENTITE,
+      v.COMPLETUDE_IDENTITE_COMP,
+      v.COMPLETUDE_CONTACT,
+      v.COMPLETUDE_ADRESSE,
+      v.COMPLETUDE_INSEE,
+      v.COMPLETUDE_IBAN,
+      v.COMPLETUDE_EMPLOYEUR,
+      v.COMPLETUDE_AUTRES,
+      v.COMPLETUDE_STATUT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_DOSSIER t ON
             t.INTERVENANT_ID                  = v.INTERVENANT_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_DOSSIER_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_DOSSIER values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-      THEN
-        DELETE FROM TBL_DOSSIER WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_DOSSIER SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_DOSSIER_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_DOSSIER values d;
+            ELSIF
+                d.INTERVENANT_ID IS NULL
+            THEN
+                DELETE FROM TBL_DOSSIER WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_DOSSIER SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_PAIEMENT(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_PAIEMENT%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT
+    PROCEDURE C_PAIEMENT(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_PAIEMENT%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT
           i.annee_id                                  annee_id,
           frs.service_id                              service_id,
           null                                        service_referentiel_id,
@@ -1128,15 +1227,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                        AND mep.histo_destruction IS NULL';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                               = v.ANNEE_ID
@@ -1167,44 +1266,42 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.SERVICE_ID,
       v.SERVICE_REFERENTIEL_ID
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_PAIEMENT t ON
             t.INTERVENANT_ID                         = v.INTERVENANT_ID
         AND COALESCE(t.MISE_EN_PAIEMENT_ID,0)        = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
         AND COALESCE(t.FORMULE_RES_SERVICE_ID,0)     = COALESCE(v.FORMULE_RES_SERVICE_ID,0)
         AND COALESCE(t.FORMULE_RES_SERVICE_REF_ID,0) = COALESCE(v.FORMULE_RES_SERVICE_REF_ID,0)
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_PAIEMENT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PAIEMENT values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-        AND d.MISE_EN_PAIEMENT_ID IS NULL
-        AND d.FORMULE_RES_SERVICE_ID IS NULL
-        AND d.FORMULE_RES_SERVICE_REF_ID IS NULL
-      THEN
-        DELETE FROM TBL_PAIEMENT WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_PAIEMENT SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_PAIEMENT_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_PAIEMENT values d;
+            ELSIF
+                    d.INTERVENANT_ID IS NULL
+                    AND d.MISE_EN_PAIEMENT_ID IS NULL
+                    AND d.FORMULE_RES_SERVICE_ID IS NULL
+                    AND d.FORMULE_RES_SERVICE_REF_ID IS NULL
+            THEN
+                DELETE FROM TBL_PAIEMENT WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_PAIEMENT SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_PIECE_JOINTE(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_PIECE_JOINTE%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT
+    PROCEDURE C_PIECE_JOINTE(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_PIECE_JOINTE%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT
             annee_id,
             type_piece_jointe_id,
             intervenant_id,
@@ -1261,15 +1358,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           WHERE
             t.rank1 = 1';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                         = v.ANNEE_ID
@@ -1290,40 +1387,38 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_POUR_SEUIL,
       v.OBLIGATOIRE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_PIECE_JOINTE t ON
             t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_PIECE_JOINTE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PIECE_JOINTE values d;
-      ELSIF
-            d.TYPE_PIECE_JOINTE_ID IS NULL
-        AND d.INTERVENANT_ID IS NULL
-      THEN
-        DELETE FROM TBL_PIECE_JOINTE WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_PIECE_JOINTE SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_PIECE_JOINTE_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_PIECE_JOINTE values d;
+            ELSIF
+                    d.TYPE_PIECE_JOINTE_ID IS NULL
+                    AND d.INTERVENANT_ID IS NULL
+            THEN
+                DELETE FROM TBL_PIECE_JOINTE WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_PIECE_JOINTE SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_PIECE_JOINTE_DEMANDE(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_PIECE_JOINTE_DEMANDE%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'WITH i_h AS (
+    PROCEDURE C_PIECE_JOINTE_DEMANDE(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_PIECE_JOINTE_DEMANDE%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'WITH i_h AS (
           SELECT
             s.intervenant_id,
             SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NULL THEN vh.heures ELSE 0 END) heures,
@@ -1388,15 +1483,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           tpj.id,
           tpjs.obligatoire';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                         = v.ANNEE_ID
@@ -1413,40 +1508,38 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.OBLIGATOIRE,
       v.CODE_INTERVENANT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_PIECE_JOINTE_DEMANDE t ON
             t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_PIECE_JOINTE_DEMAND_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PIECE_JOINTE_DEMANDE values d;
-      ELSIF
-            d.TYPE_PIECE_JOINTE_ID IS NULL
-        AND d.INTERVENANT_ID IS NULL
-      THEN
-        DELETE FROM TBL_PIECE_JOINTE_DEMANDE WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_PIECE_JOINTE_DEMANDE SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_PIECE_JOINTE_DEMAND_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_PIECE_JOINTE_DEMANDE values d;
+            ELSIF
+                    d.TYPE_PIECE_JOINTE_ID IS NULL
+                    AND d.INTERVENANT_ID IS NULL
+            THEN
+                DELETE FROM TBL_PIECE_JOINTE_DEMANDE WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_PIECE_JOINTE_DEMANDE SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_PIECE_JOINTE_FOURNIE(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_PIECE_JOINTE_FOURNIE%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT
+    PROCEDURE C_PIECE_JOINTE_FOURNIE(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_PIECE_JOINTE_FOURNIE%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT
           i.annee_id,
           i.code code_intervenant,
           pj.type_piece_jointe_id,
@@ -1482,15 +1575,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           f.id,
           pj.date_archive';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                         = v.ANNEE_ID
@@ -1515,44 +1608,42 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DATE_VALIDITE,
       v.DATE_ARCHIVE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_PIECE_JOINTE_FOURNIE t ON
             t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
         AND COALESCE(t.VALIDATION_ID,0)        = COALESCE(v.VALIDATION_ID,0)
         AND COALESCE(t.FICHIER_ID,0)           = COALESCE(v.FICHIER_ID,0)
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_PIECE_JOINTE_FOURNI_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PIECE_JOINTE_FOURNIE values d;
-      ELSIF
-            d.TYPE_PIECE_JOINTE_ID IS NULL
-        AND d.INTERVENANT_ID IS NULL
-        AND d.VALIDATION_ID IS NULL
-        AND d.FICHIER_ID IS NULL
-      THEN
-        DELETE FROM TBL_PIECE_JOINTE_FOURNIE WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_PIECE_JOINTE_FOURNIE SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_PIECE_JOINTE_FOURNI_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_PIECE_JOINTE_FOURNIE values d;
+            ELSIF
+                    d.TYPE_PIECE_JOINTE_ID IS NULL
+                    AND d.INTERVENANT_ID IS NULL
+                    AND d.VALIDATION_ID IS NULL
+                    AND d.FICHIER_ID IS NULL
+            THEN
+                DELETE FROM TBL_PIECE_JOINTE_FOURNIE WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_PIECE_JOINTE_FOURNIE SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_SERVICE(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_SERVICE%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'WITH t AS (
+    PROCEDURE C_SERVICE(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_SERVICE%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'WITH t AS (
         SELECT
           s.id                                                                                      service_id,
           s.intervenant_id                                                                          intervenant_id,
@@ -1644,15 +1735,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           t.element_pedagogique_histo,
           t.etape_histo';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                                   = v.ANNEE_ID
@@ -1695,40 +1786,38 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.TYPE_VOLUME_HORAIRE_CODE,
       v.HEURES
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_SERVICE t ON
             COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)         = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.SERVICE_ID                                 = v.SERVICE_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_SERVICE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_SERVICE values d;
-      ELSIF
-            d.TYPE_VOLUME_HORAIRE_ID IS NULL
-        AND d.SERVICE_ID IS NULL
-      THEN
-        DELETE FROM TBL_SERVICE WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_SERVICE SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_SERVICE_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_SERVICE values d;
+            ELSIF
+                    d.TYPE_VOLUME_HORAIRE_ID IS NULL
+                    AND d.SERVICE_ID IS NULL
+            THEN
+                DELETE FROM TBL_SERVICE WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_SERVICE SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_SERVICE_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_SERVICE_REFERENTIEL%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'WITH t AS (
+    PROCEDURE C_SERVICE_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_SERVICE_REFERENTIEL%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'WITH t AS (
 
           SELECT
             i.annee_id,
@@ -1776,15 +1865,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           type_volume_horaire_id,
           structure_id';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                           = v.ANNEE_ID
@@ -1803,42 +1892,40 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.NBVH,
       v.VALIDE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_SERVICE_REFERENTIEL t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND COALESCE(t.STRUCTURE_ID,0)           = COALESCE(v.STRUCTURE_ID,0)
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_SERVICE_REFERENTIEL_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_SERVICE_REFERENTIEL values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-      THEN
-        DELETE FROM TBL_SERVICE_REFERENTIEL WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_SERVICE_REFERENTIEL SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_SERVICE_REFERENTIEL_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_SERVICE_REFERENTIEL values d;
+            ELSIF
+                    d.INTERVENANT_ID IS NULL
+                    AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+            THEN
+                DELETE FROM TBL_SERVICE_REFERENTIEL WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_SERVICE_REFERENTIEL SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_SERVICE_SAISIE(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_SERVICE_SAISIE%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT
+    PROCEDURE C_SERVICE_SAISIE(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_SERVICE_SAISIE%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT
           i.annee_id,
           i.id intervenant_id,
           si.peut_saisir_service,
@@ -1867,15 +1954,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           si.peut_saisir_service,
           si.peut_saisir_referentiel';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                            = v.ANNEE_ID
@@ -1896,38 +1983,36 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_SERVICE_REAL,
       v.HEURES_REFERENTIEL_REAL
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_SERVICE_SAISIE t ON
             t.INTERVENANT_ID                      = v.INTERVENANT_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_SERVICE_SAISIE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_SERVICE_SAISIE values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-      THEN
-        DELETE FROM TBL_SERVICE_SAISIE WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_SERVICE_SAISIE SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_SERVICE_SAISIE_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_SERVICE_SAISIE values d;
+            ELSIF
+                d.INTERVENANT_ID IS NULL
+            THEN
+                DELETE FROM TBL_SERVICE_SAISIE WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_SERVICE_SAISIE SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_VALIDATION_ENSEIGNEMENT(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_VALIDATION_ENSEIGNEMENT%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT DISTINCT
+    PROCEDURE C_VALIDATION_ENSEIGNEMENT(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_VALIDATION_ENSEIGNEMENT%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT DISTINCT
           i.annee_id,
           i.id intervenant_id,
           CASE WHEN rsv.priorite = ''affectation'' THEN
@@ -1955,15 +2040,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                           = v.ANNEE_ID
@@ -1984,7 +2069,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.VOLUME_HORAIRE_ID,
       v.AUTO_VALIDATION
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_VALIDATION_ENSEIGNEMENT t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
@@ -1993,39 +2078,37 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.VALIDATION_ID,0)          = COALESCE(v.VALIDATION_ID,0)
         AND t.VOLUME_HORAIRE_ID                  = v.VOLUME_HORAIRE_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_VALIDATION_ENSEIGNE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_VALIDATION_ENSEIGNEMENT values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
-        AND d.SERVICE_ID IS NULL
-        AND d.VALIDATION_ID IS NULL
-        AND d.VOLUME_HORAIRE_ID IS NULL
-      THEN
-        DELETE FROM TBL_VALIDATION_ENSEIGNEMENT WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_VALIDATION_ENSEIGNEMENT SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
-
-
+            IF d.id IS NULL THEN
+                d.id := TBL_VALIDATION_ENSEIGNE_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_VALIDATION_ENSEIGNEMENT values d;
+            ELSIF
+                    d.INTERVENANT_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+                    AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+                    AND d.SERVICE_ID IS NULL
+                    AND d.VALIDATION_ID IS NULL
+                    AND d.VOLUME_HORAIRE_ID IS NULL
+            THEN
+                DELETE FROM TBL_VALIDATION_ENSEIGNEMENT WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_VALIDATION_ENSEIGNEMENT SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  PROCEDURE C_VALIDATION_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_VALIDATION_REFERENTIEL%rowtype;
-  filter VARCHAR2(150);
-  viewQuery CLOB;
-  BEGIN
-    viewQuery := 'SELECT DISTINCT
+    PROCEDURE C_VALIDATION_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
+        TYPE r_cursor IS REF CURSOR;
+        c         r_cursor;
+        d         TBL_VALIDATION_REFERENTIEL%rowtype;
+        filter    VARCHAR2(150);
+        viewQuery CLOB;
+    BEGIN
+        viewQuery := 'SELECT DISTINCT
           i.annee_id,
           i.id intervenant_id,
           CASE WHEN rsv.priorite = ''affectation'' THEN
@@ -2051,15 +2134,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
+        IF param IS NULL THEN
+            filter := '1=1';
+        ELSIF value IS NULL THEN
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+        ELSE
+            filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+        END IF;
 
-    OPEN c FOR '
+        OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                           = v.ANNEE_ID
@@ -2080,7 +2163,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.VOLUME_HORAIRE_REF_ID,
       v.AUTO_VALIDATION
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery, param, value) || ') v
       FULL JOIN TBL_VALIDATION_REFERENTIEL t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
@@ -2089,29 +2172,29 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.VALIDATION_ID,0)          = COALESCE(v.VALIDATION_ID,0)
         AND t.VOLUME_HORAIRE_REF_ID              = v.VOLUME_HORAIRE_REF_ID
     WHERE ' || filter;
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+        LOOP
+            FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
-      IF d.id IS NULL THEN
-        d.id := TBL_VALIDATION_REFERENT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_VALIDATION_REFERENTIEL values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-        AND d.STRUCTURE_ID IS NULL
-        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
-        AND d.SERVICE_REFERENTIEL_ID IS NULL
-        AND d.VALIDATION_ID IS NULL
-        AND d.VOLUME_HORAIRE_REF_ID IS NULL
-      THEN
-        DELETE FROM TBL_VALIDATION_REFERENTIEL WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_VALIDATION_REFERENTIEL SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
-  END;
+            IF d.id IS NULL THEN
+                d.id := TBL_VALIDATION_REFERENT_ID_SEQ.NEXTVAL;
+                INSERT INTO TBL_VALIDATION_REFERENTIEL values d;
+            ELSIF
+                    d.INTERVENANT_ID IS NULL
+                    AND d.STRUCTURE_ID IS NULL
+                    AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+                    AND d.SERVICE_REFERENTIEL_ID IS NULL
+                    AND d.VALIDATION_ID IS NULL
+                    AND d.VOLUME_HORAIRE_REF_ID IS NULL
+            THEN
+                DELETE FROM TBL_VALIDATION_REFERENTIEL WHERE id = d.id;
+            ELSIF d.id <> -1 THEN
+                UPDATE TBL_VALIDATION_REFERENTIEL SET row = d WHERE id = d.id;
+            END IF;
+        END LOOP;
+        CLOSE c;
+    END;
 
 
-  -- END OF AUTOMATIC GENERATION --
+    -- END OF AUTOMATIC GENERATION --
 
 END UNICAEN_TBL;

@@ -1,6 +1,7 @@
 <?php
 
-$dirname = $oa->getOseDir() . 'data/ddl';
+$dirname    = $oa->getOseDir() . 'data/ddl';
+$colPosFile = $oa->getOseDir() . 'data/ddl_columns_pos.php';
 
 $filters = [
     'table'              => ['excludes' => 'UNICAEN_%'],
@@ -20,5 +21,18 @@ $filters = [
 
 $c->begin('Génération du fichier de DDL à partir de la base de données');
 $ddl = $oa->getBdd()->getDdl($filters);
+
+
+/* Traitement des positionnement de colonnes */
+if (file_exists($colPosFile)) {
+    $positions = require_once $colPosFile;
+} else {
+    $positions = [];
+}
+$positions = $ddl->applyColumnPositions($positions);
+$ddl->writeArray($colPosFile, $positions);
+$c->end('Positionnement de colonnes à jour');
+
+
 $ddl->saveToDir($dirname);
 $c->end('Définition Fichier de la base de données mise à jour');

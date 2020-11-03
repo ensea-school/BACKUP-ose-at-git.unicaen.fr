@@ -18,7 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 39,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'BLOC10_NOM'     => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 36,
+            'position'    => 38,
             'commentaire' => NULL,
         ],
         'BLOC10_REQUETE' => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 38,
+            'position'    => 40,
             'commentaire' => NULL,
         ],
         'BLOC10_ZONE'    => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 37,
+            'position'    => 39,
             'commentaire' => NULL,
         ],
         'BLOC1_NOM'      => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'BLOC1_REQUETE'  => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'BLOC1_ZONE'     => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'BLOC2_NOM'      => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'BLOC2_REQUETE'  => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'BLOC2_ZONE'     => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'BLOC3_NOM'      => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'BLOC3_REQUETE'  => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'BLOC3_ZONE'     => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'BLOC4_NOM'      => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'BLOC4_REQUETE'  => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'BLOC4_ZONE'     => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'BLOC5_NOM'      => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 21,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'BLOC5_REQUETE'  => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 23,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'BLOC5_ZONE'     => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 22,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'BLOC6_NOM'      => [
@@ -246,7 +246,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 24,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'BLOC6_REQUETE'  => [
@@ -258,7 +258,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 25,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'BLOC6_ZONE'     => [
@@ -270,7 +270,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 26,
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'BLOC7_NOM'      => [
@@ -282,7 +282,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 27,
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'BLOC7_REQUETE'  => [
@@ -294,7 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 29,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'BLOC7_ZONE'     => [
@@ -306,7 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 28,
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'BLOC8_NOM'      => [
@@ -318,7 +318,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 30,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'BLOC8_REQUETE'  => [
@@ -330,7 +330,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 32,
+            'position'    => 34,
             'commentaire' => NULL,
         ],
         'BLOC8_ZONE'     => [
@@ -342,7 +342,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 31,
+            'position'    => 33,
             'commentaire' => NULL,
         ],
         'BLOC9_NOM'      => [
@@ -354,7 +354,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 33,
+            'position'    => 35,
             'commentaire' => NULL,
         ],
         'BLOC9_REQUETE'  => [
@@ -366,7 +366,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 35,
+            'position'    => 37,
             'commentaire' => NULL,
         ],
         'BLOC9_ZONE'     => [
@@ -378,7 +378,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 34,
+            'position'    => 36,
             'commentaire' => NULL,
         ],
         'CLE'            => [
@@ -426,7 +426,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 40,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'FICHIER'        => [

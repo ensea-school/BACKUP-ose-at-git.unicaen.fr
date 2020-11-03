@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'ADRESSE_COMMUNE'          => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'ADRESSE_LIEU_DIT'         => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'ADRESSE_NUMERO'           => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'ADRESSE_NUMERO_COMPL_ID'  => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'ADRESSE_PAYS_ID'          => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'ADRESSE_PRECISIONS'       => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ADRESSE_VOIE'             => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'ADRESSE_VOIRIE_ID'        => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'AUTRE_1'                  => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'AUTRE_2'                  => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'AUTRE_3'                  => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'AUTRE_4'                  => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'AUTRE_5'                  => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'BIC'                      => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'CIVILITE_ID'              => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'COMMUNE_NAISSANCE'        => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'DATE_NAISSANCE'           => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'DEPARTEMENT_NAISSANCE_ID' => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'EMAIL_PERSO'              => [
@@ -246,7 +246,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'EMAIL_PRO'                => [
@@ -258,7 +258,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 21,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'EMPLOYEUR_ID'             => [
@@ -270,7 +270,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 22,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'        => [
@@ -282,7 +282,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 23,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'           => [
@@ -294,7 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 24,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'     => [
@@ -306,7 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 25,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'        => [
@@ -318,7 +318,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 26,
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'    => [
@@ -330,7 +330,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 27,
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'       => [
@@ -342,7 +342,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 28,
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'IBAN'                     => [
@@ -354,7 +354,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 29,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'ID'                       => [
@@ -366,7 +366,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 30,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'           => [
@@ -378,7 +378,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 31,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'NOM_PATRONYMIQUE'         => [

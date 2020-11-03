@@ -232,7 +232,50 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
-    protected function writeArray(string $filename, array $data)
+    /**
+     * @param array $positions
+     *
+     * @return array
+     */
+    public function applyColumnPositions(array $positions): array
+    {
+        $tables = $this->get(Ddl::TABLE);
+        foreach ($tables as $tableName => $table) {
+            $cols = [];
+            foreach ($positions[$tableName] as $idc => $col) {
+                if (!array_key_exists($col, $table['columns'])) {
+                    unset($positions[$tableName][$idc]);
+                }
+            }
+            foreach ($table['columns'] as $column) {
+                $colname = $column['name'];
+                if (!isset($positions[$tableName]) || !in_array($colname, $positions[$tableName])) {
+                    $cols[$colname] = $column['position'];
+                }
+            }
+            asort($cols);
+            $cols = array_keys($cols);
+
+            if (!isset($positions[$tableName])) {
+                $positions[$tableName] = [];
+            }
+            $cols = array_merge($positions[$tableName], $cols);
+
+            foreach ($cols as $pos => $col) {
+                if (isset($this->data[Ddl::TABLE][$tableName]['columns'][$col])) {
+                    $this->data[Ddl::TABLE][$tableName]['columns'][$col]['position'] = $pos + 1;
+                }
+            }
+
+            $positions[$tableName] = $cols;
+        }
+
+        return $positions;
+    }
+
+
+
+    public function writeArray(string $filename, array $data)
     {
         $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->arrayExport($data) . ";\n\n//@" . "formatter:on\n";
 

@@ -6,7 +6,7 @@
 
 class OrdonnancementColonnesTbl extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_PRE;
+    protected $contexte = self::CONTEXTE_ALL;
 
     protected $tbls     = [];
 
@@ -21,10 +21,9 @@ class OrdonnancementColonnesTbl extends AbstractMigration
 
     public function utile(): bool
     {
-        $bdd = $this->manager->getBdd();
+        if (count($this->tbls) > 0) return true;
 
-        $colPosFile  = $this->manager->getOseAdmin()->getOseDir() . 'data/ddl_columns_pos.php';
-        $colonnesPos = require $colPosFile;
+        $bdd = $this->manager->getBdd();
 
         $sql = "SELECT 
               tbl.table_name,
@@ -38,12 +37,13 @@ class OrdonnancementColonnesTbl extends AbstractMigration
 
         $tblcs      = $bdd->select($sql);
         $this->tbls = [];
+        $tables     = $this->manager->getRef()->get('table');
         foreach ($tblcs as $tc) {
             $table = $tc['TABLE_NAME'];
             $col   = $tc['COLUMN_NAME'];
-            $pos   = ((int)$tc['POSITION']) - 1;
-            if (isset($colonnesPos[$table][$pos])) {
-                if ($col != $colonnesPos[$table][$pos]) {
+            $pos   = (int)$tc['POSITION'];
+            if (isset($tables[$table]['columns'][$col])) {
+                if ($pos != $tables[$table]['columns'][$col]['position']) {
                     $this->tbls[$table] = true;
                 }
             }
@@ -69,6 +69,7 @@ class OrdonnancementColonnesTbl extends AbstractMigration
     {
         $bdd     = $this->manager->getBdd();
         $console = $this->manager->getOseAdmin()->getConsole();
+        $console->println('');
         foreach ($this->tbls as $table => $null) {
             $console->println("Suppression de la table $table");
             $bdd->table()->drop($table);

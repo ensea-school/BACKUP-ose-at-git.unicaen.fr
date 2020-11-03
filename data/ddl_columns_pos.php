@@ -1457,8 +1457,6 @@ return [
     ],
     'TBL_SERVICE'                    => [
         'ID',
-        'HEURES',
-        'VALIDE',
         'ANNEE_ID',
         'INTERVENANT_ID',
         'INTERVENANT_STRUCTURE_ID',
@@ -1476,6 +1474,8 @@ return [
         'ETAPE_HISTO',
         'HAS_HEURES_MAUVAISE_PERIODE',
         'NBVH',
+        'HEURES',
+        'VALIDE',
     ],
     'TBL_SERVICE_REFERENTIEL'        => [
         'ID',

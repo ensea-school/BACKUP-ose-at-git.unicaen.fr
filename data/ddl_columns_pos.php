@@ -1511,14 +1511,14 @@ return [
     ],
     'TBL_VALIDATION_REFERENTIEL'     => [
         'ID',
-        'VOLUME_HORAIRE_REF_ID',
-        'AUTO_VALIDATION',
-        'VALIDATION_ID',
         'ANNEE_ID',
         'INTERVENANT_ID',
         'STRUCTURE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'SERVICE_REFERENTIEL_ID',
+        'VOLUME_HORAIRE_REF_ID',
+        'AUTO_VALIDATION',
+        'VALIDATION_ID',
     ],
     'TBL_WORKFLOW'                   => [
         'ID',

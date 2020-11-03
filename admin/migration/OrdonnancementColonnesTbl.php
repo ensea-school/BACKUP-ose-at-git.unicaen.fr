@@ -58,6 +58,8 @@ class OrdonnancementColonnesTbl extends AbstractMigration
     {
         if ($contexte == self::CONTEXTE_PRE) {
             $this->before();
+        } else {
+            $this->after();
         }
     }
 
@@ -65,11 +67,23 @@ class OrdonnancementColonnesTbl extends AbstractMigration
 
     protected function before()
     {
-        $bdd = $this->manager->getBdd();
-
+        $bdd     = $this->manager->getBdd();
+        $console = $this->manager->getOseAdmin()->getConsole();
         foreach ($this->tbls as $table => $null) {
+            $console->println("Suppression de la table $table");
             $bdd->table()->drop($table);
         }
+    }
+
+
+
+    protected function after()
+    {
+        $console = $this->manager->getOseAdmin()->getConsole();
+
+        $console->begin("Recalcul de tous les tableaux de bord");
+        $this->manager->getOseAdmin()->exec('calcul-tableaux-bord');
+        $console->end("Tableaux de bord recalculés");
     }
 
 }

@@ -50,6 +50,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 * Sur l'écran paramétrage d'un centre de coût d'un élément pédagogique (offre de formation), ne proposer que les centres de coûts de la composante d'appartenance de l'ELP. (Ticket #28958)
 * L'indicateur 340 était inopérant
+* Suite au passage de composer en 2.0 stable, forcer l'installation/update de ose avec la version 1.0 de composer
 
 # OSE 14.10
 

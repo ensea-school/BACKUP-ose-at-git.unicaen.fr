@@ -138,7 +138,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 45,
+            'position'    => 41,
             'commentaire' => NULL,
         ],
         'DOSSIER_EMPLOYEUR'              => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 41,
+            'position'    => 42,
             'commentaire' => NULL,
         ],
         'DOSSIER_IBAN'                   => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 42,
+            'position'    => 43,
             'commentaire' => NULL,
         ],
         'DOSSIER_IDENTITE_COMP'          => [
@@ -174,7 +174,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 43,
+            'position'    => 44,
             'commentaire' => NULL,
         ],
         'DOSSIER_INSEE'                  => [
@@ -186,7 +186,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 44,
+            'position'    => 45,
             'commentaire' => NULL,
         ],
         'DOSSIER_TEL_PERSO'              => [

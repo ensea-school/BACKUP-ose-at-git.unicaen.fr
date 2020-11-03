@@ -16,6 +16,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
+use Doctrine\ORM\NoResultException;
 
 /**
  * Description of Intervenant Dossier
@@ -163,12 +164,16 @@ class DossierService extends AbstractEntityService
 
     public function getCompletude(IntervenantDossier $intervenantDossier)
     {
-
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\TblDossier')->createQueryBuilder('tbld');
         $qb->where("tbld.intervenant = :intervenant");
         $qb->setParameter('intervenant', $intervenantDossier->getIntervenant());
-        $tblDossierIntervenant = $qb->getQuery()->setMaxResults(1)->getSingleResult();;
+        try {
+            $tblDossierIntervenant = $qb->getQuery()->setMaxResults(1)->getSingleResult();;
+        } catch (NoResultException $e) {
+            throw new \Exception('Impossible de trouver la complétude du dossier dans tbl_dossier');
+        }
         /**
+         * }
          * @var TblDossier $tblDossierIntervenant
          */
 

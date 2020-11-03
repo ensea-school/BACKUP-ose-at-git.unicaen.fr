@@ -71,7 +71,7 @@ class IntervenantDossierController extends AbstractController
             $this->updateTableauxBord($intervenantDossier->getIntervenant());
         }
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
-        //$tblDossierIntervenant        = $this->getServiceDossier()->getCompletude($intervenantDossier);
+
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
         $form->bind($intervenantDossier);

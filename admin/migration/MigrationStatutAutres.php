@@ -6,7 +6,7 @@
 
 class MigrationStatutAutres extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
+    protected $contexte = self::CONTEXTE_POST;
 
 
 
@@ -19,7 +19,23 @@ class MigrationStatutAutres extends AbstractMigration
 
     public function utile(): bool
     {
-        return true;
+        $bdd = $this->manager->getBdd();
+
+        $sqlStatutAutres = "
+            SELECT *
+            FROM statut_intervenant si 
+            WHERE si.code = 'AUTRES'
+        ";
+
+        $statutAutres = current($bdd->select($sqlStatutAutres));
+
+        return ($statutAutres['DOSSIER_ADRESSE'] ||
+            $statutAutres['DOSSIER_EMPLOYEUR'] ||
+            $statutAutres['DOSSIER_CONTACT'] ||
+            $statutAutres['DOSSIER_IBAN'] ||
+            $statutAutres['DOSSIER_IDENTITE_COMP'] ||
+            $statutAutres['DOSSIER_INSEE']
+        );
     }
 
 
@@ -44,28 +60,9 @@ class MigrationStatutAutres extends AbstractMigration
 
     protected function after()
     {
-        $oa      = $this->manager->getOseAdmin();
-        $bdd     = $this->manager->getBdd();
-        $console = $this->manager->getOseAdmin()->getConsole();
+        $bdd = $this->manager->getBdd();
 
-        $sqlStatutAutres = "
-            SELECT
-            *
-            FROM statut_intervenant si 
-            WHERE 
-                si.code = 'AUTRES'
-        ";
-
-        $statutAutres = current($bdd->select($sqlStatutAutres));
-
-        if ($statutAutres['DOSSIER_ADRESSE'] ||
-            $statutAutres['DOSSIER_EMPLOYEUR'] ||
-            $statutAutres['DOSSIER_CONTACT'] ||
-            $statutAutres['DOSSIER_IBAN'] ||
-            $statutAutres['DOSSIER_IDENTITE_COMP'] ||
-            $statutAutres['DOSSIER_INSEE']
-        ) {
-            $sqlUpdateStatutAutres = "
+        $sqlUpdateStatutAutres = "
                 UPDATE 
                     statut_intervenant 
                 SET
@@ -78,11 +75,7 @@ class MigrationStatutAutres extends AbstractMigration
                 WHERE code = 'AUTRES'
                 ";
 
-            $console->println("Update du statut autre pour n'avoir aucun bloc dans les données persos");
-
-            $bdd->exec($sqlUpdateStatutAutres);
-        }
-        $console->println("Fin du traitement du statut autres");
+        $bdd->exec($sqlUpdateStatutAutres);
     }
 }
 

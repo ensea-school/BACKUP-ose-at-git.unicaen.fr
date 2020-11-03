@@ -6,7 +6,7 @@
 
 class MigrationColonnes extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
+    protected $contexte = self::CONTEXTE_PRE;
 
 
 
@@ -19,7 +19,19 @@ class MigrationColonnes extends AbstractMigration
 
     public function utile(): bool
     {
-        return true;
+        return
+            ($this->manager->hasOldColumn('PAYS', 'LIBELLE_COURT')
+                && $this->manager->hasOldColumn('PAYS', 'LIBELLE_LONG')
+                && $this->manager->hasNewColumn('PAYS', 'LIBELLE'))
+
+            || ($this->manager->hasNewColumn('PAYS', 'CODE'))
+
+            || ($this->manager->hasOldColumn('DEPARTEMENT', 'LIBELLE_COURT')
+                && $this->manager->hasOldColumn('DEPARTEMENT', 'LIBELLE_LONG')
+                && $this->manager->hasNewColumn('DEPARTEMENT', 'LIBELLE'))
+
+            || ($this->manager->hasOldColumn('STATUT_INTERVENANT', 'SOURCE_CODE')
+                && $this->manager->hasNewColumn('STATUT_INTERVENANT', 'CODE'));
     }
 
 

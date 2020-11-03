@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => 'Témoin (0 ou 1)',
         ],
         'ID'                     => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 9,
             'commentaire' => 'Si validé',
         ],
         'VOLUME_HORAIRE_ID'      => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
     ],

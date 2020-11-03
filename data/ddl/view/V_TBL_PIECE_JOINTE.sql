@@ -7,8 +7,7 @@ SELECT
     fournie,
     validee,
     heures_pour_seuil,
-    obligatoire,
-    date_archive
+    obligatoire
 FROM (
   SELECT
     COALESCE( pjd.annee_id, pjf.annee_id )                              annee_id,

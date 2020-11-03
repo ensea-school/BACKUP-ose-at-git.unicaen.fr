@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_REF_ID' => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HEURES_A_PAYER'             => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 11,
             'commentaire' => 'HETD à payer',
         ],
         'HEURES_A_PAYER_POND'        => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 8,
+            'position'    => 12,
             'commentaire' => 'HETD à payer (en %)',
         ],
         'HEURES_DEMANDEES'           => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 13,
             'commentaire' => 'HETD demandées',
         ],
         'HEURES_PAYEES'              => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 10,
+            'position'    => 14,
             'commentaire' => 'HETD payées',
         ],
         'ID'                         => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'MISE_EN_PAIEMENT_ID'        => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'PERIODE_PAIEMENT_ID'        => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'                 => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'SERVICE_REFERENTIEL_ID'     => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'               => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
     ],

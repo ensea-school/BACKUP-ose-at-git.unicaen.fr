@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'ATTEIGNABLE'           => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => 'Témoin indiquant si l\'étape est atteignable ou non',
         ],
         'ETAPE_CODE'            => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 4,
             'commentaire' => 'Identifiant de l\'étape concernée',
         ],
         'ID'                    => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 3,
             'commentaire' => 'Identifiant de l\'intervenant concerné',
         ],
         'OBJECTIF'              => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => 'Objectif de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ],
         'REALISATION'           => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => 'Pourcentage de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ],
         'STATUT_INTERVENANT_ID' => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => 'null',
-            'position'    => 4,
+            'position'    => 5,
             'commentaire' => 'Eventuelle structure concernée',
         ],
         'TYPE_INTERVENANT_CODE' => [

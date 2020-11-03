@@ -242,9 +242,11 @@ class Ddl implements \Iterator, \ArrayAccess
         $tables = $this->get(Ddl::TABLE);
         foreach ($tables as $tableName => $table) {
             $cols = [];
-            foreach ($positions[$tableName] as $idc => $col) {
-                if (!array_key_exists($col, $table['columns'])) {
-                    unset($positions[$tableName][$idc]);
+            if (isset($positions[$tableName])) {
+                foreach ($positions[$tableName] as $idc => $col) {
+                    if (!array_key_exists($col, $table['columns'])) {
+                        unset($positions[$tableName][$idc]);
+                    }
                 }
             }
             foreach ($table['columns'] as $column) {

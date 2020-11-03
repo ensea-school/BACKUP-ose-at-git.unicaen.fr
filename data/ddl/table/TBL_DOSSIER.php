@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 10,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_AUTRES'        => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 14,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_CONTACT'       => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_EMPLOYEUR'     => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_IBAN'          => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 12,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_IDENTITE'      => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_IDENTITE_COMP' => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 8,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_INSEE'         => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 11,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'COMPLETUDE_STATUT'        => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 15,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'DOSSIER_ID'               => [

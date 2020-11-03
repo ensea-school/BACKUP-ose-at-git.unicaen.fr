@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'HEURES_POUR_SEUIL'    => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'ID'                   => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID' => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
     ],

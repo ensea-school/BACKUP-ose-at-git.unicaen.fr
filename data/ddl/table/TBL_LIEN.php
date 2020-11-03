@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 12,
             'commentaire' => 'Choix minimum',
         ],
         'ID'               => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 14,
+            'position'    => 10,
             'commentaire' => 'Poids maximum pour les fils',
         ],
         'NB_CHOIX'         => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 12,
+            'position'    => 13,
             'commentaire' => 'Nombre de choix',
         ],
         'NOEUD_INF_ID'     => [
@@ -174,7 +174,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 13,
+            'position'    => 14,
             'commentaire' => 'Total de poids des fils',
         ],
     ],

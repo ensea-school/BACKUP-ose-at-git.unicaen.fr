@@ -8,7 +8,7 @@ Ces tables dans la base Apogée sont rafraîchies régulièrement, par exemple m
 En voici le schéma général :
 [Architecture connecteurs OSE.png]: Architecture connecteurs OSE.png
 
-Le script [Apogee-OSE-createTables.sql](Apogee-OSE-createTables.sql) crée les 7 tables et les 3 vues OSE_****** dans la base Apogée :
+Le script [Apogee-OSE-createTables.sql](Apogee-OSE-createTables.sql) crée les 8 tables et les 2 vues OSE_****** dans la base Apogée :
 create table ose_groupe_type_formation : Regroupements des types de formations
 create table ose_type_formation        : Correspondance entre les types de formations Apogee et les groupes de types de formations
 create table ose_etape                 : Une etape OSE est assimilable a une VET Apogee

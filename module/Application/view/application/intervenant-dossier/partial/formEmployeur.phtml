@@ -6,7 +6,7 @@
  * @var $canValider       boolean
  * @var $canDevalider     boolean
  * @var $canSupprimer     boolean
- * @var $dossier          Dossier
+ * @var $tblDossier       \Application\Entity\Db\TblDossier
  */
 
 //$Dossier = $dossier;
@@ -32,7 +32,7 @@ $dossierInsee = $form->get('DossierEmployeur');
     <div class="panel panel-default ">
         <div class="panel-heading">
             EMPLOYEUR
-            <?php if (!$intervenantDossierCompletude['dossierEmployeur']): ?>
+            <?php if (!$tblDossier->getCompletudeEmployeur()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>

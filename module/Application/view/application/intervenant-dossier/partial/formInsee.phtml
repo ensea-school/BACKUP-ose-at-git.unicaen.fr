@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $tblDossier  \Application\Entity\Db\TblDossier
+ */
 
 $form->prepare();
 $dossierInsee = $form->get('DossierInsee');
@@ -21,7 +25,7 @@ $dossierInsee = $form->get('DossierInsee');
     <div class="panel panel-default ">
         <div class="panel-heading">
             INSEE
-            <?php if (!$intervenantDossierCompletude['dossierInsee']): ?>
+            <?php if (!$tblDossier->getCompletudeInsee()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>
@@ -32,7 +36,7 @@ $dossierInsee = $form->get('DossierInsee');
 
             echo $this->formControlGroup($dossierInsee->get('numeroInsee'));
             echo $this->formControlGroup($dossierInsee->get('numeroInseeEstProvisoire'));
-            
+
             ?>
         </div>
     </div>

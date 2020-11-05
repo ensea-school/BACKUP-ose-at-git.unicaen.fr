@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $tblDossier  \Application\Entity\Db\TblDossier
+ */
 
 $form->prepare();
 $dossierAdresse = $form->get('DossierAdresse');
@@ -10,7 +14,7 @@ $dossierAdresse = $form->get('DossierAdresse');
     <div class="panel panel-default">
         <div class="panel-heading">
             ADRESSE
-            <?php if (!$intervenantDossierCompletude['dossierAdresse']): ?>
+            <?php if (!$tblDossier->getCompletudeAdresse()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>

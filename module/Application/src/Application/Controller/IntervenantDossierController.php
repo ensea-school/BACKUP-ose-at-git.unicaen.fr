@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Constants;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\WfEtape;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\Traits\AutresFormAwareTrait;
 use Application\Form\Intervenant\Traits\IntervenantDossierFormAwareTrait;
@@ -65,13 +66,16 @@ class IntervenantDossierController extends AbstractController
         }
         /* Récupération du dossier de l'intervenant */
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+
         /*Si dossier n'a pas encore d'id alors on le save et on calcule la completude*/
         if (!$intervenantDossier->getId()) {
             $this->getServiceDossier()->save($intervenantDossier);
             $this->updateTableauxBord($intervenantDossier->getIntervenant());
         }
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
+        $tblDossier                   = $intervenantDossier->getTblDossier();
 
+        $lastCompleted = $tblDossier->getCompletude();
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
         $form->bind($intervenantDossier);
@@ -87,12 +91,21 @@ class IntervenantDossierController extends AbstractController
                 $this->getServiceDossier()->updateIndicModifDossier($intervenant, $intervenantDossier);
                 //Recalcul des tableaux de bord nécessaires
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
+                $this->em()->refresh($tblDossier);
+
                 /*On reinitialise le formulaire car le statut du dossier a
                 pu être changé donc les règles d'affichage ne sont plus les mêmes*/
                 $form = $this->getIntervenantDossierForm($intervenant);
                 $form->bind($intervenantDossier);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
+
+                if (!$lastCompleted && $tblDossier->getCompletude() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
+                    $nextEtape = $this->getServiceWorkflow()->getNextEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
+                    if ($nextEtape && $url = $nextEtape->getUrl()) {
+                        return $this->redirect()->toUrl($url);
+                    }
+                }
             } else {
                 $this->flashMessenger()->addErrorMessage("Vos données n'ont pas été enregistré, veuillez vérifier les erreurs.");
             }
@@ -100,8 +113,8 @@ class IntervenantDossierController extends AbstractController
 
         $intervenantDossierStatut = $intervenantDossier->getStatut();
         //Règles pour afficher ou non les fieldsets
-        $champsAutres                 = $intervenantDossier->getStatut()->getChampsAutres();
-        $fieldsetRules                = [
+        $champsAutres  = $intervenantDossier->getStatut()->getChampsAutres();
+        $fieldsetRules = [
             'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
             'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
             'fieldset-contact'                 => $intervenantDossier->getStatut()->getDossierContact(),
@@ -110,7 +123,6 @@ class IntervenantDossierController extends AbstractController
             'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
             'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
         ];
-        $intervenantDossierCompletude = $this->getServiceDossier()->getCompletude($intervenantDossier);
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
         $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;
@@ -135,7 +147,7 @@ class IntervenantDossierController extends AbstractController
             'intervenantDossier',
             'intervenantDossierValidation',
             'intervenantDossierStatut',
-            'intervenantDossierCompletude',
+            'tblDossier',
             'champsAutres',
             'fieldsetRules'
         );

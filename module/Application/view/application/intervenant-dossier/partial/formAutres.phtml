@@ -1,18 +1,13 @@
 <?php
 
-use Application\Assertion\IntervenantDossierAssertion;
-
-
 /**
- * @var $this             \Application\View\Renderer\PhpRenderer
- * @var $form             \Application\Form\Intervenant\Dossier
- * @var $canValider       boolean
- * @var $canDevalider     boolean
- * @var $canSupprimer     boolean
- * @var $dossier          Dossier
+ * @var $this                        \Application\View\Renderer\PhpRenderer
+ * @var $form                        \Application\Form\Intervenant\Dossier
+ * @var $canValider                  boolean
+ * @var $canDevalider                boolean
+ * @var $canSupprimer                boolean
+ * @var $intervenantDossier          \Application\Entity\Db\IntervenantDossier
  */
-
-//$Dossier = $dossier;
 
 $form->prepare();
 $dossierAutres = $form->get('DossierAutres');
@@ -37,7 +32,7 @@ $dossierAutres = $form->get('DossierAutres');
 
             <div class="panel-heading">
                 AUTRES
-                <?php if (!$intervenantDossierCompletude['dossierAutres']): ?>
+                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutres()): ?>
                     <span class="label label-warning">A compléter</span>
                 <?php else: ?>
                     <span class="label label-success">Complet</span>

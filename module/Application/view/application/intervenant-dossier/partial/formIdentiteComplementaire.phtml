@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $tblDossier  \Application\Entity\Db\TblDossier
+ */
+
 use Application\Assertion\IntervenantDossierAssertion;
 
 $viewIdentiteComplementaire = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
@@ -14,7 +19,7 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
     <div class="panel panel-default">
         <div class="panel-heading">
             IDENTITÉ COMPLEMENTAIRE
-            <?php if (!$intervenantDossierCompletude['dossierIdentiteComplementaire']): ?>
+            <?php if (!$tblDossier->getCompletudeIdentiteComp()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>

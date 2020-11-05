@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var \Application\Entity\Db\IntervenantDossier $intervenantDossier
  */
@@ -17,7 +16,7 @@ $dossierBancaire = $form->get('DossierBancaire');
     <div class="panel panel-default ">
         <div class="panel-heading">
             COORDONNÉES BANCAIRES
-            <?php if (!$intervenantDossierCompletude['dossierIban']): ?>
+            <?php if (!$intervenantDossier->getTblDossier()->getCompletudeIban()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>

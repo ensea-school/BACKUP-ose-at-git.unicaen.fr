@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $tblDossier  \Application\Entity\Db\TblDossier
+ */
 
 use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\WfEtape;
@@ -14,14 +18,7 @@ $canValider    = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRI
 $canDevalider  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
 $canEdit       = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_EDIT);
 $canSupprimer  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
-$isComplete    = true;
 $formErrors    = $this->formErrors($form);
-
-foreach ($intervenantDossierCompletude as $value) {
-    if (!$value) {
-        $isComplete = false;
-    }
-}
 
 $nextEtape = $intervenantDossierValidation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
 $this->headTitle()->append($intervenant->getPrenom() . " " . $intervenant->getNomUsuel())->append("Données personnelles");
@@ -85,11 +82,11 @@ $fieldsets = $form->getFieldsets();
     <?php if (!empty($formErrors)): ?>
         <?= $this->formErrors($form); ?>
     <?php else: ?>
-        <div class="messenger alert <?= ($isComplete) ? 'alert-success' : 'alert-warning' ?> ">
-            <?php if ($isComplete && $intervenantDossierValidation): ?>
+        <div class="messenger alert <?= ($tblDossier->getCompletude()) ? 'alert-success' : 'alert-warning' ?> ">
+            <?php if ($tblDossier->getCompletude() && $intervenantDossierValidation): ?>
                 Votre dossier est maintenant <span style="font-size:1em;" class="label label-success">Complet</span> et <span
                         style="font-size:1em;" class="label label-success">Validé</span>
-            <?php elseif ($isComplete && !$intervenantDossierValidation): ?>
+            <?php elseif ($tblDossier->getCompletude() && !$intervenantDossierValidation): ?>
                 Votre dossier est maintenant <span style="font-size:1em;"
                                                    class="label label-success">Complet</span> et en attente de validation par nos services
             <?php else: ?>
@@ -106,9 +103,9 @@ $fieldsets = $form->getFieldsets();
     <div class="row">
         <?php
         if ($canEdit) {
-            echo $this->partial('application/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude',));
+            echo $this->partial('application/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier',));
         } else {
-            echo $this->partial('application/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+            echo $this->partial('application/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
         }
         ?>
     </div>
@@ -124,63 +121,63 @@ $fieldsets = $form->getFieldsets();
             /*Fiedlset identite (toujours affiché)*/
 
             if ($editIdentite) {
-                echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                echo $this->partial('application/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
             } else {
-                echo $this->partial('application/intervenant-dossier/partial/formIdentiteView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                echo $this->partial('application/intervenant-dossier/partial/formIdentiteView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
             }
             /*Fiedlset identite complementaire*/
 
             if ($fieldsetRules['fieldset-identite-complementaire']) {
                 if ($editIdentite) {
-                    echo $this->partial('application/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 } else {
-                    echo $this->partial('application/intervenant-dossier/partial/formIdentiteComplementaireView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formIdentiteComplementaireView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 }
             }
 
             /*Fieldset Contact*/
             if ($fieldsetRules['fieldset-contact']) {
                 if ($editContact) {
-                    echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formContact', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 } else {
-                    echo $this->partial('application/intervenant-dossier/partial/formContactView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formContactView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 }
             }
 
             /*Fieldset Adresse*/
             if ($fieldsetRules['fieldset-adresse']) {
                 if ($editAdresse) {
-                    echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 } else {
-                    echo $this->partial('application/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 }
             }
             /*Fiedlset Insee*/
             if ($fieldsetRules['fieldset-insee']) {
                 if ($editInsee) {
-                    echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formInsee', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 } else {
-                    echo $this->partial('application/intervenant-dossier/partial/formInseeView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formInseeView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 }
             }
             if ($fieldsetRules['fieldset-iban']) {
                 if ($editIban) {
-                    echo $this->partial('application/intervenant-dossier/partial/formBancaire', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formBancaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 } else {
-                    echo $this->partial('application/intervenant-dossier/partial/formBancaireView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formBancaireView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 }
             }
             /*Fiedlset Employeur*/
             if ($fieldsetRules['fieldset-employeur']) {
                 if ($editEmployeur) {
-                    echo $this->partial('application/intervenant-dossier/partial/formEmployeur', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formEmployeur', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 } else {
-                    echo $this->partial('application/intervenant-dossier/partial/formEmployeurView', compact('form', 'intervenant', 'intervenantDossier', 'intervenantDossierCompletude'));
+                    echo $this->partial('application/intervenant-dossier/partial/formEmployeurView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
                 }
             }
             /*Fieldset Autres*/
             if ($fieldsetRules['fieldset-autres']) {
-                echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier', 'champsAutres', 'intervenantDossierCompletude'));
+                echo $this->partial('application/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier', 'champsAutres', 'tblDossier'));
             }
 
             ?>

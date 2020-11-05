@@ -7,6 +7,7 @@
  * @var $canDevalider     boolean
  * @var $canSupprimer     boolean
  * @var $dossier          Dossier
+ * @var $tblDossier       \Application\Entity\Db\TblDossier
  */
 
 //$Dossier = $dossier;
@@ -31,7 +32,7 @@ $dossierContact = $form->get('DossierContact');
     <div class="panel panel-default ">
         <div class="panel-heading">
             CONTACT
-            <?php if (!$intervenantDossierCompletude['dossierContact']): ?>
+            <?php if (!$tblDossier->getCompletudeContact()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @var $this                \Application\View\Renderer\PhpRenderer
+ * @var $intervenantDossier  \Application\Entity\Db\IntervenantDossier
+ */
+
 use Application\Assertion\IntervenantDossierAssertion;
 
 $viewEmployeur = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR);
@@ -13,7 +18,7 @@ $dossierEmployeur = $form->get('DossierEmployeur');
     <div class="panel panel-default ">
         <div class="panel-heading">
             EMPLOYEUR
-            <?php if (!$intervenantDossierCompletude['dossierEmployeur']): ?>
+            <?php if (!$intervenantDossier->getTblDossier()->getCompletudeEmployeur()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>

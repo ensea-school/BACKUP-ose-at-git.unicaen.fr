@@ -28,7 +28,7 @@ class TblDossier
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Dossier
+     * @var \Application\Entity\Db\IntervenantDossier
      */
     private $dossier;
 
@@ -135,7 +135,7 @@ class TblDossier
     /**
      * Get dossier
      *
-     * @return \Application\Entity\Db\Dossier
+     * @return \Application\Entity\Db\IntervenantDossier
      */
     public function getDossier()
     {
@@ -269,6 +269,21 @@ class TblDossier
     public function getCompletudeStatut()
     {
         return $this->completudeStatut;
+    }
+
+
+
+    public function getCompletude(): bool
+    {
+        return $this->getCompletudeIdentite() &&
+            $this->getCompletudeIdentiteComp() &&
+            $this->getCompletudeAdresse() &&
+            $this->getCompletudeContact() &&
+            $this->getCompletudeInsee() &&
+            $this->getCompletudeIban() &&
+            $this->getCompletudeEmployeur() &&
+            $this->getCompletudeAutres() &&
+            $this->getCompletudeStatut();
     }
 }
 

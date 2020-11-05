@@ -3,17 +3,11 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Application\Entity\Db\TblDossier" table="TBL_DOSSIER">
-        <indexes>
-            <index name="IDX_126E18FDAA401F5C" columns="ANNEE_ID"/>
-            <index name="IDX_126E18FD52CE5789" columns="DOSSIER_ID"/>
-            <index name="IDX_126E18FDBC260C55" columns="VALIDATION_ID"/>
-        </indexes>
         <unique-constraints>
             <unique-constraint name="tbl_dossier__un" columns="INTERVENANT_ID"/>
         </unique-constraints>
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
-            <sequence-generator sequence-name="TBL_DOSSIER_ID_seq" allocation-size="1" initial-value="1"/>
         </id>
         <field name="peutSaisirDossier" type="boolean" column="PEUT_SAISIR_DOSSIER" nullable="false">
             <options>
@@ -30,11 +24,14 @@
                 <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="dossier" target-entity="Application\Entity\Db\IntervenantDossier" fetch="LAZY">
+        <!--<one-to-one field="dossier" target-entity="Application\Entity\Db\IntervenantDossier" fetch="LAZY">
             <join-columns>
                 <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
             </join-columns>
-        </many-to-one>
+        </one-to-one>-->
+        <one-to-one field="dossier" target-entity="Application\Entity\Db\IntervenantDossier" inversed-by="tblDossier">
+            <join-column name="DOSSIER_ID" referenced-column-name="ID" />
+        </one-to-one>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
             <join-columns>
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>
@@ -49,7 +46,5 @@
         <field name="completudeEmployeur" type="boolean" column="COMPLETUDE_EMPLOYEUR" nullable="false"/>
         <field name="completudeAutres" type="boolean" column="COMPLETUDE_AUTRES" nullable="false"/>
         <field name="completudeStatut" type="boolean" column="COMPLETUDE_STATUT" nullable="false"/>
-
-
     </entity>
 </doctrine-mapping>

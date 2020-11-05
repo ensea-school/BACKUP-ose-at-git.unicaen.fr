@@ -403,11 +403,10 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
 
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $completudeDossier  = $this->getServiceDossier()->getCompletude($intervenantDossier);
         $isValidate         = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([
-            $completudeDossier['dossier'],
+            $intervenantDossier->getTblDossier()->getCompletude(),
             !$isValidate,
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
         ]);

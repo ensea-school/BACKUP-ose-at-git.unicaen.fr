@@ -2,12 +2,8 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
-use Application\Entity\Db\Traits\DisciplineAwareTrait;
 use Application\Entity\Db\Traits\EmployeurAwareTrait;
-use Application\Entity\Db\Traits\GradeAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
@@ -16,8 +12,6 @@ use Doctrine\Persistence\ObjectManagerAware;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
-use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -156,6 +150,11 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      * @var Intervenant|null
      */
     protected $intervenant;
+
+    /**
+     * @var TblDossier
+     */
+    protected $tblDossier;
 
 
 
@@ -827,6 +826,13 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;
+    }
+
+
+
+    public function getTblDossier(): ?TblDossier
+    {
+        return $this->tblDossier;
     }
 
 

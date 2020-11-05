@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $tblDossier  \Application\Entity\Db\TblDossier
+ */
 
 $form->prepare();
 $dossierStatut = $form->get('DossierStatut');
@@ -21,7 +25,7 @@ $dossierStatut = $form->get('DossierStatut');
     <div class="panel panel-default ">
         <div class="panel-heading">
             STATUT
-            <?php if (!$intervenantDossierCompletude['dossierStatut']): ?>
+            <?php if (!$tblDossier->getCompletudeStatut()): ?>
                 <span class="label label-warning">A compléter</span>
             <?php else: ?>
                 <span class="label label-success">Complet</span>

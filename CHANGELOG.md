@@ -31,8 +31,8 @@ Objectif : Doubles statuts et refonte des données personnelles
 ## Notes de mise à jour
 
 * Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
-La migration ne sera possible qu'à partir de la version 14.10.
-Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.10 **AVANT** de migrer vers la 15.
+La migration ne sera possible qu'à partir de la version 14.11.
+Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.11 **AVANT** de migrer vers la 15.
 
 * La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier les vues sources visant les tables INTERVENANT, STRUCTURE, PAYS et DEPARTEMENT.
 Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).

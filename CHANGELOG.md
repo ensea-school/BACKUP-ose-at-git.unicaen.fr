@@ -30,6 +30,8 @@ Objectif : Doubles statuts et refonte des données personnelles
 
 ## Notes de mise à jour
 
+* PHP 7.4 minimum requis : attention à bien mettre à jour vos serveurs
+
 * Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
 La migration ne sera possible qu'à partir de la version 14.10.
 Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.10 **AVANT** de migrer vers la 15.
@@ -331,7 +333,7 @@ ATTENTION également : Si vous migrez d'une édition zf2 vers cette nouvelle ver
 
 ## Notes de mise à jour
 
-Les versions 7.3 ou 7.4 de PHP sont maintenant nécessaires.
+Les versions 7.4 de PHP sont maintenant nécessaires.
 
 # OSE 10-zf2 et 10-zf3
 

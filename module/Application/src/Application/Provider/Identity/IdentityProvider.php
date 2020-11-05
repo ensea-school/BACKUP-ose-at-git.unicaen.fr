@@ -42,6 +42,13 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
 
 
 
+    public function clearIdentityRoles()
+    {
+        $this->identityRoles = null;
+    }
+
+
+
     /**
      * {@inheritDoc}
      */

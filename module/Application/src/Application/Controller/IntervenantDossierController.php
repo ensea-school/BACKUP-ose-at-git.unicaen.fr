@@ -152,6 +152,7 @@ class IntervenantDossierController extends AbstractController
             if (!$intervenant) {
                 throw new \LogicException('Intervenant non précisé ou inexistant');
             }
+
             $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
             $statutIntervenant  = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
             if ($statutIntervenant) {
@@ -161,6 +162,15 @@ class IntervenantDossierController extends AbstractController
                 $intervenant->setSyncStatut(false);
                 $this->getServiceIntervenant()->save($intervenant);
                 $this->updateTableauxBord($intervenant);
+
+                // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
+                // au statut choisi dans le dossier.
+                if ($role->getIntervenant()) {
+                    $this->serviceUserContext->clearIdentityRoles();
+                    \Application::$container->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
+                    \Application::$container->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
+                    $this->serviceUserContext->setSelectedIdentityRole($statutIntervenant->getRoleId());
+                }
             }
         }
 

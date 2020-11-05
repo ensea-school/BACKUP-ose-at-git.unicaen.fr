@@ -80,6 +80,13 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
 
+    public function clearRoles()
+    {
+        $this->roles = null;
+    }
+
+
+
     protected function getRolesPrivileges()
     {
         if (!$this->rolesPrivileges) {

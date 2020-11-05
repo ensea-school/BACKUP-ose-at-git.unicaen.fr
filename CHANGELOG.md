@@ -37,6 +37,8 @@ Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.10 **A
 * La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier les vues sources visant les tables INTERVENANT, STRUCTURE, PAYS et DEPARTEMENT.
 Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
 
+* Lors de la mise à jour, les différents objets qui concernent vos connecteurs et sur lesquels il y a des changements à faire s'afficheront en erreur. Il vous revient de mettre à jour par vous-mêmes ces connecteurs.
+
 * Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
 
 # OSE 14.11

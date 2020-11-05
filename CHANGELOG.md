@@ -33,15 +33,17 @@ Objectif : Doubles statuts et refonte des données personnelles
 * PHP 7.4 minimum requis : attention à bien mettre à jour vos serveurs
 
 * Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
-La migration ne sera possible qu'à partir de la version 14.10.
-Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.10 **AVANT** de migrer vers la 15.
+La migration ne sera possible qu'à partir de la version 14.11.
+Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.11 **AVANT** de migrer vers la 15.
 
 * La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier les vues sources visant les tables INTERVENANT, STRUCTURE, PAYS et DEPARTEMENT.
 Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
 
+* Lors de la mise à jour, les différents objets qui concernent vos connecteurs et sur lesquels il y a des changements à faire s'afficheront en erreur. Il vous revient de mettre à jour par vous-mêmes ces connecteurs.
+
 * Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
 
-# OSE 14.11 (à venir)
+# OSE 14.11
 
 ## Nouveautés
 

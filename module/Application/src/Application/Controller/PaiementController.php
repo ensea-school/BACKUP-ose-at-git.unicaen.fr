@@ -52,7 +52,6 @@ class PaiementController extends AbstractController
     use EtatSortieServiceAwareTrait;
 
 
-
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
@@ -322,9 +321,9 @@ class PaiementController extends AbstractController
         $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
         $rechercheForm->bind($recherche);
 
-        if ($role->getStructure()){
+        if ($role->getStructure()) {
             $structures = [$role->getStructure()->getId() => $role->getStructure()];
-        }else{
+        } else {
             $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
             $this->getServiceStructure()->finderByRole($role, $qb);
             $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
@@ -356,7 +355,7 @@ class PaiementController extends AbstractController
             $periodes = $this->getServicePeriode()->getList($qb);
             $rechercheForm->populatePeriodes($periodes);
             if (count($periodes) == 1) {
-                $recherche->setPeriode( current($periodes));
+                $recherche->setPeriode(current($periodes));
                 $rechercheForm->get('periode')->setValue($recherche->getPeriode()->getId());
             } else {
                 $recherche->setPeriode($this->context()->periodeFromPost());
@@ -381,10 +380,10 @@ class PaiementController extends AbstractController
 
         if ($this->params()->fromPost('exporter-pdf') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF))) {
             $document = $this->getServiceEtatSortie()->genererPdf($etatSortie, $recherche->getFilters());
-            $document->download($this->makeFilenameFromRecherche($recherche).'.pdf');
+            $document->download($this->makeFilenameFromRecherche($recherche) . '.pdf');
         } elseif ($this->params()->fromPost('exporter-csv-etat') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
             $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $recherche->getFilters());
-            $csvModel->setFilename($this->makeFilenameFromRecherche($recherche).'.csv');
+            $csvModel->setFilename($this->makeFilenameFromRecherche($recherche) . '.csv');
 
             return $csvModel;
         } else {
@@ -401,9 +400,9 @@ class PaiementController extends AbstractController
 
     private function makeFilenameFromRecherche(MiseEnPaiementRecherche $recherche)
     {
-        if ($recherche->getEtat() == MiseEnPaiement::A_METTRE_EN_PAIEMENT){
+        if ($recherche->getEtat() == MiseEnPaiement::A_METTRE_EN_PAIEMENT) {
             $filename = 'demande_mise_en_paiement';
-        }else{
+        } else {
             $filename = 'etat_paiement';
         }
 
@@ -425,12 +424,12 @@ class PaiementController extends AbstractController
 
         $recherche = new MiseEnPaiementRecherche;
         $recherche->setAnnee($this->getServiceContext()->getAnnee());
-        if ($role->getStructure()){
+        if ($role->getStructure()) {
             $recherche->setStructure($role->getStructure());
         }
 
         $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $recherche->getFilters());
-        $csvModel->setFilename($this->makeFilenameFromRecherche($recherche).'.csv');
+        $csvModel->setFilename($this->makeFilenameFromRecherche($recherche) . '.csv');
 
         return $csvModel;
     }
@@ -505,7 +504,9 @@ class PaiementController extends AbstractController
             $intervenants = $this->getServiceIntervenant()->get(explode(',', $intervenants));
             try {
                 $this->getServiceMiseEnPaiement()->mettreEnPaiement($structure, $intervenants, $periode, $dateMiseEnPaiement);
-                $this->updateTableauxBord($intervenants);
+                foreach ($intervenants as $intervenant) {
+                    $this->updateTableauxBord($intervenant);
+                }
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
             }
@@ -517,7 +518,7 @@ class PaiementController extends AbstractController
 
 
     /**
-     * @param Intervenant|Intervenant[] $intervenant
+     * @param Intervenant $intervenant
      */
     private function updateTableauxBord($intervenant)
     {

@@ -147,7 +147,7 @@ class PieceJointeController extends AbstractController
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
         } elseif ($nbFournies == $nbDemandees && $nbValidees < $nbFournies) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-            $msgs['danger'][]  = "Mais certaines doivent encore être validées par " . ($isIntervenant ? 'votre' : 'la') . " composante.";
+            $msgs['warning'][] = "Mais certaines doivent encore être validées " . ($isIntervenant ? 'par votre' : 'la') . " composante.";
         }
 
         return $msgs;

@@ -352,7 +352,7 @@ class EtatSortie
     public function getPdfTraitement()
     {
         $fichierGenerique = getcwd() . '/' . $this->pdfTraitement;
-        if (strlen($fichierGenerique) < 512 && file_exists($fichierGenerique)) {
+        if ($this->pdfTraitement && strlen($fichierGenerique) < 512 && file_exists($fichierGenerique)) {
             $this->pdfTraitement = substr(file_get_contents($fichierGenerique), 5);
         }
 
@@ -381,7 +381,7 @@ class EtatSortie
     public function getCsvTraitement()
     {
         $fichierGenerique = getcwd() . '/' . $this->csvTraitement;
-        if (strlen($fichierGenerique) < 512 && file_exists($fichierGenerique)) {
+        if ($this->csvTraitement && strlen($fichierGenerique) < 512 && file_exists($fichierGenerique)) {
             $this->csvTraitement = substr(file_get_contents($fichierGenerique), 5);
         }
 

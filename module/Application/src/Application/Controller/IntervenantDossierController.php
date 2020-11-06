@@ -74,6 +74,10 @@ class IntervenantDossierController extends AbstractController
         }
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $tblDossier                   = $intervenantDossier->getTblDossier();
+        if (!$tblDossier) {
+            $this->em()->refresh($intervenantDossier);
+            $tblDossier = $intervenantDossier->getTblDossier();
+        }
 
         $lastCompleted = $tblDossier->getCompletude();
         /* Initialisation du formulaire */

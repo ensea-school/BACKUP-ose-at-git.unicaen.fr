@@ -30,7 +30,6 @@ class MigrationStatutAutres extends AbstractMigration
         $statutAutres = current($bdd->select($sqlStatutAutres));
 
         return ($statutAutres['DOSSIER_ADRESSE'] ||
-            $statutAutres['DOSSIER_EMPLOYEUR'] ||
             $statutAutres['DOSSIER_CONTACT'] ||
             $statutAutres['DOSSIER_IBAN'] ||
             $statutAutres['DOSSIER_IDENTITE_COMP'] ||

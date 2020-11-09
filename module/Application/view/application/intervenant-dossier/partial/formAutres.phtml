@@ -1,14 +1,13 @@
 <?php
 
 /**
- * @var $this                        \Application\View\Renderer\PhpRenderer
- * @var $form                        \Application\Form\Intervenant\Dossier
- * @var $canValider                  boolean
- * @var $canDevalider                boolean
- * @var $canSupprimer                boolean
- * @var $intervenantDossier          \Application\Entity\Db\IntervenantDossier
+ * @var $this                         \Application\View\Renderer\PhpRenderer
+ * @var $form                         \Application\Form\Intervenant\IntervenantDossierForm
+ * @var $intervenant                  \Application\Entity\Db\Intervenant
+ * @var $intervenantDossier           \Application\Entity\Db\IntervenantDossier
+ * @var $tblDossier                   \Application\Entity\Db\TblDossier
+ * @var $champsAutres                 \Application\Entity\Collection
  */
-
 $form->prepare();
 $dossierAutres = $form->get('DossierAutres');
 ?>

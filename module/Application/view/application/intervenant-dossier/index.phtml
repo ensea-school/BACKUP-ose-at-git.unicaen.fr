@@ -1,9 +1,17 @@
 <?php
 
 /**
- * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $tblDossier  \Application\Entity\Db\TblDossier
+ * @var $form                         \Application\Form\Intervenant\IntervenantDossierForm
+ * @var $role                         \UnicaenAuth\Entity\Db\Role
+ * @var $intervenant                  \Application\Entity\Db\Intervenant
+ * @var $intervenantDossier           \Application\Entity\Db\IntervenantDossier
+ * @var $intervenantDossierValidation \Application\Entity\Db\Validation
+ * @var $intervenantDossierStatut     \Application\Entity\Db\StatutIntervenant
+ * @var $tblDossier                   \Application\Entity\Db\TblDossier
+ * @var $fieldsetRules                Array
+ * @var $champsAutres                 \Application\Entity\Collection
  */
+
 
 use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\WfEtape;

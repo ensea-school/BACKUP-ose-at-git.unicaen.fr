@@ -649,7 +649,6 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
                     if ('structureCode' == name) {
                         if (value) that.ajoutStructure($(this), value);
-                        console.log(name, value);
                     }
 
                     $(this).val(value);
@@ -752,14 +751,14 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 var vhPCount = 0;
 
                 for (var i = 1; i < 6; i++) {
-                    if (formules[formuleId]['iParam' + i + 'Libelle']) {
+                    if (formuleId && formules[formuleId]['iParam' + i + 'Libelle']) {
                         this.element.find('tr.i-param-' + i).show();
                         this.element.find('th.i-param-' + i).html(formules[formuleId]['iParam' + i + 'Libelle']);
                     } else {
                         this.element.find('tr.i-param-' + i).hide();
                     }
 
-                    if (formules[formuleId]['vhParam' + i + 'Libelle']) {
+                    if (formuleId && formules[formuleId]['vhParam' + i + 'Libelle']) {
                         vhPCount++;
                         this.element.find('th.vh-param-' + i).show();
                         this.element.find('th.vh-param-' + i).html(formules[formuleId]['vhParam' + i + 'Libelle']);
@@ -838,9 +837,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
 
 
-            ajoutStructure: function (element, structure, noPrompt)
+            ajoutStructure: function (element, structure)
             {
-                if (noPrompt === true) {
+                if (!structure) {
                     structure = prompt("Ajout d'une nouvelle structure");
                 }
 

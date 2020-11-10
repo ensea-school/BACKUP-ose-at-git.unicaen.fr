@@ -28,7 +28,7 @@ class AutresController extends AbstractController
     {
         $dossierAutre = $this->getEvent()->getParam('dossierAutre');
         $form         = $this->getAutresForm();
-        $title        = 'Édition d\'un type de ressource';
+        $title        = 'Édition champs autre';
 
         $form->bindRequestSave($dossierAutre, $this->getRequest(), function (DossierAutre $autre) {
             try {

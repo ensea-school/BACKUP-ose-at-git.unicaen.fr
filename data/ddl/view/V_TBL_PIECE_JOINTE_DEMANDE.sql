@@ -52,7 +52,7 @@ WHERE
   -- Le RIB n'est demandé QUE s'il est différent!!
   AND CASE
         WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
-        ELSE CASE WHEN replace(i.bic, ' ', '') = replace(d.bic, ' ', '') OR replace(i.iban, ' ', '') = replace(d.iban, ' ', '') THEN 0 ELSE 1 END
+        ELSE CASE WHEN replace(i.bic, ' ', '') = replace(d.bic, ' ', '') AND replace(i.iban, ' ', '') = replace(d.iban, ' ', '') THEN 0 ELSE 1 END
       END = 1
 
   -- Filtre FC

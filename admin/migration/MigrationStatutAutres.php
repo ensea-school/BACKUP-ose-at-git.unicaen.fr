@@ -19,7 +19,9 @@ class MigrationStatutAutres extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasOld('table', 'DOSSIER');
+        //Forcer le paramétrage du statuts AUTRES même après la migration v15
+        return ($this->manager->hasNew('table', 'INTERVENANT_DOSSIER') ||
+            $this->manager->has('table', 'INTERVENANT_DOSSIER'));
     }
 
 

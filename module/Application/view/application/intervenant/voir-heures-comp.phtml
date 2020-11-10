@@ -42,11 +42,11 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
 ?>
 
-<style>
-    th {
-        background-color: #eee
-    }
-</style>
+    <style>
+        th {
+            background-color: #eee
+        }
+    </style>
 <?= $this->form()->openTag($form->prepare()); ?>
     <div class="row">
         <div class="col-sm-4"><?= $this->formControlGroup($form->get('type-volume-horaire')); ?></div>
@@ -91,7 +91,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 <?php endif; ?>
 
 
-<h2>Heures effectives d'enseignement</h2>
+    <h2>Heures effectives d'enseignement</h2>
 <?php if (count($data['s']) > 0): ?>
     <table class="table table-bordered table-condensed table-extra-condensed">
         <tr>
@@ -268,7 +268,7 @@ if ($canPutInTest) {
     echo $this->tag('a', [
         'class' => 'btn btn-default',
         'href'  => $this->url('formule-calcul/test/creer-from-reel', [
-            'intervenant'       => $intervenant->getRouteParam(),
+            'intervenant'       => $intervenant->getId(),
             'typeVolumeHoraire' => $form->get('type-volume-horaire')->getValue(),
             'etatVolumeHoraire' => $form->get('etat-volume-horaire')->getValue(),
         ]),

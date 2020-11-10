@@ -24,7 +24,7 @@ class MigrationStatutAutres extends AbstractMigration
 
 
 
-    public function action(string $constexte)
+    public function action(string $contexte)
     {
         if ($contexte == self::CONTEXTE_PRE) {
             $this->before();
@@ -46,7 +46,7 @@ class MigrationStatutAutres extends AbstractMigration
     {
         $bdd     = $this->manager->getBdd();
         $console = $this->manager->getOseAdmin()->getConsole();
-        $console->println("Traitement données persos statut AUTRES");
+        $console->println("Traitement données perso statut AUTRES");
         $sqlUpdateStatutAutres = "
                 UPDATE 
                     statut_intervenant 

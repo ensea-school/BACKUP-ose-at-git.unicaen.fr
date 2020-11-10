@@ -28,13 +28,18 @@ class MigrationStatutAutres extends AbstractMigration
         ";
 
         $statutAutres = current($bdd->select($sqlStatutAutres));
+        //Si j'ai DOSSIER_ADRESSE alors je suis en V15
+        if (isset($statutAutres['DOSSIER_ADRESSE'])) {
+            //Alors je teste pour voir si pour le statut AUTRES aucun bloc de données perso est activé sinon je les désactive
+            return ($statutAutres['DOSSIER_ADRESSE'] ||
+                $statutAutres['DOSSIER_CONTACT'] ||
+                $statutAutres['DOSSIER_IBAN'] ||
+                $statutAutres['DOSSIER_IDENTITE_COMP'] ||
+                $statutAutres['DOSSIER_INSEE']
+            );
+        }
 
-        return ($statutAutres['DOSSIER_ADRESSE'] ||
-            $statutAutres['DOSSIER_CONTACT'] ||
-            $statutAutres['DOSSIER_IBAN'] ||
-            $statutAutres['DOSSIER_IDENTITE_COMP'] ||
-            $statutAutres['DOSSIER_INSEE']
-        );
+        return false;
     }
 
 

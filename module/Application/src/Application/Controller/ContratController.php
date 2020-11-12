@@ -113,7 +113,7 @@ class ContratController extends AbstractController
         //Récupération email intervenant (Perso puis unicaen)
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmail();
+        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
 
         /* Récupération des services par contrat et par structure (pour les non contractualisés) */
         $services = [
@@ -355,7 +355,7 @@ class ContratController extends AbstractController
         $intervenant        = $contrat->getIntervenant();
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailDossierPerso  = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant   = (!empty($emailDossierPerso)) ? $emailDossierPerso : $intervenant->getEmail();
+        $emailIntervenant   = (!empty($emailDossierPerso)) ? $emailDossierPerso : $intervenant->getEmailPro();
         if (!empty($emailIntervenant)) {
             try {
                 //Utilisation ici du parametre email

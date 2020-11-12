@@ -128,7 +128,7 @@ class ModeleContratService extends AbstractEntityService
         $intervenant        = $contrat->getIntervenant();
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmail();
+        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
         if (empty($emailIntervenant)) {
             throw new \Exception("Aucun email disponible / Envoi du contrat impossible");
         }

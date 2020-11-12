@@ -12,10 +12,31 @@
 $bdd = new \Application\Connecteur\Bdd\BddConnecteur();
 $bdd->setEntityManager($container->get(\Application\Constants::BDD));
 
+/*
+ *
+ * select
+  S.USERNAME,
+  s.sid, s.serial#,
+  s.program,s.osuser,
+  t.sql_id,
+  sql_text
+from
+  v$sqltext_with_newlines t,
+  V$SESSION s
+where
+  t.address =s.sql_address
+  and t.hash_value = s.sql_hash_value
+  and s.status = 'ACTIVE'
+  and s.username <> 'SYSTEM'
+order by
+  s.sid,
+  t.piece
+ */
+
 
 $sql = "
   SELECT 
-    sesion.sid, /* NO_ GET_SQL */
+    sesion.sid,
     sesion.username,
     cpu_time,
     elapsed_time,

@@ -1317,61 +1317,61 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
-    viewQuery := 'SELECT
-            annee_id,
-            type_piece_jointe_id,
-            intervenant_id,
-            demandee,
-            fournie,
-            validee,
-            heures_pour_seuil,
-            obligatoire
-        FROM (
+    viewQuery := 'WITH t AS (
           SELECT
-            COALESCE( pjd.annee_id, pjf.annee_id )                              annee_id,
-            COALESCE( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id )      type_piece_jointe_id,
-            COALESCE( pjd.intervenant_id, pjf.intervenant_id )                  intervenant_id,
-            CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END              demandee,
-            CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END                 fournie,
-            CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END              validee,
-            COALESCE(pjd.heures_pour_seuil,0)                                   heures_pour_seuil,
-            COALESCE(pjd.obligatoire,1)                                         obligatoire,
-            pjf.date_archive                                                    date_archive,
-            rank() over (partition by pjd.annee_id, pjd.code_intervenant, pjd.type_piece_jointe_id order by pjf.annee_id DESC)  rank1
+            pjd.annee_id                                                annee_id,
+            pjd.type_piece_jointe_id                                    type_piece_jointe_id,
+            pjd.intervenant_id                                          intervenant_id,
+            CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END      demandee,
+            SUM(CASE WHEN pjf.id IS NULL THEN 0 ELSE 1 END)             fournie,
+            SUM(CASE WHEN pjf.validation_id IS NULL THEN 0 ELSE 1 END)  validee,
+            COALESCE(pjd.heures_pour_seuil,0)                           heures_pour_seuil,
+            COALESCE(pjd.obligatoire,1)                                 obligatoire
           FROM
-            tbl_piece_jointe_demande pjd
-            FULL JOIN (
-              SELECT
-                pjf.annee_id,
-                pjf.type_piece_jointe_id,
-                pjf.intervenant_id,
-                pjf.code_intervenant,
-                pjf.date_validite,
-                pjf.duree_vie,
-                pjf.date_archive,
-                COUNT(*) count,
-                SUM(CASE WHEN validation_id IS NULL THEN 0 ELSE 1 END) validation,
-                SUM(CASE WHEN fichier_id IS NULL THEN 0 ELSE 1 END) fichier
-              FROM
-                tbl_piece_jointe_fournie pjf
-              WHERE
-                1=1
-              GROUP BY
-                pjf.annee_id,
-                pjf.intervenant_id,
-                pjf.code_intervenant,
-                pjf.type_piece_jointe_id,
-                pjf.date_validite,
-                pjf.duree_vie,
-                pjf.date_archive
-            ) pjf
-            ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
-            AND pjd.code_intervenant = pjf.code_intervenant
-            AND pjd.annee_id BETWEEN pjf.annee_id AND (pjf.annee_id + pjf.duree_vie - 1)
-            AND pjd.annee_id BETWEEN pjf.annee_id AND NVL(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
-          ) t
+                      tbl_piece_jointe_demande  pjd
+            LEFT JOIN tbl_piece_jointe_fournie  pjf ON pjf.code_intervenant = pjd.code_intervenant
+                                                   AND pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
+                                                   AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
           WHERE
-            t.rank1 = 1';
+            1=1
+            /*@INTERVENANT_ID=pjd.intervenant_id*/
+            /*@ANNEE_ID=pjd.annee_id*/
+          GROUP BY
+            pjd.annee_id, pjd.type_piece_jointe_id, pjd.intervenant_id, pjd.intervenant_id, pjd.heures_pour_seuil, pjd.obligatoire
+
+          UNION ALL
+
+          SELECT
+            pjf.annee_id                                                annee_id,
+            pjf.type_piece_jointe_id                                    type_piece_jointe_id,
+            pjf.intervenant_id                                          intervenant_id,
+            0                                                           demandee,
+            1                                                           fournie,
+            SUM(CASE WHEN pjf.validation_id IS NULL THEN 0 ELSE 1 END)  validee,
+            0                                                           heures_pour_seuil,
+            0                                                           obligatoire
+          FROM
+                      tbl_piece_jointe_fournie pjf
+            LEFT JOIN tbl_piece_jointe_demande pjd ON pjd.intervenant_id = pjf.intervenant_id
+                                                  AND pjd.type_piece_jointe_id = pjf.type_piece_jointe_id
+          WHERE
+            pjd.id IS NULL
+            /*@INTERVENANT_ID=pjf.intervenant_id*/
+            /*@ANNEE_ID=pjf.annee_id*/
+          GROUP BY
+            pjf.annee_id, pjf.type_piece_jointe_id, pjf.intervenant_id
+        )
+        SELECT
+          annee_id,
+          type_piece_jointe_id,
+          intervenant_id,
+          demandee,
+          CASE WHEN fournie <> 0 THEN 1 ELSE 0 END fournie,
+          CASE WHEN validee <> 0 THEN 1 ELSE 0 END validee,
+          heures_pour_seuil,
+          obligatoire
+        FROM
+          t';
 
     IF param IS NULL THEN
       filter := '1=1';
@@ -1566,8 +1566,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           pj.id piece_jointe_id,
           v.id validation_id,
           f.id fichier_id,
-          MIN(tpjs.duree_vie) duree_vie,
-          MIN(i.annee_id+tpjs.duree_vie) date_validite,
+          CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN 1 ELSE MIN(COALESCE(tpjs.duree_vie,1)) END duree_vie,
+          CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN i.annee_id+1 ELSE MIN(i.annee_id+COALESCE(tpjs.duree_vie,1)) END date_validite,
           pj.date_archive date_archive
         FROM
                     piece_jointe          pj
@@ -1576,7 +1576,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                JOIN piece_jointe_fichier pjf ON pjf.piece_jointe_id = pj.id
                JOIN fichier                f ON f.id = pjf.fichier_id
                                             AND f.histo_destruction IS NULL
-                JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
+                LEFT JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
                                                    AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
                                                    AND tpjs.HISTO_DESTRUCTION IS NULL
 

@@ -7,8 +7,8 @@ SELECT
   pj.id piece_jointe_id,
   v.id validation_id,
   f.id fichier_id,
-  CASE WHEN MIN(tpjs.duree_vie) IS NULL THEN 1 ELSE MIN(tpjs.duree_vie) END duree_vie,
-  CASE WHEN MIN(tpjs.duree_vie) IS NULL THEN i.annee_id+1 ELSE MIN(i.annee_id+tpjs.duree_vie) END date_validite,
+  CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN 1 ELSE MIN(COALESCE(tpjs.duree_vie,1)) END duree_vie,
+  CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN i.annee_id+1 ELSE MIN(i.annee_id+COALESCE(tpjs.duree_vie,1)) END date_validite,
   pj.date_archive date_archive
 FROM
             piece_jointe          pj

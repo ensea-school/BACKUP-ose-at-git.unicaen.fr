@@ -133,7 +133,6 @@ SELECT
 FROM
   srci
   LEFT JOIN intervenant i ON i.source_code = srci.source_code AND i.annee_id = unicaen_import.get_current_annee AND i.histo_destruction IS NULL
-  LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
 WHERE
   filtre1 = 1
 

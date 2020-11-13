@@ -157,7 +157,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN cell('AW',l) + cell('AY',l);
+        RETURN (cell('AW',l) + cell('AY',l)) * vh.TAUX_FI;
       END IF;
 
 
@@ -192,32 +192,32 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-    -- X=SI($H20="Référentiel";0;$BB20*E20)
+    -- X=SI($H20="Référentiel";0;$BC20*E20)
     WHEN c = 'X' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN cell('BB',l) * vh.taux_fi;
+        RETURN cell('BC',l) * vh.taux_fi;
       END IF;
 
 
 
-    -- Y=SI($H20="Référentiel";0;$BB20*F20)
+    -- Y=SI($H20="Référentiel";0;$BC20*F20)
     WHEN c = 'Y' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN cell('BB',l) * vh.taux_fa;
+        RETURN cell('BC',l) * vh.taux_fa;
       END IF;
 
 
 
-    -- Z=SI($H20="Référentiel";0;$BB20*G20)
+    -- Z=SI($H20="Référentiel";0;$BC20*G20)
     WHEN c = 'Z' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN cell('BB',l) * vh.taux_fc;
+        RETURN cell('BC',l) * vh.taux_fc;
       END IF;
 
 
@@ -228,10 +228,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-    -- AB=SI($H20="Référentiel";$BC20;0)
+    -- AB=SI($H20="Référentiel";$BE20;0)
     WHEN c = 'AB' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
-        RETURN cell('BC',l);
+        RETURN cell('BE',l);
       ELSE
         RETURN 0;
       END IF;
@@ -305,16 +305,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-    -- AJ=SI(AI$35<i_param_1;AI20;AI20/AI$35*i_param_1)
-    -- Modifié!!!
+    -- AJ=SI(AI$35<$AJ$9;AI20;SI(AI$35=0;0;AI20/AI$35*$AJ$9))
     WHEN c = 'AJ' AND v >= 1 THEN
-      IF cell('AI35') < i.param_1 THEN
+      IF cell('AI35') < CELL('AJ9') THEN
         RETURN cell('AI',l);
       ELSE
         IF cell('AI35') = 0 THEN
           RETURN 0;
         ELSE
-          RETURN cell('AI',l) / cell('AI35') * i.param_1;
+          RETURN cell('AI',l) / cell('AI35') * CELL('AJ9');
         END IF;
       END IF;
 
@@ -477,8 +476,18 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-    -- BC=SI(i_depassement_service_du_sans_hc="Non";SI($AD20<>2;0;$M20*$AF20*$BA20);0)
+    -- BC=SI(BB$35>0;BB20/BB$35*MIN(BB$35;$AJ$11);0)
     WHEN c = 'BC' AND v >= 1 THEN
+      IF CELL('BB35') > 0 THEN
+        RETURN CELL('BB',l) / CELL('BB35') * LEAST( CELL('BB35'), CELL('AJ11') );
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BD=SI(i_depassement_service_du_sans_hc="Non";SI($AD20<>2;0;$M20*$AF20*$BA20);0)
+    WHEN c = 'BD' AND v >= 1 THEN
       IF NOT i.DEPASSEMENT_SERVICE_DU_SANS_HC THEN
         --SI($AD20<>2;0;$M20*$AF20*$BA20)
         IF cell('AD',l) <> 2 THEN
@@ -486,6 +495,17 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
         ELSE
           RETURN vh.heures * cell('AF',l) * cell('BA',l);
         END IF;
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BE=SI(BD$35>0;BD20/BD$35*MIN(BD$35;$AJ$10;$AJ$11-$BC$35);0)
+    WHEN c = 'BE' AND v >= 1 THEN
+      IF CELL('BD35') > 0 THEN
+        --BD20/BD$35*MIN(BD$35;$AJ$10;$AJ$11-$BC$35)
+        RETURN CELL('BD',l) / CELL('BD35') * LEAST( CELL('BD35'), CELL('AJ10'), CELL('AJ11')-CELL('BC35') );
       ELSE
         RETURN 0;
       END IF;
@@ -588,6 +608,18 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
+    -- BD35=SOMME(BD20:BD34)
+    WHEN c = 'BD35' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BD');
+
+
+
+    -- BE35=SOMME(BE20:BE34)
+    WHEN c = 'BE35' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BE');
+
+
+
     -- AW37=AW35
     WHEN c = 'AW37' AND v >= 1 THEN
       RETURN cell('AW35');
@@ -610,6 +642,33 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
     WHEN c = 'BC37' AND v >= 1 THEN
       RETURN cell('BB35') + cell('BC35');
 
+
+
+    -- AJ9=SI(i_heures_decharge=0;0;i_param_1*i_service_du/i_heures_decharge)
+    WHEN c = 'AJ9' AND v >= 1 THEN
+      IF i.heures_service_statutaire = 0 THEN
+        RETURN 0;
+      ELSE
+        RETURN i.param_1 * i.service_du / i.heures_service_statutaire;
+      END IF;
+
+
+    -- AJ10=SI(i_heures_decharge=0;0;i_param_2*i_service_du/i_heures_decharge)
+    WHEN c = 'AJ10' AND v >= 1 THEN
+      IF i.heures_service_statutaire = 0 THEN
+        RETURN 0;
+      ELSE
+        RETURN i.param_2 * i.service_du / i.heures_service_statutaire;
+      END IF;
+
+
+    -- AJ11=SI(i_heures_decharge=0;0;i_param_3*i_service_du/i_heures_decharge)
+    WHEN c = 'AJ11' AND v >= 1 THEN
+      IF i.heures_service_statutaire = 0 THEN
+        RETURN 0;
+      ELSE
+        RETURN i.param_3 * i.service_du / i.heures_service_statutaire;
+      END IF;
 
 
     ELSE
@@ -646,7 +705,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
       fi.*,
       si.plafond_referentiel_service param_1,
       si.plafond_referentiel_hc      param_2,
-      NULL param_3,
+      si.plafond_hc_hors_remu_fc     param_3,
       NULL param_4,
       NULL param_5
     FROM

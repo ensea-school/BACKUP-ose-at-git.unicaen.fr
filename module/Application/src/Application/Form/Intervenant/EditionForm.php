@@ -218,19 +218,25 @@ class EditionForm extends AbstractForm
         $this->add($utilisateur);
 
         $this->add([
-            'name'    => 'login',
-            'type'    => 'Text',
-            'options' => [
+            'name'       => 'login',
+            'type'       => 'Text',
+            'attributes' => [
+                'autocomplete' => 'false',
+            ],
+            'options'    => [
                 'label' => 'Login',
             ],
 
         ]);
 
         $this->add([
-            'name'    => 'password',
-            'type'    => 'Password',
-            'options' => [
-                'label' => 'Mot de passe',
+            'name'       => 'password',
+            'type'       => 'Password',
+            'attributes' => [
+                'autocomplete' => 'false',
+            ],
+            'options'    => [
+                'label' => 'Mot de passe (6 caractères min.)',
             ],
 
         ]);
@@ -409,6 +415,17 @@ class EditionForm extends AbstractForm
                         $element->setAttribute('title', 'Champ intialisé à partir de ' . $object->getSource());
                         $this->getHydrator()->setReadonly($element->getName(), true);
                     }
+                }
+            }
+            if (!$object->getId()) {
+                $syncElements = ['syncStatut', 'syncStructure', 'source', 'sourceCode'];
+                foreach ($syncElements as $elementName) {
+                    $element = $this->get($elementName);
+
+                    /** @var Element $element */
+                    $element->setAttribute('readonly', true);
+                    $element->setAttribute('disabled', true);
+                    $element->setAttribute('title', 'Paramètres de synchronisation inutiles dans le cas de la création d\'une nouvelle fiche');
                 }
             }
         }

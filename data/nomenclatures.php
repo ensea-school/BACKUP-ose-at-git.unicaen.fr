@@ -186,6 +186,7 @@ return [
             'PACKAGE_NAME'      => 'FORMULE_POITIERS',
             'I_PARAM_1_LIBELLE' => 'Heures max. référentiel en service',
             'I_PARAM_2_LIBELLE' => 'Heures max. référentiel en HC',
+            'I_PARAM_3_LIBELLE' => 'Heures max. enseignement en HC',
         ],
     ],
 

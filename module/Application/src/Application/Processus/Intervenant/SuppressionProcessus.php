@@ -112,7 +112,7 @@ class SuppressionProcessus
             foreach ($entities['Contrat'] as $v) {
                 /** @var Contrat $avenant */
                 $avenant = $v->getEntity();
-                if ($avenant->estUnAvenant()){
+                if ($avenant->estUnAvenant()) {
                     $this->getServiceContrat()->delete($v->getEntity(), false);
                 }
             }
@@ -175,8 +175,8 @@ class SuppressionProcessus
         }
 
         /* Dossier */
-        if (isset($entities['Dossier'])) {
-            foreach ($entities['Dossier'] as $v) {
+        if (isset($entities['IntervenantDossier'])) {
+            foreach ($entities['IntervenantDossier'] as $v) {
                 $this->getServiceDossier()->delete($v->getEntity(), false);
             }
         }

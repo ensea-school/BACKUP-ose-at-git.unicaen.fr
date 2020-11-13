@@ -427,7 +427,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           1                                                         objectif,
           CASE
             WHEN e.code = ''DONNEES_PERSO_SAISIE'' THEN
-              CASE WHEN d.dossier_id IS NULL THEN 0 ELSE 1 END
+              (d.completude_statut + d.completude_identite + d.completude_identite_comp + d.completude_contact + d.completude_adresse + d.completude_insee + d.completude_iban + d.completude_employeur) / 8
 
             WHEN e.code = ''DONNEES_PERSO_VALIDATION'' THEN
               CASE WHEN d.validation_id IS NULL THEN 0 ELSE 1 END

@@ -19,7 +19,7 @@ class MigrationPrivileges extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasNew('table', 'DOSSIER_CHAMP_AUTRES');
+        return $this->manager->hasNew('table', 'DOSSIER_CHAMP_AUTRE');
     }
 
 

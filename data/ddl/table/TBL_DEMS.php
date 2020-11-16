@@ -5,7 +5,7 @@
 return [
     'name'        => 'TBL_DEMS',
     'temporary'   => FALSE,
-    'logging'     => TRUE,
+    'logging'     => FALSE,
     'commentaire' => NULL,
     'sequence'    => 'TBL_DEMS_ID_SEQ',
     'columns'     => [

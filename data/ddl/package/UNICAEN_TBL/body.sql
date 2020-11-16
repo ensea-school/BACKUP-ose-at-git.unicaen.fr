@@ -135,13 +135,26 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
     PROCEDURE CALCULER_DEMANDES IS
+        TYPE t_dems IS TABLE OF tbl_dems%rowtype INDEX BY PLS_INTEGER;
+        dems t_dems;
+        i NUMERIC DEFAULT 0;
     BEGIN
         FOR d IN (
             SELECT DISTINCT tbl_name, param, value FROM tbl_dems
-            )
-            LOOP
-                calculer(d.tbl_name, d.param, d.value);
-            END LOOP;
+        ) LOOP
+            i := i + 1;
+            dems(i).tbl_name := d.tbl_name;
+            dems(i).param := d.param;
+            dems(i).value := d.value;
+        END LOOP;
+        DELETE FROM TBL_DEMS;
+
+        i := dems.FIRST;
+        LOOP EXIT WHEN i IS NULL;
+            calculer(dems(i).tbl_name, dems(i).param, dems(i).value);
+
+            i := dems.NEXT(i);
+        END LOOP;
 
         IF HAS_DEMANDES THEN -- pour les boucles !!
             CALCULER_DEMANDES;

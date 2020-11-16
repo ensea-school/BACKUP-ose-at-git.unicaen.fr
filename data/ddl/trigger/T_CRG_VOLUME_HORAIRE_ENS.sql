@@ -5,9 +5,9 @@ CREATE OR REPLACE TRIGGER "T_CRG_VOLUME_HORAIRE_ENS"
   IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF DELETING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'element_pedagogique_id', :OLD.element_pedagogique_id );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'ELEMENT_PEDAGOGIQUE_ID', :OLD.element_pedagogique_id );
   ELSE
-    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'element_pedagogique_id', :NEW.element_pedagogique_id );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'ELEMENT_PEDAGOGIQUE_ID', :NEW.element_pedagogique_id );
   END IF;
 
 END;

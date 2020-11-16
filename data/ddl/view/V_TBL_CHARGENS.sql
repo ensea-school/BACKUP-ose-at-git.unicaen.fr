@@ -30,8 +30,13 @@ FROM
 
        JOIN scenario_noeud              sn ON sn.id = sne.scenario_noeud_id
                                           AND sn.histo_destruction IS NULL
+                                          /*@NOEUD_ID=sn.noeud_id*/
+                                          /*@SCENARIO_ID=sn.scenario_id*/
 
        JOIN tbl_noeud                       n ON n.noeud_id = sn.noeud_id
+                                          /*@ANNEE_ID=n.annee_id*/
+                                          /*@ELEMENT_PEDAGOGIQUE_ID=n.element_pedagogique_id*/
+                                          /*@ETAPE_ID=n.element_pedagogique_etape_id*/
 
        JOIN volume_horaire_ens         vhe ON vhe.element_pedagogique_id = n.element_pedagogique_id
                                           AND vhe.histo_destruction IS NULL
@@ -56,6 +61,9 @@ FROM
 
   LEFT JOIN scenario_noeud_seuil       sns ON sns.scenario_noeud_id = sn.id
                                           AND sns.type_intervention_id = ti.id
+WHERE
+  1=1
+  /*@ETAPE_ENS_ID=sne.etape_id*/
 )
 SELECT
   annee_id,

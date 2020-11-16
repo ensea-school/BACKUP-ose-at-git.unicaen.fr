@@ -17,9 +17,9 @@ CREATE OR REPLACE TRIGGER "T_CRG_SCENARIO_NOEUD_EFFECTIF"
   ) LOOP
 
     IF p.etape_id IS NOT NULL THEN
-      UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'etape_ens_id', p.etape_id );
+      UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'ETAPE_ENS_ID', p.etape_id );
     END IF;
-    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'noeud_id', p.noeud_id );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'chargens', 'NOEUD_ID', p.noeud_id );
 
   END LOOP;
 

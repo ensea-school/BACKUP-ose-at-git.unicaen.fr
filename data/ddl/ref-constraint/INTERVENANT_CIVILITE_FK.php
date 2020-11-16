@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'        => 'INTERVENANTS_CIVILITES_FK',
+    'name'        => 'INTERVENANT_CIVILITE_FK',
     'table'       => 'INTERVENANT',
     'rtable'      => 'CIVILITE',
     'delete_rule' => NULL,

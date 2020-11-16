@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_DOSSIER_DOSSIER_FK',
+    'name'    => 'TBL_DOSSIER_INT_DOSSIER_FK',
     'unique'  => FALSE,
     'table'   => 'TBL_DOSSIER',
     'columns' => [

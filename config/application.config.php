@@ -104,6 +104,7 @@ class AppConfig
             'UnicaenImport',
             'UnicaenTbl',
             'Application',
+            'ExportRH',
         ];
 
         if (!self::inConsole()) {

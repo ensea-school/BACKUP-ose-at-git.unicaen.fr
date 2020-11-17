@@ -148,6 +148,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             dems(i).value := d.value;
         END LOOP;
         DELETE FROM TBL_DEMS;
+        COMMIT;
 
         i := dems.FIRST;
         LOOP EXIT WHEN i IS NULL;

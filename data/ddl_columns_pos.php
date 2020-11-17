@@ -1360,12 +1360,6 @@ return [
         'EDITE',
         'SIGNE',
     ],
-    'TBL_DEMS'                       => [
-        'ID',
-        'TBL_NAME',
-        'PARAM',
-        'VALUE',
-    ],
     'TBL_DMEP_LIQUIDATION'           => [
         'ID',
         'ANNEE_ID',

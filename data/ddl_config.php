@@ -7,6 +7,7 @@ return [
         'ADRESSE_STRUCTURE',
         'INTERVENANT_SAISIE',
         'DOSSIER',
+        'TBL_DEMS',
 
     ]],
     'materialized-view' => ['includes' => [

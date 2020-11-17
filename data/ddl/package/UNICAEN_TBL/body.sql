@@ -117,7 +117,9 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
   PROCEDURE ANNULER_DEMANDES(TBL_NAME VARCHAR2) IS
   BEGIN
-    dems(tbl_name).delete;
+    IF dems.exists(tbl_name) THEN
+      dems(tbl_name).delete;
+    END IF;
   END;
 
 

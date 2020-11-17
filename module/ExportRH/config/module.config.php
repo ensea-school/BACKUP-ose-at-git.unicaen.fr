@@ -1,8 +1,12 @@
 <?php
 
-namespace Application;
+namespace ExportRH;
 
 return [
+
+    'export-rh' => [
+        'siham-ws' => [],
+    ],
 
     'router' => [
         'routes' => [
@@ -11,6 +15,7 @@ return [
 
     'service_manager' => [
         'factories' => [
+            Connecteur\Siham\SihamConnecteur::class => Connecteur\Siham\SihamConnecteurFactory::class,
         ],
     ],
     'view_helpers'    => [
@@ -19,7 +24,7 @@ return [
     ],
     'controllers'     => [
         'factories' => [
-            'ExportRH\Controller\Index' => Controller\Factory\IndexControllerFactory::class,
+//            'ExportRH\Controller\Index' => Controller\Factory\IndexControllerFactory::class,
         ],
     ],
     'view_manager'    => [

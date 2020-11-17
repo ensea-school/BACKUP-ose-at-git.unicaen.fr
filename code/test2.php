@@ -8,5 +8,6 @@
  * @var $viewFile   string
  */
 
-$sql = 'update intervenant set utilisateur_code = \'dd\' where id = 196998;';
-$container->get(\Application\Constants::BDD)->getConnection()->execute($sql);
+$sc = $container->get(\ExportRH\Connecteur\Siham\SihamConnecteur::class);
+
+$sc->test();

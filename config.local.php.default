@@ -278,4 +278,20 @@ return [
          */
         'dir'      => __DIR__ . '/data/fichiers',
     ],
+
+
+    /* Siham */
+    'siham-ws' => [
+        /* Détermine si le connecteur Siham-ws est actif ou non */
+        'actif' => false,
+
+        /* URI d'accès aux services Web de Siham */
+        'uri' => '',
+
+        /* Login d'accès aux web-services de Siham */
+        'login' => '',
+
+        /* Mot de passe */
+        'password' => '',
+    ],
 ];

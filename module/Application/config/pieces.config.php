@@ -277,11 +277,11 @@ return [
         'guards'             => [
             PrivilegeController::class => [
                 /* Dossier */
-                [//Créer un droit archivage
-                 'controller' => 'Application\Controller\Dossier',
-                 'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION],
-                 'assertion'  => Assertion\DossierPiecesAssertion::class,
+                [
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['index'],
+                    'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Dossier',
@@ -311,11 +311,11 @@ return [
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
                 ],
 
-                [//Créer un droit archivage
-                 'controller' => 'Application\Controller\IntervenantDossier',
-                 'action'     => ['index'],
-                 'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_EDITION],
-                 'assertion'  => Assertion\DossierPiecesAssertion::class,
+                [
+                    'controller' => 'Application\Controller\IntervenantDossier',
+                    'action'     => ['index'],
+                    'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_IDENTITE_EDITION],
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
 
 
@@ -371,6 +371,12 @@ return [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['televerser', 'supprimer', 'archiver'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_EDITION,
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
+                ],
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['archiver'],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE,
                     'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [

@@ -107,6 +107,7 @@ return [
             'edition'               => 'Édition',
             'validation'            => 'Validation',
             'devalidation'          => 'Dévalidation',
+            'archivage'             => 'Archivage',
             'gestion-edition'       => 'Gestion des pièces justificatives (édition)',
             'gestion-visualisation' => 'Gestion des pièces justificatives (visualisation)',
             'telechargement'        => 'Téléchargement',

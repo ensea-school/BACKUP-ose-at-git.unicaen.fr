@@ -7,8 +7,10 @@
  * @var $intervenant  \Application\Entity\Db\Intervenant
  * @var $canEdit      boolean
  * @var $canValider   boolean
+ * @var $canArchiver  boolean
  * @var $canDevalider boolean
  * @var $obligatoire  boolean
+ * @var $annee        \Application\Entity\Db\Annee
  */
 
 $hasValidation = $pj && $pj->getValidation();
@@ -48,26 +50,29 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
 >
     <div class="panel-heading panel-heading-h3">
         <h3>
-            <?php if ((!$hasValidation && $canValider) || ($hasValidation && $canDevalider)): ?>
-
-                <?php if ($pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()): ?>
-                    <div class="validation-bar pull-right"
-                         data-url="<?= $this->url('piece-jointe/intervenant/archiver', ['pieceJointe' => $pj->getId()], [], true) ?>">
-                        <a class="archiver-pj btn btn-success"
-                           href="<?= $this->url('piece-jointe/intervenant/archiver', ['pieceJointe' => $pj->getId()], [], true) ?>"
-                           title="Archiver cette pièce jointe pour pouvoir en fournir une plus récente."
-                           data-loading-text="Patientez..."
-                        >
-                            <span class="glyphicon glyphicon-refresh"></span> Modifier (si besoin)
-                        </a>
-                    </div>
-                <?php else: ?>
-                    <div class="validation-bar pull-right"
-                         data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
-                        <?= $this->partial('application/piece-jointe/validation', compact('pj')) ?>
-                    </div>
-                <?php endif; ?>
+            <?php if ($hasValidation && $canArchiver && $pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()): ?>
+                <div class="validation-bar pull-right"
+                     data-url="<?= $this->url('piece-jointe/intervenant/archiver', ['pieceJointe' => $pj->getId()], [], true) ?>">
+                    <a class="archiver-pj btn btn-success pop-ajax"
+                       href="<?= $this->url('piece-jointe/intervenant/archiver', ['pieceJointe' => $pj->getId()], [], true) ?>"
+                       data-loading-text="Patientez..."
+                       title="Archiver cette pièce jointe pour en fournir une plus récente ?"
+                       data-content="Archiver cette pièce jointe pour en fournir une plus récente ?"
+                       data-confirm="true"
+                       data-submit-reload="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                    >
+                        <span class="glyphicon glyphicon-refresh"></span> Modifier (si besoin)
+                    </a>
+                </div>
+            <?php elseif ((!$hasValidation && $canValider && $pj && $pj->getIntervenant()->getAnnee()->getId() == $annee->getId()) || ($hasValidation && $canDevalider && $pj && $pj->getIntervenant()->getAnnee()->getId() == $annee->getId())): ?>
+                <div class="validation-bar pull-right"
+                     data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
+                    <?= $this->partial('application/piece-jointe/validation', compact('pj')) ?>
+                </div>
             <?php endif; ?>
+
             <!--Infos sur document fourni sur une autre année-->
             <?=
             ($pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()) ? $type . "  <span style=\"font-size:0.6em;\">Fourni(e) en " . $pj->getIntervenant()->getAnnee()->getId() . "</span>" : $type;

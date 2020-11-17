@@ -190,6 +190,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const PIECE_JUSTIFICATIVE_TELECHARGEMENT                  = 'piece-justificative-telechargement';
     const PIECE_JUSTIFICATIVE_VALIDATION                      = 'piece-justificative-validation';
     const PIECE_JUSTIFICATIVE_VISUALISATION                   = 'piece-justificative-visualisation';
+    const PIECE_JUSTIFICATIVE_ARCHIVAGE                       = 'piece-justificative-archivage';
     const PILOTAGE_ECARTS_ETATS                               = 'pilotage-ecarts-etats';
     const PILOTAGE_VISUALISATION                              = 'pilotage-visualisation';
     const PLAFONDS_GESTION_EDITION                            = 'plafonds-gestion-edition';

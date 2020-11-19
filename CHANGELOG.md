@@ -44,6 +44,14 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 * Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
 
+
+# OSE 14.12 (à venir)
+
+## Corrections de bugs
+
+* Le bouton de report des services de l'année précédente vers l'année en cours est de nouveau opérationnel
+
+
 # OSE 14.11
 
 ## Nouveautés
@@ -57,6 +65,8 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * L'indicateur 340 était inopérant
 * Suite au passage de composer en 2.0 stable, forcer l'installation/update de ose avec la version 1.0 de composer
 
+
+
 # OSE 14.10
 
 ## Nouveautés
@@ -69,6 +79,8 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Lors de la modification du référentiel réalisé, l'horodatage (nom et date de modification) n'impacte plus le référentiel prévisionnel.
 * Bug de division par 0 sur la formule de calcul de Poitiers
 * La vue V_INDICATEUR_361 se crée maintenant correctement
+
+
 
 # OSE 14.9
 

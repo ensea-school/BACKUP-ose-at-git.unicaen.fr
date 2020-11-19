@@ -27,7 +27,7 @@ Objectif : Doubles statuts et refonte des données personnelles
 * Adaptations du connecteur Harpège
 * Possibilité d'importer un uniquement élément pédagogique depuis la page "Offre de formation"
 * Possibilité de mettre à jour par synchronisation et manuellement un élément pédagogique spécifique par déclenchement d'import
-* Ajout d'un nouveau privilège 'Archivage' pour donner la possiblité à un statut d'intervenant de mettre à jour une pièce jointe lorsque celle ci a été fourni une année antérieure à l'année en cours (Bouton "Modifiez si besoin")
+* Ajout d'un nouveau privilège 'Archivage' pour donner la possiblité à un statut d'intervenant de mettre à jour une pièce jointe lorsque celle ci a été fourni une année antérieure à l'année en cours (Bouton "Modifier si besoin")
 
 ## Notes de mise à jour
 

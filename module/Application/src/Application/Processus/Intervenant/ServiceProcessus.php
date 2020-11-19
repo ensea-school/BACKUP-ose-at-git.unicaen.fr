@@ -4,7 +4,7 @@ namespace Application\Processus\Intervenant;
 
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TblService;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -14,30 +14,18 @@ class ServiceProcessus
     use IntervenantServiceAwareTrait;
 
 
-
-    public function canPrevuToPrevu(Intervenant $intervenant)
+    public function canInitializePrevu(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire)
     {
         $intervenant = $this->getServiceIntervenant()->getPrecedent($intervenant);
         if (!$intervenant) return false;
 
-        $dql = "
-        SELECT
-          s        
-        FROM
-          " . TblService::class . " s
-          JOIN s.typeVolumeHoraire tvh
-        WHERE
-            s.intervenant = :intervenant
-            AND tvh.code = 'PREVU'
-            AND s.valide > 0
-        ";
+        $sql = "SELECT valide FROM tbl_service WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND valide > 0";
+        $res = $this->getEntityManager()->getConnection()->fetchOne($sql, [
+            'intervenant'       => $intervenant->getId(),
+            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+        ]);
 
-        $query = $this->getEntityManager()->createQuery($dql)->setMaxResults(1);
-        $query->setParameters(compact('intervenant'));
-        $s = $query->getResult();
-
-        return count($s) > 0;
-
+        return $res !== false;
     }
 
 }

@@ -45,7 +45,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
 
 
-# OSE 14.12 (à venir)
+# OSE 14.12
 
 ## Corrections de bugs
 

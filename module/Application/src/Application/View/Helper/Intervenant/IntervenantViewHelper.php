@@ -22,7 +22,6 @@ class IntervenantViewHelper extends AbstractHtmlElement
     use IntervenantServiceAwareTrait;
 
 
-
     /**
      *
      * @param Intervenant $intervenant
@@ -75,7 +74,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
             'metier'      => [
                 "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
                 "Statut de l'intervenant"   => $entity->getStatut(),
-                "N° {$entity->getSource()}" => $entity->getSourceCode(),
+                "N° {$entity->getSource()}" => $entity->getCode(),
                 "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Montant de l'indemnité FC" => $entity->getMontantIndemniteFc() !== null ? \UnicaenApp\Util::formattedEuros($entity->getMontantIndemniteFc()) : '<span class="inconnu">(Inconnue)</span>',
             ],

@@ -96,6 +96,9 @@ En voici la liste :
 * [FCA Manager](FCA Manager/Connecteur.md) également pour l'offre de formation
 * [Calcul](Calcul/Connecteur.md) pour des données essentiellement liées à l'offre de formation
 
+Si vous ne trouvez pas votre bonheur dans les connecteurs déjà fournis, il vous est possible de développer vos propres connecteurs.
+Vous pourrez suivre pour cela la [procédure de création](creer.md).
+
 Et voici ci-dessous la matrice des connecteurs qui reprend, table par table, ce qu'ils peuvent fournir.
 Les tables sont présentées dans l'ordre où il faut les traiter.
 

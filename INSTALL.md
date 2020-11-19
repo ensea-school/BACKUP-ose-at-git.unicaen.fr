@@ -182,7 +182,7 @@ A adapter à vos besoins.
 	php_value post_max_size 100M
 	php_value max_execution_time 300
 	php_value max_input_time 60
-	php_value memory_limit 512M
+	php_value memory_limit 1024M
 
 	<Directory /var/www/ose/public>
 		Options Indexes FollowSymLinks MultiViews
@@ -222,7 +222,7 @@ Alias /ose			                /var/www/ose/public
 	php_value post_max_size 100M
 	php_value max_execution_time 300
 	php_value max_input_time 60
-	php_value memory_limit 256M
+	php_value memory_limit 1024M
 </Directory>
 ```
 N'oubliez pas de recharger la configuration d'Apache (systemctl reload apache2)!

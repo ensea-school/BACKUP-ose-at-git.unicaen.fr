@@ -43,7 +43,6 @@ class ChargensController extends AbstractController
     use SeuilChargeServiceAwareTrait;
 
 
-
     public function indexAction()
     {
         return [];
@@ -239,7 +238,7 @@ class ChargensController extends AbstractController
         ]);
 
         /** @var Scenario $scenario */
-        $scenario = $this->params()->fromRoute('scenario');
+        $scenario = $scenario = $this->getEvent()->getParam('scenario');
 
         $filtre = $this->getFormChargensScenarioFiltre();
         if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
@@ -300,7 +299,7 @@ class ChargensController extends AbstractController
     public function seuilCalcHeuresAction()
     {
         /** @var Scenario $scenario */
-        $scenario = $this->params()->fromRoute('scenario');
+        $scenario = $scenario = $this->getEvent()->getParam('scenario');
 
         $provider = $this->getProviderChargens();
         $provider->setScenario($scenario);
@@ -320,7 +319,7 @@ class ChargensController extends AbstractController
         ]);
 
         /** @var Scenario $scenario */
-        $scenario = $this->params()->fromRoute('scenario');
+        $scenario = $scenario = $this->getEvent()->getParam('scenario');
 
         $filtre = $this->getFormChargensScenarioFiltre();
         if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
@@ -352,7 +351,7 @@ class ChargensController extends AbstractController
     public function exportCsvAction()
     {
         /** @var Scenario $scenario */
-        $scenario = $this->params()->fromRoute('scenario');
+        $scenario = $this->getEvent()->getParam('scenario');
 
         $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();

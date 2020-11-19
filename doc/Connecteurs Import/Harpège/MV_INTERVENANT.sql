@@ -9,6 +9,7 @@ i AS (
     psc.c_sous_section_cnu                             z_discipline_id_sous_cnu,
     psc.c_specialite_cnu                               z_discipline_id_spe_cnu,
     pss.c_disc_second_degre                            z_discipline_id_dis2deg,
+    MIN(a.d_deb_affectation)                           date_debut,
     MAX(a.d_fin_affectation)                           date_fin,
     30                                                 poids
   FROM
@@ -18,9 +19,10 @@ i AS (
     LEFT JOIN periodes_sp_sd_deg@harpprod pss                ON pss.no_dossier_pers = a.no_dossier_pers AND pss.no_seq_carriere = a.no_seq_carriere AND COALESCE(a.d_fin_affectation,SYSDATE) BETWEEN COALESCE(pss.d_deb,a.d_fin_affectation,SYSDATE) AND COALESCE(pss.d_fin,a.d_fin_affectation,SYSDATE)
   WHERE -- on sélectionne les données même 6 mois avant et plus d'un an après
     SYSDATE BETWEEN a.d_deb_affectation-184 AND COALESCE(a.d_fin_affectation,SYSDATE)+1
+    AND a.no_contrat_travail IS NULL -- les contrats sont traités ensuite
   GROUP BY
     a.no_dossier_pers, c.c_type_population, psc.c_section_cnu, psc.c_sous_section_cnu, psc.c_specialite_cnu, pss.c_disc_second_degre
-    
+
   UNION ALL
 
   SELECT
@@ -31,6 +33,7 @@ i AS (
     ca.c_sous_section_cnu                              z_discipline_id_sous_cnu,
     ca.c_specialite_cnu                                z_discipline_id_spe_cnu,
     ca.c_disc_second_degre                             z_discipline_id_dis2deg,
+    MIN(ca.d_deb_contrat_trav)                         date_debut,
     MAX(COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav)) date_fin,
     20                                                 poids
   FROM
@@ -51,12 +54,15 @@ i AS (
     ch.c_sous_section_cnu                              z_discipline_id_sous_cnu,
     NULL                                               z_discipline_id_spe_cnu,
     ch.c_disc_second_degre                             z_discipline_id_dis2deg,
-    ch.d_fin_str_trav                                  date_fin,
+    MIN(ch.d_deb_str_trav)                             date_debut,
+    MAX(ch.d_fin_str_trav)                             date_fin,
     10                                                 poids
   FROM
     chercheur@harpprod ch
   WHERE -- on sélectionne les données même 6 mois avant et plus d'un an après
     SYSDATE BETWEEN ch.d_deb_str_trav-184 AND COALESCE(ch.d_fin_str_trav,SYSDATE)+1
+  GROUP BY
+    ch.no_individu, ch.c_section_cnu, ch.c_sous_section_cnu, ch.c_disc_second_degre
 ),
 comptes (no_individu, rank_compte, nombre_comptes, IBAN, BIC) AS (
   SELECT -- récupération des comptes en banque

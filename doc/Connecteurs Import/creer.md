@@ -32,13 +32,88 @@ END;
 
 Ensuite, pour chaque table voulue, il est recommandé de procéder en plusieurs étapes :
 
-1. Récupération via une requête spécifique de toutes les données nécessaires issues de votre logiciel source. Si votre logiciel source n'(est pas accéssible via un DbLink, 
+Récupération via une requête spécifique de toutes les données nécessaires issues de votre logiciel source. Si votre logiciel source n'(est pas accéssible via un DbLink, 
 alors il vous faudra stocker ces données dans une table intermédiaire que vous peuplerez par vos propres moyens, 
 à l'aide d'une moulinette qui exploite les services web de votre application par exemple).
 
-1. Création de la vue source SRC_*table-destination* qui exploitera votre requête et fera le lien avec OSE en injectant les identifiants dons OSE a besoin. 
+Prenons l'exemple des grades. La table GRADE doit être synchronisée à partir d'une vue source SRC_GRADE qu'il faudra mettre en place.
+La première étape est de se rendre dans la liste des tables ci-dessous, afin de prendre connaissance de la liste des données nécessaires.
+La voici pour [GRADE](Création tables/GRADE.md).
 
-1. Enfin, vous devrez [activer, puis synchroniser le tout](activer-synchroniser.md), table par table.
+Créez votre propre requête. En prenant appui sur d'Harpège pour l'exemple, nous avons le résultat suivant :
+```sql
+SELECT
+  g.ll_grade  libelle_long,
+  g.lc_grade  libelle_court,
+  'Harpege'   z_source_id,
+  g.c_grade   source_code,
+  g.echelle   echelle,
+  g.c_corps   z_corps_id
+FROM
+  grade@harpprod g
+WHERE
+  SYSDATE BETWEEN COALESCE(g.d_ouverture,SYSDATE) AND COALESCE(g.d_fermeture+1,SYSDATE)
+```
+
+
+Une fois que la requête fonctionne, créez la vue source SRC_*table-destination* qui exploitera votre requête et fera le lien avec OSE en injectant les identifiants dons OSE a besoin au moyen de jointures.
+Toujours pour les grades, voici la vue source finale :
+```sql
+CREATE OR REPLACE FORCE VIEW SRC_GRADE AS
+WITH harpege_query AS (
+
+  -- Vous retrouvez la requête ici
+  SELECT
+    g.ll_grade  libelle_long,
+    g.lc_grade  libelle_court,
+    'Harpege'   z_source_id,
+    g.c_grade   source_code,
+    g.echelle   echelle,
+    g.c_corps   z_corps_id
+  FROM
+    grade@harpprod g
+  WHERE
+    SYSDATE BETWEEN COALESCE(g.d_ouverture,SYSDATE) AND COALESCE(g.d_fermeture+1,SYSDATE)
+
+
+)
+SELECT
+  hq.libelle_long   libelle_long,
+  hq.libelle_court  libelle_court,
+  s.id              source_id,
+  hq.source_code    source_code,
+  hq.echelle        echelle,
+  c.id              corps_id
+FROM
+       harpege_query hq
+  JOIN source         s ON s.code        = hq.z_source_id
+  JOIN corps          c ON c.source_code = hq.z_corps_id;
+```
+
+Les données sont maintenant encapsulées et prêtes à être syncghronisées dans OSE.
+
+Pour les tables au contenu plus volumineux ou bien si vous n'avez pas la possiblité de faire un DbLink, 
+vous pouvez appuyer votre vue source sur une vue matérialisée à l'instar de ce qui est préconisé pour les intervenants.
+Vous pouvez aussi créer une table de votre cru, peuplée par un script externe, puis y faire appel dans la vue source :
+
+```sql
+CREATE OR REPLACE FORCE VIEW SRC_GRADE AS
+SELECT
+  hq.libelle_long   libelle_long,
+  hq.libelle_court  libelle_court,
+  s.id              source_id,
+  hq.source_code    source_code,
+  hq.echelle        echelle,
+  c.id              corps_id
+FROM
+       votre-vue-materialisée-ou-votre-table hq
+  JOIN source         s ON s.code        = hq.z_source_id
+  JOIN corps          c ON c.source_code = hq.z_corps_id;
+``` 
+
+
+
+3. Enfin, vous devrez [activer, puis synchroniser le tout](activer-synchroniser.md), table par table.
 
 Exemple de vue source avec imbrication :
 La vue [SRC_GRADE](Harpège/SRC_GRADE.sql) du connecteur Harpège, où la sous-requête `harpege_query` récupère les données,

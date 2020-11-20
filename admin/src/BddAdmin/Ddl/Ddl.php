@@ -277,6 +277,25 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
+    public function orderTabCols(): self
+    {
+
+        if (!$this->has(Ddl::TABLE)) return $this;
+
+        foreach ($this->data[Ddl::TABLE] as $table) {
+            $columns = $table['columns'];
+            uasort($columns, function($a,$b){
+                return $a['position'] > $b['position'];
+            });
+
+            $this->data[Ddl::TABLE][$table['name']]['columns'] = $columns;
+        }
+
+        return $this;
+    }
+
+
+
     public function writeArray(string $filename, array $data)
     {
         $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->arrayExport($data) . ";\n\n//@" . "formatter:on\n";

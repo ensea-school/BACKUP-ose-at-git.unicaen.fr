@@ -4,6 +4,14 @@ Liste des voiries (rue, allée, boulevard, etc.)
 
 Colonnes nécessaires :
 
-<!-- VOIRIE DEB -->
+|Colonne    |Type    |Longueur|Nullable|Commentaire|
+|-----------|--------|--------|--------|-----------|
+|CODE       |VARCHAR2|5       |Non     |           |
+|LIBELLE    |VARCHAR2|120     |Non     |           |
+|Z_SOURCE_ID|NUMBER  |        |Non     |==> SOURCE.CODE|
+|SOURCE_CODE|VARCHAR2|100     |Non     |           |
 
-<!-- VOIRIE FIN -->
+
+
+Exemple de requête :
+[SRC_VOIRIE](../Harpège/SRC_VOIRIE.sql)

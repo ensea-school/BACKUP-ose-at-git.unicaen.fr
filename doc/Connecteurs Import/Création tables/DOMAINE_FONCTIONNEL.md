@@ -4,6 +4,12 @@ Liste des domaines fonctionnels
 
 Colonnes nécessaires :
 
-<!-- DOMAINE_FONCTIONNEL DEB -->
+|Colonne    |Type    |Longueur|Nullable|Commentaire|
+|-----------|--------|--------|--------|-----------|
+|LIBELLE    |VARCHAR2|200     |Non     |           |
+|Z_SOURCE_ID|NUMBER  |        |Non     |==> SOURCE.CODE|
+|SOURCE_CODE|VARCHAR2|100     |Non     |           |
 
-<!-- DOMAINE_FONCTIONNEL FIN -->
+
+Exemple de requête :
+[SRC_DOMAINE_FONCTIONNEL](../Sifac/SRC_DOMAINE_FONCTIONNEL.sql)

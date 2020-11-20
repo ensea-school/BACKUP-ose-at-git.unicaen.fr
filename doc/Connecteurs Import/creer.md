@@ -113,7 +113,7 @@ FROM
 
 
 
-3. Enfin, vous devrez [activer, puis synchroniser le tout](activer-synchroniser.md), table par table.
+Enfin, vous devrez [activer, puis synchroniser le tout](activer-synchroniser.md), table par table.
 
 Exemple de vue source avec imbrication :
 La vue [SRC_GRADE](Harpège/SRC_GRADE.sql) du connecteur Harpège, où la sous-requête `harpege_query` récupère les données,

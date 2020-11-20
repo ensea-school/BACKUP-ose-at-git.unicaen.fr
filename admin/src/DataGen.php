@@ -177,7 +177,7 @@ class DataGen
             'table'   => 'DOSSIER_CHAMP_AUTRE',
             'context' => ['install', 'update'],
             'key'     => 'ID',
-            'options' => ['update-ignore-cols' => ['LIBELLE', 'DOSSIER_CHAMP_AUTRE_TYPE_ID', 'CONTENU', 'DESCRIPTION']],
+            'options' => ['update-ignore-cols' => ['LIBELLE', 'DOSSIER_CHAMP_AUTRE_TYPE_ID', 'CONTENU', 'DESCRIPTION', 'OBLIGATOIRE']],
         ],
 
 

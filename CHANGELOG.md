@@ -45,6 +45,13 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
 
 
+# OSE 14.13
+
+## Corrections de bugs
+
+* Refactoring de l'indicateur 320 qui n'affichait plus uniquement les intervenants en attente de la création d'un contrat initial
+* Refactoring de l'indicateur 330 : affiche maintenant uniquement les intervenants en attente d'un avenant
+
 # OSE 14.12
 
 ## Corrections de bugs

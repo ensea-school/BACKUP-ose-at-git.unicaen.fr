@@ -50,6 +50,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 ## Corrections de bugs
 
 * Refactoring de l'indicateur 320 qui n'affichait plus uniquement les intervenants en attente de la création d'un contrat initial
+* Refactoring de l'indicateur 330 : affiche maintenant uniquement les intervenants en attente d'un avenant
 
 # OSE 14.12
 

@@ -333,14 +333,14 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
 
 
-    /**
-     * Get pieceJointe
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPieceJointe()
+    public function getPieceJointe(): ?PieceJointe
     {
-        return $this->pieceJointe;
+        $pj = $this->pieceJointe;
+        if ($pj->count() == 1) {
+            return $this->pieceJointe->first();
+        }
+
+        return null;
     }
 
 

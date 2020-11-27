@@ -67,16 +67,84 @@ class FichierService extends AbstractEntityService
             $filename = $this->getFichierFilename($entity);
             if (!file_exists(dirname($filename))) {
                 mkdir(dirname($filename));
-                chmod (dirname($filename), 0777);
+                chmod(dirname($filename), 0777);
             }
             $r = file_put_contents($filename, $contenuBdd);
-            if (!$r || !file_exists($filename)){
+            if (!$r || !file_exists($filename)) {
                 $entity->setContenu($contenuBdd);
                 parent::save($entity);
             }
         }
 
         return $entity;
+    }
+
+
+
+    public function isValide(Fichier $fichier): bool
+    {
+        $exts = [
+            'pdf', 'jpg', 'jpeg', 'png', 'bmp', 'gif', 'tif', 'tiff', 'rtf', 'txt', 'csv', 'html', 'htm', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods', 'odg', 'odp',
+        ];
+        $ext  = strtolower($fichier->getNom());
+        $ext  = substr($ext, strrpos($ext, '.') + 1);
+
+        if (in_array($ext, $exts)) return true;
+
+
+        $patterns = [
+            // PDF
+            '#application/pdf$#i',
+            '#^image/pdf$#i',
+            '#^application/rugpdf$#i',
+            '#^application/x-unknown-application-pdf$#i',
+            '#^application/x-pdf$#i',
+            '#^document/pdf$#i',
+            '#^pdf/pdf$#i',
+            '#^text/pdf$#i',
+            '#^pdf/application$#i',
+
+            // Images
+            '#^image/jpeg$#i',
+            '#^image/png$#i',
+            '#^application/png$#i',
+            '#^image/tiff$#i',
+            '#^image/gif$#i',
+            '#^image/bmp$#i',
+            '#^image/pjpeg$#i',
+            '#^image/heic$#i',
+
+            // Bureautique
+            '#^application/msword$#i',
+            '#^application/vnd.openxmlformats-officedocument#i',
+            '#^application/vnd.oasis.opendocument.#i',
+            '#^application/xls$#i',
+            '#^application/x-msword$#i',
+            '#^application/doc$#i',
+            '#^application/vnd.ms-xpsdocument#i',
+            '#^application/vnd.ms-word#i',
+            '#^application/vnd.ms-powerpoint#i',
+            '#^application/vnd.ms-excel#i',
+            '#^text/rtf$#i',
+            '#^application/docx$#i',
+            '#^application/rtf$#i',
+
+            // Texte
+            '#^text/plain$#i',
+            '#^application/csv$#i',
+            '#^text/html$#i',
+            '#^text/richtext$#i',
+
+        ];
+
+        $mime = str_replace('"', '', $fichier->getTypeMime());
+        $mime = str_replace("'", '', $mime);
+        $mime = str_replace("%22", '', $mime);
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $mime)) return true;
+        }
+
+        return false;
     }
 
 

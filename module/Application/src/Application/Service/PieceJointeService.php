@@ -280,9 +280,9 @@ class PieceJointeService extends AbstractEntityService
      *                             321215]
      * @param boolean $deleteFiles Supprimer les fichiers après création de la PJ$
      *
-     * @return PieceJointe[]
+     * @return array
      */
-    public function ajouterFichiers($files, Intervenant $intervenant, TypePieceJointe $type, $deleteFiles = true)
+    public function ajouterFichiers($files, Intervenant $intervenant, TypePieceJointe $type, $deleteFiles = true): array
     {
         if (!$files) {
             throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
@@ -300,6 +300,7 @@ class PieceJointeService extends AbstractEntityService
             $this->getEntityManager()->persist($pj);
         }
 
+        $errors = [];
         foreach ($files as $file) {
             $path          = $file['tmp_name'];
             $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
@@ -313,10 +314,13 @@ class PieceJointeService extends AbstractEntityService
                 ->setContenu(file_get_contents($path))
                 ->setValidation(null);
 
-            $pj->addFichier($fichier);
 
-            $this->getServiceFichier()->save($fichier);
-
+            if ($this->getServiceFichier()->isValide($fichier)) {
+                $pj->addFichier($fichier);
+                $this->getServiceFichier()->save($fichier);
+            } else {
+                $errors[] = 'Fichier ' . $fichier->getNom() . ' invalide : format "' . $fichier->getTypeMime() . '" non reconnu ou interdit.';
+            }
 
             if ($deleteFiles) {
                 unlink($path);
@@ -325,7 +329,7 @@ class PieceJointeService extends AbstractEntityService
 
         $this->getEntityManager()->flush();
 
-        return $pj;
+        return $errors;
     }
 
 

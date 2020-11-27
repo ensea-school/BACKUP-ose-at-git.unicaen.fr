@@ -257,7 +257,10 @@ class PieceJointeController extends AbstractController
             return $result;
         }
         if (is_array($result)) {
-            $pj = $this->getServicePieceJointe()->ajouterFichiers($result['files'], $intervenant, $typePieceJointe);
+            $errors = $this->getServicePieceJointe()->ajouterFichiers($result['files'], $intervenant, $typePieceJointe);
+            if (!empty($errors)) {
+                return new JsonModel(['errors' => $errors]);
+            }
         }
 
         $this->updateTableauxBord($intervenant);

@@ -17,7 +17,7 @@
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="fichier" target-entity="Application\Entity\Db\Fichier">
+    <many-to-many field="fichier" inversed-by="pieceJointe" target-entity="Application\Entity\Db\Fichier">
         <join-table name="PIECE_JOINTE_FICHIER">
             <join-columns>
                 <join-column name="PIECE_JOINTE_ID" referenced-column-name="ID"/>

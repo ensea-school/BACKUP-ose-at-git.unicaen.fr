@@ -32,6 +32,6 @@
         <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="fichier" />
+    <many-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="fichier" />
   </entity>
 </doctrine-mapping>

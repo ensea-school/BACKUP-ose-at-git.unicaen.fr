@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TblPieceJointe;
@@ -191,6 +192,13 @@ class PieceJointeController extends AbstractController
         $this->initFilters();
         /** @var PieceJointe $pj */
         $pj = $this->getEvent()->getParam('pieceJointe');
+
+        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
+        if ($intervenant && $pj->getIntervenant() != $intervenant) {
+            // un intervenant tente d'archiver la PJ d'un autre intervenant
+            throw new \Exception('Vous ne pouvez pas archiver la pièce justificative d\'un autre intervenant');
+        }
+
         $pj = $this->getServicePieceJointe()->archiver($pj);
         $this->updateTableauxBord($pj->getIntervenant(), true);
         $viewModel = new ViewModel();
@@ -227,6 +235,11 @@ class PieceJointeController extends AbstractController
         if (empty($pj)) {
             $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
             $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+        } else {
+            if ($pj->getIntervenant() != $intervenant) {
+                // un intervenant tente d'archiver la PJ d'un autre intervenant
+                throw new \Exception('Vous ne pouvez pas visualiser la liste des pièces jointes d\'un autre intervenant');
+            }
         }
 
         return compact('pj');
@@ -257,7 +270,19 @@ class PieceJointeController extends AbstractController
 
     public function telechargerAction()
     {
+        /** @var Fichier $fichier */
         $fichier = $this->getEvent()->getParam('fichier');
+
+        /** @var PieceJointe $pieceJointe */
+        $pieceJointe = $fichier->getPieceJointe();
+
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$pieceJointe || $pieceJointe->getIntervenant() != $intervenant) {
+            // un intervenant tente de télécharger la PJ d'un autre intervenant
+            throw new \Exception('La pièce jointe n\'existe pas ou bien elle appartient à un autre intervenant');
+        }
 
         $this->uploader()->download($fichier);
     }
@@ -273,6 +298,12 @@ class PieceJointeController extends AbstractController
         /** @var PieceJointe $pj */
         $pj      = $this->getEvent()->getParam('pieceJointe');
         $fichier = $this->getEvent()->getParam('fichier');
+
+        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
+        if ($intervenant && $pj->getIntervenant() != $intervenant) {
+            // un intervenant tente de supprimer la PJ d'un autre intervenant
+            throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
+        }
 
         if ($fichier) {
             $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);

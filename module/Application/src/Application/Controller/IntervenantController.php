@@ -87,6 +87,7 @@ class  IntervenantController extends AbstractController
     public function rechercherAction()
     {
         $recents = $this->getIntervenantsRecents();
+        $var     = '';
 
         return compact('recents');
     }
@@ -468,14 +469,7 @@ class  IntervenantController extends AbstractController
     {
         $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
         $form                     = $this->getFormRegleStructureValidationSaisie();
-
-        if (empty($regleStructureValidation)) {
-            $title                    = 'Création d\'une nouvelle régle';
-            $regleStructureValidation = $this->getServiceRegleStructureValidation()->newEntity();
-        } else {
-            $title = 'Édition d\'une règle';
-        }
-
+        $title                    = 'Édition de la régle de validation';
         $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
             try {
                 $this->getServiceRegleStructureValidation()->save($rsv);
@@ -483,7 +477,7 @@ class  IntervenantController extends AbstractController
             } catch (\Exception $e) {
                 $message = $this->translate($e);
 
-                if (false !== strpos($message, 'ORA-00001')) {
+                if (false !== strpos($message, 'ORA - 00001')) {
                     $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
                 } else {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -492,22 +486,6 @@ class  IntervenantController extends AbstractController
         });
 
         return compact('form', 'title');
-    }
-
-
-
-    public function validationVolumeHoraireTypeIntervenantDeleteAction()
-    {
-        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-
-        try {
-            $this->getServiceRegleStructureValidation()->delete($regleStructureValidation);
-            $this->flashMessenger()->addSuccessMessage("Règle supprimée avec succès.");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
-        }
-
-        return new MessengerViewModel(compact('regleStructureValidation'));
     }
 
 

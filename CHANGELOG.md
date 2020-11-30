@@ -46,6 +46,17 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 
 
+
+
+
+# OSE 14.14
+
+## Corrections de bugs
+
+* La fiche de saisie de service est désormais rétablie, un bug bloquait son usage depuis la 14.13.
+
+
+
 # OSE 14.13
 
 ## Corrections de bugs

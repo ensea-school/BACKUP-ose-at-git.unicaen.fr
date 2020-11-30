@@ -1911,6 +1911,18 @@ return [
         'TYPE_INTERVENANT_ID',
         'OBLIGATOIRE',
     ],
+    'DISCIPLINE_MAPPING'             => [
+        'ID',
+        'SOURCE_CODE',
+        'SOURCE_TYPE',
+        'DISCIPLINE_ID',
+    ],
+    'STATUT_INTERVENANT_MAPPING'     => [
+        'ID',
+        'SOURCE_CODE',
+        'SOURCE_TYPE',
+        'STATUT_INTERVENANT_ID',
+    ],
 ];
 
 //@formatter:on

@@ -19,13 +19,13 @@ class ServiceProcessus
         $intervenant = $this->getServiceIntervenant()->getPrecedent($intervenant);
         if (!$intervenant) return false;
 
-        $sql = "SELECT valide FROM tbl_service WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND valide > 0";
-        $res = $this->getEntityManager()->getConnection()->fetchOne($sql, [
+        $sql = "SELECT valide FROM tbl_service WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND valide > 0 AND ROWNUM = 1";
+        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, [
             'intervenant'       => $intervenant->getId(),
             'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
         ]);
 
-        return $res !== false;
+        return !empty($res);
     }
 
 }

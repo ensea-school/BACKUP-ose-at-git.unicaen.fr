@@ -134,7 +134,7 @@ return [
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\Autres', 'index'),
                                     ],
                                     'validation-volume-horaire-type-intervenant' => [
-                                        'label'      => "Règles de validation par type d'intervenant",
+                                        'label'      => "Règles de validation enseignements par type d'intervenant",
                                         'title'      => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",
                                         'route'      => 'validation-volume-horaire-type-intervenant',
                                         'withtarget' => true,

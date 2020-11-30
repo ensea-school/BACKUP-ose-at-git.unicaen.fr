@@ -4,7 +4,7 @@ $dirname    = $oa->getOseDir() . 'data/ddl';
 $colPosFile = $oa->getOseDir() . 'data/ddl_columns_pos.php';
 
 $filters = [
-    'table'              => ['excludes' => 'UNICAEN_%'],
+    'table'              => ['excludes' => ['UNICAEN_%', 'SYS_EXPORT_SCHEMA_%']],
     'sequence'           => ['excludes' => 'UNICAEN_%'],
     'primary-constraint' => ['excludes' => 'UNICAEN_%'],
     'index'              => ['excludes' => 'UNICAEN_%'],

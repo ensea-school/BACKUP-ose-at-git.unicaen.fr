@@ -2,7 +2,7 @@
 
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $rsv \Application\Entity\Db\RegleStructureValidation
+ * @var $rsv   \Application\Entity\Db\RegleStructureValidation
  */
 
 use Application\Provider\Privilege\Privileges;
@@ -13,13 +13,13 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_
 $canEdit = true;
 
 ?>
-<h1 class="page-header">Règles de validation par type d'intervenant</h1>
+<h1 class="page-header">Règles de validation enseignements par type d'intervenant</h1>
 <table class="table table-bordered table-condensed table-hover">
     <thead>
     <tr>
         <th>Type Volume Horaire</th>
         <th>Type Intervenant</th>
-        <th>Priorité</th>
+        <th>Priorité composante</th>
         <th>Message</th>
         <?php if ($canEdit): ?>
             <th>Actions</th>
@@ -43,31 +43,12 @@ $canEdit = true;
                        href="<?= $this->url('validation-volume-horaire-type-intervenant/saisie', ['regleStructureValidation' => $rsv->getId()]) ?>"
                        data-submit-reload="true">
                         <span class="glyphicon glyphicon-edit"></span></a>
-                    <a class="pop-ajax"
-                       href="<?= $this->url('validation-volume-horaire-type-intervenant/delete', ['regleStructureValidation' => $rsv->getId()]) ?>"
-                       title="Supprimer la règle de validation"
-                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-cancel-button="Non"
-                       data-submit-reload="true"
-                    >
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </a>
                 </td>
             <?php endif; ?>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-
-<?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="validation-volume-horaire-type-intervenant-saisie"
-       href="<?= $this->url('validation-volume-horaire-type-intervenant/saisie') ?>"
-       title="Ajouter une règle de validation">
-        <span class="glyphicon glyphicon-plus"></span>
-        Ajouter une règle de validation</a>
-<?php endif; ?>
 
 <script type="text/javascript">
     $(function () {

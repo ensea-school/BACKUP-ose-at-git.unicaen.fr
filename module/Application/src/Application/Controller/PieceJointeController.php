@@ -236,7 +236,7 @@ class PieceJointeController extends AbstractController
             $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
             $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
         } else {
-            if ($pj->getIntervenant() != $intervenant) {
+            if ($pj->getIntervenant()->getCode() != $intervenant->getCode()) {
                 // un intervenant tente d'archiver la PJ d'un autre intervenant
                 throw new \Exception('Vous ne pouvez pas visualiser la liste des pièces jointes d\'un autre intervenant');
             }
@@ -282,7 +282,7 @@ class PieceJointeController extends AbstractController
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        if (!$pieceJointe || $pieceJointe->getIntervenant() != $intervenant) {
+        if (!$pieceJointe || $pieceJointe->getIntervenant()->getCode() != $intervenant->getCode()) {
             // un intervenant tente de télécharger la PJ d'un autre intervenant
             throw new \Exception('La pièce jointe n\'existe pas ou bien elle appartient à un autre intervenant');
         }

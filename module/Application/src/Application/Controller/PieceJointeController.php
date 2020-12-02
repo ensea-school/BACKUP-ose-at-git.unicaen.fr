@@ -39,7 +39,6 @@ class PieceJointeController extends AbstractController
     use WorkflowServiceAwareTrait;
 
 
-
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
@@ -76,9 +75,9 @@ class PieceJointeController extends AbstractController
         $title = "Pièces justificatives <small>{$intervenant}</small>";
 
         $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
-        $fournies  = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
-        $demandees = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
-        $synthese  = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
+        $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
+        $synthese        = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
 
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -113,7 +112,7 @@ class PieceJointeController extends AbstractController
 
 
     /**
-     * @param TblPieceJointe[]     $synthesePiecesJointes
+     * @param TblPieceJointe[] $synthesePiecesJointes
      */
     protected function makeMessages($demandees, $fournies)
     {
@@ -168,6 +167,8 @@ class PieceJointeController extends AbstractController
         return compact('pj');
     }
 
+
+
     public function validerAction()
     {
         $this->initFilters();
@@ -183,6 +184,8 @@ class PieceJointeController extends AbstractController
 
         return $viewModel;
     }
+
+
 
     public function archiverAction()
     {
@@ -202,7 +205,6 @@ class PieceJointeController extends AbstractController
 
 
         return $viewModel;
-
     }
 
 
@@ -228,14 +230,13 @@ class PieceJointeController extends AbstractController
     public function listerAction()
     {
         $this->initFilters();
-        $intervenant     = $this->getEvent()->getParam('intervenant');
-        $pj = $this->getEvent()->getParam('pieceJointe');
-        if(empty($pj))
-        {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $pj          = $this->getEvent()->getParam('pieceJointe');
+        if (empty($pj)) {
             $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
             $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
         } else {
-            if ($pj->getIntervenant() != $intervenant) {
+            if ($pj->getIntervenant()->getCode() != $intervenant->getCode()) {
                 // un intervenant tente d'archiver la PJ d'un autre intervenant
                 throw new \Exception('Vous ne pouvez pas visualiser la liste des pièces jointes d\'un autre intervenant');
             }
@@ -281,7 +282,7 @@ class PieceJointeController extends AbstractController
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        if (!$pieceJointe || $pieceJointe->getIntervenant() != $intervenant) {
+        if (!$pieceJointe || $pieceJointe->getIntervenant()->getCode() != $intervenant->getCode()) {
             // un intervenant tente de télécharger la PJ d'un autre intervenant
             throw new \Exception('La pièce jointe n\'existe pas ou bien elle appartient à un autre intervenant');
         }
@@ -492,7 +493,6 @@ class PieceJointeController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([
             'piece_jointe',
         ], $intervenants);
-
     }
 
 }

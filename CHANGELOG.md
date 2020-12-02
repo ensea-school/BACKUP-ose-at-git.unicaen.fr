@@ -46,7 +46,12 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 
 
+# OSE 14.15
 
+## Corrections de bugs
+
+* Permettre à un intervenant d'accéder l'année N à ses pièces justificatives d'une année N-X (suite correction faille sécurité)
+* Simplification et correction du fonctionnement de l'interface d'admin "Règles de validation des enseignements par type d'intervenant"
 
 
 # OSE 14.14

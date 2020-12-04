@@ -25,10 +25,6 @@
                nullable="false"/>
         <field name="maximumHETD" type="float" column="MAXIMUM_HETD" precision="126" scale="0" nullable="false"/>
         <field name="chargesPatronales" type="float" column="CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
-        <field name="codesCorresp1" type="string" column="CODES_CORRESP_1" length="1000" nullable="true"/>
-        <field name="codesCorresp2" type="string" column="CODES_CORRESP_2" length="1000" nullable="true"/>
-        <field name="codesCorresp3" type="string" column="CODES_CORRESP_3" length="1000" nullable="true"/>
-        <field name="codesCorresp4" type="string" column="CODES_CORRESP_4" length="1000" nullable="true"/>
         <field name="code" type="string" column="CODE" length="50" nullable="false"/>
         <field name="nonAutorise" type="boolean" column="NON_AUTORISE" nullable="false"/>
         <field name="ordre" type="integer" column="ORDRE" nullable="false"/>

@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 39,
+            'position'    => 35,
             'commentaire' => NULL,
         ],
         'DOSSIER_CONTACT'                => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 40,
+            'position'    => 36,
             'commentaire' => NULL,
         ],
         'DOSSIER_EMAIL_PERSO'            => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 41,
+            'position'    => 37,
             'commentaire' => NULL,
         ],
         'DOSSIER_EMPLOYEUR'              => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 42,
+            'position'    => 38,
             'commentaire' => NULL,
         ],
         'DOSSIER_IBAN'                   => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 43,
+            'position'    => 39,
             'commentaire' => NULL,
         ],
         'DOSSIER_IDENTITE_COMP'          => [
@@ -126,7 +126,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 44,
+            'position'    => 40,
             'commentaire' => NULL,
         ],
         'DOSSIER_INSEE'                  => [
@@ -138,7 +138,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 45,
+            'position'    => 41,
             'commentaire' => NULL,
         ],
         'DOSSIER_TEL_PERSO'              => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 46,
+            'position'    => 42,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'              => [

@@ -41,16 +41,16 @@ WITH srci AS (
     i.autre_5                                  autre_5,
     empl.id                                    employeur_id,
     src.id                                     source_id,
-    i.code || '-' || COALESCE(si.id,sautre.id) source_code
-    ,ROW_NUMBER() OVER (PARTITION BY i.code || '-' || COALESCE(si.id,sautre.id) ORDER BY i.poids DESC, i.date_fin DESC) filtre1
+    i.source_code                              source_code,
+    i.validite_debut                           validite_debut,
+    i.validite_fin                             validite_fin
+
   FROM
               mv_intervenant          i
          JOIN source                src ON src.code = 'Harpege'
     LEFT JOIN structure               s ON s.source_code = i.z_structure_id
     LEFT JOIN statut_intervenant sautre ON sautre.code = 'AUTRES' AND sautre.histo_destruction IS NULL
-    LEFT JOIN statut_intervenant     si ON
-      i.z_statut_id_contrat_trav IS NOT NULL AND (',' || si.codes_corresp_1 || ',' LIKE '%,' || i.z_statut_id_contrat_trav || ',%')
-      OR (i.z_statut_id_type_pop IS NOT NULL AND ',' || si.codes_corresp_2 || ',' LIKE '%,' || i.z_statut_id_type_pop || ',%')
+    LEFT JOIN statut_intervenant     si ON si.code = i.z_statut_id
     LEFT JOIN grade                   g ON g.source_code = i.z_grade_id
     LEFT JOIN discipline              d ON
       d.histo_destruction IS NULL
@@ -129,12 +129,12 @@ SELECT
   srci.autre_5,
   srci.employeur_id,
   srci.source_id,
-  srci.source_code
+  srci.source_code,
+  srci.validite_debut,
+  srci.validite_fin
 FROM
   srci
   LEFT JOIN intervenant i ON i.source_code = srci.source_code AND i.annee_id = unicaen_import.get_current_annee AND i.histo_destruction IS NULL
-WHERE
-  filtre1 = 1
 
 UNION ALL
 
@@ -180,9 +180,9 @@ SELECT
   srci.autre_5,
   srci.employeur_id,
   srci.source_id,
-  srci.source_code
+  srci.source_code,
+  srci.validite_debut,
+  srci.validite_fin
 FROM
   srci
   LEFT JOIN intervenant i ON i.source_code = srci.source_code AND i.annee_id = unicaen_import.get_current_annee -1 AND i.histo_destruction IS NULL
-WHERE
-  filtre1 = 1

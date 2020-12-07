@@ -153,9 +153,9 @@ class IntervenantDossierHydrator implements HydratorInterface
         //Hydratation de l'indentité
         if (isset($data['DossierIdentite'])) {
 
-            $object->setNomUsuel($data['DossierIdentite']['nomUsuel']);
-            $object->setNomPatronymique($data['DossierIdentite']['nomPatronymique']);
-            $object->setPrenom($data['DossierIdentite']['prenom']);
+            $object->setNomUsuel(trim($data['DossierIdentite']['nomUsuel']));
+            $object->setNomPatronymique(trim($data['DossierIdentite']['nomPatronymique']));
+            $object->setPrenom(trim($data['DossierIdentite']['prenom']));
             //Civilite
             $civilite = (!empty($data['DossierIdentite']['civilite'])) ?
                 $this->getServiceCivilite()->get($data['DossierIdentite']['civilite']) : null;
@@ -180,14 +180,14 @@ class IntervenantDossierHydrator implements HydratorInterface
                 $this->getServiceDepartement()->get($data['DossierIdentiteComplementaire']['departementNaissance']) : null;
             $object->setDepartementNaissance($departementNaissance);
 
-            $object->setCommuneNaissance($data['DossierIdentiteComplementaire']['villeNaissance']);
+            $object->setCommuneNaissance(trim($data['DossierIdentiteComplementaire']['villeNaissance']));
         }
         //Hydratation de l'adresse
         if (isset($data['DossierAdresse'])) {
 
-            $object->setAdressePrecisions($data['DossierAdresse']['precisions']);
-            $object->setAdresseLieuDit($data['DossierAdresse']['lieuDit']);
-            $object->setAdresseNumero($data['DossierAdresse']['numero']);
+            $object->setAdressePrecisions(trim($data['DossierAdresse']['precisions']));
+            $object->setAdresseLieuDit(trim($data['DossierAdresse']['lieuDit']));
+            $object->setAdresseNumero(trim($data['DossierAdresse']['numero']));
             /* Complement de numéro de voie */
             $numeroComplement = (!empty(trim($data['DossierAdresse']['numeroComplement']))) ?
                 $this->getServiceAdresseNumeroCompl()->get($data['DossierAdresse']['numeroComplement']) : null;
@@ -198,9 +198,9 @@ class IntervenantDossierHydrator implements HydratorInterface
                 $this->getServiceVoirie()->get($data['DossierAdresse']['voirie']) : null;
             $object->setAdresseVoirie($voirie);
 
-            $object->setAdresseVoie($data['DossierAdresse']['voie']);
-            $object->setAdresseCodePostal($data['DossierAdresse']['codePostal']);
-            $object->setAdresseCommune($data['DossierAdresse']['ville']);
+            $object->setAdresseVoie(trim($data['DossierAdresse']['voie']));
+            $object->setAdresseCodePostal(str_replace(' ', '', $data['DossierAdresse']['codePostal']));
+            $object->setAdresseCommune(trim($data['DossierAdresse']['ville']));
             /* Pays adresse */
             $paysAdresse = (!empty($data['DossierAdresse']['pays'])) ?
                 $this->getServicePays()->get($data['DossierAdresse']['pays']) : null;
@@ -209,16 +209,16 @@ class IntervenantDossierHydrator implements HydratorInterface
         //Hydratation de contact
         if (isset($data['DossierContact'])) {
 
-            $object->setEmailPerso($data['DossierContact']['emailPersonnel']);
+            $object->setEmailPerso(trim($data['DossierContact']['emailPersonnel']));
             //$object->setEmailPro($data['DossierContact']['emailEtablissement']);
-            $object->setTelPro($data['DossierContact']['telephoneProfessionnel']);
-            $object->setTelPerso($data['DossierContact']['telephonePersonnel']);
+            $object->setTelPro(trim($data['DossierContact']['telephoneProfessionnel']));
+            $object->setTelPerso(trim($data['DossierContact']['telephonePersonnel']));
         }
 
 
         //Hydratation de INSEE
         if (isset($data['DossierInsee'])) {
-            $object->setNumeroInsee($data['DossierInsee']['numeroInsee']);
+            $object->setNumeroInsee(trim($data['DossierInsee']['numeroInsee']));
             $object->setNumeroInseeProvisoire($data['DossierInsee']['numeroInseeEstProvisoire']);
         } else {
             $object->setNumeroInseeProvisoire(false);
@@ -226,8 +226,8 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         //Hydratation de Iban
         if (isset($data['DossierBancaire'])) {
-            $object->setIBAN($data['DossierBancaire']['ribIban']);
-            $object->setBIC($data['DossierBancaire']['ribBic']);
+            $object->setIBAN(str_replace(' ', '', $data['DossierBancaire']['ribIban']));
+            $object->setBIC(trim($data['DossierBancaire']['ribBic']));
             $object->setRibHorsSepa($data['DossierBancaire']['ribHorsSepa']);
         }
 

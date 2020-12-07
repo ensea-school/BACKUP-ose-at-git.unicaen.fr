@@ -125,7 +125,7 @@ class MigrationDossier extends AbstractMigration
             //On traite dans un premier ce qu'on a pu mapper entre ancien dossier et nouveau dossier
             foreach ($mappingDossierToIntervenantDossier as $newColumn => $oldColumn) {
                 if (!empty($oldColumn)) {
-                    $intervenantDossier[$newColumn] = $dossier[$oldColumn];
+                    $intervenantDossier[$newColumn] = trim($dossier[$oldColumn]);
                 }
             }
             //Traitement des nouvelles colonnes intervenant dossier
@@ -136,26 +136,27 @@ class MigrationDossier extends AbstractMigration
                 if (count($splitRib) > 1) {
                     $intervenantDossier['BIC'] = $splitRib [0];
                 }
-                $intervenantDossier['IBAN'] = $splitRib[1];
+                $intervenantDossier['IBAN'] = str_replace(' ', '', $splitRib[1]);
             }
             //On récupére les adresses
-            $adresse = $dossier['ADRESSE'];
+            $adresse = str_replace(["\r\n", "\n", "\r"], ' ', $dossier['ADRESSE']);
+
             if (!empty($adresse)) {
                 //On sépare l'adresse pour récupérer le code postal et la ville
-                if (preg_match("'(.*)([0-9]{5})(.*)'s", $adresse, $out)) {
-                    $adressePrecisions = $out[1];
-                    $adresseCodePostal = $out[2];
+                if (preg_match("'(.*)([0-9]{5}|\d\d\s\d\d\d)(.*)'s", $adresse, $out)) {
+                    $adressePrecisions = trim($out[1]);
+                    $adresseCodePostal = trim($out[2]);
                     $commune           = explode(',', $out[3]);
-                    $adresseCommune    = (!empty($commune[1])) ? $commune[1] : $out[3];
+                    $adresseCommune    = (!empty($commune[1])) ? trim($commune[1]) : trim($out[3]);
                 } else {
-                    $adressePrecisions = $adresse;
+                    $adressePrecisions = trim($adresse);
                     $adresseCodePostal = null;
                     $adresseCommune    = null;
                 }
 
-                $intervenantDossier['ADRESSE_PRECISIONS']  = $adressePrecisions;
-                $intervenantDossier['ADRESSE_COMMUNE']     = $adresseCommune;
-                $intervenantDossier['ADRESSE_CODE_POSTAL'] = $adresseCodePostal;
+                $intervenantDossier['ADRESSE_PRECISIONS']  = trim($adressePrecisions);
+                $intervenantDossier['ADRESSE_COMMUNE']     = trim($adresseCommune);
+                $intervenantDossier['ADRESSE_CODE_POSTAL'] = trim($adresseCodePostal);
                 $intervenantDossier['ADRESSE_PAYS_ID']     = $idFrance;
             }
             $datasIntervenantDossier[] = $intervenantDossier;

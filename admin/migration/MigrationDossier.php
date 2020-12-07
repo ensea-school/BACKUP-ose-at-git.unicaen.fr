@@ -156,7 +156,7 @@ class MigrationDossier extends AbstractMigration
 
                 $intervenantDossier['ADRESSE_PRECISIONS']  = trim($adressePrecisions);
                 $intervenantDossier['ADRESSE_COMMUNE']     = trim($adresseCommune);
-                $intervenantDossier['ADRESSE_CODE_POSTAL'] = trim($adresseCodePostal);
+                $intervenantDossier['ADRESSE_CODE_POSTAL'] = str_replace(' ', '', $adresseCodePostal);
                 $intervenantDossier['ADRESSE_PAYS_ID']     = $idFrance;
             }
             $datasIntervenantDossier[] = $intervenantDossier;

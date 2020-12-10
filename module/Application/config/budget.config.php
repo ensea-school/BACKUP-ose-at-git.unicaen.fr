@@ -73,7 +73,7 @@ return [
                         'type'          => 'Segment',
                         'may_terminate' => true,
                         'options'       => [
-                            'route'       => '/saisie-dotation/:annee/:structure/:typeRessource[/:dotation1/:dotation2]',
+                            'route'       => '/saisie-dotation/:annee/:structure/:typeRessource/[:dotation1]/[:dotation2]',
                             'defaults'    => [
                                 'action' => 'saisie-dotation',
                             ],
@@ -81,8 +81,8 @@ return [
                                 'annee'         => '[0-9]*',
                                 'structure'     => '[0-9]*',
                                 'typeRessource' => '[0-9]*',
-                                'dotation1'     => '[0-9]*',
-                                'dotation2'     => '[0-9]*',
+                                //'dotation1'     => '[0-9]*',
+                                //'dotation2'     => '[0-9]*',
                             ],
                         ],
                     ],

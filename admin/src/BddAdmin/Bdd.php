@@ -787,7 +787,7 @@ class Bdd
 
 
 
-    public function copy(Bdd $source, array $fncs = []): self
+    public function copy(Bdd $source, array $filters = [], array $fncs = []): self
     {
         if ($this->getLogger() && !$source->getLogger()) {
             $source->setLogger($this->getLogger());
@@ -812,7 +812,6 @@ class Bdd
 
         $tables = array_keys($tDdl);
         sort($tables);
-
         foreach ($tables as $table) {
             $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
             if (false !== $fnc) {
@@ -824,7 +823,12 @@ class Bdd
 
         $this->inCopy = false;
 
-        $filters = [Ddl::TABLE => ['excludes' => '%']];
+        if (array_key_exists(Ddl::TABLE, $filters)) {
+            $filters[Ddl::TABLE]['excludes'][] = '%';
+        } else {
+            $filters[Ddl::TABLE] = ['excludes' => '%'];
+        }
+     
         $this->create($source, $filters);
 
         $this->logEnd();

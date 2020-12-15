@@ -176,7 +176,7 @@ SELECT DISTINCT
   /* Employeur */
   CAST(NULL AS varchar2(255))                                   z_employeur_id,
   CASE WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY') THEN NULL ELSE i.validite_debut END validite_debut,
-  CASE WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY') THEN NULL ELSE i.validite_debut END validite_fin
+  CASE WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY') THEN NULL ELSE i.validite_fin END validite_fin
 FROM
                                          i
        JOIN individu@harpprod            individu           ON individu.no_individu           = i.code
@@ -188,4 +188,4 @@ FROM
   LEFT JOIN code_insee@harpprod          code_insee         ON code_insee.no_dossier_pers     = i.code
   LEFT JOIN                              comptes            ON comptes.no_individu            = i.code AND comptes.rank_compte = comptes.nombre_comptes
 WHERE
-  i.validite_fin+1 >= SYSDATE
+  i.validite_fin+1 >= (SYSDATE - (365*2))

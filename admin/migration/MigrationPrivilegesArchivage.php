@@ -18,6 +18,16 @@ class MigrationPrivilegesArchivage extends AbstractMigration
 
     public function utile(): bool
     {
+        //test si le privilege archivage existe, si il existe déjà alors pas besoin de jouer cette migration
+        $bdd       = $this->manager->getBdd();
+        $sql       = "SELECT *
+                FROM privilege p 
+                WHERE p.code = 'archivage'";
+        $privilege = $bdd->select($sql);
+        if (!empty($privilege)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -147,18 +157,4 @@ class MigrationPrivilegesArchivage extends AbstractMigration
         //Clear cache car on a modifié les privileges donc les entity en cache ne doivent plus servir
         $oa->run('clear-cache');
     }
-
-
-
-    private function hasPrivilege($statut, $privilegeCode)
-    {
-        foreach ($statut['PRIVILEGES'] as $privilege) {
-            if ($privilege['CODE_PRIVILEGE'] == $privilegeCode) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
-

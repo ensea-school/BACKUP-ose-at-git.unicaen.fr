@@ -1,7 +1,7 @@
 version: '3'
 
 # Ne pas oublier d'ajouter au fichier /etc/hosts :
-# 172.21.0.15 ose-test.localhost
+# 172.21.0.15 ose-test.pc-local
 
 services:
   ose-test:

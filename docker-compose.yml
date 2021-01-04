@@ -1,7 +1,7 @@
 version: '3'
 
 # Ne pas oublier d'ajouter au fichier /etc/hosts :
-# 172.21.0.10 ose-dev.localhost
+# 172.21.0.10 ose-dev.pc-local
 
 services:
   ose-dev:

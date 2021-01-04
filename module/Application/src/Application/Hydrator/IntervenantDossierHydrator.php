@@ -69,6 +69,7 @@ class IntervenantDossierHydrator implements HydratorInterface
         $data['DossierIdentiteComplementaire'] = [
             'dateNaissance'        => $object->getDateNaissance(),
             'paysNaissance'        => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
+            'paysNationalite'      => ($object->getPaysNationalite()) ? $object->getPaysNationalite()->getId() : '',
             'departementNaissance' => ($object->getDepartementNaissance()) ? $object->getDepartementNaissance()->getId() : '',
             'villeNaissance'       => $object->getCommuneNaissance(),
         ];
@@ -171,6 +172,10 @@ class IntervenantDossierHydrator implements HydratorInterface
             $paysNaissance = (!empty($data['DossierIdentiteComplementaire']['paysNaissance'])) ?
                 $this->getServicePays()->get($data['DossierIdentiteComplementaire']['paysNaissance']) : null;
             $object->setPaysNaissance($paysNaissance);
+            //Pays de natioanlite
+            $paysNationalite = (!empty($data['DossierIdentiteComplementaire']['paysNationalite'])) ?
+                $this->getServicePays()->get($data['DossierIdentiteComplementaire']['paysNationalite']) : $paysNaissance;
+            $object->setPaysNationalite($paysNationalite);
             //Si pays n'est pas France alors null pour département
             if (!is_null($paysNaissance) && $paysNaissance->getLibelle() == 'FRANCE') {
                 $object->setDepartementNaissance(null);

@@ -873,7 +873,12 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setAdresseNumeroCompl($intervenant->getAdresseNumeroCompl())
             ->setAdressePays($intervenant->getAdressePays())
             ->setAdresseVoie($intervenant->getAdresseVoie())
-            ->setAdresseVoirie($intervenant->getAdresseVoirie());
+            ->setAdresseVoirie($intervenant->getAdresseVoirie())
+            ->setAutre1($intervenant->getAutre1())
+            ->setAutre2($intervenant->getAutre2())
+            ->setAutre3($intervenant->getAutre3())
+            ->setAutre4($intervenant->getAutre4())
+            ->setAutre5($intervenant->getAutre5());
 
         return $this;
     }

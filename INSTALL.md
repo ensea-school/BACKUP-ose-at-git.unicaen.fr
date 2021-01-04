@@ -267,9 +267,9 @@ docker-compose up -d
 docker exec ose-dev ose install
 ```
 Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
-172.21.0.10 ose-dev.localhost
+172.21.0.10 ose-dev.pc-local
 
-OSE sera accessible sur votre machine, à l'adresse http://ose-dev.localhost
+OSE sera accessible sur votre machine, à l'adresse http://ose-dev.pc-local
 
 #### Environnement de test
 ```bash
@@ -281,9 +281,9 @@ docker exec ose-test ose install
 ```
 
 Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
-172.21.0.15 ose-test.localhost
+172.21.0.15 ose-test.pc-local
 
-OSE sera accessible sur votre machine, à l'adresse http://ose-test.localhost
+OSE sera accessible sur votre machine, à l'adresse http://ose-test.pc-local
 
 # Configuration technique
 Personnalisez le fichier `config.local.php` pour adapter OSE à votre établissement.

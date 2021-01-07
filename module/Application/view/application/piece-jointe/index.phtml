@@ -107,6 +107,17 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
 
         });
 
+        $('[id^="update-pj-"]').click(function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var splitId = id.split('-');
+            var tpjId = splitId[2];
+            $('#valide-pj-' + tpjId).remove();
+            $('#archive-form-pj-' + tpjId).css('display', 'block');
+            return false;
+        });
+
+
     </script>
 <?php
 

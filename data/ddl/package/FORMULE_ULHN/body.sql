@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
+create or replace PACKAGE BODY "FORMULE_ULHN" AS
   decalageLigne NUMERIC DEFAULT 21;
 
 
@@ -197,8 +197,9 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
       END IF;
 
     -- r=I22*Q22*K22
+    -- Changement : ajout de * vh.ponderation_service_du pour prendre en compte le modulateur
     WHEN c = 'r' AND v >= 1 THEN
-      RETURN vh.heures * cell('q',l) * cell('k',l);
+      RETURN vh.heures * cell('q',l) * cell('k',l) * vh.ponderation_service_du;
 
 
 
@@ -234,7 +235,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
 
     -- v=SI(service_du=0;I22;SI(J22>0;SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0))
     WHEN c = 'v' AND v >= 1 THEN
-    IF i.service_du = 0 THEN
+      IF i.service_du = 0 THEN
         RETURN vh.heures;
       ELSE
         --SI(J22>0;SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0)
@@ -252,12 +253,13 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
       END IF;
 
     -- w=SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(V22+SI(H22<>"Oui";I22;0))*K22)
+    -- Changement : ajout de * vh.ponderation_service_du pour prendre en compte le modulateur
     WHEN c = 'w' AND v >= 1 THEN
       IF cell('service_realise') < ose_formule.intervenant.service_du OR ose_formule.intervenant.depassement_service_du_sans_hc THEN
         RETURN 0;
       ELSE
         --(V22+SI(H22<>"Oui";I22;0))*K22
-        RETURN (cell('v',l) + CASE WHEN NOT vh.service_statutaire THEN vh.heures ELSE 0 END ) * cell('k',l);
+        RETURN (cell('v',l) + CASE WHEN NOT vh.service_statutaire THEN vh.heures ELSE 0 END ) * cell('k',l) * vh.ponderation_service_du;
       END IF;
 
     -- y=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$U22*D22;$O22*D22))
@@ -405,7 +407,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_intervenant fi
+      V_FORMULE_INTERVENANT fi
     ';
   END;
 
@@ -422,7 +424,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_volume_horaire fvh
+      V_FORMULE_VOLUME_HORAIRE fvh
     ORDER BY
       ordre';
   END;

@@ -1,4 +1,4 @@
-### SERVICE
+# SERVICE
 
 Liste des services (éléments pédagogiques pour les intervenants)
 

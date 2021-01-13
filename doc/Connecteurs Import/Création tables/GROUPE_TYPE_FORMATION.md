@@ -1,4 +1,4 @@
-### GROUPE_TYPE_FORMATION
+# GROUPE_TYPE_FORMATION
 
 Liste des groupes de type de formation
 

@@ -21,7 +21,7 @@ BEGIN
   END IF;
 
   -- Contrôle de l'unicité de SOURCE_CODE
-  SELECT COUNT(*) INTO cs FROM INTERVENANT WHERE id <> :NEW.id AND histo_destruction IS NULL AND source_code = :NEW.source_code AND annee_id = :NEW.annee_id;
+  SELECT COUNT(*) INTO cs FROM INTERVENANT WHERE id <> :NEW.id AND histo_destruction IS NULL AND source_code = :NEW.source_code AND annee_id = :NEW.annee_id AND statut_id = :NEW.statut_id;
   IF cs > 0 THEN
     raise_application_error(-20101, 'Une autre fiche intervenant contient la même valeur pour SOURCE_CODE.');
   END IF;

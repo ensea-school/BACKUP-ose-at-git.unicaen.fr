@@ -1,4 +1,4 @@
-### DEPARTEMENT
+# DEPARTEMENT
 
 Liste des départements
 

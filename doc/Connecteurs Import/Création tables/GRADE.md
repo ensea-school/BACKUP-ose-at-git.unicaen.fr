@@ -1,4 +1,4 @@
-### GRADE
+# GRADE
 
 Liste des grades
 

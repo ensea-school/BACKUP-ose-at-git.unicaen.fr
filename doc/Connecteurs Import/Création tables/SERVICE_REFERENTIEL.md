@@ -1,4 +1,4 @@
-### SERVICE_REFERENTIEL
+# SERVICE_REFERENTIEL
 
 Liste des servcies référentiels (fonctions référentiels pour les intervenants)
 

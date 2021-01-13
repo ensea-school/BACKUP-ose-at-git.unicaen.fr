@@ -246,7 +246,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 43,
+            'position'    => 45,
             'commentaire' => NULL,
         ],
         'DATE_NAISSANCE'           => [
@@ -342,7 +342,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 49,
+            'position'    => 51,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'           => [
@@ -354,7 +354,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 48,
+            'position'    => 50,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'     => [
@@ -366,7 +366,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 53,
+            'position'    => 55,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'        => [
@@ -378,7 +378,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 52,
+            'position'    => 54,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'    => [
@@ -390,7 +390,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 51,
+            'position'    => 53,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'       => [
@@ -402,7 +402,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 50,
+            'position'    => 52,
             'commentaire' => NULL,
         ],
         'IBAN'                     => [
@@ -438,7 +438,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 42,
+            'position'    => 44,
             'commentaire' => NULL,
         ],
         'NOM_PATRONYMIQUE'         => [
@@ -546,7 +546,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 45,
+            'position'    => 47,
             'commentaire' => NULL,
         ],
         'SOURCE_ID'                => [
@@ -558,7 +558,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 44,
+            'position'    => 46,
             'commentaire' => NULL,
         ],
         'STATUT_ID'                => [
@@ -594,7 +594,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 46,
+            'position'    => 48,
             'commentaire' => NULL,
         ],
         'SYNC_STRUCTURE'           => [
@@ -606,7 +606,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 47,
+            'position'    => 49,
             'commentaire' => NULL,
         ],
         'TEL_PERSO'                => [
@@ -643,6 +643,30 @@ return [
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 4,
+            'commentaire' => NULL,
+        ],
+        'VALIDITE_DEBUT'           => [
+            'name'        => 'VALIDITE_DEBUT',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 42,
+            'commentaire' => NULL,
+        ],
+        'VALIDITE_FIN'             => [
+            'name'        => 'VALIDITE_FIN',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 43,
             'commentaire' => NULL,
         ],
     ],

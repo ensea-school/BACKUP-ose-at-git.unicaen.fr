@@ -1,4 +1,4 @@
-### AFFECTATION
+# AFFECTATION
 
 Liste des affectations (pour donner des rôles aux utilisateurs)
 

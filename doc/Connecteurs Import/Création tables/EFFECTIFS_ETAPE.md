@@ -1,4 +1,4 @@
-### EFFECTIFS_ETAPE
+# EFFECTIFS_ETAPE
 
 Liste des effectifs par étapes
 

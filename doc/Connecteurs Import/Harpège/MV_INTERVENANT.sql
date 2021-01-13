@@ -107,6 +107,7 @@ comptes (no_individu, rank_compte, nombre_comptes, IBAN, BIC) AS (
 SELECT DISTINCT
   /* Code de l'intervenant = numéro Harpège */
   ltrim(TO_CHAR(individu.no_individu,'99999999'))               code,
+  'Harpege'                                                     z_source_id,
   i.source_code                                                 source_code,
 
   /* = supannempid du LDAP Unicaen */

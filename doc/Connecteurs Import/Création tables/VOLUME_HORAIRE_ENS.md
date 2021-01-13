@@ -1,4 +1,4 @@
-### VOLUME_HORAIRE_ENS
+# VOLUME_HORAIRE_ENS
 
 Liste des volumes horaires d'enseignement (charges)
 

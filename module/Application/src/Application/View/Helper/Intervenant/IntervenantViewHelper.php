@@ -164,8 +164,10 @@ class IntervenantViewHelper extends AbstractHtmlElement
                     <ul class="nav navbar-nav">
                         <?php foreach ($statuts as $intervenantId => $statut): ?>
                             <li<?= ($statut == $intervenant->getStatut()) ? ' class="active"' : '' ?>>
-                                <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>"><span
-                                            class="type-intervenant"><?= $statut->getTypeIntervenant() . '</span><br />' . $statut->getLibelle() ?>
+                                <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
+                                    <span class="type-intervenant"><?= $statut->getTypeIntervenant() ?></span><br/>
+                                    <span class="statut-intervenant"><?= $statut->getLibelle() ?></span><br/>
+                                    <span class="validite-intervenant"><?= $intervenant->getValidite(); ?></span>
                                 </a>
                             </li>
                         <?php endforeach; ?>

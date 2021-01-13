@@ -1,4 +1,4 @@
-### TYPE_MODULATEUR_EP
+# TYPE_MODULATEUR_EP
 
 Liste des types de modulateurs par éléments pédagogiques
 

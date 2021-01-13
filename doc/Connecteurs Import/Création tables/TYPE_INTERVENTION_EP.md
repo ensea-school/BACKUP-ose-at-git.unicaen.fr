@@ -1,4 +1,4 @@
-### TYPE_INTERVENTION_EP
+# TYPE_INTERVENTION_EP
 
 Liste des types d'intervention (CM, TD, TP, ...) par élément pédagogique
 

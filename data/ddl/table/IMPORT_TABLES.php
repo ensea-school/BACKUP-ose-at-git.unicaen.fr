@@ -9,6 +9,18 @@ return [
     'commentaire' => NULL,
     'sequence'    => NULL,
     'columns'     => [
+        'KEY_COLUMNS'      => [
+            'name'        => 'KEY_COLUMNS',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 1000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
         'ORDRE'            => [
             'name'        => 'ORDRE',
             'type'        => 'int',

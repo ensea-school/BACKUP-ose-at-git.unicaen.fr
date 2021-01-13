@@ -1,4 +1,4 @@
-### CENTRE_COUT_EP
+# CENTRE_COUT_EP
 
 Liste des centres de coûts liés aux éléments pédagogiques
 

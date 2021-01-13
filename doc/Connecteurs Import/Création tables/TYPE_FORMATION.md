@@ -1,4 +1,4 @@
-### TYPE_FORMATION
+# TYPE_FORMATION
 
 Liste des types de formation
 

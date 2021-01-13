@@ -1,4 +1,4 @@
-### CENTRE_COUT
+# CENTRE_COUT
 
 Liste des centres de coûts
 

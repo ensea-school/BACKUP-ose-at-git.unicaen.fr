@@ -1,4 +1,4 @@
-### ELEMENT_PEDAGOGIQUE
+# ELEMENT_PEDAGOGIQUE
 
 Liste des éléments pédagogiques
 

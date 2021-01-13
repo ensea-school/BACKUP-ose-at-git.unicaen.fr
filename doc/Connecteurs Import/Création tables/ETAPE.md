@@ -1,4 +1,4 @@
-### ETAPE
+# ETAPE
 
 Liste des étapes (années de formation, L1 de Droit par exemple)
 

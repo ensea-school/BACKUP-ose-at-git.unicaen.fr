@@ -1,4 +1,4 @@
-### DISCIPLINE
+# DISCIPLINE
 
 Liste des disciplines (équivalent personnalisé des sections CNU, des sections du second degré, etc.)
 

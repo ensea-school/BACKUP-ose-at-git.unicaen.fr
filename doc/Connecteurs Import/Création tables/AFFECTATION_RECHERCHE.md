@@ -1,4 +1,4 @@
-### AFFECTATION_RECHERCHE
+# AFFECTATION_RECHERCHE
 
 Liste des affectations de recherche
 

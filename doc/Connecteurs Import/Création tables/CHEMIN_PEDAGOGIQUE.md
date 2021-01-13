@@ -1,4 +1,4 @@
-### CHEMIN_PEDAGOGIQUE
+# CHEMIN_PEDAGOGIQUE
 
 Liste des chemins pédagogiques
 

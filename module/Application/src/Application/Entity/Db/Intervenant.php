@@ -189,6 +189,16 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $syncStructure = true;
 
     /**
+     * @var \DateTime
+     */
+    protected $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    protected $validiteFin;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $affectation;
@@ -1086,6 +1096,71 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         $this->syncStructure = $syncStructure;
 
         return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getValiditeDebut(): ?\DateTime
+    {
+        return $this->validiteDebut;
+    }
+
+
+
+    /**
+     * @param \DateTime $validiteDebut
+     *
+     * @return Intervenant
+     */
+    public function setValiditeDebut(?\DateTime $validiteDebut): Intervenant
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getValiditeFin(): ?\DateTime
+    {
+        return $this->validiteFin;
+    }
+
+
+
+    /**
+     * @param \DateTime $validiteFin
+     *
+     * @return Intervenant
+     */
+    public function setValiditeFin(?\DateTime $validiteFin): Intervenant
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+
+
+    public function getValidite(): string
+    {
+        if (!$this->validiteDebut && !$this->validiteFin) {
+            return 'Validité sans limite';
+        }
+        if (!$this->validiteDebut) {
+            return 'Jusqu\'au ' . $this->validiteFin->format('d/m/Y');
+        }
+        if (!$this->validiteFin) {
+            return 'À partir du ' . $this->validiteDebut->format('d/m/Y');
+        }
+
+        return 'Du ' . $this->validiteDebut->format('d/m/Y') . ' au ' . $this->validiteFin->format('d/m/Y');
     }
 
 

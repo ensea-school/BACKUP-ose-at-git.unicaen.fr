@@ -673,6 +673,7 @@ return [
     ],
     'IMPORT_TABLES'                  => [
         'TABLE_NAME',
+        'KEY_COLUMNS',
         'SYNC_FILTRE',
         'SYNC_ENABLED',
         'SYNC_JOB',
@@ -751,6 +752,8 @@ return [
         'AUTRE_4',
         'AUTRE_5',
         'EMPLOYEUR_ID',
+        'VALIDITE_DEBUT',
+        'VALIDITE_FIN',
         'MONTANT_INDEMNITE_FC',
         'CRITERE_RECHERCHE',
         'SOURCE_ID',

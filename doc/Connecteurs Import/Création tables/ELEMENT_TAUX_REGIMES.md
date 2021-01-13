@@ -1,4 +1,4 @@
-### ELEMENT_TAUX_REGIMES
+# ELEMENT_TAUX_REGIMES
 
 Liste des éléments de taux de régime
 

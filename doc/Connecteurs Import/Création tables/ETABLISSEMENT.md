@@ -1,4 +1,4 @@
-### ETABLISSEMENT
+# ETABLISSEMENT
 
 Liste des établissements
 

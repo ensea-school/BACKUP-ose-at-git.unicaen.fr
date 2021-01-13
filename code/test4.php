@@ -9,7 +9,6 @@
  */
 
 
-/* @var $intervenant \Application\Entity\Db\Intervenant */
-$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(578);
+$qg = $container->get(\UnicaenImport\Service\QueryGeneratorService::class);
 
-$ni = $intervenant->dupliquer();
+sqlDump($qg->makeDiffView('INTERVENANT'));

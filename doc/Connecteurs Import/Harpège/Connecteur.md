@@ -140,7 +140,7 @@ Voici la vue matérialisée qui remonte les données d'Harpège :
 
 Les données en sortie sont préparées pour être exploitées par la vue source.
 
-[SRC_INTERVENANT](SRC_INTERVENANT.sql)
+[SRC_INTERVENANT](../Générique/SRC_INTERVENANT.sql)
 
 La vue SRC_INTERVENANT remplit plusieurs rôles :
 * Elle récupère les valeurs identifiantes pour les champs faisant références à d'autres tables à l'aide des valeurs (champs z_*) transmises à cet effet par la vue matérialisée

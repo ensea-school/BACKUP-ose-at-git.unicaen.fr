@@ -83,6 +83,9 @@
         </many-to-one>
         <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true"/>
 
+        <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="true"/>
+        <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-column name="SOURCE_ID" referenced-column-name="ID"/>
         </many-to-one>

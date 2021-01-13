@@ -1,4 +1,4 @@
-### CENTRE_COUT_STRUCTURE
+# CENTRE_COUT_STRUCTURE
 
 Liste des centres de coûts liés aux structures
 

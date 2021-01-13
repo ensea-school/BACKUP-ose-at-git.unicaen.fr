@@ -1,4 +1,4 @@
-### STRUCTURE
+# STRUCTURE
 
 Liste des structures (composantes, etc.)
 

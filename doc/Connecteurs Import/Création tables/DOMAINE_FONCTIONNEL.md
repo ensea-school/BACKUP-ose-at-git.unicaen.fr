@@ -1,4 +1,4 @@
-### DOMAINE_FONCTIONNEL
+# DOMAINE_FONCTIONNEL
 
 Liste des domaines fonctionnels
 

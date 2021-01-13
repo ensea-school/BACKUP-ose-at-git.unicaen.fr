@@ -186,7 +186,8 @@ class DataGen
             'table'   => 'IMPORT_TABLES',
             'context' => ['install', 'update'],
             'key'     => 'TABLE_NAME',
-            'options' => ['update' => false, 'delete' => false],
+            'options' => ['update' => true, 'delete' => true],
+            'options' => ['update-ignore-cols' => ['SYNC_FILTRE', 'SYNC_ENABLED', 'SYNC_JOB', 'SYNC_HOOK_BEFORE', 'SYNC_HOOK_AFTER']],
         ],
         [
             'table'   => 'CC_ACTIVITE',
@@ -543,32 +544,18 @@ class DataGen
 
     public function IMPORT_TABLES()
     {
-        $bdd = $this->oseAdmin->getBdd();
+        $data = require $this->oseAdmin->getOseDir() . 'data/import_tables.php';
 
-        $tables = [];
-        $sql    = "
-        select 
-          t.table_name
-        from 
-          user_tables t
-          JOIN user_tab_cols c ON c.table_name = t.table_name
-          LEFT JOIN user_mviews m ON m.mview_name = t.table_name
-        WHERE 
-          c.column_name IN ('SOURCE_CODE','SOURCE_ID','HISTO_CREATION','HISTO_CREATEUR_ID','HISTO_MODIFICATION','HISTO_MODIFICATEUR_ID','HISTO_DESTRUCTION','HISTO_DESTRUCTEUR_ID')
-            AND m.mview_name IS NULL
-        GROUP BY
-          t.table_name
-        HAVING
-          count(*) = 8";
-        $d      = $bdd->select($sql);
-        foreach ($d as $t) {
-            $tables[] = [
-                "TABLE_NAME"   => $t['TABLE_NAME'],
-                "SYNC_ENABLED" => false,
-            ];
+        $ordre = 0;
+        $d     = [];
+        foreach ($data as $table => $td) {
+            $ordre++;
+            $td['TABLE_NAME'] = $table;
+            $td['ORDRE']      = $ordre;
+            $d[]              = $td;
         }
 
-        return $tables;
+        return $d;
     }
 
 

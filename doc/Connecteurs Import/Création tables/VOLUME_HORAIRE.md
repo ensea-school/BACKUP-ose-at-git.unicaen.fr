@@ -1,4 +1,4 @@
-### VOLUME_HORAIRE
+# VOLUME_HORAIRE
 
 Liste des volumes horaires (nb d'heures de CM, TD, TP par ligne de service)
 

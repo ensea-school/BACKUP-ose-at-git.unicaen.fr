@@ -1,4 +1,4 @@
-### EFFECTIFS
+# EFFECTIFS
 
 Liste des effectifs
 

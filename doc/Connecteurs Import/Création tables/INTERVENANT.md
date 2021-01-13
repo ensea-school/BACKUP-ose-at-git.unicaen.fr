@@ -1,4 +1,4 @@
-### INTERVENANT
+# INTERVENANT
 
 Liste des intervenants
 
@@ -6,12 +6,14 @@ Colonnes nécessaires :
 
 Ici, principalement pour des raisons de performances, ilest recommandé de procéder en deux étapes :
 * Rapatrier les données dans une vue matérialisée à appeler MV_INTERVENANT pourvue des colonnes listées ci-dessous
-* Utiliser [SRC_INTERVENANT](../Harpège/SRC_INTERVENANT.sql) en tant que vue source et l'adapter le cas échéant 
+* Utiliser [SRC_INTERVENANT](../Générique/SRC_INTERVENANT.sql) en tant que vue source. Cette vue SRC_INTERVENANT est commune à tous les connecteurs.
+Vous devez l'utiliser telle quelle.
 
 |Colonne                   |Type    |Longueur|Nullable|Commentaire                  |
 |--------------------------|--------|--------|--------|-----------------------------|
-|Z_ANNEE_ID                |NUMBER  |        |Non     |==> ANNEE.ID (2020 pour 2020/2021) |
 |CODE                      |VARCHAR2|60      |Non     | Matricule spécifique à l'individu |
+|Z_SOURCE_ID               |VARCHAR2|15      |Non     |==> SOURCE.CODE              |
+|SOURCE_CODE               |VARCHAR2|100     |Oui     |                             |
 |UTILISATEUR_CODE          |VARCHAR2|60      |Oui     | Identifiant pour faire lien avec le LDAP |
 |Z_STRUCTURE_ID            |NUMBER  |        |Oui     |==> STRUCTURE.SOURCE_CODE    |
 |Z_STATUT_ID               |NUMBER  |        |Non     |==> STATUT_INTERVENANT.CODE  |
@@ -50,8 +52,9 @@ Ici, principalement pour des raisons de performances, ilest recommandé de proc�
 |AUTRE_4                   |VARCHAR2|1000    |Oui     |                             |
 |AUTRE_5                   |VARCHAR2|1000    |Oui     |                             |
 |Z_EMPLOYEUR_ID            |NUMBER  |        |Oui     |==> EMPLOYEUR.SOURCE_CODE    |
-|Z_SOURCE_ID       |NUMBER  |        |Non     |==> SOURCE.CODE|
-|SOURCE_CODE               |VARCHAR2|100     |Oui     |                             |
+|VALIDITE_DEBUT            |DATE    |        |Oui     |Date de début de validité (NULL = depuis toujours)  |
+|VALIDITE_FIN              |DATE    |        |Oui     |Date de fin   de validité (NULL = pas d'expiration) |
+
 
 Attention : un même individu peut avoir plusieurs fiches INTERVENANT dans la même année, tant qu'on peut les distinguer par le statut.
 Le champ CODE doit être spécifique à l'individu. Une même personne ne devrait pas avoir plusieurs valeurs diférentes dans CODE.

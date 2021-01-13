@@ -784,7 +784,7 @@ td .alert {
 .intervenant-statuts {
     margin-top: 5px;
     font-size: 12pt;
-    height: 50px;
+    height: 70px;
     min-height: 50px;
 }
 
@@ -800,7 +800,7 @@ td .alert {
 .intervenant-statuts .navbar-brand {
     padding-top: 13px;
     padding-bottom: 4px;
-    height: 50px;
+    height: 70px;
 }
 
 .intervenant-statuts .navbar-toggle {
@@ -810,6 +810,14 @@ td .alert {
 }
 
 .intervenant-statuts span.type-intervenant {
+    font-size: 10pt;
+}
+
+.intervenant-statuts span.statut-intervenant {
+    font-weight: bold;
+}
+
+.intervenant-statuts span.validite-intervenant {
     font-size: 10pt;
 }
 

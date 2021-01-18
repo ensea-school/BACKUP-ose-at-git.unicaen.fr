@@ -679,6 +679,7 @@ return [
         'SYNC_JOB',
         'SYNC_HOOK_BEFORE',
         'SYNC_HOOK_AFTER',
+        'SYNC_NON_IMPORTABLES',
         'ORDRE',
     ],
     'INDICATEUR'                     => [

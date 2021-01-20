@@ -1,5 +1,5 @@
 CREATE
-OR REPLACE FORCE VIEW SRC_GRADE_OCTO AS
+OR REPLACE FORCE VIEW SRC_OCTO_GRADE AS
 SELECT g.lib_court libelle_court,
        g.lib_long  libelle_long,
        s.id        source_id,

@@ -1,5 +1,5 @@
 CREATE
-OR REPLACE FORCE VIEW SRC_CORPS_OCTO AS
+OR REPLACE FORCE VIEW SRC_OCTO_CORPS AS
 SELECT c.lib_long  libelle_long,
        c.lib_court libelle_court,
        s.id        source_id,

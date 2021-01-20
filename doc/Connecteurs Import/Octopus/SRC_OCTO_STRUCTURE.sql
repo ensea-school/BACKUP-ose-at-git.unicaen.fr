@@ -1,5 +1,5 @@
 CREATE
-OR REPLACE VIEW SRC_STRUCTURE_OCTO AS
+OR REPLACE VIEW SRC_OCTO_STRUCTURE AS
 SELECT s.code          code,
        s.libelle_court libelle_court,
        s.libelle_long  libelle_long,

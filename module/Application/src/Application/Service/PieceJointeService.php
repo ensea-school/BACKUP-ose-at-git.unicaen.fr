@@ -91,6 +91,7 @@ class PieceJointeService extends AbstractEntityService
           JOIN pjd.typePieceJointe tpj
         WHERE
           pjd.intervenant = :intervenant
+        ORDER BY tpj.ordre ASC  
         ";
         $lpjd = $this->getEntityManager()->createQuery($dql)->setParameters([
             'intervenant' => $intervenant,

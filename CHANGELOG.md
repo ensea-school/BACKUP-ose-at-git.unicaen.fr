@@ -50,6 +50,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 ## Corrections de bugs
 
 * Erreur sur l'édition d'une dotation au niveau budget (#33703)
+* Correction ordre d'affichage des pièces jointes pour l'intervenant comme paramétré dans l'adminstration (#34324)
 
 # OSE 14.15
 

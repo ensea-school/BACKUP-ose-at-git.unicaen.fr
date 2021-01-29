@@ -1151,16 +1151,16 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function getValidite(): string
     {
         if (!$this->validiteDebut && !$this->validiteFin) {
-            return 'Validité sans limite';
+            return '';
         }
         if (!$this->validiteDebut) {
-            return 'Jusqu\'au ' . $this->validiteFin->format('d/m/Y');
+            return 'jusqu\'au ' . $this->validiteFin->format('d/m/Y');
         }
         if (!$this->validiteFin) {
-            return 'À partir du ' . $this->validiteDebut->format('d/m/Y');
+            return 'à partir du ' . $this->validiteDebut->format('d/m/Y');
         }
 
-        return 'Du ' . $this->validiteDebut->format('d/m/Y') . ' au ' . $this->validiteFin->format('d/m/Y');
+        return 'du ' . $this->validiteDebut->format('d/m/Y') . ' au ' . $this->validiteFin->format('d/m/Y');
     }
 
 
@@ -1516,6 +1516,8 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         $hydrator = new ClassMethods();
         $data     = $hydrator->extract($this);
         $hydrator->hydrate($data, $intervenant);
+        $intervenant->setValiditeDebut(new \DateTime());
+        $intervenant->setValiditeFin(null);
 
         return $intervenant;
     }

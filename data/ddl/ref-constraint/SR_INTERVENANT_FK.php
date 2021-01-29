@@ -6,7 +6,7 @@ return [
     'name'        => 'SR_INTERVENANT_FK',
     'table'       => 'SERVICE_REFERENTIEL',
     'rtable'      => 'INTERVENANT',
-    'delete_rule' => 'CASCADE',
+    'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
         'INTERVENANT_ID' => 'ID',

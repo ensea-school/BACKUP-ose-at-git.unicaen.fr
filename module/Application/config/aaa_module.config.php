@@ -182,6 +182,7 @@ $config = [
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
+            'tree'            => View\Helper\TreeViewHelper::class,
             'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
             'cartridge'       => View\Helper\CartridgeViewHelper::class,

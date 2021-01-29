@@ -562,9 +562,8 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'formuleTotauxHetd'          => View\Helper\Intervenant\TotauxHetdViewHelper::class,
-            'intervenant'                => View\Helper\Intervenant\IntervenantViewHelper::class,
-            'intervenantSuppressionData' => View\Helper\Intervenant\IntervenantSuppressionDataViewHelper::class,
+            'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
+            'intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
         ],
     ],
     'form_elements'   => [

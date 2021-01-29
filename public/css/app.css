@@ -782,31 +782,16 @@ td .alert {
 
 
 .intervenant-statuts {
-    margin-top: 5px;
     font-size: 12pt;
-    height: 70px;
-    min-height: 50px;
 }
 
-.intervenant-statuts .navbar-brand {
-    font-size: 10pt;
+.intervenant-statuts .navbar-nav {
+    width: 100%;
 }
 
 .intervenant-statuts .navbar-nav li a {
     padding-top: 4px;
     padding-bottom: 4px;
-}
-
-.intervenant-statuts .navbar-brand {
-    padding-top: 13px;
-    padding-bottom: 4px;
-    height: 70px;
-}
-
-.intervenant-statuts .navbar-toggle {
-    margin-top: 1px;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 .intervenant-statuts span.type-intervenant {
@@ -819,8 +804,10 @@ td .alert {
 
 .intervenant-statuts span.validite-intervenant {
     font-size: 10pt;
+    font-style: italic;
 }
 
 .intervenant-statuts li.ajout-intervenant{
     padding-top: 10px;
+    float:right;
 }

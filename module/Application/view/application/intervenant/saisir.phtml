@@ -7,7 +7,12 @@
  * @var $changed         bool
  * @var $errors          array
  * @var $definiParDefaut bool
+ * @var $actionDetail    string
  */
+
+if ($intervenant && 'dupliquer' == $actionDetail) {
+    $this->intervenant($intervenant)->renderTitle('Ajout de statut');
+}
 
 echo $this->form()->openTag($form->prepare());
 

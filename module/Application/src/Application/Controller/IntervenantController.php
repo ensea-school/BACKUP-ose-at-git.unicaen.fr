@@ -359,7 +359,7 @@ class  IntervenantController extends AbstractController
             }
         }
 
-        return compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut');
+        return compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail');
     }
 
 
@@ -421,26 +421,17 @@ class  IntervenantController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
 
-        if ($intervenant) {
-            $data = $this->getProcessusIntervenant()->suppression()->getData($intervenant);
-        } else {
-            $data = null;
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
         }
 
+        $intSuppr = $this->getProcessusIntervenant()->suppression($intervenant);
 
-        $ids = $this->params()->fromPost('ids');
-
-        if ($ids) {
+        if ($ids = $this->params()->fromPost('ids')) {
             try {
-                if ($data) $data = $this->getProcessusIntervenant()->suppression()->deleteRecursive($data, $ids);
-                if ($intervenant) {
-                    $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
-                }
-                if (!$data) {
-                    $this->flashMessenger()->addSuccessMessage('Fiche intervenant supprimée intégralement. Vous allez être redirigé(e) vers la page de recherche des intervenants.');
-                } else {
-                    $this->flashMessenger()->addSuccessMessage('Données bien supprimées');
-                }
+                $intSuppr->delete($ids);
+                $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+                $this->flashMessenger()->addSuccessMessage('Fiche intervenant supprimée intégralement. Vous allez être redirigé(e) vers la page de recherche des intervenants.');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
@@ -449,8 +440,9 @@ class  IntervenantController extends AbstractController
                 'Attention : La suppression d\'une fiche entraine la suppression de toutes les données associées pour l\'année en cours'
             );
         }
+        $tree = $intSuppr->getTree();
 
-        return compact('intervenant', 'data');
+        return compact('intervenant', 'tree');
     }
 
 

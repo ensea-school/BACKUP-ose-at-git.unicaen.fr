@@ -122,23 +122,23 @@ SELECT
     indc.email                                                                                           email_pro,
     ind.email_perso                                                                                      email_perso,
     /* Adresse */
-    '**Adr précision**'                                                                                  adresse_precisions,
-    '**Adr N° voie**'                                                                                    adresse_numero,
-    '**Adr complement**'                                                                                 z_adresse_numero_compl_id,
-    '**Adr voirie**'                                                                                     z_adresse_voirie_id,
-    '**Adr voie**'                                                                                       adresse_voie,
-    '**Adr lieu dit**'                                                                                   adresse_lieu_dit,
-    '**Adr code postal**'                                                                                adresse_code_postal,
-    '**Adr ville**'                                                                                      adresse_commune,
-    '**Adr pays**'                                                                                       z_adresse_pays_id,
+    trim(adr.adresse1 || ' ' || adr.adresse2 || ' ' || adresse3)                                         adresse_precisions,
+    NULL                                                                                                 adresse_numero,
+    NULL                                                                                                 z_adresse_numero_compl_id,
+    NULL                                                                                                 z_adresse_voirie_id,
+    NULL                                                                                                 adresse_voie,
+    NULL                                                                                                 adresse_lieu_dit,
+    adr.code_postal                                                                                      adresse_code_postal,
+    adr.ville_nom                                                                                        adresse_commune,
+    adr.pays_id                                                                                          z_adresse_pays_id,
     /* INSEE */
-    '**INSEE**'                                                                                          numero_insee,
-    '**INSEE provisoire**'                                                                               numero_insee_provisoire,
+    NULL                                                                                                 numero_insee,
+    NULL                                                                                                 numero_insee_provisoire,
 
     /* Banque */
-    '**iban**'                                                                                           iban,
-    '**bic**'                                                                                            bic,
-    '**RIB hors sepa**'                                                                                  rib_hors_sepa,
+    NULL                                                                                                 iban,
+    NULL                                                                                                 bic,
+    NULL                                                                                                 rib_hors_sepa,
 
     /* Données complémentaires */
     CAST(NULL AS varchar2(255))                                                                          autre_1,
@@ -156,6 +156,8 @@ FROM i
          JOIN octo.individu_unique@octodev induni ON (i.code = induni.c_src_individu AND induni.c_source = 'HARP')
          LEFT JOIN octo.individu@octodev ind ON ind.c_individu_chaine = induni.c_individu_chaine
          LEFT JOIN octo.individu_grade@octodev indg ON induni.c_individu_chaine = indg.individu_id
+         LEFT JOIN octo.v_individu_adresse_perso@octodev adr
+                   ON adr.individu_id = induni.c_individu_chaine AND t_principale = 'O'
          LEFT JOIN telephone_pro_principal telpro ON telpro.individu_id = induni.c_individu_chaine
     -- On ne prend que les comptes qui ne sont pas étudiants
          LEFT JOIN octo.individu_compte@octodev indc
@@ -167,3 +169,4 @@ WHERE i.validite_fin + 1 >= (SYSDATE - (365 * 2))
 --AND induni.c_individu_chaine = 1239
 --Filtre octopus id
 --AND induni.c_src_individu = 52958 --Filtre code rh (harpége)
+

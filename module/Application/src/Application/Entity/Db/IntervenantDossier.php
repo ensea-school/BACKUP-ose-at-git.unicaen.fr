@@ -864,6 +864,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setTelPro($intervenant->getTelPro())
             ->setStatut($intervenant->getStatut())
             ->setIBAN(preg_replace('/\s+/', '', $intervenant->getIBAN()))
+            ->setRibHorsSepa($intervenant->isRibHorsSepa())
             ->setBIC(preg_replace('/\s+/', '', $intervenant->getBIC()))
             ->setAdressePrecisions($intervenant->getAdressePrecisions())
             ->setAdresseCodePostal($intervenant->getAdresseCodePostal())

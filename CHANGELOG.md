@@ -51,6 +51,7 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 * Erreur sur l'édition d'une dotation au niveau budget (#33703)
 * Correction ordre d'affichage des pièces jointes pour l'intervenant comme paramétré dans l'adminstration (#34324)
+* Ajout de deux nouveaux indicateurs (730 et 740), identiques aux 710 et 720 mais pour les permanents (#34577)
 
 # OSE 14.15
 

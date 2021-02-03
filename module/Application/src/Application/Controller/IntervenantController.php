@@ -68,6 +68,7 @@ class  IntervenantController extends AbstractController
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
+
         if ($intervenant = $role->getIntervenant()) {
             $etapeCourante = $this->getServiceWorkflow()->getEtapeCourante();
             if ($etapeCourante && $this->getServiceWorkflow()->isAllowed($etapeCourante)) {
@@ -87,7 +88,6 @@ class  IntervenantController extends AbstractController
     public function rechercherAction()
     {
         $recents = $this->getIntervenantsRecents();
-        $var     = '';
 
         return compact('recents');
     }

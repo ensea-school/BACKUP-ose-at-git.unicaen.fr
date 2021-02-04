@@ -58,7 +58,7 @@ class MigrationDossier extends AbstractMigration
         $nbDossierMigration = 0;
 
         //Get id pays FRANCE
-        $sql      = "SELECT id FROM PAYS WHERE ose_divers.str_reduce(libelle) = 'france'";
+        $sql      = "SELECT id FROM PAYS WHERE ose_divers.str_reduce(libelle) = 'france'  AND HISTO_DESTRUCTION IS NULL";
         $pays     = $bdd->select($sql);
         $france   = current($pays);
         $idFrance = $france['ID'];

@@ -6,6 +6,24 @@
  * @var $tree        \Application\Model\TreeNode
  */
 
+if (!$tree) {
+    ?>
+    <script>
+        window.location.href = "<?= $intervenant ? $this->url('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]) : $this->url('intervenant/rechercher') ?>";
+    </script>
+    <div class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Veuillez patienter pendant le rechargement de la page ...
+        ...
+    </div>
+    <?php
+    die();
+} else {
+    ?>
+    <script>
+        $('#sidebar').load('<?= $this->url('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]); ?>')
+    </script>
+    <?php
+}
+
 echo $this->tag('div', [
     'id'       => 'int-suppr-div',
     'data-url' => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getId()]),
@@ -17,11 +35,33 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
 
 
 ?>
-    <button class="btn btn-danger" onclick="supprimer()">Supprimer définitivement les données sélectionnées</button>
+    <br/>
+
+    <button id="suppressionIntervenantData" type="button" class="btn btn-danger" data-toggle="popover" data-trigger="focus"
+            title="Suppression de données intervenant">
+        Supprimer les données sélectionnées
+    </button>
+    <div id="supprEnCours" style="display:none" class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suppression en cours
+        ...
+    </div>
     <script>
+        $(function () {
+            $('#suppressionIntervenantData').popover({
+                html: true,
+                content:
+                    '<div class="alert alert-warning">Attention : les données supprimées ne pourront pas être restaurées</div>' +
+                    'Souhaitez-vous vraiment supprimer les données sélectionnées ?<br /><br />' +
+                    '<button onclick="supprimer()" class="btn btn-danger">Oui, supprimer</button>' +
+                    '&nbsp;<button onclick="$(\'#suppressionIntervenantData\').popover(\'hide\')" class="btn btn-default">Non, laisser telle qu\'elle la fiche</button>'
+            })
+            ;
+        });
+
 
         function supprimer()
         {
+            $('#supprEnCours').show();
+
             var div = $('#int-suppr-div');
             var tree = $('#intervenant-suppr');
             var selectedElms = tree.jstree("get_selected", true);

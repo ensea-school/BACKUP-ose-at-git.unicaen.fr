@@ -93,14 +93,15 @@ class TreeViewHelper extends AbstractViewHelper
             $html .= $this->getView()->tag('ul')->html($sHtml);
         }
 
-        $attrs          = [
-            'id' => $node->getId(),
-        ];
+        $attrs          = [];
+        $attrs['id']    = $node->getId();
         $attrs['class'] = 'jstree-open';
+        if ($node->getTitle()) {
+            $attrs['title'] = $node->getTitle();
+        }
         if ($node->getIcon()) {
             $attrs['data-jstree'] = [
                 'icon' => $node->getIcon(),
-
             ];
         }
 

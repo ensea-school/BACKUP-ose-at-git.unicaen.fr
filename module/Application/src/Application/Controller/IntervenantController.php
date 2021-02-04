@@ -118,6 +118,13 @@ class  IntervenantController extends AbstractController
             throw new \LogicException('Intervenant introuvable');
         }
 
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $vh = new ViewModel();
+            $vh->setTemplate('application/intervenant/menu');
+
+            return $vh;
+        }
+
         $this->addIntervenantRecent($intervenant);
 
         return compact('intervenant', 'role', 'tab');
@@ -424,23 +431,29 @@ class  IntervenantController extends AbstractController
         if (!$intervenant) {
             throw new \Exception('Intervenant introuvable');
         }
+        $intervenantCode = $intervenant->getCode();
 
         $intSuppr = $this->getProcessusIntervenant()->suppression($intervenant);
 
         if ($ids = $this->params()->fromPost('ids')) {
             try {
-                $intSuppr->delete($ids);
-                $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
-                $this->flashMessenger()->addSuccessMessage('Fiche intervenant supprimée intégralement. Vous allez être redirigé(e) vers la page de recherche des intervenants.');
+                if (!empty($ids)) {
+                    $res = $intSuppr->delete($ids);
+                    $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+                    if ($res) {
+                        $this->flashMessenger()->addSuccessMessage('Données de l\'intervenant supprimées');
+                    } else {
+                        $this->flashMessenger()->addErrorMessage('Une ou plusieurs erreurs ont été rencontrées');
+                    }
+                }
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-        } else {
-            $this->flashMessenger()->addWarningMessage(
-                'Attention : La suppression d\'une fiche entraine la suppression de toutes les données associées pour l\'année en cours'
-            );
         }
         $tree = $intSuppr->getTree();
+        if (!$tree) {
+            $intervenant = $this->getServiceIntervenant()->getByCode($intervenantCode);
+        }
 
         return compact('intervenant', 'tree');
     }

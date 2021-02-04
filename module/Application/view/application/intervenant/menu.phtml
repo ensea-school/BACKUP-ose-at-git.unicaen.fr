@@ -4,4 +4,9 @@
  * @var $this \Application\View\Renderer\PhpRenderer
  */
 
-echo $this->navigation()->menuSecondaire('navigation')->render();
+/** @var NavigationHelper $navigationHelper */
+$navigationHelper = $this->navigation('navigation');
+
+echo $navigationHelper->menuSecondaire()->render();
+
+//echo $this->navigation()->menuSecondaire('navigation')->render();

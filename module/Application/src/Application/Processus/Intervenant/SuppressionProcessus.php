@@ -2,9 +2,9 @@
 
 namespace Application\Processus\Intervenant;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Model\TreeNode;
+use Application\Traits\TranslatorTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
@@ -12,6 +12,7 @@ class SuppressionProcessus
 {
     use EntityManagerAwareTrait;
     use IntervenantAwareTrait;
+    use TranslatorTrait;
 
 
     protected $queries = [
@@ -127,6 +128,7 @@ ORDER BY
 SELECT
   CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
   v.intervenant_id         parent_id,
+  tv.code                  type_validation_code,
   v.id                     id,
   'Validations'            categorie,
   tv.libelle || ' par ' || u.display_name || ' le ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) label,
@@ -346,6 +348,8 @@ WHERE
 SELECT
   CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
   vvh.volume_horaire_id    parent_id,
+  vvh.volume_horaire_id    volume_horaire_id,
+  vvh.validation_id        validation_id,
   '[VOLUME_HORAIRE_ID:' || vvh.VOLUME_HORAIRE_ID || ',VALIDATION_ID:' || vvh.validation_id || ']' id,
   null                     categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
@@ -363,6 +367,8 @@ WHERE
 SELECT
   CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
   vvh.volume_horaire_ref_id parent_id,
+  vvh.volume_horaire_ref_id volume_horaire_ref_id,
+  vvh.validation_id         validation_id,
   '[VOLUME_HORAIRE_REF_ID:' || vvh.VOLUME_HORAIRE_REF_ID || ',VALIDATION_ID:' || vvh.validation_id || ']' id,
   null                      categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
@@ -376,7 +382,7 @@ WHERE
         ",
 
 
-        'VALIDATION.FICHIER' => "
+        'FICHIER.VALIDATION' => "
 SELECT
   CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
   f.id                     parent_id,
@@ -391,6 +397,29 @@ FROM
 WHERE
   f.id IN (:id)
         ",
+    ];
+
+    protected $delete  = [
+        '.MISE_EN_PAIEMENT'           => [],
+        'CONTRAT.VALIDATION'          => ['queries' => ['UPDATE CONTRAT SET VALIDATION_ID = NULL WHERE validation_id = :ID']],
+        'CONTRAT.FICHIER'             => [],
+        '.CONTRAT'                    => ['queries' => ['UPDATE VOLUME_HORAIRE SET contrat_id = null WHERE contrat_id = :ID', 'UPDATE contrat SET CONTRAT_ID = NULL WHERE contrat_id = :ID']],
+        '.AGREMENT'                   => [],
+        '.VALIDATION'                 => [],
+        '.VALIDATION_VOL_HORAIRE'     => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_ID']],
+        '.VALIDATION_VOL_HORAIRE_REF' => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_REF_ID']],
+        'PIECE_JOINTE.FICHIER'        => ['queries' => ['DELETE FROM piece_jointe_fichier WHERE fichier_id = :ID']],
+        '.PIECE_JOINTE'               => [],
+        '.VOLUME_HORAIRE'             => [],
+        '.VOLUME_HORAIRE_REF'         => [],
+        '.SERVICE'                    => ['queries' => ['DELETE FROM formule_resultat_service WHERE service_id = :ID']],
+        '.SERVICE_REFERENTIEL'        => ['queries' => ['DELETE FROM formule_resultat_service_ref WHERE service_referentiel_id = :ID']],
+        '.MODIFICATION_SERVICE_DU'    => [],
+        '.INTERVENANT_DOSSIER'        => [],
+        '.INTERVENANT'                => ['queries' => [
+            'DELETE FROM validation WHERE intervenant_id = :ID',// Suppression de toutes les validations orphelines restantes
+            'DELETE FROM formule_resultat WHERE intervenant_id = :ID' // Suppression de tous les restes de formules de calcul
+        ]],
     ];
 
     /**
@@ -453,6 +482,7 @@ WHERE
                     }
                     $d['TABLE']                  = $dest;
                     $d['PARENT_TABLE']           = $ref;
+                    $d['DELETE']                 = false;
                     $this->data[$dest][$d['ID']] = $d;
                 }
                 if (isset($this->data[$dest])) {
@@ -464,8 +494,12 @@ WHERE
 
 
 
-    protected function makeTree(int $id): TreeNode
+    protected function makeTree(int $id): ?TreeNode
     {
+        if (!isset($this->data['INTERVENANT'][$id])) {
+            return null;
+        }
+
         $d = $this->data['INTERVENANT'][$id];
 
         $node = $this->makeNode($d);
@@ -480,7 +514,14 @@ WHERE
     {
         $node = new TreeNode($data['TABLE'] . '#' . $data['ID']);
         $node->setIcon($data['ICON']);
-        $node->setLabel($data['LABEL']);
+        if (isset($data['ERROR'])) {
+            $node->setLabel($data['LABEL'] . ' <span style="font-weight:bold;color:red" title="' . htmlentities($data['ERROR']) . '">Erreur rencontrée</span>');
+        } else {
+            $node->setLabel($data['LABEL']);
+        }
+
+        if (isset($data['TITLE'])) $node->setTitle($data['TITLE']);
+
 
         return $node;
     }
@@ -489,20 +530,11 @@ WHERE
 
     protected function makeNodes(string $table, $id, TreeNode $parent)
     {
-        $subTables = [];
-        foreach ($this->queries as $tbls => $null) {
-            [$p, $c] = explode('.', $tbls);
-            if ($p == $table) {
-                if (array_key_exists($c, $this->data)) {
-                    $subTables[] = $c;
-                }
-            }
-        }
-
-        foreach ($subTables as $t) {
-            foreach ($this->data[$t] as $null => $d) {
-                if ($d['PARENT_ID'] == $id && $d['VISIBLE'] == 1) {
+        foreach ($this->data as $t => $ds) {
+            foreach ($ds as $null => $d) {
+                if ($d['PARENT_TABLE'] == $table && $d['PARENT_ID'] == $id && $d['VISIBLE'] == 1) {
                     $n = $this->makeNode($d);
+
                     if ($d['CATEGORIE']) {
                         $cats = explode('|', $d['CATEGORIE']);
                         $cp   = $parent;
@@ -510,7 +542,7 @@ WHERE
                             if ($cp->has($categorie)) {
                                 $cp = $cp->get($categorie);
                             } else {
-                                $newNode = new TreeNode(uniqid('cat-'));
+                                $newNode = new TreeNode($table == 'INTERVENANT' ? $categorie : uniqid('cat-'));
                                 $newNode->setLabel($categorie);
                                 $cp->add($newNode);
                                 $cp = $newNode;
@@ -528,30 +560,196 @@ WHERE
 
 
 
-    public function delete(array $ids)
+    public function delete(array $ids, bool $force = false): bool
     {
         $this->getData();
-        $fids = [];
+        $this->tagDelete($ids, $force);
+        $this->makeDeleteQueries();
+
+        return $this->doDelete();
+    }
+
+
+
+    private function tagDelete(array $ids, bool $force)
+    {
+        /* On positionne le tag sur toutes les data à détruire */
         foreach ($ids as $id) {
             if (false !== strpos($id, '#')) {
                 [$table, $id] = explode('#', $id);
                 if (isset($this->data[$table][$id])) {
-                    if ($id[0] == '[') {
-                        $kvs = explode(',', substr($id, 1, -2));
-                        foreach ($kvs as $i => $kv) {
-                            [$k, $v] = explode(':', $kv);
-                            $fids[$table][$id][$k] = (int)$v;
-                        }
-                    } else {
-                        $fids[$table][$id] = ['ID' => (int)$id];
-                    }
+                    //$this->subTagDelete($table, $id, true, $force);
+                    $this->data[$table][$id]['DELETE'] = true;
                 }
-                //var_dump($table, $id);
             }
         }
 
+
+        /* On détruit les sous-éléments si on est en FORCE ou bien si les sous-éléments sont cachés pour ne pas qu'ils gênent */
+        foreach ($this->data as $table => $ds) {
+            foreach ($ds as $i => $d) {
+                if ($d['DELETE']) {
+                    $this->subDelete($d['TABLE'], $d ['ID'], $force);
+                }
+            }
+        }
+
+        /* Si on est en mode soft, on ne supprime pas les parents dont les enfants doivent rester */
+        foreach ($this->data as $table => $ds) {
+            foreach ($ds as $i => $d) {
+                if (!$force && !$d['DELETE']) {
+                    $dp = $d;
+                    while ($dp['PARENT_ID']) {
+                        $pTable = $dp['PARENT_TABLE'];
+                        $pId    = $dp['PARENT_ID'];
+                        $dp     = $this->data[$pTable][$pId];
+                        if ($this->data[$pTable][$pId]['DELETE']) {
+                            $this->data[$pTable][$pId]['DELETE'] = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Suppression des validations de VH ou VHRef orphelines */
+        if (isset($this->data['VALIDATION'])) {
+            foreach ($this->data['VALIDATION'] as $vid => $vdata) {
+                if (isset($vdata['TYPE_VALIDATION_CODE'])) {
+                    if ('SERVICES_PAR_COMP' == $vdata['TYPE_VALIDATION_CODE'] && isset($this->data['VALIDATION_VOL_HORAIRE'])) {
+                        $found = false;
+                        foreach ($this->data['VALIDATION_VOL_HORAIRE'] as $vvh) {
+                            if ($vvh['VALIDATION_ID'] == $vid && (false === $vvh['DELETE'])) {
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if (!$found) {
+                            $this->data['VALIDATION'][$vid]['DELETE'] = true;
+                        }
+                    }
+                    if ('REFERENTIEL' == $vdata['TYPE_VALIDATION_CODE'] && isset($this->data['VALIDATION_VOL_HORAIRE_REF'])) {
+                        $found = false;
+                        foreach ($this->data['VALIDATION_VOL_HORAIRE_REF'] as $vvh) {
+                            if ($vvh['VALIDATION_ID'] == $vid && (false === $vvh['DELETE'])) {
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if (!$found) {
+                            $this->data['VALIDATION'][$vid]['DELETE'] = true;
+                        }
+                    }
+                }
+            }
+        }
+        /* DEBUG *
+        $delIds = [];
+        foreach ($this->data as $table => $ds) {
+            foreach ($ds as $i => $d) {
+                if ($d['DELETE']) {
+                    if (!isset($delIds[$table])) $delIds[$table] = [];
+                    $delIds[$table][]                = $d['ID'];
+                    $this->data[$table][$i]['LABEL'] .= '<span style="font-weight:bold;color:red"> (à supprimer!)</span>';
+                }
+            }
+        }
+        //var_dump($this->data);
         var_dump($ids);
-        var_dump($fids);
-        var_dump($this->data);
+        var_dump($delIds);
+        /* FIN DEBUG */
+    }
+
+
+
+    private function makeDeleteQueries()
+    {
+        foreach ($this->delete as $rule => $config) {
+            [$ruleParent, $ruleTable] = explode('.', $rule);
+            $keyCols = isset($config['key']) ? $config['key'] : ['ID'];
+            $queries = isset($config['queries']) ? $config['queries'] : [];
+            $delSql  = '';
+            foreach ($keyCols as $k) {
+                if ($delSql == '') {
+                    $delSql .= 'DELETE FROM ' . $ruleTable . ' WHERE ';
+                } else {
+                    $delSql .= ' AND ';
+                }
+                $delSql .= $k . ' = :' . $k;
+            }
+            $queries[] = $delSql;
+
+            if (isset($this->data[$ruleTable])) {
+                foreach ($this->data[$ruleTable] as $i => $d) {
+                    if (!$ruleParent || $ruleParent == $d['PARENT_TABLE']) {
+                        if (isset($d['DELETE']) && $d['DELETE']) {
+                            foreach ($queries as $query) {
+                                $delQuery = $query;
+                                foreach ($keyCols as $k) {
+                                    $delQuery = str_replace(':' . $k, (int)$d[$k], $delQuery);
+                                }
+                                if (!isset($this->data[$ruleTable][$i]['DELETE_QUERIES'])) {
+                                    $this->data[$ruleTable][$i]['DELETE_QUERIES'] = [];
+                                }
+                                $this->data[$ruleTable][$i]['DELETE_QUERIES'][] = $delQuery;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    private function doDelete(): bool
+    {
+        $res = true;
+        foreach ($this->delete as $rule => $null) {
+            [$ruleParent, $ruleTable] = explode('.', $rule);
+            if (isset($this->data[$ruleTable])) {
+                foreach ($this->data[$ruleTable] as $i => $d) {
+                    if ((!$ruleParent || $d['PARENT_TABLE'] == $ruleParent) && isset($d['DELETE_QUERIES']) && !empty($d['DELETE_QUERIES'])) {
+                        if (!$this->deleteItem($ruleTable, $i)) $res = false;
+                    }
+                }
+            }
+        }
+
+        return $res;
+    }
+
+
+
+    private function deleteItem(string $table, string $id): bool
+    {
+        $data = &$this->data[$table][$id];
+        try {
+            foreach ($data['DELETE_QUERIES'] as $sql) {
+                $this->getEntityManager()->getConnection()->exec($sql);
+            }
+            unset($this->data[$table][$id]);
+            $res = true;
+        } catch (\Exception $e) {
+            $data['ERROR'] = $this->translate($e->getMessage());
+            $res           = false;
+        }
+
+        return $res;
+    }
+
+
+
+    protected function subDelete(string $table, string $id, bool $force)
+    {
+        foreach ($this->data as $t => $ds) {
+            foreach ($ds as $i => $d) {
+                if ($d['PARENT_TABLE'] == $table && $d['PARENT_ID'] == $id && !$d['DELETE']) {
+                    if ($force || !$d['VISIBLE']) {
+                        $this->data[$t][$i]['DELETE'] = true;
+                    }
+                    $this->subDelete($t, $i, $force);
+                }
+            }
+        }
     }
 }

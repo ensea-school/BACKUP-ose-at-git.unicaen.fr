@@ -113,7 +113,6 @@ class IntervenantService extends AbstractEntityService
 
     public function getByCode(string $code): ?Intervenant
     {
-        $code        = null;
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
         $structureId = $this->getServiceContext()->getStructure();

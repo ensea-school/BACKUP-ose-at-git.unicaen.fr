@@ -21,7 +21,7 @@ $canArchiver  = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUS
 
 $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getId()]);
 
-$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+$menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 ?>
     <h1 class="page-header"><?= $this->intervenant($intervenant)->renderTitle('Pièces justificatives'); ?></h1>

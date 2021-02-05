@@ -41,6 +41,7 @@ class MigrationDossier extends AbstractMigration
 
     protected function before()
     {
+
         $this->manager->sauvegarderTable('DOSSIER', 'DOSSIER_SAVE');
 
         $bdd = $this->manager->getBdd();
@@ -57,7 +58,7 @@ class MigrationDossier extends AbstractMigration
         $nbDossierMigration = 0;
 
         //Get id pays FRANCE
-        $sql      = "SELECT id FROM PAYS WHERE libelle = 'FRANCE'";
+        $sql      = "SELECT id FROM PAYS WHERE ose_divers.str_reduce(libelle) = 'france'  AND HISTO_DESTRUCTION IS NULL";
         $pays     = $bdd->select($sql);
         $france   = current($pays);
         $idFrance = $france['ID'];

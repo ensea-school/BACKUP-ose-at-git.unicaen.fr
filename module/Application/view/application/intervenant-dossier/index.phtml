@@ -272,13 +272,12 @@ $fieldsets = $form->getFieldsets();
                 var emptyDept = $("option[value='']", selectDept);
 
                 selectPays.change(function () {
-                    if ($("option:selected", selectPays).html() == 'FRANCE') {
+                    var pays = $("option:selected", selectPays).html();
+                    var paysToLower = pays.toLowerCase();
+                    if (paysToLower == 'france') {
                         selectDept.removeProp('disabled')
                         selectDept.siblings('button').removeClass('disabled')
-
-
                     } else {
-
                         selectDept.prop('disabled', 'disabled')
                         selectDept.siblings('button').addClass('disabled')
                         emptyDept.html("(Sélectionnez un département)").prop('selected', 'selected')

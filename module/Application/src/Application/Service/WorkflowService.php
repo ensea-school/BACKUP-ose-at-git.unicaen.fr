@@ -265,7 +265,9 @@ class WorkflowService extends AbstractService
             $this->calculEtats($this->feuillesDeRoute[$iid][$sid]);
         }
 
-        return $this->feuillesDeRoute[$iid][$sid];
+        $feuillleDeRoute = $this->feuillesDeRoute[$iid][$sid];
+
+        return $feuillleDeRoute;
     }
 
 
@@ -439,7 +441,7 @@ class WorkflowService extends AbstractService
      *
      * @return TblWorkflow[]
      */
-    protected function getEtapes(Intervenant $intervenant, Structure $structure = null)
+    protected function getEtapes(Intervenant $intervenant, ?Structure $structure = null, bool $calcIfEmpty = true)
     {
 
         $dql = "
@@ -462,6 +464,13 @@ class WorkflowService extends AbstractService
         $query->setParameter('intervenant', $intervenant);
         if ($structure) $query->setParameter('structure', $structure);
         $etapes = $query->getResult();
+
+        if (empty($etapes) && $calcIfEmpty) {
+            $this->calculerTableauxBord([], $intervenant);
+
+            return $this->getEtapes($intervenant, $structure, false);
+        }
+
         /* @var $etapes TblWorkflow[] */
         if ($this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
             foreach ($etapes as $etape) {

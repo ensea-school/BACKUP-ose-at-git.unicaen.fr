@@ -8,6 +8,7 @@
  * @var $errors          array
  * @var $definiParDefaut bool
  * @var $actionDetail    string
+ * @var $isImportable    bool
  */
 
 if ($intervenant && 'dupliquer' == $actionDetail) {
@@ -124,31 +125,47 @@ if ($errors) {
                         that.getSyncStructureElement().prop("checked", false);
                     });
 
+                    this.getChangementEtatBtn().click(function () {
+                        that.changementParDefaut();
+                    });
+                },
+
+                changementParDefaut: function ()
+                {
+                    console.log('changement par défaut!!!');
                 },
 
                 getStatutElement: function () { return this.element.find('select[name="statut"]'); },
                 getSyncStatutElement: function () { return this.element.find('input[name="syncStatut"]'); },
                 getStructureElement: function () { return this.element.find('select[name="structure"]'); },
-                getSyncStructureElement: function () { return this.element.find('input[name="syncStructure"]'); }
+                getSyncStructureElement: function () { return this.element.find('input[name="syncStructure"]'); },
+                getChangementEtatBtn: function () { return $('#changement-etat-defaut'); }
             });
 
             WidgetInitializer.add('form-intervenant-edition', 'formIntervenantEdition');
         })
         ;
-
     </script>
 
-
 <?php
-echo $this->formSubmit($form->get('submit'));
-
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag();
+echo ' ' . $this->tag('button', [
+        'onclick' => "$('.form-intervenant-edition').submit();",
+        'class'   => 'btn btn-primary no-intranavigation',
+    ])->html('Enregistrer');
 if ($intervenant->getId()) {
     echo ' ' . $this->tag('a', [
             'href'  => $this->url('intervenant/definir-par-defaut', ['intervenant' => $intervenant->getId()]),
             'title' => 'Définir par défaut',
+            'id'    => 'changement-etat-defaut',
             'class' => 'btn btn-info pop-ajax' . ($definiParDefaut ? ' active' : ''),
-        ])->html('Définir par défaut');
+        ])->html($definiParDefaut ? 'Ne plus définir par défaut' : 'Définir par défaut');
 }
-
-echo $this->formHidden($form->get('id'));
-echo $this->form()->closeTag();
+if ($isImportable) {
+    echo ' ' . $this->tag('a', [
+            'href'  => $this->url('intervenant/synchroniser', ['intervenant' => $intervenant->getId()]),
+            'title' => 'Synchroniser (import vers OSE)',
+            'class' => 'btn btn-default',
+        ])->html('Synchroniser (import vers OSE)');
+}

@@ -217,6 +217,22 @@ class IntervenantService extends AbstractEntityService
 
 
 
+    public function isImportable(Intervenant $intervenant): bool
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $sqlEnabled = "SELECT sync_enabled FROM import_tables WHERE table_name = 'INTERVENANT'";
+        $res        = $connection->fetchAssociative($sqlEnabled);
+        if (false === $res || '0' == $res['SYNC_ENABLED']) return false;
+
+        $sql = "SELECT code FROM SRC_INTERVENANT WHERE code = :code AND annee_id = :annee";
+        $res = $connection->fetchAssociative($sql, ['code' => $intervenant->getCode(), 'annee' => $intervenant->getAnnee()->getId()]);
+
+        return ($res !== false) && isset($res['CODE']) && ($intervenant->getCode() == $res['CODE']);
+    }
+
+
+
     private function getIntervenantIdParDefaut(string $code, int $anneeId): ?int
     {
         if (!$code || !$anneeId) return null;

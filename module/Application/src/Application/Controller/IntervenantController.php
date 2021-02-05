@@ -32,6 +32,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -62,6 +63,7 @@ class  IntervenantController extends AbstractController
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use DossierServiceAwareTrait;
+    use ImportProcessusAwareTrait;
 
 
     public function indexAction()
@@ -366,7 +368,23 @@ class  IntervenantController extends AbstractController
             }
         }
 
-        return compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail');
+        $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
+
+        $vm = new ViewModel();
+        $vm->setTemplate('application/intervenant/saisir');
+        $vm->setVariables(compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail', 'isImportable'));
+
+        return $vm;
+    }
+
+
+
+    public function synchroniserAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
+
+        return $this->saisirAction();
     }
 
 
@@ -504,7 +522,20 @@ class  IntervenantController extends AbstractController
         $container = $this->getSessionContainer();
         //$container->recents = [];
         if (isset($container->recents)) {
-            return $container->recents;
+            $recents = $container->recents;
+            foreach ($recents as $i => $recent) {
+                if (isset($recent['code'])) {
+                    $intervenant = $this->getServiceIntervenant()->getByCode($recent['code']);
+                } else {
+                    $intervenant = null;
+                }
+                if (!$intervenant) {
+                    unset($recents[$i]);
+                    unset($container->recents[$i]);
+                }
+            }
+
+            return $recents;
         } else {
             return [];
         }
@@ -549,7 +580,8 @@ class  IntervenantController extends AbstractController
                 'date-naissance'   => $intervenant->getDateNaissance(),
                 'structure'        => (string)$intervenant->getStructure(),
                 'statut'           => (string)$intervenant->getStatut(),
-                'numero-personnel' => $intervenant->getSourceCode(),
+                'code'             => $intervenant->getCode(),
+                'numero-personnel' => $intervenant->getCode(),
                 '__horo_ajout__'   => (int)date('U'),
             ];
         } else {

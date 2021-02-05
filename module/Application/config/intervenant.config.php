@@ -87,6 +87,15 @@ return [
                             ],
                         ],
                     ],
+                    'synchroniser'            => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/synchroniser',
+                            'defaults' => [
+                                'action' => 'synchroniser',
+                            ],
+                        ],
+                    ],
                     'supprimer'               => [
                         'type'    => 'Segment',
                         'options' => [
@@ -450,7 +459,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['saisir', 'definir-par-defaut'],
+                    'action'     => ['saisir', 'definir-par-defaut', 'synchroniser'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
                     ],
@@ -540,8 +549,10 @@ return [
         ],
     ],
     'controllers'     => [
+        'factories'  => [
+            'Application\Controller\Intervenant' => Controller\Factory\IntervenantControllerFactory::class,
+        ],
         'invokables' => [
-            'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
             'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
         ],
     ],

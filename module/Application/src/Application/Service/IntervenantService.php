@@ -25,7 +25,6 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @method Intervenant get($id)
  * @method Intervenant[] getList(QueryBuilder $qb = null, $alias = null)
- * @method Intervenant newEntity()
  */
 class IntervenantService extends AbstractEntityService
 {
@@ -371,6 +370,23 @@ class IntervenantService extends AbstractEntityService
         }
 
         return $qb;
+    }
+
+
+
+    /**
+     * @return Intervenant
+     */
+    public function newEntity(): Intervenant
+    {
+        $intervenant = parent::newEntity();
+        $intervenant->setStructure($this->getServiceContext()->getStructure());
+        $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
+        $intervenant->setAnnee($this->getServiceContext()->getAnnee());
+        $intervenant->setSource($this->getServiceSource()->getOse());
+        $intervenant->setCode(uniqid('OSE'));
+
+        return $intervenant;
     }
 
 

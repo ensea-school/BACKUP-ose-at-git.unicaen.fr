@@ -287,10 +287,7 @@ class  IntervenantController extends AbstractController
 
     public function saisirAction()
     {
-        $statutAutres = $this->getServiceStatutIntervenant()->getAutres();
-
-        $role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant  = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant  = $this->getEvent()->getParam('intervenant');
         $title        = "Saisie d'un intervenant";
         $form         = $this->getFormIntervenantEdition();
         $errors       = [];
@@ -304,11 +301,6 @@ class  IntervenantController extends AbstractController
         $isNew = !$intervenant;
         if (!$intervenant) {
             $intervenant = $this->getServiceIntervenant()->newEntity();
-            $intervenant->setStructure($this->getServiceContext()->getStructure());
-            $intervenant->setStatut($statutAutres);
-            $intervenant->setAnnee($this->getServiceContext()->getAnnee());
-            $intervenant->setSource($this->getServiceSource()->getOse());
-            $intervenant->setCode(uniqid('OSE'));
         }
 
         if ($actionDetail == 'dupliquer') {
@@ -332,8 +324,7 @@ class  IntervenantController extends AbstractController
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
-                    $form->protection($intervenant);
-                    if ($form->get('login')->getValue() && $form->get('password')->getValue()) {
+                    if ($this->params()->fromPost('userCreate') == '1' && $form->get('login')->getValue() && $form->get('password')->getValue()) {
                         $nom           = $intervenant->getNomUsuel();
                         $prenom        = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();

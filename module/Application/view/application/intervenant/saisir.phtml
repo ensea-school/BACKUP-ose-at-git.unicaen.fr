@@ -128,18 +128,54 @@ if ($errors) {
                     this.getChangementEtatBtn().click(function () {
                         that.changementParDefaut();
                     });
+
+                    this.getLoginElement().change(function () {
+                        that.changementLoginPassword();
+                    });
+
+                    this.getPasswordElement().change(function () {
+                        that.changementLoginPassword();
+                    });
+
+                    this.getUserUtilisateurElement().change(function () {
+                        that.changementUtilisateur();
+                    });
                 },
 
                 changementParDefaut: function ()
                 {
-                    console.log('changement par défaut!!!');
+                    var btn = this.getChangementEtatBtn();
+
+                    if (btn.hasClass('active')) {
+                        btn.removeClass('active');
+                        btn.html('Définir par défaut');
+                    } else {
+                        btn.addClass('active');
+                        btn.html('Ne plus définir par défaut');
+                    }
+                },
+
+                changementLoginPassword: function ()
+                {
+                    this.getUserCreateElement().val(1);
+                },
+
+                changementUtilisateur: function ()
+                {
+                    this.getUserChangeElement().val(1);
                 },
 
                 getStatutElement: function () { return this.element.find('select[name="statut"]'); },
                 getSyncStatutElement: function () { return this.element.find('input[name="syncStatut"]'); },
                 getStructureElement: function () { return this.element.find('select[name="structure"]'); },
                 getSyncStructureElement: function () { return this.element.find('input[name="syncStructure"]'); },
-                getChangementEtatBtn: function () { return $('#changement-etat-defaut'); }
+                getChangementEtatBtn: function () { return $('#changement-etat-defaut'); },
+
+                getUserChangeElement: function () { return this.element.find('input[name="userChange"]'); },
+                getUserCreateElement: function () { return this.element.find('input[name="userCreate"]'); },
+                getLoginElement: function () { return this.element.find('input[name="login"]'); },
+                getPasswordElement: function () { return this.element.find('input[name="password"]'); },
+                getUserUtilisateurElement: function () { return this.element.find('input[name="utilisateur[id]"]'); }
             });
 
             WidgetInitializer.add('form-intervenant-edition', 'formIntervenantEdition');
@@ -149,6 +185,8 @@ if ($errors) {
 
 <?php
 echo $this->formHidden($form->get('id'));
+echo $this->formHidden($form->get('userChange'));
+echo $this->formHidden($form->get('userCreate'));
 echo $this->form()->closeTag();
 echo ' ' . $this->tag('button', [
         'onclick' => "$('.form-intervenant-edition').submit();",

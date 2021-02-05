@@ -297,6 +297,18 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'userChange',
+            'type'       => 'Hidden',
+            'attributes' => ['value' => '0'],
+        ]);
+
+        $this->add([
+            'name'       => 'userCreate',
+            'type'       => 'Hidden',
+            'attributes' => ['value' => '0'],
+        ]);
+
+        $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [
@@ -460,7 +472,18 @@ class EditionForm extends AbstractForm
             'code'               => ['required' => true],
             'utilisateur'        => ['required' => false],
             'login'              => ['required' => false],
-            'password'           => ['required' => false],
+            'password'           => [
+                'required'   => false,
+                'validators' => [
+                    [
+                        'name'    => 'StringLength',
+                        'options' => ['min' => 6],
+                    ],
+                ],
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                ],
+            ],
             'source'             => ['required' => false],
             'sourceCode'         => ['required' => false],
             'montantIndemniteFc' => ['required' => false],
@@ -491,14 +514,16 @@ class EditionFormHydrator extends GenericHydrator
     {
         parent::hydrate($data, $object);
 
-        $login = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
-        if ($login) {
-            $code = $this->getConnecteurLdap()->getCodeFromLogin($login);
-        } else {
-            $code = null;
-        }
+        if ($data['userChange'] == '1') {
+            $login = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
+            if ($login) {
+                $code = $this->getConnecteurLdap()->getCodeFromLogin($login);
+            } else {
+                $code = null;
+            }
 
-        $object->setUtilisateurCode($code);
+            $object->setUtilisateurCode($code);
+        }
     }
 
 

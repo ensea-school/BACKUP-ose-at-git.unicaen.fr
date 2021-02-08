@@ -29,6 +29,11 @@ Objectif : Doubles statuts et refonte des données personnelles
 * Possibilité de mettre à jour par synchronisation et manuellement un élément pédagogique spécifique par déclenchement d'import
 * Ajout d'un nouveau privilège 'Archivage' pour donner la possiblité à un statut d'intervenant de mettre à jour une pièce jointe lorsque celle ci a été fourni une année antérieure à l'année en cours (Bouton "Modifier si besoin")
 
+## Corrections de bugs
+
+* La suppression d'intervenants est maintenant pleinement opérationnelle et les erreurs sont mieux affichées
+* Formule de Poitiers modifiée
+
 ## Notes de mise à jour
 
 * PHP 7.4 minimum requis : attention à bien mettre à jour vos serveurs

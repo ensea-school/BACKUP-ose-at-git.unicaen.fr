@@ -62,10 +62,10 @@ SELECT DISTINCT
     i.z_statut_id                                                                                        z_statut_id,
     grade.c_grade                                                                                        z_grade_id,
     /* Données nécessaires pour calculer la discipline */
-    indg.cnu_id                                                                                          z_discipline_id_cnu,
+    cnu.c_cnu                                                                                            z_discipline_id_cnu,
     CAST(NULL AS varchar2(255))                                                                          z_discipline_id_sous_cnu,
-    indg.cnu_specialite_id                                                                               z_discipline_id_spe_cnu,
-    indg.discipline_sec_id                                                                               z_discipline_id_dis2deg,
+    cnus.c_cnu_specialite                                                                                z_discipline_id_spe_cnu,
+    dissec.c_discipline                                                                                  z_discipline_id_dis2deg,
     /* Données identifiantes de base */
     CASE ind.sexe WHEN 'M' THEN 'M.' ELSE 'Mme' END                                                      z_civilite_id,
     initcap(ind.nom_usage)                                                                               nom_usuel,
@@ -117,6 +117,9 @@ FROM i
          LEFT JOIN octo.individu_grade@octoprod indg ON induni.c_individu_chaine = indg.individu_id
     AND COALESCE(indg.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) > SYSDATE
     AND COALESCE(indg.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) < SYSDATE
+         LEFT JOIN octo.cnu@octoprod cnu ON indg.cnu_id = cnu.id
+         LEFT JOIN octo.cnu_specialite@octoprod cnus ON indg.cnu_specialite_id = cnus.id
+         LEFT JOIN octo.discipline_sec@octoprod dissec ON indg.discipline_sec_id = dissec.id
          LEFT JOIN octo.grade@octoprod grade ON indg.grade_id = grade.id
     --On récupére l'adresse principale de l'individu
          LEFT JOIN octo.v_individu_adresse_perso@octoprod adr

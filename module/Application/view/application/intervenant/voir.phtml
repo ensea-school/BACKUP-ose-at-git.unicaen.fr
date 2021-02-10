@@ -26,6 +26,15 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
     ];
 }
 
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
+    $tabs[] = [
+        'id'            => 'synchronisation',
+        'label'         => '<span class="glyphicon glyphicon-import"></span> Synchronisation',
+        'url'           => $this->url('intervenant/synchronisation', ['intervenant' => $intervenant->getId()]),
+        'force-refresh' => true,
+    ];
+}
+
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION))) {
     $tabs[] = [
         'id'            => 'suppression',

@@ -87,6 +87,15 @@ return [
                             ],
                         ],
                     ],
+                    'synchronisation'         => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/synchronisation',
+                            'defaults' => [
+                                'action' => 'synchronisation',
+                            ],
+                        ],
+                    ],
                     'synchroniser'            => [
                         'type'    => 'Segment',
                         'options' => [
@@ -102,6 +111,24 @@ return [
                             'route'    => '/:intervenant/supprimer',
                             'defaults' => [
                                 'action' => 'supprimer',
+                            ],
+                        ],
+                    ],
+                    'historiser'              => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/historiser',
+                            'defaults' => [
+                                'action' => 'historiser',
+                            ],
+                        ],
+                    ],
+                    'restaurer'               => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/restaurer',
+                            'defaults' => [
+                                'action' => 'restaurer',
                             ],
                         ],
                     ],
@@ -459,14 +486,14 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['saisir', 'definir-par-defaut', 'synchroniser'],
+                    'action'     => ['saisir', 'definir-par-defaut', 'synchronisation', 'synchroniser', 'restaurer'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['supprimer'],
+                    'action'     => ['supprimer', 'historiser'],
                     'privileges' => [
                         Privileges::INTERVENANT_SUPPRESSION,
                     ],

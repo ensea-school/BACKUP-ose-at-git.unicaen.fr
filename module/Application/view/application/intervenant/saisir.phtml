@@ -8,7 +8,6 @@
  * @var $errors          array
  * @var $definiParDefaut bool
  * @var $actionDetail    string
- * @var $isImportable    bool
  */
 
 if ($intervenant && 'dupliquer' == $actionDetail) {
@@ -199,11 +198,4 @@ if ($intervenant->getId()) {
             'id'    => 'changement-etat-defaut',
             'class' => 'btn btn-info pop-ajax' . ($definiParDefaut ? ' active' : ''),
         ])->html($definiParDefaut ? 'Ne plus définir par défaut' : 'Définir par défaut');
-}
-if ($isImportable) {
-    echo ' ' . $this->tag('a', [
-            'href'  => $this->url('intervenant/synchroniser', ['intervenant' => $intervenant->getId()]),
-            'title' => 'Synchroniser (import vers OSE)',
-            'class' => 'btn btn-default',
-        ])->html('Synchroniser (import vers OSE)');
 }

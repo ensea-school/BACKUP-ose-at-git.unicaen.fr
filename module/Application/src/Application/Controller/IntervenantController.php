@@ -359,13 +359,70 @@ class  IntervenantController extends AbstractController
             }
         }
 
-        $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
-
         $vm = new ViewModel();
         $vm->setTemplate('application/intervenant/saisir');
-        $vm->setVariables(compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail', 'isImportable'));
+        $vm->setVariables(compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail'));
 
         return $vm;
+    }
+
+
+
+    public function synchronisationAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
+        $data         = [];
+
+        if ($isImportable) {
+            $sql = "
+            SELECT 
+              i.id,
+              si.libelle statut
+             FROM 
+              src_intervenant i 
+              JOIN statut_intervenant si ON si.id = i.statut_id
+            WHERE 
+              i.annee_id = :annee AND i.code = :code";
+            $d   = $this->em()->getConnection()->fetchAll($sql, ['annee' => $intervenant->getAnnee()->getID(), 'code' => $intervenant->getCode()]);
+            foreach ($d as $da) {
+                $id        = $da['ID'] ? (int)$da['ID'] : $da['STATUT'];
+                $data[$id] = [
+                    'source-statut'      => $da['STATUT'],
+                    'id'                 => $da['ID'] ? (int)$da['ID'] : null,
+                    'intervenant-statut' => null,
+                    'histo-destruction'  => null,
+                    'histo-destructeur'  => null,
+                ];
+            }
+
+            $sql = "
+            SELECT 
+              i.id,
+              si.libelle statut,
+              to_char(i.histo_destruction, 'dd/mm/YYYY') histo_destruction, 
+              u.display_name destructeur
+             FROM 
+              intervenant i 
+              JOIN statut_intervenant si ON si.id = i.statut_id
+              LEFT JOIN utilisateur u ON u.id = i.histo_destructeur_id
+            WHERE 
+              i.annee_id = :annee AND i.code = :code";
+            $d   = $this->em()->getConnection()->fetchAll($sql, ['annee' => $intervenant->getAnnee()->getID(), 'code' => $intervenant->getCode()]);
+            foreach ($d as $da) {
+                $id = (int)$da['ID'];
+                if (!isset($data[$id])) {
+                    $data[$id] = ['source-statut' => null];
+                }
+                $data[$id]['id']                 = $id;
+                $data[$id]['intervenant-statut'] = $da['STATUT'];
+                $data[$id]['histo-destruction']  = $da['HISTO_DESTRUCTION'];
+                $data[$id]['histo-destructeur']  = $da['DESTRUCTEUR'];
+            }
+        }
+
+        return compact('intervenant', 'isImportable', 'data');
     }
 
 
@@ -375,7 +432,7 @@ class  IntervenantController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
 
-        return $this->saisirAction();
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
     }
 
 
@@ -465,6 +522,37 @@ class  IntervenantController extends AbstractController
         }
 
         return compact('intervenant', 'tree');
+    }
+
+
+
+    public function historiserAction()
+    {
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
+        }
+        $this->getServiceIntervenant()->delete($intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
+    }
+
+
+
+    public function restaurerAction()
+    {
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
+        }
+        $intervenant->dehistoriser();
+        $this->getServiceIntervenant()->save($intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
     }
 
 

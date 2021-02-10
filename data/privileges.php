@@ -113,12 +113,13 @@ return [
     'referentiel' => [
         'libelle'    => 'Référentiel',
         'privileges' => [
-            'visualisation'       => 'Visualisation',
-            'edition'             => 'Édition',
-            'validation'          => 'Validation',
-            'admin-edition'       => 'Administration - Édition',
-            'devalidation'        => 'Dévalidation',
-            'admin-visualisation' => 'Administration - Visualisation',
+            'visualisation'             => 'Visualisation',
+            'edition'                   => 'Édition',
+            'validation'                => 'Validation',
+            'admin-edition'             => 'Administration - Édition',
+            'devalidation'              => 'Dévalidation',
+            'admin-visualisation'       => 'Administration - Visualisation',
+            'saisie-toutes-composantes' => 'Saisie sans contrainte de composante',
         ],
     ],
 

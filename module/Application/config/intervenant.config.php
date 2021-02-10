@@ -486,9 +486,16 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['saisir', 'definir-par-defaut', 'synchronisation', 'synchroniser', 'restaurer'],
+                    'action'     => ['saisir', 'definir-par-defaut', 'synchronisation', 'synchroniser'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['restaurer'],
+                    'privileges' => [
+                        Privileges::INTERVENANT_AJOUT_STATUT,
                     ],
                 ],
                 [

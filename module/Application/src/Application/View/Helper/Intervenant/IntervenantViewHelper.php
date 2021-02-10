@@ -97,6 +97,11 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 $msg .= ' Sa fiche ne remonte plus depuis l\'application ' . $entity->getSource() . '.';
             }
 
+            $canRestaure = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+            if ($canRestaure) {
+                $msg .= "<br />" . $this->getView()->tag('a', ['href' => $this->getView()->url('intervenant/restaurer', ['intervenant' => $entity->getId()])])->html('Restaurer la fiche');
+            }
+
             $html .= '<div class="alert alert-danger">' . $msg . '</div>';
         }
 
@@ -131,33 +136,38 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
         $this->getView()->headTitle()->append($intervenant->getNomUsuel())->append($title);
         $title .= ' <small>' . $intervenant . '</small>';
+        if ($intervenant->estHistorise()) {
+            $title .= ' ' . $this->getView()->tag('span', ['class' => 'text-danger glyphicon glyphicon-warning-sign', 'title' => 'Intervenant historisé'])->text('');
+        }
 
         echo $this->getView()->tag('h1', ['class' => 'page-header'])->open();
         echo $title . '<br />';
         $statuts = $this->getStatuts();
-        ?>
-        <nav class="navbar navbar-default intervenant-statuts">
-            <ul class="nav navbar-nav">
-                <?php foreach ($statuts as $intervenantId => $statut): ?>
-                    <li<?= ($statut == $intervenant->getStatut()) ? ' class="active"' : ' title="Cliquez pour afficher"' ?>>
-                        <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
-                            <span class="type-intervenant"><?= $statut->getTypeIntervenant() ?></span>
-                            <span class="validite-intervenant"><?= $intervenant->getValidite(); ?></span><br/>
-                            <span class="statut-intervenant"><?= $statut->getLibelle() ?></span>
+        if (!empty($statuts)) {
+            ?>
+            <nav class="navbar navbar-default intervenant-statuts">
+                <ul class="nav navbar-nav">
+                    <?php foreach ($statuts as $intervenantId => $statut): ?>
+                        <li<?= ($statut == $intervenant->getStatut()) ? ' class="active"' : ' title="Cliquez pour afficher"' ?>>
+                            <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
+                                <span class="type-intervenant"><?= $statut->getTypeIntervenant() ?></span>
+                                <span class="validite-intervenant"><?= $intervenant->getValidite(); ?></span><br/>
+                                <span class="statut-intervenant"><?= $statut->getLibelle() ?></span>
 
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-                <?php if ($canAddIntervenant): ?>
-                    <li class="ajout-intervenant">
-                        <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenantId]); ?>"
-                           title="Ajout d'un nouveau statut à l'intervenant"><span
-                                    class="glyphicon glyphicon-plus"></span></a>
-                    </li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-        <?php
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                    <?php if ($canAddIntervenant): ?>
+                        <li class="ajout-intervenant">
+                            <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]); ?>"
+                               title="Ajout d'un nouveau statut à l'intervenant"><span
+                                        class="glyphicon glyphicon-plus"></span></a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
+            <?php
+        }
         echo $this->getView()->tag('h1')->close();
     }
 

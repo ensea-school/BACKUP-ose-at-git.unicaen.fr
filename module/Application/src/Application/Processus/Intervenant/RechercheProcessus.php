@@ -12,6 +12,11 @@ class RechercheProcessus
     use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
 
+    /**
+     * @var bool
+     */
+    protected $showHisto = false;
+
 
 
     /**
@@ -32,6 +37,30 @@ class RechercheProcessus
 
 
     /**
+     * @return bool
+     */
+    public function isShowHisto(): bool
+    {
+        return $this->showHisto;
+    }
+
+
+
+    /**
+     * @param bool $showHisto
+     *
+     * @return RechercheProcessus
+     */
+    public function setShowHisto(bool $showHisto): RechercheProcessus
+    {
+        $this->showHisto = $showHisto;
+
+        return $this;
+    }
+
+
+
+    /**
      * @param string  $critere
      * @param integer $limit
      *
@@ -46,7 +75,7 @@ class RechercheProcessus
 
     private function sqlLocale(): string
     {
-        return "
+        $sql = "
         SELECT
           i.id,
           i.code,
@@ -59,15 +88,19 @@ class RechercheProcessus
           c.libelle_long civilite,
           si.libelle statut,
           i.critere_recherche critere,
-          i.annee_id
+          i.annee_id,
+          i.histo_destruction
         FROM
           intervenant i
           LEFT JOIN structure s ON s.id = i.structure_id
           LEFT JOIN civilite c ON c.id = i.civilite_id
           LEFT JOIN statut_intervenant si ON si.id = i.statut_id
-        WHERE
-          i.histo_destruction IS NULL
         ";
+        if (!$this->showHisto) {
+            $sql .= "WHERE i.histo_destruction IS NULL";
+        }
+
+        return $sql;
     }
 
 
@@ -87,7 +120,8 @@ class RechercheProcessus
           c.libelle_long civilite,
           si.libelle statut,
           i.critere_recherche critere,
-          i.annee_id
+          i.annee_id,
+          null histo_destruction
         FROM
           src_intervenant i
           LEFT JOIN structure s ON s.id = i.structure_id
@@ -168,8 +202,12 @@ class RechercheProcessus
                     'structure'        => $r['STRUCTURE'],
                     'statut'           => $r['STATUT'],
                     'numero-personnel' => $r['CODE'],
+                    'destruction'      => $r['HISTO_DESTRUCTION'],
                 ];
             } else {
+                if ($intervenants[$k]['destruction'] && !$r['destruction']) {
+                    $intervenants[$k]['destruction'] = null;
+                }
                 if ($intervenants[$k]['statut'] && !is_array($intervenants[$k]['statut'])) {
                     $intervenants[$k]['statut'] = [$intervenants[$k]['statut']];
                 }

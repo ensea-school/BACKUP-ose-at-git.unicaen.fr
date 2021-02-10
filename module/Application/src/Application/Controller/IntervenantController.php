@@ -102,8 +102,13 @@ class  IntervenantController extends AbstractController
             Intervenant::class,
         ]);
 
-        $critere      = $this->params()->fromPost('critere');
-        $intervenants = $this->getProcessusIntervenant()->recherche()->rechercher($critere, 21);
+        $critere   = $this->params()->fromPost('critere');
+        $recherche = $this->getProcessusIntervenant()->recherche();
+
+        $canRestaure = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+        $recherche->setShowHisto($canRestaure);
+
+        $intervenants = $recherche->rechercher($critere, 21);
 
         return compact('intervenants');
     }
@@ -112,8 +117,7 @@ class  IntervenantController extends AbstractController
 
     public function voirAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getEvent()->getParam('intervenant');
         $tab         = $this->params()->fromQuery('tab');
 
         if (!$intervenant) {
@@ -129,7 +133,7 @@ class  IntervenantController extends AbstractController
 
         $this->addIntervenantRecent($intervenant);
 
-        return compact('intervenant', 'role', 'tab');
+        return compact('intervenant', 'tab');
     }
 
 
@@ -519,6 +523,7 @@ class  IntervenantController extends AbstractController
         $tree = $intSuppr->getTree();
         if (!$tree) {
             $intervenant = $this->getServiceIntervenant()->getByCode($intervenantCode);
+            if ($intervenant && $intervenant->estHistorise()) $intervenant = null;
         }
 
         return compact('intervenant', 'tree');

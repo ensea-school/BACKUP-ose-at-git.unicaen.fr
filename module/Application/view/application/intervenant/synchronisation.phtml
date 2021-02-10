@@ -7,12 +7,16 @@
  * @var $data            array
  */
 
+use Application\Provider\Privilege\Privileges;
+
 if (!$isImportable) {
     echo $this->tag('div', ['class' => 'alert alert-warning'])->html('Cet intervenant n\'est pas synchronisable');
 
     return;
 }
 
+$canRestaure = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+$canDelete   = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION));
 
 ?>
     <table class="table table-bordered table-condensed">
@@ -27,11 +31,28 @@ if (!$isImportable) {
                 <td><?php
                     if ($d['histo-destruction']) {
                         echo 'Supprimée le ' . $d['histo-destruction'] . ' par ' . $d['histo-destructeur'] . ' ';
-                        echo $this->tag('a', [
-                            'class' => 'no-intranavigation',
-                            'href'  => $this->url('intervenant/restaurer', ['intervenant' => $d['id']]),
-                            'title' => 'Restaurer la fiche de l\'intervenant',
-                        ])->html($this->tag('span', ['class' => 'glyphicon glyphicon-open']));
+                        if (true) {
+                            echo ' ' . $this->tag('a', [
+                                    'class' => 'no-intranavigation',
+                                    'href'  => $this->url('intervenant/voir', ['intervenant' => $d['id']]),
+                                    'title' => 'Voir la fiche de l\'intervenant',
+                                ])->html($this->tag('span', ['class' => 'glyphicon glyphicon-eye-open']));
+                        }
+                        if ($canRestaure) {
+                            echo ' ' . $this->tag('a', [
+                                    'class' => 'no-intranavigation',
+                                    'href'  => $this->url('intervenant/restaurer', ['intervenant' => $d['id']]),
+                                    'title' => 'Restaurer la fiche de l\'intervenant',
+                                ])->html($this->tag('span', ['class' => 'glyphicon glyphicon-open']));
+                        }
+                    } else {
+                        if ($canDelete && $d['id']) {
+                            echo ' ' . $this->tag('a', [
+                                    'class' => 'no-intranavigation',
+                                    'href'  => $this->url('intervenant/historiser', ['intervenant' => $d['id']]),
+                                    'title' => 'Historiser la fiche de l\'intervenant',
+                                ])->html($this->tag('span', ['class' => 'glyphicon glyphicon-trash']));
+                        }
                     }
                     ?></td>
             </tr>

@@ -14,7 +14,7 @@ Le lien avec Octopus se fait au moyen d'un DbLink que vous devrez créer. Dans c
 
 ## Déclaration du connecteur dans OSE
 
-OSE doit lister toutes ses sources de données. Il faut donc y ajouter Harpège :
+OSE doit lister toutes ses sources de données. Il faut donc y ajouter Octopus :
 
 ```sql
 BEGIN
@@ -32,7 +32,7 @@ La liste des sources de OSE est accessible ici (URL pointant vers l'instance de 
 Les pays sont enregistrés dans la table PAYS.
 
 Si vous venez d'installer OSE, alors l'application est livrée avec un jeu de données par défaut, parmi lesquelles une liste
-des pays. Avant d'utiliser votre propre liste issue d'Harpège, vous devez impérativement vider la table PAYS, sans quoi vous
+des pays. Avant d'utiliser votre propre liste issue d'Octopus, vous devez impérativement vider la table PAYS, sans quoi vous
 vous retrouveriez avec des erreurs d'import pour cause de doublons.
 
 ```sql
@@ -49,7 +49,7 @@ Ensuite, créez la vue source [SRC_PAYS](SRC_PAYS.sql).
 Les départements sont enregistrés dans la table DEPARTEMENT.
 
 Comme pour les pays, si vous venez d'installer OSE, alors l'application est livrée avec un jeu de données par défaut, parmi
-lesquelles une liste des départements. Avant d'utiliser votre propre liste issue d'Harpège, vous devez impérativement vider la
+lesquelles une liste des départements. Avant d'utiliser votre propre liste issue d'Octopus, vous devez impérativement vider la
 table DEPARTEMENT, sans quoi vous vous retrouveriez avec des erreurs d'import pour cause de doublons.
 
 ```sql
@@ -68,7 +68,7 @@ Les structures portent entres autres l'offre de formation, les intervenants mais
 
 Créez la vue source [SRC_STRUCTURE](SRC_STRUCTURE.sql).
 
-Dans cette vue, on importe les structures Harpège de niveau 2 et la structure Université (UNIV) de niveau 1.
+Dans cette vue, on importe les structures Octopus de niveau 2 et la structure Université (UNIV) de niveau 1.
 
 [Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
@@ -80,7 +80,7 @@ Les corps sont enregistrés dans la table CORPS, les grades dnas la table GRADE.
 
 Comme pour les pays, si vous venez d'installer OSE, alors l'application est livrée avec un jeu de données par défaut, parmi
 lesquelles une liste des corps et une autre des grades. Avant d'utiliser vos propres listes de corps et de grades issues d'
-Harpège, vous devez impérativement vider les table GRADE et CORPS, sans quoi vous vous retrouveriez avec des erreurs d'import
+Octopus, vous devez impérativement vider les table GRADE et CORPS, sans quoi vous vous retrouveriez avec des erreurs d'import
 pour cause de doublons.
 
 ```sql
@@ -105,7 +105,7 @@ L'ensemble de la population active dans Octopus (ou plus exactement les individu
 400 jours après leur date de fin d'activité)
 se retrouve dans ce connecteur.
 
-Voici la vue matérialisée qui remonte les données d'Harpège :
+Voici la vue matérialisée qui remonte les données d'Octopus :
 
 [MV_INTERVENANT](MV_INTERVENANT.sql)
 

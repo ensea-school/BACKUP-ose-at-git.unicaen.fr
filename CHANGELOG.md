@@ -56,12 +56,18 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 
 # OSE 14.16
 
+## Nouveautés
+
+* Formule de calcul de Paris8
+* Nouveau privilège donnant la possibilité de saisir du référentiel sans aucune contrainte sur la composante
+
 ## Corrections de bugs
 
 * Erreur sur l'édition d'une dotation au niveau budget (#33703)
 * Correction ordre d'affichage des pièces jointes pour l'intervenant comme paramétré dans l'adminstration (#34324)
 * Ajout de deux nouveaux indicateurs (730 et 740), identiques aux 710 et 720 mais pour les permanents (#34577)
 * Bug sur validation/dévalidation d'une pièce jointe (erreur 403) dans le cas d'un paramétrage de workflow sans service prévisionnel (#34526)
+* Formule de calcul de Poitiers mise à jour
 
 # OSE 14.15
 

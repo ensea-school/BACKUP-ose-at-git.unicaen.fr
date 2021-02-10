@@ -34,7 +34,6 @@ class ServiceAssertion extends AbstractAssertion
     use TypeVolumeHoraireServiceAwareTrait;
 
 
-
     /* ---- Routage général ---- */
     public function __invoke(array $page) // gestion des visibilités de menus
     {
@@ -284,23 +283,23 @@ class ServiceAssertion extends AbstractAssertion
 
     protected function assertServiceReferentielEdition(Role $role, ServiceReferentiel $serviceReferentiel)
     {
-        $structure = $role->getStructure();
-
         $asserts = [];
+        if (!$role->hasPrivilege(Privileges::REFERENTIEL_SAISIE_TOUTES_COMPOSANTES)) {
+            // Si on n'a pas le privilège pour pouvoir du référentiel dans toutes les composantes sans restriction
+            if ($structure = $role->getStructure()) {
+                $structureAffectation  = $serviceReferentiel->getIntervenant() ? $serviceReferentiel->getIntervenant()->getStructure() : null;
+                $structureEnseignement = $serviceReferentiel->getStructure();
 
-        if ($structure) {
-            $structureAffectation  = $serviceReferentiel->getIntervenant() ? $serviceReferentiel->getIntervenant()->getStructure() : null;
-            $structureEnseignement = $serviceReferentiel->getStructure();
-
-            if ($structureAffectation && $structureEnseignement) {
-                // cas d'un intervenant d'une autre structure prenant un enseignement dans une autre structure
-                $asserts[] = $structure == $structureAffectation || $structure == $structureEnseignement; // le service doit avoir un lien avec la structure
-            } elseif ($structureAffectation && !$structureEnseignement) {
-                // cas d'un intervenant prenant des enseignements à l'extérieur
-                $asserts[] = $structure == $structureAffectation;
-            } elseif (!$structureAffectation && $structureEnseignement) {
-                // cas d'un intervenant extérieur prenant des enseignements de la composante
-                $asserts[] = $structure == $structureEnseignement;
+                if ($structureAffectation && $structureEnseignement) {
+                    // cas d'un intervenant d'une autre structure prenant un enseignement dans une autre structure
+                    $asserts[] = $structure == $structureAffectation || $structure == $structureEnseignement; // le service doit avoir un lien avec la structure
+                } elseif ($structureAffectation && !$structureEnseignement) {
+                    // cas d'un intervenant prenant des enseignements à l'extérieur
+                    $asserts[] = $structure == $structureAffectation;
+                } elseif (!$structureAffectation && $structureEnseignement) {
+                    // cas d'un intervenant extérieur prenant des enseignements de la composante
+                    $asserts[] = $structure == $structureEnseignement;
+                }
             }
         }
 

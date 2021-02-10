@@ -1,13 +1,13 @@
 CREATE
 MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
-    WITH i AS (
+   WITH i AS (
         SELECT DISTINCT code,
                         z_statut_id,
                         MIN(source_code)    OVER (partition by code, z_statut_id)            source_code,
                         MIN(validite_debut) OVER (partition by code, z_statut_id)            validite_debut,
                         MAX(validite_fin)   OVER (partition by code, z_statut_id)            validite_fin
         FROM (
-                --Step 1 : On prend tous les contrats des individus et statut OSE
+                --Step 1 : On prend tous les individus qui ont ou ont eu un contrat à l'université
                  SELECT icto.individu_id                                                         code,
                         CASE WHEN icto.code_ose IS NOT NULL THEN icto.code_ose ELSE 'AUTRES' END z_statut_id,
                         icto.id_orig                                                             source_code,
@@ -18,19 +18,17 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
                  WHERE icto.d_debut - 184 <= SYSDATE
 
                  UNION ALL
-                 --Step 2 : On ajoute les affectations type recherche qui n'ont pas de contrat
+                 -- Step 2 : on prend tout le reste potentiel vacataire, notamment les hébergés
                  SELECT uni.c_individu_chaine                                         code,
                         'AUTRES'                                                      z_statut_id,
-                        uni.c_individu_chaine || '-recherche'                         source_code,
-                        COALESCE(aff.date_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                        COALESCE(aff.date_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
-                 FROM octo.individu_affectation@octoprod aff
-                          JOIN octo.individu_affectation_type@octoprod aft ON (aff.type_id = aft.id)
-                          JOIN octo.individu_unique@octoprod uni
-                               ON (aff.individu_id = uni.c_individu_chaine AND uni.c_source IN ('HARP'))
-                          LEFT JOIN octo.structure@octoprod s ON s.id = aff.structure_id
-                 WHERE aff.date_debut - 184 <= SYSDATE
-                   AND aft.nom = 'RECHERCHE'
+                        uni.c_individu_chaine || '-autre'                         source_code,
+                        COALESCE(vis.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
+                        COALESCE(vis.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
+                 FROM octo.individu_unique@octoprod uni
+                 JOIN octo.individu_statut@octoprod vis ON vis.individu_id = uni.c_individu_chaine AND vis.t_heberge = 'O'
+                 WHERE vis.d_debut - 184 <= SYSDATE
+                 AND uni.c_source IN ('HARP')
+
              ) t
     ),
          --Trouver le tel pro principal de l'intervenant
@@ -133,9 +131,39 @@ FROM i
     --On récupére le code de la structure d'affectation principal de l'individu
          LEFT JOIN v_structure@octoprod str ON str.id = spi.z_structure_id
          LEFT JOIN v_structure@octoprod str2 ON str.niv2_id = str2.id
-WHERE i.validite_fin + 1 >= (SYSDATE - (365 * 2))
---AND induni.c_individu_chaine = 20359-- Filtre avec code octopus
---AND induni.c_src_individu = 1253-- Filtre avec code harpege
+WHERE i.validite_fin >= (SYSDATE - (365 * 2))
+--AND induni.c_individu_chaine = 162557-- Filtre avec code octopus
+--AND induni.c_src_individu = 169343-- Filtre avec code harpege
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -17,7 +17,11 @@ Objectif : Doubles statuts et refonte des données personnelles
   * Le nouveau statut peut être ajouté dans l'application ou bien être fourni via le connecteur IMPORT
   * La bascule d'un statut à un autre e fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
   * Pour chaque statut, l'intervenant a une fiche distincte, avec des services distincts, etc. Les pièces justificatives et les agréments sont communs.
-* Possibilité de créer un nouvel intervenant local au moyen d'une IHM
+* Refonte de la gestion des intervenants
+  * Possibilité de créer un nouvel intervenant local au moyen d'une IHM
+  * Possibilité de pouvoir rechercher et visualiser des intervenants historisés
+  * Possibilité d'historiser et de restaurer des intervenants
+  * Possibilité de synchroniser un intervenant directement depuis sa fiche 
   * Possibilité d'associer un utilisateur LDAP à un intervenant nouvellement créé
   * Possibilité de créer directement dans le formulaire INTERVENANT un nouvel utilisateur avec saisie de login/MDP.
 * Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celui fourni par le connecteur

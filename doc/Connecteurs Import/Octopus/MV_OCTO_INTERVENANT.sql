@@ -1,55 +1,55 @@
 CREATE
 MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
-WITH i AS (
-    SELECT DISTINCT code,
-                    z_statut_id,
-                    MIN(source_code)    OVER (partition by code, z_statut_id)            source_code,
-                    MIN(validite_debut) OVER (partition by code, z_statut_id)            validite_debut,
-                    MAX(validite_fin)   OVER (partition by code, z_statut_id)            validite_fin
-    FROM (
-            --Step 1 : On prend tous les contrats des individus et statut OSE
-             SELECT icto.individu_id                                                         code,
-                    CASE WHEN icto.code_ose IS NOT NULL THEN icto.code_ose ELSE 'AUTRES' END z_statut_id,
-                    icto.id_orig                                                             source_code,
-                    COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))              validite_debut,
-                    COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))                validite_fin
-             FROM octo.v_individu_contrat_type_ose@octoprod icto
-                      JOIN octo.individu_unique@octoprod uni ON (icto.individu_id = uni.c_individu_chaine AND uni.c_source IN ('HARP'))
-             WHERE icto.d_debut - 184 <= SYSDATE
+    WITH i AS (
+        SELECT DISTINCT code,
+                        z_statut_id,
+                        MIN(source_code)    OVER (partition by code, z_statut_id)            source_code,
+                        MIN(validite_debut) OVER (partition by code, z_statut_id)            validite_debut,
+                        MAX(validite_fin)   OVER (partition by code, z_statut_id)            validite_fin
+        FROM (
+                --Step 1 : On prend tous les contrats des individus et statut OSE
+                 SELECT icto.individu_id                                                         code,
+                        CASE WHEN icto.code_ose IS NOT NULL THEN icto.code_ose ELSE 'AUTRES' END z_statut_id,
+                        icto.id_orig                                                             source_code,
+                        COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))              validite_debut,
+                        COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))                validite_fin
+                 FROM octo.v_individu_contrat_type_ose@octoprod icto
+                          JOIN octo.individu_unique@octoprod uni ON (icto.individu_id = uni.c_individu_chaine AND uni.c_source IN ('HARP'))
+                 WHERE icto.d_debut - 184 <= SYSDATE
 
-             UNION ALL
-             --Step 2 : On ajoute les affectations type recherche qui n'ont pas de contrat
-             SELECT uni.c_individu_chaine                                         code,
-                    'AUTRES'                                                      z_statut_id,
-                    uni.c_individu_chaine || '-recherche'                         source_code,
-                    COALESCE(aff.date_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                    COALESCE(aff.date_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
-             FROM octo.individu_affectation@octoprod aff
-                      JOIN octo.individu_affectation_type@octoprod aft ON (aff.type_id = aft.id)
-                      JOIN octo.individu_unique@octoprod uni
-                           ON (aff.individu_id = uni.c_individu_chaine AND uni.c_source IN ('HARP'))
-                      LEFT JOIN octo.structure@octoprod s ON s.id = aff.structure_id
-             WHERE aff.date_debut - 184 <= SYSDATE
-               AND aft.nom = 'RECHERCHE'
-         ) t
-),
-     --Trouver le tel pro principal de l'intervenant
-     telephone_pro_principal AS (
-         SELECT indtel.individu_id individu_id,
-                tel.numero         numero
-         FROM octo.individu_telephone@octoprod indtel
-                  JOIN octo.telephone@octoprod tel ON (tel.id = indtel.telephone_id AND tel.t_principal = 'O')
-     ),
-     --Trouver la structure d'affectation principale de l'intervenant
-     structure_principale_individu AS (
-	     SELECT DISTINCT
-			uni.c_individu_chaine,
-			FIRST_VALUE(aff.structure_id) OVER (PARTITION BY uni.c_individu_chaine ORDER BY aff.date_fin DESC)  z_structure_id
-			FROM octo.individu_affectation@octoprod aff
-			JOIN octo.individu_unique@octoprod uni ON uni.c_individu_chaine = aff.individu_id
-			WHERE aff.t_principale = 'O'
-			AND aff.date_fin + 1 >= (SYSDATE - (365 * 2))
-     )
+                 UNION ALL
+                 --Step 2 : On ajoute les affectations type recherche qui n'ont pas de contrat
+                 SELECT uni.c_individu_chaine                                         code,
+                        'AUTRES'                                                      z_statut_id,
+                        uni.c_individu_chaine || '-recherche'                         source_code,
+                        COALESCE(aff.date_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
+                        COALESCE(aff.date_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
+                 FROM octo.individu_affectation@octoprod aff
+                          JOIN octo.individu_affectation_type@octoprod aft ON (aff.type_id = aft.id)
+                          JOIN octo.individu_unique@octoprod uni
+                               ON (aff.individu_id = uni.c_individu_chaine AND uni.c_source IN ('HARP'))
+                          LEFT JOIN octo.structure@octoprod s ON s.id = aff.structure_id
+                 WHERE aff.date_debut - 184 <= SYSDATE
+                   AND aft.nom = 'RECHERCHE'
+             ) t
+    ),
+         --Trouver le tel pro principal de l'intervenant
+         telephone_pro_principal AS (
+             SELECT indtel.individu_id individu_id,
+                    tel.numero         numero
+             FROM octo.individu_telephone@octoprod indtel
+                      JOIN octo.telephone@octoprod tel ON (tel.id = indtel.telephone_id AND tel.t_principal = 'O')
+         ),
+         --Trouver la structure d'affectation principale de l'intervenant
+         structure_principale_individu AS (
+             SELECT DISTINCT
+                uni.c_individu_chaine,
+                FIRST_VALUE(aff.structure_id) OVER (PARTITION BY uni.c_individu_chaine ORDER BY aff.date_fin DESC)  z_structure_id
+                FROM octo.individu_affectation@octoprod aff
+                JOIN octo.individu_unique@octoprod uni ON uni.c_individu_chaine = aff.individu_id
+                WHERE aff.t_principale = 'O'
+                AND aff.date_fin + 1 >= (SYSDATE - (365 * 2))
+         )
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
     i.code                                                                                               code,
@@ -123,7 +123,8 @@ FROM i
          LEFT JOIN octo.grade@octoprod grade ON indg.grade_id = grade.id
     --On récupére l'adresse principale de l'individu
          LEFT JOIN octo.v_individu_adresse_perso@octoprod adr
-                   ON adr.individu_id = induni.c_individu_chaine AND t_principale = 'O'
+                   ON adr.individu_id = induni.c_individu_chaine
+                       AND (t_principale = 'O' AND adr.source_id IN ('HARP', 'SIHAM'))
     --On récupére le téléphone pro principal de l'indivdu
          LEFT JOIN telephone_pro_principal telpro ON telpro.individu_id = induni.c_individu_chaine
     -- On ne prend que les comptes qui ne sont pas étudiants

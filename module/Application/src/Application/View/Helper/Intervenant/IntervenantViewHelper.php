@@ -157,7 +157,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                             </a>
                         </li>
                     <?php endforeach; ?>
-                    <?php if ($canAddIntervenant): ?>
+                    <?php if ($canAddIntervenant && $intervenant->getId()): ?>
                         <li class="ajout-intervenant">
                             <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]); ?>"
                                title="Ajout d'un nouveau statut à l'intervenant"><span

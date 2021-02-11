@@ -310,7 +310,6 @@ class  IntervenantController extends AbstractController
         if ($actionDetail == 'dupliquer') {
             $intervenant = $intervenant->dupliquer();
             $intervenant->setSource($this->getServiceSource()->getOse());
-            $intervenant->setSourceCode(null);
             $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
         }
 

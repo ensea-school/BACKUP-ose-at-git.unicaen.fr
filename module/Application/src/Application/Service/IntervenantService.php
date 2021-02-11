@@ -385,6 +385,7 @@ class IntervenantService extends AbstractEntityService
         $intervenant->setAnnee($this->getServiceContext()->getAnnee());
         $intervenant->setSource($this->getServiceSource()->getOse());
         $intervenant->setCode(uniqid('OSE'));
+        $intervenant->setSourceCode($intervenant->getCode());
 
         return $intervenant;
     }

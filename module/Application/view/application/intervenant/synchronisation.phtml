@@ -17,50 +17,9 @@ if (!$isImportable) {
 
 $canRestaure = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
 $canDelete   = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION));
-
-?>
-    <table class="table table-bordered table-condensed">
-        <tr>
-            <th>Source</th>
-            <th colspan="2">OSE</th>
-        </tr>
-        <?php foreach ($data as $d): ?>
-            <tr>
-                <td><?= $d['source-statut'] ?></td>
-                <td><?= $d['intervenant-statut'] ?></td>
-                <td><?php
-                    if ($d['histo-destruction']) {
-                        echo 'Supprimée le ' . $d['histo-destruction'] . ' par ' . $d['histo-destructeur'] . ' ';
-                        if (true) {
-                            echo ' ' . $this->tag('a', [
-                                    'class' => 'no-intranavigation',
-                                    'href'  => $this->url('intervenant/voir', ['intervenant' => $d['id']]),
-                                    'title' => 'Voir la fiche de l\'intervenant',
-                                ])->html($this->tag('span', ['class' => 'glyphicon glyphicon-eye-open']));
-                        }
-                        if ($canRestaure) {
-                            echo ' ' . $this->tag('a', [
-                                    'class' => 'no-intranavigation',
-                                    'href'  => $this->url('intervenant/restaurer', ['intervenant' => $d['id']]),
-                                    'title' => 'Restaurer la fiche de l\'intervenant',
-                                ])->html($this->tag('span', ['class' => 'glyphicon glyphicon-open']));
-                        }
-                    } else {
-                        if ($canDelete && $d['id']) {
-                            echo ' ' . $this->tag('a', [
-                                    'class' => 'no-intranavigation',
-                                    'href'  => $this->url('intervenant/historiser', ['intervenant' => $d['id']]),
-                                    'title' => 'Historiser la fiche de l\'intervenant',
-                                ])->html($this->tag('span', ['class' => 'glyphicon glyphicon-trash']));
-                        }
-                    }
-                    ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
-<?php
-
-if ($isImportable) {
+echo '<h4>Différentiel</h4>';
+echo $this->differentielListe($data);
+if ($isImportable && !empty($data)) {
     echo $this->tag('a', [
         'href'  => $this->url('intervenant/synchroniser', ['intervenant' => $intervenant->getId()]),
         'title' => 'Synchroniser (import vers OSE)',

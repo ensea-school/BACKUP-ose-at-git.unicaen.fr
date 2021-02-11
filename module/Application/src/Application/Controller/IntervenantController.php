@@ -32,7 +32,9 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
+use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -64,6 +66,7 @@ class  IntervenantController extends AbstractController
     use UtilisateurServiceAwareTrait;
     use DossierServiceAwareTrait;
     use ImportProcessusAwareTrait;
+    use DifferentielServiceAwareTrait;
 
 
     public function indexAction()
@@ -379,50 +382,11 @@ class  IntervenantController extends AbstractController
         $data         = [];
 
         if ($isImportable) {
-            $sql = "
-            SELECT 
-              i.id,
-              si.libelle statut
-             FROM 
-              src_intervenant i 
-              JOIN statut_intervenant si ON si.id = i.statut_id
-            WHERE 
-              i.annee_id = :annee AND i.code = :code";
-            $d   = $this->em()->getConnection()->fetchAll($sql, ['annee' => $intervenant->getAnnee()->getID(), 'code' => $intervenant->getCode()]);
-            foreach ($d as $da) {
-                $id        = $da['ID'] ? (int)$da['ID'] : $da['STATUT'];
-                $data[$id] = [
-                    'source-statut'      => $da['STATUT'],
-                    'id'                 => $da['ID'] ? (int)$da['ID'] : null,
-                    'intervenant-statut' => null,
-                    'histo-destruction'  => null,
-                    'histo-destructeur'  => null,
-                ];
-            }
-
-            $sql = "
-            SELECT 
-              i.id,
-              si.libelle statut,
-              to_char(i.histo_destruction, 'dd/mm/YYYY') histo_destruction, 
-              u.display_name destructeur
-             FROM 
-              intervenant i 
-              JOIN statut_intervenant si ON si.id = i.statut_id
-              LEFT JOIN utilisateur u ON u.id = i.histo_destructeur_id
-            WHERE 
-              i.annee_id = :annee AND i.code = :code";
-            $d   = $this->em()->getConnection()->fetchAll($sql, ['annee' => $intervenant->getAnnee()->getID(), 'code' => $intervenant->getCode()]);
-            foreach ($d as $da) {
-                $id = (int)$da['ID'];
-                if (!isset($data[$id])) {
-                    $data[$id] = ['source-statut' => null];
-                }
-                $data[$id]['id']                 = $id;
-                $data[$id]['intervenant-statut'] = $da['STATUT'];
-                $data[$id]['histo-destruction']  = $da['HISTO_DESTRUCTION'];
-                $data[$id]['histo-destructeur']  = $da['DESTRUCTEUR'];
-            }
+            $query = new Query('INTERVENANT');
+            $query->setNotNull([]); // Aucune colonne ne doit être non nulle !!
+            $query->setLimit(101);
+            $query->setColValues(['ANNEE_ID' => $intervenant->getAnnee()->getId(), 'CODE' => $intervenant->getCode()]);
+            $data = $this->getServiceDifferentiel()->make($query, $query::SQL_FULL, true)->fetchAll();
         }
 
         return compact('intervenant', 'isImportable', 'data');

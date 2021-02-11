@@ -6,6 +6,7 @@ use Application\Controller\DossierController;
 use Application\Controller\IntervenantController;
 use Psr\Container\ContainerInterface;
 use UnicaenImport\Processus\ImportProcessus;
+use UnicaenImport\Service\DifferentielService;
 
 class IntervenantControllerFactory
 {
@@ -21,6 +22,7 @@ class IntervenantControllerFactory
         $controller = new IntervenantController();
 
         $controller->setProcessusImport($container->get(ImportProcessus::class));
+        $controller->setServiceDifferentiel($container->get(DifferentielService::class));
 
         return $controller;
     }

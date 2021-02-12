@@ -9,13 +9,13 @@ $sqlSource = "SELECT id FROM source WHERE code = 'Octopus'";
 $result    = $bdd->select($sqlSource, [], ['fetch' => $bdd::FETCH_ONE]);
 
 if ($result) {
-    $sourceId = $result['ID'];
-    $console->println("Source id : " . $sourceId);
+    $sourceIdOctopus = $result['ID'];
+    $console->println("Source id : " . $sourceIdOctopus);
 } else {
     $console->println('Source Octopus inconnu', $console::BG_RED);
 }
 
-//On récupére tous les intervenants de OSE
+//On récupére tous les intervenants de OSE provenant de la source Harpege
 $sql = "SELECT 
            id       intervenant_id,
            code     code_harpege,
@@ -26,11 +26,12 @@ $sql = "SELECT
 
 $resultIntervenantOse = $bdd->select($sql);
 
-//On récupére tous les intervenants de MV_INTERVENANT
+//On récupére de octopus le mapping des codes harpeges vs code octopus
 $sql = "SELECT 
-            code        code_octopus,
-            code_rh     code_harpege            
-        FROM intervenant_octopus";
+            c_individu_chaine        code_octopus,
+            c_src_individu           code_harpege            
+        FROM octo.individu_unique@octoprod 
+        WHERE c_source = 'HARP'";
 
 $resultIntervenantOctopus  = $bdd->select($sql);
 $mappingCodeOctopusHarpege = [];
@@ -40,18 +41,29 @@ foreach ($resultIntervenantOctopus as $intervenantOcto) {
     }
 }
 $i = 0;
+$console->begin("Début migration des codes intervenant OSE de Harpège vers Octopus");
+$totalIntervenant = count($resultIntervenantOse);
+//On commence la migration des codes intervenants et on change la source en octopus
 foreach ($resultIntervenantOse as $intervenantOse) {
+    $i++;
+    $pourcent = round(($i * 100) / $totalIntervenant);
     if (array_key_exists($intervenantOse['CODE_HARPEGE'], $mappingCodeOctopusHarpege)) {
-        $console->println("Migration intervenant code harpege : " . $intervenantOse['CODE_HARPEGE'] . " vers code octopus " . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']]);
+        $console->msg($pourcent . " % Migration code intervenant  / code harpege : " . $intervenantOse['CODE_HARPEGE'] . " vers code octopus " . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']], true);
+        $sql = "UPDATE intervenant SET code = '" . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']] . "', source_id =" . $sourceIdOctopus . " WHERE code = '" . $intervenantOse['CODE_HARPEGE'] . "'";
+        //$bdd->exec($sql);
+
     } else {
-        if (in_array($intervenantOse['ANNEE_ID'], [2020, 2021])) {
-            $i++;
-        }
-        $console->println("Intervenant non trouvé dans Octopus " . $intervenantOse['CODE_HARPEGE'] . " / " . $intervenantOse['ANNEE_ID']);
+        $notFound [$intervenantOse['ANNEE_ID']][] = $intervenantOse['CODE_HARPEGE'];
     }
 }
+ksort($notFound);
+$console->end("Début migration des codes intervenant OSE de Harpège vers Octopus");
+$console->println("==================================");
+$console->println("Intervenants non trouvés dans Octopus", $console::BG_RED);
+foreach ($notFound as $annee => $intervenants) {
+    $console->println("Année " . $annee . " : " . implode(',', $intervenants));
+    $console->println("==================================");
+}
 
-$console->println("Nombre d'intervenant non migré : " . $i);
+$console->println("Fin migration code intervenant OSE de harpege vers octopus", $console::BG_BLUE);
 
-
-die;

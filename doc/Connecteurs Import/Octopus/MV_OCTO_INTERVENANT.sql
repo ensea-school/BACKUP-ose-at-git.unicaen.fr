@@ -14,7 +14,7 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
                         COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))              validite_debut,
                         COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))                validite_fin
                  FROM octo.v_individu_contrat_type_ose@octoprod icto
-                          JOIN octo.individu_unique@octoprod uni ON (icto.individu_id = uni.c_individu_chaine AND uni.c_source IN ('HARP'))
+                 JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
                  WHERE icto.d_debut - 184 <= SYSDATE
 
                  UNION ALL
@@ -22,12 +22,18 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
                  SELECT uni.c_individu_chaine                                         code,
                         'AUTRES'                                                      z_statut_id,
                         uni.c_individu_chaine || '-autre'                         source_code,
-                        COALESCE(vis.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                        COALESCE(vis.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
+                        COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
+                        COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
                  FROM octo.individu_unique@octoprod uni
-                 JOIN octo.individu_statut@octoprod vis ON vis.individu_id = uni.c_individu_chaine AND vis.t_heberge = 'O'
-                 WHERE vis.d_debut - 184 <= SYSDATE
-                 AND uni.c_source IN ('HARP')
+                 JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
+                 WHERE inds.d_debut - 184 <= SYSDATE
+                 --Combinaison des témoins octopus pour récupérer les bonnes populations
+                 AND  ((inds.t_enseignant = 'O' AND inds.t_vacataire = 'O')
+                 		OR (inds.t_enseignant = 'O' AND inds.t_heberge = 'O')
+                 		OR (inds.t_vacataire = 'O'))
+                 AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
+
+
 
              ) t
     ),
@@ -51,9 +57,13 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
     i.code                                                                                               code,
-    /* Code RH */
-    ltrim(TO_CHAR(induni.c_src_individu, '99999999'))                                                    code_rh,
-    i.source_code                                                                                        source_code,
+    /* Code RH : FIRST_VALUE pour être sûre de récupérer le code rh et non le code Apogee dans le cas ou l'individu est à la fois dans harpege/Siham et Apogee*/
+    FIRST_VALUE(ltrim(TO_CHAR(induni.c_src_individu, '99999999')))                                       OVER (PARTITION BY i.code ORDER BY
+    																						 CASE WHEN induni.c_source = 'SIHAM' THEN 1
+    																						 	  WHEN induni.c_source = 'HARP'  THEN 2
+    																						 	  WHEN induni.c_source = 'OCTO'  THEN 3
+    																						 	  WHEN induni.c_source = 'APO'   THEN 4
+    																						 END ASC)    code_rh,
     indc.ldap_uid                                                                                        utilisateur_code,
     str.code                                                                                             z_structure_code,
     CASE WHEN str2.code <> str.code THEN str2.code ELSE NULL END                                         z_structure_code_n2,
@@ -107,7 +117,9 @@ SELECT DISTINCT
     CASE WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY') THEN NULL ELSE i.validite_debut END validite_debut,
     CASE WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY') THEN NULL ELSE i.validite_fin END     validite_fin
 FROM i
-         JOIN octo.individu_unique@octoprod induni ON (i.code = induni.c_individu_chaine AND induni.c_source IN ('HARP'))
+         JOIN octo.individu_unique@octoprod induni
+              ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))
+--		 JOIN octo.individu_statut@octoprod inds ON inds.individu_id = induni.c_individu_chaine AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu
          LEFT JOIN structure_principale_individu spi ON spi.c_individu_chaine = induni.c_individu_chaine
@@ -132,40 +144,10 @@ FROM i
          LEFT JOIN v_structure@octoprod str ON str.id = spi.z_structure_id
          LEFT JOIN v_structure@octoprod str2 ON str.niv2_id = str2.id
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
---AND induni.c_individu_chaine = 162557-- Filtre avec code octopus
---AND induni.c_src_individu = 169343-- Filtre avec code harpege
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--AND induni.c_individu_chaine = 101-- Filtre avec code octopus
+--AND ind.nom_famille = 'DURANDY'
+--AND induni.c_src_individu = 45053-- Filtre avec code harpege
+--ORDER BY i.code ASC
 
 
 

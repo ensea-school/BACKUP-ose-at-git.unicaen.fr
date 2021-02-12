@@ -37,33 +37,44 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
 
              ) t
     ),
-         --Trouver le tel pro principal de l'intervenant
-         telephone_pro_principal AS (
-             SELECT indtel.individu_id individu_id,
-                    tel.numero         numero
-             FROM octo.individu_telephone@octoprod indtel
-                      JOIN octo.telephone@octoprod tel ON (tel.id = indtel.telephone_id AND tel.t_principal = 'O')
-         ),
-         --Trouver la structure d'affectation principale de l'intervenant
-         structure_principale_individu AS (
-             SELECT DISTINCT
-                uni.c_individu_chaine,
-                FIRST_VALUE(aff.structure_id) OVER (PARTITION BY uni.c_individu_chaine ORDER BY aff.date_fin DESC)  z_structure_id
-                FROM octo.individu_affectation@octoprod aff
-                JOIN octo.individu_unique@octoprod uni ON uni.c_individu_chaine = aff.individu_id
-                WHERE aff.t_principale = 'O'
-                AND aff.date_fin + 1 >= (SYSDATE - (365 * 2))
-         )
+
+     --Trouver le tel pro principal de l'intervenant
+     telephone_pro_principal AS (
+         SELECT indtel.individu_id individu_id,
+                tel.numero         numero
+         FROM octo.individu_telephone@octoprod indtel
+                  JOIN octo.telephone@octoprod tel ON (tel.id = indtel.telephone_id AND tel.t_principal = 'O')
+     ),
+     --Trouver la structure d'affectation principale de l'intervenant
+     structure_principale_individu AS (
+         SELECT DISTINCT
+            uni.c_individu_chaine,
+            FIRST_VALUE(aff.structure_id) OVER (PARTITION BY uni.c_individu_chaine ORDER BY aff.date_fin DESC)  z_structure_id
+            FROM octo.individu_affectation@octoprod aff
+            JOIN octo.individu_unique@octoprod uni ON uni.c_individu_chaine = aff.individu_id
+            WHERE aff.t_principale = 'O'
+            AND aff.date_fin + 1 >= (SYSDATE - (365 * 2))
+     ),
+     sources AS
+	   (
+	     SELECT 'HARP'  c_source,  1 priorite FROM dual UNION
+	     SELECT 'SIHAM' c_source,  2 priorite FROM dual UNION
+	     SELECT 'OCTO'  c_source,  3 priorite FROM dual UNION
+	     SELECT 'APO'   c_source,  4 priorite FROM dual
+	   ),
+    --Correspondance code harpege / octopus id
+     induni AS
+     (
+       SELECT DISTINCT u.c_individu_chaine,
+            first_value(u.c_source)       OVER (partition by u.c_individu_chaine ORDER BY sources.priorite) c_source,
+            first_value(u.c_src_individu) OVER (partition by u.c_individu_chaine ORDER BY sources.priorite)c_src_individu
+            FROM octo.individu_unique@octoprod u JOIN sources ON (u.c_source=sources.c_source)
+     )
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
     i.code                                                                                               code,
     /* Code RH : FIRST_VALUE pour être sûre de récupérer le code rh et non le code Apogee dans le cas ou l'individu est à la fois dans harpege/Siham et Apogee*/
-    FIRST_VALUE(ltrim(TO_CHAR(induni.c_src_individu, '99999999')))                                       OVER (PARTITION BY i.code ORDER BY
-    																						 CASE WHEN induni.c_source = 'SIHAM' THEN 1
-    																						 	  WHEN induni.c_source = 'HARP'  THEN 2
-    																						 	  WHEN induni.c_source = 'OCTO'  THEN 3
-    																						 	  WHEN induni.c_source = 'APO'   THEN 4
-    																						 END ASC)    code_rh,
+    induni.c_src_individu                                                                                code_rh,
     indc.ldap_uid                                                                                        utilisateur_code,
     str.code                                                                                             z_structure_code,
     CASE WHEN str2.code <> str.code THEN str2.code ELSE NULL END                                         z_structure_code_n2,
@@ -117,8 +128,9 @@ SELECT DISTINCT
     CASE WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY') THEN NULL ELSE i.validite_debut END validite_debut,
     CASE WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY') THEN NULL ELSE i.validite_fin END     validite_fin
 FROM i
-         JOIN octo.individu_unique@octoprod induni
+         JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))
+--         JOIN mapping_code_rh maprh ON maprh.c_individu_chaine = induni.c_individu_chaine
 --		 JOIN octo.individu_statut@octoprod inds ON inds.individu_id = induni.c_individu_chaine AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu

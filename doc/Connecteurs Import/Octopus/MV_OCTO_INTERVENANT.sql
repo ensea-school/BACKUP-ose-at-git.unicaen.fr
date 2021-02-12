@@ -55,20 +55,26 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
             WHERE aff.t_principale = 'O'
             AND aff.date_fin + 1 >= (SYSDATE - (365 * 2))
      ),
-     sources AS
-	   (
-	     SELECT 'HARP'  c_source,  1 priorite FROM dual UNION
-	     SELECT 'SIHAM' c_source,  2 priorite FROM dual UNION
-	     SELECT 'OCTO'  c_source,  3 priorite FROM dual UNION
-	     SELECT 'APO'   c_source,  4 priorite FROM dual
-	   ),
-    --Correspondance code harpege / octopus id
+     /*Individu unique pour avoir qu'un seul individu unique dans l'ordre c_source SIHAM, HARP, APO
+     Car individu unique peut avoir plusieurs entrée (Harpége et Apogé par exemple) dans la table individu_unique,
+     ce qui fait des doublons en sortie dans la vue. On restreint donc à un seul individu unique avec en priorité celui de SIHAM
+     pui HARPEGE puis APOGEE en dernier lieu*/
      induni AS
      (
-       SELECT DISTINCT u.c_individu_chaine,
-            first_value(u.c_source)       OVER (partition by u.c_individu_chaine ORDER BY sources.priorite) c_source,
-            first_value(u.c_src_individu) OVER (partition by u.c_individu_chaine ORDER BY sources.priorite)c_src_individu
-            FROM octo.individu_unique@octoprod u JOIN sources ON (u.c_source=sources.c_source)
+	   SELECT DISTINCT
+   			FIRST_VALUE(c_individu_chaine) OVER (PARTITION BY c_individu_chaine ORDER BY ordre_source) c_individu_chaine,
+			FIRST_VALUE(c_source) OVER (PARTITION BY c_individu_chaine ORDER BY ordre_source) c_source,
+			FIRST_VALUE(c_src_individu) OVER (PARTITION BY c_individu_chaine ORDER BY ordre_source) c_src_individu FROM (
+				SELECT DISTINCT
+			   		u.c_individu_chaine,
+			   		u.c_source,
+			   		u.c_src_individu,
+			   		CASE WHEN u.c_source = 'SIHAM' THEN 1
+			            WHEN u.c_source = 'HARP'  THEN 2
+			    	    WHEN u.c_source = 'APO'   THEN 3
+			       END                  ordre_source
+				FROM octo.individu_unique@octoprod u
+	 		)
      )
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
@@ -156,14 +162,7 @@ FROM i
          LEFT JOIN v_structure@octoprod str ON str.id = spi.z_structure_id
          LEFT JOIN v_structure@octoprod str2 ON str.niv2_id = str2.id
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
---AND induni.c_individu_chaine = 101-- Filtre avec code octopus
+--AND induni.c_individu_chaine = 4251-- Filtre avec code octopus
 --AND ind.nom_famille = 'DURANDY'
 --AND induni.c_src_individu = 45053-- Filtre avec code harpege
 --ORDER BY i.code ASC
-
-
-
-
-
-
-

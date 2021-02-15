@@ -27,11 +27,28 @@ $sql = "SELECT
 $resultIntervenantOse = $bdd->select($sql);
 
 //On récupére de octopus le mapping des codes harpeges vs code octopus
-$sql = "SELECT 
+$sql = " SELECT DISTINCT
+   			FIRST_VALUE(c_individu_chaine) OVER (PARTITION BY c_individu_chaine ORDER BY ordre_source) code_octopus,
+			FIRST_VALUE(c_source) OVER (PARTITION BY c_individu_chaine ORDER BY ordre_source) c_source,
+			FIRST_VALUE(c_src_individu) OVER (PARTITION BY c_individu_chaine ORDER BY ordre_source) code_harpege FROM (
+				SELECT DISTINCT
+			   		u.c_individu_chaine,
+			   		u.c_source,
+			   		u.c_src_individu,
+			   		CASE WHEN u.c_source = 'SIHAM' THEN 1
+			            WHEN u.c_source = 'HARP'  THEN 2
+			   		    WHEN u.c_source = 'OCTO'  THEN 3
+			    	    WHEN u.c_source = 'APO'   THEN 4
+			       END                  ordre_source
+				FROM octo.individu_unique@octoprod u
+	 		)
+";
+
+/*$sql = "SELECT
             c_individu_chaine        code_octopus,
             c_src_individu           code_harpege            
-        FROM octo.individu_unique@octoprod 
-        WHERE c_source = 'HARP'";
+        FROM individu_unique
+        WHERE c_source = 'HARP'";*/
 
 $resultIntervenantOctopus  = $bdd->select($sql);
 $mappingCodeOctopusHarpege = [];

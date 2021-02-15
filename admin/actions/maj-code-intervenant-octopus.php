@@ -40,7 +40,7 @@ $sql = " SELECT DISTINCT
 			   		    WHEN u.c_source = 'OCTO'  THEN 3
 			    	    WHEN u.c_source = 'APO'   THEN 4
 			       END                  ordre_source
-				FROM octo.individu_unique@octoprod u
+				FROM individu_unique u
 	 		)
 ";
 
@@ -61,18 +61,20 @@ $i = 0;
 $console->begin("Début migration des codes intervenant OSE de Harpège vers Octopus");
 $totalIntervenant = count($resultIntervenantOse);
 //On commence la migration des codes intervenants et on change la source en octopus
+$bdd->trigger()->disable('INTERVENANT_CK');
 foreach ($resultIntervenantOse as $intervenantOse) {
     $i++;
     $pourcent = round(($i * 100) / $totalIntervenant);
     if (array_key_exists($intervenantOse['CODE_HARPEGE'], $mappingCodeOctopusHarpege)) {
         $console->msg($pourcent . " % Migration code intervenant  / code harpege : " . $intervenantOse['CODE_HARPEGE'] . " vers code octopus " . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']], true);
         $sql = "UPDATE intervenant SET code = '" . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']] . "', source_id =" . $sourceIdOctopus . " WHERE code = '" . $intervenantOse['CODE_HARPEGE'] . "'";
-        //$bdd->exec($sql);
-
+        $bdd->exec($sql);
     } else {
         $notFound [$intervenantOse['ANNEE_ID']][] = $intervenantOse['CODE_HARPEGE'];
     }
 }
+$bdd->trigger()->enable('INTERVENANT_CK');
+
 ksort($notFound);
 $console->end("Début migration des codes intervenant OSE de Harpège vers Octopus");
 $console->println("==================================");
@@ -81,6 +83,9 @@ foreach ($notFound as $annee => $intervenants) {
     $console->println("Année " . $annee . " : " . implode(',', $intervenants));
     $console->println("==================================");
 }
+
+//Calcul des tableaux pour mettre à jour suite changement des codes intervenants
+$oa->exec('calcul-tableaux-bord');
 
 $console->println("Fin migration code intervenant OSE de harpege vers octopus", $console::BG_BLUE);
 

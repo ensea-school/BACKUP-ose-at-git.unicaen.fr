@@ -13,6 +13,19 @@ if ($result) {
     $console->println("Source id : " . $sourceIdOctopus);
 } else {
     $console->println('Source Octopus inconnu', $console::BG_RED);
+    die;
+}
+
+//On récupére la source harpege
+$sqlSource = "SELECT id FROM source WHERE code = 'Harpege'";
+$result    = $bdd->select($sqlSource, [], ['fetch' => $bdd::FETCH_ONE]);
+
+if ($result) {
+    $sourceIdHarpege = $result['ID'];
+    $console->println("Source id : " . $sourceIdHarpege);
+} else {
+    $console->println('Source Harpege inconnu', $console::BG_RED);
+    die;
 }
 
 //On récupére tous les intervenants de OSE provenant de la source Harpege
@@ -22,7 +35,7 @@ $sql = "SELECT
            source_id   source_harpege,
            annee_id
        FROM intervenant 
-       WHERE source_id = (SELECT id FROM source WHERE code ='Harpege')";
+       WHERE source_id =" . $sourceIdHarpege;
 
 $resultIntervenantOse = $bdd->select($sql);
 
@@ -44,14 +57,9 @@ $sql = " SELECT DISTINCT
 	 		)
 ";
 
-/*$sql = "SELECT
-            c_individu_chaine        code_octopus,
-            c_src_individu           code_harpege            
-        FROM individu_unique
-        WHERE c_source = 'HARP'";*/
-
 $resultIntervenantOctopus  = $bdd->select($sql);
 $mappingCodeOctopusHarpege = [];
+
 foreach ($resultIntervenantOctopus as $intervenantOcto) {
     if (!array_key_exists($intervenantOcto['CODE_HARPEGE'], $mappingCodeOctopusHarpege)) {
         $mappingCodeOctopusHarpege[$intervenantOcto['CODE_HARPEGE']] = $intervenantOcto['CODE_OCTOPUS'];
@@ -67,7 +75,7 @@ foreach ($resultIntervenantOse as $intervenantOse) {
     $pourcent = round(($i * 100) / $totalIntervenant);
     if (array_key_exists($intervenantOse['CODE_HARPEGE'], $mappingCodeOctopusHarpege)) {
         $console->msg($pourcent . " % Migration code intervenant  / code harpege : " . $intervenantOse['CODE_HARPEGE'] . " vers code octopus " . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']], true);
-        $sql = "UPDATE intervenant SET code = '" . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']] . "', source_id =" . $sourceIdOctopus . " WHERE code = '" . $intervenantOse['CODE_HARPEGE'] . "'";
+        $sql = "UPDATE intervenant SET code = '" . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']] . "', source_id =" . $sourceIdOctopus . " WHERE source_id=" . $sourceIdHarpege . " AND code = '" . $intervenantOse['CODE_HARPEGE'] . "'";
         $bdd->exec($sql);
     } else {
         $notFound [$intervenantOse['ANNEE_ID']][] = $intervenantOse['CODE_HARPEGE'];

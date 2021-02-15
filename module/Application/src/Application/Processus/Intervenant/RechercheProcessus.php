@@ -79,6 +79,7 @@ class RechercheProcessus
         SELECT
           i.id,
           i.code,
+          i.code_rh,
           i.statut_id,
           i.nom_usuel,
           i.nom_patronymique,
@@ -201,7 +202,7 @@ class RechercheProcessus
                     'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
                     'structure'        => $r['STRUCTURE'],
                     'statut'           => $r['STATUT'],
-                    'numero-personnel' => $r['CODE'],
+                    'numero-personnel' => $r['CODE_RH'],
                     'destruction'      => $r['HISTO_DESTRUCTION'],
                 ];
             } else {

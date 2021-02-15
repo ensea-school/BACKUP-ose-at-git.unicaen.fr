@@ -51,6 +51,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var string|null
      */
+    protected $codeRh;
+
+    /**
+     * @var string|null
+     */
     protected $utilisateurCode;
 
     /**
@@ -400,6 +405,30 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function setCode(?string $code): Intervenant
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodeRh(): ?string
+    {
+        return $this->codeRh;
+    }
+
+
+
+    /**
+     * @param string|null $codeRh
+     *
+     * @return Intervenant
+     */
+    public function setCodeRh(?string $codeRh): Intervenant
+    {
+        $this->codeRh = $codeRh;
 
         return $this;
     }

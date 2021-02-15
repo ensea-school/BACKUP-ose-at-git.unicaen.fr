@@ -64,10 +64,12 @@ foreach ($resultIntervenantOse as $intervenantOse) {
     if (array_key_exists($intervenantOse['CODE_HARPEGE'], $mappingCodeOctopusHarpege)) {
 
         $console->msg($pourcent . " % Migration code intervenant  / code harpege : " . $intervenantOse['CODE_HARPEGE'] . " vers code octopus " . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']], true);
-        $sql = "UPDATE intervenant SET code = '" . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']] . "', source_id =" . $sourceIdOctopus . " WHERE source_id=" . $sourceIdHarpege . " AND code = '" . $intervenantOse['CODE_HARPEGE'] . "'";
+        $sql = "UPDATE intervenant SET code_rh  = '" . $intervenantOse['CODE_HARPEGE'] . "', code = '" . $mappingCodeOctopusHarpege[$intervenantOse['CODE_HARPEGE']] . "', source_id =" . $sourceIdOctopus . " WHERE source_id=" . $sourceIdHarpege . " AND code = '" . $intervenantOse['CODE_HARPEGE'] . "'";
         $bdd->exec($sql);
     } else {
-        $notFound[] = $intervenantOse['CODE_HARPEGE'];
+        $notFound[] = $intervenantOse['CODE_HARPEGE'] . " => " . "HARP-" . $intervenantOse['CODE_HARPEGE'];
+        $sql        = "UPDATE intervenant SET code_rh = '" . $intervenantOse['CODE_HARPEGE'] . "', code = 'HARP-" . $intervenantOse['CODE_HARPEGE'] . "' WHERE source_id=" . $sourceIdHarpege . " AND code = '" . $intervenantOse['CODE_HARPEGE'] . "'";
+        $bdd->exec($sql);
     }
 }
 $bdd->trigger()->enable('INTERVENANT_CK');

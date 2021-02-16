@@ -70,10 +70,10 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Adresse"         => nl2br($entity->getAdresse(false)),
             ],
             'metier'      => [
-                "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
-                "Statut de l'intervenant"   => $entity->getStatut(),
-                "N° {$entity->getSource()}" => $entity->getCode(),
-                "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Type d'intervenant"      => $entity->getStatut()->getTypeIntervenant(),
+                "Statut de l'intervenant" => $entity->getStatut(),
+                "N° RH"                   => (($entity->getCodeRh()) ? $entity->getCodeRh() : $entity->getCode()) . (($entity->getSource()->getLibelle() == 'Octopus') ? " <i>(N° Octopus " . $entity->getCode() . ")</i>" : ''),
+                "Affectation principale"  => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
             ],
             'divers'      => [
                 "Id" => $entity->getId(),

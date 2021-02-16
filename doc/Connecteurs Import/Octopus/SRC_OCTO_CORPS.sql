@@ -8,4 +8,3 @@ FROM corps@octodev c
          JOIN source s
               ON s.code = 'Octopus'
 WHERE SYSDATE BETWEEN COALESCE(c.d_ouverture, SYSDATE) AND COALESCE(c.d_fermeture + 1, SYSDATE)
-  AND c.c_corps = '843'

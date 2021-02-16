@@ -386,7 +386,7 @@ class  IntervenantController extends AbstractController
             $query->setNotNull([]); // Aucune colonne ne doit être non nulle !!
             $query->setLimit(101);
             $query->setColValues(['ANNEE_ID' => $intervenant->getAnnee()->getId(), 'CODE' => $intervenant->getCode()]);
-            $data = $this->getServiceDifferentiel()->make($query, $query::SQL_FULL, true)->fetchAll();
+            $data = $this->getServiceDifferentiel()->make($query, $query::SQL_FULL, false)->fetchAll();
         }
 
         return compact('intervenant', 'isImportable', 'data');

@@ -147,12 +147,12 @@ class IntervenantViewHelper extends AbstractHtmlElement
             ?>
             <nav class="navbar navbar-default intervenant-statuts">
                 <ul class="nav navbar-nav">
-                    <?php foreach ($statuts as $intervenantId => $statut): ?>
-                        <li<?= ($statut == $intervenant->getStatut()) ? ' class="active"' : ' title="Cliquez pour afficher"' ?>>
+                    <?php foreach ($statuts as $intervenantId => $iStatut): ?>
+                        <li<?= ($iStatut == $intervenant) ? ' class="active"' : ' title="Cliquez pour afficher"' ?>>
                             <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
-                                <span class="type-intervenant"><?= $statut->getTypeIntervenant() ?></span>
-                                <span class="validite-intervenant"><?= $intervenant->getValidite(); ?></span><br/>
-                                <span class="statut-intervenant"><?= $statut->getLibelle() ?></span>
+                                <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
+                                <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
+                                <span class="statut-intervenant"><?= $iStatut->getStatut()->getLibelle() ?></span>
 
                             </a>
                         </li>
@@ -179,11 +179,11 @@ class IntervenantViewHelper extends AbstractHtmlElement
         $statuts       = [];
         foreach ($intervernants as $intervenant) {
             if ($intervenant->estNonHistorise() && $intervenant->getStatut()) {
-                $statuts[$intervenant->getId()] = $intervenant->getStatut();
+                $statuts[$intervenant->getId()] = $intervenant;
             }
         }
         uasort($statuts, function ($a, $b) {
-            return $a->getOrdre() > $b->getOrdre();
+            return $a->getStatut()->getOrdre() > $b->getStatut()->getOrdre();
         });
 
         return $statuts;

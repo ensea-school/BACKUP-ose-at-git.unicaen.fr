@@ -78,61 +78,78 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
      )
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
-    i.code                                                                                               code,
-    /* Code RH : FIRST_VALUE pour être sûre de récupérer le code rh et non le code Apogee dans le cas ou l'individu est à la fois dans harpege/Siham et Apogee*/
-    induni.c_src_individu                                                                                code_rh,
-    indc.ldap_uid                                                                                        utilisateur_code,
-    str.code                                                                                             z_structure_code,
-    CASE WHEN str2.code <> str.code THEN str2.code ELSE NULL END                                         z_structure_code_n2,
-    i.z_statut_id                                                                                        z_statut_id,
-    grade.c_grade                                                                                        z_grade_id,
+    i.code                                                       code,
+    /* Code RH : on alimene le code RH uniquement si la source de l'individu est HARP ou SIHAM*/
+    CASE
+        WHEN (induni.c_source = 'HARP' OR induni.c_source = 'SIHAM')
+            THEN induni.c_src_individu
+        ELSE NULL END                                            code_rh,
+    indc.ldap_uid                                                utilisateur_code,
+    str.code                                                     z_structure_code,
+    CASE
+        WHEN str2.code <> str.code THEN str2.code
+        ELSE NULL
+        END                                                      z_structure_code_n2,
+    i.z_statut_id                                                z_statut_id,
+    grade.c_grade                                                z_grade_id,
     /* Données nécessaires pour calculer la discipline */
-    cnu.c_cnu                                                                                            z_discipline_id_cnu,
-    CAST(NULL AS varchar2(255))                                                                          z_discipline_id_sous_cnu,
-    cnus.c_cnu_specialite                                                                                z_discipline_id_spe_cnu,
-    dissec.c_discipline                                                                                  z_discipline_id_dis2deg,
+    cnu.c_cnu                                                    z_discipline_id_cnu,
+    CAST(NULL AS varchar2(255))                                  z_discipline_id_sous_cnu,
+    cnus.c_cnu_specialite                                        z_discipline_id_spe_cnu,
+    dissec.c_discipline                                          z_discipline_id_dis2deg,
     /* Données identifiantes de base */
-    CASE ind.sexe WHEN 'M' THEN 'M.' ELSE 'Mme' END                                                      z_civilite_id,
-    initcap(ind.nom_usage)                                                                               nom_usuel,
-    initcap(ind.prenom)                                                                                  prenom,
-    ind.d_naissance                                                                                      date_naissance,
+    CASE ind.sexe
+        WHEN 'M' THEN 'M.'
+        ELSE 'Mme'
+        END                                                      z_civilite_id,
+    initcap(ind.nom_usage)                                       nom_usuel,
+    initcap(ind.prenom)                                          prenom,
+    ind.d_naissance                                              date_naissance,
     /* Données identifiantes complémentaires */
-    initcap(ind.nom_famille)                                                                             nom_patronymique,
-    ind.ville_de_naissance                                                                               commune_naissance,
-    ind.c_pays_naissance                                                                                 z_pays_naissance_id,
-    ind.c_dept_naissance                                                                                 z_departement_naissance_id,
-    ind.c_pays_nationalite                                                                               z_pays_nationalite_id,
-    telpro.numero                                                                                        tel_pro,
-    ind.tel_perso                                                                                        tel_perso,
-    indc.email                                                                                           email_pro,
-    ind.email_perso                                                                                      email_perso,
+    initcap(ind.nom_famille)                                     nom_patronymique,
+    ind.ville_de_naissance                                       commune_naissance,
+    ind.c_pays_naissance                                         z_pays_naissance_id,
+    ind.c_dept_naissance                                         z_departement_naissance_id,
+    ind.c_pays_nationalite                                       z_pays_nationalite_id,
+    telpro.numero                                                tel_pro,
+    ind.tel_perso                                                tel_perso,
+    indc.email                                                   email_pro,
+    ind.email_perso                                              email_perso,
     /* Adresse */
-    trim(adr.adresse1 || ' ' || adr.adresse2 || ' ' || adresse3)                                         adresse_precisions,
-    CAST(NULL AS varchar2(255))                                                                          adresse_numero,
-    CAST(NULL AS varchar2(255))                                                                          z_adresse_numero_compl_id,
-    CAST(NULL AS varchar2(255))                                                                          z_adresse_voirie_id,
-    CAST(NULL AS varchar2(255))                                                                          adresse_voie,
-    CAST(NULL AS varchar2(255))                                                                          adresse_lieu_dit,
-    adr.code_postal                                                                                      adresse_code_postal,
-    adr.ville_nom                                                                                        adresse_commune,
-    adr.pays_id                                                                                          z_adresse_pays_id,
+    trim(adr.adresse1 || ' ' || adr.adresse2 || ' ' || adresse3) adresse_precisions,
+    CAST(NULL AS varchar2(255))                                  adresse_numero,
+    CAST(NULL AS varchar2(255))                                  z_adresse_numero_compl_id,
+    CAST(NULL AS varchar2(255))                                  z_adresse_voirie_id,
+    CAST(NULL AS varchar2(255))                                  adresse_voie,
+    CAST(NULL AS varchar2(255))                                  adresse_lieu_dit,
+    adr.code_postal                                              adresse_code_postal,
+    adr.ville_nom                                                adresse_commune,
+    adr.pays_id                                                  z_adresse_pays_id,
     /* INSEE */
-    CAST(NULL AS varchar2(255))                                                                          numero_insee,
-    CAST(NULL AS varchar2(255))                                                                          numero_insee_provisoire,
+    CAST(NULL AS varchar2(255))                                  numero_insee,
+    CAST(NULL AS varchar2(255))                                  numero_insee_provisoire,
     /* Banque */
-    CAST(NULL AS varchar2(255))                                                                          iban,
-    CAST(NULL AS varchar2(255))                                                                          bic,
-    CAST(NULL AS varchar2(255))                                                                          rib_hors_sepa,
+    CAST(NULL AS varchar2(255))                                  iban,
+    CAST(NULL AS varchar2(255))                                  bic,
+    CAST(NULL AS varchar2(255))                                  rib_hors_sepa,
     /* Données complémentaires */
-    CAST(NULL AS varchar2(255))                                                                          autre_1,
-    CAST(NULL AS varchar2(255))                                                                          autre_2,
-    CAST(NULL AS varchar2(255))                                                                          autre_3,
-    CAST(NULL AS varchar2(255))                                                                          autre_4,
-    CAST(NULL AS varchar2(255))                                                                          autre_5,
+    CAST(NULL AS varchar2(255))                                  autre_1,
+    CAST(NULL AS varchar2(255))                                  autre_2,
+    CAST(NULL AS varchar2(255))                                  autre_3,
+    CAST(NULL AS varchar2(255))                                  autre_4,
+    CAST(NULL AS varchar2(255))                                  autre_5,
     /* Employeur */
-    CAST(NULL AS varchar2(255))                                                                          z_employeur_id,
-    CASE WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY') THEN NULL ELSE i.validite_debut END validite_debut,
-    CASE WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY') THEN NULL ELSE i.validite_fin END     validite_fin
+    CAST(NULL AS varchar2(255))                                  z_employeur_id,
+    CASE
+        WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY')
+            THEN NULL
+        ELSE i.validite_debut
+        END                                                      validite_debut,
+    CASE
+        WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
+            THEN NULL
+        ELSE i.validite_fin
+        END                                                      validite_fin
 FROM i
          JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))

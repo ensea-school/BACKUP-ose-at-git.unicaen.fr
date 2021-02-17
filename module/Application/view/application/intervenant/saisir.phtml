@@ -25,14 +25,31 @@ if ($errors) {
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Données indispensables</div>
+                <div class="panel-heading">Données essentielles</div>
                 <div class="panel-body">
-                    <?php
-                    echo $this->formControlGroup($form->get('nomUsuel'));
-                    echo $this->formControlGroup($form->get('prenom'));
-                    echo $this->formControlGroup($form->get('dateNaissance'));
-                    echo $this->formControlGroup($form->get('code'));
-                    ?>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->formControlGroup($form->get('nomUsuel')); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->formControlGroup($form->get('prenom')); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->formControlGroup($form->get('dateNaissance')); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= $this->formControlGroup($form->get('code')); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?= $this->formControlGroup($form->get('codeRh')); ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,6 +75,10 @@ if ($errors) {
                     <div class="row">
                         <div class="col-md-4"><?= $this->formControlGroup($form->get('civilite')); ?></div>
                         <div class="col-md-8"><?= $this->formControlGroup($form->get('nomPatronymique')); ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('validiteDebut')); ?></div>
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('validiteFin')); ?></div>
                     </div>
                     <?php
                     echo $this->formControlGroup($form->get('montantIndemniteFc'));

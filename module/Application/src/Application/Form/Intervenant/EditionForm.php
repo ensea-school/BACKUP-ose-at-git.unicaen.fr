@@ -56,12 +56,15 @@ class EditionForm extends AbstractForm
         'discipline'         => ['type' => Discipline::class],
         'grade'              => ['type' => Grade::class],
         'code'               => ['type' => 'string'],
+        'codeRh'             => ['type' => 'string'],
         'utilisateurCode'    => ['type' => 'string'],
         'source'             => ['type' => Source::class],
         'sourceCode'         => ['type' => 'string'],
         'syncStatut'         => ['type' => 'bool'],
         'syncStructure'      => ['type' => 'bool'],
         'montantIndemniteFc' => ['type' => 'float'],
+        'validiteDebut'      => ['type' => \DateTime::class],
+        'validiteFin'        => ['type' => \DateTime::class],
     ];
 
     protected $readOnly         = false;
@@ -206,6 +209,14 @@ class EditionForm extends AbstractForm
             ],
         ]);
 
+        $this->add([
+            'name'    => 'codeRh',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Code RH éventuel',
+            ],
+        ]);
+
         $utilisateur = new SearchAndSelect('utilisateur');
         $utilisateur->setRequired(false)
             ->setSelectionRequired(false)
@@ -265,6 +276,45 @@ class EditionForm extends AbstractForm
             'type'    => 'Text',
             'options' => [
                 'label' => 'Code source',
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'validiteDebut',
+            'type'       => 'DateTime',
+            'options'    => [
+                'label'  => 'Début de validité',
+                'format' => Util::DATE_FORMAT,
+            ],
+            'attributes' => [
+                'placeholder' => "jj/mm/aaaa",
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'validiteFin',
+            'type'       => 'DateTime',
+            'options'    => [
+                'label'  => 'Fin de validité',
+                'format' => Util::DATE_FORMAT,
+            ],
+            'attributes' => [
+                'placeholder' => "jj/mm/aaaa",
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'dateNaissance',
+            'type'       => 'DateTime',
+            'options'    => [
+                'label'         => 'Date de naissance <span class="text-danger">*</span>',
+                'format'        => Util::DATE_FORMAT,
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
+            ],
+            'attributes' => [
+                'placeholder' => "jj/mm/aaaa",
             ],
         ]);
 
@@ -470,8 +520,11 @@ class EditionForm extends AbstractForm
             'discipline'         => ['required' => false],
             'grade'              => ['required' => false],
             'code'               => ['required' => true],
+            'codeRh'             => ['required' => false],
             'utilisateur'        => ['required' => false],
             'login'              => ['required' => false],
+            'validiteDebut'      => ['required' => false],
+            'validiteFin'        => ['required' => false],
             'password'           => [
                 'required'   => false,
                 'validators' => [

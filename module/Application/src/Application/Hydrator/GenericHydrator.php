@@ -97,7 +97,7 @@ class GenericHydrator implements HydratorInterface
                 }
                 if (\DateTime::class == $type) {
                     $value = \DateTime::createFromFormat(Constants::DATE_FORMAT, $value);
-                    $value->setTime(0, 0, 0);
+                    if ($value) $value->setTime(0, 0, 0);
                     if (!$value) $value = null;
                 }
                 if (class_exists($type) && $this->isEntity($type) && $value) {

@@ -12,7 +12,6 @@ return [
     'CORPS'                 => [],
     'GRADE'                 => [],
     'INTERVENANT'           => [
-        'KEY_COLUMNS'          => 'STATUT_ID',
         'SYNC_HOOK_BEFORE'     => "UNICAEN_IMPORT.REFRESH_MV('MV_INTERVENANT');",
         'SYNC_NON_IMPORTABLES' => true,
         'SYNC_FILTRE'          => "WHERE (import_action <> 'delete' OR (

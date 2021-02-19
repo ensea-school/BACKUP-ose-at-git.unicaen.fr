@@ -3,7 +3,6 @@ WITH
 i AS (
   SELECT DISTINCT
     code,
-    code code_rh,
     z_statut_id,
     FIRST_VALUE(z_discipline_id_cnu) OVER (partition by code, z_statut_id order by validite_fin desc)      z_discipline_id_cnu,
     FIRST_VALUE(z_discipline_id_sous_cnu) OVER (partition by code, z_statut_id order by validite_fin desc) z_discipline_id_sous_cnu,
@@ -113,6 +112,9 @@ SELECT DISTINCT
 
   /* = supannempid du LDAP Unicaen */
   lpad(ltrim(TO_CHAR(individu.no_individu,'99999999')), 8, '0') utilisateur_code,
+
+  /* Code affiché reprenant le numéro d'individu */
+  individu.no_individu                                          code_rh,
 
   /* Code structure Harpège (il sera plus tard transformé par la vue source en ID de strucutre OSE) */
   sc.c_structure_n2                                             z_structure_id,

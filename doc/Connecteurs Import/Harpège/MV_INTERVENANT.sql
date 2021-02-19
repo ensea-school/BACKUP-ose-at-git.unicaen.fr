@@ -3,6 +3,7 @@ WITH
 i AS (
   SELECT DISTINCT
     code,
+    code code_rh,
     z_statut_id,
     FIRST_VALUE(z_discipline_id_cnu) OVER (partition by code, z_statut_id order by validite_fin desc)      z_discipline_id_cnu,
     FIRST_VALUE(z_discipline_id_sous_cnu) OVER (partition by code, z_statut_id order by validite_fin desc) z_discipline_id_sous_cnu,
@@ -123,10 +124,7 @@ SELECT DISTINCT
   pbs_divers__cicg.c_grade@harpprod(individu.no_individu, COALESCE(i.validite_fin,SYSDATE) ) z_grade_id,
 
   /* Données nécessaires pour calculer la discipline */
-  i.z_discipline_id_cnu                                         z_discipline_id_cnu,
-  i.z_discipline_id_sous_cnu                                    z_discipline_id_sous_cnu,
-  i.z_discipline_id_spe_cnu                                     z_discipline_id_spe_cnu,
-  i.z_discipline_id_dis2deg                                     z_discipline_id_dis2deg,
+  d.source_code                                                 z_discipline_id,
 
   /* Données identifiantes de base */
   CASE individu.c_civilite WHEN 'M.' THEN 'M.' ELSE 'Mme' END   z_civilite_id,
@@ -188,5 +186,29 @@ FROM
   LEFT JOIN individu_telephone@harpprod  individu_telephone ON individu_telephone.no_individu = i.code AND individu_telephone.tem_tel_principal='O' AND individu_telephone.tem_tel='O'
   LEFT JOIN code_insee@harpprod          code_insee         ON code_insee.no_dossier_pers     = i.code
   LEFT JOIN                              comptes            ON comptes.no_individu            = i.code AND comptes.rank_compte = comptes.nombre_comptes
+  LEFT JOIN discipline d ON
+    d.histo_destruction IS NULL
+    AND 1 = CASE WHEN -- si rien n'a été défini
+      COALESCE( i.z_discipline_id_cnu, i.z_discipline_id_sous_cnu, i.z_discipline_id_spe_cnu, i.z_discipline_id_dis2deg ) IS NULL
+      AND d.source_code = '00'
+
+    THEN 1 WHEN -- si une CNU ou une spécialité a été définie...
+
+      COALESCE( i.z_discipline_id_cnu, i.z_discipline_id_sous_cnu, i.z_discipline_id_spe_cnu ) IS NOT NULL
+
+    THEN CASE WHEN -- alors on teste par les sections CNU et spécialités
+
+      (
+           ',' || d.CODES_CORRESP_2 || ',' LIKE '%,' || i.z_discipline_id_cnu || NVL(i.z_discipline_id_sous_cnu,'') || ',%'
+        OR ',' || d.CODES_CORRESP_2 || ',' LIKE '%,' || i.z_discipline_id_cnu || NVL(i.z_discipline_id_sous_cnu,'00') || ',%'
+      )
+      AND ',' || NVL(d.CODES_CORRESP_3,'000') || ',' LIKE  '%,' || NVL(CASE WHEN d.CODES_CORRESP_3 IS NOT NULL THEN i.z_discipline_id_spe_cnu ELSE NULL END,'000') || ',%'
+
+    THEN 1 ELSE 0 END ELSE CASE WHEN -- sinon on teste par les disciplines du 2nd degré
+
+      i.z_discipline_id_dis2deg IS NOT NULL
+      AND ',' || NVL(d.CODES_CORRESP_4,'') || ',' LIKE  '%,' || i.z_discipline_id_dis2deg || ',%'
+
+    THEN 1 ELSE 0 END END -- fin du test
 WHERE
   i.validite_fin+1 >= (SYSDATE - (365*2))

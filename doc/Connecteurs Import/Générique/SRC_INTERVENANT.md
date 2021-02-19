@@ -2,7 +2,7 @@
 
 Pour pouvoir fonctionner, il faut pouvoir gérer simultanément: 
  - les statuts multiples
- - l'annualisation des fiches
+ - l'annualisation des fiches (en se basant sur les informations de validité fournies par la MV_INTERVENANT)
  - La synchronisation partielle dans certains cas
 
 SRC_INTERVENANT se base sur MV_INTERVENANT, puis confronte les données à la table INTERVENANT pour présenter à la vue différentielle
@@ -32,7 +32,7 @@ Tout cela se fait dans la vue SRC_INTERVENANT.
 SRC_INTERVENANT est ensuite utilisée par le système d'import de la même manière que les autres vues sources de OSE pour réaliser 
 les opérations de synchronisation adéquates (INSERT, UPDATE, DELETE, UNDELETE).
 
-## Liste des variables nécessaires :
+## Grands principes de fonctionnement. Liste des variables nécessaires :
 
 ### statut_source_autre
 
@@ -52,6 +52,18 @@ Valeurs possibles : 0 ou 1
 
 Détermine si les statuts issus de MV_INTERVENANT et INTERVENANT sont identiques ou non
 
+### types_identiques
+
+CASE WHEN ssi.type_intervenant_id = isi.type_intervenant_id THEN 1 ELSE 0 END
+
+### sync_statut
+
+Valeurs possibles : 0 ou 1
+
+Détermine s'il faut mettre à jour le statut via la synchro ou bien si celui-ci ne doit pas être modifié, 
+parcequ'il aurait par exemple été changé manuellement dans l'application.                                                   
+
+
 ### intervenant_local
 
 Valeurs possibles : 0 ou 1
@@ -59,11 +71,20 @@ Valeurs possibles : 0 ou 1
 Détermine si l'intervenant a été saisi directement dans OSE, auquel cas il ne devra pas être impacté par la synchro, 
 ou bien s'il provient d'un précédent import.
 
-### statut_deja_utilise
+
+### intervenant_donnees
 
 Valeurs possibles : 0 ou 1
 
-Détermine si le statut issu de MV_INTERVENANT est déjà affecté à l'intervenant dans une autre fiche ou non.
+Détermine si des données (services, PJ, dossier, etc.) sont associées à la fiche de l'intervenant ou non 
+
+
+### intervenant_histo
+
+Valeurs possibles : 0 ou 1
+
+Détermine si la fiche intervenant est historisée ou non
+
 
 ### nb_sources
 
@@ -84,66 +105,37 @@ Valeurs possibles : 0 à n
 
 Nombre de lignes où les statuts issus de MV_INTERVENANT et d'INTERVENANT sont égaux.
 
-### diff_statut_autre
+### statuts_egaux_id
 
-Valeurs possibles : 0 à n
+Type NUMERIC ou NULL
 
-Nombre de lignes où le statut issu de MV_INTERVENANT est à la fois égal à AUTRE et différent de celui issu de INTERVENANT.
+Si au moins un statut est présent à la fois dans la source ET dans OSE, un d'entre eux est remonté ici
 
 
 
 
 ## Liste des scénarios
 
-### a
+11 scénario ont été identifiés :
 
-Données présentes uniquement dans le connecteur : à insérer donc.
+### 1 : Lorsque le statut est le même sur la source et la fiche OSE, alors la mise à jour meut se faire
 
-### c
+### 2 : On ne doit pas restaurer les intervenants créés dans OSE puis historisés qui ne sont pas remontés par la source
 
-Une ou plusieurs lignes, et les statuts coincident tous.
+### 3 : Si la source remonte 1 fiche et qu'aucune fiche OSE ne correspond => insertion d'un nouvel intervenant
 
-### d
+### 4 : Si pour un intervenant il y a correspondances parfaite des statuts entre la source et OSE
 
-Une seule ligne, mais le statut diffère entre la source et la table.
+### 5 : Quand il y a 1 source et 1 fiche pour un intervenant, mais que le statut diffère
 
-### e
+### 6 : Quand il y a une seule source et plusieurs intervenants, et que la source matche sur au moins un statut
 
-Une ligne en source et plusieurs en table, avec une ligne dont le statut coïncide et pas les autres.
+### 7 : Quand il y a une seule source et plusieurs intervenants, et que la source matche sur au moins un statut
 
-### f
+### 8 : Quand il y a plusieurs sources pour un seul intervenant et qu'une au moins matche
+   
+### 9 : Quand il y a plusieurs sources pour un seul intervenant et qu'aucun ne matche
 
-Une ligne en source et plusieurs en table, dont aucun statut ne coïncide avec le statut source.
+### 10 : Quand il y a 2 sources et 2 intervenants et qu'un seul des deux matche
 
-### g
-
-Plusieures lignes en source, une seule en destination de même statut qu'en source et aucune ligne en source de statut AUTRE.
-
-### h
-
-Plusieures lignes en source, une seule en destination de même statut qu'en source et une ligne en source de statut AUTRE.
-
-### i
-
-Plusieurs lignes de part et d'autre, aucun statut AUTRE en source
-
-### j
-
-Plusieurs lignes de part et d'autre, un statut AUTRE en source
-
-### ...
-
-Tous les scénarios ne sont pas écrits. Il en manque et ceux listés ci-dessus vont probablement évoluer au gré des besoins.
-
-
-## Reste à faire :
-
-- Figer la liste des scénarios
-- Pour chaque scénario, identifier les sous-scenarios ligne par ligne
-- Pour chaque scénario et sous-scénarion, identifier l'action à mener
-- Dropper les lignes inutiles
-- Si plusieurs lignes sources correspondent à une même ligne destination :
-  - identifier les valeurs identiques
-  - identifier les valeurs différentes (discipline, structure, etc) et prendre à la place la valeur déjà présente dans INTERVENANT
-- Ecrire le reste de la vue source
-- Prévoir un système de log de syncgro pour savoir pourquoi telle ou telle fiche ne s'est pas synchronisée totalement (données sources multiples, plus de source alors qu'il y a des données dans OSE, etc.)
+### 11 : Autres cas

@@ -11,7 +11,8 @@ Vous devez l'utiliser telle quelle.
 
 |Colonne                   |Type    |Longueur|Nullable|Commentaire                  |
 |--------------------------|--------|--------|--------|-----------------------------|
-|CODE                      |VARCHAR2|60      |Non     | Matricule spécifique à l'individu |
+|CODE                      |VARCHAR2|60      |Non     | Identifiant unique de l'individu dans le système d'information l'individu |
+|CODE_RH                   |VARCHAR2|60      |Oui     | Matricule permettant éventuellement d'identifier l'intervenant dans Siham, Harpège, Mangue, etc. |
 |Z_SOURCE_ID               |VARCHAR2|15      |Non     |==> SOURCE.CODE              |
 |SOURCE_CODE               |VARCHAR2|100     |Oui     |                             |
 |UTILISATEUR_CODE          |VARCHAR2|60      |Oui     | Identifiant pour faire lien avec le LDAP |

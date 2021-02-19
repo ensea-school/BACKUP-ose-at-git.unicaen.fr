@@ -15,11 +15,11 @@ return [
         'KEY_COLUMNS'          => 'STATUT_ID',
         'SYNC_HOOK_BEFORE'     => "UNICAEN_IMPORT.REFRESH_MV('MV_INTERVENANT');",
         'SYNC_NON_IMPORTABLES' => true,
-        'SYNC_FILTRE'          => "WHERE import_action <> 'delete' OR (
+        'SYNC_FILTRE'          => "WHERE (import_action <> 'delete' OR (
       (NOT exists(SELECT intervenant_id FROM intervenant_dossier WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
   AND (NOT exists(SELECT intervenant_id FROM piece_jointe WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
   AND (NOT exists(SELECT intervenant_id FROM service WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
-)",
+))",
     ],
     'AFFECTATION_RECHERCHE' => [
         'SYNC_FILTRE' => "WHERE INTERVENANT_ID IS NOT NULL",

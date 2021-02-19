@@ -1,5 +1,5 @@
 CREATE
-MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
+MATERIALIZED VIEW MV_INTERVENANT AS
    WITH i AS (
         SELECT DISTINCT code,
                         z_statut_id,
@@ -9,7 +9,9 @@ MATERIALIZED VIEW MV_INTERVENANT_OCTO AS
         FROM (
                 --Step 1 : On prend tous les individus qui ont ou ont eu un contrat à l'université
                  SELECT icto.individu_id                                                         code,
-                        CASE WHEN icto.code_ose IS NOT NULL THEN icto.code_ose ELSE 'AUTRES' END z_statut_id,
+                        CASE WHEN icto.code_ose = 'ENS_2ND_DEGRE' THEN 'ENS_2ND_DEG'
+                             WHEN icto.code_ose  IS NOT NULL THEN icto.code_ose
+                             ELSE 'AUTRES' END                                                   z_statut_id,
                         icto.id_orig                                                             source_code,
                         COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))              validite_debut,
                         COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))                validite_fin
@@ -96,10 +98,11 @@ SELECT DISTINCT
     i.z_statut_id                                                        z_statut_id,
     grade.c_grade                                                        z_grade_id,
     /* Données nécessaires pour calculer la discipline */
-    cnu.c_cnu                                                            z_discipline_id_cnu,
-    CAST(NULL AS varchar2(255))                                          z_discipline_id_sous_cnu,
-    cnus.c_cnu_specialite                                                z_discipline_id_spe_cnu,
-    dissec.c_discipline                                                  z_discipline_id_dis2deg,
+    d.source_code                                                        z_discipline_id,
+    --    cnu.c_cnu                                                            z_discipline_id_cnu,
+    --  CAST(NULL AS varchar2(255))                                          z_discipline_id_sous_cnu,
+    -- cnus.c_cnu_specialite                                                z_discipline_id_spe_cnu,
+    --dissec.c_discipline                                                  z_discipline_id_dis2deg,
     /* Données identifiantes de base */
     CASE ind.sexe
         WHEN 'M' THEN 'M.'
@@ -119,7 +122,15 @@ SELECT DISTINCT
     indc.email                                                           email_pro,
     ind.email_perso                                                      email_perso,
     /* Adresse */
-    trim(adr.adresse1 || CHR(13) || adr.adresse2 || CHR(13) || adresse3) adresse_precisions,
+    trim(adr.adresse1 ||
+        CASE WHEN adr.adresse1 IS NOT NULL
+                  AND adr.adresse2 IS NOT NULL
+             THEN CHR(13)
+             ELSE '' END || adr.adresse2 ||
+        CASE WHEN adr.adresse2 IS NOT NULL
+                  AND adr.adresse3 IS NOT NULL
+             THEN CHR(13)
+             ELSE '' END || adr.adresse3)                                adresse_precisions,
     CAST(NULL AS varchar2(255))                                          adresse_numero,
     CAST(NULL AS varchar2(255))                                          z_adresse_numero_compl_id,
     CAST(NULL AS varchar2(255))                                          z_adresse_voirie_id,
@@ -180,6 +191,30 @@ FROM i
     --On récupére le code de la structure d'affectation principal de l'individu
          LEFT JOIN v_structure@octoprod str ON str.id = spi.z_structure_id
          LEFT JOIN v_structure@octoprod str2 ON str.niv2_id = str2.id
+         LEFT JOIN discipline d ON
+          d.histo_destruction IS NULL
+         AND 1 = CASE WHEN -- si rien n'a été défini
+         COALESCE( cnu.c_cnu, cnus.c_cnu_specialite, dissec.c_discipline ) IS NULL
+         AND d.source_code = '00'
+
+         THEN 1 WHEN -- si une CNU ou une spécialité a été définie...
+
+         COALESCE( cnu.c_cnu, cnus.c_cnu_specialite ) IS NOT NULL
+
+        THEN CASE WHEN -- alors on teste par les sections CNU et spécialités
+
+        (
+           ',' || d.CODES_CORRESP_2 || ',' LIKE '%,' || cnu.c_cnu || ',%'
+        OR ',' || d.CODES_CORRESP_2 || ',' LIKE '%,' || cnu.c_cnu || '00,%'
+        )
+        AND ',' || NVL(d.CODES_CORRESP_3,'000') || ',' LIKE  '%,' || NVL(CASE WHEN d.CODES_CORRESP_3 IS NOT NULL THEN cnus.c_cnu_specialite ELSE NULL END,'000') || ',%'
+
+       THEN 1 ELSE 0 END ELSE CASE WHEN -- sinon on teste par les disciplines du 2nd degré
+
+         dissec.c_discipline IS NOT NULL
+         AND ',' || NVL(d.CODES_CORRESP_4,'') || ',' LIKE  '%,' || dissec.c_discipline || ',%'
+
+       THEN 1 ELSE 0 END END -- fin du test
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
 --AND induni.c_individu_chaine = 4251-- Filtre avec code octopus
 --AND ind.nom_famille = 'DURANDY'

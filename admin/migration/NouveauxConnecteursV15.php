@@ -4,7 +4,7 @@
 
 
 
-class NouveauConnecteurIntervenantV15 extends AbstractMigration
+class NouveauxConnecteursV15 extends AbstractMigration
 {
     protected $contexte = self::CONTEXTE_ALL;
 
@@ -12,7 +12,7 @@ class NouveauConnecteurIntervenantV15 extends AbstractMigration
 
     public function description(): string
     {
-        return "Préparation de la mise en place du nouveau connectuer INTERVENANT pour la V15";
+        return "Désactivation des connecteurs à modifier pour la V15";
     }
 
 
@@ -42,13 +42,19 @@ class NouveauConnecteurIntervenantV15 extends AbstractMigration
         $ipd = require $this->manager->getOseAdmin()->getOseDir() . '/data/import_tables.php';
 
         $bdd->getTable('IMPORT_TABLES')->update(['SYNC_ENABLED' => 0, 'SYNC_FILTRE' => $ipd['INTERVENANT']['SYNC_FILTRE']], ['TABLE_NAME' => 'INTERVENANT']);
+        $bdd->getTable('IMPORT_TABLES')->update(['SYNC_ENABLED' => 0], ['TABLE_NAME' => 'STRUCTURE']);
+        $bdd->getTable('IMPORT_TABLES')->update(['SYNC_ENABLED' => 0], ['TABLE_NAME' => 'DEPARTEMENT']);
+        $bdd->getTable('IMPORT_TABLES')->update(['SYNC_ENABLED' => 0], ['TABLE_NAME' => 'PAYS']);
+
+        // Reconstruction des vues diff et des proc maj pour éviter d'afficher des bugs après
+        $this->manager->getOseAdmin()->exec('UnicaenImport MajVuesFonctions');
     }
 
 
 
     protected function after()
     {
-        $bdd = $this->manager->getBdd();
+        //$bdd = $this->manager->getBdd();
     }
 
 }

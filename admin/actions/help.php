@@ -24,6 +24,8 @@ $actions    = [
     ,
     "update-bdd"                => "Mise à jour de la base de données de l'application (sans les fichiers)",
     "update-employeur"          => "Mise à jour de la table employeur à partir d'une source (par défault source INSEE)",
+    "build-synchronisation"     => "Reconstruction des vues différentielles et des procédures de mise à jour",
+    "fichiers-vers-filesystem"  => "Déplace le contenu des fichiers (table FICHIER) vers le système de fichiers",
 ];
 $actionsDev = [
     "update-ddl"            => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",

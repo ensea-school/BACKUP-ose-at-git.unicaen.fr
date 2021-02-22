@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "322c46c5ae38cbb95f7c4a48767ee989",
+    "content-hash": "88bf8ee0408f5b607bb1dbb630021f83",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -95,16 +95,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "1.11.1",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "ce77a7ba1770462cd705a91a151b6c3746f9c6ad"
+                "reference": "b17c5014ef81d212ac539f07a1001832df1b6d3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/ce77a7ba1770462cd705a91a151b6c3746f9c6ad",
-                "reference": "ce77a7ba1770462cd705a91a151b6c3746f9c6ad",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/b17c5014ef81d212ac539f07a1001832df1b6d3b",
+                "reference": "b17c5014ef81d212ac539f07a1001832df1b6d3b",
                 "shasum": ""
             },
             "require": {
@@ -119,11 +119,6 @@
                 "phpunit/phpunit": "^7.5 || ^9.1.5"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.11.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
@@ -162,7 +157,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2020-10-26T10:28:16+00:00"
+            "time": "2021-02-21T21:00:45+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -2772,11 +2767,11 @@
         },
         {
             "name": "unicaen/import",
-            "version": "3.1.4",
+            "version": "3.1.5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "83a793dac92c0c9dba4e7f36e5a065abc2aafe99"
+                "reference": "aa5cef552651a5dd59f1508cef798a74233806ab"
             },
             "require": {
                 "unicaen/auth": "dev-zf-3.x || ^3.0",
@@ -2796,7 +2791,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2021-02-17T10:47:54+00:00"
+            "time": "2021-02-22T08:40:45+00:00"
         },
         {
             "name": "unicaen/open-document",

@@ -5,7 +5,7 @@ use BddAdmin\Bdd;
 
 class MigrationPrivilegesArchivage extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
+    protected $contexte = self::CONTEXTE_POST;
 
 
 

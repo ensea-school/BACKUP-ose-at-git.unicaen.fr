@@ -19,9 +19,20 @@ class MigrationStatutAutres extends AbstractMigration
 
     public function utile(): bool
     {
-        //Forcer le paramétrage du statuts AUTRES même après la migration v15
-        return ($this->manager->hasNew('table', 'INTERVENANT_DOSSIER') ||
-            $this->manager->has('table', 'INTERVENANT_DOSSIER'));
+        if (!$this->manager->has('table', 'INTERVENANT_DOSSIER')) {
+            return false;
+        }
+
+        $sql = "SELECT count(*) res FROM statut_intervenant WHERE code = 'AUTRES' AND (dossier_adresse = 1 OR
+                    dossier_employeur = 1 OR
+                    dossier_contact = 1 OR
+                    dossier_iban = 1 OR
+                    dossier_identite_comp = 1 OR
+                    dossier_insee = 1)";
+
+        $bdd = $this->manager->getBdd();
+
+        return $bdd->select($sql)[0]['RES'] == '1';
     }
 
 
@@ -46,9 +57,7 @@ class MigrationStatutAutres extends AbstractMigration
 
     protected function after()
     {
-        $bdd     = $this->manager->getBdd();
-        $console = $this->manager->getOseAdmin()->getConsole();
-        $console->println("Traitement données perso statut AUTRES");
+        $bdd                   = $this->manager->getBdd();
         $sqlUpdateStatutAutres = "
                 UPDATE 
                     statut_intervenant 

@@ -6,7 +6,7 @@
 
 class NouveauxConnecteursV15 extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
+    protected $contexte = self::CONTEXTE_PRE;
 
 
 
@@ -26,17 +26,6 @@ class NouveauxConnecteursV15 extends AbstractMigration
 
     public function action(string $contexte)
     {
-        if ($contexte == self::CONTEXTE_PRE) {
-            $this->before();
-        } else {
-            $this->after();
-        }
-    }
-
-
-
-    protected function before()
-    {
         $bdd = $this->manager->getBdd();
 
         $ipd = require $this->manager->getOseAdmin()->getOseDir() . '/data/import_tables.php';
@@ -46,16 +35,10 @@ class NouveauxConnecteursV15 extends AbstractMigration
         $bdd->getTable('IMPORT_TABLES')->update(['SYNC_ENABLED' => 0], ['TABLE_NAME' => 'DEPARTEMENT']);
         $bdd->getTable('IMPORT_TABLES')->update(['SYNC_ENABLED' => 0], ['TABLE_NAME' => 'PAYS']);
 
+        $bdd->exec("UPDATE intervenant SET SOURCE_CODE = 'ID-' || id WHERE source_code IS NULL");
+
         // Reconstruction des vues diff et des proc maj pour éviter d'afficher des bugs après
         $this->manager->getOseAdmin()->exec('UnicaenImport MajVuesFonctions');
     }
 
-
-
-    protected function after()
-    {
-        //$bdd = $this->manager->getBdd();
-    }
-
 }
-

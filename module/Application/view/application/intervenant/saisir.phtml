@@ -152,6 +152,11 @@ if ($errors) {
                     this.getUserUtilisateurElement().change(function () {
                         that.changementUtilisateur();
                     });
+
+                    this.element.find('#new-user').click(function () {
+                        that.getLoginElement().attr('readonly', 'false');
+                        that.getPasswordElement().attr('readonly', 'false');
+                    });
                 },
 
                 changementParDefaut: function ()

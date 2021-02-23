@@ -233,6 +233,7 @@ class EditionForm extends AbstractForm
             'type'       => 'Text',
             'attributes' => [
                 'autocomplete' => 'off',
+                'readonly'     => 'true',
             ],
             'options'    => [
                 'label' => 'Login',
@@ -245,6 +246,7 @@ class EditionForm extends AbstractForm
             'type'       => 'Password',
             'attributes' => [
                 'autocomplete' => 'off',
+                'readonly'     => 'true',
             ],
             'options'    => [
                 'label' => 'Mot de passe (6 caractères min.)',
@@ -458,7 +460,7 @@ class EditionForm extends AbstractForm
                 $element->setAttribute('disabled', true);
             }
         } else {
-            $noImport = ['syncStatut', 'syncStructure', 'statut', 'structure'];
+            $noImport = ['syncStatut', 'syncStructure', 'statut', 'structure', 'intervenant-edition-login', 'intervenant-edition-password'];
 
             foreach ($this->getElements() as $element) {
                 if (!in_array($element->getName(), $noImport)) {

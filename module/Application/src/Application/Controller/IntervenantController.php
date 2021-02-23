@@ -330,7 +330,7 @@ class  IntervenantController extends AbstractController
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
-                    if ($form->get('intervenant-edition-lg')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
+                    if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
                         $nom           = $intervenant->getNomUsuel();
                         $prenom        = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();

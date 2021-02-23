@@ -153,9 +153,10 @@ if ($errors) {
                         that.changementUtilisateur();
                     });
 
-                    this.element.find('#new-user').click(function () {
-                        that.getLoginElement().attr('readonly', 'false');
-                        that.getPasswordElement().attr('readonly', 'false');
+                    this.element.find('[href="#new-user"]').click(function () {
+                        console.log('testx');
+                        that.getLoginElement().removeAttr('readonly');
+                        that.getPasswordElement().removeAttr('readonly');
                     });
                 },
 

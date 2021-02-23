@@ -4,7 +4,7 @@ SELECT
   annee_id,
   code,
   code_rh,
-  utilisateur_code,
+  CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(i_utilisateur_code,s_utilisateur_code) ELSE s_utilisateur_code END,
   CASE WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
   CASE
     WHEN action = 'insert' OR intervenant_histo = 1 THEN statut_source_id
@@ -178,7 +178,8 @@ FROM (
       current_annee.id                                                                       current_annee_id,
       s.code                                                                                 code,
       s.code_rh                                                                              code_rh,
-      s.utilisateur_code                                                                     utilisateur_code,
+      i.utilisateur_code                                                                     i_utilisateur_code,
+      s.utilisateur_code                                                                     s_utilisateur_code,
       CASE WHEN i.sync_structure = 0 THEN i.structure_id ELSE str.id END                     structure_id,
       i.structure_id                                                                         intervenant_structure_id,
       ssi.id                                                                                 statut_source_id,
@@ -233,6 +234,7 @@ FROM (
       CASE WHEN ssi.id = isi.id THEN 1 ELSE 0 END                                            statuts_identiques,
       CASE WHEN ssi.type_intervenant_id = isi.type_intervenant_id THEN 1 ELSE 0 END          types_identiques,
       COALESCE(i.sync_statut,1)                                                              sync_statut,
+      COALESCE(i.sync_utilisateur_code,1)                                                    sync_utilisateur_code,
       CASE WHEN COALESCE(isrc.importable,1) = 1 THEN 0 ELSE 1 END                            intervenant_local,
       CASE WHEN idata.intervenant_id IS NULL THEN 0 ELSE 1 END                               intervenant_donnees,
       CASE WHEN i.histo_destruction IS NULL THEN 0 ELSE 1 END                                intervenant_histo,

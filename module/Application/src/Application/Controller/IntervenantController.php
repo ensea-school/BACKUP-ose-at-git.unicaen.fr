@@ -330,16 +330,19 @@ class  IntervenantController extends AbstractController
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
-                    if ($this->params()->fromPost('userCreate') == '1' && $form->get('login')->getValue() && $form->get('password')->getValue()) {
+                    if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
                         $nom           = $intervenant->getNomUsuel();
                         $prenom        = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();
-                        $login         = $form->get('login')->getValue();
-                        $password      = $form->get('password')->getValue();
+                        $login         = $form->get('intervenant-edition-login')->getValue();
+                        $password      = $form->get('intervenant-edition-password')->getValue();
                         $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
-                        $utilisateur->setCode($intervenant->getCode());
+                        $utilisateur->setCode($intervenant->getUtilisateurCode() ?: $intervenant->getCode());
                         $this->getServiceUtilisateur()->save($utilisateur);
-                        $intervenant->setUtilisateurCode($utilisateur->getCode());
+                        if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
+                            $intervenant->setUtilisateurCode($utilisateur->getCode());
+                            $intervenant->setSyncUtilisateurCode(false);
+                        }
                     }
                     $this->getServiceIntervenant()->save($intervenant);
                     if ($intervenant->getStatut() != $ancienStatut) {

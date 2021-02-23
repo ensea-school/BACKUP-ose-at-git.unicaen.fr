@@ -108,8 +108,8 @@ if ($errors) {
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="new-user">
                                     <div class="row">
-                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('login')); ?></div>
-                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('password')); ?></div>
+                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('intervenant-edition-login')); ?></div>
+                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('intervenant-edition-password')); ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -149,14 +149,6 @@ if ($errors) {
                         that.changementParDefaut();
                     });
 
-                    this.getLoginElement().change(function () {
-                        that.changementLoginPassword();
-                    });
-
-                    this.getPasswordElement().change(function () {
-                        that.changementLoginPassword();
-                    });
-
                     this.getUserUtilisateurElement().change(function () {
                         that.changementUtilisateur();
                     });
@@ -175,11 +167,6 @@ if ($errors) {
                     }
                 },
 
-                changementLoginPassword: function ()
-                {
-                    this.getUserCreateElement().val(1);
-                },
-
                 changementUtilisateur: function ()
                 {
                     this.getUserChangeElement().val(1);
@@ -192,9 +179,8 @@ if ($errors) {
                 getChangementEtatBtn: function () { return $('#changement-etat-defaut'); },
 
                 getUserChangeElement: function () { return this.element.find('input[name="userChange"]'); },
-                getUserCreateElement: function () { return this.element.find('input[name="userCreate"]'); },
-                getLoginElement: function () { return this.element.find('input[name="login"]'); },
-                getPasswordElement: function () { return this.element.find('input[name="password"]'); },
+                getLoginElement: function () { return this.element.find('input[name="intervenant-edition-login"]'); },
+                getPasswordElement: function () { return this.element.find('input[name="intervenant-edition-password"]'); },
                 getUserUtilisateurElement: function () { return this.element.find('input[name="utilisateur[id]"]'); }
             });
 
@@ -206,7 +192,6 @@ if ($errors) {
 <?php
 echo $this->formHidden($form->get('id'));
 echo $this->formHidden($form->get('userChange'));
-echo $this->formHidden($form->get('userCreate'));
 echo $this->form()->closeTag();
 echo ' ' . $this->tag('button', [
         'onclick' => "$('.form-intervenant-edition').submit();",

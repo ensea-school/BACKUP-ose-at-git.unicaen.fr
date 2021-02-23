@@ -229,10 +229,10 @@ class EditionForm extends AbstractForm
         $this->add($utilisateur);
 
         $this->add([
-            'name'       => 'login',
+            'name'       => 'intervenant-edition-login',
             'type'       => 'Text',
             'attributes' => [
-                'autocomplete' => 'false',
+                'autocomplete' => 'off',
             ],
             'options'    => [
                 'label' => 'Login',
@@ -241,10 +241,10 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'password',
+            'name'       => 'intervenant-edition-password',
             'type'       => 'Password',
             'attributes' => [
-                'autocomplete' => 'false',
+                'autocomplete' => 'off',
             ],
             'options'    => [
                 'label' => 'Mot de passe (6 caractères min.)',
@@ -504,28 +504,28 @@ class EditionForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'montantIndemniteFc' => [
+            'montantIndemniteFc'           => [
                 'required' => false,
                 'filters'  => [
                     ['name' => FloatFromString::class],
                 ],
             ],
-            'civilite'           => ['required' => false],
-            'nomUsuel'           => ['required' => true],
-            'nomPatronymique'    => ['required' => false],
-            'prenom'             => ['required' => true],
-            'dateNaissance'      => ['required' => true],
-            'statut'             => ['required' => false],
-            'structure'          => ['required' => false],
-            'discipline'         => ['required' => false],
-            'grade'              => ['required' => false],
-            'code'               => ['required' => true],
-            'codeRh'             => ['required' => false],
-            'utilisateur'        => ['required' => false],
-            'login'              => ['required' => false],
-            'validiteDebut'      => ['required' => false],
-            'validiteFin'        => ['required' => false],
-            'password'           => [
+            'civilite'                     => ['required' => false],
+            'nomUsuel'                     => ['required' => true],
+            'nomPatronymique'              => ['required' => false],
+            'prenom'                       => ['required' => true],
+            'dateNaissance'                => ['required' => true],
+            'statut'                       => ['required' => false],
+            'structure'                    => ['required' => false],
+            'discipline'                   => ['required' => false],
+            'grade'                        => ['required' => false],
+            'code'                         => ['required' => true],
+            'codeRh'                       => ['required' => false],
+            'utilisateur'                  => ['required' => false],
+            'intervenant-edition-login'    => ['required' => false],
+            'validiteDebut'                => ['required' => false],
+            'validiteFin'                  => ['required' => false],
+            'intervenant-edition-password' => [
                 'required'   => false,
                 'validators' => [
                     [
@@ -537,9 +537,9 @@ class EditionForm extends AbstractForm
                     ['name' => 'StringTrim'],
                 ],
             ],
-            'source'             => ['required' => false],
-            'sourceCode'         => ['required' => false],
-            'montantIndemniteFc' => ['required' => false],
+            'source'                       => ['required' => false],
+            'sourceCode'                   => ['required' => false],
+            'montantIndemniteFc'           => ['required' => false],
         ];
     }
 }

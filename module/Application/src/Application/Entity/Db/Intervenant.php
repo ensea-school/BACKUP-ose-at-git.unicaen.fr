@@ -194,6 +194,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $syncStructure = true;
 
     /**
+     * @var bool
+     */
+    protected $syncUtilisateurCode = true;
+
+    /**
      * @var \DateTime
      */
     protected $validiteDebut;
@@ -1123,6 +1128,30 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function setSyncStructure(bool $syncStructure): Intervenant
     {
         $this->syncStructure = $syncStructure;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isSyncUtilisateurCode(): bool
+    {
+        return $this->syncUtilisateurCode;
+    }
+
+
+
+    /**
+     * @param bool $syncUtilisateurCode
+     *
+     * @return Intervenant
+     */
+    public function setSyncUtilisateurCode(bool $syncUtilisateurCode): Intervenant
+    {
+        $this->syncUtilisateurCode = $syncUtilisateurCode;
 
         return $this;
     }

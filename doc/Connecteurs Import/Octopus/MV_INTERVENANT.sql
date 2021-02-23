@@ -115,7 +115,7 @@ SELECT DISTINCT
         END                                                      z_structure_id_n2,*/
     i.z_statut_id                                                  z_statut_id,
     grade.c_grade                                                  z_grade_id,
-    cnua.code_cnu_arrange                                          z_discipline_idbis,
+    COALESCE(cnua.code_cnu_arrange, '00')                          z_discipline_id,
     /* Données identifiantes de base */
     CASE ind.sexe
         WHEN 'M' THEN 'M.'

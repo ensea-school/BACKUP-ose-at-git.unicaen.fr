@@ -71,9 +71,9 @@ WITH i AS (
      --CNU arrangé
      cnua AS (
          SELECT gra.individu_id                   individu_id,
-                nvl(carr.c_cnu, darr.c_cnu)       code_cnu_arrange,
-                nvl(carr.lib_long, darr.lib_long) libelle_cnu_arrange,
-                nvl(carr.groupe, darr.groupe)     groupe_cnu_arrange
+                max(nvl(carr.c_cnu, darr.c_cnu))       code_cnu_arrange,
+                max(nvl(carr.lib_long, darr.lib_long)) libelle_cnu_arrange,
+                max(nvl(carr.groupe, darr.groupe))     groupe_cnu_arrange
          FROM octo.individu_grade@octoprod gra
                   LEFT JOIN octo.cnu_spec_cnu_adapte@octoprod ccarr ON (gra.cnu_id = ccarr.cnu_id AND
                                                                         (gra.cnu_specialite_id is null OR
@@ -83,6 +83,7 @@ WITH i AS (
                   LEFT JOIN octo.cnu_adapte@octoprod darr ON (dcarr.cnu_adapte_id = darr.id)
          WHERE sysdate BETWEEN gra.d_debut AND nvl(gra.d_fin, sysdate)
            AND (gra.cnu_id is not null OR gra.discipline_sec_id is not null)
+           GROUP BY gra.individu_id
      ),
     /*Individu unique pour avoir qu'un seul individu unique dans l'ordre c_source SIHAM, HARP, APO
     Car individu unique peut avoir plusieurs entrée (Harpége et Apogé par exemple) dans la table individu_unique,
@@ -103,6 +104,17 @@ WITH i AS (
                                           END ordre_source
                       FROM octo.individu_unique@octoprod u
                   )
+         ),
+         ind_grade AS
+         (
+         	SELECT
+         		indg.individu_id    individu_id,
+         		indg.grade_id       grade_id
+         	FROM octo.individu_grade@octoprod indg
+         	WHERE COALESCE(indg.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) > SYSDATE
+    	    AND COALESCE(indg.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) < SYSDATE
+    	    --On retire temporairement les doubles grades des quelques individus (Historique harpege), à supprimer quand full siham
+			AND indg.id NOT IN (8856,8904,9214,11735,12155,13166,14698,14731,14854,15143,15144,15201,15358,15359,15401)
          )
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
@@ -114,7 +126,7 @@ SELECT DISTINCT
             THEN ltrim(TO_CHAR(induni.c_src_individu, '99999999'))
         ELSE NULL END                                              code_rh,
     indc.ldap_uid                                                  utilisateur_code,
-    str.code                                                       z_structure_id,
+    str2.code                                                      z_structure_id,
     i.z_statut_id                                                  z_statut_id,
     grade.c_grade                                                  z_grade_id,
     COALESCE(cnua.code_cnu_arrange, '00')                          z_discipline_id,
@@ -189,13 +201,9 @@ FROM i
          LEFT JOIN structure_aff_enseigne sae ON sae.individu_id = induni.c_individu_chaine
     --On récupére le code de la structure d'affectation principal de l'individu
          LEFT JOIN v_structure@octoprod str ON str.id = sae.structure_id
+         LEFT JOIN v_structure@octoprod str2 ON str2.id = str.niv2_id
     --On récupére le grade de l'individu
-         LEFT JOIN octo.individu_grade@octoprod indg ON induni.c_individu_chaine = indg.individu_id
-    AND COALESCE(indg.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) > SYSDATE
-    AND COALESCE(indg.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) < SYSDATE
-         LEFT JOIN octo.cnu@octoprod cnu ON indg.cnu_id = cnu.id
-         LEFT JOIN octo.cnu_specialite@octoprod cnus ON indg.cnu_specialite_id = cnus.id
-         LEFT JOIN octo.discipline_sec@octoprod dissec ON indg.discipline_sec_id = dissec.id
+         LEFT JOIN ind_grade indg ON induni.c_individu_chaine = indg.individu_id
          LEFT JOIN octo.grade@octoprod grade ON indg.grade_id = grade.id
     --On récupére l'adresse principale de l'individu
          LEFT JOIN octo.v_individu_adresse_perso@octoprod adr
@@ -206,7 +214,9 @@ FROM i
          LEFT JOIN telephone_pro_principal telpro ON telpro.individu_id = induni.c_individu_chaine
     -- On ne prend que les comptes qui ne sont pas étudiants
          LEFT JOIN octo.individu_compte@octoprod indc
-                   ON indc.individu_id = induni.c_individu_chaine AND not regexp_like(ldap_uid, 'e[0-9]{8}')
+                   ON indc.individu_id = induni.c_individu_chaine AND not regexp_like(ldap_uid, 'e[0-9]{8}') AND
+                      indc.statut_id = 1
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
+

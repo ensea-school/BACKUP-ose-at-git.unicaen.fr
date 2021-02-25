@@ -401,6 +401,7 @@ class  IntervenantController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
     }
@@ -522,6 +523,7 @@ class  IntervenantController extends AbstractController
         }
         $intervenant->dehistoriser();
         $this->getServiceIntervenant()->save($intervenant);
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
     }

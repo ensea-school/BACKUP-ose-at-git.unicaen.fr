@@ -100,7 +100,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
             $canRestaure = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
             if ($canRestaure) {
-                $msg .= "<br />" . $this->getView()->tag('a', ['href' => $this->getView()->url('intervenant/restaurer', ['intervenant' => $entity->getId()])])->html('Restaurer la fiche');
+                $msg .= "<br />" . $this->getView()->tag('a', ['class' => 'no-intranavigation', 'href' => $this->getView()->url('intervenant/restaurer', ['intervenant' => $entity->getId()])])->html('Restaurer la fiche');
             }
 
             $html .= '<div class="alert alert-danger">' . $msg . '</div>';

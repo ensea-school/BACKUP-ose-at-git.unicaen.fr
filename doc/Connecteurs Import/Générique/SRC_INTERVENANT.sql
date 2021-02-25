@@ -57,7 +57,13 @@ FROM (
     CASE
 
       -- Cas 1 : Si on est sur les mêmes fiches, alors on synchronise tout le temps
-      WHEN statuts_identiques = 1 THEN 'update'
+      WHEN statuts_identiques = 1 THEN CASE
+        -- Si c'est un intervenant qui a été historisé et qu'une nouvelle fiche a été créée plus tard
+        WHEN intervenant_histo = 1 AND nb_sources = 1 AND nb_intervenants = 2 AND nb_statuts_egaux = 2 THEN 'drop'
+
+        -- Sinon on met à jour
+        ELSE 'update'
+      END
 
 
       -- Cas 2 : On ne restaure pas les locaux historisés s'il ne sont pas dans la source
@@ -96,6 +102,9 @@ FROM (
 
         -- Si la fiche est vide et vient du SI alors on supprime
         WHEN intervenant_local = 0 AND intervenant_donnees = 0 THEN 'drop'
+
+        -- Si l'intervenant est historisé alors on supprime, ce sera l'autre fiche qui l'emportera
+        WHEN intervenant_histo = 1 THEN 'drop'
 
         -- Pour le reste on met à jour tout de même
         ELSE 'update-no-statut'
@@ -154,7 +163,7 @@ FROM (
         WHEN statuts_identiques = 0 AND statut_source_id <> statuts_egaux_id AND statut_intervenant_id <> statuts_egaux_id AND types_identiques = 1 THEN 'update'
 
         -- Autres fiches de type différent
-        WHEN statuts_identiques = 0 AND statut_source_id <> statuts_egaux_id AND statut_intervenant_id <> statuts_egaux_id AND types_identiques = 1 THEN 'insert'
+        WHEN statuts_identiques = 0 AND statut_source_id <> statuts_egaux_id AND statut_intervenant_id <> statuts_egaux_id AND types_identiques = 0 THEN 'insert'
 
         ELSE 'drop'
       END

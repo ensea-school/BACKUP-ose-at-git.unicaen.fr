@@ -138,6 +138,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';
     const INTERVENANT_SUPPRESSION                             = 'intervenant-suppression';
+    const INTERVENANT_VISUALISATION_HISTORISES                = 'intervenant-visualisation-historises';
     const MISE_EN_PAIEMENT_DEMANDE                            = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EDITION                            = 'mise-en-paiement-edition';
     const MISE_EN_PAIEMENT_EXPORT_CSV                         = 'mise-en-paiement-export-csv';

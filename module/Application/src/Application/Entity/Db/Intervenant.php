@@ -1576,6 +1576,8 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         $hydrator->hydrate($data, $intervenant);
         $intervenant->setValiditeDebut(new \DateTime());
         $intervenant->setValiditeFin(null);
+        $intervenant->setHistoDestructeur(null);
+        $intervenant->setHistoDestruction(null);
 
         return $intervenant;
     }

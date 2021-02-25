@@ -789,6 +789,11 @@ td .alert {
     width: 100%;
 }
 
+.intervenant-statuts .navbar-nav li.historise a {
+    color:#a94442;
+    text-decoration: line-through;
+}
+
 .intervenant-statuts .navbar-nav li a {
     padding-top: 4px;
     padding-bottom: 4px;

@@ -108,8 +108,8 @@ class  IntervenantController extends AbstractController
         $critere   = $this->params()->fromPost('critere');
         $recherche = $this->getProcessusIntervenant()->recherche();
 
-        $canRestaure = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
-        $recherche->setShowHisto($canRestaure);
+        $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
+        $recherche->setShowHisto($canShowHistorises);
 
         $intervenants = $recherche->rechercher($critere, 21);
 

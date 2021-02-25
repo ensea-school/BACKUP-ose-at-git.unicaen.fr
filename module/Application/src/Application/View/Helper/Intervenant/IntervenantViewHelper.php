@@ -134,12 +134,10 @@ class IntervenantViewHelper extends AbstractHtmlElement
         $intervenant = $this->getIntervenant();
 
         $canAddIntervenant = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+        $canShowHistorises = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
 
         $this->getView()->headTitle()->append($intervenant->getNomUsuel())->append($title);
         $title .= ' <small>' . $intervenant . '</small>';
-        if ($intervenant->estHistorise()) {
-            $title .= ' ' . $this->getView()->tag('span', ['class' => 'text-danger glyphicon glyphicon-warning-sign', 'title' => 'Intervenant historisé'])->text('');
-        }
 
         echo $this->getView()->tag('h1', ['class' => 'page-header'])->open();
         echo $title . '<br />';
@@ -148,16 +146,26 @@ class IntervenantViewHelper extends AbstractHtmlElement
             ?>
             <nav class="navbar navbar-default intervenant-statuts">
                 <ul class="nav navbar-nav">
-                    <?php foreach ($statuts as $intervenantId => $iStatut): ?>
-                        <li<?= ($iStatut == $intervenant) ? ' class="active"' : ' title="Cliquez pour afficher"' ?>>
-                            <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
-                                <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
-                                <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
-                                <span class="statut-intervenant"><?= $iStatut->getStatut()->getLibelle() ?></span>
-
-                            </a>
+                    <?php foreach ($statuts as $intervenantId => $iStatut): if ($canShowHistorises || $iStatut->estNonHistorise() || $iStatut == $intervenant): ?>
+                        <?php
+                        $attrs = ['class' => ''];
+                        if ($iStatut == $intervenant) {
+                            $attrs['class'] = "active";
+                        } else {
+                            $attrs['title'] = 'Cliquez pour afficher';
+                        }
+                        if ($iStatut->estHistorise()) {
+                            $attrs['class'] .= ' historise';
+                        }
+                        echo $this->getView()->tag('li', $attrs)->open(); ?>
+                        <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
+                            <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
+                            <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
+                            <span class="statut-intervenant"><?= $iStatut->getStatut()->getLibelle() ?></span>
+                            <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger glyphicon glyphicon-warning-sign', 'title' => 'Intervenant historisé'])->text('') ?>
+                        </a>
                         </li>
-                    <?php endforeach; ?>
+                    <?php endif; endforeach; ?>
                     <?php if ($canAddIntervenant && $intervenant->getId()): ?>
                         <li class="ajout-intervenant">
                             <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]); ?>"
@@ -179,7 +187,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
         $intervernants = $this->getServiceIntervenant()->getIntervenants($this->getIntervenant());
         $statuts       = [];
         foreach ($intervernants as $intervenant) {
-            if ($intervenant->estNonHistorise() && $intervenant->getStatut()) {
+            if ($intervenant->getStatut()) {
                 $statuts[$intervenant->getId()] = $intervenant;
             }
         }

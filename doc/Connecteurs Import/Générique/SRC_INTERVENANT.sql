@@ -156,9 +156,6 @@ FROM (
       -- Cas 10 : Quand il y a 2 sources et 2 intervenants et qu'un seul matche
       WHEN nb_sources = 2 AND nb_intervenants = 2 THEN CASE
 
-        -- s'il y a deux fiches, mais qu'il y en a un deuxième alors on sync sur celle qui matche déjà les autres données
-        WHEN statuts_identiques = 0 AND statut_source_id = statuts_egaux_id THEN 'update-no-statut'
-
         -- Autres fiches de même type
         WHEN statuts_identiques = 0 AND statut_source_id <> statuts_egaux_id AND statut_intervenant_id <> statuts_egaux_id AND types_identiques = 1 THEN 'update'
 

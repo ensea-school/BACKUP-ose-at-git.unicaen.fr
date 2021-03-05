@@ -406,5 +406,12 @@ return [
             'employeur-edition'       => 'Édition employeurs',
         ],
     ],
+    'nomencalture-rh'    => [
+        'libelle'    => 'Nomenclature RH',
+        'privileges' => [
+            'grade-visualisation' => 'Visualiastion grades',
+            'grade-edition'       => 'Édition grades',
+        ],
+    ],
 
 ];

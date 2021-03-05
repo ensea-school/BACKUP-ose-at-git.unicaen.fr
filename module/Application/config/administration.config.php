@@ -63,6 +63,17 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'administration-nomenclature-rh'    => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/administration-nomenclature-rh',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Administration',
+                        'action'     => 'administration-nomenclature-rh',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -81,14 +92,33 @@ return [
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-referentiel-commun',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-referentiel-commun'),
-                                'order'          => 80,
+                                'order'          => 82,
                                 'border - color' => '#111',
                                 'pages'          => [
-                                    'voirie'     => [
+                                    'voirie' => [
                                         'label'        => 'Gestion des voiries',
                                         'icon'         => 'fa fa-graduation-cap',
                                         'route'        => 'voirie',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
+                                        'order'        => 800,
+                                        'border-color' => '#BBCF55',
+                                    ],
+
+                                ],
+                            ],
+                            'gestion-nomenclature-rh'    => [
+                                'label'          => 'Gestion des nomenclatures RH',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'administration-nomenclature-rh',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-nomenclature-rh'),
+                                'order'          => 83,
+                                'border - color' => '#111',
+                                'pages'          => [
+                                    'grade'      => [
+                                        'label'        => 'Gestion des grades',
+                                        'icon'         => 'fa fa-graduation-cap',
+                                        'route'        => 'grades',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Grade', 'index'),
                                         'order'        => 800,
                                         'border-color' => '#BBCF55',
                                     ],
@@ -147,7 +177,7 @@ return [
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-financiere',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-financiere'),
-                                'order'          => 80,
+                                'order'          => 81,
                                 'border - color' => '#111',
                                 'pages'          => [
                                     'centre-cout'          => [
@@ -181,7 +211,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Administration',
-                    'action'     => ['index', 'administration-types', 'administration-financiere', 'administration-intervenant', 'administration-referentiel-commun'],
+                    'action'     => ['index', 'administration-types', 'administration-financiere', 'administration-intervenant', 'administration-referentiel-commun', 'administration-nomenclature-rh'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,
@@ -198,6 +228,7 @@ return [
                         Privileges::REFERENTIEL_ADMIN_VISUALISATION,
                         Privileges::REFERENTIEL_COMMUN_VOIRIE_VISUALISATION,
                         Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
+                        Privileges::NOMENCLATURE_RH_GRADES_EDITION,
                         Privileges::TYPE_INTERVENTION_VISUALISATION,
                         Privileges::TYPE_RESSOURCE_VISUALISATION,
                         Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,

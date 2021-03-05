@@ -202,6 +202,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION          = 'referentiel-commun-employeur-visualisation';
     const REFERENTIEL_COMMUN_VOIRIE_EDITION                   = 'referentiel-commun-voirie-edition';
     const REFERENTIEL_COMMUN_VOIRIE_VISUALISATION             = 'referentiel-commun-voirie-visualisation';
+    const NOMENCLATURE_RH_GRADES_VISUALISATION                = 'nomencalture-rh-grade-visualisation';
+    const NOMENCLATURE_RH_GRADES_EDITION                      = 'nomencalture-rh-grade-edition';
     const REFERENTIEL_DEVALIDATION                            = 'referentiel-devalidation';
     const REFERENTIEL_EDITION                                 = 'referentiel-edition';
     const REFERENTIEL_SAISIE_TOUTES_COMPOSANTES               = 'referentiel-saisie-toutes-composantes';

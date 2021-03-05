@@ -1,0 +1,55 @@
+<?php
+/**
+ * @var $this                  \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Gestion des grades");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_RH_GRADES_EDITION));
+
+
+?>
+<h1 class="page-header">Gestion des grades</h1>
+
+<table class="table table-bordered table-sort">
+    <thead>
+    <th>Code</th>
+    <th>Libelle</th>
+    <th>Source</th>
+    <th>Corps</th>
+    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    </thead>
+    <tbody>
+    <?php
+    /**
+     * @var \Application\Entity\Db\Grade $grade
+     */
+    ?>
+    <?php foreach ($grades as $grade): ?>
+        <tr>
+            <td><?= $grade->getSourceCode() ?></td>
+
+            <td data-order="<?= $grade->getLibelleLong() ?>">
+                <?= $grade->getLibelleLong() ?>
+            </td>
+            <td><?= $grade->getSource()->getLibelle() ?></td>
+            <td><?= $grade->getCorps()->getLibelleCourt() ?></td>
+
+            <?php if ($canEdit): ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <?php if (!$grade->getSource()->getImportable()): ?>
+                        <a class="disabled ajax-modal" data-event="grade-saisie"
+                           href="<?= $this->url('grades/saisie', ['grade' => $grade->getId()]) ?>"
+                           title="Modifier le grade">
+                            <span class="glyphicon glyphicon-edit"></span></a>
+                    <?php else: ?>
+                        Non modifiable
+                    <?php endif; ?>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

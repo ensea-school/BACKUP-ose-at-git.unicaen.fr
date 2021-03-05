@@ -9,7 +9,7 @@ WITH ind_fonction AS(
 		indcom.login     									   username,
 		CASE WHEN s.code = 'UNIV' THEN NULL ELSE s.code END    z_structure_id,
 		CASE
-	      WHEN fon.code LIKE 'D30%' OR fon.code LIKE 'P71%' THEN 'directeur-composante'
+	      WHEN fon.code LIKE 'D30%' OR fon.code LIKE 'P71%' OR fon.code LIKE 'J60%' THEN 'directeur-composante'
 	      WHEN fon.code LIKE 'R00'  OR fon.code LIKE 'R40%' THEN 'responsable-composante'
 	      WHEN fon.code LIKE 'R00C' OR fon.code LIKE 'R40%' THEN 'responsable-recherche-labo'
 	      WHEN s.code = 'UNIV' AND fon.code = 'P00' OR fon.code LIKE 'P10%' OR fon.code LIKE 'P50%' THEN 'superviseur-etablissement'

@@ -24,6 +24,7 @@ WITH ind_fonction AS(
 	JOIN octo.individu_compte@octoprod indcom ON indcom.individu_id = ind.c_individu_chaine
     AND SYSDATE BETWEEN indfon.date_debut AND COALESCE(indfon.date_fin + 1, SYSDATE)
     AND s.niveau <= 2
+    AND s.date_fermeture IS NULL
 )
 SELECT DISTINCT display_name,
                 email,

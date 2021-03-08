@@ -211,7 +211,12 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Administration',
-                    'action'     => ['index', 'administration-types', 'administration-financiere', 'administration-intervenant', 'administration-referentiel-commun', 'administration-nomenclature-rh'],
+                    'action'     => ['index',
+                                     'administration-types',
+                                     'administration-financiere',
+                                     'administration-intervenant',
+                                     'administration-referentiel-commun',
+                                     'administration-nomenclature-rh'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,

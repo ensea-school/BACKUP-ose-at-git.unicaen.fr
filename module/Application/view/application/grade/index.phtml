@@ -44,6 +44,17 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_R
                            href="<?= $this->url('grades/saisie', ['grade' => $grade->getId()]) ?>"
                            title="Modifier le grade">
                             <span class="glyphicon glyphicon-edit"></span></a>
+                        <a class="pop-ajax"
+                           href="<?= $this->url('grades/delete', ['grade' => $grade->getId()]) ?>"
+                           title="Supprimer le grade"
+                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                           data-confirm="true"
+                           data-confirm-button="Oui"
+                           data-cancel-button="Non"
+                           data-submit-reload="true"
+                        >
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
                     <?php else: ?>
                         Non modifiable
                     <?php endif; ?>
@@ -53,3 +64,18 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_R
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="grade-saisie"
+       href="<?= $this->url('grades/saisie') ?>"
+       title="Ajouter un grade">
+        <span class="glyphicon glyphicon-edit"></span>
+        Ajouter un grade</a>
+
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("grade-saisie", function (event, data) {
+                window.location.reload();
+            });
+        });
+    </script>
+<?php endif ?>

@@ -409,7 +409,7 @@ return [
     'nomencalture-rh'    => [
         'libelle'    => 'Nomenclature RH',
         'privileges' => [
-            'grade-visualisation' => 'Visualiastion grades',
+            'grade-visualisation' => 'Visualisation grades',
             'grade-edition'       => 'Édition grades',
         ],
     ],

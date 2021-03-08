@@ -3,6 +3,7 @@
 namespace Application\Form\Grade;
 
 
+use Application\Entity\Db\Corps;
 use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\CorpsServiceAwareTrait;
@@ -24,7 +25,7 @@ class GradeSaisieForm extends AbstractForm
         'id'           => ['type' => 'int'],
         'libelleCourt' => ['type' => 'string'],
         'libelleLong'  => ['type' => 'string'],
-        'corps'        => ['type' => 'string'],
+        'corps'        => ['type' => Corps::class],
         'source'       => ['type' => Source::class],
         'sourceCode'   => ['type' => 'string'],
     ];
@@ -123,7 +124,7 @@ class GradeSaisieForm extends AbstractForm
             'libelleLong'  => [
                 'required' => true,
             ],
-            'code'         => [
+            'sourceCode'   => [
                 'required' => true,
             ],
         ];

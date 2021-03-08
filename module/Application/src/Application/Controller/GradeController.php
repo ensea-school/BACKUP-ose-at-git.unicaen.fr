@@ -34,8 +34,8 @@ class GradeController extends AbstractController
         $form = $this->getFormGradeSaisie();
 
         if (empty($grade)) {
-            $title  = "Création d'un nouveau grade";
-            $voirie = $this->getServiceGrade()->newEntity();
+            $title = "Création d'un nouveau grade";
+            $grade = $this->getServiceGrade()->newEntity();
         } else {
             $title = "Edition d'un grade";
         }
@@ -52,16 +52,20 @@ class GradeController extends AbstractController
         return compact('form', 'title');
     }
 
-    /* public function deleteAction()
-     {
-         $voirie = $this->getEvent()->getParam('voirie');
-         try {
-             $this->getServiceVoirie()->delete($voirie);
-             $this->flashMessenger()->addSuccessMessage("Voirie supprimée avec succés");
-         } catch (\Exception $e) {
-             $this->flasheMessenger()->addErrorMessage($this->translate($e));
-         }
 
-         return new MessengerViewModel(compact('voirie'));
-     }*/
+
+    public function deleteAction()
+    {
+
+        $grade = $this->getEvent()->getParam('grade');
+        try {
+            $this->getServiceGrade()->delete($grade);
+
+            $this->flashMessenger()->addSuccessMessage("Grade supprimé avec succés");
+        } catch (\Exception $e) {
+            $this->flasheMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel(compact('grade'));
+    }
 }

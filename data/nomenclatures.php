@@ -207,11 +207,11 @@ return [
             "CODE"    => "composante",
             "LIBELLE" => "Composante",
         ],
-        [
+        /*[
             'ID'      => 2,
             "CODE"    => "diplome",
             "LIBELLE" => "Diplôme",
-        ],
+        ],*/
         [
             'ID'      => 3,
             "CODE"    => "etablissement",

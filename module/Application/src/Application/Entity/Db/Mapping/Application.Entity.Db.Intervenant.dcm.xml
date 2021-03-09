@@ -11,7 +11,7 @@
         </many-to-one>
         <field name="code" type="string" column="CODE" length="60" nullable="true"/>
         <field name="codeRh" type="string" column="CODE_RH" length="60" nullable="false"/>
-        ="UTILISATEUR_CODE" length="60" nullable="false"/>
+        <field name="utilisateurCode" type="string" column="UTILISATEUR_CODE" length="60" nullable="false"/>
 
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>

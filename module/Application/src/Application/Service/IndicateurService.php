@@ -24,7 +24,6 @@ class IndicateurService extends AbstractEntityService
     use IntervenantServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -77,7 +76,8 @@ class IndicateurService extends AbstractEntityService
         }
         if ($structure) {
             $sign = $indicateur->getNotStructure() ? '<>' : '=';
-            $qb->andWhere('indicateur.structure IS NULL OR indicateur.structure ' . $sign . ' ' . $structure->getId());
+            //$qb->andWhere('indicateur.structure IS NULL OR indicateur.structure ' . $sign . ' ' . $structure->getId());
+            $qb->andWhere('indicateur.structure ' . $sign . ' ' . $structure->getId());
         }
 
         return $qb;
@@ -124,7 +124,6 @@ class IndicateurService extends AbstractEntityService
 
         $indicateurClass = \Application\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero();
         $indicateurClass::appendQueryBuilder($qb);
-
         $qb->addOrderBy('structure.libelleCourt');
         $this->getServiceIntervenant()->orderBy($qb, 'intervenant');
 

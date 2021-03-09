@@ -196,11 +196,6 @@ class StatutIntervenantHydrator implements HydratorInterface
             }
         }
 
-        for ($i = 1; $i < 5; $i++) {
-            $function                    = 'getCodesCorresp' . $i;
-            $data['codes-corresp-' . $i] = $object->$function();
-        }
-
         $typesAgrementsStatuts = $object->getTypeAgrementStatut();
         foreach ($typesAgrementsStatuts as $tas) {
             if (!$tas->getHistoDestruction()) {

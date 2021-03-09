@@ -12,14 +12,15 @@ WITH affectation_recherche AS (
  		indaff.type_id = 3--Uniquement les affectations de type recherche
  		AND SYSDATE BETWEEN indaff.date_debut AND COALESCE(indaff.date_fin + 1, SYSDATE)
  )
-SELECT i.id                                                           intervenant_id,
-       s2.id                                                          structure_id,
-       src.id                                                         source_id,
-       affrech.source_code || '_' || unicaen_import.get_current_annee source_code,
-       s2.libelle_court                                               labo_libelle
+SELECT DISTINCT i.id                intervenant_id,
+                s.id                structure_id,
+                src.id              source_id,
+                i.id || '_' || s.id source_code,
+                s2.libelle_court    labo_libelle
 FROM affectation_recherche affrech
          JOIN source src ON src.code = 'Octopus'
          JOIN intervenant i ON i.code = CAST(affrech.z_code AS varchar(255))
     AND i.annee_id = unicaen_import.get_current_annee
          JOIN octo.structure_recherche@octoprod sr ON sr.id = affrech.z_structure_recherche_id
-         LEFT JOIN octo.v_structure@octoprod s2 ON sr.structure_id = s2.id
+         JOIN octo.v_structure@octoprod s2 ON sr.structure_id = s2.id
+         JOIN structure s ON s2.code = s.source_code;

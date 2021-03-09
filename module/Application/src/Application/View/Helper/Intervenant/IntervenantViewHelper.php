@@ -58,25 +58,26 @@ class IntervenantViewHelper extends AbstractHtmlElement
         }
 
         $vars = [
-            'identite'    => [
-                "NOM prénom"        => $entity,
-                "Civilité"          => (string)$entity->getCivilite(),
-                "Date de naissance" => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
+            'identite' => [
+                "Civilité"   => (string)$entity->getCivilite(),
+                "NOM prénom" => $entity,
+                //"Date de naissance" => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
             ],
-            'coordonnees' => [
+            /*'coordonnees' => [
                 "Email"           => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone perso" => $entity->getTelPerso() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone pro"   => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Adresse"         => nl2br($entity->getAdresse(false)),
-            ],
-            'metier'      => [
+            ],*/
+            'metier'   => [
                 "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
                 "Statut de l'intervenant"   => $entity->getStatut(),
                 "N° {$entity->getSource()}" => $entity->getCode(),
                 "N° RH"                     => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnue)</span>',
                 "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Modifié le"                => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
             ],
-            'divers'      => [
+            'divers'   => [
                 "Id" => $entity->getId(),
                 //"Id de connexion" => ($u = $entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)",
             ],

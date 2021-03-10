@@ -7,7 +7,7 @@ Il faudra donc les adapter aussi selon vos convenances.
 ## Mise en place du DbLink
 
 Le lien avec Grhum et Mangue se fait au moyen d'un DbLink.
-Dans la vue, le DbLink s'appelle `DBL_GEST` et utilise le USER `GRHUM`.
+Dans la vue, le DbLink s'appelle `DBL_GRHUM` et utilise le USER `GRHUM`.
 
 ## Création de la vue matérialisée MV_INTERVENANT
 

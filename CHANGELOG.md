@@ -1,7 +1,7 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
-# OSE 15 BETA
+# OSE 15
 Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés
@@ -37,6 +37,7 @@ Objectif : Doubles statuts et refonte des données personnelles
 
 * La suppression d'intervenants est maintenant pleinement opérationnelle et les erreurs sont mieux affichées
 * Formule de Poitiers modifiée
+* Le report des services de l'année précédentepar un gestionnaire est désormais limité à sa composante.
 
 ## Notes de mise à jour
 

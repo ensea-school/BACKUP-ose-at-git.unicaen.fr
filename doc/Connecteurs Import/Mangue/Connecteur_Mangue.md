@@ -19,7 +19,7 @@ Les objets personnalisés sont les suivants :
 **Sous l'utilisateur GRHUM** :
 * Vues :
 
-- [ ] [ULHN_V_STRUCT_AFF_TOUS](ULHN_V_STRUCT_AFF_TOUS.sql)
+- [ ] [ULH_V_STRUCT_AFF_TOUS](ULH_V_STRUCT_AFF_TOUS.sql)
 - [ ] [ULH_V_ADR_CONN_OSE](ULH_V_ADR_CONN_OSE.sql)   (Champ adresse_precisions utilisé uniquement )
 - [ ] [V_ULH_INDIVIDU_BANQUE](V_ULH_INDIVIDU_BANQUE.sql)
 

@@ -48,11 +48,6 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
                         );
                     }
                 }
-            } elseif ($context->getStructure()) {
-
-                $url   = $this->url('service/resume');
-                $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");
-                ?><p><a class="btn btn-primary btn-large" href="<?= $url ?>"><?= $label ?></a></p><?php
             } elseif ($context->getUtilisateur()->getAffectation()->count() == 0) {
                 ?>
                 <div class="alert alert-danger" role="alert">

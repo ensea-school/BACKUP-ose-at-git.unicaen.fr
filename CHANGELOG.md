@@ -37,7 +37,6 @@ Objectif : Doubles statuts et refonte des données personnelles
 
 * La suppression d'intervenants est maintenant pleinement opérationnelle et les erreurs sont mieux affichées
 * Formule de Poitiers modifiée
-* Le report des services de l'année précédentepar un gestionnaire est désormais limité à sa composante.
 
 ## Notes de mise à jour
 
@@ -53,6 +52,15 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Lors de la mise à jour, les différents objets qui concernent vos connecteurs et sur lesquels il y a des changements à faire s'afficheront en erreur. Il vous revient de mettre à jour par vous-mêmes ces connecteurs.
 
 * Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
+
+
+
+# OSE 14.17 (en cours de développement)
+
+## Corrections de bugs
+
+* Le report des services de l'année précédentepar un gestionnaire est désormais limité à sa composante.
+
 
 
 # OSE 14.16

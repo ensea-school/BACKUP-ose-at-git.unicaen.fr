@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $this                  \Application\View\Renderer\PhpRenderer
  * @var $fonctionsReferentiels \Application\Entity\Db\FonctionReferentiel[]
  */
 
@@ -11,56 +11,61 @@ $this->headTitle()->append("Référentiel fonctions");
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_ADMIN_EDITION));
 
 ?>
-    <h1 class="page-header">Référentiel fonctions</h1>
+<h1 class="page-header">Référentiel fonctions</h1>
 
-    <table class="table table-bordered table-sort">
-        <thead>
-        <th>Code</th>
-        <th>Libelle</th>
-        <th>Libelle court</th>
-        <th>Domaine Fonctionnel</th>
-        <th>Plafond</th>
-        <th>Structure</th>
-        <th>Formation à préciser</th>
-        <th><abbr title="Détermine si les heures de cette fonction référentielle peuvent être comptées dans le service statutaire des intervenants ou non">Peut dans serv.</abbr></th>
-        <?php if ($canEdit) echo '<th>Actions</th>' ?>
-        </thead>
-        <tbody>
-        <?php foreach ($fonctionsReferentiels as $fr): ?>
-            <tr>
-                <td data-order="<?= ($fr->getParent() ? $fr->getParent()->getCode().'.' : '').$fr->getCode() ?>" style="<?= $fr->getParent() ? 'padding-left: 5em' : '' ?>"><?= $fr->getCode() ?>
+<table class="table table-bordered table-sort">
+    <thead>
+    <th>Code</th>
+    <th>Libelle</th>
+    <th>Libelle court</th>
+    <th>Domaine Fonctionnel</th>
+    <th>Plafond</th>
+    <th>Structure</th>
+    <th>Formation à préciser</th>
+    <th>
+        <abbr title="Détermine si les heures de cette fonction référentielle peuvent être comptées dans le service statutaire des intervenants ou non">Peut
+            dans serv.</abbr></th>
+    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    </thead>
+    <tbody>
+    <?php foreach ($fonctionsReferentiels as $fr): if ($fr->estNonHistorise()): ?>
+        <tr>
+            <td data-order="<?= (($fr->getParent() && $fr->getParent()->estNonHistorise()) ? $fr->getParent()->getCode() . '.' : '') . $fr->getCode() ?>"
+                style="<?= ($fr->getParent() && $fr->getParent()->estNonHistorise()) ? 'padding-left: 5em' : '' ?>"><?= $fr->getCode() ?>
+            </td>
+            <td><?= $fr->getLibelleLong() ?></td>
+            <td><?= $fr->getLibelleCourt() ?></td>
+            <td><?= $fr->getDomaineFonctionnel() ?></td>
+            <td><?= $fr->getPlafond() ?></td>
+            <td><?= $this->structure($fr->getStructure())->renderLink() ?></td>
+            <td style="text-align:center"><?php if ($fr->isEtapeRequise()): ?><span
+                        class="text-success glyphicon glyphicon-ok"></span><?php else: ?><span
+                        class="text-danger glyphicon glyphicon-remove"></span><?php endif; ?></td>
+            <td style="text-align:center"><?= $fr->isServiceStatutaire() ? 'Oui' : 'Non' ?></td>
+            <?php if ($canEdit) { ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <a class="ajax-modal" data-event="fonction-referentiel-saisie"
+                       href="<?= $this->url('fonction-referentiel/saisie', ['fonctionReferentiel' => $fr->getId()]) ?>"
+                       title="Modifier la fonction référentielle">
+                        <span class="glyphicon glyphicon-edit"></span></a>
+                    <a class="pop-ajax"
+                       href="<?= $this->url('fonction-referentiel/delete', ['fonctionReferentiel' => $fr->getId()]) ?>"
+                       title="Supprimer la fonction référentielle"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
                 </td>
-                <td><?= $fr->getLibelleLong() ?></td>
-                <td><?= $fr->getLibelleCourt() ?></td>
-                <td><?= $fr->getDomaineFonctionnel() ?></td>
-                <td><?= $fr->getPlafond() ?></td>
-                <td><?= $this->structure($fr->getStructure())->renderLink() ?></td>
-                <td style="text-align:center"><?php if ($fr->isEtapeRequise()): ?><span class="text-success glyphicon glyphicon-ok"></span><?php else: ?><span class="text-danger glyphicon glyphicon-remove"></span><?php endif; ?></td>
-                <td style="text-align:center"><?= $fr->isServiceStatutaire() ? 'Oui' : 'Non' ?></td>
-                <?php if ($canEdit) { ?>
-                    <td style="text-align:center;width:1px;white-space: nowrap">
-                        <a class="ajax-modal" data-event="fonction-referentiel-saisie"
-                           href="<?= $this->url('fonction-referentiel/saisie', ['fonctionReferentiel' => $fr->getId()]) ?>"
-                           title="Modifier la fonction référentielle">
-                            <span class="glyphicon glyphicon-edit"></span></a>
-                        <a class="pop-ajax"
-                           href="<?= $this->url('fonction-referentiel/delete', ['fonctionReferentiel' => $fr->getId()]) ?>"
-                           title="Supprimer la fonction référentielle"
-                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                           data-confirm="true"
-                           data-confirm-button="Oui"
-                           data-cancel-button="Non"
-                           data-submit-reload="true"
-                        >
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </a>
-                    </td>
-                <?php } ?>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <?php if ($canEdit): ?>
+            <?php } ?>
+        </tr>
+    <?php endif; endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="fonction-referentiel-saisie"
        href="<?= $this->url('fonction-referentiel/saisie') ?>"
        title="Ajouter une fonction référentielle">

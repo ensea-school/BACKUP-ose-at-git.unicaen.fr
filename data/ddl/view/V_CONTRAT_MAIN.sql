@@ -76,7 +76,7 @@ FROM
     ) "adresse",
     COALESCE(d.numero_insee,i.numero_insee)                                                       "numInsee",
     si.libelle                                                                                    "statut",
-    replace(ltrim(to_char(COALESCE(fr.total,0), '999999.00')),'.',',')                            "totalHETD",
+    replace(ltrim(to_char(COALESCE(c.total_hetd, fr.total,0), '999999.00')),'.',',')              "totalHETD",
     replace(ltrim(to_char(COALESCE(th.valeur,0), '999999.00')),'.',',')                           "tauxHoraireValeur",
     COALESCE(to_char(th.histo_creation, 'dd/mm/YYYY'), 'TAUX INTROUVABLE')                        "tauxHoraireDate",
     to_char(COALESCE(v.histo_creation, c.histo_creation), 'dd/mm/YYYY')                           "dateSignature",

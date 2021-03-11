@@ -61,7 +61,7 @@ Attention : un même individu peut avoir plusieurs fiches INTERVENANT dans la m�
 Le champ CODE doit être spécifique à l'individu. Une même personne ne devrait pas avoir plusieurs valeurs diférentes dans CODE.
 CODE sert donc à identifier que plusieurs fiches appartiennent à une même personne.
  
-La vue source doit avoir *in fine* une unicité sur le trouple [CODE,ANNEE_ID,Z_STATUT_ID].
+La vue source doit avoir *in fine* une unicité sur le trouple [CODE,ANNEE_ID,STATUT_ID].
 
 UTILISATEUR_CODE doit contenir un identifiant qui sera mis en rapport avec les données LDAP de l'utilisateur connecté.
 Par défaut, c'est `supannEmpId`, mais vous pouvez le personnaliser dans le fichier de configuration config.local.php, paramètre `ldap` `utilisateurCode`.

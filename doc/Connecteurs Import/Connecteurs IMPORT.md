@@ -91,6 +91,7 @@ Les connecteurs ne seront pas "écrasés" ou impactés par les futures mises à 
 En voici la liste :
 
 * [Harpège](Harpège/Connecteur.md) pour les données RH et diverses
+* [Mangue](Mangue/Connecteur_Mangue.md) pour les intervenants
 * [Sifac](Sifac/Connecteur.md) pour les données comptables
 * [Apogée](Apogée/Connecteur.md) pour l'offre de formation
 * [FCA Manager](FCA Manager/Connecteur.md) également pour l'offre de formation
@@ -119,6 +120,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des pays</td> <!-- Description -->
@@ -128,6 +130,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des départements</td> <!-- Description -->
@@ -137,6 +140,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des voiries</td> <!-- Description -->
@@ -146,6 +150,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des établissements</td> <!-- Description -->
@@ -155,6 +160,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des structures</td> <!-- Description -->
@@ -164,6 +170,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des disciplines (sections CNU, disc. second degré, etc)</td> <!-- Description -->
@@ -178,6 +185,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Affectation des utilisateurs à des rôles</td> <!-- Description -->
@@ -187,6 +195,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des employeurs. Un mécanisme spécifique vous offre la possibilité de bénéficier dans OSE de la liste de tous les employeurs issue de la base SIRENE</td> <!-- Description -->
@@ -196,6 +205,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
      <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des corps</td> <!-- Description -->
@@ -205,6 +215,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des grades</td> <!-- Description -->
@@ -214,6 +225,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td>Oui</td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Intervenants (vacataires et permanents)</td> <!-- Description -->
@@ -223,6 +235,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Affectations de recherche des intervenants</td> <!-- Description -->
@@ -237,6 +250,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des domaines fonctionnels</td> <!-- Description -->
@@ -246,6 +260,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des centres de coûts</td> <!-- Description -->
@@ -255,6 +270,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Relation n <=> n entre les centres de coûts et les éléments pédagogiques</td> <!-- Description -->
@@ -264,6 +280,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Relation n <=> n entre les centres de coûts et les structures</td> <!-- Description -->
@@ -278,6 +295,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des groupes de types de formation (License, Master, DU, etc.)</td> <!-- Description -->
@@ -287,6 +305,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des types de formation</td> <!-- Description -->
@@ -296,6 +315,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des étapes</td> <!-- Description -->
@@ -305,6 +325,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liste des éléments pédagogiques</td> <!-- Description -->
@@ -314,6 +335,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Relation n <=> n entre les étapes et les éléments pédagogiques</td> <!-- Description -->
@@ -323,6 +345,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Charge d'enseingement</td> <!-- Description -->
@@ -332,6 +355,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Effectifs étudiants par élément péagogique</td> <!-- Description -->
@@ -341,6 +365,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Effectifs étudiants par étape</td> <!-- Description -->
@@ -350,6 +375,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Taux FI/FC/FA par élément pédagogique</td> <!-- Description -->
@@ -359,6 +385,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Noeuds formant les arbres d'une formation, situés entre les étapes et les éléments pédagogiques. Nécessaire uniquement pour le module Charges.</td> <!-- Description -->
@@ -368,6 +395,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Liens entre deux noeuds. Nécessaire uniquement pour le module Charges.</td> <!-- Description -->
@@ -377,6 +405,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Paramétrage des noeuds. Utile uniquement pour le module Charges.</td> <!-- Description -->
@@ -386,6 +415,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Paramétrage des liens. Utile uniquement pour le module Charges.</td> <!-- Description -->
@@ -400,6 +430,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Lignes de service intervenant (enseignement)</td> <!-- Description -->
@@ -409,6 +440,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Lignes de service intervenant (référentiel)</td> <!-- Description -->
@@ -418,6 +450,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Volumes horaires (grain fin de la saisie de service : heures d'enseignement)</td> <!-- Description -->
@@ -427,6 +460,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Volumes horaires (grain fin de la saisie de service : heures de référentiel)</td> <!-- Description -->
@@ -436,6 +470,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td>Oui</td> <!-- Calcul -->
     <td>Relation n <=> n spécifiant quels types d'intervention sont pertinents par élément pédagogique</td> <!-- Description -->
@@ -445,6 +480,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td>Oui</td> <!-- Calcul -->
     <td>Relation n <=> n spécifiant quels types de modulateurs sont pertinents par élément pédagogique</td> <!-- Description -->
@@ -454,6 +490,7 @@ Les tables sont présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Mangue -->
     <td></td> <!-- Sifac -->
     <td></td> <!-- Calcul -->
     <td>Table non exploitée : à ignorer</td> <!-- Description -->

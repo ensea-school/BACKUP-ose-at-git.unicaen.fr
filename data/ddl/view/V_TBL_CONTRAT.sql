@@ -33,39 +33,6 @@ WITH t AS (
   WHERE
     i.histo_destruction IS NULL
     AND NOT (si.peut_avoir_contrat = 0 AND evh.code = 'valide')
-
-  UNION ALL
-
-  SELECT
-    i.annee_id                                                                annee_id,
-    i.id                                                                      intervenant_id,
-    si.peut_avoir_contrat                                                     peut_avoir_contrat,
-    s.structure_id                                                            structure_id,
-    CASE WHEN evh.code IN ('contrat-edite','contrat-signe') THEN 1 ELSE 0 END edite,
-    CASE WHEN evh.code IN ('contrat-signe')                 THEN 1 ELSE 0 END signe
-  FROM
-              intervenant                 i
-
-         JOIN statut_intervenant         si ON si.id = i.statut_id
-
-         JOIN service_referentiel         s ON s.intervenant_id = i.id
-                                           AND s.histo_destruction IS NULL
-
-         JOIN type_volume_horaire       tvh ON tvh.code = 'PREVU'
-
-         JOIN volume_horaire_ref         vh ON vh.service_referentiel_id = s.id
-                                           AND vh.histo_destruction IS NULL
-                                           AND vh.heures <> 0
-                                           AND vh.type_volume_horaire_id = tvh.id
-
-         JOIN v_volume_horaire_ref_etat vhe ON vhe.volume_horaire_ref_id = vh.id
-
-         JOIN etat_volume_horaire       evh ON evh.id = vhe.etat_volume_horaire_id
-                                           AND evh.code IN ('valide', 'contrat-edite', 'contrat-signe')
-
-  WHERE
-    i.histo_destruction IS NULL
-    AND NOT (si.peut_avoir_contrat = 0 AND evh.code = 'valide')
 )
 SELECT
   annee_id,

@@ -40,20 +40,67 @@ Objectif : Doubles statuts et refonte des données personnelles
 
 ## Notes de mise à jour
 
-* PHP 7.4 minimum requis : attention à bien mettre à jour vos serveurs
+Merci de lire ceci **AVANT** d'entamer la mise à jour!!
 
-* Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
-La migration ne sera possible qu'à partir de la version 14.11.
-Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.11 **AVANT** de migrer vers la 15.
+La mise à jour n'est en effet pas réversible.
 
-* La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier les vues sources visant les tables INTERVENANT, STRUCTURE, PAYS et DEPARTEMENT.
-Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
+Nous vous recommandons en outre de vous entrainer au préalable sur une instance de préproduction avant de passer en production.
 
-* Lors de la mise à jour, les différents objets qui concernent vos connecteurs et sur lesquels il y a des changements à faire s'afficheront en erreur. Il vous revient de mettre à jour par vous-mêmes ces connecteurs.
+### 1. PHP7.4
+PHP 7.4 est maintenant requis : attention à bien mettre à jour vos serveurs
 
-* Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
+### 2. OSE 14.11 minimum
 
+Pour cette version, il n'est pas possible de migrer depuis dde trop anciennes instances de OSE.
+Avant la V15, vous devrez préalablement migrer en version 14.16.
+Et ce n'est qu'à partir de la 14.16 que vous pourrez migrer vers la 15.
 
+### 3. Connecteurs
+
+La structure de la base de données OSE a évolué.
+Voici pour information la liste des changements opérés au niveau des structures de données : ([Changements de structures BDD 14->15](doc/Divers/migration-bdd-14-vers-15.sql)).
+Ce script ne doit pas être exécuté, la procédure de migration se chargera de cela toute seule.
+
+Certains de vos connecteurs devront être adaptés, en particulier au niveau RH.
+De même, si vous avez créé des requêtes personnalisées, des états de sortie, attention à bien tenir compte ces changmements!
+
+Niveau connecteurs, les changements à faire sont les suivants :
+* Vue source [SRC_PAYS](doc/Connecteurs%20Import/Création%20tables/PAYS.md) : 
+  * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
+  * nouvelle colonne CODE
+* Vue source [SRC_DEPARTEMENT](doc/Connecteurs%20Import/Création%20tables/DEPARTEMENT.md) :
+  * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
+  * nouvelle colonne CODE
+* Nouvelle table [VOIRIE](doc/Connecteurs%20Import/Création%20tables/VOIRIE.md) :
+  * Possibilité d'importer les voiries en provenance de votre système d'information.
+* Vue source [SRC_STRUCTURE](doc/Connecteurs%20Import/Création%20tables/STRUCTURE.md) :
+  * Changement du format des adresses. Vouc pourrez vous inspirer des différents connecteurs existants pour adapter le votre.
+* Vue source [SRC_INTERVENANT](doc/Connecteurs%20Import/Générique/SRC_INTERVENANT.sql) :
+  * Il y a ici de nombreux changements.
+  * La vue matérialisée [MV_INTERVENANT](doc/Connecteurs%20Import/Création%20tables/INTERVENANT.md) devra être adaptée pour fournir toutes les colonnes nécessaires.
+  * La vue [SRC_INTERVENANT](doc/Connecteurs%20Import/Générique/SRC_INTERVENANT.sql) doit être utilisée telle quelle, sans adaptation de votre part
+* Suppression d'anciennes tables, dont les vues sources correspondantes doivent être supprimées par vos soins :
+  * DROP VIEW V_DIFF_ADRESSE_INTERVENANT
+  * DROP VIEW SRC_ADRESSE_INTERVENANT
+  * DROP VIEW V_DIFF_ADRESSE_STRUCTURE
+  * DROP VIEW SRC_ADRESSE_STRUCTURE
+  * Ces vues devront être supprimées AVANT la mise à jour. Le script de migration ne le fait pas automatiquement afin de vous laisser le temps de les sauvegarder le cas échéant.
+
+Plus généralement, [une nouvelle documentation sur les connecteurs est disponible](doc/Connecteurs Import/Connecteurs IMPORT.md).
+
+### 4. Activation du stockage des fichiers dans le filesystem
+
+Pas obligatoire, mais recommandé (sur votre instance de production).
+
+* [Activer le stockage des fichiers dans le système de fichiers plutôt qu'en base de données (recommandé pour la production)](doc/Stockage-fichiers.md)
+
+### 5. Gestion des employeurs
+
+OSE peut maintenant gérer un référentiel des employeurs
+Vous avez deux options au choix :
+ * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs%20Import/Création%20tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs
+ * soit injecter dans OSE la totalité des employeurs de France, liste issue du référentiel SIRENE via la commande `./bin/ose update-employeur`
+Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
 # OSE 14.17 (en cours de développement)
 

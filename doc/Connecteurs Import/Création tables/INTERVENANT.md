@@ -9,6 +9,8 @@ Ici, principalement pour des raisons de performances, ilest recommandé de proc�
 * Utiliser [SRC_INTERVENANT](../Générique/SRC_INTERVENANT.sql) en tant que vue source. Cette vue SRC_INTERVENANT est commune à tous les connecteurs.
 Vous devez l'utiliser telle quelle.
 
+Votre vue matérialisée MV_INTERVENANT devra contenir les colonnes suivantes :
+
 |Colonne                   |Type    |Longueur|Nullable|Commentaire                  |
 |--------------------------|--------|--------|--------|-----------------------------|
 |CODE                      |VARCHAR2|60      |Non     | Identifiant unique de l'individu dans le système d'information l'individu |
@@ -69,5 +71,3 @@ Par défaut, c'est `supannEmpId`, mais vous pouvez le personnaliser dans le fich
 
 Exemple de vue matérialisée :
 [MV_INTERVENANT](../Harpège/MV_INTERVENANT.sql)
-
-Attention : il faudra adapter le code permettant de faire le mapping au niveau du statut ainsi que de la discipline.

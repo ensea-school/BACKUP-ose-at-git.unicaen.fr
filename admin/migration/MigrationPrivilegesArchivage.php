@@ -157,4 +157,17 @@ class MigrationPrivilegesArchivage extends AbstractMigration
         //Clear cache car on a modifié les privileges donc les entity en cache ne doivent plus servir
         $oa->run('clear-cache');
     }
+
+
+
+    private function havePrivilege($statut, $privilegeCode)
+    {
+        foreach ($statut['PRIVILEGES'] as $privilege) {
+            if ($privilege['CODE_PRIVILEGE'] == $privilegeCode) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

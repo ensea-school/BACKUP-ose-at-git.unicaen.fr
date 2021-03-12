@@ -107,8 +107,8 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 ## Corrections de bugs
 
-* Le report des services de l'année précédentepar un gestionnaire est désormais limité à sa composante.
-
+* Le report des services de l'année précédente par un gestionnaire est désormais limité à sa composante.
+* Correction au niveau du franchissement de l'étape contrat dans le cas de présence d'heures de service référentiel
 
 
 # OSE 14.16

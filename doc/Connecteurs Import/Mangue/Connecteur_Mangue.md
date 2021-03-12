@@ -1,7 +1,7 @@
 # Connecteur Mangue
 
 Ce connecteur Mangue correspond à la vue matérialisée MV_INTERVENANT écrite pour Harpège et adaptée pour obtenir les mêmes colonnes en interrogeant les données de Grhum et Mangue (Cocktail) :
-Elle contient en l'état des notes sur les "Usages" de l'Université du HAVRE et on y trouve aussi des appels à des vues/fonction/Table créés historiquement ou pour les besoins du connecteur.
+Elle contient en l'état des notes sur les "Usages" de l'Université du HAVRE et on y trouve aussi des appels à des vues/fonctions/Table créés historiquement ou pour les besoins du connecteur.
 Il faudra donc les adapter aussi selon vos convenances.
 
 ## Mise en place du DbLink
@@ -23,9 +23,15 @@ Les objets personnalisés sont les suivants :
 - [ ] [ULH_V_ADR_CONN_OSE](ULH_V_ADR_CONN_OSE.sql)   (Champ adresse_precisions utilisé uniquement )
 - [ ] [V_ULH_INDIVIDU_BANQUE](V_ULH_INDIVIDU_BANQUE.sql)
 
+* Fonctions utilisées par la vue ULH_V_STRUCT_AFF_TOUS :
+
+- [ ] [Trouve_lc_structure_pere](Trouve_lc_structure_pere.sql.sql)
+- [ ] [ULH_Chercher_Aff_VACATAIRE](ULH_Chercher_Aff_VACATAIRE.sql)
+
 * Fonction pour la récupération du grade en cours :
 
 - [ ] [ULH_IND_GRADE_EN_COURS](ULH_IND_GRADE_EN_COURS.sql)
+
 
 * Table :
 [ULH_LDAP](Pas_de_sql.sql)
@@ -51,4 +57,3 @@ LEFT JOIN structure             str ON str.libelle_court  = s.z_structure_id
 remplace
 LEFT JOIN structure             str ON str.source_code    = s.z_structure_id
 ```
-

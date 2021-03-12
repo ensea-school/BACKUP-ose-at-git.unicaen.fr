@@ -9,13 +9,13 @@ Objectif : Doubles statuts et refonte des données personnelles
 * Refonte complète de la gestion des données personnelles
   * Gestion des employeurs (avec utilisation possible de la base SIRENE)
   * Possibilité d'enregistrer un dossier incomplet, avec gestion du taux de complétude
-  * Masquage des données sensibles (mise en conformité RGPD)
-  * Possibilité d'ajouter des champs supplémentaires
+  * Masquage des données sensibles (mise en conformité RGPD) par rôle (gestionnaire etc...) 
+  * Possibilité d'ajouter des champs supplémentaires (5 maximum)
   * Nouveau format pour les adresses
-  * Paramétrage des conditions de remplissage des mails et téléphones personnels (oblitatoires si pas de mail/tél pro ou bien tout le temps)
+  * Paramétrage des conditions de remplissage des mails et téléphones personnels (obligatoires si pas de mail/tél pro ou bien tout le temps)
 * Possibilité pour un intervenant d'avoir simultanément plusieurs statuts
   * Le nouveau statut peut être ajouté dans l'application ou bien être fourni via le connecteur IMPORT
-  * La bascule d'un statut à un autre e fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
+  * La bascule d'un statut à un autre se fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
   * Pour chaque statut, l'intervenant a une fiche distincte, avec des services distincts, etc. Les pièces justificatives et les agréments sont communs.
 * Refonte de la gestion des intervenants
   * Possibilité de créer un nouvel intervenant local au moyen d'une IHM
@@ -24,12 +24,12 @@ Objectif : Doubles statuts et refonte des données personnelles
   * Possibilité de synchroniser un intervenant directement depuis sa fiche 
   * Possibilité d'associer un utilisateur LDAP à un intervenant nouvellement créé
   * Possibilité de créer directement dans le formulaire INTERVENANT un nouvel utilisateur avec saisie de login/MDP.
-* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celui fourni par le connecteur
+* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celle fournie par le connecteur
 * Possibilité de forcer le statut d'un intervenant dans OSE et d'ignorer celui fourni par le connecteur (même pour un permanent)
 * Les vues matérialisées sont recalculées à chaque mise à jour
 * Amélioration importante des performances pour le calcul des tableaux de bord intermédiaires
 * Adaptations du connecteur Harpège
-* Possibilité d'importer un uniquement élément pédagogique depuis la page "Offre de formation"
+* Possibilité d'importer uniquement un élément pédagogique depuis la page "Offre de formation"
 * Possibilité de mettre à jour par synchronisation et manuellement un élément pédagogique spécifique par déclenchement d'import
 * Ajout d'un nouveau privilège 'Archivage' pour donner la possiblité à un statut d'intervenant de mettre à jour une pièce jointe lorsque celle ci a été fourni une année antérieure à l'année en cours (Bouton "Modifier si besoin")
 

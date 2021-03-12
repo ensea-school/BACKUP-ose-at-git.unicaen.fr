@@ -49,9 +49,9 @@ Nous vous recommandons en outre de vous entrainer au préalable sur une instance
 ### 1. PHP7.4
 PHP 7.4 est maintenant requis : attention à bien mettre à jour vos serveurs
 
-### 2. OSE 14.11 minimum
+### 2. OSE 14.16 minimum
 
-Pour cette version, il n'est pas possible de migrer depuis dde trop anciennes instances de OSE.
+Pour cette version, il n'est pas possible de migrer depuis de trop anciennes instances de OSE.
 Avant la V15, vous devrez préalablement migrer en version 14.16.
 Et ce n'est qu'à partir de la 14.16 que vous pourrez migrer vers la 15.
 
@@ -62,9 +62,9 @@ Voici pour information la liste des changements opérés au niveau des structure
 Ce script ne doit pas être exécuté, la procédure de migration se chargera de cela toute seule.
 
 Certains de vos connecteurs devront être adaptés, en particulier au niveau RH.
-De même, si vous avez créé des requêtes personnalisées, des états de sortie, attention à bien tenir compte ces changmements!
+De même, si vous avez créé des requêtes personnalisées, des états de sortie, attention à bien tenir compte de ces changmements!
 
-Niveau connecteurs, les changements à faire sont les suivants :
+Au niveau des connecteurs, les changements à faire sont les suivants :
 * Vue source [SRC_PAYS](doc/Connecteurs%20Import/Création%20tables/PAYS.md) : 
   * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
   * nouvelle colonne CODE
@@ -96,11 +96,12 @@ Pas obligatoire, mais recommandé (sur votre instance de production).
 
 ### 5. Gestion des employeurs
 
-OSE peut maintenant gérer un référentiel des employeurs
-Vous avez deux options au choix :
- * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs%20Import/Création%20tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs
- * soit injecter dans OSE la totalité des employeurs de France, liste issue du référentiel SIRENE via la commande `./bin/ose update-employeur`
-Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
+OSE peut maintenant gérer un référentiel des employeurs, permettant ainsi d'activer au niveau des données personnelles la partie "Employeur" (non activée par défaut et à paramétrer pour chacun des statuts intervenant de votre instance OSE)
+
+Pour alimenter la table employeur de OSE, vous avez deux possiblités :
+ * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs%20Import/Création%20tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
+ * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
+
 
 # OSE 14.17 (en cours de développement)
 

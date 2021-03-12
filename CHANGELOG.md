@@ -49,11 +49,11 @@ Nous vous recommandons en outre de vous entrainer au préalable sur une instance
 ### 1. PHP7.4
 PHP 7.4 est maintenant requis : attention à bien mettre à jour vos serveurs
 
-### 2. OSE 14.16 minimum
+### 2. OSE 14.17 minimum
 
 Pour cette version, il n'est pas possible de migrer depuis de trop anciennes instances de OSE.
-Avant la V15, vous devrez préalablement migrer en version 14.16.
-Et ce n'est qu'à partir de la 14.16 que vous pourrez migrer vers la 15.
+Avant la V15, vous devrez préalablement migrer en version 14.17.
+Et ce n'est qu'à partir de la 14.17 que vous pourrez migrer vers la 15.
 
 ### 3. Connecteurs
 
@@ -103,7 +103,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
 
-# OSE 14.17 (en cours de développement)
+# OSE 14.17
 
 ## Corrections de bugs
 

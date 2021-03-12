@@ -1,4 +1,4 @@
-**ATTENTION** : cette docmuentation est adaptée à la future version 15 de OSE. Pour la V14 de OSE, les vues sources sont
+**ATTENTION** : cette docmuentation est valable à partir de la version 15 de OSE. Pour les versions antérieures, les vues sources sont
 plutôt à récupérer dans l'ancienne version de la
 documentation : [Ancienne documentation](https://git.unicaen.fr/open-source/OSE/-/tree/b14/connecteurs)
 
@@ -100,6 +100,7 @@ En voici la liste :
 * [Harpège](Harpège/Connecteur.md) pour les données RH et diverses
 * [Octopus](Octopus/Connecteur.md)  (spécifique à Caen) pour les données RH et diverses
 * [Mangue](Mangue/Connecteur_Mangue.md) pour les intervenants
+* Siham pour très bientôt ...
 * [Sifac](Sifac/Connecteur.md) pour les données comptables
 * [Apogée](Apogée/Connecteur.md) pour l'offre de formation
 * [FCA Manager](FCA Manager/Connecteur.md) également pour l'offre de formation

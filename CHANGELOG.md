@@ -32,6 +32,7 @@ Objectif : Doubles statuts et refonte des données personnelles
 * Possibilité d'importer uniquement un élément pédagogique depuis la page "Offre de formation"
 * Possibilité de mettre à jour par synchronisation et manuellement un élément pédagogique spécifique par déclenchement d'import
 * Ajout d'un nouveau privilège 'Archivage' pour donner la possiblité à un statut d'intervenant de mettre à jour une pièce jointe lorsque celle ci a été fourni une année antérieure à l'année en cours (Bouton "Modifier si besoin")
+* Avenants aux contrats de travail : les heures s'affichant sur les avenants ne reprennent plus les heures du contrat, mais n'affichent que le différentiel
 
 ## Corrections de bugs
 

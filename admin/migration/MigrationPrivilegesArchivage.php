@@ -160,7 +160,7 @@ class MigrationPrivilegesArchivage extends AbstractMigration
 
 
 
-    private function havePrivilege($statut, $privilegeCode)
+    private function hasPrivilege($statut, $privilegeCode)
     {
         foreach ($statut['PRIVILEGES'] as $privilege) {
             if ($privilege['CODE_PRIVILEGE'] == $privilegeCode) {

@@ -578,6 +578,7 @@ class EditionFormHydrator extends GenericHydrator
             }
 
             $object->setUtilisateurCode($code);
+            $object->setSyncUtilisateurCode(false);
         }
     }
 

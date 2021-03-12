@@ -381,8 +381,13 @@ class  IntervenantController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
-        $data         = [];
+        try {
+            $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+            $isImportable = false;
+        }
+        $data = [];
 
         if ($isImportable) {
             $query = new Query('INTERVENANT');

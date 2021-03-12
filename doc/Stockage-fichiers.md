@@ -5,7 +5,7 @@
 Dans OSE, les fichiers, que ce soient les pièces justificatives ou les contrats ou tout autre fichier téléversé, 
 sont par défaut stockés dans la table FICHIER et leur contenu dans la colonne CONTENU.
 
-Au bout de plusieures années d'exploitation, cela devient problématique, car le tablespace Oracle est extensible jusqu'à 32Go, mais par au-delà.
+Au bout de plusieures années d'exploitation, cela devient problématique, car le tablespace Oracle est extensible jusqu'à 32Go, mais pas au-delà.
 
 Il existe donc une alternative qui permet de stocker ces données directement dans le système de fichiers de votre serveur.
 
@@ -47,7 +47,7 @@ Paramètre "dir" :
 
 A Caen, nous avons opté pour un répertoire data de OSE lié symboliquement à un répertoire monté en réseau sur un espace de stockage distinct du serveur et sauvegardé régulièrement.
 
-Au cas ou le fichier ne pourrait pas être enregistré (espace disque insuffisant, problème réseau, droits mal configurés, etc.), alors le contenu sera stocké en base de données afin de ne pas être perdu.
+Au cas où le fichier ne pourrait pas être enregistré (espace disque insuffisant, problème réseau, droits mal configurés, etc.), alors le contenu sera stocké en base de données afin de ne pas être perdu.
 
 ### 2. Transfert des données en base vers le système de fichiers
 

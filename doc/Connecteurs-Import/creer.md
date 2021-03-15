@@ -38,7 +38,7 @@ alors il vous faudra stocker ces données dans une table intermédiaire que vous
 
 Prenons l'exemple des grades. La table GRADE doit être synchronisée à partir d'une vue source SRC_GRADE qu'il faudra mettre en place.
 La première étape est de se rendre dans la liste des tables ci-dessous, afin de prendre connaissance de la liste des données nécessaires.
-La voici pour [GRADE](Création tables/GRADE.md).
+La voici pour [GRADE](Création-tables/GRADE.md).
 
 Créez votre propre requête. En prenant appui sur d'Harpège pour l'exemple, nous avons le résultat suivant :
 ```sql
@@ -135,55 +135,55 @@ les parties "récupération" et "liaison" sont bien distinctes.
 
 | Table | Descriptif |
 | ----- | ---------- |
-| [PAYS](Création tables/PAYS.md)                   | Liste des pays |
-| [DEPARTEMENT](Création tables/DEPARTEMENT.md)     | Liste des départements |
-| [VOIRIE](Création tables/VOIRIE.md)               | Liste des voiries (rue, allée, boulevard, etc.) |
-| [ETABLISSEMENT](Création tables/ETABLISSEMENT.md) | Liste des établissements |
-| [STRUCTURE](Création tables/STRUCTURE.md)         | Liste des structures (composantes, etc.) |
-| [DISCIPLINE](Création tables/DISCIPLINE.md)       | Liste des disciplines (équivalent personnalisé des sections CNU, des sections du second degré, etc.) |
+| [PAYS](Création-tables/PAYS.md)                   | Liste des pays |
+| [DEPARTEMENT](Création-tables/DEPARTEMENT.md)     | Liste des départements |
+| [VOIRIE](Création-tables/VOIRIE.md)               | Liste des voiries (rue, allée, boulevard, etc.) |
+| [ETABLISSEMENT](Création-tables/ETABLISSEMENT.md) | Liste des établissements |
+| [STRUCTURE](Création-tables/STRUCTURE.md)         | Liste des structures (composantes, etc.) |
+| [DISCIPLINE](Création-tables/DISCIPLINE.md)       | Liste des disciplines (équivalent personnalisé des sections CNU, des sections du second degré, etc.) |
 
 ### Données "RH"
 
 | Table | Descriptif |
 | ----- | ---------- |
-| [AFFECTATION](Création tables/AFFECTATION.md)                     | Liste des affectations (pour donner des rôles aux utilisateurs) |
-| [EMPLOYEUR](Création tables/EMPLOYEUR.md)                         | Liste des employeurs |
-| [CORPS](Création tables/CORPS.md)                                 | Liste des corps |
-| [GRADE](Création tables/GRADE.md)                                 | Liste des grades |
-| [INTERVENANT](Création tables/INTERVENANT.md)                     | Liste des intervenants |
-| [AFFECTATION_RECHERCHE](Création tables/AFFECTATION_RECHERCHE.md) | Liste des affectations de recherche |
+| [AFFECTATION](Création-tables/AFFECTATION.md)                     | Liste des affectations (pour donner des rôles aux utilisateurs) |
+| [EMPLOYEUR](Création-tables/EMPLOYEUR.md)                         | Liste des employeurs |
+| [CORPS](Création-tables/CORPS.md)                                 | Liste des corps |
+| [GRADE](Création-tables/GRADE.md)                                 | Liste des grades |
+| [INTERVENANT](Création-tables/INTERVENANT.md)                     | Liste des intervenants |
+| [AFFECTATION_RECHERCHE](Création-tables/AFFECTATION_RECHERCHE.md) | Liste des affectations de recherche |
 
 ### Données comptables
 
 | Table | Descriptif |
 | ----- | ---------- |
-| [DOMAINE_FONCTIONNEL](Création tables/DOMAINE_FONCTIONNEL.md)     | Liste des domaines fonctionnels |
-| [CENTRE_COUT](Création tables/CENTRE_COUT.md)                     | Liste des centres de coûts |
-| [CENTRE_COUT_EP](Création tables/CENTRE_COUT_EP.md)               | Liste des centres de coûts liés aux éléments pédagogiques |
-| [CENTRE_COUT_STRUCTURE](Création tables/CENTRE_COUT_STRUCTURE.md) | Liste des centres de coûts liés aux structures |
+| [DOMAINE_FONCTIONNEL](Création-tables/DOMAINE_FONCTIONNEL.md)     | Liste des domaines fonctionnels |
+| [CENTRE_COUT](Création-tables/CENTRE_COUT.md)                     | Liste des centres de coûts |
+| [CENTRE_COUT_EP](Création-tables/CENTRE_COUT_EP.md)               | Liste des centres de coûts liés aux éléments pédagogiques |
+| [CENTRE_COUT_STRUCTURE](Création-tables/CENTRE_COUT_STRUCTURE.md) | Liste des centres de coûts liés aux structures |
 
 ### Données décrivant l'offre de formation
 
 | Table | Descriptif |
 | ----- | ---------- |
-| [GROUPE_TYPE_FORMATION](Création tables/GROUPE_TYPE_FORMATION.md) | Liste des groupes de type de formation |
-| [TYPE_FORMATION](Création tables/TYPE_FORMATION.md)               | Liste des types de formation |
-| [ETAPE](Création tables/ETAPE.md)                                 | Liste des étapes (années de formation, L1 de Droit par exemple) |
-| [ELEMENT_PEDAGOGIQUE](Création tables/ELEMENT_PEDAGOGIQUE.md)     | Liste des éléments pédagogiques |
-| [CHEMIN_PEDAGOGIQUE](Création tables/CHEMIN_PEDAGOGIQUE.md)       | Liste des chemins pédagogiques |
-| [VOLUME_HORAIRE_ENS](Création tables/VOLUME_HORAIRE_ENS.md)       | Liste des volumes horaires d'enseignement (charges) |
-| [EFFECTIFS](Création tables/EFFECTIFS.md)                         | Liste des effectifs |
-| [EFFECTIFS_ETAPE](Création tables/EFFECTIFS_ETAPE.md)             | Liste des effectifs par étapes |
-| [ELEMENT_TAUX_REGIMES](Création tables/ELEMENT_TAUX_REGIMES.md)   | Liste des éléments de taux de régime |
-| [NOEUD](Création tables/NOEUD.md)                                 | Liste des noeuds |
-| [LIEN](Création tables/LIEN.md)                                   | Liste des liens |
-| [SCENARIO_NOEUD](Création tables/SCENARIO_NOEUD.md)               | Liste des paramétrages de noeuds par scénarios |
-| [SCENARIO_LIEN](Création tables/SCENARIO_LIEN.md)                 | Liste des paramétrages de liens par scénarios |
+| [GROUPE_TYPE_FORMATION](Création-tables/GROUPE_TYPE_FORMATION.md) | Liste des groupes de type de formation |
+| [TYPE_FORMATION](Création-tables/TYPE_FORMATION.md)               | Liste des types de formation |
+| [ETAPE](Création-tables/ETAPE.md)                                 | Liste des étapes (années de formation, L1 de Droit par exemple) |
+| [ELEMENT_PEDAGOGIQUE](Création-tables/ELEMENT_PEDAGOGIQUE.md)     | Liste des éléments pédagogiques |
+| [CHEMIN_PEDAGOGIQUE](Création-tables/CHEMIN_PEDAGOGIQUE.md)       | Liste des chemins pédagogiques |
+| [VOLUME_HORAIRE_ENS](Création-tables/VOLUME_HORAIRE_ENS.md)       | Liste des volumes horaires d'enseignement (charges) |
+| [EFFECTIFS](Création-tables/EFFECTIFS.md)                         | Liste des effectifs |
+| [EFFECTIFS_ETAPE](Création-tables/EFFECTIFS_ETAPE.md)             | Liste des effectifs par étapes |
+| [ELEMENT_TAUX_REGIMES](Création-tables/ELEMENT_TAUX_REGIMES.md)   | Liste des éléments de taux de régime |
+| [NOEUD](Création-tables/NOEUD.md)                                 | Liste des noeuds |
+| [LIEN](Création-tables/LIEN.md)                                   | Liste des liens |
+| [SCENARIO_NOEUD](Création-tables/SCENARIO_NOEUD.md)               | Liste des paramétrages de noeuds par scénarios |
+| [SCENARIO_LIEN](Création-tables/SCENARIO_LIEN.md)                 | Liste des paramétrages de liens par scénarios |
 
-Si vous ne souhaitez pas exploiter le module charges de OSE, seules les tables [GROUPE_TYPE_FORMATION](Création tables/GROUPE_TYPE_FORMATION.md),
-[TYPE_FORMATION](Création tables/TYPE_FORMATION.md), [ETAPE](Création tables/ETAPE.md),
-[ELEMENT_PEDAGOGIQUE](Création tables/ELEMENT_PEDAGOGIQUE.md), [CHEMIN_PEDAGOGIQUE](Création tables/CHEMIN_PEDAGOGIQUE.md)
-et [VOLUME_HORAIRE_ENS](Création tables/VOLUME_HORAIRE_ENS.md) pourront être peuplées. 
+Si vous ne souhaitez pas exploiter le module charges de OSE, seules les tables [GROUPE_TYPE_FORMATION](Création-tables/GROUPE_TYPE_FORMATION.md),
+[TYPE_FORMATION](Création-tables/TYPE_FORMATION.md), [ETAPE](Création-tables/ETAPE.md),
+[ELEMENT_PEDAGOGIQUE](Création-tables/ELEMENT_PEDAGOGIQUE.md), [CHEMIN_PEDAGOGIQUE](Création-tables/CHEMIN_PEDAGOGIQUE.md)
+et [VOLUME_HORAIRE_ENS](Création-tables/VOLUME_HORAIRE_ENS.md) pourront être peuplées. 
 
 Les autres tables ne servent que pour le module charges.
 
@@ -191,20 +191,20 @@ Les autres tables ne servent que pour le module charges.
 
 | Table | Descriptif |
 | ----- | ---------- |
-| [SERVICE](Création tables/SERVICE.md)                           | Liste des services (éléments pédagogiques pour les intervenants) |
-| [SERVICE_REFERENTIEL](Création tables/SERVICE_REFERENTIEL.md)   | Liste des servcies référentiels (fonctions référentiels pour les intervenants) |
-| [VOLUME_HORAIRE](Création tables/VOLUME_HORAIRE.md)             | Liste des volumes horaires (nb d'heures de CM, TD, TP par ligne de service) |
-| [VOLUME_HORAIRE_REF](Création tables/VOLUME_HORAIRE_REF.md)     | Liste des volume horaires de référentiel (nb d'heures par service référentiel) |
-| [TYPE_INTERVENTION_EP](Création tables/TYPE_INTERVENTION_EP.md) | Liste des types d'intervention (CM, TD, TP, ...) par élément pédagogique |
-| [TYPE_MODULATEUR_EP](Création tables/TYPE_MODULATEUR_EP.md)     | Liste des types de modulateurs par éléments pédagogiques |
+| [SERVICE](Création-tables/SERVICE.md)                           | Liste des services (éléments pédagogiques pour les intervenants) |
+| [SERVICE_REFERENTIEL](Création-tables/SERVICE_REFERENTIEL.md)   | Liste des servcies référentiels (fonctions référentiels pour les intervenants) |
+| [VOLUME_HORAIRE](Création-tables/VOLUME_HORAIRE.md)             | Liste des volumes horaires (nb d'heures de CM, TD, TP par ligne de service) |
+| [VOLUME_HORAIRE_REF](Création-tables/VOLUME_HORAIRE_REF.md)     | Liste des volume horaires de référentiel (nb d'heures par service référentiel) |
+| [TYPE_INTERVENTION_EP](Création-tables/TYPE_INTERVENTION_EP.md) | Liste des types d'intervention (CM, TD, TP, ...) par élément pédagogique |
+| [TYPE_MODULATEUR_EP](Création-tables/TYPE_MODULATEUR_EP.md)     | Liste des types de modulateurs par éléments pédagogiques |
 
-Les tables [SERVICE](Création tables/SERVICE.md), [SERVICE_REFERENTIEL](Création tables/SERVICE_REFERENTIEL.md),
-[VOLUME_HORAIRE](Création tables/VOLUME_HORAIRE.md) et [VOLUME_HORAIRE_REF](Création tables/VOLUME_HORAIRE_REF.md)
+Les tables [SERVICE](Création-tables/SERVICE.md), [SERVICE_REFERENTIEL](Création-tables/SERVICE_REFERENTIEL.md),
+[VOLUME_HORAIRE](Création-tables/VOLUME_HORAIRE.md) et [VOLUME_HORAIRE_REF](Création-tables/VOLUME_HORAIRE_REF.md)
 pourront acceuillir des données issues des agendas pour injecter les services d'enseignement dans OSE directement.
 
 ### Autres
 
 | Table | Descriptif |
 | ----- | ---------- |
-| [VOLUME_HORAIRE_CHARGE](Création tables/VOLUME_HORAIRE_CHARGE.md) | Table non exploitée : à ignorer |
+| [VOLUME_HORAIRE_CHARGE](Création-tables/VOLUME_HORAIRE_CHARGE.md) | Table non exploitée : à ignorer |
 

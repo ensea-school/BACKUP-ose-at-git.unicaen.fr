@@ -6,7 +6,7 @@ OSE va lire des tables et vues créées dans la base Apogée.
 Ces tables dans la base Apogée sont rafraîchies régulièrement, par exemple midi et soir pour permettre que les modifications effectuées dans Apogée soient répercutées la demi-journée suivante dans OSE.
 
 En voici le schéma général :
-[Architecture connecteurs OSE.png]: Architecture connecteurs OSE.png
+[Architecture connecteurs OSE.png](Architecture-connecteurs-OSE.png)
 
 Le script [Apogee-OSE-createTables.sql](Apogee-OSE-createTables.sql) crée les 8 tables et les 2 vues OSE_****** dans la base Apogée :
 create table ose_groupe_type_formation : Regroupements des types de formations

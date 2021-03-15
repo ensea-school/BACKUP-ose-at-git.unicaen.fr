@@ -66,20 +66,20 @@ Certains de vos connecteurs devront être adaptés, en particulier au niveau RH.
 De même, si vous avez créé des requêtes personnalisées, des états de sortie, attention à bien tenir compte de ces changmements!
 
 Au niveau des connecteurs, les changements à faire sont les suivants :
-* Vue source [SRC_PAYS](doc/Connecteurs%20Import/Création%20tables/PAYS.md) : 
+* Vue source [SRC_PAYS](doc/Connecteurs-Import/Création-tables/PAYS.md) : 
   * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
   * nouvelle colonne CODE
-* Vue source [SRC_DEPARTEMENT](doc/Connecteurs%20Import/Création%20tables/DEPARTEMENT.md) :
+* Vue source [SRC_DEPARTEMENT](doc/Connecteurs-Import/Création-tables/DEPARTEMENT.md) :
   * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
   * nouvelle colonne CODE
-* Nouvelle table [VOIRIE](doc/Connecteurs%20Import/Création%20tables/VOIRIE.md) :
+* Nouvelle table [VOIRIE](doc/Connecteurs-Import/Création-tables/VOIRIE.md) :
   * Possibilité d'importer les voiries en provenance de votre système d'information.
-* Vue source [SRC_STRUCTURE](doc/Connecteurs%20Import/Création%20tables/STRUCTURE.md) :
+* Vue source [SRC_STRUCTURE](doc/Connecteurs-Import/Création-tables/STRUCTURE.md) :
   * Changement du format des adresses. Vouc pourrez vous inspirer des différents connecteurs existants pour adapter le votre.
-* Vue source [SRC_INTERVENANT](doc/Connecteurs%20Import/Générique/SRC_INTERVENANT.sql) :
+* Vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) :
   * Il y a ici de nombreux changements.
-  * La vue matérialisée [MV_INTERVENANT](doc/Connecteurs%20Import/Création%20tables/INTERVENANT.md) devra être adaptée pour fournir toutes les colonnes nécessaires.
-  * La vue [SRC_INTERVENANT](doc/Connecteurs%20Import/Générique/SRC_INTERVENANT.sql) doit être utilisée telle quelle, sans adaptation de votre part
+  * La vue matérialisée [MV_INTERVENANT](doc/Connecteurs-Import/Création-tables/INTERVENANT.md) devra être adaptée pour fournir toutes les colonnes nécessaires.
+  * La vue [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) doit être utilisée telle quelle, sans adaptation de votre part
 * Suppression d'anciennes tables, dont les vues sources correspondantes doivent être supprimées par vos soins :
   * DROP VIEW V_DIFF_ADRESSE_INTERVENANT
   * DROP VIEW SRC_ADRESSE_INTERVENANT
@@ -87,7 +87,7 @@ Au niveau des connecteurs, les changements à faire sont les suivants :
   * DROP VIEW SRC_ADRESSE_STRUCTURE
   * Ces vues devront être supprimées AVANT la mise à jour. Le script de migration ne le fait pas automatiquement afin de vous laisser le temps de les sauvegarder le cas échéant.
 
-Plus généralement, [une nouvelle documentation sur les connecteurs est disponible](doc/Connecteurs Import/Connecteurs IMPORT.md).
+Plus généralement, [une nouvelle documentation sur les connecteurs est disponible](doc/Connecteurs-Import/Connecteurs-IMPORT.md).
 
 ### 4. Activation du stockage des fichiers dans le filesystem
 
@@ -100,7 +100,7 @@ Pas obligatoire, mais recommandé (sur votre instance de production).
 OSE peut maintenant gérer un référentiel des employeurs, permettant ainsi d'activer au niveau des données personnelles la partie "Employeur" (non activée par défaut et à paramétrer pour chacun des statuts intervenant de votre instance OSE)
 
 Pour alimenter la table employeur de OSE, vous avez deux possiblités :
- * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs%20Import/Création%20tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
+ * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
 

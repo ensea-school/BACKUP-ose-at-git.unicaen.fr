@@ -384,7 +384,7 @@ En revanche, il est vivement recommandé de bien paramétrer en préproduction l
 
 # Connecteurs
 Afin de pouvoir intégrer OSE à votre système d'information, 
-des [connecteurs Import](doc/Connecteurs Import/Connecteurs IMPORT.md) 
+des [connecteurs Import](doc/Connecteurs-Import/Connecteurs-IMPORT.md) 
 vous sont fournis à titre d'exemple.
 Vous devrez en effet les adapter à vos besoins.
 

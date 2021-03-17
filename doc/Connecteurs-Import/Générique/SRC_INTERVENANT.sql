@@ -4,7 +4,7 @@ SELECT
   annee_id,
   code,
   code_rh,
-  CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(i_utilisateur_code,s_utilisateur_code) ELSE s_utilisateur_code END utilisateur_code,
+  CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END utilisateur_code,
   CASE WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
   CASE
     WHEN action = 'insert' OR intervenant_histo = 1 THEN statut_source_id

@@ -1944,9 +1944,9 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           si.peut_saisir_service,
           si.peut_saisir_referentiel,
           SUM( CASE WHEN tvhs.code = ''PREVU''   THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_prev,
-          SUM( CASE WHEN tvhs.code = ''PREVU''   THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_prev,
+          SUM( CASE WHEN tvhrs.code = ''PREVU''   THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_prev,
           SUM( CASE WHEN tvhs.code = ''REALISE'' THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_real,
-          SUM( CASE WHEN tvhs.code = ''REALISE'' THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_real
+          SUM( CASE WHEN tvhrs.code = ''REALISE'' THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_real
         FROM
           intervenant i
           JOIN statut_intervenant si ON si.id = i.statut_id

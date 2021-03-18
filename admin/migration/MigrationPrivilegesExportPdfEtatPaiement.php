@@ -18,7 +18,6 @@ class MigrationPrivilegesExportPdfEtatPaiement extends AbstractMigration
 
     public function utile(): bool
     {
-        return true;
         //test si le privilege export pdf etat paiement existe, si il existe déjà alors pas besoin de jouer cette mise à niveau des privilèges
         $bdd       = $this->manager->getBdd();
         $sql       = "SELECT 

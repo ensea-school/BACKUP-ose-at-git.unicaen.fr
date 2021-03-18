@@ -1,6 +1,13 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
+# OSE 15.1
+
+## Nouveautés
+
+* Ajout d'un privilége pour afficher / masquer l'adresse, email pro, email perso, téléphone (RGPD) sur la fiche intervenant
+
+
 # OSE 15
 Objectif : Doubles statuts et refonte des données personnelles
 

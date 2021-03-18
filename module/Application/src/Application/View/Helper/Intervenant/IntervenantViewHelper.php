@@ -58,18 +58,18 @@ class IntervenantViewHelper extends AbstractHtmlElement
         }
 
         $vars = [
-            'identite' => [
+            'identite'    => [
                 "Civilité"   => (string)$entity->getCivilite(),
                 "NOM prénom" => $entity,
                 //"Date de naissance" => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
             ],
-            /*'coordonnees' => [
+            'coordonnees' => [
                 "Email"           => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone perso" => $entity->getTelPerso() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone pro"   => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Adresse"         => nl2br($entity->getAdresse(false)),
-            ],*/
-            'metier'   => [
+            ],
+            'metier'      => [
                 "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
                 "Statut de l'intervenant"   => $entity->getStatut(),
                 "N° {$entity->getSource()}" => $entity->getCode(),
@@ -77,11 +77,17 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Modifié le"                => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
             ],
-            'divers'   => [
+            'divers'      => [
                 "Id" => $entity->getId(),
                 //"Id de connexion" => ($u = $entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)",
             ],
         ];
+
+        $canViewAdresseIntervenant = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
+        if (!$canViewAdresseIntervenant) {
+            unset($vars['coordonnees']);
+        }
+
 
         $html = '';
         foreach ($vars as $bloc => $vvs) {

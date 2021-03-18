@@ -41,6 +41,7 @@ return [
         'privileges' => [
             'recherche'                => 'Recherche',
             'fiche'                    => 'Visualisation de la fiche',
+            'adresse'                  => 'Visualisation de l\'adresse',
             'calcul-hetd'              => 'Calcul HETD',
             'creation'                 => 'Création',
             'ajout-statut'             => 'Ajout d\'un nouveau statut',

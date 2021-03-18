@@ -134,6 +134,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INTERVENANT_CREATION                                = 'intervenant-creation';
     const INTERVENANT_EDITION                                 = 'intervenant-edition';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
+    const INTERVENANT_ADRESSE                                 = 'intervenant-adresse';
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';

@@ -145,6 +145,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const MISE_EN_PAIEMENT_EXPORT_CSV                         = 'mise-en-paiement-export-csv';
     const MISE_EN_PAIEMENT_EXPORT_PAIE                        = 'mise-en-paiement-export-paie';
     const MISE_EN_PAIEMENT_EXPORT_PDF                         = 'mise-en-paiement-export-pdf';
+    const MISE_EN_PAIEMENT_EXPORT_PDF_ETAT                    = 'mise-en-paiement-export-pdf-etat';
     const MISE_EN_PAIEMENT_MISE_EN_PAIEMENT                   = 'mise-en-paiement-mise-en-paiement';
     const MISE_EN_PAIEMENT_VISUALISATION_GESTION              = 'mise-en-paiement-visualisation-gestion';
     const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT          = 'mise-en-paiement-visualisation-intervenant';

@@ -378,7 +378,7 @@ class PaiementController extends AbstractController
 
         $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_etat_paiement');
 
-        if ($this->params()->fromPost('exporter-pdf') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF))) {
+        if ($this->params()->fromPost('exporter-pdf') !== null && ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF)) || $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF_ETAT)))) {
             $document = $this->getServiceEtatSortie()->genererPdf($etatSortie, $recherche->getFilters());
             $document->download($this->makeFilenameFromRecherche($recherche) . '.pdf');
         } elseif ($this->params()->fromPost('exporter-csv-etat') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {

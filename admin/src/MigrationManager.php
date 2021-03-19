@@ -272,7 +272,8 @@ class MigrationManager
     {
         if (!is_dir($this->getMigrationDir())) return;
         $files = scandir($this->getMigrationDir());
-
+        sort($files);
+        
         foreach ($files as $i => $file) {
             if ($file == '.' || $file == '..') {
                 continue;

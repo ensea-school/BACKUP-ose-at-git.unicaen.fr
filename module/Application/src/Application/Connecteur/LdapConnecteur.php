@@ -217,7 +217,7 @@ class LdapConnecteur extends AbstractService
                 return $this->getUtilisateur($login, $autoInsert);
             }
         }
-        
+
         return null;
     }
 
@@ -235,6 +235,7 @@ class LdapConnecteur extends AbstractService
         if (!$code && $this->isActif()) {
             $ldapUser = $this->mapperPeople->findOneByUsername($login);
 
+            if (!$ldapUser) return null;
             $code = $this->getPeopleAttribute($ldapUser, $this->getUtilisateurCode());
         }
 

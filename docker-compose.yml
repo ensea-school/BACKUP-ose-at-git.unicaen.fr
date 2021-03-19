@@ -1,7 +1,7 @@
 version: '3'
 
 # Ne pas oublier d'ajouter au fichier /etc/hosts :
-# 172.21.0.10 ose-dev.localhost
+# 172.21.0.10 ose-dev.pc-local
 
 services:
   ose-dev:
@@ -9,20 +9,20 @@ services:
 
     environment:
       XDEBUG_CONFIG: remote_host=172.17.0.1
-      PHP_IDE_CONFIG: serverName=ose-dev.localhost
+      PHP_IDE_CONFIG: serverName=ose-dev.pc-local
+      APPLICATION_HOSTNAME: ose-dev.pc-local
+      APPLICATION_ENV: dev
 
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        PHP_VERSION: 7.4
 
     volumes:
         - .:/app
 
     working_dir: /app
-
-#    ports:
-#      - "8080:80"
-#      - "8443:443"
 
     networks:
         devnet:

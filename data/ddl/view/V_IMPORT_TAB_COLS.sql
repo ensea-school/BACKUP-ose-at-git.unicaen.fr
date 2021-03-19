@@ -32,6 +32,7 @@ WHERE
 SELECT
   tc.table_name,
   tc.column_name,
+  CASE WHEN ',' || it.key_columns || ',' LIKE '%,' || tc.column_name || ',%' THEN 1 ELSE 0 END is_key,
   tc.data_type,
   CASE WHEN tc.char_length = 0 THEN NULL ELSE tc.char_length END length,
   CASE WHEN tc.nullable = 'Y' THEN 1 ELSE 0 END nullable,

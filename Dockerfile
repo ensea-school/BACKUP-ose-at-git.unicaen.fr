@@ -6,13 +6,13 @@
 #
 ###########################################################################################
 
-FROM unicaen-dev-php7.4-apache
+ARG PHP_VERSION
+
+FROM unicaen-dev-php${PHP_VERSION}-apache
 LABEL maintainer="Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>"
 
 ENV APACHE_CONF_DIR=/etc/apache2 \
-    PHP_CONF_DIR=/etc/php/${PHP_VERSION} \
-    APPLICATION_HOSTNAME=ose-dev.localhost \
-    APPLICATION_ENV=dev
+    PHP_CONF_DIR=/etc/php/${PHP_VERSION}
 
 ## Installation de packages requis.
 RUN apt-get update -y

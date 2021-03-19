@@ -51,6 +51,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var string|null
      */
+    protected $codeRh;
+
+    /**
+     * @var string|null
+     */
     protected $utilisateurCode;
 
     /**
@@ -187,6 +192,21 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * @var bool
      */
     protected $syncStructure = true;
+
+    /**
+     * @var bool
+     */
+    protected $syncUtilisateurCode = true;
+
+    /**
+     * @var \DateTime
+     */
+    protected $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    protected $validiteFin;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -390,6 +410,30 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function setCode(?string $code): Intervenant
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodeRh(): ?string
+    {
+        return $this->codeRh;
+    }
+
+
+
+    /**
+     * @param string|null $codeRh
+     *
+     * @return Intervenant
+     */
+    public function setCodeRh(?string $codeRh): Intervenant
+    {
+        $this->codeRh = $codeRh;
 
         return $this;
     }
@@ -1091,6 +1135,95 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
+     * @return bool
+     */
+    public function isSyncUtilisateurCode(): bool
+    {
+        return $this->syncUtilisateurCode;
+    }
+
+
+
+    /**
+     * @param bool $syncUtilisateurCode
+     *
+     * @return Intervenant
+     */
+    public function setSyncUtilisateurCode(bool $syncUtilisateurCode): Intervenant
+    {
+        $this->syncUtilisateurCode = $syncUtilisateurCode;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getValiditeDebut(): ?\DateTime
+    {
+        return $this->validiteDebut;
+    }
+
+
+
+    /**
+     * @param \DateTime $validiteDebut
+     *
+     * @return Intervenant
+     */
+    public function setValiditeDebut(?\DateTime $validiteDebut): Intervenant
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getValiditeFin(): ?\DateTime
+    {
+        return $this->validiteFin;
+    }
+
+
+
+    /**
+     * @param \DateTime $validiteFin
+     *
+     * @return Intervenant
+     */
+    public function setValiditeFin(?\DateTime $validiteFin): Intervenant
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+
+
+    public function getValidite(): string
+    {
+        if (!$this->validiteDebut && !$this->validiteFin) {
+            return '';
+        }
+        if (!$this->validiteDebut) {
+            return 'jusqu\'au ' . $this->validiteFin->format('d/m/Y');
+        }
+        if (!$this->validiteFin) {
+            return 'à partir du ' . $this->validiteDebut->format('d/m/Y');
+        }
+
+        return 'du ' . $this->validiteDebut->format('d/m/Y') . ' au ' . $this->validiteFin->format('d/m/Y');
+    }
+
+
+
+    /**
      * Get affectation
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -1441,6 +1574,10 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         $hydrator = new ClassMethods();
         $data     = $hydrator->extract($this);
         $hydrator->hydrate($data, $intervenant);
+        $intervenant->setValiditeDebut(new \DateTime());
+        $intervenant->setValiditeFin(null);
+        $intervenant->setHistoDestructeur(null);
+        $intervenant->setHistoDestruction(null);
 
         return $intervenant;
     }

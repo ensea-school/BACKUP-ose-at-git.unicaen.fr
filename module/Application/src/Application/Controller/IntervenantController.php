@@ -32,6 +32,9 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenImport\Entity\Differentiel\Query;
+use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
+use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -62,11 +65,14 @@ class  IntervenantController extends AbstractController
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use DossierServiceAwareTrait;
+    use ImportProcessusAwareTrait;
+    use DifferentielServiceAwareTrait;
 
 
     public function indexAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
+
 
         if ($intervenant = $role->getIntervenant()) {
             $etapeCourante = $this->getServiceWorkflow()->getEtapeCourante();
@@ -99,8 +105,13 @@ class  IntervenantController extends AbstractController
             Intervenant::class,
         ]);
 
-        $critere      = $this->params()->fromPost('critere');
-        $intervenants = $this->getProcessusIntervenant()->recherche()->rechercher($critere, 21);
+        $critere   = $this->params()->fromPost('critere');
+        $recherche = $this->getProcessusIntervenant()->recherche();
+
+        $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
+        $recherche->setShowHisto($canShowHistorises);
+
+        $intervenants = $recherche->rechercher($critere, 21);
 
         return compact('intervenants');
     }
@@ -109,17 +120,23 @@ class  IntervenantController extends AbstractController
 
     public function voirAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getEvent()->getParam('intervenant');
         $tab         = $this->params()->fromQuery('tab');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
         }
 
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $vh = new ViewModel();
+            $vh->setTemplate('application/intervenant/menu');
+
+            return $vh;
+        }
+
         $this->addIntervenantRecent($intervenant);
 
-        return compact('intervenant', 'role', 'tab');
+        return compact('intervenant', 'tab');
     }
 
 
@@ -277,10 +294,7 @@ class  IntervenantController extends AbstractController
 
     public function saisirAction()
     {
-        $statutAutres = $this->getServiceStatutIntervenant()->getAutres();
-
-        $role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant  = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant  = $this->getEvent()->getParam('intervenant');
         $title        = "Saisie d'un intervenant";
         $form         = $this->getFormIntervenantEdition();
         $errors       = [];
@@ -294,17 +308,11 @@ class  IntervenantController extends AbstractController
         $isNew = !$intervenant;
         if (!$intervenant) {
             $intervenant = $this->getServiceIntervenant()->newEntity();
-            $intervenant->setStructure($this->getServiceContext()->getStructure());
-            $intervenant->setStatut($statutAutres);
-            $intervenant->setAnnee($this->getServiceContext()->getAnnee());
-            $intervenant->setSource($this->getServiceSource()->getOse());
-            $intervenant->setCode(uniqid('OSE'));
         }
 
         if ($actionDetail == 'dupliquer') {
             $intervenant = $intervenant->dupliquer();
             $intervenant->setSource($this->getServiceSource()->getOse());
-            $intervenant->setSourceCode(null);
             $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
         }
 
@@ -322,17 +330,19 @@ class  IntervenantController extends AbstractController
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
-                    $form->protection($intervenant);
-                    if ($form->get('login')->getValue() && $form->get('password')->getValue()) {
+                    if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
                         $nom           = $intervenant->getNomUsuel();
                         $prenom        = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();
-                        $login         = $form->get('login')->getValue();
-                        $password      = $form->get('password')->getValue();
+                        $login         = $form->get('intervenant-edition-login')->getValue();
+                        $password      = $form->get('intervenant-edition-password')->getValue();
                         $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
-                        $utilisateur->setCode($intervenant->getCode());
+                        $utilisateur->setCode($intervenant->getUtilisateurCode() ?: $intervenant->getCode());
                         $this->getServiceUtilisateur()->save($utilisateur);
-                        $intervenant->setUtilisateurCode($utilisateur->getCode());
+                        if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
+                            $intervenant->setUtilisateurCode($utilisateur->getCode());
+                            $intervenant->setSyncUtilisateurCode(false);
+                        }
                     }
                     $this->getServiceIntervenant()->save($intervenant);
                     if ($intervenant->getStatut() != $ancienStatut) {
@@ -358,7 +368,47 @@ class  IntervenantController extends AbstractController
             }
         }
 
-        return compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut');
+        $vm = new ViewModel();
+        $vm->setTemplate('application/intervenant/saisir');
+        $vm->setVariables(compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail'));
+
+        return $vm;
+    }
+
+
+
+    public function synchronisationAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        try {
+            $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+            $isImportable = false;
+        }
+        $data = [];
+
+        if ($isImportable) {
+            $query = new Query('INTERVENANT');
+            $query->setNotNull([]); // Aucune colonne ne doit être non nulle !!
+            $query->setLimit(101);
+            $query->setColValues(['ANNEE_ID' => $intervenant->getAnnee()->getId(), 'CODE' => $intervenant->getCode()]);
+            $data = $this->getServiceDifferentiel()->make($query, $query::SQL_FULL, false)->fetchAll();
+        }
+
+        return compact('intervenant', 'isImportable', 'data');
+    }
+
+
+
+    public function synchroniserAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
     }
 
 
@@ -420,36 +470,67 @@ class  IntervenantController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
 
-        if ($intervenant) {
-            $data = $this->getProcessusIntervenant()->suppression()->getData($intervenant);
-        } else {
-            $data = null;
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
         }
+        $intervenantCode = $intervenant->getCode();
 
+        $intSuppr = $this->getProcessusIntervenant()->suppression($intervenant);
 
-        $ids = $this->params()->fromPost('ids');
-
-        if ($ids) {
+        if ($ids = $this->params()->fromPost('ids')) {
             try {
-                if ($data) $data = $this->getProcessusIntervenant()->suppression()->deleteRecursive($data, $ids);
-                if ($intervenant) {
+                if (!empty($ids)) {
+                    $res = $intSuppr->delete($ids);
                     $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
-                }
-                if (!$data) {
-                    $this->flashMessenger()->addSuccessMessage('Fiche intervenant supprimée intégralement. Vous allez être redirigé(e) vers la page de recherche des intervenants.');
-                } else {
-                    $this->flashMessenger()->addSuccessMessage('Données bien supprimées');
+                    if ($res) {
+                        $this->flashMessenger()->addSuccessMessage('Données de l\'intervenant supprimées');
+                    } else {
+                        $this->flashMessenger()->addErrorMessage('Une ou plusieurs erreurs ont été rencontrées');
+                    }
                 }
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-        } else {
-            $this->flashMessenger()->addWarningMessage(
-                'Attention : La suppression d\'une fiche entraine la suppression de toutes les données associées pour l\'année en cours'
-            );
+        }
+        $tree = $intSuppr->getTree();
+        if (!$tree) {
+            $intervenant = $this->getServiceIntervenant()->getByCode($intervenantCode);
+            if ($intervenant && $intervenant->estHistorise()) $intervenant = null;
         }
 
-        return compact('intervenant', 'data');
+        return compact('intervenant', 'tree');
+    }
+
+
+
+    public function historiserAction()
+    {
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
+        }
+        $this->getServiceIntervenant()->delete($intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
+    }
+
+
+
+    public function restaurerAction()
+    {
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
+        }
+        $intervenant->dehistoriser();
+        $this->getServiceIntervenant()->save($intervenant);
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
     }
 
 
@@ -468,14 +549,7 @@ class  IntervenantController extends AbstractController
     {
         $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
         $form                     = $this->getFormRegleStructureValidationSaisie();
-
-        if (empty($regleStructureValidation)) {
-            $title                    = 'Création d\'une nouvelle régle';
-            $regleStructureValidation = $this->getServiceRegleStructureValidation()->newEntity();
-        } else {
-            $title = 'Édition d\'une règle';
-        }
-
+        $title                    = 'Édition de la régle de validation';
         $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
             try {
                 $this->getServiceRegleStructureValidation()->save($rsv);
@@ -483,7 +557,7 @@ class  IntervenantController extends AbstractController
             } catch (\Exception $e) {
                 $message = $this->translate($e);
 
-                if (false !== strpos($message, 'ORA-00001')) {
+                if (false !== strpos($message, 'ORA - 00001')) {
                     $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
                 } else {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -492,22 +566,6 @@ class  IntervenantController extends AbstractController
         });
 
         return compact('form', 'title');
-    }
-
-
-
-    public function validationVolumeHoraireTypeIntervenantDeleteAction()
-    {
-        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-
-        try {
-            $this->getServiceRegleStructureValidation()->delete($regleStructureValidation);
-            $this->flashMessenger()->addSuccessMessage("Règle supprimée avec succès.");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
-        }
-
-        return new MessengerViewModel(compact('regleStructureValidation'));
     }
 
 
@@ -521,7 +579,20 @@ class  IntervenantController extends AbstractController
         $container = $this->getSessionContainer();
         //$container->recents = [];
         if (isset($container->recents)) {
-            return $container->recents;
+            $recents = $container->recents;
+            foreach ($recents as $i => $recent) {
+                if (isset($recent['code'])) {
+                    $intervenant = $this->getServiceIntervenant()->getByCode($recent['code']);
+                } else {
+                    $intervenant = null;
+                }
+                if (!$intervenant) {
+                    unset($recents[$i]);
+                    unset($container->recents[$i]);
+                }
+            }
+
+            return $recents;
         } else {
             return [];
         }
@@ -566,7 +637,8 @@ class  IntervenantController extends AbstractController
                 'date-naissance'   => $intervenant->getDateNaissance(),
                 'structure'        => (string)$intervenant->getStructure(),
                 'statut'           => (string)$intervenant->getStatut(),
-                'numero-personnel' => $intervenant->getSourceCode(),
+                'code'             => $intervenant->getCode(),
+                'numero-personnel' => $intervenant->getCode(),
                 '__horo_ajout__'   => (int)date('U'),
             ];
         } else {

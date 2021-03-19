@@ -16,7 +16,6 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\FormButtonGroupViewHelper formButtonGroup(\Zend\Form\ElementInterface $element = null, $labelPosition = null)
  * @method \Application\View\Helper\FormSupprimerViewHelper formSupprimer($form)
  * @method \Application\View\Helper\Intervenant\FeuilleDeRouteViewHelper feuilleDeRoute(\Application\Entity\Db\Intervenant $intervenant = null)
- * @method \Application\View\Helper\Intervenant\IntervenantSuppressionDataViewHelper intervenantSuppressionData(\Application\Entity\IntervenantSuppressionData $isd = null)
  * @method \Application\View\Helper\Intervenant\IntervenantViewHelper intervenant(\Application\Entity\Db\Intervenant $intervenant = null)
  * @method \Application\View\Helper\Intervenant\TotauxHetdViewHelper formuleTotauxHetd(\Application\Entity\Db\FormuleResultat $formuleResultat)
  * @method \Application\View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper elementCentreCoutFieldset(\Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset $fieldset = null)
@@ -177,8 +176,7 @@ namespace Application\View\Renderer;
  *
  * @author UnicaenCode
  */
-class PhpRenderer extends \Zend\View\Renderer\PhpRenderer {
-
-
+class PhpRenderer extends \Zend\View\Renderer\PhpRenderer
+{
 
 }

@@ -1,7 +1,15 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
-# OSE 15 BETA
+# OSE 15.1
+
+## Nouveautés
+
+* Ajout d'un privilège pour afficher / masquer l'adresse, email pro, email perso, téléphone (RGPD) sur la fiche intervenant
+* Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
+
+
+# OSE 15
 Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés
@@ -9,39 +17,161 @@ Objectif : Doubles statuts et refonte des données personnelles
 * Refonte complète de la gestion des données personnelles
   * Gestion des employeurs (avec utilisation possible de la base SIRENE)
   * Possibilité d'enregistrer un dossier incomplet, avec gestion du taux de complétude
-  * Masquage des données sensibles (mise en conformité RGPD)
-  * Possibilité d'ajouter des champs supplémentaires
+  * Masquage des données sensibles (mise en conformité RGPD) par rôle (gestionnaire etc...) 
+  * Possibilité d'ajouter des champs supplémentaires (5 maximum)
   * Nouveau format pour les adresses
-  * Paramétrage des conditions de remplissage des mails et téléphones personnels (oblitatoires si pas de mail/tél pro ou bien tout le temps)
+  * Paramétrage des conditions de remplissage des mails et téléphones personnels (obligatoires si pas de mail/tél pro ou bien tout le temps)
 * Possibilité pour un intervenant d'avoir simultanément plusieurs statuts
   * Le nouveau statut peut être ajouté dans l'application ou bien être fourni via le connecteur IMPORT
-  * La bascule d'un statut à un autre e fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
+  * La bascule d'un statut à un autre se fait en cliquant sur le statut désiré directement sur la fiche de l'intervenant
   * Pour chaque statut, l'intervenant a une fiche distincte, avec des services distincts, etc. Les pièces justificatives et les agréments sont communs.
-* Possibilité de créer un nouvel intervenant local au moyen d'une IHM
+* Refonte de la gestion des intervenants
+  * Possibilité de créer un nouvel intervenant local au moyen d'une IHM
+  * Possibilité de pouvoir rechercher et visualiser des intervenants historisés
+  * Possibilité d'historiser et de restaurer des intervenants
+  * Possibilité de synchroniser un intervenant directement depuis sa fiche 
   * Possibilité d'associer un utilisateur LDAP à un intervenant nouvellement créé
   * Possibilité de créer directement dans le formulaire INTERVENANT un nouvel utilisateur avec saisie de login/MDP.
-* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celui fourni par le connecteur
+* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celle fournie par le connecteur
 * Possibilité de forcer le statut d'un intervenant dans OSE et d'ignorer celui fourni par le connecteur (même pour un permanent)
 * Les vues matérialisées sont recalculées à chaque mise à jour
 * Amélioration importante des performances pour le calcul des tableaux de bord intermédiaires
 * Adaptations du connecteur Harpège
-* Possibilité d'importer un uniquement élément pédagogique depuis la page "Offre de formation"
+* Possibilité d'importer uniquement un élément pédagogique depuis la page "Offre de formation"
 * Possibilité de mettre à jour par synchronisation et manuellement un élément pédagogique spécifique par déclenchement d'import
+* Ajout d'un nouveau privilège 'Archivage' pour donner la possiblité à un statut d'intervenant de mettre à jour une pièce jointe lorsque celle ci a été fourni une année antérieure à l'année en cours (Bouton "Modifier si besoin")
+* Avenants aux contrats de travail : les heures s'affichant sur les avenants ne reprennent plus les heures du contrat, mais n'affichent que le différentiel
+
+## Corrections de bugs
+
+* La suppression d'intervenants est maintenant pleinement opérationnelle et les erreurs sont mieux affichées
+* Formule de Poitiers modifiée
 
 ## Notes de mise à jour
 
-* PHP 7.4 minimum requis : attention à bien mettre à jour vos serveurs
+Merci de lire ceci **AVANT** d'entamer la mise à jour!!
 
-* Cette version comporte de nombreux changements en particulier sur la gestion des intervenants. 
-La migration ne sera possible qu'à partir de la version 14.11.
-Si vous êtes sur une version antérieure à la 14, merci de migrer en 14.11 **AVANT** de migrer vers la 15.
+La mise à jour n'est en effet pas réversible.
 
-* La base de données ayant été remaniée, il vous faudra adapter vos connecteurs RH. En particulier les vues sources visant les tables INTERVENANT, STRUCTURE, PAYS et DEPARTEMENT.
-Une nouvelle documentation sur les connecteurs est disponible ici : [Import de données via les connecteurs](doc/Connecteurs%20Import/Connecteurs%20IMPORT.md).
+Nous vous recommandons en outre de vous entrainer au préalable sur une instance de préproduction avant de passer en production.
 
-* Lors de la mise à jour, les différents objets qui concernent vos connecteurs et sur lesquels il y a des changements à faire s'afficheront en erreur. Il vous revient de mettre à jour par vous-mêmes ces connecteurs.
+### 1. PHP7.4
+PHP 7.4 est maintenant requis : attention à bien mettre à jour vos serveurs
 
-* Attention : un bug est connu et en cours de résolution : il se produit lorsqu'en tant qu'intervenant vous saisissez vos données personnelles. Une page d'erreur s'affiche au moment ou vous sélectionnez votre statut. Une mise à jour de la page suffit pour pouvoir continuer la saisie du formulaire.
+### 2. OSE 14.17 minimum
+
+Pour cette version, il n'est pas possible de migrer depuis de trop anciennes instances de OSE.
+Avant la V15, vous devrez préalablement migrer en version 14.17.
+Et ce n'est qu'à partir de la 14.17 que vous pourrez migrer vers la 15.
+
+### 3. Connecteurs
+
+La structure de la base de données OSE a évolué.
+Voici pour information la liste des changements opérés au niveau des structures de données : ([Changements de structures BDD 14->15](doc/Divers/migration-bdd-14-vers-15.sql)).
+Ce script ne doit pas être exécuté, la procédure de migration se chargera de cela toute seule.
+
+Certains de vos connecteurs devront être adaptés, en particulier au niveau RH.
+De même, si vous avez créé des requêtes personnalisées, des états de sortie, attention à bien tenir compte de ces changmements!
+
+Au niveau des connecteurs, les changements à faire sont les suivants :
+* Vue source [SRC_PAYS](doc/Connecteurs-Import/Création-tables/PAYS.md) : 
+  * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
+  * nouvelle colonne CODE
+* Vue source [SRC_DEPARTEMENT](doc/Connecteurs-Import/Création-tables/DEPARTEMENT.md) :
+  * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
+  * nouvelle colonne CODE
+* Nouvelle table [VOIRIE](doc/Connecteurs-Import/Création-tables/VOIRIE.md) :
+  * Possibilité d'importer les voiries en provenance de votre système d'information.
+* Vue source [SRC_STRUCTURE](doc/Connecteurs-Import/Création-tables/STRUCTURE.md) :
+  * Changement du format des adresses. Vouc pourrez vous inspirer des différents connecteurs existants pour adapter le votre.
+* Vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) :
+  * Il y a ici de nombreux changements.
+  * La vue matérialisée [MV_INTERVENANT](doc/Connecteurs-Import/Création-tables/INTERVENANT.md) devra être adaptée pour fournir toutes les colonnes nécessaires.
+  * La vue [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) doit être utilisée telle quelle, sans adaptation de votre part
+* Suppression d'anciennes tables, dont les vues sources correspondantes doivent être supprimées par vos soins :
+  * DROP VIEW V_DIFF_ADRESSE_INTERVENANT
+  * DROP VIEW SRC_ADRESSE_INTERVENANT
+  * DROP VIEW V_DIFF_ADRESSE_STRUCTURE
+  * DROP VIEW SRC_ADRESSE_STRUCTURE
+  * Ces vues devront être supprimées AVANT la mise à jour. Le script de migration ne le fait pas automatiquement afin de vous laisser le temps de les sauvegarder le cas échéant.
+
+Plus généralement, [une nouvelle documentation sur les connecteurs est disponible](doc/Connecteurs-Import/Connecteurs-IMPORT.md).
+
+### 4. Activation du stockage des fichiers dans le filesystem
+
+Pas obligatoire, mais recommandé (sur votre instance de production).
+
+* [Activer le stockage des fichiers dans le système de fichiers plutôt qu'en base de données (recommandé pour la production)](doc/Stockage-fichiers.md)
+
+### 5. Gestion des employeurs
+
+OSE peut maintenant gérer un référentiel des employeurs, permettant ainsi d'activer au niveau des données personnelles la partie "Employeur" (non activée par défaut et à paramétrer pour chacun des statuts intervenant de votre instance OSE)
+
+Pour alimenter la table employeur de OSE, vous avez deux possiblités :
+ * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
+ * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
+
+
+# OSE 14.17
+
+## Corrections de bugs
+
+* Le report des services de l'année précédente par un gestionnaire est désormais limité à sa composante.
+* Correction au niveau du franchissement de l'étape contrat dans le cas de présence d'heures de service référentiel (#35495)
+
+
+# OSE 14.16
+
+## Nouveautés
+
+* Formule de calcul de Paris8
+* Nouveau privilège donnant la possibilité de saisir du référentiel sans aucune contrainte sur la composante
+
+## Corrections de bugs
+
+* Erreur sur l'édition d'une dotation au niveau budget (#33703)
+* Correction ordre d'affichage des pièces jointes pour l'intervenant comme paramétré dans l'adminstration (#34324)
+* Ajout de deux nouveaux indicateurs (730 et 740), identiques aux 710 et 720 mais pour les permanents (#34577)
+* Bug sur validation/dévalidation d'une pièce jointe (erreur 403) dans le cas d'un paramétrage de workflow sans service prévisionnel (#34526)
+* Formule de calcul de Poitiers mise à jour
+
+# OSE 14.15
+
+## Corrections de bugs
+
+* Permettre à un intervenant d'accéder l'année N à ses pièces justificatives d'une année N-X (suite correction faille sécurité)
+* Simplification et correction du fonctionnement de l'interface d'admin "Règles de validation des enseignements par type d'intervenant"
+
+
+# OSE 14.14
+
+## Corrections de bugs
+
+* La fiche de saisie de service est désormais rétablie, un bug bloquait son usage depuis la 14.13.
+
+
+
+# OSE 14.13
+
+## Corrections de bugs
+
+* Refactoring de l'indicateur 320 qui n'affichait plus uniquement les intervenants en attente de la création d'un contrat initial
+* Refactoring de l'indicateur 330 : affiche maintenant uniquement les intervenants en attente d'un avenant
+* Faille de sécurité corrigée au niveau des pièces justificatives corrigée
+
+## Nouveautés
+
+* Filtre ajouté au niveau des pièces justificatives pour éviter qu'un intervenant ne dépose autre chose que des fichiers PDF, textuels, images ou bureautiques.
+
+
+
+# OSE 14.12
+
+## Corrections de bugs
+
+* Le bouton de report des services de l'année précédente vers l'année en cours est de nouveau opérationnel
+
+
 
 # OSE 14.11
 
@@ -56,6 +186,8 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * L'indicateur 340 était inopérant
 * Suite au passage de composer en 2.0 stable, forcer l'installation/update de ose avec la version 1.0 de composer
 
+
+
 # OSE 14.10
 
 ## Nouveautés
@@ -68,6 +200,8 @@ Une nouvelle documentation sur les connecteurs est disponible ici : [Import de d
 * Lors de la modification du référentiel réalisé, l'horodatage (nom et date de modification) n'impacte plus le référentiel prévisionnel.
 * Bug de division par 0 sur la formule de calcul de Poitiers
 * La vue V_INDICATEUR_361 se crée maintenant correctement
+
+
 
 # OSE 14.9
 

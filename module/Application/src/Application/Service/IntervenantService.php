@@ -25,7 +25,6 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @method Intervenant get($id)
  * @method Intervenant[] getList(QueryBuilder $qb = null, $alias = null)
- * @method Intervenant newEntity()
  */
 class IntervenantService extends AbstractEntityService
 {
@@ -113,7 +112,6 @@ class IntervenantService extends AbstractEntityService
 
     public function getByCode(string $code): ?Intervenant
     {
-        $code        = null;
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
         $statutId    = null;
         $structureId = $this->getServiceContext()->getStructure();
@@ -214,6 +212,22 @@ class IntervenantService extends AbstractEntityService
 
         // Sinon rien, mais c'est improbable!
         return null;
+    }
+
+
+
+    public function isImportable(Intervenant $intervenant): bool
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $sqlEnabled = "SELECT sync_enabled FROM import_tables WHERE table_name = 'INTERVENANT'";
+        $res        = $connection->fetchAssociative($sqlEnabled);
+        if (false === $res || '0' == $res['SYNC_ENABLED']) return false;
+
+        $sql = "SELECT code FROM SRC_INTERVENANT WHERE code = :code AND annee_id = :annee";
+        $res = $connection->fetchAssociative($sql, ['code' => $intervenant->getCode(), 'annee' => $intervenant->getAnnee()->getId()]);
+
+        return ($res !== false) && isset($res['CODE']) && ($intervenant->getCode() == $res['CODE']);
     }
 
 
@@ -356,6 +370,24 @@ class IntervenantService extends AbstractEntityService
         }
 
         return $qb;
+    }
+
+
+
+    /**
+     * @return Intervenant
+     */
+    public function newEntity(): Intervenant
+    {
+        $intervenant = parent::newEntity();
+        $intervenant->setStructure($this->getServiceContext()->getStructure());
+        $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
+        $intervenant->setAnnee($this->getServiceContext()->getAnnee());
+        $intervenant->setSource($this->getServiceSource()->getOse());
+        $intervenant->setCode(uniqid('OSE'));
+        $intervenant->setSourceCode($intervenant->getCode());
+
+        return $intervenant;
     }
 
 

@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\WfEtape;
 use Doctrine\ORM\QueryBuilder;
+use Zend\Form\Element\Select;
 
 
 /**
@@ -59,10 +60,47 @@ class WfEtapeService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->orderBy($alias . '.ordre');
 
         return $qb;
+    }
+
+
+
+    /**
+     * @param Collection|null $wfEtapes
+     *
+     * @return Select
+     */
+
+    public function getWfEtapeElement(Collection $wfEtapes = null)
+    {
+        $wfEtapesElement = new Select('select-wfetapes');
+        $wfEtapesElement->setLabel('Liste étapes');
+        $attributes = [
+            'multiple'                  => 'multiple',
+            'class'                     => 'selectpicker',
+            'data-selected-text-format' => 'count',
+            'data-count-selected-text'  => '{0} étape(s) sélectionnée(s)',
+            'data-with'                 => 'auto',
+            'title'                     => 'Choisissez les étapes du workflow devant être validées',
+        ];
+        $wfEtapesElement->setAttributes($attributes);
+
+        $qb = $this->finderByHistorique();
+        $qb->orderBy('ordre', 'ASC');
+        $wfEtapesElement->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getList($qb)));
+
+        if ($wfEtapes) {
+            $ids = [];
+            foreach ($wfEtapes as $wfEtape) {
+                $ids[] = $wfEtape->getId();
+            }
+            $wfEtapesElement->setValue($ids);
+        }
+
+        return $wfEtapesElement;
     }
 
 }

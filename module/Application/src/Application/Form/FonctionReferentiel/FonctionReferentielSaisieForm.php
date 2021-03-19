@@ -25,7 +25,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
     use ContextServiceAwareTrait;
 
 
-
     public function init()
     {
         $hydrator = new FonctionReferentielHydrator();
@@ -37,7 +36,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'parent',
             'options'    => [
-                'label' => 'Type de fonction',
+                'label'         => 'Type de fonction',
                 'empty_option'  => "Pas de type de fonction",
                 'value_options' => Util::collectionAsOptions($this->getFonctionsReferentiellesParentes()),
             ],
@@ -145,8 +144,11 @@ class FonctionReferentielSaisieForm extends AbstractForm
     protected function getFonctionsReferentiellesParentes()
     {
         $qb = $this->getServiceFonctionReferentiel()->finderByProperty('parent', null);
+        $qb = $this->getServiceFonctionReferentiel()->finderByHistorique($qb);
 
-        return $this->getServiceFonctionReferentiel()->getList($qb);
+        $frs = $this->getServiceFonctionReferentiel()->getList($qb);
+
+        return $frs;
     }
 
 
@@ -176,7 +178,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'parent'                => [
+            'parent'              => [
                 'required' => false,
             ],
             'code'                => [
@@ -213,12 +215,11 @@ class FonctionReferentielHydrator implements HydratorInterface
     use StructureServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                      $data
-     * @param  \Application\Entity\Db\FonctionReferentiel $object
+     * @param array                                      $data
+     * @param \Application\Entity\Db\FonctionReferentiel $object
      *
      * @return object
      */
@@ -247,7 +248,7 @@ class FonctionReferentielHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\FonctionReferentiel $object
+     * @param \Application\Entity\Db\FonctionReferentiel $object
      *
      * @return array
      */

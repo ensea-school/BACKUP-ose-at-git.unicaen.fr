@@ -73,6 +73,27 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
         $this->get('paysNaissance')
             ->setValueOptions(['' => '(Sélectionnez un pays)'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
 
+        /**
+         * Pays nationalité
+         */
+        $this->add([
+            'name'       => 'paysNationalite',
+            'options'    => [
+                'label'         => 'Pays de Nationalité <span class="text-danger">*</span>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],],
+            'attributes' => [
+                'class'            => 'selectpicker dossierElement',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
+        ]);
+
+
+        $this->get('paysNationalite')
+            ->setValueOptions(['' => '(Sélectionnez une nationalité)'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+
 
         /**
          * Département de naissance
@@ -146,6 +167,10 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
                 'validators'  => [
                     new PaysNaissanceValidator(['service' => $this->getServicePays()]),
                 ],
+            ],
+            'paysNationalite'      => [
+                'required'    => false,
+                'allow_empty' => true,
             ],
             'departementNaissance' => [
                 'required'   => false,//$departementRequired,

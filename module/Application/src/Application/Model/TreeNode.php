@@ -2,9 +2,10 @@
 
 namespace Application\Model;
 
-class TreeNode implements \IteratorAggregate, \ArrayAccess {
+class TreeNode implements \IteratorAggregate, \ArrayAccess
+{
 
-    CONST ABSOLUTE_ID_SEPARATOR = '/';
+    const ABSOLUTE_ID_SEPARATOR = '/';
 
     /**
      * @var mixed
@@ -12,19 +13,24 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
     private $id;
 
     /**
-     * @var string
+     * @var ?string
      */
     private $label;
 
     /**
-     * @var integer
+     * @var ?int
      */
     private $ordre;
 
     /**
-     * @var string
+     * @var ?string
      */
     private $icon;
+
+    /**
+     * @var ?string
+     */
+    private $title;
 
     /**
      * @var TreeNode
@@ -66,10 +72,10 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
     public function getAbsoluteId()
     {
         $ai = $this->getParent() ? $this->getParent()->getAbsoluteId(self::ABSOLUTE_ID_SEPARATOR) : '';
-        if ($ai != '' && $this->getId()){
+        if ($ai != '' && $this->getId()) {
             $ai .= self::ABSOLUTE_ID_SEPARATOR;
         }
-        if ($this->getId()){
+        if ($this->getId()) {
             $ai .= $this->getId();
         }
 
@@ -93,9 +99,9 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLabel()
+    public function getLabel(): ?string
     {
         return $this->label;
     }
@@ -103,11 +109,11 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
 
 
     /**
-     * @param string $label
+     * @param string|null $label
      *
      * @return TreeNode
      */
-    public function setLabel($label)
+    public function setLabel(?string $label): TreeNode
     {
         $this->label = $label;
 
@@ -117,9 +123,9 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
 
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getOrdre()
+    public function getOrdre(): ?int
     {
         return $this->ordre;
     }
@@ -127,11 +133,11 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
 
 
     /**
-     * @param int $ordre
+     * @param int|null $ordre
      *
      * @return TreeNode
      */
-    public function setOrdre($ordre)
+    public function setOrdre(?int $ordre): TreeNode
     {
         $this->ordre = $ordre;
 
@@ -141,9 +147,9 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIcon()
+    public function getIcon(): ?string
     {
         return $this->icon;
     }
@@ -151,13 +157,37 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
 
 
     /**
-     * @param string $icon
+     * @param string|null $icon
      *
      * @return TreeNode
      */
-    public function setIcon($icon)
+    public function setIcon(?string $icon): TreeNode
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+
+
+    /**
+     * @param string|null $title
+     *
+     * @return TreeNode
+     */
+    public function setTitle(?string $title): TreeNode
+    {
+        $this->title = $title;
 
         return $this;
     }
@@ -169,9 +199,9 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return bool
      */
-    public function has( $id )
+    public function has($id)
     {
-        return array_key_exists( $id, $this->children );
+        return array_key_exists($id, $this->children);
     }
 
 
@@ -191,9 +221,9 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return TreeNode|null
      */
-    public function get( $id )
+    public function get($id)
     {
-        if ($this->has($id)){
+        if ($this->has($id)) {
             return $this->children[$id];
         }
 
@@ -205,7 +235,7 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
     /**
      * @param TreeNode $isd
      */
-    public function add( TreeNode $isd )
+    public function add(TreeNode $isd)
     {
         $isd->__setParent($this);
         $this->children[$isd->getId()] = $isd;
@@ -218,17 +248,17 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return $this
      */
-    public function remove( $id=null )
+    public function remove($id = null)
     {
-        if (null == $id && $this->getParent()){
+        if (null == $id && $this->getParent()) {
             return $this->getParent()->remove($this->getId());
         }
 
-        if ($id instanceof TreeNode){
+        if ($id instanceof TreeNode) {
             $id = $id->getId();
         }
 
-        if ($this->has($id)){
+        if ($this->has($id)) {
             $this->children[$id]->__setParent();
             unset($this->children[$id]);
         }
@@ -267,12 +297,12 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return $this
      */
-    public function setChildren( array $children )
+    public function setChildren(array $children)
     {
         $this->children = [];
-        foreach( $children as $child ){
-            if (!$child instanceof TreeNode){
-                throw new \Exception('Un fils n\'est pas de classe '.__CLASS__);
+        foreach ($children as $child) {
+            if (!$child instanceof TreeNode) {
+                throw new \Exception('Un fils n\'est pas de classe ' . __CLASS__);
             }
             $this->add($child);
         }
@@ -297,10 +327,10 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      */
     public function order()
     {
-        uasort($this->children, function($a,$b){
-            if ($a->getOrdre() && $b->getOrdre()){
+        uasort($this->children, function ($a, $b) {
+            if ($a->getOrdre() && $b->getOrdre()) {
                 return $a->getOrdre() > $b->getOrdre();
-            }else{
+            } else {
                 return $a->getLabel() > $b->getLabel();
             }
         });
@@ -313,7 +343,8 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
     /**
      * @return \ArrayIterator
      */
-    public function getIterator() {
+    public function getIterator()
+    {
         return new \ArrayIterator($this->children);
     }
 
@@ -406,7 +437,7 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return TreeNode|null
      */
-    public function findOneByAbsoluteId( $absoluteId )
+    public function findOneByAbsoluteId($absoluteId)
     {
         return $this->findOneBy(['absoluteId' => $absoluteId]);
     }
@@ -418,11 +449,11 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return TreeNode|null
      */
-    public function findOneBy( array $criteria )
+    public function findOneBy(array $criteria)
     {
         if ($this->match($criteria)) return $this;
 
-        foreach( $this->getChildren() as $isd ){
+        foreach ($this->getChildren() as $isd) {
             if ($res = $isd->findOneBy($criteria)) return $res;
         }
 
@@ -436,15 +467,15 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return TreeNode[]
      */
-    public function findBy( array $criteria )
+    public function findBy(array $criteria)
     {
         $result = [];
 
         if ($this->match($criteria)) $result[] = $this;
 
-        foreach( $this->getChildren() as $isd ){
+        foreach ($this->getChildren() as $isd) {
             $cRes = $isd->findBy($criteria);
-            foreach( $cRes as $iRes ){
+            foreach ($cRes as $iRes) {
                 $result[] = $iRes;
             }
         }
@@ -459,9 +490,9 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return bool
      */
-    protected function match( array $criteria )
+    protected function match(array $criteria)
     {
-        foreach( $criteria as $criterium => $value ){
+        foreach ($criteria as $criterium => $value) {
             if (!$this->matchCriterium($criterium, $value)) return false;
         }
 
@@ -476,11 +507,11 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess {
      *
      * @return bool
      */
-    protected function matchCriterium( $criterium, $value )
+    protected function matchCriterium($criterium, $value)
     {
-        $method = 'get'.ucfirst($criterium);
+        $method = 'get' . ucfirst($criterium);
 
-        if (method_exists($this,$method)){
+        if (method_exists($this, $method)) {
             return $this->$method() == $value;
         }
 

@@ -188,6 +188,10 @@ return [
             'I_PARAM_2_LIBELLE' => 'Heures max. référentiel en HC',
             'I_PARAM_3_LIBELLE' => 'Heures max. enseignement en HC',
         ],
+        13 => [
+            'LIBELLE'      => 'Université Paris 8',
+            'PACKAGE_NAME' => 'FORMULE_PARIS8',
+        ],
     ],
 
     'MODELE_CONTRAT' => [
@@ -203,11 +207,11 @@ return [
             "CODE"    => "composante",
             "LIBELLE" => "Composante",
         ],
-        [
+        /*[
             'ID'      => 2,
             "CODE"    => "diplome",
             "LIBELLE" => "Diplôme",
-        ],
+        ],*/
         [
             'ID'      => 3,
             "CODE"    => "etablissement",

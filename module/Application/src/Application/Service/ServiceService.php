@@ -622,7 +622,11 @@ class ServiceService extends AbstractEntityService
             $service->setHistoDestruction(null);
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
             $service->setChanged(true);
-            $this->save($service, false);
+            try {
+                $this->save($service, false);
+            } catch (\Exception $e) {
+
+            }
         }
     }
 
@@ -636,7 +640,10 @@ class ServiceService extends AbstractEntityService
 
         $intervenantPrec = $this->getServiceIntervenant()->getPrecedent($intervenant);
 
-        $sVolumeHoraire = $this->getServiceVolumeHoraire();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $sVolumeHoraire      = $this->getServiceVolumeHoraire();
+        $sElementPedagogique = $this->getServiceElementPedagogique();
 
         $qb = $this->select(['id', 'elementPedagogique', 'etablissement']);
         //@formatter:off
@@ -652,6 +659,10 @@ class ServiceService extends AbstractEntityService
         $sVolumeHoraire->finderByHistorique($qb);
         $sVolumeHoraire->finderByTypeVolumeHoraire($tvhSource, $qb);
         $sVolumeHoraire->finderByEtatVolumeHoraire($evhValide, $qb);
+
+        if ($structure = $role->getStructure()) {
+            $sElementPedagogique->finderByStructure($structure, $qb);
+        }
 
         $s = $this->getList($qb);
 

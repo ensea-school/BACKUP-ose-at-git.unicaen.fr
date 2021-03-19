@@ -7,7 +7,12 @@
  * @var $changed         bool
  * @var $errors          array
  * @var $definiParDefaut bool
+ * @var $actionDetail    string
  */
+
+if ($intervenant && 'dupliquer' == $actionDetail) {
+    $this->intervenant($intervenant)->renderTitle('Ajout de statut');
+}
 
 echo $this->form()->openTag($form->prepare());
 
@@ -20,14 +25,31 @@ if ($errors) {
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Données indispensables</div>
+                <div class="panel-heading">Données essentielles</div>
                 <div class="panel-body">
-                    <?php
-                    echo $this->formControlGroup($form->get('nomUsuel'));
-                    echo $this->formControlGroup($form->get('prenom'));
-                    echo $this->formControlGroup($form->get('dateNaissance'));
-                    echo $this->formControlGroup($form->get('code'));
-                    ?>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->formControlGroup($form->get('nomUsuel')); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->formControlGroup($form->get('prenom')); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->formControlGroup($form->get('dateNaissance')); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= $this->formControlGroup($form->get('code')); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?= $this->formControlGroup($form->get('codeRh')); ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,6 +75,10 @@ if ($errors) {
                     <div class="row">
                         <div class="col-md-4"><?= $this->formControlGroup($form->get('civilite')); ?></div>
                         <div class="col-md-8"><?= $this->formControlGroup($form->get('nomPatronymique')); ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('validiteDebut')); ?></div>
+                        <div class="col-md-6"><?= $this->formControlGroup($form->get('validiteFin')); ?></div>
                     </div>
                     <?php
                     echo $this->formControlGroup($form->get('montantIndemniteFc'));
@@ -82,8 +108,8 @@ if ($errors) {
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="new-user">
                                     <div class="row">
-                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('login')); ?></div>
-                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('password')); ?></div>
+                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('intervenant-edition-login')); ?></div>
+                                        <div class="col-md-6"><?= $this->formControlGroup($form->get('intervenant-edition-password')); ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -119,31 +145,69 @@ if ($errors) {
                         that.getSyncStructureElement().prop("checked", false);
                     });
 
+                    this.getChangementEtatBtn().click(function () {
+                        that.changementParDefaut();
+                    });
+
+                    this.getUserUtilisateurElement().change(function () {
+                        that.changementUtilisateur();
+                    });
+
+                    this.element.find('[href="#new-user"]').click(function () {
+                        console.log('testx');
+                        that.getLoginElement().removeAttr('readonly');
+                        that.getPasswordElement().removeAttr('readonly');
+                    });
+                },
+
+                changementParDefaut: function ()
+                {
+                    var btn = this.getChangementEtatBtn();
+
+                    if (btn.hasClass('active')) {
+                        btn.removeClass('active');
+                        btn.html('Définir par défaut');
+                    } else {
+                        btn.addClass('active');
+                        btn.html('Ne plus définir par défaut');
+                    }
+                },
+
+                changementUtilisateur: function ()
+                {
+                    this.getUserChangeElement().val(1);
                 },
 
                 getStatutElement: function () { return this.element.find('select[name="statut"]'); },
                 getSyncStatutElement: function () { return this.element.find('input[name="syncStatut"]'); },
                 getStructureElement: function () { return this.element.find('select[name="structure"]'); },
-                getSyncStructureElement: function () { return this.element.find('input[name="syncStructure"]'); }
+                getSyncStructureElement: function () { return this.element.find('input[name="syncStructure"]'); },
+                getChangementEtatBtn: function () { return $('#changement-etat-defaut'); },
+
+                getUserChangeElement: function () { return this.element.find('input[name="userChange"]'); },
+                getLoginElement: function () { return this.element.find('input[name="intervenant-edition-login"]'); },
+                getPasswordElement: function () { return this.element.find('input[name="intervenant-edition-password"]'); },
+                getUserUtilisateurElement: function () { return this.element.find('input[name="utilisateur[id]"]'); }
             });
 
             WidgetInitializer.add('form-intervenant-edition', 'formIntervenantEdition');
         })
         ;
-
     </script>
 
-
 <?php
-echo $this->formSubmit($form->get('submit'));
-
+echo $this->formHidden($form->get('id'));
+echo $this->formHidden($form->get('userChange'));
+echo $this->form()->closeTag();
+echo ' ' . $this->tag('button', [
+        'onclick' => "$('.form-intervenant-edition').submit();",
+        'class'   => 'btn btn-primary no-intranavigation',
+    ])->html('Enregistrer');
 if ($intervenant->getId()) {
     echo ' ' . $this->tag('a', [
             'href'  => $this->url('intervenant/definir-par-defaut', ['intervenant' => $intervenant->getId()]),
             'title' => 'Définir par défaut',
+            'id'    => 'changement-etat-defaut',
             'class' => 'btn btn-info pop-ajax' . ($definiParDefaut ? ' active' : ''),
-        ])->html('Définir par défaut');
+        ])->html($definiParDefaut ? 'Ne plus définir par défaut' : 'Définir par défaut');
 }
-
-echo $this->formHidden($form->get('id'));
-echo $this->form()->closeTag();

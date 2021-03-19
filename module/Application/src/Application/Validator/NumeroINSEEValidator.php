@@ -80,9 +80,9 @@ class NumeroINSEEValidator extends NumeroINSEE
 
     public function isValid($value, $context = null)
     {
-        /* if (!parent::isValid($value)) {
-             return false;
-         }*/
+        if (!parent::isValid($value)) {
+            return false;
+        }
 
         $this->value            = $value;
         $departementDeNaissance = $this->getOption('departementDeNaissance');

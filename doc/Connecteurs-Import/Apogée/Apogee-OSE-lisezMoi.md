@@ -1,0 +1,64 @@
+# INTERFACAGE ENTRE APOGEE ET OSE
+Auteur : Bruno Bernard bruno.bernard@unicaen.fr
+
+L'importation de données d'Apogée vers OSE s'effectue via un dblink entre les deux bases Oracle.
+OSE va lire des tables et vues créées dans la base Apogée.
+Ces tables dans la base Apogée sont rafraîchies régulièrement, par exemple midi et soir pour permettre que les modifications effectuées dans Apogée soient répercutées la demi-journée suivante dans OSE.
+
+En voici le schéma général :
+[Architecture connecteurs OSE.png](Architecture-connecteurs-OSE.png)
+
+Le script [Apogee-OSE-createTables.sql](Apogee-OSE-createTables.sql) crée les 8 tables et les 2 vues OSE_****** dans la base Apogée :
+create table ose_groupe_type_formation : Regroupements des types de formations
+create table ose_type_formation        : Correspondance entre les types de formations Apogee et les groupes de types de formations
+create table ose_etape                 : Une etape OSE est assimilable a une VET Apogee
+create table ose_offre_de_formation    : L'offre de formation est reconstituee sous forme d'arbre
+create view ose_noeud                  : Noeuds de l'arbre offre de formation = VET, listes et éléments pédagogiques
+create view ose_lien                   : Liens entre les noeuds de l'arbre offre de formation
+create table ose_chemin_pedagogique    : Relations entre les etapes (racines) et les elements pedagogiques les plus fins (feuilles)
+create table ose_element_pedagogique   : Les feuilles de l'arbre sont les elements pedagogiques les plus fins (feuilles)
+create table ose_element_effectifs     : Effectifs par annee par element pedagogique et par regime d'inscription
+create table ose_volume_horaire_ens    : Volumes horaires et nombre de groupes ouverts pour enseignement, par type de groupe
+
+Le script [Apogee-OSE-export.sql](Apogee-OSE-export.sql) alimente les tables OSE_****** dans la base Apogée.
+Il doit être adapté à chaque établissement.
+
+La table ose_groupe_type_formation permet :
+- de regrouper les types de formation pour rendre cette liste plus synthétique et plus lisible (A ADAPTER)
+- d'ordonner cette liste (A ADAPTER)
+- de préciser si le niveau de la VET dans le diplôme doit apparaître dans le filtre "Niveau" (exemples L1 L2 L3 LPro ...) (A ADAPTER)
+
+La table ose_type_formation permet :
+- d'associer les types de formation Apogée aux groupes de types de formations OSE (A ADAPTER)
+- d'exclure certains types ou natures de formations sur lesquels des services d'enseignement ne devront pas pouvoir être saisis (exemples : auditeurs libres, thèses...) (A ADAPTER)
+
+La table ose_etape permet :
+- de définir les étapes visibles dans OSE et celles à exclure éventuellement (A ADAPTER)
+- d'associer chaque étape à un code structure du référentiel des structures de l'établissement (A ADAPTER)
+- de repérer si une étape est dédiée aux échanges (A ADAPTER)
+- de déterminer le domaine fonctionnel qui sera associé aux enseignements de l'étape (A ADAPTER)
+- de spécifier si l'étape est ouverte en FI, en FC et/ou en apprentissage (A ADAPTER)
+
+La table récursive ose_offre_de_formation permet :
+- de reconstituer l'offre de formation d'une année sous forme d'arbre
+- d'ignorer les elements feuilles de nature technique (elements miroirs, elements utiles uniquement pour le calcul de notes...) (A ADAPTER)
+- de substituer les éléments porteurs aux éventuels éléments portés
+- d'associer une période (S1, S2, ou Année) à chaque élément en recherchant l'information dans la branche (A ADAPTER)
+- de déterminer si un enseignement est proposé à distance en recherchant l'information dans la branche
+- d'associer chaque élément à un code structure du référentiel des structures de l'établissement (A ADAPTER)
+
+La table ose_chemin_pedagogique permet :
+- de mettre en relation les etapes (racines) et les elements pedagogiques les plus fins (feuilles) de l'arbre offre de formation
+
+La table ose_element_pedagogique permet :
+- d'associer à chaque élément pédagogique l'étape la plus pertinente dans laquelle il est présent (par exemple en écartant a priori les étapes dédiées aux échanges internationaux) (A ADAPTER)
+
+La table ose_element_effectifs permet :
+- de définir quels régimes d'inscription correspondent à la FI, à la FC, ou à l'apprentissage (FA) (A ADAPTER)
+- de calculer les effectifs par année, par élément pédagogique et par régime d'inscription
+
+La table ose_volume_horaire_ens permet :
+- d'associer à chaque enseignement ses volumes horaires par type d'intervention enregistrés dans le module Charges, la saisie de services dans OSE n'étant possible que si une charge existe pour l'enseignement
+- si l'année est en cours ou terminée, d'observer la charge réelle en dénombrant le nombre de groupes ouverts dans lesquels des étudiants sont inscrits, le type de groupe étant assimilé au type d'heure défini dans le module Charges ; en l'absence de groupes modélisés, un groupe unique sera pris en compte pour l'enseignement.
+Cf tableau Apogee-OSE-calculCharges.xls
+Modification du 22 mai 2019 : pour les années postérieures à l'année de référence des charges dans Apogée (VARIABLE_APPLI.ANN_CHARGES), si aucune charge n'est enregistrée alors ce sont les charges enregistrées pour l'année ANN_CHARGES qui sont prises en compte.

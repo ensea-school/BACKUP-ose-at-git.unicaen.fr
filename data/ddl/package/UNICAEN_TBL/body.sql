@@ -788,40 +788,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             /*@ANNEE_ID=i.annee_id*/
             AND NOT (si.peut_avoir_contrat = 0 AND evh.code = ''valide'')
 
-          UNION ALL
-
-          SELECT
-            i.annee_id                                                                annee_id,
-            i.id                                                                      intervenant_id,
-            si.peut_avoir_contrat                                                     peut_avoir_contrat,
-            s.structure_id                                                            structure_id,
-            CASE WHEN evh.code IN (''contrat-edite'',''contrat-signe'') THEN 1 ELSE 0 END edite,
-            CASE WHEN evh.code IN (''contrat-signe'')                 THEN 1 ELSE 0 END signe
-          FROM
-                      intervenant                 i
-
-                 JOIN statut_intervenant         si ON si.id = i.statut_id
-
-                 JOIN service_referentiel         s ON s.intervenant_id = i.id
-                                                   AND s.histo_destruction IS NULL
-
-                 JOIN type_volume_horaire       tvh ON tvh.code = ''PREVU''
-
-                 JOIN volume_horaire_ref         vh ON vh.service_referentiel_id = s.id
-                                                   AND vh.histo_destruction IS NULL
-                                                   AND vh.heures <> 0
-                                                   AND vh.type_volume_horaire_id = tvh.id
-
-                 JOIN v_volume_horaire_ref_etat vhe ON vhe.volume_horaire_ref_id = vh.id
-
-                 JOIN etat_volume_horaire       evh ON evh.id = vhe.etat_volume_horaire_id
-                                                   AND evh.code IN (''valide'', ''contrat-edite'', ''contrat-signe'')
-
-          WHERE
-            i.histo_destruction IS NULL
-            /*@INTERVENANT_ID=i.id*/
-            /*@ANNEE_ID=i.annee_id*/
-            AND NOT (si.peut_avoir_contrat = 0 AND evh.code = ''valide'')
         )
         SELECT
           annee_id,
@@ -1025,6 +991,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           	  	(
           	  	   d.date_naissance IS NOT NULL
         		   AND NOT (OSE_DIVERS.str_reduce(pn.LIBELLE) = ''france'' AND d.departement_naissance_id IS NULL)
+                   AND d.pays_naissance_id IS NOT NULL
+                   AND d.pays_nationalite_id IS NOT NULL
                    AND d.commune_naissance IS NOT NULL
           	  	) THEN 1 ELSE 0 END
            END completude_identite_comp,
@@ -1976,9 +1944,9 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           si.peut_saisir_service,
           si.peut_saisir_referentiel,
           SUM( CASE WHEN tvhs.code = ''PREVU''   THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_prev,
-          SUM( CASE WHEN tvhs.code = ''PREVU''   THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_prev,
+          SUM( CASE WHEN tvhrs.code = ''PREVU''   THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_prev,
           SUM( CASE WHEN tvhs.code = ''REALISE'' THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_real,
-          SUM( CASE WHEN tvhs.code = ''REALISE'' THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_real
+          SUM( CASE WHEN tvhrs.code = ''REALISE'' THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_real
         FROM
           intervenant i
           JOIN statut_intervenant si ON si.id = i.statut_id

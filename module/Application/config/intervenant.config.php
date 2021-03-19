@@ -87,12 +87,48 @@ return [
                             ],
                         ],
                     ],
+                    'synchronisation'         => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/synchronisation',
+                            'defaults' => [
+                                'action' => 'synchronisation',
+                            ],
+                        ],
+                    ],
+                    'synchroniser'            => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/synchroniser',
+                            'defaults' => [
+                                'action' => 'synchroniser',
+                            ],
+                        ],
+                    ],
                     'supprimer'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/supprimer',
                             'defaults' => [
                                 'action' => 'supprimer',
+                            ],
+                        ],
+                    ],
+                    'historiser'              => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/historiser',
+                            'defaults' => [
+                                'action' => 'historiser',
+                            ],
+                        ],
+                    ],
+                    'restaurer'               => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/restaurer',
+                            'defaults' => [
+                                'action' => 'restaurer',
                             ],
                         ],
                     ],
@@ -450,14 +486,21 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['saisir', 'definir-par-defaut'],
+                    'action'     => ['saisir', 'definir-par-defaut', 'synchronisation', 'synchroniser'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['supprimer'],
+                    'action'     => ['restaurer'],
+                    'privileges' => [
+                        Privileges::INTERVENANT_AJOUT_STATUT,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['supprimer', 'historiser'],
                     'privileges' => [
                         Privileges::INTERVENANT_SUPPRESSION,
                     ],
@@ -540,8 +583,10 @@ return [
         ],
     ],
     'controllers'     => [
+        'factories'  => [
+            'Application\Controller\Intervenant' => Controller\Factory\IntervenantControllerFactory::class,
+        ],
         'invokables' => [
-            'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
             'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
         ],
     ],
@@ -562,9 +607,8 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'formuleTotauxHetd'          => View\Helper\Intervenant\TotauxHetdViewHelper::class,
-            'intervenant'                => View\Helper\Intervenant\IntervenantViewHelper::class,
-            'intervenantSuppressionData' => View\Helper\Intervenant\IntervenantSuppressionDataViewHelper::class,
+            'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
+            'intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
         ],
     ],
     'form_elements'   => [

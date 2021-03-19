@@ -9,7 +9,11 @@
  */
 
 
-/* @var $intervenant \Application\Entity\Db\Intervenant */
-$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(578);
+/** @var \Application\Service\IntervenantService $si */
+$si = $container->get(\Application\Service\IntervenantService::class);
 
-$ni = $intervenant->dupliquer();
+$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(195999);
+
+
+$data = $si->isImportable($intervenant);
+var_dump($data);

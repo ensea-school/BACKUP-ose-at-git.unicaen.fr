@@ -259,7 +259,8 @@ class Liste extends AbstractViewHelper
             $out     .= '</div>';
             $out     .= '</div>';
         } elseif ($this->prevuToPrevu) {
-            if ($this->getProcessusIntervenant()->service()->canPrevuToPrevu($this->prevuToPrevu)) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
+            if ($this->getProcessusIntervenant()->service()->canInitializePrevu($this->prevuToPrevu, $typeVolumeHoraire)) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-prevu-show',
                     'data-toggle' => 'modal',
@@ -268,7 +269,7 @@ class Liste extends AbstractViewHelper
                     //'href'          => $this->getAddUrl(),
                     'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
                 ];
-                $source  = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'))->getLibelle();
+                $source  = $typeVolumeHoraire->getLibelle();
                 $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
                 $out     .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
                 $out     .= '<div class="modal-dialog modal-md">';

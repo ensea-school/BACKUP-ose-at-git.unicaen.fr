@@ -68,6 +68,7 @@ class MigrationIntervenants extends AbstractMigration
           i.tel_mobile, i.email,
           i.dep_naissance_id,
           i.ville_naissance_libelle,
+          d.statut_id dossier_statut_id,
           ai.tel_domicile,
           ai.mention_complementaire,
           ai.batiment,
@@ -82,6 +83,7 @@ class MigrationIntervenants extends AbstractMigration
           intervenant_save i
           LEFT JOIN adresse_intervenant_save ai ON ai.intervenant_id = i.id
           LEFT JOIN pays p ON OSE_DIVERS.STR_REDUCE(p.libelle) = OSE_DIVERS.STR_REDUCE(ai.pays_libelle)
+          LEFT JOIN intervenant_dossier d ON d.histo_destruction IS NULL AND d.intervenant_id = i.id AND d.statut_id IS NOT NULL
         ";
         $bdd->trigger()->disable('F_INTERVENANT');
         $bdd->trigger()->disable('F_INTERVENANT_S');
@@ -112,6 +114,9 @@ class MigrationIntervenants extends AbstractMigration
                 'ADRESSE_COMMUNE'          => trim($i['VILLE'] . ' ' . ($i['ADRESSE_PAYS_ID'] ? null : $i['PAYS_LIBELLE'])),
                 'ADRESSE_PAYS_ID'          => $i['ADRESSE_PAYS_ID'],
             ];
+            if ($i['DOSSIER_STATUT_ID']) {
+                $data['SYNC_STATUT'] = false;
+            }
             try {
                 $iTable->update($data, ['ID' => $i['ID']]);
             } catch (\Exception $e) {

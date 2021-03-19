@@ -22,6 +22,8 @@ SELECT
   	  	(
   	  	   d.date_naissance IS NOT NULL
 		   AND NOT (OSE_DIVERS.str_reduce(pn.LIBELLE) = 'france' AND d.departement_naissance_id IS NULL)
+           AND d.pays_naissance_id IS NOT NULL
+           AND d.pays_nationalite_id IS NOT NULL
            AND d.commune_naissance IS NOT NULL
   	  	) THEN 1 ELSE 0 END
    END completude_identite_comp,

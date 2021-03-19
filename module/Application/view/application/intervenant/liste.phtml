@@ -18,7 +18,9 @@
     <?php foreach ($intervenants
 
     as $code => $intervenant): ?>
-    <tr>
+    <tr<?php if (isset($intervenant['destruction']) && $intervenant['destruction']) {
+        echo ' class="bg-danger" title="Fiche historisée" style="color:gray"';
+    } ?>>
         <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $code]); ?>">
                 <span class="glyphicon glyphicon-eye-open"></span> Fiche
             </a></td>

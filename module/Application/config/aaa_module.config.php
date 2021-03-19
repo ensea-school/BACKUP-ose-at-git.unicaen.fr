@@ -152,6 +152,8 @@ $config = [
             Service\PaysService::class                    => Service\PaysService::class,
             Service\DepartementService::class             => Service\DepartementService::class,
             Service\VoirieService::class                  => Service\VoirieService::class,
+            Service\GradeService::class                   => Service\GradeService::class,
+            Service\CorpsService::class                   => Service\CorpsService::class,
             Service\FichierService::class                 => Service\FichierService::class,
             Service\TauxHoraireHETDService::class         => Service\TauxHoraireHETDService::class,
             Assertion\InformationAssertion::class         => Assertion\InformationAssertion::class,
@@ -182,6 +184,7 @@ $config = [
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
+            'tree'            => View\Helper\TreeViewHelper::class,
             'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
             'cartridge'       => View\Helper\CartridgeViewHelper::class,

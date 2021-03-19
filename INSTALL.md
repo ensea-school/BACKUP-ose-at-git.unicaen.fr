@@ -182,7 +182,7 @@ A adapter à vos besoins.
 	php_value post_max_size 100M
 	php_value max_execution_time 300
 	php_value max_input_time 60
-	php_value memory_limit 512M
+	php_value memory_limit 1024M
 
 	<Directory /var/www/ose/public>
 		Options Indexes FollowSymLinks MultiViews
@@ -222,7 +222,7 @@ Alias /ose			                /var/www/ose/public
 	php_value post_max_size 100M
 	php_value max_execution_time 300
 	php_value max_input_time 60
-	php_value memory_limit 256M
+	php_value memory_limit 1024M
 </Directory>
 ```
 N'oubliez pas de recharger la configuration d'Apache (systemctl reload apache2)!
@@ -267,9 +267,9 @@ docker-compose up -d
 docker exec ose-dev ose install
 ```
 Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
-172.21.0.10 ose-dev.localhost
+172.21.0.10 ose-dev.pc-local
 
-OSE sera accessible sur votre machine, à l'adresse http://ose-dev.localhost
+OSE sera accessible sur votre machine, à l'adresse http://ose-dev.pc-local
 
 #### Environnement de test
 ```bash
@@ -281,9 +281,9 @@ docker exec ose-test ose install
 ```
 
 Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
-172.21.0.15 ose-test.localhost
+172.21.0.15 ose-test.pc-local
 
-OSE sera accessible sur votre machine, à l'adresse http://ose-test.localhost
+OSE sera accessible sur votre machine, à l'adresse http://ose-test.pc-local
 
 # Configuration technique
 Personnalisez le fichier `config.local.php` pour adapter OSE à votre établissement.
@@ -384,7 +384,7 @@ En revanche, il est vivement recommandé de bien paramétrer en préproduction l
 
 # Connecteurs
 Afin de pouvoir intégrer OSE à votre système d'information, 
-des [connecteurs Import](doc/Connecteurs Import/Connecteurs IMPORT.md) 
+des [connecteurs Import](doc/Connecteurs-Import/Connecteurs-IMPORT.md) 
 vous sont fournis à titre d'exemple.
 Vous devrez en effet les adapter à vos besoins.
 

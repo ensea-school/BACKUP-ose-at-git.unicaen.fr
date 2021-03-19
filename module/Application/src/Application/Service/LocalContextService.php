@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
@@ -27,6 +28,7 @@ class LocalContextService extends AbstractService
     use ElementPedagogiqueServiceAwareTrait;
     use NiveauEtapeServiceAwareTrait;
     use SessionContainerTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * Intervenant
@@ -63,9 +65,13 @@ class LocalContextService extends AbstractService
     public function getIntervenant()
     {
         if (empty($this->intervenant)) {
-            $this->intervenant = $this->getSessionContainer()->intervenant;
-            if ($this->intervenant && !$this->intervenant instanceof Intervenant) {
-                $this->intervenant = $this->getServiceIntervenant()->get($this->intervenant);
+            if ($intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
+                $this->intervenant = $intervenant;
+            } else {
+                $this->intervenant = $this->getSessionContainer()->intervenant;
+                if ($this->intervenant && !$this->intervenant instanceof Intervenant) {
+                    $this->intervenant = $this->getServiceIntervenant()->get($this->intervenant);
+                }
             }
         }
 

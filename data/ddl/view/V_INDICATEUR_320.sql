@@ -4,16 +4,22 @@ SELECT
   t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID"
 FROM (
 SELECT DISTINCT
-  w.annee_id,
-  w.intervenant_id,
-  w.structure_id
+	w.annee_id,
+	w.intervenant_id,
+	w.structure_id
 FROM
-  tbl_workflow w
-  LEFT JOIN tbl_contrat c ON c.INTERVENANT_ID = w.intervenant_id AND w.structure_id = c.structure_id
+	tbl_workflow w
+	JOIN intervenant i ON w.intervenant_id = i.id
+	JOIN statut_intervenant si ON si.id = i.statut_id
+	LEFT JOIN contrat c ON c.intervenant_id = w.intervenant_id
 WHERE
-  w.atteignable = 1
-  AND w.etape_code = 'CONTRAT'
-  AND w.objectif > 0
-  AND w.realisation = 0
-  AND NVL(c.EDITE,0) <> 1
+	w.atteignable = 1
+	AND w.etape_code = 'CONTRAT'
+	AND w.objectif > 0
+	AND w.realisation = 0
+	AND c.histo_destruction IS NULL
+	AND i.histo_destruction IS NULL
+	AND si.histo_destruction IS NULL
+	AND c.id IS NULL
+	AND si.peut_avoir_contrat = 1
 ) t

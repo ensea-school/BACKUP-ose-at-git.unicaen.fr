@@ -15,10 +15,6 @@ class FonctionReferentielController extends AbstractController
 
     public function indexAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            FonctionReferentiel::class,
-        ]);
-
         $fonctionsReferentiels = $this->getServiceFonctionReferentiel()->getList();
 
         return compact('fonctionsReferentiels');
@@ -34,7 +30,7 @@ class FonctionReferentielController extends AbstractController
 
         $form = $this->getFormFonctionReferentielSaisie();
         if (empty($fonctionReferentiel)) {
-            $title = 'Création d\'une nouvelle fonction référentielle';
+            $title               = 'Création d\'une nouvelle fonction référentielle';
             $fonctionReferentiel = $this->getServiceFonctionReferentiel()->newEntity();
         } else {
             $title = 'Édition d\'une fonction référentielle';
@@ -52,6 +48,8 @@ class FonctionReferentielController extends AbstractController
         return compact('form', 'title');
     }
 
+
+
     public function deleteAction()
     {
         $fonctionReferentiel = $this->getEvent()->getParam('fonctionReferentiel');
@@ -62,6 +60,7 @@ class FonctionReferentielController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
+
         return new MessengerViewModel(compact('fonctionReferentiel'));
     }
 }

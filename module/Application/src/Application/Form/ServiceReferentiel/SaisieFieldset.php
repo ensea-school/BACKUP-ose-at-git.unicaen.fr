@@ -164,7 +164,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 
     public function getFonctions()
     {
-        $fncs      = $this->getServiceFonctionReferentiel()->getList();
+        $fncs      = $this->getServiceFonctionReferentiel()->getList($this->getServiceFonctionReferentiel()->finderByHistorique());
         $fonctions = [];
         foreach ($fncs as $id => $fonction) {
             if ($fonction->getFille()->count() > 0) {
@@ -338,7 +338,6 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 class SaisieFieldsetHydrator implements HydratorInterface
 {
     use EntityManagerAwaretrait;
-
 
 
     /**

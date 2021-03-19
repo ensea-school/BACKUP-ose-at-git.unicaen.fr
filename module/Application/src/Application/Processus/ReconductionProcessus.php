@@ -165,8 +165,8 @@ class ReconductionProcessus extends AbstractProcessus
                         $volumesHoraire = $elementEnCours->getVolumeHoraireEns();
                         foreach ($volumesHoraire as $volume) {
                             $volumeReconduit = $this->volumeHoraireEnsService->newEntity();
-                            $volumeReconduit->setSource($volume->getSource());
-                            $volumeReconduit->setSourceCode($volume->getSourceCode());
+                            $volumeReconduit->setSource($this->getServiceSource()->getOse());
+                            $volumeReconduit->setSourceCode(uniqid('vher-'));
                             $volumeReconduit->setTypeIntervention($volume->getTypeIntervention());
                             $volumeReconduit->setGroupes($volume->getGroupes());
                             $volumeReconduit->setHeures($volume->getHeures());

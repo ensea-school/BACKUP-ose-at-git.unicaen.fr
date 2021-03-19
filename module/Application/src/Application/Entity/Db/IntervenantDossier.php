@@ -852,7 +852,9 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setPrenom($intervenant->getPrenom())
             ->setCivilite($intervenant->getCivilite())
             ->setDateNaissance($intervenant->getDateNaissance())
+            ->setCommuneNaissance($intervenant->getCommuneNaissance())
             ->setPaysNaissance($intervenant->getPaysNaissance())
+            ->setPaysNationalite($intervenant->getPaysNationalite())
             ->setDepartementNaissance($intervenant->getDepartementNaissance())
             ->setNumeroInsee($intervenant->getNumeroInsee())
             ->setNumeroInseeProvisoire($intervenant->getNumeroInseeProvisoire())
@@ -861,6 +863,9 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setTelPerso($intervenant->getTelPerso())
             ->setTelPro($intervenant->getTelPro())
             ->setStatut($intervenant->getStatut())
+            ->setIBAN(preg_replace('/\s+/', '', $intervenant->getIBAN()))
+            ->setRibHorsSepa($intervenant->isRibHorsSepa())
+            ->setBIC(preg_replace('/\s+/', '', $intervenant->getBIC()))
             ->setAdressePrecisions($intervenant->getAdressePrecisions())
             ->setAdresseCodePostal($intervenant->getAdresseCodePostal())
             ->setAdresseCommune($intervenant->getAdresseCommune())
@@ -869,10 +874,12 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
             ->setAdresseNumeroCompl($intervenant->getAdresseNumeroCompl())
             ->setAdressePays($intervenant->getAdressePays())
             ->setAdresseVoie($intervenant->getAdresseVoie())
-            ->setAdresseVoirie($intervenant->getAdresseVoirie());
-
-        //->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()))
-        //TODO refactor complet de l'adresse
+            ->setAdresseVoirie($intervenant->getAdresseVoirie())
+            ->setAutre1($intervenant->getAutre1())
+            ->setAutre2($intervenant->getAutre2())
+            ->setAutre3($intervenant->getAutre3())
+            ->setAutre4($intervenant->getAutre4())
+            ->setAutre5($intervenant->getAutre5());
 
         return $this;
     }

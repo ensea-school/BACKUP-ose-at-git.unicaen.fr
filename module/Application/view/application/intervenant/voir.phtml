@@ -3,7 +3,6 @@
 use Application\Provider\Privilege\Privileges;
 
 /* @var $intervenant \Application\Entity\Db\Intervenant */
-/* @var $role \Application\Acl\Role */
 /* @var $tab string */
 
 $this->intervenant($intervenant)->renderTitle('Fiche');
@@ -12,7 +11,7 @@ $tabs = [
     [
         'id'            => 'fiche',
         'label'         => '<span class="glyphicon glyphicon-eye-open"></span> Fiche',
-        'content'       => $this->partial('application/intervenant/fiche.phtml', compact('intervenant', 'role')),
+        'content'       => $this->partial('application/intervenant/fiche.phtml', compact('intervenant')),
         'url'           => $this->url('intervenant/fiche', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ],
@@ -23,6 +22,15 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
         'id'    => 'edition',
         'label' => '<span class="glyphicon glyphicon-pencil"></span> Édition',
         'url'   => $this->url('intervenant/saisir', ['intervenant' => $intervenant->getId()]),
+    ];
+}
+
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
+    $tabs[] = [
+        'id'            => 'synchronisation',
+        'label'         => '<span class="glyphicon glyphicon-import"></span> Synchronisation',
+        'url'           => $this->url('intervenant/synchronisation', ['intervenant' => $intervenant->getId()]),
+        'force-refresh' => true,
     ];
 }
 

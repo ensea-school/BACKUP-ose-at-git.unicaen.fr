@@ -9,53 +9,57 @@
  */
 
 
-$bdd = new \Application\Connecteur\Bdd\BddConnecteur();
-$bdd->setEntityManager($container->get(\Application\Constants::BDD));
-
-/*
- *
- * select
-  S.USERNAME,
-  s.sid, s.serial#,
-  s.program,s.osuser,
-  t.sql_id,
-  sql_text
-from
-  v$sqltext_with_newlines t,
-  V$SESSION s
-where
-  t.address =s.sql_address
-  and t.hash_value = s.sql_hash_value
-  and s.status = 'ACTIVE'
-  and s.username <> 'SYSTEM'
-order by
-  s.sid,
-  t.piece
- */
-
+$bdd = adminBdd();
 
 $sql = "
-  SELECT 
-    sesion.sid,
-    sesion.username,
-    cpu_time,
-    elapsed_time,
-    sql_text
-  FROM
-    v\$sqlarea sqlarea
-    JOIN v\$session sesion ON sesion.sql_hash_value = sqlarea.hash_value AND sesion.sql_address = sqlarea.address 
-  WHERE 
-    sesion.username IS NOT NULL
-    AND sql_text NOT LIKE '%NO_GET_SQL%'
+SELECT
+  s.sid                   sid,
+  s.serial#               serial,
+  a.sql_fulltext          requete_sql,
+  
+  a.first_load_time       debut_requete,
+  s.seconds_in_wait       temps_attente,
+  a.plsql_exec_time       temps_execution,
+      
+  s.osuser                utilisateur,
+  s.program               client,
+  o.object_type || ' ' || o.object_name objet_bloquant,
+  s.event                 evenement
+  
+FROM
+  v\$sqlarea a
+  JOIN v\$session s ON s.sql_hash_value = a.hash_value AND s.sql_address = a.address
+  LEFT JOIN DBA_OBJECTS o ON o.object_id = s.row_wait_obj#
+WHERE
+  s.username IS NOT NULL
+  AND a.sql_text NOT LIKE '%NO_GET_SQL%'
+ORDER BY
+  s.wait_time_micro
+
 ";
 
-$res = $bdd->fetch($sql);
+$res = $bdd->select($sql);
 
+echo '<h1>Requêtes SQL en cours d\'exécution sur la base de données</h1>';
 echo '<div style="font-weight:bold">' . count($res) . ' requête(s) en cours</div>';
-
+echo '<br />';
+echo '<br />';
 foreach ($res as $s) {
-    echo 'SID=' . $s['SID'] . ', USERNAME=' . $s['USERNAME'] . ', CPU_TIME=' . $s['CPU_TIME'] . ', ELAPSED_TIME=' . $s['ELAPSED_TIME'];
-    sqlDump($s['SQL_TEXT']);
+    ?>
+    <b>SID : </b><?= $s['SID'] ?>,
+    <b>serial : </b><?= $s['SERIAL'] ?>,
+    <br/>
+    <b>Début le : </b><?= $s['DEBUT_REQUETE'] ?>,
+    <b>Temps d'attente : </b><?= $s['TEMPS_ATTENTE'] ?> secondes,
+    <b>Temps d'exécution : </b><?= $s['TEMPS_EXECUTION'] ?>,
+    <br/>
+    <b>Utilisateur : </b><?= $s['UTILISATEUR'] ?>,
+    <b>Client : </b><?= $s['CLIENT'] ?>,
+    <br/>
+    <b>Objet qui bloque : </b><?= $s['OBJET_BLOQUANT'] ?>,
+    <b>Evénement : </b><?= $s['EVENEMENT'] ?>,
+    <?php
+    AdminUtil::highlight($s['REQUETE_SQL'], 'sql-f');
 }
 
 ?>

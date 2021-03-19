@@ -56,12 +56,15 @@ class EditionForm extends AbstractForm
         'discipline'         => ['type' => Discipline::class],
         'grade'              => ['type' => Grade::class],
         'code'               => ['type' => 'string'],
+        'codeRh'             => ['type' => 'string'],
         'utilisateurCode'    => ['type' => 'string'],
         'source'             => ['type' => Source::class],
         'sourceCode'         => ['type' => 'string'],
         'syncStatut'         => ['type' => 'bool'],
         'syncStructure'      => ['type' => 'bool'],
         'montantIndemniteFc' => ['type' => 'float'],
+        'validiteDebut'      => ['type' => \DateTime::class],
+        'validiteFin'        => ['type' => \DateTime::class],
     ];
 
     protected $readOnly         = false;
@@ -206,6 +209,14 @@ class EditionForm extends AbstractForm
             ],
         ]);
 
+        $this->add([
+            'name'    => 'codeRh',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Code RH éventuel',
+            ],
+        ]);
+
         $utilisateur = new SearchAndSelect('utilisateur');
         $utilisateur->setRequired(false)
             ->setSelectionRequired(false)
@@ -218,10 +229,11 @@ class EditionForm extends AbstractForm
         $this->add($utilisateur);
 
         $this->add([
-            'name'       => 'login',
+            'name'       => 'intervenant-edition-login',
             'type'       => 'Text',
             'attributes' => [
-                'autocomplete' => 'false',
+                'autocomplete' => 'off',
+                'readonly'     => 'true',
             ],
             'options'    => [
                 'label' => 'Login',
@@ -230,10 +242,11 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'password',
+            'name'       => 'intervenant-edition-password',
             'type'       => 'Password',
             'attributes' => [
-                'autocomplete' => 'false',
+                'autocomplete' => 'off',
+                'readonly'     => 'true',
             ],
             'options'    => [
                 'label' => 'Mot de passe (6 caractères min.)',
@@ -269,6 +282,45 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'validiteDebut',
+            'type'       => 'DateTime',
+            'options'    => [
+                'label'  => 'Début de validité',
+                'format' => Util::DATE_FORMAT,
+            ],
+            'attributes' => [
+                'placeholder' => "jj/mm/aaaa",
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'validiteFin',
+            'type'       => 'DateTime',
+            'options'    => [
+                'label'  => 'Fin de validité',
+                'format' => Util::DATE_FORMAT,
+            ],
+            'attributes' => [
+                'placeholder' => "jj/mm/aaaa",
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'dateNaissance',
+            'type'       => 'DateTime',
+            'options'    => [
+                'label'         => 'Date de naissance <span class="text-danger">*</span>',
+                'format'        => Util::DATE_FORMAT,
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
+            ],
+            'attributes' => [
+                'placeholder' => "jj/mm/aaaa",
+            ],
+        ]);
+
+        $this->add([
             'name'       => 'syncStatut',
             'options'    => [
                 'label' => 'Synchronisation du statut',
@@ -294,6 +346,18 @@ class EditionForm extends AbstractForm
         $this->add([
             'name' => 'id',
             'type' => 'Hidden',
+        ]);
+
+        $this->add([
+            'name'       => 'userChange',
+            'type'       => 'Hidden',
+            'attributes' => ['value' => '0'],
+        ]);
+
+        $this->add([
+            'name'       => 'userCreate',
+            'type'       => 'Hidden',
+            'attributes' => ['value' => '0'],
         ]);
 
         $this->add([
@@ -396,7 +460,7 @@ class EditionForm extends AbstractForm
                 $element->setAttribute('disabled', true);
             }
         } else {
-            $noImport = ['syncStatut', 'syncStructure', 'statut', 'structure'];
+            $noImport = ['syncStatut', 'syncStructure', 'statut', 'structure', 'intervenant-edition-login', 'intervenant-edition-password'];
 
             foreach ($this->getElements() as $element) {
                 if (!in_array($element->getName(), $noImport)) {
@@ -442,28 +506,42 @@ class EditionForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'montantIndemniteFc' => [
+            'montantIndemniteFc'           => [
                 'required' => false,
                 'filters'  => [
                     ['name' => FloatFromString::class],
                 ],
             ],
-            'civilite'           => ['required' => false],
-            'nomUsuel'           => ['required' => true],
-            'nomPatronymique'    => ['required' => false],
-            'prenom'             => ['required' => true],
-            'dateNaissance'      => ['required' => true],
-            'statut'             => ['required' => false],
-            'structure'          => ['required' => false],
-            'discipline'         => ['required' => false],
-            'grade'              => ['required' => false],
-            'code'               => ['required' => true],
-            'utilisateur'        => ['required' => false],
-            'login'              => ['required' => false],
-            'password'           => ['required' => false],
-            'source'             => ['required' => false],
-            'sourceCode'         => ['required' => false],
-            'montantIndemniteFc' => ['required' => false],
+            'civilite'                     => ['required' => false],
+            'nomUsuel'                     => ['required' => true],
+            'nomPatronymique'              => ['required' => false],
+            'prenom'                       => ['required' => true],
+            'dateNaissance'                => ['required' => true],
+            'statut'                       => ['required' => false],
+            'structure'                    => ['required' => false],
+            'discipline'                   => ['required' => false],
+            'grade'                        => ['required' => false],
+            'code'                         => ['required' => true],
+            'codeRh'                       => ['required' => false],
+            'utilisateur'                  => ['required' => false],
+            'intervenant-edition-login'    => ['required' => false],
+            'validiteDebut'                => ['required' => false],
+            'validiteFin'                  => ['required' => false],
+            'intervenant-edition-password' => [
+                'required'   => false,
+                'validators' => [
+                    [
+                        'name'    => 'StringLength',
+                        'options' => ['min' => 6],
+                    ],
+                ],
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                ],
+            ],
+            'source'                       => ['required' => false],
+            'sourceCode'                   => ['required' => false],
+            'montantIndemniteFc'           => ['required' => false],
         ];
     }
 }
@@ -491,14 +569,17 @@ class EditionFormHydrator extends GenericHydrator
     {
         parent::hydrate($data, $object);
 
-        $login = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
-        if ($login) {
-            $code = $this->getConnecteurLdap()->getCodeFromLogin($login);
-        } else {
-            $code = null;
-        }
+        if ($data['userChange'] == '1') {
+            $login = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
+            if ($login) {
+                $code = $this->getConnecteurLdap()->getCodeFromLogin($login);
+            } else {
+                $code = null;
+            }
 
-        $object->setUtilisateurCode($code);
+            $object->setUtilisateurCode($code);
+            $object->setSyncUtilisateurCode(false);
+        }
     }
 
 

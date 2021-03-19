@@ -2,307 +2,442 @@
 
 namespace Application\Processus\Intervenant;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\IntervenantSuppressionData;
-use Application\Entity\Db\Agrement;
-use Application\Entity\Db\Contrat;
-use Application\Entity\Db\MiseEnPaiementIntervenantStructure;
-use Application\Entity\Db\PieceJointe;
-use Application\Entity\Db\Service;
-use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\VolumeHoraire;
-use Application\Entity\Db\VolumeHoraireReferentiel;
-use Application\Service\Traits\AgrementServiceAwareTrait;
-use Application\Service\Traits\ContratServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\FichierServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
-use Application\Service\Traits\ModificationServiceDuServiceAwareTrait;
-use Application\Service\Traits\PieceJointeServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
+use Application\Model\TreeNode;
+use Application\Traits\TranslatorTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
 class SuppressionProcessus
 {
+    use EntityManagerAwareTrait;
     use IntervenantAwareTrait;
-    use DossierServiceAwareTrait;
-    use ModificationServiceDuServiceAwareTrait;
-    use ValidationServiceAwareTrait;
-    use MiseEnPaiementServiceAwareTrait;
-    use FichierServiceAwareTrait;
-    use PieceJointeServiceAwareTrait;
-    use AgrementServiceAwareTrait;
-    use VolumeHoraireServiceAwareTrait;
-    use VolumeHoraireReferentielServiceAwareTrait;
-    use ServiceServiceAwareTrait;
-    use ServiceReferentielServiceAwareTrait;
-    use IntervenantServiceAwareTrait;
-    use ContratServiceAwareTrait;
+    use TranslatorTrait;
+
+
+    protected $queries = [
+
+        '.INTERVENANT' => "
+SELECT
+  1                              visible,
+  null                           parent_id,
+  i.id                           id,
+  null                           categorie,
+  i.prenom || ' ' || i.nom_usuel || ' (' || si.libelle || ', ' || a.libelle || ')'         label,
+  'glyphicon glyphicon-user' icon
+FROM
+  intervenant i
+  JOIN statut_intervenant si ON si.id = i.statut_id 
+  JOIN annee a ON a.id = i.annee_id
+WHERE 
+  i.id IN (:id)
+        ",
+
+
+        'INTERVENANT.INTERVENANT_DOSSIER' => "
+SELECT
+  CASE WHEN d.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  d.intervenant_id               parent_id,
+  d.id                           id,
+  null                           categorie,
+  'Données personnelles'         label,
+  'glyphicon glyphicon-user' icon
+FROM
+  intervenant_dossier d
+WHERE 
+  d.intervenant_id IN (:id)
+        ",
+
+
+        'INTERVENANT.PIECE_JOINTE' => "
+SELECT
+  CASE WHEN pj.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  pj.intervenant_id             parent_id,
+  pj.id                         id,
+  'Pièces justificatives'       categorie,
+  tpj.libelle                   label,
+ 'glyphicon glyphicon-envelope' icon
+FROM
+  piece_jointe pj
+  JOIN type_piece_jointe tpj ON tpj.id = pj.type_piece_jointe_id
+WHERE
+  pj.intervenant_id IN (:id)
+ORDER BY
+  tpj.ordre
+        ",
+
+
+        'INTERVENANT.MODIFICATION_SERVICE_DU' => "
+SELECT
+  CASE WHEN msd.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  msd.intervenant_id                  parent_id,
+  msd.id                              id,
+  'Modifications de service dû'       categorie,
+  msd.heures * mss.multiplicateur || ' heures pour ' || mss.libelle label,
+  'glyphicon glyphicon-compressed'    icon
+FROM
+  MODIFICATION_SERVICE_DU msd
+  JOIN motif_modification_service mss ON mss.id = msd.motif_id
+WHERE
+  msd.intervenant_id IN (:id)
+ORDER BY
+  msd.id
+        ",
+
+
+        'INTERVENANT.SERVICE' => "
+SELECT
+  CASE WHEN s.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  s.intervenant_id                parent_id,
+  s.id                            id,
+  'Enseignements|' || str.libelle_court categorie,
+  TRIM(initcap(case WHEN ep.id IS NULL THEN 'Extérieur (' || e.libelle || ')' else ep.libelle || ' (' || ep.code || ')' END)) label,
+  'glyphicon glyphicon-education' icon
+FROM
+  service s
+  JOIN etablissement e ON e.id = s.etablissement_id 
+  LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id 
+  LEFT JOIN structure str ON str.id = ep.structure_id
+WHERE
+  s.intervenant_id IN (:id)
+ORDER BY
+  ep.libelle, e.libelle
+        ",
+
+
+        'INTERVENANT.SERVICE_REFERENTIEL' => "
+SELECT
+  CASE WHEN s.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  s.intervenant_id              parent_id,
+  s.id                          id,
+  'Référentiel'                 categorie,
+  fr.libelle_court || CASE WHEN str.id IS NULL THEN '' ELSE ' (' || str.libelle_court || ')' END label,
+  'glyphicon glyphicon-education' icon
+FROM
+  service_referentiel s
+  JOIN fonction_referentiel fr ON fr.id = s.fonction_id
+  LEFT JOIN structure str ON str.id = s.structure_id
+WHERE
+  s.intervenant_id IN (:id)
+ORDER BY
+  fr.libelle_court
+        ",
+
+
+        'INTERVENANT.VALIDATION' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  v.intervenant_id         parent_id,
+  tv.code                  type_validation_code,
+  v.id                     id,
+  'Validations'            categorie,
+  tv.libelle || ' par ' || u.display_name || ' le ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) label,
+  'glyphicon glyphicon-ok' icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN type_validation tv ON tv.id = v.type_validation_id AND tv.code IN ('CLOTURE_REALISE', 'REFERENTIEL', 'SERVICES_PAR_COMP')
+WHERE
+  v.intervenant_id IN (:id)
+        ",
+
+
+        'INTERVENANT.AGREMENT' => "
+SELECT
+  CASE WHEN a.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  a.intervenant_id              parent_id,
+  a.id                          id,
+  'Agréments'                   categorie,
+  ta.libelle || CASE WHEN s.id IS NULL THEN '' ELSE ' ' || s.libelle_court END || CASE WHEN a.date_decision IS NULL THEN '' ELSE ' (décision du ' || to_char( a.date_decision, 'dd/mm/YYYY' ) || ')' END label,
+  'glyphicon glyphicon-ok-sign' icon
+FROM
+  agrement a
+  JOIN type_agrement ta ON ta.id = a.type_agrement_id
+  LEFT JOIN structure s ON s.id = a.structure_id
+WHERE
+  a.intervenant_id IN (:id)
+ORDER BY
+  ta.code        
+        ",
+
+
+        'INTERVENANT.CONTRAT' => "
+SELECT
+  CASE WHEN c.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  c.intervenant_id              parent_id,
+  c.id                          id,
+  tc.libelle || 's'             categorie,
+  'N°' || c.id || ', ' || s.libelle_court || case WHEN c.date_retour_signe IS NOT NULL THEN ', retourné signé le ' || to_char( c.date_retour_signe, 'dd/mm/YYYY' ) ELSE '' END label,
+  'glyphicon glyphicon-book'    icon
+FROM
+  contrat c
+  JOIN type_contrat tc ON tc.id = c.type_contrat_id JOIN structure s ON s.id = c.structure_id
+WHERE
+  c.intervenant_id IN (:id)
+ORDER BY            
+  c.id
+        ",
+
+
+        'INTERVENANT_DOSSIER.VALIDATION' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  d.id                     parent_id,
+  v.id                     id,
+  null                     categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'glyphicon glyphicon-ok' icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN type_validation tv ON tv.id = v.type_validation_id AND tv.code = 'DONNEES_PERSO_PAR_COMP'
+  JOIN intervenant_dossier d ON d.histo_destruction IS NULL AND d.intervenant_id = v.intervenant_id
+WHERE
+  d.id IN (:id)
+        ",
+
+
+        'SERVICE.VOLUME_HORAIRE' => "
+SELECT
+  CASE WHEN vh.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  vh.service_id             parent_id,
+  vh.id                     id,
+  tvh.libelle               categorie,
+  vh.heures || ' heures ' || ti.code || ', ' || p.libelle_court || CASE WHEN mnp.id IS NULL THEN '' ELSE ' (NP: ' || mnp.libelle_court || ')' END label,
+  'glyphicon glyphicon-calendar' icon
+FROM
+  volume_horaire vh
+  JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id 
+  JOIN periode p ON p.id = vh.periode_id JOIN type_intervention ti ON ti.id = vh.type_intervention_id 
+  LEFT JOIN motif_non_paiement mnp ON mnp.id = vh.motif_non_paiement_id
+WHERE
+  vh.service_id IN (:id)
+ORDER BY
+  tvh.code, p.ordre, ti.ordre
+        ",
+
+
+        'SERVICE.MISE_EN_PAIEMENT' => "
+SELECT
+  CASE WHEN mep.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  frs.service_id                  parent_id,
+  mep.id                          id,
+  'Mises en paiement'             categorie,
+  mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END label,
+  'glyphicon glyphicon-euro' icon
+FROM
+  mise_en_paiement mep
+  JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
+  JOIN type_heures th ON th.id = mep.type_heures_id
+  LEFT JOIN periode p ON p.id = mep.periode_paiement_id
+WHERE
+  frs.service_id IN (:id)
+ORDER BY
+  mep.id
+        ",
+
+
+        'SERVICE_REFERENTIEL.VOLUME_HORAIRE_REF' => "
+SELECT
+  CASE WHEN vh.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  vh.service_referentiel_id       parent_id,
+  vh.id                           id,
+  tvh.libelle                     categorie,
+  vh.heures || 'h'                label,
+  'glyphicon glyphicon-calendar' icon
+FROM
+  volume_horaire_ref vh
+  JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id 
+WHERE
+  vh.service_referentiel_id IN (:id)
+ORDER BY
+  tvh.code
+        ",
+
+
+        'SERVICE_REFERENTIEL.MISE_EN_PAIEMENT' => "
+SELECT
+  CASE WHEN mep.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  frs.service_referentiel_id      parent_id,
+  mep.id                          id,
+  'Mises en paiement'             categorie,
+  mep.heures || 'h ' || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END label,
+  'glyphicon glyphicon-euro' icon
+FROM
+  mise_en_paiement mep
+  JOIN formule_resultat_service_ref frs ON frs.id = mep.formule_res_service_ref_id
+  LEFT JOIN periode p ON p.id = mep.periode_paiement_id
+WHERE
+  frs.service_referentiel_id IN (:id)
+ORDER BY
+  mep.id
+        ",
+
+
+        'PIECE_JOINTE.FICHIER' => "
+SELECT
+  CASE WHEN f.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  pjf.piece_jointe_id             parent_id,
+  f.id                            id,
+  null                            categorie,
+  'Fichier: ' || f.nom            label,
+  'glyphicon glyphicon-file'      icon
+FROM
+  fichier f
+  JOIN piece_jointe_fichier pjf ON pjf.fichier_id = f.id
+WHERE
+  pjf.piece_jointe_id IN (:id)
+ORDER BY
+  f.nom
+        ",
+
+
+        'PIECE_JOINTE.VALIDATION' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  pj.id                    parent_id,
+  v.id                     id,
+  null                     categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'glyphicon glyphicon-ok' icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN piece_jointe pj ON pj.validation_id = v.id
+WHERE
+  pj.id IN (:id)
+        ",
+
+
+        'CONTRAT.FICHIER' => "
+SELECT
+  CASE WHEN f.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  cf.contrat_id                   parent_id,
+  f.id                            id,
+  null                            categorie,
+  'Fichier: ' || f.nom            label,
+  'glyphicon glyphicon-file'      icon
+FROM
+  fichier f
+  JOIN contrat_fichier cf ON cf.fichier_id = f.id
+WHERE
+  cf.contrat_id IN (:id)
+ORDER BY
+  f.nom
+        ",
+
+
+        'CONTRAT.VALIDATION' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  c.id                     parent_id,
+  v.id                     id,
+  null                     categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'glyphicon glyphicon-ok' icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN contrat c ON c.validation_id = v.id
+WHERE
+  c.id IN (:id)
+        ",
+
+
+        'VOLUME_HORAIRE.VALIDATION_VOL_HORAIRE' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  vvh.volume_horaire_id    parent_id,
+  vvh.volume_horaire_id    volume_horaire_id,
+  vvh.validation_id        validation_id,
+  '[VOLUME_HORAIRE_ID:' || vvh.VOLUME_HORAIRE_ID || ',VALIDATION_ID:' || vvh.validation_id || ']' id,
+  null                     categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'glyphicon glyphicon-ok' icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN validation_vol_horaire vvh ON vvh.validation_id = v.id
+WHERE
+  vvh.volume_horaire_id IN (:id)
+        ",
+
+
+        'VOLUME_HORAIRE_REF.VALIDATION_VOL_HORAIRE_REF' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  vvh.volume_horaire_ref_id parent_id,
+  vvh.volume_horaire_ref_id volume_horaire_ref_id,
+  vvh.validation_id         validation_id,
+  '[VOLUME_HORAIRE_REF_ID:' || vvh.VOLUME_HORAIRE_REF_ID || ',VALIDATION_ID:' || vvh.validation_id || ']' id,
+  null                      categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'glyphicon glyphicon-ok'  icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN validation_vol_horaire_ref vvh ON vvh.validation_id = v.id
+WHERE
+  vvh.volume_horaire_ref_id IN (:id)
+        ",
+
+
+        'FICHIER.VALIDATION' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  f.id                     parent_id,
+  v.id                     id,
+  null                     categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'glyphicon glyphicon-ok' icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN fichier f ON f.validation_id = v.id
+WHERE
+  f.id IN (:id)
+        ",
+    ];
+
+    protected $delete  = [
+        '.MISE_EN_PAIEMENT'           => [],
+        'CONTRAT.VALIDATION'          => ['queries' => ['UPDATE CONTRAT SET VALIDATION_ID = NULL WHERE validation_id = :ID']],
+        'CONTRAT.FICHIER'             => [],
+        '.CONTRAT'                    => ['queries' => ['UPDATE VOLUME_HORAIRE SET contrat_id = null WHERE contrat_id = :ID', 'UPDATE contrat SET CONTRAT_ID = NULL WHERE contrat_id = :ID']],
+        '.AGREMENT'                   => [],
+        '.VALIDATION'                 => [],
+        '.VALIDATION_VOL_HORAIRE'     => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_ID']],
+        '.VALIDATION_VOL_HORAIRE_REF' => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_REF_ID']],
+        'PIECE_JOINTE.FICHIER'        => ['queries' => ['DELETE FROM piece_jointe_fichier WHERE fichier_id = :ID']],
+        '.PIECE_JOINTE'               => [],
+        '.VOLUME_HORAIRE'             => [],
+        '.VOLUME_HORAIRE_REF'         => [],
+        '.SERVICE'                    => ['queries' => ['DELETE FROM formule_resultat_service WHERE service_id = :ID']],
+        '.SERVICE_REFERENTIEL'        => ['queries' => ['DELETE FROM formule_resultat_service_ref WHERE service_referentiel_id = :ID']],
+        '.MODIFICATION_SERVICE_DU'    => [],
+        '.INTERVENANT_DOSSIER'        => [],
+        '.INTERVENANT'                => ['queries' => [
+            'DELETE FROM validation WHERE intervenant_id = :ID',// Suppression de toutes les validations orphelines restantes
+            'DELETE FROM formule_resultat WHERE intervenant_id = :ID' // Suppression de tous les restes de formules de calcul
+        ]],
+    ];
 
     /**
-     * @var IntervenantSuppressionData
+     * @var array
      */
     private $data;
 
     /**
-     * @var IntervenantSuppressionData[]
+     * @var TreeNode
      */
-    private $srsr;
+    private $tree;
 
 
 
-    public function getData(Intervenant $intervenant)
+    public function getData()
     {
-        $this->setIntervenant($intervenant);
-
-        return $this->makeData();
-    }
-
-
-
-    public function deleteRecursive(IntervenantSuppressionData $isd, array $ids)
-    {
-        return $this->deleteData($isd, $ids);
-    }
-
-
-
-    private function deleteData(IntervenantSuppressionData $isd, array $ids)
-    {
-        $isd->order();
-
-        $entities = [];
-        foreach ($ids as $id) {
-            $i = $isd->findOneByAbsoluteId($id);
-            if ($i && $e = $i->getEntity()) {
-                if (!$i->isUnbreakable()) {
-                    $entities[(new \ReflectionClass($e))->getShortName()][] = $i;
-                }
-                $p = $i->getParent();
-                $i->remove();
-                if ($p && !$p->getEntity() && !$p->hasChildren()) {
-                    $p->remove();
-                }
-            }
-        }
-
-        /* Mises en paiement */
-        if (isset($entities['MiseEnPaiement'])) {
-            foreach ($entities['MiseEnPaiement'] as $v) {
-                $this->getServiceMiseEnPaiement()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Fichiers */
-        if (isset($entities['Fichier'])) {
-            foreach ($entities['Fichier'] as $v) {
-                $this->getServiceFichier()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Avenants */
-        if (isset($entities['Contrat'])) {
-            foreach ($entities['Contrat'] as $v) {
-                /** @var Contrat $avenant */
-                $avenant = $v->getEntity();
-                if ($avenant->estUnAvenant()) {
-                    $this->getServiceContrat()->delete($v->getEntity(), false);
-                }
-            }
-        }
-
-        /* Contrats */
-        if (isset($entities['Contrat'])) {
-            foreach ($entities['Contrat'] as $v) {
-                $this->getServiceContrat()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Validations */
-        if (isset($entities['Validation'])) {
-            foreach ($entities['Validation'] as $v) {
-                $this->getServiceValidation()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Volumes horaire */
-        if (isset($entities['VolumeHoraire'])) {
-            foreach ($entities['VolumeHoraire'] as $v) {
-                $this->getServiceVolumeHoraire()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Volume horaire Référentiel */
-        if (isset($entities['VolumeHoraireReferentiel'])) {
-            foreach ($entities['VolumeHoraireReferentiel'] as $v) {
-                $this->getServiceVolumeHoraireReferentiel()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Service */
-        if (isset($entities['Service'])) {
-            foreach ($entities['Service'] as $v) {
-                $this->getServiceService()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Service référentiel */
-        if (isset($entities['ServiceReferentiel'])) {
-            foreach ($entities['ServiceReferentiel'] as $v) {
-                $this->getServiceServiceReferentiel()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Agréments */
-        if (isset($entities['Agrement'])) {
-            foreach ($entities['Agrement'] as $v) {
-                $this->getServiceAgrement()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Pièces justificatives */
-        if (isset($entities['PieceJointe'])) {
-            foreach ($entities['PieceJointe'] as $v) {
-                $this->getServicePieceJointe()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Dossier */
-        if (isset($entities['IntervenantDossier'])) {
-            foreach ($entities['IntervenantDossier'] as $v) {
-                $this->getServiceDossier()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Modifications de service du */
-        if (isset($entities['ModificationServiceDu'])) {
-            foreach ($entities['ModificationServiceDu'] as $v) {
-                $this->getServiceModificationServiceDu()->delete($v->getEntity(), false);
-            }
-        }
-
-        /* Fiche intervenant */
-        if (isset($entities['Intervenant'])) {
-            foreach ($entities['Intervenant'] as $v) {
-                $this->getServiceIntervenant()->delete($v->getEntity(), false);
-            }
-        }
-
-        if (in_array($isd->getAbsoluteId(), $ids)) {
-            return null;
-        }
-
-        return $isd;
-    }
-
-
-
-    private function newIsd($entity = null)
-    {
-        if (is_object($entity) && method_exists($entity, 'getId')) {
-            $id = $entity->getId();
-        } else {
-            $id = (string)$entity;
-        }
-
-        $isd = new IntervenantSuppressionData($id);
-        if ($entity) {
-            $isd->setEntity($entity);
-            $isd->setId($entity->getId());
-        }
-
-        return $isd;
-    }
-
-
-
-    private function addIsdSR($service, $sRub = null, IntervenantSuppressionData $isd = null)
-    {
-        $k1        = $service instanceof Service ? 'service' : 'referentiel';
-        $structure = $service->getStructure() ?: $service->getIntervenant()->getStructure();
-        $k2        = $structure->getId();
-        $k3        = $service->getId();
-        $k4        = $sRub;
-
-        if (!$this->data[$k1][$k2]) {
-            $this->data[$k1][$k2] = $this->newIsd($structure)->setUnbreakable(true);
-        }
-
-        if (!$this->data[$k1][$k2][$k3]) {
-            $this->data[$k1][$k2][$k3] = $this->newIsd($service);
-        }
-
-        if ($sRub) {
-            if (!$this->data[$k1][$k2][$k3][$k4]) {
-                $this->data[$k1][$k2][$k3][$k4] = clone($this->srsr[$sRub]);
-            }
-
-            $this->data[$k1][$k2][$k3][$k4][] = $isd;
-        }
-    }
-
-
-
-    protected function makeData()
-    {
-        $rubriques     = [
-            'modifs-service-du'           => 'Modifications de service dû',
-            'dossier'                     => 'Données personnelles',
-            'pieces-jointes'              => 'Pièces justificatives',
-            'agrement-conseil-academique' => 'Agrément du conseil académique',
-            'agrement-conseil-restreint'  => 'Agréments du conseil restreint',
-            'contrats'                    => 'Contrats et avenants',
-            'service'                     => 'Enseignements',
-            'referentiel'                 => 'Référentiel',
-        ];
-        $sousRubriques = [
-            TypeVolumeHoraire::CODE_PREVU   => 'Prévisionnel',
-            TypeVolumeHoraire::CODE_REALISE => 'Réalisé',
-            'dmep'                          => 'Demande de mise en paiement',
-            'mep'                           => 'Mise en paiement',
-        ];
-
-        $this->data = $this->newIsd($this->getIntervenant());
-        foreach ($rubriques as $k => $l) {
-            $rd = $this->newIsd();
-            $rd->setId($k);
-            $rd->setLabel($l);
-
-            $this->data[] = $rd;
-        }
-
-        $ordre = 0;
-        foreach ($sousRubriques as $k => $l) {
-            $ordre++;
-            $srd = $this->newIsd();
-            $srd->setId($k);
-            $srd->setLabel($l);
-            $srd->setOrdre($ordre);
-
-            $this->srsr[$k] = $srd;
-        }
-
-        $this->makeServiceDu();
-        $this->makeDossier();
-        $this->makeService();
-        $this->makeReferentiel();
-        $this->makePiecesJointes();
-        $this->makeAgrements();
-        $this->makeContrats();
-        $this->makePaiements();
-
-        /* Purge */
-        foreach ($rubriques as $k => $l) {
-            if (!$this->data[$k]->hasChildren()) {
-                unset($this->data[$k]);
-            }
+        if (null === $this->data) {
+            $this->makeData();
         }
 
         return $this->data;
@@ -310,66 +445,48 @@ class SuppressionProcessus
 
 
 
-    private function makeServiceDu()
+    public function getTree()
     {
-        $msds = $this->getIntervenant()->getModificationServiceDu()->filter(function ($m) {
-            return $m->estNonHistorise();
-        });
-        foreach ($msds as $msd) {
-            $this->data['modifs-service-du'][] = $this
-                ->newIsd($msd)
-                ->setIcon('glyphicon glyphicon-calendar');
-        }
+        $this->getData();
+        $this->tree = $this->makeTree($this->getIntervenant()->getId());
+
+        return $this->tree;
     }
 
 
 
-    private function makeDossier()
+    protected function makeData()
     {
-        /* Récup des données personnelles */
-        $dossier = $this->getServiceDossier()->getByIntervenant($this->getIntervenant());
-        if ($dossier && $dossier->estNonHistorise()) {
-            $d = $this->newIsd($dossier)->setIcon('glyphicon glyphicon-user');
-
-            $validation = $this->getServiceDossier()->getValidation($this->getIntervenant());
-            if ($validation) {
-                $d[] = $this->newIsd($validation)->setIcon('glyphicon glyphicon-ok');
-            }
-            $this->data['dossier'][] = $d;
-        }
+        $this->data = [];
+        $this->loadData('', [$this->getIntervenant()->getId()]);
     }
 
 
 
-    private function makeService()
+    protected function loadData(string $table, array $ids)
     {
-        /* Récup des services */
-        $service = $this->getIntervenant()->getService()->filter(function ($s) {
-            return $s->estNonHistorise();
-        });
-        if ($service->count() > 0) {
-            /** @var Service $s */
-            foreach ($service as $s) {
-                $vhs = $s->getVolumeHoraire()->filter(function ($v) {
-                    return $v->estNonHistorise();
-                });
+        $bdd = $this->getEntityManager()->getConnection();
 
-                $this->addIsdSR($s);
-
-                /** @var VolumeHoraire $vh */
-                foreach ($vhs as $vh) {
-                    $sRub = $vh->getTypeVolumeHoraire()->getCode();
-
-                    $vs = $vh->getValidation()->filter(function ($v) {
-                        return $v->estNonHistorise();
-                    });
-
-                    $vhd = $this->newIsd($vh)->setIcon('glyphicon glyphicon-calendar');
-                    foreach ($vs as $v) {
-                        $vhd[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
+        foreach ($this->queries as $tables => $sql) {
+            [$ref, $dest] = explode('.', $tables);
+            if ($ref == $table) {
+                foreach ($ids as $i => $id) {
+                    if (is_string($id)) $ids[$i] = "'$id'";
+                }
+                $idList = implode(',', $ids);
+                $sql    = str_replace(':id', $idList, $sql);
+                $ds     = $bdd->fetchAll($sql);
+                foreach ($ds as $d) {
+                    if (!isset($this->data[$dest])) {
+                        $this->data[$dest] = [];
                     }
-
-                    $this->addIsdSR($s, $sRub, $vhd);
+                    $d['TABLE']                  = $dest;
+                    $d['PARENT_TABLE']           = $ref;
+                    $d['DELETE']                 = false;
+                    $this->data[$dest][$d['ID']] = $d;
+                }
+                if (isset($this->data[$dest])) {
+                    $this->loadData($dest, array_keys($this->data[$dest]));
                 }
             }
         }
@@ -377,35 +494,65 @@ class SuppressionProcessus
 
 
 
-    private function makeReferentiel()
+    protected function makeTree(int $id): ?TreeNode
     {
-        /* Récup du référentiel */
-        $refs = $this->getIntervenant()->getServiceReferentiel()->filter(function ($s) {
-            return $s->estNonHistorise();
-        });
-        if ($refs->count() > 0) {
-            /** @var ServiceReferentiel $ref */
-            foreach ($refs as $ref) {
-                $vhs = $ref->getVolumeHoraireReferentiel()->filter(function ($v) {
-                    return $v->estNonHistorise();
-                });
+        if (!isset($this->data['INTERVENANT'][$id])) {
+            return null;
+        }
 
-                $this->addIsdSR($ref);
+        $d = $this->data['INTERVENANT'][$id];
 
-                /** @var VolumeHoraireReferentiel $vh */
-                foreach ($vhs as $vh) {
-                    $sRub = $vh->getTypeVolumeHoraire()->getCode();
+        $node = $this->makeNode($d);
+        $this->makeNodes('INTERVENANT', $d['ID'], $node);
 
-                    $vs = $vh->getValidation()->filter(function ($v) {
-                        return $v->estNonHistorise();
-                    });
+        return $node;
+    }
 
-                    $vhd = $this->newIsd($vh)->setIcon('glyphicon glyphicon-calendar');
-                    foreach ($vs as $v) {
-                        $vhd[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
+
+
+    protected function makeNode(array $data): TreeNode
+    {
+        $node = new TreeNode($data['TABLE'] . '#' . $data['ID']);
+        $node->setIcon($data['ICON']);
+        if (isset($data['ERROR'])) {
+            $node->setLabel($data['LABEL'] . ' <span style="font-weight:bold;color:red" title="' . htmlentities($data['ERROR']) . '">Erreur rencontrée</span>');
+        } else {
+            $node->setLabel($data['LABEL']);
+        }
+
+        if (isset($data['TITLE'])) $node->setTitle($data['TITLE']);
+
+
+        return $node;
+    }
+
+
+
+    protected function makeNodes(string $table, $id, TreeNode $parent)
+    {
+        foreach ($this->data as $t => $ds) {
+            foreach ($ds as $null => $d) {
+                if ($d['PARENT_TABLE'] == $table && $d['PARENT_ID'] == $id && $d['VISIBLE'] == 1) {
+                    $n = $this->makeNode($d);
+
+                    if ($d['CATEGORIE']) {
+                        $cats = explode('|', $d['CATEGORIE']);
+                        $cp   = $parent;
+                        foreach ($cats as $categorie) {
+                            if ($cp->has($categorie)) {
+                                $cp = $cp->get($categorie);
+                            } else {
+                                $newNode = new TreeNode($table == 'INTERVENANT' ? $categorie : uniqid('cat-'));
+                                $newNode->setLabel($categorie);
+                                $cp->add($newNode);
+                                $cp = $newNode;
+                            }
+                        }
+                        $cp->add($n);
+                    } else {
+                        $parent->add($n);
                     }
-
-                    $this->addIsdSR($ref, $sRub, $vhd);
+                    $this->makeNodes($t, $d['ID'], $n);
                 }
             }
         }
@@ -413,92 +560,195 @@ class SuppressionProcessus
 
 
 
-    private function makePiecesJointes()
+    public function delete(array $ids, bool $force = false): bool
     {
-        /* Pièces justificatives */
-        $pjs = $this->getIntervenant()->getPieceJointe()->filter(function ($pj) {
-            return $pj->estNonHistorise();
-        });
-        /** @var PieceJointe $pj */
-        foreach ($pjs as $pj) {
+        $this->getData();
+        $this->tagDelete($ids, $force);
+        $this->makeDeleteQueries();
 
-            $dpj = $this->newIsd($pj)->setIcon('glyphicon glyphicon-envelope');
+        return $this->doDelete();
+    }
 
-            $children = $pj->getFichier()->filter(function ($f) {
-                return $f->estNonHistorise();
-            });
-            foreach ($children as $f) {
-                $dpj[] = $this->newIsd($f)->setIcon('glyphicon glyphicon-file');
+
+
+    private function tagDelete(array $ids, bool $force)
+    {
+        /* On positionne le tag sur toutes les data à détruire */
+        foreach ($ids as $id) {
+            if (false !== strpos($id, '#')) {
+                [$table, $id] = explode('#', $id);
+                if (isset($this->data[$table][$id])) {
+                    //$this->subTagDelete($table, $id, true, $force);
+                    $this->data[$table][$id]['DELETE'] = true;
+                }
             }
+        }
 
-            if (($v = $pj->getValidation()) && $v->estNonHistorise()) {
-                $dpj[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
+
+        /* On détruit les sous-éléments si on est en FORCE ou bien si les sous-éléments sont cachés pour ne pas qu'ils gênent */
+        foreach ($this->data as $table => $ds) {
+            foreach ($ds as $i => $d) {
+                if ($d['DELETE']) {
+                    $this->subDelete($d['TABLE'], $d ['ID'], $force);
+                }
             }
+        }
 
-            $this->data['pieces-jointes'][] = $dpj;
+        /* Si on est en mode soft, on ne supprime pas les parents dont les enfants doivent rester */
+        foreach ($this->data as $table => $ds) {
+            foreach ($ds as $i => $d) {
+                if (!$force && !$d['DELETE']) {
+                    $dp = $d;
+                    while ($dp['PARENT_ID']) {
+                        $pTable = $dp['PARENT_TABLE'];
+                        $pId    = $dp['PARENT_ID'];
+                        $dp     = $this->data[$pTable][$pId];
+                        if ($this->data[$pTable][$pId]['DELETE']) {
+                            $this->data[$pTable][$pId]['DELETE'] = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Suppression des validations de VH ou VHRef orphelines */
+        if (isset($this->data['VALIDATION'])) {
+            foreach ($this->data['VALIDATION'] as $vid => $vdata) {
+                if (isset($vdata['TYPE_VALIDATION_CODE'])) {
+                    if ('SERVICES_PAR_COMP' == $vdata['TYPE_VALIDATION_CODE'] && isset($this->data['VALIDATION_VOL_HORAIRE'])) {
+                        $found = false;
+                        foreach ($this->data['VALIDATION_VOL_HORAIRE'] as $vvh) {
+                            if ($vvh['VALIDATION_ID'] == $vid && (false === $vvh['DELETE'])) {
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if (!$found) {
+                            $this->data['VALIDATION'][$vid]['DELETE'] = true;
+                        }
+                    }
+                    if ('REFERENTIEL' == $vdata['TYPE_VALIDATION_CODE'] && isset($this->data['VALIDATION_VOL_HORAIRE_REF'])) {
+                        $found = false;
+                        foreach ($this->data['VALIDATION_VOL_HORAIRE_REF'] as $vvh) {
+                            if ($vvh['VALIDATION_ID'] == $vid && (false === $vvh['DELETE'])) {
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if (!$found) {
+                            $this->data['VALIDATION'][$vid]['DELETE'] = true;
+                        }
+                    }
+                }
+            }
+        }
+        /* DEBUG *
+        $delIds = [];
+        foreach ($this->data as $table => $ds) {
+            foreach ($ds as $i => $d) {
+                if ($d['DELETE']) {
+                    if (!isset($delIds[$table])) $delIds[$table] = [];
+                    $delIds[$table][]                = $d['ID'];
+                    $this->data[$table][$i]['LABEL'] .= '<span style="font-weight:bold;color:red"> (à supprimer!)</span>';
+                }
+            }
+        }
+        //var_dump($this->data);
+        var_dump($ids);
+        var_dump($delIds);
+        /* FIN DEBUG */
+    }
+
+
+
+    private function makeDeleteQueries()
+    {
+        foreach ($this->delete as $rule => $config) {
+            [$ruleParent, $ruleTable] = explode('.', $rule);
+            $keyCols = isset($config['key']) ? $config['key'] : ['ID'];
+            $queries = isset($config['queries']) ? $config['queries'] : [];
+            $delSql  = '';
+            foreach ($keyCols as $k) {
+                if ($delSql == '') {
+                    $delSql .= 'DELETE FROM ' . $ruleTable . ' WHERE ';
+                } else {
+                    $delSql .= ' AND ';
+                }
+                $delSql .= $k . ' = :' . $k;
+            }
+            $queries[] = $delSql;
+
+            if (isset($this->data[$ruleTable])) {
+                foreach ($this->data[$ruleTable] as $i => $d) {
+                    if (!$ruleParent || $ruleParent == $d['PARENT_TABLE']) {
+                        if (isset($d['DELETE']) && $d['DELETE']) {
+                            foreach ($queries as $query) {
+                                $delQuery = $query;
+                                foreach ($keyCols as $k) {
+                                    $delQuery = str_replace(':' . $k, (int)$d[$k], $delQuery);
+                                }
+                                if (!isset($this->data[$ruleTable][$i]['DELETE_QUERIES'])) {
+                                    $this->data[$ruleTable][$i]['DELETE_QUERIES'] = [];
+                                }
+                                $this->data[$ruleTable][$i]['DELETE_QUERIES'][] = $delQuery;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
 
 
-    private function makeAgrements()
+    private function doDelete(): bool
     {
-        /* Agréments */
-        $agrs = $this->getIntervenant()->getAgrement()->filter(function ($a) {
-            return $a->estNonHistorise();
-        });
-        /** @var Agrement $agr */
-        foreach ($agrs as $agr) {
-            $key                              = str_replace('_', '-', strtolower($agr->getType()->getCode()));
-            $this->data['agrement-' . $key][] = $this->newIsd($agr)->setIcon('glyphicon glyphicon-ok-sign');
+        $res = true;
+        foreach ($this->delete as $rule => $null) {
+            [$ruleParent, $ruleTable] = explode('.', $rule);
+            if (isset($this->data[$ruleTable])) {
+                foreach ($this->data[$ruleTable] as $i => $d) {
+                    if ((!$ruleParent || $d['PARENT_TABLE'] == $ruleParent) && isset($d['DELETE_QUERIES']) && !empty($d['DELETE_QUERIES'])) {
+                        if (!$this->deleteItem($ruleTable, $i)) $res = false;
+                    }
+                }
+            }
         }
+
+        return $res;
     }
 
 
 
-    private function makeContrats()
+    private function deleteItem(string $table, string $id): bool
     {
-        /* Contrats */
-        $cs = $this->getIntervenant()->getContrat()->filter(function ($c) {
-            return $c->estNonHistorise();
-        });
-        /** @var Contrat $c */
-        foreach ($cs as $c) {
-            $dc = $this->newIsd($c);
-
-            $children = $c->getFichier()->filter(function ($f) {
-                return $f->estNonHistorise();
-            });
-            foreach ($children as $f) {
-                $dc[] = $this->newIsd($f);
+        $data = &$this->data[$table][$id];
+        try {
+            foreach ($data['DELETE_QUERIES'] as $sql) {
+                $this->getEntityManager()->getConnection()->exec($sql);
             }
-
-            if (($v = $c->getValidation()) && $v->estNonHistorise()) {
-                $dc[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
-            }
-
-            $this->data['contrats'][] = $dc;
+            unset($this->data[$table][$id]);
+            $res = true;
+        } catch (\Exception $e) {
+            $data['ERROR'] = $this->translate($e->getMessage());
+            $res           = false;
         }
+
+        return $res;
     }
 
 
 
-    private function makePaiements()
+    protected function subDelete(string $table, string $id, bool $force)
     {
-        /* Paiements */
-        $miss = $this->getIntervenant()->getMiseEnPaiementIntervenantStructure();
-        $meps = [];
-        /** @var MiseEnPaiementIntervenantStructure $mis */
-        foreach ($miss as $mis) {
-            $mep = $mis->getMiseEnPaiement();
-            if ($mep->estNonHistorise()) {
-
-                $dm = $this->newIsd($mep)->setIcon('glyphicon glyphicon-euro');
-
-                $service = $mep->getFormuleResultatService() ? $mep->getFormuleResultatService()->getService() : $mep->getFormuleResultatServiceReferentiel()->getServiceReferentiel();
-                $sRub    = $mep->getPeriodePaiement() ? 'mep' : 'dmep';
-
-                $this->addIsdSR($service, $sRub, $dm);
+        foreach ($this->data as $t => $ds) {
+            foreach ($ds as $i => $d) {
+                if ($d['PARENT_TABLE'] == $table && $d['PARENT_ID'] == $id && !$d['DELETE']) {
+                    if ($force || !$d['VISIBLE']) {
+                        $this->data[$t][$i]['DELETE'] = true;
+                    }
+                    $this->subDelete($t, $i, $force);
+                }
             }
         }
     }

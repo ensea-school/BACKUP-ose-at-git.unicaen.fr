@@ -193,31 +193,46 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
     -- X=SI($H20="Référentiel";0;$BC20*E20)
+    -- X=SI($H20="Référentiel";0;SI(i_type_intervenant_code="E";$BB20;$BC20)*E20)
     WHEN c = 'X' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN cell('BC',l) * vh.taux_fi;
+        IF i.type_intervenant_code = 'E' THEN
+          RETURN cell('BB',l) * vh.taux_fi;
+        ELSE
+          RETURN cell('BC',l) * vh.taux_fi;
+        END IF;
       END IF;
 
 
 
     -- Y=SI($H20="Référentiel";0;$BC20*F20)
+    -- Y=SI($H20="Référentiel";0;SI(i_type_intervenant_code="E";$BB20;$BC20)*F20)
     WHEN c = 'Y' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN cell('BC',l) * vh.taux_fa;
+        IF i.type_intervenant_code = 'E' THEN
+          RETURN cell('BB',l) * vh.taux_fa;
+        ELSE
+          RETURN cell('BC',l) * vh.taux_fa;
+        END IF;
       END IF;
 
 
 
     -- Z=SI($H20="Référentiel";0;$BC20*G20)
+    -- Z=SI($H20="Référentiel";0;SI(i_type_intervenant_code="E";$BB20;$BC20)*G20)
     WHEN c = 'Z' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN cell('BC',l) * vh.taux_fc;
+        IF i.type_intervenant_code = 'E' THEN
+          RETURN cell('BB',l) * vh.taux_fc;
+        ELSE
+          RETURN cell('BC',l) * vh.taux_fc;
+        END IF;
       END IF;
 
 

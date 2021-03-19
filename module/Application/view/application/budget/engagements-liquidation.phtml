@@ -11,7 +11,7 @@ use UnicaenApp\Util;
  * @var $liquidation        array
  */
 
-echo '<h1 class="page-header">Budget '.$annee.' - Engagements & Liquidation</h1>';
+echo '<h1 class="page-header">Budget ' . $annee . ' - Engagements & Liquidation</h1>';
 
 if ($structureElement) {
     echo $this->formControlGroup($structureElement);
@@ -58,23 +58,28 @@ if ($structureElement) {
                 </tr>
                 <tr>
                     <th>Dotation</th>
-                    <td class="hetd"><?= Util::formattedNumber($dotations['total']['heures']) ?><span class="label">HETD</span></td>
+                    <td class="hetd"><?= Util::formattedNumber($dotations['total']['heures']) ?><span
+                                class="label">HETD</span></td>
                     <?php foreach ($dotations['typesRessources'] as $dtr): ?>
-                        <td class="hetd"><?= Util::formattedNumber($dtr['total']['heures']) ?><span class="label">HETD</span></td>
+                        <td class="hetd"><?= Util::formattedNumber($dtr['total']['heures']) ?><span class="label">HETD</span>
+                        </td>
                     <?php endforeach; ?>
                 </tr>
                 <tr>
                     <th>HETD positionnées</th>
                     <td class="hetd"><?= Util::formattedNumber($previsionnelValide) ?><span class="label">HETD</span></td>
                     <?php foreach ($dotations['typesRessources'] as $dtr): ?>
-                        <td class="hetd"><?= Util::formattedNumber($liquidation[$dtr['entity']->getId()]['dmep']) ?><span class="label">HETD</span></td>
+                        <td class="hetd"><?= Util::formattedNumber($liquidation[$dtr['entity']->getId()]['dmep']) ?><span
+                                    class="label">HETD</span></td>
                     <?php endforeach; ?>
                 </tr>
                 <tr>
                     <th>Solde</th>
-                    <td class="hetd"><?= Util::formattedNumber($dotations['total']['heures'] - $previsionnelValide) ?><span class="label">HETD</span></td>
+                    <td class="hetd"><?= Util::formattedNumber($dotations['total']['heures'] - $previsionnelValide) ?><span
+                                class="label">HETD</span></td>
                     <?php foreach ($dotations['typesRessources'] as $dtr): ?>
-                        <td class="hetd"><?= Util::formattedNumber($liquidation[$dtr['entity']->getId()]['solde']) ?><span class="label">HETD</span></td>
+                        <td class="hetd"><?= Util::formattedNumber($liquidation[$dtr['entity']->getId()]['solde']) ?><span
+                                    class="label">HETD</span></td>
                     <?php endforeach; ?>
                 </tr>
             </table>
@@ -109,24 +114,24 @@ if ($structureElement) {
         . ' et ' . Util::formattedFloat($data['anneeCivile2']['s1']) . ' au titre de ' . $data['anneeCivile2']['annee'] . ' chiffre en HETD)';
 
     if ($canEdit) {
-        $params1 = [
+        $params1              = [
             'annee'         => $data['anneeCivile1']['annee'],
             'structure'     => $view->structure->getId(),
             'typeRessource' => $typeRessource->getId(),
         ];
-        if (isset($data['anneeCivile1']['s1Entity'])) $params1['dotation1'] = $data['anneeCivile1']['s1Entity']->getId();
-        if (isset($data['anneeCivile1']['s2Entity'])) $params1['dotation2'] = $data['anneeCivile1']['s2Entity']->getId();
-        $dotEditUrl1 = $view->url('budget/saisie-dotation', $params1, ['query' => ['libelle' => $libelle]]);
+        $params1['dotation1'] = (isset($data['anneeCivile1']['s1Entity'])) ? $data['anneeCivile1']['s1Entity']->getId() : '';
+        $params1['dotation2'] = (isset($data['anneeCivile1']['s2Entity'])) ? $data['anneeCivile1']['s2Entity']->getId() : '';
+        $dotEditUrl1          = $view->url('budget/saisie-dotation', $params1, ['query' => ['libelle' => $libelle]]);
 
 
-        $params2 = [
+        $params2              = [
             'annee'         => $data['anneeCivile2']['annee'],
             'structure'     => $view->structure->getId(),
             'typeRessource' => $typeRessource->getId(),
         ];
-        if (isset($data['anneeCivile2']['s1Entity'])) $params2['dotation1'] = $data['anneeCivile2']['s1Entity']->getId();
-        if (isset($data['anneeCivile2']['s2Entity'])) $params2['dotation2'] = $data['anneeCivile2']['s2Entity']->getId();
-        $dotEditUrl2 = $view->url('budget/saisie-dotation', $params2, ['query' => ['libelle' => $libelle]]);
+        $params2['dotation1'] = (isset($data['anneeCivile2']['s1Entity'])) ? $data['anneeCivile2']['s1Entity']->getId() : '';
+        $params2['dotation2'] = (isset($data['anneeCivile2']['s2Entity'])) ? $data['anneeCivile2']['s2Entity']->getId() : '';
+        $dotEditUrl2          = $view->url('budget/saisie-dotation', $params2, ['query' => ['libelle' => $libelle]]);
     }
 
     ?>

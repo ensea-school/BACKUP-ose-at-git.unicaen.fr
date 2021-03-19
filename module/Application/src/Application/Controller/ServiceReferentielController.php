@@ -43,7 +43,6 @@ class ServiceReferentielController extends AbstractController
     use PlafondProcessusAwareTrait;
 
 
-
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -104,7 +103,6 @@ class ServiceReferentielController extends AbstractController
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Structure::class,
-            \Application\Entity\Db\FonctionReferentiel::class,
         ]);
         $id                = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));

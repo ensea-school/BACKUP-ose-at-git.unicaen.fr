@@ -2,6 +2,8 @@
 /* @var  $this \Application\View\Renderer\PhpRenderer */
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
 echo $this->intervenant($intervenant);
 
 $urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getId()]);

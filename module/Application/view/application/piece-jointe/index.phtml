@@ -17,10 +17,11 @@ $this->headTitle()->append((string)$intervenant)->append("Pièces justificatives
 $canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
 $canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
 $canDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
+$canArchiver  = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE));
 
 $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getId()]);
 
-$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+$menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 ?>
     <h1 class="page-header"><?= $this->intervenant($intervenant)->renderTitle('Pièces justificatives'); ?></h1>
@@ -46,7 +47,7 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
                 } else {
                     $pj = null;
                 }
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire', 'annee'));
+                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
             }
             echo '</div>';
 
@@ -76,7 +77,7 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
                 if ($pj->getIntervenant()->getAnnee()->getId() == $annee->getId()) {
                     $haveRestante = true;
                     $tpj          = $pj->getType();
-                    $html         .= $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire', 'annee'));
+                    $html         .= $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
                 }
             }
             $html .= '</div>';
@@ -105,6 +106,17 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
             });
 
         });
+
+        $('[id^="update-pj-"]').click(function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var splitId = id.split('-');
+            var tpjId = splitId[2];
+            $('#valide-pj-' + tpjId).remove();
+            $('#archive-form-pj-' + tpjId).css('display', 'block');
+            return false;
+        });
+
 
     </script>
 <?php

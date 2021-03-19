@@ -278,7 +278,7 @@ class Table
      * @throws Exception\BddException
      * @throws Exception\BddIndexExistsException
      */
-    public function insert(array $data, array $options = []): bool
+    public function insert(array &$data, array $options = []): bool
     {
         if (!isset($data['ID']) && $this->hasId() && $this->hasSequence()) {
             $data['ID'] = $this->getBdd()->sequenceNextVal($this->ddl['sequence']);

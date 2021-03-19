@@ -22,7 +22,6 @@ class IntervenantViewHelper extends AbstractHtmlElement
     use IntervenantServiceAwareTrait;
 
 
-
     /**
      *
      * @param Intervenant $intervenant
@@ -60,11 +59,9 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
         $vars = [
             'identite'    => [
-                "NOM prénom"           => $entity,
-                "Civilité"             => (string)$entity->getCivilite(),
-                "Date de naissance"    => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
-                "Commune de naissance" => (string)$entity->getCommuneNaissance() ?: '<span class="inconnu">(Inconnue)</span>',
-                "Pays de naissance"    => (string)$entity->getPaysNaissance(),
+                "Civilité"   => (string)$entity->getCivilite(),
+                "NOM prénom" => $entity,
+                //"Date de naissance" => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
             ],
             'coordonnees' => [
                 "Email"           => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
@@ -75,15 +72,22 @@ class IntervenantViewHelper extends AbstractHtmlElement
             'metier'      => [
                 "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
                 "Statut de l'intervenant"   => $entity->getStatut(),
-                "N° {$entity->getSource()}" => $entity->getSourceCode(),
+                "N° {$entity->getSource()}" => $entity->getCode(),
+                "N° RH"                     => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnue)</span>',
                 "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
-                "Montant de l'indemnité FC" => $entity->getMontantIndemniteFc() !== null ? \UnicaenApp\Util::formattedEuros($entity->getMontantIndemniteFc()) : '<span class="inconnu">(Inconnue)</span>',
+                "Modifié le"                => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
             ],
             'divers'      => [
                 "Id" => $entity->getId(),
                 //"Id de connexion" => ($u = $entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)",
             ],
         ];
+
+        $canViewAdresseIntervenant = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
+        if (!$canViewAdresseIntervenant) {
+            unset($vars['coordonnees']);
+        }
+
 
         $html = '';
         foreach ($vars as $bloc => $vvs) {
@@ -99,6 +103,11 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
             if ($entity->getSource()->getCode() !== \Application\Service\SourceService::CODE_SOURCE_OSE) {
                 $msg .= ' Sa fiche ne remonte plus depuis l\'application ' . $entity->getSource() . '.';
+            }
+
+            $canRestaure = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+            if ($canRestaure) {
+                $msg .= "<br />" . $this->getView()->tag('a', ['class' => 'no-intranavigation', 'href' => $this->getView()->url('intervenant/restaurer', ['intervenant' => $entity->getId()])])->html('Restaurer la fiche');
             }
 
             $html .= '<div class="alert alert-danger">' . $msg . '</div>';
@@ -131,15 +140,8 @@ class IntervenantViewHelper extends AbstractHtmlElement
         $title       = $title;
         $intervenant = $this->getIntervenant();
 
-        /*if ($this->getServiceContext()->getIntervenant() == $intervenant) {
-
-        } else {
-
-        }*/
-
-        //echo $intervenant . ' <small>' . $intervenant->getStatut() . '</small>';
-
         $canAddIntervenant = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+        $canShowHistorises = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
 
         $this->getView()->headTitle()->append($intervenant->getNomUsuel())->append($title);
         $title .= ' <small>' . $intervenant . '</small>';
@@ -147,41 +149,41 @@ class IntervenantViewHelper extends AbstractHtmlElement
         echo $this->getView()->tag('h1', ['class' => 'page-header'])->open();
         echo $title . '<br />';
         $statuts = $this->getStatuts();
-        ?>
-        <nav class="navbar navbar-default intervenant-statuts">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Statuts</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <span class="navbar-brand" href="#">Statut<?= (count($statuts) > 1) ? 's' : '' ?></span>
-                </div>
-
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <?php foreach ($statuts as $intervenantId => $statut): ?>
-                            <li<?= ($statut == $intervenant->getStatut()) ? ' class="active"' : '' ?>>
-                                <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>"><span
-                                            class="type-intervenant"><?= $statut->getTypeIntervenant() . '</span><br />' . $statut->getLibelle() ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                        <?php if ($canAddIntervenant): ?>
-                            <li class="ajout-intervenant">
-                                <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenantId]); ?>"
-                                   title="Ajout d'un nouveau statut à l'intervenant"><span
-                                            class="glyphicon glyphicon-plus"></span></a>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-        <?php
+        if (!empty($statuts)) {
+            ?>
+            <nav class="navbar navbar-default intervenant-statuts">
+                <ul class="nav navbar-nav">
+                    <?php foreach ($statuts as $intervenantId => $iStatut): if ($canShowHistorises || $iStatut->estNonHistorise() || $iStatut == $intervenant): ?>
+                        <?php
+                        $attrs = ['class' => ''];
+                        if ($iStatut == $intervenant) {
+                            $attrs['class'] = "active";
+                        } else {
+                            $attrs['title'] = 'Cliquez pour afficher';
+                        }
+                        if ($iStatut->estHistorise()) {
+                            $attrs['class'] .= ' historise';
+                        }
+                        echo $this->getView()->tag('li', $attrs)->open(); ?>
+                        <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
+                            <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
+                            <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
+                            <span class="statut-intervenant"><?= $iStatut->getStatut()->getLibelle() ?></span>
+                            <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger glyphicon glyphicon-warning-sign', 'title' => 'Intervenant historisé'])->text('') ?>
+                        </a>
+                        </li>
+                    <?php endif; endforeach; ?>
+                    <?php if ($canAddIntervenant && $intervenant->getId()): ?>
+                        <li class="ajout-intervenant">
+                            <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]); ?>"
+                               title="Ajout d'un nouveau statut à l'intervenant"><span
+                                        class="glyphicon glyphicon-plus"></span></a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
+            <?php
+        }
         echo $this->getView()->tag('h1')->close();
     }
 
@@ -192,12 +194,12 @@ class IntervenantViewHelper extends AbstractHtmlElement
         $intervernants = $this->getServiceIntervenant()->getIntervenants($this->getIntervenant());
         $statuts       = [];
         foreach ($intervernants as $intervenant) {
-            if ($intervenant->estNonHistorise() && $intervenant->getStatut()) {
-                $statuts[$intervenant->getId()] = $intervenant->getStatut();
+            if ($intervenant->getStatut()) {
+                $statuts[$intervenant->getId()] = $intervenant;
             }
         }
         uasort($statuts, function ($a, $b) {
-            return $a->getOrdre() > $b->getOrdre();
+            return $a->getStatut()->getOrdre() > $b->getStatut()->getOrdre();
         });
 
         return $statuts;

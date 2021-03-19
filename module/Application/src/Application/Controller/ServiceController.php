@@ -134,6 +134,7 @@ class ServiceController extends AbstractController
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
             $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $recherche->setIntervenant($intervenant);
         }
 
         /* Préparation et affichage */
@@ -176,6 +177,7 @@ class ServiceController extends AbstractController
             $recherche = new Recherche();
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
             $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $recherche->setIntervenant($intervenant);
         }
 
         $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_services_pdf');

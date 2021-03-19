@@ -70,15 +70,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setDossierEmployeur($data['dossier-employeur']);
         $object->setDossierEmailPerso($data['dossier-email-perso']);
         $object->setDossierTelPerso($data['dossier-tel-perso']);
-
-
-        for ($i = 1; $i < 5; $i++) {
-            if (array_key_exists('codes-corresp-' . $i, $data)) {
-                $function = 'setCodesCorresp' . $i;
-                $object->$function($data['codes-corresp-' . $i]);
-            }
-        }
-
+        
         if (!empty($data['id'])) {
             $champsAutres = [];
             /* Gestion des champs autres */
@@ -194,11 +186,6 @@ class StatutIntervenantHydrator implements HydratorInterface
                 $key        = 'champ-autre-' . $champ->getId();
                 $data[$key] = 1;
             }
-        }
-
-        for ($i = 1; $i < 5; $i++) {
-            $function                    = 'getCodesCorresp' . $i;
-            $data['codes-corresp-' . $i] = $object->$function();
         }
 
         $typesAgrementsStatuts = $object->getTypeAgrementStatut();

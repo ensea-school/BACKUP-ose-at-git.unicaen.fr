@@ -6,7 +6,7 @@ return [
     'name'        => 'VALIDATION_INTERVENANT_FK',
     'table'       => 'VALIDATION',
     'rtable'      => 'INTERVENANT',
-    'delete_rule' => 'CASCADE',
+    'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
         'INTERVENANT_ID' => 'ID',

@@ -65,10 +65,11 @@ trait AdresseTrait
         if ($this->getAdressePrecisions()) $adresse[] = $this->getAdressePrecisions();
 
         $nv = [];
-        if ($this->getAdresseNumero()) $nv[] = $this->getAdresseNumero();
-        if ($this->getAdresseNumeroCompl()) $nv[] = $this->getAdresseNumeroCompl();
-        if ($this->getAdresseVoirie()) $nv[] = $this->getAdresseVoirie();
-        if ($this->getAdresseVoie()) $nv[] = $this->getAdresseVoie();
+        if (!empty(trim($this->getAdresseNumero()))) $nv[] = $this->getAdresseNumero();
+        if (!empty(trim($this->getAdresseNumeroCompl()))) $nv[] = $this->getAdresseNumeroCompl();
+        if (!empty(trim($this->getAdresseVoirie()))) $nv[] = $this->getAdresseVoirie();
+        if (!empty(trim($this->getAdresseVoie()))) $nv[] = $this->getAdresseVoie();
+
         if (!empty($nv)) {
             $adresse[] = implode(' ', $nv);
         }
@@ -76,9 +77,9 @@ trait AdresseTrait
         if ($this->getAdresseLieuDit()) $adresse[] = $this->getAdresseLieuDit();
 
         $cpcp = [];
-        if ($this->getAdresseCodePostal()) $cpcp[] = $this->getAdresseCodePostal();
-        if ($this->getAdresseCommune()) $cpcp[] = $this->getAdresseCommune();
-        if ($this->getAdressePays()) $cpcp[] = $this->getAdressePays();
+        if (!empty(trim($this->getAdresseCodePostal()))) $cpcp[] = $this->getAdresseCodePostal();
+        if (!empty(trim($this->getAdresseCommune()))) $cpcp[] = $this->getAdresseCommune();
+        if (!empty(trim($this->getAdressePays()))) $cpcp[] = $this->getAdressePays();
         if (!empty($cpcp)) {
             $adresse[] = implode(' ', $cpcp);
         }
@@ -261,6 +262,8 @@ trait AdresseTrait
 
         return $this;
     }
+
+
 
     /**
      * @return string|null

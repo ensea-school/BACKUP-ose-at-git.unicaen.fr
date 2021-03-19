@@ -9,7 +9,19 @@ return [
     'commentaire' => NULL,
     'sequence'    => NULL,
     'columns'     => [
-        'ORDRE'            => [
+        'KEY_COLUMNS'          => [
+            'name'        => 'KEY_COLUMNS',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 1000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 2,
+            'commentaire' => NULL,
+        ],
+        'ORDRE'                => [
             'name'        => 'ORDRE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -18,10 +30,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
-        'SYNC_ENABLED'     => [
+        'SYNC_ENABLED'         => [
             'name'        => 'SYNC_ENABLED',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -30,10 +42,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 3,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
-        'SYNC_FILTRE'      => [
+        'SYNC_FILTRE'          => [
             'name'        => 'SYNC_FILTRE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -42,11 +54,23 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
-        'SYNC_HOOK_AFTER'  => [
+        'SYNC_HOOK_AFTER'      => [
             'name'        => 'SYNC_HOOK_AFTER',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 7,
+            'commentaire' => NULL,
+        ],
+        'SYNC_HOOK_BEFORE'     => [
+            'name'        => 'SYNC_HOOK_BEFORE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 4000,
@@ -57,19 +81,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'SYNC_HOOK_BEFORE' => [
-            'name'        => 'SYNC_HOOK_BEFORE',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 4000,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 5,
-            'commentaire' => NULL,
-        ],
-        'SYNC_JOB'         => [
+        'SYNC_JOB'             => [
             'name'        => 'SYNC_JOB',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -78,10 +90,22 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
-        'TABLE_NAME'       => [
+        'SYNC_NON_IMPORTABLES' => [
+            'name'        => 'SYNC_NON_IMPORTABLES',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
+        'TABLE_NAME'           => [
             'name'        => 'TABLE_NAME',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',

@@ -100,7 +100,7 @@ En voici la liste :
 * [Harpège](Harpège/Connecteur.md) pour les données RH et diverses
 * [Octopus](Octopus/Connecteur.md)  (spécifique à Caen) pour les données RH et diverses
 * [Mangue](Mangue/Connecteur.md) pour les intervenants
-* Siham pour très bientôt ...
+* [Siham](Siham/Connecteur.md) pour les données RH et diverses
 * [Sifac](Sifac/Connecteur.md) pour les données comptables
 * [Apogée](Apogée/Connecteur.md) pour l'offre de formation
 * [FCA Manager](FCA-Manager/Connecteur.md) également pour l'offre de formation
@@ -115,6 +115,7 @@ présentées dans l'ordre où il faut les traiter.
     <th>Apogée</th>
     <th>FCA Manager</th> 
     <th>Harpège</th>
+    <th>Siham</th>
     <th>Octopus</th>
     <th>Mangue</th>
     <th>Sifac</th>
@@ -131,6 +132,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td>Oui</td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -142,6 +144,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td>Oui</td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -153,6 +156,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td>Oui</td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -164,6 +168,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -175,6 +180,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td>Oui</td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -186,6 +192,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -202,6 +209,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -213,6 +221,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -224,6 +233,7 @@ présentées dans l'ordre où il faut les traiter.
      <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -235,6 +245,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -246,6 +257,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td>Oui</td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td>Oui</td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -257,6 +269,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td>Oui</td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -273,6 +286,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
@@ -284,6 +298,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
@@ -295,6 +310,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -306,6 +322,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
@@ -322,6 +339,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -333,6 +351,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -344,6 +363,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -355,6 +375,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -366,6 +387,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -377,6 +399,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td>Oui</td> <!-- Sifac -->
@@ -388,6 +411,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -399,6 +423,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -410,6 +435,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -421,6 +447,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -432,6 +459,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -443,6 +471,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -454,6 +483,7 @@ présentées dans l'ordre où il faut les traiter.
     <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -470,6 +500,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -481,6 +512,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -492,6 +524,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -503,6 +536,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -514,6 +548,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -525,6 +560,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->
@@ -536,6 +572,7 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
     <td></td> <!-- Octopus -->
     <td></td><!-- Mangue -->
     <td></td> <!-- Sifac -->

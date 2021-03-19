@@ -1,0 +1,4 @@
+# Exemple de lancement du shell dns la crontab de la BD Oracle
+# appel shell sh + param 1 correspond au chemin ORACLE_HOME + param 2 correspond au ORACLE_SID
+
+00 6 * * * /data/appli/ose/cron/lance_synchro_Siham_Ose.sh /opt/oracle/product/11.2.0.3/db OSETEST

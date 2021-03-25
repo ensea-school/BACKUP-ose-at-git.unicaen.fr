@@ -1,6 +1,6 @@
 <?php
 
-namespace ExportRH\Connecteur\Siham;
+namespace ExportRh\Connecteur\Siham;
 
 use Psr\Container\ContainerInterface;
 

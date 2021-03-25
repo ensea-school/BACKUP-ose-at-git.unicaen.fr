@@ -905,6 +905,16 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
+     * @return bool
+     */
+    public function getRibHorsSepa(): bool
+    {
+        return $this->ribHorsSepa;
+    }
+
+
+
+    /**
      * @param bool $ribHorsSepa
      *
      * @return Intervenant

@@ -1,0 +1,33 @@
+<?php
+
+namespace UnicaenSiham\Service\Factory;
+
+use Psr\Container\ContainerInterface;
+use UnicaenSiham\Service\Siham;
+use UnicaenSiham\Service\SihamClient;
+
+class SihamFactory
+{
+    public function __invoke(ContainerInterface $container): Siham
+    {
+        $sihamClient = $container->get(SihamClient::class);
+
+        return new Siham($sihamClient);
+    }
+
+    /*    public function __invoke(ContainerInterface $container): SoapClient
+        {
+            
+            $moduleConfig = $container->get(ModuleConfig::class);
+    
+            $soapClientConfig = $moduleConfig->getSoapClientConfig();
+    
+            return new SoapClient($soapClientConfig);
+        }
+    
+    
+    
+    
+    
+    */
+}

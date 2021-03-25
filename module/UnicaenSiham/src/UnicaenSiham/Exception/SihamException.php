@@ -1,0 +1,55 @@
+<?php
+
+namespace UnicaenSiham\Exception;
+
+use Throwable;
+
+class SihamException extends \Exception
+{
+    const PARAM_VIDE     = 'PARAMETRES_VIDES';
+    const INVALID_METHOD = 'is not a valid method for this service';
+    const MATRICULE_VIDE = 'MATRICULE_VIDE';
+
+
+
+    /**
+     * ERREUR_GENERALE
+     * AGENT_NON_TROUVE
+     * ADRESSE_NON_TROUVEE
+     * AJOUT_IMPOSSIBLE
+     * TYPE_ACTION_VIDE
+     * TYPE_ACTION_ERRONE
+     * MATRICULE_VIDE
+     * LONG_COMPL_ADRESSE_SUPERIEURE_A_38
+     */
+
+
+    public function __construct($message = "", $code = 0, Throwable $previous = null)
+    {
+        //Message par défault dans le cas d'une erreur de l'API
+        $message = "Un problème est survenu lors de l'appel à l'API SIHAM $previous";
+
+        //Personnalisation du message selon le code erreur
+        if (preg_match("/" . self::INVALID_METHOD . "/", $message)) {
+            $message = "La méthode appelée n'est pas disponible via l'API SIHAM";
+        }
+
+        if (preg_match("/" . self::PARAM_VIDE . "/", $message)) {
+            $message = "Aucun paramétre n'a été passé à l'API SIHAM";
+        }
+
+        if (preg_match("/" . self::MATRICULE_VIDE . "/", $message)) {
+            $message = "Aucun paramétre matricule valide n'a été fourni à l'API SIHAM";
+        }
+
+        parent::__construct($message, $code, $previous);
+    }
+
+
+
+    public function __toString()
+    {
+        return $this->getMessage();
+    }
+
+}

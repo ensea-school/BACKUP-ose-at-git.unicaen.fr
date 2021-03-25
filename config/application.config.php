@@ -95,7 +95,6 @@ class AppConfig
             'Zend\Router',
             'Zend\Session',
             'Zend\Validator',
-
             'DoctrineModule',
             'DoctrineORMModule',
             'ZfcUser',
@@ -105,6 +104,7 @@ class AppConfig
             'UnicaenTbl',
             'Application',
             'ExportRH',
+            'UnicaenSiham',
         ];
 
         if (!self::inConsole()) {

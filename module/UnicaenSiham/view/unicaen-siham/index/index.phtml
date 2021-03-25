@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Webservice SIHAM</title>
+</head>
+<body>
+<div class="page-header">
+    <h1>Page test des Webservices SIHAM</h1>
+</div>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <th>Nom</th>
+        <th>Prenom</th>
+        <th>Matricule</th>
+        <th>Numéro harpége</th>
+        <th>Date de naissance</th>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \UnicaenSiham\Entity\Agent $agent
+         */
+        ?>
+        <?php foreach ($agents as $agent): ?>
+            <tr>
+                <td><?= $agent->getNomUsuel() ?></td>
+                <td><?= $agent->getPrenom() ?></td>
+                <td><?= $agent->getMatricule() ?></td>
+                <td><?= $agent->getNumDossierHarpege() ?></td>
+                <td><?= $agent->getDateNaissance() ?></td>
+                <td><a href="">Voir données persos</a></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

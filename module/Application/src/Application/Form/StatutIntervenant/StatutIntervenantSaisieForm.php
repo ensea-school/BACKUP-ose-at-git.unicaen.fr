@@ -325,7 +325,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
                 'suffix' => 'HETD',
             ],
             'attributes' => [
-                'title' => "Montant maximal de la prime de formation continue relevant de l'article D714-60 du code de l'éducation",
+                'title' => "Nombre maximal d'heures complémentaires en formation initiale hors enseignement à distance",
             ],
             'type'       => 'Text',
         ]);

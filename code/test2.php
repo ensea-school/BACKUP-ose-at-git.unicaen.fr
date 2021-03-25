@@ -8,6 +8,20 @@
  * @var $viewFile   string
  */
 
-$sc = $container->get(\ExportRH\Connecteur\Siham\SihamConnecteur::class);
+$si = $container->get(\Application\Service\IntervenantService::class);
+//$i = $si->get(193437);
 
-$sc->test();
+
+/** @var \ExportRh\Service\ExportRhService $erhs */
+$erhs = $container->get(\ExportRh\Service\ExportRhService::class);
+
+
+$p = $erhs->getIntervenantExportParams();
+var_dump($p);
+
+//$p->prenom = true;
+
+$erhs->saveIntervenantExportParams();
+
+//$sc = $container->get(\ExportRh\Connecteur\Siham\SihamConnecteur::class);
+//$sc->test();

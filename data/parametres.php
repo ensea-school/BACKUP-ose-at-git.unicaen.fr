@@ -84,13 +84,17 @@ return [
     ],
 
     /* Divers */
-    "report_service"                     => [
+    "report_service"                             => [
         "VALEUR"      => "PREVU",
         "DESCRIPTION" => "Report du service de l'année précédente",
     ],
-    "centres_couts_paye"                 => [
+    "centres_couts_paye"                         => [
         "VALEUR"      => "enseignement",
         "DESCRIPTION" => "Centres de coûts utilisés pour la paye",
+    ],
+    "export_rh_intervenant"                      => [
+        "VALEUR"      => null,
+        "DESCRIPTION" => "Paramètres pour l'export RH des intervenants",
     ],
 
 

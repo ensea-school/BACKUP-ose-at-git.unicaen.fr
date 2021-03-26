@@ -191,9 +191,8 @@ class DataGen
         ],
         [
             'table'   => 'CC_ACTIVITE',
-            'context' => ['install', 'update'],
+            'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['update' => false, 'delete' => false],
         ],
         [
             'table'   => 'TYPE_INTERVENTION',

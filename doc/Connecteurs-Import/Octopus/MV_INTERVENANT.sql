@@ -135,8 +135,8 @@ SELECT DISTINCT
         WHEN 'M' THEN 'M.'
         ELSE 'Mme'
         END                                                        z_civilite_id,
-    COALESCE(initcap(ind.nom_usage), initcap(ind.nom_famille))     nom_usuel,
-    initcap(ind.prenom)                                            prenom,
+    COALESCE(initcap(vind.nom_usage), initcap(ind.nom_famille))     nom_usuel,
+    COALESCE (initcap(vind.prenom), initcap(ind.prenom))             prenom,
     COALESCE(ind.d_naissance, to_date('01/01/1900', 'dd/mm/YYYY')) date_naissance,
     /* Données identifiantes complémentaires */
     initcap(ind.nom_famille)                                       nom_patronymique,
@@ -197,6 +197,7 @@ FROM i
          JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
+         LEFT JOIN octo.v_individu@octoprod vind ON vind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu
          LEFT JOIN structure_aff_enseigne sae ON sae.individu_id = induni.c_individu_chaine
     --On récupére le code de la structure d'affectation principal de l'individu

@@ -142,6 +142,10 @@ return [
             'LIBELLE'      => 'Université Paris 8',
             'PACKAGE_NAME' => 'FORMULE_PARIS8',
         ],
+        14 => [
+            'LIBELLE'      => 'Université d\'Artois',
+            'PACKAGE_NAME' => 'FORMULE_ARTOIS',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

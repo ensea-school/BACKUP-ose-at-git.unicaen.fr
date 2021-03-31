@@ -16,7 +16,7 @@ create table ose_groupe_type_formation (
   primary key (source_code)
   )
 ;
-grant select on ose_groupe_type_formation to ose
+grant select on ose_groupe_type_formation to ose, ucbn_refer
 ;
 create public synonym ose_groupe_type_formation for apogee.ose_groupe_type_formation
 ;
@@ -34,7 +34,7 @@ create table ose_type_formation (
   constraint ose_tyf_fk_typ_diplome foreign key (source_code) references typ_diplome (cod_tpd_etb)
   )
 ;
-grant select on ose_type_formation to ose
+grant select on ose_type_formation to ose, ucbn_refer
 ;
 create public synonym ose_type_formation for apogee.ose_type_formation
 ;
@@ -154,7 +154,7 @@ create table ose_offre_de_formation (
   structure_inf_id               varchar2(20),
   libelle                        varchar2(120)           not null,
   libelle_court                  varchar2(25)            not null,
-  nature                         varchar2(20)            not null,
+  nature                         varchar2(20),
   periode                        varchar2(20),
   taux_foad                      number(1)     default 0 not null,
   check (periode   in ('S1', 'S2')),
@@ -258,4 +258,3 @@ grant select on ose_volume_horaire_ens to ose
 ;
 create public synonym ose_volume_horaire_ens for apogee.ose_volume_horaire_ens
 ;
-

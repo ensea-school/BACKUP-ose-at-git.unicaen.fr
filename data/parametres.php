@@ -84,15 +84,22 @@ return [
     ],
 
     /* Divers */
-    "report_service"                     => [
+    "report_service"                             => [
         "VALEUR"      => "PREVU",
         "DESCRIPTION" => "Report du service de l'année précédente",
     ],
-    "centres_couts_paye"                 => [
+    "centres_couts_paye"                         => [
         "VALEUR"      => "enseignement",
         "DESCRIPTION" => "Centres de coûts utilisés pour la paye",
     ],
-
+    "regle_paiement_annee_civile"                => [
+        "VALEUR"      => "4-6sur10",
+        "DESCRIPTION" => "Règle de répartition années civiles antérieure / en cours pour les paiements",
+    ],
+    "pourc_s1_pour_annee_civile"                 => [
+        "VALEUR"      => "0.67",
+        "DESCRIPTION" => "Taux de répartition en année civile pour les heures du premire semestre",
+    ],
 
     /* Documentations */
     "doc-intervenant-vacataires"                 => [

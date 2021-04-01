@@ -4,22 +4,43 @@ namespace UnicaenSiham\Controller;
 
 
 use UnicaenSiham\Exception\SihamException;
+use UnicaenSiham\Service\Siham;
+use UnicaenSiham\Service\SihamClient;
 use UnicaenSiham\Service\Traits\SihamAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 
 
 class IndexController extends AbstractActionController
 {
-    use SihamAwareTrait;
+
+    protected $siham;
+
+
+
+    public function __construct(Siham $siham)
+    {
+        $this->siham = $siham;
+    }
+
+
 
     public function indexAction(): array
     {
+        $params = [
+            'nomUsuel' => '',
+            'prenom'   => '',
+        ];
+
         $agents = [];
         try {
 
-            $agents = $this->siham->recupererListeAgents(['nomUsuel' => 'dup%']);
+            if ($this->getRequest()->isPost()) {
+                $params['nomUsuel'] = $this->getRequest()->getPost('nomUsuel');
+                $params['prenom']   = $this->getRequest()->getPost('prenom');
+                $agents             = $this->siham->rechercherAgent($params);
+            }
         } catch (SihamException $e) {
-            echo $e->getMessage();
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
         return compact('agents');
@@ -29,13 +50,38 @@ class IndexController extends AbstractActionController
 
     public function voirAction(): array
     {
-        $agent = [];
+        $matricule = $this->params()->fromRoute('matricule');
+        $agent     = [];
         try {
-            $agent = $this->siham->recupDonneesPersonnellesAgent(['listeMatricules' => ['UCN000159222', 'UCN000200042']]);
+            if ($this->getRequest()->isPost()) {
+                //traitemetn de la modification des données personnelles
+                $params = $this->getRequest()->getPost();
+                $params = [
+                    'matricule'  => $params->matricule,
+                    'dateDebut'  => $params->dateDebut,
+                    'codePostal' => $params->codePostal,
+                    'ville'      => $params->ville,
+                ];
+                $result = $this->siham->modificationAdresseAgent($params);
+                $this->flashMessenger()->addSuccessMessage('Modification effectuée avec succés');
+            }
         } catch (SihamException $e) {
-            echo $e->getMessage();
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        } finally {
+            try {
+                $agent = $this->siham->recupDonneesPersonnellesAgent(['listeMatricules' => [$matricule]]);
+            } catch (SihamException $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
         }
 
         return compact('agent');
+    }
+
+
+
+    public function saveAction(): array
+    {
+        return [];
     }
 }

@@ -103,7 +103,7 @@ class AppConfig
             'UnicaenImport',
             'UnicaenTbl',
             'Application',
-            'ExportRH',
+            'ExportRh',
             'UnicaenSiham',
         ];
 

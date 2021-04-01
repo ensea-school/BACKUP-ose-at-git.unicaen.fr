@@ -1,16 +1,22 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Webservice SIHAM</title>
-</head>
-<body>
-<div class="page-header">
-    <h1>Page test des Webservices SIHAM</h1>
+<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Rechercher agent SIHAM</div>
+    <div class="panel-body">
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="">Nom</label>
+                <input class="form-control" type="text" name="nomUsuel" value=""/>
+            </div>
+            <div class="form-group">
+                <label for="">Prénom</label>
+                <input class="form-control" type="text" name="prenom" value=""/>
+            </div>
+            <button type="submit" class="btn btn-default">Rechercher</button>
+        </form>
+    </div>
 </div>
+
 <div>
     <table class="table table-bordered">
         <thead>
@@ -33,11 +39,9 @@
                 <td><?= $agent->getMatricule() ?></td>
                 <td><?= $agent->getNumDossierHarpege() ?></td>
                 <td><?= $agent->getDateNaissance() ?></td>
-                <td><a href="">Voir données persos</a></td>
+                <td><a href="/siham/voir-agent/<?= $agent->getMatricule() ?>">Voir données persos</a></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
 </div>
-</body>
-</html>

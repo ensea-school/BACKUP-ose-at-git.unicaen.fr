@@ -18,7 +18,7 @@ return [
             'siham' => [
                 'type'          => 'Literal',
                 'options'       => [
-                    'route'    => '/test-ws',
+                    'route'    => '/siham',
                     'defaults' => [
                         'controller' => IndexController::class,
                         'action'     => 'index',
@@ -27,12 +27,11 @@ return [
                 'may_terminate' => true,
                 'child_routes'  => [
                     'voir' => [
-                        'type'          => 'Literal',
+                        'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/siham-voir',
+                            'route'    => '/voir-agent/:matricule',
                             'defaults' => [
-                                'controller' => IndexController::class,
-                                'action'     => 'voir',
+                                'action' => 'voir',
                             ],
                         ],
                         'may_terminate' => true,
@@ -67,10 +66,6 @@ return [
         'factories' => [
             IndexController::class => IndexControllerFactory::class,
         ],
-        /*'invokables' => [
-            'UnicaenSiham\Controller\Index' => IndexController::class,
-
-        ],*/
     ],
     'view_manager'    => [
         'template_path_stack' => [

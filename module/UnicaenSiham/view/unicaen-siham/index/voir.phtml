@@ -1,18 +1,50 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Webservice SIHAM</title>
-</head>
-<body>
-<div class="page-header">
-    <h1>Page test des Webservices SIHAM</h1>
-</div>
-<div>
-    
-</div>
-</body>
-</html>
+<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
+
+<?php
+/**
+ * @var \UnicaenSiham\Entity\Agent $agent
+ */
+?>
+
+<?php if (!empty($agent)): ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">Données personnelles
+            de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
+        <div class="panel-body">
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="">Matricule : </label>
+                    <input id="disabledInput" class="form-control" type="text" name="matricule"
+                           value="<?= $agent->getMatricule() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Nom Usuel : </label>
+                    <input class="form-control" type="text" name="nomUsuel" value="<?= $agent->getNomUsuel() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Prénom : </label>
+                    <input class="form-control" type="text" name="prenom" value="<?= $agent->getPrenom() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Date de naissance : </label>
+                    <input class="form-control" type="text" name="dateNaissance" value="<?= $agent->getDateNaissance() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Code postal : </label>
+                    <input class="form-control" type="text" name="codePostal" value="<?= $agent->getCodePostalAdresse() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Ville : </label>
+                    <input class="form-control" type="text" name="ville"
+                           value="<?= $agent->getBureauDistributeurAdresse() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Date début : </label>
+                    <input class="form-control" type="text" name="dateDebut" value="<?= $agent->getDateDebutAdresse() ?>"/>
+                </div>
+                <button type="submit" class="btn btn-default">Enregistrer</button>
+            </form>
+
+        </div>
+    </div>
+<?php endif; ?>

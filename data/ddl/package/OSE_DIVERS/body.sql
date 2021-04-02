@@ -2,6 +2,78 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
   OSE_UTILISATEUR_ID NUMERIC;
   OSE_SOURCE_ID NUMERIC;
 
+  CPA_S1_ID NUMERIC;
+
+
+  FUNCTION CALC_POURC_AA( periode_id NUMERIC, horaire_debut DATE, horaire_fin DATE, annee_id NUMERIC ) RETURN FLOAT IS
+    regle_paiement_annee_civ VARCHAR2(50);
+    nbjaa NUMERIC;
+    nbjac NUMERIC;
+  BEGIN
+    regle_paiement_annee_civ := ose_parametre.get_regle_paiement_annee_civ;
+
+    IF regle_paiement_annee_civ = '4-6sur10' THEN
+      RETURN 4/10;
+    END IF;
+
+    -- Sinon on calcule en fonction du nombre du semestre
+    IF CPA_S1_ID IS NULL THEN
+      SELECT id INTO CPA_S1_ID FROM periode WHERE code = 'S1';
+    END IF;
+
+    IF horaire_debut IS NULL AND horaire_fin IS NULL THEN
+      IF periode_id = CPA_S1_ID THEN
+        RETURN ose_parametre.get_pourc_s1_annee_civ;
+      ELSE
+        RETURN 0;
+      END IF;
+    END IF;
+
+    -- S'il y a des dates, alors on s'appuie dessus
+    IF horaire_debut IS NOT NULL AND horaire_fin IS NULL THEN
+      IF to_number(to_char(horaire_debut,'YYYY')) = annee_id THEN
+        RETURN 1;
+      ELSE
+        RETURN 0;
+      END IF;
+    END IF;
+
+    IF horaire_fin IS NOT NULL AND horaire_debut IS NULL THEN
+      IF to_number(to_char(horaire_fin,'YYYY')) = annee_id THEN
+        RETURN 1;
+      ELSE
+        RETURN 0;
+      END IF;
+    END IF;
+
+    IF horaire_fin IS NOT NULL AND horaire_debut IS NOT NULL THEN
+      IF to_number(to_char(horaire_debut,'YYYY')) = to_number(to_char(horaire_fin,'YYYY')) THEN -- si c'est la même année
+        IF to_number(to_char(horaire_debut,'YYYY')) = annee_id THEN
+          RETURN 1;
+        ELSE
+          RETURN 0;
+        END IF;
+      ELSE
+        nbjaa := to_date('01/01/' || (annee_id+1), 'dd/mm/YYYY') - horaire_debut;
+        IF nbjaa < 1 THEN
+          RETURN 0;
+        END IF;
+
+        nbjac := horaire_fin - to_date('31/12/' || annee_id, 'dd/mm/YYYY');
+        IF nbjac < 1 THEN
+          RETURN 1;
+        END IF;
+
+        ose_test.echo('nbjaa=' || nbjaa);
+        ose_test.echo('nbjac=' || nbjac);
+
+        RETURN ROUND(nbjaa / (nbjaa + nbjac), 2);
+      END IF;
+    END IF;
+
+    -- Si aucune condition n'est réunie, on retourne comme avant, CAD 4/10
+    RETURN 4/10;
+  END;
 
 
 

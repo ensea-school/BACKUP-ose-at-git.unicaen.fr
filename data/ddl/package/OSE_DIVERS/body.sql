@@ -17,11 +17,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     END IF;
 
     -- Sinon on calcule en fonction du nombre du semestre
-    IF CPA_S1_ID IS NULL THEN
-      SELECT id INTO CPA_S1_ID FROM periode WHERE code = 'S1';
-    END IF;
+    IF horaire_debut IS NULL AND horaire_fin IS NULL AND periode_id IS NOT NULL THEN
+      IF CPA_S1_ID IS NULL THEN
+        SELECT id INTO CPA_S1_ID FROM periode WHERE code = 'S1';
+      END IF;
 
-    IF horaire_debut IS NULL AND horaire_fin IS NULL THEN
       IF periode_id = CPA_S1_ID THEN
         RETURN ose_parametre.get_pourc_s1_annee_civ;
       ELSE

@@ -21,7 +21,8 @@ FROM
   JOIN centre_cout                    cc ON cc.id = mep.centre_cout_id
   JOIN service_referentiel            sr ON sr.id = frsr.service_referentiel_id
   JOIN fonction_referentiel           fr ON fr.id = sr.fonction_id
-UNION
+
+UNION ALL
 
 SELECT
   mep.id                                      mise_en_paiement_id,

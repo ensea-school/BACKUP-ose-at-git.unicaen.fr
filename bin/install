@@ -101,7 +101,8 @@ $od->writeVersion($osedir, $version);
 
 // Récupération de Composer
 $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
-$c->passthru("cd $osedir;wget https://getcomposer.org/composer-1.phar; mv composer-1.phar composer.phar");
+//$c->passthru("cd $osedir;wget https://getcomposer.org/composer-1.phar; mv composer-1.phar composer.phar");
+$c->passthru("wget https://getcomposer.org/download/1.10.21/composer.phar");
 
 // Récupération des dépendances
 $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);

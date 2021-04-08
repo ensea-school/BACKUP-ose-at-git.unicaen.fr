@@ -79,7 +79,7 @@ FROM (
       WHERE
         mep.heures * 4 / 10 > 0
 
-      UNION
+      UNION ALL
 
       SELECT
         mep.id,

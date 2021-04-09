@@ -64,9 +64,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
           RETURN 1;
         END IF;
 
-        ose_test.echo('nbjaa=' || nbjaa);
-        ose_test.echo('nbjac=' || nbjac);
-
         RETURN ROUND(nbjaa / (nbjaa + nbjac), 2);
       END IF;
     END IF;

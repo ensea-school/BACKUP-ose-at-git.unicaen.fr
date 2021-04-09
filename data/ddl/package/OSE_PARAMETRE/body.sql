@@ -1,7 +1,10 @@
 CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
 
-  cache_ose_user NUMERIC;
-  cache_annee_id NUMERIC;
+  oseuser NUMERIC;
+  annee NUMERIC;
+
+  annee_import NUMERIC;
+  etablissement VARCHAR2(50);
   regle_paiement_annee_civile VARCHAR2(50);
   pourc_s1_pour_annee_civile FLOAT;
 
@@ -10,19 +13,22 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
   FUNCTION get_etablissement return Numeric AS
     etab_id numeric;
   BEGIN
-    select to_number(valeur) into etab_id from parametre where nom = 'etablissement';
-    RETURN etab_id;
+    IF etablissement IS NULL THEN
+      select to_number(valeur) into etablissement from parametre where nom = 'etablissement';
+    END IF;
+
+    RETURN etablissement;
   END get_etablissement;
 
 
 
   FUNCTION get_annee return Numeric AS
-    annee_id numeric;
   BEGIN
-    IF cache_annee_id IS NOT NULL THEN RETURN cache_annee_id; END IF;
-    select to_number(valeur) into annee_id from parametre where nom = 'annee';
-    cache_annee_id := annee_id;
-    RETURN cache_annee_id;
+    IF annee IS NULL THEN
+      SELECT to_number(valeur) into annee from parametre where nom = 'annee';
+    END IF;
+
+    RETURN annee;
   END get_annee;
 
 
@@ -30,19 +36,22 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
   FUNCTION get_annee_import RETURN NUMERIC AS
     annee_id NUMERIC;
   BEGIN
-    SELECT to_number(valeur) INTO annee_id FROM parametre WHERE nom = 'annee_import';
-    RETURN annee_id;
+    IF annee_import IS NULL THEN
+      SELECT to_number(valeur) INTO annee_import FROM parametre WHERE nom = 'annee_import';
+    END IF;
+
+    RETURN annee_import;
   END get_annee_import;
 
 
 
   FUNCTION get_ose_user return NUMERIC AS
-    ose_user_id numeric;
   BEGIN
-    IF cache_ose_user IS NOT NULL THEN RETURN cache_ose_user; END IF;
-    select to_number(valeur) into ose_user_id from parametre where nom = 'oseuser';
-    cache_ose_user := ose_user_id;
-    RETURN cache_ose_user;
+    IF oseuser IS NULL THEN
+      SELECT to_number(valeur) into oseuser from parametre where nom = 'oseuser';
+    END IF;
+
+    RETURN oseuser;
   END get_ose_user;
 
 
@@ -56,6 +65,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
       formule f
       JOIN parametre p ON f.id = to_number(p.valeur)
     WHERE p.nom = 'formule';
+
     RETURN fdata;
   END;
 
@@ -79,6 +89,15 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
     END IF;
 
     RETURN pourc_s1_pour_annee_civile;
+  END;
+
+
+  PROCEDURE CLEAR_CACHE IS
+  BEGIN
+    annee := NULL;
+    oseuser := NULL;
+    regle_paiement_annee_civile := NULL;
+    pourc_s1_pour_annee_civile := NULL;
   END;
 
 END OSE_PARAMETRE;

@@ -787,7 +787,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             /*@INTERVENANT_ID=i.id*/
             /*@ANNEE_ID=i.annee_id*/
             AND NOT (si.peut_avoir_contrat = 0 AND evh.code = ''valide'')
-
         )
         SELECT
           annee_id,
@@ -1182,14 +1181,18 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           COALESCE( ep.structure_id, i.structure_id ) structure_id,
           mep.id                                      mise_en_paiement_id,
           mep.periode_paiement_id                     periode_paiement_id,
+          COALESCE(mep.domaine_fonctionnel_id, e.domaine_fonctionnel_id, to_number(p.valeur)) domaine_fonctionnel_id,
           frs.heures_compl_fi + frs.heures_compl_fc + frs.heures_compl_fa + frs.heures_compl_fc_majorees heures_a_payer,
           count(*) OVER(PARTITION BY frs.id)          heures_a_payer_pond,
           NVL(mep.heures,0)                           heures_demandees,
-          CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees
+          CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees,
+          4 / 10                                      pourc_exercice_aa,
+          6 / 10                                      pourc_exercice_ac
         FROM
                     formule_resultat_service        frs
                JOIN type_volume_horaire             tvh ON tvh.code = ''REALISE''
                JOIN etat_volume_horaire             evh ON evh.code = ''valide''
+               JOIN parametre                         p ON p.nom = ''domaine_fonctionnel_ens_ext''
                JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
                                                        AND fr.type_volume_horaire_id = tvh.id
                                                        AND fr.etat_volume_horaire_id = evh.id
@@ -1197,6 +1200,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                JOIN intervenant                       i ON i.id = fr.intervenant_id /*@INTERVENANT_ID=i.id*/ /*@ANNEE_ID=a.annee_id*/
                JOIN service                           s ON s.id = frs.service_id
           LEFT JOIN element_pedagogique              ep ON ep.id = s.element_pedagogique_id
+          LEFT JOIN etape                             e ON e.id = ep.etape_id
           LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_id = frs.id
                                                        AND mep.histo_destruction IS NULL
 
@@ -1209,13 +1213,16 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           null                                        formule_res_service_id,
           frs.id                                      formule_res_service_ref_id,
           i.id                                        intervenant_id,
-          s.structure_id                              structure_id,
+          sr.structure_id                             structure_id,
           mep.id                                      mise_en_paiement_id,
           mep.periode_paiement_id                     periode_paiement_id,
+          COALESCE(mep.domaine_fonctionnel_id, fncr.domaine_fonctionnel_id) domaine_fonctionnel_id,
           frs.heures_compl_referentiel                heures_a_payer,
           count(*) OVER(PARTITION BY frs.id)          heures_a_payer_pond,
           NVL(mep.heures,0)                           heures_demandees,
-          CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees
+          CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees,
+          4 / 10                                      pourc_exercice_aa,
+          6 / 10                                      pourc_exercice_ac
         FROM
                     formule_resultat_service_ref    frs
                JOIN type_volume_horaire             tvh ON tvh.code = ''REALISE''
@@ -1225,7 +1232,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                                                        AND fr.etat_volume_horaire_id = evh.id
 
                JOIN intervenant                       i ON i.id = fr.intervenant_id /*@INTERVENANT_ID=i.id*/ /*@ANNEE_ID=a.annee_id*/
-               JOIN service_referentiel               s ON s.id = frs.service_referentiel_id
+               JOIN service_referentiel              sr ON sr.id = frs.service_referentiel_id
+               JOIN fonction_referentiel           fncr ON fncr.id = sr.fonction_id
           LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                        AND mep.histo_destruction IS NULL';
 
@@ -1248,11 +1256,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.INTERVENANT_ID                         = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                           = v.STRUCTURE_ID
         AND COALESCE(t.MISE_EN_PAIEMENT_ID,0)        = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
+        AND COALESCE(t.DOMAINE_FONCTIONNEL_ID,0)     = COALESCE(v.DOMAINE_FONCTIONNEL_ID,0)
         AND COALESCE(t.PERIODE_PAIEMENT_ID,0)        = COALESCE(v.PERIODE_PAIEMENT_ID,0)
         AND t.HEURES_A_PAYER                         = v.HEURES_A_PAYER
         AND t.HEURES_A_PAYER_POND                    = v.HEURES_A_PAYER_POND
         AND t.HEURES_DEMANDEES                       = v.HEURES_DEMANDEES
         AND t.HEURES_PAYEES                          = v.HEURES_PAYEES
+        AND t.POURC_EXERCICE_AA                      = v.POURC_EXERCICE_AA
+        AND t.POURC_EXERCICE_AC                      = v.POURC_EXERCICE_AC
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.SERVICE_ID,
@@ -1262,11 +1273,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.INTERVENANT_ID,
       v.STRUCTURE_ID,
       v.MISE_EN_PAIEMENT_ID,
+      v.DOMAINE_FONCTIONNEL_ID,
       v.PERIODE_PAIEMENT_ID,
       v.HEURES_A_PAYER,
       v.HEURES_A_PAYER_POND,
       v.HEURES_DEMANDEES,
-      v.HEURES_PAYEES
+      v.HEURES_PAYEES,
+      v.POURC_EXERCICE_AA,
+      v.POURC_EXERCICE_AC
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PAIEMENT t ON

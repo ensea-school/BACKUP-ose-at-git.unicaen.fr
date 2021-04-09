@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DOMAINE_FONCTIONNEL_ID'        => [
+        'DOMAINE_FONCTIONNEL_ID'     => [
             'name'        => 'DOMAINE_FONCTIONNEL_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_ID'     => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 11,
+            'position'    => 12,
             'commentaire' => 'HETD à payer',
         ],
         'HEURES_A_PAYER_POND'        => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 12,
+            'position'    => 13,
             'commentaire' => 'HETD à payer (en %)',
         ],
         'HEURES_DEMANDEES'           => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 14,
             'commentaire' => 'HETD demandées',
         ],
         'HEURES_PAYEES'              => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 14,
+            'position'    => 15,
             'commentaire' => 'HETD payées',
         ],
         'ID'                         => [
@@ -153,7 +153,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'POURC_EXERCICE_AA'         => [
+        'POURC_EXERCICE_AA'          => [
             'name'        => 'POURC_EXERCICE_AA',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -162,10 +162,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '4/10',
-            'position'    => 15,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
-        'POURC_EXERCICE_AC'         => [
+        'POURC_EXERCICE_AC'          => [
             'name'        => 'POURC_EXERCICE_AC',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -174,7 +174,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '6/10',
-            'position'    => 16,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'                 => [

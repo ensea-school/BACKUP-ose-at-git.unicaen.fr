@@ -1413,10 +1413,13 @@ return [
         'STRUCTURE_ID',
         'MISE_EN_PAIEMENT_ID',
         'PERIODE_PAIEMENT_ID',
+        'DOMAINE_FONCTIONNEL_ID',
         'HEURES_A_PAYER',
         'HEURES_A_PAYER_POND',
         'HEURES_DEMANDEES',
         'HEURES_PAYEES',
+        'POURC_EXERCICE_AA',
+        'POURC_EXERCICE_AC',
     ],
     'TBL_PIECE_JOINTE'               => [
         'ID',

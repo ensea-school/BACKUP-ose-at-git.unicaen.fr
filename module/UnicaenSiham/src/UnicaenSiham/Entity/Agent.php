@@ -37,7 +37,7 @@ class Agent
 
     protected $nomVoieAdresse;
 
-    protected $complemetAdresse;
+    protected $complementAdresse;
 
     protected $codePostalAdresse;
 
@@ -400,9 +400,9 @@ class Agent
     /**
      * @return mixed
      */
-    public function getComplemetAdresse()
+    public function getComplementAdresse()
     {
-        return $this->complemetAdresse;
+        return $this->complementAdresse;
     }
 
 
@@ -412,9 +412,9 @@ class Agent
      *
      * @return Agent
      */
-    public function setComplemetAdresse($complemetAdresse)
+    public function setComplementAdresse($complementAdresse)
     {
-        $this->complemetAdresse = $complemetAdresse;
+        $this->complementAdresse = $complementAdresse;
 
         return $this;
     }
@@ -654,7 +654,7 @@ class Agent
                 } else {
                     $adresses[] = $value;
                 }
-                
+
                 //On traiter uniquement l'adresse principale de l'agent
                 foreach ($adresses as $adresse) {
                     if ($adresse->codeTypologieAdresse == Siham::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE) {

@@ -57,10 +57,12 @@ class IndexController extends AbstractActionController
                 //traitemetn de la modification des données personnelles
                 $params = $this->getRequest()->getPost();
                 $params = [
-                    'matricule'  => $params->matricule,
-                    'dateDebut'  => $params->dateDebut,
-                    'codePostal' => $params->codePostal,
-                    'ville'      => $params->ville,
+                    'matricule'         => $params->matricule,
+                    'dateDebut'         => $params->dateDebut,
+                    'complementAdresse' => $params->complementAdresse,
+                    'natureVoie'        => $params->natureVoie,
+                    'codePostal'        => $params->codePostal,
+                    'ville'             => $params->ville,
                 ];
                 $result = $this->siham->modificationAdresseAgent($params);
                 $this->flashMessenger()->addSuccessMessage('Modification effectuée avec succés');
@@ -69,7 +71,7 @@ class IndexController extends AbstractActionController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         } finally {
             try {
-                $agent = $this->siham->recupDonneesPersonnellesAgent(['listeMatricules' => [$matricule]]);
+                $agent = $this->siham->recupererDonneesPersonnellesAgent(['listeMatricules' => [$matricule]]);
             } catch (SihamException $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }

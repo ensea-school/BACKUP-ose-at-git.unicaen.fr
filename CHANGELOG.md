@@ -9,7 +9,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
 
 
-# OSE 15
+# OSE 15 (publié le 12/03/21)
 Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés

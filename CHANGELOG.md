@@ -125,7 +125,6 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 ## Nouveautés
 
-* Formule de calcul de Paris et Artois
 * Nouveau privilège donnant la possibilité de saisir du référentiel sans aucune contrainte sur la composante
 
 

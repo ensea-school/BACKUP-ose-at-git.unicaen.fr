@@ -118,14 +118,12 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 * Formule de calcul de Paris et Artois
 * Création d'un nouveau privilèges pour dissocier le droit sur l'export pdf des états de paiement et l'export pdf des mises en paiement (#35845)
 
-## Corrections de bugs
-
-
 # OSE 14.17 (11/03/21)
 
-## Nouveautés
+## Correctoins de bugs
 
-* Nouveau privilège donnant la possibilité de saisir du référentiel sans aucune contrainte sur la composante
+* Le report des services de l'année précédente par un gestionnaire est désormais limité à sa composante.
+* Correction au niveau du franchissement de l'étape contrat dans le cas de présence d'heures de service référentiel (#35495)
 
 
 ## Corrections de bugs

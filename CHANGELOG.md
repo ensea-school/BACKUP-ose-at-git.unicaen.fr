@@ -114,6 +114,12 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 # OSE 14.17
 
+## Nouveautés
+
+* Formule de calcul de Paris et Artois
+* Nouveau privilège donnant la possibilité de saisir du référentiel sans aucune contrainte sur la composante
+
+
 ## Corrections de bugs
 
 * Le report des services de l'année précédente par un gestionnaire est désormais limité à sa composante.

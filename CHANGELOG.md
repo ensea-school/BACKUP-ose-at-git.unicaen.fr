@@ -120,12 +120,6 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 # OSE 14.17 (11/03/21)
 
-## Correctoins de bugs
-
-* Le report des services de l'année précédente par un gestionnaire est désormais limité à sa composante.
-* Correction au niveau du franchissement de l'étape contrat dans le cas de présence d'heures de service référentiel (#35495)
-
-
 ## Corrections de bugs
 
 * Le report des services de l'année précédente par un gestionnaire est désormais limité à sa composante.

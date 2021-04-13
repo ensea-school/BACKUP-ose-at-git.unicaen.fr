@@ -124,7 +124,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 ## Nouveautés
 
-* Formule de calcul de Paris
+* Formule de calcul de Paris8
 * Nouveau privilège donnant la possibilité de saisir du référentiel sans aucune contrainte sur la composante
 
 ## Corrections de bugs

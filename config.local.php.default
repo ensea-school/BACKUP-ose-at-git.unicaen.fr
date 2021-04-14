@@ -20,35 +20,22 @@ return [
          * Si la fonction retourne true, alors on n'est topujours considéré comme connecté depuis le réseau de l'établissement
          */
         'inEtablissement'  => function () {
-            /* Exemple de test :
-            $ip        = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-            $forwarded =  isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '';
+           $hostLocalization = \Application::$container->get(\UnicaenApp\HostLocalization\HostLocalizationUnicaen::class);
 
-            $ipInterne = '10.'; // les IP doivent débuter par 10.* pour être considérés comme de l'établissement
-
-            $proxies = [
-                // Liste des adresses IP de vos proxies
-            ];
-
-            $reverseProxies = [
-                // Liste des adresses IP des reverse-proxies
-            ];
-
-            // Si on est en direct et en interne sans passer par le proxy (pas de redirection)
-            if (0 === strpos($ip,$ipInterne) && $forwarded === '') return true;
-
-            // Si on est en interne, que l'on sort puis on re-rentre en passant par le reverse proxy
-            if (in_array($ip,$reverseProxies) && 0 === strpos($forwarded,$ipInterne)) return true;
-
-            // Si on est en interne, que l'on passe par le proxy en interne
-            if (in_array($ip,$proxies) && 0 === strpos($forwarded,$ipInterne)) return true;
-
-            // Sinon, on vient de l'extérieur
-            return false;
-            */
-
-            return true;
+           return $hostLocalization->inEtablissement();
         },
+
+        'activated' => 0,
+
+        'masque-ip' => ''
+
+        'proxies' => [
+            //xxx.xx.xxx.xx
+        ],
+
+        'reverse-proxies' => [
+            //xxx.xx.xxx.xx
+        ],
     ],
 
 

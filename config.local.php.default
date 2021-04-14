@@ -25,7 +25,7 @@ return [
            return $hostLocalization->inEtablissement();
         },
 
-        'activated' => 0,
+        'activated' => false,
 
         'masque-ip' => ''
 

@@ -9,6 +9,13 @@ if (file_exists($versionFile)) {
 return [
     'unicaen-app' => [
 
+        'hostlocalization'       => [
+            'activated'       => AppConfig::get('global', 'activated', 0),
+            'proxies'         => AppConfig::get('global', 'proxies', []),
+            'reverse-proxies' => AppConfig::get('global', 'reverse-proxies', []),
+            'masque-ip'       => AppConfig::get('global', 'masque-ip', ''),
+        ],
+
         /**
          * Informations concernant cette application
          */

@@ -24,7 +24,6 @@ class OffreFormationService extends AbstractEntityService
     use LocalContextServiceAwareTrait;
 
 
-
     public function getEntityClass()
     {
     }
@@ -55,13 +54,15 @@ class OffreFormationService extends AbstractEntityService
                 partial e.{id,code,annee,libelle,sourceCode,niveau,histoDestruction},
                 partial tf.{id},
                 partial gtf.{id, libelleCourt, ordre},
-                partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa}
+                partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
+                partial vme.{id,heures, groupes}
             FROM
               Application\Entity\Db\Etape e
               JOIN e.structure s
               JOIN e.typeFormation tf
               JOIN tf.groupe gtf
               LEFT JOIN e.elementPedagogique ep
+              LEFT JOIN ep.volumeHoraireEns vme
             WHERE
               (s = :structure OR ep.structure = :structure) AND e.annee = :annee ';
 
@@ -140,9 +141,9 @@ class OffreFormationService extends AbstractEntityService
 
 
         //Offre année en cours
-        list($niveaux, $etapes, $elements) = $this->getNeep($structure, $niveau, $etape, $anneeEnCours, $source);
+        [$niveaux, $etapes, $elements] = $this->getNeep($structure, $niveau, $etape, $anneeEnCours, $source);
         //Offre année suivante
-        list($niveauxN1, $etapesN1, $elementsN1) = $this->getNeep($structure, $niveau, $etape, $anneeSuivante, $source);
+        [$niveauxN1, $etapesN1, $elementsN1] = $this->getNeep($structure, $niveau, $etape, $anneeSuivante, $source);
 
         //Organisation pour traitement dans la vue
         $codesEtapeN1          = [];

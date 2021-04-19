@@ -7,6 +7,7 @@ use Application\Entity\Db\Etape;
 use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
+use Application\Entity\Db\VolumeHoraireEns;
 use Application\Processus\Traits\ReconductionProcessusAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -36,7 +37,6 @@ class OffreFormationController extends AbstractController
     use AnneeServiceAwareTrait;
     use ReconductionProcessusAwareTrait;
     use OffreFormationServiceAwareTrait;
-
 
 
     public function indexAction()
@@ -107,8 +107,38 @@ class OffreFormationController extends AbstractController
             'Effectifs FI actuels',
             'Effectifs FA actuels',
             'Effectifs FC actuels',
+            'Nbr heures CM',
+            'Nbr groupes CM',
+            'Nbr heures TD',
+            'Nbr groupes TD',
+            'Nbr heures TP',
+            'Nbr groupes TP',
         ]);
+
+
         foreach ($elements as $element) {
+            $cm       = '0';
+            $td       = '0';
+            $tp       = '0';
+            $cmGroupe = '0';
+            $tdGroupe = '0';
+            $tpGroupe = '0';
+
+            foreach ($element->getVolumeHoraireEns() as $vhe) {
+                if ($vhe->getTypeIntervention()->getCode() == 'CM') {
+                    $cm       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $cmGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
+                }
+                if ($vhe->getTypeIntervention()->getCode() == 'TD') {
+                    $td       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $tdGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
+                }
+                if ($vhe->getTypeIntervention()->getCode() == 'TP') {
+                    $tp       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $tpGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
+                }
+            }
+
             $etape      = $element->getEtape();
             $effectifs  = $element->getEffectifs();
             $discipline = $element->getDiscipline();
@@ -128,6 +158,12 @@ class OffreFormationController extends AbstractController
                 $effectifs ? $effectifs->getFi() : null,
                 $effectifs ? $effectifs->getFa() : null,
                 $effectifs ? $effectifs->getFc() : null,
+                $cm,
+                $cmGroupe,
+                $td,
+                $tdGroupe,
+                $tp,
+                $tpGroupe,
             ]);
         }
         $csvModel->setFilename('offre-de-formation.csv');
@@ -319,6 +355,7 @@ class OffreFormationController extends AbstractController
         $this->em()->getFilters()->enable('annee')->init([
             ElementPedagogique::class,
             Etape::class,
+
         ]);
     }
 
@@ -332,6 +369,7 @@ class OffreFormationController extends AbstractController
             TypeFormation::class,
             GroupeTypeFormation::class,
             TypeModulateur::class,
+            VolumeHoraireEns::class,
         ]);
     }
 

@@ -8,6 +8,12 @@ Allez dans OSE, menu Administration / Synchronisation, Page Tables.
 
 ![Tables](tables.png)
 
+Le bouton "Mise à jour des vues et procédures d'import" vous permet de recréer les vues différentielles et les procédures de mise à jour.
+Utile si vous avez à modifier vos vues sources.
+Cette opération est faite implicitement si vous activez/désactivez la synchronisation pour une table.
+
+La commande `./bin/ose build-synchronisation` met à jour de la même manière vos vues et procédures d'import.
+
 ## Synchroniser une table
 
 ### Dans l'application

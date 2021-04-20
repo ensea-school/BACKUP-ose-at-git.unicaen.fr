@@ -1,7 +1,7 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
-# OSE 15.1
+# OSE 15.1 (à venir)
 
 ## Nouveautés
 
@@ -9,7 +9,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
 
 
-# OSE 15
+# OSE 15 (12/03/21)
 Objectif : Doubles statuts et refonte des données personnelles
 
 ## Nouveautés
@@ -111,8 +111,14 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
+# OSE 14.18 (à venir)
 
-# OSE 14.17
+## Nouveautés
+
+* Formule de calcul de Paris et Artois
+* Création d'un nouveau privilèges pour dissocier le droit sur l'export pdf des états de paiement et l'export pdf des mises en paiement (#35845)
+
+# OSE 14.17 (11/03/21)
 
 ## Corrections de bugs
 
@@ -120,7 +126,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 * Correction au niveau du franchissement de l'étape contrat dans le cas de présence d'heures de service référentiel (#35495)
 
 
-# OSE 14.16
+# OSE 14.16 (10/02/21)
 
 ## Nouveautés
 
@@ -135,7 +141,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 * Bug sur validation/dévalidation d'une pièce jointe (erreur 403) dans le cas d'un paramétrage de workflow sans service prévisionnel (#34526)
 * Formule de calcul de Poitiers mise à jour
 
-# OSE 14.15
+# OSE 14.15 (09/12/20)
 
 ## Corrections de bugs
 
@@ -143,7 +149,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 * Simplification et correction du fonctionnement de l'interface d'admin "Règles de validation des enseignements par type d'intervenant"
 
 
-# OSE 14.14
+# OSE 14.14 (30/11/20)
 
 ## Corrections de bugs
 

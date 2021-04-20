@@ -2,6 +2,11 @@
 -- ALIMENTATION DES TABLES EXPLOITEES PAR LA SYNCHRONISATION APOGEE -> OSE
 -- Auteur : Bruno Bernard bruno.bernard@unicaen.fr
 --
+-- Evolutions
+-- 04/10/2019 Plafonnement de la charge d enseignement liee a l'encadrement individuel (decision d etablissement unicaen) : 1 heure maxi par etudiant
+-- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : s il existe une charge EAD alors a_distance = Oui sinon a_distance = Non
+-- 31/03/2021 Exclusion des ELP fictifs en testant le temoin TEM_FICTIF de leur nature et non plus leur code nature
+
 -- Reinitialisation des tables
 --
 delete from ose_volume_horaire_ens
@@ -29,22 +34,23 @@ delete from ose_groupe_type_formation
 -- C : Ordre de classement des groupes de types de formation dans les interfaces utilisateurs
 -- D : Est-il pertinent de suffixer le libelle court par le niveau relatif de la VET dans le diplome? (0/1)
 -- E : Identifiant du groupe de types de formations
---                                             A                                      B                   C  D  E
-insert into ose_groupe_type_formation values ('Diplôme Universitaire de Technologie','DUT'               ,10,1,'DUT'        );
-insert into ose_groupe_type_formation values ('PACES'                               ,'PACES'             ,21,0,'PACES'      );
-insert into ose_groupe_type_formation values ('Etudes de Santé'                     ,'Santé'             ,22,1,'SANTE'      );
-insert into ose_groupe_type_formation values ('Thèse d''exercice'                   ,'Thèse d''exercice' ,24,0,'THESE_EXER' );
-insert into ose_groupe_type_formation values ('DES'                                 ,'DES'               ,25,0,'DES'        );
-insert into ose_groupe_type_formation values ('DESC'                                ,'DESC'              ,26,0,'DESC'       );
-insert into ose_groupe_type_formation values ('Licence'                             ,'L'                 ,30,1,'L'          );
-insert into ose_groupe_type_formation values ('Licence professionnelle'             ,'LPro'              ,35,0,'LP'         );
-insert into ose_groupe_type_formation values ('Master'                              ,'M'                 ,40,1,'M'          );
-insert into ose_groupe_type_formation values ('Diplôme d''ingénieur'                ,'Ingénieur'         ,45,1,'ING'        );
-insert into ose_groupe_type_formation values ('Diplôme d''université'               ,'DU'                ,60,0,'DU'         );
-insert into ose_groupe_type_formation values ('Capacité'                            ,'Capacité'          ,70,0,'CAPA'       );
-insert into ose_groupe_type_formation values ('Orthophonie'                         ,'Orthophonie'       ,71,0,'ORTHO'      );
-insert into ose_groupe_type_formation values ('Maïeutique'                          ,'Maïeutique'        ,72,0,'MAIEUTIQUE' );
-insert into ose_groupe_type_formation values ('Autre formation'                     ,'Autre'             ,99,0,'AUTRE'      );
+--                                             A                                       B                   C  D  E
+insert into ose_groupe_type_formation values ('Diplôme Universitaire de Technologie', 'DUT'               ,10,1,'DUT'        );
+insert into ose_groupe_type_formation values ('Bachelor Universitaire de Technologie','BUT'               ,11,1,'BUT'        );
+insert into ose_groupe_type_formation values ('PACES'                                ,'PACES'             ,21,0,'PACES'      );
+insert into ose_groupe_type_formation values ('Etudes de Santé'                      ,'Santé'             ,22,1,'SANTE'      );
+insert into ose_groupe_type_formation values ('Thèse d''exercice'                    ,'Thèse d''exercice' ,24,0,'THESE_EXER' );
+insert into ose_groupe_type_formation values ('DES'                                  ,'DES'               ,25,0,'DES'        );
+insert into ose_groupe_type_formation values ('DESC'                                 ,'DESC'              ,26,0,'DESC'       );
+insert into ose_groupe_type_formation values ('Licence'                              ,'L'                 ,30,1,'L'          );
+insert into ose_groupe_type_formation values ('Licence professionnelle'              ,'LPro'              ,35,0,'LP'         );
+insert into ose_groupe_type_formation values ('Master'                               ,'M'                 ,40,1,'M'          );
+insert into ose_groupe_type_formation values ('Diplôme d''ingénieur'                 ,'Ingénieur'         ,45,1,'ING'        );
+insert into ose_groupe_type_formation values ('Diplôme d''université'                ,'DU'                ,60,0,'DU'         );
+insert into ose_groupe_type_formation values ('Capacité'                             ,'Capacité'          ,70,0,'CAPA'       );
+insert into ose_groupe_type_formation values ('Orthophonie'                          ,'Orthophonie'       ,71,0,'ORTHO'      );
+insert into ose_groupe_type_formation values ('Maïeutique'                           ,'Maïeutique'        ,72,0,'MAIEUTIQUE' );
+insert into ose_groupe_type_formation values ('Autre formation'                      ,'Autre'             ,99,0,'AUTRE'      );
 --
 -- Types de formations
 -- Table de correspondance entre les types de formations Apogee et les groupes de types de formations dans OSE
@@ -57,6 +63,7 @@ with tpd as (
     case cod_tpd_etb
       when '15' then 'DUT'
       when '16' then 'DUT'
+      when 'BU' then 'BUT'
       when 'M1' then 'PACES'
       when 'M2' then 'SANTE'
       when '87' then 'SANTE'
@@ -148,7 +155,7 @@ with
     join ucbn_composante_ldap      str on str.cod_cmp = cmp.cod_cmp         -- Recherche du code structure dans le referentiel des structures de l etablissement
     join ose_type_formation        tyf on tyf.source_code = dip.cod_tpd_etb
     join ose_groupe_type_formation gtf on gtf.source_code = tyf.z_groupe_id
-    where anu.cod_anu >= to_char ( add_months ( sysdate, -6 ), 'YYYY' )     -- Par convention l annee debute le 1er juillet
+    where anu.cod_anu >= to_char ( add_months ( sysdate, -18 ), 'YYYY' )    -- Par convention l annee debute le 1er juillet
     and cmp.cod_tpc! = 'EXT'                                                -- Exclusion des structures exterieures (IFSI, etc.)
     group by
       anu.cod_anu,
@@ -245,23 +252,28 @@ with
       str.cod_str                              as structure_inf_id,
       elp.lib_elp                              as libelle,
       elp.lic_elp                              as libelle_court,
-      elp.cod_nel                              as nature,
+      case when nel.tem_fictif = 'O' then null else elp.cod_nel end as nature,
       -- Determiner les periodes qui relevent du semestre 1, du semestre 2, ou qui sont annuelles
       case
         when elp.cod_pel in ( 'S1', 'S3', 'S5', 'S7', 'S9' ) then 'S1'
         when elp.cod_pel in ( 'S2', 'S4', 'S6', 'S8', '10' ) then 'S2'
         else                                                      null
         end                                    as cod_pel,
+    -- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : la donnee Apogee tem_a_dis_elp n est plus prise en compte
+/*
       case
         when elp.tem_a_dis_elp = 'O' then '1'
         else                              null
         end                                    as tem_a_dis_elp
+*/
+      null                                     as tem_a_dis_elp
     from ose_etape              etp
     join vet_regroupe_lse       vrl on vrl.cod_etp = etp.cod_etp and vrl.cod_vrs_vet = etp.cod_vrs_vet
     join liste_elp              lse on lse.cod_lse = vrl.cod_lse
     join lse_regroupe_elp       lre on lre.cod_lse = lse.cod_lse
     left join elements_portes   epo on epo.annee_id = etp.annee_id and epo.cod_elp_porte = lre.cod_elp
     join element_pedagogi       elp on elp.cod_elp = nvl ( epo.cod_elp_porteur, lre.cod_elp )
+    join nature_elp             nel on nel.cod_nel = elp.cod_nel
     join composante             cmp on cmp.cod_cmp = elp.cod_cmp
     join ucbn_composante_ldap   str on str.cod_cmp = cmp.cod_cmp -- Recherche du code structure dans le referentiel des structures de l etablissement
     where sysdate between nvl ( vrl.dat_cre_rel_lse_vet, sysdate - 1 ) and nvl ( vrl.dat_frm_rel_lse_vet, sysdate + 1 )
@@ -282,16 +294,20 @@ with
       str.cod_str                              as structure_inf_id,
       elp.lib_elp                              as libelle,
       elp.lic_elp                              as libelle_court,
-      elp.cod_nel                              as nature,
+      case when nel.tem_fictif = 'O' then null else elp.cod_nel end as nature,
       case
         when elp.cod_pel in ( 'S1', 'S3', 'S5', 'S7', 'S9' ) then 'S1'
         when elp.cod_pel in ( 'S2', 'S4', 'S6', 'S8', '10' ) then 'S2'
         else                                                      null
         end                                    as cod_pel,
+    -- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : la donnee Apogee tem_a_dis_elp n est plus prise en compte
+/*
       case
         when elp.tem_a_dis_elp = 'O' then '1'
         else                              null
         end                                    as tem_a_dis_elp
+*/
+      null                                     as tem_a_dis_elp
     from annee                  anu
     cross join elp_regroupe_lse erl
     join element_pedagogi       el1 on el1.cod_elp = erl.cod_elp
@@ -301,6 +317,7 @@ with
     join lse_regroupe_elp       lre on lre.cod_lse = lse.cod_lse
     left join elements_portes   epo on epo.annee_id = anu.annee_id and epo.cod_elp_porte = lre.cod_elp
     join element_pedagogi       elp on elp.cod_elp = nvl ( epo.cod_elp_porteur, lre.cod_elp )
+    join nature_elp             nel on nel.cod_nel = elp.cod_nel
     join composante             cmp on cmp.cod_cmp = elp.cod_cmp
     join ucbn_composante_ldap   str on str.cod_cmp = cmp.cod_cmp
     where sysdate between nvl ( erl.dat_cre_rel_lse_elp, sysdate - 1 ) and nvl ( erl.dat_frm_rel_lse_elp, sysdate + 1 )
@@ -324,9 +341,10 @@ with
       rel.libelle,
       rel.libelle_court,
       rel.nature,
-      rtrim ( sys_connect_by_path ( case when rel.nature in ( 'CAL', 'MIR' ) then null else rel.noeud_inf_id end,  '>' ), '>' ) as chemin_noeud_inf_id,
+      rtrim ( sys_connect_by_path ( case when rel.nature is null then null else rel.noeud_inf_id end,  '>' ), '>' ) as chemin_noeud_inf_id,
       rtrim ( sys_connect_by_path ( rel.cod_pel,       '>' ), '>' ) as chemin_periode,
-      rtrim ( sys_connect_by_path ( rel.tem_a_dis_elp, '>' ), '>' ) as chemin_taux_foad,
+      -- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : la donnee Apogee tem_a_dis_elp n est plus prise en compte
+      -- rtrim ( sys_connect_by_path ( rel.tem_a_dis_elp, '>' ), '>' ) as chemin_taux_foad,
       connect_by_isleaf                        as isleaf
     from relations rel
       start with rel.noeud_sup_id is null
@@ -338,9 +356,9 @@ with
       arb.noeud_inf_id
     from arbre_offre_de_formation arb
     join arbre_offre_de_formation inu on inu.annee_id = arb.annee_id and inu.chemin_noeud_inf_id = arb.chemin_noeud_inf_id
-    where arb.nature in ( 'MIR', 'CAL' ) -- Exclusion des elements techniques (elements miroirs, elements utiles uniquement pour le calcul de notes...)
+    where arb.nature is null -- Exclusion des elements techniques (elements miroirs, elements utiles uniquement pour le calcul de notes...)
       and arb.isleaf = 1
-      and inu.nature in ( 'MIR', 'CAL' )
+      and inu.nature is null
   ),
   arbre_elague as (
     select
@@ -358,8 +376,9 @@ with
       arb.libelle,
       arb.libelle_court,
       arb.nature,
-      substr ( arb.chemin_periode,   instr ( arb.chemin_periode,   '>', -1 ) + 1 ) as periode,
-      substr ( arb.chemin_taux_foad, instr ( arb.chemin_taux_foad, '>', -1 ) + 1 ) as taux_foad
+      substr ( arb.chemin_periode,   instr ( arb.chemin_periode,   '>', -1 ) + 1 ) as periode
+      -- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : la donnee Apogee tem_a_dis_elp n est plus prise en compte
+      -- ,substr ( arb.chemin_taux_foad, instr ( arb.chemin_taux_foad, '>', -1 ) + 1 ) as taux_foad
     from      arbre_offre_de_formation arb
     left join branches_inutiles        inu on inu.annee_id = arb.annee_id and inu.noeud_inf_id = arb.noeud_inf_id
     where inu.noeud_inf_id is null
@@ -370,8 +389,9 @@ with
       arb.noeud_inf_id,
       arb.nature,
       min ( arb.periode )                             as periode_min,
-      max ( arb.periode )                             as periode_max,
-      max ( to_number ( nvl ( arb.taux_foad, '0') ) ) as taux_foad
+      max ( arb.periode )                             as periode_max
+      -- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : la donnee Apogee tem_a_dis_elp n est plus prise en compte
+      -- ,max ( to_number ( nvl ( arb.taux_foad, '0') ) ) as taux_foad
     from arbre_elague arb
     group by
       arb.annee_id,
@@ -404,7 +424,8 @@ select distinct
     then uno.periode_min
     else null
     end                                        as periode,
-  uno.taux_foad
+--  uno.taux_foad
+  0                                            as taux_foad
 from arbre_elague arb
 join noeud_unique uno on uno.annee_id = arb.annee_id and uno.noeud_inf_id = arb.noeud_inf_id
 order by 1, 2, 6, 9
@@ -432,14 +453,18 @@ select
   noeud_sup_id                                 as z_etape_id,
   noeud_sup_id || '_' || noeud_inf_id          as source_code,
   periode                                      as z_periode_id,
-  max ( taux_foad )                            as taux_foad,
+  -- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : la donnee Apogee tem_a_dis_elp n est plus prise en compte
+  -- max ( taux_foad )                            as taux_foad,
+  0                                            as taux_foad,
   annee_id || '_' || noeud_sup_id || '_' || noeud_inf_id as id
 from etape_enseignement
+/*
 group by
   annee_id,
   noeud_sup_id,
   noeud_inf_id,
   periode
+*/
 ;
 --
 -- Elements pedagogiques
@@ -465,7 +490,7 @@ select
   chp.z_periode_id,
   chp.taux_foad,
   chp.z_element_pedagogique_id                 as source_code,
-  ece.cod_scc                                  as z_discipline_id,
+  nvl ( ece.cod_scc, ec2.cod_scc )             as z_discipline_id,
   max ( etp.FI )                               as FI,
   max ( etp.FA )                               as FA,
   max ( etp.FC )                               as FC,
@@ -488,7 +513,7 @@ group by
   chp.z_periode_id,
   chp.taux_foad,
   chp.z_element_pedagogique_id,
-  ece.cod_scc
+  nvl ( ece.cod_scc, ec2.cod_scc )
 ;
 --
 -- Constatation des effectifs par annee par element pedagogique et par regime d inscription
@@ -559,7 +584,6 @@ with elp_groupes as (
     count ( distinct iag.cod_gpe ) as groupes
   from ose_element_pedagogique elp
   join gpe_obj                 gpo on gpo.typ_obj_gpo = 'ELP' and gpo.cod_elp = elp.source_code
-
   join groupe                  gpe on gpe.cod_gpe = gpo.cod_gpe
   join ind_affecte_gpe         iag on iag.cod_gpe = gpo.cod_gpe and iag.cod_anu = elp.annee_id
   where elp.annee_id between nvl ( gpe.daa_deb_val_gpe, '0000' ) and nvl ( gpe.daa_fin_val_gpe, '9999' )
@@ -573,7 +597,10 @@ select
   elp.annee_id,
   elp.source_code                              as z_element_pedagogique_id,
   ect.cod_typ_heu                              as z_type_intervention_id,
-  ect.nbr_heu_elp                              as heures,
+  case when ect.cod_typ_heu in ( 'MEMOIR', 'PROJET', 'STAGE', 'SORTIE' ) -- 04/10/2019 Plafonnement de la charge d enseignement liee a l'encadrement individuel a 1 heure par etudiant
+    then least ( ect.nbr_heu_elp, 1 )
+    else ect.nbr_heu_elp
+    end                                        as heures,
   elp.source_code || '_' || ect.cod_typ_heu    as source_code,
   elp.annee_id || '_' || elp.source_code || '_' || ect.cod_typ_heu as id,
   case when nvl ( eff.effectif_FI, 0 ) + nvl (eff.effectif_FA, 0 ) + nvl (eff.effectif_FC, 0 ) > 0
@@ -595,7 +622,10 @@ select
   elp.annee_id,
   elp.source_code                              as z_element_pedagogique_id,
   ann.cod_typ_heu                              as z_type_intervention_id,
-  ann.nbr_heu_elp                              as heures,
+  case when ann.cod_typ_heu in ( 'MEMOIR', 'PROJET', 'STAGE', 'SORTIE' ) -- 04/10/2019 Plafonnement de la charge d enseignement liee a l'encadrement individuel a 1 heure par etudiant
+    then least ( ann.nbr_heu_elp, 1 )
+    else ann.nbr_heu_elp
+    end                                        as heures,
   elp.source_code || '_' || ann.cod_typ_heu    as source_code,
   elp.annee_id || '_' || elp.source_code || '_' || ann.cod_typ_heu as id,
   case when nvl ( eff.effectif_FI, 0 ) + nvl (eff.effectif_FA, 0 ) + nvl (eff.effectif_FC, 0 ) > 0
@@ -614,4 +644,40 @@ left outer join elp_groupes             elg on elg.annee_id  = ann.cod_anu  and 
 where vap.cod_vap = 'ANN_CHARGES'
   and ect.cod_elp is null
   and nvl ( ann.nbr_heu_elp, 0 ) > 0
+;
+--
+-- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : s il existe une charge EAD alors TAUX_FOAD = 1 sinon laisser 0
+--
+merge into ose_element_pedagogique elp
+using (
+  select
+    annee_id,
+    z_element_pedagogique_id
+  from ose_volume_horaire_ens
+  where z_type_intervention_id = 'EAD'
+  ) tmp
+on ( elp.annee_id = tmp.annee_id and elp.source_code = tmp.z_element_pedagogique_id )
+when matched then update set elp.taux_foad = 1
+;
+merge into ose_chemin_pedagogique chp
+using (
+  select
+    annee_id,
+    z_element_pedagogique_id
+  from ose_volume_horaire_ens
+  where z_type_intervention_id = 'EAD'
+  ) tmp
+on ( chp.annee_id = tmp.annee_id and chp.z_element_pedagogique_id = tmp.z_element_pedagogique_id )
+when matched then update set chp.taux_foad = 1
+;
+merge into ose_offre_de_formation odf
+using (
+  select
+    annee_id,
+    z_element_pedagogique_id
+  from ose_volume_horaire_ens
+  where z_type_intervention_id = 'EAD'
+  ) tmp
+on ( odf.annee_id = tmp.annee_id and odf.noeud_inf_id = tmp.z_element_pedagogique_id )
+when matched then update set odf.taux_foad = 1
 ;

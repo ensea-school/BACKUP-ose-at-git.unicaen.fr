@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 use Application\Form\CampagneSaisieFieldset;
 use Application\Form\Traits\CampagneSaisieFormAwareTrait;
 use Application\Form\Traits\ParametresFormAwareTrait;
@@ -32,7 +34,6 @@ class ParametreController extends AbstractController
     use CampagneSaisieFormAwareTrait;
 
 
-
     public function indexAction()
     {
         return [];
@@ -44,25 +45,23 @@ class ParametreController extends AbstractController
     {
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANNEES_EDITION));
 
-        if ($this->getRequest()->isPost()){
+        if ($this->getRequest()->isPost()) {
 
             $anneeId = $this->params()->fromPost('annee');
-            $annee = $this->getServiceAnnee()->get($anneeId);
+            $annee   = $this->getServiceAnnee()->get($anneeId);
 
             $annee->setActive(!$annee->isActive());
             $this->getServiceAnnee()->save($annee);
 
             return new JsonModel([
                 'message' => 'Action effectuée',
-                'status' => 'success',
+                'status'  => 'success',
             ]);
-        }else{
+        } else {
             $annees = $this->getServiceAnnee()->getList();
 
             return compact('annees', 'canEdit');
         }
-
-
     }
 
 
@@ -82,8 +81,8 @@ class ParametreController extends AbstractController
                 $campagne = $this->getServiceCampagneSaisie()->getBy($ti, $tvh);
                 $form     = $this->getFormCampagneSaisie();
 
-                if (!$canEdit){
-                    foreach( $form->getElements() as $element ){
+                if (!$canEdit) {
+                    foreach ($form->getElements() as $element) {
                         $element->setAttribute('disabled', true);
                     }
                 }
@@ -91,13 +90,13 @@ class ParametreController extends AbstractController
                 $form->bind($campagne);
                 $forms[$ti->getId()][$tvh->getId()] = $form;
 
-                if ($canEdit && $ti == $typeIntervenant && $tvh == $typeVolumeHoraire){
-                    $form->requestSave($this->getRequest(), function() use ($campagne){
-                        if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()){
+                if ($canEdit && $ti == $typeIntervenant && $tvh == $typeVolumeHoraire) {
+                    $form->requestSave($this->getRequest(), function () use ($campagne) {
+                        if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()) {
                             $this->getServiceCampagneSaisie()->delete($campagne);
-                        }elseif(!$campagne->getMessageIntervenant() && ($campagne->getDateDebut() || $campagne->getDateFin() || $campagne->getMessageAutres())) {
+                        } elseif (!$campagne->getMessageIntervenant() && ($campagne->getDateDebut() || $campagne->getDateFin() || $campagne->getMessageAutres())) {
                             $this->flashMessenger()->addErrorMessage('Il est obligatoire de saisir un message à destination des intervenants');
-                        }else{
+                        } else {
                             $this->getServiceCampagneSaisie()->save($campagne);
                         }
                     });
@@ -119,6 +118,9 @@ class ParametreController extends AbstractController
 
         if ($canEdit) {
             $posted = $this->params()->fromPost();
+            if (isset($posted['pourc_s1_pour_annee_civile'])) {
+                $posted['pourc_s1_pour_annee_civile'] = floatToString(FloatFromString::run($posted['pourc_s1_pour_annee_civile']) / 100);
+            }
         } else {
             $posted = [];// rien ne peut être modifié!!
         }
@@ -150,6 +152,9 @@ class ParametreController extends AbstractController
             }
 
             if ($form->has($parametre)) {
+                if ($parametre == 'pourc_s1_pour_annee_civile') {
+                    $value = StringFromFloat::run(stringToFloat($value) * 100);
+                }
                 $element = $form->get($parametre);
                 if (!$canEdit) $element->setAttribute('disabled', true);
                 $element->setValue($value);

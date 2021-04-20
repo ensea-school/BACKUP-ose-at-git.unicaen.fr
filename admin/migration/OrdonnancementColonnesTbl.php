@@ -44,8 +44,10 @@ class OrdonnancementColonnesTbl extends AbstractMigration
             $pos   = (int)$tc['POSITION'];
             if (isset($tables[$table]['columns'][$col])) {
                 if ($pos != $tables[$table]['columns'][$col]['position']) {
-                    $this->tbls[$table] = true;
+                    $this->tbls[$table] = true; // Position différente => la table sera recréée
                 }
+            } else {
+                $this->tbls[$table] = true; // Nouvelle colonne => la table sera recréée
             }
         }
 

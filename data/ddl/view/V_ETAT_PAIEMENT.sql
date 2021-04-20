@@ -106,24 +106,24 @@ SELECT
                                 df.libelle                                                          domaine_fonctionnel_libelle,
                                 CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END        hetd,
                                 CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END        fc_majorees,
-                                mep.heures * 4 / 10                                                 exercice_aa,
-                                mep.heures * 6 / 10                                                 exercice_ac,
+                                mep.heures * mis.pourc_exercice_aa                                  exercice_aa,
+                                mep.heures * mis.pourc_exercice_ac                                  exercice_ac,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 4 / 10                                                 exercice_aa,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 6 / 10                                                 exercice_ac,
                                 OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )      taux_horaire
                          FROM
-                              v_mep_intervenant_structure  mis
-                                    JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
-                                    JOIN type_heures              th ON  th.id = mep.type_heures_id
-                                    JOIN centre_cout              cc ON  cc.id = mep.centre_cout_id      -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur
-                                    JOIN intervenant               i ON   i.id = mis.intervenant_id      AND i.histo_destruction IS NULL
-                                    JOIN annee                     a ON   a.id = i.annee_id
-                                    JOIN statut_intervenant       si ON  si.id = i.statut_id
-                                    JOIN type_intervenant         ti ON  ti.id = si.type_intervenant_id
-                                    JOIN structure                 s ON   s.id = mis.structure_id
-                                    LEFT JOIN validation           v ON   v.id = mep.validation_id       AND v.histo_destruction IS NULL
-                                    LEFT JOIN domaine_fonctionnel df ON  df.id = mis.domaine_fonctionnel_id
-                                    LEFT JOIN periode              p ON   p.id = mep.periode_paiement_id
+                                     tbl_paiement mis
+                                JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
+                                JOIN type_heures              th ON  th.id = mep.type_heures_id
+                                JOIN centre_cout              cc ON  cc.id = mep.centre_cout_id      -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur
+                                JOIN intervenant               i ON   i.id = mis.intervenant_id      AND i.histo_destruction IS NULL
+                                JOIN annee                     a ON   a.id = i.annee_id
+                                JOIN statut_intervenant       si ON  si.id = i.statut_id
+                                JOIN type_intervenant         ti ON  ti.id = si.type_intervenant_id
+                                JOIN structure                 s ON   s.id = mis.structure_id
+                           LEFT JOIN validation                v ON   v.id = mep.validation_id       AND v.histo_destruction IS NULL
+                           LEFT JOIN domaine_fonctionnel      df ON  df.id = mis.domaine_fonctionnel_id
+                           LEFT JOIN periode                   p ON   p.id = mep.periode_paiement_id
                      )
                      SELECT
                             periode_id,

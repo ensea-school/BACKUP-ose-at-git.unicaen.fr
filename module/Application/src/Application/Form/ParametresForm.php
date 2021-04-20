@@ -177,6 +177,37 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'Select',
+            'name'       => 'regle_paiement_annee_civile',
+            'options'    => [
+                'label'         => 'Répartition années civiles antérieure / en cours',
+                'value_options' => [
+                    '4-6sur10'      => 'Répartition 4/10 des heures pour l\'année  antérieure, 6/10 pour l\'année en cours',
+                    'semestre-date' => 'En fonction du semestre des heures ou de la date des cours',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'pourc_s1_pour_annee_civile',
+            'options'    => [
+                'label'  => 'Pour le 1er semestre, % d\'heures sur l\'année antérieure',
+                'suffix' => '%',
+            ],
+            'attributes' => [
+                'class' => 'input-sm',
+                'step'  => 'any',
+                'min'   => 0,
+                'max'   => 1,
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
             'name'    => 'doc-intervenant-vacataires',
             'type'    => 'Text',
             'options' => [

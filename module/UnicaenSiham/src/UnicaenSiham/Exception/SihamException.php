@@ -29,7 +29,7 @@ class SihamException extends \Exception
 
     public function __construct($message = "", $code = 0, \Throwable $previous = null)
     {
-
+        
         //Message par défault dans le cas d'une erreur de l'API
         $defaultMessage = "Un problème est survenu lors de l'appel à l'API SIHAM";
         if (!is_null($previous)) {

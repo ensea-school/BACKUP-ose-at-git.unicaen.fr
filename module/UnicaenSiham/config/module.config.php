@@ -26,15 +26,25 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'voir' => [
-                        'type'          => 'Segment',
-                        'options'       => [
+                    'voir'              => [
+                        'type'    => 'Segment',
+                        'options' => [
                             'route'    => '/voir-agent/:matricule',
                             'defaults' => [
                                 'action' => 'voir',
                             ],
                         ],
-                        'may_terminate' => true,
+
+                    ],
+                    'voir-nomenclature' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/voir-nomenclature/:nomenclature',
+                            'defaults' => [
+                                'action' => 'voir-nomenclature',
+                            ],
+                        ],
+                        
                     ],
                 ],
             ],
@@ -49,6 +59,7 @@ return [
                     'action'     => [
                         'index',
                         'voir',
+                        'voir-nomenclature',
                     ],
                     'roles'      => ['guest'],
 

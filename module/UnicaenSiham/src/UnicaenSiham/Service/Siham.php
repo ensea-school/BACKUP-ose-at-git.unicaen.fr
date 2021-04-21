@@ -25,6 +25,13 @@ class Siham
 
 
 
+    public function getClient(): SihamClient
+    {
+        return $this->sihamClient;
+    }
+
+
+
     /**
      * @param array $params Les paramètres possible sont les suivants (au moins l'un doit avoir une valeur) : nomUsuel,
      *                      nomPatronymique, prenom
@@ -259,6 +266,40 @@ class Siham
     public function priseEnChargeAgent($agent)
     {
 
+    }
+
+
+
+    /**
+     * @param $params       array Paramètres du webservice : codeRepertoire
+     *
+     * @return array
+     */
+
+    public function recupererNomenclatureRH(array $params)
+    {
+        $listeNomenclatures = [];
+
+        foreach ($params['listeNomenclatures'] as $nomenclature) {
+            $listeNomenclatures[] = ['codeRepertoire' => $nomenclature];
+        }
+
+        $paramsWS = ['ParamNomenclature' => [
+            'dateObservation'    => '',
+            'listeNomenclatures' => $listeNomenclatures,
+        ]];
+
+
+        try {
+            $client = $this->sihamClient->getClient('DossierParametrageWebService');
+            $result = $client->RecupNomenclaturesRH($paramsWS);
+            
+            if (isset($result->return)) {
+                return $result->return;
+            }
+        } catch (\SoapFault $e) {
+            throw new SihamException($e->faultstring, 0, $e);
+        }
     }
 
 }

@@ -35,6 +35,7 @@ class IndexController extends AbstractActionController
         try {
 
             if ($this->getRequest()->isPost()) {
+
                 $params['nomUsuel'] = $this->getRequest()->getPost('nomUsuel');
                 $params['prenom']   = $this->getRequest()->getPost('prenom');
                 $agents             = $this->siham->rechercherAgent($params);
@@ -78,6 +79,16 @@ class IndexController extends AbstractActionController
         }
 
         return compact('agent');
+    }
+
+
+
+    public function voirNomenclatureAction()
+    {
+        $nomenclature = $this->params()->fromRoute('nomenclature');
+        $result       = $this->siham->recupererNomenclatureRH(['listeNomenclatures' => [$nomenclature]]);
+        
+        return compact('result');
     }
 
 

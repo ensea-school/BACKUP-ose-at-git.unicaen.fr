@@ -8,7 +8,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout d'un privilège pour afficher / masquer l'adresse, email pro, email perso, téléphone (RGPD) sur la fiche intervenant
 * Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
 * Ajout des volumes horaires par type d'intervention (CM,TP,TD) et du nombre de groupes par élément pédagogique dans l'extraction de l'offre de formation (#36625) 
-* Amélioration UX dans l'écran gestion agrément par lot,  visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une modal box trop petite qui provoquée notamment un dysfonctionnement de l'affichage des PJ (#37269)
+* Amélioration UX dans l'écran gestion agrément par lot,  visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une modal box trop petite qui provoquait notamment un dysfonctionnement de l'affichage des PJ (#37269)
 
 
 # OSE 15 (12/03/21)

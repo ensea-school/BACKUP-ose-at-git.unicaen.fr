@@ -7,6 +7,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 * Ajout d'un privilège pour afficher / masquer l'adresse, email pro, email perso, téléphone (RGPD) sur la fiche intervenant
 * Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
+* Ajout des volumes horaires par type d'intervention (CM,TP,TD) et du nombre de groupes par élément pédagogique dans l'extraction de l'offre de formation (#36625) 
 
 
 # OSE 15 (12/03/21)

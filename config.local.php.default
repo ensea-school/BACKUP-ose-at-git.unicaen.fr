@@ -20,7 +20,7 @@ return [
          * Si la fonction retourne true, alors on n'est topujours considéré comme connecté depuis le réseau de l'établissement
          */
         'inEtablissement'  => function () {
-           $hostLocalization = \Application::$container->get(\UnicaenApp\HostLocalization\HostLocalizationUnicaen::class);
+           $hostLocalization = \Application::$container->get(\UnicaenApp\HostLocalization\HostLocalization::class);
 
            return $hostLocalization->inEtablissement();
         },

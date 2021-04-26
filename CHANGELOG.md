@@ -10,6 +10,16 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout des volumes horaires par type d'intervention (CM,TP,TD) et du nombre de groupes par élément pédagogique dans l'extraction de l'offre de formation (#36625) 
 * Amélioration UX dans l'écran gestion agrément par lot,  visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une modal box trop petite qui provoquait notamment un dysfonctionnement de l'affichage des PJ (#37269)
 
+## Notes de mise à jour
+
+Il est nécessaire d'éditer votre fichier config.local.php et de modifier la ligne  du paramétre 'inEtablissement' (si vous l'avez car c'est un paramétre optionnel) comme ci : 
+
+`
+$hostLocalization = \Application::$container->get(\UnicaenApp\HostLocalization\HostLocalization::class);
+`
+
+La class \UnicaenApp\HostLocalization\HostLocalizationUnicaen a été renommé par \UnicaenApp\HostLocalization\HostLocalization):
+
 
 # OSE 15 (12/03/21)
 Objectif : Doubles statuts et refonte des données personnelles

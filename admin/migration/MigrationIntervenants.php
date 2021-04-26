@@ -98,7 +98,7 @@ class MigrationIntervenants extends AbstractMigration
 
             $bdd->logMsg("Traitement de l'intervenant $ind/$count, ID=" . $i['ID'], true);
             $data = [
-                'NUMERO_INSEE'             => $i['NUMERO_INSEE'] . $i['NUMERO_INSEE_CLE'],
+                'NUMERO_INSEE'             => $i['NUMERO_INSEE'] . str_pad($i['NUMERO_INSEE_CLE'], 2, '0', STR_PAD_LEFT),
                 'TEL_PERSO'                => $i['TEL_MOBILE'],
                 'DEPARTEMENT_NAISSANCE_ID' => $i['DEP_NAISSANCE_ID'],
                 'EMAIL_PRO'                => $i['EMAIL'],

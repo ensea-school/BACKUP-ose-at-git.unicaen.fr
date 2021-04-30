@@ -193,6 +193,22 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'Select',
+            'name'       => 'regle_repartition_annee_civile',
+            'options'    => [
+                'label'         => 'Répartition des heures AC/AA dans les mises en paiement',
+                'value_options' => [
+                    'prorata'      => 'Chaque mise en paiement est répartie selon le prorata AA/AC',
+                    'ordre-saisie' => 'Les premières mises en paiement sont considérées en AA, puis ce qui dépasse est en AC',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
             'name'       => 'pourc_s1_pour_annee_civile',
             'options'    => [
                 'label'  => 'Pour le 1er semestre, % d\'heures sur l\'année antérieure',

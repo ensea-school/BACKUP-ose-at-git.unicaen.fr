@@ -96,6 +96,10 @@ return [
         "VALEUR"      => "4-6sur10",
         "DESCRIPTION" => "Règle de répartition années civiles antérieure / en cours pour les paiements",
     ],
+    "regle_repartition_annee_civile"             => [
+        "VALEUR"      => "prorata",
+        "DESCRIPTION" => "Ventilation des heures AA/AC",
+    ],
     "pourc_s1_pour_annee_civile"                 => [
         "VALEUR"      => "0.67",
         "DESCRIPTION" => "Taux de répartition en année civile pour les heures du premire semestre",

@@ -64,12 +64,27 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
           RETURN 1;
         END IF;
 
-        RETURN ROUND(nbjaa / (nbjaa + nbjac), 2);
+        RETURN nbjaa / (nbjaa + nbjac);
       END IF;
     END IF;
 
     -- Si aucune condition n'est réunie, on retourne comme avant, CAD 4/10
     RETURN 4/10;
+  END;
+
+
+
+  FUNCTION CALC_HEURES_AA(heures FLOAT, pourc_exercice_aa FLOAT, total_heures FLOAT, cumul_heures FLOAT) RETURN FLOAT IS
+  BEGIN
+    IF cumul_heures <= total_heures * pourc_exercice_aa THEN
+      RETURN heures;
+    END IF;
+
+    IF total_heures * pourc_exercice_aa - cumul_heures + heures > 0 THEN
+      RETURN total_heures * pourc_exercice_aa - cumul_heures + heures;
+    END IF;
+
+    RETURN 0;
   END;
 
 

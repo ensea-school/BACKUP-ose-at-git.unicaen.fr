@@ -55,8 +55,8 @@ FROM (
           mep.heures,
           cc.unite_budgetaire,
           mep.date_mise_en_paiement,
-          mis.pourc_exercice_aa,
-          mis.pourc_exercice_ac
+          mis.heures_aa,
+          mis.heures_ac
         FROM
           tbl_paiement  mis
           JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
@@ -73,13 +73,13 @@ FROM (
         mep.periode_paiement_id,
         mep.intervenant_id,
         2 code_origine,
-        mep.heures * mep.pourc_exercice_aa nbu,
+        mep.heures_aa nbu,
         mep.unite_budgetaire,
         mep.date_mise_en_paiement
       FROM
         mep
       WHERE
-        mep.heures * mep.pourc_exercice_aa > 0
+        mep.heures_aa > 0
 
       UNION ALL
 
@@ -89,13 +89,13 @@ FROM (
         mep.periode_paiement_id,
         mep.intervenant_id,
         1 code_origine,
-        mep.heures * mep.pourc_exercice_ac nbu,
+        mep.heures_ac nbu,
         mep.unite_budgetaire,
         mep.date_mise_en_paiement
       FROM
         mep
       WHERE
-        mep.heures * mep.pourc_exercice_ac > 0
+        mep.heures_ac > 0
     ) t1
     GROUP BY
       structure_id,

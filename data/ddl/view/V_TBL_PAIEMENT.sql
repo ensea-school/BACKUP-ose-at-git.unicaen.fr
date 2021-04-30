@@ -1,26 +1,56 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_PAIEMENT AS
 SELECT
+  annee_id,
+  service_id,
+  service_referentiel_id,
+  formule_res_service_id,
+  formule_res_service_ref_id,
+  intervenant_id,
+  structure_id,
+  mise_en_paiement_id,
+  periode_paiement_id,
+  domaine_fonctionnel_id,
+  heures_a_payer,
+  heures_a_payer_pond,
+  heures_demandees,
+  heures_payees,
+  ROUND(pourc_exercice_aa,2)            pourc_exercice_aa,
+  1 - ROUND(pourc_exercice_aa,2)        pourc_exercice_ac,
+  ROUND(heures_aa,2)                    heures_aa,
+  heures_demandees - ROUND(heures_aa,2) heures_ac
+FROM
+(
+SELECT
   i.annee_id                                  annee_id,
   frs.service_id                              service_id,
-  null                                        service_referentiel_id,
+  NULL                                        service_referentiel_id,
   frs.id                                      formule_res_service_id,
-  null                                        formule_res_service_ref_id,
+  NULL                                        formule_res_service_ref_id,
   i.id                                        intervenant_id,
   COALESCE( ep.structure_id, i.structure_id ) structure_id,
   mep.id                                      mise_en_paiement_id,
   mep.periode_paiement_id                     periode_paiement_id,
   COALESCE(mep.domaine_fonctionnel_id, e.domaine_fonctionnel_id, to_number(p.valeur)) domaine_fonctionnel_id,
   frs.heures_compl_fi + frs.heures_compl_fc + frs.heures_compl_fa + frs.heures_compl_fc_majorees heures_a_payer,
-  count(*) OVER(PARTITION BY frs.id)          heures_a_payer_pond,
-  NVL(mep.heures,0)                           heures_demandees,
+  COUNT(*) OVER(PARTITION BY frs.id)          heures_a_payer_pond,
+  COALESCE(mep.heures,0)                      heures_demandees,
   CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees,
   pea.pourc_exercice_aa                       pourc_exercice_aa,
-  1 - pea.pourc_exercice_aa                   pourc_exercice_ac
+  SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id)  total_heures,
+  SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id) * pea.pourc_exercice_aa  total_heures_aa,
+  SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) cumul_heures,
+  CASE WHEN p2.valeur = 'prorata' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
+    COALESCE(mep.heures,0), -- heures
+    pea.pourc_exercice_aa, -- pourc_exercice_aa
+    SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id), -- total_heures
+    SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) -- cumul_heures
+  ) END heures_aa
 FROM
             formule_resultat_service        frs
        JOIN type_volume_horaire             tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire             evh ON evh.code = 'valide'
        JOIN parametre                         p ON p.nom = 'domaine_fonctionnel_ens_ext'
+       JOIN parametre                        p2 ON p2.nom = 'regle_repartition_annee_civile'
        JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
@@ -54,9 +84,9 @@ UNION ALL
 
 SELECT
   i.annee_id                                  annee_id,
-  null                                        service_id,
+  NULL                                        service_id,
   frs.service_referentiel_id                  service_referentiel_id,
-  null                                        formule_res_service_id,
+  NULL                                        formule_res_service_id,
   frs.id                                      formule_res_service_ref_id,
   i.id                                        intervenant_id,
   sr.structure_id                             structure_id,
@@ -64,15 +94,24 @@ SELECT
   mep.periode_paiement_id                     periode_paiement_id,
   COALESCE(mep.domaine_fonctionnel_id, fncr.domaine_fonctionnel_id) domaine_fonctionnel_id,
   frs.heures_compl_referentiel                heures_a_payer,
-  count(*) OVER(PARTITION BY frs.id)          heures_a_payer_pond,
-  NVL(mep.heures,0)                           heures_demandees,
+  COUNT(*) OVER(PARTITION BY frs.id)          heures_a_payer_pond,
+  COALESCE(mep.heures,0)                           heures_demandees,
   CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees,
   pea.pourc_exercice_aa                       pourc_exercice_aa,
-  1 - pea.pourc_exercice_aa                   pourc_exercice_ac
+  SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id)  total_heures,
+  SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id) * pea.pourc_exercice_aa  total_heures_aa,
+  SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) cumul_heures,
+  CASE WHEN p2.valeur = 'prorata' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
+    COALESCE(mep.heures,0), -- heures
+    pea.pourc_exercice_aa, -- pourc_exercice_aa
+    SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id), -- total_heures
+    SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) -- cumul_heures
+  ) END heures_aa
 FROM
             formule_resultat_service_ref    frs
        JOIN type_volume_horaire             tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire             evh ON evh.code = 'valide'
+       JOIN parametre                        p2 ON p2.nom = 'regle_repartition_annee_civile'
        JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
@@ -100,3 +139,4 @@ FROM
        JOIN fonction_referentiel           fncr ON fncr.id = sr.fonction_id
   LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                AND mep.histo_destruction IS NULL
+) t

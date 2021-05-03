@@ -150,6 +150,11 @@ return [
             'LIBELLE'      => 'Université de Paris',
             'PACKAGE_NAME' => 'FORMULE_PARIS',
         ],
+        16 => [
+            'LIBELLE'            => 'Université de Lille',
+            'PACKAGE_NAME'       => 'FORMULE_LILLE',
+            'VH_PARAM_2_LIBELLE' => 'Code fonction Référentiel',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

@@ -15,6 +15,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 ## Corrections de bugs
 * Correction d'un bug de rafraichissement des pièces jointes dans le scénario suivant : dévalidation de la pièce jointe, suppression du fichier, téléversement du nouveau fichier.
+* La constatation des services réalisés par un gestionnaire ne se fait désormais que dans le périmètre de sa composante.
 
 ## Notes de mise à jour
 
@@ -134,6 +135,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 * Formules de calcul de Paris, Artois, Lille
 * Formule de calcul de Poitiers mise à jour
 * Création d'un nouveau privilèges pour dissocier le droit sur l'export pdf des états de paiement et l'export pdf des mises en paiement (#35845)
+* La constatation des services réalisés par un gestionnaire ne se fait désormais que dans le périmètre de sa composante.
 
 # OSE 14.17 (11/03/21)
 

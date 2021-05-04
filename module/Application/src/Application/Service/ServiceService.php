@@ -745,6 +745,14 @@ class ServiceService extends AbstractEntityService
 
     public function setRealisesFromPrevus(Service $service)
     {
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
+        $rStructure = $role ? $role->getStructure() : null;
+        $sStructure = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
+
+        if ($rStructure && $sStructure && $rStructure != $sStructure) {
+            return; // on ne reporte pas de service si l'utilisateur est d'une composante différente de celle du service
+        }
+
         $prevus = $service
             ->getVolumeHoraireListe()->createChild()
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())

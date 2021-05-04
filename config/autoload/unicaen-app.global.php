@@ -10,16 +10,6 @@ return [
     'unicaen-app' => [
 
         /**
-         * Information pour la gestion du filtrage d'accés hors établissement de l'application
-         */
-        'hostlocalization'       => [
-            'activated'       => AppConfig::get('global', 'activated', false),
-            'proxies'         => AppConfig::get('global', 'proxies', []),
-            'reverse-proxies' => AppConfig::get('global', 'reverse-proxies', []),
-            'masque-ip'       => AppConfig::get('global', 'masque-ip', ''),
-        ],
-
-        /**
          * Informations concernant cette application
          */
         'app_infos'              => [

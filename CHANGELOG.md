@@ -8,21 +8,17 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout d'un privilège pour afficher / masquer l'adresse, email pro, email perso, téléphone (RGPD) sur la fiche intervenant
 * Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
 * Ajout des volumes horaires par type d'intervention (CM,TP,TD) et du nombre de groupes par élément pédagogique dans l'extraction de l'offre de formation (#36625) 
-* Amélioration UX dans l'écran gestion agrément par lot,  visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une modal box trop petite qui provoquait notamment un dysfonctionnement de l'affichage des PJ (#37269)
+* Amélioration ergonomique dans l'écran de gestion des agréments par lot: visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une fenêtre modale trop petite qui provoquait notamment un dysfonctionnement de l'affichage des PJ (#37269)
 * Les heures payées en année antérieure / année en cours (AA/AC) peuvent être réparties de manière personnalisée, autrement qu'en 4/6 - 6/10
+* Formules de calcul de Paris, Artois, Lille
+* Formule de calcul de Poitiers mise à jour
 
-## Corrections
-* Correction bug listing fichier d'une pièce jointe dans le scénario suivant : devalidation de la piece jointe, suppression du fichier, upload du nouveau fichier.
+## Corrections de bugs
+* Correction d'un bug de rafraichissement des pièces jointes dans le scénario suivant : dévalidation de la pièce jointe, suppression du fichier, téléversement du nouveau fichier.
 
 ## Notes de mise à jour
 
-Il est nécessaire d'éditer votre fichier config.local.php et de modifier la ligne  du paramétre 'inEtablissement' (si vous l'avez car c'est un paramétre optionnel) comme ci : 
-
-`
-$hostLocalization = \Application::$container->get(\UnicaenApp\HostLocalization\HostLocalization::class);
-`
-
-La class \UnicaenApp\HostLocalization\HostLocalizationUnicaen a été renommé par \UnicaenApp\HostLocalization\HostLocalization):
+Si vous voulez activer le filtrage dans/hors établissement (recommandé), une nouvelle documentation est disponible : [Documentation](doc/detection-etablissement-ou-extérieur.md)
 
 
 # OSE 15 (12/03/21)
@@ -127,11 +123,16 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
+
+
+
+
 # OSE 14.18 (à venir)
 
 ## Nouveautés
 
-* Formule de calcul de Paris et Artois
+* Formules de calcul de Paris, Artois, Lille
+* Formule de calcul de Poitiers mise à jour
 * Création d'un nouveau privilèges pour dissocier le droit sur l'export pdf des états de paiement et l'export pdf des mises en paiement (#35845)
 
 # OSE 14.17 (11/03/21)

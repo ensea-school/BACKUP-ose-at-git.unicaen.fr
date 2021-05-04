@@ -1211,7 +1211,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id)  total_heures,
           SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id) * pea.pourc_exercice_aa  total_heures_aa,
           SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) cumul_heures,
-          CASE WHEN p2.valeur = ''prorata'' THEN mep.heures * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
+          CASE WHEN p2.valeur = ''prorata'' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
             COALESCE(mep.heures,0), -- heures
             pea.pourc_exercice_aa, -- pourc_exercice_aa
             SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id), -- total_heures
@@ -1273,7 +1273,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id)  total_heures,
           SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id) * pea.pourc_exercice_aa  total_heures_aa,
           SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) cumul_heures,
-          CASE WHEN p2.valeur = ''prorata'' THEN mep.heures * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
+          CASE WHEN p2.valeur = ''prorata'' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
             COALESCE(mep.heures,0), -- heures
             pea.pourc_exercice_aa, -- pourc_exercice_aa
             SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id), -- total_heures
@@ -1332,8 +1332,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.INTERVENANT_ID                         = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                           = v.STRUCTURE_ID
         AND COALESCE(t.MISE_EN_PAIEMENT_ID,0)        = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
-        AND COALESCE(t.DOMAINE_FONCTIONNEL_ID,0)     = COALESCE(v.DOMAINE_FONCTIONNEL_ID,0)
         AND COALESCE(t.PERIODE_PAIEMENT_ID,0)        = COALESCE(v.PERIODE_PAIEMENT_ID,0)
+        AND COALESCE(t.DOMAINE_FONCTIONNEL_ID,0)     = COALESCE(v.DOMAINE_FONCTIONNEL_ID,0)
         AND t.HEURES_A_PAYER                         = v.HEURES_A_PAYER
         AND t.HEURES_A_PAYER_POND                    = v.HEURES_A_PAYER_POND
         AND t.HEURES_DEMANDEES                       = v.HEURES_DEMANDEES
@@ -1351,8 +1351,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.INTERVENANT_ID,
       v.STRUCTURE_ID,
       v.MISE_EN_PAIEMENT_ID,
-      v.DOMAINE_FONCTIONNEL_ID,
       v.PERIODE_PAIEMENT_ID,
+      v.DOMAINE_FONCTIONNEL_ID,
       v.HEURES_A_PAYER,
       v.HEURES_A_PAYER_POND,
       v.HEURES_DEMANDEES,

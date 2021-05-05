@@ -180,7 +180,7 @@ class ParametresForm extends AbstractForm
             'type'       => 'Select',
             'name'       => 'regle_paiement_annee_civile',
             'options'    => [
-                'label'         => 'Répartition années civiles antérieure / en cours',
+                'label'         => 'Répartition année civile antérieure / en cours',
                 'value_options' => [
                     '4-6sur10'      => 'Répartition 4/10 des heures pour l\'année  antérieure, 6/10 pour l\'année en cours',
                     'semestre-date' => 'En fonction du semestre des heures ou de la date des cours',

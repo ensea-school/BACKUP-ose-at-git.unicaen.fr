@@ -1,7 +1,7 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
-# OSE 15.1 (à venir)
+# OSE 15.1 (06/05/2021)
 
 ## Nouveautés
 
@@ -12,6 +12,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Les heures payées en année antérieure / année en cours (AA/AC) peuvent être réparties de manière personnalisée, autrement qu'en 4/6 - 6/10
 * Formules de calcul de Paris, Artois, Lille
 * Formule de calcul de Poitiers mise à jour
+* Augmentation de la taille des libellés pour les fonctions référentielles
 
 ## Corrections de bugs
 * Correction d'un bug de rafraichissement des pièces jointes dans le scénario suivant : dévalidation de la pièce jointe, suppression du fichier, téléversement du nouveau fichier.
@@ -128,7 +129,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 
 
-# OSE 14.18 (à venir)
+# OSE 14.18 (06/05/2021)
 
 ## Nouveautés
 
@@ -136,6 +137,8 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 * Formule de calcul de Poitiers mise à jour
 * Création d'un nouveau privilèges pour dissocier le droit sur l'export pdf des états de paiement et l'export pdf des mises en paiement (#35845)
 * La constatation des services réalisés par un gestionnaire ne se fait désormais que dans le périmètre de sa composante.
+* Augmentation de la taille des libellés pour les fonctions référentielles
+
 
 # OSE 14.17 (11/03/21)
 

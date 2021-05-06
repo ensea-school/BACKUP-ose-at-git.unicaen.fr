@@ -9,7 +9,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
 * Ajout des volumes horaires par type d'intervention (CM,TP,TD) et du nombre de groupes par élément pédagogique dans l'extraction de l'offre de formation (#36625) 
 * Amélioration ergonomique dans l'écran de gestion des agréments par lot: visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une fenêtre modale trop petite qui provoquait notamment un dysfonctionnement de l'affichage des PJ (#37269)
-* Les heures payées en année antérieure / année en cours (AA/AC) peuvent être réparties de manière personnalisée, autrement qu'en 4/6 - 6/10
+* Les heures payées en année antérieure / année en cours (AA/AC) peuvent être réparties de manière personnalisée, autrement qu'en 4/6 - 6/10. Pour en savoir plus, vous pouvez consulter la documentation administrateur.
 * Formules de calcul de Paris, Artois, Lille
 * Formule de calcul de Poitiers mise à jour
 * Augmentation de la taille des libellés pour les fonctions référentielles

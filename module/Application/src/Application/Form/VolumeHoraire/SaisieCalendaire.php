@@ -262,7 +262,24 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
                 'required' => false,
             ],
             'horaire-fin'               => [
-                'required' => false,
+                'required'   => false,
+                'validators' => [[
+                                     'name'    => 'Callback',
+                                     'options' => [
+                                         'messages' => [
+                                             \Zend\Validator\Callback::INVALID_VALUE => 'L\'horaire de fin doit être ultérieur à l\'horaire de début',
+                                         ],
+                                         'callback' => function ($value, $context = []) {
+                                             if (!$context['horaire-debut'] && $context['horaire-fin']) return true; // pas d'horaires de saisis
+
+                                             $horaireDebut = \DateTime::createFromFormat(Util::DATETIME_FORMAT, $context['horaire-debut']);
+                                             $horaireFin   = \DateTime::createFromFormat(Util::DATETIME_FORMAT, $context['horaire-fin']);
+                                             $diff         = $horaireFin->diff($horaireDebut);
+
+                                             return $diff->invert == 1;
+                                         },
+                                     ],
+                                 ]],
             ],
             'motif-non-paiement'        => [
                 'required' => false,

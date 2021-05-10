@@ -7,11 +7,11 @@
 ?>
 
 <?php if (!empty($agent)): ?>
-    <div class="panel panel-default">
-        <div class="panel-heading">Données personnelles
-            de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
-        <div class="panel-body">
-            <form action="" method="post">
+    <form action="" method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">Données personnelles
+                de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
+            <div class="panel-body">
                 <div class="form-group">
                     <label for="">Matricule : </label>
                     <input id="disabledInput" class="form-control" type="text" name="matricule"
@@ -29,14 +29,20 @@
                     <label for="">Date de naissance : </label>
                     <input class="form-control" type="text" name="dateNaissance" value="<?= $agent->getDateNaissance() ?>"/>
                 </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Adresse principale
+                de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="">Numero de voie : </label>
+                    <input class="form-control" type="text" name="noVoieAdresse" value="<?= $agent->getNoVoieAdresse() ?>"/>
+                </div>
                 <div class="form-group">
                     <label for="">Nature voie : </label>
                     <input class="form-control" type="text" name="natureVoieAdresse"
                            value="<?= $agent->getNatureVoieAdresse() ?>"/>
-                </div>
-                <div class="form-group">
-                    <label for="">Numero de voie : </label>
-                    <input class="form-control" type="text" name="noVoieAdresse" value="<?= $agent->getNoVoieAdresse() ?>"/>
                 </div>
                 <div class="form-group">
                     <label for="">Nom de la voie : </label>
@@ -58,11 +64,59 @@
                 </div>
                 <div class="form-group">
                     <label for="">Date début : </label>
-                    <input class="form-control" type="text" name="dateDebut" value="<?= $agent->getDateDebutAdresse() ?>"/>
+                    <input class="form-control" disabled="disabled" type="text" name="dateDebut"
+                           value="<?= $agent->getDateDebutAdresse() ?>"/>
                 </div>
-                <button type="submit" class="btn btn-default">Enregistrer</button>
-            </form>
-
+                <div class="form-group">
+                    <label for="">Date fin : </label>
+                    <input class="form-control" disabled="disabled" type="text" name="dateDebut"
+                           value="<?= $agent->getDateFinAdresse() ?>"/>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-default">Ajouter une adresse</button>
+                    <a class="btn btn-warning" href="/siham/historiser-adresse/<?= $agent->getMatricule() ?>" role="button">Historiser
+                        adresse principale</a>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Numéros de téléphone et Emails
+                de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="">Téléphone fixe professionnel : </label>
+                    <input class="form-control" type="text" name="telFixePro" value="<?= $agent->getTelephonePro() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Date début téléphone fixe professionnel : </label>
+                    <input class="form-control" type="text" disabled="disabled" name="telFixeProDateDebut"
+                           value="<?= $agent->getTelephoneProDateDebut() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Date fin téléphone fixe professionnel : </label>
+                    <input class="form-control" type="text" disabled="disabled" name="telFixeProDateFin"
+                           value="<?= $agent->getTelephoneProDateFin() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Téléphone portable perso : </label>
+                    <input class="form-control" type="text" name="telPortablePerso  "
+                           value="<?= $agent->getTelephonePerso() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Date début Téléphone portable perso : </label>
+                    <input class="form-control" type="text" disabled="disabled" name="telPortablePersoDateDebut"
+                           value="<?= $agent->getTelephonePersoDateDebut() ?>"/>
+                </div>
+                <div class="form-group">
+                    <label for="">Date fin Téléphone portable perso : </label>
+                    <input class="form-control" type="text" disabled="disabled" name="telPortablePersoDateFin"
+                           value="<?= $agent->getTelephonePersoDateFin() ?>"/>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default">Sauvegarder les modifications</button>
+
+    </form>
+
+
 <?php endif; ?>

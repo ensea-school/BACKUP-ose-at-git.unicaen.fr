@@ -26,7 +26,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'voir'              => [
+                    'voir'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-agent/:matricule',
@@ -36,7 +36,17 @@ return [
                         ],
 
                     ],
-                    'voir-nomenclature' => [
+                    'historiser-adresse' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/historiser-adresse/:matricule',
+                            'defaults' => [
+                                'action' => 'historiser-adresse-agent',
+                            ],
+                        ],
+
+                    ],
+                    'voir-nomenclature'  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-nomenclature/:nomenclature',
@@ -44,7 +54,7 @@ return [
                                 'action' => 'voir-nomenclature',
                             ],
                         ],
-                        
+
                     ],
                 ],
             ],
@@ -60,6 +70,7 @@ return [
                         'index',
                         'voir',
                         'voir-nomenclature',
+                        'historiser-adresse-agent',
                     ],
                     'roles'      => ['guest'],
 

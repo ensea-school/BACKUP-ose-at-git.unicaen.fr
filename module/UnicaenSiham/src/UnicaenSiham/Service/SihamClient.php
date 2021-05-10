@@ -88,9 +88,8 @@ class SihamClient
     {
         $lastRequest = $this->client->__getLastRequest();
 
-        var_dump($lastRequest);
         if ($this->client instanceof \SoapClient) {
-            return true;
+            return $lastRequest;
         }
 
         return false;

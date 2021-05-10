@@ -19,6 +19,16 @@ class Agent
 
     protected $telephonePro;
 
+    protected $telephoneProDateDebut;
+
+    protected $telephoneProDateFin;
+
+    protected $telephonePerso;
+
+    protected $telephonePersoDateDebut;
+
+    protected $telephonePersoDateFin;
+
     protected $faxPro;
 
     protected $mailPro;
@@ -54,6 +64,8 @@ class Agent
     protected $codePaysINSEEAdresse;
 
     protected $dateDebutAdresse;
+
+    protected $dateFinAdresse;
 
     protected $libLongPaysAdresse;
 
@@ -185,6 +197,126 @@ class Agent
     public function setTelephonePro($telephonePro): self
     {
         $this->telephonePro = $telephonePro;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getTelephoneProDateDebut()
+    {
+        return $this->telephoneProDateDebut;
+    }
+
+
+
+    /**
+     * @param mixed $telephoneProDateDebut
+     *
+     * @return Agent
+     */
+    public function setTelephoneProDateDebut($telephoneProDateDebut)
+    {
+        $this->telephoneProDateDebut = $telephoneProDateDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getTelephoneProDateFin()
+    {
+        return $this->telephoneProDateFin;
+    }
+
+
+
+    /**
+     * @param mixed $telephoneProDateFin
+     *
+     * @return Agent
+     */
+    public function setTelephoneProDateFin($telephoneProDateFin)
+    {
+        $this->telephoneProDateFin = $telephoneProDateFin;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getTelephonePerso()
+    {
+        return $this->telephonePerso;
+    }
+
+
+
+    /**
+     * @param mixed $telephonePerso
+     *
+     * @return Agent
+     */
+    public function setTelephonePerso($telephonePerso)
+    {
+        $this->telephonePerso = $telephonePerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getTelephonePersoDateDebut()
+    {
+        return $this->telephonePersoDateDebut;
+    }
+
+
+
+    /**
+     * @param mixed $telephonePersoDateDebut
+     *
+     * @return Agent
+     */
+    public function setTelephonePersoDateDebut($telephonePersoDateDebut)
+    {
+        $this->telephonePersoDateDebut = $telephonePersoDateDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getTelephonePersoDateFin()
+    {
+        return $this->telephonePersoDateFin;
+    }
+
+
+
+    /**
+     * @param mixed $telephonePersoDateFin
+     *
+     * @return Agent
+     */
+    public function setTelephonePersoDateFin($telephonePersoDateFin)
+    {
+        $this->telephonePersoDateFin = $telephonePersoDateFin;
 
         return $this;
     }
@@ -616,6 +748,30 @@ class Agent
     /**
      * @return mixed
      */
+    public function getDateFinAdresse()
+    {
+        return $this->dateFinAdresse;
+    }
+
+
+
+    /**
+     * @param mixed $dateFinAdresse
+     *
+     * @return Agent
+     */
+    public function setDateFinAdresse($dateFinAdresse)
+    {
+        $this->dateFinAdresse = $dateFinAdresse;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
     public function getLibLongPaysAdresse()
     {
         return $this->libLongPaysAdresse;
@@ -639,6 +795,7 @@ class Agent
 
     public function mapper($values): Agent
     {
+
         foreach ($values as $property => $value) {
             if ($property == 'donneesPersonnelles') {
                 foreach ($value as $k => $v) {
@@ -655,7 +812,7 @@ class Agent
                     $adresses[] = $value;
                 }
 
-                //On traiter uniquement l'adresse principale de l'agent
+                //On traiter uniquement l'adresse principale de l'agent pour le moment
                 foreach ($adresses as $adresse) {
                     if ($adresse->codeTypologieAdresse == Siham::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE) {
                         foreach ($adresse as $k => $v) {
@@ -666,6 +823,28 @@ class Agent
                     }
                 }
             }
+
+            if ($property == 'listeNumerosMails') {
+                $numeros = [];
+                if (is_array($value)) {
+                    $numeros = $value;
+                } else {
+                    $numeros[] = $value;
+                }
+
+
+                foreach ($numeros as $numero) {
+                    if ($numero->codeTypologieNumeroMail == Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO) {
+                        $this->setTelephonePro($numero->numeroMail);
+                        $this->setTelephoneProDateDebut($numero->dateDebutTelephone);
+                    }
+                    if ($numero->codeTypologieNumeroMail == Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO) {
+                        $this->setTelephonePerso($numero->numeroMail);
+                        $this->setTelephonePersoDateDebut($numero->dateDebutTelephone);
+                    }
+                }
+            }
+
             if (method_exists($this, $setter = 'set' . ucFirst($property))) {
                 $this->$setter($value);
             }

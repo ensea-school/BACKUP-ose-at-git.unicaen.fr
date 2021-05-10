@@ -173,17 +173,21 @@ class Siham
 
 
         $paramsWS = ['ParamModifDP' => [
-            'bisTer'            => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
-            'codePostal'        => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
-            'complementAdresse' => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
-            'dateDebut'         => $dateDebut->format('Y-m-d'),//obligatoire
-            'matricule'         => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'natureVoie'        => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
-            'noVoie'            => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
-            'nomVoie'           => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
-            'typeAction'        => self::SIHAM_TYPE_ACTION_AJOUT,//obligatoire
-            'typeAdrPers'       => $typeAdresse,//obligatoire
-            'ville'             => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => $dateDebut->format('Y-m-d'),//obligatoire
+            'dateFin'                => (isset($params['dateFin'])) ? strtoupper($params['dateFin']) : '',//obligatoire
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_AJOUT,//obligatoire
+            'typeAdrPers'            => $typeAdresse,//obligatoire
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'typeNumero'             => (isset($params['typeNumero'])) ? strtoupper($params['typeNumero']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
         ]];
 
         try {
@@ -216,17 +220,21 @@ class Siham
     public function modificationAdresseAgent(array $params, $typeAdresse = 'TA01'): bool
     {
         $paramsWS = ['ParamModifDP' => [
-            'bisTer'            => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
-            'codePostal'        => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
-            'complementAdresse' => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
-            'dateDebut'         => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',//obligatoire
-            'matricule'         => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'natureVoie'        => T(isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
-            'noVoie'            => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
-            'nomVoie'           => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
-            'typeAction'        => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
-            'typeAdrPers'       => $typeAdresse,//obligatoire
-            'ville'             => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',//obligatoire
+            'dateFin'                => (isset($params['dateFin'])) ? strtoupper($params['dateFin']) : '',//obligatoire
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
+            'typeAdrPers'            => $typeAdresse,//obligatoire
+            'typeNumero'             => (isset($params['typeNumero'])) ? strtoupper($params['typeNumero']) : '',
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
         ]];
 
         try {
@@ -245,13 +253,6 @@ class Siham
         }
 
         return false;
-    }
-
-
-
-    public function supprimerAdresseAgent(array $params, $typeAdresse = 'TA01'): bool
-    {
-
     }
 
 
@@ -293,7 +294,7 @@ class Siham
         try {
             $client = $this->sihamClient->getClient('DossierParametrageWebService');
             $result = $client->RecupNomenclaturesRH($paramsWS);
-            
+
             if (isset($result->return)) {
                 return $result->return;
             }

@@ -64,6 +64,7 @@ class IndexController extends AbstractActionController
                     'natureVoie'        => $params->natureVoie,
                     'codePostal'        => $params->codePostal,
                     'ville'             => $params->ville,
+                    'nomVoie'           => $params->nomVoieAdresse,
                 ];
                 $result = $this->siham->modificationAdresseAgent($params);
                 $this->flashMessenger()->addSuccessMessage('Modification effectuée avec succés');
@@ -80,14 +81,14 @@ class IndexController extends AbstractActionController
 
         return compact('agent');
     }
-
+    
 
 
     public function voirNomenclatureAction()
     {
         $nomenclature = $this->params()->fromRoute('nomenclature');
         $result       = $this->siham->recupererNomenclatureRH(['listeNomenclatures' => [$nomenclature]]);
-        
+
         return compact('result');
     }
 

@@ -1,6 +1,12 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
+# OSE 15.2 (à venir)
+
+## Corrections de bugs
+
+* Vérification que le champs 'numéro de rue' contient uniquement des chiffres lors de l'enregistrement des données personnelles (#37492)
+
 # OSE 15.1 (06/05/2021)
 
 ## Nouveautés

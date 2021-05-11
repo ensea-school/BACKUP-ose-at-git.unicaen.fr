@@ -119,6 +119,37 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
 
 
 
+  FUNCTION DATE_TO_PERIODE_CODE( date DATE, annee_id NUMERIC ) RETURN VARCHAR2 IS
+    mois NUMERIC;
+    annee NUMERIC;
+  BEGIN
+    mois := to_number(to_char(date, 'mm'));
+    annee := to_number(to_char(date, 'YYYY'));
+
+    RETURN CASE
+      WHEN annee = annee_id AND mois = 9 THEN 'P01'
+      WHEN annee = annee_id AND mois = 10 THEN 'P02'
+      WHEN annee = annee_id AND mois = 11 THEN 'P03'
+      WHEN annee = annee_id AND mois = 12 THEN 'P04'
+      WHEN annee = annee_id + 1 AND mois = 1 THEN 'P05'
+      WHEN annee = annee_id + 1 AND mois = 2 THEN 'P06'
+      WHEN annee = annee_id + 1 AND mois = 3 THEN 'P07'
+      WHEN annee = annee_id + 1 AND mois = 4 THEN 'P08'
+      WHEN annee = annee_id + 1 AND mois = 5 THEN 'P09'
+      WHEN annee = annee_id + 1 AND mois = 6 THEN 'P10'
+      WHEN annee = annee_id + 1 AND mois = 7 THEN 'P11'
+      WHEN annee = annee_id + 1 AND mois = 8 THEN 'P12'
+      WHEN annee = annee_id + 1 AND mois = 9 THEN 'P13'
+      WHEN annee = annee_id + 1 AND mois = 10 THEN 'P14'
+      WHEN annee = annee_id + 1 AND mois = 11 THEN 'P15'
+      WHEN annee = annee_id + 1 AND mois = 12 THEN 'P16'
+      WHEN annee > annee_id + 1 THEN 'PTD'
+      ELSE NULL
+    END;
+  END;
+
+
+
   FUNCTION GET_OSE_UTILISATEUR_ID RETURN NUMERIC IS
   BEGIN
     IF OSE_DIVERS.OSE_UTILISATEUR_ID IS NULL THEN

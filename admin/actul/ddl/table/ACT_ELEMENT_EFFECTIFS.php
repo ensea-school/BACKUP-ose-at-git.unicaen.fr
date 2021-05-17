@@ -1,0 +1,75 @@
+<?php
+
+//@formatter:off
+
+return [
+    'name'        => 'ACT_ELEMENT_EFFECTIFS',
+    'temporary'   => FALSE,
+    'logging'     => TRUE,
+    'commentaire' => 'ACT_ELEMENT_EFFECTIFS',
+    'sequence'    => NULL,
+    'columns'     => [
+        'ANNEE_ID'                 => [
+            'name'        => 'ANNEE_ID',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 2,
+            'commentaire' => NULL,
+        ],
+        'EFFECTIF_FA'              => [
+            'name'        => 'EFFECTIF_FA',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 5,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 4,
+            'commentaire' => NULL,
+        ],
+        'EFFECTIF_FC'              => [
+            'name'        => 'EFFECTIF_FC',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 5,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 5,
+            'commentaire' => NULL,
+        ],
+        'EFFECTIF_FI'              => [
+            'name'        => 'EFFECTIF_FI',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 5,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 3,
+            'commentaire' => NULL,
+        ],
+        'Z_ELEMENT_PEDAGOGIQUE_ID' => [
+            'name'        => 'Z_ELEMENT_PEDAGOGIQUE_ID',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 20,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 1,
+            'commentaire' => NULL,
+        ],
+    ],
+];
+
+//@formatter:on

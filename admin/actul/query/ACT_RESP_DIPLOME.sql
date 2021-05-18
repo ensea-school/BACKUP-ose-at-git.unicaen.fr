@@ -1,9 +1,9 @@
 select anu.cod_anu annee_id
-     , dip.libelle_long
-	 , ltrim(rtrim(dip.code)) code
-     , usr.nom
-     , usr.prenom
-     , usr.login
+     , dip.libelle_long libelle
+	 , ltrim(rtrim(dip.code)) source_code
+     , usr.nom usr_nom
+     , usr.prenom usr_prenom
+     , usr.login usr_login
 from PREV_DIPLOME dip
    , PREV_USERS_DIPLOMES udi
    , USER usr

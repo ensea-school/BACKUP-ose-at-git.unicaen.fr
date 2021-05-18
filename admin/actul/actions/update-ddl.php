@@ -1,6 +1,6 @@
 <?php
 
-$dirname = $oa->getOseDir() . 'admin/actul/ddl';
+$ca = new ConnecteurActul();
 
 $tables = [
     'ACT_DIPLOME',
@@ -26,7 +26,9 @@ $filters = [
 
 $c->begin('Génération de la DDL du connecteur ACTUL+ à partir de la base de données');
 $ddl = $oa->getBdd()->getDdl($filters);
-$pc  = $ddl->get('primary-constraint');
+
+/* On retire toutes les clés étrangères qui n'ont rien à voir avec ACTUL+ */
+$pc = $ddl->get('primary-constraint');
 foreach ($pc as $n => $d) {
     if (!in_array($d['table'], $tables)) {
         unset($pc[$n]);
@@ -34,6 +36,7 @@ foreach ($pc as $n => $d) {
 }
 $ddl->set('primary-constraint', $pc);
 
-$ddl->saveToDir($dirname);
+
+$ddl->saveToDir($ca->getDdlDir());
 
 $c->end('DDL ACTUL+ mise à jour');

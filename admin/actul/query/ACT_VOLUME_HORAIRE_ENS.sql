@@ -1,6 +1,6 @@
 select distinct anu.cod_anu annee_id
-     ,ltrim(rtrim(arb.code_fils)) code_elp
-     ,chg.typ_heu type_intervention
+     ,ltrim(rtrim(arb.code_fils)) z_element_pedagogique_id
+     ,chg.typ_heu z_type_intervention_id
      ,chg.nb_heures heures
      ,concat_ws('_',ltrim(rtrim(arb.code_fils)),chg.typ_heu) source_code
      ,concat_ws('_',anu.cod_anu,ltrim(rtrim(arb.code_fils)),chg.typ_heu) id

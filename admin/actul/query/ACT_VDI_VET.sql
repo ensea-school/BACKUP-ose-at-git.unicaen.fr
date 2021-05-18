@@ -1,6 +1,6 @@
 select anu.cod_anu  annee_id,
-       concat(ltrim(rtrim(dip.code)),'_',vdi.code) code_vdi,
-       concat(ltrim(rtrim(etp.code)),'_',tin.code) code_vet
+       concat(ltrim(rtrim(dip.code)),'_',vdi.code) cod_vdi,
+       concat(ltrim(rtrim(etp.code)),'_',tin.code) cod_vet
 from PREV_DIPLOME dip
    , PREV_VERSION_DIPLOME vdi
    , PREV_ETAPE etp

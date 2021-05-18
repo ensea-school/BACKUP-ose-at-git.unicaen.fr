@@ -1,17 +1,17 @@
 SELECT
     anu.cod_anu                      as annee_id,
-    vde.libelle     					   	   as libelle,
+    vde.libelle     			           as libelle,
     etp.libelle_court                as libelle_court,
 	  tpd.typ_dip_apo                  as z_type_formation_id,
 	  vde.vdi_vet_annee_min            as niveau,
     null                             as z_structure_id,
-    etp.cod_cmp,
+    etp.cod_cmp                      as cmp_apo,
 	  concat_ws('_', ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as source_code,
     0                                as specifique_echanges ,
     'D999'                           as domaine_fonctionnel,
-	  typ_ins.fi                       as fi,
-	  typ_ins.fa                       as fa,
-	  typ_ins.fc                       as fc,
+    typ_ins.fi                       as fi,
+    typ_ins.fa                       as fa,
+    typ_ins.fc                       as fc,
     etp.code                         as cod_etp,
     cast(vti.code as char(255))      as cod_vrs_vet,
 	  concat_ws('_', anu.cod_anu, ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as id,
@@ -20,14 +20,14 @@ SELECT
 	  case etp.exported
 		when true then 'O'
 		else 'N'
-	  end                                 tem_exported
-  , etp.cod_pty_apo
+	  end                              as tem_exported
+  , etp.cod_pty_apo                  as parcours_type_apo
   , etp.prem_sem
   , etp.cod_cge
   , etp.droit_bourse
-  , vde.libelle
-  , vde.cod_coll
-  , vde.cod_duree_etape
+  , vde.libelle                      as libelle_web
+  , vde.cod_coll                     as collegium
+  , vde.cod_duree_etape              as duree_etape
   , vde.vdi_vet_annee_min
   , vde.vdi_vet_annee_max
     from PREV_PROJET                  			 anu
@@ -63,3 +63,5 @@ order by
   tpd.typ_dip_apo ,
   etp.code,
   tpd.cod_nature_diplome
+
+  ;

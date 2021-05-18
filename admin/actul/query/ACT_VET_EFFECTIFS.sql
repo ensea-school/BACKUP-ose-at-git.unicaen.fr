@@ -1,7 +1,7 @@
 select distinct
       anu.cod_anu                      as annee_id,
-	  concat_ws('_', ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as etape,
-	  concat_ws('_', anu.cod_anu, ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as source_code,
+	  concat_ws('_', ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as etape_id,
+	  concat_ws('_', anu.cod_anu, ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as etp_source_code,
 	  ifnull(typ_ins.fi * eff_prev,0) as eff_etp_fi,
 	  ifnull(typ_ins.fa * eff_prev,0) as eff_etp_fa,
 	  ifnull(typ_ins.fc * eff_prev,0) as eff_etp_fc

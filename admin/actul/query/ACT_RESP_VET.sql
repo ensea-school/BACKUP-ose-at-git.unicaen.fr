@@ -1,9 +1,9 @@
 select anu.cod_anu annee_id
      , vet.libelle
-	 , concat(ltrim(rtrim(etp.code)),'_',vty.code)   code_vet
-     , usr.nom
-     , usr.prenom
-     , usr.login
+	 , concat(ltrim(rtrim(etp.code)),'_',vty.code) source_code
+     , usr.nom usr_nom
+     , usr.prenom usr_prenom
+     , usr.login usr_login
 from PREV_VERSION_ETAPE vet
    , PREV_ETAPE etp
    , PREV_VET_TYPINS vty

@@ -14,7 +14,7 @@ select anu.cod_anu                                             annee_id
      , case elp.lien_lse_exported
           when true then 'O'
           else 'N'
-       end tem_lien_les_exported
+       end tem_lien_lse_exported
 from PREV_PROJET anu
  , PREV_VERSION_ETAPE vet
  , PREV_ETAPE etp

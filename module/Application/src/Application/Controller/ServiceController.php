@@ -386,31 +386,48 @@ class ServiceController extends AbstractController
     public function constatationAction()
     {
         $this->initFilters();
-        $errors   = [];
+        $realise  = $this->getServiceTypeVolumeHoraire()->getRealise();
         $services = $this->params()->fromQuery('services');
+
         if ($services) {
             $services = explode(',', $services);
-            foreach ($services as $sid) {
-                $service = $this->getServiceService()->get($sid);
-                $this->getProcessusPlafond()->beginTransaction();
-                $intervenants[$service->getIntervenant()->getId()] = $service->getIntervenant();
-                $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
-                if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
-                    try {
-                        $this->getServiceService()->setRealisesFromPrevus($service);
-                    } catch (\Exception $e) {
-                        $errors[] = $e->getMessage();
-                    }
-                }
-                $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $this->getServiceTypeVolumeHoraire()->getRealise());
+            foreach ($services as $n => $sid) {
+                $services[$n] = $this->getServiceService()->get($sid);
+
+                $intervenant                         = $services[$n]->getIntervenant();
+                $intervenants[$intervenant->getId()] = $intervenant;
             }
         }
 
-        foreach ($intervenants as $id => $intervenant) {
-            $this->updateTableauxBord($intervenant);
+        if (empty($services)) {
+            $this->flashMessenger()->addErrorMessage('Aucun service précisé : constatation impossible');
+
+            return [];
         }
 
-        return compact('errors');
+        if (count($intervenants) > 1) {
+            $this->flashMessenger()->addErrorMessage('On ne peut constater les services que d\'un seul intervenant à la fois');
+
+            return [];
+        }
+
+        $this->getProcessusPlafond()->beginTransaction();
+        
+        foreach ($services as $service) {
+            $service->setTypeVolumeHoraire($realise);
+            if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
+                $this->getServiceService()->setRealisesFromPrevus($service);
+            }
+        }
+        $this->updateTableauxBord($intervenant);
+
+        if (!$this->getProcessusPlafond()->endTransaction($intervenant, $realise)) {
+            $this->flashMessenger()->addErrorMessage('La constatation des services réalisés n\'a donc pas pu se faire.');
+        } else {
+            $this->flashMessenger()->addSuccessMessage('Les services prévisionnels ont été reportés comme réalisés.');
+        }
+
+        return [];
     }
 
 

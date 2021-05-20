@@ -29,7 +29,10 @@ WITH i AS (
                     COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
              FROM octo.individu_unique@octoprod uni
                       JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
+					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND (icto.code_ose IN('DOCTOR')  AND icto.d_debut - 184 <= SYSDATE)
              WHERE inds.d_debut - 184 <= SYSDATE
+               --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
+	           AND icto.individu_id IS NULL
                --Combinaison des témoins octopus pour récupérer les bonnes populations
                AND ((inds.t_enseignant = 'O' AND inds.t_vacataire = 'O')
                  OR (inds.t_enseignant = 'O' AND inds.t_heberge = 'O')

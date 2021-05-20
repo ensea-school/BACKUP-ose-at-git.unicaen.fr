@@ -58,16 +58,20 @@ class PlafondProcessus implements EntityManagerAwareInterface
     public function endTransaction(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
     {
         $this->getEntityManager()->flush();
-        $hasBloquant = $this->controle($intervenant, $typeVolumeHoraire, !$isDiminution);
-        if ($hasBloquant && !$isDiminution) {
-            $this->getEntityManager()->rollback();
 
-            return false;
+        if ($isDiminution) {
+            $passed = true; // ça passe à tous les coups si on diminue le volume d'heures
         } else {
-            $this->getEntityManager()->commit();
-
-            return true;
+            $passed = $this->controle($intervenant, $typeVolumeHoraire);
         }
+
+        if ($passed) {
+            $this->getEntityManager()->commit();
+        } else {
+            $this->getEntityManager()->rollback();
+        }
+
+        return $passed;
     }
 
 
@@ -75,26 +79,25 @@ class PlafondProcessus implements EntityManagerAwareInterface
     /**
      * @param Intervenant       $intervenant
      * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param bool              $sendToMessenger
      *
      * @return bool
      */
-    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, $sendToMessenger = true): bool
+    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): bool
     {
-        $result  = false;
+        $blocage = false;
         $reponse = $this->getServicePlafond()->controle($intervenant, $typeVolumeHoraire);
         if (!empty($reponse)) {
             foreach ($reponse as $plafondDepassement) {
                 if ($plafondDepassement->isBloquant()) {
-                    $result = true;
-                    if ($sendToMessenger) $this->flashMessenger->addErrorMessage((string)$plafondDepassement);
+                    $blocage = true;
+                    $this->flashMessenger->addErrorMessage((string)$plafondDepassement);
                 } else {
-                    if ($sendToMessenger) $this->flashMessenger->addWarningMessage((string)$plafondDepassement);
+                    $this->flashMessenger->addWarningMessage((string)$plafondDepassement);
                 }
             }
         }
 
-        return $result;
+        return !$blocage;
     }
 
 }

@@ -180,10 +180,26 @@ class ParametresForm extends AbstractForm
             'type'       => 'Select',
             'name'       => 'regle_paiement_annee_civile',
             'options'    => [
-                'label'         => 'Répartition années civiles antérieure / en cours',
+                'label'         => 'Répartition année civile antérieure / en cours',
                 'value_options' => [
                     '4-6sur10'      => 'Répartition 4/10 des heures pour l\'année  antérieure, 6/10 pour l\'année en cours',
                     'semestre-date' => 'En fonction du semestre des heures ou de la date des cours',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'regle_repartition_annee_civile',
+            'options'    => [
+                'label'         => 'Répartition des heures AA/AC dans les mises en paiement',
+                'value_options' => [
+                    'prorata'      => 'Chaque mise en paiement est répartie selon le prorata AA/AC',
+                    'ordre-saisie' => 'Les premières mises en paiement sont considérées en AA, puis ce qui dépasse est en AC',
                 ],
             ],
             'attributes' => [

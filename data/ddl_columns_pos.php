@@ -1420,6 +1420,8 @@ return [
         'HEURES_PAYEES',
         'POURC_EXERCICE_AA',
         'POURC_EXERCICE_AC',
+        'HEURES_AA',
+        'HEURES_AC',
     ],
     'TBL_PIECE_JOINTE'               => [
         'ID',

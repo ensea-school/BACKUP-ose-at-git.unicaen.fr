@@ -1,14 +1,35 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
-# OSE 15.1 (à venir)
+# OSE 15.2 (à venir)
+
+## Corrections de bugs
+
+* Vérification que le champs 'numéro de rue' contient uniquement des chiffres lors de l'enregistrement des données personnelles (#37492)
+* Il n'est désormais plus possible de saisir un horaire de fin antérieur à celui de début en mode de saisie de service calendaire (#36319)
+* Les plafonds sont de nouveau bloquants si trop d'heures prévisionnelles sont reportées en réalisé
+
+
+# OSE 15.1 (06/05/2021)
 
 ## Nouveautés
 
 * Ajout d'un privilège pour afficher / masquer l'adresse, email pro, email perso, téléphone (RGPD) sur la fiche intervenant
 * Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en paiement (#35845)
 * Ajout des volumes horaires par type d'intervention (CM,TP,TD) et du nombre de groupes par élément pédagogique dans l'extraction de l'offre de formation (#36625) 
-* Amélioration UX dans l'écran gestion agrément par lot,  visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une modal box trop petite qui provoquait notamment un dysfonctionnement de l'affichage des PJ (#37269)
+* Amélioration ergonomique dans l'écran de gestion des agréments par lot: visualisation de la fiche intervenant dans un nouvel onglet au lieu d'une fenêtre modale trop petite qui provoquait notamment un dysfonctionnement de l'affichage des PJ (#37269)
+* Les heures payées en année antérieure / année en cours (AA/AC) peuvent être réparties de manière personnalisée, autrement qu'en 4/6 - 6/10. Pour en savoir plus, vous pouvez consulter la documentation administrateur.
+* Formules de calcul de Paris, Artois, Lille
+* Formule de calcul de Poitiers mise à jour
+* Augmentation de la taille des libellés pour les fonctions référentielles
+
+## Corrections de bugs
+* Correction d'un bug de rafraichissement des pièces jointes dans le scénario suivant : dévalidation de la pièce jointe, suppression du fichier, téléversement du nouveau fichier.
+* La constatation des services réalisés par un gestionnaire ne se fait désormais que dans le périmètre de sa composante.
+
+## Notes de mise à jour
+
+Si vous voulez activer le filtrage dans/hors établissement (recommandé), une nouvelle documentation est disponible : [Documentation](doc/detection-etablissement-ou-extérieur.md)
 
 
 # OSE 15 (12/03/21)
@@ -113,12 +134,20 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
-# OSE 14.18 (à venir)
+
+
+
+
+# OSE 14.18 (06/05/2021)
 
 ## Nouveautés
 
-* Formule de calcul de Paris et Artois
+* Formules de calcul de Paris, Artois, Lille
+* Formule de calcul de Poitiers mise à jour
 * Création d'un nouveau privilèges pour dissocier le droit sur l'export pdf des états de paiement et l'export pdf des mises en paiement (#35845)
+* La constatation des services réalisés par un gestionnaire ne se fait désormais que dans le périmètre de sa composante.
+* Augmentation de la taille des libellés pour les fonctions référentielles
+
 
 # OSE 14.17 (11/03/21)
 

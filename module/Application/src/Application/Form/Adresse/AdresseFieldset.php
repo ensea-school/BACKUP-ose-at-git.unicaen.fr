@@ -87,6 +87,9 @@ class AdresseFieldset extends AbstractFieldset
             'attributes' => [
                 'class'       => 'dossierElement',
                 'placeholder' => 'N°',
+                'pattern'     => '[0-9]*',
+                'title'       => 'Le champs doit contenir uniquement des numéros',
+                'maxlength'   => 4,
             ],
             'type'       => 'Text',
         ]);

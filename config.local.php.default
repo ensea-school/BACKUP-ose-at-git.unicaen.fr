@@ -17,26 +17,17 @@ return [
         'locale' => 'fr_FR',
 
         /* Fonction qui détermine si le client est situé dans le réseau de l'établissement ou non *
-         * Si la fonction retourne true, alors on n'est topujours considéré comme connecté depuis le réseau de l'établissement
+         * Si la fonction retourne true, alors on n'est considéré comme connecté depuis le réseau de l'établissement
+         * Si la fonction retourne false, alors on est considéré comme accédant à OSE depuis l'extérieur de l'établissement
+         *
+         * Il vous revient d'écrire votre propre règle.
+         * Un exemple vous est fourni ici : https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/detection-etablissement-ou-extérieur.md
          */
         'inEtablissement'  => function () {
-           $hostLocalization = \Application::$container->get(\UnicaenApp\HostLocalization\HostLocalization::class);
-
-           return $hostLocalization->inEtablissement();
+            // a vous d'écrire votre propre test.
+            return true;
         },
-
-        'activated' => false,
-
-        'masque-ip' => ''
-
-        'proxies' => [
-            //xxx.xx.xxx.xx
-        ],
-
-        'reverse-proxies' => [
-            //xxx.xx.xxx.xx
-        ],
-
+    ],
 
 
     /* Configuration du mode maintenance */

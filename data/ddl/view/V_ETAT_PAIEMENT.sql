@@ -106,8 +106,8 @@ SELECT
                                 df.libelle                                                          domaine_fonctionnel_libelle,
                                 CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END        hetd,
                                 CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END        fc_majorees,
-                                mep.heures * mis.pourc_exercice_aa                                  exercice_aa,
-                                mep.heures * mis.pourc_exercice_ac                                  exercice_ac,
+                                mis.heures_aa                                                       exercice_aa,
+                                mis.heures_ac                                                       exercice_ac,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 4 / 10                                                 exercice_aa,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 6 / 10                                                 exercice_ac,
                                 OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )      taux_horaire

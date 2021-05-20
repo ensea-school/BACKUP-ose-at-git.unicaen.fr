@@ -3,6 +3,10 @@
 namespace UnicaenSiham\Controller;
 
 
+use Application\Entity\Db\Intervenant;
+use Application\Service\Traits\DossierServiceAwareTrait;
+use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
 use UnicaenSiham\Service\SihamClient;
@@ -15,7 +19,8 @@ class IndexController extends AbstractActionController
 
     protected $siham;
 
-
+    use IntervenantServiceAwareTrait;
+    use DossierServiceAwareTrait;
 
     public function __construct(Siham $siham)
     {
@@ -67,20 +72,61 @@ class IndexController extends AbstractActionController
                     'nomVoie'           => $params->nomVoieAdresse,
                     '',
                 ];
-                if (empty($params['dateDebut'])) {
-                    // $result = $this->siham->ajouterAdresseAgent($paramsWS);
+                if (empty($paramsWS['dateDebut'])) {
+                    $result = $this->siham->ajouterAdresseAgent($paramsWS);
                 } else {
-                    //$result = $this->siham->modifierAdresseAgent($paramsWS);
+                    $result = $this->siham->modifierAdresseAgent($paramsWS);
                 }
                 //gestion des numéros de téléphone
+                //Teléphone pro
                 $paramsWS = [
                     'matricule' => $params->matricule,
-                    'dateDebut' => $params->telFixeProDateDebut,
                     'numero'    => $params->telFixePro,
 
                 ];
-
+                if (!empty($params->telFixePro)) {
+                    $result = $this->siham->modifierTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                } else {
+                    $result = $this->siham->supprimerTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                }
                 $result = $this->siham->modifierTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO);
+                //Téléphone perso
+                $paramsWS = [
+                    'matricule' => $params->matricule,
+                    'numero'    => $params->telPortablePerso,
+
+                ];
+
+                if (!empty($params->telPortablePerso)) {
+                    $result = $this->siham->modifierTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                } else {
+                    $result = $this->siham->supprimerTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                }
+                //Mail Pro
+                $paramsWS = [
+                    'matricule' => $params->matricule,
+                    'numero'    => $params->emailPro,
+
+                ];
+
+                if (!empty($params->emailPro)) {
+                    $result = $this->siham->modifierEmailAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO);
+                } else {
+                    // $result = $this->siham->supprimerTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                }
+
+                //Mail Perso
+                $paramsWS = [
+                    'matricule' => $params->matricule,
+                    'numero'    => $params->emailPerso,
+
+                ];
+
+                if (!empty($params->emailPerso)) {
+                    $result = $this->siham->modifierEmailAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO);
+                } else {
+                    // $result = $this->siham->supprimerTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                }
 
                 $this->flashMessenger()->addSuccessMessage('Modification effectuée avec succés');
             }
@@ -146,7 +192,6 @@ class IndexController extends AbstractActionController
         try {
             $params = [
                 'matricule' => $matricule,
-                //'dateDebut'         => $params->dateDebut,
                 'dateFin'   => $dateFin,
             ];
 
@@ -174,6 +219,83 @@ class IndexController extends AbstractActionController
         $result       = $this->siham->recupererNomenclatureRH(['listeNomenclatures' => [$nomenclature]]);
 
         return compact('result');
+    }
+
+
+
+    public function renouvellerAgentAction()
+    {
+        $matricule = $this->params()->fromRoute('matricule');
+    }
+
+
+
+    public function listeIntervenantsPECAction()
+    {
+        //On récupérer les intervenants à prendre en charge
+        $serviceIntervenant = $this->getServiceIntervenant();
+        $sql                = "
+            SELECT i.id,i.code, i.nom_usuel,i.prenom
+            FROM intervenant i 
+            JOIN intervenant_dossier d ON d.intervenant_id = i.id 
+            JOIN contrat c ON c.intervenant_id = i.id AND c.histo_destruction IS NULL AND c.date_retour_signe IS NOT NULL
+            WHERE i.annee_id = 2020 
+            AND i.code_rh IS NULL
+        ";
+
+        $intervenants = $serviceIntervenant->getEntityManager()->getConnection()->fetchAll($sql, []);
+
+        return compact('intervenants');
+    }
+
+
+
+    public function priseEnChargeAgentAction()
+    {
+        $intervenant        = $this->params()->fromRoute('intervenant');
+        $serviceIntervenant = $this->getServiceIntervenant();
+        $serviceDossier     = $this->getServiceDossier();
+
+        /**
+         * @var Intervenant $intervenant
+         */
+        $intervenant        = current($serviceIntervenant->getEntityManager()->getRepository(Intervenant::class)->findBy(['id' => $intervenant]));
+        $dossierIntervenant = $serviceDossier->getByIntervenant($intervenant);
+
+        if ($this->getRequest()->isPost()) {
+            $params = [
+                'categorieEntree' => '',
+                'civilite'        => '1,
+                'codeAdministration'        => 'UCN',
+                'codeEtablissement'         => '0141408E',
+                'dateEmbauche'              => '2021 - 05 - 20',
+                'dateNaissance'             => $this->getRequest()->getPost('dateNaissance'),
+                'villeNaissance'            => $this->getRequest()->getPost('villeNaissance'),
+                'departementNaissance'      => '',
+                'emploi'                    => '',
+                'listeCoordonneesPostales'  => '',
+                'listeCoordonneesBancaires' => '',
+                'listeModalitesServices'    => '',
+                'listeStatuts'              => '',
+                'listeNationalites'         => '',
+                'listeNumerosTelephoneFax'  => '',
+                'listePositions'            => '',
+                'motifEntree'               => '',
+                'nomPatronymique'           => '',
+                'nomUsuel'                  => $this->getRequest()->getPost('nomUsuel'),
+                'numeroInsee'               => '',
+                'paysNaissance'             => '',
+                'prenom'                    => $this->getRequest()->getPost('prenom'),
+                'sexe'                      => '1',
+                'temoinValidite'            => '',
+                'UO'                        => '',
+            ];
+
+            $result = $this->siham->priseEnChargeAgent($params);
+        }
+
+
+        return compact('intervenant', 'dossierIntervenant');
     }
 
 

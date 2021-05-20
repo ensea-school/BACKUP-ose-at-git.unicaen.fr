@@ -31,7 +31,17 @@ class Agent
 
     protected $faxPro;
 
-    protected $mailPro;
+    protected $emailPro;
+
+    protected $emailProDateDebut;
+
+    protected $emailProDateFin;
+
+    protected $emailPerso;
+
+    protected $emailPersoDateDebut;
+
+    protected $emailPersoDateFin;
 
     protected $matricule;
 
@@ -348,19 +358,141 @@ class Agent
     /**
      * @return mixed
      */
-    public function getMailPro()
+    public function getEmailPro()
     {
-        return $this->mailPro;
+        return $this->emailPro;
     }
 
 
 
     /**
-     * @param mixed $mailPro
+     * @param mixed $emailPro
+     *
+     * @return Agent
      */
-    public function setMailPro($mailPro): self
+    public function setEmailPro($emailPro)
     {
-        $this->mailPro = $mailPro;
+        $this->emailPro = $emailPro;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getEmailProDateDebut()
+    {
+        return $this->emailProDateDebut;
+    }
+
+
+
+    /**
+     * @param mixed $emailProDateDebut
+     *
+     * @return Agent
+     */
+    public function setEmailProDateDebut($emailProDateDebut)
+    {
+        $this->emailProDateDebut = $emailProDateDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getEmailProDateFin()
+    {
+        return $this->emailProDateFin;
+    }
+
+
+
+    /**
+     * @param mixed $emailProDateFin
+     *
+     * @return Agent
+     */
+    public function setEmailProDateFin($emailProDateFin)
+    {
+        $this->emailProDateFin = $emailProDateFin;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getEmailPerso()
+    {
+        return $this->emailPerso;
+    }
+
+
+
+    /**
+     * @param mixed $emailPerso
+     *
+     * @return Agent
+     */
+    public function setEmailPerso($emailPerso)
+    {
+        $this->emailPerso = $emailPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getEmailPersoDateDebut()
+    {
+        return $this->emailPersoDateDebut;
+    }
+
+
+
+    /**
+     * @param mixed $emailPersoDateDebut
+     *
+     * @return Agent
+     */
+    public function setEmailPersoDateDebut($emailPersoDateDebut)
+    {
+        $this->emailPersoDateDebut = $emailPersoDateDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getEmailPersoDateFin()
+    {
+        return $this->emailPersoDateFin;
+    }
+
+
+
+    /**
+     * @param mixed $emailPersoDateFin
+     *
+     * @return Agent
+     */
+    public function setEmailPersoDateFin($emailPersoDateFin)
+    {
+        $this->emailPersoDateFin = $emailPersoDateFin;
 
         return $this;
     }
@@ -842,8 +974,17 @@ class Agent
                         $this->setTelephonePerso($numero->numeroMail);
                         $this->setTelephonePersoDateDebut($numero->dateDebutTelephone);
                     }
+                    if ($numero->codeTypologieNumeroMail == Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO) {
+                        $this->setEmailPro($numero->numeroMail);
+                        $this->setEmailProDateDebut($numero->dateDebutTelephone);
+                    }
+                    if ($numero->codeTypologieNumeroMail == Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO) {
+                        $this->setEmailPerso($numero->numeroMail);
+                        $this->setEmailPersoDateDebut($numero->dateDebutTelephone);
+                    }
                 }
             }
+
 
             if (method_exists($this, $setter = 'set' . ucFirst($property))) {
                 $this->$setter($value);

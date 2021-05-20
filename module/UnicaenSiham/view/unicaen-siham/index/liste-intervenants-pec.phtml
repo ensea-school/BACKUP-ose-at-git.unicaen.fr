@@ -1,0 +1,28 @@
+<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
+
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <th>Nom</th>
+        <th>Prenom</th>
+        <th>Code intervenant</th>
+        </thead>
+        <tbody>
+        <?php
+
+        /**
+         * @var \Application\Entity\Db\Intervenant $intervenant
+         */
+        ?>
+
+        <?php foreach ($intervenants as $intervenant): ?>
+            <tr>
+                <td><?= $intervenant['NOM_USUEL'] ?></td>
+                <td><?= $intervenant['PRENOM'] ?></td>
+                <td><?= $intervenant['CODE'] ?></td>
+                <td><a href="/siham/prise-en-charge-agent/<?= $intervenant['ID'] ?>">Prendre en charge</a></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

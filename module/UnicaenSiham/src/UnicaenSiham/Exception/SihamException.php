@@ -39,7 +39,6 @@ class SihamException extends \Exception
            die;*/
         //Message par défault dans le cas d'une erreur de l'API
         $defaultMessage = "Un problème est survenu lors de l'appel à l'API SIHAM / " . $message;
-
         if (!is_null($previous)) {
             $defaultMessage .= " (" . $previous->getMessage() . ")";
         }

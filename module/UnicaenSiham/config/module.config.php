@@ -26,7 +26,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'voir'               => [
+                    'voir'                   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-agent/:matricule',
@@ -36,7 +36,7 @@ return [
                         ],
 
                     ],
-                    'historiser-adresse' => [
+                    'historiser-adresse'     => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/historiser-adresse/:matricule',
@@ -46,12 +46,42 @@ return [
                         ],
 
                     ],
-                    'voir-nomenclature'  => [
+                    'voir-nomenclature'      => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-nomenclature/:nomenclature',
                             'defaults' => [
                                 'action' => 'voir-nomenclature',
+                            ],
+                        ],
+
+                    ],
+                    'renouveller-agent'      => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/renouveller-agent/:matricule',
+                            'defaults' => [
+                                'action' => 'renouveller-agent',
+                            ],
+                        ],
+
+                    ],
+                    'prise-en-charge-agent'  => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/prise-en-charge-agent/:intervenant',
+                            'defaults' => [
+                                'action' => 'prise-en-charge-agent',
+                            ],
+                        ],
+
+                    ],
+                    'liste-intervenants-pec' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/liste-intervenant-pec',
+                            'defaults' => [
+                                'action' => 'liste-intervenants-pec',
                             ],
                         ],
 
@@ -71,6 +101,9 @@ return [
                         'voir',
                         'voir-nomenclature',
                         'historiser-adresse-agent',
+                        'renouveller-agent',
+                        'prise-en-charge-agent',
+                        'liste-intervenants-pec',
                     ],
                     'roles'      => ['guest'],
 

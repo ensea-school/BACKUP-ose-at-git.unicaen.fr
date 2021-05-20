@@ -12,6 +12,9 @@ class Siham
     const SIHAM_TYPE_ACTION_MODIFICATION          = 'M';
     const SIHAM_TYPE_ACTION_AJOUT                 = 'A';
     const SIHAM_TYPE_ACTION_SUPPRESSION           = 'S';
+    const SIHAM_TEMOIN_VALIDITE_DEFAULT           = 1;
+    const SIHAM_TEMOIN_ADRESSE_PRINCIPALE         = 1;
+    const SIHAM_MOTIF_ENTREE_DEFAULT              = 'PEC';
     const SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE = "TA01";
     const SIHAM_CODE_TYPOLOGIE_FIXE_PRO           = "TPR";
     const SIHAM_CODE_TYPOLOGIE_FIXE_PERSO         = "TPE";
@@ -178,18 +181,24 @@ class Siham
         $dateDebut = new \DateTime('+1 day');
 
         $paramsWS = ['ParamModifDP' => [
-            'bisTer'              => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
-            'codePostal'          => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
-            'complementAdresse'   => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
-            'dateDebut'           => $dateDebut->format('Y-m-d'),//obligatoire
-            'matricule'           => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'natureVoie'          => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
-            'noVoie'              => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
-            'nomVoie'             => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
-            'codeUOAffectAdresse' => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
-            'typeAction'          => self::SIHAM_TYPE_ACTION_AJOUT,//obligatoire
-            'typeAdrPers'         => self::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE,
-            'ville'               => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codePays'               => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => $dateDebut->format('Y-m-d'),//obligatoire
+            'dateFin'                => '',
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'numero'                 => (isset($params['numero'])) ? strtoupper($params['numero']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_AJOUT,//obligatoire
+            'typeAdrPers'            => self::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE,
+            'typeNUmero'             => '',
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
         ]];
 
         try {
@@ -223,19 +232,24 @@ class Siham
     public function modifierAdresseAgent(array $params, $typeAdresse = 'TA01'): bool
     {
         $paramsWS = ['ParamModifDP' => [
-            'bisTer'              => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
-            'codePostal'          => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
-            'complementAdresse'   => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
-            'dateDebut'           => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',//obligatoire
-            'dateFin'             => (isset($params['dateFin'])) ? strtoupper($params['dateFin']) : '',//obligatoire
-            'matricule'           => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'natureVoie'          => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
-            'noVoie'              => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
-            'nomVoie'             => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
-            'codeUOAffectAdresse' => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
-            'typeAction'          => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
-            'typeAdrPers'         => $typeAdresse,//obligatoire
-            'ville'               => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codePays'               => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => '',
+            'dateFin'                => '',
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'numero'                 => (isset($params['numero'])) ? strtoupper($params['numero']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
+            'typeAdrPers'            => self::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE,
+            'typeNUmero'             => '',
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
         ]];
 
         try {
@@ -266,20 +280,27 @@ class Siham
 
     public function historiserAdresseAgent(array $params, $typeAdresse = 'TA01'): bool
     {
+        $dateFin = new \DateTime();
+
         $paramsWS = ['ParamModifDP' => [
-            'bisTer'              => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
-            'codePostal'          => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
-            'complementAdresse'   => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
-            'matricule'           => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'natureVoie'          => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
-            'noVoie'              => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
-            'nomVoie'             => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
-            'ville'               => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
-            'codeUOAffectAdresse' => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
-            'dateDebut'           => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',//obligatoire
-            'dateFin'             => (isset($params['dateFin'])) ? strtoupper($params['dateFin']) : '',//obligatoire
-            'typeAction'          => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
-            'typeAdrPers'         => $typeAdresse,//obligatoire
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codePays'               => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',
+            'dateFin'                => $dateFin->format('Y-m-d'),//obligatoire,
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'numero'                 => (isset($params['numero'])) ? strtoupper($params['numero']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
+            'typeAdrPers'            => self::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE,
+            'typeNUmero'             => '',
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
         ]];
 
         try {
@@ -290,6 +311,8 @@ class Siham
                 $paramsWS['ParamModifDP']['dateDebut'] = $agent->getDateDebutAdresse();
                 $client                                = $this->sihamClient->getClient('DossierAgentWebService');
                 $result                                = $client->ModifDonneesPersonnelles($paramsWS);
+                var_dump($this->sihamClient->getLastRequest());
+                die;
                 if (isset($result->return)) {
                     if ($result->return->statutMAJ == 1) {
                         return true;
@@ -311,13 +334,24 @@ class Siham
     public function modifierTelephoneAgent(array $params, $typeNumero = self::SIHAM_CODE_TYPOLOGIE_NUMERO_FIXE_PROFESSIONNEL): bool
     {
         $paramsWS = ['ParamModifDP' => [
-            'matricule'           => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'codeUOAffectAdresse' => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
-            'dateDebut'           => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',//obligatoire
-            'dateFin'             => (isset($params['dateFin'])) ? strtoupper($params['dateFin']) : '',//obligatoire
-            'typeAction'          => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
-            'numero'              => (isset($params['numero'])) ? strtoupper($params['numero']) : '',//obligatoire
-            'typeNumero'          => $typeNumero,//obligatoire
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codePays'               => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',
+            'dateFin'                => '',//obligatoire,
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'numero'                 => (isset($params['numero'])) ? strtoupper($params['numero']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
+            'typeAdrPers'            => '',
+            'typeNumero'             => $typeNumero,
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
         ]];
 
         try {
@@ -325,12 +359,25 @@ class Siham
             $agent = $this->recupererDonneesPersonnellesAgent(['listeMatricules' => [$params['matricule']]]);
 
             if ($agent) {
-                $paramsWS['ParamModifDP']['dateDebut'] = $agent->getTelephoneProDateDebut();
-                if (!empty($agent->getTelephoneProDateDebut())) {
-                    $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_MODIFICATION;
-                } else {
-                    $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_AJOUT;
+                switch ($typeNumero) {
+                    case self::SIHAM_CODE_TYPOLOGIE_FIXE_PRO:
+                        $paramsWS['ParamModifDP']['dateDebut'] = $agent->getTelephoneProDateDebut();
+                        if (!empty($agent->getTelephoneProDateDebut())) {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_MODIFICATION;
+                        } else {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_AJOUT;
+                        }
+                    break;
+                    case self::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO:
+                        $paramsWS['ParamModifDP']['dateDebut'] = $agent->getTelephonePersoDateDebut();
+                        if (!empty($agent->getTelephonePersoDateDebut())) {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_MODIFICATION;
+                        } else {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_AJOUT;
+                        }
+                    break;
                 }
+
                 $client = $this->sihamClient->getClient('DossierAgentWebService');
                 $result = $client->ModifDonneesPersonnelles($paramsWS);
                 if (isset($result->return)) {
@@ -351,18 +398,29 @@ class Siham
 
 
 
-    public function ajouterTelephoneAgent(array $params, $typeNumero = self::SIHAM_CODE_TYPOLOGIE_FIXE_PRO): bool
+    public function supprimerTelephoneAgent(array $params, $typeNumero = self::SIHAM_CODE_TYPOLOGIE_NUMERO_FIXE_PROFESSIONNEL): bool
     {
-        $dateDebut = new \DateTime();
+        $dateFin = new \DateTime();
 
         $paramsWS = ['ParamModifDP' => [
-            'matricule'           => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'codeUOAffectAdresse' => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
-            'dateDebut'           => $dateDebut->format('Y-m-d'),//obligatoire
-            'dateFin'             => (isset($params['dateFin'])) ? strtoupper($params['dateFin']) : '',//obligatoire
-            'typeAction'          => self::SIHAM_TYPE_ACTION_AJOUT,//obligatoire
-            'numero'              => (isset($params['numero'])) ? strtoupper($params['numero']) : '',//obligatoire
-            'typeNumero'          => $typeNumero,//obligatoire
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codePays'               => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',
+            'dateFin'                => $dateFin->format('Y-m-d'),//obligatoire,
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'numero'                 => (isset($params['numero'])) ? strtoupper($params['numero']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_SUPPRESSION,//obligatoire
+            'typeAdrPers'            => '',
+            'typeNumero'             => $typeNumero,
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
         ]];
 
         try {
@@ -370,9 +428,94 @@ class Siham
             $agent = $this->recupererDonneesPersonnellesAgent(['listeMatricules' => [$params['matricule']]]);
 
             if ($agent) {
-                $paramsWS['ParamModifDP']['dateDebut'] = $agent->getDateDebutAdresse();
-                $client                                = $this->sihamClient->getClient('DossierAgentWebService');
-                $result                                = $client->ModifDonneesPersonnelles($paramsWS);
+
+
+                switch ($typeNumero) {
+                    case self::SIHAM_CODE_TYPOLOGIE_FIXE_PRO:
+                        if (empty($agent->getTelephonePro())) {
+                            return false;
+                        }
+                        $paramsWS['ParamModifDP']['dateDebut'] = $agent->getTelephoneProDateDebut();
+                        $paramsWS['ParamModifDP']['numero']    = $agent->getTelephonePro();
+                    break;
+                    case self::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO:
+                        if (empty($agent->getTelephonePerso())) {
+                            return false;
+                        }
+                        $paramsWS['ParamModifDP']['dateDebut'] = $agent->getTelephonePersoDateDebut();
+                        $paramsWS['ParamModifDP']['numero']    = $agent->getTelephonePerso();
+                    break;
+                }
+                $client = $this->sihamClient->getClient('DossierAgentWebService');
+                $result = $client->ModifDonneesPersonnelles($paramsWS);
+
+                if (isset($result->return)) {
+                    if ($result->return->statutMAJ == 1) {
+                        return true;
+                    } else {
+                        $message = $result->return->statutMAJ;
+                        throw new SihamException($result->return->statutMAJ, 0);
+                    }
+                }
+            }
+        } catch (\SoapFault $e) {
+            throw new SihamException($e->faultstring, 0, $e);
+        }
+
+        return false;
+    }
+
+
+
+    public function modifierEmailAgent(array $params, $typeNumero = self::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO): bool
+    {
+        $paramsWS = ['ParamModifDP' => [
+            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codePays'               => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
+            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
+            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'dateDebut'              => (isset($params['dateDebut'])) ? strtoupper($params['dateDebut']) : '',
+            'dateFin'                => '',//obligatoire,
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'numero'                 => (isset($params['numero'])) ? strtoupper($params['numero']) : '',
+            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
+            'typeAction'             => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
+            'typeAdrPers'            => '',
+            'typeNumero'             => $typeNumero,
+            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+        ]];
+
+        try {
+            //On récupére l'agent pour pouvoir le modifier
+            $agent = $this->recupererDonneesPersonnellesAgent(['listeMatricules' => [$params['matricule']]]);
+
+            if ($agent) {
+                switch ($typeNumero) {
+                    case self::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO:
+                        $paramsWS['ParamModifDP']['dateDebut'] = $agent->getEmailProDateDebut();
+                        if (!empty($agent->getEmailPro())) {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_MODIFICATION;
+                        } else {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_AJOUT;
+                        }
+                    break;
+                    case self::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO:
+                        $paramsWS['ParamModifDP']['dateDebut'] = $agent->getEmailPersoDateDebut();
+                        if (!empty($agent->getEmailPerso())) {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_MODIFICATION;
+                        } else {
+                            $paramsWS['ParamModifDP']['typeAction'] = self::SIHAM_TYPE_ACTION_AJOUT;
+                        }
+                    break;
+                }
+
+                $client = $this->sihamClient->getClient('DossierAgentWebService');
+                $result = $client->ModifDonneesPersonnelles($paramsWS);
                 if (isset($result->return)) {
                     if ($result->return->statutMAJ == 1) {
                         return true;
@@ -398,9 +541,207 @@ class Siham
 
 
 
-    public function priseEnChargeAgent($agent)
+    public function priseEnChargeAgent($params)
     {
+        //Traitement de l'adresse principale
+        $listeCoordonneesPostales = [];
 
+        if (!empty($params['listeCoordonneesPostales'])) {
+            foreach ($params['listeCoordonneesPostales'] as $coordonnees) {
+                $listeCoordonneesPostales[] = [
+                    'bureauDistributeur'   => (isset($coordonnees['bureauDistributeur'])) ? strtoupper($coordonnees['bureauDistributeur']) : '',
+                    'codePays'             => (isset($coordonnees['codePays'])) ? strtoupper($coordonnees['codePays']) : '',
+                    'codePostal'           => (isset($coordonnees['codePostal'])) ? strtoupper($coordonnees['codePostal']) : '',
+                    'commune'              => (isset($coordonnees['commune'])) ? strtoupper($coordonnees['commune']) : '',
+                    'debutAdresse'         => (isset($coordonnees['debutAdresse'])) ? strtoupper($coordonnees['debutAdresse']) : '',
+                    'natureVoie'           => (isset($coordonnees['natureVoie'])) ? strtoupper($coordonnees['natureVoie']) : '',
+                    'nomVoie'              => (isset($coordonnees['nomVoie'])) ? strtoupper($coordonnees['nomVoie']) : '',
+                    'numAdresse'           => (isset($coordonnees['numAdresse'])) ? strtoupper($coordonnees['numAdresse']) : '',
+                    'temAdressePrincipale' => (isset($coordonnees['temAdressePrincipale'])) ? strtoupper($coordonnees['temAdressePrincipale']) : self::SIHAM_TEMOIN_ADRESSE_PRINCIPALE,
+                    'temoinValidite'       => (isset($coordonnees['temoinValidite'])) ? strtoupper($coordonnees['temoinValidite']) : self::SIHAM_TEMOIN_VALIDITE_DEFAULT,
+                    'typeAdresse'          => (isset($coordonnees['typeAdresse'])) ? strtoupper($coordonnees['typeAdresse']) : self::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE,
+                ];
+            }
+        } else {
+            $listeCoordonneesPostales[] = [
+                'bureauDistributeur'   => '',
+                'codePays'             => '',
+                'codePostal'           => '',
+                'commune'              => '',
+                'debutAdresse'         => '',
+                'natureVoie'           => '',
+                'nomVoie'              => '',
+                'numAdresse'           => '',
+                'temAdressePrincipale' => '',
+                'temoinValidite'       => '',
+                'typeAdresse'          => '',
+            ];
+        }
+
+
+        //Traitement des coordonnées bancaires
+        $listeCoordonneesBancaires = [];
+        if (!empty($params['listeCoordonneesBancaires'])) {
+            foreach ($params['listeCoordonneesBancaires'] as $coordonnees) {
+                $listeCoordonneesBancaires[] = [
+                    'cleCompte'      => (isset($coordonnees['cleCompte'])) ? strtoupper($coordonnees['cleCompte']) : '',
+                    'codeAgence'     => (isset($coordonnees['codeAgence'])) ? strtoupper($coordonnees['codeAgence']) : '',
+                    'codeBanque'     => (isset($coordonnees['codeBanque'])) ? strtoupper($coordonnees['codeBanque']) : '',
+                    'dateDebBanque'  => (isset($coordonnees['dateDebBanque'])) ? strtoupper($coordonnees['dateDebBanque']) : '',
+                    'dateFinBanque'  => (isset($coordonnees['dateFinBanque'])) ? strtoupper($coordonnees['dateFinBanque']) : '',
+                    'IBAN'           => (isset($coordonnees['IBAN'])) ? strtoupper($coordonnees['IBAN']) : '',
+                    'libelleAgence'  => (isset($coordonnees['libelleAgence'])) ? strtoupper($coordonnees['libelleAgence']) : '',
+                    'modePaiement'   => (isset($coordonnees['modePaiement'])) ? strtoupper($coordonnees['modePaiement']) : '',
+                    'numCompte'      => (isset($coordonnees['numCompte'])) ? strtoupper($coordonnees['numCompte']) : '',
+                    'paysBanque'     => (isset($coordonnees['paysBanque'])) ? strtoupper($coordonnees['paysBanque']) : '',
+                    'SWIFT'          => (isset($coordonnees['SWIFT'])) ? strtoupper($coordonnees['SWIFT']) : '',
+                    'temoinValidite' => (isset($coordonnees['temoinValidite'])) ? strtoupper($coordonnees['temoinValidite']) : '',
+
+                ];
+            }
+        } else {
+            $listeCoordonneesBancaires[] = [
+                'cleCompte'      => '',
+                'codeAgence'     => '',
+                'codeBanque'     => '',
+                'dateDebBanque'  => '',
+                'dateFinBanque'  => '',
+                'IBAN'           => '',
+                'libelleAgence'  => '',
+                'modePaiement'   => '',
+                'numCompte'      => '',
+                'paysBanque'     => '',
+                'SWIFT'          => '',
+                'temoinValidite' => '',
+
+            ];
+        }
+
+        //Traitement des modalités de services
+        $listeModalitesServices = [];
+
+        if (!empty($params['listeModalitesService'])) {
+            foreach ($params['listeModalitesService'] as $modalite) {
+                $listeModalitesServices[] = ['dateEffetModalite' => $modalite['dateEffetModalite'],
+                                             'modalite'          => $modalite['modalite']];
+            }
+        } else {
+            $listeModalitesServices[] = ['dateEffetModalite' => '',
+                                         'modalite'          => ''];
+        }
+
+        //Traitement du statut
+
+        $listeStatuts = [];
+
+        if (!empty($params['listeStatuts'])) {
+            foreach ($params['listeStatuts'] as $statut) {
+                $listeStatuts[] = ['dateEffetStatut' => $statut['dateEffetStatut'],
+                                   'statut'          => $statut['dateEffetStatut']];
+            }
+        } else {
+            $listeStatuts[] = ['dateEffetStatut' => '',
+                               'statut'          => ''];
+        }
+
+        //Traitement de la nationalité
+
+        $listeNationalites = [];
+        if (!empty($params['listeNationalites'])) {
+            foreach ($params['listeNationalites'] as $nationalite) {
+                $listeNationalites[] = [
+                    'nationalite' => (isset($nationalite['nationalite'])) ? strtoupper($nationalite['nationalite']) : '',
+                ];
+            }
+        } else {
+            $listeNationalites[] = [
+                'nationalite' => '',
+            ];
+        }
+
+        //Traitement du numéro de téléphone
+
+        $listeNumerosTelephoneFax = [];
+        if (!empty($params['listeNumerosTelephoneFax'])) {
+            foreach ($params['listeNumerosTelephoneFax'] as $numero) {
+                $listeNumerosTelephoneFax[] = [
+                    'dateDebutTel' => (isset($numero['dateDebutTel'])) ? strtoupper($numero['dateDebutTel']) : '',
+                    'numero'       => (isset($numero['numero'])) ? strtoupper($numero['numero']) : '',
+                    'typeNumero'   => (isset($numero['typeNumero'])) ? strtoupper($numero['typeNumero']) : '',
+
+                ];
+            }
+        } else {
+            $listeNumerosTelephoneFax[] = [
+                'dateDebutTel' => '',
+                'numero'       => '',
+                'typeNumero'   => '',
+
+            ];
+        }
+
+        //Traitement des positions
+        $listePositions = [];
+        if (!empty($params['listePositions'])) {
+            foreach ($params['listePositions'] as $position) {
+                $listePositions[] = [
+                    'dateEffetPosition' => (isset($position['dateEffetPosition'])) ? strtoupper($position['dateEffetPosition']) : '',
+                    'position'          => (isset($position['position'])) ? strtoupper($position['position']) : '',
+                    'temoinValidite'    => (isset($position['temoinValidite'])) ? strtoupper($position['temoinValidite']) : '',
+                ];
+            }
+        } else {
+            $listePositions[] = [
+                'dateEffetPosition' => '',
+                'position'          => '',
+                'temoinValidite'    => '',
+            ];
+        }
+
+        $paramsWS = ['ParamPEC' => [
+            'categorieEntree'           => (isset($params['categorieEntree'])) ? strtoupper($params['categorieEntree']) : '',
+            'civilite'                  => (isset($params['civilite'])) ? strtoupper($params['civilite']) : '',
+            'codeAdministration'        => (isset($params['codeAdministration'])) ? strtoupper($params['codeAdministration']) : '',
+            'codeEtablissement'         => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'dateEmbauche'              => (isset($params['dateEmbauche'])) ? strtoupper($params['dateEmbauche']) : '',
+            'dateNaissance'             => (isset($params['dateNaissance'])) ? strtoupper($params['dateNaissance']) : '',
+            'villeNaissance'            => (isset($params['villeNaissance'])) ? strtoupper($params['villeNaissance']) : '',
+            'departementNaissance'      => (isset($params['departementNaissance'])) ? strtoupper($params['departementNaissance']) : '',
+            'emploi'                    => (isset($params['emploi'])) ? strtoupper($params['emploi']) : '',
+            'listeCoordonneesPostales'  => $listeCoordonneesPostales,
+            'listeCoordonneesBancaires' => $listeCoordonneesBancaires,
+            'listeModalitesServices'    => $listeModalitesServices,
+            'listeStatuts'              => $listeStatuts,
+            'listeNationalites'         => $listeNationalites,
+            'listeNumerosTelephoneFax'  => $listeNumerosTelephoneFax,
+            'listePositions'            => $listePositions,
+            'motifEntree'               => (isset($params['motifEntree'])) ? strtoupper($params['motifEntree']) : self::SIHAM_MOTIF_ENTREE_DEFAULT,
+            'nomPatronymique'           => (isset($params['nomPatronymique'])) ? strtoupper($params['nomPatronymique']) : '',
+            'nomUsuel'                  => (isset($params['nomUsuel'])) ? strtoupper($params['nomUsuel']) : '',
+            'numeroInsee'               => (isset($params['numeroInsee'])) ? strtoupper($params['numeroInsee']) : '',
+            'paysNaissance'             => (isset($params['paysNaissance'])) ? strtoupper($params['paysNaissance']) : '',
+            'prenom'                    => (isset($params['prenom'])) ? strtoupper($params['prenom']) : '',
+            'sexe'                      => (isset($params['sexe'])) ? strtoupper($params['sexe']) : '1',
+            'temoinValidite'            => (isset($params['temoinValidite'])) ? strtoupper($params['temoinValidite']) : '',
+            'UO'                        => (isset($params['UO'])) ? strtoupper($params['UO']) : '',
+
+        ]];
+
+        try {
+            $client = $this->sihamClient->getClient('PECWebService');
+            $result = $client->PriseEnChargeAgent($paramsWS);
+            //var_dump($this->sihamClient->getLastRequest());
+            //die;
+            if ($result->return->statut == 'ERREUR_GENERALE') {
+                var_dump($result->return);
+                die;
+                throw new SihamException('Erreur générale', 0);
+            }
+
+            return $result->return;
+        } catch (\SoapFault $e) {
+            throw new SihamException($e->faultstring, 0, $e);
+        }
     }
 
 

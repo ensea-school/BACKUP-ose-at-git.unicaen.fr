@@ -4,14 +4,6 @@ use BddAdmin\Bdd;
 use BddAdmin\Ddl\Ddl;
 
 
-/*
-act_arbre_odf ??
- */
-
-
-
-
-
 class ConnecteurActul
 {
     /**
@@ -32,7 +24,37 @@ class ConnecteurActul
     /**
      * @var Ddl
      */
-    public $ddl;
+    protected $ddl;
+
+    /**
+     * @var array
+     */
+    protected $odf = [];
+
+    /**
+     * @var array
+     */
+    protected $etapes = [];
+
+    /**
+     * @var array
+     */
+    protected $elements = [];
+
+    /**
+     * @var array
+     */
+    protected $chemins = [];
+
+    /**
+     * @var array
+     */
+    protected $noeuds = [];
+
+    /**
+     * @var array
+     */
+    protected $liens = [];
 
 
 
@@ -65,16 +87,79 @@ class ConnecteurActul
 
     public function getDdl()
     {
-        if (!$this->ddl) $this->init();
-
         return $this->ddl;
     }
 
 
 
-    public function getTables(): array
+    public function sync()
     {
-        return array_keys($this->getDdl()['table']);
+        $this->initDataFromActul();
+        $this->makeOdf();
+
+        $this->majActTable('ACT_ETAPE', $this->etapes);
+    }
+
+
+
+    protected function initDataFromActul()
+    {
+        $this->etapes = [];
+        $this->odf    = [];
+
+        /* Récupération des étapes */
+        $sql = $this->getActulQuery('ACT_ETAPE');
+        $ds  = $this->actul->select($sql);
+        foreach ($ds as $d) {
+            $this->etapes[$d['source_code']] = $d;
+        }
+        unset($ds);
+
+        /* Récupération des données d'offre de formation */
+        $sql = $this->getActulQuery('ACT_ODF');
+        $ds  = $this->actul->select($sql);
+        foreach ($ds as $d) {
+            $this->odf[$d['source_code']] = $d;
+        }
+        unset($ds);
+    }
+
+
+
+    protected function makeOdf()
+    {
+        /* Construction des éléments pédagogiques */
+        $this->elements = [];
+        foreach ($this->odf as $i => $e) {
+            if (empty($this->getChildren($i))) {
+                $this->elements[] = [
+                    'code' =>
+                ];
+            }
+        }
+
+        var_dump($this->odf);
+    }
+
+
+
+    protected function odfToElement($id): array
+    {
+        $element = [];
+    }
+
+
+
+    protected function getChildren($id): array
+    {
+        $res = [];
+        foreach ($this->odf as $i => $e) {
+            if ($e['element_parent_id'] == $id) {
+                $res[$i] = $e;
+            }
+        }
+
+        return $res;
     }
 
 
@@ -92,30 +177,26 @@ class ConnecteurActul
 
 
 
-    public function majTampon(string $tableName, int $anneeId): int
+    protected function getActulQuery($name): string
     {
-        /* On prend la requête correspondante à la table et on récupère le contenu depuis Actul */
-        $sql  = file_get_contents($this->oa->getOseDir() . 'admin/actul/query/' . $tableName . '.sql');
-        $data = $this->actul->select($sql, ['v_annee' => $anneeId]);
+        return file_get_contents($this->oa->getOseDir() . 'admin/actul/query/' . $name . '.sql');
+    }
 
+
+
+    protected function majActTable(string $tableName, array $data): int
+    {
         $key = $this->getTableKey($tableName);
 
         if (empty($data)) {
             return 0;
         }
 
-        $this->colMatch($tableName, array_keys(array_change_key_case($data[0], CASE_UPPER)));
+        $this->colMatch($tableName, array_keys(array_change_key_case(current($data), CASE_UPPER)));
 
         foreach ($data as $i => $d) {
             /* On passe les colonnes en majuscules pour Oracle */
             $data[$i] = array_change_key_case($d, CASE_UPPER);
-
-            /* Si une colonne servant de clé est nulle, alors on ne prend pas la ligne */
-            foreach ($key as $k) {
-                if (empty($data[$i][$k]) && array_key_exists($i, $data)) {
-                    unset($data[$i]);
-                }
-            }
         }
 
         /* on fait le merge dans ose des data récupérées */
@@ -126,7 +207,7 @@ class ConnecteurActul
 
 
 
-    public function colMatch(string $tableName, array $cols)
+    protected function colMatch(string $tableName, array $cols)
     {
         $dc = array_keys($this->ddl['table'][$tableName]['columns']);
 

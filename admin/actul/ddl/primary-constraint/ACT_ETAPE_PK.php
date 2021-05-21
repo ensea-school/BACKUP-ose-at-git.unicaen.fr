@@ -3,11 +3,12 @@
 //@formatter:off
 
 return [
-    'name'    => 'PK_ACT_ETP',
+    'name'    => 'ACT_ETAPE_PK',
     'table'   => 'ACT_ETAPE',
-    'index'   => 'PK_ACT_ETP',
+    'index'   => 'ACT_ETAPE_PK',
     'columns' => [
-        'ID',
+        'ANNEE_ID',
+        'SOURCE_CODE',
     ],
 ];
 

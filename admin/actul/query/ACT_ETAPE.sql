@@ -1,67 +1,49 @@
 SELECT
-    anu.cod_anu                      as annee_id,
-    vde.libelle     			           as libelle,
-    etp.libelle_court                as libelle_court,
-	  tpd.typ_dip_apo                  as z_type_formation_id,
-	  vde.vdi_vet_annee_min            as niveau,
-    null                             as z_structure_id,
-    etp.cod_cmp                      as cmp_apo,
-	  concat_ws('_', ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as source_code,
-    0                                as specifique_echanges ,
-    'D999'                           as domaine_fonctionnel,
-    typ_ins.fi                       as fi,
-    typ_ins.fa                       as fa,
-    typ_ins.fc                       as fc,
-    etp.code                         as cod_etp,
-    cast(vti.code as char(255))      as cod_vrs_vet,
-	  concat_ws('_', anu.cod_anu, ltrim(rtrim(etp.code)), cast(vti.code as char(255))) as id,
-	  tpd.cod_nature_diplome           as tem_dn,
-    vde.statut                       as statut_actul,
-	  case etp.exported
-		when true then 'O'
-		else 'N'
-	  end                              as tem_exported
-  , etp.cod_pty_apo                  as parcours_type_apo
-  , etp.prem_sem
-  , etp.cod_cge
-  , etp.droit_bourse
-  , vde.libelle                      as libelle_web
-  , vde.cod_coll                     as collegium
-  , vde.cod_duree_etape              as duree_etape
-  , vde.vdi_vet_annee_min
-  , vde.vdi_vet_annee_max
-    from PREV_PROJET                  			 anu
-    join PREV_DIPLOME                    		 dip on dip.prev_projet_id = anu.cod_anu
-    join PREV_TYP_DIPLOME                		 tpd on dip.prev_typ_diplome_id = tpd.id
-    join PREV_VERSION_DIPLOME            		 vdi on vdi.prev_diplome_id = dip.id
-    join PREV_ETAPE                      		 etp on etp.prev_version_diplome_id = vdi.id
-    join PREV_VERSION_ETAPE				         vde on vde.prev_etape_id = etp.id
-	left join PREV_VET_TYPINS 					 vti on vde.id = vti.prev_vet_id
-    left join (select case tis.prev_typins_id
-            when 0 then 1
-            else 0
-       end fi
-      , case tis.prev_typins_id
-            when 1 then 1
-            else 0
-       end fc
-      , case tis.prev_typins_id
-            when 2 then 1
-            else 0
-       end fa
-    , vet.prev_etape_id
-from PREV_VET_TYPINS tis
-    ,PREV_VERSION_ETAPE vet
-where tis.prev_vet_id = vet.id
-group by vet.prev_etape_id) typ_ins on typ_ins.prev_etape_id = etp.id
-where anu.cod_anu = :v_annee
-  and anu.temoin_actif = 1
-order by
-  anu.cod_anu,
-  vde.libelle ,
-  etp.libelle_court,
-  tpd.typ_dip_apo ,
-  etp.code,
-  tpd.cod_nature_diplome
-
-  ;
+  vde.libelle                as libelle,
+  tpd.typ_dip_apo            as z_type_formation_id,
+  CASE etp.prem_sem
+    WHEN 1 THEN 1 -- semestre 1 => première année
+    WHEN 3 THEN 2 -- semestre 3 => deuxième année
+    WHEN 5 THEN 3 -- semestre 5 => troisième année
+    ELSE NULL
+  END                        as niveau,
+  0                          as specifique_echanges,
+  etp.cod_cmp                as z_structure_id,
+  'Actul'                    as z_source_id,
+  vde.id                     as source_code,
+  case tpd.COD_CURSUS_LMD -- Codification LMD standard
+    WHEN 'L' THEN 'D101'
+    WHEN 'M' THEN 'D102'
+    WHEN 'D' THEN 'D103'
+    ELSE NULL             -- sinon NULL
+  END                        as z_domaine_fonctionnel_id,
+  anu.COD_ANU                as annee_id,
+  CASE WHEN etp.code IS NOT NULL AND MAX(vti.code) IS NOT NULL
+    THEN concat(ltrim(rtrim(etp.code)), '_', cast(MAX(vti.code) as char(255)))
+    ELSE concat('aid_',vde.id)
+  END                        as code,
+  CASE WHEN SUM(CASE pti.LIBELLE_COURT WHEN 'FI' THEN 1 ELSE 0 END) >= 1 THEN 1 ELSE 0 END fi,
+  CASE WHEN SUM(CASE pti.LIBELLE_COURT WHEN 'FC' THEN 1 ELSE 0 END) >= 1 THEN 1 ELSE 0 END fc,
+  CASE WHEN SUM(CASE pti.LIBELLE_COURT WHEN 'FA' THEN 1 ELSE 0 END) >= 1 THEN 1 ELSE 0 END fa,
+  vde.EFF_PREV               as effectif
+FROM
+    PREV_PROJET               anu
+    JOIN PREV_DIPLOME         dip on dip.prev_projet_id = anu.cod_anu
+    JOIN PREV_TYP_DIPLOME     tpd on tpd.id = dip.prev_typ_diplome_id
+    JOIN PREV_VERSION_DIPLOME vdi on vdi.prev_diplome_id = dip.id
+    JOIN PREV_ETAPE           etp on etp.prev_version_diplome_id = vdi.id
+    JOIN PREV_VERSION_ETAPE   vde on vde.prev_etape_id = etp.id
+    LEFT JOIN PREV_VET_TYPINS vti on vde.id = vti.prev_vet_id
+    LEFT JOIN PREV_TYP_INS    pti ON pti.COD_TYP_INS = vti.PREV_TYPINS_ID
+WHERE
+  anu.temoin_actif = 1
+  AND vde.STATUT = 'TERMINE'
+GROUP BY
+  vde.libelle,
+  tpd.typ_dip_apo,
+  etp.prem_sem,
+  etp.cod_cmp,
+  vde.id,
+  tpd.COD_CURSUS_LMD,
+  anu.COD_ANU,
+  etp.code

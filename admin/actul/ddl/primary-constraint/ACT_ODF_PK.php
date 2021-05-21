@@ -3,13 +3,12 @@
 //@formatter:off
 
 return [
-    'name'    => 'PK_ACT_RETP',
-    'table'   => 'ACT_RESP_ETP',
-    'index'   => 'PK_ACT_RETP',
+    'name'    => 'ACT_ODF_PK',
+    'table'   => 'ACT_ODF',
+    'index'   => 'ACT_ODF_PK',
     'columns' => [
         'SOURCE_CODE',
         'ANNEE_ID',
-        'USR_LOGIN',
     ],
 ];
 

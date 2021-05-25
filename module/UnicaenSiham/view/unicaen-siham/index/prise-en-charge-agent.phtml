@@ -42,6 +42,29 @@
                 <input id="disabledInput" class="form-control" type="text" name="departementNaissance"
                        value="<?= $dossierIntervenant->getDepartementNaissance() ?>"/>
             </div>
+            <div class="form-group">
+                <label for="">Emploi : </label>
+                <select name="emploi" class="form-control">
+                    <option value="UCNVCE">Vacataire chargé d'enseignement</option>
+                    <option value="UCNVA">Vacataire administratif</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Unité organisationelle : </label>
+                <select name="uo" class="form-control">
+                    <?php foreach ($uo as $value): ?>
+                        <option value="<?= $value['CODE_UO'] ?>"> <?= $value['LIBELLE_LONG_UO'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Position Administrative : </label>
+                <select name="position-administrative" class="form-control">
+                    <option value="DEL06">Délégation mission étude/exercer enseignement</option>
+                </select>
+            </div>
+
+
         </div>
     </div>
 

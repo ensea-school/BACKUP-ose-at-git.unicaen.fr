@@ -620,8 +620,8 @@ class Siham
         //Traitement des modalités de services
         $listeModalitesServices = [];
 
-        if (!empty($params['listeModalitesService'])) {
-            foreach ($params['listeModalitesService'] as $modalite) {
+        if (!empty($params['listeModalitesServices'])) {
+            foreach ($params['listeModalitesServices'] as $modalite) {
                 $listeModalitesServices[] = ['dateEffetModalite' => $modalite['dateEffetModalite'],
                                              'modalite'          => $modalite['modalite']];
             }
@@ -637,7 +637,7 @@ class Siham
         if (!empty($params['listeStatuts'])) {
             foreach ($params['listeStatuts'] as $statut) {
                 $listeStatuts[] = ['dateEffetStatut' => $statut['dateEffetStatut'],
-                                   'statut'          => $statut['dateEffetStatut']];
+                                   'statut'          => $statut['statut']];
             }
         } else {
             $listeStatuts[] = ['dateEffetStatut' => '',

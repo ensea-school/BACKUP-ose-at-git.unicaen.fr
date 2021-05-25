@@ -256,6 +256,15 @@ class IndexController extends AbstractActionController
         $serviceIntervenant = $this->getServiceIntervenant();
         $serviceDossier     = $this->getServiceDossier();
 
+        /*UO*/
+        $sql = "
+            SELECT *
+            FROM src_uo 
+        ";
+
+        $uo = $serviceIntervenant->getEntityManager()->getConnection()->fetchAll($sql, []);
+
+      
         /**
          * @var Intervenant $intervenant
          */
@@ -263,39 +272,55 @@ class IndexController extends AbstractActionController
         $dossierIntervenant = $serviceDossier->getByIntervenant($intervenant);
 
         if ($this->getRequest()->isPost()) {
+            /*POSITION ADMINISTRATIVE ===> position*/
+            $position[] =
+                ['dateEffetModalite' => '2021-05-20',
+                 'position'          => $this->getRequest()->getPost('position-administrative')];
+
+            /*STATUT*/
+            $statut[] =
+                ['dateEffetStatut' => '2021-05-20',
+                 'statut'          => 'C0301'];
+
+            /*MODALITE SERVICE ===> Mouvement*/
+            $service[] =
+                ['dateEffetModalite' => '2021-05-20',
+                 'modalite'          => 'MS100'];
+
+
             $params = [
-                'categorieEntree' => '',
-                'civilite'        => '1,
+                'categorieEntree'           => 'ACTIVE',
+                'civilite'                  => '1',
                 'codeAdministration'        => 'UCN',
                 'codeEtablissement'         => '0141408E',
-                'dateEmbauche'              => '2021 - 05 - 20',
+                'dateEmbauche'              => '2021-05-20',
                 'dateNaissance'             => $this->getRequest()->getPost('dateNaissance'),
                 'villeNaissance'            => $this->getRequest()->getPost('villeNaissance'),
                 'departementNaissance'      => '',
-                'emploi'                    => '',
+                'emploi'                    => $this->getRequest()->getPost('emploi'),
                 'listeCoordonneesPostales'  => '',
                 'listeCoordonneesBancaires' => '',
-                'listeModalitesServices'    => '',
-                'listeStatuts'              => '',
+                'listeModalitesServices'    => $service,
+                'listeStatuts'              => $statut,
                 'listeNationalites'         => '',
                 'listeNumerosTelephoneFax'  => '',
-                'listePositions'            => '',
-                'motifEntree'               => '',
+                'listePositions'            => $position,
+                'motifEntree'               => 'PEC',
                 'nomPatronymique'           => '',
                 'nomUsuel'                  => $this->getRequest()->getPost('nomUsuel'),
                 'numeroInsee'               => '',
                 'paysNaissance'             => '',
                 'prenom'                    => $this->getRequest()->getPost('prenom'),
                 'sexe'                      => '1',
-                'temoinValidite'            => '',
-                'UO'                        => '',
+                'temoinValidite'            => '1',
+                'UO'                        => $this->getRequest()->getPost('uo'),
             ];
 
             $result = $this->siham->priseEnChargeAgent($params);
         }
 
 
-        return compact('intervenant', 'dossierIntervenant');
+        return compact('intervenant', 'dossierIntervenant', 'uo');
     }
 
 

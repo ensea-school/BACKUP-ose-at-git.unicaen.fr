@@ -172,7 +172,7 @@ SELECT DISTINCT
     adr.ville_nom                                                  adresse_commune,
     pays.code_pays                                                 z_adresse_pays_id,
     /* INSEE */
-    COALESCE(vindinsee.no_insee, vindinsee.no_insee_provisoire)    numero_insee,
+    COALESCE(TRIM(vindinsee.no_insee), TRIM(vindinsee.no_insee_provisoire))    numero_insee,
     CASE
     	WHEN vindinsee.no_insee IS NULL
 	    	AND vindinsee.no_insee_provisoire IS NOT NULL

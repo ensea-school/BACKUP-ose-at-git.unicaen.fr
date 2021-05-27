@@ -9,6 +9,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Il n'est désormais plus possible de saisir un horaire de fin antérieur à celui de début en mode de saisie de service calendaire (#36319)
 * Les plafonds sont de nouveau bloquants si trop d'heures prévisionnelles sont reportées en réalisé
 * Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
+* Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
 
 
 
@@ -141,6 +142,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 ## Corrections de bugs
 
 * Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
+* Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
 
 
 # OSE 14.18 (06/05/2021)

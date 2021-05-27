@@ -100,7 +100,6 @@ class AgrementService extends AbstractEntityService
                 'intervenant-nom-patronymique' => 'Nom patronymique',
                 'intervenant-prenom'           => 'Prénom',
                 'intervenant-statut-libelle'   => 'Statut',
-                'premier-recrutement'          => 'Premier recrutement',
                 'discipline'                   => 'Discipline',
                 'hetd-fi'                      => 'HETD (FI)',
                 'hetd-fa'                      => 'HETD (FA)',

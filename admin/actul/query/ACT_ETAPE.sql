@@ -20,7 +20,7 @@ SELECT
   anu.COD_ANU                as annee_id,
   CASE WHEN etp.code IS NOT NULL AND MAX(vti.code) IS NOT NULL
     THEN concat(ltrim(rtrim(etp.code)), '_', cast(MAX(vti.code) as char(255)))
-    ELSE concat('aid_',vde.id)
+    ELSE concat('act_',vde.id)
   END                        as code,
   CASE WHEN SUM(CASE pti.LIBELLE_COURT WHEN 'FI' THEN 1 ELSE 0 END) >= 1 THEN 1 ELSE 0 END fi,
   CASE WHEN SUM(CASE pti.LIBELLE_COURT WHEN 'FC' THEN 1 ELSE 0 END) >= 1 THEN 1 ELSE 0 END fc,
@@ -37,7 +37,7 @@ FROM
     LEFT JOIN PREV_TYP_INS    pti ON pti.COD_TYP_INS = vti.PREV_TYPINS_ID
 WHERE
   anu.temoin_actif = 1
-  AND vde.STATUT = 'TERMINE'
+  /*AND vde.STATUT = 'TERMINE'*/
 GROUP BY
   vde.libelle,
   tpd.typ_dip_apo,

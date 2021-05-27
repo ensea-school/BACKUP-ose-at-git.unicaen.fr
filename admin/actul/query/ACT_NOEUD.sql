@@ -1,5 +1,5 @@
 SELECT
-  COALESCE(pep.CODE,CONCAT('act_',pep.id))                     as code,
+  COALESCE(pep.CODE,CONCAT('act_',pep.id))                    as code,
   pep.LIBELLE_long                                            as libelle,
   pp.COD_ANU                                                  as annee_id,
   pep.PREV_VET_ID                                             as z_etape_id,
@@ -10,12 +10,7 @@ SELECT
   pep.CODE_SECTION_CNU                                        as z_discipline_id,
   'Actul'                                                     as z_source_id,
   pep.id                                                      as source_code,
-  pep.NB_CHOIX                                                as choix_minimum,
-  pep.NB_CHOIX_MAX                                            as choix_maximum,
-  pep.id                                                      as id,
   pep.nel                                                     as type_noeud,
-  pep.PREV_ELP_PARENT_ID                                      as element_parent_id,
-  pep.PREV_ELP_REFERENCE_ID                                   as element_ref_id,
   pep.elp_order                                               as ordre
 FROM
        PREV_ELEMENT_PEDAGOGI   pep
@@ -34,4 +29,5 @@ FROM
   )                        elp_ead ON elp_ead.PREV_ELP_ID = pep.id
 WHERE
   pp.TEMOIN_ACTIF = 1        -- on ne sélectionne que les projets actifs
+  AND pep.PREV_ELP_REFERENCE_ID IS NULL -- on ignore les noeuds "référence"
   /*AND pve.STATUT = 'TERMINE'*/ -- on ne récupère que ce qui est terminé

@@ -94,72 +94,17 @@ class ConnecteurActul
 
     public function sync()
     {
-        $this->initDataFromActul();
-        $this->makeOdf();
+        $tables = [
+            'ACT_ETAPE',
+            'ACT_NOEUD',
+            'ACT_LIEN',
+        ];
 
-        $this->majActTable('ACT_ETAPE', $this->etapes);
-    }
-
-
-
-    protected function initDataFromActul()
-    {
-        $this->etapes = [];
-        $this->odf    = [];
-
-        /* Récupération des étapes */
-        $sql = $this->getActulQuery('ACT_ETAPE');
-        $ds  = $this->actul->select($sql);
-        foreach ($ds as $d) {
-            $this->etapes[$d['source_code']] = $d;
+        foreach ($tables as $table) {
+            $sql  = $this->getActulQuery($table);
+            $data = $this->actul->select($sql, ['fetch' => Bdd::FETCH_ALL]);
+            $this->majActTable($table, $data);
         }
-        unset($ds);
-
-        /* Récupération des données d'offre de formation */
-        $sql = $this->getActulQuery('ACT_ODF');
-        $ds  = $this->actul->select($sql);
-        foreach ($ds as $d) {
-            $this->odf[$d['source_code']] = $d;
-        }
-        unset($ds);
-    }
-
-
-
-    protected function makeOdf()
-    {
-        /* Construction des éléments pédagogiques */
-        $this->elements = [];
-        foreach ($this->odf as $i => $e) {
-            if (empty($this->getChildren($i))) {
-                $this->elements[] = [
-                    'code' =>
-                ];
-            }
-        }
-
-        var_dump($this->odf);
-    }
-
-
-
-    protected function odfToElement($id): array
-    {
-        $element = [];
-    }
-
-
-
-    protected function getChildren($id): array
-    {
-        $res = [];
-        foreach ($this->odf as $i => $e) {
-            if ($e['element_parent_id'] == $id) {
-                $res[$i] = $e;
-            }
-        }
-
-        return $res;
     }
 
 

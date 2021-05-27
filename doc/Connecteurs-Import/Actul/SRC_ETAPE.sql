@@ -12,7 +12,7 @@ SELECT
   ae.code                 code
 FROM
             act_etape                 ae
-  LEFT JOIN type_formation            tf ON tf.id = ae.z_type_formation_id
+  LEFT JOIN type_formation            tf ON tf.source_code = ae.z_type_formation_id
   LEFT JOIN unicaen_structure_corresp sc ON sc.cod_cmp = ae.z_structure_id
   LEFT JOIN structure                str ON str.source_code = sc.c_structure_n2
   LEFT JOIN source                     s ON s.code = ae.z_source_id

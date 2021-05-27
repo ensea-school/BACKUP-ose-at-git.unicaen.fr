@@ -1,28 +1,12 @@
 <?php
 
 $tables = [
-//    'ACT_ARBRE_ODF',
-//    'ACT_DIPLOME',
-//    'ACT_ELEMENT_COMMUN',
-//    'ACT_ELEMENT_EFFECTIFS',
-'ACT_ETAPE',
-'ACT_ODF',
-//    'ACT_ETAPE_EFFECTIFS',
-//    'ACT_ODF_RELATIONS',
-//    'ACT_OFFRE_DE_FORMATION',
-//    'ACT_RESP_DIPLOME',
-//    'ACT_RESP_ETP',
-//    'ACT_RESP_VDI',
-//    'ACT_RESP_VET',
-//    'ACT_VDI_VET',
-//    'ACT_LCC_APO',
-//    'ACT_VET_EFFECTIFS',
-//    'ACT_VOLUME_HORAIRE_ENS',
+    'ACT_ETAPE',
+    'ACT_NOEUD',
+    'ACT_LIEN',
 ];
 
 $views = [
-//    'ACT_LIEN',
-//    'ACT_NOEUD',
 ];
 
 $filters = [

@@ -57,6 +57,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'Z_SOURCE_ID'    => [
+            'name'        => 'Z_SOURCE_ID',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 100,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 5,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

@@ -2,7 +2,8 @@ SELECT
   COALESCE(epr.prev_elp_reference_id,epr.id)  as z_noeud_sup_id,
   COALESCE(pep.prev_elp_reference_id,pep.id)  as z_noeud_inf_id,
   pep.nb_choix                                as choix_minimum,
-  pep.nb_choix_max                            as choix_maximum
+  pep.nb_choix_max                            as choix_maximum,
+  'Actul'                                     as z_source_id
 FROM
   PREV_ELEMENT_PEDAGOGI           pep
   JOIN PREV_VERSION_ETAPE         pve ON pve.id = pep.PREV_VET_ID

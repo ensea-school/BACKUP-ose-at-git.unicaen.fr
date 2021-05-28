@@ -144,11 +144,11 @@ class NoeudProvider
     {
         $noeudIds = array_keys($this->noeuds);
 
-        $data = $this->getNoeudsSeuilsHeuresData($noeudIds);
+        $data     = $this->getNoeudsSeuilsHeuresData($noeudIds);
         $hydrator = new NoeudDbHydrator();
 
-        foreach( $this->noeuds as $noeud ){
-            if (isset($data[$noeud->getId()])){
+        foreach ($this->noeuds as $noeud) {
+            if (isset($data[$noeud->getId()])) {
                 $hydrator->hydradeSeuilHeures($data[$noeud->getId()], $noeud);
             }
         }
@@ -276,7 +276,6 @@ class NoeudProvider
 
 
 
-
     /**
      * @param array $noeudIds
      *
@@ -285,7 +284,7 @@ class NoeudProvider
     private function getNoeudsSeuilsHeuresData(array $noeudIds)
     {
         if (empty($noeudIds)) return [];
-        $ids  = implode(',', $noeudIds);
+        $ids = implode(',', $noeudIds);
 
         $data = [];
 
@@ -312,7 +311,7 @@ class NoeudProvider
         }
 
         $params = [
-            'annee' => $this->chargens->getServiceContext()->getAnnee()->getId(),
+            'annee'    => $this->chargens->getServiceContext()->getAnnee()->getId(),
             'scenario' => $this->chargens->getScenario()->getId(),
         ];
 
@@ -360,14 +359,12 @@ class NoeudProvider
             $hetd     = (float)$d['HETD'];
 
             $data[$nid]['HEURES'][$scenario] = $heures;
-            $data[$nid]['HETD'][$scenario] = $hetd;
+            $data[$nid]['HETD'][$scenario]   = $hetd;
         }
 
 
         return $data;
     }
-
-
 
 
 
@@ -482,9 +479,9 @@ class NoeudProvider
      * This method is called by var_dump() when dumping an object to get the properties that should be shown.
      * If the method isn't defined on an object, then all public, protected and private properties will be shown.
      *
+     * @return array
      * @since PHP 5.6.0
      *
-     * @return array
      * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
      */
     function __debugInfo()

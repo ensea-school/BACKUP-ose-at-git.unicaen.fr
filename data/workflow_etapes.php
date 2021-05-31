@@ -102,7 +102,7 @@ return [
     "DEMANDE_MEP"                    => [
         "LIBELLE_INTERVENANT" => "Je visualise les demandes de mise en paiement me concernant",
         "LIBELLE_AUTRES"      => "J'accède aux demandes de mise en paiement",
-        "ROUTE"               => "intervenant/mise-en-paiement/visualisation",
+        "ROUTE"               => "intervenant/mise-en-paiement/demande",
         "DESC_NON_FRANCHIE"   => "Aucune demande de mise en paiement n'a été faite",
         "OBLIGATOIRE"         => true,
         "DESC_SANS_OBJECTIF"  => "Le nombre d'heures de service réalisées ET validées n'est pas suffisant pour déclencher le paiement d'heures complémentaires.",

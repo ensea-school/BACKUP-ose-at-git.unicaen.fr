@@ -728,17 +728,29 @@ class Siham
         ]];
 
         try {
+
             $client = $this->sihamClient->getClient('PECWebService');
             $result = $client->PriseEnChargeAgent($paramsWS);
+//            /var_dump($result->return);
             //var_dump($this->sihamClient->getLastRequest());
             //die;
             if ($result->return->statut == 'ERREUR_GENERALE') {
-                var_dump($result->return);
-                die;
-                throw new SihamException('Erreur générale', 0);
+                $messageErreur  = '';
+                $messageWarning = '';
+                if (!empty($result->return->listeAnomaliesWebServices) > 0) {
+                    foreach ($result->return->listeAnomaliesWebServices as $anomalie) {
+                        if (strpos($anomalie->anomalie, 'Erreur') === 0) {
+                            $messageErreur .= $anomalie->anomalie . '<br/>';
+                        }
+                    }
+                }
+                //Traitement du message d'erreur spécifique à la PEC
+                throw new SihamException($messageErreur, 0);
+            } elseif ($result->return->statut == 'MAJ OK' && !empty($result->return->matricule)) {
+                return $result->return->matricule;
+            } else {
+                throw new SihamException('Erreur non identifié, veuillez vous rapprocher du support informatique', 0);
             }
-
-            return $result->return;
         } catch (\SoapFault $e) {
             throw new SihamException($e->faultstring, 0, $e);
         }
@@ -769,6 +781,48 @@ class Siham
         try {
             $client = $this->sihamClient->getClient('DossierParametrageWebService');
             $result = $client->RecupNomenclaturesRH($paramsWS);
+
+            if (isset($result->return)) {
+                return $result->return;
+            }
+        } catch (\SoapFault $e) {
+            throw new SihamException($e->faultstring, 0, $e);
+        }
+    }
+
+
+
+    public function recupererListeUO(array $params)
+    {
+        //Traitement des listes unité organisationnelle
+        $listeUO = [];
+        if (!empty($params['listeUO'])) {
+            foreach ($params['listeUO'] as $uo) {
+                $listeUO[] = [
+                    'codeUO'      => (isset($uo['codeUO'])) ? strtoupper($uo['codeUO']) : '',
+                    'structureUO' => (isset($uo['structureUO'])) ? strtoupper($uo['structureUO']) : '',
+                    'typeUO'      => (isset($uo['typeUO'])) ? strtoupper($uo['typeUO']) : '',
+                ];
+            }
+        } else {
+            $listeUO[] = [
+                'codeUO'      => '',
+                'structureUO' => '',
+                'typeUO'      => '',
+            ];
+        }
+
+
+        $paramsWS = ['ParamStructure' => [
+            'codeAdministration' => (isset($params['codeAdministration'])) ? strtoupper($params['codeAdministration']) : '',
+            'dateObservation'    => (isset($params['dateObservation'])) ? $params['dateObservation'] : '',
+            'listeUO'            => $listeUO,
+        ]];
+
+
+        try {
+            $client = $this->sihamClient->getClient('DossierParametrageWebService');
+            $result = $client->RecupStructures($paramsWS);
 
             if (isset($result->return)) {
                 return $result->return;

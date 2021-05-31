@@ -53,7 +53,7 @@
                 <label for="">Unité organisationelle : </label>
                 <select name="uo" class="form-control">
                     <?php foreach ($uo as $value): ?>
-                        <option value="<?= $value['CODE_UO'] ?>"> <?= $value['LIBELLE_LONG_UO'] ?></option>
+                        <option value="<?= $value->codeUO ?>"> <?= $value->libLongUO ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

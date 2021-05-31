@@ -257,75 +257,83 @@ class IndexController extends AbstractActionController
         $serviceDossier     = $this->getServiceDossier();
 
         /*UO*/
-        $sql = "
-            SELECT *
-            FROM src_uo 
-        ";
+        $params = [
+            'codeAdministration' => '',
+            'listeUO'            => [[
+                                         'typeUO' => 'COP',
+                                     ]],
+        ];
 
-        $uo = $serviceIntervenant->getEntityManager()->getConnection()->fetchAll($sql, []);
+        $uo = $this->siham->recupererListeUO($params);
 
-      
+
         /**
          * @var Intervenant $intervenant
          */
         $intervenant        = current($serviceIntervenant->getEntityManager()->getRepository(Intervenant::class)->findBy(['id' => $intervenant]));
         $dossierIntervenant = $serviceDossier->getByIntervenant($intervenant);
+        try {
+            if ($this->getRequest()->isPost()) {
 
-        if ($this->getRequest()->isPost()) {
-            /*POSITION ADMINISTRATIVE ===> position*/
-            $position[] =
-                ['dateEffetModalite' => '2021-05-20',
-                 'position'          => $this->getRequest()->getPost('position-administrative')];
+                /*POSITION ADMINISTRATIVE ===> position*/
+                $position[] =
+                    ['dateEffetModalite' => '2021-05-20',
+                     'position'          => $this->getRequest()->getPost('position-administrative')];
 
-            /*STATUT*/
-            $statut[] =
-                ['dateEffetStatut' => '2021-05-20',
-                 'statut'          => 'C0301'];
+                /*STATUT*/
+                $statut[] =
+                    ['dateEffetStatut' => '2021-05-20',
+                     'statut'          => 'C0301'];
 
-            /*MODALITE SERVICE ===> Mouvement*/
-            $service[] =
-                ['dateEffetModalite' => '2021-05-20',
-                 'modalite'          => 'MS100'];
+                /*MODALITE SERVICE ===> Mouvement*/
+                $service[] =
+                    ['dateEffetModalite' => '2021-05-20',
+                     'modalite'          => 'MS100'];
 
 
-            $params = [
-                'categorieEntree'           => 'ACTIVE',
-                'civilite'                  => '1',
-                'codeAdministration'        => 'UCN',
-                'codeEtablissement'         => '0141408E',
-                'dateEmbauche'              => '2021-05-20',
-                'dateNaissance'             => $this->getRequest()->getPost('dateNaissance'),
-                'villeNaissance'            => $this->getRequest()->getPost('villeNaissance'),
-                'departementNaissance'      => '',
-                'emploi'                    => $this->getRequest()->getPost('emploi'),
-                'listeCoordonneesPostales'  => '',
-                'listeCoordonneesBancaires' => '',
-                'listeModalitesServices'    => $service,
-                'listeStatuts'              => $statut,
-                'listeNationalites'         => '',
-                'listeNumerosTelephoneFax'  => '',
-                'listePositions'            => $position,
-                'motifEntree'               => 'PEC',
-                'nomPatronymique'           => '',
-                'nomUsuel'                  => $this->getRequest()->getPost('nomUsuel'),
-                'numeroInsee'               => '',
-                'paysNaissance'             => '',
-                'prenom'                    => $this->getRequest()->getPost('prenom'),
-                'sexe'                      => '1',
-                'temoinValidite'            => '1',
-                'UO'                        => $this->getRequest()->getPost('uo'),
-            ];
+                $params = [
+                    'categorieEntree'           => 'ACTIVE',
+                    'civilite'                  => '1',
+                    'codeAdministration'        => 'UCN',
+                    'codeEtablissement'         => '0141408E',
+                    'dateEmbauche'              => '2021-05-20',
+                    'dateNaissance'             => $this->getRequest()->getPost('dateNaissance'),
+                    'villeNaissance'            => $this->getRequest()->getPost('villeNaissance'),
+                    'departementNaissance'      => '',
+                    'emploi'                    => $this->getRequest()->getPost('emploi'),
+                    'listeCoordonneesPostales'  => '',
+                    'listeCoordonneesBancaires' => '',
+                    'listeModalitesServices'    => $service,
+                    'listeStatuts'              => $statut,
+                    'listeNationalites'         => '',
+                    'listeNumerosTelephoneFax'  => '',
+                    'listePositions'            => $position,
+                    'motifEntree'               => 'PEC',
+                    'nomPatronymique'           => '',
+                    'nomUsuel'                  => $this->getRequest()->getPost('nomUsuel'),
+                    'numeroInsee'               => '',
+                    'paysNaissance'             => '',
+                    'prenom'                    => $this->getRequest()->getPost('prenom'),
+                    'sexe'                      => '1',
+                    'temoinValidite'            => '1',
+                    'UO'                        => $this->getRequest()->getPost('uo'),
+                ];
 
-            $result = $this->siham->priseEnChargeAgent($params);
+                $matricule = $this->siham->priseEnChargeAgent($params);
+
+                $this->flashMessenger()->addSuccessMessage("La prise en charge de l'agent est effective  / Code Agent SIHAM : $matricule");
+            }
+        } catch (SihamException $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        } finally {
+            return compact('intervenant', 'dossierIntervenant', 'uo');
         }
-
-
-        return compact('intervenant', 'dossierIntervenant', 'uo');
     }
 
 
 
-    public function saveAction(): array
+    public
+    function saveAction(): array
     {
         return [];
     }

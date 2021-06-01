@@ -4,6 +4,8 @@ $tables = [
     'ACT_ETAPE',
     'ACT_NOEUD',
     'ACT_LIEN',
+    'ACT_VHENS_HEURES',
+    'ACT_VHENS_GROUPES',
 ];
 
 $views = [

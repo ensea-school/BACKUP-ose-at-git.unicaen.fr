@@ -44,10 +44,9 @@ SELECT
   an.libelle                                                  ordre
 FROM
   act_noeud an
-  LEFT JOIN act_lien al ON al.z_noeud_sup_id = an.source_code
+  JOIN (SELECT DISTINCT z_noeud_sup_id FROM act_lien) al ON al.z_noeud_sup_id = an.source_code
   LEFT JOIN noeud nsup ON nsup.source_code = 'nep_' || an.source_code
   LEFT JOIN noeud ninf ON ninf.source_code = 'lep_' || an.source_code
-  JOIN (SELECT DISTINCT z_noeud_sup_id FROM act_lien) al ON al.z_noeud_sup_id = an.source_code
   JOIN source        s ON s.code = an.z_source_id
 
 UNION ALL

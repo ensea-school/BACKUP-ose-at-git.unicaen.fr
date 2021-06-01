@@ -381,7 +381,7 @@ class EtatSortie
     public function getCsvTraitement()
     {
         $fichierGenerique = getcwd() . '/' . $this->csvTraitement;
-        if (strlen($fichierGenerique) < 512 && file_exists($fichierGenerique)) {
+        if (strlen($fichierGenerique) < 512 && file_exists($fichierGenerique) && $this->csvTraitement) {
             $this->csvTraitement = substr(file_get_contents($fichierGenerique), 5);
         }
 

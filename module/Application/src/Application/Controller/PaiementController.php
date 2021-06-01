@@ -119,13 +119,18 @@ class PaiementController extends AbstractController
     public function demandeMiseEnPaiementAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
 
+        //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+        }
         // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
         $postChangeIndex = (int)$this->params()->fromPost('change-index');
         $changeIndex     = $this->getChangeIndex();
 
-        $this->initFilters();
-        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');

@@ -2,10 +2,9 @@
 
 namespace Application\View\Helper;
 
-use Application\Entity\Db\TypeInterventionStatut;
 use Application\Entity\Db\TypeIntervention;
+use Application\Filter\StringFromFloat;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use UnicaenApp\Util;
 
 /**
  * Aide de vue permettant d'afficher une liste de statuts
@@ -88,7 +87,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
      */
     public function render($details = false)
     {
-        $ti   = $this->getTypeIntervention();
+        $ti = $this->getTypeIntervention();
 
         $title   = '';
         $statuts = $ti->getTypeInterventionStatut();
@@ -96,7 +95,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
             if ($title) $title .= ' - ';
             $title .= $tis->getStatutIntervenant()->getLibelle();
         }
-        $etoile= (strlen($title)? '&#x2605;':'');
+        $etoile = (strlen($title) ? '&#x2605;' : '');
 
         $url = $this->getView()->url('type-intervention/statut', ['typeIntervention' => $ti->getId()]);
 
@@ -108,7 +107,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
             'title'              => $title,
             'href'               => $url,
             'data-submit-reload' => 'true',
-        ])->text(Util::formattedNumber($ti->getTauxHetdService()).$etoile);
+        ])->text(StringFromFloat::run($ti->getTauxHetdService()) . $etoile);
         $html .= '</td><td>';
 
         $html .= $this->getView()->tag('a', [
@@ -118,9 +117,9 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
             'title'              => $title,
             'href'               => $url,
             'data-submit-reload' => 'true',
-        ])->text(Util::formattedNumber($ti->getTauxHetdComplementaire()).$etoile);
+        ])->text(StringFromFloat::run($ti->getTauxHetdComplementaire()) . $etoile);
 
-        $html.='</td>';
+        $html .= '</td>';
 
         return $html;
     }

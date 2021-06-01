@@ -3,6 +3,7 @@
 use Application\Entity\Db\TypeInterventionStatut;
 use Application\Provider\Privilege\Privileges;
 use UnicaenApp\Util;
+use Application\Filter\StringFromFloat;
 
 /**
  * @var $this                              \Application\View\Renderer\PhpRenderer
@@ -30,10 +31,10 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                 <?= $tis->getStatutIntervenant()->getLibelle() ?>&nbsp;
             </td>
             <td>
-                <?= Util::formattedNumber($tis->getTauxHETDService()) ?>
+                <?= StringFromFloat::run($tis->getTauxHETDService()) ?>
             </td>
             <td>
-                <?= Util::formattedNumber($tis->getTauxHETDComplementaire()) ?>
+                <?= StringFromFloat::run($tis->getTauxHETDComplementaire()) ?>
             </td>
             <?php if ($canEdit): ?>
                 <td>

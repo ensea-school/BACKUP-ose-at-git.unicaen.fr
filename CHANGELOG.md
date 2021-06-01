@@ -1,7 +1,11 @@
 # OSE 16 (à venir)
-Objectif : Connecteur Export OSE => Logiciel RH
+Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
 # OSE 15.2 (à venir)
+
+## Nouveautés
+
+* Au niveau des types d'intervention, il est désormais possible de saisir des fractions (2/3 TP par exemple)
 
 ## Corrections de bugs
 

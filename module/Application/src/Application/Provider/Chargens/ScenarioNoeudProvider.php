@@ -226,10 +226,13 @@ class ScenarioNoeudProvider
             }
 
             $scenarioNoeudEffectif->setId($bdd->sequenceNextVal('SCENARIO_NOEUD_EFFECTIF_ID_SEQ'));
-            $changes['ID']                = $scenarioNoeudEffectif->getId();
-            $changes['SCENARIO_NOEUD_ID'] = $scenarioNoeudEffectif->getScenarioNoeud()->getId();
-            $changes['TYPE_HEURES_ID']    = $scenarioNoeudEffectif->getTypeHeures()->getId();
-            $changes['ETAPE_ID']          = $scenarioNoeudEffectif->getEtape()->getId();
+            $changes['ID']                    = $scenarioNoeudEffectif->getId();
+            $changes['SCENARIO_NOEUD_ID']     = $scenarioNoeudEffectif->getScenarioNoeud()->getId();
+            $changes['TYPE_HEURES_ID']        = $scenarioNoeudEffectif->getTypeHeures()->getId();
+            $changes['ETAPE_ID']              = $scenarioNoeudEffectif->getEtape()->getId();
+            $changes['SOURCE_ID']             = $this->chargens->getServiceSource()->getOse()->getId();
+            $changes['HISTO_CREATEUR_ID']     = $this->chargens->getServiceContext()->getUtilisateur()->getId();
+            $changes['HISTO_MODIFICATEUR_ID'] = $this->chargens->getServiceContext()->getUtilisateur()->getId();
             $conn->insert('SCENARIO_NOEUD_EFFECTIF', $changes);
         }
 
@@ -272,10 +275,10 @@ class ScenarioNoeudProvider
     {
         $bdd = $this->chargens->getBdd();
         $bdd->execPlsql('OSE_CHARGENS.CALC_SUB_EFFECTIF2(:noeud, :scenario, :typeHeures, :etape);', [
-            'noeud'         => $scenarioNoeudEffectif->getScenarioNoeud()->getNoeud()->getId(),
-            'scenario'      => $scenarioNoeudEffectif->getScenarioNoeud()->getScenario()->getId(),
-            'typeHeures'    => $scenarioNoeudEffectif->getTypeHeures()->getId(),
-            'etape'         => $scenarioNoeudEffectif->getEtape()->getId()
+            'noeud'      => $scenarioNoeudEffectif->getScenarioNoeud()->getNoeud()->getId(),
+            'scenario'   => $scenarioNoeudEffectif->getScenarioNoeud()->getScenario()->getId(),
+            'typeHeures' => $scenarioNoeudEffectif->getTypeHeures()->getId(),
+            'etape'      => $scenarioNoeudEffectif->getEtape()->getId(),
         ]);
 
         return $this;
@@ -453,9 +456,9 @@ class ScenarioNoeudProvider
      * This method is called by var_dump() when dumping an object to get the properties that should be shown.
      * If the method isn't defined on an object, then all public, protected and private properties will be shown.
      *
+     * @return array
      * @since PHP 5.6.0
      *
-     * @return array
      * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
      */
     function __debugInfo()

@@ -44,6 +44,7 @@ foreach ($listFiles as $file) {
     $csvFile = fopen($importDirectory . $file, "r");
     $row     = 0;
     $datas   = [];
+
     while (($data = fgetcsv($csvFile, 1000, ",")) !== false) {
         /*
         * $data[0] = Siret
@@ -114,6 +115,26 @@ foreach ($listFiles as $file) {
 
     $tableEmployeur->merge($datas, 'SIREN', $options);
 }
+//On remet l'insertion de l'employeur étrangé
+
+$data                            = [];
+$data['SIREN']                   = '999999999';
+$data['RAISON_SOCIALE']          = 'EMPLOYEUR ETRANGÉ';
+$data['NOM_COMMERCIAL']          = 'EMPLOYEUR ETRANGÉ';
+$data['SOURCE_CODE']             = '999999999';
+$data['SOURCE_ID']               = $oseSource;
+$data['IDENTIFIANT_ASSOCIATION'] = null;
+$data['HISTO_DESTRUCTEUR_ID']    = null;
+$data['HISTO_DESTRUCTION']       = null;
+$data['IDENTIFIANT_ASSOCIATION'] = null;
+$data['CRITERE_RECHERCHE']       = reduce('Employeur étrangé 999999999');
+$options['histo-user-id']        = $oseId;
+$options['where']                = 'SIREN = \'999999999\'';
+$options['soft-delete']          = true;
+$datas[]                         = $data;
+$tableEmployeur->merge($datas, 'SIREN', $options);
+
+
 exec('cd ' . $importDirectory . ' && rm -rf *.csv');
 $c->println("Fin de mise à jour des données employeurs", $c::COLOR_LIGHT_GREEN);
 unlink($importFilePath);

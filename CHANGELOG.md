@@ -1,13 +1,20 @@
 # OSE 16 (à venir)
-Objectif : Connecteur Export OSE => Logiciel RH
+Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
 # OSE 15.2 (à venir)
+
+## Nouveautés
+
+* Au niveau des types d'intervention, il est désormais possible de saisir des fractions (2/3 TP par exemple)
 
 ## Corrections de bugs
 
 * Vérification que le champs 'numéro de rue' contient uniquement des chiffres lors de l'enregistrement des données personnelles (#37492)
 * Il n'est désormais plus possible de saisir un horaire de fin antérieur à celui de début en mode de saisie de service calendaire (#36319)
 * Les plafonds sont de nouveau bloquants si trop d'heures prévisionnelles sont reportées en réalisé
+* Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
+* Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
+
 
 
 # OSE 15.1 (06/05/2021)
@@ -134,8 +141,13 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
+# OSE 14.19 (à venir)
 
+## Corrections de bugs
 
+* Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
+* Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
+* Correction d'un bug sur l'export csv des états de paiement (#38076)
 
 
 # OSE 14.18 (06/05/2021)

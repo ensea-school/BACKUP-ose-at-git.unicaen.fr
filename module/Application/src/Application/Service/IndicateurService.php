@@ -58,6 +58,9 @@ class IndicateurService extends AbstractEntityService
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->from(\Application\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero(), 'indicateur');
+        $qb->join('indicateur.intervenant', 'intervenant');
+        $qb->join('intervenant.statut', 'statut');
+        $qb->andWhere('statut.nonAutorise = 0');
 
         /* Filtrage par intervenant */
         //$qb->join('indicateur.intervenant', 'intervenant');
@@ -114,7 +117,7 @@ class IndicateurService extends AbstractEntityService
     {
         $qb = $this->getBaseQueryBuilder($indicateur, $structure);
 
-        $qb->join('indicateur.intervenant', 'intervenant');
+        //$qb->join('indicateur.intervenant', 'intervenant');
 
         $qb->addSelect('indicateur');
         $qb->addSelect('partial intervenant.{id, nomUsuel, prenom, emailPerso, emailPro, code}');

@@ -268,13 +268,19 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       scenario_noeud_id,
       type_heures_id,
       effectif,
-      etape_id
+      etape_id,
+      source_id,
+      histo_createur_id,
+      histo_modificateur_id
     ) SELECT
       scenario_noeud_effectif_id_seq.nextval,
       sn_dst.id,
       sne.type_heures_id,
       sne.effectif,
-      sne.etape_id
+      sne.etape_id,
+      ose_divers.GET_OSE_SOURCE_ID(),
+      ose_divers.GET_OSE_UTILISATEUR_ID(),
+      ose_divers.GET_OSE_UTILISATEUR_ID()
     FROM
       scenario_noeud_effectif sne
       JOIN scenario_noeud sn_src ON sn_src.id = sne.scenario_noeud_id
@@ -412,7 +418,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       SCENARIO_NOEUD_ID,
       TYPE_HEURES_ID,
       ETAPE_ID,
-      EFFECTIF
+      EFFECTIF,
+      SOURCE_ID,
+      HISTO_CREATEUR_ID,
+      HISTO_MODIFICATEUR_ID
 
     ) VALUES (
 
@@ -420,7 +429,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       ADD_SCENARIO_NOEUD_EFFECTIF.scenario_noeud_id,
       ADD_SCENARIO_NOEUD_EFFECTIF.type_heures_id,
       ADD_SCENARIO_NOEUD_EFFECTIF.etape_id,
-      ADD_SCENARIO_NOEUD_EFFECTIF.effectif
+      ADD_SCENARIO_NOEUD_EFFECTIF.effectif,
+      ose_divers.GET_OSE_SOURCE_ID(),
+      ose_divers.GET_OSE_UTILISATEUR_ID(),
+      ose_divers.GET_OSE_UTILISATEUR_ID()
 
     );
 
@@ -472,13 +484,19 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
         scenario_noeud_id,
         type_heures_id,
         effectif,
-        etape_id
+        etape_id,
+        SOURCE_ID,
+        HISTO_CREATEUR_ID,
+        HISTO_MODIFICATEUR_ID
       ) VALUES (
         scenario_noeud_effectif_id,
         scenario_noeud_id,
         INIT_SCENARIO_NOEUD_EFFECTIF.type_heures_id,
         INIT_SCENARIO_NOEUD_EFFECTIF.effectif,
-        INIT_SCENARIO_NOEUD_EFFECTIF.etape_id
+        INIT_SCENARIO_NOEUD_EFFECTIF.etape_id,
+        ose_divers.GET_OSE_SOURCE_ID(),
+        ose_divers.GET_OSE_UTILISATEUR_ID(),
+        ose_divers.GET_OSE_UTILISATEUR_ID()
       );
     ELSIF surcharge THEN
       UPDATE scenario_noeud_effectif SET effectif = INIT_SCENARIO_NOEUD_EFFECTIF.effectif WHERE id = scenario_noeud_effectif_id;

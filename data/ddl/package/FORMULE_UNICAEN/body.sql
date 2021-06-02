@@ -985,7 +985,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN" AS
         element_modulateur
       SET
         histo_destruction = SYSDATE,
-        histo_destructeur_id = ose_parametre.get_ose_user
+        histo_destructeur_id = ose_divers.GET_OSE_UTILISATEUR_ID()
       WHERE
           id = em.id
       ;

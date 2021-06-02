@@ -888,6 +888,7 @@ class ServiceService extends AbstractEntityService
             } else {
                 $sid = $d['SERVICE_ID'] ? $d['SERVICE_ID'] . '_' . $d['PERIODE_ID'] : $d['ID'];
             }
+
             $ds = [
                 '__total__'                 => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
                 'type-etat'                 => $d['TYPE_ETAT'],
@@ -896,6 +897,7 @@ class ServiceService extends AbstractEntityService
                 'annee-libelle'             => (string)$annee,
 
                 'intervenant-code'               => $d['INTERVENANT_CODE'],
+                'intervenant-id'                 => $d['INTERVENANT_ID'],
                 'intervenant-nom'                => $d['INTERVENANT_NOM'],
                 'intervenant-date-naissance'     => $d['INTERVENANT_DATE_NAISSANCE'],
                 'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
@@ -1000,6 +1002,7 @@ class ServiceService extends AbstractEntityService
             'service-date-modification' => 'Date de modif. du service',
 
             'intervenant-code'               => 'Code intervenant',
+            'intervenant-id'                 => 'Id intervenant',
             'intervenant-nom'                => 'Intervenant',
             'intervenant-date-naissance'     => 'Date de naissance',
             'intervenant-statut-libelle'     => 'Statut intervenant',

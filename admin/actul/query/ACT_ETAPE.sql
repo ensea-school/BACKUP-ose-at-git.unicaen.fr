@@ -36,8 +36,8 @@ FROM
     LEFT JOIN PREV_VET_TYPINS vti on vde.id = vti.prev_vet_id
     LEFT JOIN PREV_TYP_INS    pti ON pti.COD_TYP_INS = vti.PREV_TYPINS_ID
 WHERE
-  anu.temoin_actif = 1
-  /*AND vde.STATUT = 'TERMINE'*/
+  anu.temoin_actif = 1 -- on ne sélectionne que les projets actifs
+  AND vde.STATUT = 'TERMINE'  -- on ne récupère que ce qui est terminé
 GROUP BY
   vde.libelle,
   tpd.typ_dip_apo,

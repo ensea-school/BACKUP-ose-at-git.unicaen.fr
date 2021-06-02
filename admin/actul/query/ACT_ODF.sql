@@ -34,4 +34,4 @@ FROM
   )                        elp_ead ON elp_ead.PREV_ELP_ID = pep.id
 WHERE
   pp.TEMOIN_ACTIF = 1        -- on ne sélectionne que les projets actifs
-  /*AND pve.STATUT = 'TERMINE'*/ -- on ne récupère que ce qui est terminé
+  AND pve.STATUT = 'TERMINE' -- on ne récupère que ce qui est terminé

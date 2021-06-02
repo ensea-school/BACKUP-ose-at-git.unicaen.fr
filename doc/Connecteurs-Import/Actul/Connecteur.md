@@ -27,6 +27,26 @@ Cette commande va vous créer des tables tampon et des vues `ACT_%` sur lesquell
 
 ## Vue SRC_HARPEGE_STRUCTURE_CODES
 
+Pour chque composante Apogée, nous avons besoin de récupérer le code de la structure de niveau 2 correspondant.
+
+A Caen, nous utilisons la vue v_unicaen_structure_corresp, elle-même basée sur des tables qui nous sont spécifiques.
+Cette vue renvoie deux colonnes :
+ - COD_CMP : Code Apogée de la composante
+ - C_STRUCTURE_N2 : Code de structure de niveau 2
+
+```sql
+CREATE OR REPLACE FORCE VIEW v_unicaen_structure_corresp AS  
+SELECT 
+  c.cod_cmp,
+  vs2.code c_structure_n2
+FROM 
+  ucbn_composante_ldap@apoprod c
+  JOIN octo.v_structure@octoprod vs ON vs.code = c.cod_str
+  JOIN octo.v_structure@octoprod vs2 ON vs2.id = vs.NIV2_ID
+```
+
+A vous, donc, de développer votre propre vue répondant aux mêmes critères.
+
 Le connecteur Apogée exploite par défaut la vue `SRC_HARPEGE_STRUCTURE_CODES`, faisant partie du
 [connecteur Harpège](../Harpège/Connecteur.md).
 
@@ -64,4 +84,95 @@ Créez la vue [SRC_TYPE_FORMATION](../Apogée/SRC_TYPE_FORMATION.sql).
 
 
 ## Récupération des étapes
+
+Créez la vue [SRC_ETAPE](SRC_ETAPE.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des éléments pédagogiques
+
+Créez la vue [SRC_ELEMENT_PEDAGOGIQUE](SRC_ELEMENT_PEDAGOGIQUE.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des chemins pédagogiques
+
+Lien entre les étapes et les éléments pédagogiques.
+Utile pour visualiser l'offre de formation dans le menu homonyme.
+
+Créez la vue [SRC_CHEMIN_PEDAGOGIQUE](SRC_CHEMIN_PEDAGOGIQUE.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des volumes horaires d'enseignement
+
+Récupère les heures et groupes calculé par Actul.
+Cette information est nécessaire, car elle permet de savoir si les éléments pédagogiques ont dsu CM, du TD, du TP, etc.
+
+Créez la vue [SRC_VOLUME_HORAIRE_ENS](SRC_VOLUME_HORAIRE_ENS.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des noeuds
+
+Les noeuds sont tous les constituants d'une formation :
+- les étapes
+- les éléments pédagogiques
+- tous les niveaux intermédiaires (semestres, UE, listes, etc.)
+
+Créez la vue [SRC_NOEUD](SRC_NOEUD.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des liens
+
+Les liens font la correspondance entre les noeuds.
+
+Créez la vue [SRC_LIEN](SRC_LIEN.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des paramétrages de noeuds par scénarios
+
+Aucune information ne transite ici. On a seulement besoin de cela pour pouvoir synchroniser les effectifs par étape par scénario.
+
+Créez la vue [SRC_SCENARIO_NOEUD](SRC_SCENARIO_NOEUD.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des effectifs par étape par scénario
+
+Initialise les effectifs FI/FA/FC par étape.
+Actul+ ne permet pas de panacher entre ces trois types d'heures.
+Les effectifs sont donc positionnés intégralement en FI, à défaut en FC, et à défaut en FA.
+
+Créez la vue [SRC_SCENARIO_NOEUD_EFFECTIF](SRC_SCENARIO_NOEUD_EFFECTIF.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
+
+## Récupération des paramétrages de liens par scénarios
+
+Concerne les choix minimum / maximum (entre 1 et 1 UE à choisir parmis la liste ci-dessous, etc.).
+
+Créez la vue [SRC_SCENARIO_LIEN](SRC_SCENARIO_LIEN.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+
 

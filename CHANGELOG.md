@@ -14,6 +14,7 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 * Les plafonds sont de nouveau bloquants si trop d'heures prévisionnelles sont reportées en réalisé
 * Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
 * Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
+* Correction du lien vers la fiche intervenant dans le menu gestion service (#38166)
 
 
 

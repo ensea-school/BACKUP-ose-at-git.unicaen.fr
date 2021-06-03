@@ -29,20 +29,20 @@ SELECT
   s.id                     source_id,
   an.source_code           source_code
 FROM
-            act_noeud                 an
-       JOIN act_etape                 ae ON ae.source_code = an.z_etape_id
-  LEFT JOIN act_lien             enfants ON enfants.z_noeud_sup_id = an.source_code
-  LEFT JOIN etape                      e ON e.source_code = an.z_etape_id
-  LEFT JOIN unicaen_structure_corresp sc ON sc.cod_cmp = an.z_structure_id
-  LEFT JOIN structure                str ON str.source_code = sc.c_structure_n2
-  LEFT JOIN element_pedagogique       ep ON ep.source_code             = ae.source_code
-                                        AND ep.annee_id                = ae.annee_id
-  LEFT JOIN element_taux_regimes     etr ON etr.element_pedagogique_id = ep.id
-                                        AND etr.histo_destruction      IS NULL
-  LEFT JOIN discipline               d99 ON d99.source_code            = '99'
-  LEFT JOIN discipline                 d ON ',' || d.CODES_CORRESP_1 || ',' LIKE '%,' || NVL(an.z_discipline_id,'00') || ',%'
-                                        AND d.histo_destruction        IS NULL
-  LEFT JOIN source                     s ON s.code = an.z_source_id
+            act_noeud                   an
+       JOIN act_etape                   ae ON ae.source_code = an.z_etape_id
+  LEFT JOIN act_lien               enfants ON enfants.z_noeud_sup_id = an.source_code
+  LEFT JOIN etape                        e ON e.source_code = an.z_etape_id
+  LEFT JOIN v_unicaen_structure_corresp sc ON sc.cod_cmp = an.z_structure_id
+  LEFT JOIN structure                  str ON str.source_code = sc.c_structure_n2
+  LEFT JOIN element_pedagogique         ep ON ep.source_code             = ae.source_code
+                                          AND ep.annee_id                = ae.annee_id
+  LEFT JOIN element_taux_regimes       etr ON etr.element_pedagogique_id = ep.id
+                                          AND etr.histo_destruction      IS NULL
+  LEFT JOIN discipline                 d99 ON d99.source_code            = '99'
+  LEFT JOIN discipline                   d ON ',' || d.CODES_CORRESP_1 || ',' LIKE '%,' || NVL(an.z_discipline_id,'00') || ',%'
+                                          AND d.histo_destruction        IS NULL
+  LEFT JOIN source                       s ON s.code = an.z_source_id
 WHERE
   -- les éléments pédagogiques sont les feuilles de l'arbre
   enfants.z_noeud_sup_id IS NULL

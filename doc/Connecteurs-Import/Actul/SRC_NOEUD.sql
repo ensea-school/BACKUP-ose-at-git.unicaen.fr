@@ -11,11 +11,11 @@ SELECT
   'net_' || ae.source_code           source_code,
   str.id                             structure_id
 FROM
-       act_etape                      ae
-  LEFT JOIN etape                      e ON e.source_code = ae.source_code
-  LEFT JOIN unicaen_structure_corresp sc ON sc.cod_cmp = ae.z_structure_id
-  LEFT JOIN structure                str ON str.source_code = sc.c_structure_n2
-  JOIN source                          s ON s.code = ae.z_source_id
+       act_etape                        ae
+  LEFT JOIN etape                        e ON e.source_code = ae.source_code
+  LEFT JOIN v_unicaen_structure_corresp sc ON sc.cod_cmp = ae.z_structure_id
+  LEFT JOIN structure                  str ON str.source_code = sc.c_structure_n2
+  JOIN source                            s ON s.code = ae.z_source_id
 
 UNION ALL
 
@@ -31,11 +31,11 @@ SELECT
   'let_' || ae.source_code           source_code,
   str.id                             structure_id
 FROM
-       act_etape                      ae
-  LEFT JOIN etape                      e ON e.source_code = ae.source_code
-  LEFT JOIN unicaen_structure_corresp sc ON sc.cod_cmp = ae.z_structure_id
-  LEFT JOIN structure                str ON str.source_code = sc.c_structure_n2
-  JOIN source                          s ON s.code = ae.z_source_id
+       act_etape                        ae
+  LEFT JOIN etape                        e ON e.source_code = ae.source_code
+  LEFT JOIN v_unicaen_structure_corresp sc ON sc.cod_cmp = ae.z_structure_id
+  LEFT JOIN structure                  str ON str.source_code = sc.c_structure_n2
+  JOIN source                            s ON s.code = ae.z_source_id
 
 UNION ALL
 
@@ -51,11 +51,11 @@ SELECT
   'nep_' || an.source_code           source_code,
   str.id                             structure_id
 FROM
-  act_noeud                           an
-  LEFT JOIN element_pedagogique       ep ON ep.source_code = an.source_code
-  LEFT JOIN unicaen_structure_corresp sc ON sc.cod_cmp = an.z_structure_id
-  LEFT JOIN structure                str ON str.source_code = sc.c_structure_n2
-  JOIN source                          s ON s.code = an.z_source_id
+  act_noeud                             an
+  LEFT JOIN element_pedagogique         ep ON ep.source_code = an.source_code
+  LEFT JOIN v_unicaen_structure_corresp sc ON sc.cod_cmp = an.z_structure_id
+  LEFT JOIN structure                  str ON str.source_code = sc.c_structure_n2
+  JOIN source                            s ON s.code = an.z_source_id
 
 UNION ALL
 
@@ -71,8 +71,8 @@ SELECT
   'lep_' || an.source_code           source_code,
   str.id                             structure_id
 FROM
-  act_noeud                           an
+  act_noeud                             an
   JOIN (SELECT DISTINCT z_noeud_sup_id FROM act_lien) al ON al.z_noeud_sup_id = an.source_code
-  LEFT JOIN unicaen_structure_corresp sc ON sc.cod_cmp = an.z_structure_id
-  LEFT JOIN structure                str ON str.source_code = sc.c_structure_n2
-  JOIN source                          s ON s.code = an.z_source_id
+  LEFT JOIN v_unicaen_structure_corresp sc ON sc.cod_cmp = an.z_structure_id
+  LEFT JOIN structure                  str ON str.source_code = sc.c_structure_n2
+  JOIN source                            s ON s.code = an.z_source_id

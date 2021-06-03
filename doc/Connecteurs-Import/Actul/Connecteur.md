@@ -23,19 +23,27 @@ Vous trouverez un exemple de configuration ici : [config.local.php.default](../.
 Lancez `./bin/ose actul install`.
 Cette commande va vous créer des tables tampon et des vues `ACT_%` sur lesquelles s'appuieront les vues sources.
 
+## Mise en place des vues sources
 
+Vous devez ensuite mettre en place vos vues sources. Cette opération n'est pas automatique, car il vous revient de les adapter à vos besoin
+si nécessaire.
 
-## Vue SRC_HARPEGE_STRUCTURE_CODES
+### Récupération des structures & correspondance avec les composantes
 
-Pour chque composante Apogée, nous avons besoin de récupérer le code de la structure de niveau 2 correspondant.
+Vous devez récupérer une liste des structures, car Actul s'appuie sur les composantes d'Apogée.
 
-A Caen, nous utilisons la vue v_unicaen_structure_corresp, elle-même basée sur des tables qui nous sont spécifiques.
+A vous, donc, de créer votre propre vue SRC_STRUCTURE.
+
+Pour chaque composante Apogée, nous avons besoin de récupérer le code de la structure de niveau 2 correspondant.
+
+A Caen, nous utilisons la vue V_UNICAEN_STRUCTURE_CORRESP, elle-même basée sur des tables qui nous sont spécifiques.
 Cette vue renvoie deux colonnes :
  - COD_CMP : Code Apogée de la composante
  - C_STRUCTURE_N2 : Code de structure de niveau 2
 
+La voici à titre d'exemple :
 ```sql
-CREATE OR REPLACE FORCE VIEW v_unicaen_structure_corresp AS  
+CREATE OR REPLACE FORCE VIEW V_UNICAEN_STRUCTURE_CORRESP AS  
 SELECT 
   c.cod_cmp,
   vs2.code c_structure_n2
@@ -58,8 +66,13 @@ Si vous n'utilisez pas le connecteur Harpège, il vous faudra créer une vue sim
 de la vue [SRC_HARPEGE_STRUCTURE_CODES](../Harpège/SRC_HARPEGE_STRUCTURE_CODES.sql) par celle que vous aurez créé dans les vues sources qui l'utilisent.
 
 
+### 
 
-## Récupération des groupes de types de formation
+
+
+
+
+### Récupération des groupes de types de formation
 
 Les groupes de types de formation sont à récupérer depuis Apogée.
 
@@ -71,7 +84,7 @@ Créez la vue [SRC_GROUPE_TYPE_FORMATION](../Apogée/SRC_GROUPE_TYPE_FORMATION.s
 
 
 
-## Récupération des groupes de types de formation
+### Récupération des groupes de types de formation
 
 Ici aussi, les types de formation sont à récupérer depuis Apogée.
 
@@ -83,7 +96,7 @@ Créez la vue [SRC_TYPE_FORMATION](../Apogée/SRC_TYPE_FORMATION.sql).
 
 
 
-## Récupération des étapes
+### Récupération des étapes
 
 Créez la vue [SRC_ETAPE](SRC_ETAPE.sql).
 
@@ -91,7 +104,7 @@ Créez la vue [SRC_ETAPE](SRC_ETAPE.sql).
 
 
 
-## Récupération des éléments pédagogiques
+### Récupération des éléments pédagogiques
 
 Créez la vue [SRC_ELEMENT_PEDAGOGIQUE](SRC_ELEMENT_PEDAGOGIQUE.sql).
 
@@ -99,7 +112,7 @@ Créez la vue [SRC_ELEMENT_PEDAGOGIQUE](SRC_ELEMENT_PEDAGOGIQUE.sql).
 
 
 
-## Récupération des chemins pédagogiques
+### Récupération des chemins pédagogiques
 
 Lien entre les étapes et les éléments pédagogiques.
 Utile pour visualiser l'offre de formation dans le menu homonyme.
@@ -110,7 +123,7 @@ Créez la vue [SRC_CHEMIN_PEDAGOGIQUE](SRC_CHEMIN_PEDAGOGIQUE.sql).
 
 
 
-## Récupération des volumes horaires d'enseignement
+### Récupération des volumes horaires d'enseignement
 
 Récupère les heures et groupes calculé par Actul.
 Cette information est nécessaire, car elle permet de savoir si les éléments pédagogiques ont dsu CM, du TD, du TP, etc.
@@ -121,7 +134,7 @@ Créez la vue [SRC_VOLUME_HORAIRE_ENS](SRC_VOLUME_HORAIRE_ENS.sql).
 
 
 
-## Récupération des noeuds
+### Récupération des noeuds
 
 Les noeuds sont tous les constituants d'une formation :
 - les étapes
@@ -134,7 +147,7 @@ Créez la vue [SRC_NOEUD](SRC_NOEUD.sql).
 
 
 
-## Récupération des liens
+### Récupération des liens
 
 Les liens font la correspondance entre les noeuds.
 
@@ -144,7 +157,7 @@ Créez la vue [SRC_LIEN](SRC_LIEN.sql).
 
 
 
-## Récupération des paramétrages de noeuds par scénarios
+### Récupération des paramétrages de noeuds par scénarios
 
 Aucune information ne transite ici. On a seulement besoin de cela pour pouvoir synchroniser les effectifs par étape par scénario.
 
@@ -154,7 +167,7 @@ Créez la vue [SRC_SCENARIO_NOEUD](SRC_SCENARIO_NOEUD.sql).
 
 
 
-## Récupération des effectifs par étape par scénario
+### Récupération des effectifs par étape par scénario
 
 Initialise les effectifs FI/FA/FC par étape.
 Actul+ ne permet pas de panacher entre ces trois types d'heures.
@@ -166,7 +179,7 @@ Créez la vue [SRC_SCENARIO_NOEUD_EFFECTIF](SRC_SCENARIO_NOEUD_EFFECTIF.sql).
 
 
 
-## Récupération des paramétrages de liens par scénarios
+### Récupération des paramétrages de liens par scénarios
 
 Concerne les choix minimum / maximum (entre 1 et 1 UE à choisir parmis la liste ci-dessous, etc.).
 

@@ -11,7 +11,8 @@ FROM
     peg.nb_gpes    groupes
   FROM
          PREV_ELP_CALC_NB_GPES peg
-    JOIN PREV_ELEMENT_PEDAGOGI pep ON pep.id = peg.prev_elp_id
+    JOIN PREV_ELEMENT_PEDAGOGI pep1 ON pep1.id = peg.prev_elp_id
+    JOIN PREV_ELEMENT_PEDAGOGI pep ON pep.id = COALESCE(pep1.prev_elp_reference_id,pep1.id)
     JOIN PREV_VERSION_ETAPE    pve ON pve.id = pep.PREV_VET_ID
     JOIN PREV_ETAPE             pe ON pe.id = pve.PREV_ETAPE_ID
     JOIN PREV_VERSION_DIPLOME  pvd ON pvd.id = pe.PREV_VERSION_DIPLOME_ID

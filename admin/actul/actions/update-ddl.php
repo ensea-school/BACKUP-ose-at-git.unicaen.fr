@@ -8,14 +8,11 @@ $tables = [
     'ACT_VHENS_GROUPES',
 ];
 
-$views = [
-];
-
 $filters = [
     'explicit'           => true,
     'table'              => ['includes' => $tables],
-    'view'               => ['includes' => $views],
     'primary-constraint' => ['includes' => '%'],
+    'package'            => ['includes' => 'OSE_ACTUL'],
 ];
 
 

@@ -13,7 +13,7 @@ SELECT
   sn.id scenario_id,
   n.id noeud_id,
   s.id source_id,
-  n.source_code || '_' || s.id source_code
+  n.source_code || '_' || sn.id source_code
 FROM
   a
   JOIN scenario sn ON sn.histo_destruction IS NULL

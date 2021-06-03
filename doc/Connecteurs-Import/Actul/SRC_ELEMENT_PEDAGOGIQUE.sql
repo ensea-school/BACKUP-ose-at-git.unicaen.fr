@@ -5,7 +5,7 @@ SELECT
   an.annee_id              annee_id,
   e.id                     etape_id,
   str.id                   structure_id,
-  null                     periode_id, -- à revoir
+  p.id                     periode_id,
   an.taux_foad             taux_foad,
   ae.fi                    fi,
   ae.fc                    fc,
@@ -35,6 +35,7 @@ FROM
   LEFT JOIN etape                        e ON e.source_code = an.z_etape_id
   LEFT JOIN v_unicaen_structure_corresp sc ON sc.cod_cmp = an.z_structure_id
   LEFT JOIN structure                  str ON str.source_code = sc.c_structure_n2
+  LEFT JOIN periode                      p ON p.code = OSE_ACTUL.CALC_SEMESTRE(an.source_code,an.z_periode_id_semestre, an.z_periode_id_ordre)
   LEFT JOIN element_pedagogique         ep ON ep.source_code             = ae.source_code
                                           AND ep.annee_id                = ae.annee_id
   LEFT JOIN element_taux_regimes       etr ON etr.element_pedagogique_id = ep.id

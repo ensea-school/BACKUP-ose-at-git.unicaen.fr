@@ -155,6 +155,7 @@ Les effectifs et les éléments pédagogiques sont, eux, synchronisés réguliè
 
 Si vous ne souhaitez pas fonctionner de la même manière, alors il vous faudra adapter les vues sources présentées ci-dessus.
 Attention toutefois à bien peupler les taux de mixité des éléments pédagogiques à partir des taux de régime.
-Le mieux est de ne pas toucher à SRC_ELEMENT_PEDAGOGIQUE et de vous concentrer à fournir les bonnes données dans SRC_ELEMENT_TAUX_REGIMES.
+Le mieux est de ne pas toucher à [SRC_ELEMENT_PEDAGOGIQUE](Apogée/SRC_ELEMENT_PEDAGOGIQUE.sql) et de vous concentrer à fournir 
+les bonnes données dans [SRC_ELEMENT_TAUX_REGIMES](Apogée/SRC_ELEMENT_TAUX_REGIMES.sql).
 
 Attention ausi à bien respecter les règles décrites dans cette page!

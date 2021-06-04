@@ -187,6 +187,8 @@ et [VOLUME_HORAIRE_ENS](Création-tables/VOLUME_HORAIRE_ENS.md) pourront être p
 
 Les autres tables ne servent que pour le module charges.
 
+En ce qui concerne les taux de mixité, je vous invite à parcourir la [documentation suivante](taux-repartition.md) qui vous aidera à comprendre comment ils fonctionnent.
+
 ### Données liées aux services d'enseignement
 
 | Table | Descriptif |

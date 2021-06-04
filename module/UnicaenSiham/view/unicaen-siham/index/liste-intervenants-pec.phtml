@@ -6,6 +6,7 @@
         <th>Nom</th>
         <th>Prenom</th>
         <th>Code intervenant</th>
+        <th>Matricule</th>
         </thead>
         <tbody>
         <?php
@@ -20,6 +21,7 @@
                 <td><?= $intervenant['NOM_USUEL'] ?></td>
                 <td><?= $intervenant['PRENOM'] ?></td>
                 <td><?= $intervenant['CODE'] ?></td>
+                <td><?= $intervenant['CODE_RH'] ?></td>
                 <td><a href="/siham/prise-en-charge-agent/<?= $intervenant['ID'] ?>">Prendre en charge</a></td>
             </tr>
         <?php endforeach; ?>

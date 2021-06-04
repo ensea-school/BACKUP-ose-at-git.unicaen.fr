@@ -235,12 +235,13 @@ class IndexController extends AbstractActionController
         //On récupérer les intervenants à prendre en charge
         $serviceIntervenant = $this->getServiceIntervenant();
         $sql                = "
-            SELECT i.id,i.code, i.nom_usuel,i.prenom
+            SELECT i.id,i.code, i.nom_usuel,i.prenom,i.code_rh
             FROM intervenant i 
             JOIN intervenant_dossier d ON d.intervenant_id = i.id 
             JOIN contrat c ON c.intervenant_id = i.id AND c.histo_destruction IS NULL AND c.date_retour_signe IS NOT NULL
-            WHERE i.annee_id = 2020 
-            AND i.code_rh IS NULL
+            WHERE i.annee_id = 2020
+            AND code_rh IS NULL
+            
         ";
 
         $intervenants = $serviceIntervenant->getEntityManager()->getConnection()->fetchAll($sql, []);
@@ -266,6 +267,30 @@ class IndexController extends AbstractActionController
 
         $uo = $this->siham->recupererListeUO($params);
 
+        /*Statut*/
+        $params  = [
+            'codeAdministration' => 'UCN',
+            'dateObservation'    => date('Y-m-d'),
+            'listeNomenclatures' => ['HJ8'],
+        ];
+        $statuts = $this->siham->recupererNomenclatureRH($params);
+
+        /*modalite*/
+        $params    = [
+            'codeAdministration' => 'UCN',
+            'dateObservation'    => date('Y-m-d'),
+            'listeNomenclatures' => ['UHU'],
+        ];
+        $modalites = $this->siham->recupererNomenclatureRH($params);
+
+        /*position*/
+        $params    = [
+            'codeAdministration' => 'UCN',
+            'dateObservation'    => date('Y-m-d'),
+            'listeNomenclatures' => ['HKK'],
+        ];
+        $positions = $this->siham->recupererNomenclatureRH($params);
+
 
         /**
          * @var Intervenant $intervenant
@@ -277,18 +302,18 @@ class IndexController extends AbstractActionController
 
                 /*POSITION ADMINISTRATIVE ===> position*/
                 $position[] =
-                    ['dateEffetModalite' => '2021-05-20',
+                    ['dateEffetModalite' => $this->getRequest()->getPost('dateEmbauche'),
                      'position'          => $this->getRequest()->getPost('position-administrative')];
 
                 /*STATUT*/
                 $statut[] =
-                    ['dateEffetStatut' => '2021-05-20',
+                    ['dateEffetStatut' => $this->getRequest()->getPost('dateEmbauche'),
                      'statut'          => 'C0301'];
 
                 /*MODALITE SERVICE ===> Mouvement*/
                 $service[] =
-                    ['dateEffetModalite' => '2021-05-20',
-                     'modalite'          => 'MS100'];
+                    ['dateEffetModalite' => $this->getRequest()->getPost('dateEmbauche'),
+                     'modalite'          => $this->getRequest()->getPost('modaliteService')];
 
 
                 $params = [
@@ -296,9 +321,9 @@ class IndexController extends AbstractActionController
                     'civilite'                  => '1',
                     'codeAdministration'        => 'UCN',
                     'codeEtablissement'         => '0141408E',
-                    'dateEmbauche'              => '2021-05-20',
-                    'dateNaissance'             => $this->getRequest()->getPost('dateNaissance'),
-                    'villeNaissance'            => $this->getRequest()->getPost('villeNaissance'),
+                    'dateEmbauche'              => $this->getRequest()->getPost('dateEmbauche'),
+                    'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
+                    'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
                     'departementNaissance'      => '',
                     'emploi'                    => $this->getRequest()->getPost('emploi'),
                     'listeCoordonneesPostales'  => '',
@@ -310,23 +335,23 @@ class IndexController extends AbstractActionController
                     'listePositions'            => $position,
                     'motifEntree'               => 'PEC',
                     'nomPatronymique'           => '',
-                    'nomUsuel'                  => $this->getRequest()->getPost('nomUsuel'),
+                    'nomUsuel'                  => $dossierIntervenant->getNomUsuel(),
                     'numeroInsee'               => '',
                     'paysNaissance'             => '',
-                    'prenom'                    => $this->getRequest()->getPost('prenom'),
-                    'sexe'                      => '1',
+                    'prenom'                    => $dossierIntervenant->getPrenom(),
+                    'sexe'                      => ($dossierIntervenant->getCivilite() == 'M . ') ? '1' : '2',
                     'temoinValidite'            => '1',
                     'UO'                        => $this->getRequest()->getPost('uo'),
                 ];
 
                 $matricule = $this->siham->priseEnChargeAgent($params);
 
-                $this->flashMessenger()->addSuccessMessage("La prise en charge de l'agent est effective  / Code Agent SIHAM : $matricule");
+                $this->flashMessenger()->addSuccessMessage("La prise en charge de l'agent est effective / Code Agent SIHAM : $matricule");
             }
         } catch (SihamException $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         } finally {
-            return compact('intervenant', 'dossierIntervenant', 'uo');
+            return compact('intervenant', 'dossierIntervenant', 'uo', 'statuts', 'modalites', 'positions');
         }
     }
 

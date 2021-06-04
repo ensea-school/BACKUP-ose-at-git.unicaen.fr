@@ -14,10 +14,10 @@
          * @var \UnicaenSiham\Entity\Agent $agent
          */
         ?>
-        <?php foreach ($result as $item): ?>
+        <?php foreach ($result as $code => $libelle): ?>
             <tr>
-                <td><?= $item->codeNomenclature ?></td>
-                <td><?= $item->libLongNomenclature ?></td>
+                <td><?= $code ?></td>
+                <td><?= $libelle ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

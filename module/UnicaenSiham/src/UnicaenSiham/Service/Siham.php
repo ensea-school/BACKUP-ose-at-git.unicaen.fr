@@ -731,16 +731,26 @@ class Siham
 
             $client = $this->sihamClient->getClient('PECWebService');
             $result = $client->PriseEnChargeAgent($paramsWS);
-//            /var_dump($result->return);
+            // var_dump($result->return);
             //var_dump($this->sihamClient->getLastRequest());
             //die;
             if ($result->return->statut == 'ERREUR_GENERALE') {
                 $messageErreur  = '';
                 $messageWarning = '';
-                if (!empty($result->return->listeAnomaliesWebServices) > 0) {
-                    foreach ($result->return->listeAnomaliesWebServices as $anomalie) {
-                        if (strpos($anomalie->anomalie, 'Erreur') === 0) {
-                            $messageErreur .= $anomalie->anomalie . '<br/>';
+                if (!empty($result->return->listeAnomaliesWebServices)) {
+                    if (is_array($result->return->listeAnomaliesWebServices)) {
+                        foreach ($result->return->listeAnomaliesWebServices as $anomalie) {
+                            if (isset($anomalie->anomalie)) {
+                                if (strpos($anomalie->anomalie, 'Erreur') === 0) {
+                                    $messageErreur .= $anomalie->anomalie . '<br/>';
+                                }
+                            }
+                        }
+                    } else {
+                        if (isset($result->return->listeAnomaliesWebServices->anomalie)) {
+                            if (strpos($result->return->listeAnomaliesWebServices->anomalie, 'Erreur') === 0) {
+                                $messageErreur .= $result->return->listeAnomaliesWebServices->anomalie . '<br/>';
+                            }
                         }
                     }
                 }
@@ -773,7 +783,8 @@ class Siham
         }
 
         $paramsWS = ['ParamNomenclature' => [
-            'dateObservation'    => '',
+            'codeAdministration' => (isset($params['codeAdministration'])) ? strtoupper($params['codeAdministration']) : '',
+            'dateObservation'    => (isset($params['dateObservation'])) ? $params['dateObservation'] : date("Y-m-d"),
             'listeNomenclatures' => $listeNomenclatures,
         ]];
 
@@ -783,7 +794,14 @@ class Siham
             $result = $client->RecupNomenclaturesRH($paramsWS);
 
             if (isset($result->return)) {
-                return $result->return;
+                $nomenclature = [];
+                //traitement pour classer alpha sur le libelle
+                foreach ($result->return as $value) {
+                    $nomenclature[$value->codeNomenclature] = $value->libLongNomenclature;
+                }
+                asort($nomenclature);
+
+                return $nomenclature;
             }
         } catch (\SoapFault $e) {
             throw new SihamException($e->faultstring, 0, $e);

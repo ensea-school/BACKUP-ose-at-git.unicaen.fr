@@ -7,48 +7,63 @@
 ?>
 
 
-<form action="" method="post">
-    <div class="panel panel-default">
-        <div class="panel-heading">Dossier Intervenant
-            de <?= $intervenant->getPrenom() . ' ' . $intervenant->getNomUsuel() ?></div>
-        <div class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-heading">Résumé du dossier intervenant
+        de <?= $intervenant->getPrenom() . ' ' . $intervenant->getNomUsuel() ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Identité</h4>
+                <strong>Civilite :</strong> <?= $dossierIntervenant->getCivilite() ?><br/>
+                <strong>Nom :</strong> <?= $dossierIntervenant->getNomUsuel() ?><br/>
+                <strong>Nom de naissance :</strong> <?= $dossierIntervenant->getNomPatronymique() ?><br/>
+                <strong>Prénom :</strong> <?= $dossierIntervenant->getPrenom() ?><br/>
+            </div>
+            <div class="col-md-6">
+                <h4>Adresse</h4>
+                <?php
+                $adresse = '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() . ' ' : '';
+                $adresse .= '<br/>';
+                $adresse .= $dossierIntervenant->getAdresseCodePostal() . ' ' . $dossierIntervenant->getAdresseCommune();
+                echo $adresse;
+
+                ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Paramétrage de la prise en charge
+        de <?= $intervenant->getPrenom() . ' ' . $intervenant->getNomUsuel() ?></div>
+    <div class="panel-body">
+        <form action="" method="post">
+
             <div class="form-group">
-                <label for="">Civilite : </label>
-                <input id="disabledInput" class="form-control" type="text" name="civilite"
-                       value="<?= $dossierIntervenant->getCivilite() ?>"/>
+                <label for="">Date d'embauche souhaitée : </label>
+                <input class="form-control" type="date" name="dateEmbauche" value="" min="2020-01-01" max="2099-12-31"/>
             </div>
             <div class="form-group">
-                <label for="">nom : </label>
-                <input id="disabledInput" class="form-control" type="text" name="nomUsuel"
-                       value="<?= $dossierIntervenant->getNomUsuel() ?>"/>
+                <label for="">Statut : </label>
+                <select name="statut" class="form-control">
+                    <?php foreach ($statuts as $code => $libelle): ?>
+                        <option value="<?= $code ?>"> <?= $libelle ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
-                <label for="">Prénom : </label>
-                <input id="disabledInput" class="form-control" type="text" name="prenom"
-                       value="<?= $dossierIntervenant->getPrenom() ?>"/>
-            </div>
-            <div class="form-group">
-                <label for="">Date de naissance : </label>
-                <input id="disabledInput" class="form-control" type="text" name="dateNaissance"
-                       value="<?= $dossierIntervenant->getDateNaissance()->format('Y-m-d') ?>"/>
-            </div>
-            <div class="form-group">
-                <label for="">Ville naissance : </label>
-                <input id="disabledInput" class="form-control" type="text" name="villeNaissance"
-                       value="<?= $dossierIntervenant->getCommuneNaissance() ?>"/>
-            </div>
-            <div class="form-group">
-                <label for="">Département naissance : </label>
-                <input id="disabledInput" class="form-control" type="text" name="departementNaissance"
-                       value="<?= $dossierIntervenant->getDepartementNaissance() ?>"/>
-            </div>
-            <div class="form-group">
-                <label for="">Emploi : </label>
+                <label for="">Emploi restreint : </label>
                 <select name="emploi" class="form-control">
                     <option value="UCNVCE">Vacataire chargé d'enseignement</option>
                     <option value="UCNVA">Vacataire administratif</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="">Unité organisationelle : </label>
                 <select name="uo" class="form-control">
@@ -58,17 +73,39 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="">Position Administrative : </label>
+                <label for="">Modalité de service restreint: </label>
+                <select name="modaliteService" class="form-control">
+                    <option value="MS100">Temps plein</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Modalité full: </label>
+                <select name="modaliteServiceFull" class="form-control">
+                    <?php foreach ($modalites as $code => $libelle): ?>
+                        <option value="<?= $code ?>"> <?= $libelle ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Position Administrative restreint : </label>
                 <select name="position-administrative" class="form-control">
-                    <option value="DEL06">Délégation mission étude/exercer enseignement</option>
+                    <option value="ACI01">Affecté dans l'administration</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Position Administrative full : </label>
+                <select name="position-administrativeFull" class="form-control">
+                    <?php foreach ($positions as $code => $libelle): ?>
+                        <option value="<?= $code ?>"> <?= $libelle ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
 
-        </div>
     </div>
+</div>
 
-    <button type="submit" class="btn btn-default">Lance la PEC</button>
+<button type="submit" class="btn btn-default">Lance la PEC</button>
 
 </form>
 

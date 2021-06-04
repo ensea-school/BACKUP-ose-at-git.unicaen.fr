@@ -349,7 +349,7 @@ $.widget("ose.chargens", {
 
                     var seuilDedoublement = noeud['seuils-dedoublement'][ti];
                     if (!seuilDedoublement) seuilDedoublement = noeud['seuils-dedoublement-defaut'][ti];
-                    if (!seuilDedoublement) seuilDedoublement = 99999999;
+                    if (!seuilDedoublement) seuilDedoublement = 1;
 
                     var seuilAssiduite = noeud['seuils-assiduite'][ti];
                     if (!seuilAssiduite) seuilAssiduite = 1;

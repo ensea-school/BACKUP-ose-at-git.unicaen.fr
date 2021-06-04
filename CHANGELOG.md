@@ -15,6 +15,10 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 * Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
 * Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
 * Correction du lien vers la fiche intervenant dans le menu gestion service (#38166)
+* Correction apparition d'un message de re-soumission du formulaire des données personnelles sur diverses actions (valider, devalider, supprimer etc...) (#38248)
+* Redirection vers la fiche individuelle de l'intervenant lors de la suppression des données personnelles pour éviter de réinitialiser automatiquement le dossier (#37466)
+
+
 
 
 

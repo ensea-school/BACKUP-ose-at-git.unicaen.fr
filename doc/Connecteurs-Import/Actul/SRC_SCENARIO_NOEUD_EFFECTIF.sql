@@ -30,4 +30,8 @@ FROM
   LEFT JOIN scenario_noeud sn ON sn.source_code = a.z_noeud_id || '_' || s.id
   LEFT JOIN source        src ON src.code = a.z_source_id
   LEFT JOIN etape           e ON e.source_code = a.z_etape_id
-  LEFT JOIN type_heures th ON th.code = a.z_type_heures_id
+  LEFT JOIN type_heures    th ON th.code = a.z_type_heures_id
+  LEFT JOIN SCENARIO_NOEUD_EFFECTIF sne ON sne.TYPE_HEURES_ID = th.id AND sne.SCENARIO_NOEUD_ID = sn.id
+  LEFT JOIN source       snes ON snes.id = sne.source_id
+WHERE
+  COALESCE(snes.importable,1) = 1 -- s'il y a déjà des data saisies en local => on les garde

@@ -30,4 +30,4 @@ FROM
   LEFT JOIN scenario_lien sl ON sl.scenario_id = sc.id AND sl.lien_id = l.id AND sl.histo_destruction IS NULL
   LEFT JOIN source       sls ON sls.id = sl.source_id
 WHERE
-  COALESCE(sls.importable,1) <> 0 -- s'il y a déjà des data saisies en local => on les garde
+  COALESCE(sls.importable,1) = 1 -- s'il y a déjà des data saisies en local => on les garde

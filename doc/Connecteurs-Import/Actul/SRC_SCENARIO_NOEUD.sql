@@ -15,7 +15,11 @@ SELECT
   s.id source_id,
   n.source_code || '_' || sn.id source_code
 FROM
-  a
-  JOIN scenario sn ON sn.histo_destruction IS NULL
-  LEFT JOIN noeud n ON n.source_code = a.z_noeud_id
-  LEFT JOIN source s ON s.code = a.z_source_id
+                             a
+       JOIN scenario        sn ON sn.histo_destruction IS NULL
+  LEFT JOIN noeud            n ON n.source_code = a.z_noeud_id
+  LEFT JOIN source           s ON s.code = a.z_source_id
+  LEFT JOIN SCENARIO_NOEUD sno ON sno.SCENARIO_ID = sn.id AND sno.NOEUD_ID = n.id
+  LEFT JOIN source         sns ON sns.id = sno.source_id
+WHERE
+  COALESCE(sns.importable,1) = 1 -- s'il y a déjà des data saisies en local => on les garde

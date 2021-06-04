@@ -65,10 +65,9 @@ Elle est néanmoins indispensable au bon fonctionnement du connecteur.
 Si vous n'utilisez pas le connecteur Harpège, il vous faudra créer une vue similaire et remplacer l'usage
 de la vue [SRC_HARPEGE_STRUCTURE_CODES](../Harpège/SRC_HARPEGE_STRUCTURE_CODES.sql) par celle que vous aurez créé dans les vues sources qui l'utilisent.
 
+Vous devrez ensuite créer la vue [SRC_STRUCTURE](../Création-tables/STRUCTURE.md).
 
-### 
-
-
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 
 
@@ -189,3 +188,31 @@ Créez la vue [SRC_SCENARIO_LIEN](SRC_SCENARIO_LIEN.sql).
 
 
 
+## Synchronisation
+
+Une fois que vos vues sources sont en place et fonctionnent bien, vous pourrez lancer la synchronisation complète via la commande
+
+```bash
+./bin/ose actul synchronisation
+```
+
+Cette commande :
+- récupère les données d'Actul + pour les injecter dans les tables ACT_* de OSE.
+- Déclenche la synchronisation de toutes vos tables ayant des vues sources et dont la synchro a été activée.
+- Met à jour un certain nombre de caches et force le recalcul de tous les effectifs du module charges
+
+
+
+Une fois en production, vous pourrez automatiser cette synchronisation via une tâche CRON.
+
+Après la commande, on ajoute `> /tmp/oselog 2>&1` pour loguer le résultat dans le fichier`/tmp/oselog`.
+A adapter le cas échéant.
+
+Voici un exemple de crontab :
+
+```cron
+# m  h    dom mon dow command
+*/15 7-21 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose actul synchronisation > /tmp/oselog 2>&1
+```
+
+La synchronisation sera effectuée tous les jours sauf le dimamche, entre 7h et 21h tous les quarts d'heures.

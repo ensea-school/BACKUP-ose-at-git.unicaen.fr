@@ -132,7 +132,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
   ) IS
     snid  NUMERIC;
   BEGIN
-    UPDATE scenario_noeud_effectif SET effectif = 0
+    UPDATE scenario_noeud_effectif SET effectif = 0, SOURCE_ID = ose_divers.GET_OSE_SOURCE_ID()
     WHERE
       scenario_noeud_id = (
         SELECT id FROM scenario_noeud WHERE noeud_id = CALC_EFFECTIF.noeud_id AND scenario_id = CALC_EFFECTIF.scenario_id
@@ -410,7 +410,8 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
 
     ) WHEN MATCHED THEN UPDATE SET
 
-      effectif = effectif + ADD_SCENARIO_NOEUD_EFFECTIF.effectif
+      effectif = effectif + ADD_SCENARIO_NOEUD_EFFECTIF.effectif,
+      source_id = ose_divers.GET_OSE_SOURCE_ID()
 
     WHEN NOT MATCHED THEN INSERT (
 
@@ -499,7 +500,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
         ose_divers.GET_OSE_UTILISATEUR_ID()
       );
     ELSIF surcharge THEN
-      UPDATE scenario_noeud_effectif SET effectif = INIT_SCENARIO_NOEUD_EFFECTIF.effectif WHERE id = scenario_noeud_effectif_id;
+      UPDATE scenario_noeud_effectif SET effectif = INIT_SCENARIO_NOEUD_EFFECTIF.effectif, source_id=ose_divers.GET_OSE_SOURCE_ID() WHERE id = scenario_noeud_effectif_id;
     END IF;
 
     CALC_SUB_EFFECTIF2( noeud_id, scenario_id, type_heures_id, etape_id );

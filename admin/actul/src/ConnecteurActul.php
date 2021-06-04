@@ -19,7 +19,7 @@ class ConnecteurActul
     /**
      * @var Bdd
      */
-    protected $ose;
+    public $ose;
 
     /**
      * @var Ddl
@@ -92,21 +92,29 @@ class ConnecteurActul
 
 
 
-    public function sync()
+    public function getActTables(): array
     {
-        $tables = [
+        return [
             'ACT_ETAPE',
             'ACT_NOEUD',
             'ACT_LIEN',
             'ACT_VHENS_HEURES',
             'ACT_VHENS_GROUPES',
         ];
+    }
 
-        foreach ($tables as $table) {
-            $sql  = $this->getActulQuery($table);
-            $data = $this->actul->select($sql, ['fetch' => Bdd::FETCH_ALL]);
-            $this->majActTable($table, $data);
+
+
+    public function getSyncTables(): array
+    {
+        $sql = "SELECT * FROM import_tables WHERE SYNC_ENABLED = 1 ORDER BY ORDRE";
+        $it  = $this->ose->select($sql);
+        $st  = [];
+        foreach ($it as $tbl) {
+            $st[] = $tbl['TABLE_NAME'];
         }
+
+        return $st;
     }
 
 
@@ -131,8 +139,11 @@ class ConnecteurActul
 
 
 
-    protected function majActTable(string $tableName, array $data): int
+    public function majActTable(string $tableName): int
     {
+        $sql  = $this->getActulQuery($tableName);
+        $data = $this->actul->select($sql, ['fetch' => Bdd::FETCH_ALL]);
+
         $key = $this->getTableKey($tableName);
 
         if (empty($data)) {
@@ -150,6 +161,13 @@ class ConnecteurActul
         $this->ose->getTable($tableName)->merge($data, $key);
 
         return count($data);
+    }
+
+
+
+    public function syncTable(string $tableName)
+    {
+        $this->ose->exec('BEGIN UNICAEN_IMPORT.SYNCHRONISATION(:table); END;', ['table' => $tableName]);
     }
 
 

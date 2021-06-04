@@ -2,11 +2,19 @@
 
 use BddAdmin\Ddl\Ddl;
 
-$ca = new ConnecteurActul();
+$c->begin("\nInstallation ou mise à jour du connecteur ACTUL+");
 
-$c->println("\nInstallation ou mise à jour du connecteur ACTUL+", $c::COLOR_LIGHT_CYAN);
+$c->println('Création de la source de données Actul+ si besoin');
+$sql = "BEGIN
+  unicaen_import.add_source('Actul', 'Actul +');
+  commit;
+END;";
+$oa->getBdd()->exec($sql);
+
 
 // Récupération du schéma de référence
+$c->println('Mise en place des structures de données');
+$ca = new ConnecteurActul();
 $ca->init();
 $ddl = $ca->getDdl();
 
@@ -16,9 +24,5 @@ $filters = $ddl->filterOnlyDdl();
 // Mise à jour de la BDD (structures)
 $oa->getBdd()->alter($ddl, $filters);
 
-// Création de la source ACTUL
-$sql = "BEGIN
-  unicaen_import.add_source('Actul', 'Actul +');
-  commit;
-END;";
-$oa->getBdd()->exec($sql);
+$c->end('Connecteur installé');
+$c->println('Le connecteur Actul+ vers OSE est installé. Il vous reste à mettre en place par vous-même les vues sources et à les activer.');

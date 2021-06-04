@@ -2,4 +2,45 @@
 
 $ca = new ConnecteurActul;
 $ca->init();
-$ca->sync();
+
+$c->begin('Mise à jour de OSE à partir des données d\'Actul +');
+
+
+$at = $ca->getActTables();
+$c->println('');
+$c->begin('Transfert des données depuis Actul');
+foreach ($at as $table) {
+    $c->print('Table ' . $table . '... ');
+    //$ca->majActTable($table);
+    $c->println('OK');
+}
+$c->end('Transfert terminé');
+
+
+$st = $ca->getSyncTables();
+$c->println('');
+$c->begin('Synchronisation des données vers OSE');
+foreach ($st as $table) {
+    $c->print('Table ' . $table . '... ');
+    $ca->syncTable($table);
+    $c->println('OK');
+}
+$c->end('Synchronisation terminée');
+
+
+$c->begin('Mise à jour des caches de données');
+$c->print('Vue matérialisée TBL_NOEUD ... ');
+$ca->ose->exec('BEGIN UNICAEN_IMPORT.REFRESH_MV(\'TBL_NOEUD\'); END;');
+$c->println('OK');
+
+$c->print('Calcul de tous les effectifs ... ');
+$ca->ose->exec('BEGIN OSE_CHARGENS.CALC_ALL_EFFECTIFS(); END;');
+$c->println('OK');
+
+$c->print('Tableau de bord des charges ... ');
+$ca->ose->exec('BEGIN UNICAEN_TBL.CALCULER(\'chargens\'); END;');
+$c->println('OK');
+$c->end('Caches à jour');
+
+
+$c->end('Ose est maintenant à jour');

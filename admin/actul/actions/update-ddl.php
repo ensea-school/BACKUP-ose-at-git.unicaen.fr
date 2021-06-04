@@ -1,20 +1,13 @@
 <?php
 
-$tables = [
-    'ACT_ETAPE',
-    'ACT_NOEUD',
-    'ACT_LIEN',
-    'ACT_VHENS_HEURES',
-    'ACT_VHENS_GROUPES',
-];
+$ca = new ConnecteurActul();
 
 $filters = [
     'explicit'           => true,
-    'table'              => ['includes' => $tables],
+    'table'              => ['includes' => $ca->getActTables()],
     'primary-constraint' => ['includes' => '%'],
     'package'            => ['includes' => 'OSE_ACTUL'],
 ];
-
 
 $c->begin('Génération de la DDL du connecteur ACTUL+ à partir de la base de données');
 $ddl = $oa->getBdd()->getDdl($filters);
@@ -28,7 +21,7 @@ foreach ($pc as $n => $d) {
 }
 $ddl->set('primary-constraint', $pc);
 
-$ca = new ConnecteurActul();
+
 $ddl->saveToDir($ca->getDdlDir());
 
 $c->end('DDL ACTUL+ mise à jour');

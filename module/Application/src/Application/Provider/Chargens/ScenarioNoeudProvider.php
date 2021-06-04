@@ -219,7 +219,7 @@ class ScenarioNoeudProvider
         if ($scenarioNoeudEffectif->getId()) {
             unset($changes['ID']);
             $changes['EFFECTIF']  = (int)$changes['EFFECTIF'];
-            $changes['SOURCE_ID'] = $this->chargens->getServiceSource()->getOse();
+            $changes['SOURCE_ID'] = $this->chargens->getServiceSource()->getOse()->getId();
             $conn->update('SCENARIO_NOEUD_EFFECTIF', $changes, ['ID' => $scenarioNoeudEffectif->getId()]);
         } else {
             if (!$scenarioNoeudEffectif->getScenarioNoeud()->getId()) {

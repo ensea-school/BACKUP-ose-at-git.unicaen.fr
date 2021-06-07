@@ -8,6 +8,7 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 * Au niveau des types d'intervention, il est désormais possible de saisir des fractions (2/3 TP par exemple)
 * Lorsqu'on sélectionne une formation dans la page Offre de formation, les éléments pédagogiques dont ce n'est pas l'étape principale sont listés tout de même #35881
 * Formule de calcul de l'Université de Strasbourg, en remplacement celle de l'Ensicaen (règles identiques).
+* Ajout d'un privilège 'Enseignement - Edition en masse' pour pouvoir différencier l'affichage du bouton 'Saisi d'un nouvel enseignement' dans la partie gestion service, de la partie feuille de route de l'intervenant (#36390)
 
 ## Corrections de bugs
 

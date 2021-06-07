@@ -90,7 +90,8 @@ class MigrationPrivilegesServiceEditionMasse extends AbstractMigration
 	            JOIN role_privilege rp ON rp.role_id = r.id AND rp.privilege_id = (
 		            SELECT p.id FROM privilege p
 		            JOIN categorie_privilege cp ON cp.id = p.categorie_id AND cp.code = 'enseignement'
-		            WHERE p.code = 'edition') 
+		            WHERE p.code = 'edition')
+		        JOIN role r ON rp.role_id = r.id AND r.code != 'administrateur'
             ";
 
             $bdd->exec($sql);

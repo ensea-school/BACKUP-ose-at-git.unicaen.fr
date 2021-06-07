@@ -151,6 +151,10 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 # OSE 14.19 (à venir)
 
+# Nouveautés
+
+* Ajout d'un privilège 'Enseignement - Edition en masse' pour pouvoir différencier l'affichage du bouton 'Saisi d'un nouvel enseignement' dans la partie gestion service, de la partie feuille de route de l'intervenant (#36390)
+
 ## Corrections de bugs
 
 * Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)

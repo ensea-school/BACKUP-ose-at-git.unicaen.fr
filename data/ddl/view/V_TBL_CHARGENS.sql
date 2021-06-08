@@ -62,7 +62,7 @@ FROM
   LEFT JOIN scenario_noeud_seuil       sns ON sns.scenario_noeud_id = sn.id
                                           AND sns.type_intervention_id = ti.id
 WHERE
-  1=1
+  sne.histo_destruction IS NULL
   /*@ETAPE_ENS_ID=sne.etape_id*/
 )
 SELECT

@@ -55,9 +55,12 @@ class Siham
         $agents = [];
 
         $paramsWS = ['ParamRechercheAgent' => [
-            'nomUsuel'        => (isset($params['nomUsuel'])) ? strtoupper($params['nomUsuel']) : '',
-            'nomPatronymique' => (isset($params['nomPatronymique'])) ? strtoupper($params['nomPatronymique']) : '',
-            'prenom'          => (isset($params['prenom'])) ? strtoupper($params['prenom']) : '',
+            'codeEtablissement' => (isset($params['codeEtablissement'])) ? $params['codeEtablissement'] : '',
+            'nomUsuel'          => (isset($params['nomUsuel'])) ? strtoupper($params['nomUsuel']) : '',
+            'nomPatronymique'   => (isset($params['nomPatronymique'])) ? strtoupper($params['nomPatronymique']) : '',
+            'prenom'            => (isset($params['prenom'])) ? strtoupper($params['prenom']) : '',
+            'dateNaissance'     => (isset($params['dateNaissance'])) ? strtoupper($params['dateNaissance']) : '',
+            'codeNIRSsCle'      => (isset($params['codeNIRSsCle'])) ? strtoupper($params['codeNIRSsCle']) : '',
         ],
         ];
 
@@ -100,6 +103,7 @@ class Siham
         $agents = [];
 
         $paramsWS = ['ParamRecupListeAgents' => [
+            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? $params['codeEtablissement'] : '',
             'nomUsuel'               => (isset($params['nomUsuel'])) ? strtoupper($params['nomUsuel']) : '',
             'nomPatronymique'        => (isset($params['nomPatronymique'])) ? strtoupper($params['nomPatronymique']) : '',
             'prenom'                 => (isset($params['prenom'])) ? strtoupper($params['prenom']) : '',
@@ -229,27 +233,23 @@ class Siham
      * @return Boolean
      */
 
-    public function modifierAdresseAgent(array $params, $typeAdresse = 'TA01'): bool
+    public function modifierAdressePrincipaleAgent(array $params): bool
     {
         $paramsWS = ['ParamModifDP' => [
-            'bisTer'                 => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
-            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
-            'codePays'               => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
-            'codePostal'             => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
-            'codeUOAffectAdresse'    => (isset($params['codeUOAffectAdresse'])) ? strtoupper($params['codeUOAffectAdresse']) : '',
-            'complementAdresse'      => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
-            'dateDebut'              => '',
-            'dateFin'                => '',
-            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
-            'natureVoie'             => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
-            'noVoie'                 => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
-            'nomVoie'                => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
-            'numero'                 => (isset($params['numero'])) ? strtoupper($params['numero']) : '',
-            'pourcentageAffectation' => (isset($params['pourcentageAffectation'])) ? strtoupper($params['pourcentageAffectation']) : '',
-            'typeAction'             => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
-            'typeAdrPers'            => self::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE,
-            'typeNUmero'             => '',
-            'ville'                  => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'codeEtablissement' => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'typeAction'        => self::SIHAM_TYPE_ACTION_MODIFICATION,//obligatoire
+            'typeAdrPers'       => self::SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE,
+            'matricule'         => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',//obligatoire
+            'bisTer'            => (isset($params['bisTer'])) ? strtoupper($params['bisTer']) : '',
+            'natureVoie'        => (isset($params['natureVoie'])) ? strtoupper($params['natureVoie']) : '',
+            'noVoie'            => (isset($params['noVoie'])) ? strtoupper($params['noVoie']) : '',
+            'nomVoie'           => (isset($params['nomVoie'])) ? strtoupper($params['nomVoie']) : '',
+            'codePostal'        => (isset($params['codePostal'])) ? strtoupper($params['codePostal']) : '',
+            'complementAdresse' => (isset($params['complementAdresse'])) ? strtoupper($params['complementAdresse']) : '',
+            'ville'             => (isset($params['ville'])) ? strtoupper($params['ville']) : '',
+            'codePays'          => (isset($params['codePays'])) ? strtoupper($params['codePays']) : '',
+            'dateDebut'         => '',
+            'dateFin'           => '',
         ]];
 
         try {

@@ -75,7 +75,7 @@ class IndexController extends AbstractActionController
                 if (empty($paramsWS['dateDebut'])) {
                     $result = $this->siham->ajouterAdresseAgent($paramsWS);
                 } else {
-                    $result = $this->siham->modifierAdresseAgent($paramsWS);
+                    $result = $this->siham->modifierAdressePrincipaleAgent($paramsWS);
                 }
                 //gestion des numéros de téléphone
                 //Teléphone pro

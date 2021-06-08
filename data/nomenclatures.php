@@ -158,8 +158,8 @@ return [
             'I_PARAM_2_LIBELLE' => 'Lecteur/ATER',
         ],
         6  => [
-            'LIBELLE'      => 'Ensicaen',
-            'PACKAGE_NAME' => 'FORMULE_ENSICAEN',
+            'LIBELLE'      => 'Université de Strasbourg',
+            'PACKAGE_NAME' => 'FORMULE_UNISTRA',
         ],
         7  => [
             'LIBELLE'      => 'Université Lumière Lyon 2',

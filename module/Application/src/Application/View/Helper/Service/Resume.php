@@ -115,7 +115,7 @@ class Resume extends AbstractViewHelper
             $intervenantPermanent = $line['intervenant-type-code'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
             $res .= '<tr>' . "\n";
-            $url = $this->getView()->url('intervenant/services', ['intervenant' => $line['intervenant-code']]);
+            $url = $this->getView()->url('intervenant/services', ['intervenant' => $line['intervenant-id']]);
 
             $res .= '<td><a href="' . $url . '">' . strtoupper($line['intervenant-nom']) . '</a></td>' . "\n";
             $totaux['intervenant']++;

@@ -208,7 +208,7 @@ $fieldsets = $form->getFieldsets();
                        data-confirm="true"
                        data-confirm-button="Je confirme"
                        data-cancel-button="Non"
-                       data-submit-reload="true"
+                       data-submit-event="valide-donnees"
                     >
                         <span class="glyphicon glyphicon-thumbs-up"></span> Je valide les données
                     </a>
@@ -222,7 +222,7 @@ $fieldsets = $form->getFieldsets();
                        data-confirm="true"
                        data-confirm-button="Oui"
                        data-cancel-button="Non"
-                       data-submit-reload="true"
+                       data-submit-event="devalide-donnees"
                     >
                         <span class="glyphicon glyphicon-thumbs-down"></span> Je dévalide les données
                     </a>
@@ -237,7 +237,7 @@ $fieldsets = $form->getFieldsets();
                        data-confirm="true"
                        data-confirm-button="Oui"
                        data-cancel-button="Non"
-                       data-submit-reload="true"
+                       data-submit-event="supprimer-donnees"
                     >
                         <span class="glyphicon glyphicon-thumbs-down"></span> Je supprime les données
                     </a>
@@ -257,6 +257,13 @@ $fieldsets = $form->getFieldsets();
 
 
     <script type="text/javascript">
+
+        $(function () {
+
+
+        });
+
+
 
         $(function () {
             var dataModificated = 0;
@@ -309,6 +316,18 @@ $fieldsets = $form->getFieldsets();
             $(".dossierElement").change(function () {
                 dataModificated = 1;
             })
+
+            $("body").on("devalide-donnees", function (event, data) {
+                window.location = window.location.href;
+            });
+            $("body").on("valide-donnees", function (event, data) {
+                window.location = window.location.href;
+            });
+            $("body").on("supprimer-donnees", function (event, data) {
+                var url = window.location.href;
+                var urlRedirect = url.replace('dossier', 'voir')
+                window.location = urlRedirect;
+            });
 
 
         })

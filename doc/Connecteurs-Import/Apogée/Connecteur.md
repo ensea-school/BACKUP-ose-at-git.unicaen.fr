@@ -99,11 +99,13 @@ Créez la vue [SRC_VOLUME_HORAIRE_ENS](SRC_VOLUME_HORAIRE_ENS.sql).
 
 [Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
-## Récupération des taux de régimes par élément pédagogique
+## Récupération des taux de mixité par élément pédagogique
 
-Pour rappel, les taux de régimes permettent de savoir quel pourcentage des effectifs étudiants est en FI, en FC et en FA.
-Dans l'exemple proposé ici, les taux de régimes sont calculés à partir des effectifs de l'année précédente.
-Nous avons fait ce choix, car des taux de régimes doivent être aussi stables que possibles au cours d'une année : les mises en paiement en dépendent.
+Pour rappel, les taux de mixité permettent de savoir quel pourcentage des effectifs étudiants est en FI, en FC et en FA.
+Dans l'exemple proposé ici, les taux de mixité sont calculés à partir des effectifs de l'année précédente.
+Nous avons fait ce choix, car des taux de mixité doivent être aussi stables que possibles au cours d'une année : les mises en paiement en dépendent.
+
+Vous trouverez [ici une documentation détaillée](../taux-repartition.md) sur le fonctionnement des taux de mixité.
 
 Créez la vue [SRC_ELEMENT_TAUX_REGIMES](SRC_ELEMENT_TAUX_REGIMES.sql).
 

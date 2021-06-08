@@ -228,7 +228,7 @@ SELECT
   tvh.libelle || ' ' || evh.libelle type_etat,
   his.histo_modification            service_date_modification,
 
-  i.source_code                     intervenant_code,
+  i.code                            intervenant_code,
   i.nom_usuel || ' ' || i.prenom    intervenant_nom,
   i.date_naissance                  intervenant_date_naissance,
   si.libelle                        intervenant_statut_libelle,

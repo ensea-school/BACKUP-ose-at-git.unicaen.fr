@@ -215,7 +215,7 @@ class ServiceController extends AbstractController
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
         /* @var $intervenant Intervenant */
 
-        $canAddService = $this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EDITION));
+        $canAddService = $this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EDITION_MASSE));
         $annee         = $this->getServiceContext()->getAnnee();
         $action        = $this->getRequest()->getQuery('action', null);
         $tri           = null;
@@ -412,7 +412,7 @@ class ServiceController extends AbstractController
         }
 
         $this->getProcessusPlafond()->beginTransaction();
-        
+
         foreach ($services as $service) {
             $service->setTypeVolumeHoraire($realise);
             if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {

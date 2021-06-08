@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 
+use Application\Entity\Db\CheminPedagogique;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\NiveauEtape;
@@ -38,7 +39,10 @@ class OffreFormationService extends AbstractEntityService
 
     public function getNeep($structure, $niveau, $etape, $annee = null, $source = null)
     {
-
+        if ($etape) {
+            /* workaroud pour parser les chemins pédagogiques si on fournit une étape spécifique */
+            return $this->getNeepEtape($etape);
+        }
 
         if (is_null($annee)) {
             $annee = $this->getServiceContext()->getAnnee();
@@ -111,6 +115,56 @@ class OffreFormationService extends AbstractEntityService
             return $e1Lib > $e2Lib;
         });
 
+        uasort($elements, function (ElementPedagogique $e1, ElementPedagogique $e2) {
+            $e1Lib = strtolower(trim($e1->getEtape()->getLibelle() . ' ' . $e1->getLibelle()));
+            $e2Lib = strtolower(trim($e2->getEtape()->getLibelle() . ' ' . $e2->getLibelle()));
+
+            return $e1Lib > $e2Lib;
+        });
+
+        return [$niveaux, $etapes, $elements];
+    }
+
+
+
+    public function getNeepEtape($etape)
+    {
+        $niveaux  = [];
+        $etapes   = [];
+        $elements = [];
+
+        $sql = 'SELECT
+                cp,
+                partial e.{id,code,annee,libelle,sourceCode,niveau,histoDestruction},
+                partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
+                partial vme.{id,heures, groupes}
+            FROM
+              Application\Entity\Db\CheminPedagogique cp
+              JOIN cp.etape e
+              JOIN cp.elementPedagogique ep
+              LEFT JOIN ep.volumeHoraireEns vme
+            WHERE
+              cp.etape = :etape';
+
+        $query = $this->getEntityManager()->createQuery($sql);
+
+        $query->setParameter('etape', $etape);
+
+        $result = $query->getResult();
+        foreach ($result as $object) {
+            /** @var CheminPedagogique $object */
+            if ($object->estHistorise()) continue;
+
+            $etape   = $object->getEtape();
+            $element = $object->getElementPedagogique();
+
+            $n                           = NiveauEtape::getInstanceFromEtape($etape);
+            $niveaux[$n->getId()]        = $n;
+            $etapes[$etape->getId()]     = $etape;
+            $elements[$element->getId()] = $element;
+        }
+
+        /* Tri */
         uasort($elements, function (ElementPedagogique $e1, ElementPedagogique $e2) {
             $e1Lib = strtolower(trim($e1->getEtape()->getLibelle() . ' ' . $e1->getLibelle()));
             $e2Lib = strtolower(trim($e2->getEtape()->getLibelle() . ' ' . $e2->getLibelle()));

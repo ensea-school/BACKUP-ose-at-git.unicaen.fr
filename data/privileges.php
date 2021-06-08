@@ -121,6 +121,7 @@ return [
         'privileges' => [
             'visualisation'                          => 'Visualisation',
             'edition'                                => 'Édition',
+            'edition-masse'                          => 'Édition en masse',
             'exterieur'                              => 'Saisie de service dans une autre autre université',
             'validation'                             => 'Validation',
             'devalidation'                           => 'Dévalidation',

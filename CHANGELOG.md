@@ -1,11 +1,14 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
-# OSE 15.2 (à venir)
+# OSE 15.2 (07/06/2021)
 
 ## Nouveautés
 
 * Au niveau des types d'intervention, il est désormais possible de saisir des fractions (2/3 TP par exemple)
+* Lorsqu'on sélectionne une formation dans la page Offre de formation, les éléments pédagogiques dont ce n'est pas l'étape principale sont listés tout de même #35881
+* Formule de calcul de l'Université de Strasbourg, en remplacement celle de l'Ensicaen (règles identiques).
+* Ajout d'un privilège 'Enseignement - Edition en masse' pour pouvoir différencier l'affichage du bouton 'Saisi d'un nouvel enseignement' dans la partie gestion service, de la partie feuille de route de l'intervenant (#36390)
 
 ## Corrections de bugs
 
@@ -14,6 +17,11 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 * Les plafonds sont de nouveau bloquants si trop d'heures prévisionnelles sont reportées en réalisé
 * Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
 * Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
+* Correction du lien vers la fiche intervenant dans le menu gestion service (#38166)
+* Correction apparition d'un message de re-soumission du formulaire des données personnelles sur diverses actions (valider, devalider, supprimer etc...) (#38248)
+* Redirection vers la fiche individuelle de l'intervenant lors de la suppression des données personnelles pour éviter de réinitialiser automatiquement le dossier (#37466)
+
+
 
 
 
@@ -141,7 +149,11 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
 
-# OSE 14.19 (à venir)
+# OSE 14.19 (07/06/2021)
+
+# Nouveautés
+
+* Ajout d'un privilège 'Enseignement - Edition en masse' pour pouvoir différencier l'affichage du bouton 'Saisi d'un nouvel enseignement' dans la partie gestion service, de la partie feuille de route de l'intervenant (#36390)
 
 ## Corrections de bugs
 

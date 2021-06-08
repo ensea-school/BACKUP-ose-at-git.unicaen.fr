@@ -18,7 +18,6 @@ use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\OffreFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Zend\Session\Container;
 
 
 /**

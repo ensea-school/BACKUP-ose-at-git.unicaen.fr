@@ -1,5 +1,20 @@
+# Versions stables
+
+[OSE 15.3](#OSE 15.3)
+
+[OSE 14.20](#OSE 14.20)
+
+
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
+
+
+# OSE 15.3 (09/06/2021)
+
+## Correction de bug
+
+* Formule de poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
+
 
 # OSE 15.2 (08/06/2021)
 
@@ -148,6 +163,17 @@ OSE peut maintenant gérer un référentiel des employeurs, permettant ainsi d'a
 Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
+
+
+
+# OSE 14.20 (09/06/2021)
+
+## Correction de bug
+
+* Formule de poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
+
+
+
 
 # OSE 14.19 (08/06/2021)
 

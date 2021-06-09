@@ -314,8 +314,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
     -- AJ=SI(AI$35<$AJ$9;AI20;SI(AI$35=0;0;AI20/AI$35*$AJ$9))
     -- AJ=SI(AI$35<i_param_1;AI20;AI20/AI$35*i_param_1)
+    -- AJ=SI(OU(i_param_1=0;AI$35<i_param_1);AI20;AI20/AI$35*i_param_1)
     WHEN c = 'AJ' AND v >= 1 THEN
-      IF cell('AI35') < i.param_1 THEN
+      IF i.param_1 = 0 OR cell('AI35') < i.param_1 THEN
         RETURN cell('AI',l);
       ELSE
         RETURN cell('AI',l) / cell('AI35') * i.param_1;

@@ -1,8 +1,8 @@
 # Versions stables
 
-[OSE 15.3](#OSE 15.3)
+[OSE 15.3](#ose-153-09062021)
 
-[OSE 14.20](#OSE 14.20)
+[OSE 14.20](#ose-1420-09062021)
 
 
 # OSE 16 (à venir)

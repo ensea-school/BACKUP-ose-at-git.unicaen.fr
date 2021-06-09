@@ -13,7 +13,7 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
 ## Correction de bug
 
-* Formule de poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
+* Formule de Poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
 
 
 # OSE 15.2 (08/06/2021)
@@ -170,7 +170,7 @@ Pour alimenter la table employeur de OSE, vous avez deux possiblités :
 
 ## Correction de bug
 
-* Formule de poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
+* Formule de Poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
 
 
 

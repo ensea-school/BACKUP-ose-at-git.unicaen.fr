@@ -50,7 +50,7 @@ class AdresseFieldset extends AbstractFieldset
         $this->add([
             'name'       => 'precisions',
             'options'    => [
-                'label'         => 'Précisions',
+                'label'         => 'Complément d\'adresse',
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],

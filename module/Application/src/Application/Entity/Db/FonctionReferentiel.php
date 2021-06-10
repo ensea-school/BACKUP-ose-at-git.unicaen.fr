@@ -3,6 +3,7 @@
 namespace Application\Entity\Db;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityNotFoundException;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -106,7 +107,7 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      */
     public function setParent($parent = null): FonctionReferentiel
     {
-        if ($parent instanceof FonctionReferentiel && $parent->getParent()){
+        if ($parent instanceof FonctionReferentiel && $parent->getParent()) {
             throw new \Exception('Il est impossible de définir cette fonction référentielle comme parente : elle a déjà un parent');
         }
 
@@ -385,9 +386,13 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     public function __toString()
     {
         $str = $this->getLibelleCourt();
-
-        if ($this->getStructure()) {
-            $str .= " (" . $this->getStructure() . ")";
+        //Try catch préventif dans le cas d'une fonction référentiel attachée à une structure historisée.
+        try {
+            if ($this->getStructure()) {
+                $str .= " (" . $this->getStructure() . ")";
+            }
+        } catch (EntityNotFoundException $e) {
+            return $str;
         }
 
         return $str;

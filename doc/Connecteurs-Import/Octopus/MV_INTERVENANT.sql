@@ -178,9 +178,9 @@ SELECT DISTINCT
 	    	AND vindinsee.no_insee_provisoire IS NOT NULL
     		THEN 1
     	ELSE 0 END                                                 numero_insee_provisoire,
-    /* Banque */
-    CAST(NULL AS varchar2(255))                                    iban,
-    CAST(NULL AS varchar2(255))                                    bic,
+     /* Banque */
+    TRIM(vindiban.iban)                                            iban,
+    TRIM(vindiban.bic)                                             bic,
     CAST(NULL AS numeric(1))                                       rib_hors_sepa,
     /* Données complémentaires */
     CAST(NULL AS varchar2(255))                                    autre_1,
@@ -205,6 +205,7 @@ FROM i
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
          LEFT JOIN octo.v_individu_insee@octoprod vindinsee ON ind.c_individu_chaine = vindinsee.individu_id
+         LEFT JOIN octo.v_individu_iban@octoprod vindiban ON vindiban.individu_id = ind.c_individu_chaine
          LEFT JOIN octo.v_individu@octoprod vind ON vind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu
          LEFT JOIN structure_aff_enseigne sae ON sae.individu_id = induni.c_individu_chaine

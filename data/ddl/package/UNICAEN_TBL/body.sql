@@ -360,27 +360,29 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     viewQuery := 'WITH t AS (
         SELECT
-          n.annee_id                        annee_id,
-          n.noeud_id                        noeud_id,
-          sn.scenario_id                    scenario_id,
-          sne.type_heures_id                type_heures_id,
-          ti.id                             type_intervention_id,
+          n.annee_id                                                                       annee_id,
+          n.noeud_id                                                                       noeud_id,
+          sn.scenario_id                                                                   scenario_id,
+          sne.type_heures_id                                                               type_heures_id,
+          ti.id                                                                            type_intervention_id,
 
-          n.element_pedagogique_id          element_pedagogique_id,
-          n.element_pedagogique_etape_id    etape_id,
-          sne.etape_id                      etape_ens_id,
-          n.structure_id                    structure_id,
-          n.groupe_type_formation_id        groupe_type_formation_id,
+          n.element_pedagogique_id                                                         element_pedagogique_id,
+          n.element_pedagogique_etape_id                                                   etape_id,
+          sne.etape_id                                                                     etape_ens_id,
+          n.structure_id                                                                   structure_id,
+          n.groupe_type_formation_id                                                       groupe_type_formation_id,
 
-          vhe.heures                        heures,
-          vhe.heures * ti.taux_hetd_service hetd,
+          vhe.heures                                                                       heures,
+          vhe.heures * ti.taux_hetd_service                                                hetd,
 
           GREATEST(COALESCE(sns.ouverture, 1),1)                                           ouverture,
           GREATEST(COALESCE(sns.dedoublement, snsetp.dedoublement, csdd.dedoublement,1),1) dedoublement,
           COALESCE(sns.assiduite,1)                                                        assiduite,
           sne.effectif*COALESCE(sns.assiduite,1)                                           effectif,
-
-          SUM(sne.effectif*COALESCE(sns.assiduite,1)) OVER (PARTITION BY n.noeud_id, sn.scenario_id, ti.id) t_effectif
+          SUM(sne.effectif*COALESCE(sns.assiduite,1))
+            OVER (PARTITION BY n.noeud_id, sn.scenario_id, ti.id)                          t_effectif,
+          AVG(GREATEST(COALESCE(sns.dedoublement, snsetp.dedoublement, csdd.dedoublement,1),1))
+            OVER (PARTITION BY n.noeud_id, sn.scenario_id, ti.id)                          t_dedoublement
 
         FROM
                     scenario_noeud_effectif    sne
@@ -442,18 +444,18 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           assiduite,
           effectif,
           heures heures_ens,
-          --t_effectif,
+          --t_effectif,t_dedoublement,
 
           CASE WHEN t_effectif < ouverture THEN 0 ELSE
-            CEIL( t_effectif / dedoublement ) * effectif / t_effectif
+            (CEIL(t_effectif / t_dedoublement) * effectif) / t_effectif
           END groupes,
 
           CASE WHEN t_effectif < ouverture THEN 0 ELSE
-            CEIL( t_effectif / dedoublement ) * heures * effectif / t_effectif
+            ((CEIL(t_effectif / t_dedoublement) * effectif) / t_effectif) * heures
           END heures,
 
           CASE WHEN t_effectif < ouverture THEN 0 ELSE
-            CEIL( t_effectif / dedoublement ) * hetd * effectif / t_effectif
+            ((CEIL(t_effectif / t_dedoublement) * effectif) / t_effectif) * hetd
           END  hetd
 
         FROM

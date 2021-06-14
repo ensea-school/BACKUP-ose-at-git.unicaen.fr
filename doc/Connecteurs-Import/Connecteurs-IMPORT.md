@@ -420,7 +420,7 @@ présentées dans l'ordre où il faut les traiter.
   </tr>
   <tr>
     <td>EFFECTIFS_ETAPE</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
+    <td>Oui</td> <!-- Apogée -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -657,6 +657,20 @@ JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 WHERE 
     (annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND annee_id >= to_number(amio.valeur))
     OR source_id = source.id
+```
+
+- Effectifs/étapes (table EFFECTIFS_ETAPE)
+
+On synchronise toutes les données issues de FCA Manager et les autres données si leur année n'est
+pas inférieure à l'année d'import ou à l'année minimale d'import de l'ODF.
+
+```sql
+JOIN source ON source.code = 'FCAManager'
+JOIN etape e ON e.id = v_diff_effectifs_etape.etape_id
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+WHERE
+  (e.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND e.annee_id >= to_number(amio.valeur))
+  OR v_diff_effectifs_etape.source_id = source.id
 ```
 
 - Chemins pédagogiques et volumes horaires d'enseignement (tables CHEMIN_PEDAGOGIQUE et VOLUME_HORAIRE_ENS)

@@ -57,6 +57,10 @@ La table ose_element_effectifs permet :
 - de définir quels régimes d'inscription correspondent à la FI, à la FC, ou à l'apprentissage (FA) (A ADAPTER)
 - de calculer les effectifs par année, par élément pédagogique et par régime d'inscription
 
+La table ose_etape_effectifs permet :
+- de définir quels régimes d'inscription correspondent à la FI, à la FC, ou à l'apprentissage (FA) (A ADAPTER)
+- de calculer les effectifs par année, par étape et par régime d'inscription
+
 La table ose_volume_horaire_ens permet :
 - d'associer à chaque enseignement ses volumes horaires par type d'intervention enregistrés dans le module Charges, la saisie de services dans OSE n'étant possible que si une charge existe pour l'enseignement
 - si l'année est en cours ou terminée, d'observer la charge réelle en dénombrant le nombre de groupes ouverts dans lesquels des étudiants sont inscrits, le type de groupe étant assimilé au type d'heure défini dans le module Charges ; en l'absence de groupes modélisés, un groupe unique sera pris en compte pour l'enseignement.

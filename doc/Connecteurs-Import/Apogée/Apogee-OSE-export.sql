@@ -6,7 +6,8 @@
 -- 04/10/2019 Plafonnement de la charge d enseignement liee a l'encadrement individuel (decision d etablissement unicaen) : 1 heure maxi par etudiant
 -- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : s il existe une charge EAD alors a_distance = Oui sinon a_distance = Non
 -- 31/03/2021 Exclusion des ELP fictifs en testant le temoin TEM_FICTIF de leur nature et non plus leur code nature
-
+-- 01/06/2021 Alimentation nouvelle table des effectifs par etape par annee et par regime d inscription
+--
 -- Reinitialisation des tables
 --
 delete from ose_volume_horaire_ens
@@ -18,6 +19,8 @@ delete from ose_element_pedagogique
 delete from ose_chemin_pedagogique
 ;
 delete from ose_offre_de_formation
+;
+delete from ose_etape_effectifs
 ;
 delete from ose_etape
 ;
@@ -115,7 +118,7 @@ with
       -- Determiner si la notion de niveau a du sens pour le type de formation
       min (
         case gtf.pertinence_niveau
-          when 0 then null 
+          when 0 then null
           else vde.cod_sis_daa_min
           end
                             ) keep ( dense_rank first order by anu.cod_anu, vde.cod_etp, vde.cod_vrs_vet ) as niveau,
@@ -195,6 +198,23 @@ group by
   tmp.cod_etp,
   tmp.cod_vrs_vet,
   tmp.specifique_echanges
+;
+--
+-- Constatation des effectifs par annee par etape et par regime d inscription
+--
+insert into ose_etape_effectifs
+select
+  source_code      as z_etape_id,
+  cod_anu          as annee_id,
+  sum( case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end ) as effectif_FI,
+  sum( case when iae.cod_rge in ('4')           then 1 else 0 end ) as effectif_FA,
+  sum( case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end ) as effectif_FC
+from ose_etape   etp
+join ins_adm_etp iae on iae.cod_anu = etp.annee_id and iae.cod_etp = etp.cod_etp and iae.cod_vrs_vet = etp.cod_vrs_vet
+where iae.eta_iae = 'E'
+  and iae.eta_pmt_iae = 'P'
+group by source_code,
+  cod_anu
 ;
 --
 -- Table recursive de l offre de formation

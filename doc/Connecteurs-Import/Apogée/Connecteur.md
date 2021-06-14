@@ -117,6 +117,12 @@ Créez la vue [SRC_EFFECTIFS](SRC_EFFECTIFS.sql).
 
 [Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
+## Récupération des effectifs par étape
+
+Créez la vue [SRC_EFFECTIFS_ETAPE](SRC_EFFECTIFS_ETAPE.sql).
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
 ## Récupération des noeuds
 
 La table NOEUD, ainsi que les deux tables suivantes, doit être peuplée si vous utilisez le module

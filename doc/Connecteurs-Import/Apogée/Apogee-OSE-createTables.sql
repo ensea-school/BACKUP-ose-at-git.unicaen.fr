@@ -70,6 +70,22 @@ grant select on ose_etape to ose
 create public synonym ose_etape for apogee.ose_etape
 ;
 --
+-- Effectifs par annee par etape et par regime d inscription
+--
+create table ose_etape_effectifs (
+  z_etape_id                     varchar2(20)            not null,
+  annee_id                       varchar2(4)             not null,
+  effectif_FI                    number(5)    default  0 not null,
+  effectif_FA                    number(5)    default  0 not null,
+  effectif_FC                    number(5)    default  0 not null,
+  primary key (z_etape_id, annee_id)
+  )
+;
+grant select on ose_etape_effectifs to ose
+;
+create public synonym ose_etape_effectifs for apogee.ose_etape_effectifs
+;
+--
 -- Chemins pedagogiques
 -- Relations entre les etapes et les elements pedagogiques les plus fins
 --

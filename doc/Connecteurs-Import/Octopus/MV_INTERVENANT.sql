@@ -118,6 +118,17 @@ WITH i AS (
     	    AND COALESCE(indg.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) < SYSDATE
     	    --On retire temporairement les doubles grades des quelques individus (Historique harpege), à supprimer quand full siham
 			AND indg.id NOT IN (8856,8904,9214,11735,12155,13166,14698,14731,14854,15143,15144,15201,15358,15359,15401)
+         ),
+         iban_dossier AS
+         (
+            SELECT
+				i.code,
+				MAX(REPLACE(d.iban, ' ', '')) iban,
+				MAX(REPLACE(d.bic, ' ', ''))   bic
+			FROM intervenant i
+			JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS null
+			WHERE  i.annee_id = 2020 AND i.histo_destruction IS NULL AND d.iban IS NOT NULL AND d.rib_hors_sepa = 0 AND i.source_id = '24'
+			GROUP BY i.code
          )
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
@@ -179,8 +190,8 @@ SELECT DISTINCT
     		THEN 1
     	ELSE 0 END                                                 numero_insee_provisoire,
      /* Banque */
-    TRIM(vindiban.iban)                                            iban,
-    TRIM(vindiban.bic)                                             bic,
+    COALESCE(TRIM(vindiban.iban), ibandossier.iban)                iban,
+    COALESCE(TRIM(vindiban.bic), ibandossier.bic)                  bic,
     CAST(NULL AS numeric(1))                                       rib_hors_sepa,
     /* Données complémentaires */
     CAST(NULL AS varchar2(255))                                    autre_1,
@@ -206,6 +217,7 @@ FROM i
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
          LEFT JOIN octo.v_individu_insee@octoprod vindinsee ON ind.c_individu_chaine = vindinsee.individu_id
          LEFT JOIN octo.v_individu_iban@octoprod vindiban ON vindiban.individu_id = ind.c_individu_chaine
+         LEFT JOIN iban_dossier ibandossier ON ibandossier.code = ind.c_individu_chaine
          LEFT JOIN octo.v_individu@octoprod vind ON vind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu
          LEFT JOIN structure_aff_enseigne sae ON sae.individu_id = induni.c_individu_chaine

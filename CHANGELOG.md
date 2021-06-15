@@ -8,6 +8,12 @@
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
+# OSE 15.4 (à venir)
+
+## Correction de bug
+
+* Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
+
 
 # OSE 15.3 (09/06/2021)
 

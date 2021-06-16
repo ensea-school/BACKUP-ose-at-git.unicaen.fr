@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $form \Application\Form\Chargens\DifferentielForm
+ */
+
+$title    = "Différentiel entre deux exports des charges d'enseignement";
+$uploader = $this->uploader();
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+
+
+echo $this->form()->openTag($form);
+
+echo '<div class="row">';
+
+echo '<div class="col-md-6">';
+echo $this->formControlGroup($form->get('avant'));
+echo '</div>';
+
+echo '<div class="col-md-6">';
+echo $this->formControlGroup($form->get('apres'));
+echo '</div>';
+
+echo '</div>';
+
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
+
+?>
+<a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
+    <i class="fa fa-undo" aria-hidden="true"></i>
+    Retour au menu des charges d'enseignement
+</a>

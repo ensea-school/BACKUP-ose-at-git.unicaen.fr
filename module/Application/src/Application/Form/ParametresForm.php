@@ -65,6 +65,19 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type'       => 'Select',
+            'name'       => 'annee_minimale_import_odf',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
+                'label'         => 'Année minimale d\'import pour l\'ODF',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
             'name'       => 'structure_univ',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceStructure()->getList(

@@ -623,13 +623,9 @@ synchronisées si les données sont antérieures.
 
 #### Définition de l'année minimale d'import des données d'offre de formation
 
-En base de données, dans la table PARAMETRE, il existe le paramètre `annee_minimale_import_odf`.
-
-Vous pouvez définir comme suit l'année minimale d'import de l'offre de formation :
-
-```sql
-UPDATE PARAMETRE SET VALEUR = '2020' WHERE NOM = 'annee_minimale_import_odf'; 
-```
+Le paramètre général "Année minimale d'import pour l'ODF" vous permet de définir à partir de quelle année
+votre offre de formation se synchronisera. Pour les années précédentes, même si votre connecteur fournit des données,
+rien ne sera modifié dans OSE, sous réserve que vous ayez mis en place les filtres listés ci-dessous.
 
 #### Mise en place des filtres
 

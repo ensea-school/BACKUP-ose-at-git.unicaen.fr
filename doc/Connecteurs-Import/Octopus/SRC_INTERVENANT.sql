@@ -57,7 +57,7 @@ FROM (
     CASE
 
       -- Cas 1 : Si on est sur un statut multiple avec un non-autorisé et un autre statut, alors le non autorisé est supprimé
-      WHEN statut_intervenant_nautorise = 1 AND intervenant_local = 0 AND nb_intervenants > 1 AND intervenant_histo = 0 THEN 'dropna'
+      WHEN statut_intervenant_nautorise = 1 AND intervenant_local = 0 AND nb_intervenants > 1 AND intervenant_histo = 0 THEN 'drop'
 
 
       -- Cas 2 : Si on est sur les mêmes fiches, alors on synchronise tout le temps

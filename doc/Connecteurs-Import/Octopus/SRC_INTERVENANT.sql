@@ -39,13 +39,13 @@ SELECT
   numero_insee_provisoire,
   iban,
   bic,
-  rib_hors_sepa,
-  autre_1,
-  autre_2,
-  autre_3,
-  autre_4,
-  autre_5,
-  employeur_id,
+  --rib_hors_sepa,
+  --autre_1,
+  --autre_2,
+  --autre_3,
+  --autre_4,
+  --autre_5,
+  --employeur_id,
   CASE WHEN statuts_identiques = 0 AND i_source_id IS NOT NULL AND action <> 'insert' THEN i_source_id ELSE s_source_id END source_id,
   source_code,
   CASE WHEN statuts_identiques = 0 AND intervenant_local = 1 AND action <> 'insert' THEN i_validite_debut ELSE s_validite_debut END validite_debut,
@@ -56,11 +56,7 @@ FROM (
     t.*,
     CASE
 
-      -- Cas 1 : Si on est sur un statut multiple avec un non-autorisé et un autre statut, alors le non autorisé est supprimé
-      WHEN statut_intervenant_nautorise = 1 AND intervenant_local = 0 AND nb_intervenants > 1 AND intervenant_histo = 0 THEN 'dropna'
-
-
-      -- Cas 2 : Si on est sur les mêmes fiches, alors on synchronise tout le temps
+      -- Cas 1 : Si on est sur les mêmes fiches, alors on synchronise tout le temps
       WHEN statuts_identiques = 1 THEN CASE
         -- Si c'est un intervenant qui a été historisé et qu'une nouvelle fiche a été créée plus tard
         WHEN intervenant_histo = 1 AND nb_sources = 1 AND nb_intervenants = 2 AND nb_statuts_egaux = 2 THEN 'drop'
@@ -70,19 +66,19 @@ FROM (
       END
 
 
-      -- Cas 3 : On ne restaure pas les locaux historisés s'il ne sont pas dans la source
+      -- Cas 2 : On ne restaure pas les locaux historisés s'il ne sont pas dans la source
       WHEN statuts_identiques = 0 AND intervenant_histo = 1 AND intervenant_local = 1 THEN 'drop'
 
 
-      -- Cas 4 : Nouvelle insertion
+      -- Cas 3 : Nouvelle insertion
       WHEN nb_sources = 1 AND nb_intervenants = 0 THEN 'insert'
 
 
-      -- Cas 5 : Quand les statuts matchent à 100%, il faut supprimer les faux positifs
+      -- Cas 4 : Quand les statuts matchent à 100%, il faut supprimer les faux positifs
       WHEN nb_sources = nb_intervenants AND nb_sources = nb_statuts_egaux THEN 'drop'
 
 
-      -- Cas 6 : Quand il y a différence de statut alors que c'est 1 <=> 1
+      -- Cas 5 : Quand il y a différence de statut alors que c'est 1 <=> 1
       WHEN nb_sources = 1 AND nb_intervenants = 1 AND statuts_identiques = 0 THEN CASE
         -- Si c'est un intervenant local qui avait été créé, on n'y touche pas et on en recrée un nouveau
         WHEN intervenant_local = 1 THEN 'insert'
@@ -101,7 +97,7 @@ FROM (
       END
 
 
-      -- Cas 7 : Quand il y a une seule source et plusieurs intervenants, et que la source matche sur au moins un statut
+      -- Cas 6 : Quand il y a une seule source et plusieurs intervenants, et que la source matche sur au moins un statut
       WHEN nb_sources = 1 AND nb_intervenants > 1 AND nb_statuts_egaux = 1 THEN CASE
 
         -- Si la fiche est vide et vient du SI alors on supprime
@@ -115,7 +111,7 @@ FROM (
       END
 
 
-      -- Cas 8 : Quand il y a une seule source et plusieurs intervenants, et que la source matche sur au moins un statut
+      -- Cas 7 : Quand il y a une seule source et plusieurs intervenants, et que la source matche sur au moins un statut
       WHEN nb_sources = 1 AND nb_intervenants > 1 AND nb_statuts_egaux = 0 THEN CASE
         -- Cas typique du vacataire qui a renseigné des données personnelles
         WHEN intervenant_local = 0 AND types_identiques = 1 AND statut_source_autre = 1 AND statut_intervenant_autre = 0 AND sync_statut = 0 THEN 'update'
@@ -131,7 +127,7 @@ FROM (
       END
 
 
-      -- Cas 9 : Quand il y a plusieurs sources pour un seul intervenant et qu'une au moins matche
+      -- Cas 8 : Quand il y a plusieurs sources pour un seul intervenant et qu'une au moins matche
       WHEN nb_sources > 1 AND nb_intervenants = 1 AND nb_statuts_egaux = 1 THEN CASE
 
         -- Si le nouveau statut est de type différent, alors on ajoute une nouvelle fiche
@@ -143,7 +139,7 @@ FROM (
       END
 
 
-      -- Cas 10 : Quand il y a plusieurs sources pour un seul intervenant et qu'aucun ne matche
+      -- Cas 9 : Quand il y a plusieurs sources pour un seul intervenant et qu'aucun ne matche
       WHEN nb_sources > 1 AND nb_intervenants = 1 AND nb_statuts_egaux = 0 THEN CASE
         -- Cas typique du vacataire qui a renseigné des données personnelles
         WHEN intervenant_local = 0 AND types_identiques = 1 AND statut_source_autre = 1 AND statut_intervenant_autre = 0 AND sync_statut = 0 THEN 'update'
@@ -157,7 +153,7 @@ FROM (
       END
 
 
-      -- Cas 11 : Quand il y a 2 sources et 2 intervenants et qu'un seul matche
+      -- Cas 10 : Quand il y a 2 sources et 2 intervenants et qu'un seul matche
       WHEN nb_sources = 2 AND nb_intervenants = 2 THEN CASE
 
         -- Autres fiches de même type
@@ -170,7 +166,7 @@ FROM (
       END
 
 
-      -- Cas 12 : Pour le reste
+      -- Cas 11 : Pour le reste
       ELSE CASE
 
         -- Cas typique du vacataire qui a renseigné des données personnelles
@@ -241,8 +237,6 @@ FROM (
       -- Variables calculées
       CASE WHEN ssi.code = 'AUTRES' THEN 1 ELSE 0 END                                        statut_source_autre,
       CASE WHEN isi.code = 'AUTRES' THEN 1 ELSE 0 END                                        statut_intervenant_autre,
-      CASE WHEN ssi.code = 'NON_AUTORISE' THEN 1 ELSE 0 END                                  statut_source_nautorise,
-      CASE WHEN isi.code = 'NON_AUTORISE' THEN 1 ELSE 0 END                                  statut_intervenant_nautorise,
       CASE WHEN ssi.id = isi.id THEN 1 ELSE 0 END                                            statuts_identiques,
       CASE WHEN ssi.type_intervenant_id = isi.type_intervenant_id THEN 1 ELSE 0 END          types_identiques,
       COALESCE(i.sync_statut,1)                                                              sync_statut,

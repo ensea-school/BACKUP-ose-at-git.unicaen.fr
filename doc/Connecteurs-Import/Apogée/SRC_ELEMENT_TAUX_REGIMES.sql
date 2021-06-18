@@ -1,15 +1,17 @@
-CREATE OR REPLACE FORCE VIEW SRC_ELEMENT_TAUX_REGIMES AS
+CREATE OR REPLACE FORCE VIEW SRC_ELEMENT_TAUX_REGIMES AS 
 WITH apogee_query AS (
   SELECT
     e.z_element_pedagogique_id  z_element_pedagogique_id,
-    to_number(e.annee_id) + 1   annee_id,
+    -- à partir de décembre on synchronise avec l'année en cours, avant on se réfère à l'année antérieure
+    to_number(e.annee_id) + CASE WHEN COALESCE(p.ecart_mois,0) > 2 THEN 0 ELSE 1 END annee_id,
     e.effectif_fi               effectif_fi,
     e.effectif_fc               effectif_fc,
     e.effectif_fa               effectif_fa,
     'Apogee'                    z_source_id,
-    TO_NUMBER(e.annee_id) + 1 || '-' || e.z_element_pedagogique_id source_code
+    TO_NUMBER(e.annee_id) + CASE WHEN COALESCE(p.ecart_mois,0) > 2 THEN 0 ELSE 1 END || '-' || e.z_element_pedagogique_id source_code
   FROM
     ose_element_effectifs@apoprod e
+    LEFT JOIN periode p ON p.code = OSE_DIVERS.DATE_TO_PERIODE_CODE(sysdate,TO_NUMBER(e.annee_id))
   WHERE
     (e.effectif_fi + e.effectif_fc + e.effectif_fa) > 0
 )

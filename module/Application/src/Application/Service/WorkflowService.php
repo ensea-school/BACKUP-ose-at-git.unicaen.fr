@@ -242,7 +242,7 @@ class WorkflowService extends AbstractService
         $iid = $intervenant->getId();
         $sid = $structure ? $structure->getId() : 0;
 
-        if (!isset($this->feuillesDeRoute[$iid][$sid])) {
+        if (true || !isset($this->feuillesDeRoute[$iid][$sid])) {
             $wie = $this->getEtapes($intervenant, $structure);
 
             $this->feuillesDeRoute[$iid][$sid] = [];
@@ -378,6 +378,18 @@ class WorkflowService extends AbstractService
                     $this->getServiceTableauBord()->calculer($dep, 'INTERVENANT_ID', $value);
                 } catch (\Exception $e) {
                     $errors[$dep] = $e;
+                }
+            }
+        }
+
+        /* Mise à jour des entités */
+        if (array_key_exists($intervenant->getId(), $this->feuillesDeRoute)) {
+            foreach ($this->feuillesDeRoute[$intervenant->getId()] as $fdr) {
+                foreach ($fdr as $etp) {
+                    /** @var $etp WorkflowEtape */
+                    foreach ($etp->getEtapes() as $etape) {
+                        $this->getEntityManager()->refresh($etape);
+                    }
                 }
             }
         }

@@ -22,7 +22,7 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 ## Correction de bug
 
 * Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
-
+* Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles
 
 
 

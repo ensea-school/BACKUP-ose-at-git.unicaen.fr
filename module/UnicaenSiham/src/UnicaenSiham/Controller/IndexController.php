@@ -128,6 +128,12 @@ class IndexController extends AbstractActionController
                     // $result = $this->siham->supprimerTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
                 }
 
+                //Modification des coordonnées bancaires
+
+                /*if (!empty($params->iban)) {
+                    $this->siham->ibanToSiham('');
+                }*/
+
                 $this->flashMessenger()->addSuccessMessage('Modification effectuée avec succés');
             }
         } catch (SihamException $e) {
@@ -141,6 +147,144 @@ class IndexController extends AbstractActionController
         }
 
         return compact('agent');
+    }
+
+
+
+    public function saveAdresseAction()
+    {
+        try {
+            if ($this->getRequest()->isPost()) {
+                //traitemetn de la modification des données personnelles
+                $params   = $this->getRequest()->getPost();
+                $paramsWS = [
+                    'matricule'         => $params->matricule,
+                    'dateDebut'         => $params->dateDebut,
+                    'complementAdresse' => $params->complementAdresse,
+                    'natureVoie'        => $params->natureVoie,
+                    'codePostal'        => $params->codePostal,
+                    'ville'             => $params->ville,
+                    'nomVoie'           => $params->nomVoieAdresse,
+                ];
+
+                $result = $this->siham->modifierAdressePrincipaleAgent($paramsWS);
+
+                if ($result) {
+                    $this->flashMessenger()->addSuccessMessage('Modification effectuée avec succés');
+                }
+            }
+        } catch (SihamException $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute('siham/voir', ['matricule' => $params->matricule]);
+    }
+
+
+
+    public function saveCoordonneesAction()
+    {
+        try {
+            if ($this->getRequest()->isPost()) {
+                $params = $this->getRequest()->getPost();
+
+                //gestion des numéros de téléphone
+                //Teléphone pro
+                $paramsWS = [
+                    'matricule' => $params->matricule,
+                    'numero'    => $params->telFixePro,
+
+                ];
+                if (!empty($params->telFixePro)) {
+                    $paramsWS = [
+                        'matricule' => $params->matricule,
+                        'numero'    => $params->telFixePro,
+                        'dateDebut' => $params->telFixeProDateDebut,
+                    ];
+                    $result   = $this->siham->modifierCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO);
+                }
+                //$result = $this->siham->modifierTelephoneAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO);
+                //Téléphone perso
+                if (!empty($params->telPortablePerso)) {
+                    $paramsWS = [
+                        'matricule' => $params->matricule,
+                        'numero'    => $params->telPortablePerso,
+                        'dateDebut' => $params->telPortablePersoDateDebut,
+                    ];
+                    $result   = $this->siham->modifierCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                }
+
+                //Mail Pro
+                if (!empty($params->emailPro)) {
+                    $paramsWS = [
+                        'matricule' => $params->matricule,
+                        'numero'    => $params->emailPro,
+                        'dateDebut' => $params->emailProDateDebut,
+                    ];
+                    $result   = $this->siham->modifierCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO);
+                }
+                //Mail Perso
+                if (!empty($params->emailPerso)) {
+                    $paramsWS = [
+                        'matricule' => $params->matricule,
+                        'numero'    => $params->emailPerso,
+                        'dateDebut' => $params->emailProDateDebut,
+                    ];
+                    $result   = $this->siham->modifierCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO);
+                }
+
+
+                $this->flashMessenger()->addSuccessMessage('Coordonnées téléphoniques et Email enregistrées avec succés');
+            }
+        } catch (SihamException $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute('siham/voir', ['matricule' => $params->matricule]);
+    }
+
+
+
+    public function historiserCoordonneesAction()
+    {
+        $matricule = $this->params()->fromRoute('matricule');
+        $type      = $this->params()->fromRoute('type');
+
+
+        try {
+            $paramsWS = [
+                'matricule' => $matricule,
+            ];
+            switch ($type) {
+                case 'telpro':
+                    $this->siham->historiserCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO);
+                break;
+
+                case 'telperso':
+                    $this->siham->historiserCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO);
+                break;
+
+                case 'emailperso':
+                    $this->siham->historiserCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO);
+                break;
+
+                case 'emailpro':
+                    $this->siham->historiserCoordonneesAgent($paramsWS, Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO);
+                break;
+            }
+            $this->flashMessenger()->addSuccessMessage('Coordonnées historiser avec succès');
+        } catch (SihamException $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute('siham/voir', ['matricule' => $matricule]);
+    }
+
+
+
+    public function saveIbanAction()
+    {
+
     }
 
 

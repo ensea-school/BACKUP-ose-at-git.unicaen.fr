@@ -28,5 +28,5 @@ $params : Array contenant les clés d'entrées suivantes
 
 Retour :
 
-Retourn un ArrayCollection d'[Agent](../src/UnicaenSiham/Entity/Agent.php).
+Retourn un [Agent](../src/UnicaenSiham/Entity/Agent.php).
 

@@ -39,6 +39,46 @@ return [
                         ],
 
                     ],
+                    'save-adresse'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/save-adresse',
+                            'defaults' => [
+                                'action' => 'save-adresse',
+                            ],
+                        ],
+
+                    ],
+                    'save-iban'              => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/save-iban',
+                            'defaults' => [
+                                'action' => 'save-iban',
+                            ],
+                        ],
+
+                    ],
+                    'save-coordonnees'       => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/save-coordonnees',
+                            'defaults' => [
+                                'action' => 'save-coordonnees',
+                            ],
+                        ],
+
+                    ],
+                    'historiser-coordonnees' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/historiser-coordonnees/:matricule/:type',
+                            'defaults' => [
+                                'action' => 'historiser-coordonnees',
+                            ],
+                        ],
+
+                    ],
                     'historiser-adresse'     => [
                         'type'    => 'Segment',
                         'options' => [
@@ -144,6 +184,10 @@ return [
                     'action'     => [
                         'index',
                         'voir',
+                        'save-adresse',
+                        'save-coordonnees',
+                        'save-iban',
+                        'historiser-coordonnees',
                         'voir-nomenclature',
                         'historiser-adresse-agent',
                         'renouveller-agent',

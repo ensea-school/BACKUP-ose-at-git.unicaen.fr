@@ -49,6 +49,10 @@ class Agent
 
     protected $dateNaissance;
 
+    protected $paysNaissance;
+
+    protected $villeNaissance;
+
     protected $bisTerAdresse;
 
     protected $natureVoieAdresse;
@@ -78,6 +82,10 @@ class Agent
     protected $dateFinAdresse;
 
     protected $libLongPaysAdresse;
+
+    protected $iban;
+
+    protected $bic;
 
 
 
@@ -568,6 +576,50 @@ class Agent
     /**
      * @return mixed
      */
+    public function getPaysNaissance()
+    {
+        return $this->paysNaissance;
+    }
+
+
+
+    /**
+     * @param mixed $paysNaissance
+     */
+    public function setPaysNaissance($paysNaissance): self
+    {
+        $this->paysNaissance = $paysNaissance;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getVilleNaissance()
+    {
+        return $this->villeNaissance;
+    }
+
+
+
+    /**
+     * @param mixed $villeNaissance
+     */
+    public function setVilleNaissance($villeNaissance): self
+    {
+        $this->villeNaissance = $villeNaissance;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
     public function getBisTerAdresse()
     {
         return $this->bisTerAdresse;
@@ -925,6 +977,54 @@ class Agent
 
 
 
+    /**
+     * @param mixed $iban
+     *
+     * @return Agent
+     */
+    public function setIban($iban)
+    {
+        $this->iban = $iban;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getIban()
+    {
+        return $this->iban;
+    }
+
+
+
+    /**
+     * @param mixed $bic
+     *
+     * @return Agent
+     */
+    public function setBic($bic)
+    {
+        $this->bic = $bic;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getBic()
+    {
+        return $this->bic;
+    }
+
+
+
     public function mapper($values): Agent
     {
 
@@ -990,6 +1090,32 @@ class Agent
                 $this->$setter($value);
             }
         }
+
+        //Traitement de l'IBAN et BIC
+        if (isset($values->donneesPersonnelles)) {
+            $dp   = $values->donneesPersonnelles;
+            $iban = '';
+            $iban .= isset($dp->IBAN1CoordBanc) ? $dp->IBAN1CoordBanc : '';
+            $iban .= isset($dp->IBAN2CoordBanc) ? $dp->IBAN2CoordBanc : '';
+            $iban .= isset($dp->IBAN3CoordBanc) ? $dp->IBAN3CoordBanc : '';
+            $iban .= isset($dp->IBAN4CoordBanc) ? $dp->IBAN4CoordBanc : '';
+            $iban .= isset($dp->IBAN5CoordBanc) ? $dp->IBAN5CoordBanc : '';
+            $iban .= isset($dp->IBAN6CoordBanc) ? $dp->IBAN6CoordBanc : '';
+            $iban .= isset($dp->IBAN7CoordBanc) ? $dp->IBAN7CoordBanc : '';
+            $iban .= isset($dp->IBAN8CoordBanc) ? $dp->IBAN8CoordBanc : '';
+            $iban .= isset($dp->IBAN9CoordBanc) ? $dp->IBAN9CoordBanc : '';
+
+            $this->setIban($iban);
+
+            $bic = '';
+            $bic .= isset($dp->typeBanqueCoordBanc) ? $dp->typeBanqueCoordBanc : '';
+            $bic .= isset($dp->codePaysCoordBanc) ? $dp->codePaysCoordBanc : '';
+            $bic .= isset($dp->localisationCoordBanc) ? $dp->localisationCoordBanc : '';
+            $bic .= isset($dp->agenceCoordBanc) ? $dp->agenceCoordBanc : '';
+
+            $this->setBic($bic);
+        };
+
 
         return $this;
     }

@@ -7,30 +7,28 @@
 ?>
 
 <?php if (!empty($agent)): ?>
-    <form action="" method="post">
-        <div class="panel panel-default">
-            <div class="panel-heading">Données personnelles
-                de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label for="">Matricule : </label>
-                    <input id="disabledInput" class="form-control" type="text" name="matricule"
-                           value="<?= $agent->getMatricule() ?>"/>
+    <div class="panel panel-default">
+        <div class="panel-heading">Données personnelles
+            de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Matricule : </strong><?= $agent->getMatricule() ?><br/>
+                    <strong>Nom patronymique :</strong> <?= $agent->getNomPatronymique() ?><br/>
+                    <strong>Nom Usuel :</strong> <?= $agent->getNomUsuel() ?><br/>
+                    <strong>Prénom :</strong> <?= $agent->getPrenom() ?><br/>
+
                 </div>
-                <div class="form-group">
-                    <label for="">Nom Usuel : </label>
-                    <input class="form-control" type="text" name="nomUsuel" value="<?= $agent->getNomUsuel() ?>"/>
-                </div>
-                <div class="form-group">
-                    <label for="">Prénom : </label>
-                    <input class="form-control" type="text" name="prenom" value="<?= $agent->getPrenom() ?>"/>
-                </div>
-                <div class="form-group">
-                    <label for="">Date de naissance : </label>
-                    <input class="form-control" type="text" name="dateNaissance" value="<?= $agent->getDateNaissance() ?>"/>
+                <div class="col-md-6">
+                    <strong>Date de naissance :</strong> <?= $agent->getDateNaissance() ?><br/>
+                    <strong>Pays de naissance :</strong> <?= $agent->getPaysNaissance() ?><br/>
+                    <strong>Ville de naissance :</strong> <?= $agent->getVilleNaissance() ?><br/>
+                    <strong>Numéro Insee :</strong> <?= $agent->getNumeroInseeDefinitif() ?><br/>
                 </div>
             </div>
         </div>
+    </div>
+    <form action="/siham/save-adresse" method="post">
         <div class="panel panel-default">
             <div class="panel-heading">Adresse principale
                 de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
@@ -62,23 +60,20 @@
                     <input class="form-control" type="text" name="ville"
                            value="<?= $agent->getBureauDistributeurAdresse() ?>"/>
                 </div>
-                <div class="form-group">
-                    <label for="">Date début : </label>
-                    <input class="form-control" type="text" name="dateDebut"
+                <div style="display:hidden">
+                    <input class="form-control" type="hidden" name="dateDebut"
                            value="<?= $agent->getDateDebutAdresse() ?>"/>
-                </div>
-                <div class="form-group">
-                    <label for="">Date fin : </label>
-                    <input class="form-control" disabled="disabled" type="text" name="dateFin"
+                    <input class="form-control" disabled="disabled" type="hidden" name="dateFin"
                            value="<?= $agent->getDateFinAdresse() ?>"/>
+                    <input type="hidden" name="matricule" value="<?= $agent->getMatricule() ?>"/>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-default">Ajouter une adresse</button>
-                    <a class="btn btn-warning" href="/siham/historiser-adresse/<?= $agent->getMatricule() ?>" role="button">Historiser
-                        adresse principale</a>
+                    <button type="submit" class="btn btn-default">Enregistrer adresse</button>
                 </div>
             </div>
         </div>
+    </form>
+    <form action="/siham/save-coordonnees" method="post">
         <div class="panel panel-default">
             <div class="panel-heading">Numéros de téléphone et Emails
                 de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
@@ -86,62 +81,83 @@
                 <div class="form-group">
                     <label for="">Téléphone fixe professionnel : </label>
                     <input class="form-control" type="text" name="telFixePro" value="<?= $agent->getTelephonePro() ?>"/>
+                    <div class="pull-right" style="margin:10px 0;">
+                        <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/telpro" role="button">
+                            Historiser
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="telFixeProDateDebut"
-                           value="<?= $agent->getTelephoneProDateDebut() ?>"/>
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="telFixeProDateFin"
-                           value="<?= $agent->getTelephoneProDateFin() ?>"/>
-                </div>
-                <div class="form-group">
+                <div class="clearfix"></div>
+                <div class=" form-group">
                     <label for="">Téléphone portable perso : </label>
                     <input class="form-control" type="text" name="telPortablePerso"
                            value="<?= $agent->getTelephonePerso() ?>"/>
+                    <div class="pull-right" style="margin:10px 0;">
+                        <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/telperso" role="button">
+                            Historiser
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="telPortablePersoDateDebut"
-                           value="<?= $agent->getTelephonePersoDateDebut() ?>"/>
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="telPortablePersoDateFin"
-                           value="<?= $agent->getTelephonePersoDateFin() ?>"/>
-                </div>
+                <div class="clearfix"></div>
                 <div class="form-group">
                     <label for="">Email pro : </label>
                     <input class="form-control" type="text" name="emailPro"
                            value="<?= $agent->getEmailPro() ?>"/>
+                    <div class="pull-right" style="margin:10px 0;">
+                        <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/emailpro" role="button">
+                            Historiser
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="emailProDateDebut"
-                           value="<?= $agent->getEmailProDateDebut() ?>"/>
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="emailProDateFin"
-                           value="<?= $agent->getEmailProDateFin() ?>"/>
-                </div>
+                <div class="clearfix"></div>
                 <div class="form-group">
                     <label for="">Email perso : </label>
                     <input class="form-control" type="text" name="emailPerso"
                            value="<?= $agent->getEmailPerso() ?>"/>
+                    <div class="pull-right" style="margin:10px 0;">
+                        <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/emailperso" role="button">
+                            Historiser
+                        </a>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="emailPersoDateDebut"
+                <div style="display:hidden;">
+                    <input type="hidden" name="matricule" value="<?= $agent->getMatricule() ?>"/>
+                    <input class="form-control" type="hidden" name="emailProDateDebut"
+                           value="<?= $agent->getEmailProDateDebut() ?>"/>
+                    <input class="form-control" type="hidden" name="emailPersoDateDebut"
                            value="<?= $agent->getEmailPersoDateDebut() ?>"/>
+                    <input class="form-control" type="hidden" name="telPortablePersoDateDebut"
+                           value="<?= $agent->getTelephonePersoDateDebut() ?>"/>
+                    <input class="form-control" type="hidden" name="telFixeProDateDebut"
+                           value="<?= $agent->getTelephoneProDateDebut() ?>"/>
+
+
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" disabled="disabled" name="emailPersoDateFin"
-                           value="<?= $agent->getEmailPersoDateFin() ?>"/>
+                <div class="clearfix"></div>
+
+                <div>
+                    <button type="submit" class="btn btn-default">Enregistrer coordonnées</button>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-default">Sauvegarder les modifications</button>
-        <a class="btn btn-warning" href="/siham/renouveller-agent/<?= $agent->getMatricule() ?>" role="button">Renouveller
-            Agent</a>
-        <a class="btn btn-warning" href="/siham/prise-en-charge-agent" role="button">Prise en charge
-            Agent</a>
     </form>
-
-
+    <form action="/siham/save-iban" method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">Coordonnées bancaires
+                de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="iban"
+                           value="<?= $agent->getIban() ?>"/>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="bic"
+                           value="<?= $agent->getBic() ?>"/>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-default">Enregistrer iban</button>
+                </div>
+            </div>
+        </div>
+    </form>
 <?php endif; ?>

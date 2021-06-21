@@ -632,16 +632,6 @@ rien ne sera modifié dans OSE, sous réserve que vous ayez mis en place les fil
 Reste à exploiter ce paramètre pour filtrer les données import ne venant pas de FCA Manager. Bien entendu, les filtres
 ci-dessous vous sont fournis à titre indicatif. Il vous revient de les adapter à vos besoins.
 
-- Groupes de type de formation (table GROUPE_TYPE_FORMATION) et types de formation (TYPE_FORMATION)
-
-Un même filtre est appliqué pour ces deux tables. La synchro ne se fait que si l'année d'import comfigurée dans les paramètres
-généraux est supérieure à l'année minimale d'import d'ODF.
-
-```sql
-JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
-WHERE OSE_PARAMETRE.GET_ANNEE_IMPORT >= to_number(amio.valeur)
-```
-
 - Etapes, éléments, effectifs et noeuds (tables ETAPE, ELEMENT_PEDAGOGIQUE, EFFECTIFS et NOEUD)
 
 Ces tables sont annualisées. On synchronise toutes les données issues de FCA Manager et les autres données si leur année n'est
@@ -651,8 +641,7 @@ pas inférieure à l'année d'import ou à l'année minimale d'import de l'ODF.
 JOIN source ON source.code = 'FCAManager'
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 WHERE 
-    (annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND annee_id >= to_number(amio.valeur))
-    OR source_id = source.id
+  (annee_id >= to_number(amio.valeur) OR source_id = source.id)
 ```
 
 - Effectifs/étapes (table EFFECTIFS_ETAPE)
@@ -665,8 +654,7 @@ JOIN source ON source.code = 'FCAManager'
 JOIN etape e ON e.id = v_diff_effectifs_etape.etape_id
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 WHERE
-  (e.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND e.annee_id >= to_number(amio.valeur))
-  OR v_diff_effectifs_etape.source_id = source.id
+  (e.annee_id >= to_number(amio.valeur) OR v_diff_effectifs_etape.source_id = source.id)
 ```
 
 - Chemins pédagogiques et volumes horaires d'enseignement (tables CHEMIN_PEDAGOGIQUE et VOLUME_HORAIRE_ENS)
@@ -679,8 +667,7 @@ JOIN source ON source.code = 'FCAManager'
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
 WHERE 
-    (ep.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND ep.annee_id >= to_number(amio.valeur)) 
-    OR v_diff_chemin_pedagogique.source_id = source.id
+    (ep.annee_id >= to_number(amio.valeur) OR v_diff_chemin_pedagogique.source_id = source.id)
 ```
 
 - Liens et scénarios par liens (tables LIEN et SCENARIO_LIEN)
@@ -692,24 +679,11 @@ universitaire (exemple : `2018_{}MD22ENTB_M.DM240`).
 JOIN source ON source.code = 'FCAManager'
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 WHERE 
-  (SUBSTR(source_code,0,4) >= to_char(OSE_PARAMETRE.GET_ANNEE_IMPORT) AND SUBSTR(source_code,0,4) >= amio.valeur)
-  OR source_id = source.id
+  (SUBSTR(source_code,0,4) >= amio.valeur OR source_id = source.id)
 ```
 
-- Taux de répartition FI/A/FC (ELEMENT_TAUX_REGIMES)
 
-Dans OSE, on peut affecter das taux de répartition FI/FA/FC aux éléments pédagogiques. Ceci peut se faire directement dans le
-logiciel. On peut aussi, comme ce qui se fait à Caen, pré-calculer ces taux sur la base des effectifs de l'année précédente.
 
-On les initialise une fois sans jamais les mettre à jour (sauf si c'est "forcé" manuellement). Du coup, on fait toutes les
-actions d'import sauf `update`.
-
-```sql
-JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
-JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
-WHERE IMPORT_ACTION IN ('delete','insert','undelete') 
-   OR (ep.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND ep.annee_id >= to_number(amio.valeur))
-```
 
 ## Traitement automatiques
 

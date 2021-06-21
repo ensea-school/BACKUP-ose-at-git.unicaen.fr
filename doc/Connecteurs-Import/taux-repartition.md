@@ -39,7 +39,10 @@ Là, une page vous permettra de saisir ces taux pour tout ou partie des élémen
 Compte tenu du nombre de données à saisir, il est plus simple de mettre en place un traitement automatique pour renseigner ces informations, 
 la saisie manuelle pouvant être réservée aux cas particuliers.
 
-A Caen, nous initialisons ces taux de mixité en nous basant sur les effectifs de l’année passée.
+A Caen, nous initialisons ces taux de mixité en nous basant sur les effectifs de l’année passée en début d'année universitaire,
+puis au 15 décembre, ce sont les effectifs de l'année en cours qui sont utilisés.
+
+Ces données ne sont donc pas synchronisées tous les quarts d'heures comme les autres, mais deux fois par an.
 
 # Architecture
 

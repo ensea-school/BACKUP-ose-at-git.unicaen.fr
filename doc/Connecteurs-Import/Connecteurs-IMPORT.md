@@ -657,10 +657,10 @@ WHERE
   (e.annee_id >= to_number(amio.valeur) OR v_diff_effectifs_etape.source_id = source.id)
 ```
 
-- Chemins pédagogiques et volumes horaires d'enseignement (tables CHEMIN_PEDAGOGIQUE et VOLUME_HORAIRE_ENS)
+- Chemins pédagogiques (table CHEMIN_PEDAGOGIQUE)
 
-Ces tables ne sont pas annualisées. En revanche on peut se baser sur l'année de l'élément pédagogique dont elles dépendent. Le
-principe des filtre reste le même que ci-dessus.
+Cette table n'est pas annualisée. En revanche on peut se baser sur l'année de l'élément pédagogique dont elle dépend. 
+Le principe des filtre reste le même que ci-dessus.
 
 ```sql
 JOIN source ON source.code = 'FCAManager'
@@ -669,6 +669,21 @@ JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
 WHERE 
     (ep.annee_id >= to_number(amio.valeur) OR v_diff_chemin_pedagogique.source_id = source.id)
 ```
+
+
+- Volumes horaires d'enseignement (table VOLUME_HORAIRE_ENS)
+
+Cette table n'est pas annualisée. En revanche on peut se baser sur l'année de l'élément pédagogique dont elle dépend.
+Le principe des filtre reste le même que ci-dessus.
+
+```sql
+JOIN source ON source.code = 'FCAManager'
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
+WHERE 
+    (ep.annee_id >= to_number(amio.valeur) OR v_diff_volume_horaire_ens.source_id = source.id)
+```
+
 
 - Liens et scénarios par liens (tables LIEN et SCENARIO_LIEN)
 
@@ -682,6 +697,34 @@ WHERE
   (SUBSTR(source_code,0,4) >= amio.valeur OR source_id = source.id)
 ```
 
+
+- Taux de mixité FI/FA/FC (ELEMENT_TAUX_REGIMES)
+
+Dans OSE, on peut affecter das taux de mixité FI/FA/FC aux éléments pédagogiques. Ceci peut se faire directement dans le
+logiciel. On peut aussi, comme ce qui se fait à Caen, pré-calculer ces taux sur la base des effectifs de l'année précédente, puis actuelle selon la période.
+
+Les nouveaux taux sont importés continuellement.
+Les modifications de taux ne sont pas faites automatiquement pour éviter de perturnber d'éventuelles mises en paiement.
+Les modifications sont réalisées le 15 décembre.
+
+```sql
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
+WHERE 
+  (IMPORT_ACTION IN ('insert','undelete') AND ep.annee_id >= to_number(amio.valeur))
+```
+
+Et voici la commande permettant d'actualiser les taux de régime, que nous exécutons le 15 décembre :
+
+```sql
+BEGIN
+  UNICAEN_IMPORT.SYNCHRONISATION('ELEMENT_TAUX_REGIMES', 'JOIN element_pedagogique ep ON ep.id = element_pedagogique_id WHERE import_action IN (''update'',''delete'') AND annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT');
+END;
+```
+
+Elle fait un `UPDATE` ou un `DELETE` de tous les taux qui ont évolué pour les années supérieures ou égales à l'année d'import courante.
+Ce filtre présente l'avantage de ne rien modifier des années antérieures à l'année d'import courante.
+A Caen, un simple `job` Oracle déclenche cette commande automatiquement tous les 15 décembre... 
 
 
 

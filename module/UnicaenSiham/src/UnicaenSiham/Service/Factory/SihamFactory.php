@@ -11,8 +11,10 @@ class SihamFactory
     public function __invoke(ContainerInterface $container): Siham
     {
         $sihamClient = $container->get(SihamClient::class);
+        $configSiham = $container->get('Config');
+        $config      = $configSiham['unicaen-siham'];
 
-        return new Siham($sihamClient);
+        return new Siham($sihamClient, $config);
     }
 
     /*    public function __invoke(ContainerInterface $container): SoapClient

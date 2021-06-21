@@ -401,7 +401,7 @@ class IndexController extends AbstractActionController
         $serviceIntervenant = $this->getServiceIntervenant();
         $serviceDossier     = $this->getServiceDossier();
 
-        /*UO*/
+        /*On récupére les UO de type composante*/
         $params = [
             'codeAdministration' => '',
             'listeUO'            => [[
@@ -411,30 +411,10 @@ class IndexController extends AbstractActionController
 
         $uo = $this->siham->recupererListeUO($params);
 
-        /*Statut*/
-        $params  = [
-            'codeAdministration' => 'UCN',
-            'dateObservation'    => date('Y-m-d'),
-            'listeNomenclatures' => ['HJ8'],
-        ];
-        $statuts = $this->siham->recupererNomenclatureRH($params);
 
-        /*modalite*/
-        $params    = [
-            'codeAdministration' => 'UCN',
-            'dateObservation'    => date('Y-m-d'),
-            'listeNomenclatures' => ['UHU'],
-        ];
-        $modalites = $this->siham->recupererNomenclatureRH($params);
-
-        /*position*/
-        $params    = [
-            'codeAdministration' => 'UCN',
-            'dateObservation'    => date('Y-m-d'),
-            'listeNomenclatures' => ['HKK'],
-        ];
-        $positions = $this->siham->recupererNomenclatureRH($params);
-
+        $statuts   = $this->siham->recupererListeStatuts();
+        $modalites = $this->siham->recupererListeModalites();
+        $positions = $this->siham->recupererListePositions();
 
         /**
          * @var Intervenant $intervenant
@@ -444,46 +424,67 @@ class IndexController extends AbstractActionController
         try {
             if ($this->getRequest()->isPost()) {
 
-                /*POSITION ADMINISTRATIVE ===> position*/
+                /*POSITION ADMINISTRATIVE*/
                 $position[] =
-                    ['dateEffetModalite' => $this->getRequest()->getPost('dateEmbauche'),
+                    ['dateEffetPosition' => $this->getRequest()->getPost('anneeUniversitaire'),
                      'position'          => $this->getRequest()->getPost('position-administrative')];
 
                 /*STATUT*/
                 $statut[] =
-                    ['dateEffetStatut' => $this->getRequest()->getPost('dateEmbauche'),
+                    ['dateEffetStatut' => $this->getRequest()->getPost('anneeUniversitaire'),
                      'statut'          => 'C0301'];
 
-                /*MODALITE SERVICE ===> Mouvement*/
+                /*MODALITE SERVICE*/
                 $service[] =
-                    ['dateEffetModalite' => $this->getRequest()->getPost('dateEmbauche'),
+                    ['dateEffetModalite' => $this->getRequest()->getPost('anneeUniversitaire'),
                      'modalite'          => $this->getRequest()->getPost('modaliteService')];
 
+                /*COORDONNEES POSTALES*/
+                $coordonneesPostales[] = [
+                    'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
+                    'complementAdresse'  => $dossierIntervenant->getAdressePrecisions(),
+                    'commune'            => $dossierIntervenant->getAdresseCommune(),
+                    'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
+                    'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
+                    'debutAdresse'       => $this->getRequest()->getPost('anneeUniversitaire'),
+                ];
+
+                /*COORDONNEES BANCAIRES*/
+                $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
+                $coordonnees['dateDebBanque']  = $this->getRequest()->getPost('anneeUniversitaire');
+                $coordonnees['temoinValidite'] = '1';
+                $coordonnees['modePaiement']   = '25';
+                $coordonneesBancaires[]        = $coordonnees;
+
+
+                /*NATIONALITES*/
+                $nationalites[] = [
+                    'nationalite'   => 'FRA',//$dossierIntervenant->getPaysNationalite()->getCode(),
+                    'temPrincipale' => 1,
+                ];
 
                 $params = [
                     'categorieEntree'           => 'ACTIVE',
                     'civilite'                  => '1',
-                    'codeAdministration'        => 'UCN',
-                    'codeEtablissement'         => '0141408E',
-                    'dateEmbauche'              => $this->getRequest()->getPost('dateEmbauche'),
+                    'dateEmbauche'              => $this->getRequest()->getPost('anneeUniversitaire'),
                     'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                     'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
-                    'departementNaissance'      => '',
+                    'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr(1, 2, $dossierIntervenant->getDepartementNaissance()->getCode()) : '',
                     'emploi'                    => $this->getRequest()->getPost('emploi'),
-                    'listeCoordonneesPostales'  => '',
-                    'listeCoordonneesBancaires' => '',
+                    'listeCoordonneesPostales'  => $coordonneesPostales,
+                    'listeCoordonneesBancaires' => $coordonneesBancaires,
                     'listeModalitesServices'    => $service,
                     'listeStatuts'              => $statut,
-                    'listeNationalites'         => '',
+                    'listeNationalites'         => $nationalites,
                     'listeNumerosTelephoneFax'  => '',
                     'listePositions'            => $position,
                     'motifEntree'               => 'PEC',
-                    'nomPatronymique'           => '',
+                    'nomPatronymique'           => $dossierIntervenant->getNomPatronymique(),
                     'nomUsuel'                  => $dossierIntervenant->getNomUsuel(),
-                    'numeroInsee'               => '',
+                    'numeroInsee'               => $dossierIntervenant->getNumeroInsee(),
                     'paysNaissance'             => '',
                     'prenom'                    => $dossierIntervenant->getPrenom(),
-                    'sexe'                      => ($dossierIntervenant->getCivilite() == 'M . ') ? '1' : '2',
+                    'sexe'                      => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
                     'temoinValidite'            => '1',
                     'UO'                        => $this->getRequest()->getPost('uo'),
                 ];
@@ -493,6 +494,8 @@ class IndexController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage("La prise en charge de l'agent est effective / Code Agent SIHAM : $matricule");
             }
         } catch (SihamException $e) {
+            //var_dump($this->siham->getClient()->getLastRequest());
+            //die;
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         } finally {
             return compact('intervenant', 'dossierIntervenant', 'uo', 'statuts', 'modalites', 'positions');

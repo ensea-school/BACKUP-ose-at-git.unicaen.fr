@@ -45,8 +45,11 @@
         <form action="" method="post">
 
             <div class="form-group">
-                <label for="">Date d'embauche souhaitée : </label>
-                <input class="form-control" type="date" name="dateEmbauche" value="" min="2020-01-01" max="2099-12-31"/>
+                <label for="">Année universitaire : </label>
+                <select name="anneeUniversitaire" class="form-control">
+                    <option value="2020-09-01">2020/2021</option>
+                    <option value="2021-09-01">2021/2022</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="">Statut : </label>
@@ -73,31 +76,16 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="">Modalité de service restreint: </label>
+                <label for="">Modalité de service : </label>
                 <select name="modaliteService" class="form-control">
                     <option value="MS100">Temps plein</option>
                 </select>
             </div>
+
             <div class="form-group">
-                <label for="">Modalité full: </label>
-                <select name="modaliteServiceFull" class="form-control">
-                    <?php foreach ($modalites as $code => $libelle): ?>
-                        <option value="<?= $code ?>"> <?= $libelle ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="">Position Administrative restreint : </label>
+                <label for="">Position Administrative : </label>
                 <select name="position-administrative" class="form-control">
                     <option value="ACI01">Affecté dans l'administration</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="">Position Administrative full : </label>
-                <select name="position-administrativeFull" class="form-control">
-                    <?php foreach ($positions as $code => $libelle): ?>
-                        <option value="<?= $code ?>"> <?= $libelle ?></option>
-                    <?php endforeach; ?>
                 </select>
             </div>
 

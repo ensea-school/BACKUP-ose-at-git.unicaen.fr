@@ -9,27 +9,76 @@ use UnicaenSiham\Exception\SihamException;
 
 class Siham
 {
-    const SIHAM_TYPE_ACTION_MODIFICATION          = 'M';
-    const SIHAM_TYPE_ACTION_AJOUT                 = 'A';
-    const SIHAM_TYPE_ACTION_SUPPRESSION           = 'S';
-    const SIHAM_TEMOIN_VALIDITE_DEFAULT           = 1;
-    const SIHAM_TEMOIN_ADRESSE_PRINCIPALE         = 1;
-    const SIHAM_MOTIF_ENTREE_DEFAULT              = 'PEC';
-    const SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE = "TA01";
-    const SIHAM_CODE_TYPOLOGIE_FIXE_PRO           = "TPR";
-    const SIHAM_CODE_TYPOLOGIE_FIXE_PERSO         = "TPE";
-    const SIHAM_CODE_TYPOLOGIE_PORTABLE_PRO       = "PPR";
-    const SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO     = "PPE";
-    const SIHAM_CODE_TYPOLOGIE_EMAIL_PRO          = "MPR";
-    const SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO        = "MPE";
+    const        SIHAM_TYPE_ACTION_MODIFICATION          = 'M';
+    const        SIHAM_TYPE_ACTION_AJOUT                 = 'A';
+    const        SIHAM_TYPE_ACTION_SUPPRESSION           = 'S';
+    const        SIHAM_TEMOIN_VALIDITE_DEFAULT           = 1;
+    const        SIHAM_TEMOIN_ADRESSE_PRINCIPALE         = 1;
+    const        SIHAM_MOTIF_ENTREE_DEFAULT              = 'PEC';
+    const        SIHAM_CODE_TYPOLOGIE_ADRESSE_PRINCIPALE = "TA01";
+    const        SIHAM_CODE_TYPOLOGIE_FIXE_PRO           = "TPR";
+    const        SIHAM_CODE_TYPOLOGIE_FIXE_PERSO         = "TPE";
+    const        SIHAM_CODE_TYPOLOGIE_PORTABLE_PRO       = "PPR";
+    const        SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO     = "PPE";
+    const        SIHAM_CODE_TYPOLOGIE_EMAIL_PRO          = "MPR";
+    const        SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO        = "MPE";
+    public const SIHAM_CODE_NOMENCLATURE_STATUT          = "";
 
     protected $sihamClient;
 
+    protected $codeAdministration;
+
+    protected $codeEtablissement;
+
+    protected $codeNomenclatureStatuts;
+
+    protected $codeNomenclatureGrades;
+
+    protected $codeNomenclatureCorps;
+
+    protected $codeNomenclatureSectionsCnu;
+
+    protected $codeNomenclatureSpecialites;
+
+    protected $codeNomenclatureFamillesProfessionnelles;
+
+    protected $codeNomenclatureQualitesStatutaires;
+
+    protected $codeNomenclatureCategories;
+
+    protected $codeNomenclatureContrats;
+
+    protected $codeNomenclatureModalites;
+
+    protected $codeNomenclaturePositions;
+
+    protected $codeNomenclatureEchelons;
+
+    protected $codeNomenclatureAdministrations;
+
+    protected $codeNomenclatureEtablissements;
 
 
-    public function __construct(SihamClient $sihamClient)
+
+    public function __construct(SihamClient $sihamClient, array $config)
     {
-        $this->sihamClient = $sihamClient;
+        $this->sihamClient                              = $sihamClient;
+        $this->codeEtablissement                        = $config['code-etablissement'];
+        $this->codeAdministration                       = $config['code-administration'];
+        $this->codeNomenclatureGrades                   = (isset($config['code-nomenclature']['grades'])) ? $config['code-nomenclature']['grades'] : '';
+        $this->codeNomenclatureCorps                    = (isset($config['code-nomenclature']['corps'])) ? $config['code-nomenclature']['corps'] : '';
+        $this->codeNomenclatureSectionsCnu              = (isset($config['code-nomenclature']['sections-cnu'])) ? $config['code-nomenclature']['section-cnu'] : '';
+        $this->codeNomenclatureSpecialites              = (isset($config['code-nomenclature']['specialites'])) ? $config['code-nomenclature']['specialites'] : '';
+        $this->codeNomenclatureFamillesProfessionnelles = (isset($config['code-nomenclature']['familles-professionnelles'])) ? $config['code-nomenclature']['familles-professionnelles'] : '';
+        $this->codeNomenclatureQualitesStatutaires      = (isset($config['code-nomenclature']['qualites-statutaires'])) ? $config['code-nomenclature']['qualites-statutaires'] : '';
+        $this->codeNomenclatureCategories               = (isset($config['code-nomenclature']['categories'])) ? $config['code-nomenclature']['categories'] : '';
+        $this->codeNomenclatureContrats                 = (isset($config['code-nomenclature']['contrats'])) ? $config['code-nomenclature']['contrats'] : '';
+        $this->codeNomenclatureStatuts                  = (isset($config['code-nomenclature']['statut'])) ? $config['code-nomenclature']['statut'] : '';
+        $this->codeNomenclatureModalites                = (isset($config['code-nomenclature']['modalites'])) ? $config['code-nomenclature']['modalites'] : '';
+        $this->codeNomenclaturePositions                = (isset($config['code-nomenclature']['positions'])) ? $config['code-nomenclature']['positions'] : '';
+        $this->codeNomenclatureEchelons                 = (isset($config['code-nomenclature']['echelons'])) ? $config['code-nomenclature']['echelons'] : '';
+        $this->codeNomenclatureAdministrations          = (isset($config['code-nomenclature']['administrations'])) ? $config['code-nomenclature']['administrations'] : '';
+        $this->codeNomenclatureEtablissements           = (isset($config['code-nomenclature']['etablissements'])) ? $config['code-nomenclature']['etablissements'] : '';
     }
 
 
@@ -286,7 +335,7 @@ class Siham
         if (empty($type)) {
             throw new SihamException("Vous devez préciser le type de coordonnées à mettre à jour : TPR, TPE etc...");
         }
-        
+
         $dateDebut = new \DateTime();
 
         $paramsWS = ['ParamModifDP' => [
@@ -419,6 +468,7 @@ class Siham
                     'codePays'             => (isset($coordonnees['codePays'])) ? strtoupper($coordonnees['codePays']) : '',
                     'codePostal'           => (isset($coordonnees['codePostal'])) ? strtoupper($coordonnees['codePostal']) : '',
                     'commune'              => (isset($coordonnees['commune'])) ? strtoupper($coordonnees['commune']) : '',
+                    'complementAdresse'    => (isset($coordonnees['complementAdresse'])) ? strtoupper($coordonnees['complementAdresse']) : '',
                     'debutAdresse'         => (isset($coordonnees['debutAdresse'])) ? strtoupper($coordonnees['debutAdresse']) : '',
                     'natureVoie'           => (isset($coordonnees['natureVoie'])) ? strtoupper($coordonnees['natureVoie']) : '',
                     'nomVoie'              => (isset($coordonnees['nomVoie'])) ? strtoupper($coordonnees['nomVoie']) : '',
@@ -516,12 +566,15 @@ class Siham
         if (!empty($params['listeNationalites'])) {
             foreach ($params['listeNationalites'] as $nationalite) {
                 $listeNationalites[] = [
-                    'nationalite' => (isset($nationalite['nationalite'])) ? strtoupper($nationalite['nationalite']) : '',
+                    'nationalite'   => (isset($nationalite['nationalite'])) ? strtoupper($nationalite['nationalite']) : '',
+                    'temPrincipale' => '1',
+
                 ];
             }
         } else {
             $listeNationalites[] = [
-                'nationalite' => '',
+                'nationalite'   => '',
+                'temPrincipale' => '1',
             ];
         }
 
@@ -567,15 +620,15 @@ class Siham
         $paramsWS = ['ParamPEC' => [
             'categorieEntree'           => (isset($params['categorieEntree'])) ? strtoupper($params['categorieEntree']) : '',
             'civilite'                  => (isset($params['civilite'])) ? strtoupper($params['civilite']) : '',
-            'codeAdministration'        => (isset($params['codeAdministration'])) ? strtoupper($params['codeAdministration']) : '',
-            'codeEtablissement'         => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codeAdministration'        => $this->codeAdministration,
+            'codeEtablissement'         => $this->codeEtablissement,
             'dateEmbauche'              => (isset($params['dateEmbauche'])) ? strtoupper($params['dateEmbauche']) : '',
             'dateNaissance'             => (isset($params['dateNaissance'])) ? strtoupper($params['dateNaissance']) : '',
             'villeNaissance'            => (isset($params['villeNaissance'])) ? strtoupper($params['villeNaissance']) : '',
             'departementNaissance'      => (isset($params['departementNaissance'])) ? strtoupper($params['departementNaissance']) : '',
             'emploi'                    => (isset($params['emploi'])) ? strtoupper($params['emploi']) : '',
             'listeCoordonneesPostales'  => $listeCoordonneesPostales,
-            'listeCoordonneesBancaires' => $listeCoordonneesBancaires,
+            'listeCoordonneesbancaires' => $listeCoordonneesBancaires,
             'listeModalitesServices'    => $listeModalitesServices,
             'listeStatuts'              => $listeStatuts,
             'listeNationalites'         => $listeNationalites,
@@ -597,9 +650,7 @@ class Siham
 
             $client = $this->sihamClient->getClient('PECWebService');
             $result = $client->PriseEnChargeAgent($paramsWS);
-            // var_dump($result->return);
-            //var_dump($this->sihamClient->getLastRequest());
-            //die;
+
             if ($result->return->statut == 'ERREUR_GENERALE') {
                 $messageErreur  = '';
                 $messageWarning = '';
@@ -630,6 +681,8 @@ class Siham
         } catch (\SoapFault $e) {
             throw new SihamException($e->faultstring, 0, $e);
         }
+
+        return false;
     }
 
 
@@ -640,8 +693,7 @@ class Siham
      * @return array
      */
 
-    public
-    function recupererNomenclatureRH(array $params)
+    public function recupererNomenclatureRH(array $params)
     {
         $listeNomenclatures = [];
 
@@ -677,8 +729,161 @@ class Siham
 
 
 
-    public
-    function recupererListeUO(array $params)
+    public function recupererListeStatuts($from = '')
+    {
+        $params = ['codeAdministration' => $this->codeAdministration,
+                   'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+                   'listeNomenclatures' => [$this->codeNomenclatureStatuts],];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeGrades($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureGrades],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeModalites($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => $from,
+            'listeNomenclatures' => [$this->codeNomenclatureModalites],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListePositions($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureGrades],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeCorps($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureCorps],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeSectionsCnu($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureSectionsCnu],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeContrats($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureContrats],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeFamillesProfessionnelles($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureFamillesProfessionnelles],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeCategories($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureCategories],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeEchelons($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureEchelons],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeAdminsitrations($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureAdministrations],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeEtablissements($from = '')
+    {
+        $params = [
+            'codeAdministration' => $this->codeAdministration,
+            'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
+            'listeNomenclatures' => [$this->codeNomenclatureEtablissements],
+        ];
+
+        return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeUO(array $params)
     {
         //Traitement des listes unité organisationnelle
         $listeUO = [];
@@ -720,16 +925,20 @@ class Siham
 
 
 
-    public
-    function ibanToSiham($iban)
+    public function formatCoordoonneesBancairesForSiham($iban, $bic)
     {
         //On récupére l'iban et on doit le décompser pour récupérer les informations nécessaire à SIHAM
-        $iban       = 'FR7615589297430269316674054';
-        $payBanque  = substr($iban, 0, 2);
-        $cleCompte  = substr($iban, 2, 2);
-        $codeBanque = substr($iban, 4, 5);
-        $codeAgence = substr($iban, 9, 5);
-        $reste      = substr($iban, 14);
-        $numCompte  = substr($reste, 0, strlen($reste) - 2);
+        $coordonnees               = [];
+        $coordonnees['paysBanque'] = (substr($iban, 0, 2) == 'FR') ? 'FRA' : substr($iban, 0, 2);
+        $coordonnees['codeBanque'] = substr($iban, 4, 5);
+        $coordonnees['codeAgence'] = substr($iban, 9, 5);
+        $reste                     = substr($iban, 14);
+        $coordonnees['numCompte']  = substr($reste, 0, strlen($reste) - 2);
+        $coordonnees['cleCompte']  = substr($iban, strlen($iban) - 2, 2);
+        $coordonnees['IBAN']       = $iban;
+        $coordonnees['SWIFT']      = $bic;
+
+
+        return $coordonnees;
     }
 }

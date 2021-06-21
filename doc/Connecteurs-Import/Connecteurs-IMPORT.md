@@ -703,9 +703,9 @@ WHERE
 Dans OSE, on peut affecter das taux de mixité FI/FA/FC aux éléments pédagogiques. Ceci peut se faire directement dans le
 logiciel. On peut aussi, comme ce qui se fait à Caen, pré-calculer ces taux sur la base des effectifs de l'année précédente, puis actuelle selon la période.
 
-Les nouveaux taux sont importés continuellement.
-Les modifications de taux ne sont pas faites automatiquement pour éviter de perturnber d'éventuelles mises en paiement.
-Les modifications sont réalisées le 15 décembre.
+Les nouveaux taux peuvent être importés en même temps que toutes les autres données issues de l'offre de formation.
+Les modifications de taux ne sont pas faites automatiquement pour éviter de perturnber d'éventuelles mises en paiement,
+elles sont réalisées le 15 décembre.
 
 ```sql
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
@@ -716,15 +716,13 @@ WHERE
 
 Et voici la commande permettant d'actualiser les taux de régime, que nous exécutons le 15 décembre :
 
-```sql
-BEGIN
-  UNICAEN_IMPORT.SYNCHRONISATION('ELEMENT_TAUX_REGIMES', 'JOIN element_pedagogique ep ON ep.id = element_pedagogique_id WHERE import_action IN (''update'',''delete'') AND annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT');
-END;
+```sh
+./bin/ose maj-taux-mixite
 ```
 
 Elle fait un `UPDATE` ou un `DELETE` de tous les taux qui ont évolué pour les années supérieures ou égales à l'année d'import courante.
-Ce filtre présente l'avantage de ne rien modifier des années antérieures à l'année d'import courante.
-A Caen, un simple `job` Oracle déclenche cette commande automatiquement tous les 15 décembre... 
+Ceci présente l'avantage de ne rien modifier des années antérieures à l'année d'import courante.
+Dans la [procédure d'installation](../../INSTALL.md), il est mentionné de lancer cette commande au moyen du `cron` tous les 15 décembre.
 
 
 

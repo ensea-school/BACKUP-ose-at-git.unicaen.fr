@@ -151,17 +151,17 @@ SELECT DISTINCT
         END                                                        z_civilite_id,
     COALESCE(initcap(vind.nom_usage), initcap(ind.nom_famille))     nom_usuel,
     COALESCE (initcap(vind.prenom), initcap(ind.prenom))             prenom,
-    COALESCE(ind.d_naissance, to_date('01/01/1900', 'dd/mm/YYYY')) date_naissance,
+    COALESCE(ind.d_naissance_ow, ind.d_naissance, to_date('01/01/1900', 'dd/mm/YYYY')) date_naissance,
     /* Données identifiantes complémentaires */
     initcap(ind.nom_famille)                                       nom_patronymique,
-    ind.ville_de_naissance                                         commune_naissance,
-    ind.c_pays_naissance                                           z_pays_naissance_id,
-    ind.c_dept_naissance                                           z_departement_naissance_id,
-    ind.c_pays_nationalite                                         z_pays_nationalite_id,
+    COALESCE(ind.ville_de_naissance_ow, ind.ville_de_naissance)    commune_naissance,
+    COALESCE(ind.c_pays_naissance_ow, ind.c_pays_naissance)        z_pays_naissance_id,
+    COALESCE(ind.c_dept_naissance_ow, ind.c_dept_naissance)        z_departement_naissance_id,
+    COALESCE(ind.c_pays_nationalite_ow, ind.c_pays_nationalite)    z_pays_nationalite_id,
     telpro.numero                                                  tel_pro,
-    ind.tel_perso                                                  tel_perso,
+    COALESCE(ind.tel_perso_ow, ind.tel_perso)                      tel_perso,
     indc.email                                                     email_pro,
-    ind.email_perso                                                email_perso,
+    COALESCE(ind.email_perso_ow, ind.email_perso)                  email_perso,
     /* Adresse */
     trim(adr.adresse1 ||
          CASE

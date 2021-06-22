@@ -440,9 +440,16 @@ class IndexController extends AbstractActionController
                      'modalite'          => $this->getRequest()->getPost('modaliteService')];
 
                 /*COORDONNEES POSTALES*/
+                $adresse = '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() . ' ' : '';
+
                 $coordonneesPostales[] = [
                     'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
-                    'complementAdresse'  => $dossierIntervenant->getAdressePrecisions(),
+                    'complementAdresse'  => $adresse,
                     'commune'            => $dossierIntervenant->getAdresseCommune(),
                     'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
                     'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
@@ -456,6 +463,39 @@ class IndexController extends AbstractActionController
                 $coordonnees['modePaiement']   = '25';
                 $coordonneesBancaires[]        = $coordonnees;
 
+                /*COORDONNEES TELEPHONIQUES ET MAIL*/
+                /*'dateDebutTel' => (isset($numero['dateDebutTel'])) ? strtoupper($numero['dateDebutTel']) : '',
+                    'numero'       => (isset($numero['numero'])) ? strtoupper($numero['numero']) : '',
+                    'typeNumero'*/
+                $coordonneesTelMail[] = '';
+                if ($dossierIntervenant->getTelPro()) {
+                    $coordonneesTelMail[] = [
+                        'dateDebutTel' => $this->getRequest()->getPost('anneeUniversitaire'),
+                        'numero'       => $dossierIntervenant->getTelPro(),
+                        'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO,
+                    ];
+                }
+                if ($dossierIntervenant->getTelPerso()) {
+                    $coordonneesTelMail[] = [
+                        'dateDebutTel' => $this->getRequest()->getPost('anneeUniversitaire'),
+                        'numero'       => $dossierIntervenant->getTelPerso(),
+                        'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO,
+                    ];
+                }
+                if ($dossierIntervenant->getEmailPro()) {
+                    $coordonneesTelMail[] = [
+                        'dateDebutTel' => $this->getRequest()->getPost('anneeUniversitaire'),
+                        'numero'       => $dossierIntervenant->getEmailPro(),
+                        'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
+                    ];
+                }
+                if ($dossierIntervenant->getEmailPerso()) {
+                    $coordonneesTelMail[] = [
+                        'dateDebutTel' => $this->getRequest()->getPost('anneeUniversitaire'),
+                        'numero'       => $dossierIntervenant->getEmailPerso(),
+                        'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO,
+                    ];
+                }
 
                 /*NATIONALITES*/
                 $nationalites[] = [
@@ -465,7 +505,7 @@ class IndexController extends AbstractActionController
 
                 $params = [
                     'categorieEntree'           => 'ACTIVE',
-                    'civilite'                  => '1',
+                    'civilite'                  => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
                     'dateEmbauche'              => $this->getRequest()->getPost('anneeUniversitaire'),
                     'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                     'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
@@ -476,7 +516,7 @@ class IndexController extends AbstractActionController
                     'listeModalitesServices'    => $service,
                     'listeStatuts'              => $statut,
                     'listeNationalites'         => $nationalites,
-                    'listeNumerosTelephoneFax'  => '',
+                    'listeNumerosTelephoneFax'  => $coordonneesTelMail,
                     'listePositions'            => $position,
                     'motifEntree'               => 'PEC',
                     'nomPatronymique'           => $dossierIntervenant->getNomPatronymique(),

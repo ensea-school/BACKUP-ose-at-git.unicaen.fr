@@ -9,11 +9,32 @@
 Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
 
+
+
+
+# OSE 15.4 (à venir)
+
+## Nouveautés
+
+* L'année minimale d'import de l'offre de formation est maintenant paramétrable dans les paramètres généraux
+* On peut maintenant modifier les charges d'un élément pédagogique dans l'ODF s'il n'est plus synchronisé (cf. année minimale d'import de l'offre de formation).
+
+## Correction de bug
+
+* Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
+* Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles
+
+
+
+
 # OSE 15.3 (09/06/2021)
 
 ## Correction de bug
 
 * Formule de Poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
+
+
+
 
 
 # OSE 15.2 (08/06/2021)

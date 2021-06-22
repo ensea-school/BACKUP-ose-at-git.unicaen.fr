@@ -623,28 +623,14 @@ synchronisées si les données sont antérieures.
 
 #### Définition de l'année minimale d'import des données d'offre de formation
 
-En base de données, dans la table PARAMETRE, il existe le paramètre `annee_minimale_import_odf`.
-
-Vous pouvez définir comme suit l'année minimale d'import de l'offre de formation :
-
-```sql
-UPDATE PARAMETRE SET VALEUR = '2020' WHERE NOM = 'annee_minimale_import_odf'; 
-```
+Le paramètre général "Année minimale d'import pour l'ODF" vous permet de définir à partir de quelle année
+votre offre de formation se synchronisera. Pour les années précédentes, même si votre connecteur fournit des données,
+rien ne sera modifié dans OSE, sous réserve que vous ayez mis en place les filtres listés ci-dessous.
 
 #### Mise en place des filtres
 
 Reste à exploiter ce paramètre pour filtrer les données import ne venant pas de FCA Manager. Bien entendu, les filtres
 ci-dessous vous sont fournis à titre indicatif. Il vous revient de les adapter à vos besoins.
-
-- Groupes de type de formation (table GROUPE_TYPE_FORMATION) et types de formation (TYPE_FORMATION)
-
-Un même filtre est appliqué pour ces deux tables. La synchro ne se fait que si l'année d'import comfigurée dans les paramètres
-généraux est supérieure à l'année minimale d'import d'ODF.
-
-```sql
-JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
-WHERE OSE_PARAMETRE.GET_ANNEE_IMPORT >= to_number(amio.valeur)
-```
 
 - Etapes, éléments, effectifs et noeuds (tables ETAPE, ELEMENT_PEDAGOGIQUE, EFFECTIFS et NOEUD)
 
@@ -655,8 +641,7 @@ pas inférieure à l'année d'import ou à l'année minimale d'import de l'ODF.
 JOIN source ON source.code = 'FCAManager'
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 WHERE 
-    (annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND annee_id >= to_number(amio.valeur))
-    OR source_id = source.id
+  (annee_id >= to_number(amio.valeur) OR source_id = source.id)
 ```
 
 - Effectifs/étapes (table EFFECTIFS_ETAPE)
@@ -669,23 +654,36 @@ JOIN source ON source.code = 'FCAManager'
 JOIN etape e ON e.id = v_diff_effectifs_etape.etape_id
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 WHERE
-  (e.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND e.annee_id >= to_number(amio.valeur))
-  OR v_diff_effectifs_etape.source_id = source.id
+  (e.annee_id >= to_number(amio.valeur) OR v_diff_effectifs_etape.source_id = source.id)
 ```
 
-- Chemins pédagogiques et volumes horaires d'enseignement (tables CHEMIN_PEDAGOGIQUE et VOLUME_HORAIRE_ENS)
+- Chemins pédagogiques (table CHEMIN_PEDAGOGIQUE)
 
-Ces tables ne sont pas annualisées. En revanche on peut se baser sur l'année de l'élément pédagogique dont elles dépendent. Le
-principe des filtre reste le même que ci-dessus.
+Cette table n'est pas annualisée. En revanche on peut se baser sur l'année de l'élément pédagogique dont elle dépend. 
+Le principe des filtre reste le même que ci-dessus.
 
 ```sql
 JOIN source ON source.code = 'FCAManager'
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
 WHERE 
-    (ep.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND ep.annee_id >= to_number(amio.valeur)) 
-    OR v_diff_chemin_pedagogique.source_id = source.id
+    (ep.annee_id >= to_number(amio.valeur) OR v_diff_chemin_pedagogique.source_id = source.id)
 ```
+
+
+- Volumes horaires d'enseignement (table VOLUME_HORAIRE_ENS)
+
+Cette table n'est pas annualisée. En revanche on peut se baser sur l'année de l'élément pédagogique dont elle dépend.
+Le principe des filtre reste le même que ci-dessus.
+
+```sql
+JOIN source ON source.code = 'FCAManager'
+JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
+JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
+WHERE 
+    (ep.annee_id >= to_number(amio.valeur) OR v_diff_volume_horaire_ens.source_id = source.id)
+```
+
 
 - Liens et scénarios par liens (tables LIEN et SCENARIO_LIEN)
 
@@ -696,24 +694,37 @@ universitaire (exemple : `2018_{}MD22ENTB_M.DM240`).
 JOIN source ON source.code = 'FCAManager'
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
 WHERE 
-  (SUBSTR(source_code,0,4) >= to_char(OSE_PARAMETRE.GET_ANNEE_IMPORT) AND SUBSTR(source_code,0,4) >= amio.valeur)
-  OR source_id = source.id
+  (SUBSTR(source_code,0,4) >= amio.valeur OR source_id = source.id)
 ```
 
-- Taux de répartition FI/A/FC (ELEMENT_TAUX_REGIMES)
 
-Dans OSE, on peut affecter das taux de répartition FI/FA/FC aux éléments pédagogiques. Ceci peut se faire directement dans le
-logiciel. On peut aussi, comme ce qui se fait à Caen, pré-calculer ces taux sur la base des effectifs de l'année précédente.
+- Taux de mixité FI/FA/FC (ELEMENT_TAUX_REGIMES)
 
-On les initialise une fois sans jamais les mettre à jour (sauf si c'est "forcé" manuellement). Du coup, on fait toutes les
-actions d'import sauf `update`.
+Dans OSE, on peut affecter das taux de mixité FI/FA/FC aux éléments pédagogiques. Ceci peut se faire directement dans le
+logiciel. On peut aussi, comme ce qui se fait à Caen, pré-calculer ces taux sur la base des effectifs de l'année précédente, puis actuelle selon la période.
+
+Les nouveaux taux peuvent être importés en même temps que toutes les autres données issues de l'offre de formation.
+Les modifications de taux ne sont pas faites automatiquement pour éviter de perturnber d'éventuelles mises en paiement,
+elles sont réalisées le 15 décembre.
 
 ```sql
-JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
 JOIN parametre amio ON amio.nom = 'annee_minimale_import_odf'
-WHERE IMPORT_ACTION IN ('delete','insert','undelete') 
-   OR (ep.annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT AND ep.annee_id >= to_number(amio.valeur))
+JOIN element_pedagogique ep ON ep.id = element_pedagogique_id
+WHERE 
+  (IMPORT_ACTION IN ('insert','undelete') AND ep.annee_id >= to_number(amio.valeur))
 ```
+
+Et voici la commande permettant d'actualiser les taux de régime, que nous exécutons le 15 décembre :
+
+```sh
+./bin/ose maj-taux-mixite
+```
+
+Elle fait un `UPDATE` ou un `DELETE` de tous les taux qui ont évolué pour les années supérieures ou égales à l'année d'import courante.
+Ceci présente l'avantage de ne rien modifier des années antérieures à l'année d'import courante.
+Dans la [procédure d'installation](../../INSTALL.md), il est mentionné de lancer cette commande au moyen du `cron` tous les 15 décembre.
+
+
 
 ## Traitement automatiques
 

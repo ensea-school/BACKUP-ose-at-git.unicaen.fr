@@ -40,14 +40,12 @@ Compte tenu du nombre de données à saisir, il est plus simple de mettre en pla
 la saisie manuelle pouvant être réservée aux cas particuliers.
 
 A Caen, nous initialisons ces taux de mixité en nous basant sur les effectifs de l’année passée en début d'année universitaire,
-puis au 15 décembre, ce sont les effectifs de l'année en cours qui sont utilisés.
+puis à partir de décembre, ce sont les effectifs de l'année en cours qui sont utilisés.
 
-Ces données ne sont donc pas synchronisées tous les quarts d'heures comme les autres, mais deux fois par an.
+Les taux sont initialisés dès que possible via le processus de synchronisation standard. 
+En revanche, s'il y a une modification du fait d'un changement de la base d'effectifs, celle-ci ne sera faite que le 15 décembre. 
 
 # Architecture
-
-En base de données, les effectifs par élément pédagogique sont stockés dans la table [EFFECTIFS](Création-tables/EFFECTIFS.md), 
-avec en colonnes FI, FA et FC le nombre d’étudiants respectifs.
 
 Les taux de mixité sont stockés dans la table [ELEMENT_TAUX_REGIMES](Création-tables/ELEMENT_TAUX_REGIMES.md).
 Les informations stockées dans [ELEMENT_TAUX_REGIMES](Création-tables/ELEMENT_TAUX_REGIMES.md) sont ensuite transférées 
@@ -64,13 +62,10 @@ Si tout n’était stocké que dans [ELEMENT_PEDAGOGIQUE](Création-tables/ELEME
 
 Les exemples ci-dessous sont tirés du [connecteur Apogée](Apogée/Connecteur.md).
 
-La table [EFFECTIFS](Création-tables/EFFECTIFS.md) est peuplée au moyen de la vue source 
-[SRC_EFFECTIFS](Apogée/SRC_EFFECTIFS.sql).
-
 Il va falloir peupler la table [ELEMENT_TAUX_REGIMES](Création-tables/ELEMENT_TAUX_REGIMES.md). 
 La vue [SRC_ELEMENT_TAUX_REGIMES](Apogée/SRC_ELEMENT_TAUX_REGIMES.sql) va fournir les données nécessaires pour cela.
 
-Ensuite, il faut spécifier, dans la vue [SRC_EFFECTIFS](Apogée/SRC_ELEMENT_PEDAGOGIQUE.sql), qu’il faut recourir à
+Ensuite, il faut spécifier, dans la vue [SRC_ELEMENT_PEDAGOGIQUE](Apogée/SRC_ELEMENT_PEDAGOGIQUE.sql), qu’il faut recourir à
 [ELEMENT_TAUX_REGIMES](Création-tables/ELEMENT_TAUX_REGIMES.md) si la donnée existe. 
 Si au contraire aucune répartition n’est spécifiée, alors un taux de mixité est calculé automatiquement à partie des témoins FI, FA et FC avec:
 - l’un des trois types d’heures ==> 100% sur le taux correspondant;
@@ -92,27 +87,32 @@ Idem pour CALCUL_TAUX_FC avec la FC et CALCUL_TAUX_FA pour la FA.
 
 ### [SRC_ELEMENT_TAUX_REGIMES](Apogée/SRC_ELEMENT_TAUX_REGIMES.sql)
 
-Ligne 5 :
-`to_number(e.annee_id) + 1   annee_id,`
+Cette vue se base sur les données en provenance d'Apogée, en l'occurence sur la table ose_element_effectifs du connecteur.
 
-`+ 1` signifie qu'on prend les effectifs d'une année pour en faire les taux de mixité de l'année suivante.
-A vous d'adapter cela à vos besoins si vous souhaitez un autre mode de calcul.
+Pour chaque élément pédagogique, on récupère la période de paiement courante, donc le mois en cours via `OSE_DIVERS.DATE_TO_PERIODE_CODE(sysdate,ep.annee_id)`.
+Cette période va nous donner l'écart en nombre de mois `PERIODE.ECART_MOIS` par rapport au mois de septembre.
 
-Pour le reste, dans cette vue on se base directement sur `ose_element_effectifs@apoprod`.
+On récupère ensuite dans `aetr` les effectifs de l'année précédente si on est avant décembre et ceux de l'année en cours si on est en décembre ou après.
+On récupère dans `aetraa` les effectifs de l'année précédente.
 
-En fin de vue, nous avons :
+On liste des taux de régime déjà saisis dans OSE, dans `etr`.
+
+Au niveau filtres :
+- On ne s'interesse qu'aux éléments pédagogiques actifs.
+- Il ne faut pas qu'un taux de régime ai déjà été saisi manuellement (sinon la synchronisation écraserait ce qui a été entré dans OSE).
+- Il faut qu'il y ait des effectifs dans au moins une des deux années n-1 ou n, sinon inutile de faire un import.
+
+Ensuite, au niveau des trois lignes 
 ```sql
-JOIN ELEMENT_PEDAGOGIQUE ep ON ep.source_code = aq.z_element_pedagogique_id AND ep.annee_id = aq.annee_id
-WHERE
-NOT EXISTS( -- on évite de remonter des données issus d'autres sources pour le pas risquer de les écraser!!
-SELECT * FROM element_taux_regimes aq_tbl WHERE
-aq_tbl.element_pedagogique_id = ep.id
-AND aq_tbl.source_id <> s.id
-)
+  OSE_DIVERS.CALCUL_TAUX_FI( COALESCE(aetr.effectif_fi,aetraa.effectif_fi), COALESCE(aetr.effectif_fc,aetraa.effectif_fc), COALESCE(aetr.effectif_fa,aetraa.effectif_fa), ep.fi, ep.fc, ep.fa ) taux_fi,
+  OSE_DIVERS.CALCUL_TAUX_FC( COALESCE(aetr.effectif_fi,aetraa.effectif_fi), COALESCE(aetr.effectif_fc,aetraa.effectif_fc), COALESCE(aetr.effectif_fa,aetraa.effectif_fa), ep.fi, ep.fc, ep.fa ) taux_fc,
+  OSE_DIVERS.CALCUL_TAUX_FA( COALESCE(aetr.effectif_fi,aetraa.effectif_fi), COALESCE(aetr.effectif_fc,aetraa.effectif_fc), COALESCE(aetr.effectif_fa,aetraa.effectif_fa), ep.fi, ep.fc, ep.fa ) taux_fa,
 ```
 
-Si des taux de mixité existent déjà et qu'ils ne proviennent pas de la même source, alors il ne faut pas les écraser.
-Sans ce filtre, vos saisies manuellement dans OSE pourraient être remplacées par les données issues de votre connecteur.
+la logique est la suivante :
+- on prend les effectifs issus de aetr et à défaut ceux de l'année n-1, donc aetraa. Ceci permet, d'éviter de supprimer des taux de régime au cas ou
+les effectifs existeraient en n-1 mais pas en année courante (pour un cours du S2 synchronisé en décembre par exemple).
+
 
 ### [SRC_ELEMENT_PEDAGOGIQUE](Apogée/SRC_ELEMENT_PEDAGOGIQUE.sql)
 
@@ -142,23 +142,37 @@ Idem pour FA et FC.
 
 Cela signifie : si on a un taux de mixité, alors on s'appuie dessus, sinon on calcule des taux de mixité à partir des témoins (100%, 50/50 ou 33/33/33).
 
+## Le filtre des taux de mixité
+
+Lors des opérations de synchronisation régulières, il faut pouvoir filtrer les données afin de ne synchroniser que les nouveaux taux, tout en ignorant les
+modifications à apporter aux taux existants.
+
+Vous avez sur la [page de documentation générale des connecteurs](Connecteurs-IMPORT.md#mise-en-place-des-filtres) tous les filtres utiles.
+Le filtre à mettre en place ici est celui de la table ELEMENT_TAUX_REGIMES.
+
+## La mise à jour du 15 décembre
+
+Le 15 décembre, la commande `./bin/ose maj-taux-mixite` lancée via le `cron` actualise sur la base des effectifs de l'année en cours tous les taux précalculés, sans toucher à ceux qui ont été saisis manuellement.
+Vous trouverez dans la [procédure d'installation](../../INSTALL.md#mise-en-place-des-t%C3%A2ches-cron) les éléments nécessaire pour mettre en place cette tâche.
+
+
 ## Conclusion
 
-A Caen, nous nous basons sur les effectifs de l'année passée pour initialiser nos taux de répartition.
-Une fois initialisés, ils ne sont pas synchronisés régulièrement et automatiquemenet comme le reste des données issues des connecteurs.
-Concrètement, la table ELEMENT_TAUX_REGIMES ne fait pas partie du job de synchronisation comme les autres. Sa synhronisation est traitée manuellement,
-en passant une ou deux fois par an par le différentiel d'import 
-(Administration/Synchronisation/Écarts entre les données de l'application et ses sources), puis en cliquant sur le bouton "Synchroniser".
+A Caen, nous nous basons sur les effectifs de l'année passée en début d'année, puis de l'année en cours à partir de décembre pour initialiser nos taux de mixité.
+Ces taux ne doivent idéalement pas trop bouger, car cela impacte les demandes de mise en paiement. Mieux vaut donc les figer le plus tôt possible.
+La synchronisation régulière ne s'occupe donc que des nouveaux taux de mixité, sans jamais modifier les taux existants.
 
 Les taux de mixité sont aussi personnalisés manuellement en passant par "Offre de formation", au besoin.
 
-Ces taux ne doivent idéalement pas bouger toute l'année, car cela impacte les demandes de mise en paiement. Mieux vaut donc les figer le plus tôt possible.
+Le 15 décembre, on actualise les taux sur la base des effectifs de l'année en cours, sans toucher à ceux qui ont été saisis manuellement.
 
-Les effectifs et les éléments pédagogiques sont, eux, synchronisés régulièrement comme le reste des données en import automatique.
+Pour cela il faut mettre en place :
+- La [partie Apogée du connecteur ODF](Apogée/Apogee-OSE-lisezMoi.md) pour avoir `ose_element_effectifs`.
+- La vue source [SRC_ELEMENT_TAUX_REGIMES](Apogée/SRC_ELEMENT_TAUX_REGIMES.sql)
+- La vue source [SRC_ELEMENT_PEDAGOGIQUE](Apogée/SRC_ELEMENT_PEDAGOGIQUE.sql)
+- Le [filtre en import](Connecteurs-IMPORT.md#mise-en-place-des-filtres) sur ELEMENT_TAUX_REGIMES
+- Le job qui va lancer tous les 15 décembre la commande `./bin/ose maj-taux-mixite` (cf. [doc Install](../../INSTALL.md#mise-en-place-des-t%C3%A2ches-cron))
 
-Si vous ne souhaitez pas fonctionner de la même manière, alors il vous faudra adapter les vues sources présentées ci-dessus.
+Si vous ne souhaitez pas fonctionner de la même manière, alors il vous faudra adapter les éléments présentés ci-dessus.
 Attention toutefois à bien peupler les taux de mixité des éléments pédagogiques à partir des taux de régime.
-Le mieux est de ne pas toucher à [SRC_ELEMENT_PEDAGOGIQUE](Apogée/SRC_ELEMENT_PEDAGOGIQUE.sql) et de vous concentrer à fournir 
-les bonnes données dans [SRC_ELEMENT_TAUX_REGIMES](Apogée/SRC_ELEMENT_TAUX_REGIMES.sql).
-
-Attention ausi à bien respecter les règles décrites dans cette page!
+Le mieux est de laisser telle qu'elle [SRC_ELEMENT_PEDAGOGIQUE](Apogée/SRC_ELEMENT_PEDAGOGIQUE.sql).

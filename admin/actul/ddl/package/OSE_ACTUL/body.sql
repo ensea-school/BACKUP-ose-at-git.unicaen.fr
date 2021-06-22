@@ -1,19 +1,20 @@
 CREATE OR REPLACE PACKAGE BODY OSE_ACTUL AS
 
 
-  FUNCTION z_to_code ( z_periode_id_semestre NUMERIC, z_periode_id_ordre NUMERIC ) RETURN VARCHAR2 IS
+  FUNCTION z_to_code ( z_periode_id_semestre VARCHAR2, z_periode_id_ordre NUMERIC ) RETURN VARCHAR2 IS
     pcode VARCHAR2(2);
   BEGIN
-    pcode := CASE
-      WHEN z_periode_id_semestre = 1 AND z_periode_id_ordre < 2 THEN 'S1'
-      WHEN z_periode_id_semestre = 1 AND z_periode_id_ordre = 2 THEN 'S2'
-      WHEN z_periode_id_semestre = 3 AND z_periode_id_ordre < 2 THEN 'S1'
-      WHEN z_periode_id_semestre = 3 AND z_periode_id_ordre = 2 THEN 'S2'
-      WHEN z_periode_id_semestre = 5 AND z_periode_id_ordre < 2 THEN 'S1'
-      WHEN z_periode_id_semestre = 5 AND z_periode_id_ordre = 2 THEN 'S2'
-      WHEN z_periode_id_semestre = 2 THEN 'S2'
-      WHEN z_periode_id_semestre = 4 THEN 'S2'
-      WHEN z_periode_id_semestre = 6 THEN 'S2'
+    pcode := CASE 
+      WHEN z_periode_id_semestre = '1' AND z_periode_id_ordre < 2 THEN 'S1'
+      WHEN z_periode_id_semestre = '1' AND z_periode_id_ordre = 2 THEN 'S2'
+      WHEN z_periode_id_semestre = '3' AND z_periode_id_ordre < 2 THEN 'S1'
+      WHEN z_periode_id_semestre = '3' AND z_periode_id_ordre = 2 THEN 'S2'
+      WHEN z_periode_id_semestre = '5' AND z_periode_id_ordre < 2 THEN 'S1'
+      WHEN z_periode_id_semestre = '5' AND z_periode_id_ordre = 2 THEN 'S2'
+      WHEN z_periode_id_semestre = '2' THEN 'S2'
+      WHEN z_periode_id_semestre = '4' THEN 'S2'
+      WHEN z_periode_id_semestre = '6' THEN 'S2'
+      ELSE NULL
     END;
 
     RETURN pcode;
@@ -21,7 +22,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_ACTUL AS
 
 
 
-  FUNCTION CALC_SEMESTRE( NOEUD_SOURCE_CODE VARCHAR2, z_periode_id_semestre NUMERIC, z_periode_id_ordre NUMERIC ) RETURN VARCHAR2 IS
+  FUNCTION CALC_SEMESTRE( NOEUD_SOURCE_CODE VARCHAR2, z_periode_id_semestre VARCHAR2, z_periode_id_ordre NUMERIC ) RETURN VARCHAR2 IS
     pcode VARCHAR2(2);
     p_sup VARCHAR2(2);
     is_s1_sup BOOLEAN DEFAULT FALSE;

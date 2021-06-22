@@ -11,7 +11,7 @@ $c->println('');
 $c->begin('Transfert des données depuis Actul');
 foreach ($at as $table) {
     $c->print('Table ' . $table . '... ');
-    //$ca->majActTable($table);
+    $ca->majActTable($table);
     $c->println('OK');
 }
 $c->end('Transfert terminé');

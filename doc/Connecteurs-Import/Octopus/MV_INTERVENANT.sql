@@ -134,11 +134,8 @@ SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
     ltrim(TO_CHAR(i.code, '99999999'))                             code,
     'Octopus'                                                      z_source_id,
-    /* Code RH : on alimene le code RH uniquement si la source de l'individu est HARP ou SIHAM*/
-    CASE
-        WHEN (induni.c_source = 'HARP' OR induni.c_source = 'SIHAM')
-            THEN ltrim(TO_CHAR(induni.c_src_individu, '99999999'))
-        ELSE NULL END                                              code_rh,
+    /*Code RH si l'utilisateur est dans SIHAM*/
+    ind.c_rh    												   code_rh,
     indc.ldap_uid                                                  utilisateur_code,
     str2.code                                                      z_structure_id,
     i.z_statut_id                                                  z_statut_id,

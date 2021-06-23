@@ -232,7 +232,8 @@ class ElementPedagogiqueController extends AbstractController
 
         $saisie = $this->params()->fromPost('vhes');
 
-        $tis = $element->getTypesInterventionPossibles();
+        $tis  = $element->getTypesInterventionPossibles();
+        $vhes = [];
         foreach ($tis as $typeIntervention) {
             if (!isset($existsVhes[$typeIntervention->getId()])) {
                 $vhe = $this->getServiceVolumeHoraireEns()->newEntity($element, $typeIntervention);

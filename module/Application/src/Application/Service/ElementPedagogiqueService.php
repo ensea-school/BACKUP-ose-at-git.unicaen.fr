@@ -434,7 +434,7 @@ where rang = 1
             DECLARE
               element_id NUMERIC;
             BEGIN
-              unicaen_import.synchronisation('ELEMENT_PEDAGOGIQUE', 'WHERE code =''' || " . $c->quote($code) . " || ''' AND annee_id = ' || " . $annee . ");
+              unicaen_import.synchronisation('ELEMENT_PEDAGOGIQUE', 'WHERE code =''' || " . $c->quote($code) . " || ''' AND import_action <> ''delete'' AND annee_id = ' || " . $annee . ");
               BEGIN  
                 SELECT id INTO element_id FROM element_pedagogique ep WHERE code = " . $c->quote($code) . " AND ep.annee_id = " . $annee . " AND histo_destruction IS NULL;
             

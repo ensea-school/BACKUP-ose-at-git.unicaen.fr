@@ -3,6 +3,7 @@
 /**
  * @var $this \Application\View\Renderer\PhpRenderer
  * @var $form \Application\Form\Chargens\DifferentielForm
+ * @var $diff array
  */
 
 $title    = "Différentiel entre deux exports des charges d'enseignement";
@@ -30,6 +31,20 @@ echo '</div>';
 
 echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
+
+if (!empty($diff)) {
+
+    foreach ($diff as $dc) {
+        echo '<h2>' . $dc['libelle'] . '</h2>';
+        foreach ($dc['etapes'] as $de) {
+            echo '<h3>' . $de['libelle'] . '</h3>';
+            foreach ($de['elements'] as $ep) {
+                echo '<h4>' . $ep['libelle'] . ' (' . $ep['code'] . ')</h4>';
+                var_dump($ep);
+            }
+        }
+    }
+}
 
 ?>
 <a class="btn btn-default" href="<?= $this->url('chargens'); ?>">

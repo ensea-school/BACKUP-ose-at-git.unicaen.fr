@@ -84,9 +84,50 @@ class ExportProvider
 
 
 
-    public function dataFromFile(string $filename): array
+    public function fromCsv(string $filename): array
     {
+        $data = [];
+        $row  = 1;
+        if (($handle = fopen($filename, "r")) !== false) {
+            fgetcsv($handle, 9999, ";");
+            while (($d = fgetcsv($handle, 9999, ";")) !== false) {
 
+                $l      = [
+                    'annee'                      => $d[0],
+                    'structure-porteuse-code'    => $d[1],
+                    'structure-porteuse-libelle' => $d[2],
+                    'etape-porteuse-code'        => $d[3],
+                    'etape-porteuse-libelle'     => $d[4],
+
+                    'structure-ins-code'    => $d[5],
+                    'structure-ins-libelle' => $d[6],
+                    'etape-ins-code'        => $d[7],
+                    'etape-ins-libelle'     => $d[8],
+
+                    'element-code'       => $d[9],
+                    'element-libelle'    => $d[10],
+                    'periode'            => $d[11],
+                    'discipline-code'    => $d[12],
+                    'discipline-libelle' => $d[13],
+                    'type-heures'        => $d[14],
+                    'type-intervention'  => $d[15],
+
+                    'seuil-ouverture'    => (int)$d[16],
+                    'seuil-dedoublement' => (int)$d[17],
+                    'assiduite'          => (float)$d[18],
+                    'effectif-etape'     => (int)$d[19],
+                    'effectif-element'   => (int)$d[20],
+                    'heures-ens'         => (float)$d[21],
+                    'groupes'            => (float)$d[22],
+                    'heures'             => (float)$d[23],
+                    'hetd'               => (float)$d[24],
+                ];
+                $data[] = $l;
+            }
+            fclose($handle);
+        }
+
+        return $data;
     }
 
 
@@ -131,6 +172,96 @@ class ExportProvider
         $csvModel->setFilename('charges-enseignement.csv');
 
         return $csvModel;
+    }
+
+
+
+    public function diff(array $avant, array $apres): array
+    {
+        $diff = [];
+        // structure porteuse
+        // etape porteuse
+        // element
+        // structure ins
+        // etape ins
+
+        foreach ($avant as $a) {
+            $spc = $a['structure-porteuse-code'];
+            $epc = $a['etape-porteuse-code'];
+            $ec  = $a['element-code'];
+            if (!array_key_exists($spc, $diff)) {
+                $diff[$spc] = [
+                    'libelle' => $a['structure-porteuse-libelle'],
+                    'etapes'  => [],
+                ];
+            }
+            if (!array_key_exists($epc, $diff[$spc]['etapes'])) {
+                $diff[$spc]['etapes'][$epc] = [
+                    'libelle'  => $a['etape-porteuse-libelle'],
+                    'elements' => [],
+                ];
+            }
+            if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec])) {
+                $diff[$spc]['etapes'][$epc]['elements'][$ec] = [
+                    'code'               => $ec,
+                    'libelle'            => $a['element-libelle'],
+                    'periode'            => $a['periode'],
+                    'discipline-code'    => $a['discipline-code'],
+                    'discipline-libelle' => $a['discipline-libelle'],
+                ];
+            }
+            if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec]['avant'])) {
+                $diff[$spc]['etapes'][$epc]['elements'][$ec]['avant'] = [
+                    'seuil-ouverture'    => $a['seuil-ouverture'],
+                    'seuil-dedoublement' => $a['seuil-dedoublement'],
+                    'assiduite'          => $a['assiduite'],
+                    'effectifs-fi'       => 0,
+                    'effectifs-fa'       => 0,
+                    'effectifs-fc'       => 0,
+                ];
+            }
+        }
+
+        foreach ($apres as $a) {
+            $spc = $a['structure-porteuse-code'];
+            $epc = $a['etape-porteuse-code'];
+            $ec  = $a['element-code'];
+            if (!array_key_exists($spc, $diff)) {
+                $diff[$spc] = [
+                    'libelle' => $a['structure-porteuse-libelle'],
+                    'etapes'  => [],
+                ];
+            }
+            if (!array_key_exists($epc, $diff[$spc]['etapes'])) {
+                $diff[$spc]['etapes'][$epc] = [
+                    'libelle'  => $a['etape-porteuse-libelle'],
+                    'elements' => [],
+                ];
+            }
+            if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec])) {
+                $diff[$spc]['etapes'][$epc]['elements'][$ec] = [
+                    'code'               => $ec,
+                    'libelle'            => $a['element-libelle'],
+                    'periode'            => $a['periode'],
+                    'discipline-code'    => $a['discipline-code'],
+                    'discipline-libelle' => $a['discipline-libelle'],
+                ];
+            }
+            if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec]['apres'])) {
+                $diff[$spc]['etapes'][$epc]['elements'][$ec]['apres'] = [
+                    'seuil-ouverture'    => $a['seuil-ouverture'],
+                    'seuil-dedoublement' => $a['seuil-dedoublement'],
+                    'assiduite'          => $a['assiduite'],
+                    'effectifs-fi'       => 0,
+                    'effectifs-fa'       => 0,
+                    'effectifs-fc'       => 0,
+                ];
+            }
+        }
+
+        // var_dump($avant, $apres);
+
+        return $diff;
     }
 
 

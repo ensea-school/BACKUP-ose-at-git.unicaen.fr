@@ -354,19 +354,31 @@ class ChargensController extends AbstractController
     {
         $form = $this->getFormChargensDifferentiel();
 
-        if ($this->getRequest()->isPost()) {
-            $post = array_merge_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
-            );
+        /*
+                $diff = [];
+                if ($this->getRequest()->isPost()) {
+                    $post = array_merge_recursive(
+                        $this->getRequest()->getPost()->toArray(),
+                        $this->getRequest()->getFiles()->toArray()
+                    );
 
-            $form->setData($post);
-            if ($form->isValid()) {
-                $data = $form->getData();
-            }
-        }
+                    $form->setData($post);
+                    if ($form->isValid()) {
+                        $data  = $form->getData();
+                        $pce   = $this->getProviderChargens()->getExport();
+                        $avant = $pce->fromCsv($data['avant']['tmp_name']);
+                        $apres = $pce->fromCsv($data['apres']['tmp_name']);
+                        $diff = $pce->diff($avant, $apres);
+                    }
+                }
+        */
 
-        return compact('form');
+        $pce   = $this->getProviderChargens()->getExport();
+        $avant = $pce->fromCsv(getcwd() . '/data/charges.csv');
+        $apres = $pce->fromCsv(getcwd() . '/data/charges2.csv');
+        $diff  = $pce->diff($avant, $apres);
+
+        return compact('form', 'diff');
     }
 
 

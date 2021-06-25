@@ -25,10 +25,12 @@ $dossierInsee = $form->get('DossierInsee');
     <div class="panel panel-default ">
         <div class="panel-heading">
             INSEE
-            <?php if (!$intervenantDossier->getTblDossier()->getCompletudeInsee()): ?>
-                <span class="label label-warning">A compléter</span>
-            <?php else: ?>
-                <span class="label label-success">Complet</span>
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeInsee()): ?>
+                    <span class="label label-warning">A compléter</span>
+                <?php else: ?>
+                    <span class="label label-success">Complet</span>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
         <div class="panel-body">

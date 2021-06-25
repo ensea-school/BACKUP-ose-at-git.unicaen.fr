@@ -31,10 +31,12 @@ $dossierAutres = $form->get('DossierAutres');
 
             <div class="panel-heading">
                 AUTRES
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutres()): ?>
-                    <span class="label label-warning">A compléter</span>
-                <?php else: ?>
-                    <span class="label label-success">Complet</span>
+                <?php if (!empty($tblDossier)): ?>
+                    <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutres()): ?>
+                        <span class="label label-warning">A compléter</span>
+                    <?php else: ?>
+                        <span class="label label-success">Complet</span>
+                    <?php endif; ?>
                 <?php endif; ?>
 
             </div>

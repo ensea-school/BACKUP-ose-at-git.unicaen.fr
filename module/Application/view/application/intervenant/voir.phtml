@@ -34,6 +34,16 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
     ];
 }
 
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
+    $tabs[] = [
+        'id'            => 'export-rh',
+        'label'         => '<span class="glyphicon glyphicon-export"></span> Export RH',
+        'url'           => $this->url('intervenant/export', ['intervenant' => $intervenant->getId()]),
+        'force-refresh' => true,
+    ];
+}
+
+
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION))) {
     $tabs[] = [
         'id'            => 'suppression',

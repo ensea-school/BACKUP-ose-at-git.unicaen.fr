@@ -48,6 +48,7 @@ return [
             'visualisation-historises' => 'Voir les intervenants historisés',
             'edition'                  => 'Edition',
             'suppression'              => 'Suppression',
+            'exporter'                 => 'Exporter vers SIRH',
             'statut-edition'           => 'Statuts (Édition)',
             'statut-visualisation'     => 'Statuts (Visualisation)',
             'autres-visualisation'     => 'Champs autres (Visualisation)',

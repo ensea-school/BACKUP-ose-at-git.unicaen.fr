@@ -26,6 +26,7 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use ExportRh\Connecteur\Siham\SihamConnecteurAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use LogicException;
 use Application\Entity\Db\Intervenant;
@@ -67,6 +68,7 @@ class  IntervenantController extends AbstractController
     use DossierServiceAwareTrait;
     use ImportProcessusAwareTrait;
     use DifferentielServiceAwareTrait;
+    use SihamConnecteurAwareTrait;
 
 
     public function indexAction()
@@ -499,6 +501,29 @@ class  IntervenantController extends AbstractController
         }
 
         return compact('intervenant', 'tree');
+    }
+
+
+
+    public function exporterAction()
+    {
+        /* Initialisation */
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+        /* Récupération du dossier de l'intervenant */
+        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+        /* Récupération de la validation du dossier si elle existe */
+        $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
+        $typeIntervenant              = $intervenant->getStatut()->getTypeIntervenant()->getCode();
+
+        $test = $this->getSihamConnecteur();
+        $test->test();
+
+
+        return compact('typeIntervenant', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation');
     }
 
 

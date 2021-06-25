@@ -14,7 +14,7 @@ interface ExportRhInterface
      *
      * @return array
      */
-    public function intervenantEquivalents(\Application\Entity\Db\Intervenant $intervenant): Intervenant[];
+    public function intervenantEquivalents(\Application\Entity\Db\Intervenant $intervenant): Intervenant;
 
 
 

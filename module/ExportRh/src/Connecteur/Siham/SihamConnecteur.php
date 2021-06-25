@@ -2,8 +2,9 @@
 
 namespace ExportRh\Connecteur\Siham;
 
-use Application\Entity\Db\Intervenant;
+
 use ExportRh\Connecteur\ExportRhInterface;
+use ExportRh\Entity\Intervenant;
 
 class SihamConnecteur implements ExportRhInterface
 {
@@ -21,16 +22,9 @@ class SihamConnecteur implements ExportRhInterface
 
 
 
-    public function intervenantExists(Intervenant $intervenant): bool
+    public function intervenantEquivalents(\Application\Entity\Db\Intervenant $intervenant): Intervenant
     {
-        // TODO: Implement intervenantExists() method.
-    }
-
-
-
-    public function intervenantDiff(Intervenant $intervenant): array
-    {
-        // TODO: Implement intervenantDiff() method.
+        
     }
 
 

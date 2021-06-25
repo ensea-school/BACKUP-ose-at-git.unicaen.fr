@@ -3,6 +3,8 @@
 namespace ExportRh\Connecteur\Siham;
 
 use Psr\Container\ContainerInterface;
+use UnicaenSiham\Service\Siham;
+use UnicaenSiham\Service\SihamClient;
 
 class SihamConnecteurFactory
 {
@@ -16,6 +18,8 @@ class SihamConnecteurFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $config = $container->get('Config');
+        $client = new Siham();
+        var_dump($client);
 
         $configSiham = [];
         if (isset($config['export-rh']['siham-ws'])) {

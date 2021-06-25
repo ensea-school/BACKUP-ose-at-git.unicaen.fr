@@ -23,6 +23,8 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
 * Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
 * Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles
+* Le dossier intervenant ne se crée en base maintenant uniquement si l'utilisateur appuie sur le bouton 'enregistrer', afin d'éviter de créer des dossiers inutilement lors de la visualisation de la page données perso (#38835)
+
 
 
 

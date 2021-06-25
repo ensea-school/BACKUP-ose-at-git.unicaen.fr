@@ -30,21 +30,21 @@ $dossierBancaire = $form->get('DossierBancaire');
         </div>
         <div class="panel-body">
             <div class="form-group">
-                <?= $this->formLabel($dossierBancaire->get('ribBic')); ?>
-                <div class="input-group cold-md-6 readonly">
-                    <?php
-                    if (!empty($intervenantDossier->getBIC())) {
-                        echo ($viewIban) ? $intervenantDossier->getBIC() : '*************';
-                    }
-                    ?>
-                </div>
-            </div>
-            <div class="form-group">
                 <?= $this->formLabel($dossierBancaire->get('ribIban')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($intervenantDossier->getIBAN())) {
                         echo ($viewIban) ? $intervenantDossier->getIBAN() : '**************************';
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?= $this->formLabel($dossierBancaire->get('ribBic')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getBIC())) {
+                        echo ($viewIban) ? $intervenantDossier->getBIC() : '*************';
                     }
                     ?>
                 </div>

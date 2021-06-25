@@ -39,8 +39,8 @@ $dossierBancaire = $form->get('DossierBancaire');
         <div class="panel-body">
             <?php
 
-            echo $this->formControlGroup($dossierBancaire->get('ribBic'));
             echo $this->formControlGroup($dossierBancaire->get('ribIban'));
+            echo $this->formControlGroup($dossierBancaire->get('ribBic'));
             echo $this->formControlGroup($dossierBancaire->get('ribHorsSepa'));
 
             ?>

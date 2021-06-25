@@ -165,7 +165,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                             $attrs['class'] .= ' historise';
                         }
                         echo $this->getView()->tag('li', $attrs)->open(); ?>
-                        <a href="<?= $this->getView()->url(null, ['intervenant' => $intervenantId]); ?>">
+                        <a href="<?= $this->getView()->url('intervenant/voir', ['intervenant' => $intervenantId]); ?>">
                             <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
                             <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
                             <span class="statut-intervenant"><?= $iStatut->getStatut()->getLibelle() ?></span>

@@ -16,6 +16,7 @@ $actions    = [
     "creer-utilisateur"         => "Création d'un nouvel utilisateur de OSE. Possibilité de créer une fiche intervenant dans la foulée",
     "changement-mot-de-passe"   => "Changement de mot de passe (pour un utilisateur local uniquement)",
     "maj-public-links"          => "Mise à jour des liens vers les répertoires publics des dépendances",
+    "maj-taux-mixite"           => "Met à jour les taux de mixité",
     "clear-cache"               => "Vidage du cache de l'application",
     "test-bdd"                  => "Test d'accès à la base de données",
     "install-bdd"               => "Installe la base de données"
@@ -25,6 +26,8 @@ $actions    = [
     "update-employeur"          => "Mise à jour de la table employeur à partir d'une source (par défault source INSEE)",
     "build-synchronisation"     => "Reconstruction des vues différentielles et des procédures de mise à jour",
     "fichiers-vers-filesystem"  => "Déplace le contenu des fichiers (table FICHIER) vers le système de fichiers",
+    "save-bdd"                  => "Sauvegarde une base de données dans un répertoire du système de fichiers",
+    "load-bdd"                  => "Charge une base de données à partir d'un répertoire du système de fichiers",
 ];
 $actionsDev = [
     "update-ddl"            => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",

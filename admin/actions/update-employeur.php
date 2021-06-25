@@ -38,6 +38,7 @@ $c->println("Nombre de fichier à charger : $nbFiles", $c::COLOR_LIGHT_GREEN);
 $tableEmployeur = $bdd->getTable('EMPLOYEUR');
 
 foreach ($listFiles as $file) {
+
     $num = str_replace('.csv', '', $file);
 
     $c->println("Chargement du fichier employeur N° $i sur $nbFiles");
@@ -108,15 +109,13 @@ foreach ($listFiles as $file) {
         $data['CRITERE_RECHERCHE']       = reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren);
         $datas[]                         = $data;
         $options['histo-user-id']        = $oseId;
-        $options['where']                = 'SIREN LIKE \'' . $num . '%\'';
+        $options['where']                = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'OSE\')';
         $options['soft-delete']          = true;
     }
     $i++;
-
     $tableEmployeur->merge($datas, 'SIREN', $options);
 }
 //On remet l'insertion de l'employeur étrangé
-
 $data                            = [];
 $data['SIREN']                   = '999999999';
 $data['RAISON_SOCIALE']          = 'EMPLOYEUR ETRANGÉ';
@@ -131,6 +130,25 @@ $data['CRITERE_RECHERCHE']       = reduce('Employeur étrangé 999999999');
 $options['histo-user-id']        = $oseId;
 $options['where']                = 'SIREN = \'999999999\'';
 $options['soft-delete']          = true;
+$datas                           = [];
+$datas[]                         = $data;
+$tableEmployeur->merge($datas, 'SIREN', $options);
+
+$data                            = [];
+$data['SIREN']                   = '000000000000';
+$data['RAISON_SOCIALE']          = 'Employeur non présent dans la liste';
+$data['NOM_COMMERCIAL']          = 'Employeur non présent dans la liste';
+$data['SOURCE_CODE']             = '000000000000';
+$data['SOURCE_ID']               = $oseSource;
+$data['IDENTIFIANT_ASSOCIATION'] = null;
+$data['HISTO_DESTRUCTEUR_ID']    = null;
+$data['HISTO_DESTRUCTION']       = null;
+$data['IDENTIFIANT_ASSOCIATION'] = null;
+$data['CRITERE_RECHERCHE']       = reduce('Employeur non présent dans la liste 000000000000');
+$options['histo-user-id']        = $oseId;
+$options['where']                = 'SIREN = \'000000000000\'';
+$options['soft-delete']          = true;
+$datas                           = [];
 $datas[]                         = $data;
 $tableEmployeur->merge($datas, 'SIREN', $options);
 

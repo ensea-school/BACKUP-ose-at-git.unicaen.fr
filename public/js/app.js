@@ -180,7 +180,9 @@ Util = {
             {},
             function ()
             {
-                window.location.reload();
+                //Préférable pour éviter de re-soumettre des posts lors d'un changement d'année
+                window.location = window.location.href;
+                //window.location.reload();
             }
         );
     },

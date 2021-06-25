@@ -47,11 +47,6 @@ class DataGen
 
         /* Nomenclatures fixes et jamais paramétrables */
         [
-            'table'   => 'ADRESSE_NUMERO_COMPL',
-            'context' => ['install', 'update'],
-            'key'     => ['CODE'],
-        ],
-        [
             'table'   => 'CIVILITE',
             'context' => ['install', 'update'],
             'key'     => ['LIBELLE_COURT'],
@@ -182,6 +177,11 @@ class DataGen
 
 
         /* Tables avec paramétrages pré-configurés (certaines colonnes + nouveaux enregistrements) */
+        [
+            'table'   => 'ADRESSE_NUMERO_COMPL',
+            'context' => ['install'],
+            'key'     => ['CODE'],
+        ],
         [
             'table'   => 'IMPORT_TABLES',
             'context' => ['install', 'update'],

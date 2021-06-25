@@ -437,6 +437,21 @@ class StatutIntervenantSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
+            'champ-autre-1'          => [
+                'required' => false,
+            ],
+            'champ-autre-2'          => [
+                'required' => false,
+            ],
+            'champ-autre-3'          => [
+                'required' => false,
+            ],
+            'champ-autre-4'          => [
+                'required' => false,
+            ],
+            'champ-autre-5'          => [
+                'required' => false,
+            ],
         ];
     }
 

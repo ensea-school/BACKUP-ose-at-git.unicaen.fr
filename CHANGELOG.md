@@ -1,5 +1,43 @@
+# Versions stables
+
+[OSE 15.3](#ose-153-09062021)
+
+[OSE 14.20](#ose-1420-09062021)
+
+
 # OSE 16 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
+
+
+
+
+
+# OSE 15.4 (à venir)
+
+## Nouveautés
+
+* L'année minimale d'import de l'offre de formation est maintenant paramétrable dans les paramètres généraux
+* On peut maintenant modifier les charges d'un élément pédagogique dans l'ODF s'il n'est plus synchronisé (cf. année minimale d'import de l'offre de formation).
+
+## Correction de bug
+
+* Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
+* Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles
+* Le dossier intervenant ne se crée en base maintenant uniquement si l'utilisateur appuie sur le bouton 'enregistrer', afin d'éviter de créer des dossiers inutilement lors de la visualisation de la page données perso (#38835)
+
+
+
+
+
+# OSE 15.3 (09/06/2021)
+
+## Correction de bug
+
+* Formule de Poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
+
+
+
+
 
 # OSE 15.2 (08/06/2021)
 
@@ -148,6 +186,17 @@ OSE peut maintenant gérer un référentiel des employeurs, permettant ainsi d'a
 Pour alimenter la table employeur de OSE, vous avez deux possiblités :
  * soit importer votre propre liste d'employeurs via une vue source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
  * soit utiliser le référentiel sirene officiel de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs soit à jour.
+
+
+
+# OSE 14.20 (09/06/2021)
+
+## Correction de bug
+
+* Formule de Poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
+
+
+
 
 # OSE 14.19 (08/06/2021)
 

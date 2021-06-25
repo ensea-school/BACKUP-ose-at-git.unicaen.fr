@@ -11,6 +11,7 @@ use Application\Entity\Db\ElementModulateur;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use UnicaenImport\Entity\Db\Source;
 use Application\Entity\Db\Structure;
 use UnicaenAuth\Assertion\AbstractAssertion;
@@ -26,6 +27,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class OffreDeFormationAssertion extends AbstractAssertion
 {
     use ContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
     protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
     {
@@ -259,9 +261,14 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertSourceSaisie(Source $source, Annee $annee)
     {
-        if ($annee->getId() < $this->getServiceContext()->getAnneeImport()->getId()) {
+        $anneeMinimaleImportOdf = (int)$this->getServiceParametres()->get('annee_minimale_import_odf');
+        if (0 == $anneeMinimaleImportOdf) {
+            $anneeMinimaleImportOdf = $this->getServiceContext()->getAnneeImport()->getId();
+        }
+
+        if ($annee->getId() < $anneeMinimaleImportOdf) {
             return true;
-        };
+        }
 
         return !$source->getImportable();
     }

@@ -66,41 +66,38 @@ class IntervenantDossierController extends AbstractController
         }
         /* Récupération du dossier de l'intervenant */
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-
-        /*Si dossier n'a pas encore d'id alors on le save et on calcule la completude*/
-        if (!$intervenantDossier->getId()) {
-            $this->getServiceDossier()->save($intervenantDossier);
-            $this->updateTableauxBord($intervenantDossier->getIntervenant());
-        }
+        /* Récupération de la validation du dossier si elle existe */
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $tblDossier                   = $intervenantDossier->getTblDossier();
-        if (!$tblDossier) {
-            $this->em()->refresh($intervenantDossier);
+        if (!$tblDossier and $intervenantDossier->getId()) {
+            //$this->em()->refresh($intervenantDossier);
             $tblDossier = $intervenantDossier->getTblDossier();
         }
+        $lastCompleted = (!empty($tblDossier)) ? $tblDossier->getCompletude() : '';
 
-        $lastCompleted = $tblDossier->getCompletude();
         /* Initialisation du formulaire */
         $form = $this->getIntervenantDossierForm($intervenant);
         $form->bind($intervenantDossier);
 
-        //si on vient de post
-        if ($this->getRequest()->isPost()) {
+        //si on vient de post et que le dossier n'est pas encore validé
+        if ($this->getRequest()->isPost() && empty($intervenantDossierValidation)) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
                 /* Traitement du formulaire */
                 $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
-                //Alimentation de la table INDIC_MODIF_DOSSIER
-                $this->getServiceDossier()->updateIndicModifDossier($intervenant, $intervenantDossier);
-                //Recalcul des tableaux de bord nécessaires
-                $this->updateTableauxBord($intervenantDossier->getIntervenant());
-                $this->em()->refresh($tblDossier);
-
                 /*On reinitialise le formulaire car le statut du dossier a
                 pu être changé donc les règles d'affichage ne sont plus les mêmes*/
                 $form = $this->getIntervenantDossierForm($intervenant);
                 $form->bind($intervenantDossier);
+                //Alimentation de la table INDIC_MODIF_DOSSIER
+                $this->getServiceDossier()->updateIndicModifDossier($intervenant, $intervenantDossier);
+                //Recalcul des tableaux de bord nécessaires
+                $this->updateTableauxBord($intervenantDossier->getIntervenant());
+                $this->em()->refresh($intervenantDossier);
+                $tblDossier    = $intervenantDossier->getTblDossier();
+                $lastCompleted = $tblDossier->getCompletude();
+
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
@@ -319,6 +316,7 @@ class IntervenantDossierController extends AbstractController
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'dossier',
+            'service_saisie',
             'piece_jointe_demande',
         ], $intervenant);
     }

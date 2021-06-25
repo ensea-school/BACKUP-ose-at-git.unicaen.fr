@@ -19,11 +19,20 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('annee')); ?>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('annee_import')); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('annee_minimale_import_odf')); ?>
+                        <div class="help-block">
+                            Ce paramètre concerne l'offre de formation et il ne fonctionnera que si vous mettez en place des
+                            <a
+                                    href="https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Connecteurs-IMPORT.md#d%C3%A9finition-de-lann%C3%A9e-minimale-dimport-des-donn%C3%A9es-doffre-de-formation">filtres</a>
+                            qui vont l'exploiter.
+                        </div>
                     </div>
                 </div>
             </div>

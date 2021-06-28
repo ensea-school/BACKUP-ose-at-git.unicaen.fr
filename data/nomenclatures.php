@@ -205,6 +205,14 @@ return [
             'PACKAGE_NAME'       => 'FORMULE_LILLE',
             'VH_PARAM_2_LIBELLE' => 'Code fonction Référentiel',
         ],
+        17 => [
+            'LIBELLE'      => 'Université de la Réunion',
+            'PACKAGE_NAME' => 'FORMULE_REUNION',
+        ],
+        18 => [
+            'LIBELLE'      => 'Université Sorbonne Nouvelle',
+            'PACKAGE_NAME' => 'FORMULE_SORBONNE_NOUVELLE',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

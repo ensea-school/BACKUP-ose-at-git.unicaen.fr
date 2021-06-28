@@ -134,11 +134,8 @@ SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
     ltrim(TO_CHAR(i.code, '99999999'))                             code,
     'Octopus'                                                      z_source_id,
-    /* Code RH : on alimene le code RH uniquement si la source de l'individu est HARP ou SIHAM*/
-    CASE
-        WHEN (induni.c_source = 'HARP' OR induni.c_source = 'SIHAM')
-            THEN ltrim(TO_CHAR(induni.c_src_individu, '99999999'))
-        ELSE NULL END                                              code_rh,
+    /*Code RH si l'utilisateur est dans SIHAM*/
+    ind.c_rh    												   code_rh,
     indc.ldap_uid                                                  utilisateur_code,
     str2.code                                                      z_structure_id,
     i.z_statut_id                                                  z_statut_id,
@@ -151,17 +148,17 @@ SELECT DISTINCT
         END                                                        z_civilite_id,
     COALESCE(initcap(vind.nom_usage), initcap(ind.nom_famille))     nom_usuel,
     COALESCE (initcap(vind.prenom), initcap(ind.prenom))             prenom,
-    COALESCE(ind.d_naissance, to_date('01/01/1900', 'dd/mm/YYYY')) date_naissance,
+    COALESCE(ind.d_naissance_ow, ind.d_naissance, to_date('01/01/1900', 'dd/mm/YYYY')) date_naissance,
     /* Données identifiantes complémentaires */
     initcap(ind.nom_famille)                                       nom_patronymique,
-    ind.ville_de_naissance                                         commune_naissance,
-    ind.c_pays_naissance                                           z_pays_naissance_id,
-    ind.c_dept_naissance                                           z_departement_naissance_id,
-    ind.c_pays_nationalite                                         z_pays_nationalite_id,
+    COALESCE(ind.ville_de_naissance_ow, ind.ville_de_naissance)    commune_naissance,
+    COALESCE(ind.c_pays_naissance_ow, ind.c_pays_naissance)        z_pays_naissance_id,
+    COALESCE(ind.c_dept_naissance_ow, ind.c_dept_naissance)        z_departement_naissance_id,
+    COALESCE(ind.c_pays_nationalite_ow, ind.c_pays_nationalite)    z_pays_nationalite_id,
     telpro.numero                                                  tel_pro,
-    ind.tel_perso                                                  tel_perso,
+    COALESCE(ind.tel_perso_ow, ind.tel_perso)                      tel_perso,
     indc.email                                                     email_pro,
-    ind.email_perso                                                email_perso,
+    COALESCE(ind.email_perso_ow, ind.email_perso)                  email_perso,
     /* Adresse */
     trim(adr.adresse1 ||
          CASE

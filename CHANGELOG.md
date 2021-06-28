@@ -18,11 +18,14 @@ Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
 
 * L'année minimale d'import de l'offre de formation est maintenant paramétrable dans les paramètres généraux
 * On peut maintenant modifier les charges d'un élément pédagogique dans l'ODF s'il n'est plus synchronisé (cf. année minimale d'import de l'offre de formation).
+* Formules de calcul de Sorbonne Nouvelle et de La Réunion
 
 ## Correction de bug
 
 * Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
 * Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles
+* Le dossier intervenant ne se crée en base maintenant uniquement si l'utilisateur appuie sur le bouton 'enregistrer', afin d'éviter de créer des dossiers inutilement lors de la visualisation de la page données perso (#38835)
+
 
 
 

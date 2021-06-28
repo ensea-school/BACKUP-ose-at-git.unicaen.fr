@@ -2,14 +2,17 @@
 
 return [
     'explicit'          => true,
-    'table'             => ['includes' => [
-        'ADRESSE_INTERVENANT',
-        'ADRESSE_STRUCTURE',
-        'INTERVENANT_SAISIE',
-        'DOSSIER',
-        'TBL_DEMS',
+    'table'             => [
+        'includes' => [
+            'ADRESSE_INTERVENANT',
+            'ADRESSE_STRUCTURE',
+            'INTERVENANT_SAISIE',
+            'DOSSIER',
+            'TBL_DEMS',
 
-    ]],
+        ],
+        'excludes' => ['ACT_%'],
+    ],
     'materialized-view' => ['includes' => [
 
     ], 'excludes'                      => ['MV_EXT_SERVICE']],
@@ -19,7 +22,7 @@ return [
     ]],
     'package'           => ['includes' => [
 
-    ]],
+    ], 'excludes'                      => 'OSE_ACTUL'],
     'trigger'           => ['includes' => [
         'F_CONTRAT', 'F_CONTRAT_S', 'INDIC_TRG_MODIF_DOSSIER',
     ]],

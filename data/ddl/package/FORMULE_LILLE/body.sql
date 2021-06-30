@@ -1,4 +1,4 @@
-create or replace PACKAGE BODY FORMULE_LILLE AS
+CREATE OR REPLACE PACKAGE BODY FORMULE_LILLE AS
   decalageLigne NUMERIC DEFAULT 20;
 
 
@@ -243,7 +243,6 @@ create or replace PACKAGE BODY FORMULE_LILLE AS
     -- AD=SI(ESTERREUR(I20);1;I20)
     WHEN c = 'AD' AND v >= 1 THEN
       RETURN vh.taux_service_du;
-      
 
 
 

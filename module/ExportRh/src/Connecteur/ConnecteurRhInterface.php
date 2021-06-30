@@ -4,8 +4,9 @@ namespace ExportRh\Connecteur;
 
 
 use ExportRh\Entity\Intervenant;
+use ExportRh\Entity\IntervenantRH;
 
-interface ExportRhInterface
+interface ConnecteurRhInterface
 {
     /**
      * Recherche dans le SIRH la liste des fiches intervenant qui peuvent correspondre à l'intervenant fourni
@@ -14,7 +15,11 @@ interface ExportRhInterface
      *
      * @return array
      */
-    public function intervenantEquivalents(\Application\Entity\Db\Intervenant $intervenant): Intervenant;
+    public function rechercherIntervenant($nomUsuel, $prenom, $insee, $dateNaissance): ?IntervenantRH;
+
+
+
+    public function trouverIntervenant(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRH;
 
 
 
@@ -23,5 +28,5 @@ interface ExportRhInterface
      *
      * @return bool
      */
-    public function intervenantExport(Intervenant $intervenant): bool;
+    public function exporterIntervenant(Intervenant $intervenant): bool;
 }

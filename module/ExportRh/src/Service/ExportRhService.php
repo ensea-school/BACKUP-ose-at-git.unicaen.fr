@@ -4,7 +4,7 @@ namespace ExportRh\Service;
 
 use Application\Service\AbstractService;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use ExportRh\Entity\IntervenantExportParams;
+use ExportRh\Entity\IntervenantRHExportParams;
 
 /**
  * Description of FonctionReferentiel
@@ -16,16 +16,34 @@ class ExportRhService extends AbstractService
     use ParametresServiceAwareTrait;
 
     /**
-     * @var IntervenantExportParams
+     * @var IntervenantRHExportParams
      */
-    private $intervenantEportParams;
+    private   $intervenantEportParams;
+
+    protected $connecteur;
 
 
 
-    public function getIntervenantExportParams(): IntervenantExportParams
+    public function __construct($connecteur)
+    {
+        $this->connecteur = $connecteur;
+    }
+
+
+
+    public function getIntervenantRh($params)
+    {
+        $this->connecteur->rechercherIntervenantRH($params);
+
+        return true;
+    }
+
+
+
+    public function getIntervenantRHExportParams(): IntervenantRHExportParams
     {
         if (!$this->intervenantEportParams) {
-            $this->intervenantEportParams = new IntervenantExportParams();
+            $this->intervenantEportParams = new IntervenantRHExportParams();
             $iep                          = $this->getServiceParametres()->get('export_rh_intervenant');
             if ($iep) {
                 $this->intervenantEportParams->fromArray((array)json_decode($iep));
@@ -37,7 +55,7 @@ class ExportRhService extends AbstractService
 
 
 
-    public function getIntervenantParamsDescription(): array
+    public function getIntervenantRHParamsDescription(): array
     {
         $desc = [
             'Codifications'         => [

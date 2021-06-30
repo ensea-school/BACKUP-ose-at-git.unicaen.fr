@@ -4,7 +4,6 @@ namespace ExportRh\Connecteur\Siham;
 
 use Psr\Container\ContainerInterface;
 use UnicaenSiham\Service\Siham;
-use UnicaenSiham\Service\SihamClient;
 
 class SihamConnecteurFactory
 {
@@ -13,24 +12,14 @@ class SihamConnecteurFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return LdapConnecteur
+     * @return SihamConnecteur
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $config = $container->get('Config');
-        $client = new Siham();
-        var_dump($client);
+        $siham           = $container->get(Siham::class);
+        $sihamConnecteur = new SihamConnecteur($siham);
 
-        $configSiham = [];
-        if (isset($config['export-rh']['siham-ws'])) {
-            $configSiham = $config['export-rh']['siham-ws'];
-        }
-
-        $service = new SihamConnecteur(
-            $configSiham,
-        );
-
-        return $service;
+        return $sihamConnecteur;
     }
 
 }

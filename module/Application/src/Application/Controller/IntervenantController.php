@@ -519,11 +519,14 @@ class  IntervenantController extends AbstractController
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $typeIntervenant              = $intervenant->getStatut()->getTypeIntervenant()->getCode();
 
-        $test = $this->getSihamConnecteur();
-        $test->test();
+        $sihamConnecteur = $this->getSihamConnecteur();
+        $intervenantRH   = $sihamConnecteur->rechercherIntervenant($intervenant);
+        if (!$intervenant) {
+            $this->flashMessenger()->addErrorMessage("Aucun intervenant n'a été trouvé dans le SIRH");
+        }
 
 
-        return compact('typeIntervenant', 'intervenant', 'intervenantDossier', 'intervenantDossierValidation');
+        return compact('typeIntervenant', 'intervenant', 'intervenantRH', 'intervenantDossier', 'intervenantDossierValidation');
     }
 
 

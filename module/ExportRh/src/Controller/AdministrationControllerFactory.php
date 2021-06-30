@@ -3,6 +3,7 @@
 namespace ExportRh\Controller;
 
 use Psr\Container\ContainerInterface;
+use UnicaenSiham\Service\Siham;
 
 
 /**
@@ -22,7 +23,9 @@ class AdministrationControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new AdministrationController();
+        $siham = $container->get(Siham::class);
+
+        $controller = new AdministrationController($siham);
 
         return $controller;
     }

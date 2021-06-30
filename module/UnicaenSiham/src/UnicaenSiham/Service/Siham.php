@@ -26,6 +26,8 @@ class Siham
 
     protected $sihamClient;
 
+    protected $sihameConfig;
+
     protected $codeAdministration;
 
     protected $codeEtablissement;
@@ -63,6 +65,7 @@ class Siham
     public function __construct(SihamClient $sihamClient, array $config)
     {
         $this->sihamClient                              = $sihamClient;
+        $this->sihameConfig                             = $config;
         $this->codeEtablissement                        = $config['code-etablissement'];
         $this->codeAdministration                       = $config['code-administration'];
         $this->codeNomenclatureGrades                   = (isset($config['code-nomenclature']['grades'])) ? $config['code-nomenclature']['grades'] : '';
@@ -90,6 +93,13 @@ class Siham
 
 
 
+    public function getConfig(): array
+    {
+        return $this->sihameConfig;
+    }
+
+
+
     /**
      * @param array $params Les paramètres possible sont les suivants (au moins l'un doit avoir une valeur) : nomUsuel,
      *                      nomPatronymique, prenom
@@ -104,7 +114,7 @@ class Siham
         $agents = [];
 
         $paramsWS = ['ParamRechercheAgent' => [
-            'codeEtablissement' => (isset($params['codeEtablissement'])) ? $params['codeEtablissement'] : '',
+            'codeEtablissement' => $this->codeEtablissement,
             'nomUsuel'          => (isset($params['nomUsuel'])) ? strtoupper($params['nomUsuel']) : '',
             'nomPatronymique'   => (isset($params['nomPatronymique'])) ? strtoupper($params['nomPatronymique']) : '',
             'prenom'            => (isset($params['prenom'])) ? strtoupper($params['prenom']) : '',
@@ -205,7 +215,7 @@ class Siham
 
 
         $paramsWS = ['ParamListAgent' => [
-            'codeEtablissement'  => (isset($params['codeEtablissement'])) ? $params['codeEtablissement'] : '',
+            'codeEtablissement'  => $this->codeEtablissement,
             'dateFinObservation' => (isset($params['dateFinObservation'])) ? $params['dateFinObservation'] : '',
             'dateObservation'    => (isset($params['dateObservation'])) ? $params['dateObservation'] : '',
             'listeMatricules'    => $listeMatricules,

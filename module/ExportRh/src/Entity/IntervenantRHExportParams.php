@@ -2,7 +2,7 @@
 
 namespace ExportRh\Entity;
 
-class IntervenantExportParams
+class IntervenantRHExportParams
 {
     public bool $code                  = false;
 

@@ -2,6 +2,7 @@
 
 namespace ExportRh\Service;
 
+use ExportRh\Connecteur\Siham\SihamConnecteur;
 use Psr\Container\ContainerInterface;
 
 
@@ -22,7 +23,15 @@ class ExportRhServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $service = new ExportRhService();
+        $config = $container->get('Config');
+
+        switch ($config['export-rh']['connecteur']) {
+            case 'siham':
+                $connecteur = $container->get(SihamConnecteur::class);
+            break;
+        }
+
+        $service = new ExportRhService($connecteur);
 
         return $service;
     }

@@ -1,24 +1,31 @@
 # Versions stables
 
-[OSE 15.3](#ose-153-09062021)
+[OSE 15.4](#ose-154-30062021)
 
 [OSE 14.20](#ose-1420-09062021)
 
+# OSE 17 (à venir)
+Objectif : Connecteur Export OSE => Logiciel RH
+
+
+
+
 
 # OSE 16 (à venir)
-Objectif : Connecteur Export OSE => Logiciel RH + import Actul+
+Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
 
 
 
 
 
-# OSE 15.4 (à venir)
+# OSE 15.4 (30/06/2021)
 
 ## Nouveautés
 
 * L'année minimale d'import de l'offre de formation est maintenant paramétrable dans les paramètres généraux
 * On peut maintenant modifier les charges d'un élément pédagogique dans l'ODF s'il n'est plus synchronisé (cf. année minimale d'import de l'offre de formation).
 * Formules de calcul de Sorbonne Nouvelle et de La Réunion
+* Ajout de la colonne "code RH" à l'export CSV des services
 
 ## Correction de bug
 

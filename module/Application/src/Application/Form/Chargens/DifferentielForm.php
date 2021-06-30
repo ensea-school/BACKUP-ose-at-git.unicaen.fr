@@ -3,6 +3,7 @@
 namespace Application\Form\Chargens;
 
 use Application\Form\AbstractForm;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**
  * Description of DifferentielForm
@@ -11,6 +12,8 @@ use Application\Form\AbstractForm;
  */
 class DifferentielForm extends AbstractForm
 {
+    use ContextServiceAwareTrait;
+
     public function init()
     {
         $this->setAttributes([
@@ -21,9 +24,9 @@ class DifferentielForm extends AbstractForm
 
         $this->add([
             'type'       => 'File',
-            'name'       => 'avant',
+            'name'       => 'avant-fichier',
             'options'    => [
-                'label' => "Premier export des charges",
+
             ],
             'attributes' => [
                 'id'       => 'fichier',
@@ -34,15 +37,39 @@ class DifferentielForm extends AbstractForm
 
         $this->add([
             'type'       => 'File',
-            'name'       => 'apres',
+            'name'       => 'apres-fichier',
             'options'    => [
-                'label' => "Export des charges le plus récent",
+
             ],
             'attributes' => [
                 'id'       => 'fichier',
                 'multiple' => false,
                 'accept'   => 'application/csv',
             ],
+        ]);
+
+        $this->add([
+            'name'       => 'avant',
+            'options'    => [
+                'label' => "Premier export des charges",
+            ],
+            'attributes' => [
+                'class'            => 'input-sm selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
+        ]);
+
+        $this->add([
+            'name'       => 'apres',
+            'options'    => [
+                'label' => "Export des charges le plus récent",
+            ],
+            'attributes' => [
+                'class'            => 'input-sm selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -53,6 +80,50 @@ class DifferentielForm extends AbstractForm
                 'class' => 'btn btn-primary btn-save',
             ],
         ]);
+
+        $scenarios = $this->getScenarioValues();
+
+        $this->get('avant')->setValueOptions($scenarios);
+        $this->get('apres')->setValueOptions($scenarios);
+    }
+
+
+
+    protected function getScenarioValues(): array
+    {
+        $scenarios = ['export' => ['label' => 'A partir d\'un fichier d\'export', 'options' => ['export' => 'Veuillez téléverser un fichier ci-dessous ou bien choisir un scénario']]];
+
+        $structure = $this->getServiceContext()->getStructure();
+        if ($structure) {
+            $where  = 'WHERE s.structure_id IS NULL OR s.structure_id = :structure';
+            $params = ['structure' => $structure->getId()];
+        } else {
+            $where  = '';
+            $params = [];
+        }
+        $sql = "
+        SELECT 
+          DISTINCT c.annee_id, a.LIBELLE annee, s.id scenario_id, s.libelle scenario, s.type, s.structure_id
+        FROM 
+          tbl_chargens c
+          JOIN scenario s ON s.id = c.scenario_id
+          JOIN annee a ON a.id = c.annee_id
+        $where
+        ORDER BY 
+          annee_id, type DESC, scenario
+        ";
+
+        $ss = $this->getServiceContext()->getEntityManager()->getConnection()->fetchAll($sql, $params);
+        foreach ($ss as $s) {
+            if (!isset($scenarios[(int)$s['ANNEE_ID']])) {
+                $scenarios[(int)$s['ANNEE_ID']] = [
+                    'label' => $s['ANNEE'], 'options' => [],
+                ];
+            }
+            $scenarios[(int)$s['ANNEE_ID']]['options'][$s['ANNEE_ID'] . '-' . $s['SCENARIO_ID']] = $s['SCENARIO'];
+        }
+
+        return $scenarios;
     }
 
 

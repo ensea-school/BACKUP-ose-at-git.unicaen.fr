@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
@@ -354,29 +355,40 @@ class ChargensController extends AbstractController
     {
         $form = $this->getFormChargensDifferentiel();
 
-        /*
-                $diff = [];
-                if ($this->getRequest()->isPost()) {
-                    $post = array_merge_recursive(
-                        $this->getRequest()->getPost()->toArray(),
-                        $this->getRequest()->getFiles()->toArray()
-                    );
 
-                    $form->setData($post);
-                    if ($form->isValid()) {
-                        $data  = $form->getData();
-                        $pce   = $this->getProviderChargens()->getExport();
-                        $avant = $pce->fromCsv($data['avant']['tmp_name']);
-                        $apres = $pce->fromCsv($data['apres']['tmp_name']);
-                        $diff = $pce->diff($avant, $apres);
-                    }
+        $diff = null;
+        if ($this->getRequest()->isPost()) {
+            $post = array_merge_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $pce  = $this->getProviderChargens()->getExport();
+
+                if ($data['avant'] == 'export' && isset($data['avant-fichier']['tmp_name'])) {
+                    $avant = $pce->fromCsv($data['avant-fichier']['tmp_name']);
+                } else {
+                    [$avantAnneeId, $avantScenarioId] = explode('-', $data['avant']);
+                    $avantAnnee    = $this->em()->find(Annee::class, $avantAnneeId);
+                    $avantScenario = $this->em()->find(Scenario::class, $avantScenarioId);
+                    $avant         = $pce->fromBdd($avantAnnee, $avantScenario, $this->getServiceContext()->getStructure());
                 }
-        */
 
-        $pce   = $this->getProviderChargens()->getExport();
-        $avant = $pce->fromCsv(getcwd() . '/data/charges.csv');
-        $apres = $pce->fromCsv(getcwd() . '/data/charges2.csv');
-        $diff  = $pce->diff($avant, $apres);
+                if ($data['apres'] == 'export' && isset($data['apres-fichier']['tmp_name'])) {
+                    $apres = $pce->fromCsv($data['apres-fichier']['tmp_name']);
+                } else {
+                    [$apresAnneeId, $apresScenarioId] = explode('-', $data['apres']);
+                    $apresAnnee    = $this->em()->find(Annee::class, $apresAnneeId);
+                    $apresScenario = $this->em()->find(Scenario::class, $apresScenarioId);
+                    $apres         = $pce->fromBdd($apresAnnee, $apresScenario, $this->getServiceContext()->getStructure());
+                }
+
+                $diff = $pce->diff($avant, $apres);
+            }
+        }
 
         return compact('form', 'diff');
     }

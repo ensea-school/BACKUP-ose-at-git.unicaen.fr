@@ -75,7 +75,7 @@ class ExportProvider
                 'hetd'               => (float)$d['HETD'],
             ];
 
-            if ($l['hetd'] === 120.00) $l['hetd'] = '120,00'; // Hack pour éviter un bug inxplicable
+            //if ($l['hetd'] === 120.00) $l['hetd'] = '120,00'; // Hack pour éviter un bug inxplicable
             $data[$i] = $l;
         }
 
@@ -114,13 +114,13 @@ class ExportProvider
 
                     'seuil-ouverture'    => (int)$d[16],
                     'seuil-dedoublement' => (int)$d[17],
-                    'assiduite'          => (float)$d[18],
+                    'assiduite'          => stringToFloat($d[18]),
                     'effectif-etape'     => (int)$d[19],
                     'effectif-element'   => (int)$d[20],
-                    'heures-ens'         => (float)$d[21],
-                    'groupes'            => (float)$d[22],
-                    'heures'             => (float)$d[23],
-                    'hetd'               => (float)$d[24],
+                    'heures-ens'         => stringToFloat($d[21]),
+                    'groupes'            => stringToFloat($d[22]),
+                    'heures'             => stringToFloat($d[23]),
+                    'hetd'               => stringToFloat($d[24]),
                 ];
                 $data[] = $l;
             }
@@ -185,10 +185,15 @@ class ExportProvider
         // structure ins
         // etape ins
 
+        $typesIntervention = $this->chargens->getServiceTypeIntervention()->getList();
+
+        /* On formatte les donées d'avant */
         foreach ($avant as $a) {
             $spc = $a['structure-porteuse-code'];
             $epc = $a['etape-porteuse-code'];
             $ec  = $a['element-code'];
+            $th  = strtolower($a['type-heures']);
+            $ti  = $a['type-intervention'];
             if (!array_key_exists($spc, $diff)) {
                 $diff[$spc] = [
                     'libelle' => $a['structure-porteuse-libelle'],
@@ -197,6 +202,7 @@ class ExportProvider
             }
             if (!array_key_exists($epc, $diff[$spc]['etapes'])) {
                 $diff[$spc]['etapes'][$epc] = [
+                    'code'     => $a['etape-porteuse-code'],
                     'libelle'  => $a['etape-porteuse-libelle'],
                     'elements' => [],
                 ];
@@ -212,20 +218,34 @@ class ExportProvider
             }
             if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec]['avant'])) {
                 $diff[$spc]['etapes'][$epc]['elements'][$ec]['avant'] = [
+                    'effectifs' => ['fi' => 0, 'fa' => 0, 'fc' => 0],
+                    'ti'        => [],
+                ];
+            }
+            if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec]['avant']['ti'][$ti])) {
+                $diff[$spc]['etapes'][$epc]['elements'][$ec]['avant']['ti'][$ti] = [
                     'seuil-ouverture'    => $a['seuil-ouverture'],
                     'seuil-dedoublement' => $a['seuil-dedoublement'],
                     'assiduite'          => $a['assiduite'],
-                    'effectifs-fi'       => 0,
-                    'effectifs-fa'       => 0,
-                    'effectifs-fc'       => 0,
+                    'heures-ens'         => $a['heures-ens'],
+                    'groupes'            => 0,
+                    'heures'             => 0,
+                    'hetd'               => 0,
                 ];
             }
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['avant']['effectifs'][$th]     += $a['effectif-element'];
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['avant']['ti'][$ti]['groupes'] += $a['groupes'];
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['avant']['ti'][$ti]['heures']  += $a['heures'];
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['avant']['ti'][$ti]['hetd']    += $a['hetd'];
         }
 
+        /* On formatte les donées d'après */
         foreach ($apres as $a) {
             $spc = $a['structure-porteuse-code'];
             $epc = $a['etape-porteuse-code'];
             $ec  = $a['element-code'];
+            $th  = strtolower($a['type-heures']);
+            $ti  = $a['type-intervention'];
             if (!array_key_exists($spc, $diff)) {
                 $diff[$spc] = [
                     'libelle' => $a['structure-porteuse-libelle'],
@@ -234,6 +254,7 @@ class ExportProvider
             }
             if (!array_key_exists($epc, $diff[$spc]['etapes'])) {
                 $diff[$spc]['etapes'][$epc] = [
+                    'code'     => $a['etape-porteuse-code'],
                     'libelle'  => $a['etape-porteuse-libelle'],
                     'elements' => [],
                 ];
@@ -249,17 +270,95 @@ class ExportProvider
             }
             if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec]['apres'])) {
                 $diff[$spc]['etapes'][$epc]['elements'][$ec]['apres'] = [
+                    'effectifs' => ['fi' => 0, 'fa' => 0, 'fc' => 0],
+                    'ti'        => [],
+                ];
+            }
+            if (!isset($diff[$spc]['etapes'][$epc]['elements'][$ec]['apres']['ti'][$ti])) {
+                $diff[$spc]['etapes'][$epc]['elements'][$ec]['apres']['ti'][$ti] = [
                     'seuil-ouverture'    => $a['seuil-ouverture'],
                     'seuil-dedoublement' => $a['seuil-dedoublement'],
                     'assiduite'          => $a['assiduite'],
-                    'effectifs-fi'       => 0,
-                    'effectifs-fa'       => 0,
-                    'effectifs-fc'       => 0,
+                    'heures-ens'         => $a['heures-ens'],
+                    'groupes'            => 0,
+                    'heures'             => 0,
+                    'hetd'               => 0,
                 ];
+            }
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['apres']['effectifs'][$th]     += $a['effectif-element'];
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['apres']['ti'][$ti]['groupes'] += $a['groupes'];
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['apres']['ti'][$ti]['heures']  += $a['heures'];
+            $diff[$spc]['etapes'][$epc]['elements'][$ec]['apres']['ti'][$ti]['hetd']    += $a['hetd'];
+        }
+
+        /* On liste les différences */
+        foreach ($diff as $k1 => $d1) {
+            foreach ($d1['etapes'] as $k2 => $d2) {
+                foreach ($d2['elements'] as $ke => $d) {
+                    $rd = [];
+                    if (!array_key_exists('avant', $d)) {
+                        $rd = 'new';
+                    } elseif (!array_key_exists('apres', $d)) {
+                        $rd = 'old';
+                    } else {
+                        $typeHeures = array_keys($d['avant']['effectifs']);
+
+                        foreach ($typeHeures as $typeHeure) {
+                            if ($d['avant']['effectifs'][$typeHeure] != $d['apres']['effectifs'][$typeHeure]) {
+                                $rd['effectifs'][$typeHeure] = true;
+                            }
+                        }
+
+                        foreach ($typesIntervention as $typeIntervention) {
+                            $ti = $typeIntervention->getCode();
+
+                            $hasAvant = isset($d['avant']['ti'][$ti]);
+                            $hasApres = isset($d['apres']['ti'][$ti]);
+
+                            if ($hasAvant && !$hasApres) {
+                                $rd['ti'][$ti] = 'old';
+                            } elseif (!$hasAvant && $hasApres) {
+                                $rd['ti'][$ti] = 'new';
+                            } elseif ($hasAvant && $hasApres) {
+                                $rdti = [];
+                                $keys = array_keys($d['avant']['ti'][$ti]);
+                                foreach ($keys as $k) {
+                                    if ($d['avant']['ti'][$ti][$k] != $d['apres']['ti'][$ti][$k]) {
+                                        $rdti[$k] = true;
+                                    }
+                                }
+                                if (!empty($rdti)) {
+                                    $rd['ti'][$ti] = $rdti;
+                                }
+                            }
+                        }
+                    }
+
+                    $diff[$k1]['etapes'][$k2]['elements'][$ke]['diff'] = $rd;
+                }
             }
         }
 
-        // var_dump($avant, $apres);
+        /* On retire tout ce qui est identique */
+        foreach ($diff as $k1 => $d1) {
+            foreach ($d1['etapes'] as $k2 => $d2) {
+                $hasDiff = false;
+                foreach ($d2['elements'] as $ke => $d) {
+                    if (empty($d['diff'])) {
+                        unset($diff[$k1]['etapes'][$k2]['elements'][$ke]);
+                    }
+//                    if ($ke != '1DUCUE6') { // TEST TEST TEST TEST TEST TEST TEST
+//                        unset($diff[$k1]['etapes'][$k2]['elements'][$ke]);
+//                    }
+                }
+                if (empty($diff[$k1]['etapes'][$k2]['elements'])) {
+                    unset($diff[$k1]['etapes'][$k2]);
+                }
+            }
+            if (empty($diff[$k1]['etapes'])) {
+                unset($diff[$k1]);
+            }
+        }
 
         return $diff;
     }

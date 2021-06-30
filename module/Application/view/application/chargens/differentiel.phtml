@@ -6,6 +6,8 @@
  * @var $diff array
  */
 
+use Application\Filter\StringFromFloat;
+
 $title    = "Différentiel entre deux exports des charges d'enseignement";
 $uploader = $this->uploader();
 
@@ -21,29 +23,137 @@ echo '<div class="row">';
 
 echo '<div class="col-md-6">';
 echo $this->formControlGroup($form->get('avant'));
+echo $this->formControlGroup($form->get('avant-fichier'));
 echo '</div>';
 
 echo '<div class="col-md-6">';
 echo $this->formControlGroup($form->get('apres'));
+echo $this->formControlGroup($form->get('apres-fichier'));
 echo '</div>';
 
 echo '</div>';
-
 echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
 
-if (!empty($diff)) {
+?>
+<script type="text/javascript">
 
-    foreach ($diff as $dc) {
-        echo '<h2>' . $dc['libelle'] . '</h2>';
-        foreach ($dc['etapes'] as $de) {
-            echo '<h3>' . $de['libelle'] . '</h3>';
-            foreach ($de['elements'] as $ep) {
-                echo '<h4>' . $ep['libelle'] . ' (' . $ep['code'] . ')</h4>';
-                var_dump($ep);
+    $(function () {
+
+        $("[name='avant'").change(function () {
+            var value = $(this).val();
+            if (value == 'export') {
+                $("[name=avant-fichier").show();
+            } else {
+                $("[name=avant-fichier").hide();
             }
-        }
+        });
+
+        $("[name='apres'").change(function () {
+            var value = $(this).val();
+            if (value == 'export') {
+                $("[name=apres-fichier").show();
+            } else {
+                $("[name=apres-fichier").hide();
+            }
+        });
+
+        $("[name='avant'").change();
+        $("[name='apres'").change();
+
+    });
+
+</script>
+<?php
+
+$tks = [
+    'seuil-ouverture'    => 'Seuil d\'ouverture',
+    'seuil-dedoublement' => 'Seuil de dédoublement',
+    'assiduite'          => 'Assiduité',
+    'heures-ens'         => 'Heures d\'enseignement',
+    'groupes'            => 'Groupes',
+    'heures'             => 'Heures',
+    'hetd'               => 'HETD',
+];
+
+if (null === $diff) {
+    echo '<br /><div class="alert alert-warning">Veuillez choisir vos exports de charges d\'enseignement...</div>';
+} elseif (empty($diff)) {
+    echo '<br /><div class="alert alert-info">Il n\'y a aucune différence entre les deux exports de charges</div>';
+} else {
+    echo '<br /><div class="well">';
+    $first = true;
+    echo '<ul class="nav nav-tabs" role="tablist">';
+    foreach ($diff as $dk => $dc) {
+        echo '<li role="presentation"' . ($first ? ' class="active"' : '') . '><a href="#composante-' . $dk . '" aria-controls="home" role="tab" data-toggle="tab">' . $dc['libelle'] . '</a></li>';
+        $first = false;
     }
+    echo '</ul>';
+    echo '<div class="tab-content">';
+
+    foreach ($diff as $dk => $dc) {
+        echo '<div role="tabpanel" class="tab-pane active" id="composante-' . $dk . '">';
+        echo '<br /><h2>' . $dc['libelle'] . '</h2>';
+        foreach ($dc['etapes'] as $de) {
+            echo '<div class="panel panel-default">';
+            echo '<div class="panel-heading">';
+            echo '<h3 class="panel-title"><span class="label label-default">' . $de['code'] . '</span> ' . $de['libelle'] . '</h3>';
+            echo '</div>';
+            echo '<div class="panel-body">';
+            foreach ($de['elements'] as $ep) {
+                $diff = $ep['diff'];
+                echo '<h4><span class="label label-default">' . $ep['code'] . '</span> ' . $ep['libelle'] . '</h4>';
+                echo '<div style="margin-left:2em;">';
+                if (is_array($diff)) {
+                    echo '<table class="table table-bordered table-condensed table-extra-condensed table-hover">';
+                    echo '<tr><th style="width:50%">Différentiel</th><th style="width:25%">Ancien</th><th style="width:25%">Nouveau</th></tr>';
+                    if (isset($diff['effectifs'])) {
+                        echo '<tr><th>Effectifs</th><td></td><td></td></tr>';
+                        foreach ($diff['effectifs'] as $th => $null) {
+                            echo '<tr><th style="padding-left:2em">' . strtoupper($th) . '</th>'
+                                . '<td>' . StringFromFloat::run($ep['avant']['effectifs'][$th], false) . '</td>'
+                                . '<td>' . StringFromFloat::run($ep['apres']['effectifs'][$th], false) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+                    if (isset($diff['ti'])) {
+                        foreach ($diff['ti'] as $ti => $tdata) {
+                            if (is_array($tdata)) {
+                                echo '<tr><th>' . $ti . '</th><td></td><td></td></tr>';
+                                foreach ($tdata as $tk => $null) {
+                                    echo '<tr><th style="padding-left:2em">' . (isset($tks[$tk]) ? $tks[$tk] : $tk) . '</th>'
+                                        . '<td>' . StringFromFloat::run($ep['avant']['ti'][$ti][$tk], false) . '</td>'
+                                        . '<td>' . StringFromFloat::run($ep['apres']['ti'][$ti][$tk], false) . '</td>'
+                                        . '</tr>';
+                                }
+                            } else {
+                                echo '<tr><th>' . $ti . '</th><td colspan="2">';
+                                if ($tdata == 'new') {
+                                    echo '<span class="label label-info">Nouveau type d\'intervention</span>';
+                                } elseif ($tdata == 'old') {
+                                    echo '<span class="label label-warning">Ancien type d\'intervention</span>';
+                                }
+                                echo '</td></tr>';
+                            }
+                        }
+                    }
+                    echo '</table>';
+                } else {
+                    if ($diff == 'new') {
+                        echo '<p class="alert alert-info">Pas de charges pour comparaison dans le premier export </p >';
+                    } elseif ($diff == 'old') {
+                        echo '<p class="alert alert-warning"> Pas de charges pour comparaison dans l\'export le plus récent </p >';
+                    }
+                }
+                echo '</div > ';
+            }
+            echo '</div > ';
+            echo '</div > ';
+        }
+        echo '</div > ';
+    }
+    echo '</div > ';
+    echo '</div > ';
 }
 
 ?>

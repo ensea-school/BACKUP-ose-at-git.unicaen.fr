@@ -36,7 +36,11 @@ class MigrationESCodeRh extends AbstractMigration
 
     public function action(string $contexte)
     {
-        $this->manager->getBdd()->exec('DROP MATERIALIZED VIEW MV_EXT_SERVICE');
+        try {
+            $this->manager->getBdd()->exec('DROP MATERIALIZED VIEW MV_EXT_SERVICE');
+        } catch (\Exception $e) {
+            // rien à faire si la MV n'existait pas...
+        }
     }
 
 }

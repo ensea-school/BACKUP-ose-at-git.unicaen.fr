@@ -1,6 +1,6 @@
 # Versions stables
 
-[OSE 15.4](#ose-154-30062021)
+[OSE 15.5](#ose-155-01072021)
 
 [OSE 14.20](#ose-1420-09062021)
 
@@ -13,6 +13,14 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 # OSE 16 (à venir)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
+
+
+
+# OSE 15.5 (01/07/2021)
+
+## Correction de bug
+
+* Correction d'un problème lié à la v15.4 : l'ajout d'une colonne dans l'export des service mettait en erreur la vue matérisée mv_ext_service.  
 
 
 

@@ -20,7 +20,7 @@ class MigrationESCodeRh extends AbstractMigration
     public function utile(): bool
     {
         try {
-            $oa->getBdd()->exec('SELECT intervenant_code_rh FROM v_export_service WHERE 1=0');
+            $this->manager->getBdd()->exec('SELECT intervenant_code_rh FROM v_export_service WHERE 1=0');
 
             // colonne trouvée => pas besoin de pêter mv_ext_service
             return false;

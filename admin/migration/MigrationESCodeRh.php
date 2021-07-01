@@ -12,7 +12,7 @@ class MigrationESCodeRh extends AbstractMigration
 
     public function description(): string
     {
-        return "Suppression de la vue métérialisée MX_EXT_SERVICE, qui sera recréée ensuite avec une nouvelle colonne";
+        return "Suppression de la vue métérialisée MV_EXT_SERVICE, qui sera recréée ensuite avec une nouvelle colonne";
     }
 
 

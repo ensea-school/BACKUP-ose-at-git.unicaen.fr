@@ -20,7 +20,8 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 
 ## Correction de bug
 
-* Retour de la vue matérialisée MV_EXT_SERVICE, qui avait disparue de OSE par erreur, et correction d'un problème de MAJ depuis la 15.4 qui provoquait une erreur suite à la l'ajout d'une colonne sur l'export des services.  
+* Retour de la vua matérialisée MV_EXT_SERVICE qui avait disparu de OSE par erreur depuis la V15
+* Correction d'un problème de MAJ de MV_EXT_SERVICE depuis la 15.4 qui provoquait une erreur suite à la l'ajout d'une colonne sur l'export des services.  
 
 
 

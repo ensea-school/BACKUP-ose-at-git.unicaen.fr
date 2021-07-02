@@ -4,9 +4,9 @@ namespace ExportRh\Connecteur\Siham;
 
 
 use ExportRh\Connecteur\ConnecteurRhInterface;
-use ExportRh\Entity\Intervenant;
-use ExportRh\Entity\IntervenantRH;
+use ExportRh\Entity\IntervenantRh;
 use UnicaenSiham\Service\Siham;
+
 
 class SihamConnecteur implements ConnecteurRhInterface
 {
@@ -22,61 +22,65 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function rechercherIntervenant($nom, $prenom, $insee, $dateNaissance): ?IntervenantRH
+    public function rechercherIntervenantRh($nomUsuel = '', $prenom = '', $insee = ''): array
     {
-        $params        = [
-            'nomUsuel' => $nom,
-        ];
-        $result        = $this->siham->rechercherAgent($params);
-        $intervenantRH = new IntervenantRH();
-        $intervenantRH->setNomUsuel($result->getNomUsuel());
+        $params = [
+            'nomUsuel'    => $nomUsuel,
+            'prenom'      => $prenom,
+            'numeroInsee' => $insee,
 
-        return $intervenantRH;
+        ];
+
+        $listIntervenantRh = [];
+        //$result        = $this->siham->rechercherAgent($params);
+        $result = $this->siham->recupererListeAgents($params);
+
+        if (!empty($result)) {
+            foreach ($result as $v) {
+                $intervenantRh = new IntervenantRh();
+                $intervenantRh->setNomUsuel($v->getNomUsuel());
+                $intervenantRh->setPrenom($v->getPrenom());
+                $intervenantRh->setCodeRh($v->getMatricule());
+                $dateNaissance = new \DateTime($v->getDateNaissance());
+                $intervenantRh->setDateNaissance($dateNaissance);
+                $intervenantRh->setNumeroInsee($v->getNumeroInsee());
+                $listIntervenantRh[] = $intervenantRh;
+            }
+        }
+
+
+        return $listIntervenantRh;
     }
 
 
 
-    public function trouverIntervenant(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRH
+    public function trouverIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh
     {
 
-        $intervenantRH = null;
+        $intervenantRh = null;
         if (!empty($intervenant->getCodeRh())) {
             $params        =
                 [
                     'listeMatricules' => [$intervenant->getCodeRh()],
                 ];
             $agent         = $this->siham->recupererDonneesPersonnellesAgent($params);
-            $intervenantRH = new IntervenantRH();
-            $intervenantRH->setNomUsuel($agent->getNomUsuel());
-            $intervenantRH->setPrenom($agent->getPrenom());
-            $intervenantRH->setTelPerso($agent->getTelephonePerso());
-            $intervenantRH->setTelPro($agent->getTelephonePro());
+            $intervenantRh = new IntervenantRH();
+            $intervenantRh->setNomUsuel($agent->getNomUsuel());
+            $intervenantRh->setPrenom($agent->getPrenom());
+            $intervenantRh->setDateNaissance(new \DateTime($agent->getDateNaissance()));
+            $intervenantRh->setTelPerso($agent->getTelephonePerso());
+            $intervenantRh->setTelPro($agent->getTelephonePro());
+            $intervenantRh->setNumeroInsee($agent->getNumeroInsee());
         }
 
-        return $intervenantRH;
+        return $intervenantRh;
     }
 
 
 
-    public
-    function prendreEnChargeIntervenant(\Application\Entity\Db\Intervenant $intervenant): Intervenant
+    public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh
     {
 
     }
 
-
-
-    public
-    function exporterIntervenant(Intervenant $intervenant): bool
-    {
-        // TODO: Implement intervenantExport() method.
-    }
-
-
-
-    public
-    function test()
-    {
-        echo 'test réussi';
-    }
 }

@@ -7,12 +7,13 @@ use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Departement;
 use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Pays;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Voirie;
 
-class IntervenantRH
+class IntervenantRh
 {
     public ?string             $code;
 
@@ -97,6 +98,32 @@ class IntervenantRH
     public ?\DateTime          $validiteFin;
 
     public ?string             $sourceCode;
+
+    public ?Intervenant        $intervenant;
+
+
+
+    /**
+     * @return Intervenant|null
+     */
+    public function getIntervenant(): ?Intervenant
+    {
+        return $this->intervenant;
+    }
+
+
+
+    /**
+     * @param Intervenant|null $intervenant
+     *
+     * @return IntervenantRh
+     */
+    public function setIntervenant(?Intervenant $intervenant): IntervenantRh
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
+    }
 
 
 

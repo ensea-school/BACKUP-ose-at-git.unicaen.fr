@@ -33,27 +33,28 @@ class AdministrationController extends AbstractController
     public function chercherIntervenantRhAction(): array
     {
         $connecteurRh = $this->getExportRhService();
-        $connecteurRh->getIntervenantRh([]);
 
         $params = [
             'nomUsuel' => '',
             'prenom'   => '',
         ];
 
-        $agents = [];
+        $listIntervenantRh = [];
+
         try {
 
             if ($this->getRequest()->isPost()) {
 
-                $params['nomUsuel'] = $this->getRequest()->getPost('nomUsuel');
-                $params['prenom']   = $this->getRequest()->getPost('prenom');
-                //$agents             = $this->siham->rechercherAgent($params);
+                $nomUsuel          = $this->getRequest()->getPost('nomUsuel');
+                $prenom            = $this->getRequest()->getPost('prenom');
+                $insee             = $this->getRequest()->getPost('insee');
+                $listIntervenantRh = $connecteurRh->getListIntervenantRh($nomUsuel, $prenom, $insee);
             }
         } catch (SihamException $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return compact('agents');
+        return compact('listIntervenantRh');
     }
 
 }

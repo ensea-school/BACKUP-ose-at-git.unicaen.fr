@@ -162,7 +162,7 @@ class Siham
         $agents = [];
 
         $paramsWS = ['ParamRecupListeAgents' => [
-            'codeEtablissement'      => (isset($params['codeEtablissement'])) ? $params['codeEtablissement'] : '',
+            'codeEtablissement'      => $this->codeEtablissement,
             'nomUsuel'               => (isset($params['nomUsuel'])) ? strtoupper($params['nomUsuel']) : '',
             'nomPatronymique'        => (isset($params['nomPatronymique'])) ? strtoupper($params['nomPatronymique']) : '',
             'prenom'                 => (isset($params['prenom'])) ? strtoupper($params['prenom']) : '',
@@ -177,6 +177,7 @@ class Siham
         try {
             $client = $this->sihamClient->getClient('ListeAgentsWebService');
             $result = $client->recupListeAgents($paramsWS);
+        
             if (isset($result->return)) {
                 if (is_array($result->return)) {
                     foreach ($result->return as $values) {

@@ -3,8 +3,7 @@
 namespace ExportRh\Connecteur;
 
 
-use ExportRh\Entity\Intervenant;
-use ExportRh\Entity\IntervenantRH;
+use ExportRh\Entity\IntervenantRh;
 
 interface ConnecteurRhInterface
 {
@@ -15,18 +14,14 @@ interface ConnecteurRhInterface
      *
      * @return array
      */
-    public function rechercherIntervenant($nomUsuel, $prenom, $insee, $dateNaissance): ?IntervenantRH;
+    public function rechercherIntervenantRh($nomUsuel = '', $prenom = '', $insee = ''): array;
 
 
 
-    public function trouverIntervenant(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRH;
+    public function trouverIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh;
 
 
 
-    /**
-     * @param Intervenant $intervenant
-     *
-     * @return bool
-     */
-    public function exporterIntervenant(Intervenant $intervenant): bool;
+    public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh;
+
 }

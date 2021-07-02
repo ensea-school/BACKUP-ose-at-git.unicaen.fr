@@ -17,19 +17,4 @@ class SihamClientFactory
         return new SihamClient($wsdl, $soapParams);
     }
 
-    /*    public function __invoke(ContainerInterface $container): SoapClient
-        {
-            
-            $moduleConfig = $container->get(ModuleConfig::class);
-    
-            $soapClientConfig = $moduleConfig->getSoapClientConfig();
-    
-            return new SoapClient($soapClientConfig);
-        }
-    
-    
-    
-    
-    
-    */
 }

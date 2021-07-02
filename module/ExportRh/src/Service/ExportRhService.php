@@ -3,6 +3,7 @@
 namespace ExportRh\Service;
 
 use Application\Service\AbstractService;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
 
@@ -14,6 +15,7 @@ use ExportRh\Entity\IntervenantRHExportParams;
 class ExportRhService extends AbstractService
 {
     use ParametresServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
 
     /**
      * @var IntervenantRHExportParams
@@ -31,11 +33,31 @@ class ExportRhService extends AbstractService
 
 
 
-    public function getIntervenantRh($params)
+    public function getListIntervenantRh($nomUsuel, $prenom, $insee)
     {
-        $this->connecteur->rechercherIntervenantRH($params);
 
-        return true;
+        $listIntervenantRh  = $this->connecteur->rechercherIntervenantRH($nomUsuel, $prenom, $insee);
+        $intervenantService = $this->getServiceIntervenant();
+        if (!empty($listIntervenantRh)) {
+            foreach ($listIntervenantRh as $key => $intervenantRh) {
+                $intervenant = $intervenantService->getByCodeRh($intervenantRh->getCodeRh());
+                if ($intervenant) {
+                    $intervenantRh->setIntervenant($intervenant);
+                    $listIntervenantRh[$key] = $intervenantRh;
+                }
+            }
+        }
+
+        return $listIntervenantRh;
+    }
+
+
+
+    public function getIntervenantRh($intervenant)
+    {
+        $intervenantRh = $this->connecteur->trouverIntervenantRh($intervenant);
+
+        return $intervenantRh;
     }
 
 

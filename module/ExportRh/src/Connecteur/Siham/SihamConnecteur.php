@@ -70,7 +70,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             $intervenantRh->setDateNaissance(new \DateTime($agent->getDateNaissance()));
             $intervenantRh->setTelPerso($agent->getTelephonePerso());
             $intervenantRh->setTelPro($agent->getTelephonePro());
-            $intervenantRh->setNumeroInsee($agent->getNumeroInsee());
+            $intervenantRh->setNumeroInsee($agent->getNumeroInseeDefinitif());
         }
 
         return $intervenantRh;

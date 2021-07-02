@@ -37,7 +37,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EXPORTER))) {
     $tabs[] = [
         'id'            => 'export-rh',
-        'label'         => '<span class="glyphicon glyphicon-export"></span> Export RH',
+        'label'         => '<span class="glyphicon glyphicon-export"></span> PEC / REN',
         'url'           => $this->url('intervenant/export', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];

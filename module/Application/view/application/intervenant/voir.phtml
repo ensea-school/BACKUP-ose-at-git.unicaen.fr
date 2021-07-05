@@ -7,6 +7,7 @@ use Application\Provider\Privilege\Privileges;
 
 $this->intervenant($intervenant)->renderTitle('Fiche');
 
+
 $tabs = [
     [
         'id'            => 'fiche',
@@ -34,11 +35,11 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
     ];
 }
 
-if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EXPORTER))) {
+if ($this->isAllowed($intervenant, Privileges::EXPORT_RH_SYNC)) {
     $tabs[] = [
         'id'            => 'export-rh',
-        'label'         => '<span class="glyphicon glyphicon-export"></span> PEC / REN',
-        'url'           => $this->url('intervenant/export', ['intervenant' => $intervenant->getId()]),
+        'label'         => '<span class="glyphicon glyphicon-export"></span> Export RH',
+        'url'           => $this->url('intervenant/exporter', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];
 }

@@ -77,6 +77,27 @@ class ExportRhService extends AbstractService
 
 
 
+    public function getListeUO()
+    {
+        return $this->connecteur->recupererListeUO();
+    }
+
+
+
+    public function getListePositions()
+    {
+        return $this->connecteur->recupererListePositions();
+    }
+
+
+
+    public function getListeEmplois()
+    {
+        return $this->connecteur->recupererListeEmplois();
+    }
+
+
+
     public function getIntervenantRHParamsDescription(): array
     {
         $desc = [

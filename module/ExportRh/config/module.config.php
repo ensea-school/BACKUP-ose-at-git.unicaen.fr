@@ -3,21 +3,35 @@
 namespace ExportRh;
 
 use Application\Provider\Privilege\Privileges;
+use ExportRh\Assertion\ExportRhAssertion;
 use ExportRh\Connecteur\Siham\SihamConnecteur;
 use ExportRh\Connecteur\Siham\SihamConnecteurFactory;
 use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
 
     'router' => [
         'routes' => [
-            'export-rh' => [
+            'intervenant' => [
                 'type'          => 'Segment',
-                'may_terminate' => false,
+                'may_terminate' => true,
                 'options'       => [
-                    'route' => '/export-rh',
+                    'route'  => '/intervenant',
+                    'action' => 'index',
                 ],
                 'child_routes'  => [
+                    'exporter'       => [
+                        'type'          => 'Segment',
+                        'may_terminate' => false,
+                        'options'       => [
+                            'route'    => '/:intervenant/exporter',
+                            'defaults' => [
+                                'controller' => Controller\ExportRhController::class,
+                                'action'     => 'exporter',
+                            ],
+                        ],
+                    ],
                     'administration' => [
                         'type'          => 'Literal',
                         'may_terminate' => true,
@@ -31,7 +45,7 @@ return [
                         'child_routes'  => [
                             'chercher-intervenant-rh' => [
                                 'type'          => 'Literal',
-                                'may_terminate' => true,
+                                'may_terminate' => false,
                                 'options'       => [
                                     'route'    => '/chercher-intervenant-rh',
                                     'defaults' => [
@@ -49,7 +63,7 @@ return [
         ],
     ],
 
-    'navigation' => [
+    'navigation'   => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -58,7 +72,7 @@ return [
                             'export-rh' => [
                                 'label'          => 'Export vers le SI RH',
                                 'icon'           => 'glyphicon glyphicon-list-alt',
-                                'route'          => 'export-rh/administration',
+                                'route'          => 'intervenant/administration',
                                 'resource'       => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
                                 'order'          => 82,
                                 'border - color' => '#111',
@@ -66,7 +80,7 @@ return [
                                     'chercher-intervenant-rh' => [
                                         'label'        => 'Rechercher un intervenant dans le SI RH',
                                         'icon'         => 'fa fa-graduation-cap',
-                                        'route'        => 'export-rh/administration/chercher-intervenant-rh',
+                                        'route'        => 'intervenant/administration/chercher-intervenant-rh',
                                         'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'chercher-intervenant-rh'),
                                         'order'        => 800,
                                         'border-color' => '#BBCF55',
@@ -74,27 +88,50 @@ return [
                                 ],
                             ],
                         ],
+
+                    ],
+
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards'         => [
+            PrivilegeController::class => [
+                [
+                    'controller' => Controller\AdministrationController::class,
+                    'action'     => ['index', 'chercher-intervenant-rh'],
+                    'privileges' => [Privileges::EXPORT_RH_SYNC],
+                    //'assertion'  => Assertion\AgrementAssertion::class,
+
+                ],
+                [
+                    'controller' => Controller\ExportRhController::class,
+                    'action'     => ['exporter'],
+                    'privileges' => [Privileges::EXPORT_RH_SYNC],
+                    'assertion'  => ExportRhAssertion::class,
+
+                ],
+            ],
+        ],
+        'rule_providers' => [
+            PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'privileges' => Privileges::EXPORT_RH_SYNC,
+                        'resources'  => 'Intervenant',
+                        'assertion'  => ExportRhAssertion::class,
                     ],
                 ],
             ],
         ],
     ],
 
-    'bjyauthorize' => [
-        'guards' => [
-            PrivilegeController::class => [
-                [
-                    'controller' => Controller\AdministrationController::class,
-                    'action'     => ['index', 'chercher-intervenant-rh'],
-                    'privileges' => [Privileges::INTERVENANT_STATUT_VISUALISATION],
-                ],
-            ],
-        ],
-    ],
 
     'service_manager' => [
         'factories' => [
             Service\ExportRhService::class => Service\ExportRhServiceFactory::class,
+            ExportRhAssertion::class       => \UnicaenAuth\Assertion\AssertionFactory::class,
             SihamConnecteur::class         => SihamConnecteurFactory::class,
         ],
     ],
@@ -105,6 +142,7 @@ return [
     'controllers'     => [
         'factories' => [
             Controller\AdministrationController::class => Controller\AdministrationControllerFactory::class,
+            Controller\ExportRhController::class       => Controller\ExportRhControllerFactory::class,
         ],
     ],
     'view_manager'    => [

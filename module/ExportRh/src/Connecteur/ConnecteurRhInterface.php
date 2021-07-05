@@ -24,4 +24,12 @@ interface ConnecteurRhInterface
 
     public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh;
 
+
+
+    public function recupererListeUO(): ?array;
+
+
+
+    public function recupererListePositions(): ?array;
+
 }

@@ -224,5 +224,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const UNICAEN_TBL_UPDATE_ACTUPROC                         = 'unicaen-tbl-update-actuproc';
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
+    const EXPORT_RH_PEC                                       = 'export-rh-prise-en-charge';
+    const EXPORT_RH_REN                                       = 'export-rh-renouvellement';
+    const EXPORT_RH_SYNC                                      = 'export-rh-synchronisation';
 
 }

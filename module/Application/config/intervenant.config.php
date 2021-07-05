@@ -105,15 +105,6 @@ return [
                             ],
                         ],
                     ],
-                    'export'                  => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/export',
-                            'defaults' => [
-                                'action' => 'exporter',
-                            ],
-                        ],
-                    ],
                     'supprimer'               => [
                         'type'    => 'Segment',
                         'options' => [
@@ -512,13 +503,6 @@ return [
                     'action'     => ['supprimer', 'historiser'],
                     'privileges' => [
                         Privileges::INTERVENANT_SUPPRESSION,
-                    ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['exporter'],
-                    'privileges' => [
-                        Privileges::INTERVENANT_EXPORTER,
                     ],
                 ],
                 [

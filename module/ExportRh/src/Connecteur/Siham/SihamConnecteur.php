@@ -59,21 +59,33 @@ class SihamConnecteur implements ConnecteurRhInterface
 
         $intervenantRh = null;
         if (!empty($intervenant->getCodeRh())) {
-            $params        =
+            $codeRh = $intervenant->getCodeRh();
+            //Si code RH
+            if (!strstr($codeRh, 'UCN')) {
+                $codeRh = $this->siham->getCodeAdministration() . str_pad($codeRh, 9, '0', STR_PAD_LEFT);
+            }
+
+            $params =
                 [
-                    'listeMatricules' => [$intervenant->getCodeRh()],
+                    'listeMatricules' => [$codeRh],
                 ];
-            $agent         = $this->siham->recupererDonneesPersonnellesAgent($params);
-            $intervenantRh = new IntervenantRH();
-            $intervenantRh->setNomUsuel($agent->getNomUsuel());
-            $intervenantRh->setPrenom($agent->getPrenom());
-            $intervenantRh->setDateNaissance(new \DateTime($agent->getDateNaissance()));
-            $intervenantRh->setTelPerso($agent->getTelephonePerso());
-            $intervenantRh->setTelPro($agent->getTelephonePro());
-            $intervenantRh->setNumeroInsee($agent->getNumeroInseeDefinitif());
+
+            $agent = $this->siham->recupererDonneesPersonnellesAgent($params);
+
+            if (!empty($agent)) {
+                $intervenantRh = new IntervenantRH();
+                $intervenantRh->setNomUsuel($agent->getNomUsuel());
+                $intervenantRh->setPrenom($agent->getPrenom());
+                $intervenantRh->setDateNaissance(new \DateTime($agent->getDateNaissance()));
+                $intervenantRh->setTelPerso($agent->getTelephonePerso());
+                $intervenantRh->setTelPro($agent->getTelephonePro());
+                $intervenantRh->setNumeroInsee($agent->getNumeroInseeDefinitif());
+
+                return $intervenantRh;
+            }
         }
 
-        return $intervenantRh;
+        return null;
     }
 
 
@@ -81,6 +93,37 @@ class SihamConnecteur implements ConnecteurRhInterface
     public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh
     {
 
+    }
+
+
+
+    public function recupererListeUO(): ?array
+    {
+        /*On récupére les UO de type composante*/
+        $params = [
+            'codeAdministration' => '',
+            'listeUO'            => [[
+                                         'typeUO' => 'COP',
+                                     ]],
+        ];
+
+        $uo = $this->siham->recupererListeUO($params);
+
+        return $uo;
+    }
+
+
+
+    public function recupererListePositions(): ?array
+    {
+        return $this->siham->recupererListePositions();
+    }
+
+
+
+    public function recupererListeEmplois(): array
+    {
+        return $this->siham->recupererListeEmplois();
     }
 
 }

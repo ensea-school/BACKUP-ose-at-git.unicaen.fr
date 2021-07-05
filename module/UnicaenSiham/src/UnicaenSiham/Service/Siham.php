@@ -26,7 +26,7 @@ class Siham
 
     protected $sihamClient;
 
-    protected $sihameConfig;
+    protected $sihamConfig;
 
     protected $codeAdministration;
 
@@ -65,7 +65,7 @@ class Siham
     public function __construct(SihamClient $sihamClient, array $config)
     {
         $this->sihamClient                              = $sihamClient;
-        $this->sihameConfig                             = $config;
+        $this->sihamConfig                              = $config;
         $this->codeEtablissement                        = $config['code-etablissement'];
         $this->codeAdministration                       = $config['code-administration'];
         $this->codeNomenclatureGrades                   = (isset($config['code-nomenclature']['grades'])) ? $config['code-nomenclature']['grades'] : '';
@@ -95,7 +95,7 @@ class Siham
 
     public function getConfig(): array
     {
-        return $this->sihameConfig;
+        return $this->sihamConfig;
     }
 
 
@@ -177,7 +177,7 @@ class Siham
         try {
             $client = $this->sihamClient->getClient('ListeAgentsWebService');
             $result = $client->recupListeAgents($paramsWS);
-        
+
             if (isset($result->return)) {
                 if (is_array($result->return)) {
                     foreach ($result->return as $values) {
@@ -210,6 +210,7 @@ class Siham
     public function recupererDonneesPersonnellesAgent($params)
     {
         $listMatricules = [];
+        $agent          = null;
         foreach ($params['listeMatricules'] as $matricule) {
             $listeMatricules[] = ['matricule' => $matricule];
         }
@@ -779,13 +780,28 @@ class Siham
 
     public function recupererListePositions($from = '')
     {
+        if (!empty($this->sihamConfig['filters'][$this->codeNomenclaturePositions])) {
+            return $this->sihamConfig['filters'][$this->codeNomenclaturePositions];
+        }
+
         $params = [
             'codeAdministration' => $this->codeAdministration,
             'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
-            'listeNomenclatures' => [$this->codeNomenclatureGrades],
+            'listeNomenclatures' => [$this->codeNomenclaturePositions],
         ];
 
         return $this->recupererNomenclatureRH($params);
+    }
+
+
+
+    public function recupererListeEmplois()
+    {
+        if (!empty($this->sihamConfig['filters']['emplois'])) {
+            return $this->sihamConfig['filters']['emplois'];
+        }
+
+        return [];
     }
 
 
@@ -916,7 +932,7 @@ class Siham
 
 
         $paramsWS = ['ParamStructure' => [
-            'codeAdministration' => (isset($params['codeAdministration'])) ? strtoupper($params['codeAdministration']) : '',
+            'codeAdministration' => $this->getCodeAdministration(),
             'dateObservation'    => (isset($params['dateObservation'])) ? $params['dateObservation'] : '',
             'listeUO'            => $listeUO,
         ]];
@@ -951,5 +967,19 @@ class Siham
 
 
         return $coordonnees;
+    }
+
+
+
+    public function getCodeEtablissement()
+    {
+        return $this->codeEtablissement;
+    }
+
+
+
+    public function getCodeAdministration()
+    {
+        return $this->codeAdministration;
     }
 }

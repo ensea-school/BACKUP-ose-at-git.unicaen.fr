@@ -1,0 +1,138 @@
+<?php
+/**
+ * @var \Application\Entity\Db\Intervenant        $intervenant
+ * @var \ExportRh\Entity\IntervenantRh            $intervenantRh
+ * @var \Application\Entity\Db\IntervenantDossier $intervenantDossier
+ */
+
+$intervenant->getNomUsuel()
+?>
+<br/>
+
+
+<div class="messenger alert alert-warning">
+    <?php if ($typeIntervenant == 'P'): ?>
+        L'export des données intervenants vers le SIRH n'est disponible que pour les vacataires.
+    <?php elseif (empty($intervenantDossierValidation)): ?>
+        Vous devez d'abord valider les données personnelles de <?= $intervenant; ?> pour pouvoir les synchroniser avec le SIRH
+    <?php elseif (empty($intervenantRh)): ?>
+    <?php endif; ?>
+</div>
+<?php if (empty($intervenantRh)): ?>
+
+<form action="" method="post">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Récapitulatif des données personnelles</div>
+        <div class="panel-body">
+            <? if (empty($intervenantRh)): ?>
+            <p>L'intervenant XXXX XXXX n'a pas été trouvé dans le SI RH. Vous pouvez si vous le souhaiter prendre en charge cette intervenant avec les données de son dossier, résumées ci-dessous :</p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Champs</th>
+                    <th>Données</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="checkbox" checked="checked" name="nomUsuel"/> Nom usuel :</td>
+                    <td><?= $intervenantDossier->getNomUsuel() ?></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" checked="checked" name="nomUsuel"/> Prénom :</td>
+                    <td><?= $intervenantDossier->getPrenom() ?></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" checked="checked" name="nomUsuel"/> Date de naissance :</td>
+                    <td><?= $intervenantDossier->getDateNaissance()->format('d/m/Y') ?></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" checked="checked" name="nomUsuel"/> Numéro INSEE</td>
+                    <td><?= $intervenantDossier->getNumeroInsee() ?></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" checked="checked" name="nomUsuel"/> Tel pro :</td>
+                    <td><?= $intervenantDossier->getTelPro() ?></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" checked="checked" name="nomUsuel"/> Tel perso :</td>
+                    <td><?= $intervenantDossier->getTelPerso() ?></td>
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Configuration de la prise en charge</div>
+        <div class="panel-body">
+            <p>Veuillez paramétrer la prise en charge de l'agent : </p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Paramètres</th>
+                    <th>Choix</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Année universitaire de prise en charge :</td>
+                    <td>
+                        <select name="anneeUniversitaire" class="form-control">
+                            <option value="2020-09-01">2020/2021</option>
+                            <option value="2021-09-01">2021/2022</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Type d'emploi :</td>
+                    <td>
+                        <select name="emploi" class="form-control">
+                            <?php foreach ($emplois as $code => $libelle): ?>
+                                <option value="<?= $code ?>"> <?= $libelle ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Affectation :</td>
+                    <td>
+                        <select name="uo" class="form-control">
+                            <?php foreach ($uo as $value): ?>
+                                <option value="<?= $value->codeUO ?>"> <?= $value->libLongUO ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>Position administrative :</td>
+                    <td>
+                        <select name="position-administrative" class="form-control">
+                            <?php foreach ($positions as $code => $libelle): ?>
+                                <option value="<?= $code ?>"> <?= $libelle ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
+
+
+                </tbody>
+            </table>
+            <p>
+                <input type="submit" value="Prendre en charge l'agent"/>
+            </p>
+        </div>
+    </div>
+</form>
+<?php endif; ?>
+
+

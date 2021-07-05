@@ -68,7 +68,6 @@ class  IntervenantController extends AbstractController
     use DossierServiceAwareTrait;
     use ImportProcessusAwareTrait;
     use DifferentielServiceAwareTrait;
-    use SihamConnecteurAwareTrait;
 
 
     public function indexAction()
@@ -501,32 +500,6 @@ class  IntervenantController extends AbstractController
         }
 
         return compact('intervenant', 'tree');
-    }
-
-
-
-    public function exporterAction()
-    {
-        /* Initialisation */
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-        /* Récupération du dossier de l'intervenant */
-        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-        /* Récupération de la validation du dossier si elle existe */
-        $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
-        $typeIntervenant              = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-
-        $sihamConnecteur = $this->getSihamConnecteur();
-        $intervenantRh   = $sihamConnecteur->trouverIntervenantRh($intervenant);
-        if (!$intervenant) {
-            $this->flashMessenger()->addErrorMessage("Aucun intervenant n'a été trouvé dans le SIRH");
-        }
-
-
-        return compact('typeIntervenant', 'intervenant', 'intervenantRh', 'intervenantDossier', 'intervenantDossierValidation');
     }
 
 

@@ -93,8 +93,17 @@ class ExportProvider
     {
         $data = [];
         $row  = 1;
+        if (!$filename) {
+            throw new \Exception('Fichier non fourni');
+        }
+        if (!file_exists($filename)) {
+            throw new \Exception('Fichier inexistant ou inaccessible');
+        }
         if (($handle = fopen($filename, "r")) !== false) {
-            fgetcsv($handle, 9999, ";");
+            $head = fgetcsv($handle, 9999, ";");
+            if (!$this->checkGoodCSV($head)) {
+                throw new \Exception('Le fichier CSV fourni n\'est pas un export des charges d\'enseignement');
+            }
             while (($d = fgetcsv($handle, 9999, ";")) !== false) {
 
                 $l      = [
@@ -133,6 +142,16 @@ class ExportProvider
         }
 
         return $data;
+    }
+
+
+
+    protected function checkGoodCSV(array $data)
+    {
+        return
+            (isset($data[24]) && $data[24] === 'HETD')
+            && (isset($data[22]) && $data[22] === 'Groupes')
+            && (isset($data[1]) && $data[1] === 'Composante porteuse (code)');
     }
 
 
@@ -215,9 +234,15 @@ class ExportProvider
                         $typeHeures = array_keys($d['avant']['effectifs']);
 
                         foreach ($typeHeures as $typeHeure) {
-//                            if ($d['avant']['effectifs'][$typeHeure] != $d['apres']['effectifs'][$typeHeure]) {
-                            $rd['effectifs'][$typeHeure] = true;
-//                            }
+                            $this->diff[$k1]['etapes'][$k2]['elements'][$ke]['avant']['effectifs'][$typeHeure] =
+                                $d['avant']['effectifs'][$typeHeure] / count($d['avant']['ti']);
+
+                            $this->diff[$k1]['etapes'][$k2]['elements'][$ke]['apres']['effectifs'][$typeHeure] =
+                                $d['apres']['effectifs'][$typeHeure] / count($d['apres']['ti']);
+
+                            if ($d['avant']['effectifs'][$typeHeure] != $d['apres']['effectifs'][$typeHeure]) {
+                                $rd['effectifs'][$typeHeure] = true;
+                            }
                         }
 
                         foreach ($typesIntervention as $typeIntervention) {
@@ -234,9 +259,9 @@ class ExportProvider
                                 $rdti = [];
                                 $keys = array_keys($d['avant']['ti'][$ti]);
                                 foreach ($keys as $k) {
-//                                    if ($d['avant']['ti'][$ti][$k] != $d['apres']['ti'][$ti][$k]) {
-                                    $rdti[$k] = true;
-//                                    }
+                                    if ($d['avant']['ti'][$ti][$k] != $d['apres']['ti'][$ti][$k]) {
+                                        $rdti[$k] = true;
+                                    }
                                 }
                                 if (!empty($rdti)) {
                                     $rd['ti'][$ti] = $rdti;
@@ -257,9 +282,9 @@ class ExportProvider
                     if (empty($d['diff'])) {
                         unset($this->diff[$k1]['etapes'][$k2]['elements'][$ke]);
                     }
-                    if ($ke != 'M.AN-4B') { // TEST TEST TEST TEST TEST TEST TEST
-                        unset($this->diff[$k1]['etapes'][$k2]['elements'][$ke]);
-                    }
+//                    if ($ke != 'act_3925') { // TEST TEST TEST TEST TEST TEST TEST
+//                        unset($this->diff[$k1]['etapes'][$k2]['elements'][$ke]);
+//                    }
                 }
                 if (empty($this->diff[$k1]['etapes'][$k2]['elements'])) {
                     unset($this->diff[$k1]['etapes'][$k2]);
@@ -285,6 +310,14 @@ class ExportProvider
         if (!array_key_exists($spc, $this->diff)) {
             $this->diff[$spc] = [
                 'libelle' => $a['structure-porteuse-libelle'],
+                'avant'   => [
+                    'heures' => 0,
+                    'hetd'   => 0,
+                ],
+                'apres'   => [
+                    'heures' => 0,
+                    'hetd'   => 0,
+                ],
                 'etapes'  => [],
             ];
         }
@@ -292,6 +325,14 @@ class ExportProvider
             $this->diff[$spc]['etapes'][$epc] = [
                 'code'     => $a['etape-porteuse-code'],
                 'libelle'  => $a['etape-porteuse-libelle'],
+                'avant'    => [
+                    'heures' => 0,
+                    'hetd'   => 0,
+                ],
+                'apres'    => [
+                    'heures' => 0,
+                    'hetd'   => 0,
+                ],
                 'elements' => [],
             ];
         }
@@ -332,6 +373,12 @@ class ExportProvider
         $this->diff[$spc]['etapes'][$epc]['elements'][$ec][$avap]['ti'][$ti]['groupes'] += $a['groupes'];
         $this->diff[$spc]['etapes'][$epc]['elements'][$ec][$avap]['ti'][$ti]['heures']  += $a['heures'];
         $this->diff[$spc]['etapes'][$epc]['elements'][$ec][$avap]['ti'][$ti]['hetd']    += $a['hetd'];
+
+        $this->diff[$spc][$avap]['heures'] += $a['heures'];
+        $this->diff[$spc][$avap]['hetd']   += $a['hetd'];
+
+        $this->diff[$spc]['etapes'][$epc][$avap]['heures'] += $a['heures'];
+        $this->diff[$spc]['etapes'][$epc][$avap]['hetd']   += $a['hetd'];
     }
 
 

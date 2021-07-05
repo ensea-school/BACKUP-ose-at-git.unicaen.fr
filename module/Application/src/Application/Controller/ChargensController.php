@@ -355,6 +355,8 @@ class ChargensController extends AbstractController
     {
         $form = $this->getFormChargensDifferentiel();
 
+        $avantLibelle = null;
+        $apresLibelle = null;
 
         $diff = null;
         if ($this->getRequest()->isPost()) {
@@ -368,29 +370,41 @@ class ChargensController extends AbstractController
                 $data = $form->getData();
                 $pce  = $this->getProviderChargens()->getExport();
 
-                if ($data['avant'] == 'export' && isset($data['avant-fichier']['tmp_name'])) {
-                    $avant = $pce->fromCsv($data['avant-fichier']['tmp_name']);
-                } else {
-                    [$avantAnneeId, $avantScenarioId] = explode('-', $data['avant']);
-                    $avantAnnee    = $this->em()->find(Annee::class, $avantAnneeId);
-                    $avantScenario = $this->em()->find(Scenario::class, $avantScenarioId);
-                    $avant         = $pce->fromBdd($avantAnnee, $avantScenario, $this->getServiceContext()->getStructure());
-                }
+                try {
+                    if ($data['avant'] == 'export' && isset($data['avant-fichier']['tmp_name'])) {
+                        $avant        = $pce->fromCsv($data['avant-fichier']['tmp_name']);
+                        $avantLibelle = $data['avant-fichier']['name'];
+                    } else {
+                        [$avantAnneeId, $avantScenarioId] = explode('-', $data['avant']);
+                        /** @var $avantAnnee Annee */
+                        $avantAnnee = $this->em()->find(Annee::class, $avantAnneeId);
+                        /** @var $avantScenario Scenario */
+                        $avantScenario = $this->em()->find(Scenario::class, $avantScenarioId);
+                        $avant         = $pce->fromBdd($avantAnnee, $avantScenario, $this->getServiceContext()->getStructure());
+                        $avantLibelle  = $avantScenario->getLibelle() . ' ' . $avantAnnee->getLibelle();
+                    }
 
-                if ($data['apres'] == 'export' && isset($data['apres-fichier']['tmp_name'])) {
-                    $apres = $pce->fromCsv($data['apres-fichier']['tmp_name']);
-                } else {
-                    [$apresAnneeId, $apresScenarioId] = explode('-', $data['apres']);
-                    $apresAnnee    = $this->em()->find(Annee::class, $apresAnneeId);
-                    $apresScenario = $this->em()->find(Scenario::class, $apresScenarioId);
-                    $apres         = $pce->fromBdd($apresAnnee, $apresScenario, $this->getServiceContext()->getStructure());
-                }
+                    if ($data['apres'] == 'export' && isset($data['apres-fichier']['tmp_name'])) {
+                        $apres        = $pce->fromCsv($data['apres-fichier']['tmp_name']);
+                        $apresLibelle = $data['apres-fichier']['name'];
+                    } else {
+                        [$apresAnneeId, $apresScenarioId] = explode('-', $data['apres']);
+                        /** @var $apresAnnee Annee */
+                        $apresAnnee = $this->em()->find(Annee::class, $apresAnneeId);
+                        /** @var $apresScenario Scenario */
+                        $apresScenario = $this->em()->find(Scenario::class, $apresScenarioId);
+                        $apres         = $pce->fromBdd($apresAnnee, $apresScenario, $this->getServiceContext()->getStructure());
+                        $apresLibelle  = $apresScenario->getLibelle() . ' ' . $apresAnnee->getLibelle();
+                    }
 
-                $diff = $pce->diff($avant, $apres);
+                    $diff = $pce->diff($avant, $apres);
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($e->getMessage());
+                }
             }
         }
 
-        return compact('form', 'diff');
+        return compact('form', 'diff', 'avantLibelle', 'apresLibelle');
     }
 
 

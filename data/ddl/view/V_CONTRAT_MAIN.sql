@@ -9,6 +9,7 @@ SELECT
   ct.formule_resultat_id,
   ct.id contrat_id,
 
+  ct."composante",
   ct."annee",
   ct."nom",
   ct."prenom",
@@ -56,6 +57,7 @@ FROM
     c.*,
     i.annee_id                                                                                    annee_id,
     fr.id                                                                                         formule_resultat_id,
+    s.libelle_court                                                                               "composante",
     a.libelle                                                                                     "annee",
     COALESCE(d.nom_usuel,i.nom_usuel)                                                             "nom",
     COALESCE(d.prenom,i.prenom)                                                                   "prenom",

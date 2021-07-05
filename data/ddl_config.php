@@ -12,7 +12,7 @@ return [
     ]],
     'materialized-view' => ['includes' => [
 
-    ], 'excludes'                      => ['MV_EXT_SERVICE']],
+    ]],
     'view'              => ['includes' => [
         'V_INDIC_DIFF_DOSSIER',
         'V_MEP_INTERVENANT_STRUCTURE',

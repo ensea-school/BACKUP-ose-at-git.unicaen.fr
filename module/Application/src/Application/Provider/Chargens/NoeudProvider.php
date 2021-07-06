@@ -295,7 +295,7 @@ class NoeudProvider
           csdd.type_intervention_id,
           csdd.dedoublement
         FROM
-          V_CHARGENS_SEUILS_DED_DEF csdd
+          tbl_chargens csdd
         WHERE
           csdd.noeud_id IN (" . $ids . ")
         ";

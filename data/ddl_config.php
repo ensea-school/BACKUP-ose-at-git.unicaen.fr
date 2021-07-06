@@ -23,6 +23,7 @@ return [
         'includes' => [
             'V_INDIC_DIFF_DOSSIER',
             'V_MEP_INTERVENANT_STRUCTURE',
+            'V_CHARGENS_SEUILS_DED_DEF',
         ],
     ],
     'package'           => [

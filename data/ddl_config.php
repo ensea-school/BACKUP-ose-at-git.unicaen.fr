@@ -15,9 +15,6 @@ return [
         'includes' => [
 
         ],
-        'excludes' => [
-            'MV_EXT_SERVICE',
-        ],
     ],
     'view'              => [
         'includes' => [

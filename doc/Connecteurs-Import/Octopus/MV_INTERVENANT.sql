@@ -129,14 +129,28 @@ WITH i AS (
 			JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS null
 			WHERE  i.annee_id = 2020 AND i.histo_destruction IS NULL AND d.iban IS NOT NULL AND d.rib_hors_sepa = 0 AND i.source_id = '24'
 			GROUP BY i.code
+         ),
+         compte as
+         (
+	         SELECT
+				MAX(individu_id) individu_id,
+				MAX(ldap_uid) KEEP (DENSE_RANK  FIRST ORDER BY histo_creation)  ldap_uid,
+				MAX(email) KEEP (DENSE_RANK  FIRST ORDER BY histo_creation)  email,
+				MAX(histo_creation) KEEP (DENSE_RANK  FIRST ORDER BY histo_creation)  histo_creation
+			 FROM  octo.individu_compte@octoprod indc
+			 WHERE not regexp_like(ldap_uid, 'e[0-9]{8}')
+			 AND indc.statut_id = 1
+			 GROUP BY individu_id
+			 ORDER BY histo_creation ASC
          )
+
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
     ltrim(TO_CHAR(i.code, '99999999'))                             code,
     'Octopus'                                                      z_source_id,
     /*Code RH si l'utilisateur est dans SIHAM*/
     ind.c_rh    												   code_rh,
-    indc.ldap_uid                                                  utilisateur_code,
+    compte.ldap_uid                                                utilisateur_code,
     str2.code                                                      z_structure_id,
     i.z_statut_id                                                  z_statut_id,
     grade.c_grade                                                  z_grade_id,
@@ -157,7 +171,7 @@ SELECT DISTINCT
     COALESCE(ind.c_pays_nationalite_ow, ind.c_pays_nationalite)    z_pays_nationalite_id,
     telpro.numero                                                  tel_pro,
     COALESCE(ind.tel_perso_ow, ind.tel_perso)                      tel_perso,
-    indc.email                                                     email_pro,
+    compte.email                                                   email_pro,
     COALESCE(ind.email_perso_ow, ind.email_perso)                  email_perso,
     /* Adresse */
     trim(adr.adresse1 ||
@@ -232,9 +246,10 @@ FROM i
     --On récupére le téléphone pro principal de l'indivdu
          LEFT JOIN telephone_pro_principal telpro ON telpro.individu_id = induni.c_individu_chaine
     -- On ne prend que les comptes qui ne sont pas étudiants
-         LEFT JOIN octo.individu_compte@octoprod indc
-                   ON indc.individu_id = induni.c_individu_chaine AND not regexp_like(ldap_uid, 'e[0-9]{8}') AND
-                      indc.statut_id = 1
+         --LEFT JOIN octo.individu_compte@octoprod indc
+           --        ON indc.individu_id = induni.c_individu_chaine AND not regexp_like(ldap_uid, 'e[0-9]{8}') AND
+             --         indc.statut_id = 1
+         LEFT JOIN compte ON compte.individu_id = induni.c_individu_chaine
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))

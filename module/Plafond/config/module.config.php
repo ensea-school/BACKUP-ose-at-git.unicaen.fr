@@ -1,6 +1,6 @@
 <?php
 
-namespace Application;
+namespace Plafond;
 
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;

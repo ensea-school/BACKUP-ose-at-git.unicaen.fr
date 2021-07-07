@@ -4,6 +4,17 @@
 
 [OSE 14.20](#ose-1420-09062021)
 
+
+
+
+
+# OSE 18 (à venir)
+Objectif : Plafonds personnalisables
+
+
+
+
+
 # OSE 17 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
@@ -13,6 +24,17 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 # OSE 16 (à venir)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
+
+## Correction de bug
+
+* Fiabilisation du calcul des charges d'enseignement (pb réglé au niveau des seuils qui n'étaient pas toujours les bons utilisés)
+
+## Nouveautés
+
+* Connecteur en import avec Actul+
+* Outil différentiel d'export des charges d'enseignement
+
+
 
 
 

@@ -38,9 +38,17 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 
 
 
-# OSE 15.5 (01/07/2021)
+# OSE 15.6 (à venir)
 
 ## Correction de bug
+
+* Dans ODF, la liste des éléments dont on peut forcer la synchronisation tient maintenant compte des données à restaurer en plus de celles à insérer
+
+
+
+# OSE 15.5 (01/07/2021)
+
+## Correction de bugs
 
 * Retour de la vua matérialisée MV_EXT_SERVICE qui avait disparu de OSE par erreur depuis la V15
 * Correction d'un problème de MAJ de MV_EXT_SERVICE depuis la 15.4 qui provoquait une erreur suite à la l'ajout d'une colonne sur l'export des services.  
@@ -58,7 +66,7 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 * Formules de calcul de Sorbonne Nouvelle et de La Réunion
 * Ajout de la colonne "code RH" à l'export CSV des services
 
-## Correction de bug
+## Correction de bugs
 
 * Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
 * Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles

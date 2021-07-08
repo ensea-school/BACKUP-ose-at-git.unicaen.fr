@@ -4,16 +4,11 @@ namespace ExportRh\Connecteur;
 
 
 use ExportRh\Entity\IntervenantRh;
+use Zend\Form\Fieldset;
 
 interface ConnecteurRhInterface
 {
-    /**
-     * Recherche dans le SIRH la liste des fiches intervenant qui peuvent correspondre à l'intervenant fourni
-     *
-     * @param Intervenant $intervenant
-     *
-     * @return array
-     */
+
     public function rechercherIntervenantRh($nomUsuel = '', $prenom = '', $insee = ''): array;
 
 
@@ -22,14 +17,14 @@ interface ConnecteurRhInterface
 
 
 
-    public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh;
+    public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, array $postData): ?string;
 
 
 
-    public function recupererListeUO(): ?array;
+    public function getConnecteurName(): string;
 
 
 
-    public function recupererListePositions(): ?array;
+    public function recupererFieldsetConnecteur(): ?Fieldset;
 
 }

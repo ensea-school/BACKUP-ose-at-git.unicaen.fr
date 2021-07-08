@@ -2,10 +2,12 @@
 
 namespace ExportRh\Service;
 
+use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
+use Zend\Form\Fieldset;
 
 /**
  * Description of FonctionReferentiel
@@ -98,6 +100,27 @@ class ExportRhService extends AbstractService
 
 
 
+    public function getListeStatuts()
+    {
+        return $this->connecteur->recupererListeStatuts();
+    }
+
+
+
+    public function getListeModalites()
+    {
+        return $this->connecteur->recupererListeModalites();
+    }
+
+
+
+    public function priseEnChargeIntrervenantRh(Intervenant $intervenant, $datas)
+    {
+        return $this->connecteur->prendreEnChargeIntervenantRh($intervenant, $datas);
+    }
+
+
+
     public function getIntervenantRHParamsDescription(): array
     {
         $desc = [
@@ -183,6 +206,20 @@ class ExportRhService extends AbstractService
         $this->getServiceParametres()->set('export_rh_intervenant', $iep);
 
         return $this;
+    }
+
+
+
+    public function getFieldsetConnecteur(): Fieldset
+    {
+        return $this->connecteur->recupererFormulairePriseEnCharge();
+    }
+
+
+
+    public function getConnecteurName(): string
+    {
+        return $this->connecteur->getConnecteurName();
     }
 
 }

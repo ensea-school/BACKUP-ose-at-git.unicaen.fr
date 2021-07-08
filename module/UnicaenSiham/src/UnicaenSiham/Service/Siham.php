@@ -22,7 +22,6 @@ class Siham
     const        SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO     = "PPE";
     const        SIHAM_CODE_TYPOLOGIE_EMAIL_PRO          = "MPR";
     const        SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO        = "MPE";
-    public const SIHAM_CODE_NOMENCLATURE_STATUT          = "";
 
     protected $sihamClient;
 
@@ -75,8 +74,8 @@ class Siham
         $this->codeNomenclatureFamillesProfessionnelles = (isset($config['code-nomenclature']['familles-professionnelles'])) ? $config['code-nomenclature']['familles-professionnelles'] : '';
         $this->codeNomenclatureQualitesStatutaires      = (isset($config['code-nomenclature']['qualites-statutaires'])) ? $config['code-nomenclature']['qualites-statutaires'] : '';
         $this->codeNomenclatureCategories               = (isset($config['code-nomenclature']['categories'])) ? $config['code-nomenclature']['categories'] : '';
-        $this->codeNomenclatureContrats                 = (isset($config['code-nomenclature']['contrats'])) ? $config['code-nomenclature']['contrats'] : '';
-        $this->codeNomenclatureStatuts                  = (isset($config['code-nomenclature']['statut'])) ? $config['code-nomenclature']['statut'] : '';
+        $this->codeNomenclatureContrats                 = (isset($config['code-nomenclature']['type-contrats'])) ? $config['code-nomenclature']['type-contrats'] : '';
+        $this->codeNomenclatureStatuts                  = (isset($config['code-nomenclature']['statuts'])) ? $config['code-nomenclature']['statuts'] : '';
         $this->codeNomenclatureModalites                = (isset($config['code-nomenclature']['modalites'])) ? $config['code-nomenclature']['modalites'] : '';
         $this->codeNomenclaturePositions                = (isset($config['code-nomenclature']['positions'])) ? $config['code-nomenclature']['positions'] : '';
         $this->codeNomenclatureEchelons                 = (isset($config['code-nomenclature']['echelons'])) ? $config['code-nomenclature']['echelons'] : '';
@@ -743,6 +742,10 @@ class Siham
 
     public function recupererListeStatuts($from = '')
     {
+        if (!empty($this->sihamConfig['filters'][$this->codeNomenclatureStatuts])) {
+            return $this->sihamConfig['filters'][$this->codeNomenclatureStatuts];
+        }
+
         $params = ['codeAdministration' => $this->codeAdministration,
                    'dateObservation'    => (!empty($from)) ? $from : date('Y-m-d'),
                    'listeNomenclatures' => [$this->codeNomenclatureStatuts],];
@@ -767,6 +770,10 @@ class Siham
 
     public function recupererListeModalites($from = '')
     {
+        if (!empty($this->sihamConfig['filters'][$this->codeNomenclatureModalites])) {
+            return $this->sihamConfig['filters'][$this->codeNomenclatureModalites];
+        }
+
         $params = [
             'codeAdministration' => $this->codeAdministration,
             'dateObservation'    => $from,
@@ -943,7 +950,12 @@ class Siham
             $result = $client->RecupStructures($paramsWS);
 
             if (isset($result->return)) {
-                return $result->return;
+                $unitesOrganisationnelles = [];
+                foreach ($result->return as $value) {
+                    $unitesOrganisationnelles[$value->codeUO] = $value->libLongUO;
+                }
+
+                return $unitesOrganisationnelles;
             }
         } catch (\SoapFault $e) {
             throw new SihamException($e->faultstring, 0, $e);

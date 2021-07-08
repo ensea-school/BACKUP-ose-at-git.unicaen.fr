@@ -26,7 +26,7 @@ class ExportRhServiceFactory
         $config = $container->get('Config');
 
         switch ($config['export-rh']['connecteur']) {
-            case 'siham':
+            default:
                 $connecteur = $container->get(SihamConnecteur::class);
             break;
         }

@@ -6,6 +6,8 @@ use Application\Provider\Privilege\Privileges;
 use ExportRh\Assertion\ExportRhAssertion;
 use ExportRh\Connecteur\Siham\SihamConnecteur;
 use ExportRh\Connecteur\Siham\SihamConnecteurFactory;
+use ExportRh\Form\ExportRhForm;
+use ExportRh\Form\Factory\ExportRhFormFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
@@ -29,6 +31,17 @@ return [
                             'defaults' => [
                                 'controller' => Controller\ExportRhController::class,
                                 'action'     => 'exporter',
+                            ],
+                        ],
+                    ],
+                    'pec'            => [
+                        'type'          => 'Segment',
+                        'may_terminate' => false,
+                        'options'       => [
+                            'route'    => '/:intervenant/pec',
+                            'defaults' => [
+                                'controller' => Controller\ExportRhController::class,
+                                'action'     => 'prise-en-charge',
                             ],
                         ],
                     ],
@@ -107,7 +120,7 @@ return [
                 ],
                 [
                     'controller' => Controller\ExportRhController::class,
-                    'action'     => ['exporter'],
+                    'action'     => ['exporter', 'prise-en-charge'],
                     'privileges' => [Privileges::EXPORT_RH_SYNC],
                     'assertion'  => ExportRhAssertion::class,
 
@@ -148,6 +161,11 @@ return [
     'view_manager'    => [
         'template_path_stack' => [
             __DIR__ . '/../view',
+        ],
+    ],
+    'form_elements'   => [
+        'factories' => [
+            ExportRhForm::class => ExportRhFormFactory::class,
         ],
     ],
 ];

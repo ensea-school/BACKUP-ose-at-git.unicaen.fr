@@ -240,6 +240,38 @@ class Siham
 
 
 
+    public function recupererDonneesAdministrativeAgent(array $params)
+    {
+        $listMatricules = [];
+        foreach ($params['listeMatricules'] as $matricule) {
+            $listeMatricules[] = ['matricule' => $matricule];
+        }
+
+
+        $paramsWS = ['ParamListAgent' => [
+            'codeEtablissement'  => $this->codeEtablissement,
+            'dateFinObservation' => (isset($params['dateFinObservation'])) ? $params['dateFinObservation'] : '',
+            'dateObservation'    => '',//(isset($params['dateObservation'])) ? $params['dateObservation'] : '',
+            'listeMatricules'    => $listeMatricules,
+        ]];
+
+
+        try {
+            $client = $this->sihamClient->getClient('DossierAgentWebService');
+            $result = $client->RecupDonneesAdministratives($paramsWS);
+            
+            if (isset($result->return)) {
+
+                return $result->return;
+            }
+        } catch (\SoapFault $e) {
+
+            throw new SihamException($e->faultstring, 0, $e);
+        }
+    }
+
+
+
     /**
      * @param $params       array Paramètres du webservice : bisTer, codePostal, complementAdresse,dateDebut, matricule,
      *                      natureVoie, noVoie, nomVoie, ville

@@ -85,14 +85,35 @@ class ExportRhController extends AbstractController
         /* Récupération de la validation du dossier si elle existe */
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $typeIntervenant              = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-        $intervenantRh                = $this->exportRhService->getIntervenantRh($intervenant);
+        $renouvellement               = false;
+        $priseEnCharge                = false;
 
-        /*Scénario 1 : Intervenant non présent dans le SI RH*/
+        /**
+         * Etape 1 : On cherche si l'intervenant est déjà dans le SI RH
+         * Etape 2 : Si pas dans le SI RH alors c'est une prise en charge
+         * Etape 3 : Si il est déjà dans le SI RH alors on regarde si il a une affectation en cours pour l'année en cours
+         * Etape 4 : Si il a une affectation en cours alors on propose uniquement la mise à jour des données personnelles
+         * Etape 5 : Si il n'a pas encore d'affectation on propose alors un renouvellement de l'intervenant
+         */
+
+        $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
+
+        if ($intervenantRh) {
+            //On a trouvé un intervenant dans le SI RH
+            $affectationEnCours = $this->exportRhService->getAffectationEnCours($intervenant);
+            //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
+            $renouvellement = true;
+            if (!empty($affectationEnCours)) {
+                //Si non on propose un renouvellement de l'intervenant SI RH
+                $renouvellement = false;
+            }
+        } else {
+            $priseEnCharge = true;
+        }
+
         $form = $this->getExportRhForm();
 
 
-        /*Scénario 2 : Intervenant présent dans le SI RH donc uniquement mis à jour des données*/
-        /*Scénario 3 : Intervenant présent dans le SI RH avec une affectation*/
         $nameConnecteur = $this->exportRhService->getConnecteurName();
 
 
@@ -102,6 +123,8 @@ class ExportRhController extends AbstractController
             'intervenantDossier',
             'intervenantDossierValidation',
             'form',
+            'renouvellement',
+            'priseEnCharge',
             'nameConnecteur');
     }
 

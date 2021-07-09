@@ -95,6 +95,52 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
+    public function recupererDonneesAdministrativesIntervenantRh(\Application\Entity\Db\Intervenant $intervenant)
+    {
+        try {
+            if (!empty($intervenant->getCodeRh())) {
+                $codeRh = $intervenant->getCodeRh();
+                //Si code RH ne contient pas UCN alors on le reformate
+                if (!strstr($codeRh, 'UCN')) {
+                    $codeRh = $this->siham->getCodeAdministration() . str_pad($codeRh, 9, '0', STR_PAD_LEFT);
+                }
+
+
+                $dateObservation = $intervenant->getAnnee()->getDateDebut();
+                $params          =
+                    [
+                        'listeMatricules' => [$codeRh],
+                        'dateObservation' => $intervenant->getAnnee()->getDateDebut()->format('Y-m-d'),
+                    ];
+
+
+                $donneesAdministratives = $this->siham->recupererDonneesAdministrativeAgent($params);
+
+                return $donneesAdministratives;
+            }
+
+            return null;
+        } catch (SihamException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+
+    public function recupererAffectationEnCours($intervenant)
+    {
+        $affectation            = [];
+        $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+
+        if (!empty($donneesAdministratives->listeAffectations)) {
+            $affectation = $donneesAdministratives->listeAffectations;
+        }
+
+        return $affectation;
+    }
+
+
+
     public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, $datas): ?string
     {
         try {

@@ -22,7 +22,6 @@ $connecteurFieldset = $form->get('connecteurForm');
     <?php endif; ?>
 </div>
 <?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger(); ?>
-<?php if (empty($intervenantRh)): ?>
 
 <form class="no-intranavigation" action="<?= $this->url('intervenant/pec', ['intervenant' => $intervenant->getId()]) ?>" method="post">
     <!--Partie générique du formulaire-->
@@ -145,16 +144,20 @@ $connecteurFieldset = $form->get('connecteurForm');
 
         </div>
     </div>
-    <!-- Formulaire spécifique au connecteur-->
-    <?php
-    echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset'));
-    ?>
+    <?php if ($priseEnCharge): ?>
 
-    <p>
-        <input type="submit" value="Prendre en charge l'agent"/>
-    </p>
+        <!-- Formulaire spécifique au connecteur-->
+        <?php
+        echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset'));
+        ?>
+
+        <p>
+            <input type="submit" value="Prendre en charge l'agent"/>
+        </p>
+    <?php elseif ($renouvellement): ?>
+        renouvellement
+
+    <?php endif; ?>
+
 </form>
-
-<?php endif; ?>
-
 

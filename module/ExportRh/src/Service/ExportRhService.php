@@ -79,6 +79,26 @@ class ExportRhService extends AbstractService
 
 
 
+    public function getDonneesAdministrativeIntervenantRh($intervenant)
+    {
+        $donneesAdministratives = $this->connecteur->recupererDonneesAdministrativesIntervenantRh($intervenant);
+
+        return $donneesAdministratives;
+    }
+
+
+
+    public function getAffectationEnCours($intervenant)
+    {
+        $affectation = $this->connecteur->recupererAffectationEnCours($intervenant);
+        var_dump($affectation);
+        die;
+
+        return $affectation;
+    }
+
+
+
     public function getListeUO()
     {
         return $this->connecteur->recupererListeUO();

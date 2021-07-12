@@ -74,8 +74,12 @@ class ExportRhController extends AbstractController
     {
 
         /* Initialisation */
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant              = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenantRh            = '';
+        $form                     = '';
+        $nameConnecteur           = '';
+        $affectationFonctionnelle = '';
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -95,27 +99,33 @@ class ExportRhController extends AbstractController
          * Etape 4 : Si il a une affectation en cours alors on propose uniquement la mise à jour des données personnelles
          * Etape 5 : Si il n'a pas encore d'affectation on propose alors un renouvellement de l'intervenant
          */
-
-        $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
-
-        if ($intervenantRh) {
-            //On a trouvé un intervenant dans le SI RH
-            $affectationEnCours = $this->exportRhService->getAffectationEnCours($intervenant);
-            //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
-            $renouvellement = true;
-            if (!empty($affectationEnCours)) {
-                //Si non on propose un renouvellement de l'intervenant SI RH
-                $renouvellement = false;
+        try {
+            $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
+            if (!empty($intervenantRh)) {
+                //On a trouvé un intervenant dans le SI RH
+                $affectationEnCours = $this->exportRhService->getAffectationEnCours($intervenant);
+                //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
+                $renouvellement = true;
+                if (!empty($affectationEnCours)) {
+                    foreach ($affectationEnCours as $affectation) //Si non on propose un renouvellement de l'intervenant SI RH
+                    {
+                        if ($affectation->codeTypeRattachement == 'FUN') {
+                            $affectationFonctionnelle = $affectation;
+                            $renouvellement           = false;
+                        }
+                    }
+                }
+            } else {
+                $priseEnCharge = true;
             }
-        } else {
-            $priseEnCharge = true;
+
+
+            $nameConnecteur = $this->exportRhService->getConnecteurName();
+            $form           = $this->getExportRhForm();
+        } catch (SihamException $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
-
-        $form = $this->getExportRhForm();
-
-
-        $nameConnecteur = $this->exportRhService->getConnecteurName();
-
+      
 
         return compact('typeIntervenant',
             'intervenant',
@@ -125,7 +135,8 @@ class ExportRhController extends AbstractController
             'form',
             'renouvellement',
             'priseEnCharge',
-            'nameConnecteur');
+            'nameConnecteur',
+            'affectationFonctionnelle');
     }
 
 
@@ -157,4 +168,30 @@ class ExportRhController extends AbstractController
         return $this->redirect()->toRoute('intervenant/exporter', [], [], true);
     }
 
+
+
+    public function renouvellementAction()
+    {
+        try {
+            if ($this->getRequest()->isPost()) {
+                $intervenant = $this->getEvent()->getParam('intervenant');
+                if (!$intervenant) {
+                    throw new \LogicException('Intervenant non précisé ou inexistant');
+                }
+
+                $posts  = $this->getRequest()->getPost();
+                $result = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
+                if ($result !== false) {
+                    $this->flashMessenger()->addSuccessMessage('succes du renouvellement matricule : ' . $result);
+                } else {
+                    $this->flashMessenger()->addErrorMessage('Probleme de renouvellement');
+                }
+            }
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+
+        return $this->redirect()->toRoute('intervenant/exporter', [], [], true);
+    }
 }

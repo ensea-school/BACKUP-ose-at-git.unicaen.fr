@@ -5,12 +5,18 @@
  * @var \Application\Entity\Db\IntervenantDossier $intervenantDossier
  */
 
-$form->prepare();
-$generiqueFieldset  = $form->get('generiqueFieldset');
-$connecteurFieldset = $form->get('connecteurForm');
+if ($priseEnCharge) {
+    $action = 'intervenant/pec';
+} elseif ($renouvellement) {
+    $action = 'intervenant/ren';
+} else {
+    $action = 'intervenant/ren';
+}
 
 ?>
 <br/>
+
+<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger(); ?>
 
 
 <div class="messenger alert alert-warning">
@@ -21,143 +27,164 @@ $connecteurFieldset = $form->get('connecteurForm');
     <?php elseif (empty($intervenantRh)): ?>
     <?php endif; ?>
 </div>
-<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger(); ?>
+<?php if (!empty($form)): ?>
+    <?php
+    $form->prepare();
+    $generiqueFieldset  = $form->get('generiqueFieldset');
+    $connecteurFieldset = $form->get('connecteurForm');
+    ?>
 
-<form class="no-intranavigation" action="<?= $this->url('intervenant/pec', ['intervenant' => $intervenant->getId()]) ?>" method="post">
-    <!--Partie générique du formulaire-->
-    <div class="panel panel-default">
-        <div class="panel-heading">Récapitulatif des données personnelles</div>
-        <div class="panel-body">
-            <? if (empty($intervenantRh)): ?>
-            <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> n'a pas été trouvé dans le SI RH. Vous pouvez si vous le souhaiter prendre en charge cette intervenant avec les données de son dossier, résumées ci-dessous :</p>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Champs</th>
-                    <th>Données</th>
+    <form class="no-intranavigation" action="<?= $this->url($action, ['intervenant' => $intervenant->getId()]) ?>" method="post">
+        <!--Partie générique du formulaire-->
+        <div class="panel panel-default">
+            <div class="panel-heading">Récapitulatif des données personnelles</div>
+            <div class="panel-body">
+                <?php if (empty($intervenantRh)): ?>
+                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> n'a pas été trouvé dans le SI RH. Vous pouvez si vous le souhaiter prendre en charge cette intervenant avec les données de son dossier, résumées ci-dessous :</p>
+                <?php else: ?>
+                    <?php if (!empty($affectationFonctionnelle)): ?>
+                        <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?>. Il possède déjà actuellement une affectation pour l'année universitaire en cours. Vous pouvez mettre à jour ses données personnelles si
+                            vous le souhaitez avec le bouton synchronisation ci-dessous.</p>
+                    <?php else: ?>
+                        <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?>.Il ne possède pas encore d'affectation pour l'année en cours. Vous pouvez le renouveller pour cette année à l'aide du formulaire
+                            ci-dessous.</p>
+                    <?php endif; ?>
+                <?php endif; ?>
 
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('nomUsuel')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('nomUsuel')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getNomUsuel() ?></td>
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('prenom')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('prenom')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getPrenom() ?></td>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Champs</th>
+                        <th>Données</th>
 
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('dateNaissance')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('dateNaissance')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getDateNaissance()->format('d/m/Y') ?></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('nomUsuel')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('nomUsuel')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getNomUsuel() ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('prenom')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('prenom')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getPrenom() ?></td>
 
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('nationalite')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('nationalite')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getPaysNationalite()->getLibelle() ?></td>
-                </tr>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('dateNaissance')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('dateNaissance')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getDateNaissance()->format('d/m/Y') ?></td>
 
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('adressePrincipale')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('adressePrincipale')) ?> :
-                    </td>
-                    <td>
-                        <?php
-                        $adresse = '';
-                        $adresse .= (!empty($intervenantDossier->getAdresseNumero())) ? $intervenantDossier->getAdresseNumero() . ' ' : '';
-                        $adresse .= (!empty($intervenantDossier->getAdresseNumeroCompl())) ? $intervenantDossier->getAdresseNumeroCompl() . ' ' : '';
-                        $adresse .= (!empty($intervenantDossier->getAdresseVoirie())) ? $intervenantDossier->getAdresseVoirie() . ' ' : '';
-                        $adresse .= (!empty($intervenantDossier->getAdresseVoie())) ? $intervenantDossier->getAdresseVoie() . ' ' : '';
-                        $adresse .= (!empty($intervenantDossier->getAdressePrecisions())) ? '<br/>' . $intervenantDossier->getAdressePrecisions() . ' ' : '';
-                        $adresse .= '<br/>';
-                        $adresse .= $intervenantDossier->getAdresseCodePostal() . ' ' . $intervenantDossier->getAdresseCommune();
-                        echo $adresse;
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('telPro')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('telPro')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getTelPro() ?></td>
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('telPerso')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('telPerso')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getTelPerso() ?></td>
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('emailPro')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('emailPro')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getEmailPro() ?></td>
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('emailPerso')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('emailPerso')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getEmailPerso() ?></td>
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('numeroInsee')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('numeroInsee')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getNumeroInsee() ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('nationalite')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('nationalite')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getPaysNationalite()->getLibelle() ?></td>
+                    </tr>
 
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('iban')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('iban')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getIBAN() ?></td>
-                </tr>
-                <tr>
-                    <td>
-                        <?= $this->formCheckbox($generiqueFieldset->get('bic')); ?>
-                        <?= $this->formLabel($generiqueFieldset->get('bic')) ?> :
-                    </td>
-                    <td><?= $intervenantDossier->getBIC() ?></td>
-                </tr>
-                </tbody>
-            </table>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('adressePrincipale')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('adressePrincipale')) ?> :
+                        </td>
+                        <td>
+                            <?php
+                            $adresse = '';
+                            $adresse .= (!empty($intervenantDossier->getAdresseNumero())) ? $intervenantDossier->getAdresseNumero() . ' ' : '';
+                            $adresse .= (!empty($intervenantDossier->getAdresseNumeroCompl())) ? $intervenantDossier->getAdresseNumeroCompl() . ' ' : '';
+                            $adresse .= (!empty($intervenantDossier->getAdresseVoirie())) ? $intervenantDossier->getAdresseVoirie() . ' ' : '';
+                            $adresse .= (!empty($intervenantDossier->getAdresseVoie())) ? $intervenantDossier->getAdresseVoie() . ' ' : '';
+                            $adresse .= (!empty($intervenantDossier->getAdressePrecisions())) ? '<br/>' . $intervenantDossier->getAdressePrecisions() . ' ' : '';
+                            $adresse .= '<br/>';
+                            $adresse .= $intervenantDossier->getAdresseCodePostal() . ' ' . $intervenantDossier->getAdresseCommune();
+                            echo $adresse;
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('telPro')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('telPro')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getTelPro() ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('telPerso')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('telPerso')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getTelPerso() ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('emailPro')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('emailPro')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getEmailPro() ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('emailPerso')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('emailPerso')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getEmailPerso() ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('numeroInsee')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('numeroInsee')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getNumeroInsee() ?></td>
 
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('iban')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('iban')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getIBAN() ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?= $this->formCheckbox($generiqueFieldset->get('bic')); ?>
+                            <?= $this->formLabel($generiqueFieldset->get('bic')) ?> :
+                        </td>
+                        <td><?= $intervenantDossier->getBIC() ?></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
-    </div>
-    <?php if ($priseEnCharge): ?>
+        <?php if ($priseEnCharge): ?>
 
-        <!-- Formulaire spécifique au connecteur-->
-        <?php
-        echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset'));
-        ?>
+            <!-- Formulaire spécifique au connecteur-->
+            <?php
+            echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset'));
+            ?>
 
-        <p>
-            <input type="submit" value="Prendre en charge l'agent"/>
-        </p>
-    <?php elseif ($renouvellement): ?>
-        renouvellement
+            <p>
+                <input type="submit" value="Prendre en charge l'agent"/>
+            </p>
+        <?php elseif ($renouvellement): ?>
+            <?php
+            echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset'));
+            ?>
 
-    <?php endif; ?>
+            <p>
+                <input type="submit" value="Renouveller l'agent"/>
+            </p>
+        <?php endif; ?>
 
-</form>
+    </form>
+<?php endif; ?>
 

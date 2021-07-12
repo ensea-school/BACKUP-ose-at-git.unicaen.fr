@@ -91,8 +91,7 @@ class ExportRhService extends AbstractService
     public function getAffectationEnCours($intervenant)
     {
         $affectation = $this->connecteur->recupererAffectationEnCours($intervenant);
-        var_dump($affectation);
-        die;
+
 
         return $affectation;
     }
@@ -137,6 +136,13 @@ class ExportRhService extends AbstractService
     public function priseEnChargeIntrervenantRh(Intervenant $intervenant, $datas)
     {
         return $this->connecteur->prendreEnChargeIntervenantRh($intervenant, $datas);
+    }
+
+
+
+    public function renouvellementIntervenantRh(Intervenant $intervenant, $datas)
+    {
+        return $this->connecteur->renouvellerIntervenantRH($intervenant, $datas);
     }
 
 

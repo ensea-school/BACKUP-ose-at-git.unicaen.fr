@@ -266,6 +266,56 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
+    public function renouvellerIntervenantRH(\Application\Entity\Db\Intervenant $intervenant, $datas): ?string
+    {
+        try {
+            /* Récupération du dossier de l'intervenant */
+            $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
+
+            /* Récupération du dossier de l'intervenant */
+            $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
+
+            /*POSITION ADMINISTRATIVE*/
+            $position[] =
+                ['dateEffetPosition' => $datas['connecteurForm']['anneeUniversitaire'],
+                 'position'          => $datas['connecteurForm']['position']];
+
+            /*STATUT*/
+            $statut[] =
+                ['dateEffetStatut' => $datas['connecteurForm']['anneeUniversitaire'],
+                 'statut'          => $datas['connecteurForm']['statut']];
+
+            /*MODALITE SERVICE*/
+            $service[] =
+                ['dateEffetModalite' => $datas['connecteurForm']['anneeUniversitaire'],
+                 'modalite'          => $datas['connecteurForm']['modaliteService']];
+
+
+            $params = [
+                'categorieEntree'        => 'ACTIVE',
+                'dateRenouvellement'     => $datas['connecteurForm']['anneeUniversitaire'],
+                'emploi'                 => $datas['connecteurForm']['emploi'],
+                'listeModalitesServices' => $service,
+                'listeStatuts'           => $statut,
+                
+                'listePositions' => $position,
+                'motifEntree'    => 'REN',
+                'matricule'      => $intervenant->getCodeRh(),
+                'temoinValidite' => '1',
+                'UO'             => $datas['connecteurForm']['affectation'],
+            ];
+
+            $matricule = $this->siham->renouvellementAgent($params);
+
+
+            return $matricule;
+        } catch (SihamException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+
     public function recupererListeUO(): ?array
     {
         /*On récupére les UO de type composante*/

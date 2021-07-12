@@ -45,6 +45,17 @@ return [
                             ],
                         ],
                     ],
+                    'ren'            => [
+                        'type'          => 'Segment',
+                        'may_terminate' => false,
+                        'options'       => [
+                            'route'    => '/:intervenant/ren',
+                            'defaults' => [
+                                'controller' => Controller\ExportRhController::class,
+                                'action'     => 'renouvellement',
+                            ],
+                        ],
+                    ],
                     'administration' => [
                         'type'          => 'Literal',
                         'may_terminate' => true,
@@ -120,7 +131,7 @@ return [
                 ],
                 [
                     'controller' => Controller\ExportRhController::class,
-                    'action'     => ['exporter', 'prise-en-charge'],
+                    'action'     => ['exporter', 'prise-en-charge', 'renouvellement'],
                     'privileges' => [Privileges::EXPORT_RH_SYNC],
                     'assertion'  => ExportRhAssertion::class,
 

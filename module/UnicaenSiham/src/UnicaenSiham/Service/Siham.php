@@ -251,7 +251,7 @@ class Siham
         $paramsWS = ['ParamListAgent' => [
             'codeEtablissement'  => $this->codeEtablissement,
             'dateFinObservation' => (isset($params['dateFinObservation'])) ? $params['dateFinObservation'] : '',
-            'dateObservation'    => '',//(isset($params['dateObservation'])) ? $params['dateObservation'] : '',
+            'dateObservation'    => (isset($params['dateObservation'])) ? $params['dateObservation'] : '',
             'listeMatricules'    => $listeMatricules,
         ]];
 
@@ -259,7 +259,7 @@ class Siham
         try {
             $client = $this->sihamClient->getClient('DossierAgentWebService');
             $result = $client->RecupDonneesAdministratives($paramsWS);
-            
+
             if (isset($result->return)) {
 
                 return $result->return;
@@ -353,8 +353,7 @@ class Siham
                 $paramsWS['ParamModifDP']['dateDebut'] = $agent->getDateDebutAdresse();
                 $client                                = $this->sihamClient->getClient('DossierAgentWebService');
                 $result                                = $client->ModifDonneesPersonnelles($paramsWS);
-                var_dump($this->sihamClient->getLastRequest());
-                die;
+
                 if (isset($result->return)) {
                     if ($result->return->statutMAJ == 1) {
                         return true;
@@ -722,6 +721,124 @@ class Siham
                 throw new SihamException('Erreur non identifié, veuillez vous rapprocher du support informatique', 0);
             }
         } catch (\SoapFault $e) {
+            throw new SihamException($e->faultstring, 0, $e);
+        }
+
+        return false;
+    }
+
+
+
+    public function renouvellementAgent(array $params)
+    {
+
+        //Traitement des modalités de services
+        $listeModalitesServices = [];
+
+        if (!empty($params['listeModalitesServices'])) {
+            foreach ($params['listeModalitesServices'] as $modalite) {
+                $listeModalitesServices[] = ['dateEffetModalite' => $modalite['dateEffetModalite'],
+                                             'modalite'          => $modalite['modalite']];
+            }
+        } else {
+            $listeModalitesServices[] = ['dateEffetModalite' => '',
+                                         'modalite'          => ''];
+        }
+
+        //Traitement du statut
+
+        $listeStatuts = [];
+
+        if (!empty($params['listeStatuts'])) {
+            foreach ($params['listeStatuts'] as $statut) {
+                $listeStatuts[] = ['dateEffetStatut' => $statut['dateEffetStatut'],
+                                   'statut'          => $statut['statut']];
+            }
+        } else {
+            $listeStatuts[] = ['dateEffetStatut' => '',
+                               'statut'          => ''];
+        }
+
+        //Traitement du carriere
+        $listeCarriere[] = ['dateEffetCarriere' => (isset($params['dateRenouvellement'])) ? strtoupper($params['dateRenouvellement']) : '',
+                            'grade'             => '0000',
+                            'qualiteStatutaire' => 'N',
+                            'temoinValidite'    => '1'];
+
+        //Traitement des positions
+
+        $listePositions = [];
+
+
+        if (!empty($params['listePositions'])) {
+            foreach ($params['listePositions'] as $position) {
+                $listePositions[] = [
+                    'dateEffetPosition' => (isset($position['dateEffetPosition'])) ? strtoupper($position['dateEffetPosition']) : '',
+                    'position'          => (isset($position['position'])) ? strtoupper($position['position']) : '',
+                    'temoinValidite'    => (isset($position['temoinValidite'])) ? strtoupper($position['temoinValidite']) : '',
+                ];
+            }
+        } else {
+            $listePositions[] = [
+                'dateEffetPosition' => '',
+                'position'          => '',
+                'temoinValidite'    => '',
+            ];
+        }
+
+        $paramsWS = ['ParamRA' => [
+            'categorieEntree'        => (isset($params['categorieEntree'])) ? strtoupper($params['categorieEntree']) : '',
+            'codeAdministration'     => $this->codeAdministration,
+            'codeEtablissement'      => $this->codeEtablissement,
+            'dateRenouvellement'     => (isset($params['dateRenouvellement'])) ? strtoupper($params['dateRenouvellement']) : '',
+            'emploi'                 => (isset($params['emploi'])) ? strtoupper($params['emploi']) : '',
+            'listeCarriere'          => $listeCarriere,
+            'listeModalitesServices' => $listeModalitesServices,
+            'listeStatuts'           => $listeStatuts,
+            'listePositions'         => $listePositions,
+            'motifEntree'            => (isset($params['motifEntree'])) ? strtoupper($params['motifEntree']) : self::SIHAM_MOTIF_ENTREE_DEFAULT,
+            'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',
+            'temoinValidite'         => (isset($params['temoinValidite'])) ? strtoupper($params['temoinValidite']) : '',
+            'UO'                     => (isset($params['UO'])) ? strtoupper($params['UO']) : '',
+
+        ]];
+
+
+        try {
+
+            $client = $this->sihamClient->getClient('PECWebService');
+            $result = $client->RenouvellementAgent($paramsWS);
+
+
+            if ($result->return->statut == 'ERREUR_GENERALE') {
+                $messageErreur  = '';
+                $messageWarning = '';
+                if (!empty($result->return->listeAnomaliesWebServices)) {
+                    if (is_array($result->return->listeAnomaliesWebServices)) {
+                        foreach ($result->return->listeAnomaliesWebServices as $anomalie) {
+                            if (isset($anomalie->anomalie)) {
+                                if (strpos($anomalie->anomalie, 'Erreur') === 0) {
+                                    $messageErreur .= $anomalie->anomalie . '<br/>';
+                                }
+                            }
+                        }
+                    } else {
+                        if (isset($result->return->listeAnomaliesWebServices->anomalie)) {
+                            if (strpos($result->return->listeAnomaliesWebServices->anomalie, 'Erreur') === 0) {
+                                $messageErreur .= $result->return->listeAnomaliesWebServices->anomalie . '<br/>';
+                            }
+                        }
+                    }
+                }
+                //Traitement du message d'erreur spécifique à la PEC
+                throw new SihamException($messageErreur, 0);
+            } elseif ($result->return->statut == 'MAJ OK' && !empty($result->return->matricule)) {
+                return $result->return->matricule;
+            } else {
+                throw new SihamException('Erreur non identifié, veuillez vous rapprocher du support informatique', 0);
+            }
+        } catch (\SoapFault $e) {
+
             throw new SihamException($e->faultstring, 0, $e);
         }
 

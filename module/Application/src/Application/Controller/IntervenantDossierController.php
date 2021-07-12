@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Constants;
-use Application\Entity\Db\IndicModifDossier;
+use Indicateur\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Form\Intervenant\DossierValidation;

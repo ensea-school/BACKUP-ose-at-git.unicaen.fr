@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Indicateur\Entity\Db\Indicateur\Indicateur340" table="V_INDICATEUR_340" read-only="true">
+        <id name="id" type="integer" column="ID"/>
+
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+            <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

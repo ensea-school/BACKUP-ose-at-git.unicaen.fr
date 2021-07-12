@@ -105,6 +105,7 @@ class AppConfig
             'UnicaenTbl',
             'Application',
             'Plafond',
+            'Indicateur',
         ];
 
         if (!self::inConsole()) {

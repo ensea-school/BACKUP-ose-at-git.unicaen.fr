@@ -5,8 +5,7 @@ namespace Plafond;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
-$config = [
-    'module' => 'Plafond',
+return [
 
     'routes' => [
         'type'          => 'Literal',
@@ -87,58 +86,5 @@ $config = [
 
     'forms' => [
         Form\PlafondApplicationForm::class => Form\PlafondApplicationFormFactory::class,
-    ],
-];
-
-
-return [
-    'doctrine' => [
-        'driver' => [
-            'orm_default_driver' => [
-                'paths' => [
-                    __DIR__ . '/../src/' . $config['module'] . '/Entity/Db/Mapping',
-                ],
-            ],
-            'orm_default'        => [
-                'drivers' => [
-                    $config['module'] . '\Entity\Db' => 'orm_default_driver',
-                ],
-            ],
-        ],
-    ],
-
-    'view_manager' => [
-        'template_path_stack' => [
-            __DIR__ . '/../view',
-        ],
-    ],
-
-    'router' => [
-        'routes' => [
-            strtolower($config['module']) => $config['routes'],
-        ],
-    ],
-
-    'navigation' => [
-        'default' => [
-            'home' => [
-                'pages' => $config['navigation'],
-            ],
-        ],
-    ],
-
-    'bjyauthorize'    => [
-        'guards' => [
-            PrivilegeController::class => $config['guards'],
-        ],
-    ],
-    'controllers'     => [
-        'factories' => $config['controllers'],
-    ],
-    'service_manager' => [
-        'factories' => $config['services'],
-    ],
-    'form_elements'   => [
-        'factories' => $config['forms'],
     ],
 ];

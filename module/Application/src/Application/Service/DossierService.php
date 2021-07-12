@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\IndicModifDossier;
+use Indicateur\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\TblDossier;
@@ -173,7 +173,7 @@ class DossierService extends AbstractEntityService
     public function purgerDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->update(\Application\Entity\Db\IndicModifDossier::class, 't')
+            ->update(\Indicateur\Entity\Db\IndicModifDossier::class, 't')
             ->set("t.histoDestruction", ":destruction")
             ->set("t.histoDestructeur", ":destructeur")
             ->where("t.intervenant = :intervenant")

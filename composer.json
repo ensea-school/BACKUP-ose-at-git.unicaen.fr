@@ -24,7 +24,8 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-            "Plafond\\": "module/Plafond/src/"
+            "Plafond\\": "module/Plafond/src/",
+            "Indicateur\\": "module/Indicateur/src/"
         }
     },
     "require-dev" : {

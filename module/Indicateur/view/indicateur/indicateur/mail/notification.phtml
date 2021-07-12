@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @var $this         \Application\View\Renderer\PhpRenderer
+ * @var $notification \Indicateur\Entity\Db\NotificationIndicateur
+ *
+ */
+
+use Application\Constants;
+
+$result = $notification->getIndicateur()->getResult($notification->getAffectation()->getStructure());
+
+$hasStructure = false;
+$hasDetails   = false;
+if (!$notification->getAffectation()->getStructure()) {
+    foreach ($result as $re) {
+        if ($re->getStructure()) {
+            $hasStructure = true;
+        }
+        if ($re->getDetails()) {
+            $hasDetails = true;
+        }
+    }
+} else {
+    foreach ($result as $re) {
+        if ($re->getDetails()) {
+            $hasDetails = true;
+        }
+    }
+}
+
+
+?>
+
+<h1><?= $notification->getIndicateur()->getLibelle($notification->getAffectation()->getStructure()) ?></h1>
+<?php if ($hasStructure): ?>
+    <table border="1" style="border-collapse: collapse">
+        <thead>
+        <tr>
+            <th>Composante</th>
+            <th>Intervenant</th>
+            <?php if ($hasDetails): ?>
+                <th>Détails</th>
+            <?php endif; ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($result as $r): ?>
+            <tr>
+                <td><?= $r->getStructure() ?></td>
+                <td>
+                    <a href="<?= $this->url($notification->getIndicateur()->getRoute(), $r->getUrlParams(), ['force_canonical' => true]) ?>">
+                        <?= $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
+                    </a>
+                </td>
+                <?php if ($hasDetails): ?>
+                    <td><?= $r->getDetails() ?></td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <ul>
+        <?php foreach ($result as $r): ?>
+            <li>
+                <a href="<?= $this->url($notification->getIndicateur()->getRoute(), $r->getUrlParams(), ['force_canonical' => true]) ?>">
+                    <?= $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
+                </a>
+                <?php if ($r->getDetails()): ?>
+                    <?= $r->getDetails() ?>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+
+<p>
+    Vous vous êtes abonné(e) à cet indicateur
+    le <?= $notification->getDateAbonnement()->format(Constants::DATETIME_FORMAT) ?>.<br/>
+    <a href="<?= $this->url('indicateur', [], ['force_canonical' => true]) ?>"
+       title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à des
+        indicateurs</a>
+</p>

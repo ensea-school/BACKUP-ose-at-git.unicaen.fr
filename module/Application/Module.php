@@ -11,6 +11,7 @@ namespace Application;
 
 use Application\Service\ContextService;
 use Psr\Container\ContainerInterface;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
@@ -27,6 +28,9 @@ include_once(__DIR__ . '/src/Application/functions.php');
 
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
+    private $modules = [];
+
+
 
     public function onBootstrap(MvcEvent $e)
     {
@@ -107,13 +111,22 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
     private function getEntityService(ContainerInterface $container, $paramName)
     {
+        if (empty($this->modules)) {
+            $moduleManager = $container->get('ModuleManager');
+            /* @var $moduleManager ModuleManager */
+
+            $this->modules = $moduleManager->getModules();
+        }
+
         if ('typeAgrementCode' === $paramName) {
             $paramName = 'typeAgrement';
         }
 
-        $serviceName = 'Application\\Service\\' . ucfirst($paramName) . 'Service';
-        if ($container->has($serviceName)) {
-            return $container->get($serviceName);
+        foreach ($this->modules as $module) {
+            $serviceName = $module . '\\Service\\' . ucfirst($paramName) . 'Service';
+            if ($container->has($serviceName)) {
+                return $container->get($serviceName);
+            }
         }
 
         return null;

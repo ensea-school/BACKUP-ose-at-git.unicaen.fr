@@ -132,7 +132,7 @@
             </cascade>
         </one-to-many>
         <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant"/>
-        <one-to-many field="indicModifDossier" target-entity="Application\Entity\Db\IndicModifDossier"
+        <one-to-many field="indicModifDossier" target-entity="Indicateur\Entity\Db\IndicModifDossier"
                      mapped-by="intervenant"/>
 
     </entity>

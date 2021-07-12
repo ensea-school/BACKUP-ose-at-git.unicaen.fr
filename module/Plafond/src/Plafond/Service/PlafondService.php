@@ -1,11 +1,12 @@
 <?php
 
-namespace Application\Service;
+namespace Plafond\Service;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Plafond;
+use Application\Service\AbstractEntityService;
+use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\PlafondDepassement;
+use Plafond\Entity\PlafondDepassement;
 
 /**
  * Description of PlafondService
@@ -26,7 +27,7 @@ class PlafondService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass() : string
+    public function getEntityClass(): string
     {
         return Plafond::class;
     }
@@ -39,11 +40,11 @@ class PlafondService extends AbstractEntityService
      *
      * @return PlafondDepassement[]
      */
-    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire) : array
+    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): array
     {
-        $sql = file_get_contents('data/Query/plafond.sql');
-        $sql = str_replace('/*i.id*/', 'AND intervenant_id = ' . $intervenant->getId(), $sql) . ' AND tvh.id = ' . $typeVolumeHoraire->getId();
-        $sql = preg_replace('/--(.*)\n/Uis', "\n", $sql) ;
+        $sql          = file_get_contents('data/Query/plafond.sql');
+        $sql          = str_replace('/*i.id*/', 'AND intervenant_id = ' . $intervenant->getId(), $sql) . ' AND tvh.id = ' . $typeVolumeHoraire->getId();
+        $sql          = preg_replace('/--(.*)\n/Uis', "\n", $sql);
         $res          = $this->getEntityManager()->getConnection()->fetchAll($sql);
         $depassements = [];
         foreach ($res as $r) {
@@ -60,7 +61,7 @@ class PlafondService extends AbstractEntityService
      *
      * @return PlafondDepassement
      */
-    private function depassementFromArray(array $a) : PlafondDepassement
+    private function depassementFromArray(array $a): PlafondDepassement
     {
         $depassement = new PlafondDepassement();
         $depassement->setPlafondLibelle($a['PLAFOND_LIBELLE']);
@@ -78,7 +79,7 @@ class PlafondService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias() : string
+    public function getAlias(): string
     {
         return 'plafond';
     }

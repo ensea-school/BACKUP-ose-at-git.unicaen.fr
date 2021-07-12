@@ -1,14 +1,14 @@
 <?php
 
-namespace Application\Form\Plafond;
+namespace Plafond\Form;
 
-use Application\Entity\Db\PlafondApplication;
-use Application\Entity\Db\PlafondEtat;
+use Plafond\Entity\Db\PlafondApplication;
+use Plafond\Entity\Db\PlafondEtat;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PlafondApplicationServiceAwareTrait;
-use Application\Service\Traits\PlafondEtatServiceAwareTrait;
+use Plafond\Service\PlafondApplicationServiceAwareTrait;
+use Plafond\Service\PlafondEtatServiceAwareTrait;
 use UnicaenApp\Util;
 use Zend\Hydrator\HydratorInterface;
 
@@ -24,7 +24,6 @@ class PlafondApplicationForm extends AbstractForm
     use PlafondEtatServiceAwareTrait;
     use ContextServiceAwareTrait;
     use PlafondApplicationServiceAwareTrait;
-
 
 
     public function init()
@@ -62,7 +61,7 @@ class PlafondApplicationForm extends AbstractForm
         $this->add([
             'name'       => 'anneeDebut',
             'options'    => [
-                'label'         => 'Année de début',
+                'label' => 'Année de début',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -74,7 +73,7 @@ class PlafondApplicationForm extends AbstractForm
         $this->add([
             'name'       => 'anneeFin',
             'options'    => [
-                'label'         => 'Année de fin',
+                'label' => 'Année de fin',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -188,7 +187,6 @@ class PlafondApplicationFormHydrator implements HydratorInterface
 {
     use AnneeServiceAwareTrait;
     use PlafondEtatServiceAwareTrait;
-
 
 
     /**

@@ -80,16 +80,11 @@ class Application
         $serviceManager->setService('ApplicationConfig', $configuration);
 
         // Load modules
-        $serviceManager->get('ModuleManager')->loadModules();
-
-        // Prepare list of listeners to bootstrap
-        //$listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
-        //$config                     = $serviceManager->get('config');
-        //$listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
-
-        $listeners = [];//array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
-
-        $serviceManager->get('Application')->bootstrap($listeners)->run();
+        /** @var $moduleManager \Zend\ModuleManager\ModuleManager */
+        $moduleManager = $serviceManager->get('ModuleManager');
+        $moduleManager->loadModules();
+        $application = $serviceManager->get('Application')->bootstrap([]);
+        $application->run();
     }
 
 

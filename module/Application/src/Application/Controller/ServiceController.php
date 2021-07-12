@@ -7,7 +7,7 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
-use Application\Processus\Traits\PlafondProcessusAwareTrait;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;

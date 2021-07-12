@@ -10,7 +10,7 @@ use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Form\Intervenant\Traits\RegleStructureValidationFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
-use Application\Processus\Traits\PlafondProcessusAwareTrait;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;

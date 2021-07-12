@@ -1,6 +1,6 @@
 <?php
 
-use Application\Entity\Db\Plafond;
+use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\PlafondApplication;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Provider\Privilege\Privileges;
@@ -42,10 +42,10 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTI
                                 'plafondApplication' => $regle->getId(),
                             ]);
                             echo $this->tag('a', [
-                                'class'      => 'pop-ajax',
-                                'href'       => $url,
+                                'class'              => 'pop-ajax',
+                                'href'               => $url,
                                 'data-submit-reload' => 'true',
-                                'data-min-width' => '400px',
+                                'data-min-width'     => '400px',
                             ])->html((string)$regle);
                         } else {
                             echo (string)$regle;
@@ -57,10 +57,10 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTI
                                 'plafond'           => $plafond->getId(),
                             ]]);
                             echo $this->tag('a', [
-                                'class'      => 'pop-ajax',
-                                'href'       => $url,
+                                'class'              => 'pop-ajax',
+                                'href'               => $url,
                                 'data-submit-reload' => 'true',
-                                'data-min-width' => '400px',
+                                'data-min-width'     => '400px',
                             ])->html('Désactivé');
                         }
                     }

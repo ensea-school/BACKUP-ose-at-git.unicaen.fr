@@ -1,9 +1,9 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Plafond\Entity\Db;
 
-use Application\Entity\Db\Traits\PlafondAwareTrait;
-use Application\Entity\Db\Traits\PlafondEtatAwareTrait;
+use Plafond\Entity\Db\PlafondAwareTrait;
+use Plafond\Entity\Db\PlafondEtatAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**

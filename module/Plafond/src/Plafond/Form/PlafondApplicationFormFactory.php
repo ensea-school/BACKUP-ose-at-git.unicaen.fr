@@ -1,9 +1,9 @@
 <?php
 
-namespace Application\Form\Plafond\Factory;
+namespace Plafond\Form;
 
 use Psr\Container\ContainerInterface;
-use Application\Form\Plafond\PlafondApplicationForm;
+use Plafond\Form\PlafondApplicationForm;
 
 
 /**

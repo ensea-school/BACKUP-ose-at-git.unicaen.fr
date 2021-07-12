@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
-
-use Application\Service\PlafondEtatService;
+namespace Plafond\Service;
 
 /**
  * Description of PlafondEtatServiceAwareTrait
@@ -20,9 +18,10 @@ trait PlafondEtatServiceAwareTrait
 
     /**
      * @param PlafondEtatService $servicePlafondEtat
+     *
      * @return self
      */
-    public function setServicePlafondEtat( PlafondEtatService $servicePlafondEtat )
+    public function setServicePlafondEtat(PlafondEtatService $servicePlafondEtat)
     {
         $this->servicePlafondEtat = $servicePlafondEtat;
 
@@ -34,9 +33,9 @@ trait PlafondEtatServiceAwareTrait
     /**
      * @return PlafondEtatService
      */
-    public function getServicePlafondEtat() : PlafondEtatService
+    public function getServicePlafondEtat(): PlafondEtatService
     {
-        if (!$this->servicePlafondEtat){
+        if (!$this->servicePlafondEtat) {
             $this->servicePlafondEtat = \Application::$container->get(PlafondEtatService::class);
         }
 

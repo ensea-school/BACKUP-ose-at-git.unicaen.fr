@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
-
-use Application\Service\PlafondApplicationService;
+namespace Plafond\Service;
 
 /**
  * Description of PlafondApplicationServiceAwareTrait
@@ -20,9 +18,10 @@ trait PlafondApplicationServiceAwareTrait
 
     /**
      * @param PlafondApplicationService $servicePlafondApplication
+     *
      * @return self
      */
-    public function setServicePlafondApplication( PlafondApplicationService $servicePlafondApplication )
+    public function setServicePlafondApplication(PlafondApplicationService $servicePlafondApplication)
     {
         $this->servicePlafondApplication = $servicePlafondApplication;
 
@@ -34,9 +33,9 @@ trait PlafondApplicationServiceAwareTrait
     /**
      * @return PlafondApplicationService
      */
-    public function getServicePlafondApplication() : PlafondApplicationService
+    public function getServicePlafondApplication(): PlafondApplicationService
     {
-        if (!$this->servicePlafondApplication){
+        if (!$this->servicePlafondApplication) {
             $this->servicePlafondApplication = \Application::$container->get(PlafondApplicationService::class);
         }
 

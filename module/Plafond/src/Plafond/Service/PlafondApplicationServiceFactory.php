@@ -1,10 +1,9 @@
 <?php
 
-namespace Application\Service\Factory;
+namespace Plafond\Service;
 
 use Application\Constants;
 use Psr\Container\ContainerInterface;
-use Application\Service\PlafondApplicationService;
 
 
 /**

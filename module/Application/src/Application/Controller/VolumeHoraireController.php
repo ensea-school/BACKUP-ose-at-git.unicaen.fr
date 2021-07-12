@@ -12,6 +12,7 @@ use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Processus\Traits\PlafondProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -32,6 +33,7 @@ class VolumeHoraireController extends AbstractController
     use WorkflowServiceAwareTrait;
     use PlafondProcessusAwareTrait;
     use SaisieCalendaireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
 
 
     public function listeAction()
@@ -43,7 +45,8 @@ class VolumeHoraireController extends AbstractController
         /* @var $service Service */
         if (!$service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
-        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
+        $typeVolumeHoraireId = $this->params()->fromPost('type-volume-horaire', $this->params()->fromQuery('type-volume-horaire'));
+        $typeVolumeHoraire   = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId);
 
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
         $readOnly = 1 == (int)$this->params()->fromQuery('read-only', 0);

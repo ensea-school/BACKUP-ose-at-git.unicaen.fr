@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Form\Plafond\Traits;
+namespace Plafond\Form;
 
-use Application\Form\Plafond\PlafondApplicationForm;
 use RuntimeException;
 
 /**

@@ -14,8 +14,6 @@ use RuntimeException;
  * @method *FromRoute($name = null, $default = null) Description
  * @method *FromQuery($name = null, $default = null) Description
  * @method *FromPost($name = null, $default = null) Description
- * @method *FromSources($name = null, $default = null, array $sources = null) Description
- * @method *FromQueryPost($name = null, $default = null) Description
  *
  * @see Params
  */
@@ -23,27 +21,6 @@ class Context extends Params
 {
     use EntityManagerAwareTrait;
     use IntervenantServiceAwareTrait;
-
-    /**
-     * @var bool
-     */
-    protected $mandatory = false;
-
-
-
-    /**
-     *
-     * @param bool $mandatory
-     *
-     * @return Context
-     */
-    public function mandatory($mandatory = true)
-    {
-        $this->mandatory = $mandatory;
-
-        return $this;
-    }
-
 
 
     /**
@@ -71,12 +48,6 @@ class Context extends Params
             break;
             case ($method = 'FromPost') === substr($name, $length = -8):
             break;
-            case ($method = 'FromSources') === substr($name, $length = -11):
-            break;
-            case 'FromQueryPost' === substr($name, $length = -13):
-                $method     = 'FromSources';
-                $argSources = ['query', 'post'];
-            break;
             default:
                 throw new LogicException("Méthode '$name' inexistante.");
         }
@@ -95,11 +66,7 @@ class Context extends Params
         if (!$argName) $argName = $target;
 
         /* Récupération de la valeur */
-        if ('FromSources' === $method) {
-            $value = $this->fromSources($argName, $argDefault, $argSources);
-        } else {
-            $value = call_user_func_array([$this, lcfirst($method)], [$argName, $argDefault]);
-        }
+        $value = call_user_func_array([$this, lcfirst($method)], [$argName, $argDefault]);
 
         /* Parcours du tableau pour récupérer la valeur attendue */
         if (!empty($argSubNames)) {
@@ -116,10 +83,6 @@ class Context extends Params
             $value = $this->getServiceIntervenant()->getByRouteParam($value);
         }
 
-        if ($this->mandatory && null === $value) {
-            throw new LogicException("Paramètre requis introuvable : '$target'.");
-        }
-
         /* Conversion éventuelle en entité */
         $className = 'Application\\Entity\\Db\\' . ucfirst($target);
         if (class_exists($className)) {
@@ -127,7 +90,7 @@ class Context extends Params
                 $id = (int)$value;
                 if ($id) {
                     $value = $this->getEntityManager()->find($className, $id);
-                    if (!$value && $this->mandatory) {
+                    if (!$value) {
                         throw new RuntimeException($className . " introuvable avec cet id : $id.");
                     }
                 } else {
@@ -136,35 +99,7 @@ class Context extends Params
             }
         }
 
-        $this->mandatory = false;
-
         return $value;
-    }
-
-
-
-    /**
-     *
-     * @param string $name    Parameter name to retrieve.
-     * @param mixed  $default Default value to use when the requested parameter is not set.
-     * @param array  $sources
-     *
-     * @return mixed
-     */
-    public function fromSources($name, $default = null, array $sources = [])
-    {
-        $defaultSources = ['context', 'route', 'query', 'post'];
-        if (empty($sources)) $sources = $defaultSources;
-
-        foreach ($sources as $source) {
-            if (!in_array($source, $defaultSources)) {
-                throw new LogicException("Source de données introuvable : '$source'.");
-            }
-            $result = call_user_func_array([$this, 'from' . lcfirst($source)], [$name, null]);
-            if ($result !== null) return $result;
-        }
-
-        return $default;
     }
 
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace Application\Controller;
+namespace Plafond\Controller;
 
-use Application\Entity\Db\PlafondApplication;
-use Application\Form\Plafond\Traits\PlafondApplicationFormAwareTrait;
+use Application\Controller\AbstractController;
+use Plafond\Entity\Db\PlafondApplication;
+use Plafond\Form\PlafondApplicationFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PlafondApplicationServiceAwareTrait;
-use Application\Service\Traits\PlafondServiceAwareTrait;
+use Plafond\Service\PlafondApplicationServiceAwareTrait;
+use Plafond\Service\PlafondServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -23,7 +24,6 @@ class PlafondController extends AbstractController
     use PlafondServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use ContextServiceAwareTrait;
-
 
 
     public function indexAction()
@@ -68,10 +68,13 @@ class PlafondController extends AbstractController
         if ($plafondApplication) {
             $title = 'Modification d\'une règle de plafond';
         } else {
-            $title = 'Création d \'une nouvelle règle de plafond';
+            $title = 'Création d\'une nouvelle règle de plafond';
 
-            $plafond           = $this->context()->plafondFromQueryPost();
-            $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQueryPost();
+            $plafondId = $this->params()->fromPost('plafond', $this->params()->fromQuery('plafond'));
+            $plafond   = $this->getServicePlafond()->get($plafondId);
+
+            $typeVolumeHoraireId = $this->params()->fromPost('typeVolumeHoraire', $this->params()->fromQuery('typeVolumeHoraire'));
+            $typeVolumeHoraire   = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId);
 
             if (!$plafond) {
                 throw new \Exception('Le plafond n\'est pas spécifié');

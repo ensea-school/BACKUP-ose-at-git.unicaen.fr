@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Application\Entity\Db\PlafondEtat;
+namespace Plafond\Entity\Db;
 
 /**
  * Description of PlafondEtatAwareTrait
@@ -18,15 +16,15 @@ trait PlafondEtatAwareTrait
 
 
 
-
-
     /**
      * @param PlafondEtat $plafondEtat
+     *
      * @return self
      */
-    public function setPlafondEtat( PlafondEtat $plafondEtat = null )
+    public function setPlafondEtat(PlafondEtat $plafondEtat = null)
     {
         $this->plafondEtat = $plafondEtat;
+
         return $this;
     }
 

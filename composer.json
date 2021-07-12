@@ -15,11 +15,17 @@
         "zendframework/zend-code": "3.3.2",
         "unicaen/bjy-authorize"  : "3.0.4",
         "zendframework/zend-file": "2.8.3",
-        "unicaen/code"           : "3.0.2",
+        "unicaen/code"           : "3.1",
         "unicaen/import"         : "3.1.5",
         "unicaen/tbl"            : "4.1",
         "unicaen/open-document"  : "3.0.2",
         "ocramius/proxy-manager" : "2.2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "module/Application/src/",
+            "Plafond\\": "module/Plafond/src/"
+        }
     },
     "require-dev" : {
         "zendframework/zend-test"           : "3.3.0",

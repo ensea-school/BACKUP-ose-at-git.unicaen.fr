@@ -1,9 +1,10 @@
 <?php
 
-namespace Application\Service;
+namespace Plafond\Service;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\PlafondApplication;
+use Application\Service\AbstractEntityService;
+use Plafond\Entity\Db\PlafondApplication;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 
 /**

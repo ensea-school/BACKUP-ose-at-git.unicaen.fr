@@ -1,8 +1,9 @@
 <?php
 
-namespace Application\Service;
+namespace Plafond\Service;
 
-use Application\Entity\Db\PlafondEtat;
+use Application\Service\AbstractEntityService;
+use Plafond\Entity\Db\PlafondEtat;
 
 /**
  * Description of PlafondEtatService
@@ -35,7 +36,8 @@ class PlafondEtatService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'plaetat';
     }
 

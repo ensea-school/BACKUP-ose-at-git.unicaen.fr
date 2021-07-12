@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Controller\Factory;
+namespace Plafond\Controller;
 
-use Application\Controller\PlafondController;
 use Psr\Container\ContainerInterface;
 
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Processus;
+namespace Plafond\Processus;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Service\Traits\PlafondServiceAwareTrait;
+use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;

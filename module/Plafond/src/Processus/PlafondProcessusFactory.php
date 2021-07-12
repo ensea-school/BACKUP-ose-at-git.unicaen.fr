@@ -1,9 +1,8 @@
 <?php
 
-namespace Application\Processus\Factory;
+namespace Plafond\Processus;
 
 use Psr\Container\ContainerInterface;
-use Application\Processus\PlafondProcessus;
 
 
 /**

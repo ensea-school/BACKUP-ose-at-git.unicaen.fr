@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Plafond\Entity\Db;
 
 /**
  * PlafondEtat

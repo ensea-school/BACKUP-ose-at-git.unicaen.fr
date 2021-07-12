@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Application\Entity\Db\Plafond;
+namespace Plafond\Entity\Db;
 
 /**
  * Description of PlafondAwareTrait
@@ -18,15 +16,15 @@ trait PlafondAwareTrait
 
 
 
-
-
     /**
      * @param Plafond $plafond
+     *
      * @return self
      */
-    public function setPlafond( Plafond $plafond = null )
+    public function setPlafond(Plafond $plafond = null)
     {
         $this->plafond = $plafond;
+
         return $this;
     }
 

@@ -6,8 +6,9 @@ $settings = [
     'generator-output-dir' => '/app/cache/UnicaenCode',
     'namespaces'           => [
         'services'  => [
-            'Application',
-            'UnicaenImport',
+            //'Application',
+            'Plafond',
+            'Indicateur',
         ],
         'forms'     => [
             'Application\Form',

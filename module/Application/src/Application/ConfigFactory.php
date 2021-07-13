@@ -34,7 +34,7 @@ class ConfigFactory
 
             'view_manager' => [
                 'template_path_stack' => [
-                    $dir . '/view',
+                    $namespace => $dir . '/view',
                 ],
             ],
         ];

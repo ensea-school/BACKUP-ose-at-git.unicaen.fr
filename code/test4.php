@@ -9,11 +9,35 @@
  */
 
 
-/** @var \Application\Service\IntervenantService $si */
-$si = $container->get(\Application\Service\IntervenantService::class);
-
-$intervenant = $container->get(\Application\Service\IntervenantService::class)->get(195999);
+$cg = \UnicaenCode\Util::codeGenerator();
 
 
-$data = $si->isImportable($intervenant);
-var_dump($data);
+$params = [
+    'generator' => 'AwareInterface',
+    //'write'     => false,
+    'echo'      => true,
+
+    'classname' => \Plafond\Service\PlafondService::class,
+    //'useGetter' => true,
+    'subDir'    => false,
+];
+
+
+$cg->generate($params);
+
+
+$cg = \UnicaenCode\Util::codeGenerator();
+
+
+$params = [
+    'generator' => 'Factory',
+    //'write'     => false,
+    'echo'      => true,
+
+    'classname' => \Plafond\Form\PlafondApplicationForm::class,
+    'subDir'    => true,
+    'type'      => 'Form',
+];
+
+
+$cg->generate($params);

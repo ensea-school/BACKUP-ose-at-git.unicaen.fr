@@ -7,8 +7,15 @@
 	
 	-- v1.8 - 02/12/2019 - MYP : aucune modif pour ces tables de referentiel
 	-- v2.0 - 11/2020 à 01/2021 - MYP : V15 ajout VOIRIE
+	-- v2.1 - 28/05/21 - MYP : retaillage zone adresse
 =====================================================================================================*/
 
+--======== PARTIE A/ SIHAM_REF  A_1_T_OSE_alter_tables.sql ================================================
+--- V2.1 A FAIRE DANS CET ORDRE : -----------------------------------------------------------------
+
+-- UM_ADRESSE_STRUCTURE.localite  varchar2(26) =>  varchar2(40) -- le champs était tronqué par rapport à Siham
+ALTER TABLE OSE.UM_ADRESSE_STRUCTURE MODIFY LOCALITE VARCHAR2(40 CHAR);		 
+-- OSEPREP2 le 28/05/21
 
 --======== PARTIE A/ SIHAM_REF  A_1_T_OSE_alter_tables.sql ================================================
 --- V2.0 OSETEST A FAIRE DANS CET ORDRE : -----------------------------------------------------------------

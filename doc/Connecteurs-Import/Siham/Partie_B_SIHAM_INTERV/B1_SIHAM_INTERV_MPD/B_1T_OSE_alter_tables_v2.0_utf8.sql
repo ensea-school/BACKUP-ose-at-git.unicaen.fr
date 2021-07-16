@@ -1,14 +1,23 @@
 /* ====================================================================================================
+	B_1T_OSE_alter_tables.sql
+	
 	# Detail du connecteur PARTIE B/ SIHAM_INTERV : les intervenants existant dans SIHAM - Avec user OSE
    
 	EXTRACTION_SIHAM CREATION SCHEMA TABLES INTERMEDIAIRES POUR OSE : nommage UM_<nom table>
 
 	ALTER TABLES : à executer POUR LES UNIVERSITES AYANT DEJA INSTALLE le Connecteur_SIHAM_OSE_v1.1_2019-12
 	
-	-- v2.0 - 12/2020 à 03/2021 - MYP : V15
 =====================================================================================================*/
 
+/* === V2.1 16/07/21 - MYP : suppression fonctions inutiles =========================================================*/
 
+-- le 18/05/2021 : complément suite à install sur OSEPREP2 
+drop function OSE.UM_CALCULE_DATE_STATUT;  			--: fc V14 supprimée et regroupée dans UM_AFFECTE_STATUT
+drop function OSE.UM_AFFICH_INTERV_STATUT; 			--: fc V14 supprimée car info mce dans T_UM_ENREG_STATUT
+drop function OSE.UM_RECUP_INTERV_NB_HEURE_MCE; 	--: fc V14 supprimée car info mce dans T_UM_ENREG_STATUT
+
+
+/* === V2.0 12/2020 à 03/2021 - MYP : V15  =========================================================================*/
 
 -- Infos INTERVENANTS -- OSETEST le 01/2021 -03/2021 -------------------------------------------------------------
 
@@ -39,7 +48,7 @@ create or replace type T_UM_ENREG_STATUT is object
 	,DATE_FIN_STATUT		DATE				-- DATE fin statut
 	,NB_H_MCE				NUMBER(8,2)			-- Nombre d'heures avec Mission d'enseignement
 );
-
+/
 --- MULTI-STATUT : modification de la cle unique -----------------------------------------
 ALTER table OSE.UM_INTERVENANT DROP CONSTRAINT UK_UM_INTERV_SOURCE_CODE;
 DROP INDEX UK_UM_INTERV_SOURCE_CODE;

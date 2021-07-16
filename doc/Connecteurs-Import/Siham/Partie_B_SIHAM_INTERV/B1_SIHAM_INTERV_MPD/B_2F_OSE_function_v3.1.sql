@@ -7,7 +7,6 @@
 			
 	--- fonctions -------------- 
 	OSE.UM_AFFECTE_STATUT
-	
 	OSE.UM_EXISTE_INTERVENANT
 	OSE.UM_STAT_TRANSFERT_INDIVIDU
 	OSE.UM_EXISTE_ADR_INTERVENANT
@@ -21,7 +20,7 @@
 	OSE.UM_MAJ_UM_TRANSFERT_INDIVIDU
 	OSE.UM_AJOUT_UM_SYNCHRO_A_VALIDER
 	OSE.UM_RECUP_NEW_MULTI_STATUT_AUTO
-	
+
 	-- OSE.UM_CALCULE_DATE_STATUT : fc V14 supprimée et regroupée dans UM_AFFECTE_STATUT
 	-- OSE.UM_AFFICH_INTERV_STATUT : fc V14 supprimée car info mce dans T_UM_ENREG_STATUT
 	-- OSE.UM_RECUP_INTERV_NB_HEURE_MCE : fc V14 supprimée car info mce dans T_UM_ENREG_STATUT
@@ -32,6 +31,9 @@
 	-- v2.2  19/11/20 MYP : differentes modif de mise en forme
 	-- v3.0  04/12/20 MYP : adaptations pour Ose V15 
 	-- v3.1  01-03/21 MYP : nouvelles fonctions pour gérer T_UM_ENREG_STATUT
+	-- v3.2  15/06/21 MYP : report modifs V14 depuis ex v2.2
+			-- v2.3 - 14/12/20 MYP : nouveau statut CONV_MAIEU
+			-- v2.4 - 28/05/21 MYP : suppression espaces décalage
 =====================================================================================================*/
 
 /* --------------- VERSION V15.1 - ATIVE ------------------------------------------*/
@@ -101,6 +103,7 @@ BEGIN
 		when p_statut_pip = 'HB111' and p_code_emploi = 'UEXTMAD_01' 					then v_new_statut.CODE_STATUT := 'MAD_1D';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- MAD premier degré
 		when p_statut_pip = 'HB111' and p_code_emploi = 'UEXTMAD_02' 					then v_new_statut.CODE_STATUT := 'MAD_2D';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- MAD second degré
 		when p_statut_pip = 'HB111' and p_code_emploi like 'UEXTPFA%' 					then v_new_statut.CODE_STATUT := 'PFA';			v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- PFA
+		when p_statut_pip = 'HB112'	and p_code_emploi = 'UEXTMAD_02' 					then v_new_statut.CODE_STATUT := 'CONV_MAIEU';  v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Enseignant Maïeutique				-- v2.3 14/12/2020
 		when p_statut_pip = 'HB112'									 					then v_new_statut.CODE_STATUT := 'CONV';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Enseignant avec convention entrante
 		when p_statut_pip like 'HB%' and p_code_fonction = 'UE01'						then v_new_statut.CODE_STATUT := 'CONV';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut, p_dat_fonct);			-- Hébergé avec convention entrante  	-- v1.11 -- v2.1 - 07/07/2020 HB%
 		when p_statut_pip like 'HB%' and (p_code_fonction = 'UPD2' 
@@ -150,6 +153,7 @@ BEGIN
 		end if;
 	end if;
 	v_new_statut.date_deb_statut 		:= trunc(v_date_deb_statut);
+	
 	-- controles date de fin ---
 	v_date_fin_statut := nvl(v_new_statut.date_fin_statut,p_d_fin_annee_univ);
 	if v_new_statut.date_fin_statut < v_new_statut.date_deb_statut then v_date_fin_statut := v_new_statut.date_deb_statut; 
@@ -186,14 +190,14 @@ END;
 
 create or replace FUNCTION OSE.UM_STAT_TRANSFERT_INDIVIDU(p_annee_id IN number) RETURN VARCHAR2 IS
 /* =============================================================
-	UM_STAT_TRANSFERT_INDIVIDU -- v1.13 -- v2.0b
+	UM_STAT_TRANSFERT_INDIVIDU  -- v1.13 -- v2.0b -- v2.4
 ===============================================================*/
 -- retourne le nombre de dossiers insérés ou modifiés de la table intermédiaire UM_TRANSFERT_INDIVIDU
 v_statistiques 		VARCHAR2(1000) := '';  -- v2.0b
    
 BEGIN
 	
-	select listagg(v.valeur, chr(10)||'      ') within group (order by V.valeur) INTO v_statistiques
+	select listagg(v.valeur, chr(10)) within group (order by V.valeur) INTO v_statistiques	-- v2.4 - 28/05/21
 	FROM(
 		select listagg(v.valeur,'||') within group (order by v.nom) as valeur
 		from
@@ -432,7 +436,7 @@ BEGIN
 
 		return v_id_intervenant;
 END;
-
+/
 CREATE OR REPLACE FUNCTION OSE.UM_INSERT_STATUT_VALIDE(p_siham_matricule IN VARCHAR2, p_annee_id IN number) RETURN VARCHAR2 IS
 /* =============================================================
 	UM_INSERT_STATUT_VALIDE
@@ -504,16 +508,16 @@ BEGIN
 											NEW_STATUT_ID, NEW_CODE_STATUT, NEW_CODE_TYPE_INT, NEW_DATE_DEB_STATUT, NEW_DATE_FIN_STATUT, NEW_NB_H_MCE, 
 											PARAM_GESTION_STATUT)
 			
-		select tr.d_horodatage, tr.nudoss, tr.matcle, tr.qualit, tr.nomuse, tr.prenom, tr.nompat, tr.changement_statut, p_temoin_validation, p_date_validation, p_date_transfert_force, p_annee_id,
-				p_statut_actuel.id, p_statut_actuel.code_statut, p_statut_actuel.code_type_intervenant, p_statut_actuel.date_deb_statut, p_statut_actuel.date_fin_statut, p_statut_actuel.nb_h_mce,
-				p_statut_nouveau.id, p_statut_nouveau.code_statut, p_statut_nouveau.code_type_intervenant, p_statut_nouveau.date_deb_statut, p_statut_nouveau.date_fin_statut, p_statut_nouveau.nb_h_mce,
-				p_param_gestion_statut
-		from OSE.UM_TRANSFERT_INDIVIDU tr
-		where tr.matcle = p_matricule and tr.annee_id = p_annee_id and tr.changement_statut is not null 
-		and not exists ( select 1 from OSE.UM_SYNCHRO_A_VALIDER s
-						 where s.matcle = tr.matcle and s.changement_statut = tr.changement_statut and s.annee_id = p_annee_id  
-								and s.ACTU_STATUT_ID = p_statut_actuel.id and s.NEW_STATUT_ID = p_statut_nouveau.id and s.NEW_DATE_DEB_STATUT = p_statut_nouveau.date_deb_statut
-						);	
+	select tr.d_horodatage, tr.nudoss, tr.matcle, tr.qualit, tr.nomuse, tr.prenom, tr.nompat, tr.changement_statut, p_temoin_validation, p_date_validation, p_date_transfert_force, p_annee_id,
+			p_statut_actuel.id, p_statut_actuel.code_statut, p_statut_actuel.code_type_intervenant, p_statut_actuel.date_deb_statut, p_statut_actuel.date_fin_statut, p_statut_actuel.nb_h_mce,
+			p_statut_nouveau.id, p_statut_nouveau.code_statut, p_statut_nouveau.code_type_intervenant, p_statut_nouveau.date_deb_statut, p_statut_nouveau.date_fin_statut, p_statut_nouveau.nb_h_mce,
+			p_param_gestion_statut
+	from OSE.UM_TRANSFERT_INDIVIDU tr
+	where tr.matcle = p_matricule and tr.annee_id = p_annee_id and tr.changement_statut is not null 
+	and not exists ( select 1 from OSE.UM_SYNCHRO_A_VALIDER s
+					 where s.matcle = tr.matcle and s.changement_statut = tr.changement_statut and s.annee_id = p_annee_id  
+							and s.ACTU_STATUT_ID = p_statut_actuel.id and s.NEW_STATUT_ID = p_statut_nouveau.id and s.NEW_DATE_DEB_STATUT = p_statut_nouveau.date_deb_statut
+					);	
 
 	v_est_bien_insere := true;
 	

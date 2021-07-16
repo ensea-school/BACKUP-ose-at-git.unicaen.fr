@@ -12,10 +12,13 @@
 	OSE.UM_INIT_RIB_HORS_SEPA
 	OSE.UM_MAJ_UM_SYNCHRO_A_VALIDER
 	OSE.UM_SELECT_MULTI_STATUT
+	OSE.UM_MAJ_INSERT_STATUT
 	----------------------------
 	
-	-- v2.1 - 03/07/2020 - MYP : pour Ose v14
-	-- v2.2 - 03/12/2020 - MYP : pour OSE V15 : découpage adresses intervenant avec numero compl et voirie
+	-- v2.1 - 03/07/20 MYP : pour Ose v14
+	-- v2.2 - 03/12/20 MYP : pour OSE V15 : découpage adresses intervenant avec numero compl et voirie
+	-- v2.3 - 18/06/21 MYP : raz numero_compl_code si inexistant dans OSE.ADRESSE_NUMERO_COMPL 
+		                     + correction car si MULTI_AUTO 'AI' tous les flags et dates ne suivent pas 
 =====================================================================================================*/
 
 
@@ -86,7 +89,7 @@ cursor cur_adr_interv_OSE is
 	 ,v_adr.NUMERO_COMPL						 	as NUMERO_COMPL_CODE 	-- v2.2 26/01/2021
 	 ,UM_EXISTE_VOIRIE_LIB(v_adr.VOIRIE) 			as VOIRIE_CODE			-- v2.2 26/01/2021
 	from OSE.UM_INTERVENANT ose_i
-		,hr.zy00@SIHAM_TEST i
+		,hr.zy00@SIHAM_PREP i
 		 ,(    ---- v_tel -----------------------------------------------------------------
 			select 
 				nudoss
@@ -96,17 +99,18 @@ cursor cur_adr_interv_OSE is
 				,trim(TRANSLATE(upper(trim(max(decode(typtel,'PPE', numtel,'')))), '? -_./@ABCDEFGHIJKLMNOPQRSTUVWXYZ', ' ' )) as tel_mobile_perso
 				,trim(max(decode(typtel,'MPR', numtel,''))) as mail_pro
 				,trim(max(decode(typtel,'MPE', numtel,''))) as mail_perso
-			from hr.zy0h@SIHAM_TEST
+			from hr.zy0h@SIHAM_PREP
 			where typtel in ('TPR','TPE','PPR','PPE','MPR','MPE') -- ##A_PERSONNALISER_CHOIX_SIHAM## suivant vos types de coordonnees
 			group by nudoss
 		 ) v_tel
 		 ,(    ---- v_adr -----------------------------------------------------------------
 			select nudoss
 				, datdeb, datfin
-				,trim(zonada) 				as batiment 
-				,trim(substr(zonadb,1,4)) 	as no_voie
+				,trim(zonada) 							as batiment 
+				,trim(substr(zonadb,1,4)) 				as no_voie
 				-- ,decode(trim(substr(zonadb,5,1)),'B','Bis','T','Ter','') as bis_ter 							-- v2.2 03/12/2020
-				,upper(trim(substr(zonadb,5,2))) 	as NUMERO_COMPL 													-- v2.2 03/12/2020
+				--,upper(trim(substr(zonadb,5,2))) 		as NUMERO_COMPL 										-- v2.2 03/12/2020
+				,compl.code						 		as NUMERO_COMPL 										-- v2.3 11/06/2020
 				,upper(trim(substr(trim(substr(zonadb,7,32)) , 1, instr(trim(substr(zonadb,7,32)),' ')-1))) as VOIRIE 	-- v2.2 03/12/2020  -- !!!!!!!!!!!!! prévoir : GRAND RUE (avec espace!! )
 				--,trim(substr(zonadb,7,32)) 	as nom_voie														-- v2.2 03/12/2020
 				,trim(substr(trim(substr(zonadb,7,32)), instr(trim(substr(zonadb,7,32)),' ')+1,length(trim(substr(zonadb,7,32)) ))) as nom_voie  -- v2.2 03/12/2020
@@ -115,10 +119,12 @@ cursor cur_adr_interv_OSE is
 				,trim(substr(zonadd,7,32)) 	as ville
 				,cdpays 					as pays_code_insee
 				,trim(p.libelle_court)		as pays_libelle
-			from hr.zy0f@SIHAM_TEST,
-				UM_PAYS p
+			from hr.zy0f@SIHAM_PREP,
+				UM_PAYS p,
+				OSE.ADRESSE_NUMERO_COMPL compl		-- v2.3 11/06/2020
 			where temadd = 1
 			 and cdpays = p.source_code(+)
+			 and upper(trim(substr(zonadb,5,2))) = compl.code(+)		-- v2.3 11/06/2020
 		 ) v_adr
 		,OSE.UM_STATUT_INTERVENANT st
         ,OSE.TYPE_INTERVENANT typ
@@ -233,7 +239,7 @@ BEGIN
 				and i.id is null);													  
 	
 END;
-
+/
 
 CREATE OR REPLACE PROCEDURE OSE.UM_INIT_RIB_HORS_SEPA IS
 /* ===================================================================================================
@@ -254,10 +260,10 @@ select bq.nudoss
         ,trim(bq.swift)     as bic
         ,trunc(bq.datdeb)      as datdeb
         ,case when trim(d.liblon) = 'Virement hors SEPA' then 1 else 0 end as rib_hors_sepa     -- v3.0 07/01/2021
-        from hr.zy0i@SIHAM_TEST bq,         -- coord bancaires
-            hr.ZD00@SIHAM_TEST c,         	-- reglementation        -- v3.0 07/01/2021
-            hr.ZD01@SIHAM_TEST d,			-- v3.0 07/01/2021
-			hr.zy00@SIHAM_TEST i
+        from hr.zy0i@SIHAM_PREP bq,         -- coord bancaires
+            hr.ZD00@SIHAM_PREP c,         	-- reglementation        -- v3.0 07/01/2021
+            hr.ZD01@SIHAM_PREP d,			-- v3.0 07/01/2021
+			hr.zy00@SIHAM_PREP i
         where bq.modpai= c.CDCODE 
             and c.cdstco = 'DRN'
             and c.nudoss = d.nudoss
@@ -320,7 +326,7 @@ CURSOR cur_synchro_a_valider IS
 		and d_transfert_force is null
 	;
 
-/*========= PROG PRINCIPAL PROCEDURE UM_INIT_RIB_HORS_SEPA ===============================*/
+/*========= PROG PRINCIPAL PROCEDURE UM_MAJ_UM_SYNCHRO_A_VALIDER ===============================*/
 BEGIN
 	dbms_output.put_line(' ');
 	dbms_output.put_line('   Lancement maj UM_SYNCHRO_A_VALIDER : ');
@@ -382,7 +388,7 @@ BEGIN
 					rollback;
 					dbms_output.put_line('   !!! Pb update UM_TRANSFERT_INDIVIDU pour Multi-statut auto : '||c1.matcle);
 			END;
-	
+			commit;  -- v2.3
 			BEGIN -- maj date fin période précédente + d_transfert_force pour ne pas traiter la ligne la prochaine fois
 			update OSE.UM_SYNCHRO_A_VALIDER SET actu_date_fin_statut = new_date_fin_statut - 1,
 				d_validation = sysdate, d_transfert_force = sysdate	
@@ -393,9 +399,10 @@ BEGIN
 				rollback;
 				dbms_output.put_line('   !!! Pb update UM_SYNCHRO_A_VALIDER pour Multi-statut auto : '||' id: '||c1.id||' '||c1.matcle);
 			END;			
+			commit;  -- v2.3	   
 			
 			BEGIN -- maj date fin période précédente
-				update OSE.UM_INTERVENANT SET date_fin_statut = c1.actu_date_fin_statut
+				update OSE.UM_INTERVENANT SET date_fin_statut = c1.new_date_fin_statut - 1			-- v2.3 
 				WHERE source_code = c1.matcle and annee_id = p_annee_id and statut_id = c1.actu_statut_id and date_deb_statut = c1.actu_date_deb_statut;
 			EXCEPTION
 			-- when no_data_found then null;
@@ -403,6 +410,7 @@ BEGIN
 				rollback;
 				dbms_output.put_line('   !!! Pb update UM_INTERVENANT pour Multi-statut auto (date_fin_statut) : '||c1.matcle||' pour statut :'||c1.actu_statut_id||'-'||c1.actu_code_statut);
 			END;
+			commit;  -- v2.3	   
 			
 	END LOOP;
 	COMMIT;

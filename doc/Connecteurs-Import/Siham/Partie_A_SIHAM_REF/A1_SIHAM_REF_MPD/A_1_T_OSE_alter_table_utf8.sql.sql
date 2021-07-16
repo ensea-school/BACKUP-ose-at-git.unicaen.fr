@@ -1,24 +1,28 @@
 /* ====================================================================================================
-	# Detail du connecteur PARTIE A/ SIHAM_REF : des tables de référentiel - Avec user OSE
-   
+
+	Detail du connecteur PARTIE A/ SIHAM_REF : des tables de référentiel - Avec user OSE
+                           --------------------
+						   
 	PHASE1 : EXTRACTION_SIHAM CREATION SCHEMA TABLES INTERMEDIAIRES POUR OSE : nommage UM_<nom table>
 
-	ALTER TABLES : à executer POUR LES UNIVERSITES AYANT DEJA INSTALLE le Connecteur_SIHAM_OSE_v1.1_2019-12
+	A_1_T_OSE_alter_tables_utf8.sql : à executer POUR LES UNIVERSITES AYANT DEJA INSTALLE le Connecteur_SIHAM_OSE_v1.1_2019-12
 	
-	-- v1.8 - 02/12/2019 - MYP : aucune modif pour ces tables de referentiel
-	-- v2.0 - 11/2020 à 01/2021 - MYP : V15 ajout VOIRIE
-	-- v2.1 - 28/05/21 - MYP : retaillage zone adresse
+	-- v1.8 - 02/12/19 MYP : aucune modif pour ces tables de referentiel
+	-- v2.0 - 11/20-01/21 MYP : V15 ajout VOIRIE
+	-- v2.1 - 28/05/21 MYP : retaillage zones adresse
 =====================================================================================================*/
 
---======== PARTIE A/ SIHAM_REF  A_1_T_OSE_alter_tables.sql ================================================
---- V2.1 A FAIRE DANS CET ORDRE : -----------------------------------------------------------------
+
+/* === V2.1 16/07/2021  ================================================================================*/
 
 -- UM_ADRESSE_STRUCTURE.localite  varchar2(26) =>  varchar2(40) -- le champs était tronqué par rapport à Siham
 ALTER TABLE OSE.UM_ADRESSE_STRUCTURE MODIFY LOCALITE VARCHAR2(40 CHAR);		 
 -- OSEPREP2 le 28/05/21
 
---======== PARTIE A/ SIHAM_REF  A_1_T_OSE_alter_tables.sql ================================================
---- V2.0 OSETEST A FAIRE DANS CET ORDRE : -----------------------------------------------------------------
+
+
+/* === V2.0 03/2021  ===================================================================================*/
+--- A FAIRE DANS CET ORDRE et pas à pas en adaptant si besoin ---------------------------------------------
 
 /*------------- UM_VOIRIE ------------------------------------*/
 CREATE TABLE OSE.UM_VOIRIE  -- v2.0
@@ -80,3 +84,5 @@ insert into OSE.UM_PARAM_ETABL (CODE, VALEUR, COMMENTAIRE) values ('OSE_STATUT_D
 insert into OSE.UM_PARAM_ETABL (CODE, VALEUR, COMMENTAIRE) values ('PREFIXE_MATRICULE','UDM','Préfixe établissement utilisé pour les matricules SIHAM');
 insert into OSE.UM_PARAM_ETABL (CODE, VALEUR, COMMENTAIRE) values ('GESTION_STATUT','UNIQUE_MANUEL','Multi-statuts sur une année: 4 choix :  UNIQUE_MANUEL/UNIQUE_AUTO/MULTI_MANUEL/MULTI_AUTO (UNIQUE_MANUEL : unique à valider manuellement (maj) dans UM_SYNCHRO_A_VALIDER - comme V14 
 																	/ UNIQUE_AUTO : unique et écrasé automatiquement/ MULTI_MANUEL :  à valider manuellement (ajout ou maj) dans UM_SYNCHRO_A_VALIDER / MULTI_AUTO : inséré automatiquement en plus');
+
+

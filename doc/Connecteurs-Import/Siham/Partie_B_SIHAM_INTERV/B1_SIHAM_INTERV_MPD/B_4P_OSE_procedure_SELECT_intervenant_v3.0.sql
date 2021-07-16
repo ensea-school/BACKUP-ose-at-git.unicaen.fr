@@ -48,8 +48,8 @@ cursor cur_dossier_diff is
 	from (
 		select distinct td12.nudoss, i.matcle
 			--to_char(td12.timjif,'YYYY-MM-DD') as date_maj, td12.cdinfo, count(distinct td12.nudoss)
-			from hr.zytd12@SIHAM_TEST    td12
-				, hr.zy00@SIHAM_TEST i
+			from hr.zytd12@SIHAM_PREP    td12
+				, hr.zy00@SIHAM_PREP i
 			--  Maj pour les types de modifs non techniques comme pour les TM tables Miroirs de Siham + 'ES' Entrées sorties
 			-- '0F' Adresses, '0H' tel mail, '0I' bq, '18' sit fam, '3B' '3C' affectations, 'CO' contrat, 'GR' 'GS' carriere, 'PO' positions, 'V1' fonctions
 			-- ##A_PERSONNALISER_CHOIX_SIHAM##
@@ -67,7 +67,7 @@ cursor cur_dossier_diff is
 					where annee_id = p_annee_id  -- v2.1
 					--and service_rectorat  like '%.%'
 			) v_new_orec
-			,hr.zy00@SIHAM_TEST i
+			,hr.zy00@SIHAM_PREP i
 			where v_new_orec.matricule = i.matcle
 		union
 			-- v0.4 - 07/06/2018 - MYP - Matricules forcés manuellement
@@ -92,14 +92,14 @@ cursor cur_dossier_actif is
    ,floor(floor(months_between(p_date_systeme, naiss.datnai))/12) 		as nb_an
    ,mod(floor(months_between(p_date_systeme, naiss.datnai)),12) 		as nb_mois
    ,nvl( situ_strat.dtef1s-1,  v_pos.date_maintien_activ_pos) 			as date_maintien_activ
-   from hr.zy00@SIHAM_TEST i            	-- dossier agent
-		,hr.zy4i@SIHAM_TEST i_adm     	-- HRA id user
-		,hr.zy10@SIHAM_TEST naiss    	-- naissance
-		,hr.zy1S@SIHAM_TEST situ_strat 	-- carriere situation strategique
+   from hr.zy00@SIHAM_PREP i            	-- dossier agent
+		,hr.zy4i@SIHAM_PREP i_adm     	-- HRA id user
+		,hr.zy10@SIHAM_PREP naiss    	-- naissance
+		,hr.zy1S@SIHAM_PREP situ_strat 	-- carriere situation strategique
 		-- ##A_PERSONNALISER_CHOIX_SIHAM##
 		,(  -- v1.4b position admin
 			select nudoss, datxxx-1 as date_maintien_activ_pos
-			from hr.zyPO@SIHAM_TEST pos 		
+			from hr.zyPO@SIHAM_PREP pos 		
 			where p_date_systeme between pos.dateff and pos.datxxx-1
 			and pos.posits = 'AC'    -- en activite
 			and pos.RSPRO like 'PA%' -- Prolongation activite
@@ -111,7 +111,7 @@ cursor cur_dossier_actif is
 				  else 'ACTIF'
 				end as ETAT
 				,trim(aff_hie.idps00) as code_poste                                    
-			from hr.zy3b@SIHAM_TEST aff_hie         -- affectation HIE
+			from hr.zy3b@SIHAM_PREP aff_hie         -- affectation HIE
 			where 
 			-- ##A_PERSONNALISER_CHOIX_SIHAM##
 			trim(aff_hie.idou00) not in (v_uo_a_exclure) 	-- v3.0 04/12/2020 voir remplissage variable
@@ -126,7 +126,7 @@ cursor cur_dossier_actif is
 						trunc(aff_hie.dtef00) > p_date_systeme
 						and not exists (
 								select 1
-								from hr.zy3b@SIHAM_TEST -- affectation HIE
+								from hr.zy3b@SIHAM_PREP -- affectation HIE
 								where
 								-- ##A_PERSONNALISER_CHOIX_SIHAM##
 								trim(idou00) not in (v_uo_a_exclure) -- v3.0 04/12/2020 voir remplissage variable
@@ -219,13 +219,13 @@ from
            ,mod(floor(months_between(p_date_systeme, naiss.datnai)),12) as nb_mois
 		   -- date maintien de situ stratégique sinon date fin position admin type prolong = PA%
            ,nvl(nvl( trim(situ_strat.dtef1s-1),  v_pos.date_maintien_activ_pos),v_compl_carr.date_suite_prolong) as date_maintien_activ
-           from hr.zy00@SIHAM_TEST i            	-- dossier agent
-                ,hr.zy4i@SIHAM_TEST i_adm     	-- HRA id user
-                ,hr.zy10@SIHAM_TEST naiss    	-- naissance
-                ,hr.zy1S@SIHAM_TEST situ_strat 	-- carriere situation strategique
+           from hr.zy00@SIHAM_PREP i            	-- dossier agent
+                ,hr.zy4i@SIHAM_PREP i_adm     	-- HRA id user
+                ,hr.zy10@SIHAM_PREP naiss    	-- naissance
+                ,hr.zy1S@SIHAM_PREP situ_strat 	-- carriere situation strategique
 				,(  -- v1.4b position admin
 					select nudoss, trim(datxxx-1) as date_maintien_activ_pos
-                    from hr.zyPO@SIHAM_TEST pos 		
+                    from hr.zyPO@SIHAM_PREP pos 		
                     where pos.nudoss = p_nudoss
 					and p_date_systeme between pos.dateff and pos.datxxx-1
                     and pos.posits = 'AC'    -- en activite
@@ -234,7 +234,7 @@ from
 				,( -- v2.3 si contractuel date prolongation saisie dans carriere complement retraire
 				   -- v2.3b pb date en zone texte saisie libre
 					select nudoss, decode(trim(dtrtpr),'01/01/01',null,trim(dtrtpr)) as date_suite_prolong
-					from zy19@SIHAM_TEST
+					from zy19@SIHAM_PREP
 					where nudoss = p_nudoss
 				) v_compl_carr
 			where i.nudoss = p_nudoss
@@ -343,7 +343,7 @@ from
 				,dten00  -- date_fin
 				,idjb00	 -- code_emploi
 				,row_number() over (partition by nudoss order by dtef00 desc) as rnum	-- la plus récente en premier
-				from hr.zy3b@SIHAM_TEST 	-- affectation HIE
+				from hr.zy3b@SIHAM_PREP 	-- affectation HIE
 				where nudoss = p_nudoss
 					-- ##A_PERSONNALISER_CHOIX_SIHAM##
 					and trim(idou00) not in (v_uo_a_exclure) 	-- v3.0 04/12/2020 voir remplissage variable
@@ -357,7 +357,7 @@ from
 					    or ( trunc(dtef00) > p_date_systeme
 							and not exists (
 									select 1
-									from hr.zy3b@SIHAM_TEST -- affectation HIE
+									from hr.zy3b@SIHAM_PREP -- affectation HIE
 									where nudoss = p_nudoss
 									-- ##A_PERSONNALISER_CHOIX_SIHAM##
 									and trim(idou00) not in ('0000000000','UO_REP','UM1REP','UO_UM1','HZD0000003')
@@ -377,9 +377,9 @@ from
             ,trim(st.statut) statut_pip
 			,trunc(st.dateff) as date_effet
             ,row_number() over (partition by st.nudoss order by st.dateff desc) as rnum 
-            from hr.zyfl@SIHAM_TEST st		-- statut pip
-            ,hr.zd00@SIHAM_TEST reg      	-- reglementation
-            ,hr.zdvp@SIHAM_TEST ens        	-- recup temoin enseig
+            from hr.zyfl@SIHAM_PREP st		-- statut pip
+            ,hr.zd00@SIHAM_PREP reg      	-- reglementation
+            ,hr.zdvp@SIHAM_PREP ens        	-- recup temoin enseig
         where 	-- statut actif
 			st.nudoss = p_nudoss
 			-- v2.4 rajout not exists sinon je recup toujours la future année
@@ -392,7 +392,7 @@ from
 					trunc(st.dateff) > p_date_systeme
 					and not exists (
 							select 1
-							from hr.zyfl@SIHAM_TEST -- statut pip
+							from hr.zyfl@SIHAM_PREP -- statut pip
 							where nudoss = p_nudoss
 							 and trunc(dateff) <= p_d_fin_annee_univ
 							 and trunc(dateff) <= p_date_systeme
@@ -420,7 +420,7 @@ from
             ,trim(adecod)   as adecod
 			,dateff
 			,datfin
-			from hr.zygr@SIHAM_TEST 		--carriere administrative
+			from hr.zygr@SIHAM_PREP 		--carriere administrative
 			where nudoss = p_nudoss
 				and numcar = 1
                 -- carriere normale (pas secondaire) 
@@ -434,7 +434,7 @@ from
                         trunc(dateff) > p_date_systeme
                         and not exists (
                                 select 1
-                                from hr.zygr@SIHAM_TEST -- statut pip
+                                from hr.zygr@SIHAM_PREP -- statut pip
                                 where nudoss = p_nudoss
                                  and numcar = 1
                                     -- carriere normale (pas secondaire) 
@@ -451,7 +451,7 @@ from
 			,decode(trim(adecod),null,'0000',adecod)
 			,dateff
 			,decode(to_char(datxxx,'YYYY-MM-DD'),'2999-12-31',datxxx, datxxx-1)
-			from hr.zyfa@SIHAM_TEST 	 	-- administration origine
+			from hr.zyfa@SIHAM_PREP 	 	-- administration origine
 			where nudoss = p_nudoss
 				and rtrim(orgori,' ') is null
 				-- toutes les périodes sur l'année univ
@@ -467,9 +467,9 @@ from
 		select rtrim(g.cdcode,' ') cdcode
 		,h.liblon
 		,trim(i.cdhiec) as groupe_hierarchique
-		from hr.zd00@SIHAM_TEST g,
-			hr.zd01@SIHAM_TEST h,
-			hr.zd63@SIHAM_TEST i
+		from hr.zd00@SIHAM_PREP g,
+			hr.zd01@SIHAM_PREP h,
+			hr.zd63@SIHAM_PREP i
 		where g.nudoss = p_nudoss
 		and g.nudoss = h.nudoss
 		and g.nudoss = i.nudoss
@@ -498,11 +498,11 @@ from
 				  when trim(f.cgstat) = 'MUTATI' 				then 'MUTATION'
 				  else ''
 				end as lib_depart
-			  from hr.zy1s@SIHAM_TEST f -- statut depart
-					,hr.zypo@SIHAM_TEST b -- positions
-					,hr.ZD00@SIHAM_TEST c, hr.ZD01@SIHAM_TEST d -- repertoire hors univ
-					,hr.ZD00@SIHAM_TEST g, hr.ZD01@SIHAM_TEST h -- repertoire fin de travail
-					,hr.zytd12@SIHAM_TEST    z
+			  from hr.zy1s@SIHAM_PREP f -- statut depart
+					,hr.zypo@SIHAM_PREP b -- positions
+					,hr.ZD00@SIHAM_PREP c, hr.ZD01@SIHAM_PREP d -- repertoire hors univ
+					,hr.ZD00@SIHAM_PREP g, hr.ZD01@SIHAM_PREP h -- repertoire fin de travail
+					,hr.zytd12@SIHAM_PREP    z
 			  where f.nudoss = p_nudoss
 				and f.rsstat <> 'PEC'
 			  -- ##A_PERSONNALISER_CHOIX_SIHAM##
@@ -539,10 +539,10 @@ from
 				end as lib_depart
 				--,d.liblon as ll_position
 				from 
-				hr.zypo@SIHAM_TEST b,				  -- positions
-				hr.zy1s@SIHAM_TEST f,				  -- statut
-				hr.ZD00@SIHAM_TEST c, hr.ZD01@SIHAM_TEST d, -- repertoire
-				hr.ZD00@SIHAM_TEST g, hr.ZD01@SIHAM_TEST h  -- repertoire
+				hr.zypo@SIHAM_PREP b,				  -- positions
+				hr.zy1s@SIHAM_PREP f,				  -- statut
+				hr.ZD00@SIHAM_PREP c, hr.ZD01@SIHAM_PREP d, -- repertoire
+				hr.ZD00@SIHAM_PREP g, hr.ZD01@SIHAM_PREP h  -- repertoire
 				where 
 				b.nudoss = p_nudoss
 				-- ##A_PERSONNALISER_CHOIX_SIHAM##

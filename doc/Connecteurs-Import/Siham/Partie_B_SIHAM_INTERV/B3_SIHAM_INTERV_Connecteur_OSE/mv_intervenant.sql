@@ -24,7 +24,7 @@ SELECT
   i.email_pro                                     																				  email_pro,
   uad.w_mail_perso                           																					  email_perso,
   uad.batiment 																													  adresse_precisions,
-  substr(substr(uad.no_voie,1,instr(uad.no_voie,' ')),1, 4)								adresse_numero,
+  uad.no_voie																	  												  adresse_numero,
   uad.numero_compl_code 																										  z_adresse_numero_compl_id,
   uad.voirie_code 																												  z_adresse_voirie_id,
   uad.nom_voie 																							  						  adresse_voie,
@@ -104,7 +104,7 @@ SELECT
   i.email_pro                                     																				  email_pro,
   uad.w_mail_perso                           																					  email_perso,
   uad.batiment 																													  adresse_precisions,
-  substr(substr(uad.no_voie,1,instr(uad.no_voie,' ')),1,4)								adresse_numero,
+  uad.no_voie																	  												  adresse_numero,
   uad.numero_compl_code 																										  z_adresse_numero_compl_id,
   uad.voirie_code 																												  z_adresse_voirie_id,
   uad.nom_voie 																							  						  adresse_voie,
@@ -184,7 +184,7 @@ SELECT
   i.email_pro                                     																				  email_pro,
   uad.w_mail_perso                           																					  email_perso,
   uad.batiment 																													  adresse_precisions,
-  substr(substr(uad.no_voie,1,instr(uad.no_voie,' ')),1,4)								adresse_numero,
+  uad.no_voie																	  												  adresse_numero,
   uad.numero_compl_code 																										  z_adresse_numero_compl_id,
   uad.voirie_code 																												  z_adresse_voirie_id,
   uad.nom_voie 																							  						  adresse_voie,
@@ -272,7 +272,7 @@ SELECT
   i.email_pro                                     																				  email_pro,
   uad.w_mail_perso                           																					  email_perso,
   uad.batiment 																													  adresse_precisions,
-  uad.no_voie 	  																												  adresse_numero,
+  uad.no_voie																		  											  adresse_numero,
   uad.numero_compl_code 																										  z_adresse_numero_compl_id,
   uad.voirie_code 																												  z_adresse_voirie_id,
   uad.nom_voie 																							   						  adresse_voie,
@@ -329,5 +329,5 @@ where a.source_code = i.source_code
    and payr.source_code = uad.pays_code_insee
 --   and opr.source_code = payr.source_code
    and i.w_statut_pip not in ('TITU1','STAGI')
-   and vr.code(+) = uad.voirie_code
+   and vr.code(+) = uad.voirie_code;
    ;

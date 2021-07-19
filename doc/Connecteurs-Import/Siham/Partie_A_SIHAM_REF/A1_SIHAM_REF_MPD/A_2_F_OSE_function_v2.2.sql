@@ -1,4 +1,5 @@
 /* ====================================================================================================
+	A_2_F_OSE_function.sql
 	# Detail du connecteur PARTIE A/ SIHAM_REF : des tables de référentiel - Avec user OSE
    
 	PHASE1 : EXTRACTION_SIHAM CREATION SCHEMA TABLES INTERMEDIAIRES POUR OSE : nommage UM_<nom table>

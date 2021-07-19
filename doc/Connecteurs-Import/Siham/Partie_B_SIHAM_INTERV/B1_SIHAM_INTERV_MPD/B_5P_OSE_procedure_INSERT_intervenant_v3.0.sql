@@ -14,18 +14,23 @@ CREATE OR REPLACE PROCEDURE OSE.UM_INSERT_INTERVENANT(p_source_id number, p_anne
 			- Maj Table OSE.UM_TRANSFERT_INDIVIDU flag témoins traitements d'update ou insert à "DONE"
 			- Maj Table OSE.UM_SYNCHRO_A_VALIDER : détection changement de statut automatique ou manuel
 			
-  -- v2.0b 24/01/2020 MYP : var v_stat_transfert : augmentation taille variable
-  -- v2.1  06/02/2020 MYP : test date fin fonction pas dépassée à p_date_systeme
-  -- v2.2  21/07/2020 MYP : test <= p_date_systeme sinon ne remonte pas modserv pour synchro en avance au 01/09 new annee
-  -- v2.2b 19/11/2020 MYP : adaptation prép V15 : v_annee_id remplacé par param p_annee_id
-  -- v2.2c 01/03/2021 MYP : correction no_insee def depuis Siham pers nées apres 2000
+  -- v2.0b 24/01/20 MYP : var v_stat_transfert : augmentation taille variable
+  -- v2.1  06/02/20 MYP : test date fin fonction pas dépassée à p_date_systeme
+  -- v2.2  21/07/20 MYP : test <= p_date_systeme sinon ne remonte pas modserv pour synchro en avance au 01/09 new annee
+  -- v2.2b 19/11/20 MYP : adaptation prép V15 : v_annee_id remplacé par param p_annee_id
+  -- v2.2c 01/03/21 MYP : correction no_insee def depuis Siham pers nées apres 2000
   -- v3.0  07/01-05/03/21 MYP : adaptations pour OSE V15
+  -- v3.1  14/06/21 MYP : correction taille variable v_maj_statut_a_faire + d_validation null quand MULTI_AUTO 'AI' + date_deb_statut au 01/09 si 1er enreg
+  -- v3.2  15/06/21 MYP : report modifs V14 depuis 03/2021 
+			-- v2.3   19/04/21 MYP : test en dur pour laisser passer 2 dossiers hors UM HXC0B00005 avec MCE, comme si que recherche et MCE uo liée
+			-- v2.3b  27/04/21 MYP : validé claire pourtous les HX%, avec MCE, comme si que recherche et MCE uo liée
+			-- + correction pb id_grade_ose à null pour les CTRL Permanents  + date_deb_statut au 01/09 si 1er enreg
 =====================================================================================================*/
 
 -- VARIABLES DE TRAITEMENT ----------------------------
 v_stat_transfert			VARCHAR2(1000) 		:= ''	; -- v1.14b -- v2.0b
 v_nb_a_valider				NUMBER(5) 			:= 0	;
-v_maj_statut_a_faire 		VARCHAR2(5)			:= 'OUI';
+v_maj_statut_a_faire 		VARCHAR2(15)		:= 'OUI'; -- v3.1 14/06/21
 v_statut_siham				VARCHAR2(8)			:= ''	; -- v3.0
 v_ose_mail_pro				VARCHAR2(255)		:= ''	; -- v3.0
 v_id_grade_ose				NUMBER(9)			:= 0	; -- v3.0
@@ -392,7 +397,7 @@ FROM
 									  else 'ACTIF'
 									end as ETAT
 									,trim(aff_hie.idps00) as code_poste									
-								from hr.zy3b@SIHAM_TEST aff_hie 		-- affectation HIE
+								from hr.zy3b@SIHAM_PREP aff_hie 		-- affectation HIE
 								where aff_hie.nudoss = p_nudoss
 								-- ##A_PERSONNALISER_CHOIX_SIHAM##
 								and trim(aff_hie.idou00) not in ('0000000000','UO_REP','UM1REP','UO_UM1','HZD0000003') -- uo generique,uo reprise, autre posi admin
@@ -408,7 +413,7 @@ FROM
 											trunc(aff_hie.dtef00) > p_date_systeme
 											and not exists (
 													select 1
-													from hr.zy3b@SIHAM_TEST 		-- affectation HIE
+													from hr.zy3b@SIHAM_PREP 		-- affectation HIE
 													where nudoss = p_nudoss
 													-- ##A_PERSONNALISER_CHOIX_SIHAM##
 													and trim(idou00) not in ('0000000000','UO_REP','UM1REP','UO_UM1','HZD0000003')
@@ -497,10 +502,12 @@ FROM
 					OSE.UM_TRANSFERT_INDIVIDU i
 					,( select aff_hie.nudoss, trunc(aff_hie.dtef00) as date_deb, trunc(aff_hie.dten00) as date_fin, trim(aff_hie.idjb00) as code_emploi
 						,trim(aff_hie.idps00) as code_poste
-						from hr.zy3b@SIHAM_TEST aff_hie 	   -- affectation HIE
+						from hr.zy3b@SIHAM_PREP aff_hie 	   -- affectation HIE
 						-- ##A_PERSONNALISER_CHOIX_SIHAM## suivant codage affectation recherche : HR
 						where aff_hie.nudoss = p_nudoss
-							and (aff_hie.idou00 like 'HR%' or aff_hie.idou00 like 'HFM%')  -- v1.8c MUSE comme HR%
+							and (aff_hie.idou00 like 'HR%' or aff_hie.idou00 like 'HFM%' or aff_hie.idou00 like 'HX%'  --v2.3b 27/04/21
+									--or (aff_hie.idou00 = 'HXC0B00005' and aff_hie.nudoss in (152599, 161861))  -- v2.3 19/04/2021 test en dur
+ 								)  -- v1.8c MUSE comme HR%
 					) aff_hie
 					,( -- aff_fun -------------------------------------------------------------------------------------------
 						( 	-- affectation FUN normale saisie dans siham - affectation 
@@ -509,7 +516,7 @@ FROM
 									when trunc(aff_fun.dten00) < p_d_deb_annee_univ then 'INACTIF'   -- période passée
 									  else 'ACTIF'
 									end as ETAT
-								from hr.zy3c@SIHAM_TEST aff_fun  -- affectation FUN
+								from hr.zy3c@SIHAM_PREP aff_fun  -- affectation FUN
 								where aff_fun.nudoss = p_nudoss
 									and aff_fun.tytrst = 'FUN' 
 									and substr(aff_fun.idou00,1,3) in
@@ -529,7 +536,7 @@ FROM
 											  ( trunc(aff_fun.dtef00) > p_date_systeme
 												and not exists (
 														select 1
-														from hr.zy3c@SIHAM_TEST -- affectation FUN
+														from hr.zy3c@SIHAM_PREP -- affectation FUN
 														where nudoss = p_nudoss
 														and tytrst = 'FUN' 
 														and substr(aff_fun.idou00,1,3) in
@@ -560,12 +567,12 @@ FROM
 								  else 'ACTIF'
 								end as ETAT
 						from 
-							hr.zyv1@SIHAM_TEST aff_fc,
-							hr.zd00@SIHAM_TEST reg_fc,         -- reglementation
-							hr.zd01@SIHAM_TEST lib_reg_fc,
-							hr.zd08@SIHAM_TEST comm_fc,          -- commentaire sur codes
-							hr.zd00@SIHAM_TEST reg_typ_fc,
-							hr.zd01@SIHAM_TEST lib_reg_typ_fc
+							hr.zyv1@SIHAM_PREP aff_fc,
+							hr.zd00@SIHAM_PREP reg_fc,         -- reglementation
+							hr.zd01@SIHAM_PREP lib_reg_fc,
+							hr.zd08@SIHAM_PREP comm_fc,          -- commentaire sur codes
+							hr.zd00@SIHAM_PREP reg_typ_fc,
+							hr.zd01@SIHAM_PREP lib_reg_typ_fc
 						where 
 							aff_fc.nudoss = p_nudoss
 							-- fonction MCE AVEC UO LIEE
@@ -593,11 +600,11 @@ FROM
 								   -- ##A_PERSONNALISER_CHOIX_SIHAM## : ou affectation future si aucune sur annee univ (demandé par notre DRH pour planning)
 								   ( trunc(aff_fc.datdeb) > p_date_systeme
 									 and not exists (select 1
-											from hr.zyv1@SIHAM_TEST aff_fc,
-												hr.zd00@SIHAM_TEST reg_fc, -- reglementation
-												hr.zd01@SIHAM_TEST lib_reg_fc,
-												hr.zd00@SIHAM_TEST reg_typ_fc,
-												hr.zd01@SIHAM_TEST lib_reg_typ_fc
+											from hr.zyv1@SIHAM_PREP aff_fc,
+												hr.zd00@SIHAM_PREP reg_fc, -- reglementation
+												hr.zd01@SIHAM_PREP lib_reg_fc,
+												hr.zd00@SIHAM_PREP reg_typ_fc,
+												hr.zd01@SIHAM_PREP lib_reg_typ_fc
 											where aff_fc.nudoss = p_nudoss
 											-- fonction
 											and aff_fc.foncti = reg_fc.cdcode
@@ -638,8 +645,8 @@ FROM
 				) v_aff_fun
 			) v_aff
 		) v_aff_princ
-		,hr.zc00@SIHAM_TEST 			emp		-- emplois
-		,hr.zc01@SIHAM_TEST 			emp_lib -- libelle
+		,hr.zc00@SIHAM_PREP 			emp		-- emplois
+		,hr.zc01@SIHAM_PREP 			emp_lib -- libelle
 		-- v1.6c
 		where v_aff_princ.rnum = 1
 			and trim(v_aff_princ.code_emploi) = trim(emp.idjb00)
@@ -665,7 +672,7 @@ FROM
             ,trim(adecod)   as adecod
 			,trunc(dateff) 	as dateff
 			,trunc(datfin)	as datfin
-			from hr.zygr@SIHAM_TEST 		--carriere administrative
+			from hr.zygr@SIHAM_PREP 		--carriere administrative
 			where nudoss = p_nudoss
 				-- toutes les périodes sur l'année univ
 				and trunc(datfin) >= p_d_deb_annee_univ
@@ -680,7 +687,7 @@ FROM
 			,decode(trim(adecod),null,'0000',adecod)
 			,trunc(dateff) as dateff
 			,decode(to_char(datxxx,'YYYY-MM-DD'),'2999-12-31',datxxx, datxxx-1)
-			from hr.zyfa@SIHAM_TEST 	 	-- administration origine
+			from hr.zyfa@SIHAM_PREP 	 	-- administration origine
 			where nudoss = p_nudoss
 				and rtrim(orgori,' ') is null
 				-- toutes les périodes sur l'année univ
@@ -695,9 +702,9 @@ FROM
 			select rtrim(g.cdcode,' ') cdcode
 			,trim(h.liblon) 	as liblon
 			,i.cdhiec 			as groupe_hierarchique
-			from hr.zd00@SIHAM_TEST g,
-				hr.zd01@SIHAM_TEST h,
-				hr.zd63@SIHAM_TEST i
+			from hr.zd00@SIHAM_PREP g,
+				hr.zd01@SIHAM_PREP h,
+				hr.zd63@SIHAM_PREP i
 			where g.nudoss = h.nudoss
 			and g.nudoss = i.nudoss
 			and g.cdstco = 'HJB'
@@ -718,20 +725,20 @@ FROM
             , trim(naiss.natemp) as natemp
             , trim(v_nation.nation) as nation
             , O_pays_nat.id as id_pays_nat
-        from hr.zy10@SIHAM_TEST naiss
-             ,hr.zd00@SIHAM_TEST reg      		-- reglementation pour dept naissance
-             ,hr.zd01@SIHAM_TEST lreg     		-- libelle reglementation
-             ,hr.zd00@SIHAM_TEST reg_pnaiss      -- reglementation pur pays naissance
-             ,hr.zd01@SIHAM_TEST lreg_pnaiss     -- libelle reglementation
+        from hr.zy10@SIHAM_PREP naiss
+             ,hr.zd00@SIHAM_PREP reg      		-- reglementation pour dept naissance
+             ,hr.zd01@SIHAM_PREP lreg     		-- libelle reglementation
+             ,hr.zd00@SIHAM_PREP reg_pnaiss      -- reglementation pur pays naissance
+             ,hr.zd01@SIHAM_PREP lreg_pnaiss     -- libelle reglementation
 			 ,( -- v1.8c : nationalité meme si pas principale  -- liste nationalités -- v1.6c
 				select nudoss, nation.nation, nation.FLPRCI
 				-- v1.9b- 04/04/2019
 				,row_number() over (partition by nudoss order by nation.FLPRCI desc) as rnum
-				from hr.zy12@SIHAM_TEST nation
+				from hr.zy12@SIHAM_PREP nation
 				where 
 				 (nation.FLPRCI =1    -- principale
 					or nation.FLPRCI <>1 and nation.nulign = ( select min(nation2.nulign)
-                                                              from hr.zy12@SIHAM_TEST nation2
+                                                              from hr.zy12@SIHAM_PREP nation2
                                                               where nation2.nudoss = nation.nudoss
                                                             )
                  )
@@ -767,7 +774,7 @@ FROM
 			,trim(TRANSLATE(upper(trim(max(decode(typtel,'PPE', numtel,'')))), '? -_./@ABCDEFGHIJKLMNOPQRSTUVWXYZ', ' ' )) as tel_mobile_perso
             ,trim(max(decode(typtel,'MPR', numtel,''))) as mail_pro
             ,trim(max(decode(typtel,'MPE', numtel,''))) as mail_perso
-        from hr.zy0h@SIHAM_TEST
+        from hr.zy0h@SIHAM_PREP
         where nudoss = p_nudoss
 			-- ##A_PERSONNALISER_CHOIX_SIHAM## suivant type de coordonnées personnelles
 			and typtel in ('TPR','TPE','PPR','PPE','MPR','MPE')
@@ -783,10 +790,10 @@ FROM
             ,ens.enseig 		as tem_enseig
 			,'' 				as id_grade_ose -- v1.10 
 			,row_number() over (partition by st.nudoss order by st.dateff desc) as rnum 
-            from hr.zyfl@SIHAM_TEST st		-- statut pip
-            ,hr.zd00@SIHAM_TEST reg      	-- reglementation
-            ,hr.zd01@SIHAM_TEST lreg        	-- libelle reglementation
-            ,hr.zdvp@SIHAM_TEST ens        	-- recup temoin enseig
+            from hr.zyfl@SIHAM_PREP st		-- statut pip
+            ,hr.zd00@SIHAM_PREP reg      	-- reglementation
+            ,hr.zd01@SIHAM_PREP lreg        	-- libelle reglementation
+            ,hr.zdvp@SIHAM_PREP ens        	-- recup temoin enseig
 			--, OSE.UM_GRADE ose_gr -- v1.10 
         where st.nudoss = p_nudoss
         and st.statut <> '00000'
@@ -808,8 +815,8 @@ FROM
 			or -- ##A_PERSONNALISER_CHOIX_SIHAM## : ou futur si aucun sur annee univ (demandé par notre DRH pour planning)
 			( trunc(st.dateff) > p_date_systeme
 			  and not exists (select 1
-							from hr.zyfl@SIHAM_TEST st
-								,hr.zd00@SIHAM_TEST reg 
+							from hr.zyfl@SIHAM_PREP st
+								,hr.zd00@SIHAM_PREP reg 
 							where st.nudoss = p_nudoss
 							and st.statut <> '00000'
 							-- reglementation HJ8
@@ -836,13 +843,13 @@ FROM
 		from
 		( 
 			select a.nudoss, 'PROV' as type_insee, substr(trim(a.seepro),1,13) no_insee, substr(trim(a.seepro),14,2) cle_insee
-			 from hr.zyfx@SIHAM_TEST a -- insee_prov
+			 from hr.zyfx@SIHAM_PREP a -- insee_prov
 		 where a.nudoss = p_nudoss
 			and a.seepro <> '               '
 			--and a.nudoss = '144829' 
 		 union
 			select a.nudoss, 'DEFI' as type_insee, trim(a.sssexe||lpad(to_char(a.ssanne),2,'0')||lpad(a.ssmois,2,'0')||a.ssdept||a.sscomm||a.ssnord) as no_insee, trim(a.ssclef) as cle_insee -- v2.2c 01/03/2021
-			from hr.zyff@SIHAM_TEST a
+			from hr.zyff@SIHAM_PREP a
 			where a.nudoss = p_nudoss
 		) tous_nss
 		group by tous_nss.nudoss
@@ -860,12 +867,12 @@ FROM
             ,comm_fc.numord					as nb_heure_mce
 			,row_number() over (partition by aff_fc.nudoss order by aff_fc.datdeb desc, decode(aff_fc.foncti,'UPD2',1,0) desc, aff_fc.datfin desc) as rnum			
 		from 
-			hr.zyv1@SIHAM_TEST aff_fc,
-			hr.zd00@SIHAM_TEST reg_fc, 		-- reglementation
-			hr.zd01@SIHAM_TEST lib_reg_fc,
-			hr.zd08@SIHAM_TEST comm_fc,  		-- commentaire sur codes
-			hr.zd00@SIHAM_TEST reg_typ_fc,
-			hr.zd01@SIHAM_TEST lib_reg_typ_fc
+			hr.zyv1@SIHAM_PREP aff_fc,
+			hr.zd00@SIHAM_PREP reg_fc, 		-- reglementation
+			hr.zd01@SIHAM_PREP lib_reg_fc,
+			hr.zd08@SIHAM_PREP comm_fc,  		-- commentaire sur codes
+			hr.zd00@SIHAM_PREP reg_typ_fc,
+			hr.zd01@SIHAM_PREP lib_reg_typ_fc
 		where aff_fc.nudoss = p_nudoss
 			-- fonction
 			and aff_fc.foncti = reg_fc.cdcode
@@ -891,11 +898,11 @@ FROM
 				   or -- ##A_PERSONNALISER_CHOIX_SIHAM## : ou futur si aucun sur annee univ (demandé par notre DRH pour planning)
 				   ( trunc(aff_fc.datdeb) > p_date_systeme
 					 and not exists (select 1
-							from hr.zyv1@SIHAM_TEST aff_fc,
-								hr.zd00@SIHAM_TEST reg_fc, -- reglementation
-								hr.zd01@SIHAM_TEST lib_reg_fc,
-								hr.zd00@SIHAM_TEST reg_typ_fc,
-								hr.zd01@SIHAM_TEST lib_reg_typ_fc
+							from hr.zyv1@SIHAM_PREP aff_fc,
+								hr.zd00@SIHAM_PREP reg_fc, -- reglementation
+								hr.zd01@SIHAM_PREP lib_reg_fc,
+								hr.zd00@SIHAM_PREP reg_typ_fc,
+								hr.zd01@SIHAM_PREP lib_reg_typ_fc
 							where aff_fc.nudoss = p_nudoss
 							-- fonction
 							and aff_fc.foncti = reg_fc.cdcode
@@ -925,9 +932,9 @@ FROM
         ,trunc(bq.datdeb)  	as datdeb
 		,case when trim(d.liblon) = 'Virement hors SEPA' then 1 else 0 end as rib_hors_sepa 	-- v3.0 07/01/2021
         ,row_number() over (partition by bq.nudoss order by bq.datdeb desc) as rnum
-		from hr.zy0i@SIHAM_TEST bq,     	-- coord bancaires
-			hr.ZD00@SIHAM_TEST c, 		-- reglementation		-- v3.0 07/01/2021
-			hr.ZD01@SIHAM_TEST d									-- v3.0 07/01/2021
+		from hr.zy0i@SIHAM_PREP bq,     	-- coord bancaires
+			hr.ZD00@SIHAM_PREP c, 		-- reglementation		-- v3.0 07/01/2021
+			hr.ZD01@SIHAM_PREP d									-- v3.0 07/01/2021
 		where bq.nudoss = p_nudoss
 			and bq.modpai= c.CDCODE 
 			and c.cdstco = 'DRN'
@@ -948,12 +955,12 @@ FROM
 		,trim(b.SITCOD) as code_position
 		,trim(d.liblon) as ll_position
 		from 
-		hr.zypo@SIHAM_TEST b,
-		hr.ZD00@SIHAM_TEST c, 
-		hr.ZD01@SIHAM_TEST d,
-		hr.zy1s@SIHAM_TEST f,
-		hr.ZD00@SIHAM_TEST g,
-		hr.ZD01@SIHAM_TEST h 
+		hr.zypo@SIHAM_PREP b,
+		hr.ZD00@SIHAM_PREP c, 
+		hr.ZD01@SIHAM_PREP d,
+		hr.zy1s@SIHAM_PREP f,
+		hr.ZD00@SIHAM_PREP g,
+		hr.ZD01@SIHAM_PREP h 
 		where b.nudoss = p_nudoss
 		and b.SITCOD <> 'FINAC'
 		and b.nudoss = f.nudoss
@@ -981,7 +988,7 @@ FROM
 	,row_number() over (partition by v_spe.nudoss order by v_spe.datdeb desc, v_spe.datfin desc) as rnum
 	from (	SELECT spe.nudoss, trim(spe.typspe) AS type_specialite, trunc(spe.datdeb) AS datdeb
 					, trunc(spe.datfin) AS datfin, trim(spe.specia) AS specialite, trim(spe.discip) AS discipline
-			FROM hr.zyvs@SIHAM_TEST spe
+			FROM hr.zyvs@SIHAM_PREP spe
 			WHERE spe.nudoss = p_nudoss
 				and trunc(spe.datdeb) <= add_months(p_d_fin_annee_univ,12)
 				and trunc(spe.datfin) >= p_d_deb_annee_univ
@@ -1035,14 +1042,14 @@ FROM
 			else 'N'
 		end as tem_partage_rectorat
         from
-            hr.zytl@SIHAM_TEST a,    -- modalite service
-            hr.zd00@SIHAM_TEST rep1,
-            hr.zd01@SIHAM_TEST lrep1,
-            hr.zy00@SIHAM_TEST i,
-            hr.zy39@SIHAM_TEST lieu,  -- lieu de travail 
-            hr.zd00@SIHAM_TEST rep2,
-            hr.zd01@SIHAM_TEST lrep2,
-            hr.zd0F@SIHAM_TEST adr
+            hr.zytl@SIHAM_PREP a,    -- modalite service
+            hr.zd00@SIHAM_PREP rep1,
+            hr.zd01@SIHAM_PREP lrep1,
+            hr.zy00@SIHAM_PREP i,
+            hr.zy39@SIHAM_PREP lieu,  -- lieu de travail 
+            hr.zd00@SIHAM_PREP rep2,
+            hr.zd01@SIHAM_PREP lrep2,
+            hr.zd0F@SIHAM_PREP adr
         where a.nudoss = p_nudoss
         and trunc(a.datxxx-1) >= p_d_deb_annee_univ
         and trunc(a.dateff)   <= p_d_fin_annee_univ
@@ -1168,18 +1175,30 @@ BEGIN
 			end if;
 			-------------
 			v_ose_mail_pro := c1.mail_pro;		-- ##A_PERSONNALISER_CHOIX_SIHAM## : si pas besoin de tester um_passeport: supprimer V_BI_PASSEPORT et DBLink @BI et remonter directement le mail suivant vos règles
-			if v_statut_new.code_type_intervenant = 'E' then   -- v3.0  07/01/2021	--- SI IE + passeport valide : mail pro sinon mail perso 
+			if v_statut_new.code_type_intervenant = 'E' then   -- v3.0  07/01/2021	--- SI IE + passeport non valide : mail pro sinon mail perso 
 					if c1.um_passeport <> '1' then v_ose_mail_pro := c1.mail_perso; end if;
 			end if;
 			-------------
-			v_id_grade_ose:= c1.id_grade_ose;		-- ID du GRADE DANS OSE.UM_GRADE
-			if v_statut_new.code_type_intervenant = 'E' then
-				-- ##A_PERSONNALISER_CHOIX_OSE##  -- la lettre permet d'afficher un libellé grade différent dans OSE suivant si Vac ou Perm
-				-- Si V sera couplé avec libelle catégorie OREC dans la vue SRC_...
-				if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V') <> 0 then v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V');  	 -- VACATAIRE CODE GRADE AVEC V ou sans lettre	
-				else if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P') <> 0 then v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P');  -- PERMANENT CODE GRADE AVEC P ou sans lettre
-					 end if;
+			v_id_grade_ose := c1.id_grade_ose;		-- ID du GRADE DANS OSE.UM_GRADE
+			if v_id_grade_ose is null then -- pour les non titulaires -- v3.2  15/06/21
+			
+				if ( c1.W_STATUT_PIP like 'HB%' or (c1.W_STATUT_PIP like 'C%' and OSE.UM_EST_CTR_PERM_OU_VAC(c1.W_STATUT_PIP) <> 0) ) then
+				
+					if v_statut_new.code_type_intervenant = 'E' then
+						-- ##A_PERSONNALISER_CHOIX_OSE##  -- la lettre permet d'afficher un libellé grade différent dans OSE suivant si Vac ou Perm
+						-- Si V sera couplé avec libelle catégorie OREC dans la vue SRC_...
+						-- if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V') <> 0 then  -- v3.2  15/06/21
+						v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V'); 	 -- VACATAIRE CODE GRADE AVEC V ou sans lettre	
+					else 
+						--if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P') <> 0 then -- v3.2  15/06/21
+						v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P');  -- PERMANENT CODE GRADE AVEC P ou sans lettre
+						--	 end if; -- v3.2  15/06/21
+						-- end if; -- v3.2  15/06/21
+					end if;
+				else
+					v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP);
 				end if;
+				
 			end if;
 			-------------
 			v_tem_transfert_ose := 'N';  -- TEMOIN DOSSIER A ENVOYER A OSE (dossier concerné par la GSE dans ose)
@@ -1198,6 +1217,9 @@ BEGIN
 			COMMIT;
 		  ELSE
 			--dbms_output.put_line('    - insert dans OSE.UM_INTERVENANT ... '||v_statut_new.id||' '||v_statut_new.code_statut||' '||v_statut_new.date_deb_statut);
+		  
+			-- v3.2 15/06/2021 rectif date_deb_statut si 1er insert de l'année : début dès le 01/09/N
+			if UM_EXISTE_INTERVENANT(p_annee_id, cur_pop.matcle) = 0 then v_statut_new.date_deb_statut := p_d_deb_annee_univ; end if; -- v3.2  15/06/21
 		  
 			-- v1.6 - CAS des DOC MCE avec mission ens se terminant en septembre : on ne les insere pas, on les insèrera plus tard si mce reconduit à partir de octobre
 			if ( UM_EST_DOC_MCE(v_statut_new.id) and c1.W_DATFIN_FC < add_months(p_d_deb_annee_univ,1) and c1.tem_present_orec = 'N') then	
@@ -1268,7 +1290,7 @@ BEGIN
 					-- CRITERE_RECHERCHE	
 					-- CODE
 					-- SUPANN_EMP_ID
-					,c1.pays_naissance_id    	-- id à revoir avec id dans OSE
+					,c1.pays_naissance_id    	-- id dans OSE.UM_PAYS
 					,c1.dep_naissance
 					,c1.pays_nationalite_id		
 					-- ##A_PERSONNALISER_CHOIX_SIHAM## ajout de champs W_ de verification des infos Siham bien utile pour les verifs
@@ -1358,13 +1380,23 @@ BEGIN
 					if c1.um_passeport <> '1' then v_ose_mail_pro := c1.mail_perso; end if;
 			end if;
 			-------------
-			v_id_grade_ose:= c1.id_grade_ose;
-			if v_statut_new.code_type_intervenant = 'E' then
-				-- ##A_PERSONNALISER_CHOIX_OSE##  -- la lettre permet d'afficher un libellé grade différent dans OSE suivant si Vac ou Perm
-				-- Si V sera couplé avec libelle catégorie OREC dans la vue SRC_...
-				if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V') <> 0 then v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V');  	-- VACATAIRE CODE GRADE AVEC V ou sans lettre	
-				else if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P') <> 0 then v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P'); -- PERMANENT CODE GRADE AVEC P ou sans lettre
-					 end if;
+			v_id_grade_ose := c1.id_grade_ose;		-- ID du GRADE DANS OSE.UM_GRADE
+			if v_id_grade_ose is null then -- pour les non titulaires -- v3.2  15/06/21
+				if ( c1.W_STATUT_PIP like 'HB%' or (c1.W_STATUT_PIP like 'C%' and OSE.UM_EST_CTR_PERM_OU_VAC(c1.W_STATUT_PIP) <> 0) ) then 
+				
+					if v_statut_new.code_type_intervenant = 'E' then
+						-- ##A_PERSONNALISER_CHOIX_OSE##  -- la lettre permet d'afficher un libellé grade différent dans OSE suivant si Vac ou Perm
+						-- Si V sera couplé avec libelle catégorie OREC dans la vue SRC_...
+						-- if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V') <> 0 then  -- v3.2  15/06/21
+						v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'V'); 	 -- VACATAIRE CODE GRADE AVEC V ou sans lettre	
+					else 
+						--if UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P') <> 0 then -- v3.2  15/06/21
+						v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP||'P');  -- PERMANENT CODE GRADE AVEC P ou sans lettre
+						--	 end if; -- v3.2  15/06/21
+						-- end if; -- v3.2  15/06/21
+					end if;
+				else
+					v_id_grade_ose:= UM_EXISTE_GRADE(c1.W_STATUT_PIP);
 				end if;
 			end if;
 			-------------
@@ -1473,7 +1505,7 @@ BEGIN
 					when v_param_gestion_statut = 'MULTI_AUTO' then 
 						v_maj_statut_a_faire := 'AUTO_INSERT';
 						-- traces dans la table historique des changements de statut
-						if UM_AJOUT_UM_SYNCHRO_A_VALIDER(cur_pop.matcle,p_annee_id,'AI', null, null, v_statut_actuel,v_statut_new, v_param_gestion_statut) = false then
+						if UM_AJOUT_UM_SYNCHRO_A_VALIDER(cur_pop.matcle,p_annee_id,'AI', sysdate, null, v_statut_actuel,v_statut_new, v_param_gestion_statut) = false then   -- v3.1 pour tem AI il faut d_validation en auto
 							dbms_output.put_line('    - update UM_INTERVENANT PARTIE 2 ... '||cur_pop.matcle||' changement statut détecté mais ajout dans UM_SYNCHRO_A_VALIDER ko');
 						end if;
 					when v_param_gestion_statut in ('UNIQUE_MANUEL','MULTI_MANUEL') then
@@ -1568,16 +1600,17 @@ BEGIN
 					END;
 					update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'DONE' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.TEM_OSE_UPDATE = 'TODO' and ose_tr.annee_id = p_annee_id;  -- v1.14
 					COMMIT;
-				else
+			else
 					if v_maj_statut_a_faire = 'AUTO_INSERT' then 
 						-- changement de statut à valider MANUELLEMENT ----
-						update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'A_INS' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.TEM_OSE_UPDATE = 'TODO' and ose_tr.annee_id = p_annee_id;
+						update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'A_INS' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.TEM_OSE_UPDATE = 'DONE' 
+																										and ose_tr.annee_id = p_annee_id and ose_tr.changement_statut like 'MULTI_AUTO :%';  -- v3.1 annul test TODO car update déjà fait
 					else
 						-- changement de statut à valider MANUELLEMENT ----
 						update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'CHGT' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.TEM_OSE_UPDATE = 'TODO' and ose_tr.annee_id = p_annee_id;  -- v1.14
 					end if;
 					COMMIT;
-				end if; -- fin v_maj_statut_a_faire PARTIE 2
+			end if; -- fin v_maj_statut_a_faire PARTIE 2
 
 		  END IF;	-- fin v_tem_transfert_ose = 'O'
 		end loop;

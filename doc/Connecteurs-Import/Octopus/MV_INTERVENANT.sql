@@ -127,7 +127,7 @@ WITH i AS (
 				MAX(REPLACE(d.bic, ' ', ''))   bic
 			FROM intervenant i
 			JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS null
-			WHERE  i.annee_id = 2020 AND i.histo_destruction IS NULL AND d.iban IS NOT NULL AND d.rib_hors_sepa = 0 AND i.source_id = '24'
+			WHERE  i.annee_id = 2020 AND i.histo_destruction IS NULL AND d.iban IS NOT NULL AND d.rib_hors_sepa = 0 AND i.source_id = '24' AND i.code_rh IS NOT NULL
 			GROUP BY i.code
          ),
          compte as

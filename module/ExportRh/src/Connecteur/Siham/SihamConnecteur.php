@@ -164,7 +164,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
             //Synchronisation Tel pro
-            if ($datas['generiqueFieldset']['telPro']) {
+            if ($datas['generiqueFieldset']['telPro'] && !empty($dossierIntervenant->getTelPro())) {
                 $params = [
                     'matricule' => $intervenantRh->getCodeRh(),
                     'numero'    => $dossierIntervenant->getTelPro(),
@@ -175,7 +175,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
 
             //Synchronisation Tel perso
-            if ($datas['generiqueFieldset']['telPerso']) {
+            if ($datas['generiqueFieldset']['telPerso'] && !empty($dossierIntervenant->getTelPerso())) {
                 $params = [
                     'matricule' => $intervenantRh->getCodeRh(),
                     'numero'    => $dossierIntervenant->getTelPerso(),
@@ -186,7 +186,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
 
             //Synchronisation email pro
-            if ($datas['generiqueFieldset']['emailPro']) {
+            if ($datas['generiqueFieldset']['emailPro'] && !empty($dossierIntervenant->getEmailPro())) {
                 $params = [
                     'matricule' => $intervenantRh->getCodeRh(),
                     'numero'    => $dossierIntervenant->getEmailPro(),
@@ -197,7 +197,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
 
             //Synchronisation email perso
-            if ($datas['generiqueFieldset']['emailPerso']) {
+            if ($datas['generiqueFieldset']['emailPerso'] && !empty($dossierIntervenant->getEmailPerso())) {
                 $params = [
                     'matricule' => $intervenantRh->getCodeRh(),
                     'numero'    => $dossierIntervenant->getEmailPerso(),

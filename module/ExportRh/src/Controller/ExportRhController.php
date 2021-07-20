@@ -74,12 +74,12 @@ class ExportRhController extends AbstractController
     {
 
         /* Initialisation */
-        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant              = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $intervenantRh            = '';
-        $form                     = '';
-        $nameConnecteur           = '';
-        $affectationFonctionnelle = '';
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenantRh      = '';
+        $form               = '';
+        $nameConnecteur     = '';
+        $affectationEnCours = '';
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');

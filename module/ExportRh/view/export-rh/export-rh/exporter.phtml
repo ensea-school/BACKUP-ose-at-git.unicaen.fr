@@ -132,7 +132,7 @@ if ($priseEnCharge) {
 
                             </td>
                             <td><?= $intervenantDossier->getNomUsuel() ?></td>
-                            <td class="active"><?= $intervenantRh->getNomUsuel() ?></td>
+                            <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getNomUsuel() : '' ?></td>
                         </tr>
                         <tr>
                             <td>
@@ -140,7 +140,7 @@ if ($priseEnCharge) {
                                 <?= $this->formLabel($generiqueFieldset->get('telPro')) ?> :
                             </td>
                             <td><?= $intervenantDossier->getTelPro() ?></td>
-                            <td class="active"><?= $intervenantRh->getTelPro() ?></td>
+                            <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getTelPro() : '' ?></td>
                         </tr>
                         <tr>
                             <td>
@@ -148,7 +148,7 @@ if ($priseEnCharge) {
                                 <?= $this->formLabel($generiqueFieldset->get('telPerso')) ?> :
                             </td>
                             <td><?= $intervenantDossier->getTelPerso() ?></td>
-                            <td class="active"><?= $intervenantRh->getTelPerso() ?></td>
+                            <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getTelPerso() : '' ?></td>
                         </tr>
                         <tr>
                             <td>
@@ -156,7 +156,7 @@ if ($priseEnCharge) {
                                 <?= $this->formLabel($generiqueFieldset->get('emailPro')) ?> :
                             </td>
                             <td><?= $intervenantDossier->getEmailPro() ?></td>
-                            <td class="active"><?= $intervenantRh->getEmailPro() ?></td>
+                            <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getEmailPro() : '' ?></td>
                         </tr>
                         <tr>
                             <td>
@@ -164,7 +164,7 @@ if ($priseEnCharge) {
                                 <?= $this->formLabel($generiqueFieldset->get('emailPerso')) ?> :
                             </td>
                             <td><?= $intervenantDossier->getEmailPerso() ?></td>
-                            <td class="active"><?= $intervenantRh->getEmailPerso() ?></td>
+                            <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getEmailPerso() : '' ?></td>
                         </tr>
 
                         <tr>
@@ -173,7 +173,7 @@ if ($priseEnCharge) {
                                 <?= $this->formLabel($generiqueFieldset->get('iban')) ?> :
                             </td>
                             <td><?= $intervenantDossier->getIBAN() ?></td>
-                            <td class="active"><?= $intervenantRh->getIBAN() ?></td>
+                            <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getIBAN() : '' ?></td>
                         </tr>
                         <tr>
                             <td>
@@ -181,7 +181,7 @@ if ($priseEnCharge) {
                                 <?= $this->formLabel($generiqueFieldset->get('bic')) ?> :
                             </td>
                             <td><?= $intervenantDossier->getBIC() ?></td>
-                            <td class="active"><?= $intervenantRh->getBIC() ?></td>
+                            <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getBIC() : '' ?></td>
                         </tr>
                         </tbody>
                     </table>

@@ -1,17 +1,17 @@
 <?php
-return array(
-    'zenddevelopertools' => array(
+return [
+    'zenddevelopertools' => [
         /**
          * General Profiler settings
          */
-        'profiler' => array(
+        'profiler' => [
             /**
              * Enables or disables the profiler.
              *
              * Expects: bool
              * Default: true
              */
-            'enabled' => true,
+            'enabled'     => false,
 
             /**
              * Enables or disables the strict mode. If the strict mode is enabled, any error will throw an exception,
@@ -20,7 +20,7 @@ return array(
              * Expects: bool
              * Default: true
              */
-            'strict' => true,
+            'strict'      => true,
 
             /**
              * If enabled, the profiler tries to flush the content before the it starts collecting data. This option
@@ -41,7 +41,7 @@ return array(
              * Expects: string
              * Default: 'data/cache'
              */
-            'cache_dir' => 'cache',
+            'cache_dir'   => 'cache',
 
             /**
              * If a matches is defined, the profiler will be disabled if the request does not match the pattern.
@@ -51,7 +51,7 @@ return array(
              * 'matcher' => array('url' => array('path' => '/admin')
              * Note: The matcher is not implemented yet!
              */
-            'matcher' => array(),
+            'matcher'     => [],
 
             /**
              * Contains a list with all collector the profiler should run. Zend Developer Tools ships with
@@ -61,9 +61,9 @@ return array(
              * Example: 'collectors' => array('db' => null)
              * Expects: array
              */
-            'collectors' => array()
-        ),
-        'events' => array(
+            'collectors'  => [],
+        ],
+        'events'   => [
             /**
              * Set to true to enable event-level logging for collectors that will support it. This enables a wildcard
              * listener onto the shared event manager that will allow profiling of user-defined events as well as the
@@ -72,7 +72,7 @@ return array(
              * Expects: bool
              * Default: false
              */
-            'enabled' => false,
+            'enabled'     => true,
 
             /**
              * Contains a list with all event-level collectors that should run. Zend Developer Tools ships with 'time'
@@ -81,7 +81,7 @@ return array(
              * Example: 'collectors' => array('memory' => null)
              * Expects: array
              */
-            'collectors' => array(),
+            'collectors'  => [],
 
             /**
              * Contains event identifiers used with the event listener. Zend Developer Tools defaults to listen to all
@@ -91,19 +91,19 @@ return array(
              * Example: 'identifiers' => array('all' => null, 'dispatchable' => 'Zend\Stdlib\DispatchableInterface')
              * Expects: array
              */
-            'identifiers' => array()
-        ),
+            'identifiers' => [],
+        ],
         /**
          * General Toolbar settings
          */
-        'toolbar' => array(
+        'toolbar'  => [
             /**
              * Enables or disables the Toolbar.
              *
              * Expects: bool
              * Default: false
              */
-            'enabled' => true,
+            'enabled'       => true,
 
             /**
              * If enabled, every empty collector will be hidden.
@@ -111,7 +111,7 @@ return array(
              * Expects: bool
              * Default: false
              */
-            'auto_hide' => false,
+            'auto_hide'     => false,
 
             /**
              * The Toolbar position.
@@ -119,7 +119,7 @@ return array(
              * Expects: string ('bottom' or 'top')
              * Default: bottom
              */
-            'position' => 'bottom',
+            'position'      => 'bottom',
 
             /**
              * If enabled, the Toolbar will check if your current Zend Framework version is up-to-date.
@@ -147,14 +147,14 @@ return array(
              * ),
              * Expects: array
              */
-            'entries' => array(
-                'config'  => false,
-                'db'      => false,
+            'entries'       => [
+                'config'                                 => false,
+                'db'                                     => false,
                 'doctrine.mapping_collector.orm_default' => false,
                 //'bjy_authorize_role_collector' => false,
-                //'request' => false,
-                //'memory'  => false,
-            )
-        )
-    )
-);
+                //'request'                                => true,
+                //'memory'                                 => true,
+            ],
+        ],
+    ],
+];

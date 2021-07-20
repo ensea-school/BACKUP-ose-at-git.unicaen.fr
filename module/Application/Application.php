@@ -84,6 +84,7 @@ class Application
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
         $application = $serviceManager->get('Application')->bootstrap([]);
+        /** @var $application \Zend\Mvc\Application */
         $application->run();
     }
 

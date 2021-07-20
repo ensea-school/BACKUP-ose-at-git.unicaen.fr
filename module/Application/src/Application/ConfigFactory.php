@@ -36,6 +36,7 @@ class ConfigFactory
                 'template_path_stack' => [
                     $namespace => $dir . '/view',
                 ],
+                'template_map'        => include $dir . '/template_map.php',
             ],
         ];
 

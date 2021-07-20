@@ -79,25 +79,4 @@ return [
             'do_not_send'       => AppConfig::get('mail', 'envoiDesactive'),
         ],
     ],
-
-    'navigation' => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'etab'                     => [
-                        'label' => AppConfig::get('etablissement', 'nom'),
-                        'title' => AppConfig::get('etablissement', 'logoDescription'),
-                        'uri'   => AppConfig::get('etablissement', 'logoUri'),
-                        'class' => 'lien-univ',
-                    ],
-                    'mentions-legales'         => [
-                        'uri' => AppConfig::get('etablissement', 'mentionsLegales'),
-                    ],
-                    'informatique-et-libertes' => [
-                        'uri' => AppConfig::get('etablissement', 'viePrivee', AppConfig::get('etablissement', 'informatiqueEtLibertes')),
-                    ],
-                ],
-            ],
-        ],
-    ],
 ];

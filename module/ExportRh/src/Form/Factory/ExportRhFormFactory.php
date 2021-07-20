@@ -17,7 +17,8 @@ class ExportRhFormFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $config = $container->get('Config');
+        $config     = $container->get('Config');
+        $connecteur = '';
 
         switch ($config['export-rh']['connecteur']) {
             case 'siham':
@@ -25,7 +26,9 @@ class ExportRhFormFactory
             break;
         }
 
+
         $fieldset = $connecteur->recupererFieldsetConnecteur();
+
 
         $form = new ExportRhForm($fieldset);
 

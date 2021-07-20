@@ -1,7 +1,8 @@
 <div class="panel panel-default">
-    <div class="panel-heading">Configuration de la prise en charge</div>
+    <div class="panel-heading">Configuration de la prise en charge dans <?= $nameConnecteur; ?></div>
     <div class="panel-body">
-        <p>Veuillez paramétrer la prise en charge de l'agent : </p>
+        <!-- Année universitaire de prise en charge -->
+        <input type="hidden" name="connecteurForm[anneeUniversitaire]" value="<?= $intervenant->getAnnee()->getId() ?>"/>
         <table class="table">
             <thead>
             <tr>
@@ -11,10 +12,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><?= $this->formLabel($connecteurFieldset->get('anneeUniversitaire')) ?> :</td>
-                <td><?= $this->formSelect($connecteurFieldset->get('anneeUniversitaire')); ?></td>
-            </tr>
+
             <tr>
                 <td><?= $this->formLabel($connecteurFieldset->get('emploi')) ?> :</td>
                 <td><?= $this->formSelect($connecteurFieldset->get('emploi')); ?></td>

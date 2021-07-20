@@ -9,7 +9,7 @@ use Zend\Form\Fieldset;
 class ExportRhForm extends AbstractForm
 {
 
-    protected $fieldsetConnecteur = null;
+    protected $fieldsetConnecteur;
 
 
 

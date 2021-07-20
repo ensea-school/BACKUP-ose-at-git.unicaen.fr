@@ -204,4 +204,5 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
         return $statuts;
     }
+    
 }

@@ -57,7 +57,7 @@ class ExportRhService extends AbstractService
 
     public function getIntervenantRh($intervenant)
     {
-        $intervenantRh = $this->connecteur->trouverIntervenantRh($intervenant);
+        $intervenantRh = $this->connecteur->recupererIntervenantRh($intervenant);
 
         return $intervenantRh;
     }
@@ -88,9 +88,9 @@ class ExportRhService extends AbstractService
 
 
 
-    public function getAffectationEnCours($intervenant)
+    public function getAffectationEnCoursIntervenantRh($intervenant)
     {
-        $affectation = $this->connecteur->recupererAffectationEnCours($intervenant);
+        $affectation = $this->connecteur->recupererAffectationEnCoursIntervenantRh($intervenant);
 
 
         return $affectation;
@@ -143,6 +143,13 @@ class ExportRhService extends AbstractService
     public function renouvellementIntervenantRh(Intervenant $intervenant, $datas)
     {
         return $this->connecteur->renouvellerIntervenantRH($intervenant, $datas);
+    }
+
+
+
+    public function synchroniserDonneesPersonnelles(Intervenant $intervenant, $datas)
+    {
+        return $this->connecteur->synchroniserDonneesPersonnelles($intervenant, $datas);
     }
 
 

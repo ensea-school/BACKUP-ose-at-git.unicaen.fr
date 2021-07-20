@@ -56,6 +56,17 @@ return [
                             ],
                         ],
                     ],
+                    'sync'           => [
+                        'type'          => 'Segment',
+                        'may_terminate' => false,
+                        'options'       => [
+                            'route'    => '/:intervenant/sync',
+                            'defaults' => [
+                                'controller' => Controller\ExportRhController::class,
+                                'action'     => 'synchroniser',
+                            ],
+                        ],
+                    ],
                     'administration' => [
                         'type'          => 'Literal',
                         'may_terminate' => true,
@@ -131,7 +142,7 @@ return [
                 ],
                 [
                     'controller' => Controller\ExportRhController::class,
-                    'action'     => ['exporter', 'prise-en-charge', 'renouvellement'],
+                    'action'     => ['exporter', 'prise-en-charge', 'renouvellement', 'synchroniser'],
                     'privileges' => [Privileges::EXPORT_RH_SYNC],
                     'assertion'  => ExportRhAssertion::class,
 

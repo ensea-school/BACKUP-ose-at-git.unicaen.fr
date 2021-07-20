@@ -30,8 +30,7 @@ class SihamFieldset extends AbstractFieldset
 
 
         $this->get('anneeUniversitaire')
-            ->setValueOptions([''           => '(Sélectionnez une année de prise en charge)',
-                               '2020-09-01' => '2020/2021',
+            ->setValueOptions(['2020-09-01' => '2020/2021',
                                '2021-09-01' => '2021/2022',]);
 
 
@@ -52,9 +51,17 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+        $valuesModaliteService = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeModalites());
 
-        $this->get('modaliteService')
-            ->setValueOptions(['' => '(Sélectionnez une modalité de service)'] + \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeModalites()));
+        if (count($valuesModaliteService) == 1) {
+            $this->get('modaliteService')
+                ->setValueOptions($valuesModaliteService)
+                ->setAttribute('readonly', 'readonly');
+        } else {
+            $this->get('modaliteService')
+                ->setValueOptions(['' => '(Sélectionnez une modalité de service)'] + $valuesModaliteService);
+        }
+
 
         //Statut
         $this->add([
@@ -71,9 +78,17 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+        $valuesStatut = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeStatuts());
 
-        $this->get('statut')
-            ->setValueOptions(['' => '(Sélectionnez un statut)'] + \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeStatuts()));
+        if (count($valuesStatut) == 1) {
+            $this->get('statut')
+                ->setValueOptions($valuesStatut)
+                ->setAttribute('readonly', 'readonly');
+        } else {
+            $this->get('statut')
+                ->setValueOptions(['' => '(Sélectionnez un statut)'] + $valuesStatut);
+        }
+
 
         //Position administrative
         $this->add([
@@ -90,9 +105,17 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+        $valuesPosition = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListePositions());
 
-        $this->get('position')
-            ->setValueOptions(['' => '(Sélectionnez une position administrative)'] + \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListePositions()));
+        if (count($valuesPosition) == 1) {
+            $this->get('position')
+                ->setValueOptions($valuesPosition)
+                ->setAttribute('readonly', 'readonly');
+        } else {
+            $this->get('statut')
+                ->setValueOptions(['' => '(Sélectionnez une position)'] + $valuesPosition);
+        }
+
 
         //Affectation
         $this->add([
@@ -109,9 +132,17 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+        $valuesAffectation = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeUO());
 
-        $this->get('affectation')
-            ->setValueOptions(['' => '(Sélectionnez une affectation)'] + \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeUO()));
+        if (count($valuesAffectation) == 1) {
+            $this->get('affectation')
+                ->setValueOptions($valuesAffectation)
+                ->setAttribute('readonly', 'readonly');
+        } else {
+            $this->get('affectation')
+                ->setValueOptions(['' => '(Sélectionnez une affectation)'] + $valuesAffectation);
+        }
+
 
         //Type d'emploi
         $this->add([
@@ -128,9 +159,17 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+        $valuesEmploi = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeEmplois());
 
-        $this->get('emploi')
-            ->setValueOptions(['' => '(Sélectionnez un type d\'emploi)'] + \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeEmplois()));
+        if (count($valuesEmploi) == 1) {
+            $this->get('emploi')
+                ->setValueOptions($valuesEmploi)
+                ->setAttribute('readonly', 'readonly');
+        } else {
+            $this->get('emploi')
+                ->setValueOptions(['' => '(Sélectionnez un emploi)'] + $valuesEmploi);
+        }
+
 
         return $this;
     }

@@ -49,11 +49,19 @@ class IntervenantRh
 
     public ?string             $telPro;
 
+    public ?string             $telProDateDebut;
+
     public ?string             $telPerso;
+
+    public ?string             $telPersoDateDebut;
 
     public ?string             $emailPro;
 
+    public ?string             $emailProDateDebut;
+
     public ?string             $emailPerso;
+
+    public ?string             $emailPersoDateDebut;
 
     public ?string             $adressePrecisions;
 
@@ -550,6 +558,30 @@ class IntervenantRh
     /**
      * @return string|null
      */
+    public function getTelProDateDebut(): ?string
+    {
+        return $this->telProDateDebut;
+    }
+
+
+
+    /**
+     * @param string|null $telProDateDebut
+     *
+     * @return IntervenantRH
+     */
+    public function setTelProDateDebut(?string $telProDateDebut): IntervenantRH
+    {
+        $this->telProDateDebut = $telProDateDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
     public function getTelPerso(): ?string
     {
         return $this->telPerso;
@@ -565,6 +597,30 @@ class IntervenantRh
     public function setTelPerso(?string $telPerso): IntervenantRH
     {
         $this->telPerso = $telPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getTelPersoDateDebut(): ?string
+    {
+        return $this->telPersoDateDebut;
+    }
+
+
+
+    /**
+     * @param string|null $telPersoDateDebut
+     *
+     * @return IntervenantRH
+     */
+    public function setTelPersoDateDebut(?string $telPersoDateDebut): IntervenantRH
+    {
+        $this->telPersoDateDebut = $telPersoDateDebut;
 
         return $this;
     }
@@ -598,6 +654,30 @@ class IntervenantRh
     /**
      * @return string|null
      */
+    public function getEmailProDateDebut(): ?string
+    {
+        return $this->emailProDateDebut;
+    }
+
+
+
+    /**
+     * @param string|null $emailProDateDebut
+     *
+     * @return IntervenantRH
+     */
+    public function setEmailProDateDebut(?string $emailProDateDebut): IntervenantRH
+    {
+        $this->emailProDateDebut = $emailProDateDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
     public function getEmailPerso(): ?string
     {
         return $this->emailPerso;
@@ -613,6 +693,30 @@ class IntervenantRh
     public function setEmailPerso(?string $emailPerso): IntervenantRH
     {
         $this->emailPerso = $emailPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getEmailPersoDateDebut(): ?string
+    {
+        return $this->emailPersoDateDebut;
+    }
+
+
+
+    /**
+     * @param string|null $emailPersoDateDebut
+     *
+     * @return IntervenantRH
+     */
+    public function setEmailPersoDateDebut(?string $emailPersoDateDebut): IntervenantRH
+    {
+        $this->emailPersoDateDebut = $emailPersoDateDebut;
 
         return $this;
     }

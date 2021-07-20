@@ -381,7 +381,7 @@ class Siham
         $dateDebut = new \DateTime();
 
         $paramsWS = ['ParamModifDP' => [
-            'codeEtablissement'   => (isset($params['codeEtablissement'])) ? strtoupper($params['codeEtablissement']) : '',
+            'codeEtablissement'   => $this->codeEtablissement,
             'codeUOAffectAdresse' => '',//Obligatoire sinon le WS plante...
             'typeAction'          => (!empty($params['dateDebut'])) ? self::SIHAM_TYPE_ACTION_MODIFICATION : self::SIHAM_TYPE_ACTION_AJOUT,//obligatoire
             'dateDebut'           => (!empty($params['dateDebut'])) ? $params['dateDebut'] : $dateDebut->format('Y-m-d'),
@@ -391,10 +391,11 @@ class Siham
             'typeNumero'          => $type,
         ]];
 
+
         try {
             $client = $this->sihamClient->getClient('DossierAgentWebService');
             $result = $client->ModifDonneesPersonnelles($paramsWS);
-
+           
             if (isset($result->return)) {
                 if ($result->return->statutMAJ == 1) {
                     return true;
@@ -490,6 +491,7 @@ class Siham
         try {
             //On récupére l'agent pour pouvoir le modifier
             $client = $this->sihamClient->getClient('DossierAgentWebService');
+            //TODO : à retester car fait planter les WS siham dans le mode mise à jour
             //$result->ModifCoordonneesBancaires($paramsWS);
         } catch (\SoapFault $e) {
             throw new SihamException($e->faultstring, 0, $e);
@@ -724,7 +726,7 @@ class Siham
             throw new SihamException($e->faultstring, 0, $e);
         }
 
-        return false;
+        return null;
     }
 
 
@@ -766,7 +768,6 @@ class Siham
                             'temoinValidite'    => '1'];
 
         //Traitement des positions
-
         $listePositions = [];
 
 
@@ -796,7 +797,7 @@ class Siham
             'listeModalitesServices' => $listeModalitesServices,
             'listeStatuts'           => $listeStatuts,
             'listePositions'         => $listePositions,
-            'motifEntree'            => (isset($params['motifEntree'])) ? strtoupper($params['motifEntree']) : self::SIHAM_MOTIF_ENTREE_DEFAULT,
+            //'motifEntree'            => (isset($params['motifEntree'])) ? strtoupper($params['motifEntree']) : self::SIHAM_MOTIF_ENTREE_DEFAULT,
             'matricule'              => (isset($params['matricule'])) ? strtoupper($params['matricule']) : '',
             'temoinValidite'         => (isset($params['temoinValidite'])) ? strtoupper($params['temoinValidite']) : '',
             'UO'                     => (isset($params['UO'])) ? strtoupper($params['UO']) : '',
@@ -835,6 +836,7 @@ class Siham
             } elseif ($result->return->statut == 'MAJ OK' && !empty($result->return->matricule)) {
                 return $result->return->matricule;
             } else {
+
                 throw new SihamException('Erreur non identifié, veuillez vous rapprocher du support informatique', 0);
             }
         } catch (\SoapFault $e) {
@@ -842,7 +844,7 @@ class Siham
             throw new SihamException($e->faultstring, 0, $e);
         }
 
-        return false;
+        return null;
     }
 
 

@@ -189,9 +189,12 @@ class  IntervenantController extends AbstractController
         $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire);
 
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
+
         if (!$campagneSaisie->estOuverte()) {
+            die;
             $role = $this->getServiceContext()->getSelectedIdentityRole();
             if ($role->getIntervenant()) {
+
                 $this->flashMessenger()->addErrorMessage($campagneSaisie->getMessage($role));
             } else {
                 $this->flashMessenger()->addWarningMessage($campagneSaisie->getMessage($role));

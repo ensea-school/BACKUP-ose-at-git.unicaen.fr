@@ -101,19 +101,14 @@ class ExportRhController extends AbstractController
          */
         try {
             $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
+            //On a trouvé un intervenant dans le SI RH
             if (!empty($intervenantRh)) {
-                //On a trouvé un intervenant dans le SI RH
-                $affectationEnCours = $this->exportRhService->getAffectationEnCours($intervenant);
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
+                $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
+
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {
-                    foreach ($affectationEnCours as $affectation) //Si non on propose un renouvellement de l'intervenant SI RH
-                    {
-                        if ($affectation->codeTypeRattachement == 'FUN') {
-                            $affectationFonctionnelle = $affectation;
-                            $renouvellement           = false;
-                        }
-                    }
+                    $renouvellement = false;
                 }
             } else {
                 $priseEnCharge = true;
@@ -121,11 +116,11 @@ class ExportRhController extends AbstractController
 
 
             $nameConnecteur = $this->exportRhService->getConnecteurName();
-            $form           = $this->getExportRhForm();
-        } catch (SihamException $e) {
+            $form           = $this->getExportRhForm($intervenant);
+        } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
-      
+
 
         return compact('typeIntervenant',
             'intervenant',
@@ -136,7 +131,7 @@ class ExportRhController extends AbstractController
             'renouvellement',
             'priseEnCharge',
             'nameConnecteur',
-            'affectationFonctionnelle');
+            'affectationEnCours');
     }
 
 
@@ -182,15 +177,41 @@ class ExportRhController extends AbstractController
                 $posts  = $this->getRequest()->getPost();
                 $result = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
                 if ($result !== false) {
-                    $this->flashMessenger()->addSuccessMessage('succes du renouvellement matricule : ' . $result);
+                    $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés');
                 } else {
-                    $this->flashMessenger()->addErrorMessage('Probleme de renouvellement');
+                    $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
                 }
             }
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
+
+        return $this->redirect()->toRoute('intervenant/exporter', [], [], true);
+    }
+
+
+
+    public function synchroniserAction()
+    {
+        try {
+            if ($this->getRequest()->isPost()) {
+                $intervenant = $this->getEvent()->getParam('intervenant');
+                if (!$intervenant) {
+                    throw new \LogicException('Intervenant non précisé ou inexistant');
+                }
+
+                $posts  = $this->getRequest()->getPost();
+                $result = $this->exportRhService->synchroniserDonneesPersonnelles($intervenant, $posts);
+                if ($result !== false) {
+                    $this->flashMessenger()->addSuccessMessage('Les données personnelles ont bien été synchronisé');
+                } else {
+                    $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la synchronisation des données personnelles');
+                }
+            }
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
 
         return $this->redirect()->toRoute('intervenant/exporter', [], [], true);
     }

@@ -1,12 +1,19 @@
 <?php
 
 return [
-    'etats'    => [
+    'etats'      => [
         'desactive'  => 'Désactivé',
         'informatif' => 'Informatif',
         'bloquant'   => 'Bloquant',
     ],
-    'plafonds' => [
+    'perimetres' => [
+        'composante'     => 'Composante',
+        'intervenant'    => 'Intervenant',
+        'element'        => 'Elément pédagogique',
+        'volume_horaire' => 'Volume horaire',
+        'referentiel'    => 'Fonction référentielle',
+    ],
+    'plafonds'   => [
         'ref-par-structure'     => 'Heures max. de référentiel par structure',
         'remu-d714-60'          => 'Montant maximal par intervenant de la prime D714-60 du code de l\'éducation',
         'ref-par-statut'        => 'Heures max. de référentiel par intervenant selon son statut',

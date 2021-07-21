@@ -3,11 +3,10 @@
 namespace Plafond\Entity\Db;
 
 /**
- * Plafond
+ * PlafondPerimetre
  */
-class Plafond
+class PlafondPerimetre
 {
-    use PlafondPerimetreAwareTrait;
 
     /**
      * @var integer
@@ -49,9 +48,9 @@ class Plafond
     /**
      * @param string $code
      *
-     * @return Plafond
+     * @return PlafondPerimetre
      */
-    public function setCode($code): Plafond
+    public function setCode($code): PlafondPerimetre
     {
         $this->code = $code;
 
@@ -73,9 +72,9 @@ class Plafond
     /**
      * @param string $libelle
      *
-     * @return Plafond
+     * @return PlafondPerimetre
      */
-    public function setLibelle($libelle): Plafond
+    public function setLibelle($libelle): PlafondPerimetre
     {
         $this->libelle = $libelle;
 
@@ -94,5 +93,4 @@ class Plafond
     {
         return $this->getLibelle();
     }
-
 }

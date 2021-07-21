@@ -2,6 +2,7 @@
 
 namespace Indicateur\Entity\Db;
 
+use Application\Entity\Db\Structure;
 use Indicateur\Service\IndicateurServiceAwareTrait;
 
 /**

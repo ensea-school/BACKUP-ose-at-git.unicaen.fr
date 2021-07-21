@@ -3,6 +3,7 @@
 namespace Indicateur\Entity\Db;
 
 use Application\Constants;
+use Application\Entity\Db\Affectation;
 use DateTime;
 
 /**

@@ -62,6 +62,11 @@ class DataGen
             'key'     => 'CODE',
         ],
         [
+            'table'   => 'PLAFOND_PERIMETRE',
+            'context' => ['install', 'update'],
+            'key'     => 'CODE',
+        ],
+        [
             'table'   => 'TYPE_VOLUME_HORAIRE',
             'context' => ['install', 'update'],
             'key'     => 'CODE',
@@ -649,6 +654,26 @@ class DataGen
 
         foreach ($data['etats'] as $code => $libelle) {
             $plafond    = [
+                'CODE'    => $code,
+                'LIBELLE' => $libelle,
+            ];
+            $plafonds[] = $plafond;
+        }
+
+        return $plafonds;
+    }
+
+
+
+    public function PLAFOND_PERIMETRE()
+    {
+        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $plafonds = [];
+        $id       = 0;
+        foreach ($data['perimetres'] as $code => $libelle) {
+            $id++;
+            $plafond    = [
+                'ID'      => $id,
                 'CODE'    => $code,
                 'LIBELLE' => $libelle,
             ];

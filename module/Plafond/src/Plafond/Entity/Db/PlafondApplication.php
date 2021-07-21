@@ -2,8 +2,7 @@
 
 namespace Plafond\Entity\Db;
 
-use Plafond\Entity\Db\PlafondAwareTrait;
-use Plafond\Entity\Db\PlafondEtatAwareTrait;
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**

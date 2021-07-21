@@ -8,7 +8,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_IMPORT" AS
   FUNCTION get_current_user RETURN INTEGER IS
   BEGIN
     IF v_current_user IS NULL THEN
-      v_current_user := ose_divers.GET_OSE_UTILISATEUR_ID();
+      v_current_user := OSE_PARAMETRE.GET_OSE_USER();
     END IF;
     RETURN v_current_user;
   END get_current_user;

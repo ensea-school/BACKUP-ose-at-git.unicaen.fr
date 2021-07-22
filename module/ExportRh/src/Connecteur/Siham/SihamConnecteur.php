@@ -268,10 +268,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             $coordonnees['modePaiement']   = '25';
             $coordonneesBancaires[]        = $coordonnees;*/
 
-            /*COORDONNEES TELEPHONIQUES ET MAIL*/
-            /*'dateDebutTel' => (isset($numero['dateDebutTel'])) ? strtoupper($numero['dateDebutTel']) : '',
-                'numero'       => (isset($numero['numero'])) ? strtoupper($numero['numero']) : '',
-                'typeNumero'*/
+
             $coordonneesTelMail[] = '';
             if ($dossierIntervenant->getTelPro()) {
                 $coordonneesTelMail[] = [

@@ -102,9 +102,9 @@ class AppConfig
             'UnicaenAuth',
             'UnicaenImport',
             'UnicaenTbl',
+            'UnicaenSiham',
             'Application',
             'ExportRh',
-            'UnicaenSiham',
         ];
 
         if (!self::inConsole()) {

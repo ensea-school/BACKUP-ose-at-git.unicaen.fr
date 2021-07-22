@@ -26,11 +26,5 @@
         "zendframework/zend-test"           : "3.3.0",
         "zendframework/zend-developer-tools": "1.2.3",
         "unicaen/php-compat"                : "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url" : "https://git.unicaen.fr/lib/unicaen/siham.git"
-        }
-    ]
+    }
 }

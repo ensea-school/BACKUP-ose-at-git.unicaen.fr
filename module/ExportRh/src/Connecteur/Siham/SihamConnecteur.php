@@ -261,12 +261,12 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
 
             //TODO : travailler les coordonnées bancaires pour la prise en charge
-            /*COORDONNEES BANCAIRES
+            /*COORDONNEES BANCAIRES*/
             $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
-            $coordonnees['dateDebBanque']  = $this->getRequest()->getPost('anneeUniversitaire');
+            $coordonnees['dateDebBanque']  = $datas['connecteurForm']['anneeUniversitaire'];
             $coordonnees['temoinValidite'] = '1';
             $coordonnees['modePaiement']   = '25';
-            $coordonneesBancaires[]        = $coordonnees;*/
+            $coordonneesBancaires[]        = $coordonnees;
 
 
             $coordonneesTelMail[] = '';
@@ -312,9 +312,10 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                 'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
                 'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr(1, 2, $dossierIntervenant->getDepartementNaissance()->getCode()) : '',
+                'paysNaissance'             => 'FRA',
                 'emploi'                    => $datas['connecteurForm']['emploi'],
                 'listeCoordonneesPostales'  => $coordonneesPostales,
-                'listeCoordonneesBancaires' => '',//$coordonneesBancaires,
+                'listeCoordonneesBancaires' => $coordonneesBancaires,
                 'listeModalitesServices'    => $service,
                 'listeStatuts'              => $statut,
                 'listeNationalites'         => $nationalites,
@@ -323,8 +324,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'motifEntree'               => 'PEC',
                 'nomPatronymique'           => $dossierIntervenant->getNomPatronymique(),
                 'nomUsuel'                  => $dossierIntervenant->getNomUsuel(),
-                'numeroInsee'               => $dossierIntervenant->getNumeroInsee(),
-                'paysNaissance'             => '',
+                'numeroInsee'               => (!$dossierIntervenant->getNumeroInseeProvisoire()) ? $dossierIntervenant->getNumeroInsee() : '',
+                'numeroInseeProvisoire'     => ($dossierIntervenant->getNumeroInseeProvisoire()) ? $dossierIntervenant->getNumeroInsee() : '',
                 'prenom'                    => $dossierIntervenant->getPrenom(),
                 'sexe'                      => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
                 'temoinValidite'            => '1',

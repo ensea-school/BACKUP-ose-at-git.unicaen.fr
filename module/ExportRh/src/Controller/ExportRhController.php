@@ -160,7 +160,7 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return $this->redirect()->toRoute('intervenant/exporter', [], [], true);
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
     }
 
 
@@ -187,7 +187,7 @@ class ExportRhController extends AbstractController
         }
 
 
-        return $this->redirect()->toRoute('intervenant/exporter', [], [], true);
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
     }
 
 
@@ -213,6 +213,6 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return $this->redirect()->toRoute('intervenant/exporter', [], [], true);
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
     }
 }

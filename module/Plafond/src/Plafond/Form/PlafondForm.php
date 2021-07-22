@@ -1,32 +1,26 @@
 <?php
 
-namespace <namespace>;
+namespace Plafond\Form;
 
-<if useSubForm>
 use Application\Form\AbstractForm;
-<endif useSubForm>
-<if useHydrator>
-use Zend\Hydrator\HydratorInterface;
-<endif useHydrator>
-
+use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 
 /**
- * Description of <classname>
+ * Description of PlafondForm
  *
- * @author <author>
+ * @author UnicaenCode
  */
-class <classname> extends AbstractForm
+class PlafondForm extends AbstractForm implements InputFilterProviderInterface
 {
 
     public function init()
     {
-        <if useHydrator>
-        $hydrator = new <classname>Hydrator;
+        $hydrator = new PlafondFormHydrator;
         $this->setHydrator($hydrator);
-        <endif useHydrator>
 
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         /* Ajoutez vos éléments de formulaire ici */
 
@@ -54,18 +48,18 @@ class <classname> extends AbstractForm
             /* Filtres et validateurs */
         ];
     }
+
 }
 
 
 
 
 
-<if useHydrator>
-class <classname>Hydrator implements HydratorInterface
+class PlafondFormHydrator implements HydratorInterface
 {
 
     /**
-     * @param  array    $data
+     * @param array     $data
      * @param           $object
      *
      * @return object
@@ -93,4 +87,3 @@ class <classname>Hydrator implements HydratorInterface
         return $data;
     }
 }
-<endif useHydrator>

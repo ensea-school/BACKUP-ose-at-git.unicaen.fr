@@ -1044,6 +1044,8 @@ return [
         'ID',
         'CODE',
         'LIBELLE',
+        'PLAFOND_PERIMETRE_ID',
+        'REQUETE',
     ],
     'PLAFOND_APPLICATION'            => [
         'ID',
@@ -1946,6 +1948,11 @@ return [
         'VILLE_NAISSANCE',
         'INTERVENANT_ID',
         'RIB_HORS_SEPA',
+    ],
+    'PLAFOND_PERIMETRE'              => [
+        'ID',
+        'CODE',
+        'LIBELLE',
     ],
 ];
 

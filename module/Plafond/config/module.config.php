@@ -86,5 +86,6 @@ return [
 
     'forms' => [
         Form\PlafondApplicationForm::class => Form\PlafondApplicationFormFactory::class,
+        Form\PlafondForm::class            => Form\PlafondFormFactory::class,
     ],
 ];

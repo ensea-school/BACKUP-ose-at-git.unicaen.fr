@@ -6,6 +6,7 @@
         <id name="id" type="integer" column="ID"/>
         <field name="code" type="string" column="CODE" length="40" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="150" nullable="false"/>
+        <field name="requete" type="string" column="REQUETE" length="4000" nullable="false"/>
 
         <many-to-one field="plafondPerimetre" target-entity="Plafond\Entity\Db\PlafondPerimetre">
             <join-columns>

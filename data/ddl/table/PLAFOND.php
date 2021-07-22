@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'PLAFOND_ID_SEQ',
     'columns'     => [
-        'CODE'    => [
+        'CODE'                 => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'ID'      => [
+        'ID'                   => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +33,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE' => [
+        'LIBELLE'              => [
             'name'        => 'LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -43,6 +43,30 @@ return [
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 3,
+            'commentaire' => NULL,
+        ],
+        'PLAFOND_PERIMETRE_ID' => [
+            'name'        => 'PLAFOND_PERIMETRE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 4,
+            'commentaire' => NULL,
+        ],
+        'REQUETE'              => [
+            'name'        => 'REQUETE',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
     ],

@@ -24,12 +24,17 @@ class Plafond
      */
     protected $libelle;
 
+    /**
+     * @var string
+     */
+    protected $requete;
+
 
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -39,7 +44,7 @@ class Plafond
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -63,7 +68,7 @@ class Plafond
     /**
      * @return string
      */
-    public function getLibelle(): string
+    public function getLibelle(): ?string
     {
         return $this->libelle;
     }
@@ -78,6 +83,30 @@ class Plafond
     public function setLibelle($libelle): Plafond
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getRequete(): ?string
+    {
+        return $this->requete;
+    }
+
+
+
+    /**
+     * @param string $requete
+     *
+     * @return Plafond
+     */
+    public function setRequete(string $requete): Plafond
+    {
+        $this->requete = $requete;
 
         return $this;
     }

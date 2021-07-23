@@ -2,27 +2,29 @@
 
 namespace <namespace>;
 
-use <targetFullClass>;
+<if subDir>use <targetClass>;
+<endif subDir>
 
 /**
- * Description of <class>
+ * Description of <classname>
  *
  * @author UnicaenCode
  */
-trait <class>
+trait <classname>
 {
     /**
-     * @var <targetClass>
+     * @var <targetClassname>
      */
     protected $<variable>;
 
 
 
     /**
-     * @param <targetClass> $<variable>
+     * @param <targetClassname> $<variable>
+     *
      * @return self
      */
-    public function set<method>( <targetClass> $<variable> )
+    public function set<method>( <targetClassname> $<variable> )
     {
         $this-><variable> = $<variable>;
 
@@ -32,12 +34,12 @@ trait <class>
 
 
     /**
-     * @return <targetClass>
+     * @return <targetClassname>
      */
-    public function get<method>() : <targetClass>
+    public function get<method>(): ?<targetClassname>
     {
         if (!$this-><variable>){
-            $this-><variable> = \Application::$container->get(<targetClass>::class);
+            $this-><variable> = \Application::$container->get(<targetClassname>::class);
         }
 
         return $this-><variable>;

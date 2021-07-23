@@ -2,28 +2,29 @@
 
 namespace <namespace>;
 
-use <targetFullClass>;
+<if subDir>use <targetClass>;
+<endif subDir>
 
 /**
- * Description of <class>
+ * Description of <classname>
  *
  * @author UnicaenCode
  */
-trait <class>
+trait <classname>
 {
     /**
-     * @var <targetClass>
+     * @var <targetClassname>
      */
     protected $<variable>;
 
 
 
     /**
-     * @param <targetClass> $<variable>
+     * @param <targetClassname> $<variable>
      *
      * @return self
      */
-    public function set<method>( <targetClass> $<variable> )
+    public function set<method>( <targetClassname> $<variable> )
     {
         $this-><variable> = $<variable>;
 
@@ -33,18 +34,15 @@ trait <class>
 
 
     /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return <targetClass>
-     * @throws RuntimeException
+     * @return <targetClassname>
      */
-    public function get<method>() : <targetClass>
+    public function get<method>(): ?<targetClassname>
     {
-        if ($this-><variable>){
-            return $this-><variable>;
-        }else{
-            return \Application::$container->get('FormElementManager')->get(<targetClass>::class);
+        if (!$this-><variable>){
+            $this-><variable> = \Application::$container->get('FormElementManager')->get(<targetClassname>::class);
         }
+
+        return $this-><variable>;
     }
 <endif useGetter>
 }

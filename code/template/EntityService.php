@@ -2,16 +2,16 @@
 
 namespace <namespace>;
 
-use Application\Entity\Db\<entity>;
+use <entityClass>;
 
 /**
  * Description of <classname>
  *
  * @author <author>
  *
- * @method <entity> get($id)
- * @method <entity>[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method <entity> newEntity()
+ * @method <entityClassname> get($id)
+ * @method <entityClassname>[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method <entityClassname> newEntity()
  *
  */
 class <classname> extends AbstractEntityService
@@ -23,9 +23,9 @@ class <classname> extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
-        return <entity>::class;
+        return <entityClassname>::class;
     }
 
 
@@ -35,7 +35,7 @@ class <classname> extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias(): string{
         return '<alias>';
     }
 

@@ -4,6 +4,26 @@ $settings = [
     'view-dirs'            => [getcwd() . '/code'],
     'template-dirs'        => [getcwd() . '/code/template'],
     'generator-output-dir' => '/app/cache/UnicaenCode',
+    'triggers'             => [
+        [
+            'template' => 'AwareTrait',
+            'type'     => ['Service', 'Hydrator', 'Provider', 'Processus'],
+            'function' => function (array $params) {
+                $params['template'] = 'ServiceAwareTrait';
+
+                return $params;
+            },
+        ],
+        [
+            'template' => 'AwareTrait',
+            'type'     => ['Form', 'Fieldset'],
+            'function' => function (array $params) {
+                $params['template'] = 'FormAwareTrait';
+
+                return $params;
+            },
+        ],
+    ],
 ];
 
 

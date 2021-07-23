@@ -1,5 +1,0 @@
-<?php if ($canEdit) echo '<th>Actions</th>' ?>
-        </thead>
-        <tbody>
-        <?php foreach ($nomms as $fr): ?>
-            <tr>

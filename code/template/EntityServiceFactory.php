@@ -1,21 +1,19 @@
 <?php
 
-namespace <
+namespace <namespace>;
 
-namespace>;
-
-use Application\Constants;
-use Psr\Container\ContainerInterface;
-use <targetFullClass >;
+use Interop\Container\ContainerInterface;
+<if subDir>use <targetClass>;
+<endif subDir>
 
 
 
 /**
- * Description of <class>
+ * Description of <classname>
  *
  * @author <author>
  */
-class <class>
+class <classname>
 {
 
     /**
@@ -23,13 +21,18 @@ class <class>
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return <targetClass>
+     * @return <targetClassname>
      */
-    public
-    function __invoke(ContainerInterface $container, $requestedName, $options = null)
-    {
-        $<variable> = new <targetClass>;
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): <targetClassname>
+    {        <if controllerForm notrim>
+        /* On quitte le FormElementManager */
+        $container = $container->getServiceLocator();
+        <endif controllerForm>
+
+        $<variable> = new <targetClassname>;
         $<variable>->setEntityManager($container->get(Constants::BDD));
+
+        /* Injectez vos dépendances ICI */
 
         return $<variable>;
     }

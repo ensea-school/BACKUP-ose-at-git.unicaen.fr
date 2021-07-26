@@ -255,4 +255,11 @@ class ExportRhService extends AbstractService
         return $this->connecteur->getConnecteurName();
     }
 
+
+
+    public function getConnecteur()
+    {
+        return $this->connecteur;
+    }
+
 }

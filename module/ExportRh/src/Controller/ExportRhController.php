@@ -101,6 +101,7 @@ class ExportRhController extends AbstractController
          */
         try {
             $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
+            
             //On a trouvé un intervenant dans le SI RH
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
@@ -150,6 +151,7 @@ class ExportRhController extends AbstractController
 
 
                 $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
+
                 if ($result !== false) {
                     $this->flashMessenger()->addSuccessMessage('succes matricule : ' . $result);
                 } else {
@@ -157,6 +159,7 @@ class ExportRhController extends AbstractController
                 }
             }
         } catch (\Exception $e) {
+
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 

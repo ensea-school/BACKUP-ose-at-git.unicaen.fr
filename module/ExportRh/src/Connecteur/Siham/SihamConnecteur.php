@@ -92,6 +92,15 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $intervenantRh->setIBAN($agent->getIban());
                 $intervenantRh->setBIC($agent->getBic());
                 $intervenantRh->setCodeRh($agent->getMatricule());
+                $intervenantRh->setAdresseNumero($agent->getNoVoieAdresse());
+                $intervenantRh->setAdresseNumeroCompl(null);
+                $intervenantRh->setAdresseVoirie(null);
+                $intervenantRh->setAdresseVoie($agent->getNomVoieAdresse());
+                $intervenantRh->setAdressePrecisions($agent->getComplementAdresse());
+                $intervenantRh->setAdresseCodePostal($agent->getCodePostalAdresse());
+                $intervenantRh->setAdresseCommune($agent->getBureauDistributeurAdresse());
+                $intervenantRh->setAdresseDateDebut($agent->getDateDebutAdresse());
+
 
                 return $intervenantRh;
             }
@@ -208,10 +217,37 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
 
             //TODO : Synchroniser l'adresse
+            if ($datas['generiqueFieldset']['adressePrincipale']) {
+
+                $adresse = '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() . ' ' : '';
+                $adresse .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() . ' ' : '';
+
+
+                $params = [
+                    'matricule'          => $intervenantRh->getCodeRh(),
+                    'dateDebut'          => $intervenantRh->getAdresseDateDebut(),
+                    'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
+                    'complementAdresse'  => $adresse,
+                    'noVoie'             => ' ',
+                    'natureVoie'         => '',
+                    'nomVoie'            => ' ',
+                    'commune'            => $dossierIntervenant->getAdresseCommune(),
+                    'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
+                    'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
+
+                ];
+
+                $this->siham->modifierAdressePrincipaleAgent($params);
+            }
 
 
             return true;
-        } catch (SihamException $e) {
+        } catch
+        (SihamException $e) {
             throw new \Exception($e->getMessage());
         }
     }
@@ -333,6 +369,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
 
             $matricule = $this->siham->priseEnChargeAgent($params);
+            var_dump($this->siham->getClient()->getLastRequest());
+            die;
 
 
             return $matricule;

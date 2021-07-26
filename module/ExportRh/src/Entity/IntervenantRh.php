@@ -63,6 +63,8 @@ class IntervenantRh
 
     public ?string             $emailPersoDateDebut;
 
+    public ?string             $adresseDateDebut;
+
     public ?string             $adressePrecisions;
 
     public ?string             $adresseNumero;
@@ -717,6 +719,30 @@ class IntervenantRh
     public function setEmailPersoDateDebut(?string $emailPersoDateDebut): IntervenantRH
     {
         $this->emailPersoDateDebut = $emailPersoDateDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getAdresseDateDebut(): ?string
+    {
+        return $this->adresseDateDebut;
+    }
+
+
+
+    /**
+     * @param string|null $adresseDateDebut
+     *
+     * @return IntervenantRH
+     */
+    public function setAdresseDateDebut(?string $adresseDateDebut): IntervenantRH
+    {
+        $this->adresseDateDebut = $adresseDateDebut;
 
         return $this;
     }

@@ -2884,7 +2884,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "147f055c50636a7329e47ecc79c26326dcc10475"
+                "reference": "b57e42f7d66ae72e410d216aa740ab9337fded83"
             },
             "require": {
                 "unicaen/app": "^3.0"
@@ -2908,7 +2908,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2021-07-22T14:04:13+00:00"
+            "time": "2021-07-26T08:57:28+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -7687,6 +7687,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {

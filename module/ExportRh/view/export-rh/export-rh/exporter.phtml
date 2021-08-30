@@ -128,15 +128,17 @@ if ($priseEnCharge) {
                     </td>
                     <td class="active">
                         <?php
-                        $adresse = '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdresseNumero()))) ? $intervenantRh->getAdresseNumero() . ' ' : '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdresseNumeroCompl()))) ? $intervenantRh->getAdresseNumeroCompl() . ' ' : '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdresseVoirie()))) ? $intervenantRh->getAdresseVoirie() . ' ' : '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdresseVoie()))) ? $intervenantRh->getAdresseVoie() . ' ' : '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdressePrecisions()))) ? '<br/>' . $intervenantRh->getAdressePrecisions() . ' ' : '';
-                        $adresse .= '<br/>';
-                        $adresse .= $intervenantRh->getAdresseCodePostal() . ' ' . $intervenantRh->getAdresseCommune();
-                        echo $adresse;
+                        if (!empty($intervenantRh)) {
+                            $adresse = '';
+                            $adresse .= (!empty(trim($intervenantRh->getAdresseNumero()))) ? $intervenantRh->getAdresseNumero() . ' ' : '';
+                            $adresse .= (!empty(trim($intervenantRh->getAdresseNumeroCompl()))) ? $intervenantRh->getAdresseNumeroCompl() . ' ' : '';
+                            $adresse .= (!empty(trim($intervenantRh->getAdresseVoirie()))) ? $intervenantRh->getAdresseVoirie() . ' ' : '';
+                            $adresse .= (!empty(trim($intervenantRh->getAdresseVoie()))) ? $intervenantRh->getAdresseVoie() . ' ' : '';
+                            $adresse .= (!empty(trim($intervenantRh->getAdressePrecisions()))) ? '<br/>' . $intervenantRh->getAdressePrecisions() . ' ' : '';
+                            $adresse .= '<br/>';
+                            $adresse .= $intervenantRh->getAdresseCodePostal() . ' ' . $intervenantRh->getAdresseCommune();
+                            echo $adresse;
+                        }
                         ?>
                     </td>
                 </tr>

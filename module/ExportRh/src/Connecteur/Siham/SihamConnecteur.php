@@ -49,7 +49,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $intervenantRh->setCodeRh($v->getMatricule());
                 $dateNaissance = new \DateTime($v->getDateNaissance());
                 $intervenantRh->setDateNaissance($dateNaissance);
-                $intervenantRh->setNumeroInsee($v->getNumeroInsee());
+                $intervenantRh->setNumeroInsee($v->getNumeroInseeDefinitif());
                 $listIntervenantRh[] = $intervenantRh;
             }
         }

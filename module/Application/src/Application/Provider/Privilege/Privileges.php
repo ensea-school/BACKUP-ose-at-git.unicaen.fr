@@ -128,6 +128,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INDICATEUR_ABONNEMENTS_VISUALISATION                = 'indicateur-abonnements-visualisation';
     const INDICATEUR_ENVOI_MAIL_INTERVENANTS                  = 'indicateur-envoi-mail-intervenants';
     const INDICATEUR_VISUALISATION                            = 'indicateur-visualisation';
+    const INTERVENANT_ADRESSE                                 = 'intervenant-adresse';
     const INTERVENANT_AJOUT_STATUT                            = 'intervenant-ajout-statut';
     const INTERVENANT_AUTRES_EDITION                          = 'intervenant-autres-edition';
     const INTERVENANT_AUTRES_VISUALISATION                    = 'intervenant-autres-visualisation';
@@ -135,7 +136,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INTERVENANT_CREATION                                = 'intervenant-creation';
     const INTERVENANT_EDITION                                 = 'intervenant-edition';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
-    const INTERVENANT_ADRESSE                                 = 'intervenant-adresse';
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';
@@ -162,6 +162,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const MOTIF_NON_PAIEMENT_VISUALISATION                    = 'motif-non-paiement-visualisation';
     const MOTIFS_MODIFICATION_SERVICE_DU_EDITION              = 'motifs-modification-service-du-edition';
     const MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION        = 'motifs-modification-service-du-visualisation';
+    const NOMENCALTURE_RH_GRADE_EDITION                       = 'nomencalture-rh-grade-edition';
+    const NOMENCALTURE_RH_GRADE_VISUALISATION                 = 'nomencalture-rh-grade-visualisation';
     const ODF_CENTRES_COUT_EDITION                            = 'odf-centres-cout-edition';
     const ODF_ELEMENT_EDITION                                 = 'odf-element-edition';
     const ODF_ELEMENT_SYNCHRONISATION                         = 'odf-element-synchronisation';

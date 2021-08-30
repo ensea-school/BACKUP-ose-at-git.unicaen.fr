@@ -95,8 +95,8 @@ FROM
                                          AND sep.type_intervention_id = ti.id
 
     LEFT JOIN seuils_perso             se ON se.etape_id = n.element_pedagogique_etape_id
-                                         AND sep.scenario_id = sn.scenario_id
-                                         AND sep.type_intervention_id = ti.id
+                                         AND se.scenario_id = sn.scenario_id
+                                         AND se.type_intervention_id = ti.id
 
     LEFT JOIN tbl_chargens_seuils_def  sd ON sd.annee_id = n.annee_id
                                          AND sd.scenario_id = sn.scenario_id

@@ -19,15 +19,15 @@ SELECT
   heures_ens,
   --t_effectif,t_dedoublement,
 
-  CASE WHEN t_effectif < ouverture THEN 0 ELSE
+  CASE WHEN t_effectif < ouverture OR dedoublement = 0 OR t_effectif = 0 THEN 0 ELSE
     (CEIL(t_effectif / dedoublement) * effectif) / t_effectif
   END groupes,
 
-  CASE WHEN t_effectif < ouverture THEN 0 ELSE
+  CASE WHEN t_effectif < ouverture OR dedoublement = 0 OR t_effectif = 0 THEN 0 ELSE
     ((CEIL(t_effectif / dedoublement) * effectif) / t_effectif) * heures_ens
   END heures,
 
-  CASE WHEN t_effectif < ouverture THEN 0 ELSE
+  CASE WHEN t_effectif < ouverture OR dedoublement = 0 OR t_effectif = 0 THEN 0 ELSE
     ((CEIL(t_effectif / dedoublement) * effectif) / t_effectif) * hetd
   END  hetd
 

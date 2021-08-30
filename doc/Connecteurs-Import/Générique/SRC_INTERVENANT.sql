@@ -8,7 +8,7 @@ SELECT
   CASE WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
   CASE
     WHEN action = 'insert' OR intervenant_histo = 1 THEN statut_source_id
-    WHEN action = 'update-no-statut' OR sync_statut = 0 OR annee_id < current_annee_id THEN statut_intervenant_id
+    WHEN (action = 'update-no-statut' OR sync_statut = 0 OR annee_id < current_annee_id) AND statut_intervenant_id IS NOT NULL THEN statut_intervenant_id
     ELSE statut_source_id
   END                                                                                       statut_id,
   CASE WHEN annee_id < current_annee_id THEN intervenant_grade_id ELSE grade_id END         grade_id,
@@ -131,7 +131,22 @@ FROM (
       END
 
 
-      -- Cas 9 : Quand il y a plusieurs sources pour un seul intervenant et qu'une au moins matche
+      -- Cas 9 : Quand il y a plusieurs sources et aucun intervenant
+      WHEN nb_sources > 1 AND nb_intervenants = 0 THEN CASE
+        
+        -- Si un des statuts est NON AUTORISE
+        WHEN statut_source_nautorise = 1 THEN 'drop'
+        
+        -- Si on est sur un statut "Autres" et qu'il y a un autre statut du même type
+        WHEN types_identiques = 0 AND statut_source_autre = 1 THEN 'drop'
+
+        -- sinon on laisse passer
+        ELSE 'insert'
+
+      END
+
+
+      -- Cas 10 : Quand il y a plusieurs sources pour un seul intervenant et qu'une au moins matche
       WHEN nb_sources > 1 AND nb_intervenants = 1 AND nb_statuts_egaux = 1 THEN CASE
 
         -- Si le nouveau statut est de type différent, alors on ajoute une nouvelle fiche
@@ -143,7 +158,7 @@ FROM (
       END
 
 
-      -- Cas 10 : Quand il y a plusieurs sources pour un seul intervenant et qu'aucun ne matche
+      -- Cas 11 : Quand il y a plusieurs sources pour un seul intervenant et qu'aucun ne matche
       WHEN nb_sources > 1 AND nb_intervenants = 1 AND nb_statuts_egaux = 0 THEN CASE
         -- Cas typique du vacataire qui a renseigné des données personnelles
         WHEN intervenant_local = 0 AND types_identiques = 1 AND statut_source_autre = 1 AND statut_intervenant_autre = 0 AND sync_statut = 0 THEN 'update'
@@ -157,7 +172,7 @@ FROM (
       END
 
 
-      -- Cas 11 : Quand il y a 2 sources et 2 intervenants et qu'un seul matche
+      -- Cas 12 : Quand il y a 2 sources et 2 intervenants et qu'un seul matche
       WHEN nb_sources = 2 AND nb_intervenants = 2 THEN CASE
 
         -- Autres fiches de même type
@@ -170,7 +185,7 @@ FROM (
       END
 
 
-      -- Cas 12 : Pour le reste
+      -- Cas 13 : Pour le reste
       ELSE CASE
 
         -- Cas typique du vacataire qui a renseigné des données personnelles

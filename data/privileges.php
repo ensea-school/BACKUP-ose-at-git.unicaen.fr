@@ -411,11 +411,11 @@ return [
             'employeur-edition'       => 'Édition employeurs',
         ],
     ],
-    'nomencalture-rh'    => [
+    'nomenclature-rh'    => [
         'libelle'    => 'Nomenclature RH',
         'privileges' => [
-            'grade-visualisation' => 'Visualisation grades',
-            'grade-edition'       => 'Édition grades',
+            'grades-visualisation' => 'Visualisation grades',
+            'grades-edition'       => 'Édition grades',
         ],
     ],
 

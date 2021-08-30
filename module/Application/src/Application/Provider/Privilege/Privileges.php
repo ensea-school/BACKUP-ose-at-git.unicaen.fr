@@ -162,8 +162,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const MOTIF_NON_PAIEMENT_VISUALISATION                    = 'motif-non-paiement-visualisation';
     const MOTIFS_MODIFICATION_SERVICE_DU_EDITION              = 'motifs-modification-service-du-edition';
     const MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION        = 'motifs-modification-service-du-visualisation';
-    const NOMENCALTURE_RH_GRADE_EDITION                       = 'nomencalture-rh-grade-edition';
-    const NOMENCALTURE_RH_GRADE_VISUALISATION                 = 'nomencalture-rh-grade-visualisation';
+    const NOMENCLATURE_RH_GRADES_EDITION                      = 'nomenclature-rh-grades-edition';
+    const NOMENCLATURE_RH_GRADES_VISUALISATION                = 'nomenclature-rh-grades-visualisation';
     const ODF_CENTRES_COUT_EDITION                            = 'odf-centres-cout-edition';
     const ODF_ELEMENT_EDITION                                 = 'odf-element-edition';
     const ODF_ELEMENT_SYNCHRONISATION                         = 'odf-element-synchronisation';

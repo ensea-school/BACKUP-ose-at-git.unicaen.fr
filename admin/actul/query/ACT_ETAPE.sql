@@ -8,7 +8,7 @@ SELECT
     ELSE NULL
   END                        as niveau,
   0                          as specifique_echanges,
-  etp.cod_cmp                as z_structure_id,
+  vde.cod_cip                as z_structure_id,
   'Actul'                    as z_source_id,
   vde.id                     as source_code,
   case tpd.COD_CURSUS_LMD -- Codification LMD standard

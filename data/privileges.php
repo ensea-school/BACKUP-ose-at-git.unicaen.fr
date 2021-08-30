@@ -391,6 +391,8 @@ return [
         'privileges' => [
             'gestion-visualisation' => 'Gestion (visualisation)',
             'gestion-edition'       => 'Gestion (édition)',
+            'creation'              => 'Créer un nouveau plafond',
+            'modification'          => 'Modifier un plafond existant',
         ],
     ],
 

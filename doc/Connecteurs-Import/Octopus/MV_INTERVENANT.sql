@@ -1,29 +1,40 @@
 CREATE
 MATERIALIZED VIEW MV_INTERVENANT AS
 WITH i AS (
+
     SELECT DISTINCT code,
-                    z_statut_id,
+                    MAX(z_statut_id) OVER (partition by code, z_statut_id)               z_statut_id,
+				    MAX(z_type) OVER (partition by code, z_statut_id)                    z_type,
                     MIN(source_code)    OVER (partition by code, z_statut_id)            source_code,
                     MIN(validite_debut) OVER (partition by code, z_statut_id)            validite_debut,
                     MAX(validite_fin)   OVER (partition by code, z_statut_id)            validite_fin
     FROM (
-             --Step 1 : On prend tous les individus qui ont ou ont eu un contrat à l'université
+	    	 --Step 1 : On prend tous les individus qui ont ou ont eu un contrat à l'université
              SELECT icto.individu_id                                            code,
                     CASE
                         WHEN icto.code_ose = 'ENS_2ND_DEGRE' THEN 'ENS_2ND_DEG'
                         WHEN icto.code_ose IS NOT NULL THEN icto.code_ose
                         ELSE 'AUTRES' END                                       z_statut_id,
+                    CASE
+                    	WHEN (vinds.t_titulaire='O' OR vinds.t_cdi='O' OR vinds.t_cdd='O') THEN 'permanent'
+                    	ELSE 'vacataire' END                                        z_type,
                     icto.id_orig                                                source_code,
                     COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
                     COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
              FROM octo.v_individu_contrat_type_ose@octoprod icto
                       JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
+                      JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
+
+
              WHERE icto.d_debut - 184 <= SYSDATE
 
              UNION ALL
              -- Step 2 : on prend tout le reste potentiel vacataire, notamment les hébergés
              SELECT uni.c_individu_chaine                                       code,
                     'AUTRES'                                                    z_statut_id,
+					CASE
+                    	WHEN (inds.t_titulaire='O' OR inds.t_cdi='O' OR inds.t_cdd='O') THEN 'permanent'
+                    	ELSE 'vacataire' END                                       z_type,
                     uni.c_individu_chaine || '-autre'                           source_code,
                     COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
                     COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
@@ -133,14 +144,16 @@ WITH i AS (
          compte as
          (
 	         SELECT
-				MAX(individu_id) individu_id,
-				MAX(ldap_uid) KEEP (DENSE_RANK  FIRST ORDER BY histo_creation)  ldap_uid,
-				MAX(email) KEEP (DENSE_RANK  FIRST ORDER BY histo_creation)  email,
-				MAX(histo_creation) KEEP (DENSE_RANK  FIRST ORDER BY histo_creation)  histo_creation
+				MAX(indc.individu_id) individu_id,
+				MAX(indc.ldap_uid) KEEP (DENSE_RANK  FIRST ORDER BY indc.histo_creation)  ldap_uid,
+				MAX(indc.email) KEEP (DENSE_RANK  FIRST ORDER BY indc.histo_creation)  email,
+				MAX(indc.histo_creation) KEEP (DENSE_RANK  FIRST ORDER BY indc.histo_creation)  histo_creation,
+				MAX(vindcvc.date_fin) KEEP (DENSE_RANK FIRST ORDER BY vindcvc.date_fin DESC)   date_fin
 			 FROM  octo.individu_compte@octoprod indc
+			 JOIN  octo.v_individu_cycle_vie_compte@octoprod vindcvc ON vindcvc.individu_id = indc.individu_id
 			 WHERE not regexp_like(ldap_uid, 'e[0-9]{8}')
 			 AND indc.statut_id = 1
-			 GROUP BY individu_id
+			 GROUP BY indc.individu_id
 			 ORDER BY histo_creation ASC
          )
 
@@ -220,6 +233,7 @@ SELECT DISTINCT
     CASE
         WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
             THEN NULL
+        WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL) THEN compte.date_fin
         ELSE i.validite_fin
         END                                                        validite_fin
 FROM i
@@ -253,4 +267,16 @@ FROM i
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
+
+
+
+
+
+
+
+
+
+
+
+
 

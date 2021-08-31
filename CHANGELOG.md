@@ -43,6 +43,7 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 ## Correction de bug
 
 * Dans ODF, la liste des éléments dont on peut forcer la synchronisation tient maintenant compte des données à restaurer en plus de celles à insérer
+* Correction sur le rafraichissement du rôle de l'intervenant lors d'un changement d'année universitaire (#39020)
 
 
 

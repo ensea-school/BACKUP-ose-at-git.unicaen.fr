@@ -21,8 +21,7 @@ class IndexController extends AbstractController
     use IntervenantServiceAwareTrait;
     use UserContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
-
-
+    
 
     /**
      *
@@ -30,7 +29,7 @@ class IndexController extends AbstractController
      */
     public function indexAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->serviceUserContext->getSelectedIdentityRole();
 
         $documentation = [
             'vacataires' => $this->getServiceParametres()->get('doc-intervenant-vacataires'),
@@ -68,7 +67,9 @@ class IndexController extends AbstractController
             if ($role instanceof Role && $role->getIntervenant()) {
                 $intervenant = $this->getServiceIntervenant()->getByCode($role->getIntervenant()->getCode());
                 if ($intervenant) {
-                    $this->serviceUserContext->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
+                    //Correction mauvais refresh du role lors du changement d'année
+                    $this->serviceUserContext->setSelectedIdentityRole($intervenant->getStatut()->getRoleId());
+                    //$this->serviceUserContext->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
                 }
             }
         }

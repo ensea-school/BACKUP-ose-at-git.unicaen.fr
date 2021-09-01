@@ -57,7 +57,7 @@ FROM (
     CASE
 
       -- Cas 1 : Si on est sur un statut multiple avec un non-autorisé et un autre statut, alors le non autorisé est supprimé
-      WHEN statut_intervenant_nautorise = 1 AND intervenant_local = 0 AND nb_intervenants > 1 AND intervenant_histo = 0 THEN 'drop'
+      WHEN statut_source_nautorise = 1 AND nb_sources > 1 THEN 'drop'
 
 
       -- Cas 2 : Si on est sur les mêmes fiches, alors on synchronise tout le temps
@@ -151,6 +151,9 @@ FROM (
 
         -- Si le nouveau statut est de type différent, alors on ajoute une nouvelle fiche
         WHEN types_identiques = 0 THEN 'insert'
+
+        -- Si on a AUTRE+ NA en source et NA en intervenant => on transforme
+        WHEN nb_statut_source_nautorise > 0 AND statut_intervenant_nautorise = 1 THEN 'update'
 
         -- Sinon, on ne prend pas en compte pour éviter tout problème
         ELSE 'drop'
@@ -268,6 +271,8 @@ FROM (
       COUNT(DISTINCT ssi.id) OVER (PARTITION BY s.code, a.id)                                nb_sources,
       COUNT(DISTINCT i.id) OVER (PARTITION BY i.code, i.annee_id)                            nb_intervenants,
       SUM(CASE WHEN ssi.id = i.statut_id THEN 1 ELSE 0 END) OVER (PARTITION BY s.code, a.id) nb_statuts_egaux,
+      COUNT(CASE WHEN ssi.code = 'AUTRES' THEN 1 ELSE 0 END) OVER (PARTITION BY s.code, a.id) nb_statut_source_autre,
+      COUNT(CASE WHEN ssi.code = 'NON_AUTORISE' THEN 1 ELSE 0 END) OVER (PARTITION BY s.code, a.id) nb_statut_source_nautorise,
       MAX(CASE WHEN ssi.id = i.statut_id THEN ssi.id ELSE 0 END) OVER (PARTITION BY s.code, a.id) statuts_egaux_id
     FROM
                 mv_intervenant          s

@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @var $this                 \Application\View\Renderer\PhpRenderer
+ * @var $title                string
+ * @var $form                 \Plafond\Form\PlafondForm
+ */
+
+?>
+<h1><?= $title ?></h1>
+
+<?php
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+/* On réutilise l'ACE d'UnicaenImport (pas top) */
+echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/import/ace-builds-master/src-min/ace.js');
+
+echo $this->form($form);
+
+?>
+
+<a href="<?= $this->url('plafond') ?>" class="btn btn-default"><i class="fa fa-undo" aria-hidden="true"></i> Retour à la liste des plafonds</a>
+
+<script>
+
+    $(function ()
+    {
+        $.widget("ose.plafondForm", {
+            requeteEditor: null,
+
+            save: function ()
+            {
+                var requete = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "requete")
+                    .val(this.requeteEditor.getSession().getValue());
+                this.element.append($(requete));
+
+            },
+
+            _create: function ()
+            {
+                var that = this;
+
+                that.element.find('.btn-save').click(function () { that.save();});
+
+                var options = {
+                    minLines: 15, maxLines: 40,
+                };
+
+                that.requeteEditor = ace.edit("requete");
+                that.requeteEditor.setTheme("ace/theme/github");
+                that.requeteEditor.getSession().setMode("ace/mode/sql");
+                that.requeteEditor.setOptions(options);
+            }
+        });
+
+        WidgetInitializer.add('plafond-form', 'plafondForm');
+    });
+
+</script>
+<style>
+    .etat-sortie-saisir #sql .ace_editor {
+        border: none;
+        border-radius: 0;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+</style>

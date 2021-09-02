@@ -387,12 +387,11 @@ return [
     ],
 
     'plafonds' => [
-        'libelle'    => 'Plafonds',
+        'libelle'    => 'Administration des Plafonds',
         'privileges' => [
-            'gestion-visualisation' => 'Gestion (visualisation)',
-            'gestion-edition'       => 'Gestion (édition)',
-            'creation'              => 'Créer un nouveau plafond',
-            'modification'          => 'Modifier un plafond existant',
+            'visualisation' => 'Visualisation',
+            'edition'       => 'Édition',
+            'application'   => 'Application',
         ],
     ],
 

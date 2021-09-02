@@ -22,9 +22,6 @@ class PlafondFormFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): PlafondForm
     {
-        /* On quitte le FormElementManager */
-        $container = $container->getServiceLocator();
-
         $form = new PlafondForm;
 
         /* Injectez vos dépendances ICI */

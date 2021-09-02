@@ -18,27 +18,61 @@ return [
         ],
         'may_terminate' => true,
         'child_routes'  => [
-            'saisir'    => [
+            'ajouter'   => [
                 'type'    => 'Segment',
                 'options' => [
-                    'route'       => '/saisir[/:plafondApplication]',
+                    'route'    => '/ajouter',
+                    'defaults' => [
+                        'action' => 'editer',
+                    ],
+                ],
+            ],
+            'modifier'  => [
+                'type'    => 'Segment',
+                'options' => [
+                    'route'       => '/modifier/:plafond',
                     'constraints' => [
-                        'plafondApplication' => '[0-9]*',
+                        'plafond' => '[0-9]*',
                     ],
                     'defaults'    => [
-                        'action' => 'saisir',
+                        'action' => 'editer',
                     ],
                 ],
             ],
             'supprimer' => [
                 'type'    => 'Segment',
                 'options' => [
-                    'route'       => '/supprimer/:plafondApplication',
+                    'route'       => '/supprimer/:plafond',
+                    'constraints' => [
+                        'plafond' => '[0-9]*',
+                    ],
+                    'defaults'    => [
+                        'action' => 'supprimer',
+                    ],
+                ],
+            ],
+
+            'editer-application'    => [
+                'type'    => 'Segment',
+                'options' => [
+                    'route'       => '/editer-application[/:plafondApplication]',
                     'constraints' => [
                         'plafondApplication' => '[0-9]*',
                     ],
                     'defaults'    => [
-                        'action' => 'supprimer',
+                        'action' => 'editerApplication',
+                    ],
+                ],
+            ],
+            'supprimer-application' => [
+                'type'    => 'Segment',
+                'options' => [
+                    'route'       => '/supprimer-application/:plafondApplication',
+                    'constraints' => [
+                        'plafondApplication' => '[0-9]*',
+                    ],
+                    'defaults'    => [
+                        'action' => 'supprimerApplication',
                     ],
                 ],
             ],
@@ -64,12 +98,17 @@ return [
         [
             'controller' => 'Plafond\Controller\Plafond',
             'action'     => ['index'],
-            'privileges' => Privileges::PLAFONDS_GESTION_VISUALISATION,
+            'privileges' => Privileges::PLAFONDS_VISUALISATION,
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
-            'action'     => ['saisir', 'supprimer'],
-            'privileges' => Privileges::PLAFONDS_GESTION_EDITION,
+            'action'     => ['editer', 'supprimer'],
+            'privileges' => Privileges::PLAFONDS_EDITION,
+        ],
+        [
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['editerApplication', 'supprimerApplication'],
+            'privileges' => Privileges::PLAFONDS_APPLICATION,
         ],
     ],
 

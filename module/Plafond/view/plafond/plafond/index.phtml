@@ -13,15 +13,20 @@ use Application\Provider\Privilege\Privileges;
  * @var $regles               PlafondApplication[][]
  */
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTION_EDITION));
+$canApply = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_APPLICATION));
+$canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITION));
 
 ?>
 <h1 class="page-header"><?= $title ?></h1>
 
-<table class="table table-condensed table-hover table-bordered">
+<table class="table table-condensed table-hover table-bordered table-sort">
     <thead>
     <tr>
+        <th>Périmètre</th>
         <th>Plafond</th>
+        <?php if ($canEdit): ?>
+            <th>Actions</th>
+        <?php endif; ?>
         <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
             <th><?= $typeVolumeHoraire ?></th>
         <?php endforeach; ?>
@@ -30,15 +35,32 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTI
     <tbody>
     <?php foreach ($plafonds as $plafond): ?>
         <tr>
+            <td><?= $plafond->getPlafondPerimetre() ?></td>
             <td style="width:50%"><?= $plafond ?></td>
+            <?php if ($canEdit): ?>
+                <td>
+                    <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>"><span class="glyphicon glyphicon-edit"</a>
+                    <a class="pop-ajax"
+                       href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getId()]) ?>"
+                       title="Supprimer le plafond"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            <?php endif; ?>
             <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
                 <td style="text-align:center;width:25%"><?php
 
                     $regle = isset($regles[$plafond->getId()][$typeVolumeHoraire->getId()]) ? $regles[$plafond->getId()][$typeVolumeHoraire->getId()] : null;
 
                     if ($regle) {
-                        if ($canEdit) {
-                            $url = $this->url('plafond/saisir', [
+                        if ($canApply) {
+                            $url = $this->url('plafond/editer-application', [
                                 'plafondApplication' => $regle->getId(),
                             ]);
                             echo $this->tag('a', [
@@ -51,8 +73,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTI
                             echo (string)$regle;
                         }
                     } else {
-                        if ($canEdit) {
-                            $url = $this->url('plafond/saisir', [], ['query' => [
+                        if ($canApply) {
+                            $url = $this->url('plafond/editer-application', [], ['query' => [
                                 'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
                                 'plafond'           => $plafond->getId(),
                             ]]);
@@ -71,3 +93,6 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTI
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php if ($canEdit): ?>
+    <a href="<?= $this->url('plafond/ajouter') ?>" class="btn btn-default">Création d'un nouveau plafond</a>
+<?php endif; ?>

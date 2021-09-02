@@ -3,13 +3,16 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
+use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondApplication;
 use Plafond\Form\PlafondApplicationFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Plafond\Form\PlafondFormAwareTrait;
 use Plafond\Service\PlafondApplicationServiceAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Zend\View\Renderer\JsonRenderer;
 
 
 /**
@@ -24,6 +27,7 @@ class PlafondController extends AbstractController
     use PlafondServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use PlafondFormAwareTrait;
 
 
     public function indexAction()
@@ -61,14 +65,57 @@ class PlafondController extends AbstractController
 
 
 
-    public function saisirAction()
+    public function editerAction()
+    {
+        $plafond = $this->getEvent()->getParam('plafond');
+        if ($plafond) {
+            $title = 'Modification du plafond';
+        } else {
+            $title   = 'Création d\'un nouveau plafond';
+            $plafond = $this->getServicePlafond()->newEntity();
+        }
+
+        $form = $this->getFormPlafond();
+        $form->bindRequestSave($plafond, $this->getRequest(), function (Plafond $p) {
+            try {
+                $this->getServicePlafond()->save($p);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+
+                $this->redirect()->toRoute('plafond');
+            } catch (Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        });
+
+        return compact('title', 'form');
+    }
+
+
+
+    public function supprimerAction()
+    {
+        $plafond = $this->getEvent()->getParam('plafond');
+        try {
+            $this->getServicePlafond()->delete($plafond);
+
+            $this->flashMessenger()->addSuccessMessage("Plafond supprimé avec succès");
+        } catch (\Exception $e) {
+            $this->flasheMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel();
+    }
+
+
+
+    public function editerApplicationAction()
     {
         $plafondApplication = $this->getEvent()->getParam('plafondApplication');
 
         if ($plafondApplication) {
-            $title = 'Modification d\'une règle de plafond';
+            $title = 'Modification d\'une règle d\'application de plafond';
         } else {
-            $title = 'Création d\'une nouvelle règle de plafond';
+            $title = 'Création d\'une nouvelle règle d\'application de plafond';
 
             $plafondId = $this->params()->fromPost('plafond', $this->params()->fromQuery('plafond'));
             $plafond   = $this->getServicePlafond()->get($plafondId);
@@ -98,7 +145,7 @@ class PlafondController extends AbstractController
 
 
 
-    public function supprimerAction()
+    public function supprimerApplicationAction()
     {
         $plafondApplication = $this->getEvent()->getParam('plafondApplication');
 

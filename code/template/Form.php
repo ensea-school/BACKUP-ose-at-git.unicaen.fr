@@ -4,7 +4,7 @@ namespace <namespace>;
 
 use Application\Form\AbstractForm;
 <if useHydrator>
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 <endif useHydrator>
 
 

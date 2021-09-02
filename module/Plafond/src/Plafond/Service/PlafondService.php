@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Entity\PlafondDepassement;
 
 /**
@@ -70,6 +71,16 @@ class PlafondService extends AbstractEntityService
         $depassement->setHeures($a['HEURES']);
 
         return $depassement;
+    }
+
+
+
+    /**
+     * @return PlafondPerimetre[]
+     */
+    public function getPerimetres(): array
+    {
+        return $this->getEntityManager()->getRepository(PlafondPerimetre::class)->findAll();
     }
 
 

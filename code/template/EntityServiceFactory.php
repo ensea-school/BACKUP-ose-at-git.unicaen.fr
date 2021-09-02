@@ -24,11 +24,7 @@ class <classname>
      * @return <targetClassname>
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): <targetClassname>
-    {        <if controllerForm notrim>
-        /* On quitte le FormElementManager */
-        $container = $container->getServiceLocator();
-        <endif controllerForm>
-
+    {
         $<variable> = new <targetClassname>;
         $<variable>->setEntityManager($container->get(Constants::BDD));
 

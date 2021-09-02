@@ -27,16 +27,15 @@ echo $this->formHidden($form->get('typeVolumeHoraire'));
 <?php
 echo $this->formRow($form->get('submit'));
 if ($form->getObject()->getId()) {
-    echo ' '.$this->tag('a', [
-        'class'               => 'pop-ajax btn btn-danger',
-        'href'                => $this->url('plafond/supprimer', ['plafondApplication' => $form->getObject()->getId()]),
-        'title'               => 'Supprimer le type de piece jointe',
-        'data-content'        => '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>',
-        'data-confirm'        => 'true',
-        'data-confirm-button' => 'Oui',
-        'data-cancel-button'  => 'Non',
-        'data-submit-reload'  => 'true',
-    ])->text("Supprimer");
+    echo ' ' . $this->tag('a', [
+            'class'               => 'pop-ajax btn btn-danger',
+            'href'                => $this->url('plafond/supprimer-application', ['plafondApplication' => $form->getObject()->getId()]),
+            'title'               => 'Supprimer la règle d\'application du plafond',
+            'data-content'        => '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>',
+            'data-confirm'        => 'true',
+            'data-confirm-button' => 'Oui',
+            'data-cancel-button'  => 'Non',
+            'data-submit-reload'  => 'true',
+        ])->text("Supprimer la règle d'application");
 }
 echo $this->form()->closeTag();
-

@@ -101,7 +101,7 @@ class ExportRhController extends AbstractController
          */
         try {
             $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
-            
+
             //On a trouvé un intervenant dans le SI RH
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
@@ -205,7 +205,7 @@ class ExportRhController extends AbstractController
                 }
 
                 $posts  = $this->getRequest()->getPost();
-                $result = $this->exportRhService->synchroniserDonneesPersonnelles($intervenant, $posts);
+                $result = $this->exportRhService->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $posts);
                 if ($result !== false) {
                     $this->flashMessenger()->addSuccessMessage('Les données personnelles ont bien été synchronisé');
                 } else {

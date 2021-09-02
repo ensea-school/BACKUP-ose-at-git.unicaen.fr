@@ -33,7 +33,7 @@ interface ConnecteurRhInterface
 
 
 
-    public function synchroniserDonneesPersonnelles(\Application\Entity\Db\Intervenant $intervenant, $datas): bool;
+    public function synchroniserDonneesPersonnellesIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, $datas): bool;
 
 
 

@@ -158,13 +158,12 @@ class SihamConnecteur implements ConnecteurRhInterface
             };
         }
 
-
         return $affectations;
     }
 
 
 
-    public function synchroniserDonneesPersonnelles(\Application\Entity\Db\Intervenant $intervenant, $datas): bool
+    public function synchroniserDonneesPersonnellesIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, $datas): bool
     {
         try {
 

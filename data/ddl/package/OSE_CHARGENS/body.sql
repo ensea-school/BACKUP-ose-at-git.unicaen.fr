@@ -182,6 +182,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
 
   PROCEDURE DUPLIQUER( source_id NUMERIC, destination_id NUMERIC, utilisateur_id NUMERIC, structure_id NUMERIC, noeuds VARCHAR2 DEFAULT '', liens VARCHAR2 DEFAULT '' ) IS
   BEGIN
+    UNICAEN_TBL.ACTIV_TRIGGERS := FALSE;
 
     /* Destruction de tous les liens antérieurs de la destination */
     DELETE FROM
@@ -194,6 +195,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
         SELECT id FROM lien WHERE lien.structure_id = DUPLIQUER.STRUCTURE_ID
       ))
     ;
+    commit;
 
     /* Duplication des liens */
     INSERT INTO scenario_lien (
@@ -222,6 +224,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       AND (DUPLIQUER.LIENS IS NULL OR DUPLIQUER.LIENS LIKE '%,' || lien_id || ',%' )
       AND (DUPLIQUER.STRUCTURE_ID IS NULL OR l.structure_id = DUPLIQUER.STRUCTURE_ID)
     ;
+    commit;
 
 
     /* Destruction de tous les noeuds antérieurs de la destination */
@@ -235,6 +238,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
         SELECT id FROM noeud WHERE noeud.structure_id = DUPLIQUER.STRUCTURE_ID
       ))
     ;
+    commit;
 
     /* Duplication des noeuds */
     INSERT INTO scenario_noeud (
@@ -261,6 +265,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       AND (DUPLIQUER.NOEUDS IS NULL OR DUPLIQUER.NOEUDS LIKE '%,' || noeud_id || ',%' )
       AND (DUPLIQUER.STRUCTURE_ID IS NULL OR n.structure_id = DUPLIQUER.STRUCTURE_ID)
     ;
+    commit;
 
     /* Duplication des effectifs */
     INSERT INTO scenario_noeud_effectif (
@@ -292,6 +297,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       AND (DUPLIQUER.NOEUDS IS NULL OR DUPLIQUER.NOEUDS LIKE '%,' || sn_src.noeud_id || ',%' )
       AND (DUPLIQUER.STRUCTURE_ID IS NULL OR n.structure_id = DUPLIQUER.STRUCTURE_ID)
     ;
+    commit;
 
     /* Duplication des seuils */
     INSERT INTO scenario_noeud_seuil (
@@ -317,6 +323,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       AND (DUPLIQUER.NOEUDS IS NULL OR DUPLIQUER.NOEUDS LIKE '%,' || sn_src.noeud_id || ',%' )
       AND (DUPLIQUER.STRUCTURE_ID IS NULL OR n.structure_id = DUPLIQUER.STRUCTURE_ID)
     ;
+    commit;
+
+    UNICAEN_TBL.ACTIV_TRIGGERS := TRUE;
+
+    UNICAEN_TBL.CALCULER( 'chargens', 'SCENARIO_ID', DUPLIQUER.destination_id );
   END;
 
 

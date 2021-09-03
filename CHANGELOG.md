@@ -4,6 +4,17 @@
 
 [OSE 14.20](#ose-1420-09062021)
 
+
+
+
+
+# OSE 18 (à venir)
+Objectif : Plafonds personnalisables
+
+
+
+
+
 # OSE 17 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
@@ -14,11 +25,32 @@ Objectif : Connecteur Export OSE => Logiciel RH
 # OSE 16 (à venir)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
 
+## Correction de bug
+
+* Fiabilisation du calcul des charges d'enseignement (pb réglé au niveau des seuils qui n'étaient pas toujours les bons utilisés)
+
+## Nouveautés
+
+* Connecteur en import avec Actul+
+* Outil différentiel d'export des charges d'enseignement
+
+
+
+
+
+# OSE 15.6 (à venir)
+
+## Correction de bug
+
+* Dans ODF, la liste des éléments dont on peut forcer la synchronisation tient maintenant compte des données à restaurer en plus de celles à insérer
+* Correction sur le rafraichissement du rôle de l'intervenant lors d'un changement d'année universitaire (#39020)
+* Correction sur la gestion des pièces jointes lors de l'archivage de celles-ci afin que cela impacte correctement la feuille de route et les indicateurs notamment pour les nouvelles pièces jointes à valider (#39195)
+* Niveau Charges, lors de la duplication d'un scénario, le périmètre est pris en compte lors de la duplication pour ne pas écraser des données d'autres composantes à tort
 
 
 # OSE 15.5 (01/07/2021)
 
-## Correction de bug
+## Correction de bugs
 
 * Retour de la vua matérialisée MV_EXT_SERVICE qui avait disparu de OSE par erreur depuis la V15
 * Correction d'un problème de MAJ de MV_EXT_SERVICE depuis la 15.4 qui provoquait une erreur suite à la l'ajout d'une colonne sur l'export des services.  
@@ -36,7 +68,7 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 * Formules de calcul de Sorbonne Nouvelle et de La Réunion
 * Ajout de la colonne "code RH" à l'export CSV des services
 
-## Correction de bug
+## Correction de bugs
 
 * Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
 * Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles

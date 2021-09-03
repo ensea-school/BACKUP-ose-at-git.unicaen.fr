@@ -56,8 +56,7 @@ class ElementPedagogiqueSynchronisationForm extends AbstractForm implements Enti
     public function populate()
     {
         $elements = [];
-        $sql      = "SELECT code, libelle FROM V_DIFF_ELEMENT_PEDAGOGIQUE WHERE IMPORT_ACTION = 'insert' AND ANNEE_ID = :annee AND structure_id = :structure ORDER BY CODE";
-        $sql      = "SELECT code, libelle FROM ELEMENT_PEDAGOGIQUE WHERE rownum < 100 ORDER BY CODE";
+        $sql      = "SELECT code, libelle FROM V_DIFF_ELEMENT_PEDAGOGIQUE WHERE IMPORT_ACTION IN ('insert','undelete') AND ANNEE_ID = :annee AND structure_id = :structure ORDER BY CODE";
         $params   = [
             'annee'     => $this->getServiceContext()->getAnnee()->getId(),
             'structure' => $this->getStructure()->getId(),

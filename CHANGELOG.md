@@ -45,7 +45,7 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 * Dans ODF, la liste des éléments dont on peut forcer la synchronisation tient maintenant compte des données à restaurer en plus de celles à insérer
 * Correction sur le rafraichissement du rôle de l'intervenant lors d'un changement d'année universitaire (#39020)
 * Correction sur la gestion des pièces jointes lors de l'archivage de celles-ci afin que cela impacte correctement la feuille de route et les indicateurs notamment pour les nouvelles pièces jointes à valider (#39195)
-
+* Niveau Charges, lors de la duplication d'un scénario, le périmètre est pris en compte lors de la duplication pour ne pas écraser des données d'autres composantes à tort
 
 
 # OSE 15.5 (01/07/2021)

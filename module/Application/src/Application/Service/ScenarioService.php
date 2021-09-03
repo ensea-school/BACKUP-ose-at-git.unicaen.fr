@@ -23,7 +23,6 @@ class ScenarioService extends AbstractEntityService
     use BddConnecteurAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -47,7 +46,7 @@ class ScenarioService extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         if ($structure = $this->getServiceContext()->getStructure()) {
             $qb->andWhere($alias . '.structure = :structure OR ' . $alias . '.structure IS NULL')->setParameter(
@@ -71,11 +70,13 @@ class ScenarioService extends AbstractEntityService
         $bdd = new BddConnecteur();
         $bdd->setEntityManager($this->getEntityManager());
 
+        $structure = $this->getServiceContext()->getStructure() ?: $source->getStructure();
+
         $bdd->execPlsql('OSE_CHARGENS.DUPLIQUER(:source, :destination, :utilisateur, :structure, :noeuds, :liens);', [
             'source'      => $source->getId(),
             'destination' => $destination->getId(),
             'utilisateur' => $this->getServiceContext()->getUtilisateur()->getId(),
-            'structure'   => $this->getServiceContext()->getStructure() ? $this->getServiceContext()->getStructure()->getId() : null,
+            'structure'   => $structure ? $structure->getId() : null,
             'noeuds'      => $noeuds,
             'liens'       => $liens,
         ]);

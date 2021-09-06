@@ -38,26 +38,51 @@ $settings = [
      * Configuration de l'authentification locale.
      */
     'local'                  => [
+        'order'   => 2,
+
         /**
          * Possibilité ou non de s'authentifier à l'aide d'un compte local.
          */
-        'enabled' => false,//!AppConfig::get('ldap', 'actif', true),
+        'enabled' => true,//!AppConfig::get('ldap', 'actif', true),
+
+        'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement ou un compte local dédié à l'application.",
+
+        /**
+         * Mode d'authentification à l'aide d'un compte dans la BDD de l'application.
+         */
+        'db'          => [
+            'enabled' => true, // doit être activé pour que l'usurpation fonctionne (cf. Authentication/Storage/Db::read()) :-/
+        ],
+
+        'ldap' => [
+            /**
+             * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
+             */
+            'enabled' => AppConfig::get('ldap', 'actif', true),
+        ],
     ],
 
-    /**
-     * Configuration de l'authentification LDAP.
-     */
-    'ldap'                   => [
+    'cas'  => [
         /**
-         * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
+         * Ordre d'affichage du formulaire de connexion.
          */
-        'enabled' => true,//AppConfig::get('ldap', 'actif', true),
+        'order'       => 1,
+
+        /**
+         * Activation ou non de ce mode d'authentification.
+         */
+        'enabled'     => AppConfig::get('cas', 'actif'),
+
+        /**
+         * Description facultative de ce mode d'authentification qui apparaîtra sur la page de connexion.
+         */
+        'description' => "Cliquez sur le bouton ci-dessous pour vous connecter à l'aide de l'authentification centralisée (CAS).",
     ],
 
     /**
      * Configuration de l'authentification Shibboleth.
      */
-    'shibboleth'             => [
+    'shib' => [
         /**
          * Affichage ou non du formulaire d'authentification via l'annuaire LDAP.
          * NB: en réalité cela permet aussi l'authentification avec un compte local.

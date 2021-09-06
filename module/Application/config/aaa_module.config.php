@@ -181,6 +181,7 @@ $config = [
             \UnicaenAuth\View\Helper\UserProfileSelectRadioItem::class => View\Helper\UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
             \UnicaenAuth\View\Helper\UserCurrent::class                => View\Helper\UserCurrentFactory::class,
+            \UnicaenAuth\View\Helper\LocalConnectViewHelper::class     => View\Helper\LocalConnectViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,

@@ -18,7 +18,7 @@ La [`procédure de mise à jour`](UPDATE.md) vous indiquera comment mettre à ni
 
 ## Documentation
 
-[`Documentation`](doc).
+[`Documentation`](doc/doc.md).
 
 ## Nous contacter
 

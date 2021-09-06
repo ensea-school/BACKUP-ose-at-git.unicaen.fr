@@ -368,9 +368,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
 
             $matricule = $this->siham->priseEnChargeAgent($params);
-            var_dump($this->siham->getClient()->getLastRequest());
-            die;
-
+      
 
             return $matricule;
         } catch (SihamException $e) {

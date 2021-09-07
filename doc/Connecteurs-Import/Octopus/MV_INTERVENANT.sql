@@ -145,14 +145,13 @@ WITH i AS (
          (
 	         SELECT
 				MAX(indc.individu_id) individu_id,
-				MAX(indc.ldap_uid) KEEP (DENSE_RANK  FIRST ORDER BY indc.histo_creation)  ldap_uid,
-				MAX(indc.email) KEEP (DENSE_RANK  FIRST ORDER BY indc.histo_creation)  email,
-				MAX(indc.histo_creation) KEEP (DENSE_RANK  FIRST ORDER BY indc.histo_creation)  histo_creation,
+				MAX(indc.ldap_uid) KEEP (DENSE_RANK  FIRST ORDER BY CASE WHEN regexp_like(ldap_uid, 'e[0-9]{8}') THEN 1 ELSE 0 END, indc.histo_creation)  ldap_uid,
+				MAX(indc.email) KEEP (DENSE_RANK  FIRST ORDER BY CASE WHEN regexp_like(ldap_uid, 'e[0-9]{8}') THEN 1 ELSE 0 END,indc.histo_creation)  email,
+				MAX(indc.histo_creation) KEEP (DENSE_RANK  FIRST ORDER BY CASE WHEN regexp_like(ldap_uid, 'e[0-9]{8}') THEN 1 ELSE 0 END,indc.histo_creation)  histo_creation,
 				MAX(vindcvc.date_fin) KEEP (DENSE_RANK FIRST ORDER BY vindcvc.date_fin DESC)   date_fin
 			 FROM  octo.individu_compte@octoprod indc
 			 JOIN  octo.v_individu_cycle_vie_compte@octoprod vindcvc ON vindcvc.individu_id = indc.individu_id
-			 WHERE not regexp_like(ldap_uid, 'e[0-9]{8}')
-			 AND indc.statut_id = 1
+			 WHERE indc.statut_id = 1
 			 GROUP BY indc.individu_id
 			 ORDER BY histo_creation ASC
          )
@@ -235,7 +234,12 @@ SELECT DISTINCT
             THEN NULL
         WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL) THEN compte.date_fin
         ELSE i.validite_fin
-        END                                                        validite_fin
+        END                                                        validite_fin,
+    CASE
+        WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
+            THEN NULL
+        ELSE i.validite_fin
+        END                                                        affectation_fin
 FROM i
          JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))
@@ -267,16 +271,3 @@ FROM i
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
-
-
-
-
-
-
-
-
-
-
-
-
-

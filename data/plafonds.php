@@ -3,6 +3,7 @@
 return [
     'etats'      => [
         'desactive'  => 'Désactivé',
+        'indicateur' => 'Indicateur',
         'informatif' => 'Informatif',
         'bloquant'   => 'Bloquant',
     ],

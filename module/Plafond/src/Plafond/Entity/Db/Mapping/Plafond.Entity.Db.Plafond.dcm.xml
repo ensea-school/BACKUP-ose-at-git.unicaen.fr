@@ -15,5 +15,6 @@
                 <join-column name="PLAFOND_PERIMETRE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <one-to-many field="plafondApplication" target-entity="Plafond\Entity\Db\PlafondApplication" mapped-by="plafond"/>
     </entity>
 </doctrine-mapping>

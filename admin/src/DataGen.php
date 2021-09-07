@@ -59,7 +59,7 @@ class DataGen
         [
             'table'   => 'PLAFOND_ETAT',
             'context' => ['install', 'update'],
-            'key'     => 'CODE',
+            'key'     => 'ID',
         ],
         [
             'table'   => 'PLAFOND_PERIMETRE',
@@ -651,13 +651,15 @@ class DataGen
     {
         $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
-
+        $id       = 1;
         foreach ($data['etats'] as $code => $libelle) {
             $plafond    = [
+                'ID'      => $id,
                 'CODE'    => $code,
                 'LIBELLE' => $libelle,
             ];
             $plafonds[] = $plafond;
+            $id++;
         }
 
         return $plafonds;

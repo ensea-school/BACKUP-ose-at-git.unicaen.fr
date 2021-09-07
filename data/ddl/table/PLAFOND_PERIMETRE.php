@@ -45,6 +45,18 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
+        'ORDRE'      => [
+            'name'        => 'ORDRE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => 1,
+            'position'    => 4,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

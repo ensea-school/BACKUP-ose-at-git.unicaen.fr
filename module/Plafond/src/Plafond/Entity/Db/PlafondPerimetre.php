@@ -2,6 +2,9 @@
 
 namespace Plafond\Entity\Db;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 /**
  * PlafondPerimetre
  */
@@ -22,6 +25,23 @@ class PlafondPerimetre
      * @var string
      */
     protected $libelle;
+
+    /**
+     * @var int
+     */
+    protected $ordre;
+
+    /**
+     * @var Collection
+     */
+    protected $plafond;
+
+
+
+    public function __construct()
+    {
+        $this->plafond = new ArrayCollection();
+    }
 
 
 
@@ -79,6 +99,70 @@ class PlafondPerimetre
         $this->libelle = $libelle;
 
         return $this;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getOrdre(): int
+    {
+        return $this->ordre;
+    }
+
+
+
+    /**
+     * @param int $ordre
+     *
+     * @return PlafondPerimetre
+     */
+    public function setOrdre(int $ordre): PlafondPerimetre
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+
+
+    /**
+     * add Plafond
+     *
+     * @param Plafond $plafond
+     *
+     * @return $this
+     */
+    public function addPlafond(Plafond $plafond): self
+    {
+        $this->plafond[] = $plafond;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove Plafond
+     *
+     * @param Plafond $plafond
+     */
+    public function removePlafond(Plafond $plafond)
+    {
+        $this->plafond->removeElement($plafond);
+    }
+
+
+
+    /**
+     * Get Plafond
+     *
+     * @return Collection|Plafond[]
+     */
+    public function getPlafond(): Collection
+    {
+        return $this->plafond;
     }
 
 

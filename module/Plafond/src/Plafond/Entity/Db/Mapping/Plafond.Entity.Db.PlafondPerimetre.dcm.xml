@@ -6,5 +6,7 @@
         <id name="id" type="integer" column="ID"/>
         <field name="code" type="string" column="CODE" length="20" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="100" nullable="false"/>
+        <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
+        <one-to-many field="plafond" target-entity="Plafond\Entity\Db\Plafond" mapped-by="plafondPerimetre"/>
     </entity>
 </doctrine-mapping>

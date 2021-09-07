@@ -2,6 +2,9 @@
 
 namespace Plafond\Entity\Db;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 /**
  * Plafond
  */
@@ -28,6 +31,18 @@ class Plafond
      * @var string
      */
     protected $requete;
+
+    /**
+     * @var Collection
+     */
+    protected $plafondApplication;
+
+
+
+    public function __construct()
+    {
+        $this->plafondApplication = new ArrayCollection();
+    }
 
 
 
@@ -109,6 +124,46 @@ class Plafond
         $this->requete = $requete;
 
         return $this;
+    }
+
+
+
+    /**
+     * add PlafondApplication
+     *
+     * @param PlafondApplication $plafondApplication
+     *
+     * @return $this
+     */
+    public function addPlafondApplication(PlafondApplication $plafondApplication): self
+    {
+        $this->plafondApplication[] = $plafondApplication;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove PlafondApplication
+     *
+     * @param PlafondApplication $plafondApplication
+     */
+    public function removePlafondApplication(PlafondApplication $plafondApplication)
+    {
+        $this->plafondApplication->removeElement($plafondApplication);
+    }
+
+
+
+    /**
+     * Get PlafondApplication
+     *
+     * @return Collection|PlafondApplication[]
+     */
+    public function getPlafondApplication(): Collection
+    {
+        return $this->plafondApplication;
     }
 
 

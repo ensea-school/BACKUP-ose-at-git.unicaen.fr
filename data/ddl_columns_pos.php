@@ -1974,7 +1974,6 @@ return [
         'HEURES',
         'PLAFOND',
         'DEROGATION',
-
     ],
     'TBL_PLAFOND_REFERENTIEL'        => [
         'ID',

@@ -7,6 +7,7 @@ en fixant des règles à plusieurs niveaux.
 
 Chaque plafond peut être activé ou non de plusieures manières :
 - Désactivé : le plafond n'est pas mis en oeuvre
+- Indicateur : le plafond n'est pas affiché, il n'est utilisé que pour les indicateurs
 - Informatif : s'il y a dépassement, OSE vous l'indiquera, sans pour autant bloquer la saisie des heures
 - Bloquant : L'application refusera d'enregistrer toute heure qui entrainerait le dépassement du plafond
 

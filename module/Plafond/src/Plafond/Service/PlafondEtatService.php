@@ -3,6 +3,7 @@
 namespace Plafond\Service;
 
 use Application\Service\AbstractEntityService;
+use Doctrine\ORM\QueryBuilder;
 use Plafond\Entity\Db\PlafondEtat;
 
 /**
@@ -39,6 +40,23 @@ class PlafondEtatService extends AbstractEntityService
     public function getAlias()
     {
         return 'plaetat';
+    }
+
+
+
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     *
+     * @return QueryBuilder
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.id");
+
+        return $qb;
     }
 
 }

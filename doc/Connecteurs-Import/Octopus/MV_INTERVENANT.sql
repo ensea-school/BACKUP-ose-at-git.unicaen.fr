@@ -238,8 +238,8 @@ SELECT DISTINCT
     CASE
         WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
             THEN NULL
-        ELSE i.validite_fin                                        affectation_fin
-        END
+        ELSE i.validite_fin
+        END                                                        affectation_fin
 FROM i
          JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))

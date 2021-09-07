@@ -7,3 +7,9 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+/** @var \Plafond\Service\PlafondService $sp */
+$sp = $container->get(\Plafond\Service\PlafondService::class);
+
+
+$sp->construireVues();

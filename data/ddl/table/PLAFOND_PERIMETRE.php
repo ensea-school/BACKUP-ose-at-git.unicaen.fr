@@ -45,7 +45,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ORDRE'      => [
+        'ORDRE'   => [
             'name'        => 'ORDRE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -53,7 +53,7 @@ return [
             'scale'       => '0',
             'precision'   => NULL,
             'nullable'    => FALSE,
-            'default'     => 1,
+            'default'     => '1',
             'position'    => 4,
             'commentaire' => NULL,
         ],

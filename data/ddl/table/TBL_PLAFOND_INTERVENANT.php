@@ -9,7 +9,7 @@ return [
     'commentaire' => 'Plafond des intervenants',
     'sequence'    => 'TBL_PLAFOND_INTERVENANT_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'         => [
+        'ANNEE_ID'               => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DEROGATION'        => [
+        'DEROGATION'             => [
             'name'        => 'DEROGATION',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -30,10 +30,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 18,
+            'position'    => 5,
             'commentaire' => 'Dérogation',
         ],
-        'HEURES'                           => [
+        'HEURES'                 => [
             'name'        => 'HEURES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -42,10 +42,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 18,
+            'position'    => 6,
             'commentaire' => 'Nombre d\'heures pour l\'intervenant concerné',
         ],
-        'ID'               => [
+        'ID'                     => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +57,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'   => [
+        'INTERVENANT_ID'         => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -66,22 +66,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
-        'TYPE_VOLUME_HORAIRE_ID'         => [
-            'name'        => 'TYPE_VOLUME_HORAIRE_ID',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 13,
-            'commentaire' => NULL,
-        ],
-        'PLAFOND'                           => [
+        'PLAFOND'                => [
             'name'        => 'PLAFOND',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -90,8 +78,32 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 18,
+            'position'    => 7,
             'commentaire' => 'Valeur du plafond',
+        ],
+        'PLAFOND_ID'             => [
+            'name'        => 'PLAFOND_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
+        'TYPE_VOLUME_HORAIRE_ID' => [
+            'name'        => 'TYPE_VOLUME_HORAIRE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 4,
+            'commentaire' => NULL,
         ],
     ],
 ];

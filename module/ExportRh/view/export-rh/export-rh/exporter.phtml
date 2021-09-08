@@ -37,9 +37,13 @@ if ($priseEnCharge) {
         <?php if (empty($intervenantRh)): ?>
             <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> n'a pas été trouvé dans <?= $nameConnecteur; ?>. Vous pouvez si vous le souhaiter prendre en charge cet intervenant avec les données de son dossier, résumées ci-dessous :</p>
         <?php else: ?>
-            <?php if (!empty($affectationEnCours)): ?>
+            <?php if (!empty($affectationEnCours) && !empty($contratsEnCours)): ?>
                 <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>). Il possède déjà actuellement une affectation pour l'année
                     universitaire <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page.</p>
+            <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
+                <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il possède une affectation mais pas encore de contrat
+                    l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous
+                    pouvez le renouveller pour cette année à l'aide du formulaire ci-dessous.</p>
             <?php else: ?>
                 <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il ne possède pas encore d'affectation pour
                     l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous
@@ -56,40 +60,79 @@ if ($priseEnCharge) {
     $connecteurFieldset = $form->get('connecteurForm');
 
     ?>
-    <!-- BLOC AFFECTATIOn -->
+    <!-- BLOC AFFECTATION -->
     <?php if (!empty($affectationEnCours)): ?>
         <div class="panel panel-default">
             <div class="panel-heading">Affectation <?= $nameConnecteur ?> en cours</div>
             <div class="panel-body">
-                <table>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Champs</th>
-                            <th>Données</th>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Champs</th>
+                        <th>Données</th>
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Affecté a</td>
-                            <td><?= $affectationEnCours->libLongStructureNiv2 ?></td>
-                        </tr>
-                        <tr>
-                            <td>Date début</td>
-                            <td><?= $affectationEnCours->dateDebutAffectation ?></td>
-                        </tr>
-                        <tr>
-                            <td>Date fin</td>
-                            <td><?= $affectationEnCours->dateFinAffectation ?></td>
-                        </tr>
-                        <tr>
-                            <td>Type de rattachement</td>
-                            <td><?= $affectationEnCours->libLongTypeRattachement ?></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Affecté a</td>
+                        <td><?= $affectationEnCours->libLongStructureNiv2 ?></td>
+                    </tr>
+                    <tr>
+                        <td>Date début</td>
+                        <td><?= $affectationEnCours->dateDebutAffectation ?></td>
+                    </tr>
+                    <tr>
+                        <td>Date fin</td>
+                        <td><?= $affectationEnCours->dateFinAffectation ?></td>
+                    </tr>
+                    <tr>
+                        <td>Type de rattachement</td>
+                        <td><?= $affectationEnCours->libLongTypeRattachement ?></td>
+                    </tr>
+                    </tbody>
                 </table>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">Affectation <?= $nameConnecteur ?> en cours</div>
+            <div class="panel-body" style="text-align:center;">
+                Aucune affectation en cours dans SIHAM
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($contratsEnCours)): ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">Contrat <?= $nameConnecteur ?> en cours</div>
+            <div class="panel-body">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>Type de contrat</td>
+                        <td><?= $contratsEnCours->libLongTypeContrat ?></td>
+                    </tr>
+                    <tr>
+                        <td>Date début contrat</td>
+                        <td><?= $contratsEnCours->dateDebutContrat ?></td>
+                    </tr>
+                    <tr>
+                        <td>Date fin de contrat prévue</td>
+                        <td><?= $contratsEnCours->dateFinPrevueContrat ?></td>
+                    </tr>
+                    <tr>
+                        <td>Date fin de contrat réelle</td>
+                        <td><?= $contratsEnCours->dateFinReelleContrat ?></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">Contrat <?= $nameConnecteur ?> en cours</div>
+            <div class="panel-body" style="text-align:center;">
+                Aucun contrat en cours dans SIHAM
             </div>
         </div>
     <?php endif; ?>

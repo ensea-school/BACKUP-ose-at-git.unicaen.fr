@@ -106,8 +106,9 @@ class ExportRhController extends AbstractController
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
                 $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
-                $this->recupererContratEnCoursIntervenantRh($intervenant);
-
+                //On regarde si il a un contrat en cours pour l'année courante
+                $contratEnCours = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
+           
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {
                     $renouvellement = false;
@@ -133,7 +134,8 @@ class ExportRhController extends AbstractController
             'renouvellement',
             'priseEnCharge',
             'nameConnecteur',
-            'affectationEnCours');
+            'affectationEnCours',
+            'contratEnCours');
     }
 
 

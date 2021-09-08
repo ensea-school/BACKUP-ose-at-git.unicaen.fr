@@ -85,7 +85,9 @@ class ExportRhService extends AbstractService
 
     public function getContratEnCoursIntervenantRh($intervenant)
     {
-        return true;
+        $contrat = $this->connecteur->recupererContratEnCoursIntervenantRh($intervenant);
+
+        return $contrat;
     }
 
 
@@ -121,6 +123,13 @@ class ExportRhService extends AbstractService
     public function getListeModalites()
     {
         return $this->connecteur->recupererListeModalites();
+    }
+
+
+
+    public function getListContrats()
+    {
+        return $this->connecteur->recupererListeContrats();
     }
 
 

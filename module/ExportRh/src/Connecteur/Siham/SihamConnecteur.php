@@ -148,12 +148,19 @@ class SihamConnecteur implements ConnecteurRhInterface
     {
         $affectations           = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+
         if (!empty($donneesAdministratives['listeAffectations']) || !empty($donneesAdministratives->listeAffectations)) {
             $listeAffectations = (isset($donneesAdministratives['listeAffectations'])) ? $donneesAdministratives['listeAffectations'] : $donneesAdministratives->listeAffectations;
+
             foreach ($listeAffectations as $affectation) {
                 //On prend uniquement les affectations fonctionnelles
                 if ($affectation->codeTypeRattachement == 'FUN') {
-                    $affectations[] = $affectation;
+                    $dateDebutAffectation = new \DateTime($affectation->dateDebutAffectation);
+                    $dateFinAffectation   = new \DateTime($affectation->dateFinAffectation);
+                    $currentDate          = new \DateTime();
+                    if ($currentDate > $dateDebutAffectation and $currentDate > $dateFinAffectation) {
+                        $affectations[] = $affectation;
+                    }
                 }
             };
         }
@@ -165,13 +172,25 @@ class SihamConnecteur implements ConnecteurRhInterface
 
     public function recupererContratEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
-        $contrat                = [];
+        $contrats               = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
-        var_dump($donneesAdministratives);
-        die;
+
+        if (!empty($donneesAdministratives['listeContrats']) || !empty($donneesAdministratives->listeContrats)) {
+            $listeContrats = (isset($donneesAdministratives['listeContrats']) && is_array($donneesAdministratives['listeContrats'])) ? $donneesAdministratives['listeContrats'] : [$donneesAdministratives['listeContrats']];
 
 
-        return true;
+            foreach ($listeContrats as $contrat) {
+
+                $dateDebutContrat = new \DateTime($contrat->dateDebutContrat);
+                $dateFinContrat   = new \DateTime($contrat->dateFinReelleContrat);
+                $currentDate      = new \DateTime();
+                if ($currentDate > $dateDebutContrat and $currentDate > $dateFinContrat) {
+                    $contrats[] = $contrat;
+                }
+            }
+        };
+
+        return $contrats;
     }
 
 
@@ -502,6 +521,13 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
+    public function recupererListeContrats(): ?array
+    {
+        return $this->siham->recupererListeContrats();
+    }
+
+
+
     public function getConnecteurName(): string
     {
         return 'siham';
@@ -515,5 +541,4 @@ class SihamConnecteur implements ConnecteurRhInterface
 
         return $fieldset;
     }
-
 }

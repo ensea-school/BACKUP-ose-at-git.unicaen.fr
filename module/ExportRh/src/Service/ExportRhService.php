@@ -83,6 +83,13 @@ class ExportRhService extends AbstractService
 
 
 
+    public function getContratEnCoursIntervenantRh($intervenant)
+    {
+        return true;
+    }
+
+
+
     public function getListeUO()
     {
         return $this->connecteur->recupererListeUO();

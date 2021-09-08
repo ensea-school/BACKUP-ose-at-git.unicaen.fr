@@ -163,6 +163,19 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
+    public function recupererContratEnCoursIntervenantRh(Intervenant $intervenant): ?array
+    {
+        $contrat                = [];
+        $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        var_dump($donneesAdministratives);
+        die;
+
+
+        return true;
+    }
+
+
+
     public function synchroniserDonneesPersonnellesIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, $datas): bool
     {
         try {
@@ -368,7 +381,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
 
             $matricule = $this->siham->priseEnChargeAgent($params);
-      
+
 
             return $matricule;
         } catch (SihamException $e) {

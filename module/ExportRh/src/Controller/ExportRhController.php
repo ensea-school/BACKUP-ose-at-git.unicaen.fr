@@ -106,6 +106,7 @@ class ExportRhController extends AbstractController
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
                 $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
+                $this->recupererContratEnCoursIntervenantRh($intervenant);
 
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {

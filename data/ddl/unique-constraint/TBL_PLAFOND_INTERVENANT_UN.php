@@ -5,7 +5,7 @@
 return [
     'name'    => 'TBL_PLAFOND_INTERVENANT_UN',
     'table'   => 'TBL_PLAFOND_INTERVENANT',
-    'index'   => 'TBL_PLAFOND_INTERVENANT_UN1',
+    'index'   => 'TBL_PLAFOND_INTERVENANT_UN',
     'columns' => [
         'INTERVENANT_ID',
         'TYPE_VOLUME_HORAIRE_ID',

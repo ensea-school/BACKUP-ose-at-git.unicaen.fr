@@ -10,6 +10,7 @@ return [
         'FONCTION_REFERENTIEL_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'ANNEE_ID',
+        'PLAFOND_ID',
     ],
 ];
 

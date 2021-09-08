@@ -5,7 +5,7 @@
 return [
     'name'    => 'TBL_PLAFOND_STRUCTURE_UN',
     'table'   => 'TBL_PLAFOND_STRUCTURE',
-    'index'   => 'TBL_PLAFOND_STRUCTURE_UN1',
+    'index'   => 'TBL_PLAFOND_STRUCTURE_UN',
     'columns' => [
         'ANNEE_ID',
         'STRUCTURE_ID',

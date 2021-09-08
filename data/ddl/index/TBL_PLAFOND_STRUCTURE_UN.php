@@ -10,6 +10,7 @@ return [
         'ANNEE_ID',
         'STRUCTURE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
+        'PLAFOND_ID',
     ],
 ];
 

@@ -158,4 +158,11 @@ class PlafondController extends AbstractController
 
         return new MessengerViewModel();
     }
+
+
+
+    public function construireVuesAction()
+    {
+        $this->getServicePlafond()->construireVues();
+    }
 }

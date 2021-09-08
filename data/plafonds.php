@@ -8,7 +8,7 @@ return [
         'bloquant'   => 'Bloquant',
     ],
     'perimetres' => [
-        'composante'     => 'Composante',
+        'structure'      => 'Composante',
         'intervenant'    => 'Intervenant',
         'element'        => 'Elément pédagogique',
         'volume_horaire' => 'Volume horaire',

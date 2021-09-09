@@ -18,6 +18,7 @@ class ExportRhService extends AbstractService
 {
     use ParametresServiceAwareTrait;
     use IntervenantServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
     /**
      * @var IntervenantRHExportParams
@@ -172,6 +173,13 @@ class ExportRhService extends AbstractService
     public function getConnecteur()
     {
         return $this->connecteur;
+    }
+
+
+
+    public function getAnneeUniversitaireEnCours()
+    {
+        return $this->getServiceParametres()->get('annee');
     }
 
 }

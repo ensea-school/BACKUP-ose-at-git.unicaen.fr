@@ -153,7 +153,10 @@ return [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
-                        'privileges' => Privileges::EXPORT_RH_SYNC,
+                        'privileges' => [
+                            Privileges::EXPORT_RH_SYNC,
+                            ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH,
+                        ],
                         'resources'  => 'Intervenant',
                         'assertion'  => ExportRhAssertion::class,
                     ],

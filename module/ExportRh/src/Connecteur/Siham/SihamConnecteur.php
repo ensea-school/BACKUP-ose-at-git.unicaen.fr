@@ -148,6 +148,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     {
         $affectations           = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+     
 
         if (!empty($donneesAdministratives['listeAffectations']) || !empty($donneesAdministratives->listeAffectations)) {
             $listeAffectations = (isset($donneesAdministratives['listeAffectations'])) ? $donneesAdministratives['listeAffectations'] : $donneesAdministratives->listeAffectations;

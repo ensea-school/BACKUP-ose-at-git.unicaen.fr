@@ -37,7 +37,10 @@ if ($priseEnCharge) {
         <?php if (empty($intervenantRh)): ?>
             <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> n'a pas été trouvé dans <?= $nameConnecteur; ?>. Vous pouvez si vous le souhaiter prendre en charge cet intervenant avec les données de son dossier, résumées ci-dessous :</p>
         <?php else: ?>
-            <?php if (!empty($affectationEnCours) && !empty($contratsEnCours)): ?>
+            <?php if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH) === false): ?>
+                <p><p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>). L'export RH n'est disponible que sur l'année universitaire en
+                    cours.</p>
+            <?php elseif (!empty($affectationEnCours) && !empty($contratsEnCours)): ?>
                 <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>). Il possède déjà actuellement une affectation pour l'année
                     universitaire <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page.</p>
             <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
@@ -46,10 +49,7 @@ if ($priseEnCharge) {
                     pouvez le renouveller pour cette année à l'aide du formulaire ci-dessous.</p>
             <?php else: ?>
                 <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il ne possède pas encore d'affectation pour
-                    l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous
-                    pouvez le
-                    renouveller pour cette année à l'aide du formulaire
-                    ci-dessous.</p>
+                    l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez le renouveller pour cette année à l'aide du formulaire ci-dessous.</p>
             <?php endif; ?>
         <?php endif; ?>
     </div>
@@ -136,6 +136,7 @@ if ($priseEnCharge) {
             </div>
         </div>
     <?php endif; ?>
+    <?php if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)): ?>
     <!--Partie générique du formulaire-->
     <div class="panel panel-default">
         <div class="panel-heading">Récapitulatif des données personnelles synchronisables</div>
@@ -270,6 +271,7 @@ if ($priseEnCharge) {
     <p>
         <button onclick="$('.form-export-rh').submit();" class="btn btn-primary no-intranavigation">Synchroniser les données personnelles</button>
     </p>
+<?php endif; ?>
 <?php endif; ?>
 
 

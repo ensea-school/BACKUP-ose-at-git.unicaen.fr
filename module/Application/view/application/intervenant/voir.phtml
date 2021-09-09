@@ -35,7 +35,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
     ];
 }
 
-if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)) {
+if ($this->isAllowed($intervenant, Privileges::EXPORT_RH_SYNC)) {
     $tabs[] = [
         'id'            => 'export-rh',
         'label'         => '<span class="glyphicon glyphicon-export"></span> Export RH',

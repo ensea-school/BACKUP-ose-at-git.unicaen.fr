@@ -12,7 +12,6 @@ use Plafond\Service\PlafondApplicationServiceAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\View\Renderer\JsonRenderer;
 
 
 /**
@@ -79,6 +78,8 @@ class PlafondController extends AbstractController
         $form->bindRequestSave($plafond, $this->getRequest(), function (Plafond $p) {
             try {
                 $this->getServicePlafond()->save($p);
+                $this->construireAction();
+
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
 
                 $this->redirect()->toRoute('plafond');
@@ -97,6 +98,7 @@ class PlafondController extends AbstractController
         $plafond = $this->getEvent()->getParam('plafond');
         try {
             $this->getServicePlafond()->delete($plafond);
+            $this->construireAction();
 
             $this->flashMessenger()->addSuccessMessage("Plafond supprimé avec succès");
         } catch (\Exception $e) {
@@ -161,8 +163,30 @@ class PlafondController extends AbstractController
 
 
 
-    public function construireVuesAction()
+    public function construireCalculerAction()
     {
-        $this->getServicePlafond()->construireVues();
+        $this->construireAction();
+        $this->calculerAction();
+
+        $this->flashMessenger()->addSuccessMessage("Tous les plafonds ont été construits et calculés");
+
+        return new MessengerViewModel();
+    }
+
+
+
+    public function construireAction()
+    {
+        $this->getServicePlafond()->construire();
+    }
+
+
+
+    public function calculerAction()
+    {
+        $perimetres = $this->getServicePlafond()->getPerimetres();
+        foreach ($perimetres as $perimetre) {
+            $this->getServicePlafond()->calculer($perimetre);
+        }
     }
 }

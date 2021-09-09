@@ -76,6 +76,37 @@ return [
                     ],
                 ],
             ],
+
+            'construire-calculer' => [
+                'type'    => 'Segment',
+                'options' => [
+                    'route'    => '/construire-calculer',
+                    'defaults' => [
+                        'action' => 'construire-calculer',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'console' => [
+        'construire' => [
+            'options' => [
+                'route'    => 'plafonds construire',
+                'defaults' => [
+                    'controller' => 'Plafond\Controller\Plafond',
+                    'action'     => 'construire',
+                ],
+            ],
+        ],
+        'calculer'   => [
+            'options' => [
+                'route'    => 'plafonds calculer',
+                'defaults' => [
+                    'controller' => 'Plafond\Controller\Plafond',
+                    'action'     => 'calculer',
+                ],
+            ],
         ],
     ],
 
@@ -102,7 +133,7 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
-            'action'     => ['editer', 'supprimer'],
+            'action'     => ['editer', 'supprimer', 'construire', 'calculer', 'construire-calculer'],
             'privileges' => Privileges::PLAFONDS_EDITION,
         ],
         [

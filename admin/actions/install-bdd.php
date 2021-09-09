@@ -13,6 +13,8 @@ $bdd->create($ref);
 $dataGen = new DataGen($oa);
 $dataGen->install();
 
+/* On construit les plafonds et les tableaux de bord */
+$oa->exec('plafonds construire');
 
 /* Définition d'un mdp pour oseappli */
 if ($c->hasOption('oseappli-pwd')) {

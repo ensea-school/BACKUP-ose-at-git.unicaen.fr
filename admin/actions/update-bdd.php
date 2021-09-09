@@ -52,15 +52,16 @@ $bdd->alter($ref, $filters, true);
 // Mise à jour des séquences
 $bdd->majSequences($ref);
 
-// Reconstruction des TBL
-$c->begin("Reconstruction de tous les tableaux de bord");
-$oa->exec('UnicaenTbl build-procedures');
-$c->end();
-
 
 // Mise à jour des données
 $dataGen = new DataGen($oa);
 $dataGen->update();
+
+
+// Reconstruction des TBL
+$c->begin("Reconstruction de tous les plafonds & tableaux de bord");
+$oa->exec('plafonds construire');
+$c->end();
 
 
 // Post-migration

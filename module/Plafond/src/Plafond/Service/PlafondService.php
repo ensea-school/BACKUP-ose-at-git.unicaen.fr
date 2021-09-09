@@ -2,12 +2,20 @@
 
 namespace Plafond\Service;
 
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Service;
+use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
 use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Entity\PlafondDepassement;
+use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
+use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
 /**
  * Description of PlafondService
@@ -21,6 +29,8 @@ use Plafond\Entity\PlafondDepassement;
  */
 class PlafondService extends AbstractEntityService
 {
+    use TableauBordServiceAwareTrait;
+    use QueryGeneratorServiceAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -136,6 +146,103 @@ class PlafondService extends AbstractEntityService
             }
             $this->getEntityManager()->getConnection()->exec($view);
         }
+    }
+
+
+
+    /**
+     * @param array           $tableauxBords
+     * @param Intervenant|int $intervenant
+     */
+    public function calculerDepuisEntite($entity)
+    {
+        if ($entity instanceof Structure) {
+            $this->calculer('structure', 'STRUCTURE_ID', $entity->getId());
+        }
+
+        if ($entity instanceof Intervenant) {
+            $this->calculer('intervenant', 'INTERVENANT_ID', $entity->getId());
+            if ($entity->getStructure()) {
+                $this->calculerDepuisEntite($entity->getStructure());
+            }
+        }
+
+        if ($entity instanceof ElementPedagogique) {
+            $this->calculer('element', 'ELEMENT_PEDAGOGIQUE_ID', $entity->getId());
+            if ($entity->getStructure()) {
+                $this->calculerDepuisEntite($entity->getStructure());
+            }
+        }
+
+        if ($entity instanceof FonctionReferentiel) {
+            $this->calculer('referentiel', 'FONCTION_REFERENTIEL_ID', $entity->getId());
+            if ($entity->getStructure()) {
+                $this->calculerDepuisEntite($entity->getStructure());
+            }
+        }
+
+        if ($entity instanceof Service) {
+            if ($entity->getElementPedagogique()) {
+                $this->calculerDepuisEntite($entity->getElementPedagogique());
+            }
+            if ($entity->getIntervenant()) {
+                $this->calculerDepuisEntite($entity->getIntervenant());
+            }
+            if ($entity->getStructure()) {
+                $this->calculerDepuisEntite($entity->getStructure());
+            }
+        }
+
+        if ($entity instanceof ServiceReferentiel) {
+            if ($entity->getFonction()) {
+                $this->calculerDepuisEntite($entity->getFonction());
+            }
+            if ($entity->getIntervenant()) {
+                $this->calculerDepuisEntite($entity->getIntervenant());
+            }
+            if ($entity->getStructure()) {
+                $this->calculerDepuisEntite($entity->getStructure());
+            }
+        }
+
+        if ($entity instanceof VolumeHoraire) {
+            if ($entity->getService()) {
+                if ($entity->getService()->getElementPedagogique()) {
+                    $this->calculer('volume_horaire', 'ELEMENT_PEDAGOGIQUE_ID', $entity->getService()->getElementPedagogique());
+                }
+
+                $this->calculerDepuisEntite($entity->getService());
+            }
+        }
+    }
+
+
+
+    /**
+     * @param string|PlafondPerimetre $perimetre
+     * @param string|null             $param
+     * @param string|null             $value
+     */
+    public function calculer($perimetre, ?string $param = null, ?string $value = null)
+    {
+        if ($perimetre instanceof PlafondPerimetre) $perimetre = $perimetre->getCode();
+        $tblName = 'plafond_' . $perimetre;
+        $this->getServiceTableauBord()->calculer($tblName, $param, $value);
+    }
+
+
+
+    public function construireTableauxBord()
+    {
+        $this->getServiceQueryGenerator()->updateProcedures();
+    }
+
+
+
+    public function construire()
+    {
+        $this->construireVues();
+        $this->construireTableauxBord();
     }
 
 

@@ -8,7 +8,6 @@ return [
         'INTERVENANT_SAISIE',
         'DOSSIER',
         'TBL_DEMS',
-
     ]],
     'materialized-view' => ['includes' => [
 
@@ -16,7 +15,9 @@ return [
     'view'              => ['includes' => [
         'V_INDIC_DIFF_DOSSIER',
         'V_MEP_INTERVENANT_STRUCTURE',
-    ]],
+    ], 'excludes'                      => [
+        'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
+    ],],
     'package'           => ['includes' => [
 
     ]],

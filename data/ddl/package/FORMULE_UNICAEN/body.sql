@@ -1,997 +1,1129 @@
-CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN" AS
+CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
+  decalageLigne NUMERIC DEFAULT 20;
+
 
   /* Stockage des valeurs intermédiaires */
-  TYPE t_valeurs IS TABLE OF FLOAT INDEX BY PLS_INTEGER;
-  TYPE t_tableau IS RECORD (
-    valeurs t_valeurs,
-    total   FLOAT DEFAULT 0
-    );
-  TYPE t_tableaux       IS TABLE OF t_tableau INDEX BY PLS_INTEGER;
-  TYPE t_tableau_config IS RECORD (
-    tableau NUMERIC,
-    version NUMERIC,
-    referentiel BOOLEAN DEFAULT FALSE,
-    setTotal BOOLEAN DEFAULT FALSE
-    );
-  TYPE t_tableaux_configs IS VARRAY(100) OF t_tableau_config;
+  TYPE t_cell IS RECORD (
+    valeur FLOAT,
+    enCalcul BOOLEAN DEFAULT FALSE
+  );
+  TYPE t_cells IS TABLE OF t_cell INDEX BY PLS_INTEGER;
+  TYPE t_coll IS RECORD (
+    cells t_cells
+  );
+  TYPE t_colls IS TABLE OF t_coll INDEX BY VARCHAR2(50);
+  feuille t_colls;
 
-  t                     t_tableaux;
-  vh_index              NUMERIC;
+  debugLine NUMERIC;
 
 
-
-  -- Crée une définition de tableau
-  FUNCTION TC( tableau NUMERIC, version NUMERIC, options VARCHAR2 DEFAULT NULL) RETURN t_tableau_config IS
-    tcRes t_tableau_config;
+  PROCEDURE dbg( val CLOB ) IS
   BEGIN
-    tcRes.tableau := tableau;
-    tcRes.version := version;
-    CASE
-      WHEN options like '%t%' THEN tcRes.setTotal := TRUE;
-      WHEN options like '%r%' THEN tcRes.referentiel := TRUE;
-      ELSE RETURN tcRes;
-      END CASE;
-
-    RETURN tcRes;
-  END;
-
-  -- Setter d'une valeur intermédiaire au niveau case
-  PROCEDURE SV( tableau NUMERIC, valeur FLOAT ) IS
-  BEGIN
-    t(tableau).valeurs(vh_index) := valeur;
-    t(tableau).total             := t(tableau).total + valeur;
-  END;
-
-  -- Setter d'une valeur intermédiaire au niveau tableau
-  PROCEDURE ST( tableau NUMERIC, valeur FLOAT ) IS
-  BEGIN
-    t(tableau).total      := valeur;
-  END;
-
-  -- Getter d'une valeur intermédiaire, au niveau case
-  FUNCTION GV( tableau NUMERIC ) RETURN FLOAT IS
-  BEGIN
-    IF NOT t.exists(tableau) THEN RETURN 0; END IF;
-    IF NOT t(tableau).valeurs.exists( vh_index ) THEN RETURN 0; END IF;
-    RETURN t(tableau).valeurs( vh_index );
-  END;
-
-  -- Getter d'une valeur intermédiaire, au niveau tableau
-  FUNCTION GT( tableau NUMERIC ) RETURN FLOAT IS
-  BEGIN
-    IF NOT t.exists(tableau) THEN RETURN 0; END IF;
-    RETURN t(tableau).total;
+    ose_formule.volumes_horaires.items(debugLine).debug_info :=
+      ose_formule.volumes_horaires.items(debugLine).debug_info || val;
   END;
 
 
-
-
-  PROCEDURE DEBUG_VH IS
-    tableau NUMERIC;
-    vh ose_formule.t_volume_horaire;
+  PROCEDURE dbgi( val CLOB ) IS
   BEGIN
-    IF NOT debug_enabled THEN RETURN; END IF;
-    IF ose_formule.intervenant.etat_volume_horaire_id <> debug_etat_volume_horaire_id THEN RETURN; END IF;
+    ose_formule.intervenant.debug_info := ose_formule.intervenant.debug_info || val;
+  END;
 
-    FOR i IN 1 .. ose_formule.volumes_horaires.length LOOP
-      vh_index := i;
-      vh := ose_formule.volumes_horaires.items(i);
-      IF vh.volume_horaire_id = debug_volume_horaire_id OR vh.volume_horaire_ref_id = debug_volume_horaire_ref_id THEN
-        ose_formule.DEBUG_INTERVENANT;
-        ose_test.echo('');
-        ose_test.echo('-- DEBUG DE VOLUME HORAIRE --');
-        ose_test.echo('volume_horaire_id         = ' || vh.volume_horaire_id);
-        ose_test.echo('volume_horaire_ref_id     = ' || vh.volume_horaire_ref_id);
-        ose_test.echo('service_id                = ' || vh.service_id);
-        ose_test.echo('service_referentiel_id    = ' || vh.service_referentiel_id);
-        ose_test.echo('taux_fi                   = ' || vh.taux_fi);
-        ose_test.echo('taux_fa                   = ' || vh.taux_fa);
-        ose_test.echo('taux_fc                   = ' || vh.taux_fc);
-        ose_test.echo('ponderation_service_du    = ' || vh.ponderation_service_du);
-        ose_test.echo('ponderation_service_compl = ' || vh.ponderation_service_compl);
-        ose_test.echo('structure_is_affectation  = ' || CASE WHEN vh.structure_is_affectation THEN 'OUI' ELSE 'NON' END);
-        ose_test.echo('structure_is_univ         = ' || CASE WHEN vh.structure_is_univ THEN 'OUI' ELSE 'NON' END);
-        ose_test.echo('service_statutaire        = ' || CASE WHEN vh.service_statutaire THEN 'OUI' ELSE 'NON' END);
-        ose_test.echo('heures                    = ' || vh.heures);
-        ose_test.echo('taux_service_du           = ' || vh.taux_service_du);
-        ose_test.echo('taux_service_compl        = ' || vh.taux_service_compl);
+  PROCEDURE dbgDump( val CLOB ) IS
+  BEGIN
+    dbg('<div class="dbg-dump">' || val || '</div>');
+  END;
 
-        tableau := t.FIRST;
-        LOOP EXIT WHEN tableau IS NULL;
-        IF gv(tableau) <> 0 OR gt(tableau) <> 0 THEN
-          ose_test.echo('     t(' || LPAD(tableau,3,' ') || ') v=' || RPAD(round(gv(tableau),3),10,' ') || 't=' || round(gt(tableau),3));
+  PROCEDURE dbgCell( c VARCHAR2, l NUMERIC, val FLOAT ) IS
+    ligne NUMERIC;
+  BEGIN
+    ligne := l;
+    IF l <> 0 THEN
+      ligne := ligne + decalageLigne;
+    END IF;
+
+    dbgi( '[cell|' || c || '|' || ligne || '|' || val );
+  END;
+
+  PROCEDURE dbgCalc( fncName VARCHAR2, c VARCHAR2, res FLOAT ) IS
+  BEGIN
+    dbgi( '[calc|' || fncName || '|' || c || '|' || res );
+  END;
+
+  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 0 ) RETURN FLOAT IS
+    val FLOAT;
+  BEGIN
+    IF feuille.exists(c) THEN
+      IF feuille(c).cells.exists(l) THEN
+        IF feuille(c).cells(l).enCalcul THEN
+          raise_application_error( -20001, 'Dépendance cyclique : la cellule [' || c || ';' || l || '] est déjà en cours de calcul');
         END IF;
-        tableau := t.NEXT(tableau);
-        END LOOP;
-
-        ose_test.echo('service_fi                = ' || vh.service_fi);
-        ose_test.echo('service_fa                = ' || vh.service_fa);
-        ose_test.echo('service_fc                = ' || vh.service_fc);
-        ose_test.echo('service_referentiel       = ' || vh.service_referentiel);
-        ose_test.echo('heures_compl_fi           = ' || vh.heures_compl_fi);
-        ose_test.echo('heures_compl_fa           = ' || vh.heures_compl_fa);
-        ose_test.echo('heures_compl_fc           = ' || vh.heures_compl_fc);
-        ose_test.echo('heures_compl_fc_majorees  = ' || vh.heures_compl_fc_majorees);
-        ose_test.echo('heures_compl_referentiel  = ' || vh.heures_compl_referentiel);
-        ose_test.echo('-- FIN DE DEBUG DE VOLUME HORAIRE --');
-        ose_test.echo('');
+        RETURN feuille(c).cells(l).valeur;
       END IF;
-    END LOOP;
+    END IF;
+
+    feuille(c).cells(l).enCalcul := true;
+    val := calcCell( c, l );
+    IF ose_formule.debug_actif THEN
+      dbgCell( c, l, val );
+    END IF;
+    feuille(c).cells(l).valeur := val;
+    feuille(c).cells(l).enCalcul := false;
+
+    RETURN val;
   END;
 
-
-
-  -- Formule de calcul définie par tableaux
-  FUNCTION EXECFORMULE( tableau NUMERIC, version NUMERIC ) RETURN FLOAT IS
-    vh ose_formule.t_volume_horaire;
-    i  ose_formule.t_intervenant;
+  FUNCTION mainCell( libelle VARCHAR2, c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
+    val FLOAT;
   BEGIN
-    vh := ose_formule.volumes_horaires.items(vh_index);
-    i := ose_formule.intervenant;
+    debugLine := l;
+    val := cell(c,l);
+
+    RETURN val;
+  END;
+
+  FUNCTION calcFnc( fncName VARCHAR2, c VARCHAR2 ) RETURN FLOAT IS
+    val FLOAT;
+    cellRes FLOAT;
+  BEGIN
+    IF feuille.exists('__' || fncName || '__' || c || '__') THEN
+      IF feuille('__' || fncName || '__' || c || '__').cells.exists(1) THEN
+        RETURN feuille('__' || fncName || '__' || c || '__').cells(1).valeur;
+      END IF;
+    END IF;
     CASE
-
-
-      WHEN tableau = 11 AND version = 2 THEN
-        IF vh.structure_is_affectation AND vh.taux_fc < 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 11 AND version = 3 THEN
-        IF vh.structure_is_affectation THEN
-          RETURN vh.heures * (vh.taux_fi + vh.taux_fa);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 12 AND version = 2 THEN
-        IF NOT vh.structure_is_affectation AND vh.taux_fc < 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 12 AND version = 3 THEN
-        IF NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * (vh.taux_fi + vh.taux_fa);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 13 AND version = 2 THEN
-        IF vh.structure_is_affectation AND vh.taux_fc = 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 13 AND version = 3 THEN
-        IF vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fc;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 14 AND version = 2 THEN
-        IF NOT vh.structure_is_affectation AND vh.taux_fc = 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 14 AND version = 3 THEN
-        IF NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fc;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 15 AND version = 2 THEN
-        IF vh.structure_is_affectation THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 16 AND version = 2 THEN
-        IF NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 17 AND version = 2 THEN
-        IF vh.structure_is_univ THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 21 AND version = 2 THEN
-        RETURN gv(11) * vh.taux_service_du;
-
-
-
-      WHEN tableau = 22 AND version = 2 THEN
-        RETURN gv(12) * vh.taux_service_du;
-
-
-
-      WHEN tableau = 23 AND version = 2 THEN
-        RETURN gv(13) * vh.taux_service_du;
-
-
-
-      WHEN tableau = 24 AND version = 2 THEN
-        RETURN gv(14) * vh.taux_service_du;
-
-
-
-      WHEN tableau = 25 AND version = 2 THEN
-        RETURN gv(15);
-
-
-
-      WHEN tableau = 26 AND version = 2 THEN
-        RETURN gv(16);
-
-
-
-      WHEN tableau = 27 AND version = 2 THEN
-        RETURN gv(17);
-
-
-
-      WHEN tableau = 31 AND version = 2 THEN
-        RETURN GREATEST( ose_formule.intervenant.service_du - gt(21), 0 );
-
-
-
-      WHEN tableau = 32 AND version = 2 THEN
-        RETURN GREATEST( gt(31) - gt(22), 0 );
-
-
-
-      WHEN tableau = 33 AND version = 2 THEN
-        RETURN GREATEST( gt(32) - gt(23), 0 );
-
-
-
-      WHEN tableau = 34 AND version = 2 THEN
-        RETURN GREATEST( gt(33) - gt(24), 0 );
-
-
-
-      WHEN tableau = 35 AND version = 2 THEN
-        RETURN GREATEST( gt(34) - gt(25), 0 );
-
-
-
-      WHEN tableau = 36 AND version = 2 THEN
-        RETURN GREATEST( gt(35) - gt(26), 0 );
-
-
-
-      WHEN tableau = 37 AND version = 2 THEN
-        RETURN GREATEST( gt(36) - gt(27), 0 );
-
-
-
-      WHEN tableau = 41 AND version = 2 THEN
-        IF gt(21) <> 0 THEN
-          RETURN gv(21) / gt(21);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 42 AND version = 2 THEN
-        IF gt(22) <> 0 THEN
-          RETURN gv(22) / gt(22);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 43 AND version = 2 THEN
-        IF gt(23) <> 0 THEN
-          RETURN gv(23) / gt(23);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 44 AND version = 2 THEN
-        IF gt(24) <> 0 THEN
-          RETURN gv(24) / gt(24);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 45 AND version = 2 THEN
-        IF gt(25) <> 0 THEN
-          RETURN gv(25) / gt(25);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 46 AND version = 2 THEN
-        IF gt(26) <> 0 THEN
-          RETURN gv(26) / gt(26);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 47 AND version = 2 THEN
-        IF gt(27) <> 0 THEN
-          RETURN gv(27) / gt(27);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 51 AND version = 2 THEN
-        RETURN LEAST( ose_formule.intervenant.service_du, gt(21) ) * gv(41);
-
-
-
-      WHEN tableau = 52 AND version = 2 THEN
-        RETURN LEAST( gt(31), gt(22) ) * gv(42);
-
-
-
-      WHEN tableau = 53 AND version = 2 THEN
-        RETURN LEAST( gt(32), gt(23) ) * gv(43);
-
-
-
-      WHEN tableau = 54 AND version = 2 THEN
-        RETURN LEAST( gt(33), gt(24) ) * gv(44);
-
-
-
-      WHEN tableau = 55 AND version = 2 THEN
-        RETURN LEAST( gt(34), gt(25) ) * gv(45);
-
-
-
-      WHEN tableau = 56 AND version = 2 THEN
-        RETURN LEAST( gt(35), gt(26) ) * gv(46);
-
-
-
-      WHEN tableau = 57 AND version = 2 THEN
-        RETURN LEAST( gt(36), gt(27) ) * gv(47);
-
-
-
-      WHEN tableau = 61 AND version = 2 THEN
-        RETURN gv(51) * vh.taux_fi;
-
-
-
-      WHEN tableau = 61 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(51) / (vh.taux_fi + vh.taux_fa) * vh.taux_fi;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 62 AND version = 2 THEN
-        RETURN gv(52) * vh.taux_fi;
-
-
-
-      WHEN tableau = 62 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(52) / (vh.taux_fi + vh.taux_fa) * vh.taux_fi;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 71 AND version = 2 THEN
-        RETURN gv(51) * vh.taux_fa;
-
-
-
-      WHEN tableau = 71 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(51) / (vh.taux_fi + vh.taux_fa) * vh.taux_fa;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 72 AND version = 2 THEN
-        RETURN gv(52) * vh.taux_fa;
-
-
-
-      WHEN tableau = 72 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(52) / (vh.taux_fi + vh.taux_fa) * vh.taux_fa;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 81 AND version = 2 THEN
-        RETURN gv(51) * vh.taux_fc;
-
-
-
-      WHEN tableau = 82 AND version = 2 THEN
-        RETURN gv(52) * vh.taux_fc;
-
-
-
-      WHEN tableau = 83 AND version = 2 THEN
-        RETURN gv(53) * vh.taux_fc;
-
-
-
-      WHEN tableau = 83 AND version = 3 THEN
-        RETURN gv(53);
-
-
-
-      WHEN tableau = 84 AND version = 2 THEN
-        RETURN gv(54) * vh.taux_fc;
-
-
-
-      WHEN tableau = 84 AND version = 3 THEN
-        RETURN gv(54);
-
-
-
-      WHEN tableau = 91 AND version = 2 THEN
-        IF gv(21) <> 0 THEN
-          RETURN gv(51) / gv(21);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 92 AND version = 2 THEN
-        IF gv(22) <> 0 THEN
-          RETURN gv(52) / gv(22);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 93 AND version = 2 THEN
-        IF gv(23) <> 0 THEN
-          RETURN gv(53) / gv(23);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 94 AND version = 2 THEN
-        IF gv(24) <> 0 THEN
-          RETURN gv(54) / gv(24);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 95 AND version = 2 THEN
-        IF gv(25) <> 0 THEN
-          RETURN gv(55) / gv(25);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 96 AND version = 2 THEN
-        IF gv(26) <> 0 THEN
-          RETURN gv(56) / gv(26);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 97 AND version = 2 THEN
-        IF gv(27) <> 0 THEN
-          RETURN gv(57) / gv(27);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 101 AND version = 2 THEN
-        IF gt(37) <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - gv(91);
-        END IF;
-
-
-
-      WHEN tableau = 102 AND version = 2 THEN
-        IF gt(37) <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - gv(92);
-        END IF;
-
-
-
-      WHEN tableau = 103 AND version = 2 THEN
-        IF gt(37) <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - gv(93);
-        END IF;
-
-
-
-      WHEN tableau = 104 AND version = 2 THEN
-        IF gt(37) <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - gv(94);
-        END IF;
-
-
-
-      WHEN tableau = 105 AND version = 2 THEN
-        IF gt(37) <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - gv(95);
-        END IF;
-
-
-
-      WHEN tableau = 106 AND version = 2 THEN
-        IF gt(37) <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - gv(96);
-        END IF;
-
-
-
-      WHEN tableau = 107 AND version = 2 THEN
-        IF gt(37) <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - gv(97);
-        END IF;
-
-
-
-      WHEN tableau = 111 AND version = 2 THEN
-        RETURN gv(11) * vh.taux_service_compl * gv(101);
-
-
-
-      WHEN tableau = 112 AND version = 2 THEN
-        RETURN gv(12) * vh.taux_service_compl * gv(102);
-
-
-
-      WHEN tableau = 113 AND version = 2 THEN
-        RETURN gv(13) * vh.taux_service_compl * gv(103);
-
-
-
-      WHEN tableau = 114 AND version = 2 THEN
-        RETURN gv(14) * vh.taux_service_compl * gv(104);
-
-
-
-      WHEN tableau = 115 AND version = 2 THEN
-        RETURN gv(15) * gv(105);
-
-
-
-      WHEN tableau = 116 AND version = 2 THEN
-        RETURN gv(16) * gv(106);
-
-
-
-      WHEN tableau = 117 AND version = 2 THEN
-        RETURN gv(17) * gv(107);
-
-
-
-      WHEN tableau = 123 AND version = 2 THEN
-        IF vh.taux_fc = 1 THEN
-          RETURN gv(113) * vh.ponderation_service_compl;
-        ELSE
-          RETURN gv(113);
-        END IF;
-
-
-
-      WHEN tableau = 123 AND version = 3 THEN
-        IF vh.taux_fc > 0 THEN
-          RETURN gv(113) * vh.ponderation_service_compl;
-        ELSE
-          RETURN gv(113);
-        END IF;
-
-
-
-      WHEN tableau = 124 AND version = 2 THEN
-        IF vh.taux_fc = 1 THEN
-          RETURN gv(114) * vh.ponderation_service_compl;
-        ELSE
-          RETURN gv(114);
-        END IF;
-
-
-
-      WHEN tableau = 124 AND version = 3 THEN
-        IF vh.taux_fc > 0 THEN
-          RETURN gv(114) * vh.ponderation_service_compl;
-        ELSE
-          RETURN gv(114);
-        END IF;
-
-
-
-      WHEN tableau = 131 AND version = 2 THEN
-        RETURN gv(111) * vh.taux_fi;
-
-
-
-      WHEN tableau = 131 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(111) / (vh.taux_fi + vh.taux_fa) * vh.taux_fi;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 132 AND version = 2 THEN
-        RETURN gv(112) * vh.taux_fi;
-
-
-
-      WHEN tableau = 132 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(112) / (vh.taux_fi + vh.taux_fa) * vh.taux_fi;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 141 AND version = 2 THEN
-        RETURN gv(111) * vh.taux_fa;
-
-
-
-      WHEN tableau = 141 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(111) / (vh.taux_fi + vh.taux_fa) * vh.taux_fa;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 142 AND version = 2 THEN
-        RETURN gv(112) * vh.taux_fa;
-
-
-
-      WHEN tableau = 142 AND version = 3 THEN
-        IF vh.taux_fi + vh.taux_fa > 0 THEN
-          RETURN gv(112) / (vh.taux_fi + vh.taux_fa) * vh.taux_fa;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 151 AND version = 2 THEN
-        RETURN gv(111) * vh.taux_fc;
-
-
-
-      WHEN tableau = 152 AND version = 2 THEN
-        RETURN gv(112) * vh.taux_fc;
-
-
-
-      WHEN tableau = 153 AND version = 2 THEN
-        IF gv(123) = gv(113) THEN
-          RETURN gv(113) * vh.taux_fc;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 153 AND version = 3 THEN
-        IF gv(123) = gv(113) THEN
-          RETURN gv(113);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 154 AND version = 2 THEN
-        IF gv(124) = gv(114) THEN
-          RETURN gv(114) * vh.taux_fc;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 154 AND version = 3 THEN
-        IF gv(124) = gv(114) THEN
-          RETURN gv(114);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 163 AND version = 2 THEN
-        IF gv(123) <> gv(113) THEN
-          RETURN gv(123) * vh.taux_fc;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 163 AND version = 3 THEN
-        IF gv(123) <> gv(113) THEN
-          RETURN gv(123);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 164 AND version = 2 THEN
-        IF gv(124) <> gv(114) THEN
-          RETURN gv(124) * vh.taux_fc;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      WHEN tableau = 164 AND version = 3 THEN
-        IF gv(124) <> gv(114) THEN
-          RETURN gv(124);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      ELSE
-        raise_application_error( -20001, 'Le tableau ' || tableau || ' version ' || version || ' n''existe pas!');
-      END CASE; END;
-
-
-
-
-
-
-
-  PROCEDURE CALCUL_RESULTAT_V2 IS
-    tableaux       t_tableaux_configs;
-    valeur         FLOAT;
-  BEGIN
-
-    -- Définition des tableaux à utiliser
-    tableaux := t_tableaux_configs(
-        tc( 11,2    ), tc( 12,2    ), tc( 13,2    ), tc( 14,2    ), tc( 15,2,'r' ), tc( 16,2,'r' ), tc( 17,2,'r' ),
-        tc( 21,2    ), tc( 22,2    ), tc( 23,2    ), tc( 24,2    ), tc( 25,2,'r' ), tc( 26,2,'r' ), tc( 27,2,'r' ),
-        tc( 31,2,'t'), tc( 32,2,'t'), tc( 33,2,'t'), tc( 34,2,'t'), tc( 35,2,'tr'), tc( 36,2,'tr'), tc( 37,2,'tr'),
-        tc( 41,2    ), tc( 42,2    ), tc( 43,2    ), tc( 44,2    ), tc( 45,2,'r' ), tc( 46,2,'r' ), tc( 47,2,'r' ),
-        tc( 51,2    ), tc( 52,2    ), tc( 53,2    ), tc( 54,2    ), tc( 55,2,'r' ), tc( 56,2,'r' ), tc( 57,2,'r' ),
-        tc( 61,2    ), tc( 62,2    ),
-        tc( 71,2    ), tc( 72,2    ),
-        tc( 81,2    ), tc( 82,2    ), tc( 83,2    ), tc( 84,2    ),
-        tc( 91,2    ), tc( 92,2    ), tc( 93,2    ), tc( 94,2    ), tc( 95,2,'r' ), tc( 96,2,'r' ), tc( 97,2,'r' ),
-        tc(101,2    ), tc(102,2    ), tc(103,2    ), tc(104,2    ), tc(105,2,'r' ), tc(106,2,'r' ), tc(107,2,'r' ),
-        tc(111,2    ), tc(112,2    ), tc(113,2    ), tc(114,2    ), tc(115,2,'r' ), tc(116,2,'r' ), tc(117,2,'r' ),
-        tc(123,2    ), tc(124,2    ),
-        tc(131,2    ), tc(132,2    ),
-        tc(141,2    ), tc(142,2    ),
-        tc(151,2    ), tc(152,2    ), tc(153,2    ), tc(154,2    ),
-        tc(163,2    ), tc(164,2    )
-      );
-
-    -- calcul par tableau pour chaque volume horaire
-    t.delete;
-    FOR it IN tableaux.FIRST .. tableaux.LAST LOOP
-      FOR ivh IN 1 .. ose_formule.volumes_horaires.length LOOP
-        vh_index := ivh;
-        IF
-                ose_formule.volumes_horaires.items(ivh).service_id IS NOT NULL AND NOT tableaux(it).referentiel
-            OR ose_formule.volumes_horaires.items(ivh).service_referentiel_id IS NOT NULL AND tableaux(it).referentiel
-            OR tableaux(it).setTotal -- car on en a besoin tout le temps
-        THEN
-          valeur := EXECFORMULE(tableaux(it).tableau, tableaux(it).version);
-          IF tableaux(it).setTotal THEN
-            ST( tableaux(it).tableau, valeur );
-          ELSE
-            SV( tableaux(it).tableau, valeur );
-          END IF;
+    -- Liste des fonctions supportées
+
+    WHEN fncName = 'total' THEN
+      val := 0;
+      FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+        val := val + COALESCE(cell(c, l),0);
+      END LOOP;
+
+    WHEN fncName = 'max' THEN
+      val := NULL;
+      FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+        cellRes := cell(c,l);
+        IF val IS NULL OR val < cellRes THEN
+          val := cellRes;
         END IF;
       END LOOP;
-    END LOOP;
 
-    -- transmisssion des résultats aux volumes horaires et volumes horaires référentiel
-    FOR i IN 1 .. ose_formule.volumes_horaires.length LOOP
-      vh_index := i;
-      IF ose_formule.volumes_horaires.items(i).service_id IS NOT NULL THEN
-        ose_formule.volumes_horaires.items(i).service_fi               := gv( 61) + gv( 62);
-        ose_formule.volumes_horaires.items(i).service_fa               := gv( 71) + gv( 72);
-        ose_formule.volumes_horaires.items(i).service_fc               := gv( 81) + gv( 82) + gv( 83) + gv( 84);
-        ose_formule.volumes_horaires.items(i).heures_compl_fi          := gv(131) + gv(132);
-        ose_formule.volumes_horaires.items(i).heures_compl_fa          := gv(141) + gv(142);
-        ose_formule.volumes_horaires.items(i).heures_compl_fc          := gv(151) + gv(152) + gv(153) + gv(154);
-        ose_formule.volumes_horaires.items(i).heures_compl_fc_majorees :=                     gv(163) + gv(164);
-      ELSIF ose_formule.volumes_horaires.items(i).service_referentiel_id IS NOT NULL THEN
-        ose_formule.volumes_horaires.items(i).service_referentiel      := gv( 55) + gv( 56) + gv( 57);
-        ose_formule.volumes_horaires.items(i).heures_compl_referentiel := gv(115) + gv(116) + gv(117);
-      END IF;
-    END LOOP;
+    -- fin de la liste des fonctions supportées
+    ELSE
+      raise_application_error( -20001, 'La formule "' || fncName || '" n''existe pas!');
+    END CASE;
+    IF ose_formule.debug_actif THEN
+      dbgCalc(fncName, c, val );
+    END IF;
+    feuille('__' || fncName || '__' || c || '__').cells(1).valeur := val;
 
-    DEBUG_VH;
+    RETURN val;
   END;
+
+
+  FUNCTION calcVersion RETURN NUMERIC IS
+  BEGIN
+    RETURN 1;
+  END;
+
+
+
+  FUNCTION notInStructs( v VARCHAR2 DEFAULT NULL ) RETURN BOOLEAN IS
+  BEGIN
+    RETURN COALESCE(v,' ') NOT IN ('KE8','UP10');
+  END;
+
+
+
+  FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
+    vh ose_formule.t_volume_horaire;
+    i  ose_formule.t_intervenant;
+    v NUMERIC;
+    val FLOAT;
+  BEGIN
+    v := calcVersion;
+
+    i := ose_formule.intervenant;
+    IF l > 0 THEN
+      vh := ose_formule.volumes_horaires.items(l);
+    END IF;
+    CASE
+
+
+
+    -- AH15=SOMME(AG:AG)
+    WHEN c = 'AH15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AG');
+
+
+
+    -- AN15=SOMME(AM:AM)
+    WHEN c = 'AN15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AM');
+
+
+
+    -- AT15=SOMME(AS:AS)
+    WHEN c = 'AT15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AS');
+
+
+
+    -- AZ15=SOMME(AY:AY)
+    WHEN c = 'AZ15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AY');
+
+
+
+    -- BF15=SOMME(BE:BE)
+    WHEN c = 'BF15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BE');
+
+
+
+    -- BL15=SOMME(BK:BK)
+    WHEN c = 'BL15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BK');
+
+
+
+    -- BR15=SOMME(BQ:BQ)
+    WHEN c = 'BR15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BQ');
+
+
+
+    -- BX15=SOMME(BW:BW)
+    WHEN c = 'BX15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BW');
+
+
+
+    -- CD15=SOMME(CC:CC)
+    WHEN c = 'CD15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'CC');
+
+
+
+    -- CJ15=SOMME(CI:CI)
+    WHEN c = 'CJ15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'CI');
+
+
+
+    -- CP15=SOMME(CO:CO)
+    WHEN c = 'CP15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'CO');
+
+
+
+    -- CV15=SOMME(CU:CU)
+    WHEN c = 'CV15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'CU');
+
+
+
+    -- DB15=SOMME(DA:DA)
+    WHEN c = 'DB15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'DA');
+
+
+
+    -- AH16=MIN(AH15;i_service_du)
+    WHEN c = 'AH16' AND v >= 1 THEN
+      RETURN LEAST(cell('AH15'), i.service_du);
+
+
+
+    -- AN16=MIN(AN15;AH17)
+    WHEN c = 'AN16' AND v >= 1 THEN
+      RETURN LEAST(cell('AN15'), cell('AH17'));
+
+
+
+    -- AT16=MIN(AT15;AN17)
+    WHEN c = 'AT16' AND v >= 1 THEN
+      RETURN LEAST(cell('AT15'), cell('AN17'));
+
+
+
+    -- AZ16=MIN(AZ15;AT17)
+    WHEN c = 'AZ16' AND v >= 1 THEN
+      RETURN LEAST(cell('AZ15'), cell('AT17'));
+
+
+
+    -- BF16=MIN(BF15;AZ17)
+    WHEN c = 'BF16' AND v >= 1 THEN
+      RETURN LEAST(cell('BF15'), cell('AZ17'));
+
+
+
+    -- BL16=MIN(BL15;BF17)
+    WHEN c = 'BL16' AND v >= 1 THEN
+      RETURN LEAST(cell('BL15'), cell('BF17'));
+
+
+
+    -- BR16=MIN(BR15;BL17)
+    WHEN c = 'BR16' AND v >= 1 THEN
+      RETURN LEAST(cell('BR15'), cell('BL17'));
+
+
+
+    -- BX16=MIN(BX15;BR17)
+    WHEN c = 'BX16' AND v >= 1 THEN
+      RETURN LEAST(cell('BX15'), cell('BR17'));
+
+
+
+    -- CD16=MIN(CD15;BX17)
+    WHEN c = 'CD16' AND v >= 1 THEN
+      RETURN LEAST(cell('CD15'), cell('BX17'));
+
+
+
+    -- CJ16=MIN(CJ15;CD17)
+    WHEN c = 'CJ16' AND v >= 1 THEN
+      RETURN LEAST(cell('CJ15'), cell('CD17'));
+
+
+
+    -- CP16=MIN(CP15;CJ17)
+    WHEN c = 'CP16' AND v >= 1 THEN
+      RETURN LEAST(cell('CP15'), cell('CJ17'));
+
+
+
+    -- CV16=MIN(CV15;CP17)
+    WHEN c = 'CV16' AND v >= 1 THEN
+      RETURN LEAST(cell('CV15'), cell('CP17'));
+
+
+
+    -- DB16=MIN(DB15;CV17)
+    WHEN c = 'DB16' AND v >= 1 THEN
+      RETURN LEAST(cell('DB15'), cell('CV17'));
+
+
+
+    -- AH17=i_service_du-AH16
+    WHEN c = 'AH17' AND v >= 1 THEN
+      RETURN i.service_du - cell('AH16');
+
+
+
+    -- AN17=AH17-AN16
+    WHEN c = 'AN17' AND v >= 1 THEN
+      RETURN cell('AH17') - cell('AN16');
+
+
+
+    -- AT17=AN17-AT16
+    WHEN c = 'AT17' AND v >= 1 THEN
+      RETURN cell('AN17') - cell('AT16');
+
+
+
+    -- AZ17=AT17-AZ16
+    WHEN c = 'AZ17' AND v >= 1 THEN
+      RETURN cell('AT17') - cell('AZ16');
+
+
+
+    -- BF17=AZ17-BF16
+    WHEN c = 'BF17' AND v >= 1 THEN
+      RETURN cell('AZ17') - cell('BF16');
+
+
+
+    -- BL17=BF17-BL16
+    WHEN c = 'BL17' AND v >= 1 THEN
+      RETURN cell('BF17') - cell('BL16');
+
+
+
+    -- BR17=BL17-BR16
+    WHEN c = 'BR17' AND v >= 1 THEN
+      RETURN cell('BL17') - cell('BR16');
+
+
+
+    -- BX17=BR17-BX16
+    WHEN c = 'BX17' AND v >= 1 THEN
+      RETURN cell('BR17') - cell('BX16');
+
+
+
+    -- CD17=BX17-CD16
+    WHEN c = 'CD17' AND v >= 1 THEN
+      RETURN cell('BX17') - cell('CD16');
+
+
+
+    -- CJ17=CD17-CJ16
+    WHEN c = 'CJ17' AND v >= 1 THEN
+      RETURN cell('CD17') - cell('CJ16');
+
+
+
+    -- CP17=CJ17-CP16
+    WHEN c = 'CP17' AND v >= 1 THEN
+      RETURN cell('CJ17') - cell('CP16');
+
+
+
+    -- CV17=CP17-CV16
+    WHEN c = 'CV17' AND v >= 1 THEN
+      RETURN cell('CP17') - cell('CV16');
+
+
+
+    -- DB17=CV17-DB16
+    WHEN c = 'DB17' AND v >= 1 THEN
+      RETURN cell('CV17') - cell('DB16');
+
+
+
+    -- T=SI($H20="Référentiel";0;$AI20+$AO20+$AU20+$BA20)
+    WHEN c = 'T' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('AI',l) + cell('AO',l) + cell('AU',l) + cell('BA',l);
+      END IF;
+
+
+
+    -- U=SI($H20="Référentiel";0;$BG20+$BM20+$BS20+$BY20)
+    WHEN c = 'U' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('BG',l) + cell('BM',l) + cell('BS',l) + cell('BY',l);
+      END IF;
+
+
+
+    -- V=SI($H20="Référentiel";0;$CE20+$CK20)
+    WHEN c = 'V' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('CE',l) + cell('CK',l);
+      END IF;
+
+
+
+    -- W=SI($H20="Référentiel";$CQ20+$CW20+$DC20;0)
+    WHEN c = 'W' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell('CQ',l) + cell('CW',l) + cell('DC',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- X=SI($H20="Référentiel";0;$AK20+$AQ20+$AW20+$BC20)
+    WHEN c = 'X' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('AK',l) + cell('AQ',l) + cell('AW',l) + cell('BC',l);
+      END IF;
+
+
+
+    -- Y=SI($H20="Référentiel";0;$BI20+$BO20+$BU20+$CA20)
+    WHEN c = 'Y' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('BI',l) + cell('BO',l) + cell('BU',l) + cell('CA',l);
+      END IF;
+
+
+
+    -- Z=SI($H20="Référentiel";0;SI($L20=1;$CG20+$CM20;0))
+    WHEN c = 'Z' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        IF vh.ponderation_service_compl = 1 THEN
+          RETURN cell('CG', l) + cell('CM', l);
+        ELSE
+          RETURN 0;
+        END IF;
+      END IF;
+
+
+
+    -- AA=SI($H20="Référentiel";0;SI($L20=1;0;($CG20+$CM20)*$L20))
+    WHEN c = 'AA' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        IF vh.ponderation_service_compl = 1 THEN
+          RETURN 0;
+        ELSE
+          RETURN (cell('CG', l) + cell('CM', l)) * vh.ponderation_service_compl;
+        END IF;
+      END IF;
+
+
+
+    -- AB=SI($H20="Référentiel";$CS20+$CY20+$DE20;0)
+    WHEN c = 'AB' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell('CS',l) + cell('CY',l) + cell('DE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AD=SI(ESTERREUR(I20);1;I20)
+    WHEN c = 'AD' AND v >= 1 THEN
+      RETURN vh.taux_service_du;
+
+
+
+    -- AE=SI(ESTERREUR(J20);1;J20)
+    WHEN c = 'AE' AND v >= 1 THEN
+      RETURN vh.taux_service_compl;
+
+
+
+    -- AG=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20=i_structure_code);$M20*$E20*$AD20;0)
+    WHEN c = 'AG' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code = i.structure_code THEN
+        RETURN vh.heures * vh.taux_fi * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AH=SI(AH$15>0;AG20/AH$15;0)
+    WHEN c = 'AH' AND v >= 1 THEN
+      IF cell('AH15') > 0 THEN
+        RETURN cell('AG',l) / cell('AH15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AI=AH$16*AH20
+    WHEN c = 'AI' AND v >= 1 THEN
+      RETURN cell('AH16') * cell('AH',l);
+
+
+
+    -- AJ=SI(AH$17=0;(AG20-AI20)/$AD20;0)
+    WHEN c = 'AJ' AND v >= 1 THEN
+      IF cell('AH17') = 0 THEN
+        RETURN (cell('AG',l) - cell('AI',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AK=SI(i_depassement_service_du_sans_hc="Non";AJ20*$AE20;0)
+    WHEN c = 'AK' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('AJ',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AM=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20<>i_structure_code);$M20*$E20*$AD20;0)
+    WHEN c = 'AM' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code <> i.structure_code THEN
+        RETURN vh.heures * vh.taux_fi * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AN=SI(AN$15>0;AM20/AN$15;0)
+    WHEN c = 'AN' AND v >= 1 THEN
+      IF cell('AN15') > 0 THEN
+        RETURN cell('AM',l) / cell('AN15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AO=AN$16*AN20
+    WHEN c = 'AO' AND v >= 1 THEN
+      RETURN cell('AN16') * cell('AN',l);
+
+
+
+    -- AP=SI(AN$17=0;(AM20-AO20)/$AD20;0)
+    WHEN c = 'AP' AND v >= 1 THEN
+      IF cell('AN17') = 0 THEN
+        RETURN (cell('AM',l) - cell('AO',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AQ=SI(i_depassement_service_du_sans_hc="Non";AP20*$AE20;0)
+    WHEN c = 'AQ' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('AP',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AS=SI(ET($D20="Oui";$H20="EAD";$A20=i_structure_code);$M20*$E20*$AD20;0)
+    WHEN c = 'AS' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code = i.structure_code THEN
+        RETURN vh.heures * vh.taux_fi * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AT=SI(AT$15>0;AS20/AT$15;0)
+    WHEN c = 'AT' AND v >= 1 THEN
+      IF cell('AT15') > 0 THEN
+        RETURN cell('AS',l) / cell('AT15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AU=AT$16*AT20
+    WHEN c = 'AU' AND v >= 1 THEN
+      RETURN cell('AT16') * cell('AT',l);
+
+
+
+    -- AV=SI(AT$17=0;(AS20-AU20)/$AD20;0)
+    WHEN c = 'AV' AND v >= 1 THEN
+      IF cell('AT17') = 0 THEN
+        RETURN (cell('AS',l) - cell('AU',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AW=SI(i_depassement_service_du_sans_hc="Non";AV20*$AE20;0)
+    WHEN c = 'AW' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('AV',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AY=SI(ET($D20="Oui";$H20="EAD";$A20<>i_structure_code);$M20*$E20*$AD20;0)
+    WHEN c = 'AY' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code <> i.structure_code THEN
+        RETURN vh.heures * vh.taux_fi * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- AZ=SI(AZ$15>0;AY20/AZ$15;0)
+    WHEN c = 'AZ' AND v >= 1 THEN
+      IF cell('AZ15') > 0 THEN
+        RETURN cell('AY',l) / cell('AZ15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BA=AZ$16*AZ20
+    WHEN c = 'BA' AND v >= 1 THEN
+      RETURN cell('AZ16') * cell('AZ',l);
+
+
+
+    -- BB=SI(AZ$17=0;(AY20-BA20)/$AD20;0)
+    WHEN c = 'BB' AND v >= 1 THEN
+      IF cell('AZ17') = 0 THEN
+        RETURN (cell('AY',l) - cell('BA',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BC=SI(i_depassement_service_du_sans_hc="Non";BB20*$AE20;0)
+    WHEN c = 'BC' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('BB',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BE=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20=i_structure_code);$M20*$F20*$AD20;0)
+    WHEN c = 'BE' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code = i.structure_code THEN
+        RETURN vh.heures * vh.taux_fa * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BF=SI(BF$15>0;BE20/BF$15;0)
+    WHEN c = 'BF' AND v >= 1 THEN
+      IF cell('BF15') > 0 THEN
+        RETURN cell('BE',l) / cell('BF15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BG=BF$16*BF20
+    WHEN c = 'BG' AND v >= 1 THEN
+      RETURN cell('BF16') * cell('BF',l);
+
+
+
+    -- BH=SI(BF$17=0;(BE20-BG20)/$AD20;0)
+    WHEN c = 'BH' AND v >= 1 THEN
+      IF cell('BF17') = 0 THEN
+        RETURN (cell('BE',l) - cell('BG',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BI=SI(i_depassement_service_du_sans_hc="Non";BH20*$AE20;0)
+    WHEN c = 'BI' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('BH',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BK=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20<>i_structure_code);$M20*$F20*$AD20;0)
+    WHEN c = 'BK' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code <> i.structure_code THEN
+        RETURN vh.heures * vh.taux_fa * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BL=SI(BL$15>0;BK20/BL$15;0)
+    WHEN c = 'BL' AND v >= 1 THEN
+      IF cell('BL15') > 0 THEN
+        RETURN cell('BK',l) / cell('BL15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BM=BL$16*BL20
+    WHEN c = 'BM' AND v >= 1 THEN
+      RETURN cell('BL16') * cell('BL',l);
+
+
+
+    -- BN=SI(BL$17=0;(BK20-BM20)/$AD20;0)
+    WHEN c = 'BN' AND v >= 1 THEN
+      IF cell('BL17') = 0 THEN
+        RETURN (cell('BK',l) - cell('BM',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BO=SI(i_depassement_service_du_sans_hc="Non";BN20*$AE20;0)
+    WHEN c = 'BO' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('BN',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BQ=SI(ET($D20="Oui";$H20="EAD";$A20=i_structure_code);$M20*$F20*$AD20;0)
+    WHEN c = 'BQ' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code = i.structure_code THEN
+        RETURN vh.heures * vh.taux_fa * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BR=SI(BR$15>0;BQ20/BR$15;0)
+    WHEN c = 'BR' AND v >= 1 THEN
+      IF cell('BR15') > 0 THEN
+        RETURN cell('BQ',l) / cell('BR15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BS=BR$16*BR20
+    WHEN c = 'BS' AND v >= 1 THEN
+      RETURN cell('BR16') * cell('BR',l);
+
+
+
+    -- BT=SI(BR$17=0;(BQ20-BS20)/$AD20;0)
+    WHEN c = 'BT' AND v >= 1 THEN
+      IF cell('BR17') = 0 THEN
+        RETURN (cell('BQ',l) - cell('BS',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BU=SI(i_depassement_service_du_sans_hc="Non";BT20*$AE20;0)
+    WHEN c = 'BU' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('BT',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BW=SI(ET($D20="Oui";$H20="EAD";$A20<>i_structure_code);$M20*$F20*$AD20;0)
+    WHEN c = 'BW' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code <> i.structure_code THEN
+        RETURN vh.heures * vh.taux_fa * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BX=SI(BX$15>0;BW20/BX$15;0)
+    WHEN c = 'BX' AND v >= 1 THEN
+      IF cell('BX15') > 0 THEN
+        RETURN cell('BW',l) / cell('BX15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- BY=BX$16*BX20
+    WHEN c = 'BY' AND v >= 1 THEN
+      RETURN cell('BX16') * cell('BX',l);
+
+
+
+    -- BZ=SI(BX$17=0;(BW20-BY20)/$AD20;0)
+    WHEN c = 'BZ' AND v >= 1 THEN
+      IF cell('BX17') = 0 THEN
+        RETURN (cell('BW',l) - cell('BY',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CA=SI(i_depassement_service_du_sans_hc="Non";BZ20*$AE20;0)
+    WHEN c = 'CA' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('BZ',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CC=SI(ET($D20="Oui";$H20<>"Référentiel";$A20=i_structure_code);$M20*$G20*$AD20;0)
+    WHEN c = 'CC' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code = i.structure_code THEN
+        RETURN vh.heures * vh.taux_fc * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CD=SI(CD$15>0;CC20/CD$15;0)
+    WHEN c = 'CD' AND v >= 1 THEN
+      IF cell('CD15') > 0 THEN
+        RETURN cell('CC',l) / cell('CD15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CE=CD$16*CD20
+    WHEN c = 'CE' AND v >= 1 THEN
+      RETURN cell('CD16') * cell('CD',l);
+
+
+
+    -- CF=SI(CD$17=0;(CC20-CE20)/$AD20;0)
+    WHEN c = 'CF' AND v >= 1 THEN
+      IF cell('CD17') = 0 THEN
+        RETURN (cell('CC',l) - cell('CE',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CG=SI(i_depassement_service_du_sans_hc="Non";CF20*$AE20;0)
+    WHEN c = 'CG' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('CF',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CI=SI(ET($D20="Oui";$H20<>"Référentiel";$A20<>i_structure_code);$M20*$G20*$AD20;0)
+    WHEN c = 'CI' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code <> i.structure_code THEN
+        RETURN vh.heures * vh.taux_fc * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CJ=SI(CJ$15>0;CI20/CJ$15;0)
+    WHEN c = 'CJ' AND v >= 1 THEN
+      IF cell('CJ15') > 0 THEN
+        RETURN cell('CI',l) / cell('CJ15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CK=CJ$16*CJ20
+    WHEN c = 'CK' AND v >= 1 THEN
+      RETURN cell('CJ16') * cell('CJ',l);
+
+
+
+    -- CL=SI(CJ$17=0;(CI20-CK20)/$AD20;0)
+    WHEN c = 'CL' AND v >= 1 THEN
+      IF cell('CJ17') = 0 THEN
+        RETURN (cell('CI',l) - cell('CK',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CM=SI(i_depassement_service_du_sans_hc="Non";CL20*$AE20;0)
+    WHEN c = 'CM' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('CL',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CO=SI(ET($D20="Oui";$H20="Référentiel";$A20=i_structure_code);$M20*$AD20;0)
+    WHEN c = 'CO' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_code = i.structure_code THEN
+        RETURN vh.heures * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CP=SI(CP$15>0;CO20/CP$15;0)
+    WHEN c = 'CP' AND v >= 1 THEN
+      IF cell('CP15') > 0 THEN
+        RETURN cell('CO',l) / cell('CP15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CQ=CP$16*CP20
+    WHEN c = 'CQ' AND v >= 1 THEN
+      RETURN cell('CP16') * cell('CP',l);
+
+
+
+    -- CR=SI(CP$17=0;(CO20-CQ20)/$AD20;0)
+    WHEN c = 'CR' AND v >= 1 THEN
+      IF cell('CP17') = 0 THEN
+        RETURN (cell('CO',l) - cell('CQ',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CS=SI(i_depassement_service_du_sans_hc="Non";CR20*$AE20;0)
+    WHEN c = 'CS' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('CR',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CU=SI(ET($D20="Oui";$H20="Référentiel";$A20<>i_structure_code;$A20<>$K$10);$M20*$AD20;0)
+    WHEN c = 'CU' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_code <> i.structure_code AND NOT vh.structure_is_univ THEN
+        RETURN vh.heures * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CV=SI(CV$15>0;CU20/CV$15;0)
+    WHEN c = 'CV' AND v >= 1 THEN
+      IF cell('CV15') > 0 THEN
+        RETURN cell('CU',l) / cell('CV15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CW=CV$16*CV20
+    WHEN c = 'CW' AND v >= 1 THEN
+      RETURN cell('CV16') * cell('CV',l);
+
+
+
+    -- CX=SI(CV$17=0;(CU20-CW20)/$AD20;0)
+    WHEN c = 'CX' AND v >= 1 THEN
+      IF cell('CV17') = 0 THEN
+        RETURN (cell('CU',l) - cell('CW',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- CY=SI(i_depassement_service_du_sans_hc="Non";CX20*$AE20;0)
+    WHEN c = 'CY' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('CX',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- DA=SI(ET($D20="Oui";$H20="Référentiel";$A20=$K$10);$M20*$AD20;0)
+    WHEN c = 'DA' AND v >= 1 THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ THEN
+        RETURN vh.heures * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- DB=SI(DB$15>0;DA20/DB$15;0)
+    WHEN c = 'DB' AND v >= 1 THEN
+      IF cell('DB15') > 0 THEN
+        RETURN cell('DA',l) / cell('DB15');
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- DC=DB$16*DB20
+    WHEN c = 'DC' AND v >= 1 THEN
+      RETURN cell('DB16') * cell('DB',l);
+
+
+
+    -- DD=SI(DB$17=0;(DA20-DC20)/$AD20;0)
+    WHEN c = 'DD' AND v >= 1 THEN
+      IF cell('DB17') = 0 THEN
+        RETURN (cell('DA',l) - cell('DC',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- DE=SI(i_depassement_service_du_sans_hc="Non";DD20*$AE20;0)
+    WHEN c = 'DE' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('DD',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+
+    ELSE
+      return 111;--raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
+  END CASE; END;
 
 
 
   PROCEDURE CALCUL_RESULTAT IS
-    tableaux       t_tableaux_configs;
-    valeur         FLOAT;
   BEGIN
-    -- si l'année est antérieure à 2016/2017 alors on utilise la V2!!
-    IF ose_formule.intervenant.annee_id < 2016 THEN
-      CALCUL_RESULTAT_V2;
+    -- si l'année est antérieure à 2021/2022 alors on utilise la V2!!
+    IF ose_formule.intervenant.annee_id < 2021 THEN
+      FORMULE_UNICAEN_2016.CALCUL_RESULTAT;
       RETURN;
     END IF;
 
-
-    -- Définition des tableaux à utiliser
-    tableaux := t_tableaux_configs(
-        tc( 11,3    ), tc( 12,3    ), tc( 13,3    ), tc( 14,3    ), tc( 15,2,'r' ), tc( 16,2,'r' ), tc( 17,2,'r' ),
-        tc( 21,2    ), tc( 22,2    ), tc( 23,2    ), tc( 24,2    ), tc( 25,2,'r' ), tc( 26,2,'r' ), tc( 27,2,'r' ),
-        tc( 31,2,'t'), tc( 32,2,'t'), tc( 33,2,'t'), tc( 34,2,'t'), tc( 35,2,'tr'), tc( 36,2,'tr'), tc( 37,2,'tr'),
-        tc( 41,2    ), tc( 42,2    ), tc( 43,2    ), tc( 44,2    ), tc( 45,2,'r' ), tc( 46,2,'r' ), tc( 47,2,'r' ),
-        tc( 51,2    ), tc( 52,2    ), tc( 53,2    ), tc( 54,2    ), tc( 55,2,'r' ), tc( 56,2,'r' ), tc( 57,2,'r' ),
-        tc( 61,3    ), tc( 62,3    ),
-        tc( 71,3    ), tc( 72,3    ),
-        tc( 83,3    ), tc( 84,3    ),
-        tc( 91,2    ), tc( 92,2    ), tc( 93,2    ), tc( 94,2    ), tc( 95,2,'r' ), tc( 96,2,'r' ), tc( 97,2,'r' ),
-        tc(101,2    ), tc(102,2    ), tc(103,2    ), tc(104,2    ), tc(105,2,'r' ), tc(106,2,'r' ), tc(107,2,'r' ),
-        tc(111,2    ), tc(112,2    ), tc(113,2    ), tc(114,2    ), tc(115,2,'r' ), tc(116,2,'r' ), tc(117,2,'r' ),
-        tc(123,3    ), tc(124,3    ),
-        tc(131,3    ), tc(132,3    ),
-        tc(141,3    ), tc(142,3    ),
-        tc(153,3    ), tc(154,3    ),
-        tc(163,3    ), tc(164,3    )
-      );
-
-    -- calcul par tableau pour chaque volume horaire
-    t.delete;
-    FOR it IN tableaux.FIRST .. tableaux.LAST LOOP
-      FOR ivh IN 1 .. ose_formule.volumes_horaires.length LOOP
-        vh_index := ivh;
-        IF
-                ose_formule.volumes_horaires.items(ivh).service_id IS NOT NULL AND NOT tableaux(it).referentiel
-            OR ose_formule.volumes_horaires.items(ivh).service_referentiel_id IS NOT NULL AND tableaux(it).referentiel
-            OR tableaux(it).setTotal -- car on en a besoin tout le temps
-        THEN
-          valeur := EXECFORMULE(tableaux(it).tableau, tableaux(it).version);
-          IF tableaux(it).setTotal THEN
-            ST( tableaux(it).tableau, valeur );
-          ELSE
-            SV( tableaux(it).tableau, valeur );
-          END IF;
-        END IF;
-      END LOOP;
-    END LOOP;
+    feuille.delete;
 
     -- transmission des résultats aux volumes horaires et volumes horaires référentiel
-    FOR i IN 1 .. ose_formule.volumes_horaires.length LOOP
-      vh_index := i;
-      IF ose_formule.volumes_horaires.items(i).service_id IS NOT NULL THEN
-        ose_formule.volumes_horaires.items(i).service_fi               := gv( 61) + gv( 62);
-        ose_formule.volumes_horaires.items(i).service_fa               := gv( 71) + gv( 72);
-        ose_formule.volumes_horaires.items(i).service_fc               := gv( 83) + gv( 84);
-        ose_formule.volumes_horaires.items(i).heures_compl_fi          := gv(131) + gv(132);
-        ose_formule.volumes_horaires.items(i).heures_compl_fa          := gv(141) + gv(142);
-        ose_formule.volumes_horaires.items(i).heures_compl_fc          := gv(153) + gv(154);
-        ose_formule.volumes_horaires.items(i).heures_compl_fc_majorees := gv(163) + gv(164);
-      ELSIF ose_formule.volumes_horaires.items(i).service_referentiel_id IS NOT NULL THEN
-        ose_formule.volumes_horaires.items(i).service_referentiel      := gv( 55) + gv( 56) + gv( 57);
-        ose_formule.volumes_horaires.items(i).heures_compl_referentiel := gv(115) + gv(116) + gv(117);
-      END IF;
-    END LOOP;
-
-    DEBUG_VH;
-  END;
-
-
-
-  PROCEDURE PURGE_EM_NON_FC IS
-  BEGIN
-    FOR em IN (
-      SELECT
-        em.id
-      FROM
-        ELEMENT_MODULATEUR em
-          JOIN element_pedagogique ep ON ep.id = em.element_id AND ep.histo_destruction IS NULL
-      WHERE
-          em.histo_destruction IS NULL
-        AND ep.taux_fc < 1
-      ) LOOP
-      UPDATE
-        element_modulateur
-      SET
-        histo_destruction = SYSDATE,
-        histo_destructeur_id = ose_parametre.get_ose_user
-      WHERE
-          id = em.id
-      ;
+    FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+      ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'T',l);
+      ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'U',l);
+      ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'V',l);
+      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'W',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'X',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Y',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'Z',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AA',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AB',l);
     END LOOP;
   END;
-
 
 
 

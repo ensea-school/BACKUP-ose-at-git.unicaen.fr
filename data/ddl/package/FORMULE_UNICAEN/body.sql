@@ -129,13 +129,6 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
 
 
-  FUNCTION notInStructs( v VARCHAR2 DEFAULT NULL ) RETURN BOOLEAN IS
-  BEGIN
-    RETURN COALESCE(v,' ') NOT IN ('KE8','UP10');
-  END;
-
-
-
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
     vh ose_formule.t_volume_horaire;
     i  ose_formule.t_intervenant;
@@ -1004,7 +997,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- CU=SI(ET($D20="Oui";$H20="Référentiel";$A20<>i_structure_code;$A20<>$K$10);$M20*$AD20;0)
     WHEN c = 'CU' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
@@ -1104,7 +1097,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
   PROCEDURE CALCUL_RESULTAT IS
   BEGIN
     -- si l'année est antérieure à 2020/2021 alors on utilise la V2!!
-    IF ose_formule.intervenant.annee_id < 202099 THEN -- désactivée pour l'instant
+    IF ose_formule.intervenant.annee_id < 2020 THEN
       FORMULE_UNICAEN_2016.CALCUL_RESULTAT;
       RETURN;
     END IF;

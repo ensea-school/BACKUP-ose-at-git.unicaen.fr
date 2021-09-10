@@ -136,8 +136,8 @@ return [
 
     'FORMULE' => [
         1  => [
-            'LIBELLE'      => 'Université de Caen',
-            'PACKAGE_NAME' => 'FORMULE_UNICAEN',
+            'LIBELLE'      => 'Université de Caen (version 2016)',
+            'PACKAGE_NAME' => 'FORMULE_UNICAEN_2016',
         ],
         2  => [
             'LIBELLE'      => 'Université de Montpellier',
@@ -212,6 +212,10 @@ return [
         18 => [
             'LIBELLE'      => 'Université Sorbonne Nouvelle',
             'PACKAGE_NAME' => 'FORMULE_SORBONNE_NOUVELLE',
+        ],
+        19 => [
+            'LIBELLE'      => 'Université de Caen (version 2021)',
+            'PACKAGE_NAME' => 'FORMULE_UNICAEN',
         ],
     ],
 

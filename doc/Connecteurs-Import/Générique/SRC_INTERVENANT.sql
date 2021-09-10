@@ -8,7 +8,7 @@ SELECT
   CASE WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
   CASE
     WHEN action = 'insert' OR intervenant_histo = 1 THEN statut_source_id
-    WHEN action = 'update-no-statut' OR sync_statut = 0 OR annee_id < current_annee_id THEN statut_intervenant_id
+    WHEN (action = 'update-no-statut' OR sync_statut = 0 OR annee_id < current_annee_id) AND statut_intervenant_id IS NOT NULL THEN statut_intervenant_id
     ELSE statut_source_id
   END                                                                                       statut_id,
   CASE WHEN annee_id < current_annee_id THEN intervenant_grade_id ELSE grade_id END         grade_id,
@@ -45,6 +45,7 @@ SELECT
   autre_3,
   autre_4,
   autre_5,
+  affectation_fin,
   employeur_id,
   CASE WHEN statuts_identiques = 0 AND i_source_id IS NOT NULL AND action <> 'insert' THEN i_source_id ELSE s_source_id END source_id,
   source_code,
@@ -57,7 +58,7 @@ FROM (
     CASE
 
       -- Cas 1 : Si on est sur un statut multiple avec un non-autorisé et un autre statut, alors le non autorisé est supprimé
-      WHEN statut_intervenant_nautorise = 1 AND intervenant_local = 0 AND nb_intervenants > 1 AND intervenant_histo = 0 THEN 'drop'
+      WHEN statut_source_nautorise = 1 AND nb_sources > 1 THEN 'drop'
 
 
       -- Cas 2 : Si on est sur les mêmes fiches, alors on synchronise tout le temps
@@ -131,11 +132,29 @@ FROM (
       END
 
 
-      -- Cas 9 : Quand il y a plusieurs sources pour un seul intervenant et qu'une au moins matche
+      -- Cas 9 : Quand il y a plusieurs sources et aucun intervenant
+      WHEN nb_sources > 1 AND nb_intervenants = 0 THEN CASE
+        
+        -- Si un des statuts est NON AUTORISE
+        WHEN statut_source_nautorise = 1 THEN 'drop'
+        
+        -- Si on est sur un statut "Autres" et qu'il y a un autre statut du même type
+        WHEN types_identiques = 0 AND statut_source_autre = 1 THEN 'drop'
+
+        -- sinon on laisse passer
+        ELSE 'insert'
+
+      END
+
+
+      -- Cas 10 : Quand il y a plusieurs sources pour un seul intervenant et qu'une au moins matche
       WHEN nb_sources > 1 AND nb_intervenants = 1 AND nb_statuts_egaux = 1 THEN CASE
 
         -- Si le nouveau statut est de type différent, alors on ajoute une nouvelle fiche
         WHEN types_identiques = 0 THEN 'insert'
+
+        -- Si on a AUTRE+ NA en source et NA en intervenant => on transforme
+        WHEN nb_statut_source_nautorise > 0 AND statut_intervenant_nautorise = 1 THEN 'update'
 
         -- Sinon, on ne prend pas en compte pour éviter tout problème
         ELSE 'drop'
@@ -143,7 +162,7 @@ FROM (
       END
 
 
-      -- Cas 10 : Quand il y a plusieurs sources pour un seul intervenant et qu'aucun ne matche
+      -- Cas 11 : Quand il y a plusieurs sources pour un seul intervenant et qu'aucun ne matche
       WHEN nb_sources > 1 AND nb_intervenants = 1 AND nb_statuts_egaux = 0 THEN CASE
         -- Cas typique du vacataire qui a renseigné des données personnelles
         WHEN intervenant_local = 0 AND types_identiques = 1 AND statut_source_autre = 1 AND statut_intervenant_autre = 0 AND sync_statut = 0 THEN 'update'
@@ -157,7 +176,7 @@ FROM (
       END
 
 
-      -- Cas 11 : Quand il y a 2 sources et 2 intervenants et qu'un seul matche
+      -- Cas 12 : Quand il y a 2 sources et 2 intervenants et qu'un seul matche
       WHEN nb_sources = 2 AND nb_intervenants = 2 THEN CASE
 
         -- Autres fiches de même type
@@ -170,7 +189,7 @@ FROM (
       END
 
 
-      -- Cas 12 : Pour le reste
+      -- Cas 13 : Pour le reste
       ELSE CASE
 
         -- Cas typique du vacataire qui a renseigné des données personnelles
@@ -229,6 +248,7 @@ FROM (
       s.autre_3                                                                              autre_3,
       s.autre_4                                                                              autre_4,
       s.autre_5                                                                              autre_5,
+      s.affectation_fin                                                                      affectation_fin,
       empl.id                                                                                employeur_id,
       isrc.id                                                                                i_source_id,
       ssrc.id                                                                                s_source_id,
@@ -253,6 +273,8 @@ FROM (
       COUNT(DISTINCT ssi.id) OVER (PARTITION BY s.code, a.id)                                nb_sources,
       COUNT(DISTINCT i.id) OVER (PARTITION BY i.code, i.annee_id)                            nb_intervenants,
       SUM(CASE WHEN ssi.id = i.statut_id THEN 1 ELSE 0 END) OVER (PARTITION BY s.code, a.id) nb_statuts_egaux,
+      COUNT(CASE WHEN ssi.code = 'AUTRES' THEN 1 ELSE 0 END) OVER (PARTITION BY s.code, a.id) nb_statut_source_autre,
+      COUNT(CASE WHEN ssi.code = 'NON_AUTORISE' THEN 1 ELSE 0 END) OVER (PARTITION BY s.code, a.id) nb_statut_source_nautorise,
       MAX(CASE WHEN ssi.id = i.statut_id THEN ssi.id ELSE 0 END) OVER (PARTITION BY s.code, a.id) statuts_egaux_id
     FROM
                 mv_intervenant          s

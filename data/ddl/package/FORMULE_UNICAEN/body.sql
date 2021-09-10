@@ -498,7 +498,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- AG=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20=i_structure_code);$M20*$E20*$AD20;0)
     WHEN c = 'AG' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code = i.structure_code THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fi * cell('AD',l);
       ELSE
         RETURN 0;
@@ -544,7 +544,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- AM=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20<>i_structure_code);$M20*$E20*$AD20;0)
     WHEN c = 'AM' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code <> i.structure_code THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND NOT vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fi * cell('AD',l);
       ELSE
         RETURN 0;
@@ -590,7 +590,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- AS=SI(ET($D20="Oui";$H20="EAD";$A20=i_structure_code);$M20*$E20*$AD20;0)
     WHEN c = 'AS' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code = i.structure_code THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fi * cell('AD',l);
       ELSE
         RETURN 0;
@@ -636,7 +636,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- AY=SI(ET($D20="Oui";$H20="EAD";$A20<>i_structure_code);$M20*$E20*$AD20;0)
     WHEN c = 'AY' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code <> i.structure_code THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND NOT vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fi * cell('AD',l);
       ELSE
         RETURN 0;
@@ -682,7 +682,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- BE=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20=i_structure_code);$M20*$F20*$AD20;0)
     WHEN c = 'BE' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code = i.structure_code THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fa * cell('AD',l);
       ELSE
         RETURN 0;
@@ -728,7 +728,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- BK=SI(ET($D20="Oui";$H20<>"Référentiel";$H20<>"EAD";$A20<>i_structure_code);$M20*$F20*$AD20;0)
     WHEN c = 'BK' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND vh.structure_code <> i.structure_code THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'EAD' AND NOT vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fa * cell('AD',l);
       ELSE
         RETURN 0;
@@ -774,7 +774,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- BQ=SI(ET($D20="Oui";$H20="EAD";$A20=i_structure_code);$M20*$F20*$AD20;0)
     WHEN c = 'BQ' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code = i.structure_code THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fa * cell('AD',l);
       ELSE
         RETURN 0;
@@ -820,7 +820,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- BW=SI(ET($D20="Oui";$H20="EAD";$A20<>i_structure_code);$M20*$F20*$AD20;0)
     WHEN c = 'BW' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND vh.structure_code <> i.structure_code THEN
+      IF vh.service_statutaire AND vh.type_intervention_code = 'EAD' AND NOT vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fa * cell('AD',l);
       ELSE
         RETURN 0;
@@ -866,7 +866,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- CC=SI(ET($D20="Oui";$H20<>"Référentiel";$A20=i_structure_code);$M20*$G20*$AD20;0)
     WHEN c = 'CC' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code = i.structure_code THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fc * cell('AD',l);
       ELSE
         RETURN 0;
@@ -912,7 +912,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- CI=SI(ET($D20="Oui";$H20<>"Référentiel";$A20<>i_structure_code);$M20*$G20*$AD20;0)
     WHEN c = 'CI' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code <> i.structure_code THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fc * cell('AD',l);
       ELSE
         RETURN 0;
@@ -958,7 +958,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- CO=SI(ET($D20="Oui";$H20="Référentiel";$A20=i_structure_code);$M20*$AD20;0)
     WHEN c = 'CO' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_code = i.structure_code THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
@@ -1004,7 +1004,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
     -- CU=SI(ET($D20="Oui";$H20="Référentiel";$A20<>i_structure_code;$A20<>$K$10);$M20*$AD20;0)
     WHEN c = 'CU' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_code <> i.structure_code AND NOT vh.structure_is_univ THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;

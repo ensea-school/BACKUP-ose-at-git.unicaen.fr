@@ -1103,8 +1103,8 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
   PROCEDURE CALCUL_RESULTAT IS
   BEGIN
-    -- si l'année est antérieure à 2021/2022 alors on utilise la V2!!
-    IF ose_formule.intervenant.annee_id < 2021 THEN
+    -- si l'année est antérieure à 2020/2021 alors on utilise la V2!!
+    IF ose_formule.intervenant.annee_id < 202099 THEN -- désactivée pour l'instant
       FORMULE_UNICAEN_2016.CALCUL_RESULTAT;
       RETURN;
     END IF;

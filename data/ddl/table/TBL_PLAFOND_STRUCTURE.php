@@ -57,6 +57,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'INTERVENANT_ID'         => [
+            'name'        => 'INTERVENANT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 9,
+            'commentaire' => NULL,
+        ],
         'PLAFOND'                => [
             'name'        => 'PLAFOND',
             'type'        => 'float',

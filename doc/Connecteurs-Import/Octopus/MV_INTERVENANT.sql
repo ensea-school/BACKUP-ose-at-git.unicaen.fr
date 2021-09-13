@@ -16,7 +16,7 @@ WITH i AS (
                         WHEN icto.code_ose IS NOT NULL THEN icto.code_ose
                         ELSE 'AUTRES' END                                       z_statut_id,
                     CASE
-                    	WHEN (vinds.t_titulaire='O' OR vinds.t_cdi='O' OR vinds.t_cdd='O') THEN 'permanent'
+                    	WHEN icto.code_ose IS NOT NULL AND icto.code_ose NOT IN ('BIATSS','NON_AUTORISE') THEN 'permanent'
                     	ELSE 'vacataire' END                                        z_type,
                     icto.id_orig                                                source_code,
                     COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
@@ -43,7 +43,7 @@ WITH i AS (
 					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND (icto.code_ose IN('DOCTOR')  AND icto.d_debut - 184 <= SYSDATE)
              WHERE inds.d_debut - 184 <= SYSDATE
                --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
-	           AND icto.individu_id IS NULL
+	           --AND icto.individu_id IS NULL
                --Combinaison des témoins octopus pour récupérer les bonnes populations
                AND ((inds.t_enseignant = 'O' AND inds.t_vacataire = 'O')
                  OR (inds.t_enseignant = 'O' AND inds.t_heberge = 'O')
@@ -234,7 +234,12 @@ SELECT DISTINCT
             THEN NULL
         WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL) THEN compte.date_fin
         ELSE i.validite_fin
-        END                                                        validite_fin
+        END                                                        validite_fin,
+    CASE
+        WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
+            THEN NULL
+        ELSE i.validite_fin
+        END                                                        affectation_fin
 FROM i
          JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))
@@ -266,3 +271,5 @@ FROM i
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
+
+

@@ -119,7 +119,8 @@ class PlafondService extends AbstractEntityService
             $first    = true;
             $hasQuery = false;
             foreach ($plafonds as $plafond) {
-                if ($plafond->getRequete()) {
+                if ($this->testRequete($plafond)) {
+
                     $hasQuery = true;
                     if (!$first) $view .= "\n\n  UNION ALL\n";
                     $view  .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID, 0 DEROGATION, p.* FROM (\n    ";
@@ -145,6 +146,30 @@ class PlafondService extends AbstractEntityService
                 }
             }
             $this->getEntityManager()->getConnection()->exec($view);
+        }
+    }
+
+
+
+    public function testRequete(Plafond $plafond): bool
+    {
+        $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
+        $cols    = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
+        $cols    = array_diff($cols, ['ID', 'PLAFOND_ID', 'DEROGATION']);
+
+        try {
+            $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';
+            $res = $this->getEntityManager()->getConnection()->fetchAll($sql);
+
+            foreach ($cols as $col) {
+                if (!isset($res[0][$col])) {
+                    return false;
+                }
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
         }
     }
 

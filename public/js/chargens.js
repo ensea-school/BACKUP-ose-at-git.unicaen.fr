@@ -200,9 +200,9 @@ $.widget("ose.chargens", {
             this.formNoeud.find('#choix-assiduite').show();
         }*/
 
-        if (noeud['can-edit-assiduite'] && noeud['element-pedagogique']){
+        if (noeud['can-edit-assiduite'] && noeud['element-pedagogique']) {
             this.formNoeud.find('.seuil-assiduite').show();
-        }else{
+        } else {
             this.formNoeud.find('.seuil-assiduite').hide();
         }
 
@@ -349,7 +349,7 @@ $.widget("ose.chargens", {
 
                     var seuilDedoublement = noeud['seuils-dedoublement'][ti];
                     if (!seuilDedoublement) seuilDedoublement = noeud['seuils-dedoublement-defaut'][ti];
-                    if (!seuilDedoublement) seuilDedoublement = 99999999;
+                    if (!seuilDedoublement) seuilDedoublement = 1;
 
                     var seuilAssiduite = noeud['seuils-assiduite'][ti];
                     if (!seuilAssiduite) seuilAssiduite = 1;
@@ -722,9 +722,9 @@ $.widget("ose.chargens", {
         {
             if (data.erreur) {
                 alertFlash(data.erreur, 'danger', 5000);
-            } else if(data.noeuds) {
+            } else if (data.noeuds) {
                 that.chargerDonnees(p.etape, p.scenario, data);
-            } else{
+            } else {
                 alertFlash(data, 'danger', 15000);
             }
 

@@ -10,6 +10,11 @@ class OseAdmin
     const MIN_VERSION = 14; // version minimum installable
 
     /**
+     * @var self
+     */
+    private static $instance;
+
+    /**
      * @var Console
      */
     protected $console;
@@ -58,7 +63,15 @@ class OseAdmin
      */
     public function __construct(Console $console)
     {
-        $this->console = $console;
+        $this->console  = $console;
+        self::$instance = $this;
+    }
+
+
+
+    public static function getInstance(): self
+    {
+        return self::$instance;
     }
 
 
@@ -209,7 +222,16 @@ class OseAdmin
      */
     public function run(string $action, $newProcess = false)
     {
-        if (file_exists($this->getOseDir() . 'admin/actions/' . $action . '.php')) {
+        $cible = $this->getOseDir() . 'admin/';
+
+        if (file_exists($cible . 'actions/' . $action . '.php')) {
+            $filename = $cible . 'actions/' . $action . '.php';
+        } elseif (is_dir($cible . $action)) {
+            $sousAction = $this->getConsole()->getArg(2);
+            $filename   = $cible . $action . '/actions/' . $sousAction . '.php';
+        }
+
+        if ($filename) {
             if ($newProcess) {
                 $this->console->passthru(
                     "php " . $this->getOseDir() . "/bin/ose " . $action
@@ -219,7 +241,7 @@ class OseAdmin
             } else {
                 $oa = $this;
                 $c  = $this->console;
-                require_once $this->getOseDir() . 'admin/actions/' . $action . '.php';
+                require_once $filename;
             }
         } else {
             $this->console->println('Action "' . $action . '" inconnue.', $this->console::COLOR_RED);

@@ -2,9 +2,11 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
+use Application\Form\Chargens\Traits\DifferentielFormAwareTrait;
 use Application\Form\Chargens\Traits\DuplicationScenarioFormAwareTrait;
 use Application\Form\Chargens\Traits\FiltreFormAwareTrait;
 use Application\Form\Chargens\Traits\ScenarioFiltreFormAwareTrait;
@@ -41,6 +43,7 @@ class ChargensController extends AbstractController
     use ScenarioFormAwareTrait;
     use DuplicationScenarioFormAwareTrait;
     use SeuilChargeServiceAwareTrait;
+    use DifferentielFormAwareTrait;
 
 
     public function indexAction()
@@ -348,6 +351,64 @@ class ChargensController extends AbstractController
 
 
 
+    public function differentielAction()
+    {
+        $form = $this->getFormChargensDifferentiel();
+
+        $avantLibelle = null;
+        $apresLibelle = null;
+
+        $diff = null;
+        if ($this->getRequest()->isPost()) {
+            $post = array_merge_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $pce  = $this->getProviderChargens()->getExport();
+
+                try {
+                    if ($data['avant'] == 'export' && isset($data['avant-fichier']['tmp_name'])) {
+                        $avant        = $pce->fromCsv($data['avant-fichier']['tmp_name']);
+                        $avantLibelle = $data['avant-fichier']['name'];
+                    } else {
+                        [$avantAnneeId, $avantScenarioId] = explode('-', $data['avant']);
+                        /** @var $avantAnnee Annee */
+                        $avantAnnee = $this->em()->find(Annee::class, $avantAnneeId);
+                        /** @var $avantScenario Scenario */
+                        $avantScenario = $this->em()->find(Scenario::class, $avantScenarioId);
+                        $avant         = $pce->fromBdd($avantAnnee, $avantScenario, $this->getServiceContext()->getStructure());
+                        $avantLibelle  = $avantScenario->getLibelle() . ' ' . $avantAnnee->getLibelle();
+                    }
+
+                    if ($data['apres'] == 'export' && isset($data['apres-fichier']['tmp_name'])) {
+                        $apres        = $pce->fromCsv($data['apres-fichier']['tmp_name']);
+                        $apresLibelle = $data['apres-fichier']['name'];
+                    } else {
+                        [$apresAnneeId, $apresScenarioId] = explode('-', $data['apres']);
+                        /** @var $apresAnnee Annee */
+                        $apresAnnee = $this->em()->find(Annee::class, $apresAnneeId);
+                        /** @var $apresScenario Scenario */
+                        $apresScenario = $this->em()->find(Scenario::class, $apresScenarioId);
+                        $apres         = $pce->fromBdd($apresAnnee, $apresScenario, $this->getServiceContext()->getStructure());
+                        $apresLibelle  = $apresScenario->getLibelle() . ' ' . $apresAnnee->getLibelle();
+                    }
+
+                    $diff = $pce->diff($avant, $apres);
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($e->getMessage());
+                }
+            }
+        }
+
+        return compact('form', 'diff', 'avantLibelle', 'apresLibelle');
+    }
+
+
+
     public function exportCsvAction()
     {
         /** @var Scenario $scenario */
@@ -356,84 +417,10 @@ class ChargensController extends AbstractController
         $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();
 
-        $sql    = 'SELECT * FROM V_CHARGENS_EXPORT_CSV WHERE scenario_id = :scenario AND annee_id = :annee';
-        $params = [
-            'scenario' => $scenario->getId(),
-            'annee'    => $annee->getId(),
-        ];
-        if ($structure) {
-            $sql                 .= ' AND (structure_porteuse_id = :structure OR structure_ins_id = :structure)';
-            $params['structure'] = $structure->getId();
-        }
-        $data = $this->em()->getConnection()->fetchAll($sql, $params);
+        $pce = $this->getProviderChargens()->getExport();
 
-        $csvModel = new CsvModel();
-        $csvModel->setHeader([
-            'annee'                      => 'Année',
-            'structure-porteuse-code'    => 'Composante porteuse (code)',
-            'structure-porteuse-libelle' => 'Composante porteuse (libellé)',
-            'etape-porteuse-code'        => 'Étape porteuse (code)',
-            'etape-porteuse-libelle'     => 'Étape porteuse (libellé)',
-
-            'structure-ins-code'    => 'Composante d\'inscription (code)',
-            'structure-ins-libelle' => 'Composante d\'inscription (libellé)',
-            'etape-ins-code'        => 'Étape d\'inscription (code)',
-            'etape-ins-libelle'     => 'Étape d\'inscription (libellé)',
-
-            'element-code'       => 'Ens. (code)',
-            'element-libelle'    => 'Enseignement (libellé)',
-            'periode'            => 'Période',
-            'discipline-code'    => 'Discipline (code)',
-            'discipline-libelle' => 'Discipline (libellé)',
-            'type-heures'        => 'Régime d\'inscription',
-            'type-intervention'  => 'Type d\'intervention',
-
-            'seuil-ouverture'    => 'Seuil d\'ouverture',
-            'seuil-dedoublement' => 'Seuil de dédoublement',
-            'assiduite'          => 'Assiduité',
-            'effectif-etape'     => 'Effectifs (étape)',
-            'effectif-element'   => 'Effectifs (élément)',
-            'heures-ens'         => 'Vol. Horaire',
-            'groupes'            => 'Groupes',
-            'heures'             => 'Heures',
-            'hetd'               => 'HETD',
-        ]);
-
-        foreach ($data as $d) {
-            $l = [
-                'annee'                      => $d['ANNEE'],
-                'structure-porteuse-code'    => $d['STRUCTURE_PORTEUSE_CODE'],
-                'structure-porteuse-libelle' => $d['STRUCTURE_PORTEUSE_LIBELLE'],
-                'etape-porteuse-code'        => $d['ETAPE_PORTEUSE_CODE'],
-                'etape-porteuse-libelle'     => $d['ETAPE_PORTEUSE_LIBELLE'],
-
-                'structure-ins-code'    => $d['STRUCTURE_INS_CODE'],
-                'structure-ins-libelle' => $d['STRUCTURE_INS_LIBELLE'],
-                'etape-ins-code'        => $d['ETAPE_INS_CODE'],
-                'etape-ins-libelle'     => $d['ETAPE_INS_LIBELLE'],
-
-                'element-code'       => $d['ELEMENT_CODE'],
-                'element-libelle'    => $d['ELEMENT_LIBELLE'],
-                'periode'            => $d['PERIODE'],
-                'discipline-code'    => $d['DISCIPLINE_CODE'],
-                'discipline-libelle' => $d['DISCIPLINE_LIBELLE'],
-                'type-heures'        => $d['TYPE_HEURES'],
-                'type-intervention'  => $d['TYPE_INTERVENTION'],
-
-                'seuil-ouverture'    => (int)$d['SEUIL_OUVERTURE'],
-                'seuil-dedoublement' => (int)$d['SEUIL_DEDOUBLEMENT'],
-                'assiduite'          => (float)$d['ASSIDUITE'],
-                'effectif-etape'     => (int)$d['EFFECTIF_ETAPE'],
-                'effectif-element'   => (int)$d['EFFECTIF_ELEMENT'],
-                'heures-ens'         => (float)$d['HEURES_ENS'],
-                'groupes'            => (float)$d['GROUPES'],
-                'heures'             => (float)$d['HEURES'],
-                'hetd'               => (float)$d['HETD'],
-            ];
-
-            if ($l['hetd'] === 120.00) $l['hetd'] = '120,00'; // Hack pour éviter un bug inxplicable
-            $csvModel->addLine($l);
-        }
+        $export   = $pce->fromBdd($annee, $scenario, $structure);
+        $csvModel = $pce->toCsv($export);
         $csvModel->setFilename('charges-enseignement-' . $annee->getId() . '-' . Util::reduce($scenario->getLibelle()) . '.csv');
 
         return $csvModel;

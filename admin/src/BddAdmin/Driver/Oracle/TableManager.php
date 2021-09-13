@@ -338,7 +338,7 @@ END;';
 
 
 
-    public function isDiff(array $d1, array $d2)
+    public function isDiff(array $d1, array $d2): bool
     {
         foreach ($d1 as $key => $val) {
             if ($key != 'columns') {

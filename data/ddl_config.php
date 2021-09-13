@@ -2,28 +2,42 @@
 
 return [
     'explicit'          => true,
-    'table'             => ['includes' => [
-        'ADRESSE_INTERVENANT',
-        'ADRESSE_STRUCTURE',
-        'INTERVENANT_SAISIE',
-        'DOSSIER',
-        'TBL_DEMS',
+    'table'             => [
+        'includes' => [
+            'ADRESSE_INTERVENANT',
+            'ADRESSE_STRUCTURE',
+            'INTERVENANT_SAISIE',
+            'DOSSIER',
+            'TBL_DEMS',
+        ],
+    ],
+    'materialized-view' => [
+        'includes' => [
 
-    ]],
-    'materialized-view' => ['includes' => [
+        ],
+    ],
+    'view'              => [
+        'includes' => [
+            'V_INDIC_DIFF_DOSSIER',
+            'V_MEP_INTERVENANT_STRUCTURE',
+            'V_CHARGENS_SEUILS_DED_DEF',
+        ],
+    ],
+    'package'           => [
+        'includes' => [
+            'FORMULE_ENSICAEN',
+        ],
+    ],
+    'trigger'           => [
+        'includes' => [
+            'F_CONTRAT',
+            'F_CONTRAT_S',
+            'INDIC_TRG_MODIF_DOSSIER',
+        ],
+    ],
+    'sequence'          => [
+        'includes' => [
 
-    ]],
-    'view'              => ['includes' => [
-        'V_INDIC_DIFF_DOSSIER',
-        'V_MEP_INTERVENANT_STRUCTURE',
-    ]],
-    'package'           => ['includes' => [
-
-    ]],
-    'trigger'           => ['includes' => [
-        'F_CONTRAT', 'F_CONTRAT_S', 'INDIC_TRG_MODIF_DOSSIER',
-    ]],
-    'sequence'          => ['includes' => [
-
-    ]],
+        ],
+    ],
 ];

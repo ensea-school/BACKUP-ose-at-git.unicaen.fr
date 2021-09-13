@@ -8,7 +8,8 @@ SELECT
   n.element_pedagogique_id element_pedagogique_id,
   etp.id                   element_pedagogique_etape_id,
   n.structure_id           structure_id,
-  tf.groupe_id             groupe_type_formation_id
+  tf.groupe_id             groupe_type_formation_id,
+  etp.structure_id         structure_etape_id
 FROM
             noeud                n
   LEFT JOIN element_pedagogique ep ON ep.id = n.element_pedagogique_id

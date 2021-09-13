@@ -2,8 +2,10 @@
 
 namespace ExportRh\Service;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractService;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
@@ -19,6 +21,7 @@ class ExportRhService extends AbstractService
     use ParametresServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use ParametresServiceAwareTrait;
+    use AnneeServiceAwareTrait;
 
     /**
      * @var IntervenantRHExportParams
@@ -177,9 +180,11 @@ class ExportRhService extends AbstractService
 
 
 
-    public function getAnneeUniversitaireEnCours()
+    public function getAnneeUniversitaireEnCours(): ?Annee
     {
-        return $this->getServiceParametres()->get('annee');
+        $annee = $this->getServiceParametres()->get('annee');
+
+        return $this->getServiceAnnee()->get($annee);
     }
 
 }

@@ -8,6 +8,7 @@ use Application\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
+use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
 use Zend\Form\Fieldset;
@@ -17,6 +18,7 @@ use Zend\Validator\Date;
 class SihamConnecteur implements ConnecteurRhInterface
 {
     use DossierServiceAwareTrait;
+    use ExportRhServiceAwareTrait;
 
     public Siham $siham;
 
@@ -66,9 +68,9 @@ class SihamConnecteur implements ConnecteurRhInterface
         if (!empty($intervenant->getCodeRh())) {
             $codeRh = $intervenant->getCodeRh();
             //Si code RH ne contient pas UCN alors on le reformate par rapport au masque matricule de SIHAM
-            if (!strstr($codeRh, 'UCN')) {
-                $codeRh = $this->siham->getCodeAdministration() . str_pad($codeRh, 9, '0', STR_PAD_LEFT);
-            }
+            /*   if (!strstr($codeRh, 'UCN')) {
+                   $codeRh = $this->siham->getCodeAdministration() . str_pad($codeRh, 9, '0', STR_PAD_LEFT);
+               }*/
 
             $params =
                 [
@@ -76,34 +78,45 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
 
             $agent = $this->siham->recupererDonneesPersonnellesAgent($params);
+        } else {
+            $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+            $numeroInsee        = (!empty($intervenant->getNumeroInsee())) ? $intervenant->getNumeroInsee() : $intervenantDossier->getNumeroInsee();
 
-            if (!empty($agent)) {
-                $intervenantRh = new IntervenantRH();
-                $intervenantRh->setNomUsuel($agent->getNomUsuel());
-                $intervenantRh->setPrenom($agent->getPrenom());
-                $intervenantRh->setTelPerso($agent->getTelephonePerso());
-                $intervenantRh->setTelPersoDateDebut($agent->getTelephonePersoDateDebut());
-                $intervenantRh->setTelPro($agent->getTelephonePro());
-                $intervenantRh->setTelProDateDebut($agent->getTelephoneProDateDebut());
-                $intervenantRh->setEmailPro($agent->getEmailPro());
-                $intervenantRh->setEmailProDateDebut($agent->getEmailProDateDebut());
-                $intervenantRh->setEmailPerso($agent->getEmailPerso());
-                $intervenantRh->setEmailPersoDateDebut($agent->getEmailPersoDateDebut());
-                $intervenantRh->setIBAN($agent->getIban());
-                $intervenantRh->setBIC($agent->getBic());
-                $intervenantRh->setCodeRh($agent->getMatricule());
-                $intervenantRh->setAdresseNumero($agent->getNoVoieAdresse());
-                $intervenantRh->setAdresseNumeroCompl(null);
-                $intervenantRh->setAdresseVoirie(null);
-                $intervenantRh->setAdresseVoie($agent->getNomVoieAdresse());
-                $intervenantRh->setAdressePrecisions($agent->getComplementAdresse());
-                $intervenantRh->setAdresseCodePostal($agent->getCodePostalAdresse());
-                $intervenantRh->setAdresseCommune($agent->getBureauDistributeurAdresse());
-                $intervenantRh->setAdresseDateDebut($agent->getDateDebutAdresse());
+            $params =
+                [
+                    'numeroInsee' => $numeroInsee,
+                ];
+
+            $listeAgents = $this->siham->recupererListeAgents($params);
+            $agent       = current($listeAgents);
+        }
+
+        if (!empty($agent)) {
+            $intervenantRh = new IntervenantRH();
+            $intervenantRh->setNomUsuel($agent->getNomUsuel());
+            $intervenantRh->setPrenom($agent->getPrenom());
+            $intervenantRh->setTelPerso($agent->getTelephonePerso());
+            $intervenantRh->setTelPersoDateDebut($agent->getTelephonePersoDateDebut());
+            $intervenantRh->setTelPro($agent->getTelephonePro());
+            $intervenantRh->setTelProDateDebut($agent->getTelephoneProDateDebut());
+            $intervenantRh->setEmailPro($agent->getEmailPro());
+            $intervenantRh->setEmailProDateDebut($agent->getEmailProDateDebut());
+            $intervenantRh->setEmailPerso($agent->getEmailPerso());
+            $intervenantRh->setEmailPersoDateDebut($agent->getEmailPersoDateDebut());
+            $intervenantRh->setIBAN($agent->getIban());
+            $intervenantRh->setBIC($agent->getBic());
+            $intervenantRh->setCodeRh($agent->getMatricule());
+            $intervenantRh->setAdresseNumero($agent->getNoVoieAdresse());
+            $intervenantRh->setAdresseNumeroCompl(null);
+            $intervenantRh->setAdresseVoirie(null);
+            $intervenantRh->setAdresseVoie($agent->getNomVoieAdresse());
+            $intervenantRh->setAdressePrecisions($agent->getComplementAdresse());
+            $intervenantRh->setAdresseCodePostal($agent->getCodePostalAdresse());
+            $intervenantRh->setAdresseCommune($agent->getBureauDistributeurAdresse());
+            $intervenantRh->setAdresseDateDebut($agent->getDateDebutAdresse());
 
 
-                return $intervenantRh;
-            }
+            return $intervenantRh;
         }
 
         return null;
@@ -148,7 +161,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     {
         $affectations           = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
-     
+
 
         if (!empty($donneesAdministratives['listeAffectations']) || !empty($donneesAdministratives->listeAffectations)) {
             $listeAffectations = (isset($donneesAdministratives['listeAffectations'])) ? $donneesAdministratives['listeAffectations'] : $donneesAdministratives->listeAffectations;
@@ -159,7 +172,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $dateDebutAffectation = new \DateTime($affectation->dateDebutAffectation);
                     $dateFinAffectation   = new \DateTime($affectation->dateFinAffectation);
                     $currentDate          = new \DateTime();
-                    if ($currentDate > $dateDebutAffectation and $currentDate > $dateFinAffectation) {
+                    if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
                         $affectations[] = $affectation;
                     }
                 }
@@ -175,6 +188,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     {
         $contrats               = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+
 
         if (!empty($donneesAdministratives['listeContrats']) || !empty($donneesAdministratives->listeContrats)) {
             $listeContrats = (isset($donneesAdministratives['listeContrats']) && is_array($donneesAdministratives['listeContrats'])) ? $donneesAdministratives['listeContrats'] : [$donneesAdministratives['listeContrats']];
@@ -295,20 +309,23 @@ class SihamConnecteur implements ConnecteurRhInterface
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
+            $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+            $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+
 
             /*POSITION ADMINISTRATIVE*/
             $position[] =
-                ['dateEffetPosition' => $datas['connecteurForm']['anneeUniversitaire'],
+                ['dateEffetPosition' => $dateEffet,
                  'position'          => $datas['connecteurForm']['position']];
 
             /*STATUT*/
             $statut[] =
-                ['dateEffetStatut' => $datas['connecteurForm']['anneeUniversitaire'],
+                ['dateEffetStatut' => $dateEffet,
                  'statut'          => $datas['connecteurForm']['statut']];
 
             /*MODALITE SERVICE*/
             $service[] =
-                ['dateEffetModalite' => $datas['connecteurForm']['anneeUniversitaire'],
+                ['dateEffetModalite' => $dateEffet,
                  'modalite'          => $datas['connecteurForm']['modaliteService']];
 
             /*COORDONNEES POSTALES*/
@@ -325,13 +342,13 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'commune'            => $dossierIntervenant->getAdresseCommune(),
                 'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
                 'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
-                'debutAdresse'       => $datas['connecteurForm']['anneeUniversitaire'],
+                'debutAdresse'       => $dateEffet,
             ];
 
             //TODO : travailler les coordonnées bancaires pour la prise en charge
             /*COORDONNEES BANCAIRES*/
             $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
-            $coordonnees['dateDebBanque']  = $datas['connecteurForm']['anneeUniversitaire'];
+            $coordonnees['dateDebBanque']  = $dateEffet;
             $coordonnees['temoinValidite'] = '1';
             $coordonnees['modePaiement']   = '25';
             $coordonneesBancaires[]        = $coordonnees;
@@ -340,28 +357,28 @@ class SihamConnecteur implements ConnecteurRhInterface
             $coordonneesTelMail[] = '';
             if ($dossierIntervenant->getTelPro()) {
                 $coordonneesTelMail[] = [
-                    'dateDebutTel' => $datas['connecteurForm']['anneeUniversitaire'],
+                    'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getTelPro(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO,
                 ];
             }
             if ($dossierIntervenant->getTelPerso()) {
                 $coordonneesTelMail[] = [
-                    'dateDebutTel' => $datas['connecteurForm']['anneeUniversitaire'],
+                    'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getTelPerso(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO,
                 ];
             }
             if ($dossierIntervenant->getEmailPro()) {
                 $coordonneesTelMail[] = [
-                    'dateDebutTel' => $datas['connecteurForm']['anneeUniversitaire'],
+                    'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getEmailPro(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
                 ];
             }
             if ($dossierIntervenant->getEmailPerso()) {
                 $coordonneesTelMail[] = [
-                    'dateDebutTel' => $datas['connecteurForm']['anneeUniversitaire'],
+                    'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getEmailPerso(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO,
                 ];
@@ -376,7 +393,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             $params = [
                 'categorieEntree'           => 'ACTIVE',
                 'civilite'                  => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
-                'dateEmbauche'              => $datas['connecteurForm']['anneeUniversitaire'],
+                'dateEmbauche'              => $dateEffet,
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                 'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
                 'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr(1, 2, $dossierIntervenant->getDepartementNaissance()->getCode()) : '',
@@ -419,14 +436,9 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $currentDate        = new \DateTime();
-            $currentMonth       = $currentDate->format('m');
-            if ($currentMonth < 9) {
-                $dateEffet = $datas['connecteurForm']['anneeUniversitaire'] + 1 . $currentDate->format('-m-d');
-            } else {
-                $dateEffet = $datas['connecteurForm']['anneeUniversitaire'] . $currentDate->format('-m-d');
-            }
+            $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
 
+            $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
 
             /*Formatage du matricule*/
             $matricule = $intervenant->getCodeRh();
@@ -451,6 +463,18 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ['dateEffetModalite' => $dateEffet,
                  'modalite'          => $datas['connecteurForm']['modaliteService']];
 
+            /*CONTRAT*/
+            $annee = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+
+
+            $contrat[] =
+                ['dateDebutContrat'  => $annee->getDateDebut()->format('Y-m-d'),
+                 'dateFinContrat'    => $annee->getDateFin()->format('Y-m-d'),
+                 'natureContrat'     => 'CO',
+                 'typeContrat'       => 'TC01',
+                 'typeLienJuridique' => 'TL01',
+                ];
+
 
             $params = [
                 'categorieEntree'        => 'ACTIVE',
@@ -458,13 +482,14 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'emploi'                 => $datas['connecteurForm']['emploi'],
                 'listeModalitesServices' => $service,
                 'listeStatuts'           => $statut,
-
-                'listePositions' => $position,
-                'motifEntree'    => 'REN',
-                'matricule'      => $matricule,
-                'temoinValidite' => '1',
-                'UO'             => $datas['connecteurForm']['affectation'],
+                'listeContrats'          => $contrat,
+                'listePositions'         => $position,
+                'motifEntree'            => 'REN',
+                'matricule'              => $matricule,
+                'temoinValidite'         => '1',
+                'UO'                     => $datas['connecteurForm']['affectation'],
             ];
+
 
             $matricule = $this->siham->renouvellementAgent($params);
 

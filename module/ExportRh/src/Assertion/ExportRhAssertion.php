@@ -77,7 +77,7 @@ class ExportRhAssertion extends AbstractAssertion
         $anneeContexte             = $this->getServiceContext()->getAnnee();
 
         //Si nous ne sommes dans l'année universitaire en cours le module export reste inactif
-        if ($anneeContexte->getId() != (int)$anneeUniversitaireEnCours) {
+        if ($anneeContexte->getId() != $anneeUniversitaireEnCours->getId()) {
             return false;
         }
 

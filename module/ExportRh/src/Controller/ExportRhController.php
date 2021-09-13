@@ -11,6 +11,7 @@ use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenSiham\Exception\SihamException;
+use Zend\View\Model\ViewModel;
 
 class ExportRhController extends AbstractController
 {
@@ -80,6 +81,8 @@ class ExportRhController extends AbstractController
         $form               = '';
         $nameConnecteur     = '';
         $affectationEnCours = '';
+        $contratEnCours     = '';
+
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -98,9 +101,11 @@ class ExportRhController extends AbstractController
          * Etape 3 : Si il est déjà dans le SI RH alors on regarde si il a une affectation en cours pour l'année en cours
          * Etape 4 : Si il a une affectation en cours alors on propose uniquement la mise à jour des données personnelles
          * Etape 5 : Si il n'a pas encore d'affectation on propose alors un renouvellement de l'intervenant
+         *
          */
         try {
             $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
+
 
             //On a trouvé un intervenant dans le SI RH
             if (!empty($intervenantRh)) {
@@ -108,7 +113,7 @@ class ExportRhController extends AbstractController
                 $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
                 //On regarde si il a un contrat en cours pour l'année courante
                 $contratEnCours = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
-           
+
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {
                     $renouvellement = false;
@@ -124,8 +129,9 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-
-        return compact('typeIntervenant',
+        $vm = new ViewModel();
+        $vm->setTemplate('export-rh/export-rh/exporter');
+        $vm->setVariables(compact('typeIntervenant',
             'intervenant',
             'intervenantRh',
             'intervenantDossier',
@@ -135,7 +141,9 @@ class ExportRhController extends AbstractController
             'priseEnCharge',
             'nameConnecteur',
             'affectationEnCours',
-            'contratEnCours');
+            'contratEnCours'));
+
+        return $vm;
     }
 
 
@@ -166,7 +174,7 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+        return $this->exporterAction();
     }
 
 
@@ -192,8 +200,7 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+        return $this->exporterAction();
     }
 
 
@@ -219,6 +226,6 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+        return $this->exporterAction();
     }
 }

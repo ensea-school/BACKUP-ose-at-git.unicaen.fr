@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 58,
+            'position'    => 45,
             'commentaire' => NULL,
         ],
         'ANNEE_ID'                 => [
@@ -270,7 +270,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 46,
+            'position'    => 47,
             'commentaire' => NULL,
         ],
         'DATE_NAISSANCE'           => [
@@ -366,7 +366,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 53,
+            'position'    => 54,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'           => [
@@ -378,7 +378,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 52,
+            'position'    => 53,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'     => [
@@ -390,7 +390,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 57,
+            'position'    => 58,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'        => [
@@ -402,7 +402,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 56,
+            'position'    => 57,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'    => [
@@ -414,7 +414,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 55,
+            'position'    => 56,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'       => [
@@ -426,7 +426,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 54,
+            'position'    => 55,
             'commentaire' => NULL,
         ],
         'IBAN'                     => [
@@ -462,7 +462,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 45,
+            'position'    => 46,
             'commentaire' => NULL,
         ],
         'NOM_PATRONYMIQUE'         => [
@@ -570,7 +570,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 48,
+            'position'    => 49,
             'commentaire' => NULL,
         ],
         'SOURCE_ID'                => [
@@ -582,7 +582,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 47,
+            'position'    => 48,
             'commentaire' => NULL,
         ],
         'STATUT_ID'                => [
@@ -618,7 +618,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 49,
+            'position'    => 50,
             'commentaire' => NULL,
         ],
         'SYNC_STRUCTURE'           => [
@@ -630,7 +630,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 50,
+            'position'    => 51,
             'commentaire' => NULL,
         ],
         'SYNC_UTILISATEUR_CODE'    => [
@@ -642,7 +642,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 51,
+            'position'    => 52,
             'commentaire' => NULL,
         ],
         'TEL_PERSO'                => [

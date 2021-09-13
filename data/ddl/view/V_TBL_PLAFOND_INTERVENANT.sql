@@ -9,39 +9,35 @@ SELECT
   p.DEROGATION
 FROM
 (
-  SELECT 6 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+  SELECT 1 PLAFOND_ID, 0 DEROGATION, p.* FROM (
     SELECT
-      i.annee_id,
-      t.intervenant_id,
-      t.type_volume_horaire_id,
-      AVG(t.plafond)                      plafond,
-      AVG(t.heures)                       heures
+      i.annee_id                          annee_id,
+      i.id                                intervenant_id,
+      fr.type_volume_horaire_id           type_volume_horaire_id,
+      ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond,
+      fr.heures_compl_fc_majorees         heures
     FROM
-      (
-        SELECT
-          vhr.type_volume_horaire_id        type_volume_horaire_id,
-          sr.intervenant_id                 intervenant_id,
-          fr.plafond                        plafond,
-          fr.id                             fr_id,
-          SUM(vhr.heures)                   heures
-        FROM
-          service_referentiel        sr
-          JOIN fonction_referentiel frf ON frf.id = sr.fonction_id
-          JOIN fonction_referentiel  fr ON fr.id = frf.parent_id
-          JOIN volume_horaire_ref   vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
-        WHERE
-            sr.histo_destruction IS NULL
-        GROUP BY
-          vhr.type_volume_horaire_id,
-          sr.intervenant_id,
-          fr.plafond,
-          fr.id
-      ) t
-        JOIN intervenant i ON i.id = t.intervenant_id
-    GROUP BY
-      t.type_volume_horaire_id,
-      i.annee_id,
-      t.intervenant_id
+           intervenant                i
+      JOIN annee                      a ON a.id = i.annee_id
+      JOIN statut_intervenant        si ON si.id = i.statut_id
+      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+  ) p
+
+  UNION ALL
+
+  SELECT 2 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+    SELECT
+      i.annee_id                          annee_id,
+      i.id                                intervenant_id,
+      fr.type_volume_horaire_id           type_volume_horaire_id,
+      si.plafond_referentiel              plafond,
+      fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL heures
+    FROM
+      intervenant                     i
+      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+      JOIN statut_intervenant        si ON si.id = i.statut_id
   ) p
 
   UNION ALL
@@ -82,18 +78,71 @@ FROM
 
   UNION ALL
 
-  SELECT 2 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+  SELECT 4 PLAFOND_ID, 0 DEROGATION, p.* FROM (
     SELECT
-      i.annee_id                          annee_id,
-      i.id                                intervenant_id,
-      fr.type_volume_horaire_id           type_volume_horaire_id,
-      si.plafond_referentiel              plafond,
-      fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL heures
+      fr.type_volume_horaire_id              type_volume_horaire_id,
+      i.annee_id                             annee_id,
+      i.id                                   intervenant_id,
+      si.maximum_hetd                        plafond,
+      fr.total - fr.heures_compl_fc_majorees heures
     FROM
       intervenant                     i
       JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
       JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
       JOIN statut_intervenant        si ON si.id = i.statut_id
+  ) p
+
+  UNION ALL
+
+  SELECT 5 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+    SELECT
+      fr.type_volume_horaire_id           type_volume_horaire_id,
+      i.annee_id                          annee_id,
+      fr.intervenant_id                   intervenant_id,
+      si.plafond_hc_hors_remu_fc          plafond,
+      fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
+    FROM
+           intervenant                i
+      JOIN statut_intervenant        si ON si.id = i.statut_id
+      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+  ) p
+
+  UNION ALL
+
+  SELECT 6 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+    SELECT
+      i.annee_id,
+      t.intervenant_id,
+      t.type_volume_horaire_id,
+      AVG(t.plafond)                      plafond,
+      AVG(t.heures)                       heures
+    FROM
+      (
+        SELECT
+          vhr.type_volume_horaire_id        type_volume_horaire_id,
+          sr.intervenant_id                 intervenant_id,
+          fr.plafond                        plafond,
+          fr.id                             fr_id,
+          SUM(vhr.heures)                   heures
+        FROM
+          service_referentiel        sr
+          JOIN fonction_referentiel frf ON frf.id = sr.fonction_id
+          JOIN fonction_referentiel  fr ON fr.id = frf.parent_id
+          JOIN volume_horaire_ref   vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+        WHERE
+            sr.histo_destruction IS NULL
+        GROUP BY
+          vhr.type_volume_horaire_id,
+          sr.intervenant_id,
+          fr.plafond,
+          fr.id
+      ) t
+        JOIN intervenant i ON i.id = t.intervenant_id
+    GROUP BY
+      t.type_volume_horaire_id,
+      i.annee_id,
+      t.intervenant_id
   ) p
 
   UNION ALL
@@ -132,55 +181,6 @@ FROM
           si.plafond_hc_fi_hors_ead
       ) t
         JOIN statut_intervenant si ON si.id = t.statut_intervenant_id
-  ) p
-
-  UNION ALL
-
-  SELECT 4 PLAFOND_ID, 0 DEROGATION, p.* FROM (
-    SELECT
-      fr.type_volume_horaire_id              type_volume_horaire_id,
-      i.annee_id                             annee_id,
-      i.id                                   intervenant_id,
-      si.maximum_hetd                        plafond,
-      fr.total - fr.heures_compl_fc_majorees heures
-    FROM
-      intervenant                     i
-      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
-      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-      JOIN statut_intervenant        si ON si.id = i.statut_id
-  ) p
-
-  UNION ALL
-
-  SELECT 1 PLAFOND_ID, 0 DEROGATION, p.* FROM (
-    SELECT
-      i.annee_id                          annee_id,
-      i.id                                intervenant_id,
-      fr.type_volume_horaire_id           type_volume_horaire_id,
-      ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond,
-      fr.heures_compl_fc_majorees         heures
-    FROM
-           intervenant                i
-      JOIN annee                      a ON a.id = i.annee_id
-      JOIN statut_intervenant        si ON si.id = i.statut_id
-      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
-      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-  ) p
-
-  UNION ALL
-
-  SELECT 5 PLAFOND_ID, 0 DEROGATION, p.* FROM (
-    SELECT
-      fr.type_volume_horaire_id           type_volume_horaire_id,
-      i.annee_id                          annee_id,
-      fr.intervenant_id                   intervenant_id,
-      si.plafond_hc_hors_remu_fc          plafond,
-      fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
-    FROM
-           intervenant                i
-      JOIN statut_intervenant        si ON si.id = i.statut_id
-      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
-      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
   ) p
 ) p
 JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)

@@ -806,6 +806,7 @@ return [
         'EMPLOYEUR_ID',
         'VALIDITE_DEBUT',
         'VALIDITE_FIN',
+        'AFFECTATION_FIN',
         'MONTANT_INDEMNITE_FC',
         'CRITERE_RECHERCHE',
         'SOURCE_ID',

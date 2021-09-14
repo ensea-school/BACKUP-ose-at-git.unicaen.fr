@@ -178,6 +178,17 @@ return [
                             ],
                         ],
                     ],
+
+                    'differentiel' => [
+                        'type'          => 'Literal',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'    => '/diffrentiel',
+                            'defaults' => [
+                                'action' => 'differentiel',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -210,35 +221,42 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Chargens', 'index'),
                         'order'    => 5,
                         'pages'    => [
-                            'scenario'    => [
+                            'scenario'     => [
                                 'label'       => "Gestion des scénarios",
                                 'description' => "Permet de créer, dupliquer ou supprimer des scénarios",
                                 'route'       => 'chargens/scenario',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'scenario'),
                                 'visible'     => false,
                             ],
-                            'seuil'       => [
+                            'seuil'        => [
                                 'label'       => "Gestion des seuils de dédoublement",
                                 'description' => "Permet de spécifier des seuils de dédoublement qui s'appliqueront à toutes les formations concernées",
                                 'route'       => 'chargens/seuil',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'seuil'),
                                 'visible'     => false,
                             ],
-                            'formation'   => [
+                            'formation'    => [
                                 'label'       => "Paramétrage des formations",
                                 'description' => "Permet de configurer de manière fine les formations (définition des taux d'assiduite, seuils, effectifs...)",
                                 'route'       => 'chargens/formation',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'formation'),
                                 'visible'     => false,
                             ],
-                            'export'      => [
+                            'export'       => [
                                 'label'       => "Export des charges d'enseignement (CSV)",
                                 'description' => "Produit un fichier qui comporte l'ensemble des données concernant les charges d'enseignement",
                                 'route'       => 'chargens/export',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'export'),
                                 'visible'     => false,
                             ],
-                            'depassement' => [
+                            'differentiel' => [
+                                'label'       => "Différentiel entre deux exports des charges d'enseignement",
+                                'description' => "Affiche les différences entre deux exports des charges d'enseignement",
+                                'route'       => 'chargens/differentiel',
+                                'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'differentiel'),
+                                'visible'     => false,
+                            ],
+                            'depassement'  => [
                                 'label'       => "Rapprochement des charges et des services d'enseignement (CSV)",
                                 'description' => "Produit un fichier qui rapproche les services d'enseignement saisis et les charges d'enseignement calculées",
                                 'route'       => 'chargens/depassement',
@@ -319,7 +337,7 @@ return [
 
                 [
                     'controller' => 'Application\Controller\Chargens',
-                    'action'     => ['export', 'export-csv'],
+                    'action'     => ['export', 'export-csv', 'differentiel'],
                     'privileges' => [
                         Privileges::CHARGENS_EXPORT_CSV,
                     ],
@@ -390,6 +408,7 @@ return [
             Form\Chargens\ScenarioFiltreForm::class      => Form\Chargens\ScenarioFiltreForm::class,
             Form\Chargens\DuplicationScenarioForm::class => Form\Chargens\DuplicationScenarioForm::class,
             Form\Chargens\ScenarioForm::class            => Form\Chargens\ScenarioForm::class,
+            Form\Chargens\DifferentielForm::class        => Form\Chargens\DifferentielForm::class,
         ],
     ],
 ];

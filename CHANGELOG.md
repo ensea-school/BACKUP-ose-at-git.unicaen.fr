@@ -35,8 +35,11 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 * Outil différentiel d'export des charges d'enseignement
 
 
+# OSE 15.7 (à venir)
 
+## Correction de bugs
 
+* Correction de la validation du numéro INSEE dans le dossier de l'intervenant dans le cas d'un département de naissance en Outre Mer (le numéro de département de naissance de l'INSEE dans ce cas peut être sur 2 ou 3 chiffres)
 
 # OSE 15.6 (à venir)
 

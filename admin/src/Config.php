@@ -1,5 +1,9 @@
 <?php
 
+
+
+
+
 class Config
 {
 
@@ -14,9 +18,9 @@ class Config
 
     public static function get($section = null, $key = null, $default = null)
     {
-        if (false === self::$config){
+        if (false === self::$config) {
             $configFile = dirname(dirname(__DIR__)) . '/config.local.php';
-            if (file_exists($configFile)){
+            if (file_exists($configFile)) {
                 self::$config = require($configFile);
             }
         }
@@ -24,6 +28,14 @@ class Config
         if (self::$config && $section && $key) {
             if (isset(self::$config[$section][$key])) {
                 return self::$config[$section][$key];
+            } else {
+                return $default;
+            }
+        }
+
+        if (self::$config && $section && $key === null) {
+            if (isset(self::$config[$section])) {
+                return self::$config[$section];
             } else {
                 return $default;
             }
@@ -37,7 +49,7 @@ class Config
     public static function getBdd(): array
     {
         return [
-            'host'     => self::get('bdd','host'),
+            'host'     => self::get('bdd', 'host'),
             'port'     => self::get('bdd', 'port'),
             'dbname'   => self::get('bdd', 'dbname'),
             'username' => self::get('bdd', 'username'),

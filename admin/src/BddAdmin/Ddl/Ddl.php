@@ -182,6 +182,8 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
     /**
+     * Applique un filtre à la DDL : en retire tout objet qui ne passe pas le filtre
+     *
      * @param DdlFilters|array|string|null $filters
      *
      * @return self
@@ -191,7 +193,7 @@ class Ddl implements \Iterator, \ArrayAccess
         $filters = DdlFilters::normalize($filters);
 
         foreach ($this->data as $ddlType => $ddlConf) {
-            foreach ($ddlConf as $name => $config) {
+            foreach ($ddlConf as $name => $null) {
                 if (!$filters[$ddlType]->match($name)) {
                     unset($this->data[$ddlType][$name]);
                 }
@@ -199,6 +201,31 @@ class Ddl implements \Iterator, \ArrayAccess
         }
 
         return $this;
+    }
+
+
+
+    /**
+     *
+     * Crée un filtre à partir de la DDL
+     * Permet de ne modifier une base de donnée existance que sur le périmètre de la DDL courante sans toucher aux
+     * autres objets
+     *
+     * @param DdlFilters|array|string|null $filters
+     *
+     * @return DdlFilters
+     */
+    public function filterOnlyDdl($filters = null): DdlFilters
+    {
+        $filters = DdlFilters::normalize($filters);
+        $filters->setExplicit(true);
+        foreach ($this->data as $ddlType => $ddlConf) {
+            foreach ($ddlConf as $name => $null) {
+                $filters->get($ddlType)->addInclude($name);
+            }
+        }
+
+        return $filters;
     }
 
 
@@ -233,6 +260,8 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
     /**
+     * On passe un tableau de positions de colonnes, et cela réorganise l'ordonnancement.
+     *
      * @param array $positions
      *
      * @return array
@@ -284,7 +313,7 @@ class Ddl implements \Iterator, \ArrayAccess
 
         foreach ($this->data[Ddl::TABLE] as $table) {
             $columns = $table['columns'];
-            uasort($columns, function($a,$b){
+            uasort($columns, function ($a, $b) {
                 return $a['position'] > $b['position'];
             });
 

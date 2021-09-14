@@ -282,7 +282,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ARTOIS AS
 
     -- AI=(AF20-AH20)/AD20
     WHEN c = 'AI' AND v >= 1 THEN
-      RETURN cell('AF',l) - cell('AH',l);
+      RETURN (cell('AF',l) - cell('AH',l)) / cell('AD', l);
 
 
 

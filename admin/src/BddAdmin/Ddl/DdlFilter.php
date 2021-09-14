@@ -40,6 +40,21 @@ class DdlFilter implements \ArrayAccess
 
 
 
+    public function addInclude(string $include): self
+    {
+        if (!$this->includes) {
+            $this->includes = [];
+        }
+        if (!is_array($this->includes)) {
+            throw new \Exception('On ne peut ajouter une règle d\'inclusion qu\'à un tableau');
+        }
+        $this->includes[] = $include;
+
+        return $this;
+    }
+
+
+
     /**
      * @return array|string|null
      */
@@ -58,6 +73,21 @@ class DdlFilter implements \ArrayAccess
     public function setExcludes($excludes)
     {
         $this->excludes = $excludes;
+
+        return $this;
+    }
+
+
+
+    public function addExclude(string $exclude): self
+    {
+        if (!$this->excludes) {
+            $this->excludes = [];
+        }
+        if (!is_array($this->excludes)) {
+            throw new \Exception('On ne peut ajouter une règle d\'exclusion qu\'à un tableau');
+        }
+        $this->excludes[] = $exclude;
 
         return $this;
     }

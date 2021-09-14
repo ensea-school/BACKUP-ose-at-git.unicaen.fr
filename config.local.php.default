@@ -258,18 +258,24 @@ return [
     ],
 
 
-    /* Siham */
-    'siham-ws' => [
-        /* Détermine si le connecteur Siham-ws est actif ou non */
-        'actif' => false,
+    /* Base de données Actul+ */
+    'actul'    => [
+        /* Base de données utilisée */
+        'driver'   => 'Mysql',
 
-        /* URI d'accès aux services Web de Siham */
-        'uri' => '',
+        /* IP ou nom DNS du serveur de base de données */
+        'host'            => 'xxx.unicaen.fr',
 
-        /* Login d'accès aux web-services de Siham */
-        'login' => '',
+        /* Port d'accès au serveur */
+        'port'            => 9999,
+
+        /* Nom de la base de données */
+        'dbname'          => 'dbname',
+
+        /* Nom d'utilisateur */
+        'username'        => 'ose',
 
         /* Mot de passe */
-        'password' => '',
+        'password'        => 'password',
     ],
 ];

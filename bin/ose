@@ -2,11 +2,20 @@
 <?php
 
 spl_autoload_register(function ($class) {
-    $dir = dirname(__DIR__) . '/admin/src/';
-    $class = $dir . str_replace('\\', '/', $class) . '.php';
+    $root = dirname(__DIR__);
 
-    if (file_exists($class)) {
-        require_once $class;
+    $dirs = [
+            $root . '/admin/src/',
+            $root . '/admin/actul/src/',
+    ];
+
+    foreach($dirs as $dir) {
+        $filename = $dir . str_replace('\\', '/', $class) . '.php';
+
+        if (file_exists($filename)) {
+            require_once $filename;
+            break;
+        }
     }
 });
 

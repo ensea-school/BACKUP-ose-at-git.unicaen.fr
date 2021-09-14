@@ -1,8 +1,8 @@
 # Versions stables
 
-[OSE 15.5](#ose-155-01072021)
+[OSE 16.0](#ose-16-14092021)
 
-[OSE 14.20](#ose-1420-09062021)
+[OSE 15.7](#ose-157-14092021)
 
 
 
@@ -22,7 +22,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 
 
-# OSE 16 (à venir)
+# OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
 
 ## Correction de bug
@@ -31,15 +31,17 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 
 ## Nouveautés
 
-* Connecteur en import avec Actul+
+* [Connecteur en import avec Actul+](doc/Connecteurs-Import/Actul/Connecteur.md)
 * Outil différentiel d'export des charges d'enseignement
 
 
-# OSE 15.7 (à venir)
+# OSE 15.7 (14/09/2021)
 
 ## Correction de bugs
 
 * Correction de la validation du numéro INSEE dans le dossier de l'intervenant dans le cas d'un département de naissance en Outre Mer (le numéro de département de naissance de l'INSEE dans ce cas peut être sur 2 ou 3 chiffres)
+* Bug [#39644](https://redmine.unicaen.fr/Etablissement/issues/39644) corrigé au niveau de la formule de calcul de l'Université d'Artois
+* Au niveau des formules et en mode test uniquement, si le vacataire n'avait pas de composante d'affectation, les calculs pouvaient être faussés 
 
 # OSE 15.6 (à venir)
 

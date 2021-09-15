@@ -202,7 +202,10 @@ class NumeroINSEEValidator extends NumeroINSEE
     private function isValidDepartementFrance()
     {
         /* Département du numéro INSEE */
-        $iDepartement = strtoupper(str_pad((string)$this->getDepartement(), 3, '0', STR_PAD_LEFT));
+        $iDepartement = (string)$this->getDepartement();
+        if ($iDepartement != '97' && $iDepartement != '98') {
+            $iDepartement = strtoupper(str_pad($iDepartement, 3, '0', STR_PAD_LEFT));
+        }
 
         /* Code du département issu du dossier */
         $dDepartement = strtoupper(str_pad((string)$this->departement->getCode(), 3, '0', STR_PAD_LEFT));
@@ -218,6 +221,12 @@ class NumeroINSEEValidator extends NumeroINSEE
             $this->error(self::MSG_DEPT);
 
             return false; // département étranger
+        }
+
+        //On traite les départements d'outre mer (peuvent etre sur deux ou trois chiffres, donc on teste que les deux premiers...)
+        if ($iDepartement == '97' || $iDepartement == '98') {
+            $dDepartement = substr($dDepartement, 0, 2);
+            if ($dDepartement == $iDepartement) return true;
         }
 
         if ($dDepartement == $iDepartement) return true; // Impec
@@ -310,11 +319,12 @@ class NumeroINSEEValidator extends NumeroINSEE
         if ($iDepartement == '99') {
             return 99; // étranger
         }
-        if ($iDepartement == '97' || $iDepartement == '98') {
-            $iDepartement = substr(strtoupper($this->value), 5, 3);
 
-            return (int)$iDepartement;
-        }
+        /* if ($iDepartement == '97' || $iDepartement == '98') {
+             $iDepartement = substr(strtoupper($this->value), 5, 3);
+
+             return (int)$iDepartement;
+         }*/
 
         return (int)$iDepartement;
     }

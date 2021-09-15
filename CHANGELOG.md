@@ -43,7 +43,7 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 * Bug [#39644](https://redmine.unicaen.fr/Etablissement/issues/39644) corrigé au niveau de la formule de calcul de l'Université d'Artois
 * Au niveau des formules et en mode test uniquement, si le vacataire n'avait pas de composante d'affectation, les calculs pouvaient être faussés 
 
-# OSE 15.6 (à venir)
+# OSE 15.6 (14/09/2021)
 
 ## Correction de bugs
 

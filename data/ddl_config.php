@@ -9,6 +9,7 @@ return [
             'INTERVENANT_SAISIE',
             'DOSSIER',
             'TBL_DEMS',
+            'VERSION',
         ],
     ],
     'materialized-view' => [

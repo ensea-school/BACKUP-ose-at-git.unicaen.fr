@@ -26,15 +26,15 @@ if ($priseEnCharge) {
 
     <?php if ($typeIntervenant == 'P'): ?>
         <div class="messenger alert alert-warning">
-            L'export des données intervenants vers <?= $nameConnecteur; ?> n'est disponible que pour les vacataires.
+            L'export des données intervenants vers <?= $nameConnecteur; ?> n'est pas disponible pour les intervenants permanents.
         </div>
-    <?php elseif (empty($intervenantDossierValidation)): ?>
+    <?php elseif ($haveContratOse === false): ?>
         <div class="messenger alert alert-warning">
-            Vous devez d'abord valider les données personnelles de <?= $intervenant; ?> pour pouvoir les synchroniser avec <?= $nameConnecteur; ?>
+            L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> n'a pas encore retourné son contrat. Vous pourrez le renouveller ou le prendre en charge dans <?= $nameConnecteur; ?> une fois le contrat retourné et daté.
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($intervenantDossierValidation)): ?>
+    <?php if ($haveContratOse === true): ?>
 
         <div class="well">
             <?php if (empty($intervenantRh)): ?>
@@ -46,8 +46,7 @@ if ($priseEnCharge) {
                         universitaire <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page.</p>
                 <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
                     <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il possède une affectation mais pas encore de contrat
-                        l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous
-                        pouvez le renouveller pour cette année à l'aide du formulaire ci-dessous.</p>
+                        pour l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page</p>
                 <?php else: ?>
                     <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il ne possède pas encore d'affectation pour
                         l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez le renouveller pour cette année à l'aide du formulaire ci-dessous.</p>
@@ -82,10 +81,6 @@ if ($priseEnCharge) {
                             <tr>
                                 <td>Date début</td>
                                 <td><?= $affectationEnCours->dateDebutAffectation ?></td>
-                            </tr>
-                            <tr>
-                                <td>Date fin</td>
-                                <td><?= $affectationEnCours->dateFinAffectation ?></td>
                             </tr>
                             <tr>
                                 <td>Type de rattachement</td>
@@ -256,7 +251,7 @@ if ($priseEnCharge) {
                 </form>
 
                 <p>
-                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Prendre en charge l'intervenant</button>
+                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Prendre en charge l'intervenant dans <?= $nameConnecteur; ?></button>
                 </p>
             <?php elseif ($renouvellement): ?>
                 <?php
@@ -264,12 +259,12 @@ if ($priseEnCharge) {
                 ?>
                 </form>
                 <p>
-                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Renouveller l'intervenant</button>
+                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Renouveller l'intervenant dans <?= $nameConnecteur; ?></button>
                 </p>
             <?php else: ?>
                 </form>
                 <p>
-                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Synchroniser les données personnelles</button>
+                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Synchroniser les données personnelles dans <?= $nameConnecteur; ?></button>
                 </p>
             <?php endif; ?>
         <?php endif; ?>

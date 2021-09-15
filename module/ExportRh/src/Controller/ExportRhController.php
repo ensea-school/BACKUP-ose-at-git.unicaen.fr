@@ -4,6 +4,7 @@ namespace ExportRh\Controller;
 
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\Contrat;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Form\ExportRhForm;
@@ -95,6 +96,18 @@ class ExportRhController extends AbstractController
         $renouvellement               = false;
         $priseEnCharge                = false;
 
+        /*Vérification si contrat avec date de retour*/
+        $haveContratOse = false;
+        $contratsOse    = $intervenant->getContrat();
+        foreach ($contratsOse as $contrat) {
+            /**
+             * @var Contrat $contrat
+             */
+            if (!empty($contrat->getDateRetourSigne())) {
+                $haveContratOse = true;
+            }
+        }
+
         /**
          * Etape 1 : On cherche si l'intervenant est déjà dans le SI RH
          * Etape 2 : Si pas dans le SI RH alors c'est une prise en charge
@@ -128,7 +141,7 @@ class ExportRhController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
-
+        
         $vm = new ViewModel();
         $vm->setTemplate('export-rh/export-rh/exporter');
         $vm->setVariables(compact('typeIntervenant',
@@ -136,6 +149,7 @@ class ExportRhController extends AbstractController
             'intervenantRh',
             'intervenantDossier',
             'intervenantDossierValidation',
+            'haveContratOse',
             'form',
             'renouvellement',
             'priseEnCharge',

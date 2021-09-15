@@ -156,7 +156,7 @@ class ExportRhService extends AbstractService
     {
         return $this->connecteur->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $datas);
     }
-
+    
 
 
     public function getFieldsetConnecteur(): Fieldset

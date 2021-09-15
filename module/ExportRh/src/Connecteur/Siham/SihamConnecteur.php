@@ -65,6 +65,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
     public function recupererIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh
     {
+        $agent = '';
 
         if (!empty($intervenant->getCodeRh())) {
             $codeRh = $intervenant->getCodeRh();
@@ -81,12 +82,14 @@ class SihamConnecteur implements ConnecteurRhInterface
             $agent = $this->siham->recupererDonneesPersonnellesAgent($params);
         } else {
             $codeRh = $this->trouverCodeRhByInsee($intervenant);
-            $params =
-                [
-                    'listeMatricules' => [$codeRh],
-                ];
+            if (!empty($codeRh)) {
+                $params =
+                    [
+                        'listeMatricules' => [$codeRh],
+                    ];
 
-            $agent = $this->siham->recupererDonneesPersonnellesAgent($params);
+                $agent = $this->siham->recupererDonneesPersonnellesAgent($params);
+            }
         }
 
         if (!empty($agent)) {
@@ -266,7 +269,6 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $this->siham->modifierCoordonneesAgent($params, Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PERSO);
             }
 
-            //TODO : Synchroniser l'adresse
             if ($datas['generiqueFieldset']['adressePrincipale']) {
 
                 $adresse = '';
@@ -293,6 +295,19 @@ class SihamConnecteur implements ConnecteurRhInterface
 
                 $this->siham->modifierAdressePrincipaleAgent($params);
             }
+
+            //Fait planter les WS SIHAM....
+            /*if ($datas['generiqueFieldset']['iban']) {
+                $anneeUniversitaire            = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+                $dateEffet                     = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+                $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
+                $coordonnees['dateDebBanque']  = $dateEffet;
+                $coordonnees['temoinValidite'] = '1';
+                $coordonnees['modePaiement']   = '25';
+                $coordonneesBancaires[]        = $coordonnees;
+                $this->siham->modifierCoordonnéesBancairesAgent($coordonneesBancaires);
+                die;
+            }*/
 
 
             return true;
@@ -525,6 +540,8 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             $matricule = $this->siham->renouvellementAgent($params);
 
+            //Mise à jour des données personnelles de l'agent
+            $this->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $datas);
 
             return $matricule;
         } catch (SihamException $e) {

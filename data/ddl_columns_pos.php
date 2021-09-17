@@ -2017,6 +2017,7 @@ return [
     'TBL_PLAFOND_ELEMENT'            => [
         'ID',
         'PLAFOND_ID',
+        'PLAFOND_ETAT_ID',
         'ANNEE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'INTERVENANT_ID',
@@ -2028,6 +2029,7 @@ return [
     'TBL_PLAFOND_INTERVENANT'        => [
         'ID',
         'PLAFOND_ID',
+        'PLAFOND_ETAT_ID',
         'ANNEE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'INTERVENANT_ID',
@@ -2038,6 +2040,7 @@ return [
     'TBL_PLAFOND_REFERENTIEL'        => [
         'ID',
         'PLAFOND_ID',
+        'PLAFOND_ETAT_ID',
         'ANNEE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'INTERVENANT_ID',
@@ -2049,6 +2052,7 @@ return [
     'TBL_PLAFOND_STRUCTURE'          => [
         'ID',
         'PLAFOND_ID',
+        'PLAFOND_ETAT_ID',
         'ANNEE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'INTERVENANT_ID',
@@ -2060,6 +2064,7 @@ return [
     'TBL_PLAFOND_VOLUME_HORAIRE'     => [
         'ID',
         'PLAFOND_ID',
+        'PLAFOND_ETAT_ID',
         'ANNEE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'INTERVENANT_ID',

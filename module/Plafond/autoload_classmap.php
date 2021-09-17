@@ -9,7 +9,7 @@ return [
     'Plafond\Entity\Db\PlafondAwareTrait'                 => __DIR__ . '/src/Plafond/Entity/Db/PlafondAwareTrait.php',
     'Plafond\Entity\Db\PlafondEtat'                       => __DIR__ . '/src/Plafond/Entity/Db/PlafondEtat.php',
     'Plafond\Entity\Db\PlafondEtatAwareTrait'             => __DIR__ . '/src/Plafond/Entity/Db/PlafondEtatAwareTrait.php',
-    'Plafond\Entity\PlafondDepassement'                   => __DIR__ . '/src/Plafond/Entity/PlafondDepassement.php',
+    'Plafond\Entity\PlafondControle'                      => __DIR__ . '/src/Plafond/Entity/PlafondControle.php',
     'Plafond\Form\PlafondApplicationForm'                 => __DIR__ . '/src/Plafond/Form/PlafondApplicationForm.php',
     'Plafond\Form\PlafondApplicationFormAwareTrait'       => __DIR__ . '/src/Plafond/Form/PlafondApplicationFormAwareTrait.php',
     'Plafond\Form\PlafondApplicationFormFactory'          => __DIR__ . '/src/Plafond/Form/PlafondApplicationFormFactory.php',

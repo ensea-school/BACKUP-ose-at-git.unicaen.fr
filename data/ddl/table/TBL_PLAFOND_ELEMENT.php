@@ -93,6 +93,18 @@ return [
             'position'    => 8,
             'commentaire' => 'Valeur du plafond',
         ],
+        'PLAFOND_ETAT_ID' => [
+            'name'        => 'PLAFOND_ETAT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 3,
+            'commentaire' => NULL,
+        ],
         'PLAFOND_ID'             => [
             'name'        => 'PLAFOND_ID',
             'type'        => 'int',

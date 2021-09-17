@@ -13,7 +13,7 @@ use Application\Service\AbstractEntityService;
 use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Plafond\Entity\Db\PlafondPerimetre;
-use Plafond\Entity\PlafondDepassement;
+use Plafond\Entity\PlafondControle;
 use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
@@ -49,14 +49,36 @@ class PlafondService extends AbstractEntityService
      * @param Intervenant       $intervenant
      * @param TypeVolumeHoraire $typeVolumeHoraire
      *
-     * @return PlafondDepassement[]
+     * @return PlafondControle[]
      */
-    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): array
+    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, bool $depassementsUniquement = true): array
     {
-        $sql          = file_get_contents('data/Query/plafond.sql');
-        $sql          = str_replace('/*i.id*/', 'AND intervenant_id = ' . $intervenant->getId(), $sql) . ' AND tvh.id = ' . $typeVolumeHoraire->getId();
-        $sql          = preg_replace('/--(.*)\n/Uis', "\n", $sql);
-        $res          = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $filtreDepassement = $depassementsUniquement ? "AND pd.heures > pd.plafond + pd.derogation + 0.05" : "";
+
+        $sql = "
+            SELECT
+              pm.code perimetre,
+              p.code plafond_code,
+              p.libelle plafond_libelle,
+              pd.heures heures,
+              pd.plafond plafond,
+              pd.derogation derogation
+            FROM 
+              v_tbl_plafond_intervenant pd
+              JOIN plafond p ON p.id = pd.plafond_id
+              JOIN plafond_perimetre pm ON pm.id = p.plafond_perimetre_id
+            WHERE 
+              pd.intervenant_id = :intervenant
+              AND pd.type_volume_horaire_id = :typeVolumeHoraire
+              $filtreDepassement
+        ";
+
+        $params = [
+            'intervenant'       => $intervenant->getId(),
+            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+        ];
+
+        $res          = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         $depassements = [];
         foreach ($res as $r) {
             $depassements[] = $this->depassementFromArray($r);
@@ -70,11 +92,11 @@ class PlafondService extends AbstractEntityService
     /**
      * @param array $a
      *
-     * @return PlafondDepassement
+     * @return PlafondControle
      */
-    private function depassementFromArray(array $a): PlafondDepassement
+    private function depassementFromArray(array $a): PlafondControle
     {
-        $depassement = new PlafondDepassement();
+        $depassement = new PlafondControle();
         $depassement->setPlafondLibelle($a['PLAFOND_LIBELLE']);
         if ($a['PLAFOND_ETAT_CODE'] == 'bloquant') $depassement->setBloquant(true);
         $depassement->setPlafond($a['PLAFOND']);
@@ -155,7 +177,7 @@ class PlafondService extends AbstractEntityService
     {
         $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
         $cols    = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
-        $cols    = array_diff($cols, ['ID', 'PLAFOND_ID', 'DEROGATION']);
+        $cols    = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION']);
 
         try {
             $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';

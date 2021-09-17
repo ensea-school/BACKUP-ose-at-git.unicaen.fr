@@ -93,7 +93,7 @@ return [
             'position'    => 9,
             'commentaire' => 'Valeur du plafond',
         ],
-        'PLAFOND_ETAT_ID' => [
+        'PLAFOND_ETAT_ID'         => [
             'name'        => 'PLAFOND_ETAT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

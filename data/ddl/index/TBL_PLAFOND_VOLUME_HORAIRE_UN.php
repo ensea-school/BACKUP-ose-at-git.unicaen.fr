@@ -11,6 +11,7 @@ return [
         'ELEMENT_PEDAGOGIQUE_ID',
         'TYPE_INTERVENTION_ID',
         'TYPE_VOLUME_HORAIRE_ID',
+        'INTERVENANT_ID',
         'PLAFOND_ID',
     ],
 ];

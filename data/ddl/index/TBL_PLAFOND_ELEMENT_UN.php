@@ -9,6 +9,7 @@ return [
     'columns' => [
         'ELEMENT_PEDAGOGIQUE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
+        'INTERVENANT_ID',
         'ANNEE_ID',
         'PLAFOND_ID',
     ],

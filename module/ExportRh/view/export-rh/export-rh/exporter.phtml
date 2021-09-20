@@ -80,7 +80,12 @@ if ($priseEnCharge) {
                             </tr>
                             <tr>
                                 <td>Date début</td>
-                                <td><?= $affectationEnCours->dateDebutAffectation ?></td>
+                                <td>
+                                    <?php
+                                    $date = new DateTime($affectationEnCours->dateDebutAffectation);
+                                    echo $date->format('d-m-Y');
+                                    ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Type de rattachement</td>
@@ -183,7 +188,8 @@ if ($priseEnCharge) {
                         </tr>
                         <tr>
                             <td>
-
+                                <input type="checkbox" checked="" disabled="disabled" title="Cette donnée n'est pas synchronisable">
+                                <label>Nom usuel:</label>
                             </td>
                             <td><?= $intervenantDossier->getNomUsuel() ?></td>
                             <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getNomUsuel() : '' ?></td>
@@ -223,16 +229,26 @@ if ($priseEnCharge) {
 
                         <tr>
                             <td>
-                                <?= $this->formCheckbox($generiqueFieldset->get('iban')); ?>
-                                <?= $this->formLabel($generiqueFieldset->get('iban')) ?> :
+                                <?php if ($renouvellement || (!$renouvellement && !$priseEnCharge)): ?>
+                                    <input type="checkbox" checked="" disabled="disabled" title="Cette donnée n'est pas synchronisable, pensez à la mettre à jour manuellement dans SIHAM">
+                                    <label>IBAN:</label>
+                                <?php else: ?>
+                                    <?= $this->formCheckbox($generiqueFieldset->get('iban')); ?>
+                                    <?= $this->formLabel($generiqueFieldset->get('iban')) ?> :
+                                <?php endif; ?>
                             </td>
                             <td><?= $intervenantDossier->getIBAN() ?></td>
                             <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getIBAN() : '' ?></td>
                         </tr>
                         <tr>
                             <td>
-                                <?= $this->formCheckbox($generiqueFieldset->get('bic')); ?>
-                                <?= $this->formLabel($generiqueFieldset->get('bic')) ?> :
+                                <?php if ($renouvellement || (!$renouvellement && !$priseEnCharge)): ?>
+                                    <input type="checkbox" checked="" disabled="disabled" title="Cette donnée n'est pas synchronisable, pensez à la mettre à jour manuellement dans SIHAM">
+                                    <label>BIC:</label>
+                                <?php else: ?>
+                                    <?= $this->formCheckbox($generiqueFieldset->get('bic')); ?>
+                                    <?= $this->formLabel($generiqueFieldset->get('bic')) ?> :
+                                <?php endif; ?>
                             </td>
                             <td><?= $intervenantDossier->getBIC() ?></td>
                             <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getBIC() : '' ?></td>
@@ -246,7 +262,7 @@ if ($priseEnCharge) {
 
                 <!-- Formulaire spécifique au connecteur-->
                 <?php
-                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant'));
+                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
                 ?>
                 </form>
 
@@ -255,7 +271,7 @@ if ($priseEnCharge) {
                 </p>
             <?php elseif ($renouvellement): ?>
                 <?php
-                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant'));
+                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
                 ?>
                 </form>
                 <p>

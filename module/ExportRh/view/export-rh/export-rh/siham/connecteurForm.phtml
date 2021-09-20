@@ -1,5 +1,13 @@
 <div class="panel panel-default">
-    <div class="panel-heading">Configuration de la prise en charge dans <?= $nameConnecteur; ?></div>
+    <?php
+    if ($priseEnCharge) {
+        $libelle = "de la prise en charge";
+    } else {
+        $libelle = "du renouvellement";
+    }
+    ?>
+
+    <div class="panel-heading">Configuration <?= $libelle ?> dans <?= $nameConnecteur; ?></div>
     <div class="panel-body">
         <!-- Année universitaire de prise en charge -->
         <input type="hidden" name="connecteurForm[anneeUniversitaire]" value="<?= $intervenant->getAnnee()->getId() ?>"/>

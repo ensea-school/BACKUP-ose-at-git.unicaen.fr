@@ -65,24 +65,19 @@ class SihamConnecteur implements ConnecteurRhInterface
 
     public function recupererIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh
     {
-        $agent = '';
-
-        if (!empty($intervenant->getCodeRh())) {
-            $codeRh = $intervenant->getCodeRh();
-            //Si code RH ne contient pas UCN alors on le reformate par rapport au masque matricule de SIHAM
-            /*   if (!strstr($codeRh, 'UCN')) {
-                   $codeRh = $this->siham->getCodeAdministration() . str_pad($codeRh, 9, '0', STR_PAD_LEFT);
-               }*/
-
+        $agent  = null;
+        $codeRh = $this->trouverCodeRhByInsee($intervenant);
+        if (!empty($codeRh)) {
             $params =
                 [
                     'listeMatricules' => [$codeRh],
                 ];
 
             $agent = $this->siham->recupererDonneesPersonnellesAgent($params);
-        } else {
-            $codeRh = $this->trouverCodeRhByInsee($intervenant);
-            if (!empty($codeRh)) {
+        }
+        if (empty($agent)) {
+            if (!empty($intervenant->getCodeRh())) {
+                $codeRh = $intervenant->getCodeRh();
                 $params =
                     [
                         'listeMatricules' => [$codeRh],
@@ -91,6 +86,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $agent = $this->siham->recupererDonneesPersonnellesAgent($params);
             }
         }
+
 
         if (!empty($agent)) {
             $intervenantRh = new IntervenantRH();
@@ -129,15 +125,11 @@ class SihamConnecteur implements ConnecteurRhInterface
     {
         try {
             $codeRh = '';
-            //On récupére le code RH
-            if (!empty($intervenant->getCodeRh())) {
+            //On récupére le code RH par le INSEE
+            $codeRh = $this->trouverCodeRhByInsee($intervenant);
+
+            if (!empty($intervenant->getCodeRh()) && empty($codeRh)) {
                 $codeRh = $intervenant->getCodeRh();
-                //Si code RH ne contient pas UCN alors on le reformate
-                if (!strstr($codeRh, 'UCN')) {
-                    $codeRh = $this->siham->getCodeAdministration() . str_pad($codeRh, 9, '0', STR_PAD_LEFT);
-                }
-            } else {
-                $codeRh = $this->trouverCodeRhByInsee($intervenant);
             }
 
             if (!empty($codeRh)) {
@@ -283,7 +275,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'matricule'          => $intervenantRh->getCodeRh(),
                     'dateDebut'          => $intervenantRh->getAdresseDateDebut(),
                     'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
-                    'complementAdresse'  => $adresse,
+                    'complementAdresse'  => substr($adresse, 0, 37),
                     'noVoie'             => ' ',
                     'natureVoie'         => '',
                     'nomVoie'            => ' ',
@@ -332,6 +324,7 @@ class SihamConnecteur implements ConnecteurRhInterface
         $listeAgents = $this->siham->recupererListeAgents($params);
         $agent       = current($listeAgents);
 
+
         if (!empty($agent)) {
             return $agent->getMatricule();
         }
@@ -354,6 +347,13 @@ class SihamConnecteur implements ConnecteurRhInterface
             $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
 
+            /*CARRIERE*/
+            $carriere = [
+                'dateEffetCarriere' => $dateEffet,
+                'grade'             => '0000',
+                'qualiteStatutaire' => 'N',
+                'temoinValidite'    => 1,
+            ];
 
             /*POSITION ADMINISTRATIVE*/
             $position[] =
@@ -445,6 +445,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'emploi'                    => $datas['connecteurForm']['emploi'],
                 'listeCoordonneesPostales'  => $coordonneesPostales,
                 'listeCoordonneesBancaires' => $coordonneesBancaires,
+                'listeCarriere'             => $carriere,
                 'listeModalitesServices'    => $service,
                 'listeStatuts'              => $statut,
                 'listeNationalites'         => $nationalites,
@@ -486,11 +487,18 @@ class SihamConnecteur implements ConnecteurRhInterface
             $dateFin   = $anneeUniversitaire->getDateFin()->format('Y-m-d');
 
             /*Formatage du matricule*/
-            $matricule = $intervenant->getCodeRh();
-            //Si code RH ne contient pas UCN alors on le reformate
-            if (!strstr($matricule, 'UCN')) {
-                $matricule = $this->siham->getCodeAdministration() . str_pad($matricule, 9, '0', STR_PAD_LEFT);
+
+            $matricule = '';
+            //On récupére le code RH par le INSEE
+            $matricule = $this->trouverCodeRhByInsee($intervenant);
+
+            if (!empty($intervenant->getCodeRh()) && empty($matricule)) {
+                $matricule = $intervenant->getCodeRh();
             }
+            //Si code RH ne contient pas UCN alors on le reformate
+            /*if (!strstr($matricule, 'UCN')) {
+                $matricule = $this->siham->getCodeAdministration() . str_pad($matricule, 9, '0', STR_PAD_LEFT);
+            }/*/
 
 
             /*POSITION ADMINISTRATIVE*/
@@ -510,13 +518,18 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ['dateEffetModalite' => $dateEffet,
                  'modalite'          => $datas['connecteurForm']['modaliteService']];
 
+            /*CARRIERE*/
+            $carriere = [
+                'dateEffetCarriere' => $dateEffet,
+                'grade'             => '0000',
+                'qualiteStatutaire' => 'N',
+                'temoinValidite'    => 1,
+            ];
+
             /*CONTRAT*/
-            $annee = $this->getExportRhService()->getAnneeUniversitaireEnCours();
-
-
             $contrat[] =
-                ['dateDebutContrat'  => $annee->getDateDebut()->format('Y-m-d'),
-                 'dateFinContrat'    => $annee->getDateFin()->format('Y-m-d'),
+                ['dateDebutContrat'  => $dateEffet,
+                 'dateFinContrat'    => $dateFin,
                  'natureContrat'     => 'CO',
                  'typeContrat'       => 'TC01',
                  'typeLienJuridique' => 'TL01',
@@ -527,6 +540,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'categorieEntree'        => 'ACTIVE',
                 'dateRenouvellement'     => $dateEffet,
                 'emploi'                 => $datas['connecteurForm']['emploi'],
+                'listeCarriere'          => $carriere,
                 'listeModalitesServices' => $service,
                 'listeStatuts'           => $statut,
                 'listeContrats'          => $contrat,

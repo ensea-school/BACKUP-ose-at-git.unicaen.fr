@@ -124,8 +124,10 @@ class ExportRhController extends AbstractController
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
                 $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
-                //On regarde si il a un contrat en cours pour l'année courante
-                $contratEnCours = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
+                if (!empty($affectationEnCours)) {
+                    //On regarde si il a un contrat en cours pour l'année courante
+                    $contratEnCours = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
+                }
 
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {
@@ -141,7 +143,8 @@ class ExportRhController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
-        
+        $haveContratOse = true;
+
         $vm = new ViewModel();
         $vm->setTemplate('export-rh/export-rh/exporter');
         $vm->setVariables(compact('typeIntervenant',

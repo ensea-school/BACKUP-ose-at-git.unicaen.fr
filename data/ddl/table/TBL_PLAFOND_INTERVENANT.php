@@ -21,6 +21,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'DEPASSEMENT' => [
+            'name'        => 'DEPASSEMENT',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
         'DEROGATION'             => [
             'name'        => 'DEROGATION',
             'type'        => 'float',

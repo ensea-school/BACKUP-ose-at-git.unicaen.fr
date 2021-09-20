@@ -53,7 +53,7 @@ class DataGen
         ],
         [
             'table'   => 'PLAFOND',
-            'context' => ['install', 'update'],
+            'context' => ['install'],
             'key'     => 'CODE',
         ],
         [
@@ -652,11 +652,12 @@ class DataGen
         $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
         $id       = 1;
-        foreach ($data['etats'] as $code => $libelle) {
+        foreach ($data['etats'] as $code => $pe) {
             $plafond    = [
-                'ID'      => $id,
-                'CODE'    => $code,
-                'LIBELLE' => $libelle,
+                'ID'       => $id,
+                'CODE'     => $code,
+                'LIBELLE'  => $pe['libelle'],
+                'BLOQUANT' => $pe['bloquant'],
             ];
             $plafonds[] = $plafond;
             $id++;

@@ -9,7 +9,19 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'PLAFOND_ETAT_ID_SEQ',
     'columns'     => [
-        'CODE'    => [
+        'BLOQUANT' => [
+            'name'        => 'BLOQUANT',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
+        'CODE'     => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -21,7 +33,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'ID'      => [
+        'ID'       => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +45,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE' => [
+        'LIBELLE'  => [
             'name'        => 'LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',

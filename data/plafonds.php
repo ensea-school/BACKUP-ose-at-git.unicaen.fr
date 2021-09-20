@@ -2,10 +2,10 @@
 
 return [
     'etats'      => [
-        'desactive'  => 'Désactivé',
-        'indicateur' => 'Indicateur',
-        'informatif' => 'Informatif',
-        'bloquant'   => 'Bloquant',
+        'desactive'  => ['libelle' => 'Désactivé', 'bloquant' => false],
+        'indicateur' => ['libelle' => 'Indicateur', 'bloquant' => false],
+        'informatif' => ['libelle' => 'Informatif', 'bloquant' => false],
+        'bloquant'   => ['libelle' => 'Bloquant', 'bloquant' => true],
     ],
     'perimetres' => [
         'structure'      => 'Composante',

@@ -2,7 +2,7 @@
 
 namespace Plafond\Entity;
 
-use Plafond\Entity\Db\PlafondEtat;
+use Plafond\Controller\PlafondController;
 
 /**
  * Description of PlafondControle
@@ -14,12 +14,17 @@ class PlafondControle
     /**
      * @var string
      */
-    private $plafondLibelle;
+    private $message;
 
     /**
-     * @var PlafondEtat
+     * @var string
      */
-    private $plafondEtat;
+    private $perimetre;
+
+    /**
+     * @var string
+     */
+    private $etat;
 
     /**
      * @var bool
@@ -51,21 +56,21 @@ class PlafondControle
     /**
      * @return string
      */
-    public function getPlafondLibelle(): string
+    public function getMessage(): string
     {
-        return $this->plafondLibelle;
+        return $this->message;
     }
 
 
 
     /**
-     * @param string $plafondLibelle
+     * @param string $message
      *
      * @return PlafondControle
      */
-    public function setPlafondLibelle(string $plafondLibelle): PlafondControle
+    public function setMessage(string $message): PlafondControle
     {
-        $this->plafondLibelle = $plafondLibelle;
+        $this->message = $message;
 
         return $this;
     }
@@ -73,23 +78,47 @@ class PlafondControle
 
 
     /**
-     * @return PlafondEtat
+     * @return string
      */
-    public function getPlafondEtat(): PlafondEtat
+    public function getPerimetre(): string
     {
-        return $this->plafondEtat;
+        return $this->perimetre;
     }
 
 
 
     /**
-     * @param PlafondEtat $plafondEtat
+     * @param string $perimetre
      *
      * @return PlafondControle
      */
-    public function setPlafondEtat(PlafondEtat $plafondEtat): PlafondControle
+    public function setPerimetre(string $perimetre): PlafondControle
     {
-        $this->plafondEtat = $plafondEtat;
+        $this->perimetre = $perimetre;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getEtat(): string
+    {
+        return $this->etat;
+    }
+
+
+
+    /**
+     * @param string $etat
+     *
+     * @return PlafondControle
+     */
+    public function setEtat(string $etat): PlafondControle
+    {
+        $this->etat = $etat;
 
         return $this;
     }
@@ -234,4 +263,36 @@ class PlafondControle
         );
     }
 
+
+
+    public static function fromArray(array $a): PlafondControle
+    {
+        $pc = new PlafondControle();
+        if (isset($a['MESSAGE'])) {
+            $pc->setMessage($a['MESSAGE']);
+        }
+        if (isset($a['PERIMETRE'])) {
+            $pc->setPerimetre($a['PERIMETRE']);
+        }
+        if (isset($a['ETAT'])) {
+            $pc->setEtat($a['ETAT']);
+        }
+        if (isset($a['BLOQUANT'])) {
+            $pc->setBloquant($a['BLOQUANT'] == '1');
+        }
+        if (isset($a['DEPASSEMENT'])) {
+            $pc->setDepassement($a['DEPASSEMENT'] == '1');
+        }
+        if (isset($a['HEURES'])) {
+            $pc->setHeures((float)$a['HEURES']);
+        }
+        if (isset($a['PLAFOND'])) {
+            $pc->setPlafond((float)$a['PLAFOND']);
+        }
+        if (isset($a['DEROGATION'])) {
+            $pc->setDerogation((float)$a['DEROGATION']);
+        }
+
+        return $pc;
+    }
 }

@@ -11,5 +11,10 @@
 /** @var \Plafond\Service\PlafondService $sp */
 $sp = $container->get(\Plafond\Service\PlafondService::class);
 
+$intervenantId = 58753;
+$tvhId         = 1;
 
-$sp->construireVues();
+$intervenant = $container->get(\Application\Service\IntervenantService::class)->get($intervenantId);
+$tvh         = $container->get(\Application\Service\TypeVolumeHoraireService::class)->get($tvhId);
+
+$sp->controle($intervenant, $tvh);

@@ -1756,21 +1756,24 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     viewQuery := 'SELECT
           p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
           p.ANNEE_ID,
           p.TYPE_VOLUME_HORAIRE_ID,
           p.INTERVENANT_ID,
           p.ELEMENT_PEDAGOGIQUE_ID,
           p.HEURES,
           p.PLAFOND,
-          p.DEROGATION
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
         FROM
         (
-          SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL ELEMENT_PEDAGOGIQUE_ID,NULL HEURES,NULL PLAFOND,NULL DEROGATION FROM dual WHERE 0 = 1
+          SELECT NULL PLAFOND_ID,NULL PLAFOND_ETAT_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL ELEMENT_PEDAGOGIQUE_ID,NULL HEURES,NULL PLAFOND,NULL DEROGATION FROM dual WHERE 0 = 1
         ) p
         JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
         WHERE
           1=1
           /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
           /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/
@@ -1788,6 +1791,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     SELECT
       CASE WHEN
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
@@ -1795,21 +1799,25 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.HEURES                             = v.HEURES
         AND t.PLAFOND                            = v.PLAFOND
         AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
       THEN -1 ELSE t.ID END ID,
       v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
       v.ANNEE_ID,
       v.TYPE_VOLUME_HORAIRE_ID,
       v.INTERVENANT_ID,
       v.ELEMENT_PEDAGOGIQUE_ID,
       v.HEURES,
       v.PLAFOND,
-      v.DEROGATION
+      v.DEROGATION,
+      v.DEPASSEMENT
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PLAFOND_ELEMENT t ON
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
     WHERE ' || filter;
     LOOP
@@ -1822,6 +1830,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
         AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
         AND d.ELEMENT_PEDAGOGIQUE_ID IS NULL
       THEN
         DELETE FROM TBL_PLAFOND_ELEMENT WHERE id = d.id;
@@ -1844,20 +1853,123 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     viewQuery := 'SELECT
           p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
           p.ANNEE_ID,
           p.TYPE_VOLUME_HORAIRE_ID,
           p.INTERVENANT_ID,
           p.HEURES,
           p.PLAFOND,
-          p.DEROGATION
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
         FROM
         (
-          SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL HEURES,NULL PLAFOND,NULL DEROGATION FROM dual WHERE 0 = 1
+          SELECT 2 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                          annee_id,
+              fr.type_volume_horaire_id           type_volume_horaire_id,
+              i.id                                intervenant_id,
+              fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL heures,
+              si.plafond_referentiel              plafond
+            FROM
+              intervenant                     i
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+          ) p
+
+          UNION ALL
+
+          SELECT 4 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                             annee_id,
+              fr.type_volume_horaire_id              type_volume_horaire_id,
+              i.id                                   intervenant_id,
+              fr.total - fr.heures_compl_fc_majorees heures,
+              si.maximum_hetd                        plafond
+            FROM
+              intervenant                     i
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+          ) p
+
+          UNION ALL
+
+          SELECT 1 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                          annee_id,
+              fr.type_volume_horaire_id           type_volume_horaire_id,
+              i.id                                intervenant_id,
+              fr.heures_compl_fc_majorees         heures,
+              ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond
+
+            FROM
+                   intervenant                i
+              JOIN annee                      a ON a.id = i.annee_id
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+          ) p
+
+          UNION ALL
+
+          SELECT 5 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                          annee_id,
+              fr.type_volume_horaire_id           type_volume_horaire_id,
+              fr.intervenant_id                   intervenant_id,
+              fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures,
+              si.plafond_hc_hors_remu_fc          plafond
+            FROM
+                   intervenant                i
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+          ) p
+
+          UNION ALL
+
+          SELECT 8 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              t.annee_id,
+              t.type_volume_horaire_id,
+              t.intervenant_id,
+              t.heures,
+              si.plafond_hc_fi_hors_ead           plafond
+            FROM
+              (
+                SELECT
+                  fr.type_volume_horaire_id           type_volume_horaire_id,
+                  i.annee_id                          annee_id,
+                  i.id                                intervenant_id,
+                  i.statut_id                         statut_intervenant_id,
+                  si.plafond_hc_fi_hors_ead           plafond,
+                  SUM(frvh.heures_compl_fi)           heures
+                FROM
+                  intervenant                     i
+                  JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                  JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+                  JOIN formule_resultat_vh     frvh ON frvh.formule_resultat_id = fr.id
+                  JOIN volume_horaire            vh ON vh.id = frvh.volume_horaire_id
+                  JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
+                  JOIN statut_intervenant        si ON si.id = i.statut_id
+                WHERE
+                  ti.regle_foad = 0
+                GROUP BY
+                  fr.type_volume_horaire_id,
+                  i.annee_id,
+                  i.id,
+                  i.statut_id,
+                  si.plafond_hc_fi_hors_ead
+              ) t
+                JOIN statut_intervenant si ON si.id = t.statut_intervenant_id
+          ) p
         ) p
         JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
         WHERE
           1=1
           /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
           /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/';
@@ -1874,20 +1986,24 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     SELECT
       CASE WHEN
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.HEURES                             = v.HEURES
         AND t.PLAFOND                            = v.PLAFOND
         AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
       THEN -1 ELSE t.ID END ID,
       v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
       v.ANNEE_ID,
       v.TYPE_VOLUME_HORAIRE_ID,
       v.INTERVENANT_ID,
       v.HEURES,
       v.PLAFOND,
-      v.DEROGATION
+      v.DEROGATION,
+      v.DEPASSEMENT
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PLAFOND_INTERVENANT t ON
@@ -1928,21 +2044,63 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     viewQuery := 'SELECT
           p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
           p.ANNEE_ID,
           p.TYPE_VOLUME_HORAIRE_ID,
           p.INTERVENANT_ID,
           p.FONCTION_REFERENTIEL_ID,
           p.HEURES,
           p.PLAFOND,
-          p.DEROGATION
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
         FROM
         (
-          SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL FONCTION_REFERENTIEL_ID,NULL HEURES,NULL PLAFOND,NULL DEROGATION FROM dual WHERE 0 = 1
+          SELECT 3 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                        annee_id,
+              vhr.type_volume_horaire_id        type_volume_horaire_id,
+              i.id                              intervenant_id,
+              fr.id                             fonction_referentiel_id,
+              SUM(vhr.heures)                   heures,
+              fr.plafond                        plafond
+            FROM
+                   service_referentiel       sr
+              JOIN intervenant                i ON i.id = sr.intervenant_id
+              JOIN fonction_referentiel      fr ON fr.id = sr.fonction_id
+              JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+            WHERE
+              sr.histo_destruction IS NULL
+            GROUP BY
+              i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+          ) p
+
+          UNION ALL
+
+          SELECT 6 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                 annee_id,
+              vhr.type_volume_horaire_id type_volume_horaire_id,
+              i.id                       intervenant_id,
+              fr.id                      fonction_referentiel_id,
+              SUM(vhr.heures)            heures,
+              fr.plafond                 plafond
+            FROM
+              service_referentiel       sr
+              JOIN intervenant i ON i.id = sr.intervenant_id
+              JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+              JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+              JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+            WHERE
+              sr.histo_destruction IS NULL
+            GROUP BY
+              i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+          ) p
         ) p
         JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
         WHERE
           1=1
           /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
           /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/
@@ -1960,6 +2118,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     SELECT
       CASE WHEN
             COALESCE(t.PLAFOND_ID,0)              = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                     = v.PLAFOND_ETAT_ID
         AND t.ANNEE_ID                            = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)  = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                      = v.INTERVENANT_ID
@@ -1967,21 +2126,25 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.HEURES                              = v.HEURES
         AND t.PLAFOND                             = v.PLAFOND
         AND t.DEROGATION                          = v.DEROGATION
+        AND t.DEPASSEMENT                         = v.DEPASSEMENT
       THEN -1 ELSE t.ID END ID,
       v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
       v.ANNEE_ID,
       v.TYPE_VOLUME_HORAIRE_ID,
       v.INTERVENANT_ID,
       v.FONCTION_REFERENTIEL_ID,
       v.HEURES,
       v.PLAFOND,
-      v.DEROGATION
+      v.DEROGATION,
+      v.DEPASSEMENT
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PLAFOND_REFERENTIEL t ON
             COALESCE(t.PLAFOND_ID,0)              = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                            = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)  = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                      = v.INTERVENANT_ID
         AND t.FONCTION_REFERENTIEL_ID             = v.FONCTION_REFERENTIEL_ID
     WHERE ' || filter;
     LOOP
@@ -1994,6 +2157,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
         AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
         AND d.FONCTION_REFERENTIEL_ID IS NULL
       THEN
         DELETE FROM TBL_PLAFOND_REFERENTIEL WHERE id = d.id;
@@ -2016,21 +2180,41 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     viewQuery := 'SELECT
           p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
           p.ANNEE_ID,
           p.TYPE_VOLUME_HORAIRE_ID,
           p.INTERVENANT_ID,
           p.STRUCTURE_ID,
           p.HEURES,
           p.PLAFOND,
-          p.DEROGATION
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
         FROM
         (
-          SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL STRUCTURE_ID,NULL HEURES,NULL PLAFOND,NULL DEROGATION FROM dual WHERE 0 = 1
+          SELECT 7 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                 annee_id,
+              vhr.type_volume_horaire_id type_volume_horaire_id,
+              i.id                       intervenant_id,
+              s.id                       structure_id,
+              SUM(vhr.heures)            heures,
+              s.plafond_referentiel      plafond
+            FROM
+              service_referentiel       sr
+              JOIN intervenant           i ON i.id = sr.intervenant_id
+              JOIN structure             s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
+              JOIN volume_horaire_ref  vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+            WHERE
+              sr.histo_destruction IS NULL
+            GROUP BY
+              i.annee_id, vhr.type_volume_horaire_id, i.id, s.id, s.plafond_referentiel
+          ) p
         ) p
         JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
         WHERE
           1=1
           /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
           /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/
@@ -2048,6 +2232,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     SELECT
       CASE WHEN
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
@@ -2055,21 +2240,25 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.HEURES                             = v.HEURES
         AND t.PLAFOND                            = v.PLAFOND
         AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
       THEN -1 ELSE t.ID END ID,
       v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
       v.ANNEE_ID,
       v.TYPE_VOLUME_HORAIRE_ID,
       v.INTERVENANT_ID,
       v.STRUCTURE_ID,
       v.HEURES,
       v.PLAFOND,
-      v.DEROGATION
+      v.DEROGATION,
+      v.DEPASSEMENT
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PLAFOND_STRUCTURE t ON
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
     WHERE ' || filter;
     LOOP
@@ -2082,6 +2271,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
         AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
         AND d.STRUCTURE_ID IS NULL
       THEN
         DELETE FROM TBL_PLAFOND_STRUCTURE WHERE id = d.id;
@@ -2104,6 +2294,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     viewQuery := 'SELECT
           p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
           p.ANNEE_ID,
           p.TYPE_VOLUME_HORAIRE_ID,
           p.INTERVENANT_ID,
@@ -2111,15 +2302,40 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           p.TYPE_INTERVENTION_ID,
           p.HEURES,
           p.PLAFOND,
-          p.DEROGATION
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
         FROM
         (
-          SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL ELEMENT_PEDAGOGIQUE_ID,NULL TYPE_INTERVENTION_ID,NULL HEURES,NULL PLAFOND,NULL DEROGATION FROM dual WHERE 0 = 1
+          SELECT 9 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                annee_id,
+              vh.type_volume_horaire_id type_volume_horaire_id,
+              i.id                      intervenant_id,
+              s.element_pedagogique_id  element_pedagogique_id,
+              vh.type_intervention_id   type_intervention_id,
+              SUM(vh.heures)            heures,
+              vhe.heures * vhe.groupes  plafond
+            FROM
+              volume_horaire vh
+              JOIN service s ON s.id = vh.service_id AND s.histo_destruction IS NULL
+              JOIN intervenant i ON i.id = s.intervenant_id
+              JOIN parametre p ON p.nom = ''scenario_charges_services''
+              JOIN volume_horaire_ens vhe ON vhe.histo_destruction IS NULL
+                                         AND vhe.element_pedagogique_id = s.element_pedagogique_id
+                                         AND vhe.type_intervention_id = vh.type_intervention_id
+            WHERE
+              vh.histo_destruction IS NULL
+              AND s.element_pedagogique_id IS NOT NULL
+              AND vhe.groupes IS NOT NULL AND vhe.heures IS NOT NULL
+            GROUP BY
+              i.annee_id, vh.type_volume_horaire_id, i.id, s.element_pedagogique_id, vh.type_intervention_id, vhe.heures, vhe.groupes
+          ) p
         ) p
         JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
         WHERE
           1=1
           /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
           /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/
@@ -2138,6 +2354,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     SELECT
       CASE WHEN
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
@@ -2146,8 +2363,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.HEURES                             = v.HEURES
         AND t.PLAFOND                            = v.PLAFOND
         AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
       THEN -1 ELSE t.ID END ID,
       v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
       v.ANNEE_ID,
       v.TYPE_VOLUME_HORAIRE_ID,
       v.INTERVENANT_ID,
@@ -2155,13 +2374,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.TYPE_INTERVENTION_ID,
       v.HEURES,
       v.PLAFOND,
-      v.DEROGATION
+      v.DEROGATION,
+      v.DEPASSEMENT
     FROM
       (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PLAFOND_VOLUME_HORAIRE t ON
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
         AND COALESCE(t.TYPE_INTERVENTION_ID,0)   = COALESCE(v.TYPE_INTERVENTION_ID,0)
     WHERE ' || filter;
@@ -2175,6 +2396,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
         AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
         AND d.ELEMENT_PEDAGOGIQUE_ID IS NULL
         AND d.TYPE_INTERVENTION_ID IS NULL
       THEN

@@ -18,7 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 10,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'CODE'     => [

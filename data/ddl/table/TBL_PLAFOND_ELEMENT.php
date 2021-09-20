@@ -21,7 +21,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'DEPASSEMENT' => [
+        'DEPASSEMENT'            => [
             'name'        => 'DEPASSEMENT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -105,7 +105,7 @@ return [
             'position'    => 9,
             'commentaire' => 'Valeur du plafond',
         ],
-        'PLAFOND_ETAT_ID' => [
+        'PLAFOND_ETAT_ID'        => [
             'name'        => 'PLAFOND_ETAT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

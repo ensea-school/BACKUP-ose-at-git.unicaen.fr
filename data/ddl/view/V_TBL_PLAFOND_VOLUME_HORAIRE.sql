@@ -1,6 +1,7 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_PLAFOND_VOLUME_HORAIRE AS
 SELECT
   p.PLAFOND_ID,
+  pa.PLAFOND_ETAT_ID,
   p.ANNEE_ID,
   p.TYPE_VOLUME_HORAIRE_ID,
   p.INTERVENANT_ID,
@@ -8,7 +9,8 @@ SELECT
   p.TYPE_INTERVENTION_ID,
   p.HEURES,
   p.PLAFOND,
-  p.DEROGATION
+  p.DEROGATION,
+  CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
 FROM
 (
   SELECT 9 PLAFOND_ID, 0 DEROGATION, p.* FROM (
@@ -24,6 +26,7 @@ FROM
       volume_horaire vh
       JOIN service s ON s.id = vh.service_id AND s.histo_destruction IS NULL
       JOIN intervenant i ON i.id = s.intervenant_id
+      JOIN parametre p ON p.nom = 'scenario_charges_services'
       JOIN volume_horaire_ens vhe ON vhe.histo_destruction IS NULL
                                  AND vhe.element_pedagogique_id = s.element_pedagogique_id
                                  AND vhe.type_intervention_id = vh.type_intervention_id
@@ -39,6 +42,7 @@ JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_h
 WHERE
   1=1
   /*@PLAFOND_ID=p.PLAFOND_ID*/
+  /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
   /*@ANNEE_ID=p.ANNEE_ID*/
   /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
   /*@INTERVENANT_ID=p.INTERVENANT_ID*/

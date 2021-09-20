@@ -21,7 +21,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'DEPASSEMENT' => [
+        'DEPASSEMENT'            => [
             'name'        => 'DEPASSEMENT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',

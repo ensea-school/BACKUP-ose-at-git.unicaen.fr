@@ -1,12 +1,14 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_PLAFOND_INTERVENANT AS
 SELECT
   p.PLAFOND_ID,
+  pa.PLAFOND_ETAT_ID,
   p.ANNEE_ID,
   p.TYPE_VOLUME_HORAIRE_ID,
   p.INTERVENANT_ID,
   p.HEURES,
   p.PLAFOND,
-  p.DEROGATION
+  p.DEROGATION,
+  CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
 FROM
 (
   SELECT 2 PLAFOND_ID, 0 DEROGATION, p.* FROM (
@@ -16,6 +18,22 @@ FROM
       i.id                                intervenant_id,
       fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL heures,
       si.plafond_referentiel              plafond
+    FROM
+      intervenant                     i
+      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+      JOIN statut_intervenant        si ON si.id = i.statut_id
+  ) p
+
+  UNION ALL
+
+  SELECT 4 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+    SELECT
+      i.annee_id                             annee_id,
+      fr.type_volume_horaire_id              type_volume_horaire_id,
+      i.id                                   intervenant_id,
+      fr.total - fr.heures_compl_fc_majorees heures,
+      si.maximum_hetd                        plafond
     FROM
       intervenant                     i
       JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
@@ -39,22 +57,6 @@ FROM
       JOIN statut_intervenant        si ON si.id = i.statut_id
       JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
       JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-  ) p
-
-  UNION ALL
-
-  SELECT 4 PLAFOND_ID, 0 DEROGATION, p.* FROM (
-    SELECT
-      i.annee_id                             annee_id,
-      fr.type_volume_horaire_id              type_volume_horaire_id,
-      i.id                                   intervenant_id,
-      fr.total - fr.heures_compl_fc_majorees heures,
-      si.maximum_hetd                        plafond
-    FROM
-      intervenant                     i
-      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
-      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-      JOIN statut_intervenant        si ON si.id = i.statut_id
   ) p
 
   UNION ALL
@@ -115,6 +117,7 @@ JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_h
 WHERE
   1=1
   /*@PLAFOND_ID=p.PLAFOND_ID*/
+  /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
   /*@ANNEE_ID=p.ANNEE_ID*/
   /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
   /*@INTERVENANT_ID=p.INTERVENANT_ID*/

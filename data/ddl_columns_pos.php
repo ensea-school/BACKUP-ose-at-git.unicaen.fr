@@ -1110,6 +1110,7 @@ return [
         'ID',
         'CODE',
         'LIBELLE',
+        'BLOQUANT',
     ],
     'PRIVILEGE'                      => [
         'ID',
@@ -2025,6 +2026,7 @@ return [
         'HEURES',
         'PLAFOND',
         'DEROGATION',
+        'DEPASSEMENT',
     ],
     'TBL_PLAFOND_INTERVENANT'        => [
         'ID',
@@ -2036,6 +2038,7 @@ return [
         'HEURES',
         'PLAFOND',
         'DEROGATION',
+        'DEPASSEMENT',
     ],
     'TBL_PLAFOND_REFERENTIEL'        => [
         'ID',
@@ -2048,6 +2051,7 @@ return [
         'HEURES',
         'PLAFOND',
         'DEROGATION',
+        'DEPASSEMENT',
     ],
     'TBL_PLAFOND_STRUCTURE'          => [
         'ID',
@@ -2060,6 +2064,7 @@ return [
         'HEURES',
         'PLAFOND',
         'DEROGATION',
+        'DEPASSEMENT',
     ],
     'TBL_PLAFOND_VOLUME_HORAIRE'     => [
         'ID',
@@ -2073,6 +2078,7 @@ return [
         'HEURES',
         'PLAFOND',
         'DEROGATION',
+        'DEPASSEMENT',
     ],
 ];
 

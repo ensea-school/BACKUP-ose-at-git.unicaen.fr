@@ -370,7 +370,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       volumes_horaires.items(length).taux_fc                   := d.taux_fc;
       volumes_horaires.items(length).ponderation_service_du    := d.ponderation_service_du;
       volumes_horaires.items(length).ponderation_service_compl := d.ponderation_service_compl;
-      volumes_horaires.items(length).structure_is_affectation  := d.structure_code = intervenant.structure_code;
+      volumes_horaires.items(length).structure_is_affectation  := COALESCE(d.structure_code,' ') = COALESCE(intervenant.structure_code,' ');
       volumes_horaires.items(length).structure_is_univ         := d.structure_code = '__UNIV__';
       volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
       volumes_horaires.items(length).heures                    := d.heures;

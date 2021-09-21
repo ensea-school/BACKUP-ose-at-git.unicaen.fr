@@ -20,21 +20,20 @@ if ($priseEnCharge) {
 <?php if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)): ?>
 
 <form class="form-export-rh" action="<?= $this->url($action, ['intervenant' => $intervenant->getId()]) ?>" method="post">
-
     <?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
 
 
-    <?php if ($typeIntervenant == 'P'): ?>
+    <?php if ($typeIntervenant == 'P' || $intervenant->getStatut()->getCode() == 'BIATSS'): ?>
         <div class="messenger alert alert-warning">
-            L'export des données intervenants vers <?= $nameConnecteur; ?> n'est pas disponible pour les intervenants permanents.
+            L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires (hors BIATSS)
         </div>
     <?php elseif ($haveContratOse === false): ?>
         <div class="messenger alert alert-warning">
             L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> n'a pas encore retourné son contrat. Vous pourrez le renouveller ou le prendre en charge dans <?= $nameConnecteur; ?> une fois le contrat retourné et daté.
         </div>
-    <?php endif; ?>
 
-    <?php if ($haveContratOse === true): ?>
+
+    <?php elseif ($haveContratOse === true): ?>
 
         <div class="well">
             <?php if (empty($intervenantRh)): ?>

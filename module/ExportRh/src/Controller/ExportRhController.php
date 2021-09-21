@@ -7,11 +7,13 @@ use Application\Controller\AbstractController;
 use Application\Entity\Db\Contrat;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use ExportRh\Form\ExportRhForm;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenSiham\Exception\SihamException;
+use Zend\Validator\Date;
 use Zend\View\Model\ViewModel;
 
 class ExportRhController extends AbstractController
@@ -21,6 +23,7 @@ class ExportRhController extends AbstractController
     use ContextServiceAwareTrait;
     use DossierServiceAwareTrait;
     use ExportRhFormAwareTrait;
+    use IntervenantServiceAwareTrait;
 
     /**
      * @var ExportRhService $exportRhService
@@ -117,7 +120,9 @@ class ExportRhController extends AbstractController
          *
          */
         try {
-            $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
+            if ($intervenant->getStatut()->getCode() != 'BIATSS' && $typeIntervenant != 'P') {
+                $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
+            }
 
 
             //On a trouvé un intervenant dans le SI RH
@@ -143,7 +148,7 @@ class ExportRhController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
-        $haveContratOse = true;
+
 
         $vm = new ViewModel();
         $vm->setTemplate('export-rh/export-rh/exporter');
@@ -182,6 +187,7 @@ class ExportRhController extends AbstractController
 
                 if ($result !== false) {
                     $this->flashMessenger()->addSuccessMessage('succes matricule : ' . $result);
+                    $this->getServiceIntervenant()->updateExportDate($intervenant);
                 } else {
                     $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
                 }
@@ -205,10 +211,14 @@ class ExportRhController extends AbstractController
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
 
+                $dateExport = new \DateTime();
+                $intervenant->setExportDate($dateExport);
+                $this->getServiceIntervenant()->save($intervenant);
                 $posts  = $this->getRequest()->getPost();
                 $result = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
                 if ($result !== false) {
                     $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés');
+                    $this->getServiceIntervenant()->updateExportDate($intervenant);
                 } else {
                     $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
                 }

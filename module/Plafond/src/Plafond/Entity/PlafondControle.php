@@ -257,7 +257,7 @@ class PlafondControle
 
         return sprintf(
             $errStr,
-            $this->getPlafondLibelle(),
+            $this->getMessage(),
             floatToString($this->getPlafond()),
             floatToString($this->getHeures())
         );

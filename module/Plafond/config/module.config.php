@@ -150,7 +150,6 @@ return [
     'services' => [
         Service\PlafondApplicationService::class => Service\PlafondApplicationServiceFactory::class,
         Service\PlafondService::class            => Service\PlafondServiceFactory::class,
-        Service\PlafondEtatService::class        => Service\PlafondEtatServiceFactory::class,
         Processus\PlafondProcessus::class        => Processus\PlafondProcessusFactory::class,
     ],
 

@@ -10,6 +10,11 @@ use Doctrine\Common\Collections\Collection;
  */
 class PlafondPerimetre
 {
+    const STRUCTURE      = 'structure';
+    const INTERVENANT    = 'intervenant';
+    const ELEMENT        = 'element';
+    const VOLUME_HORAIRE = 'volume_horaire';
+    const REFERENTIEL    = 'referentiel';
 
     /**
      * @var integer

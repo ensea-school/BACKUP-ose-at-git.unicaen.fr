@@ -3,12 +3,12 @@
 namespace Plafond\Form;
 
 use Plafond\Entity\Db\PlafondApplication;
-use Plafond\Entity\Db\PlafondEtat;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Service\PlafondApplicationServiceAwareTrait;
-use Plafond\Service\PlafondEtatServiceAwareTrait;
+use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\Util;
 use Zend\Hydrator\HydratorInterface;
 
@@ -21,7 +21,7 @@ use Zend\Hydrator\HydratorInterface;
 class PlafondApplicationForm extends AbstractForm
 {
     use AnneeServiceAwareTrait;
-    use PlafondEtatServiceAwareTrait;
+    use PlafondServiceAwareTrait;
     use ContextServiceAwareTrait;
     use PlafondApplicationServiceAwareTrait;
 
@@ -32,7 +32,7 @@ class PlafondApplicationForm extends AbstractForm
 
         $hydrator = new PlafondApplicationFormHydrator;
         $hydrator->setServiceAnnee($this->getServiceAnnee());
-        $hydrator->setServicePlafondEtat($this->getServicePlafondEtat());
+        $hydrator->setServicePlafond($this->getServicePlafond());
         $this->setHydrator($hydrator);
 
         $this->add([
@@ -49,7 +49,7 @@ class PlafondApplicationForm extends AbstractForm
             'name'       => 'plafondEtat',
             'options'    => [
                 'label'         => 'État',
-                'value_options' => Util::collectionAsOptions($this->getPlafondsEtats()),
+                'value_options' => Util::collectionAsOptions($this->getServicePlafond()->getEtats()),
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -90,16 +90,6 @@ class PlafondApplicationForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-    }
-
-
-
-    /**
-     * @return PlafondEtat[]
-     */
-    protected function getPlafondsEtats()
-    {
-        return $this->getServicePlafondEtat()->getList();
     }
 
 
@@ -186,7 +176,7 @@ class PlafondApplicationForm extends AbstractForm
 class PlafondApplicationFormHydrator implements HydratorInterface
 {
     use AnneeServiceAwareTrait;
-    use PlafondEtatServiceAwareTrait;
+    use PlafondServiceAwareTrait;
 
 
     /**
@@ -197,7 +187,7 @@ class PlafondApplicationFormHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $plafondEtat = $this->getServicePlafondEtat()->get($data['plafondEtat']);
+        $plafondEtat = $this->getServicePlafond()->getEntityManager()->find(PlafondEtat::class, $data['plafondEtat']);
         $anneeDebut  = isset($data['anneeDebut']) && $data['anneeDebut'] ? $this->getServiceAnnee()->get($data['anneeDebut']) : null;
         $anneeFin    = isset($data['anneeFin']) && $data['anneeFin'] ? $this->getServiceAnnee()->get($data['anneeFin']) : null;
 

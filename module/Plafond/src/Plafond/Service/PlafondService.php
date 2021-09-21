@@ -12,6 +12,7 @@ use Application\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
 use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Entity\PlafondControle;
 use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
@@ -33,6 +34,18 @@ class PlafondService extends AbstractEntityService
     use QueryGeneratorServiceAwareTrait;
 
     /**
+     * @var PlafondPerimetre[]
+     */
+    protected array $perimetres;
+
+    /**
+     * @var PlafondEtat[]
+     */
+    protected array $etats;
+
+
+
+    /**
      * retourne la classe des entités
      *
      * @return string
@@ -46,42 +59,40 @@ class PlafondService extends AbstractEntityService
 
 
     /**
-     * @param Intervenant       $intervenant
-     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity
+     * @param TypeVolumeHoraire                                                          $typeVolumeHoraire
+     * @param bool                                                                       $pourBlocage
      *
      * @return PlafondControle[]
      */
-    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, bool $depassementsUniquement = true): array
+    public function controle(TypeVolumeHoraire $typeVolumeHoraire, $entity, bool $pourBlocage = false): array
     {
-        $filtreDepassement = $depassementsUniquement ? "AND pd.heures > pd.plafond + pd.derogation + 0.05" : "";
+        $sqls = [];
+        if ($entity instanceof Structure) {
+            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
+        } elseif ($entity instanceof Intervenant) {
+            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage);
+            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::STRUCTURE, $pourBlocage);
+            if (!$pourBlocage) {
+                $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::ELEMENT, $pourBlocage, false, true);
+                $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::REFERENTIEL, $pourBlocage, false, true);
+                $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::VOLUME_HORAIRE, $pourBlocage, false, true);
+            }
+        } elseif ($entity instanceof ElementPedagogique) {
+            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
+        } elseif ($entity instanceof VolumeHoraire) {
+            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage);
+        } elseif ($entity instanceof FonctionReferentiel) {
+            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
+        } else {
+            throw new \Exception('Entité non gérée pour les contrôles de plafonds');
+        }
 
-        $sql = "
-            SELECT
-              pm.code perimetre,
-              p.code plafond_code,
-              p.libelle plafond_libelle,
-              pd.heures heures,
-              pd.plafond plafond,
-              pd.derogation derogation
-            FROM 
-              v_tbl_plafond_intervenant pd
-              JOIN plafond p ON p.id = pd.plafond_id
-              JOIN plafond_perimetre pm ON pm.id = p.plafond_perimetre_id
-            WHERE 
-              pd.intervenant_id = :intervenant
-              AND pd.type_volume_horaire_id = :typeVolumeHoraire
-              $filtreDepassement
-        ";
-
-        $params = [
-            'intervenant'       => $intervenant->getId(),
-            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
-        ];
-
-        $res          = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
+        $sql          = implode("\n\nUNION ALL\n\n", $sqls);
+        $res          = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $depassements = [];
         foreach ($res as $r) {
-            $depassements[] = $this->depassementFromArray($r);
+            $depassements[] = PlafondControle::fromArray($r);
         }
 
         return $depassements;
@@ -90,19 +101,89 @@ class PlafondService extends AbstractEntityService
 
 
     /**
-     * @param array $a
+     * @param TypeVolumeHoraire                                                          $typeVolumeHoraire
+     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity
+     * @param string|PlafondPerimetre|null                                               $perimetre
+     * @param bool                                                                       $pourBlocage
+     * @param bool                                                                       $bloquantUniquement
+     * @param bool                                                                       $depassementsUniquement
      *
-     * @return PlafondControle
+     * @return string
+     * @throws \Exception
      */
-    private function depassementFromArray(array $a): PlafondControle
+    protected function makeControleQuery(
+        TypeVolumeHoraire $typeVolumeHoraire,
+        $entity,
+        $perimetre = null,
+        bool $pourBlocage = false,
+        bool $bloquantUniquement = false,
+        bool $depassementsUniquement = false): string
     {
-        $depassement = new PlafondControle();
-        $depassement->setPlafondLibelle($a['PLAFOND_LIBELLE']);
-        if ($a['PLAFOND_ETAT_CODE'] == 'bloquant') $depassement->setBloquant(true);
-        $depassement->setPlafond($a['PLAFOND']);
-        $depassement->setHeures($a['HEURES']);
+        $filters = [];
 
-        return $depassement;
+        if ($perimetre instanceof PlafondPerimetre) $perimetre = $perimetre->getCode();
+
+        if ($entity instanceof Structure) {
+            if (!$perimetre) $perimetre = PlafondPerimetre::STRUCTURE;
+            $filters['pd.STRUCTURE_ID'] = (int)$entity->getId();
+            $filters['pd.ANNEE_ID']     = (int)$this->getServiceContext()->getAnnee()->getId();
+        } elseif ($entity instanceof Intervenant) {
+            if (!$perimetre) $perimetre = PlafondPerimetre::INTERVENANT;
+            $filters['pd.INTERVENANT_ID'] = (int)$entity->getId();
+        } elseif ($entity instanceof ElementPedagogique) {
+            if (!$perimetre) $perimetre = PlafondPerimetre::ELEMENT;
+            $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getId();
+        } elseif ($entity instanceof VolumeHoraire) {
+            if (!$perimetre) $perimetre = PlafondPerimetre::VOLUME_HORAIRE;
+            $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getService()->getElementPedagogique()->getId();
+            $filters['pd.TYPE_INTERVENTION_ID']   = (int)$entity->getTypeIntervention()->getId();
+        } elseif ($entity instanceof FonctionReferentiel) {
+            if (!$perimetre) $perimetre = PlafondPerimetre::REFERENTIEL;
+            $filters['pd.FONCTION_REFERENTIEL_ID'] = (int)$entity->getId();
+            $filters['pd.ANNEE_ID']                = (int)$this->getServiceContext()->getAnnee()->getId();
+        } else {
+            throw new \Exception('Entité non reconnue pour la création de la requête de contrôle');
+        }
+
+        if ($pourBlocage) {
+            $bloquantUniquement = true;
+        }
+        if ($bloquantUniquement) {
+            $depassementsUniquement = true;
+            $filters['pe.bloquant'] = 1;
+        }
+        if ($depassementsUniquement) {
+            $filters['pd.depassement'] = 1;
+        }
+
+        /*
+        Pour un contrôle en vue d'un blocage, il faut avoir recours à la vue, car les TBL n'ont pas encore été mis à jour
+        Pour un listage de plafonds normal, on utilise la table pour de raisons de perfs
+        */
+
+        $sql = "
+            SELECT
+              p.libelle      message,
+              pp.code        perimetre,
+              pe.code        etat,
+              pe.bloquant    bloquant,
+              pd.depassement depassement,
+              pd.heures      heures,
+              pd.plafond     plafond,
+              pd.derogation  derogation
+            FROM 
+              " . ($pourBlocage ? 'v_' : '') . "tbl_plafond_" . $perimetre . " pd
+              JOIN plafond               p ON p.id = pd.plafond_id
+              JOIN plafond_etat         pe ON pe.id = pd.plafond_etat_id
+              JOIN plafond_perimetre    pp ON pp.id = p.plafond_perimetre_id
+            WHERE
+                  pd.type_volume_horaire_id = " . ((int)$typeVolumeHoraire->getId());
+
+        foreach ($filters as $v => $c) {
+            $sql .= "\n  AND $v = $c";
+        }
+
+        return $sql;
     }
 
 
@@ -128,14 +209,16 @@ class PlafondService extends AbstractEntityService
 
         foreach ($perimetres as $perimetre) {
             $cols = $colsPos['TBL_PLAFOND_' . strtoupper($perimetre->getCode())];
-            $cols = array_diff($cols, ['ID']);
+            $cols = array_diff($cols, ['ID', 'DEPASSEMENT']);
 
             $view = "CREATE OR REPLACE FORCE VIEW V_TBL_PLAFOND_" . strtoupper($perimetre->getCode()) . ' AS';
             $view .= "\nSELECT";
             foreach ($cols as $col) {
-                $view .= "\n  p.$col,";
+                $alias = 'p';
+                if ($col == 'PLAFOND_ETAT_ID') $alias = 'pa';
+                $view .= "\n  $alias.$col,";
             }
-            $view     = substr($view, 0, -1);
+            $view     .= "\n  CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement";
             $view     .= "\nFROM\n(";
             $plafonds = $perimetre->getPlafond();
             $first    = true;
@@ -177,7 +260,7 @@ class PlafondService extends AbstractEntityService
     {
         $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
         $cols    = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
-        $cols    = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION']);
+        $cols    = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION', 'DEPASSEMENT']);
 
         try {
             $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';
@@ -204,25 +287,25 @@ class PlafondService extends AbstractEntityService
     public function calculerDepuisEntite($entity)
     {
         if ($entity instanceof Structure) {
-            $this->calculer('structure', 'STRUCTURE_ID', $entity->getId());
+            $this->calculer(PlafondPerimetre::STRUCTURE, 'STRUCTURE_ID', $entity->getId());
         }
 
         if ($entity instanceof Intervenant) {
-            $this->calculer('intervenant', 'INTERVENANT_ID', $entity->getId());
+            $this->calculer(PlafondPerimetre::INTERVENANT, 'INTERVENANT_ID', $entity->getId());
             if ($entity->getStructure()) {
                 $this->calculerDepuisEntite($entity->getStructure());
             }
         }
 
         if ($entity instanceof ElementPedagogique) {
-            $this->calculer('element', 'ELEMENT_PEDAGOGIQUE_ID', $entity->getId());
+            $this->calculer(PlafondPerimetre::ELEMENT, 'ELEMENT_PEDAGOGIQUE_ID', $entity->getId());
             if ($entity->getStructure()) {
                 $this->calculerDepuisEntite($entity->getStructure());
             }
         }
 
         if ($entity instanceof FonctionReferentiel) {
-            $this->calculer('referentiel', 'FONCTION_REFERENTIEL_ID', $entity->getId());
+            $this->calculer(PlafondPerimetre::REFERENTIEL, 'FONCTION_REFERENTIEL_ID', $entity->getId());
             if ($entity->getStructure()) {
                 $this->calculerDepuisEntite($entity->getStructure());
             }
@@ -279,17 +362,10 @@ class PlafondService extends AbstractEntityService
 
 
 
-    public function construireTableauxBord()
-    {
-        $this->getServiceQueryGenerator()->updateProcedures();
-    }
-
-
-
     public function construire()
     {
         $this->construireVues();
-        $this->construireTableauxBord();
+        $this->getServiceQueryGenerator()->updateProcedures();
     }
 
 
@@ -299,13 +375,67 @@ class PlafondService extends AbstractEntityService
      */
     public function getPerimetres(): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('p');
-        $qb->from(PlafondPerimetre::class, 'p', 'p.id');
-        $qb->addOrderBy("p.ordre");
-        $perimetres = $qb->getQuery()->execute();
+        if (empty($this->perimetres)) {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $qb->select('p');
+            $qb->from(PlafondPerimetre::class, 'p', 'p.id');
+            $qb->addOrderBy("p.ordre");
+            $this->perimetres = $qb->getQuery()->execute();
+        }
 
-        return $perimetres;
+        return $this->perimetres;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return PlafondPerimetre|null
+     */
+    public function getPerimetre(string $code): ?PlafondPerimetre
+    {
+        $parimetres = $this->getPerimetres();
+        if (isset($parimetres[$code])) {
+            return $parimetres[$code];
+        } else {
+            return null;
+        }
+    }
+
+
+
+    /**
+     * @return PlafondEtat[]
+     */
+    public function getEtats(): array
+    {
+        if (empty($this->etats)) {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $qb->select('pe');
+            $qb->from(PlafondEtat::class, 'pe', 'pe.code');
+            $qb->addOrderBy("pe.id");
+            $this->etats = $qb->getQuery()->execute();
+        }
+
+        return $this->etats;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return PlafondEtat|null
+     */
+    public function getEtat(string $code): ?PlafondEtat
+    {
+        $etats = $this->getEtats();
+        if (isset($etats[$code])) {
+            return $etats[$code];
+        } else {
+            return null;
+        }
     }
 
 

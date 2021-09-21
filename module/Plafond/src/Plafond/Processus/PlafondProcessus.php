@@ -50,23 +50,24 @@ class PlafondProcessus implements EntityManagerAwareInterface
 
 
     /**
-     * @param Intervenant       $intervenant
+     * @param Intervenant       $entity
      * @param TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return bool
      */
-    public function endTransaction(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
+    public function endTransaction(Intervenant $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
     {
         $this->getEntityManager()->flush();
 
         if ($isDiminution) {
             $passed = true; // ça passe à tous les coups si on diminue le volume d'heures
         } else {
-            $passed = $this->controle($intervenant, $typeVolumeHoraire);
+            $passed = $this->controle($entity, $typeVolumeHoraire, true);
         }
 
         if ($passed) {
             $this->getEntityManager()->commit();
+            $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
         } else {
             $this->getEntityManager()->rollback();
         }
@@ -77,22 +78,22 @@ class PlafondProcessus implements EntityManagerAwareInterface
 
 
     /**
-     * @param Intervenant       $intervenant
+     * @param Intervenant       $entity
      * @param TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return bool
      */
-    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): bool
+    public function controle($entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
     {
         $blocage = false;
-        $reponse = $this->getServicePlafond()->controle($intervenant, $typeVolumeHoraire);
+        $reponse = $this->getServicePlafond()->controle($typeVolumeHoraire, $entity, $pourBlocage);
         if (!empty($reponse)) {
-            foreach ($reponse as $plafondDepassement) {
-                if ($plafondDepassement->isBloquant()) {
+            foreach ($reponse as $controle) {
+                if ($controle->isBloquant()) {
                     $blocage = true;
-                    $this->flashMessenger->addErrorMessage((string)$plafondDepassement);
-                } else {
-                    $this->flashMessenger->addWarningMessage((string)$plafondDepassement);
+                    $this->flashMessenger->addErrorMessage((string)$controle);
+                } elseif ($controle->isDepassement()) {
+                    $this->flashMessenger->addWarningMessage((string)$controle);
                 }
             }
         }
@@ -100,4 +101,13 @@ class PlafondProcessus implements EntityManagerAwareInterface
         return !$blocage;
     }
 
+
+
+    /**
+     *
+     */
+    public function construire()
+    {
+        $this->getServicePlafond()->construire();
+    }
 }

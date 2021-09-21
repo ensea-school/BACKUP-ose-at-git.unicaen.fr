@@ -2080,6 +2080,20 @@ return [
         'DEROGATION',
         'DEPASSEMENT',
     ],
+    'PLAFOND_DEROGATION'             => [
+        'ID',
+        'INTERVENANT_ID',
+        'PLAFOND_ID',
+        'HEURES',
+    ],
+    'PLAFOND_STRUCTURE'              => [
+        'ID',
+        'STRUCTURE_ID',
+        'PLAFOND_ID',
+        'ANNEE_DEBUT_ID',
+        'ANNEE_FIN_ID',
+        'PLAFOND',
+    ],
 ];
 
 //@formatter:on

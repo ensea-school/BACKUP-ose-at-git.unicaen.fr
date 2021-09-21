@@ -354,6 +354,14 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'qualiteStatutaire' => 'N',
                 'temoinValidite'    => 1,
             ];
+            /*CONTRAT*/
+            $contrat[] =
+                ['dateDebutContrat'  => $dateEffet,
+                 'dateFinContrat'    => $dateFin,
+                 'natureContrat'     => 'CO',
+                 'typeContrat'       => 'TC01',
+                 'typeLienJuridique' => 'TL02',
+                ];
 
             /*POSITION ADMINISTRATIVE*/
             $position[] =
@@ -399,28 +407,28 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
             $coordonneesTelMail[] = '';
-            if ($dossierIntervenant->getTelPro()) {
+            if (!empty($dossierIntervenant->getTelPro())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getTelPro(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO,
                 ];
             }
-            if ($dossierIntervenant->getTelPerso()) {
+            if (!empty($dossierIntervenant->getTelPerso())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getTelPerso(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO,
                 ];
             }
-            if ($dossierIntervenant->getEmailPro()) {
+            if (!empty($dossierIntervenant->getEmailPro())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getEmailPro(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
                 ];
             }
-            if ($dossierIntervenant->getEmailPerso()) {
+            if (!empty($dossierIntervenant->getEmailPerso())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getEmailPerso(),
@@ -446,6 +454,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'listeCoordonneesPostales'  => $coordonneesPostales,
                 'listeCoordonneesBancaires' => $coordonneesBancaires,
                 'listeCarriere'             => $carriere,
+                //'listeContrats'             => $contrat,
                 'listeModalitesServices'    => $service,
                 'listeStatuts'              => $statut,
                 'listeNationalites'         => $nationalites,
@@ -462,11 +471,13 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'UO'                        => $datas['connecteurForm']['affectation'],
             ];
 
-            $matricule = $this->siham->priseEnChargeAgent($params);
 
+            $matricule = $this->siham->priseEnChargeAgent($params);
 
             return $matricule;
         } catch (SihamException $e) {
+
+
             throw new \Exception($e->getMessage());
         }
     }
@@ -543,7 +554,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'listeCarriere'          => $carriere,
                 'listeModalitesServices' => $service,
                 'listeStatuts'           => $statut,
-                'listeContrats'          => $contrat,
+                //'listeContrats'          => $contrat,
                 'listePositions'         => $position,
                 'motifEntree'            => 'REN',
                 'matricule'              => $matricule,

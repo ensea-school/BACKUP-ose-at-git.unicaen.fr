@@ -86,6 +86,7 @@
 
         <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="true"/>
         <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+        <field name="exportDate" type="datetime" column="EXPORT_DATE" nullable="true"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-column name="SOURCE_ID" referenced-column-name="ID"/>

@@ -580,4 +580,16 @@ class IntervenantService extends AbstractEntityService
         return $intervenant;
     }
 
+
+
+    public function updateExportDate(Intervenant $intervenant): Intervenant
+    {
+        $date = new \DateTime();
+        $intervenant->setExportDate($date);
+        $this->getEntityManager()->persist($intervenant);
+        $this->getEntityManager()->flush();
+
+        return $intervenant;
+    }
+
 }

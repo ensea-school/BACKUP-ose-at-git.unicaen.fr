@@ -34,6 +34,15 @@ return [
                             ],
                         ],
                     ],
+                    'exporter-rh'    => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/voir?tab=export-rh',
+                            'defaults' => [
+                                'action' => 'voir',
+                            ],
+                        ],
+                    ],
                     'pec'            => [
                         'type'          => 'Segment',
                         'may_terminate' => false,

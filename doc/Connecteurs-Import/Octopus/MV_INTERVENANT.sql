@@ -7,7 +7,9 @@ WITH i AS (
 				    MAX(z_type) OVER (partition by code, z_statut_id)                    z_type,
                     MIN(source_code)    OVER (partition by code, z_statut_id)            source_code,
                     MIN(validite_debut) OVER (partition by code, z_statut_id)            validite_debut,
-                    MAX(validite_fin)   OVER (partition by code, z_statut_id)            validite_fin
+                    MAX(validite_fin)   OVER (partition by code, z_statut_id)            validite_fin,
+                    MAX(fin_affectation_siham) OVER (partition by code, z_statut_id)     fin_affectation_siham
+
     FROM (
 	    	 --Step 1 : On prend tous les individus qui ont ou ont eu un contrat à l'université
              SELECT icto.individu_id                                            code,
@@ -20,7 +22,8 @@ WITH i AS (
                     	ELSE 'vacataire' END                                        z_type,
                     icto.id_orig                                                source_code,
                     COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                    COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
+                    COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin,
+                    NULL	   													fin_affectation_siham
              FROM octo.v_individu_contrat_type_ose@octoprod icto
                       JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
                       JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
@@ -30,14 +33,18 @@ WITH i AS (
 
              UNION ALL
              -- Step 2 : on prend tout le reste potentiel vacataire, notamment les hébergés
-             SELECT uni.c_individu_chaine                                       code,
-                    'AUTRES'                                                    z_statut_id,
+             SELECT uni.c_individu_chaine                                           code,
+                    'AUTRES'                                                        z_statut_id,
 					CASE
                     	WHEN (inds.t_titulaire='O' OR inds.t_cdi='O' OR inds.t_cdd='O') THEN 'permanent'
-                    	ELSE 'vacataire' END                                       z_type,
-                    uni.c_individu_chaine || '-autre'                           source_code,
-                    COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                    COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin
+                    	ELSE 'vacataire' END                                        z_type,
+                    uni.c_individu_chaine || '-autre'                               source_code,
+                    COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))     validite_debut,
+                    COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))       validite_fin,
+                    CASE
+                        WHEN inds.c_source = 'SIHAM' THEN 	inds.d_fin
+                        ELSE NULL END		                                        fin_affectation_siham
+
              FROM octo.individu_unique@octoprod uni
                       JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
    					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
@@ -237,11 +244,8 @@ SELECT DISTINCT
         WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL) THEN compte.date_fin
         ELSE i.validite_fin
         END                                                        validite_fin,
-    CASE
-        WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
-            THEN NULL
-        ELSE i.validite_fin
-        END                                                        affectation_fin
+    	i.fin_affectation_siham                                    affectation_fin
+
 FROM i
          JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))

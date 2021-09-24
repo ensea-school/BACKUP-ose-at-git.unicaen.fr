@@ -12,6 +12,7 @@ use ExportRh\Form\ExportRhForm;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
 use Zend\Validator\Date;
 use Zend\View\Model\ViewModel;
@@ -120,6 +121,8 @@ class ExportRhController extends AbstractController
          *
          */
         try {
+
+
             if ($intervenant->getStatut()->getCode() != 'BIATSS' && $typeIntervenant != 'P') {
                 $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
             }
@@ -186,7 +189,8 @@ class ExportRhController extends AbstractController
                 $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
 
                 if ($result !== false) {
-                    $this->flashMessenger()->addSuccessMessage('succes matricule : ' . $result);
+                    $this->exportRhService->cloreDossier($intervenant);
+                    $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
                     $this->getServiceIntervenant()->updateExportDate($intervenant);
                 } else {
                     $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
@@ -217,7 +221,8 @@ class ExportRhController extends AbstractController
                 $posts  = $this->getRequest()->getPost();
                 $result = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
                 if ($result !== false) {
-                    $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés');
+                    $this->exportRhService->cloreDossier($intervenant);
+                    $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
                     $this->getServiceIntervenant()->updateExportDate($intervenant);
                 } else {
                     $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');

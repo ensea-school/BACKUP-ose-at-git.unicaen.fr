@@ -2896,7 +2896,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "af707552271432f46eb16fe86b0718501d8b2980"
+                "reference": "5eecac4aa6ecc069cc31dcecbd10731aad9d194a"
             },
             "require": {
                 "zendframework/zend-mail": "^2.10",
@@ -2921,7 +2921,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2021-09-21T12:38:46+00:00"
+            "time": "2021-09-24T08:30:23+00:00"
         },
         {
             "name": "unicaen/tbl",

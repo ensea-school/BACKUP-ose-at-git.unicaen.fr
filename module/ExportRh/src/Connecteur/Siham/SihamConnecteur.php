@@ -9,6 +9,7 @@ use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use UnicaenApp\Util;
 use UnicaenSiham\Entity\Agent;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
@@ -269,6 +270,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $adresse .= (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie() . ' ' : '';
                 $adresse .= (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() . ' ' : '';
                 $adresse .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() . ' ' : '';
+                $adresse = Util::reduce($adresse);
+                $adresse = str_replace('_', ' ', $adresse);
 
 
                 $params = [
@@ -387,6 +390,9 @@ class SihamConnecteur implements ConnecteurRhInterface
             $adresse .= (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie() . ' ' : '';
             $adresse .= (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() . ' ' : '';
             $adresse .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() . ' ' : '';
+            $adresse = Util::reduce($adresse);
+            $adresse = str_replace('_', ' ', $adresse);
+
 
             $coordonneesPostales[] = [
                 'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
@@ -569,6 +575,36 @@ class SihamConnecteur implements ConnecteurRhInterface
             $this->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $datas);
 
             return $matricule;
+        } catch (SihamException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+
+    public function cloreDossier(Intervenant $intervenant): ?bool
+    {
+
+        try {
+            $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+            $dateSortie         = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+
+            $matricule = '';
+            //On récupére le code RH par le INSEE
+            $matricule = $this->trouverCodeRhByInsee($intervenant);
+            if (!empty($intervenant->getCodeRh()) && empty($matricule)) {
+                $matricule = $intervenant->getCodeRh();
+            }
+
+            $paramsWS = [
+                'categorieSituation' => 'MC140',
+                'dateSortie'         => $dateSortie,
+                'matricule'          => $matricule,
+                'motifSituation'     => 'MC141',
+
+            ];
+
+            return $this->siham->cloreDossier($paramsWS);
         } catch (SihamException $e) {
             throw new \Exception($e->getMessage());
         }

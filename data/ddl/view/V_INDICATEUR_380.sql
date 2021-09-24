@@ -11,5 +11,5 @@ FROM intervenant i
 JOIN contrat c ON c.intervenant_id = i.id  AND c.histo_destruction IS NULL
 WHERE i.export_date IS NULL
 AND i.affectation_fin < sysdate
-AND c.
+AND c.date_retour_signe IS NOT NULL
 ) t

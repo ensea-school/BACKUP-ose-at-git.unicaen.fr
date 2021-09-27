@@ -26,6 +26,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 * Nouvelle vue V_IMPORT_DEPUIS_DOSSIERS pouvant servir pour peupler les données des intervenants à partir des données personnelles
 * Possibilité pour un gestionnire de saisir des heures d'enseignement ou de référentiel qui n'auront pas besoin d'être validées par la suite (nouveau privilège d'autovalidation associé)
+* Ajout d'une colonne dans l'export CSV des charges précisant si un élément est mutualisé ou non
 
 
 # OSE 16 (14/09/2021)

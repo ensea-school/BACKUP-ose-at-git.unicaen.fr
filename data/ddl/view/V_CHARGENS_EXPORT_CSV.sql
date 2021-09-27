@@ -19,6 +19,10 @@ SELECT
 
   ep.code           element_code,
   ep.libelle        element_libelle,
+  CASE
+    WHEN COALESCE(ch.nbch,0) > 1 THEN 'Oui'
+    ELSE 'Non'
+  END               element_mutualise,
   p.libelle_court   periode,
   d.source_code     discipline_code,
   d.libelle_court   discipline_libelle,
@@ -56,6 +60,12 @@ SELECT
   LEFT JOIN scenario_noeud_effectif     sne ON sne.scenario_noeud_id = sn.id
                                            AND sne.type_heures_id = cph.type_heures_id
                                            AND sne.etape_id = n.etape_id
+  LEFT JOIN (
+    SELECT element_pedagogique_id, count(*) nbch
+    FROM chemin_pedagogique
+    WHERE histo_destruction IS NULL
+    GROUP BY element_pedagogique_id
+  )                                      ch ON ch.element_pedagogique_id = ep.id
 ORDER BY
   structure_porteuse_code,
   etape_porteuse_code,

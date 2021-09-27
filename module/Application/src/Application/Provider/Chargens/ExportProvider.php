@@ -63,6 +63,7 @@ class ExportProvider
 
                 'element-code'       => $d['ELEMENT_CODE'],
                 'element-libelle'    => $d['ELEMENT_LIBELLE'],
+                'element-mutualise'  => $d['ELEMENT_MUTUALISE'],
                 'periode'            => $d['PERIODE'],
                 'discipline-code'    => $d['DISCIPLINE_CODE'],
                 'discipline-libelle' => $d['DISCIPLINE_LIBELLE'],
@@ -120,21 +121,22 @@ class ExportProvider
 
                     'element-code'       => $d[9],
                     'element-libelle'    => $d[10],
-                    'periode'            => $d[11],
-                    'discipline-code'    => $d[12],
-                    'discipline-libelle' => $d[13],
-                    'type-heures'        => $d[14],
-                    'type-intervention'  => $d[15],
+                    'element-mutualise'  => $d[11],
+                    'periode'            => $d[12],
+                    'discipline-code'    => $d[13],
+                    'discipline-libelle' => $d[14],
+                    'type-heures'        => $d[15],
+                    'type-intervention'  => $d[16],
 
-                    'seuil-ouverture'    => (int)$d[16],
-                    'seuil-dedoublement' => (int)$d[17],
-                    'assiduite'          => stringToFloat($d[18]),
-                    'effectif-etape'     => (int)$d[19],
-                    'effectif-element'   => (int)$d[20],
-                    'heures-ens'         => stringToFloat($d[21]),
-                    'groupes'            => stringToFloat($d[22]),
-                    'heures'             => stringToFloat($d[23]),
-                    'hetd'               => stringToFloat($d[24]),
+                    'seuil-ouverture'    => (int)$d[17],
+                    'seuil-dedoublement' => (int)$d[18],
+                    'assiduite'          => stringToFloat($d[19]),
+                    'effectif-etape'     => (int)$d[20],
+                    'effectif-element'   => (int)$d[21],
+                    'heures-ens'         => stringToFloat($d[22]),
+                    'groupes'            => stringToFloat($d[23]),
+                    'heures'             => stringToFloat($d[24]),
+                    'hetd'               => stringToFloat($d[25]),
                 ];
                 $data[] = $l;
             }
@@ -173,6 +175,7 @@ class ExportProvider
 
             'element-code'       => 'Ens. (code)',
             'element-libelle'    => 'Enseignement (libellé)',
+            'element-mutualise'  => 'Mutualisation',
             'periode'            => 'Période',
             'discipline-code'    => 'Discipline (code)',
             'discipline-libelle' => 'Discipline (libellé)',

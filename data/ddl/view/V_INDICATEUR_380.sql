@@ -12,4 +12,5 @@ JOIN contrat c ON c.intervenant_id = i.id  AND c.histo_destruction IS NULL
 WHERE i.export_date IS NULL
 AND i.affectation_fin < sysdate
 AND c.date_retour_signe IS NOT NULL
+AND i.annee_id = (SELECT valeur FROM parametre p WHERE nom = 'annee')
 ) t

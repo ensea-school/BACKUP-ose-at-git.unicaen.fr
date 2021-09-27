@@ -18,8 +18,14 @@ Objectif : Plafonds personnalisables
 # OSE 17 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
+## Corrections de bugs
 
+* Au niveau du connecteur Actul+, les formations fermées étaient ignorées, elles sont également synchronisées
 
+## Nouveautés
+
+* Nouvelle vue V_IMPORT_DEPUIS_DOSSIERS pouvant servir pour peupler les données des intervenants à partir des données personnelles
+* Possibilité pour un gestionnire de saisir des heures d'enseignement ou de référentiel qui n'auront pas besoin d'être validées par la suite (nouveau privilège d'autovalidation associé)
 
 
 # OSE 16 (14/09/2021)
@@ -40,6 +46,7 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 ## Correction de bugs
 
 * Correction de la validation du numéro INSEE dans le dossier de l'intervenant dans le cas d'un département de naissance en Outre Mer (le numéro de département de naissance de l'INSEE dans ce cas peut être sur 2 ou 3 chiffres)
+* Bug sur la prise en compte de règles multiples sur les pièces jointes par statut d'intervenant (date de début et date de fin)
 * Bug [#39644](https://redmine.unicaen.fr/Etablissement/issues/39644) corrigé au niveau de la formule de calcul de l'Université d'Artois
 * Au niveau des formules et en mode test uniquement, si le vacataire n'avait pas de composante d'affectation, les calculs pouvaient être faussés 
 

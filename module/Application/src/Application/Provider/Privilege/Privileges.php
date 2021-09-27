@@ -102,6 +102,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const DOSSIER_VISUALISATION                               = 'dossier-visualisation';
     const DROIT_AFFECTATION_EDITION                           = 'droit-affectation-edition';
     const DROIT_AFFECTATION_VISUALISATION                     = 'droit-affectation-visualisation';
+    const ENSEIGNEMENT_AUTOVALIDATION                         = 'enseignement-autovalidation';
     const ENSEIGNEMENT_DEVALIDATION                           = 'enseignement-devalidation';
     const ENSEIGNEMENT_EDITION                                = 'enseignement-edition';
     const ENSEIGNEMENT_EDITION_MASSE                          = 'enseignement-edition-masse';
@@ -204,6 +205,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const PLAFONDS_VISUALISATION                              = 'plafonds-visualisation';
     const REFERENTIEL_ADMIN_EDITION                           = 'referentiel-admin-edition';
     const REFERENTIEL_ADMIN_VISUALISATION                     = 'referentiel-admin-visualisation';
+    const REFERENTIEL_AUTOVALIDATION                          = 'referentiel-autovalidation';
     const REFERENTIEL_COMMUN_EMPLOYEUR_EDITION                = 'referentiel-commun-employeur-edition';
     const REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION          = 'referentiel-commun-employeur-visualisation';
     const REFERENTIEL_COMMUN_VOIRIE_EDITION                   = 'referentiel-commun-voirie-edition';

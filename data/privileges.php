@@ -124,6 +124,7 @@ return [
             'edition-masse'                          => 'Édition en masse',
             'exterieur'                              => 'Saisie de service dans une autre autre université',
             'validation'                             => 'Validation',
+            'autovalidation'                         => 'Validation automatique',
             'devalidation'                           => 'Dévalidation',
             'export-pdf'                             => 'Export PDF',
             'export-csv'                             => 'Export CSV',
@@ -146,6 +147,7 @@ return [
             'visualisation'             => 'Visualisation',
             'edition'                   => 'Édition',
             'validation'                => 'Validation',
+            'autovalidation'            => 'Validation automatique',
             'admin-edition'             => 'Administration - Édition',
             'devalidation'              => 'Dévalidation',
             'admin-visualisation'       => 'Administration - Visualisation',
@@ -389,9 +391,11 @@ return [
     'plafonds' => [
         'libelle'    => 'Administration des Plafonds',
         'privileges' => [
-            'visualisation' => 'Visualisation',
-            'edition'       => 'Édition',
-            'application'   => 'Application',
+            'visualisation'           => 'Visualisation',
+            'edition'                 => 'Édition',
+            'application'             => 'Application',
+            'structure-visualisation' => 'Par structure (visualisation)',
+            'structure-edition'       => 'Par structure (édition)',
         ],
     ],
 

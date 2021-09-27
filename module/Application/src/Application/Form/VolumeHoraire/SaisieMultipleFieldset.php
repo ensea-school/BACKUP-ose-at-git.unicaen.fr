@@ -34,8 +34,11 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
     {
         $qb = $this->getServiceTypeIntervention()->finderByContext();
         $this->getServiceTypeIntervention()->finderByHistorique($qb);
-        return $this->getServiceTypeIntervention()->getList( $qb );
+
+        return $this->getServiceTypeIntervention()->getList($qb);
     }
+
+
 
     /**
      *
@@ -43,22 +46,21 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
     public function init()
     {
         $hydrator = new SaisieMultipleHydrator;
-        $hydrator->setServiceTypeIntervention( $this->getServiceTypeIntervention() );
-        $hydrator->setEntityManager( $this->getEntityManager() );
+        $hydrator->setServiceTypeIntervention($this->getServiceTypeIntervention());
+        $hydrator->setEntityManager($this->getEntityManager());
 
-        $this   ->setAttribute('method', 'post')
-                ->setAttribute('class', 'volume-horaire-multiple')
-                ->setHydrator($hydrator)
-                ->setAllowedObjectBindingClass(VolumeHoraireListe::class)
-        ;
+        $this->setAttribute('method', 'post')
+            ->setAttribute('class', 'volume-horaire-multiple')
+            ->setHydrator($hydrator)
+            ->setAllowedObjectBindingClass(VolumeHoraireListe::class);
 
         $tis = $this->getTypesInterventions();
-        foreach( $tis as $typeIntervention ){
+        foreach ($tis as $typeIntervention) {
             $this->add([
                 'name'       => $typeIntervention->getCode(),
                 'options'    => [
-                    'label' => '<abbr title="'.$typeIntervention->getLibelle().'">'.$typeIntervention->getCode().'</abbr> :',
-                    'label_options' => ['disable_html_escape' => true]
+                    'label'         => '<abbr title="' . $typeIntervention->getLibelle() . '">' . $typeIntervention->getCode() . '</abbr> :',
+                    'label_options' => ['disable_html_escape' => true],
                 ],
                 'attributes' => [
                     'title' => $typeIntervention->getLibelle(),
@@ -68,12 +70,13 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
                 ],
                 'type'       => 'Text',
             ]);
-
         }
-        $this->add( new Hidden('type-volume-horaire') );
-        $this->add( new Hidden('service') );
-        $this->add( new Hidden('periode') );
+        $this->add(new Hidden('type-volume-horaire'));
+        $this->add(new Hidden('service'));
+        $this->add(new Hidden('periode'));
     }
+
+
 
     /**
      * Should return an array specification compatible with
@@ -84,14 +87,15 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
     public function getInputFilterSpecification()
     {
         $filters = [];
-        foreach( $this->getTypesInterventions() as $typeIntervention ){
+        foreach ($this->getTypesInterventions() as $typeIntervention) {
             $filters[$typeIntervention->getCode()] = [
                 'required' => false,
-                'filters'    => [
+                'filters'  => [
                     ['name' => FloatFromString::class],
                 ],
             ];
         }
+
         return $filters;
     }
 
@@ -112,7 +116,6 @@ class SaisieMultipleHydrator implements HydratorInterface
     use TypeInterventionServiceAwareTrait;
 
 
-
     /**
      *
      * @return \Application\Service\TypeInterventionService[]
@@ -124,6 +127,7 @@ class SaisieMultipleHydrator implements HydratorInterface
         } else {
             $qb = $this->getServiceTypeIntervention()->finderByHistorique();
             $this->getServiceTypeIntervention()->finderByContext($qb);
+
             return $this->getServiceTypeIntervention()->getList($qb);
         }
     }
@@ -133,8 +137,8 @@ class SaisieMultipleHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                  $data
-     * @param  \Application\Entity\VolumeHoraireListe $object
+     * @param array                                  $data
+     * @param \Application\Entity\VolumeHoraireListe $object
      *
      * @return object
      */
@@ -153,7 +157,7 @@ class SaisieMultipleHydrator implements HydratorInterface
             } else {
                 $heures = 0;
             }
-            $object->setHeures($heures, false);
+            $object->setHeures($heures);
         }
 
         return $object;
@@ -164,7 +168,7 @@ class SaisieMultipleHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\VolumeHoraireListe $object
+     * @param \Application\Entity\VolumeHoraireListe $object
      *
      * @return array
      */
@@ -176,7 +180,7 @@ class SaisieMultipleHydrator implements HydratorInterface
             'service'             => $object->getService() ? $object->getService()->getId() : null,
             'periode'             => $object->getPeriode() ? $object->getPeriode()->getId() : null,
         ];
-        $tis = $this->getTypesInterventions($object->getService());
+        $tis  = $this->getTypesInterventions($object->getService());
         foreach ($tis as $typeIntervention) {
             $vhl->setTypeIntervention($typeIntervention);
             $data[$typeIntervention->getCode()] = StringFromFloat::run($vhl->getHeures(), false);

@@ -6,11 +6,12 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * VolumeHoraireReferentiel
  */
-class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareInterface
+class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
@@ -354,7 +355,6 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
 
 
-
     /**
      * @return \DateTime
      */
@@ -399,5 +399,12 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
         $this->horaireFin = $horaireFin;
 
         return $this;
+    }
+
+
+
+    public function getResourceId()
+    {
+        return 'VolumeHoraireReferentiel';
     }
 }

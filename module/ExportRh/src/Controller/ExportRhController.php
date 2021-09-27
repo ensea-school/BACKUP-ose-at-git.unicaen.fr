@@ -148,6 +148,7 @@ class ExportRhController extends AbstractController
 
             $nameConnecteur = $this->exportRhService->getConnecteurName();
             $form           = $this->getExportRhForm($intervenant);
+            $form->bind($intervenantDossier);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }

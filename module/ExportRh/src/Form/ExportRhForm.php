@@ -4,6 +4,7 @@ namespace ExportRh\Form;
 
 use Application\Form\AbstractForm;
 use ExportRh\Form\Fieldset\GeneriqueFieldset;
+use ExportRh\Hydrator\ExportRhHydrator;
 use Zend\Form\Fieldset;
 
 class ExportRhForm extends AbstractForm
@@ -29,6 +30,9 @@ class ExportRhForm extends AbstractForm
         $this->add($generiqueFieldset->init());
         //Partie sépcifique au connecteur SI RH
         $this->add($this->fieldsetConnecteur->init());
+        
+        $hydrator = new ExportRhHydrator();
+        $this->setHydrator($hydrator);
 
 
         $this->add([

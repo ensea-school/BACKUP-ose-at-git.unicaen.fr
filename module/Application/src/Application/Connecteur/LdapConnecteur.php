@@ -3,6 +3,7 @@
 namespace Application\Connecteur;
 
 use Application\Entity\Db\Composante;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\AbstractService;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
@@ -215,6 +216,31 @@ class LdapConnecteur extends AbstractService
                 $login = $this->getPeopleAttribute($ldapUser, $this->getUtilisateurLogin());
 
                 return $this->getUtilisateur($login, $autoInsert);
+            }
+        }
+
+        return null;
+    }
+
+
+
+    public function intervenantGetLogin(Intervenant $intervenant): ?string
+    {
+        $utilisateurCode = $intervenant->getUtilisateurCode();
+
+        if (!$utilisateurCode) return null;
+
+        /* @var $utilisateur Utilisateur */
+        $utilisateur = $this->getServiceUtilisateur()->getRepo()->findOneBy(['code' => $utilisateurCode]);
+
+        if ($utilisateur && $utilisateur->getUsername()) {
+            return $utilisateur->getUsername();
+        }
+
+        if ($this->isActif()) {
+            $ldapUser = $this->mapperPeople->findOneByNoIndividu($utilisateurCode);
+            if ($ldapUser) {
+                return $this->getPeopleAttribute($ldapUser, $this->getUtilisateurLogin());
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace Application\View\Helper\Intervenant;
 
+use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Constants;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -20,6 +21,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
     use IntervenantAwareTrait;
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
+    use LdapConnecteurAwareTrait;
 
 
     /**
@@ -79,6 +81,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Id"      => $entity->getId(),
                 "Code"    => $entity->getCode(),
                 "Code RH" => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnu)</span>',
+                "Login"   => $this->getConnecteurLdap()->intervenantGetLogin($entity) ?: '<span class="inconnu">(Inconnu)</span>',
             ],
         ];
 

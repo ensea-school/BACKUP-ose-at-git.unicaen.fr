@@ -9,6 +9,8 @@ use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
@@ -105,6 +107,14 @@ class ServiceAssertion extends AbstractAssertion
                         return $this->assertServiceEdition($role, $entity);
                     case Privileges::ENSEIGNEMENT_EXTERIEUR:
                         return $this->assertServiceExterieur($role, $entity);
+                    case Privileges::ENSEIGNEMENT_VALIDATION:
+                        return $this->assertServiceValidation($role, $entity);
+                }
+            break;
+            case $entity instanceof VolumeHoraire:
+                switch ($privilege) {
+                    case Privileges::ENSEIGNEMENT_VALIDATION:
+                        return $this->assertVolumeHoraireValidation($role, $entity);
                 }
             break;
             case $entity instanceof ServiceReferentiel:
@@ -113,6 +123,14 @@ class ServiceAssertion extends AbstractAssertion
                         return $this->assertServiceReferentielVisualisation($role, $entity);
                     case Privileges::REFERENTIEL_EDITION:
                         return $this->assertServiceReferentielEdition($role, $entity);
+                    case Privileges::REFERENTIEL_VALIDATION:
+                        return $this->assertServiceReferentielValidation($role, $entity);
+                }
+            break;
+            case $entity instanceof VolumeHoraireReferentiel:
+                switch ($privilege) {
+                    case Privileges::REFERENTIEL_VALIDATION:
+                        return $this->assertVolumeHoraireReferentielValidation($role, $entity);
                 }
             break;
             case $entity instanceof Intervenant:
@@ -135,10 +153,10 @@ class ServiceAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_VALIDATION:
                     case Privileges::REFERENTIEL_VALIDATION:
-                        return $this->assertServiceValidation($role, $entity);
+                        return $this->assertValidationValidation($role, $entity);
                     case Privileges::ENSEIGNEMENT_DEVALIDATION:
                     case Privileges::REFERENTIEL_DEVALIDATION:
-                        return $this->assertServiceDevalidation($role, $entity);
+                        return $this->assertValidationDevalidation($role, $entity);
                 }
             break;
         }
@@ -373,18 +391,59 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertServiceValidation(Role $role, Validation $validation)
+    protected function assertVolumeHoraireValidation(Role $role, VolumeHoraire $volumeHoraire)
+    {
+        $service = $volumeHoraire->getService();
+
+        return $this->assertServiceValidation($role, $service);
+    }
+
+
+
+    protected function assertServiceValidation(Role $role, Service $service)
+    {
+        return $this->assertValidation($role, $service->getIntervenant(), $service->getStructure());
+    }
+
+
+
+    protected function assertVolumeHoraireReferentielValidation(Role $role, VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    {
+        $serviceReferentiel = $volumeHoraireReferentiel->getServiceReferentiel();
+
+        return $this->assertServiceReferentielValidation($role, $serviceReferentiel);
+    }
+
+
+
+    protected function assertServiceReferentielValidation(Role $role, ServiceReferentiel $serviceReferentiel)
+    {
+        return $this->assert($role, $serviceReferentiel->getIntervenant(), $serviceReferentiel->getStructure());
+    }
+
+
+
+    protected function assertValidationValidation(Role $role, Validation $validation)
     {
         return $this->asserts([
             !$validation->getId(),
-            $this->assertIntervenant($role, $validation->getIntervenant()),
-            $this->assertStructure($role, $validation->getStructure()),
+            $this->assertValidation($role, $validation->getIntervenant(), $validation->getStructure()),
         ]);
     }
 
 
 
-    protected function assertServiceDevalidation(Role $role, Validation $validation)
+    protected function assertValidation(Role $role, Intervenant $intervenant, ?Structure $structure)
+    {
+        return $this->asserts([
+            $this->assertIntervenant($role, $intervenant),
+            $this->assertStructure($role, $structure),
+        ]);
+    }
+
+
+
+    protected function assertValidationDevalidation(Role $role, Validation $validation)
     {
         return $this->asserts([
             $validation->getId(),
@@ -440,7 +499,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructure(Role $role, Structure $structure = null)
+    protected function assertStructure(Role $role, ?Structure $structure = null)
     {
         if ($structure) {
             if ($ri = $role->getStructure()) {

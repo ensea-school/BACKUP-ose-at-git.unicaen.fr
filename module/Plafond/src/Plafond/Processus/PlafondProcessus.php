@@ -89,7 +89,7 @@ class PlafondProcessus implements EntityManagerAwareInterface
         $reponse = $this->getServicePlafond()->controle($typeVolumeHoraire, $entity, $pourBlocage);
         if (!empty($reponse)) {
             foreach ($reponse as $controle) {
-                if ($controle->isBloquant()) {
+                if ($controle->isBloquant() && $controle->isDepassement()) {
                     $blocage = true;
                     $this->flashMessenger->addErrorMessage((string)$controle);
                 } elseif ($controle->isDepassement()) {

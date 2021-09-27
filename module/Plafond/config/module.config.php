@@ -86,6 +86,21 @@ return [
                     ],
                 ],
             ],
+
+            'structure' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/structure',
+                    'defaults' => [
+                        'controller' => 'Plafond\Controller\PlafondStructure',
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    /* Placez ici vos routes filles */
+                ],
+            ],
         ],
     ],
 
@@ -141,10 +156,18 @@ return [
             'action'     => ['editerApplication', 'supprimerApplication'],
             'privileges' => Privileges::PLAFONDS_APPLICATION,
         ],
+        [
+            'controller' => 'Plafond\Controller\PlafondStructure',
+            'action'     => ['index'],
+            'privileges' => [
+                /* Placez ici les privilèges concernés */
+            ],
+        ],
     ],
 
     'controllers' => [
-        'Plafond\Controller\Plafond' => Controller\PlafondControllerFactory::class,
+        'Plafond\Controller\Plafond'          => Controller\PlafondControllerFactory::class,
+        'Plafond\Controller\PlafondStructure' => Controller\PlafondStructureControllerFactory::class,
     ],
 
     'services' => [

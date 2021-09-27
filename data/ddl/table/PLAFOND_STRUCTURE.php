@@ -33,7 +33,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'HEURES'        => [
+        'HEURES'         => [
             'name'        => 'HEURES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',

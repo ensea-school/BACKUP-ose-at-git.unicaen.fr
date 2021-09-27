@@ -2092,7 +2092,7 @@ return [
         'PLAFOND_ID',
         'ANNEE_DEBUT_ID',
         'ANNEE_FIN_ID',
-        'PLAFOND',
+        'HEURES',
     ],
 ];
 

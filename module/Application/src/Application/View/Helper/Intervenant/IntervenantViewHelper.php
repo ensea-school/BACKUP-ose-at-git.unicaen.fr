@@ -58,28 +58,27 @@ class IntervenantViewHelper extends AbstractHtmlElement
         }
 
         $vars = [
-            'identite'    => [
-                "Civilité"   => (string)$entity->getCivilite(),
+            'identite'     => [
+                "Civilité"   => (string)$entity->getCivilite()->getLibelleLong(),
                 "NOM prénom" => $entity,
                 //"Date de naissance" => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
             ],
-            'coordonnees' => [
+            'coordonnees'  => [
                 "Email"           => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone perso" => $entity->getTelPerso() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone pro"   => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Adresse"         => nl2br($entity->getAdresse(false)),
             ],
-            'metier'      => [
-                "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
-                "Statut de l'intervenant"   => $entity->getStatut(),
-                "N° {$entity->getSource()}" => $entity->getCode(),
-                "N° RH"                     => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnue)</span>',
-                "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
-                "Modifié le"                => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
+            'metier'       => [
+                "Type d'intervenant"       => $entity->getStatut()->getTypeIntervenant(),
+                "Statut de l'intervenant"  => $entity->getStatut(),
+                "Composante d'affectation" => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Dernière modification le" => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
             ],
-            'divers'      => [
-                "Id" => $entity->getId(),
-                //"Id de connexion" => ($u = $entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)",
+            'identifiants' => [
+                "Id"      => $entity->getId(),
+                "Code"    => $entity->getCode(),
+                "Code RH" => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnu)</span>',
             ],
         ];
 

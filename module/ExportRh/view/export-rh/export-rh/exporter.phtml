@@ -23,9 +23,9 @@ if ($priseEnCharge) {
     <?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
 
 
-    <?php if ($typeIntervenant == 'P' || $intervenant->getStatut()->getCode() == 'BIATSS'): ?>
+    <?php if ($typeIntervenant == 'P' || array_key_exists($intervenant->getStatut()->getCode(), $excludeStatut)): ?>
         <div class="messenger alert alert-warning">
-            L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires (hors BIATSS)
+            L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires (hors <?= implode(', ', $excludeStatut) ?> )
         </div>
     <?php elseif ($haveContratOse === false): ?>
         <div class="messenger alert alert-warning">

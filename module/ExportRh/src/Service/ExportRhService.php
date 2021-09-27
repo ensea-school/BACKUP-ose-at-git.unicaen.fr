@@ -9,6 +9,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
+use phpDocumentor\Reflection\Types\Array_;
 use Zend\Form\Fieldset;
 
 /**
@@ -30,11 +31,14 @@ class ExportRhService extends AbstractService
 
     protected $connecteur;
 
+    protected $config;
 
 
-    public function __construct($connecteur)
+
+    public function __construct($connecteur, $config)
     {
         $this->connecteur = $connecteur;
+        $this->config     = $config;
     }
 
 
@@ -192,6 +196,18 @@ class ExportRhService extends AbstractService
         $annee = $this->getServiceParametres()->get('annee');
 
         return $this->getServiceAnnee()->get($annee);
+    }
+
+
+
+    public function getExcludeStatutOse(): array
+    {
+        $config = $this->config;
+        if (array_key_exists('exclude-statut-ose', $config)) {
+            return $config['exclude-statut-ose'];
+        }
+
+        return [];
     }
 
 }

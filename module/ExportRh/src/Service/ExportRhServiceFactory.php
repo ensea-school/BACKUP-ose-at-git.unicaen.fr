@@ -31,7 +31,7 @@ class ExportRhServiceFactory
             break;
         }
 
-        $service = new ExportRhService($connecteur);
+        $service = new ExportRhService($connecteur, $config['unicaen-siham']);
 
         return $service;
     }

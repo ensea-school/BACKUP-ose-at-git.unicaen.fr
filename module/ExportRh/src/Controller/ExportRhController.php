@@ -35,6 +35,7 @@ class ExportRhController extends AbstractController
 
     public function __construct(ExportRhService $exportRhService)
     {
+
         $this->exportRhService = $exportRhService;
     }
 
@@ -122,8 +123,10 @@ class ExportRhController extends AbstractController
          */
         try {
 
+            $excludeStatut = $this->exportRhService->getExcludeStatutOse();
 
-            if ($intervenant->getStatut()->getCode() != 'BIATSS' && $typeIntervenant != 'P') {
+
+            if (!array_key_exists($intervenant->getStatut()->getCode(), $this->exportRhService->getExcludeStatutOse()) && $typeIntervenant != 'P') {
                 $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
             }
 
@@ -167,7 +170,8 @@ class ExportRhController extends AbstractController
             'priseEnCharge',
             'nameConnecteur',
             'affectationEnCours',
-            'contratEnCours'));
+            'contratEnCours',
+            'excludeStatut'));
 
         return $vm;
     }

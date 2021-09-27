@@ -20,7 +20,7 @@ FROM
     JOIN PREV_PROJET            pp ON pp.COD_ANU = pd.PREV_PROJET_ID
   WHERE
     pp.TEMOIN_ACTIF = 1        -- on ne sélectionne que les projets actifs
-    AND pve.STATUT = 'TERMINE' -- on ne récupère que ce qui est terminé
+    AND pve.STATUT IN ('TERMINE','FERME')  -- on ne récupère que ce qui est terminé ou fermé
 ) t
 GROUP BY
   z_type_intervention_id,

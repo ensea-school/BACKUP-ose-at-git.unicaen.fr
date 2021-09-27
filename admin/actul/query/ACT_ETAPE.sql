@@ -37,7 +37,8 @@ FROM
     LEFT JOIN PREV_TYP_INS    pti ON pti.COD_TYP_INS = vti.PREV_TYPINS_ID
 WHERE
   anu.temoin_actif = 1 -- on ne sélectionne que les projets actifs
-  AND vde.STATUT = 'TERMINE'  -- on ne récupère que ce qui est terminé
+  AND vde.STATUT IN ('TERMINE','FERME')  -- on ne récupère que ce qui est terminé ou fermé
+  AND tpd.COD_CURSUS_LMD IN ('L','M','D')
 GROUP BY
   vde.libelle,
   tpd.typ_dip_apo,

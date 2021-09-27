@@ -18,6 +18,9 @@ Objectif : Plafonds personnalisables
 # OSE 17 (à venir)
 Objectif : Connecteur Export OSE => Logiciel RH
 
+## Corrections de bugs
+
+* Au niveau du connecteur Actul+, les formations fermées étaient ignorées, elles sont également synchronisées
 
 
 

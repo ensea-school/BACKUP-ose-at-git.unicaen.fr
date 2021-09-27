@@ -10,11 +10,9 @@ use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenApp\Util;
-use UnicaenSiham\Entity\Agent;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
 use Zend\Form\Fieldset;
-use Zend\Validator\Date;
 
 
 class SihamConnecteur implements ConnecteurRhInterface
@@ -403,7 +401,6 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'debutAdresse'       => $dateEffet,
             ];
 
-            //TODO : travailler les coordonnées bancaires pour la prise en charge
             /*COORDONNEES BANCAIRES*/
             $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
             $coordonnees['dateDebBanque']  = $dateEffet;
@@ -454,7 +451,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'dateEmbauche'              => $dateEffet,
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                 'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
-                'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr(1, 2, $dossierIntervenant->getDepartementNaissance()->getCode()) : '',
+                'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr($dossierIntervenant->getDepartementNaissance()->getCode(), 1, 2) : '',
                 'paysNaissance'             => 'FRA',
                 'emploi'                    => $datas['connecteurForm']['emploi'],
                 'listeCoordonneesPostales'  => $coordonneesPostales,

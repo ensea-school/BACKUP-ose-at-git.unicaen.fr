@@ -192,7 +192,7 @@ class ExportRhController extends AbstractController
 
 
                 $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
-
+            
                 if ($result !== false) {
                     $this->exportRhService->cloreDossier($intervenant);
                     $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');

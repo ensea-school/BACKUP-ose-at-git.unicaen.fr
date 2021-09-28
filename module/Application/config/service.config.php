@@ -394,8 +394,10 @@ return [
         ],
         'resource_providers' => [
             \BjyAuthorize\Provider\Resource\Config::class => [
-                'Service'            => [],
-                'ServiceReferentiel' => [],
+                'Service'                  => [],
+                'ServiceReferentiel'       => [],
+                'VolumeHoraire'            => [],
+                'VolumeHoraireReferentiel' => [],
             ],
         ],
         'rule_providers'     => [
@@ -411,8 +413,11 @@ return [
                         'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
-                        'privileges' => Privileges::ENSEIGNEMENT_VALIDATION,
-                        'resources'  => 'Validation',
+                        'privileges' => [
+                            Privileges::ENSEIGNEMENT_VALIDATION,
+                            Privileges::ENSEIGNEMENT_AUTOVALIDATION,
+                        ],
+                        'resources'  => ['Service', 'VolumeHoraire', 'Validation'],
                         'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
@@ -446,8 +451,11 @@ return [
                         'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
-                        'privileges' => Privileges::REFERENTIEL_VALIDATION,
-                        'resources'  => 'Validation',
+                        'privileges' => [
+                            Privileges::REFERENTIEL_VALIDATION,
+                            Privileges::REFERENTIEL_AUTOVALIDATION,
+                        ],
+                        'resources'  => ['ServiceReferentiel', 'VolumeHoraireReferentiel', 'Validation'],
                         'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac9cf1ab6b4d0db5255a5e0697cc6626",
+    "content-hash": "25f3bf165aca197f0744a83c93336d5c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2894,11 +2894,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "dev-master",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "cbc2a7482dd157f96029e8438da63cf0c76ca4d9"
+                "reference": "9ae9c8034e32c5ed082b1b9548fbc93e592f124a"
             },
             "require": {
                 "zendframework/zend-mail": "^2.10",
@@ -2923,7 +2923,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2021-09-27T10:14:03+00:00"
+            "time": "2021-09-27T10:25:02+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -8149,7 +8149,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "unicaen/siham": 20,
         "unicaen/php-compat": 20
     },
     "prefer-stable": false,

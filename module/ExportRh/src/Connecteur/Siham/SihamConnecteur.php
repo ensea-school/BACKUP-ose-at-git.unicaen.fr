@@ -369,17 +369,23 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ['dateEffetPosition' => $dateEffet,
                  'dateFinPrevue'     => $dateFin,
                  'dateFinReelle'     => $dateFin,
-                 'position'          => $datas['connecteurForm']['position']];
+                 'position'          => $datas['connecteurForm']['position'],
+                 'temoinValidite'    => 1,
+                ];
 
             /*STATUT*/
             $statut[] =
                 ['dateEffetStatut' => $dateEffet,
-                 'statut'          => $datas['connecteurForm']['statut']];
+                 'statut'          => $datas['connecteurForm']['statut'],
+                 'temoinValidite'  => 1,
+                ];
 
             /*MODALITE SERVICE*/
             $service[] =
                 ['dateEffetModalite' => $dateEffet,
-                 'modalite'          => $datas['connecteurForm']['modaliteService']];
+                 'modalite'          => $datas['connecteurForm']['modaliteService'],
+                 'temoinValidite'    => 1,
+                ];
 
             /*COORDONNEES POSTALES*/
             $adresse = '';
@@ -470,7 +476,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'numeroInseeProvisoire'     => ($dossierIntervenant->getNumeroInseeProvisoire()) ? $dossierIntervenant->getNumeroInsee() : '',
                 'prenom'                    => $dossierIntervenant->getPrenom(),
                 'sexe'                      => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
-                'temoinValidite'            => '1',
+                'temoinValidite'            => 1,
                 'UO'                        => $datas['connecteurForm']['affectation'],
             ];
 
@@ -520,17 +526,25 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ['dateEffetPosition' => $dateEffet,
                  'dateFinPrevue'     => $dateFin,
                  'dateFinReelle'     => $dateFin,
-                 'position'          => $datas['connecteurForm']['position']];
+                 'position'          => $datas['connecteurForm']['position'],
+                 'temoinValidite'    => 1,
+                ];
+
 
             /*STATUT*/
             $statut[] =
                 ['dateEffetStatut' => $dateEffet,
-                 'statut'          => $datas['connecteurForm']['statut']];
+                 'statut'          => $datas['connecteurForm']['statut'],
+                 'temoinValidite'  => 1,
+                ];
 
             /*MODALITE SERVICE*/
             $service[] =
                 ['dateEffetModalite' => $dateEffet,
-                 'modalite'          => $datas['connecteurForm']['modaliteService']];
+                 'modalite'          => $datas['connecteurForm']['modaliteService'],
+                 'temoinValidite'    => 1,
+
+                ];
 
             /*CARRIERE*/
             $carriere = [
@@ -561,7 +575,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'listePositions'         => $position,
                 'motifEntree'            => 'REN',
                 'matricule'              => $matricule,
-                'temoinValidite'         => '1',
+                'temoinValidite'         => 1,
                 'UO'                     => $datas['connecteurForm']['affectation'],
             ];
 

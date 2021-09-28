@@ -20,7 +20,7 @@
         "unicaen/tbl"            : "4.1",
         "unicaen/open-document"  : "3.0.2",
         "ocramius/proxy-manager" : "2.2.3",
-        "unicaen/siham"          : "dev-master"
+        "unicaen/siham"          : "^1.0"
     },
     "require-dev" : {
         "zendframework/zend-test"           : "3.3.0",

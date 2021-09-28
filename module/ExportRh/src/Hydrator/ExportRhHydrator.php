@@ -45,6 +45,9 @@ class ExportRhHydrator implements HydratorInterface
             case 'ETUD_UCBN':
                 $statutRh = 'C2041';
             break;
+            case 'PAMSU':
+                $statutRh = 'C1210';
+            break;
         }
 
         $data['connecteurForm'] = [

@@ -184,6 +184,9 @@ return [
 
         /* Attribut correspondant au code de la structure */
         'structureCode'                => 'supannCodeEntite',
+
+        /* URL d'accès à la page de l'utilisateur dans le système d'information */
+        'systemeInformationUrl'        => '',
     ],
 
 

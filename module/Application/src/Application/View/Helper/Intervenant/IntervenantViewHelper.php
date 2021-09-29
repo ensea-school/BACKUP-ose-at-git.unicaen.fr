@@ -7,6 +7,7 @@ use Application\Constants;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Zend\Hydrator\ClassMethods;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
@@ -59,6 +60,13 @@ class IntervenantViewHelper extends AbstractHtmlElement
             return '';
         }
 
+        $code = $entity->getCode();
+
+        $systemeInformationUrl = $this->getServiceIntervenant()->getSystemeInformationUrl($entity);
+        if ($systemeInformationUrl && $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_LIEN_SYSTEME_INFORMATION))) {
+            $code = $this->getView()->tag('a', ['href' => $systemeInformationUrl, 'target' => '_blank'])->text($code);
+        }
+
         $vars = [
             'identite'     => [
                 "Civilité"   => (string)$entity->getCivilite()->getLibelleLong(),
@@ -78,10 +86,10 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Dernière modification le" => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
             ],
             'identifiants' => [
-                "Id"      => $entity->getId(),
-                "Code"    => $entity->getCode(),
-                "Code RH" => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnu)</span>',
-                "Login"   => $this->getConnecteurLdap()->intervenantGetLogin($entity) ?: '<span class="inconnu">(Inconnu)</span>',
+                "Id"                           => $entity->getId(),
+                "Code " . $entity->getSource() => $code,
+                "Code RH"                      => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnu)</span>',
+                "Login"                        => $this->getConnecteurLdap()->intervenantGetLogin($entity) ?: '<span class="inconnu">(Inconnu)</span>',
             ],
         ];
 

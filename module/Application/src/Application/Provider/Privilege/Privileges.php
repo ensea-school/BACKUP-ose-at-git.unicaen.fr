@@ -9,8 +9,7 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
-{
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                 = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION             = 'agrement-conseil-academique-suppression';
@@ -137,6 +136,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INTERVENANT_CREATION                                = 'intervenant-creation';
     const INTERVENANT_EDITION                                 = 'intervenant-edition';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
+    const INTERVENANT_LIEN_SYSTEME_INFORMATION                = 'intervenant-lien-systeme-information';
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';
@@ -202,6 +202,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const PILOTAGE_VISUALISATION                              = 'pilotage-visualisation';
     const PLAFONDS_APPLICATION                                = 'plafonds-application';
     const PLAFONDS_EDITION                                    = 'plafonds-edition';
+    const PLAFONDS_STRUCTURE_EDITION                          = 'plafonds-structure-edition';
+    const PLAFONDS_STRUCTURE_VISUALISATION                    = 'plafonds-structure-visualisation';
     const PLAFONDS_VISUALISATION                              = 'plafonds-visualisation';
     const REFERENTIEL_ADMIN_EDITION                           = 'referentiel-admin-edition';
     const REFERENTIEL_ADMIN_VISUALISATION                     = 'referentiel-admin-visualisation';

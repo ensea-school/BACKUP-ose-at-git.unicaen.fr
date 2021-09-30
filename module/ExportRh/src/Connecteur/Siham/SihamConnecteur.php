@@ -400,7 +400,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             $coordonneesPostales[] = [
                 'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
-                'complementAdresse'  => $adresse,
+                'complementAdresse'  => substr($adresse, 0, 37),
                 'commune'            => $dossierIntervenant->getAdresseCommune(),
                 'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
                 'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
@@ -408,36 +408,40 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
 
             /*COORDONNEES BANCAIRES*/
-            $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
-            $coordonnees['dateDebBanque']  = $dateEffet;
-            $coordonnees['temoinValidite'] = '1';
-            $coordonnees['modePaiement']   = '25';
-            $coordonneesBancaires[]        = $coordonnees;
+            $coordonneesBancaires[] = '';
+            if ($datas['generiqueFieldset']['iban']) {
+                $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
+                $coordonnees['dateDebBanque']  = $dateEffet;
+                $coordonnees['temoinValidite'] = '1';
+                $coordonnees['modePaiement']   = '25';
+
+                $coordonneesBancaires[] = $coordonnees;
+            }
 
 
             $coordonneesTelMail[] = '';
-            if (!empty($dossierIntervenant->getTelPro())) {
+            if ($datas['generiqueFieldset']['telPro'] && !empty($dossierIntervenant->getTelPro())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getTelPro(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO,
                 ];
             }
-            if (!empty($dossierIntervenant->getTelPerso())) {
+            if ($datas['generiqueFieldset']['telperso'] && !empty($dossierIntervenant->getTelPerso())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getTelPerso(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_PORTABLE_PERSO,
                 ];
             }
-            if (!empty($dossierIntervenant->getEmailPro())) {
+            if ($datas['generiqueFieldset']['emailPro'] && !empty($dossierIntervenant->getEmailPro())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getEmailPro(),
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
                 ];
             }
-            if (!empty($dossierIntervenant->getEmailPerso())) {
+            if ($datas['generiqueFieldset']['emailPerso'] && !empty($dossierIntervenant->getEmailPerso())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getEmailPerso(),

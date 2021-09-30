@@ -1,0 +1,23 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sih="http://siham.amue.fr">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <sih:RecupStructures>
+            <!--Optional:-->
+            <ParamStructure>
+                <!--Optional:-->
+                <codeAdministration></codeAdministration>
+                <!--Optional:-->
+                <dateObservation></dateObservation>
+                <!--Zero or more repetitions:-->
+                <listeUO>
+                    <!--Optional:-->
+                    <codeUO></codeUO>
+                    <!--Optional:-->
+                    <structureUO></structureUO>
+                    <!--Optional:-->
+                    <typeUO></typeUO>
+                </listeUO>
+            </ParamStructure>
+        </sih:RecupStructures>
+    </soapenv:Body>
+</soapenv:Envelope>

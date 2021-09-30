@@ -145,14 +145,14 @@ return [
                 [
                     'controller' => Controller\AdministrationController::class,
                     'action'     => ['index', 'chercher-intervenant-rh'],
-                    'privileges' => [Privileges::EXPORT_RH_SYNC],
+                    'privileges' => [Privileges::INTERVENANT_EXPORTER],
                     //'assertion'  => Assertion\AgrementAssertion::class,
 
                 ],
                 [
                     'controller' => Controller\ExportRhController::class,
                     'action'     => ['exporter', 'prise-en-charge', 'renouvellement', 'synchroniser'],
-                    'privileges' => [Privileges::EXPORT_RH_SYNC],
+                    'privileges' => [Privileges::INTERVENANT_EXPORTER],
                     'assertion'  => ExportRhAssertion::class,
 
                 ],
@@ -163,7 +163,7 @@ return [
                 'allow' => [
                     [
                         'privileges' => [
-                            Privileges::EXPORT_RH_SYNC,
+                            Privileges::INTERVENANT_EXPORTER,
                             ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH,
                         ],
                         'resources'  => 'Intervenant',

@@ -280,7 +280,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'noVoie'             => ' ',
                     'natureVoie'         => '',
                     'nomVoie'            => ' ',
-                    'commune'            => $dossierIntervenant->getAdresseCommune(),
+                    'ville'              => $dossierIntervenant->getAdresseCommune(),
                     'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
                     'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
 

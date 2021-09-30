@@ -68,7 +68,7 @@ class ExportRhAssertion extends AbstractAssertion
 
     protected function assertIntervenantExportRh(Intervenant $intervenant)
     {
-        if (!$this->getRole()->hasPrivilege(Privileges::EXPORT_RH_SYNC)) {
+        if (!$this->getRole()->hasPrivilege(Privileges::INTERVENANT_EXPORTER)) {
             return false;
         }
 

@@ -419,13 +419,6 @@ return [
             'grade-edition'       => 'Édition grades',
         ],
     ],
-    'export-rh'          => [
-        'libelle'    => 'Export RH',
-        'privileges' => [
-            'prise-en-charge' => 'Prise en charge d\'un intervenant',
-            'renouvellement'  => 'Renouvellement d\'un intervenant',
-            'synchronisation' => 'Synchronisation d\'un intervenant',
-        ],
-    ],
+   
 
 ];

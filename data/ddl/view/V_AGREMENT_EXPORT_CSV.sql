@@ -29,6 +29,8 @@ WITH heures_s AS (
 SELECT
   a.id                                                                        annee_id,
   i.id                                                                        intervenant_id,
+  s2.id                                                                       intervenant_structure_id,
+  s2.libelle_court															  intervenant_structure_libelle,
   s.id                                                                        structure_id,
 
   a.libelle                                                                   annee,
@@ -72,6 +74,7 @@ FROM
 
 
   LEFT JOIN structure                 s ON s.id = ta.structure_id
+  LEFT JOIN structure                 s2 ON s2.id = i.structure_id
   LEFT JOIN agrement                agr ON agr.id = ta.agrement_id
   LEFT JOIN utilisateur               u ON u.id = agr.histo_modificateur_id
   LEFT JOIN discipline                d ON d.id = i.discipline_id

@@ -427,7 +427,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_FIXE_PRO,
                 ];
             }
-            if ($datas['generiqueFieldset']['telperso'] && !empty($dossierIntervenant->getTelPerso())) {
+            if ($datas['generiqueFieldset']['telPerso'] && !empty($dossierIntervenant->getTelPerso())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
                     'numero'       => $dossierIntervenant->getTelPerso(),

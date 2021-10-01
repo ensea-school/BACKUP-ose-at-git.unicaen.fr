@@ -60,7 +60,7 @@ class PlafondApplicationService extends AbstractEntityService
           AND papp.annee_fin_id IS NOT NULL
           AND papp.annee_fin_id < :annee
         ";
-        $res = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
+        $res = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAssociative();
         if ($res && (int)$res['ANNEE_FIN'] !== 0) {
             return $this->getServiceAnnee()->get((int)$res['ANNEE_FIN']);
         } else {
@@ -96,7 +96,7 @@ class PlafondApplicationService extends AbstractEntityService
           AND papp.annee_fin_id IS NOT NULL
           AND papp.annee_fin_id > :annee
         ";
-        $res = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
+        $res = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAssociative();
         if ($res && (int)$res['ANNEE_DEBUT'] !== 0) {
             return $this->getServiceAnnee()->get((int)$res['ANNEE_DEBUT']);
         } else {

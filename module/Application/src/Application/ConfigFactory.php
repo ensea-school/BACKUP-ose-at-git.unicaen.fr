@@ -4,6 +4,7 @@ namespace Application;
 
 
 use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 use Zend\Config\Factory;
 use Zend\Stdlib\Glob;
 
@@ -70,6 +71,15 @@ class ConfigFactory
             $finalConfig['bjyauthorize'] = [
                 'guards' => [
                     PrivilegeController::class => $config['guards'],
+                ],
+            ];
+        }
+
+        if (isset($config['rules'])) {
+            if (!isset($finalConfig['bjyauthorize'])) $finalConfig['bjyauthorize'] = [];
+            $finalConfig['bjyauthorize']['rule_providers'] = [
+                PrivilegeRuleProvider::class => [
+                    'allow' => $config['rules'],
                 ],
             ];
         }

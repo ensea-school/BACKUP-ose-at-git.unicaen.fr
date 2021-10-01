@@ -2,6 +2,8 @@
 
 namespace Application\Form;
 
+use Application\Constants;
+use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
 use Application\Traits\TranslatorTrait;
 use Zend\Form\Form;
@@ -29,14 +31,14 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
     /**
      * Generates a url given the name of a route.
      *
-     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
-     *
-     * @param  string            $name               Name of the route
-     * @param  array             $params             Parameters for the link
-     * @param  array|Traversable $options            Options for the route
-     * @param  bool              $reuseMatchedParams Whether to reuse matched parameters
+     * @param string            $name               Name of the route
+     * @param array             $params             Parameters for the link
+     * @param array|Traversable $options            Options for the route
+     * @param bool              $reuseMatchedParams Whether to reuse matched parameters
      *
      * @return string Url                         For the link href attribute
+     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
+     *
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
@@ -54,6 +56,29 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
     protected function getCurrentUrl()
     {
         return $this->getUrl(null, [], [], true);
+    }
+
+
+
+    /**
+     * @param array       $hydratorElements
+     * @param string|null $hydratorClass
+     *
+     * @return GenericHydrator
+     */
+    protected function useGenericHydrator(array $hydratorElements, ?string $hydratorClass = null): GenericHydrator
+    {
+        $em = \Application::$container->get(Constants::BDD);
+
+        if ($hydratorClass) {
+            $hydrator = new $hydratorClass($em, $hydratorElements);
+        } else {
+            $hydrator = new GenericHydrator($em, $hydratorElements);
+        }
+
+        $this->setHydrator($hydrator);
+
+        return $hydrator;
     }
 
 

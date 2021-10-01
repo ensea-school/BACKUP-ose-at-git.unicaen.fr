@@ -3,6 +3,20 @@
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
+ * @var $structure            \Application\Entity\Db\Structure
+ * @var $plafonds             \Plafond\Entity\Db\PlafondStructure[]
  */
 
-echo 'prout';
+use Application\Provider\Privilege\Privileges;
+
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_STRUCTURE_EDITION));
+
+var_dump($plafonds);
+?>
+
+
+<?php if ($canEdit): ?>
+    <a href="<?= $this->url('plafond/structure/ajouter', ['structure' => $structure->getId()]) ?>" class="btn btn-default pop-aja">Ajout d'une
+        nouvelle valeur</a>
+<?php endif; ?>

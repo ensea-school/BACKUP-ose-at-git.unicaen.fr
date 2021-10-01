@@ -16,17 +16,17 @@ class PlafondStructure
     /**
      * @var integer
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @var Annee|null
      */
-    protected ?Annee $anneeDebut;
+    protected ?Annee $anneeDebut = null;
 
     /**
      * @var Annee|null
      */
-    protected ?Annee $anneeFin;
+    protected ?Annee $anneeFin = null;
 
     /**
      * @var float

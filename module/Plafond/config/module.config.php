@@ -3,6 +3,7 @@
 namespace Plafond;
 
 use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
@@ -19,7 +20,7 @@ return [
         'may_terminate' => true,
         'child_routes'  => [
             'ajouter'   => [
-                'type'    => 'Segment',
+                'type'    => 'Literal',
                 'options' => [
                     'route'    => '/ajouter',
                     'defaults' => [
@@ -78,7 +79,7 @@ return [
             ],
 
             'construire-calculer' => [
-                'type'    => 'Segment',
+                'type'    => 'Literal',
                 'options' => [
                     'route'    => '/construire-calculer',
                     'defaults' => [
@@ -88,17 +89,40 @@ return [
             ],
 
             'structure' => [
-                'type'          => 'Literal',
+                'type'          => 'Segment',
                 'options'       => [
-                    'route'    => '/structure',
-                    'defaults' => [
+                    'route'       => '/structure/:structure',
+                    'constraints' => [
+                        'structure' => '[0-9]*',
+                    ],
+                    'defaults'    => [
                         'controller' => 'Plafond\Controller\PlafondStructure',
                         'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    /* Placez ici vos routes filles */
+                    'ajouter'  => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/ajouter',
+                            'defaults' => [
+                                'action' => 'editer',
+                            ],
+                        ],
+                    ],
+                    'modifier' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/modifier/:plafondStructure',
+                            'constraints' => [
+                                'plafondStructure' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'editer',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -159,9 +183,25 @@ return [
         [
             'controller' => 'Plafond\Controller\PlafondStructure',
             'action'     => ['index'],
+            'privileges' => Privileges::PLAFONDS_STRUCTURE_VISUALISATION,
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+        [
+            'controller' => 'Plafond\Controller\PlafondStructure',
+            'action'     => ['editer'],
+            'privileges' => Privileges::PLAFONDS_STRUCTURE_EDITION,
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+    ],
+
+    'rules' => [
+        [
             'privileges' => [
-                /* Placez ici les privilèges concernés */
+                Privileges::PLAFONDS_STRUCTURE_VISUALISATION,
+                Privileges::PLAFONDS_STRUCTURE_EDITION,
             ],
+            'resources'  => 'Structure',
+            'assertion'  => Assertion\PlafondAssertion::class,
         ],
     ],
 
@@ -171,13 +211,16 @@ return [
     ],
 
     'services' => [
+        Assertion\PlafondAssertion::class        => AssertionFactory::class,
         Service\PlafondApplicationService::class => Service\PlafondApplicationServiceFactory::class,
         Service\PlafondService::class            => Service\PlafondServiceFactory::class,
+        Service\PlafondStructureService::class   => Service\PlafondStructureServiceFactory::class,
         Processus\PlafondProcessus::class        => Processus\PlafondProcessusFactory::class,
     ],
 
     'forms' => [
         Form\PlafondApplicationForm::class => Form\PlafondApplicationFormFactory::class,
         Form\PlafondForm::class            => Form\PlafondFormFactory::class,
+        Form\PlafondStructureForm::class   => Form\PlafondStructureFormFactory::class,
     ],
 ];

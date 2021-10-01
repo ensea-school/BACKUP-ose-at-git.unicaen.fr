@@ -20,7 +20,6 @@ class StructureController extends AbstractController
     use StructureSaisieFormAwareTrait;
 
 
-
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -89,6 +88,7 @@ class StructureController extends AbstractController
     public function voirAction()
     {
         $structure = $this->getEvent()->getParam('structure');
+        $tab       = $this->params()->fromQuery('tab', 'fiche');
 
         if (!$structure) {
             throw new RuntimeException("Structure non spécifiée ou introuvable.");
@@ -96,7 +96,7 @@ class StructureController extends AbstractController
 
         $title = (string)$structure;
 
-        return compact('structure', 'title');
+        return compact('structure', 'title', 'tab');
     }
 
 }

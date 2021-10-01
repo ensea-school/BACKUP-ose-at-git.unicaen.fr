@@ -25,6 +25,30 @@ class GenericHydrator implements HydratorInterface
 
 
 
+    /**
+     * @return array
+     */
+    public function getElements(): array
+    {
+        return $this->elements;
+    }
+
+
+
+    /**
+     * @param array $elements
+     *
+     * @return GenericHydrator
+     */
+    public function setElements(array $elements): GenericHydrator
+    {
+        $this->elements = $elements;
+
+        return $this;
+    }
+
+
+    
     public function extract($object)
     {
         $data = [];

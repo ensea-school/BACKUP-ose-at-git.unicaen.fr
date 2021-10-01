@@ -4,6 +4,7 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router' => [
@@ -98,11 +99,24 @@ return [
                     'controller' => 'Application\Controller\Structure',
                     'action'     => ['saisie', 'delete'],
                     'privileges' => Privileges::STRUCTURES_ADMINISTRATION_EDITION,
+                    'assertion'  => Assertion\StructureAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Structure',
                     'action'     => ['voir'],
                     'roles'      => ['user'],
+                ],
+            ],
+        ],
+
+        'rule_providers' => [
+            PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'privileges' => Privileges::STRUCTURES_ADMINISTRATION_EDITION,
+                        'resources'  => 'Structure',
+                        'assertion'  => Assertion\StructureAssertion::class,
+                    ],
                 ],
             ],
         ],
@@ -117,6 +131,9 @@ return [
     'service_manager' => [
         'invokables' => [
             Service\StructureService::class => Service\StructureService::class,
+        ],
+        'factories'  => [
+            Assertion\StructureAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

@@ -43,7 +43,6 @@ class DroitsController extends AbstractController
     use DoctrineCacheAwareTrait;
 
 
-
     /**
      *
      * @return type
@@ -348,7 +347,7 @@ class DroitsController extends AbstractController
             'options'    => [
                 'label'         => 'Choix du rôle ou du statut à paramétrer :',
                 'value_options' => $options,
-                'empty_options' => 'Sélectionner un rôle...',
+                'empty_option'  => 'Sélectionner un rôle...',
             ],
         ]);
         $form->setAttribute('action', $this->url()->fromRoute(null, []));

@@ -15,7 +15,7 @@
         "zendframework/zend-code": "3.3.2",
         "unicaen/bjy-authorize"  : "3.0.4",
         "zendframework/zend-file": "2.8.3",
-        "unicaen/code"           : "4.3",
+        "unicaen/code"           : "4.4",
         "unicaen/import"         : "3.1.5",
         "unicaen/tbl"            : "4.1",
         "unicaen/open-document"  : "3.0.2",

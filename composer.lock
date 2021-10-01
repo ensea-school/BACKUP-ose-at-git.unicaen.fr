@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73f6968caa778147aa210b576c9656ac",
+    "content-hash": "70b22a4f86b363906e17c78e05b53bd9",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2792,11 +2792,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "4.3",
+            "version": "4.4",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "858420a6765ffad2ec4c5c7795a7ca7d8bb44402"
+                "reference": "e5bd71dbffa8bc94e483ac2ed06837a5f5bc2182"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -2814,7 +2814,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2021-09-29T13:27:58+00:00"
+            "time": "2021-09-30T10:13:04+00:00"
         },
         {
             "name": "unicaen/import",

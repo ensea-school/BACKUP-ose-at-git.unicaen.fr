@@ -15,7 +15,7 @@ function affBooleen($flg)
 
 $this->headTitle()->append("Structures");
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTURES_ADMINISTRATION_EDITION));
+$globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTURES_ADMINISTRATION_EDITION));
 
 ?>
 <h1 class="page-header">Structures</h1>
@@ -29,10 +29,12 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTURES_ADM
     <th style="word-wrap: break-word ; ">Plafond Référentiel</th>
     <th style="word-wrap: break-word ; ">Aff. adresse sur contrat</th>
     <th style="word-wrap: break-word ; ">Source</th>
-    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    <?php if ($globalCanEdit) echo '<th>Actions</th>' ?>
     </thead>
     <tbody>
-    <?php foreach ($structures as $structure): $canDelete = $canEdit && !$structure->getSource()->getImportable() ?>
+    <?php foreach ($structures as $structure):
+        $canEdit = $this->isAllowed($structure, Privileges::STRUCTURES_ADMINISTRATION_EDITION);
+        $canDelete = $canEdit && !$structure->getSource()->getImportable() ?>
         <tr>
             <td style="word-wrap: break-word ; "><?= $structure->getCode() ?></td>
             <td style="word-wrap: break-word ; "><?= $structure->getLibelleCourt() ?></td>
@@ -45,7 +47,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTURES_ADM
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <?php if ($canEdit): ?>
                         <a class="ajax-modal" data-event="structure-saisie"
-                           href="<?= $this->url('structure/saisie', ['structure' => $structure->getId()]) ?>"
+                           href="<?= $this->url('structure/voir', ['structure' => $structure->getId()], ['query' => ['tab' => 'edition']]) ?>"
                            title="Modifier la Structure">
                             <span class="glyphicon glyphicon-edit"></span></a>
                     <?php endif; ?>
@@ -63,12 +65,14 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTURES_ADM
                         </a>
                     <?php endif; ?>
                 </td>
+            <?php elseif ($globalCanEdit): ?>
+                <td>&nbsp;</td>
             <?php endif; ?>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-<?php if ($canEdit): ?>
+<?php if ($globalCanEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="structure-saisie"
        href="<?= $this->url('structure/saisie') ?>"
        title="Ajouter une structure">

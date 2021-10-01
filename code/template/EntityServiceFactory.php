@@ -2,6 +2,7 @@
 
 namespace <namespace>;
 
+use Application\Constants;
 use Interop\Container\ContainerInterface;
 <if subDir>use <targetClass>;
 <endif subDir>

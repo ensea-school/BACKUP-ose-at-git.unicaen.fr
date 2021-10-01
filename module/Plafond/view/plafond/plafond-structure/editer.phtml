@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @var $this                 \Application\View\Renderer\PhpRenderer
+ * @var $title                string
+ * @var $plafondStructure     \Plafond\Entity\Db\PlafondStructure
+ * @var $form                 \Plafond\Form\PlafondStructureForm
+ */
+
+?>
+<h1><?= $title ?></h1>
+
+<?php
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo $this->form($form);
+
+?>
+
+<a href="<?= $this->url('plafond/structure', ['structure' => $plafondStructure->getStructure()->getId()]) ?>" class="btn btn-default"><i class="fa fa-undo"
+                                                                                                                                         aria-hidden="true"></i>
+    Retour à la liste des plafonds</a>

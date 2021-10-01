@@ -1,1 +1,47 @@
-<?= $this->structure($structure);
+<?php
+/**
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ * @var $form      \Application\Form\Structure\StructureSaisieForm
+ * @var $structure \Application\Entity\Db\Structure
+ * @var $tab       string
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$visu = (string)$this->structure($structure);
+
+$tabs = [
+    [
+        'id'      => 'fiche',
+        'label'   => 'Fiche',
+        'content' => $visu,
+    ],
+];
+
+$structureId = $structure->getId();
+
+$canEdit     = $this->isAllowed($structure, Privileges::STRUCTURES_ADMINISTRATION_EDITION);
+$canPlafonds = $this->isAllowed($structure, Privileges::PLAFONDS_STRUCTURE_VISUALISATION);
+
+if ($structureId && ($canEdit || $canPlafonds)) {
+
+    if ($canEdit) {
+        $tabs[] = [
+            'id'    => 'edition',
+            'label' => '<span class="glyphicon glyphicon-pencil"></span> Modification',
+            'url'   => $this->url('structure/saisie', ['structure' => $structureId]),
+        ];
+    }
+
+    if ($canPlafonds) {
+        $tabs[] = [
+            'id'    => 'plafonds',
+            'label' => '<span class="glyphicon glyphicon-signal"></span> Plafonds',
+            'url'   => $this->url('plafond/structure', ['structure' => $structureId]),
+        ];
+    }
+
+    echo $this->tabajax($tabs, $tab);
+} else {
+    echo $visu;
+}

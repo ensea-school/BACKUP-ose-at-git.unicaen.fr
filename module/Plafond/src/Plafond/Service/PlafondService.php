@@ -395,12 +395,14 @@ class PlafondService extends AbstractEntityService
      */
     public function getPerimetre(string $code): ?PlafondPerimetre
     {
-        $parimetres = $this->getPerimetres();
-        if (isset($parimetres[$code])) {
-            return $parimetres[$code];
-        } else {
-            return null;
+        $perimetres = $this->getPerimetres();
+        foreach ($perimetres as $perimetre) {
+            if ($perimetre->getCode() == $code) {
+                return $perimetre;
+            }
         }
+
+        return null;
     }
 
 

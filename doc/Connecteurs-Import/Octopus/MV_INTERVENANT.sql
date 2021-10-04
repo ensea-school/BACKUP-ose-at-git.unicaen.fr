@@ -1,6 +1,6 @@
 CREATE
 MATERIALIZED VIEW MV_INTERVENANT AS
-WITH i AS (
+ WITH i AS (
 
     SELECT DISTINCT code,
                     MAX(z_statut_id) OVER (partition by code, z_statut_id)               z_statut_id,
@@ -22,14 +22,16 @@ WITH i AS (
                     	ELSE 'vacataire' END                                        z_type,
                     icto.id_orig                                                source_code,
                     COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                    COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))   validite_fin,
+                    CASE
+                    	WHEN icto.d_fin = to_date('01/09/2021', 'dd/mm/YYYY') THEN to_date('31/08/2021', 'dd/mm/YYYY')
+                    	ELSE COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) END   validite_fin,
                     NULL	   													fin_affectation_siham
              FROM octo.v_individu_contrat_type_ose@octoprod icto
                       JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
                       JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
 
+             WHERE icto.d_debut - 184 <= SYSDATE  AND icto.code_ose IS NOT NULL
 
-             WHERE icto.d_debut - 184 <= SYSDATE AND icto.code_ose IS NOT NULL
 
              UNION ALL
              -- Step 2 : on prend tout le reste potentiel vacataire, notamment les hébergés
@@ -40,7 +42,9 @@ WITH i AS (
                     	ELSE 'vacataire' END                                        z_type,
                     uni.c_individu_chaine || '-autre'                               source_code,
                     COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))     validite_debut,
-                    COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))       validite_fin,
+                    CASE
+                    	WHEN inds.d_fin = to_date('01/09/2021', 'dd/mm/YYYY') THEN to_date('31/08/2021', 'dd/mm/YYYY')
+                    	ELSE COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) END   validite_fin,
                     CASE
                         WHEN inds.c_source = 'SIHAM' THEN 	inds.d_fin
                         ELSE NULL END		                                        fin_affectation_siham
@@ -58,7 +62,7 @@ WITH i AS (
                  OR (inds.t_vacataire = 'O')
                  OR (inds.t_heberge = 'O'))
                AND icto.individu_id IS NULL
-               AND (vinds.t_doctorant='N' OR vinds.individu_id IS NULL)
+               --AND (vinds.t_doctorant='N' OR vinds.individu_id IS NULL)
                AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
          ) t
 ),
@@ -278,5 +282,3 @@ FROM i
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
-
-

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70b22a4f86b363906e17c78e05b53bd9",
+    "content-hash": "796bd6e262ba49524d51bd3314479818",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -420,16 +420,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.13.3",
+            "version": "2.13.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "0d7adf4cadfee6f70850e5b163e6cdd706417838"
+                "reference": "2411a55a2a628e6d8dd598388ab13474802c7b6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/0d7adf4cadfee6f70850e5b163e6cdd706417838",
-                "reference": "0d7adf4cadfee6f70850e5b163e6cdd706417838",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/2411a55a2a628e6d8dd598388ab13474802c7b6e",
+                "reference": "2411a55a2a628e6d8dd598388ab13474802c7b6e",
                 "shasum": ""
             },
             "require": {
@@ -442,8 +442,8 @@
             "require-dev": {
                 "doctrine/coding-standard": "9.0.0",
                 "jetbrains/phpstorm-stubs": "2021.1",
-                "phpstan/phpstan": "0.12.96",
-                "phpunit/phpunit": "^7.5.20|^8.5|9.5.5",
+                "phpstan/phpstan": "0.12.99",
+                "phpunit/phpunit": "^7.5.20|^8.5|9.5.10",
                 "psalm/plugin-phpunit": "0.16.1",
                 "squizlabs/php_codesniffer": "3.6.0",
                 "symfony/cache": "^4.4",
@@ -521,7 +521,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-12T19:11:48+00:00"
+            "time": "2021-10-02T15:59:26+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1468,33 +1468,33 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.0.4",
+            "version": "v8.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "d3147a0d790b6d11936fd9c73fa31a7ed45e3f6f"
+                "reference": "42f145615cfe830fd432474da1d2e1f927efe402"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/d3147a0d790b6d11936fd9c73fa31a7ed45e3f6f",
-                "reference": "d3147a0d790b6d11936fd9c73fa31a7ed45e3f6f",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/42f145615cfe830fd432474da1d2e1f927efe402",
+                "reference": "42f145615cfe830fd432474da1d2e1f927efe402",
                 "shasum": ""
             },
             "require": {
                 "ext-gd": "*",
                 "ext-mbstring": "*",
                 "myclabs/deep-copy": "^1.7",
-                "paragonie/random_compat": "^1.4|^2.0|9.99.99",
-                "php": "^5.6 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0",
+                "paragonie/random_compat": "^1.4|^2.0|^9.99.99",
+                "php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0",
                 "psr/log": "^1.0",
                 "setasign/fpdi": "^2.1"
             },
             "require-dev": {
-                "mockery/mockery": "^0.9.5",
-                "mpdf/qrcode": "^1.0.0",
-                "phpunit/phpunit": "^5.0",
+                "mockery/mockery": "^1.3.0",
+                "mpdf/qrcode": "^1.1.0",
                 "squizlabs/php_codesniffer": "^3.5.0",
-                "tracy/tracy": "^2.4"
+                "tracy/tracy": "^2.4",
+                "yoast/phpunit-polyfills": "^1.0"
             },
             "suggest": {
                 "ext-bcmath": "Needed for generation of some types of barcodes",
@@ -1502,11 +1502,6 @@
                 "ext-zlib": "Needed for compression of embedded resources, such as fonts"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-development": "7.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Mpdf\\": "src/"
@@ -1533,7 +1528,13 @@
                 "php",
                 "utf-8"
             ],
-            "time": "2019-11-28T09:39:33+00:00"
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/mpdf",
+                    "type": "custom"
+                }
+            ],
+            "time": "2021-09-10T10:09:59+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2637,11 +2638,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "3.1.16",
+            "version": "3.1.22",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "1a493207d7303de67f7b60dbc165a20bb17e4236"
+                "reference": "75e60faee03ca88c9396cc8f734136ee72690312"
             },
             "require": {
                 "beberlei/assert": "^2.9",
@@ -2649,7 +2650,7 @@
                 "ext-bcmath": "*",
                 "ext-intl": "*",
                 "ext-ldap": "*",
-                "mpdf/mpdf": "^7.1",
+                "mpdf/mpdf": "^7.1 || ^8.0",
                 "ocramius/proxy-manager": "^2.0",
                 "php": ">=5.6 || >=7.0",
                 "zendframework/zend-config": "^3.2",
@@ -2675,8 +2676,7 @@
                 "zendframework/zend-servicemanager": "^3.4",
                 "zendframework/zend-session": "^2.8",
                 "zendframework/zend-version": "^2.4",
-                "zendframework/zend-view": "^2.11",
-                "zfcampus/zf-asset-manager": "^1.2"
+                "zendframework/zend-view": "^2.11"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.6",
@@ -2697,7 +2697,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2021-04-26T07:50:23+00:00"
+            "time": "2021-10-04T14:33:04+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -5837,51 +5837,6 @@
                 "zf2"
             ],
             "time": "2017-05-24T10:45:54+00:00"
-        },
-        {
-            "name": "zfcampus/zf-asset-manager",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zfcampus/zf-asset-manager.git",
-                "reference": "8987509ee4d9cadd153e54cfb6c5be2ac6d51aad"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zfcampus/zf-asset-manager/zipball/8987509ee4d9cadd153e54cfb6c5be2ac6d51aad",
-                "reference": "8987509ee4d9cadd153e54cfb6c5be2ac6d51aad",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1",
-                "php": "^5.6 || ^7.0"
-            },
-            "require-dev": {
-                "composer/composer": ">=1.0.0-alpha10",
-                "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^5.7.23 || ^6.4.3",
-                "squizlabs/php_codesniffer": "^2.6.2"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2-dev",
-                    "dev-develop": "1.3-dev"
-                },
-                "class": "ZF\\AssetManager\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "ZF\\AssetManager\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Composer plugin for copying module assets into application document roots.",
-            "abandoned": "laminas-api-tools/api-tools-asset-manager",
-            "time": "2017-11-02T22:28:50+00:00"
         }
     ],
     "packages-dev": [
@@ -6548,16 +6503,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "30f38bffc6f24293dadd1823936372dfa9e86e2f"
+                "reference": "a12f7e301eb7258bb68acd89d4aefa05c2906cae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/30f38bffc6f24293dadd1823936372dfa9e86e2f",
-                "reference": "30f38bffc6f24293dadd1823936372dfa9e86e2f",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/a12f7e301eb7258bb68acd89d4aefa05c2906cae",
+                "reference": "a12f7e301eb7258bb68acd89d4aefa05c2906cae",
                 "shasum": ""
             },
             "require": {
@@ -6590,7 +6545,7 @@
                 }
             ],
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
-            "time": "2021-09-17T15:28:14+00:00"
+            "time": "2021-10-02T14:08:47+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -8106,14 +8061,7 @@
             "time": "2019-06-11T19:33:38+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "7.1.7",
-            "alias_normalized": "7.1.7.0",
-            "version": "8.0.4.0",
-            "package": "mpdf/mpdf"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "unicaen/php-compat": 20

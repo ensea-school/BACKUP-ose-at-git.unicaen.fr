@@ -41,14 +41,11 @@ class DossierAutreService extends AbstractEntityService
          */
         $sql = $dossierAutre->getSqlValue();
         if (!empty($sql)) {
-            try {
-                $connection = $this->getEntityManager()->getConnection();
-                $result     = $connection->fetchAll($sql);
-                foreach ($result as $k => $v) {
-                    $datas [$v['VALUE_OPTION']] = $v['VALUE_OPTION'];
-                }
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
+
+            $connection = $this->getEntityManager()->getConnection();
+            $result     = $connection->fetchAll($sql);
+            foreach ($result as $k => $v) {
+                $datas [$v['VALUE_OPTION']] = $v['VALUE_OPTION'];
             }
         }
 

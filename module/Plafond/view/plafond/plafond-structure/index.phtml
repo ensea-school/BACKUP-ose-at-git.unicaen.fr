@@ -10,13 +10,58 @@
 use Application\Provider\Privilege\Privileges;
 
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_STRUCTURE_EDITION));
+$canEdit = $this->isAllowed($structure, Privileges::PLAFONDS_STRUCTURE_EDITION);
 
-var_dump($plafonds);
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
 ?>
-
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>Plafond</th>
+            <th>Heures</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <?php if ($canEdit): ?>
+                <th>Actions</th><?php endif; ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($plafonds as $plafond): ?>
+            <tr>
+                <td><?= $plafond->getPlafond() ?></td>
+                <td><?= floatToString($plafond->getHeures()) ?></td>
+                <td><?= $plafond->getAnneeDebut() ?: '' ?></td>
+                <td><?= $plafond->getAnneeFin() ?: '' ?></td>
+                <?php if ($canEdit): ?>
+                    <td>
+                    <a href="<?= $this->url('plafond/structure/modifier', ['structure' => $structure->getId(), 'plafondStructure' => $plafond->getId()]) ?>"><span
+                                class="glyphicon glyphicon-pencil"></span></a>
+                    <a class="pop-ajax"
+                       title="Supprimer le plafond"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-event="delete-plafond-structure"
+                       href="<?= $this->url('plafond/structure/supprimer', ['structure' => $structure->getId(), 'plafondStructure' => $plafond->getId()]) ?>"><span
+                                class="glyphicon glyphicon-trash"
+                        ></span></a>
+                    </td><?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
 <?php if ($canEdit): ?>
-    <a href="<?= $this->url('plafond/structure/ajouter', ['structure' => $structure->getId()]) ?>" class="btn btn-default pop-aja">Ajout d'une
+    <a href="<?= $this->url('plafond/structure/ajouter', ['structure' => $structure->getId()]) ?>" class="btn btn-default">Ajout d'une
         nouvelle valeur</a>
+
+    <script type="application/javascript">
+
+        $("body").on('delete-plafond-structure', function (event, popAjax) {
+            $(".tab-pane#plafonds").refresh();
+        });
+
+    </script>
 <?php endif; ?>

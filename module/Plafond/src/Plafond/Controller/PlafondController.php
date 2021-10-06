@@ -102,7 +102,7 @@ class PlafondController extends AbstractController
 
             $this->flashMessenger()->addSuccessMessage("Plafond supprimé avec succès");
         } catch (\Exception $e) {
-            $this->flasheMessenger()->addErrorMessage($this->translate($e));
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

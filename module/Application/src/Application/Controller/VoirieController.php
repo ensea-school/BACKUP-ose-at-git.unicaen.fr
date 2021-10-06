@@ -60,7 +60,7 @@ class VoirieController extends AbstractController
             $this->getServiceVoirie()->delete($voirie);
             $this->flashMessenger()->addSuccessMessage("Voirie supprimée avec succés");
         } catch (\Exception $e) {
-            $this->flasheMessenger()->addErrorMessage($this->translate($e));
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('voirie'));

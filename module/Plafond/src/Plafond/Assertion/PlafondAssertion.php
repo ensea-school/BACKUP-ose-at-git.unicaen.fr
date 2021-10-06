@@ -4,6 +4,7 @@ namespace Plafond\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Structure;
+use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
@@ -50,15 +51,22 @@ class PlafondAssertion extends AbstractAssertion
 
     protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
     {
+        $role = $this->getRole();
 
-//        switch (true) {
-//            case $entity instanceof VotreEntite:
-//                switch ($privilege) {
-//                    case Privileges::VOTRE_PRIVILEGE: // Attention à bien avoir généré le fournisseur de privilèges si vous utilisez la gestion des privilèges d'UnicaenAuth
-//                        return $this->assertVotreAssertion($role, $entity);
-//                }
-//                break;
-//        }
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
+        // pareil si le rôle ne possède pas le privilège adéquat
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+
+        switch (true) {
+            case $entity instanceof Structure:
+                switch ($privilege) {
+                    case Privileges::PLAFONDS_STRUCTURE_VISUALISATION:
+                    case Privileges::PLAFONDS_STRUCTURE_EDITION:
+                        return $this->assertStructure($role, $entity);
+                }
+            break;
+        }
 
         return true;
     }

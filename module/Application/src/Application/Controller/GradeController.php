@@ -63,7 +63,7 @@ class GradeController extends AbstractController
 
             $this->flashMessenger()->addSuccessMessage("Grade supprimé avec succés");
         } catch (\Exception $e) {
-            $this->flasheMessenger()->addErrorMessage($this->translate($e));
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('grade'));

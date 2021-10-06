@@ -102,7 +102,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'ajouter'  => [
+                    'ajouter'   => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/ajouter',
@@ -111,7 +111,7 @@ return [
                             ],
                         ],
                     ],
-                    'modifier' => [
+                    'modifier'  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/modifier/:plafondStructure',
@@ -120,6 +120,18 @@ return [
                             ],
                             'defaults'    => [
                                 'action' => 'editer',
+                            ],
+                        ],
+                    ],
+                    'supprimer' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/supprimer/:plafondStructure',
+                            'constraints' => [
+                                'plafondStructure' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'supprimer',
                             ],
                         ],
                     ],
@@ -188,7 +200,7 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\PlafondStructure',
-            'action'     => ['editer'],
+            'action'     => ['editer', 'supprimer'],
             'privileges' => Privileges::PLAFONDS_STRUCTURE_EDITION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],

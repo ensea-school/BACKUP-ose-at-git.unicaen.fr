@@ -30,6 +30,7 @@ class StructureAssertion extends AbstractAssertion
             case $entity instanceof Structure:
                 switch ($privilege) {
                     case Privileges::STRUCTURES_ADMINISTRATION_EDITION:
+                        //case Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION:
                         return $this->assertStructure($role, $entity);
                 }
             break;

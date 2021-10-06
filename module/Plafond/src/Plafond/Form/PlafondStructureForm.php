@@ -36,7 +36,7 @@ class PlafondStructureForm extends AbstractForm
     public function init()
     {
         $this->setAttribute('action', $this->getCurrentUrl());
-        $this->useGenericHydrator($this->getInputFilterSpecification());
+        $this->useGenericHydrator($this->hydratorElements);
 
         $this->add([
             'type'       => 'Select',
@@ -80,7 +80,7 @@ class PlafondStructureForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'heures2',
+            'name'       => 'heures',
             'type'       => 'Text',
             'options'    => [
                 'label' => "Heures",

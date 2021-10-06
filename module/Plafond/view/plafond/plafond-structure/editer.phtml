@@ -8,16 +8,22 @@
  */
 
 ?>
-<h1><?= $title ?></h1>
-
+    <h1><?= $title ?></h1>
 <?php
 
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->form()->openTag($form);
 
-echo $this->form($form);
+echo $this->formControlGroup($form->get('plafond'));
+echo $this->formControlGroup($form->get('heures'));
+echo '<div class="row">';
+echo '<div class="col-md-6">';
+echo $this->formControlGroup($form->get('anneeDebut'));
+echo '</div>';
+echo '<div class="col-md-6">';
+echo $this->formControlGroup($form->get('anneeFin'));
+echo '</div>';
+echo '</div>';
 
-?>
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
 
-<a href="<?= $this->url('plafond/structure', ['structure' => $plafondStructure->getStructure()->getId()]) ?>" class="btn btn-default"><i class="fa fa-undo"
-                                                                                                                                         aria-hidden="true"></i>
-    Retour à la liste des plafonds</a>

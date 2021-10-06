@@ -23,9 +23,5 @@
             "Plafond\\": "module/Plafond/src/",
             "Indicateur\\": "module/Indicateur/src/"
         }
-    },
-    "require-dev" : {
-        "zendframework/zend-test"           : "3.3.0",
-        "unicaen/php-compat"                : "dev-master"
     }
 }

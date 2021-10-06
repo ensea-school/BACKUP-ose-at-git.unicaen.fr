@@ -94,8 +94,9 @@ class AgrementService extends AbstractEntityService
         $res  = [
             'head' => [
                 'annee'                        => 'Année',
-                'structure-libelle'            => 'Structure d\'affectation',
                 'intervenant-code'             => 'Code intervenant',
+                'intervenant-structure'        => 'Structure hiérarchique',
+                'structure-libelle'            => 'Structure d\'affectation',
                 'intervenant-nom-usuel'        => 'Nom usuel',
                 'intervenant-nom-patronymique' => 'Nom patronymique',
                 'intervenant-prenom'           => 'Prénom',
@@ -118,6 +119,7 @@ class AgrementService extends AbstractEntityService
                 'annee'                        => $d['ANNEE'],
                 'structure-libelle'            => $d['STRUCTURE_LIBELLE'],
                 'intervenant-code'             => $d['INTERVENANT_CODE'],
+                'intervenant-structure'        => $d['INTERVENANT_STRUCTURE_LIBELLE'],
                 'intervenant-nom-usuel'        => $d['INTERVENANT_NOM_USUEL'],
                 'intervenant-nom-patronymique' => $d['INTERVENANT_NOM_PATRONYMIQUE'],
                 'intervenant-prenom'           => $d['INTERVENANT_PRENOM'],

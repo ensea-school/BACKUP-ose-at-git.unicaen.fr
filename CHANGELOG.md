@@ -29,6 +29,13 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout d'une colonne dans l'export CSV des charges précisant si un élément est mutualisé ou non
 
 
+# OSE 16.1 (prochainement)
+
+## Nouveautés
+
+* Ajout de la composante hiérarchique de l'intervenant dans l'export csv des agréments (#40053)
+
+
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
 
@@ -40,7 +47,6 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 
 * [Connecteur en import avec Actul+](doc/Connecteurs-Import/Actul/Connecteur.md)
 * Outil différentiel d'export des charges d'enseignement
-
 
 # OSE 15.7 (14/09/2021)
 

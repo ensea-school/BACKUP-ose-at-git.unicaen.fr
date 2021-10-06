@@ -65,7 +65,7 @@ SELECT
     FROM chemin_pedagogique
     WHERE histo_destruction IS NULL
     GROUP BY element_pedagogique_id
-  )                                      ch ON ch.element_pedagogique_id = ep.id
+  )                                     ch ON ch.element_pedagogique_id = ep.id
 ORDER BY
   structure_porteuse_code,
   etape_porteuse_code,

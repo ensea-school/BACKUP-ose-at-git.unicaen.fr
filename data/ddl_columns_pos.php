@@ -2090,9 +2090,8 @@ return [
         'ID',
         'STRUCTURE_ID',
         'PLAFOND_ID',
-        'ANNEE_DEBUT_ID',
-        'ANNEE_FIN_ID',
         'HEURES',
+        'ANNEE_ID',
     ],
 ];
 

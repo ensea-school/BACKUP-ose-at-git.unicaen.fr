@@ -27,14 +27,8 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Nouvelle vue V_IMPORT_DEPUIS_DOSSIERS pouvant servir pour peupler les données des intervenants à partir des données personnelles
 * Possibilité pour un gestionnire de saisir des heures d'enseignement ou de référentiel qui n'auront pas besoin d'être validées par la suite (nouveau privilège d'autovalidation associé)
 * Ajout d'une colonne dans l'export CSV des charges précisant si un élément est mutualisé ou non
-
-
-# OSE 16.1 (prochainement)
-
-## Nouveautés
-
 * Ajout de la composante hiérarchique de l'intervenant dans l'export csv des agréments (#40053)
-
+* Ajout de la structure d'affectation d'un intervenant vacataire dans l'extraction de mise en paiement (#40180)
 
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement

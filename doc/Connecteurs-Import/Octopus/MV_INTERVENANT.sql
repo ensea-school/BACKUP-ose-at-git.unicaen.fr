@@ -30,7 +30,7 @@ MATERIALIZED VIEW MV_INTERVENANT AS
                       JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
                       JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
 
-             WHERE icto.d_debut - 184 <= SYSDATE  AND icto.code_ose IS NOT NULL
+             WHERE (icto.d_debut - 184 <= SYSDATE OR icto.d_fin >= SYSDATE)  AND icto.code_ose IS NOT NULL
 
 
              UNION ALL
@@ -52,7 +52,7 @@ MATERIALIZED VIEW MV_INTERVENANT AS
              FROM octo.individu_unique@octoprod uni
                       JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
    					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND icto.d_debut - 184 <= SYSDATE AND icto.code_ose IS NOT NULL
+					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND (icto.d_debut - 184 <= SYSDATE OR icto.d_fin >= SYSDATE) AND icto.code_ose IS NOT NULL AND icto.code_ose != 'NON_AUTORISE'
              WHERE inds.d_debut - 184 <= SYSDATE
                --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
 	           --AND icto.individu_id IS NULL

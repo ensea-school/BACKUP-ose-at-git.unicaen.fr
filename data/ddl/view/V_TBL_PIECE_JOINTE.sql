@@ -1,4 +1,4 @@
-CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
+--CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
 WITH t AS (
   SELECT
     pjd.annee_id                                                annee_id,
@@ -13,7 +13,7 @@ WITH t AS (
               tbl_piece_jointe_demande  pjd
     LEFT JOIN tbl_piece_jointe_fournie  pjf ON pjf.code_intervenant = pjd.code_intervenant
                                            AND pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
-                                           AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,pjf.date_validite,(pjf.annee_id + pjf.duree_vie - 1))
+                                           AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,pjf.date_validite - 1,(pjf.annee_id + pjf.duree_vie - 1))
   WHERE
     1=1
     /*@INTERVENANT_ID=pjd.intervenant_id*/

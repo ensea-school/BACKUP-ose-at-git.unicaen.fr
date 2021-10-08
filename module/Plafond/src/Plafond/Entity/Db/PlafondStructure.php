@@ -2,14 +2,16 @@
 
 namespace Plafond\Entity\Db;
 
-use Application\Entity\Db\Annee;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\Traits\ParametreEntityTrait;
 
 /**
  * PlafondStructure
  */
-class PlafondStructure
+class PlafondStructure implements ParametreEntityInterface
 {
+    use ParametreEntityTrait;
     use StructureAwareTrait;
     use PlafondAwareTrait;
 
@@ -17,16 +19,6 @@ class PlafondStructure
      * @var integer
      */
     protected ?int $id = null;
-
-    /**
-     * @var Annee|null
-     */
-    protected ?Annee $anneeDebut = null;
-
-    /**
-     * @var Annee|null
-     */
-    protected ?Annee $anneeFin = null;
 
     /**
      * @var float
@@ -41,54 +33,6 @@ class PlafondStructure
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * @return Annee|null
-     */
-    public function getAnneeDebut(): ?Annee
-    {
-        return $this->anneeDebut;
-    }
-
-
-
-    /**
-     * @param Annee|null $anneeDebut
-     *
-     * @return PlafondStructure
-     */
-    public function setAnneeDebut(?Annee $anneeDebut): PlafondStructure
-    {
-        $this->anneeDebut = $anneeDebut;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return Annee|null
-     */
-    public function getAnneeFin(): ?Annee
-    {
-        return $this->anneeFin;
-    }
-
-
-
-    /**
-     * @param Annee|null $anneeFin
-     *
-     * @return PlafondStructure
-     */
-    public function setAnneeFin(?Annee $anneeFin): PlafondStructure
-    {
-        $this->anneeFin = $anneeFin;
-
-        return $this;
     }
 
 

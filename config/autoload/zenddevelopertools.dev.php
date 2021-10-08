@@ -11,7 +11,7 @@ return [
              * Expects: bool
              * Default: true
              */
-            'enabled'     => false,
+            'enabled'     => true,
 
             /**
              * Enables or disables the strict mode. If the strict mode is enabled, any error will throw an exception,
@@ -151,7 +151,7 @@ return [
                 'config'                                 => false,
                 'db'                                     => false,
                 'doctrine.mapping_collector.orm_default' => false,
-                //'bjy_authorize_role_collector' => false,
+                //'bjy_authorize_role_collector'           => false,
                 //'request'                                => true,
                 //'memory'                                 => true,
             ],

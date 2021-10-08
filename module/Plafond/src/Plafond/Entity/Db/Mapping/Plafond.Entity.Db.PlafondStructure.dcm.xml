@@ -3,6 +3,9 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Plafond\Entity\Db\PlafondStructure" table="PLAFOND_STRUCTURE">
+        <unique-constraints>
+            <unique-constraint name="PLAFOND_STRUCTURE_UN" columns="STRUCTURE_ID,PLAFOND_ID,ANNEE_ID"/>
+        </unique-constraints>
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
@@ -16,16 +19,18 @@
                 <join-column name="PLAFOND_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="anneeDebut" target-entity="Application\Entity\Db\Annee">
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-columns>
-                <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>
-            </join-columns>
-        </many-to-one>
-        <many-to-one field="anneeFin" target-entity="Application\Entity\Db\Annee">
-            <join-columns>
-                <join-column name="ANNEE_FIN_ID" referenced-column-name="ID"/>
+                <join-column name="ANNEE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
         <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

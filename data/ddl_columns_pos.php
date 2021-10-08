@@ -2092,6 +2092,8 @@ return [
         'PLAFOND_ID',
         'HEURES',
         'ANNEE_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
     ],
 ];
 

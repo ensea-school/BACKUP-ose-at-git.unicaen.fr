@@ -13,6 +13,7 @@ use Application\Interfaces\AdresseInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectManagerAware;
+use Indicateur\Entity\Db\IndicModifDossier;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;

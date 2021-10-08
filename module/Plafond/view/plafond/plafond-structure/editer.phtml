@@ -12,18 +12,8 @@
 <?php
 
 echo $this->form()->openTag($form);
-
 echo $this->formControlGroup($form->get('plafond'));
 echo $this->formControlGroup($form->get('heures'));
-echo '<div class="row">';
-echo '<div class="col-md-6">';
-echo $this->formControlGroup($form->get('anneeDebut'));
-echo '</div>';
-echo '<div class="col-md-6">';
-echo $this->formControlGroup($form->get('anneeFin'));
-echo '</div>';
-echo '</div>';
-
 echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
 

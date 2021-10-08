@@ -1421,7 +1421,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                       tbl_piece_jointe_demande  pjd
             LEFT JOIN tbl_piece_jointe_fournie  pjf ON pjf.code_intervenant = pjd.code_intervenant
                                                    AND pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
-                                                   AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,(pjf.annee_id + pjf.duree_vie - 1))
+                                                   AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,pjf.date_validite, (pjf.annee_id + pjf.duree_vie - 1))
           WHERE
             1=1
             /*@INTERVENANT_ID=pjd.intervenant_id*/
@@ -1659,7 +1659,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           --CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN 1 ELSE MIN(COALESCE(tpjs.duree_vie,1)) END duree_vie,
           --CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN i.annee_id+1 ELSE MIN(i.annee_id+COALESCE(tpjs.duree_vie,1)) END date_validite,
           MIN(COALESCE(tpjs.duree_vie,1)) duree_vie,
-          MIN(COALESCE(tpjs.annee_fin_id+1, i.annee_id+COALESCE(tpjs.duree_vie,1))) date_validite,
+          MIN(COALESCE(tpjs.annee_fin_id, i.annee_id+COALESCE(tpjs.duree_vie,1))) date_validite,
           pj.date_archive date_archive
         FROM
                     piece_jointe          pj

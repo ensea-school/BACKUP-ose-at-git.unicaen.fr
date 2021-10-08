@@ -10,7 +10,7 @@ SELECT
 --  CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN 1 ELSE MIN(COALESCE(tpjs.duree_vie,1)) END duree_vie,
   --CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN i.annee_id+1 ELSE MIN(i.annee_id+COALESCE(tpjs.duree_vie,1)) END date_validite,
   MIN(COALESCE(tpjs.duree_vie,1)) duree_vie,
-  MIN(COALESCE(tpjs.annee_fin_id+1, i.annee_id+COALESCE(tpjs.duree_vie,1))) date_validite,
+  MIN(COALESCE(tpjs.annee_fin_id, i.annee_id+COALESCE(tpjs.duree_vie,1))) date_validite,
 
   pj.date_archive date_archive
 FROM

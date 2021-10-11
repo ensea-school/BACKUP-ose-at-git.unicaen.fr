@@ -421,6 +421,14 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'indicateur_email_expediteur',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Email expéditeur',
+            ],
+        ]);
+
+        $this->add([
             'type'       => 'Select',
             'name'       => 'contrat_regle_franchissement',
             'options'    => [

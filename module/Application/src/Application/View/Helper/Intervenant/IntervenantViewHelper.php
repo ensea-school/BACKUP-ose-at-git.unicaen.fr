@@ -75,6 +75,8 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "N° {$entity->getSource()}" => $entity->getCode(),
                 "N° RH"                     => ($entity->getCodeRh()) ? $entity->getCodeRh() : '<span class="inconnu">(Inconnue)</span>',
                 "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Grade"                     => $entity->getGrade() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Discipline"                => (!empty($entity->getDiscipline()) && $entity->getDiscipline() != '00 Non renseignée') ? $entity->getDiscipline() : '<span class="inconnu">(Inconnue)</span>',
                 "Modifié le"                => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
             ],
             'divers'      => [

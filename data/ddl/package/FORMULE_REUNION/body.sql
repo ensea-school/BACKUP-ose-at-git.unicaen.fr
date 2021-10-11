@@ -294,7 +294,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
     -- AM=SI(ET($D20="Oui";$H20<>"TP");$M20*$AD20*$K20;0)
     WHEN c = 'AM' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.type_intervention_code <> 'TP' THEN
+      IF vh.service_statutaire AND COALESCE(vh.type_intervention_code,' ') <> 'TP' THEN
         RETURN vh.heures * cell('AD',l) * vh.ponderation_service_du;
       ELSE
         RETURN 0;

@@ -13,7 +13,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
 
-    'router' => [
+    'router'       => [
         'routes' => [
             'intervenant' => [
                 'type'          => 'Segment',
@@ -107,38 +107,38 @@ return [
         ],
     ],
 
-    'navigation'   => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'export-rh' => [
-                                'label'          => 'Export vers le SI RH',
-                                'icon'           => 'glyphicon glyphicon-list-alt',
-                                'route'          => 'intervenant/administration',
-                                'resource'       => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
-                                'order'          => 82,
-                                'border - color' => '#111',
-                                'pages'          => [
-                                    'chercher-intervenant-rh' => [
-                                        'label'        => 'Rechercher un intervenant dans le SI RH',
-                                        'icon'         => 'fa fa-graduation-cap',
-                                        'route'        => 'intervenant/administration/chercher-intervenant-rh',
-                                        'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'chercher-intervenant-rh'),
-                                        'order'        => 800,
-                                        'border-color' => '#BBCF55',
-                                    ],
-                                ],
-                            ],
-                        ],
+    /* 'navigation'   => [
+         'default' => [
+             'home' => [
+                 'pages' => [
+                     'administration' => [
+                         'pages' => [
+                             'export-rh' => [
+                                 'label'          => 'Export vers le SI RH',
+                                 'icon'           => 'glyphicon glyphicon-list-alt',
+                                 'route'          => 'intervenant/administration',
+                                 'resource'       => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+                                 'order'          => 82,
+                                 'border - color' => '#111',
+                                 'pages'          => [
+                                     'chercher-intervenant-rh' => [
+                                         'label'        => 'Rechercher un intervenant dans le SI RH',
+                                         'icon'         => 'fa fa-graduation-cap',
+                                         'route'        => 'intervenant/administration/chercher-intervenant-rh',
+                                         'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'chercher-intervenant-rh'),
+                                         'order'        => 800,
+                                         'border-color' => '#BBCF55',
+                                     ],
+                                 ],
+                             ],
+                         ],
 
-                    ],
+                     ],
 
-                ],
-            ],
-        ],
-    ],
+                 ],
+             ],
+         ],
+     ],*/
     'bjyauthorize' => [
         'guards'         => [
             PrivilegeController::class => [

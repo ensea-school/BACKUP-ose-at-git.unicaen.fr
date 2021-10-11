@@ -22,6 +22,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 * Au niveau du connecteur Actul+, les formations fermées étaient ignorées, elles sont également synchronisées
 * La suppression d'un statut intervenant n'était plus possible (#39548)
+* Il était impossible de modifier les règles de validation des services via le formulaire de l'administration (#39194)
 
 ## Nouveautés
 

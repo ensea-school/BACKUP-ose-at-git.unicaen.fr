@@ -31,6 +31,8 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Ajout de la composante hiérarchique de l'intervenant dans l'export csv des agréments (#40053)
 * Ajout de la structure d'affectation d'un intervenant vacataire dans l'extraction de mise en paiement (#40180)
 * Ajout d'un nouveau paramètre pour pouvoir spécifier un email expéditeur générique dans le cadre d'envoi d'email via les indicateurs (#40106)
+* Affichage de l'horodatage du dossier de l'intervenant dans les données personnelles (#39014)
+* Affichage du grade et de la discipline au niveau de la fiche intervenant (#39603)
 
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement

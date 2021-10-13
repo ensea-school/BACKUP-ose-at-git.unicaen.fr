@@ -21,14 +21,21 @@ Objectif : Connecteur Export OSE => Logiciel RH
 ## Corrections de bugs
 
 * Au niveau du connecteur Actul+, les formations fermées étaient ignorées, elles sont également synchronisées
+* La suppression d'un statut intervenant n'était plus possible (#39548)
+* Il était impossible de modifier les règles de validation des services via le formulaire de l'administration (#39194)
 
 ## Nouveautés
 
+* Module export intervenant de OSE vers SIHAM
 * Nouvelle vue V_IMPORT_DEPUIS_DOSSIERS pouvant servir pour peupler les données des intervenants à partir des données personnelles
 * Possibilité pour un gestionnire de saisir des heures d'enseignement ou de référentiel qui n'auront pas besoin d'être validées par la suite (nouveau privilège d'autovalidation associé)
 * Ajout d'une colonne dans l'export CSV des charges précisant si un élément est mutualisé ou non
 * Ajout de la composante hiérarchique de l'intervenant dans l'export csv des agréments (#40053)
 * Ajout de la structure d'affectation d'un intervenant vacataire dans l'extraction de mise en paiement (#40180)
+* Ajout d'un nouveau paramètre pour pouvoir spécifier un email expéditeur générique dans le cadre d'envoi d'email via les indicateurs (#40106)
+* Affichage de l'horodatage du dossier de l'intervenant dans les données personnelles (#39014)
+* Affichage du grade et de la discipline au niveau de la fiche intervenant (#39603)
+* Synchronisation de l'email pro de la fiche intervenant avec le dossier de l'intervenant en cas de mise à jour (#39346)
 
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement

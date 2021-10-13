@@ -113,9 +113,7 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
 
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-        if ($statutIntervenant->getSource()->getImportable()) {
-            $canEdit = false; // Si la source est synchronisable alors pas d'édition possible
-        }
+        
 
         if (!$canEdit) {
             $this->flashMessenger()->addErrorMessage('Statut non modifiable : droit non accordé, car vous n\'avez pas le privilège pour cela ou bien le statut est synchronisé depuis un autre logiciel');

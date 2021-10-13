@@ -203,4 +203,10 @@ Cordialement,
         "VALEUR"      => "Vous n'êtes pas autorisé(e) à vous connecter à OSE avec ce compte. Nous vous prions de vous rapprocher de votre composante pour en obtenir un valide.",
         "DESCRIPTION" => "Message informatif si l'utilisateur n'est pas intervenant et n'a aucune affectation",
     ],
+
+    /* Indicateur */
+    "indicateur_email_expediteur"   => [
+        "DESCRIPTION" => "Adresse email d'expéditeur des mails via les indicateur, si vide alors l'email de l'utilisateur sera utilisé",
+    ],
+  
 ];

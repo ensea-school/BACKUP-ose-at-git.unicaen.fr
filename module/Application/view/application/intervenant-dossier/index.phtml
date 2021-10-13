@@ -110,7 +110,8 @@ $fieldsets = $form->getFieldsets();
         <?php endif; ?>
 
     <?php endif; ?>
-
+    <!--Affichage de l'horodatage pour le dossier de l'intervenant-->
+    <?= $this->historique($intervenantDossier) ?>
 
     <?= $this->form()->openTag($form); ?>
     <!-- legend champs obligatoire -->

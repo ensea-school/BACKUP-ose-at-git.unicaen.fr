@@ -116,7 +116,16 @@ class RegleStructureValidationForm extends AbstractForm
      */
     public function getInputFilterSpecification()
     {
-        return [];
+        $spec = [
+            'type-intervenant'    => [
+                'required' => false,
+            ],
+            'type-volume-horaire' => [
+                'required' => false,
+            ],
+        ];
+
+        return $spec;
     }
 
 }

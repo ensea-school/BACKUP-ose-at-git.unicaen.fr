@@ -91,6 +91,24 @@
             </div>
         </div>
 
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Indicateur</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('indicateur_email_expediteur')); ?>
+                        <div class="help-block">
+                            Si l'email expéditeur est vide alors l'email de l'utilisateur en cours sera utilisé.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Gestion des contrats de travail</h3>

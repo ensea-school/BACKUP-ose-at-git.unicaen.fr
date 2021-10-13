@@ -5,11 +5,14 @@ SELECT
 FROM (
 SELECT
 	i.id   intervenant_id,
-	i.annee_id annee_id,
-	i.structure_id structure_id
+	MAX(i.annee_id) annee_id,
+	MAX(i.structure_id) structure_id
 FROM intervenant i
 JOIN contrat c ON c.intervenant_id = i.id  AND c.histo_destruction IS NULL
+JOIN statut_intervenant si ON si.id = i.statut_id
 WHERE i.export_date IS NULL
+AND si.code != 'BIATSS'
+AND si.type_intervenant_id = 2
 AND i.affectation_fin < sysdate
 AND c.date_retour_signe IS NOT NULL
 AND i.annee_id = (SELECT valeur FROM parametre p WHERE nom = 'annee')

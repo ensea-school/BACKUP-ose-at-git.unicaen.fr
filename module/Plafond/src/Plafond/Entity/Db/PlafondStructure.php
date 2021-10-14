@@ -16,24 +16,9 @@ class PlafondStructure implements ParametreEntityInterface
     use PlafondAwareTrait;
 
     /**
-     * @var integer
-     */
-    protected ?int $id = null;
-
-    /**
      * @var float
      */
     protected float $heures = 0;
-
-
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
 
 
@@ -58,5 +43,4 @@ class PlafondStructure implements ParametreEntityInterface
 
         return $this;
     }
-
 }

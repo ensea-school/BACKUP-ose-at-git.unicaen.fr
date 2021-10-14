@@ -12,7 +12,6 @@ use Plafond\Entity\Db\PlafondStructure;
  *
  * @method PlafondStructure get($id)
  * @method PlafondStructure[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method PlafondStructure newEntity()
  *
  */
 class PlafondStructureService extends AbstractEntityService
@@ -39,6 +38,22 @@ class PlafondStructureService extends AbstractEntityService
     public function getAlias(): string
     {
         return 'plastruct';
+    }
+
+
+
+    /**
+     * Retourne une nouvelle entité de la classe donnée
+     *
+     * @return PlafondStructure
+     */
+    public function newEntity()
+    {
+        /** @var $entity \Plafond\Entity\Db\PlafondStructure */
+        $entity = parent::newEntity();
+        $entity->setAnnee($this->getServiceContext()->getAnnee());
+
+        return $entity;
     }
 
 }

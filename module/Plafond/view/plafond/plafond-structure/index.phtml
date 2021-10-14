@@ -20,7 +20,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <tr>
             <th>Plafond</th>
             <th>Heures</th>
-            <th>Depuis</th>
             <?php if ($canEdit): ?>
                 <th>Actions</th><?php endif; ?>
         </tr>
@@ -30,7 +29,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <tr>
                 <td><?= $plafond->getPlafond() ?></td>
                 <td><?= floatToString($plafond->getHeures()) ?></td>
-                <td><?= $plafond->getAnnee() ?></td>
                 <?php if ($canEdit): ?>
                     <td>
                     <a href="<?= $this->url('plafond/structure/modifier', ['structure' => $structure->getId(), 'plafondStructure' => $plafond->getId()]) ?>"><span

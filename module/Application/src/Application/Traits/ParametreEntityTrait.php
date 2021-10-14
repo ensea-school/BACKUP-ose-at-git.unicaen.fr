@@ -2,20 +2,27 @@
 
 namespace Application\Traits;
 
-use DateTime;
 use Application\Entity\Db\Annee;
-use UnicaenApp\Entity\UserInterface;
 use Application\Interfaces\ParametreEntityInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 trait ParametreEntityTrait
 {
-    protected Annee          $annee;
+    use HistoriqueAwareTrait;
 
-    protected bool           $saveOnlyAnneeCourante = false;
+    protected ?int  $id = null;
 
-    protected ?DateTime      $histoModification     = null;
+    protected Annee $annee;
 
-    protected ?UserInterface $histoModificateur     = null;
+
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
 
 
@@ -37,78 +44,6 @@ trait ParametreEntityTrait
     public function setAnnee(Annee $annee): ParametreEntityInterface
     {
         $this->annee = $annee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isSaveOnlyAnneeCourante(): bool
-    {
-        return $this->saveOnlyAnneeCourante;
-    }
-
-
-
-    /**
-     * @param bool $saveOnlyAnneeCourante
-     *
-     * @return ParametreEntityInterface
-     */
-    public function setSaveOnlyAnneeCourante(bool $saveOnlyAnneeCourante): ParametreEntityInterface
-    {
-        $this->saveOnlyAnneeCourante = $saveOnlyAnneeCourante;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return null|DateTime
-     */
-    public function getHistoModification(): ?DateTime
-    {
-        return $this->histoModification;
-    }
-
-
-
-    /**
-     * @param DateTime $histoModification
-     *
-     * @return ParametreEntityInterface
-     */
-    public function setHistoModification(DateTime $histoModification): ParametreEntityInterface
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return null|UserInterface
-     */
-    public function getHistoModificateur(): ?UserInterface
-    {
-        return $this->histoModificateur;
-    }
-
-
-
-    /**
-     * @param UserInterface $histoModificateur
-     *
-     * @return ParametreEntityInterface
-     */
-    public function setHistoModificateur(UserInterface $histoModificateur): ParametreEntityInterface
-    {
-        $this->histoModificateur = $histoModificateur;
 
         return $this;
     }

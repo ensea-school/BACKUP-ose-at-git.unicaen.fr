@@ -2,6 +2,7 @@
 
 namespace Application\ORM\Event\Listeners;
 
+use Application\Interfaces\ParametreEntityInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Doctrine\Common\EventSubscriber;
@@ -17,21 +18,13 @@ class HistoriqueListener implements EventSubscriber
     use UtilisateurServiceAwareTrait;
 
 
-
     /**
      * @param LifecycleEventArgs $args
      *
      * @throws RuntimeException Aucun utilisateur disponible pour en faire l'auteur de la création/modification
      */
-    protected function updateHistorique(LifecycleEventArgs $args)
+    public function updateHistorique(HistoriqueAwareInterface $entity)
     {
-        $entity = $args->getEntity();
-
-        // l'entité doit implémenter l'interface requise
-        if (!$entity instanceof HistoriqueAwareInterface) {
-            return;
-        }
-
         $now = new \DateTime();
 
         // on tente d'abord d'obtenir l'utilisateur connecté pour en faire l'auteur de la création/modification.
@@ -71,7 +64,11 @@ class HistoriqueListener implements EventSubscriber
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        $this->updateHistorique($args);
+        $entity = $args->getEntity();
+        // On fait si c'est une HistoriqueAwareInterface, mais pas une ParametreEntityInterface
+        if (($entity instanceof HistoriqueAwareInterface) && (!$entity instanceof ParametreEntityInterface)) {
+            $this->updateHistorique($entity);
+        }
     }
 
 
@@ -81,7 +78,11 @@ class HistoriqueListener implements EventSubscriber
      */
     public function preUpdate(PreUpdateEventArgs $args)
     {
-        $this->updateHistorique($args);
+        $entity = $args->getEntity();
+        // On fait si c'est une HistoriqueAwareInterface, mais pas une ParametreEntityInterface
+        if (($entity instanceof HistoriqueAwareInterface) && (!$entity instanceof ParametreEntityInterface)) {
+            $this->updateHistorique($entity);
+        }
     }
 
 

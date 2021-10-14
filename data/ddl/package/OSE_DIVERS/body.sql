@@ -68,6 +68,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
       END IF;
     END IF;
 
+    IF periode_id IS NULL THEN -- on se trouve dans du référentiel ou dans un enseignement annuel, on utilise le ratio configuré
+      RETURN ose_parametre.get_pourc_s1_annee_civ;
+    END IF;
+
     -- Si aucune condition n'est réunie, on retourne comme avant, CAD 4/10
     RETURN 4/10;
   END;

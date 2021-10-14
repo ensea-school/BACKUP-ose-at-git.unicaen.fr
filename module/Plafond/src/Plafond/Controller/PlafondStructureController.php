@@ -2,12 +2,13 @@
 
 namespace Plafond\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\Structure;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Plafond\Entity\Db\PlafondStructure;
 use Plafond\Form\PlafondStructureFormAwareTrait;
 use Plafond\Service\PlafondStructureServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\Mvc\Controller\AbstractActionController;
 
 
 /**
@@ -15,13 +16,17 @@ use Zend\Mvc\Controller\AbstractActionController;
  *
  * @author UnicaenCode
  */
-class PlafondStructureController extends AbstractActionController
+class PlafondStructureController extends AbstractController
 {
     use PlafondStructureServiceAwareTrait;
     use PlafondStructureFormAwareTrait;
+    use ContextServiceAwareTrait;
 
     public function indexAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(PlafondStructure::class);
+        $this->em()->getFilters()->enable('annee')->init(PlafondStructure::class);
+
         /* @var $structure Structure */
         $structure = $this->getEvent()->getParam('structure');
 
@@ -69,9 +74,6 @@ class PlafondStructureController extends AbstractActionController
 
     public function supprimerAction()
     {
-        /* @var $structure Structure */
-        $structure = $this->getEvent()->getParam('structure');
-
         /* @var $plafondStructure PlafondStructure */
         $plafondStructure = $this->getEvent()->getParam('plafondStructure');
 

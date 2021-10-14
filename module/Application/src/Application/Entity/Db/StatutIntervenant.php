@@ -211,6 +211,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     protected $dossierTelPerso;
 
+    /**
+     * @var string
+     */
+    protected $codeRh;
+
 
 
     /**
@@ -1260,6 +1265,28 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     public function setDossierTelPerso(int $dossierTelPerso): StatutIntervenant
     {
         $this->dossierTelPerso = $dossierTelPerso;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCodeRh()
+    {
+        return $this->codeRh;
+    }
+
+
+
+    /**
+     * @param string $codeRh
+     */
+    public function setCodeRh($codeRh): string
+    {
+        $this->codeRh = $codeRh;
 
         return $this;
     }

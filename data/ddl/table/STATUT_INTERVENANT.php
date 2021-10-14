@@ -33,6 +33,18 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
+        'CODE_RH'                           => [
+            'name'        => 'CODE_RH',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 50,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 44,
+            'commentaire' => 'Code de correspondance avec le SI RH',
+        ],
         'DEPASSEMENT'                    => [
             'name'        => 'DEPASSEMENT',
             'type'        => 'bool',

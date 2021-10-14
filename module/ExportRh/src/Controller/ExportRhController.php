@@ -135,11 +135,8 @@ class ExportRhController extends AbstractController
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
                 $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
-                if (!empty($affectationEnCours)) {
-                    //On regarde si il a un contrat en cours pour l'année courante
-                    $contratEnCours = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
-                }
-
+                $contratEnCours     = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
+             
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {
                     $renouvellement = false;
@@ -192,7 +189,7 @@ class ExportRhController extends AbstractController
 
 
                 $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
-            
+
                 if ($result !== false) {
                     $this->exportRhService->cloreDossier($intervenant);
                     $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');

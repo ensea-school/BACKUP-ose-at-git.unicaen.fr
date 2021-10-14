@@ -197,7 +197,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $dateDebutContrat = new \DateTime($contrat->dateDebutContrat);
                 $dateFinContrat   = new \DateTime($contrat->dateFinReelleContrat);
                 $currentDate      = new \DateTime();
-                if ($currentDate > $dateDebutContrat and $currentDate > $dateFinContrat) {
+                if ($currentDate > $dateDebutContrat and $currentDate < $dateFinContrat) {
                     $contrats[] = $contrat;
                 }
             }

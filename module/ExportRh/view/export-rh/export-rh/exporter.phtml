@@ -42,10 +42,10 @@ if ($priseEnCharge) {
                     données de son dossier, résumées ci-dessous :</p>
             <?php else: ?>
 
-                <?php if (!empty($affectationEnCours) && !empty($contratsEnCours)): ?>
+                <?php if (!empty($affectationEnCours) && !empty($contratEnCours)): ?>
                     <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<?= $intervenantDossier->getStatut()->getLibelle() ?>) est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>). Il
                         possède déjà actuellement une affectation pour l'année
-                        universitaire <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page.</p>
+                        universitaire <?= $intervenant->getAnnee()->getLibelle() ?> ainsi qu'un contrat. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page.</p>
                 <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
                     <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<?= $intervenantDossier->getStatut()->getLibelle() ?>) est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il
                         possède une affectation mais pas encore de contrat
@@ -113,27 +113,40 @@ if ($priseEnCharge) {
                     </div>
                 </div>
             <?php endif; ?>
-            <?php if (!empty($contratsEnCours)): ?>
+            <?php if (!empty($contratEnCours)): ?>
                 <div class="panel panel-default">
                     <div class="panel-heading">Contrat <?= $nameConnecteur ?> en cours</div>
                     <div class="panel-body">
                         <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Champs</th>
+                                <th>Données</th>
+
+                            </tr>
+                            </thead>
                             <tbody>
                             <tr>
                                 <td>Type de contrat</td>
-                                <td><?= $contratsEnCours->libLongTypeContrat ?></td>
+                                <td><?= $contratEnCours->libLongTypeContrat ?></td>
                             </tr>
                             <tr>
                                 <td>Date début contrat</td>
-                                <td><?= $contratsEnCours->dateDebutContrat ?></td>
+                                <td>
+                                    <?php
+                                    $date = new DateTime($contratEnCours->dateDebutContrat);
+                                    echo $date->format('d-m-Y');
+                                    ?>
+                                </td>
                             </tr>
                             <tr>
-                                <td>Date fin de contrat prévue</td>
-                                <td><?= $contratsEnCours->dateFinPrevueContrat ?></td>
-                            </tr>
-                            <tr>
-                                <td>Date fin de contrat réelle</td>
-                                <td><?= $contratsEnCours->dateFinReelleContrat ?></td>
+                                <td>Date fin de contrat</td>
+                                <td>
+                                    <?php
+                                    $date = new DateTime($contratEnCours->dateFinReelleContrat);
+                                    echo $date->format('d-m-Y');
+                                    ?>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

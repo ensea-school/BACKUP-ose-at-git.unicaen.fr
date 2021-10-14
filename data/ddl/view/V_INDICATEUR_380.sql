@@ -18,4 +18,3 @@ AND c.date_retour_signe IS NOT NULL
 AND i.annee_id = (SELECT valeur FROM parametre p WHERE nom = 'annee')
 GROUP BY i.id
 ) t
-;

@@ -57,12 +57,14 @@ Votre vue matérialisée MV_INTERVENANT devra contenir les colonnes suivantes :
 |Z_EMPLOYEUR_ID            |NUMBER  |        |Oui     |==> EMPLOYEUR.SOURCE_CODE    |
 |VALIDITE_DEBUT            |DATE    |        |Oui     |Date de début de validité (NULL = depuis toujours)  |
 |VALIDITE_FIN              |DATE    |        |Oui     |Date de fin   de validité (NULL = pas d'expiration) |
-
+|AFFECTATION_FIN           |DATE    |        |Oui     |Date de fin   d'affectation |
 
 Attention : un même individu peut avoir plusieurs fiches INTERVENANT dans la même année, tant qu'on peut les distinguer par le statut.
 Le champ CODE doit être spécifique à l'individu. Une même personne ne devrait pas avoir plusieurs valeurs diférentes dans CODE.
 CODE sert donc à identifier que plusieurs fiches appartiennent à une même personne.
- 
+
+Attention également : les dates de début et de fin de validité sont utilisées par la SRC_INTERVENANT pour déterminer sur quelles années synchroniser l'intervenant.
+
 La vue source doit avoir *in fine* une unicité sur le trouple [CODE,ANNEE_ID,STATUT_ID].
 
 UTILISATEUR_CODE doit contenir un identifiant qui sera mis en rapport avec les données LDAP de l'utilisateur connecté.

@@ -583,7 +583,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'listeCarriere'          => $carriere,
                 'listeModalitesServices' => $service,
                 'listeStatuts'           => $statut,
-                'listeContrats'          => $contrat,
+                //'listeContrats'          => $contrat,
                 'listePositions'         => $position,
                 'motifEntree'            => 'REN',
                 'matricule'              => $matricule,

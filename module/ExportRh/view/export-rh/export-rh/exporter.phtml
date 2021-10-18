@@ -183,7 +183,7 @@ if ($priseEnCharge) {
                 </form>
 
                 <p>
-                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Prendre en charge l'intervenant dans <?= $nameConnecteur; ?></button>
+                    <button id="sihamButton" class="btn btn-primary">Prendre en charge l'intervenant dans <?= $nameConnecteur; ?></button>
                 </p>
             <?php elseif ($renouvellement): ?>
                 <!--Partie générique du formulaire-->
@@ -196,7 +196,7 @@ if ($priseEnCharge) {
                 ?>
                 </form>
                 <p>
-                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Renouveller l'intervenant dans <?= $nameConnecteur; ?></button>
+                    <button id="sihamButton" class="btn btn-primary">Renouveller l'intervenant dans <?= $nameConnecteur; ?></button>
                 </p>
             <?php else: ?>
                 <!--Partie générique du formulaire-->
@@ -205,7 +205,7 @@ if ($priseEnCharge) {
                 ?>
                 </form>
                 <p>
-                    <button onclick="$('.form-export-rh').submit();" class="btn btn-primary">Synchroniser les données personnelles dans <?= $nameConnecteur; ?></button>
+                    <button id="sihamButton" class="btn btn-primary">Synchroniser les données personnelles dans <?= $nameConnecteur; ?></button>
                 </p>
             <?php endif; ?>
         <?php endif; ?>
@@ -215,5 +215,27 @@ if ($priseEnCharge) {
 <?php else: ?>
     <div class="alert alert-warning">Le module export RH n'est disponible que pour l'année universitaire en cours.</div>
 <?php endif; ?>
+<script type="text/javascript">
+    $("document").ready(function ()
+    {
+
+        $("#sihamButton").click(function () {
+
+            var emploi = $("select[name='connecteurForm[emploi]']");
+            var affectation = $("select[name='connecteurForm[affectation]']");
+
+            if (emploi.val() == '' || affectation.val() == '') {
+                alert("Vous devez obligatoirement renseigner une affectation et un type d'emploi pour un renouvellement ou une prise en charge dans SIHAM")
+            } else {
+                $('.form-export-rh').submit();
+            }
+
+        });
+    });
+
+
+</script>
+
+
 
 

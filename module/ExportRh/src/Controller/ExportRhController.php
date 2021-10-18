@@ -136,7 +136,7 @@ class ExportRhController extends AbstractController
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
                 $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
                 $contratEnCours     = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
-             
+
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {
                     $renouvellement = false;
@@ -185,9 +185,7 @@ class ExportRhController extends AbstractController
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
 
-                $posts = $this->getRequest()->getPost();
-
-
+                $posts  = $this->getRequest()->getPost();
                 $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
 
                 if ($result !== false) {
@@ -216,18 +214,25 @@ class ExportRhController extends AbstractController
                 if (!$intervenant) {
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
-
-                $dateExport = new \DateTime();
-                $intervenant->setExportDate($dateExport);
-                $this->getServiceIntervenant()->save($intervenant);
-                $posts  = $this->getRequest()->getPost();
-                $result = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
-                if ($result !== false) {
-                    $this->exportRhService->cloreDossier($intervenant);
-                    $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
-                    $this->getServiceIntervenant()->updateExportDate($intervenant);
-                } else {
-                    $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
+                $posts           = $this->getRequest()->getPost();
+                $missingArgument = 0;
+                if (empty($posts['connecteurForm']['affectation'])) {
+                    $this->flashMessenger()->addErrorMessage('Vous n\'avez pas choisi d\'affectation pour l\'agent');
+                    $missingArgument++;
+                }
+                if (empty($posts['connecteurForm']['emploi'])) {
+                    $this->flashMessenger()->addErrorMessage('Vous n\'avez pas choisi de type d\'emploi pour l\'agent');
+                    $missingArgument++;
+                }
+                if ($missingArgument == 0) {
+                    $result = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
+                    if ($result !== false) {
+                        $this->exportRhService->cloreDossier($intervenant);
+                        $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
+                        $this->getServiceIntervenant()->updateExportDate($intervenant);
+                    } else {
+                        $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
+                    }
                 }
             }
         } catch (\Exception $e) {

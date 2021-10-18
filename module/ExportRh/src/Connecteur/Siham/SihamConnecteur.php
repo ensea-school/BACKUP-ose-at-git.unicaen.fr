@@ -387,6 +387,13 @@ class SihamConnecteur implements ConnecteurRhInterface
                  'temoinValidite'    => 1,
                 ];
 
+            /*SITUATION FAMILIALE*/
+            $situationFamiliale[] =
+                ['dateEffetSituFam' => $dateEffet,
+                 'situFam'          => 'CEL',
+                 'temoinValidite'   => 1,
+                ];
+
             /*COORDONNEES POSTALES*/
             $adresse = '';
             $adresse .= (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() . ' ' : '';
@@ -468,6 +475,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'listeCoordonneesBancaires' => $coordonneesBancaires,
                 'listeCarriere'             => $carriere,
                 //'listeContrats'             => $contrat,
+                'listeSituations'           => $situationFamiliale,
                 'listeModalitesServices'    => $service,
                 'listeStatuts'              => $statut,
                 'listeNationalites'         => $nationalites,
@@ -575,7 +583,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'listeCarriere'          => $carriere,
                 'listeModalitesServices' => $service,
                 'listeStatuts'           => $statut,
-                //'listeContrats'          => $contrat,
+                'listeContrats'          => $contrat,
                 'listePositions'         => $position,
                 'motifEntree'            => 'REN',
                 'matricule'              => $matricule,

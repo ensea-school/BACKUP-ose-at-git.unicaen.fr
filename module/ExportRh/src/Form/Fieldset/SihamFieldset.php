@@ -180,7 +180,19 @@ class SihamFieldset extends AbstractFieldset
     {
 
         $spec = [
-            'nomUsuel' => [
+            'emploi'          => [
+                'required' => true,
+            ],
+            'affectation'     => [
+                'required' => true,
+            ],
+            'position'        => [
+                'required' => true,
+            ],
+            'statut'          => [
+                'required' => true,
+            ],
+            'modaliteService' => [
                 'required' => true,
             ],
 

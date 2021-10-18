@@ -85,8 +85,15 @@
                     <input type="checkbox" checked="" disabled="disabled" title="Cette donnée n'est pas synchronisable, pensez à la mettre à jour manuellement dans SIHAM">
                     <label>IBAN:</label>
                 </td>
-                <td><?= $intervenantDossier->getIBAN() ?></td>
-                <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getIBAN() : '' ?></td>
+                <td>
+                    <?= $intervenantDossier->getIBAN() ?>
+                    <?php if ($intervenantRh->getIBAN() != $intervenantDossier->getIBAN()): ?>
+                        <span class="glyphicon glyphicon-alert" style="color:#a40000;"></span>
+                    <?php endif; ?>
+                </td>
+                <td class="active">
+                    <?= (!empty($intervenantRh)) ? $intervenantRh->getIBAN() : '' ?>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -94,11 +101,24 @@
                     <label>BIC:</label>
 
                 </td>
-                <td><?= $intervenantDossier->getBIC() ?></td>
-                <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getBIC() : '' ?></td>
+                <td>
+                    <?= $intervenantDossier->getBIC() ?>
+                    <?php if ($intervenantRh->getBIC() != $intervenantDossier->getBIC()): ?>
+                        <span class="glyphicon glyphicon-alert" style="color:#a40000;"></span>
+                    <?php endif; ?>
+                </td>
+                <td class="active">
+                    <?= (!empty($intervenantRh)) ? $intervenantRh->getBIC() : '' ?>
+                </td>
             </tr>
             </tbody>
         </table>
+        <p>
+            <?php if ($intervenantRh->getBIC() != $intervenantDossier->getBIC() || $intervenantRh->getIBAN() != $intervenantDossier->getIBAN()): ?>
+                <span class="glyphicon glyphicon-alert" style="color:#a40000;"></span> <span
+                        style="font-style: italic;color:#555753">&nbsp;Attention, le BIC et l'IBAN sont différents entre SIHAM et OSE, le renouvellement SIHAM ne met pas à jour cette information, pensez à le faire manuellement dans SIHAM.</span>
+            <?php endif; ?>
+        </p>
 
     </div>
 </div>

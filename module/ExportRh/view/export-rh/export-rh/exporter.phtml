@@ -29,7 +29,9 @@ if ($priseEnCharge) {
         </div>
     <?php elseif ($haveContratOse === false): ?>
         <div class="messenger alert alert-warning">
-            L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<?= $intervenantDossier->getStatut()->getLibelle() ?>) n'a pas encore retourné son contrat. Vous pourrez le renouveller ou le prendre en charge dans <?= $nameConnecteur; ?> une fois le
+            L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>) n'a pas
+            encore retourné son
+            contrat. Vous pourrez le renouveller ou le prendre en charge dans <?= $nameConnecteur; ?> une fois le
             contrat retourné et daté.
         </div>
 
@@ -38,20 +40,28 @@ if ($priseEnCharge) {
 
         <div class="well">
             <?php if (empty($intervenantRh)): ?>
-                <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<?= $intervenantDossier->getStatut()->getLibelle() ?>) n'a pas été trouvé dans <?= $nameConnecteur; ?>. Vous pouvez si vous le souhaiter prendre en charge cet intervenant avec les
+                <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>) n'a
+                    pas été trouvé
+                    dans <?= $nameConnecteur; ?>. Vous pouvez si vous le souhaiter prendre en charge cet intervenant avec les
                     données de son dossier, résumées ci-dessous :</p>
             <?php else: ?>
 
                 <?php if (!empty($affectationEnCours) && !empty($contratEnCours)): ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<?= $intervenantDossier->getStatut()->getLibelle() ?>) est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>). Il
+                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                        est bien dans
+                        le <?= $nameConnecteur ?> (<strong>matricule : <?= $intervenantRh->getCodeRh() ?></strong>). Il
                         possède déjà actuellement une affectation pour l'année
                         universitaire <?= $intervenant->getAnnee()->getLibelle() ?> ainsi qu'un contrat. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page.</p>
                 <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<?= $intervenantDossier->getStatut()->getLibelle() ?>) est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il
+                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                        est bien dans
+                        le <?= $nameConnecteur ?> (<strong>matricule : <?= $intervenantRh->getCodeRh() ?></strong>).Il
                         possède une affectation mais pas encore de contrat
                         pour l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page</p>
                 <?php else: ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<?= $intervenantDossier->getStatut()->getLibelle() ?>) est bien dans le <?= $nameConnecteur ?> (<strong>numéro de matricule :</strong> <?= $intervenantRh->getCodeRh() ?>).Il ne
+                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                        est bien dans
+                        le <?= $nameConnecteur ?> (<strong>matricule : <?= $intervenantRh->getCodeRh() ?></strong>).Il ne
                         possède pas encore d'affectation pour
                         l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez le renouveller pour cette année à l'aide du formulaire ci-dessous.</p>
                 <?php endif; ?>

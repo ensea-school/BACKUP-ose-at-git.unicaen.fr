@@ -461,6 +461,9 @@ class EditionForm extends AbstractForm
             }
         } else {
             $noImport = ['syncStatut', 'syncStructure', 'statut', 'structure', 'intervenant-edition-login', 'intervenant-edition-password'];
+            if ($object->getAnnee()->getId() < $this->getServiceContext()->getAnneeImport()->getId()) {
+                $noImport[] = 'grade';
+            }
 
             foreach ($this->getElements() as $element) {
                 if (!in_array($element->getName(), $noImport)) {

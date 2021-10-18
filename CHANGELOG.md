@@ -11,7 +11,11 @@
 # OSE 18 (à venir)
 Objectif : Plafonds personnalisables
 
+## Nouveautés
 
+* Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
+
+## Corrections de bugs
 
 
 

@@ -265,20 +265,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-    -- AE=SI(OU(ESTERREUR(I20);ESTERREUR(J20));1;SI(AD20=3;J20;I20)*K20)
+    -- AE=SI(OU(ESTERREUR(I20);ESTERREUR(J20));1;I20*K20)
     WHEN c = 'AE' AND v >= 1 THEN
-      --SI(AD20=3;J20;I20)*K20
-      IF cell('AD',l) = 3 THEN
-        RETURN vh.TAUX_SERVICE_COMPL * vh.PONDERATION_SERVICE_DU;
-      ELSE
-        RETURN vh.TAUX_SERVICE_DU * vh.PONDERATION_SERVICE_DU;
-      END IF;
+      RETURN vh.TAUX_SERVICE_DU * vh.PONDERATION_SERVICE_DU;
 
 
 
-    -- AF=SI(OU(ESTERREUR(I20);ESTERREUR(J20));1;J20*K20)
+    -- AF=SI(OU(ESTERREUR(I20);ESTERREUR(J20));1;J20*L20)
     WHEN c = 'AF' AND v >= 1 THEN
-      RETURN vh.taux_service_compl * vh.ponderation_service_du;
+      RETURN vh.taux_service_compl * vh.ponderation_service_compl;
 
 
 

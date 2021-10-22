@@ -291,15 +291,25 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             //Fait planter les WS SIHAM....
             /*if ($datas['generiqueFieldset']['iban']) {
-                $anneeUniversitaire            = $this->getExportRhService()->getAnneeUniversitaireEnCours();
-                $dateEffet                     = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
-                $coordonnees                   = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
-                $coordonnees['dateDebBanque']  = $dateEffet;
-                $coordonnees['temoinValidite'] = '1';
-                $coordonnees['modePaiement']   = '25';
-                $coordonneesBancaires[]        = $coordonnees;
-                $this->siham->modifierCoordonnéesBancairesAgent($coordonneesBancaires);
-                die;
+                $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+                $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+                $coordonnees        = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
+
+                $params = [
+                    'matricule'      => $intervenantRh->getCodeRh(),
+                    'dateDebBanque'  => $dateEffet,
+                    'paysBanque'     => $coordonnees['paysBanque'],
+                    'codeBanque'     => $coordonnees['codeBanque'],
+                    'codeAgence'     => $coordonnees['codeAgence'],
+                    'numCompte'      => $coordonnees['numCompte'],
+                    'cleCompte'      => $coordonnees['cleCompte'],
+                    'IBAN'           => $coordonnees['IBAN'],
+                    'SWIFT'          => $coordonnees['SWIFT'],
+                    'modePaiement'   => '25',
+                    'temoinValidite' => '1',
+                ];
+
+                $this->siham->modifierCoordonnéesBancairesAgent($params);
             }*/
 
 

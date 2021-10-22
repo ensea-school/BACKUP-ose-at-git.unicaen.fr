@@ -82,16 +82,16 @@
 
             <tr>
                 <td>
-                    <input type="checkbox" checked="" disabled="disabled" title="Cette donnée n'est pas synchronisable, pensez à la mettre à jour manuellement dans SIHAM">
-                    <label>IBAN:</label>
+                    <?= $this->formCheckbox($generiqueFieldset->get('iban')); ?>
+                    <?= $this->formLabel($generiqueFieldset->get('iban')) ?> :
                 </td>
                 <td><?= $intervenantDossier->getIBAN() ?></td>
                 <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getIBAN() : '' ?></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" checked="" disabled="disabled" title="Cette donnée n'est pas synchronisable, pensez à la mettre à jour manuellement dans SIHAM">
-                    <label>BIC:</label>
+                    <?= $this->formCheckbox($generiqueFieldset->get('bic')); ?>
+                    <?= $this->formLabel($generiqueFieldset->get('bic')) ?> :
 
                 </td>
                 <td><?= $intervenantDossier->getBIC() ?></td>

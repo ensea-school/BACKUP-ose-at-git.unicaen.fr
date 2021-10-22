@@ -3,44 +3,14 @@
 namespace Plafond\Entity\Db;
 
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Interfaces\ParametreEntityInterface;
-use Application\Traits\ParametreEntityTrait;
+use Plafond\Interfaces\PlafondConfigInterface;
+use Plafond\Traits\PlafondConfigTrait;
 
 /**
  * PlafondStructure
  */
-class PlafondStructure implements ParametreEntityInterface
+class PlafondStructure implements PlafondConfigInterface
 {
-    use ParametreEntityTrait;
+    use PlafondConfigTrait;
     use StructureAwareTrait;
-    use PlafondAwareTrait;
-
-    /**
-     * @var float
-     */
-    protected float $heures = 0;
-
-
-
-    /**
-     * @return float
-     */
-    public function getHeures(): float
-    {
-        return $this->heures;
-    }
-
-
-
-    /**
-     * @param float $heures
-     *
-     * @return PlafondStructure
-     */
-    public function setHeures(float $heures)
-    {
-        $this->heures = $heures;
-
-        return $this;
-    }
 }

@@ -30,10 +30,7 @@ trait PlafondEtatAwareTrait
 
 
 
-    /**
-     * @return PlafondEtat
-     */
-    public function getPlafondEtat()
+    public function getPlafondEtat(): ?PlafondEtat
     {
         return $this->plafondEtat;
     }

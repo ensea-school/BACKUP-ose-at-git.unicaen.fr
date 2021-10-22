@@ -30,10 +30,7 @@ trait PlafondAwareTrait
 
 
 
-    /**
-     * @return Plafond
-     */
-    public function getPlafond()
+    public function getPlafond(): ?Plafond
     {
         return $this->plafond;
     }

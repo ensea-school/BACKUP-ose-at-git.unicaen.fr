@@ -16,6 +16,7 @@ use Indicateur\Service\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Zend\Form\Element\Checkbox;
@@ -364,6 +365,7 @@ class IndicateurController extends AbstractController
 class IndicateurIntervenantsMailer
 {
     use ContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
     /**
      * @var AbstractController
@@ -435,7 +437,13 @@ class IndicateurIntervenantsMailer
     public function getFrom()
     {
         /** @var ContextService $context */
-        $context = $this->controller->getServiceContext();
+        $context   = $this->controller->getServiceContext();
+        $parametre = $this->getServiceParametres();
+
+        $from = trim($parametre->get('indicateur_email_expediteur'));
+        if (!empty($from)) {
+            return $from;
+        }
 
         $from = $context->getUtilisateur()->getEmail();
 

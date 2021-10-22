@@ -107,7 +107,7 @@ FROM
          JOIN type_intervenant          ti ON ti.id   = si.type_intervenant_id
     LEFT JOIN grade                      g ON g.id    = i.grade_id
     LEFT JOIN discipline                di ON di.id   = i.discipline_id
-    LEFT JOIN structure               saff ON saff.id = i.structure_id AND ti.code = 'P'
+    LEFT JOIN structure               saff ON saff.id = i.structure_id-- AND ti.code = 'P'
     LEFT JOIN structure               sens ON sens.id = NVL( ep.structure_id, sr.structure_id )
          JOIN etablissement           etab ON etab.id = NVL( s.etablissement_id, ose_parametre.get_etablissement() )
     LEFT JOIN periode                    p ON p.id    = mep.periode_paiement_id

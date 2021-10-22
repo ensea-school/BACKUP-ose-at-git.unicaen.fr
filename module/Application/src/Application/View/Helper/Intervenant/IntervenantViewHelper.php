@@ -2,12 +2,10 @@
 
 namespace Application\View\Helper\Intervenant;
 
-use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Constants;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Zend\Hydrator\ClassMethods;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
@@ -22,7 +20,6 @@ class IntervenantViewHelper extends AbstractHtmlElement
     use IntervenantAwareTrait;
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use LdapConnecteurAwareTrait;
 
 
     /**
@@ -83,6 +80,8 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Type d'intervenant"       => $entity->getStatut()->getTypeIntervenant(),
                 "Statut de l'intervenant"  => $entity->getStatut(),
                 "Composante d'affectation" => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Grade"                    => $entity->getGrade() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Discipline"               => (!empty($entity->getDiscipline()) && $entity->getDiscipline() != '00 Non renseignée') ? $entity->getDiscipline() : '<span class="inconnu">(Inconnue)</span>',
                 "Dernière modification le" => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
             ],
             'identifiants' => [

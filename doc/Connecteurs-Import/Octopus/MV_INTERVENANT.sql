@@ -1,8 +1,9 @@
 CREATE
 MATERIALIZED VIEW MV_INTERVENANT AS
- WITH i AS (
 
-    SELECT DISTINCT code,
+WITH i AS (
+
+     SELECT DISTINCT code,
                     MAX(z_statut_id) OVER (partition by code, z_statut_id)               z_statut_id,
 				    MAX(z_type) OVER (partition by code, z_statut_id)                    z_type,
                     MIN(source_code)    OVER (partition by code, z_statut_id)            source_code,
@@ -18,7 +19,7 @@ MATERIALIZED VIEW MV_INTERVENANT AS
                         WHEN icto.code_ose IS NOT NULL THEN icto.code_ose
                         ELSE 'AUTRES' END                                       z_statut_id,
                     CASE
-                    	WHEN icto.code_ose IS NOT NULL AND icto.code_ose NOT IN ('BIATSS','NON_AUTORISE') THEN 'permanent'
+                    	WHEN icto.code_ose IS NOT NULL AND icto.code_ose NOT IN ('NON_AUTORISE') THEN 'permanent'
                     	ELSE 'vacataire' END                                        z_type,
                     icto.id_orig                                                source_code,
                     COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
@@ -30,7 +31,7 @@ MATERIALIZED VIEW MV_INTERVENANT AS
                       JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
                       JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
 
-             WHERE (icto.d_debut - 184 <= SYSDATE OR icto.d_fin >= SYSDATE)  AND icto.code_ose IS NOT NULL
+             WHERE (COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) - 184 <= SYSDATE OR COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) >= SYSDATE)  AND icto.code_ose IS NOT NULL
 
 
              UNION ALL
@@ -52,7 +53,7 @@ MATERIALIZED VIEW MV_INTERVENANT AS
              FROM octo.individu_unique@octoprod uni
                       JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
    					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND (icto.d_debut - 184 <= SYSDATE OR icto.d_fin >= SYSDATE) AND icto.code_ose IS NOT NULL
+					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND  COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) - 184 <= SYSDATE AND COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))  >= SYSDATE AND icto.code_ose IS NOT NULL AND icto.code_ose NOT IN('NON_AUTORISE')
              WHERE inds.d_debut - 184 <= SYSDATE
                --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
 	           --AND icto.individu_id IS NULL
@@ -65,6 +66,8 @@ MATERIALIZED VIEW MV_INTERVENANT AS
                --AND (vinds.t_doctorant='N' OR vinds.individu_id IS NULL)
                AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
          ) t
+
+
 ),
 
      --Trouver le tel pro principal de l'intervenant
@@ -229,7 +232,7 @@ SELECT DISTINCT
      /* Banque */
     COALESCE(TRIM(vindiban.iban), ibandossier.iban)                iban,
     COALESCE(TRIM(vindiban.bic), ibandossier.bic)                  bic,
-    CAST(NULL AS numeric(1))                                       rib_hors_sepa,
+    0                                                              rib_hors_sepa,
     /* Données complémentaires */
     CAST(NULL AS varchar2(255))                                    autre_1,
     CAST(NULL AS varchar2(255))                                    autre_2,
@@ -282,3 +285,7 @@ FROM i
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (SYSDATE - (365 * 2))
+
+
+
+

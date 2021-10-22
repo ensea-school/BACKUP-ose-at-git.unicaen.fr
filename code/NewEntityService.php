@@ -1,85 +1,53 @@
 <?php
 
-use UnicaenCode\Form\AbstractForm;
+use UnicaenCode\Form\Form;
 use UnicaenCode\Form\ElementMakerForm;
 use UnicaenCode\Util;
 
-/**
- * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Psr\Container\ContainerInterface
- * @var $viewName   string
- * @var $viewFile   string
- */
-class EntityServiceForm extends AbstractForm
-{
-    public function init()
-    {
-        $this->addSelectEntity(
-            'entityClass', 'Entité du service'
-        );
+$cg = Util::codeGenerator();
 
-        $this->addText(
-            'alias', 'Alias d\'entité'
-        );
+$generator = function (array $params): array {
+    $params['type']            = 'Service';
+    $params['entityClassname'] = Util::classClassname($params['entityClass']);
+    $params['class']           = Util::classModule($params['entityClass']) . '\Service\\' . $params['entityClassname'] . 'Service';
+    $params['template']        = 'EntityService';
+    Util::codeGenerator()->generateFrom($params, 'factory');
+    $params['factory']['template'] = 'EntityServiceFactory';
 
-        $this->addCheckbox(
-            'awareTrait', 'Générer un trait', true
-        );
+    $params['namespace'] = Util::classNamespace($params['class']);
+    $params['classname'] = Util::classClassname($params['class']);
+    $params['author']    = Util::getAuthor();
 
-        $this->addCheckbox(
-            'awareInterface', 'Générer une interface', false
-        );
+    return $params;
+};
 
-        $this->addCheckbox(
-            'subDir', 'Les traits, interfaces et Factory seront placés dans des sous-dossiers dédiés', false
-        );
-    }
+$params = [
+    'title'          => 'Création d\'un nouveau service d\'entité OSE',
+    'generator'      => $generator,
+    'factory'        => true,
+    'useGetter'      => true,
+    'entityClass'    => [
+        'type'  => 'selectEntity',
+        'label' => 'Entité du service',
+    ],
+    'alias'          => [
+        'label' => 'Alias d\'entité',
+    ],
+    'awareTrait'     => [
+        'type'  => 'checkbox',
+        'label' => 'Générer un trait',
+        'value' => true,
+    ],
+    'awareInterface' => [
+        'type'  => 'checkbox',
+        'label' => 'Générer une interface',
+        'value' => false,
+    ],
+    'subDir'         => [
+        'type'  => 'checkbox',
+        'label' => 'Les traits, interfaces et Factory seront placés dans des sous-dossiers dédiés',
+        'value' => false,
+    ],
+];
 
-
-
-    public function getParams(): array
-    {
-        $params                    = [
-            'generator'   => 'Service',
-            'type'        => 'Service',
-            'entityClass' => $this->get('entityClass')->getValue(),
-            'useGetter'   => true,
-            'subDir'      => $this->get('subDir')->getValue(),
-            'alias'       => $this->get('alias')->getValue(),
-        ];
-        $params['entityClassname'] = Util::classClassname($params['entityClass']);
-        $params['class']           = Util::classModule($params['entityClass']) . '\Service\\' . $params['entityClassname'] . 'Service';
-
-        if ($this->get('awareTrait')->getValue()) {
-            $params['awareTrait'] = [];
-        }
-        if ($this->get('awareInterface')->getValue()) {
-            $params['awareInterface'] = [];
-        }
-        $params['factory'] = [];
-
-        return $params;
-    }
-}
-
-
-
-
-
-$cg = \UnicaenCode\Util::codeGenerator();
-
-$cg->start('Création d\'un nouveau service d\'entité OSE');
-
-$form = new EntityServiceForm();
-$form->init();
-
-$form->addText('alias', 'Alias d\'entité');
-
-
-if (empty($params = $cg->formPublish($form))) return;
-
-$params['template']            = 'EntityService';
-$params['factory']['template'] = 'EntityServiceFactory';
-
-$cg->end($params);
+$cg->generer($params);

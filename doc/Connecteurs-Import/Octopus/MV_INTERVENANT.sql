@@ -232,7 +232,7 @@ SELECT DISTINCT
      /* Banque */
     COALESCE(TRIM(vindiban.iban), ibandossier.iban)                iban,
     COALESCE(TRIM(vindiban.bic), ibandossier.bic)                  bic,
-    CAST(NULL AS numeric(1))                                       rib_hors_sepa,
+    0                                                              rib_hors_sepa,
     /* Données complémentaires */
     CAST(NULL AS varchar2(255))                                    autre_1,
     CAST(NULL AS varchar2(255))                                    autre_2,

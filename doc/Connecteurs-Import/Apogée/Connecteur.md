@@ -144,3 +144,22 @@ Créez la vue [SRC_LIEN](SRC_LIEN.sql).
 Créez la vue [SRC_SCENARIO_LIEN](SRC_SCENARIO_LIEN.sql).
 
 [Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+## Récupération des paramétrages par scénarios pour les noeuds
+
+Créez la vue [SRC_SCENARIO_NOEUD](SRC_SCENARIO_NOEUD.sql).
+
+Cette vue ne peuple que les noeuds correspondant aux étapes.
+Il sont injectés sans aucun paramètre.
+L'objectif est de pouvoir s'appuyer dessus pour injecter plus tard les effectifs.
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
+
+## Récupération des paramétrages des effectifs par scénarios pour les noeuds d'étapes
+
+Créez la vue [SRC_SCENARIO_NOEUD_EFFECTIF](SRC_SCENARIO_NOEUD_EFFECTIF.sql).
+
+Les effectifs ne sont pas mis à jour si un quelqu'un les a modifié manuellement dans OSE.
+La synchronisation ne modifie jamais des données saisies à la main.
+
+[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).

@@ -113,6 +113,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <th>Table</th>
     <th>Apogée</th>
+    <th>ActUL</th>
     <th>FCA Manager</th> 
     <th>Harpège</th>
     <th>Siham</th>
@@ -130,6 +131,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>PAYS</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td>Oui</td> <!-- Siham -->
@@ -142,6 +144,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>DEPARTEMENT</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td>Oui</td> <!-- Siham -->
@@ -154,6 +157,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>VOIRIE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td>Oui</td> <!-- Siham -->
@@ -166,6 +170,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>ETABLISSEMENT</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -178,6 +183,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>STRUCTURE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td>Oui</td> <!-- Siham -->
@@ -190,6 +196,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>DISCIPLINE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -207,6 +214,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>AFFECTATION</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -219,6 +227,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>EMPLOYEUR</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -230,7 +239,8 @@ présentées dans l'ordre où il faut les traiter.
   </tr>
   <tr>
     <td>CORPS</td> <!-- Table -->
-     <td></td> <!-- Apogée -->
+    <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -243,6 +253,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>GRADE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -255,6 +266,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>INTERVENANT</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td>Oui</td> <!-- Siham -->
@@ -267,6 +279,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>AFFECTATION_RECHERCHE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td>Oui</td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -284,6 +297,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>DOMAINE_FONCTIONNEL</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -296,6 +310,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>CENTRE_COUT</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -308,6 +323,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>CENTRE_COUT_EP</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -320,6 +336,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>CENTRE_COUT_STRUCTURE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -337,6 +354,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>GROUPE_TYPE_FORMATION</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -349,6 +367,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>TYPE_FORMATION</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -361,6 +380,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>ETAPE</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -373,6 +393,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>ELEMENT_PEDAGOGIQUE</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -385,6 +406,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>CHEMIN_PEDAGOGIQUE</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -397,6 +419,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>VOLUME_HORAIRE_ENS</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td>Oui</td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -409,6 +432,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>EFFECTIFS</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -421,6 +445,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>EFFECTIFS_ETAPE</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -433,6 +458,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>ELEMENT_TAUX_REGIMES</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -445,6 +471,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>NOEUD</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -457,6 +484,7 @@ présentées dans l'ordre où il faut les traiter.
     <tr>
     <td>LIEN</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -468,7 +496,8 @@ présentées dans l'ordre où il faut les traiter.
   </tr>  
   <tr>
     <td>SCENARIO_NOEUD</td> <!-- Table -->
-    <td></td> <!-- Apogée -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -478,9 +507,23 @@ présentées dans l'ordre où il faut les traiter.
     <td></td> <!-- Calcul -->
     <td>Paramétrage des noeuds. Utile uniquement pour le module Charges.</td> <!-- Description -->
   </tr>
+    <tr>
+    <td>SCENARIO_NOEUD_EFFECTIF</td> <!-- Table -->
+    <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
+    <td></td> <!-- FCA Manager -->
+    <td></td> <!-- Harpège -->
+    <td></td> <!-- Siham -->
+    <td></td> <!-- Octopus -->
+    <td></td><!-- Mangue -->
+    <td></td> <!-- Sifac -->
+    <td></td> <!-- Calcul -->
+    <td>Paramétrage des effectifs des noeuds d'étapes. Utile uniquement pour le module Charges.</td> <!-- Description -->
+  </tr>
   <tr>
     <td>SCENARIO_LIEN</td> <!-- Table -->
     <td>Oui</td> <!-- Apogée -->
+    <td>Oui</td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -498,6 +541,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>SERVICE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -510,6 +554,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>SERVICE_REFERENTIEL</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -522,6 +567,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>VOLUME_HORAIRE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -534,6 +580,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>VOLUME_HORAIRE_REF</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -546,6 +593,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>TYPE_INTERVENTION_EP</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -558,6 +606,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>TYPE_MODULATEUR_EP</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->
@@ -570,6 +619,7 @@ présentées dans l'ordre où il faut les traiter.
   <tr>
     <td>VOLUME_HORAIRE_CHARGE</td> <!-- Table -->
     <td></td> <!-- Apogée -->
+    <td></td> <!-- ActUL -->
     <td></td> <!-- FCA Manager -->
     <td></td> <!-- Harpège -->
     <td></td> <!-- Siham -->

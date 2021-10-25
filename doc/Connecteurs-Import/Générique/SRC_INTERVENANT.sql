@@ -4,14 +4,14 @@ SELECT
   annee_id,
   code,
   code_rh,
-  CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END utilisateur_code,
-  CASE WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
+  CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END     utilisateur_code,
+  CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN intervenant_structure_id ELSE structure_id END structure_id,
   CASE
     WHEN action = 'insert' OR intervenant_histo = 1 THEN statut_source_id
     WHEN (action = 'update-no-statut' OR sync_statut = 0 OR annee_id < current_annee_id) AND statut_intervenant_id IS NOT NULL THEN statut_intervenant_id
     ELSE statut_source_id
-  END                                                                                       statut_id,
-  CASE WHEN annee_id < current_annee_id THEN intervenant_grade_id ELSE grade_id END         grade_id,
+  END                                                                                                                      statut_id,
+  CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN intervenant_grade_id ELSE grade_id END         grade_id,
   discipline_id,
   civilite_id,
   nom_usuel,
@@ -38,9 +38,9 @@ SELECT
   numero_insee,
   numero_insee_provisoire,
   -- Pour synchroniser les coord. bancaires uniquement sur l'année n, il faut décommenter les 3 lignes ci-dessous et commenter les trois lignes d'après
-  --CASE WHEN annee_id < current_annee_id THEN i_iban          ELSE s_iban          END iban,
-  --CASE WHEN annee_id < current_annee_id THEN i_bic           ELSE s_bic           END bic,
-  --CASE WHEN annee_id < current_annee_id THEN i_rib_hors_sepa ELSE s_rib_hors_sepa END rib_hors_sepa,
+  --CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN i_iban          ELSE s_iban          END iban,
+  --CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN i_bic           ELSE s_bic           END bic,
+  --CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN i_rib_hors_sepa ELSE s_rib_hors_sepa END rib_hors_sepa,
   s_iban          iban,
   s_bic           bic,
   s_rib_hors_sepa rib_hors_sepa,

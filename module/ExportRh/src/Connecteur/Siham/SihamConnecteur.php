@@ -272,15 +272,11 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $natureVoie = (!empty($dossierIntervenant->getAdresseVoirie()->getCodeRh())) ? $dossierIntervenant->getAdresseVoirie()->getCodeRh() : '';
                 $bisTer     = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
                 $nomVoie    = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : '';
+                $nomVoie    = Util::stripAccents($nomVoie);
                 $complement = (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : '';
-                $commune    = Util::reduce($dossierIntervenant->getAdresseCommune());
-                $commune    = str_replace('_', ' ', $commune);
+                $complement = Util::stripAccents($complement);
+                $commune    = Util::stripAccents($dossierIntervenant->getAdresseCommune());
                 $codePostal = $dossierIntervenant->getAdresseCodePostal();
-
-
-                $commune = Util::reduce($dossierIntervenant->getAdresseCommune());
-                $commune = str_replace('_', ' ', $commune);
-
 
                 $params = [
                     'matricule'          => $intervenantRh->getCodeRh(),
@@ -292,11 +288,11 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'nomVoie'            => $nomVoie,
                     'complementAdresse'  => substr($complement, 0, 37),
                     'ville'              => $commune,
-                    'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
+                    'codePostal'         => $codePostal,
                     'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
 
                 ];
-           
+
 
                 $this->siham->modifierAdressePrincipaleAgent($params);
             }
@@ -421,14 +417,10 @@ class SihamConnecteur implements ConnecteurRhInterface
             $natureVoie = (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie()->getCodeRh() : '';
             $bisTer     = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
             $nomVoie    = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : '';
-            $complement = (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : '';
-            $commune    = Util::reduce($dossierIntervenant->getAdresseCommune());
-            $commune    = str_replace('_', ' ', $commune);
+            $nomVoie    = Util::stripAccents($nomVoie);
+            $complement = Util::stripAccents($complement);
+            $commune    = Util::stripAccents($dossierIntervenant->getAdresseCommune());
             $codePostal = $dossierIntervenant->getAdresseCodePostal();
-
-            $commune = Util::reduce($dossierIntervenant->getAdresseCommune());
-            $commune = str_replace('_', ' ', $commune);
-
 
             $coordonneesPostales[] = [
                 'bureauDistributeur' => $commune,
@@ -438,7 +430,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'numAdresse'         => $numeroVoie,
                 'complementAdresse'  => substr($complement, 0, 37),
                 'commune'            => $commune,
-                'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
+                'codePostal'         => $codePostal,
                 'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
                 'debutAdresse'       => $dateEffet,
             ];

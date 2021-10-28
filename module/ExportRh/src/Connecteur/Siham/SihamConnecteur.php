@@ -4,7 +4,9 @@ namespace ExportRh\Connecteur\Siham;
 
 
 use Application\Entity\Db\Intervenant;
+use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
+use Application\Service\Traits\VoirieServiceAwareTrait;
 use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
@@ -19,6 +21,8 @@ class SihamConnecteur implements ConnecteurRhInterface
 {
     use DossierServiceAwareTrait;
     use ExportRhServiceAwareTrait;
+    use AdresseNumeroComplServiceAwareTrait;
+    use VoirieServiceAwareTrait;
 
     public Siham $siham;
 
@@ -103,8 +107,10 @@ class SihamConnecteur implements ConnecteurRhInterface
             $intervenantRh->setBIC($agent->getBic());
             $intervenantRh->setCodeRh($agent->getMatricule());
             $intervenantRh->setAdresseNumero($agent->getNoVoieAdresse());
-            $intervenantRh->setAdresseNumeroCompl(null);
-            $intervenantRh->setAdresseVoirie(null);
+            $bisTer = $this->getServiceAdresseNumeroCompl()->getRepo()->findOneBy(['codeRh' => $agent->getBisTerAdresse()]);
+            $intervenantRh->setAdresseNumeroCompl($bisTer);
+            $voirie = $this->getServiceVoirie()->getRepo()->findOneBy(['codeRh' => $agent->getNatureVoieAdresse()]);
+            $intervenantRh->setAdresseVoirie($voirie);
             $intervenantRh->setAdresseVoie($agent->getNomVoieAdresse());
             $intervenantRh->setAdressePrecisions($agent->getComplementAdresse());
             $intervenantRh->setAdresseCodePostal($agent->getCodePostalAdresse());
@@ -262,29 +268,35 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             if ($datas['generiqueFieldset']['adressePrincipale']) {
 
-                $adresse = '';
-                $adresse .= (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() . ' ' : '';
-                $adresse .= (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl() . ' ' : '';
-                $adresse .= (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie() . ' ' : '';
-                $adresse .= (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() . ' ' : '';
-                $adresse .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() . ' ' : '';
-                $adresse = Util::reduce($adresse);
-                $adresse = str_replace('_', ' ', $adresse);
+                $numeroVoie = (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() : '';
+                $natureVoie = (!empty($dossierIntervenant->getAdresseVoirie()->getCodeRh())) ? $dossierIntervenant->getAdresseVoirie()->getCodeRh() : '';
+                $bisTer     = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
+                $nomVoie    = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : '';
+                $complement = (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : '';
+                $commune    = Util::reduce($dossierIntervenant->getAdresseCommune());
+                $commune    = str_replace('_', ' ', $commune);
+                $codePostal = $dossierIntervenant->getAdresseCodePostal();
+
+
+                $commune = Util::reduce($dossierIntervenant->getAdresseCommune());
+                $commune = str_replace('_', ' ', $commune);
 
 
                 $params = [
                     'matricule'          => $intervenantRh->getCodeRh(),
                     'dateDebut'          => $intervenantRh->getAdresseDateDebut(),
-                    'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
-                    'complementAdresse'  => substr($adresse, 0, 37),
-                    'noVoie'             => ' ',
-                    'natureVoie'         => '',
-                    'nomVoie'            => ' ',
-                    'ville'              => $dossierIntervenant->getAdresseCommune(),
+                    'bureauDistributeur' => $commune,
+                    'bisTer'             => $bisTer,
+                    'noVoie'             => $numeroVoie,
+                    'natureVoie'         => $natureVoie,
+                    'nomVoie'            => $nomVoie,
+                    'complementAdresse'  => substr($complement, 0, 37),
+                    'ville'              => $commune,
                     'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
                     'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
 
                 ];
+           
 
                 $this->siham->modifierAdressePrincipaleAgent($params);
             }
@@ -405,20 +417,27 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
 
             /*COORDONNEES POSTALES*/
-            $adresse = '';
-            $adresse .= (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() . ' ' : '';
-            $adresse .= (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl() . ' ' : '';
-            $adresse .= (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie() . ' ' : '';
-            $adresse .= (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() . ' ' : '';
-            $adresse .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() . ' ' : '';
-            $adresse = Util::reduce($adresse);
-            $adresse = str_replace('_', ' ', $adresse);
+            $numeroVoie = (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() : '';
+            $natureVoie = (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie()->getCodeRh() : '';
+            $bisTer     = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
+            $nomVoie    = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : '';
+            $complement = (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : '';
+            $commune    = Util::reduce($dossierIntervenant->getAdresseCommune());
+            $commune    = str_replace('_', ' ', $commune);
+            $codePostal = $dossierIntervenant->getAdresseCodePostal();
+
+            $commune = Util::reduce($dossierIntervenant->getAdresseCommune());
+            $commune = str_replace('_', ' ', $commune);
 
 
             $coordonneesPostales[] = [
-                'bureauDistributeur' => $dossierIntervenant->getAdresseCommune(),
-                'complementAdresse'  => substr($adresse, 0, 37),
-                'commune'            => $dossierIntervenant->getAdresseCommune(),
+                'bureauDistributeur' => $commune,
+                'bisTer'             => $bisTer,
+                'natureVoie'         => $natureVoie,
+                'nomVoie'            => $nomVoie,
+                'numAdresse'         => $numeroVoie,
+                'complementAdresse'  => substr($complement, 0, 37),
+                'commune'            => $commune,
                 'codePostal'         => $dossierIntervenant->getAdresseCodePostal(),
                 'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
                 'debutAdresse'       => $dateEffet,
@@ -656,6 +675,7 @@ class SihamConnecteur implements ConnecteurRhInterface
         ];
 
         $uo = $this->siham->recupererListeUO($params);
+
 
         return $uo;
     }

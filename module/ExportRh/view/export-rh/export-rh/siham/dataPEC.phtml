@@ -52,10 +52,10 @@
                 <td>
                     <?php
                     $adresse = '';
-                    $adresse = (!empty($intervenantDossier->getAdresseLieuDit())) ? $intervenantDossier->getAdresseLieuDit() . ' ' : '';
+                    $adresse = (!empty($intervenantDossier->getAdresseLieuDit())) ? $intervenantDossier->getAdresseLieuDit() . '<br/>' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseNumero())) ? $intervenantDossier->getAdresseNumero() . ' ' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseNumeroCompl())) ? $intervenantDossier->getAdresseNumeroCompl() . ' ' : '';
-                    $adresse .= (!empty($intervenantDossier->getAdresseVoirie())) ? $intervenantDossier->getAdresseVoirie() . ' ' : '';
+                    $adresse .= (!empty($intervenantDossier->getAdresseVoirie())) ? strtoupper($intervenantDossier->getAdresseVoirie()) . ' ' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseVoie())) ? $intervenantDossier->getAdresseVoie() . ' ' : '';
                     $adresse .= (!empty($intervenantDossier->getAdressePrecisions())) ? '<br/>' . $intervenantDossier->getAdressePrecisions() . ' ' : '';
                     $adresse .= '<br/>';

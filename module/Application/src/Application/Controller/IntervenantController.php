@@ -191,7 +191,7 @@ class  IntervenantController extends AbstractController
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
 
         if (!$campagneSaisie->estOuverte()) {
-            die;
+            
             $role = $this->getServiceContext()->getSelectedIdentityRole();
             if ($role->getIntervenant()) {
 

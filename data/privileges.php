@@ -22,7 +22,7 @@ return [
             'types-diplome-edition'              => 'Types de diplômes (édition)',
             'reconduction-offre'                 => 'Prolongation de l\'offre l\'année suivante',
             'reconduction-centre-cout'           => 'Reconduction des centres de coûts de l\'offre de formation',
-            'reconduction-modulateur'            => 'Reconduction des modualteurs de l\'offre de formation',
+            'reconduction-modulateur'            => 'Reconduction des modulateurs de l\'offre de formation',
 
         ],
     ],
@@ -122,7 +122,7 @@ return [
             'visualisation'                          => 'Visualisation',
             'edition'                                => 'Édition',
             'edition-masse'                          => 'Édition en masse',
-            'exterieur'                              => 'Saisie de service dans une autre autre université',
+            'exterieur'                              => 'Saisie de service dans une autre université',
             'validation'                             => 'Validation',
             'autovalidation'                         => 'Validation automatique',
             'devalidation'                           => 'Dévalidation',

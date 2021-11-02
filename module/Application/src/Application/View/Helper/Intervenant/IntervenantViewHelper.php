@@ -2,6 +2,7 @@
 
 namespace Application\View\Helper\Intervenant;
 
+use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Constants;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -20,6 +21,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
     use IntervenantAwareTrait;
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
+    use LdapConnecteurAwareTrait;
 
 
     /**

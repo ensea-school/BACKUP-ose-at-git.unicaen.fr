@@ -88,6 +88,10 @@ return [
         "VALEUR"      => "PREVU",
         "DESCRIPTION" => "Report du service de l'année précédente",
     ],
+    "constatation_realise"                       => [
+        "VALEUR"      => "PREVU",
+        "DESCRIPTION" => "Constatation du service fait",
+    ],
     "centres_couts_paye"                         => [
         "VALEUR"      => "enseignement",
         "DESCRIPTION" => "Centres de coûts utilisés pour la paye",
@@ -133,7 +137,7 @@ return [
     ],
 
 
-    /* Disciplines */
+    /* Statuts */
     "statut_intervenant_codes_corresp_1_libelle" => [
         "VALEUR"      => "Types de contrats Harpège",
         "DESCRIPTION" => "Libellé de la liste 1 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
@@ -208,5 +212,5 @@ Cordialement,
     "indicateur_email_expediteur"   => [
         "DESCRIPTION" => "Adresse email d'expéditeur des mails via les indicateur, si vide alors l'email de l'utilisateur sera utilisé",
     ],
-  
+
 ];

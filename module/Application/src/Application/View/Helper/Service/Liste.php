@@ -230,37 +230,38 @@ class Liste extends AbstractViewHelper
     {
         $out = '';
         if ($this->isInRealise()) {
-            $attribs = [
-                'class'       => 'btn btn-warning prevu-to-realise-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-realise-modal',
-                //'data-event'    => 'service-constatation',
-                //'href'          => $this->getAddUrl(),
-                'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
-                    . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
-            ];
-            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
-            $out     .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out     .= '<div class="modal-dialog modal-md">';
-            $out     .= '<div class="modal-content">';
-            $out     .= '<div class="modal-header">';
-            $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-            $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
-            $out     .= '</div>';
-            $out     .= '<div class="modal-body">';
-            $out     .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
-            $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
-            $out     .= '</div>';
-            $out     .= '<div class="modal-footer">';
-            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out     .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
-            $out     .= '</div>';
-            $out     .= '</div>';
-            $out     .= '</div>';
-            $out     .= '</div>';
+            if ($this->getProcessusIntervenant()->service()->initializeRealise($this->getIntervenant())) {
+                $attribs = [
+                    'class'       => 'btn btn-warning prevu-to-realise-show',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#prevu-to-realise-modal',
+                    //'data-event'    => 'service-constatation',
+                    //'href'          => $this->getAddUrl(),
+                    'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
+                        . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
+                ];
+                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
+                $out     .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+                $out     .= '<div class="modal-dialog modal-md">';
+                $out     .= '<div class="modal-content">';
+                $out     .= '<div class="modal-header">';
+                $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+                $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+                $out     .= '</div>';
+                $out     .= '<div class="modal-body">';
+                $out     .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+                $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
+                $out     .= '</div>';
+                $out     .= '<div class="modal-footer">';
+                $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+                $out     .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+            }
         } elseif ($this->prevuToPrevu) {
-            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
-            if ($this->getProcessusIntervenant()->service()->canInitializePrevu($this->prevuToPrevu, $typeVolumeHoraire)) {
+            if ($typeVolumeHoraire = $this->getProcessusIntervenant()->service()->initializePrevu($this->prevuToPrevu)) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-prevu-show',
                     'data-toggle' => 'modal',

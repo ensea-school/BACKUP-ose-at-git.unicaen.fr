@@ -397,6 +397,7 @@ class ParametresForm extends AbstractForm
                 'value_options' => [
                     TypeVolumeHoraire::CODE_PREVU   => 'Se baser sur le prévisionnel validé de l\'année prédédente',
                     TypeVolumeHoraire::CODE_REALISE => 'Se baser sur le réalisé validé de l\'année prédédente',
+                    'desactive'                     => 'Fonctionnalité désactivée',
                 ],
             ],
             'attributes' => [
@@ -405,6 +406,21 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'constatation_realise',
+            'options'    => [
+                'value_options' => [
+                    TypeVolumeHoraire::CODE_PREVU => 'Constater comme réalisées les heures prévisionelles validées',
+                    'desactive'                   => 'Fonctionnalité désactivée',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+        
         $this->add([
             'type'       => 'Select',
             'name'       => 'centres_couts_paye',

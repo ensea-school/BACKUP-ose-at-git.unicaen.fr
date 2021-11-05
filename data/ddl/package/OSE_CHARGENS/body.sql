@@ -337,7 +337,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
   FUNCTION CREER_SCENARIO_NOEUD( scenario_id NUMERIC, noeud_id NUMERIC, assiduite FLOAT DEFAULT 1 ) RETURN NUMERIC IS
     new_id NUMERIC;
   BEGIN
-    new_id := SCENARIO_NOEUD_ID_SEQ.NEXTVAL;
+
+    BEGIN  
+      SELECT id INTO new_id FROM scenario_noeud WHERE noeud_id = CREER_SCENARIO_NOEUD.noeud_id AND scenario_id = CREER_SCENARIO_NOEUD.scenario_id AND histo_destruction IS NULL;
+      
+      RETURN new_id;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+      new_id := SCENARIO_NOEUD_ID_SEQ.NEXTVAL;
+    END;
 
     INSERT INTO SCENARIO_NOEUD(
       ID,

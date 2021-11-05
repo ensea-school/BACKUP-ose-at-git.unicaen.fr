@@ -275,7 +275,7 @@ class ScenarioNoeudProvider
     public function calculSousEffectifs(ScenarioNoeudEffectif $scenarioNoeudEffectif)
     {
         $bdd = $this->chargens->getBdd();
-        $bdd->execPlsql('OSE_CHARGENS.CALC_SUB_EFFECTIF2(:noeud, :scenario, :typeHeures, :etape);', [
+        $bdd->execPlsql('OSE_CHARGENS.CALC_SUB_EFFECTIF(:noeud, :scenario, :typeHeures, :etape);', [
             'noeud'      => $scenarioNoeudEffectif->getScenarioNoeud()->getNoeud()->getId(),
             'scenario'   => $scenarioNoeudEffectif->getScenarioNoeud()->getScenario()->getId(),
             'typeHeures' => $scenarioNoeudEffectif->getTypeHeures()->getId(),

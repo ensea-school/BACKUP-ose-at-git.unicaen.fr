@@ -9,6 +9,7 @@ return [
             'INTERVENANT_SAISIE',
             'DOSSIER',
             'TBL_DEMS',
+            'TMP_SCENARIO_NOEUD_EFFECTIF',
         ],
     ],
     'materialized-view' => [
@@ -21,6 +22,9 @@ return [
             'V_INDIC_DIFF_DOSSIER',
             'V_MEP_INTERVENANT_STRUCTURE',
             'V_CHARGENS_SEUILS_DED_DEF',
+            'V_CHARGENS_CALC_EFFECTIF',
+            'V_CHARGENS_GRANDS_LIENS',
+            'V_CHARGENS_PRECALCUL_HEURES',
         ],
     ],
     'package'           => [
@@ -33,6 +37,7 @@ return [
             'F_CONTRAT',
             'F_CONTRAT_S',
             'INDIC_TRG_MODIF_DOSSIER',
+            'CHARGENS_MAJ_EFFECTIFS',
         ],
     ],
     'sequence'          => [

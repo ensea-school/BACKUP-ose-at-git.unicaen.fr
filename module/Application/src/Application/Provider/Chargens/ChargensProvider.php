@@ -178,16 +178,6 @@ class ChargensProvider
 
 
     /**
-     * @return \Doctrine\DBAL\Driver\Statement
-     */
-    public function calculEffectifs()
-    {
-        return $this->getBdd()->execPlsql('OSE_CHARGENS.CALC_ALL_EFFECTIFS;');
-    }
-
-
-
-    /**
      * @param Etape $etape
      *
      * @return Noeud
@@ -304,7 +294,6 @@ class ChargensProvider
 
         if ($scenario) {
             $this->getEntities()->add($scenario);
-            $this->getBdd()->execPlsql('OSE_CHARGENS.set_scenario(:scenario);', ['scenario' => $scenario]);
             $this->getScenarioNoeuds()->load();
             $this->getScenarioLiens()->load();
             $this->getNoeuds()->loadSeuilsHeures();
@@ -328,34 +317,6 @@ class ChargensProvider
         $data['liens']  = $this->getLiens()->getDiagrammeData();
 
         return $data;
-    }
-
-
-
-    public function initPreCalculHeures($annee = null, $structure = null, $scenario = null, $typeHeures = null, $etape = null, array $noeuds = [])
-    {
-        /* Préparation des données en entrée */
-        if ($annee instanceof Annee) $annee = $annee->getId();
-        if ($structure instanceof Structure) $structure = $structure->getId();
-        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
-        if ($typeHeures instanceof TypeHeures) $typeHeures = $typeHeures->getId();
-        if ($etape instanceof Etape) $etape = $etape->getId();
-        foreach ($noeuds as $k => $noeud) {
-            if ($noeud instanceof Noeud) $noeuds[$k] = $noeud->getId();
-        }
-
-        /* Préparation de la requête, puis exécution */
-        $params = compact('annee', 'structure', 'scenario', 'typeHeures', 'etape');
-        if (!empty($noeuds)) {
-            $pnoeuds = 'ose_chargens.tnoeud_ids(' . implode(',', $noeuds) . ')';
-        } else {
-            $pnoeuds = 'null';
-        }
-
-        $plsql = 'ose_chargens.set_precalc_heures_params(:annee, :structure, :scenario, :typeHeures, :etape, ' . $pnoeuds . ');';
-        $this->getBdd()->execPlsql($plsql, $params);
-
-        return $this;
     }
 
 

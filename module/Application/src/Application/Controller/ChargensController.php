@@ -344,13 +344,6 @@ class ChargensController extends AbstractController
 
 
 
-    public function calculEffectifsAction()
-    {
-        $this->getProviderChargens()->calculEffectifs();
-    }
-
-
-
     public function differentielAction()
     {
         $form = $this->getFormChargensDifferentiel();

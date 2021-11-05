@@ -1,13 +1,11 @@
-CREATE OR REPLACE FORCE VIEW V_CHARGENS_GRANDS_LIENS AS
 SELECT
   nsup.id noeud_sup_id,
   lsup.id lien_sup_id,
-  nl.id   noeud_liste_id,
+  nl.id noeud_liste_id,
   linf.id lien_inf_id,
   ninf.id noeud_inf_id
 FROM
        noeud            nsup
-
   JOIN lien             lsup   ON lsup.noeud_sup_id = nsup.id
                               AND lsup.histo_destruction IS NULL
 

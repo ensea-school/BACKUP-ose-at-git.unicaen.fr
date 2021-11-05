@@ -1,45 +1,4 @@
 CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
-  SCENARIO NUMERIC;
-  NOEUD NUMERIC;
-  old_enable BOOLEAN DEFAULT TRUE;
-
-  TYPE T_PRECALC_HEURES_PARAMS IS RECORD (
-    annee_id                       NUMERIC DEFAULT NULL,
-    structure_id                   NUMERIC DEFAULT NULL,
-    scenario_id                    NUMERIC DEFAULT NULL,
-    type_heures_id                 NUMERIC DEFAULT NULL,
-    etape_id                       NUMERIC DEFAULT NULL,
-    noeud_ids                      tnoeud_ids DEFAULT NULL
-  );
-
-  PRECALC_HEURES_PARAMS T_PRECALC_HEURES_PARAMS;
-
-
-  FUNCTION GET_SCENARIO RETURN NUMERIC IS
-  BEGIN
-    RETURN OSE_CHARGENS.SCENARIO;
-  END;
-
-  PROCEDURE SET_SCENARIO( SCENARIO NUMERIC ) IS
-  BEGIN
-    OSE_CHARGENS.SCENARIO := SET_SCENARIO.SCENARIO;
-  END;
-
-
-
-  FUNCTION GET_NOEUD RETURN NUMERIC IS
-  BEGIN
-    RETURN OSE_CHARGENS.NOEUD;
-  END;
-
-  PROCEDURE SET_NOEUD( NOEUD NUMERIC ) IS
-  BEGIN
-    OSE_CHARGENS.NOEUD := SET_NOEUD.NOEUD;
-  END;
-
-
-
-
 
   FUNCTION CALC_COEF( choix_min NUMERIC, choix_max NUMERIC, poids NUMERIC, max_poids NUMERIC, total_poids NUMERIC, nb_choix NUMERIC ) RETURN FLOAT IS
     cmin NUMERIC;
@@ -82,97 +41,140 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
   END;
 
 
-  PROCEDURE DEM_CALC_SUB_EFFECTIF( scenario_noeud_id NUMERIC, type_heures_id NUMERIC, etape_id NUMERIC, effectif FLOAT ) IS
-  BEGIN
-    INSERT INTO TMP_scenario_noeud_effectif(
-      scenario_noeud_id, type_heures_id, etape_id, effectif
-    ) VALUES(
-      scenario_noeud_id, type_heures_id, etape_id, effectif
-    );
-  END;
-
-
-
-  PROCEDURE CALC_SUB_EFFECTIF_DEM IS
-  BEGIN
-    DELETE FROM TMP_scenario_noeud_effectif;
-  END;
-
-
-  PROCEDURE CALC_ALL_EFFECTIFS IS
-  BEGIN
-    FOR p IN (
-
-      SELECT
-        sn.noeud_id,
-        sn.scenario_id,
-        sne.type_heures_id,
-        sne.etape_id
-      FROM
-        scenario_noeud_effectif sne
-        JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id
-        JOIN noeud n ON n.id = sn.noeud_id
-      WHERE
-        n.etape_id IS NOT NULL
-
-    ) LOOP
-
-      CALC_SUB_EFFECTIF2( p.noeud_id, p.scenario_id, p.type_heures_id, p.etape_id );
-    END LOOP;
-
-  END;
-
-
 
   PROCEDURE CALC_EFFECTIF(
     noeud_id       NUMERIC,
     scenario_id    NUMERIC,
-    type_heures_id NUMERIC DEFAULT NULL,
-    etape_id       NUMERIC DEFAULT NULL
+    type_heures_id NUMERIC,
+    etape_id       NUMERIC
   ) IS
-    snid  NUMERIC;
+    snid     NUMERIC;
+    effectif FLOAT;
   BEGIN
     UPDATE scenario_noeud_effectif SET effectif = 0, SOURCE_ID = ose_divers.GET_OSE_SOURCE_ID()
     WHERE
       scenario_noeud_id = (
         SELECT id FROM scenario_noeud WHERE noeud_id = CALC_EFFECTIF.noeud_id AND scenario_id = CALC_EFFECTIF.scenario_id
       )
-      AND (type_heures_id = CALC_EFFECTIF.type_heures_id OR CALC_EFFECTIF.type_heures_id IS NULL)
-      AND (etape_id = CALC_EFFECTIF.etape_id OR CALC_EFFECTIF.etape_id IS NULL)
+      AND type_heures_id = CALC_EFFECTIF.type_heures_id
+      AND etape_id = CALC_EFFECTIF.etape_id
     ;
 
     FOR p IN (
-
       SELECT
-        *
+        ninf.id                     noeud_id,
+        snsup.scenario_id           scenario_id,
+        sninf.id                    scenario_noeud_id,
+        sne.type_heures_id          type_heures_id,
+        sne.etape_id                etape_id,
+        slsup.choix_minimum         choix_minimum,
+        slsup.choix_maximum         choix_maximum,
+        COALESCE(slinf.poids,1)     poids,
+        MAX(COALESCE(slinf.poids,1))   max_poids,
+        SUM(COALESCE(slinf.poids,1))   total_poids,
+        COUNT(*)                    nb_choix,
+        sne.effectif                effectif
       FROM
-        v_chargens_calc_effectif cce
-      WHERE
-        cce.noeud_id = CALC_EFFECTIF.noeud_id
-        AND cce.scenario_id = CALC_EFFECTIF.scenario_id
-        AND (cce.type_heures_id = CALC_EFFECTIF.type_heures_id OR CALC_EFFECTIF.type_heures_id IS NULL)
-        AND (cce.etape_id = CALC_EFFECTIF.etape_id OR CALC_EFFECTIF.etape_id IS NULL)
+                  noeud                nsup
 
+             JOIN lien                 lsup   ON lsup.noeud_sup_id = nsup.id
+                                             AND lsup.histo_destruction IS NULL
+
+             JOIN noeud                  nl   ON nl.liste = 1
+                                             AND nl.histo_destruction IS NULL
+                                             AND nl.id = lsup.noeud_inf_id
+
+             JOIN lien                 linf   ON linf.noeud_sup_id = nl.id
+                                             AND linf.histo_destruction IS NULL
+
+             JOIN noeud                ninf   ON ninf.id = linf.noeud_inf_id
+                                             AND ninf.histo_destruction IS NULL
+                                             AND ninf.liste = 0
+
+             JOIN scenario_noeud        snsup ON snsup.noeud_id = nsup.id
+                                             AND snsup.histo_destruction IS NULL
+
+             JOIN scenario_noeud_effectif sne ON sne.scenario_noeud_id = snsup.id
+
+        LEFT JOIN scenario_lien         slsup ON slsup.histo_destruction IS NULL
+                                             AND slsup.lien_id = lsup.id
+                                             AND slsup.scenario_id = snsup.scenario_id
+
+        LEFT JOIN scenario_lien         slinf ON slinf.histo_destruction IS NULL
+                                             AND slinf.lien_id = linf.id
+                                             AND slinf.scenario_id = snsup.scenario_id
+
+        LEFT JOIN scenario_noeud        sninf ON sninf.noeud_id = ninf.id
+                                             AND sninf.scenario_id = snsup.scenario_id
+                                             AND sninf.histo_destruction IS NULL
+
+      WHERE
+        nsup.histo_destruction IS NULL
+        AND nsup.liste = 0
+        AND (slsup.actif = 1 OR slsup.actif IS NULL)
+        AND (slinf.actif = 1 OR slinf.actif IS NULL)
+        AND ninf.id = CALC_EFFECTIF.noeud_id
+        --AND ninf.id = 389005
+        AND snsup.scenario_id = CALC_EFFECTIF.scenario_id
+        AND sne.type_heures_id = CALC_EFFECTIF.type_heures_id
+        AND sne.etape_id = CALC_EFFECTIF.etape_id
+      GROUP BY
+        nsup.id,
+        ninf.id,
+        snsup.scenario_id,
+        sninf.id,
+        sne.type_heures_id,
+        sne.etape_id,
+        sne.effectif,
+        slsup.choix_minimum,
+        slsup.choix_maximum,
+        slinf.poids
     ) LOOP
-      snid := OSE_CHARGENS.GET_SCENARIO_NOEUD_ID( p.scenario_id, p.noeud_id );
+      effectif := OSE_CHARGENS.CALC_COEF(
+          p.choix_minimum,
+          p.choix_maximum,
+          p.poids,
+          p.max_poids,
+          p.total_poids,
+          p.nb_choix
+        ) * p.effectif;
+
+      snid := p.scenario_noeud_id;
       IF snid IS NULL THEN
         snid := OSE_CHARGENS.CREER_SCENARIO_NOEUD( p.scenario_id, p.noeud_id );
       END IF;
-      ADD_SCENARIO_NOEUD_EFFECTIF( snid, p.type_heures_id, p.etape_id, p.effectif );
+      ADD_SCENARIO_NOEUD_EFFECTIF( snid, p.type_heures_id, p.etape_id, effectif );
     END LOOP;
-    CALC_SUB_EFFECTIF2( noeud_id, scenario_id, type_heures_id, etape_id );
+    CALC_SUB_EFFECTIF( noeud_id, scenario_id, type_heures_id, etape_id );
   END;
 
 
 
-  PROCEDURE CALC_SUB_EFFECTIF2( noeud_id NUMERIC, scenario_id NUMERIC, type_heures_id NUMERIC DEFAULT NULL, etape_id NUMERIC DEFAULT NULL) IS
+  PROCEDURE CALC_SUB_EFFECTIF( noeud_id NUMERIC, scenario_id NUMERIC, type_heures_id NUMERIC, etape_id NUMERIC) IS
   BEGIN
     FOR p IN (
+      SELECT
+        ninf.id noeud_inf_id
+      FROM
+             noeud            nsup
 
-      SELECT *
-      FROM   V_CHARGENS_GRANDS_LIENS cgl
-      WHERE  cgl.noeud_sup_id = CALC_SUB_EFFECTIF2.noeud_id
+        JOIN lien             lsup   ON lsup.noeud_sup_id = nsup.id
+                                    AND lsup.histo_destruction IS NULL
 
+        JOIN noeud              nl   ON nl.liste = 1
+                                    AND nl.histo_destruction IS NULL
+                                    AND nl.id = lsup.noeud_inf_id
+
+        JOIN lien             linf   ON linf.noeud_sup_id = nl.id
+                                    AND linf.histo_destruction IS NULL
+
+        JOIN noeud            ninf   ON ninf.id = linf.noeud_inf_id
+                                    AND ninf.histo_destruction IS NULL
+                                    AND ninf.liste = 0
+      WHERE
+        nsup.histo_destruction IS NULL
+        AND nsup.liste = 0
+        AND nsup.id = CALC_SUB_EFFECTIF.noeud_id
     ) LOOP
       CALC_EFFECTIF( p.noeud_inf_id, scenario_id, type_heures_id, etape_id );
     END LOOP;
@@ -332,33 +334,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
 
 
 
-  PROCEDURE CONTROLE_SEUIL( ouverture NUMERIC, dedoublement NUMERIC ) IS
-  BEGIN
-    IF ouverture IS NOT NULL THEN
-      IF ouverture < 1 THEN
-        raise_application_error(-20101, 'Le seuil d''ouverture doit être supérieur ou égal à 1');
-      END IF;
-    END IF;
-
-    IF dedoublement IS NOT NULL THEN
-      IF dedoublement < 1 THEN
-        raise_application_error(-20101, 'Le seuil de dédoublement doit être supérieur ou égal à 1');
-      END IF;
-    END IF;
-
-    IF ouverture IS NOT NULL AND dedoublement IS NOT NULL THEN
-      IF dedoublement < ouverture THEN
-        raise_application_error(-20101, 'Le seuil de dédoublement doit être supérieur ou égal au seuil d''ouverture');
-      END IF;
-    END IF;
-  END;
-
-
   FUNCTION CREER_SCENARIO_NOEUD( scenario_id NUMERIC, noeud_id NUMERIC, assiduite FLOAT DEFAULT 1 ) RETURN NUMERIC IS
     new_id NUMERIC;
   BEGIN
     new_id := SCENARIO_NOEUD_ID_SEQ.NEXTVAL;
---ose_test.echo(scenario_id || '-' || noeud_id);
+
     INSERT INTO SCENARIO_NOEUD(
       ID,
       SCENARIO_ID,
@@ -388,31 +368,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
   END;
 
 
-  FUNCTION GET_SCENARIO_NOEUD_ID(scenario_id NUMERIC, noeud_id NUMERIC) RETURN NUMERIC IS
-    res NUMERIC;
-  BEGIN
-    SELECT
-      sn.id INTO res
-    FROM
-      scenario_noeud sn
-    WHERE
-      sn.noeud_id = GET_SCENARIO_NOEUD_ID.noeud_id
-      AND sn.scenario_id = GET_SCENARIO_NOEUD_ID.scenario_id
-      AND sn.histo_destruction IS NULL;
-
-    RETURN res;
-
-  EXCEPTION WHEN NO_DATA_FOUND THEN
-    RETURN NULL;
-  END;
-
 
   PROCEDURE ADD_SCENARIO_NOEUD_EFFECTIF( scenario_noeud_id NUMERIC, type_heures_id NUMERIC, etape_id NUMERIC, effectif FLOAT ) IS
-    old_enable BOOLEAN;
   BEGIN
-    old_enable := ose_chargens.ENABLE_TRIGGER_EFFECTIFS;
-    ose_chargens.ENABLE_TRIGGER_EFFECTIFS := false;
-
     MERGE INTO scenario_noeud_effectif sne USING dual ON (
 
           sne.scenario_noeud_id = ADD_SCENARIO_NOEUD_EFFECTIF.scenario_noeud_id
@@ -447,176 +405,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
       ose_divers.GET_OSE_UTILISATEUR_ID()
 
     );
-
-    DELETE FROM scenario_noeud_effectif WHERE effectif = 0;
-
-    ose_chargens.ENABLE_TRIGGER_EFFECTIFS := old_enable;
   END;
-
-
-
-  PROCEDURE INIT_SCENARIO_NOEUD_EFFECTIF(
-    etape_id NUMERIC,
-    scenario_id NUMERIC,
-    type_heures_id NUMERIC,
-    effectif FLOAT,
-    surcharge BOOLEAN DEFAULT FALSE
-  ) IS
-    noeud_id NUMERIC;
-    scenario_noeud_id NUMERIC;
-    scenario_noeud_effectif_id NUMERIC;
-  BEGIN
-    SELECT
-      n.id, sn.id, sne.id
-    INTO
-      noeud_id, scenario_noeud_id, scenario_noeud_effectif_id
-    FROM
-                noeud                     n
-      LEFT JOIN scenario_noeud           sn ON sn.noeud_id = n.id
-                                           AND sn.histo_destruction IS NULL
-                                           AND sn.scenario_id = INIT_SCENARIO_NOEUD_EFFECTIF.scenario_id
-
-      LEFT JOIN scenario_noeud_effectif sne ON sne.scenario_noeud_id = sn.id
-                                           AND sne.type_heures_id = INIT_SCENARIO_NOEUD_EFFECTIF.type_heures_id
-    WHERE
-      n.etape_id = INIT_SCENARIO_NOEUD_EFFECTIF.etape_id
-      AND n.histo_destruction IS NULL
-    ;
-
-    IF noeud_id IS NULL THEN RETURN; END IF;
-
-    IF scenario_noeud_id IS NULL THEN
-      scenario_noeud_id := CREER_SCENARIO_NOEUD( scenario_id, noeud_id );
-    END IF;
-
-    IF scenario_noeud_effectif_id IS NULL THEN
-      scenario_noeud_effectif_id := SCENARIO_NOEUD_EFFECTIF_ID_SEQ.NEXTVAL;
-      INSERT INTO scenario_noeud_effectif (
-        id,
-        scenario_noeud_id,
-        type_heures_id,
-        effectif,
-        etape_id,
-        SOURCE_ID,
-        HISTO_CREATEUR_ID,
-        HISTO_MODIFICATEUR_ID
-      ) VALUES (
-        scenario_noeud_effectif_id,
-        scenario_noeud_id,
-        INIT_SCENARIO_NOEUD_EFFECTIF.type_heures_id,
-        INIT_SCENARIO_NOEUD_EFFECTIF.effectif,
-        INIT_SCENARIO_NOEUD_EFFECTIF.etape_id,
-        ose_divers.GET_OSE_SOURCE_ID(),
-        ose_divers.GET_OSE_UTILISATEUR_ID(),
-        ose_divers.GET_OSE_UTILISATEUR_ID()
-      );
-    ELSIF surcharge THEN
-      UPDATE scenario_noeud_effectif SET effectif = INIT_SCENARIO_NOEUD_EFFECTIF.effectif, source_id=ose_divers.GET_OSE_SOURCE_ID() WHERE id = scenario_noeud_effectif_id;
-    END IF;
-
-    CALC_SUB_EFFECTIF2( noeud_id, scenario_id, type_heures_id, etape_id );
-
-  EXCEPTION WHEN NO_DATA_FOUND THEN
-    RETURN;
-  END;
-
-
-
-  PROCEDURE SET_PRECALC_HEURES_PARAMS(
-    annee_id                       NUMERIC DEFAULT NULL,
-    structure_id                   NUMERIC DEFAULT NULL,
-    scenario_id                    NUMERIC DEFAULT NULL,
-    type_heures_id                 NUMERIC DEFAULT NULL,
-    etape_id                       NUMERIC DEFAULT NULL,
-    noeud_ids                      tnoeud_ids DEFAULT NULL
-  ) IS
-  BEGIN
-    PRECALC_HEURES_PARAMS.ANNEE_ID       := ANNEE_ID;
-    PRECALC_HEURES_PARAMS.STRUCTURE_ID   := STRUCTURE_ID;
-    PRECALC_HEURES_PARAMS.SCENARIO_ID    := SCENARIO_ID;
-    PRECALC_HEURES_PARAMS.TYPE_HEURES_ID := TYPE_HEURES_ID;
-    PRECALC_HEURES_PARAMS.ETAPE_ID       := ETAPE_ID;
-    PRECALC_HEURES_PARAMS.NOEUD_IDS      := noeud_ids;
-  END;
-
-
-
-  FUNCTION MATCH_PRECALC_HEURES_PARAMS(
-    annee_id                       NUMERIC DEFAULT NULL,
-    structure_id                   NUMERIC DEFAULT NULL,
-    scenario_id                    NUMERIC DEFAULT NULL,
-    type_heures_id                 NUMERIC DEFAULT NULL,
-    etape_id                       NUMERIC DEFAULT NULL,
-    noeud_id                       NUMERIC DEFAULT NULL
-  ) RETURN NUMERIC IS
-  BEGIN
-
-    IF PRECALC_HEURES_PARAMS.noeud_ids IS NOT NULL THEN
-      IF NOT (noeud_id MEMBER OF PRECALC_HEURES_PARAMS.noeud_ids) THEN
-        RETURN 0;
-      END IF;
-    END IF;
-
-    IF annee_id <> COALESCE(PRECALC_HEURES_PARAMS.annee_id, annee_id) THEN
-      RETURN 0;
-    END IF;
-
-    IF structure_id <> COALESCE(PRECALC_HEURES_PARAMS.structure_id, structure_id) THEN
-      RETURN 0;
-    END IF;
-
-    IF scenario_id <> COALESCE(PRECALC_HEURES_PARAMS.scenario_id, scenario_id) THEN
-      RETURN 0;
-    END IF;
-
-    IF type_heures_id <> COALESCE(PRECALC_HEURES_PARAMS.type_heures_id, type_heures_id) THEN
-      RETURN 0;
-    END IF;
-
-    IF etape_id <> COALESCE(PRECALC_HEURES_PARAMS.etape_id, etape_id) THEN
-      RETURN 0;
-    END IF;
-
-    RETURN 1;
-  END;
-
-
-  FUNCTION GET_PRECALC_HEURES_ANNEE RETURN NUMERIC IS
-  BEGIN
-    RETURN PRECALC_HEURES_PARAMS.ANNEE_ID;
-  END;
-
-
-
-  FUNCTION GET_PRECALC_HEURES_STRUCTURE RETURN NUMERIC IS
-  BEGIN
-    RETURN PRECALC_HEURES_PARAMS.STRUCTURE_ID;
-  END;
-
-
-
-  FUNCTION GET_PRECALC_HEURES_SCENARIO RETURN NUMERIC IS
-  BEGIN
-    RETURN PRECALC_HEURES_PARAMS.SCENARIO_ID;
-  END;
-
-
-
-  FUNCTION GET_PRECALC_HEURES_TYPE_HEURES RETURN NUMERIC IS
-  BEGIN
-    RETURN PRECALC_HEURES_PARAMS.TYPE_HEURES_ID;
-  END;
-
-
-
-  FUNCTION GET_PRECALC_HEURES_ETAPE RETURN NUMERIC IS
-  BEGIN
-    RETURN PRECALC_HEURES_PARAMS.ETAPE_ID;
-  END;
-
---  FUNCTION GET_PRECALC_HEURES_NOEUD RETURN NUMERIC IS
---  BEGIN
-
---  END;
 
 END OSE_CHARGENS;

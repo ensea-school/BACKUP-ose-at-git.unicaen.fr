@@ -273,7 +273,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $bisTer     = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
                 $nomVoie    = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : ' ';
                 $nomVoie    = Util::stripAccents($nomVoie);
-                $complement = (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : ' ';
+                $complement = (!empty($dossierIntervenant->getAdresseLieuDit())) ? $dossierIntervenant->getAdresseLieuDit() . ' ' : ' ';
+                $complement .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : ' ';
                 $complement = Util::stripAccents($complement);
                 $commune    = Util::stripAccents($dossierIntervenant->getAdresseCommune());
                 $codePostal = $dossierIntervenant->getAdresseCodePostal();
@@ -417,7 +418,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             $natureVoie = (!empty($dossierIntervenant->getAdresseVoirie())) ? $dossierIntervenant->getAdresseVoirie()->getCodeRh() : '';
             $bisTer     = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
             $nomVoie    = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : '';
-            $complement = (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : ' ';
+            $complement = (!empty($dossierIntervenant->getAdresseLieuDit())) ? $dossierIntervenant->getAdresseLieuDit() . ' ' : ' ';
+            $complement .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : ' ';
             $nomVoie    = Util::stripAccents($nomVoie);
             $complement = Util::stripAccents($complement);
             $commune    = Util::stripAccents($dossierIntervenant->getAdresseCommune());

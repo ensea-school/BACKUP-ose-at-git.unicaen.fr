@@ -148,8 +148,14 @@ class SeuilChargeService extends AbstractEntityService
     {
         parent::save($entity);
 
-        $this->getServiceTableauBord()->calculer('chargens_seuils_def', 'ANNEE_ID', $entity->getAnnee()->getId());
-        $this->getServiceTableauBord()->calculer('chargens', 'ANNEE_ID', $entity->getAnnee()->getId());
+        $params = [
+            'ANNEE_ID'             => $entity->getAnnee()->getId(),
+            'SCENARIO_ID'          => $entity->getScenario()->getId(),
+            'TYPE_INTERVENTION_ID' => $entity->getTypeIntervention()->getId(),
+        ];
+
+        $this->getServiceTableauBord()->calculer('chargens_seuils_def', $params);
+        $this->getServiceTableauBord()->calculer('chargens', $params);
 
         return $entity;
     }

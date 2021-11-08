@@ -4,12 +4,10 @@ namespace Application\Provider\Chargens;
 
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Chargens\Noeud;
-use Application\Entity\Db\Annee;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\TypeHeures;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeHeuresServiceAwareTrait;

@@ -255,9 +255,8 @@ return [
     'unicaen-tbl' => [
         'libelle'    => 'Tableaux de bord',
         'privileges' => [
-            'admin'           => 'Gestion des tableaux de bord',
-            'update-actuproc' => 'Mise à jour des procédures d\'actualisation',
-            'actualisation'   => 'Actualisation',
+            'admin'         => 'Gestion des tableaux de bord',
+            'actualisation' => 'Actualisation',
         ],
     ],
 

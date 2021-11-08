@@ -227,6 +227,7 @@ if ($priseEnCharge) {
             if (emploi.val() == '' || affectation.val() == '') {
                 alert("Vous devez obligatoirement renseigner une affectation et un type d'emploi pour un renouvellement ou une prise en charge dans SIHAM")
             } else {
+                $("#sihamButton").hide();
                 $('.form-export-rh').submit();
             }
 

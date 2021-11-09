@@ -204,7 +204,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
     IF calcul_proc IS NOT NULL THEN
       EXECUTE IMMEDIATE
-        'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAMS.p1, UNICAEN_TBL.CALCUL_PROC_PARAMS.v1); END;';
+        'BEGIN ' || calcul_proc || '(params.p1, params.v1); END;';
     ELSE
       EXECUTE IMMEDIATE
         'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
@@ -295,11 +295,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
   -- AUTOMATIC GENERATION --
 
-  PROCEDURE C_AGREMENT(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_AGREMENT(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_AGREMENT%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH i_s AS (
@@ -422,14 +421,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         WHERE
           rank = 1';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -453,13 +444,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.AGREMENT_ID,
       v.DUREE_VIE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_AGREMENT t ON
             COALESCE(t.ANNEE_AGREMENT,0)   = COALESCE(v.ANNEE_AGREMENT,0)
         AND t.TYPE_AGREMENT_ID             = v.TYPE_AGREMENT_ID
         AND t.INTERVENANT_ID               = v.INTERVENANT_ID
         AND COALESCE(t.STRUCTURE_ID,0)     = COALESCE(v.STRUCTURE_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -483,11 +474,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CHARGENS(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_CHARGENS(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CHARGENS%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -599,14 +589,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             /*@ETAPE_ENS_ID=sne.etape_id*/
           ) t';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -648,7 +630,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES,
       v.HETD
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_CHARGENS t ON
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.NOEUD_ID                             = v.NOEUD_ID
@@ -660,7 +642,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.ETAPE_ENS_ID                         = v.ETAPE_ENS_ID
         AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
         AND t.GROUPE_TYPE_FORMATION_ID             = v.GROUPE_TYPE_FORMATION_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -690,11 +672,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CHARGENS_SEUILS_DEF(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_CHARGENS_SEUILS_DEF(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CHARGENS_SEUILS_DEF%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -743,14 +724,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         WHERE
           COALESCE(sc1.dedoublement, sc2.dedoublement, sc3.dedoublement, sc4.dedoublement, 1) <> 1';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -768,14 +741,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.TYPE_INTERVENTION_ID,
       v.DEDOUBLEMENT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_CHARGENS_SEUILS_DEF t ON
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.SCENARIO_ID                          = v.SCENARIO_ID
         AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
         AND t.GROUPE_TYPE_FORMATION_ID             = v.GROUPE_TYPE_FORMATION_ID
         AND t.TYPE_INTERVENTION_ID                 = v.TYPE_INTERVENTION_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -800,11 +773,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CLOTURE_REALISE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_CLOTURE_REALISE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CLOTURE_REALISE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -839,14 +811,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           intervenant_id,
           peut_cloturer_saisie';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -860,10 +824,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.PEUT_CLOTURER_SAISIE,
       v.CLOTURE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_CLOTURE_REALISE t ON
             t.INTERVENANT_ID                   = v.INTERVENANT_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -884,11 +848,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CONTRAT(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_CONTRAT(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CONTRAT%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -944,14 +907,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           peut_avoir_contrat,
           structure_id';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -971,11 +926,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.EDITE,
       v.SIGNE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_CONTRAT t ON
             t.INTERVENANT_ID                 = v.INTERVENANT_ID
         AND COALESCE(t.STRUCTURE_ID,0)       = COALESCE(v.STRUCTURE_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -997,11 +952,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_DMEP_LIQUIDATION(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_DMEP_LIQUIDATION(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_DMEP_LIQUIDATION%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1051,14 +1005,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         GROUP BY
           annee_id, type_ressource_id, structure_id';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1072,12 +1018,12 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.STRUCTURE_ID,
       v.HEURES
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_DMEP_LIQUIDATION t ON
             t.ANNEE_ID                      = v.ANNEE_ID
         AND t.TYPE_RESSOURCE_ID             = v.TYPE_RESSOURCE_ID
         AND t.STRUCTURE_ID                  = v.STRUCTURE_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1100,11 +1046,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_DOSSIER(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_DOSSIER(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_DOSSIER%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1239,14 +1184,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
            /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1280,10 +1217,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.COMPLETUDE_EMPLOYEUR,
       v.COMPLETUDE_AUTRES
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_DOSSIER t ON
             t.INTERVENANT_ID                       = v.INTERVENANT_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1304,11 +1241,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PAIEMENT(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PAIEMENT(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PAIEMENT%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1453,14 +1389,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                                                        AND mep.histo_destruction IS NULL
         ) t';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1502,13 +1430,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_AA,
       v.HEURES_AC
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PAIEMENT t ON
             COALESCE(t.FORMULE_RES_SERVICE_ID,0)     = COALESCE(v.FORMULE_RES_SERVICE_ID,0)
         AND COALESCE(t.FORMULE_RES_SERVICE_REF_ID,0) = COALESCE(v.FORMULE_RES_SERVICE_REF_ID,0)
         AND t.INTERVENANT_ID                         = v.INTERVENANT_ID
         AND COALESCE(t.MISE_EN_PAIEMENT_ID,0)        = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1532,11 +1460,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PIECE_JOINTE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PIECE_JOINTE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PIECE_JOINTE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -1595,14 +1522,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         FROM
           t';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1624,11 +1543,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_POUR_SEUIL,
       v.OBLIGATOIRE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PIECE_JOINTE t ON
             t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1650,11 +1569,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PIECE_JOINTE_DEMANDE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PIECE_JOINTE_DEMANDE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PIECE_JOINTE_DEMANDE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH i_h AS (
@@ -1722,14 +1640,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           tpj.id,
           tpjs.obligatoire';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1747,11 +1657,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_POUR_SEUIL,
       v.OBLIGATOIRE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PIECE_JOINTE_DEMANDE t ON
             t.INTERVENANT_ID                   = v.INTERVENANT_ID
         AND t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1773,11 +1683,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PIECE_JOINTE_FOURNIE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PIECE_JOINTE_FOURNIE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PIECE_JOINTE_FOURNIE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1820,14 +1729,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           f.id,
           pj.date_archive';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1853,13 +1754,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DATE_VALIDITE,
       v.DATE_ARCHIVE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PIECE_JOINTE_FOURNIE t ON
             t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
         AND COALESCE(t.VALIDATION_ID,0)        = COALESCE(v.VALIDATION_ID,0)
         AND COALESCE(t.FICHIER_ID,0)           = COALESCE(v.FICHIER_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1883,11 +1784,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PLAFOND_ELEMENT(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PLAFOND_ELEMENT(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PLAFOND_ELEMENT%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1915,14 +1815,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/
           /*@ELEMENT_PEDAGOGIQUE_ID=p.ELEMENT_PEDAGOGIQUE_ID*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1948,14 +1840,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DEROGATION,
       v.DEPASSEMENT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PLAFOND_ELEMENT t ON
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1980,11 +1872,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PLAFOND_INTERVENANT(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PLAFOND_INTERVENANT(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PLAFOND_INTERVENANT%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -2110,14 +2001,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2141,13 +2024,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DEROGATION,
       v.DEPASSEMENT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PLAFOND_INTERVENANT t ON
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2171,11 +2054,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PLAFOND_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PLAFOND_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PLAFOND_REFERENTIEL%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -2242,14 +2124,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/
           /*@FONCTION_REFERENTIEL_ID=p.FONCTION_REFERENTIEL_ID*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2275,14 +2149,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DEROGATION,
       v.DEPASSEMENT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PLAFOND_REFERENTIEL t ON
             COALESCE(t.PLAFOND_ID,0)              = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                            = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)  = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                      = v.INTERVENANT_ID
         AND t.FONCTION_REFERENTIEL_ID             = v.FONCTION_REFERENTIEL_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2307,11 +2181,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PLAFOND_STRUCTURE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PLAFOND_STRUCTURE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PLAFOND_STRUCTURE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -2356,14 +2229,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=p.INTERVENANT_ID*/
           /*@STRUCTURE_ID=p.STRUCTURE_ID*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2389,14 +2254,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DEROGATION,
       v.DEPASSEMENT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PLAFOND_STRUCTURE t ON
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                           = v.ANNEE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2421,11 +2286,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PLAFOND_VOLUME_HORAIRE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_PLAFOND_VOLUME_HORAIRE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PLAFOND_VOLUME_HORAIRE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -2512,14 +2376,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@ELEMENT_PEDAGOGIQUE_ID=p.ELEMENT_PEDAGOGIQUE_ID*/
           /*@TYPE_INTERVENTION_ID=p.TYPE_INTERVENTION_ID*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2547,7 +2403,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DEROGATION,
       v.DEPASSEMENT
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PLAFOND_VOLUME_HORAIRE t ON
             COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
         AND t.ANNEE_ID                           = v.ANNEE_ID
@@ -2555,7 +2411,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
         AND COALESCE(t.TYPE_INTERVENTION_ID,0)   = COALESCE(v.TYPE_INTERVENTION_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2581,11 +2437,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_SERVICE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_SERVICE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_SERVICE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -2680,14 +2535,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           t.element_pedagogique_histo,
           t.etape_histo';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2731,11 +2578,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES,
       v.VALIDE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_SERVICE t ON
             t.SERVICE_ID                                 = v.SERVICE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)         = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2757,11 +2604,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_SERVICE_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_SERVICE_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_SERVICE_REFERENTIEL%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -2812,14 +2658,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           type_volume_horaire_id,
           structure_id';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2839,12 +2677,12 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.NBVH,
       v.VALIDE
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_SERVICE_REFERENTIEL t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND COALESCE(t.STRUCTURE_ID,0)           = COALESCE(v.STRUCTURE_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2867,11 +2705,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_SERVICE_SAISIE(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_SERVICE_SAISIE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_SERVICE_SAISIE%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -2903,14 +2740,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           si.peut_saisir_service,
           si.peut_saisir_referentiel';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2932,10 +2761,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_SERVICE_REAL,
       v.HEURES_REFERENTIEL_REAL
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_SERVICE_SAISIE t ON
             t.INTERVENANT_ID                      = v.INTERVENANT_ID
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2956,11 +2785,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_VALIDATION_ENSEIGNEMENT(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_VALIDATION_ENSEIGNEMENT(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_VALIDATION_ENSEIGNEMENT%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT DISTINCT
@@ -2991,14 +2819,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -3020,7 +2840,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.AUTO_VALIDATION,
       v.VALIDATION_ID
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_VALIDATION_ENSEIGNEMENT t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
@@ -3028,7 +2848,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.SERVICE_ID                         = v.SERVICE_ID
         AND t.VOLUME_HORAIRE_ID                  = v.VOLUME_HORAIRE_ID
         AND COALESCE(t.VALIDATION_ID,0)          = COALESCE(v.VALIDATION_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -3054,11 +2874,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_VALIDATION_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
+  PROCEDURE C_VALIDATION_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_VALIDATION_REFERENTIEL%rowtype;
-  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT DISTINCT
@@ -3087,14 +2906,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
-    IF param IS NULL THEN
-      filter := '1=1';
-    ELSIF value IS NULL THEN
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
-    ELSE
-      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
-    END IF;
-
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -3116,7 +2927,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.AUTO_VALIDATION,
       v.VALIDATION_ID
     FROM
-      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_VALIDATION_REFERENTIEL t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
@@ -3124,7 +2935,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.SERVICE_REFERENTIEL_ID             = v.SERVICE_REFERENTIEL_ID
         AND t.VOLUME_HORAIRE_REF_ID              = v.VOLUME_HORAIRE_REF_ID
         AND COALESCE(t.VALIDATION_ID,0)          = COALESCE(v.VALIDATION_ID,0)
-    WHERE ' || filter;
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18f8830a24bceaafb795349271d75ec5",
+    "content-hash": "707c46ad726bd92c4cc735061cd4a960",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2927,11 +2927,11 @@
         },
         {
             "name": "unicaen/tbl",
-            "version": "4.1",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "d95373b207337d0b329f7c69652760660e5509e6"
+                "reference": "5299b2283309fb440444115f468f7329032bc171"
             },
             "require": {
                 "unicaen/app": "^3.0"
@@ -2950,7 +2950,7 @@
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2020-11-03T08:52:19+00:00"
+            "time": "2021-11-08T16:18:32+00:00"
         },
         {
             "name": "zendframework/zend-authentication",

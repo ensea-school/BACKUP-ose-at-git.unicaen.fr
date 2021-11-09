@@ -42,7 +42,8 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Affichage du grade et de la discipline au niveau de la fiche intervenant (#39603)
 * Synchronisation de l'email pro de la fiche intervenant avec le dossier de l'intervenant en cas de mise à jour (#39346)
 * Paiements : Pour du référentiel, la répartition AA/AC tient maintenant compte du ratio configuré dans les paramètres généraux (#39695).
-
+* Nouvelles optimisations du modules CHARGES, au niveau des seuils et des calculs d'effectifs
+* 
 
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement

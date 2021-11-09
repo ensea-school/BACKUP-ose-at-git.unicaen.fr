@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9cf25f1392dce1857f38b92891a96faf",
+    "content-hash": "9000e344dfa7a3f2740f558bba094a13",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1523,16 +1523,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.0.13",
+            "version": "v8.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "42f145615cfe830fd432474da1d2e1f927efe402"
+                "reference": "ab362c8b11667813487be5d3da64b31c89d9d826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/42f145615cfe830fd432474da1d2e1f927efe402",
-                "reference": "42f145615cfe830fd432474da1d2e1f927efe402",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/ab362c8b11667813487be5d3da64b31c89d9d826",
+                "reference": "ab362c8b11667813487be5d3da64b31c89d9d826",
                 "shasum": ""
             },
             "require": {
@@ -1541,7 +1541,7 @@
                 "myclabs/deep-copy": "^1.7",
                 "paragonie/random_compat": "^1.4|^2.0|^9.99.99",
                 "php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0",
-                "psr/log": "^1.0",
+                "psr/log": "^1.0 || ^2.0",
                 "setasign/fpdi": "^2.1"
             },
             "require-dev": {
@@ -1589,7 +1589,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-09-10T10:09:59+00:00"
+            "time": "2021-11-02T20:27:57+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1813,20 +1813,20 @@
         },
         {
             "name": "psr/container",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.0"
+                "php": ">=7.4.0"
             },
             "type": "library",
             "autoload": {
@@ -1853,7 +1853,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2021-03-05T17:36:06+00:00"
+            "time": "2021-11-05T16:50:12+00:00"
         },
         {
             "name": "psr/log",
@@ -2119,16 +2119,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.3.7",
+            "version": "v5.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8b1008344647462ae6ec57559da166c2bfa5e16a"
+                "reference": "d4e409d9fbcfbf71af0e5a940abb7b0b4bad0bd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8b1008344647462ae6ec57559da166c2bfa5e16a",
-                "reference": "8b1008344647462ae6ec57559da166c2bfa5e16a",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d4e409d9fbcfbf71af0e5a940abb7b0b4bad0bd3",
+                "reference": "d4e409d9fbcfbf71af0e5a940abb7b0b4bad0bd3",
                 "shasum": ""
             },
             "require": {
@@ -2211,7 +2211,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-25T20:02:16+00:00"
+            "time": "2021-10-26T09:30:15+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -2823,16 +2823,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.3.7",
+            "version": "v5.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "8d224396e28d30f81969f083a58763b8b9ceb0a5"
+                "reference": "d70c35bb20bbca71fc4ab7921e3c6bda1a82a60c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/8d224396e28d30f81969f083a58763b8b9ceb0a5",
-                "reference": "8d224396e28d30f81969f083a58763b8b9ceb0a5",
+                "url": "https://api.github.com/repos/symfony/string/zipball/d70c35bb20bbca71fc4ab7921e3c6bda1a82a60c",
+                "reference": "d70c35bb20bbca71fc4ab7921e3c6bda1a82a60c",
                 "shasum": ""
             },
             "require": {
@@ -2899,20 +2899,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-26T08:00:08+00:00"
+            "time": "2021-10-27T18:21:46+00:00"
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.3.8",
+            "version": "v5.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "eaaea4098be1c90c8285543e1356a09c8aa5c8da"
+                "reference": "875432adb5f5570fff21036fd22aee244636b7d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/eaaea4098be1c90c8285543e1356a09c8aa5c8da",
-                "reference": "eaaea4098be1c90c8285543e1356a09c8aa5c8da",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/875432adb5f5570fff21036fd22aee244636b7d1",
+                "reference": "875432adb5f5570fff21036fd22aee244636b7d1",
                 "shasum": ""
             },
             "require": {
@@ -2984,7 +2984,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-24T15:59:58+00:00"
+            "time": "2021-10-26T09:30:15+00:00"
         },
         {
             "name": "true/punycode",
@@ -3188,15 +3188,16 @@
         },
         {
             "name": "unicaen/code",
-            "version": "4.5",
+            "version": "5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "319edc50c1e19326f098ed365b3f18b13c38afe0"
+                "reference": "aa7ca00017032b6f8e88c4335163e4c60e2fa482"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
-                "zendframework/zend-developer-tools": "2.0.0"
+                "zendframework/zend-developer-tools": "2.0.0",
+                "zendframework/zend-file": "^2.8"
             },
             "type": "library",
             "autoload": {
@@ -3209,7 +3210,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2021-10-04T14:58:18+00:00"
+            "time": "2021-10-22T14:29:08+00:00"
         },
         {
             "name": "unicaen/import",
@@ -3257,6 +3258,39 @@
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
             "time": "2020-05-15T15:47:37+00:00"
+        },
+        {
+            "name": "unicaen/siham",
+            "version": "1.4",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
+                "reference": "ca056ea766128de913435f2920c43f9e5fea2e23"
+            },
+            "require": {
+                "zendframework/zend-mail": "^2.10",
+                "zendframework/zend-mime": "^2.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenSiham": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "Antony Le Courtes",
+                    "email": "antony.lecourtes@unicaen.fr"
+                }
+            ],
+            "description": "PHP library for SIHAM webservices",
+            "time": "2021-10-28T13:19:26+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -3895,6 +3929,64 @@
             ],
             "abandoned": "laminas/laminas-eventmanager",
             "time": "2018-04-25T15:33:34+00:00"
+        },
+        {
+            "name": "zendframework/zend-file",
+            "version": "2.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-file.git",
+                "reference": "b6e167e056ce8594be1db93460cddb503de341ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-file/zipball/b6e167e056ce8594be1db93460cddb503de341ed",
+                "reference": "b6e167e056ce8594be1db93460cddb503de341ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+                "zendframework/zend-coding-standard": "~1.0.0",
+                "zendframework/zend-filter": "^2.7.2",
+                "zendframework/zend-i18n": "^2.7.4",
+                "zendframework/zend-progressbar": "^2.5.2",
+                "zendframework/zend-servicemanager": "^2.7.8 || ^3.3",
+                "zendframework/zend-session": "^2.8",
+                "zendframework/zend-validator": "^2.10.1"
+            },
+            "suggest": {
+                "zendframework/zend-filter": "Zend\\Filter component",
+                "zendframework/zend-i18n": "Zend\\I18n component",
+                "zendframework/zend-validator": "Zend\\Validator component"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8.x-dev",
+                    "dev-develop": "2.9.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\File\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Locate PHP classfiles",
+            "keywords": [
+                "ZendFramework",
+                "file",
+                "zf"
+            ],
+            "abandoned": "laminas/laminas-file",
+            "time": "2019-02-06T16:53:31+00:00"
         },
         {
             "name": "zendframework/zend-filter",

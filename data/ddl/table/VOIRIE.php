@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CODE_RH'                  => [
+        'CODE_RH'               => [
             'name'        => 'CODE_RH',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',

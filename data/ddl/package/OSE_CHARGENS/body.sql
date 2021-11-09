@@ -338,9 +338,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
     new_id NUMERIC;
   BEGIN
 
-    BEGIN  
+    BEGIN
       SELECT id INTO new_id FROM scenario_noeud WHERE noeud_id = CREER_SCENARIO_NOEUD.noeud_id AND scenario_id = CREER_SCENARIO_NOEUD.scenario_id AND histo_destruction IS NULL;
-      
+
       RETURN new_id;
     EXCEPTION WHEN NO_DATA_FOUND THEN
       new_id := SCENARIO_NOEUD_ID_SEQ.NEXTVAL;

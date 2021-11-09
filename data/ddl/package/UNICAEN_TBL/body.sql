@@ -204,7 +204,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
     IF calcul_proc IS NOT NULL THEN
       EXECUTE IMMEDIATE
-        'BEGIN ' || calcul_proc || '(params.p1, params.v1); END;';
+        'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAMS.p1, UNICAEN_TBL.CALCUL_PROC_PARAMS.v1); END;';
     ELSE
       EXECUTE IMMEDIATE
         'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
@@ -295,10 +295,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
   -- AUTOMATIC GENERATION --
 
-  PROCEDURE C_AGREMENT(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_AGREMENT(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_AGREMENT%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH i_s AS (
@@ -421,6 +422,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         WHERE
           rank = 1';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -444,13 +453,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.AGREMENT_ID,
       v.DUREE_VIE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_AGREMENT t ON
             COALESCE(t.ANNEE_AGREMENT,0)   = COALESCE(v.ANNEE_AGREMENT,0)
         AND t.TYPE_AGREMENT_ID             = v.TYPE_AGREMENT_ID
         AND t.INTERVENANT_ID               = v.INTERVENANT_ID
         AND COALESCE(t.STRUCTURE_ID,0)     = COALESCE(v.STRUCTURE_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -474,10 +483,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CHARGENS(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_CHARGENS(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CHARGENS%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -589,6 +599,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             /*@ETAPE_ENS_ID=sne.etape_id*/
           ) t';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -630,7 +648,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES,
       v.HETD
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_CHARGENS t ON
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.NOEUD_ID                             = v.NOEUD_ID
@@ -642,7 +660,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.ETAPE_ENS_ID                         = v.ETAPE_ENS_ID
         AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
         AND t.GROUPE_TYPE_FORMATION_ID             = v.GROUPE_TYPE_FORMATION_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -672,10 +690,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CHARGENS_SEUILS_DEF(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_CHARGENS_SEUILS_DEF(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CHARGENS_SEUILS_DEF%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -724,6 +743,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         WHERE
           COALESCE(sc1.dedoublement, sc2.dedoublement, sc3.dedoublement, sc4.dedoublement, 1) <> 1';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -741,14 +768,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.TYPE_INTERVENTION_ID,
       v.DEDOUBLEMENT
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_CHARGENS_SEUILS_DEF t ON
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.SCENARIO_ID                          = v.SCENARIO_ID
         AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
         AND t.GROUPE_TYPE_FORMATION_ID             = v.GROUPE_TYPE_FORMATION_ID
         AND t.TYPE_INTERVENTION_ID                 = v.TYPE_INTERVENTION_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -773,10 +800,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CLOTURE_REALISE(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_CLOTURE_REALISE(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CLOTURE_REALISE%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -811,6 +839,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           intervenant_id,
           peut_cloturer_saisie';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -824,10 +860,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.PEUT_CLOTURER_SAISIE,
       v.CLOTURE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_CLOTURE_REALISE t ON
             t.INTERVENANT_ID                   = v.INTERVENANT_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -848,10 +884,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_CONTRAT(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_CONTRAT(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_CONTRAT%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -907,6 +944,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           peut_avoir_contrat,
           structure_id';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -926,11 +971,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.EDITE,
       v.SIGNE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_CONTRAT t ON
             t.INTERVENANT_ID                 = v.INTERVENANT_ID
         AND COALESCE(t.STRUCTURE_ID,0)       = COALESCE(v.STRUCTURE_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -952,10 +997,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_DMEP_LIQUIDATION(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_DMEP_LIQUIDATION(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_DMEP_LIQUIDATION%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1005,6 +1051,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         GROUP BY
           annee_id, type_ressource_id, structure_id';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1018,12 +1072,12 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.STRUCTURE_ID,
       v.HEURES
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_DMEP_LIQUIDATION t ON
             t.ANNEE_ID                      = v.ANNEE_ID
         AND t.TYPE_RESSOURCE_ID             = v.TYPE_RESSOURCE_ID
         AND t.STRUCTURE_ID                  = v.STRUCTURE_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1046,10 +1100,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_DOSSIER(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_DOSSIER(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_DOSSIER%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1184,6 +1239,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
            /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1217,10 +1280,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.COMPLETUDE_EMPLOYEUR,
       v.COMPLETUDE_AUTRES
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_DOSSIER t ON
             t.INTERVENANT_ID                       = v.INTERVENANT_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1241,10 +1304,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PAIEMENT(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_PAIEMENT(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PAIEMENT%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1389,6 +1453,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                                                        AND mep.histo_destruction IS NULL
         ) t';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1430,13 +1502,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_AA,
       v.HEURES_AC
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PAIEMENT t ON
             COALESCE(t.FORMULE_RES_SERVICE_ID,0)     = COALESCE(v.FORMULE_RES_SERVICE_ID,0)
         AND COALESCE(t.FORMULE_RES_SERVICE_REF_ID,0) = COALESCE(v.FORMULE_RES_SERVICE_REF_ID,0)
         AND t.INTERVENANT_ID                         = v.INTERVENANT_ID
         AND COALESCE(t.MISE_EN_PAIEMENT_ID,0)        = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1460,10 +1532,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PIECE_JOINTE(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_PIECE_JOINTE(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PIECE_JOINTE%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -1480,7 +1553,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                       tbl_piece_jointe_demande  pjd
             LEFT JOIN tbl_piece_jointe_fournie  pjf ON pjf.code_intervenant = pjd.code_intervenant
                                                    AND pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
-                                                   AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,pjf.date_validite -1,(pjf.annee_id + pjf.duree_vie-1))
+                                                   AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,pjf.date_validite - 1,(pjf.annee_id + pjf.duree_vie - 1))
           WHERE
             1=1
             /*@INTERVENANT_ID=pjd.intervenant_id*/
@@ -1522,6 +1595,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         FROM
           t';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1543,11 +1624,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_POUR_SEUIL,
       v.OBLIGATOIRE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PIECE_JOINTE t ON
             t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1569,10 +1650,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PIECE_JOINTE_DEMANDE(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_PIECE_JOINTE_DEMANDE(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PIECE_JOINTE_DEMANDE%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH i_h AS (
@@ -1640,6 +1722,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           tpj.id,
           tpjs.obligatoire';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1657,11 +1747,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_POUR_SEUIL,
       v.OBLIGATOIRE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PIECE_JOINTE_DEMANDE t ON
             t.INTERVENANT_ID                   = v.INTERVENANT_ID
         AND t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1683,10 +1773,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_PIECE_JOINTE_FOURNIE(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_PIECE_JOINTE_FOURNIE(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_PIECE_JOINTE_FOURNIE%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -1729,6 +1820,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           f.id,
           pj.date_archive';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1754,13 +1853,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.DATE_VALIDITE,
       v.DATE_ARCHIVE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_PIECE_JOINTE_FOURNIE t ON
             t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
         AND COALESCE(t.VALIDATION_ID,0)        = COALESCE(v.VALIDATION_ID,0)
         AND COALESCE(t.FICHIER_ID,0)           = COALESCE(v.FICHIER_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1784,10 +1883,709 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_SERVICE(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_PLAFOND_ELEMENT(param VARCHAR2, value VARCHAR2) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_PLAFOND_ELEMENT%rowtype;
+  filter VARCHAR2(150);
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
+          p.ANNEE_ID,
+          p.TYPE_VOLUME_HORAIRE_ID,
+          p.INTERVENANT_ID,
+          p.ELEMENT_PEDAGOGIQUE_ID,
+          p.HEURES,
+          p.PLAFOND,
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
+        FROM
+        (
+          SELECT NULL PLAFOND_ID,NULL PLAFOND_ETAT_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL ELEMENT_PEDAGOGIQUE_ID,NULL HEURES,NULL PLAFOND,NULL DEROGATION FROM dual WHERE 0 = 1
+        ) p
+        JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
+        WHERE
+          1=1
+          /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
+          /*@ANNEE_ID=p.ANNEE_ID*/
+          /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+          /*@INTERVENANT_ID=p.INTERVENANT_ID*/
+          /*@ELEMENT_PEDAGOGIQUE_ID=p.ELEMENT_PEDAGOGIQUE_ID*/';
+
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
+        AND t.HEURES                             = v.HEURES
+        AND t.PLAFOND                            = v.PLAFOND
+        AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
+      THEN -1 ELSE t.ID END ID,
+      v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
+      v.ANNEE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.INTERVENANT_ID,
+      v.ELEMENT_PEDAGOGIQUE_ID,
+      v.HEURES,
+      v.PLAFOND,
+      v.DEROGATION,
+      v.DEPASSEMENT
+    FROM
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      FULL JOIN TBL_PLAFOND_ELEMENT t ON
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
+    WHERE ' || filter;
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_PLAFOND_ELEMENT_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_PLAFOND_ELEMENT values d;
+      ELSIF
+            d.PLAFOND_ID IS NULL
+        AND d.ANNEE_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
+        AND d.ELEMENT_PEDAGOGIQUE_ID IS NULL
+      THEN
+        DELETE FROM TBL_PLAFOND_ELEMENT WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_PLAFOND_ELEMENT SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
+  PROCEDURE C_PLAFOND_INTERVENANT(param VARCHAR2, value VARCHAR2) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_PLAFOND_INTERVENANT%rowtype;
+  filter VARCHAR2(150);
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
+          p.ANNEE_ID,
+          p.TYPE_VOLUME_HORAIRE_ID,
+          p.INTERVENANT_ID,
+          p.HEURES,
+          p.PLAFOND,
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
+        FROM
+        (
+          SELECT 2 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                          annee_id,
+              fr.type_volume_horaire_id           type_volume_horaire_id,
+              i.id                                intervenant_id,
+              fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL heures,
+              si.plafond_referentiel              plafond
+            FROM
+              intervenant                     i
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+          ) p
+
+          UNION ALL
+
+          SELECT 4 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                             annee_id,
+              fr.type_volume_horaire_id              type_volume_horaire_id,
+              i.id                                   intervenant_id,
+              fr.total - fr.heures_compl_fc_majorees heures,
+              si.maximum_hetd                        plafond
+            FROM
+              intervenant                     i
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+          ) p
+
+          UNION ALL
+
+          SELECT 1 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                          annee_id,
+              fr.type_volume_horaire_id           type_volume_horaire_id,
+              i.id                                intervenant_id,
+              fr.heures_compl_fc_majorees         heures,
+              ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond
+
+            FROM
+                   intervenant                i
+              JOIN annee                      a ON a.id = i.annee_id
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+          ) p
+
+          UNION ALL
+
+          SELECT 5 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                          annee_id,
+              fr.type_volume_horaire_id           type_volume_horaire_id,
+              fr.intervenant_id                   intervenant_id,
+              fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures,
+              si.plafond_hc_hors_remu_fc          plafond
+            FROM
+                   intervenant                i
+              JOIN statut_intervenant        si ON si.id = i.statut_id
+              JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+              JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+          ) p
+
+          UNION ALL
+
+          SELECT 8 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              t.annee_id,
+              t.type_volume_horaire_id,
+              t.intervenant_id,
+              t.heures,
+              si.plafond_hc_fi_hors_ead           plafond
+            FROM
+              (
+                SELECT
+                  fr.type_volume_horaire_id           type_volume_horaire_id,
+                  i.annee_id                          annee_id,
+                  i.id                                intervenant_id,
+                  i.statut_id                         statut_intervenant_id,
+                  si.plafond_hc_fi_hors_ead           plafond,
+                  SUM(frvh.heures_compl_fi)           heures
+                FROM
+                  intervenant                     i
+                  JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                  JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+                  JOIN formule_resultat_vh     frvh ON frvh.formule_resultat_id = fr.id
+                  JOIN volume_horaire            vh ON vh.id = frvh.volume_horaire_id
+                  JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
+                  JOIN statut_intervenant        si ON si.id = i.statut_id
+                WHERE
+                  ti.regle_foad = 0
+                GROUP BY
+                  fr.type_volume_horaire_id,
+                  i.annee_id,
+                  i.id,
+                  i.statut_id,
+                  si.plafond_hc_fi_hors_ead
+              ) t
+                JOIN statut_intervenant si ON si.id = t.statut_intervenant_id
+          ) p
+        ) p
+        JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
+        WHERE
+          1=1
+          /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
+          /*@ANNEE_ID=p.ANNEE_ID*/
+          /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+          /*@INTERVENANT_ID=p.INTERVENANT_ID*/';
+
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.HEURES                             = v.HEURES
+        AND t.PLAFOND                            = v.PLAFOND
+        AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
+      THEN -1 ELSE t.ID END ID,
+      v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
+      v.ANNEE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.INTERVENANT_ID,
+      v.HEURES,
+      v.PLAFOND,
+      v.DEROGATION,
+      v.DEPASSEMENT
+    FROM
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      FULL JOIN TBL_PLAFOND_INTERVENANT t ON
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+    WHERE ' || filter;
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_PLAFOND_INTERVENANT_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_PLAFOND_INTERVENANT values d;
+      ELSIF
+            d.PLAFOND_ID IS NULL
+        AND d.ANNEE_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
+      THEN
+        DELETE FROM TBL_PLAFOND_INTERVENANT WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_PLAFOND_INTERVENANT SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
+  PROCEDURE C_PLAFOND_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_PLAFOND_REFERENTIEL%rowtype;
+  filter VARCHAR2(150);
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
+          p.ANNEE_ID,
+          p.TYPE_VOLUME_HORAIRE_ID,
+          p.INTERVENANT_ID,
+          p.FONCTION_REFERENTIEL_ID,
+          p.HEURES,
+          p.PLAFOND,
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
+        FROM
+        (
+          SELECT 3 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                        annee_id,
+              vhr.type_volume_horaire_id        type_volume_horaire_id,
+              i.id                              intervenant_id,
+              fr.id                             fonction_referentiel_id,
+              SUM(vhr.heures)                   heures,
+              fr.plafond                        plafond
+            FROM
+                   service_referentiel       sr
+              JOIN intervenant                i ON i.id = sr.intervenant_id
+              JOIN fonction_referentiel      fr ON fr.id = sr.fonction_id
+              JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+            WHERE
+              sr.histo_destruction IS NULL
+            GROUP BY
+              i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+          ) p
+
+          UNION ALL
+
+          SELECT 6 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                 annee_id,
+              vhr.type_volume_horaire_id type_volume_horaire_id,
+              i.id                       intervenant_id,
+              fr.id                      fonction_referentiel_id,
+              SUM(vhr.heures)            heures,
+              fr.plafond                 plafond
+            FROM
+              service_referentiel       sr
+              JOIN intervenant i ON i.id = sr.intervenant_id
+              JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+              JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+              JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+            WHERE
+              sr.histo_destruction IS NULL
+            GROUP BY
+              i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+          ) p
+        ) p
+        JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
+        WHERE
+          1=1
+          /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
+          /*@ANNEE_ID=p.ANNEE_ID*/
+          /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+          /*@INTERVENANT_ID=p.INTERVENANT_ID*/
+          /*@FONCTION_REFERENTIEL_ID=p.FONCTION_REFERENTIEL_ID*/';
+
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            COALESCE(t.PLAFOND_ID,0)              = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                     = v.PLAFOND_ETAT_ID
+        AND t.ANNEE_ID                            = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)  = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                      = v.INTERVENANT_ID
+        AND t.FONCTION_REFERENTIEL_ID             = v.FONCTION_REFERENTIEL_ID
+        AND t.HEURES                              = v.HEURES
+        AND t.PLAFOND                             = v.PLAFOND
+        AND t.DEROGATION                          = v.DEROGATION
+        AND t.DEPASSEMENT                         = v.DEPASSEMENT
+      THEN -1 ELSE t.ID END ID,
+      v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
+      v.ANNEE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.INTERVENANT_ID,
+      v.FONCTION_REFERENTIEL_ID,
+      v.HEURES,
+      v.PLAFOND,
+      v.DEROGATION,
+      v.DEPASSEMENT
+    FROM
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      FULL JOIN TBL_PLAFOND_REFERENTIEL t ON
+            COALESCE(t.PLAFOND_ID,0)              = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                            = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)  = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                      = v.INTERVENANT_ID
+        AND t.FONCTION_REFERENTIEL_ID             = v.FONCTION_REFERENTIEL_ID
+    WHERE ' || filter;
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_PLAFOND_REFERENTIEL_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_PLAFOND_REFERENTIEL values d;
+      ELSIF
+            d.PLAFOND_ID IS NULL
+        AND d.ANNEE_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
+        AND d.FONCTION_REFERENTIEL_ID IS NULL
+      THEN
+        DELETE FROM TBL_PLAFOND_REFERENTIEL WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_PLAFOND_REFERENTIEL SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
+  PROCEDURE C_PLAFOND_STRUCTURE(param VARCHAR2, value VARCHAR2) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_PLAFOND_STRUCTURE%rowtype;
+  filter VARCHAR2(150);
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
+          p.ANNEE_ID,
+          p.TYPE_VOLUME_HORAIRE_ID,
+          p.INTERVENANT_ID,
+          p.STRUCTURE_ID,
+          p.HEURES,
+          p.PLAFOND,
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
+        FROM
+        (
+          SELECT 7 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            SELECT
+              i.annee_id                 annee_id,
+              vhr.type_volume_horaire_id type_volume_horaire_id,
+              i.id                       intervenant_id,
+              s.id                       structure_id,
+              SUM(vhr.heures)            heures,
+              s.plafond_referentiel      plafond
+            FROM
+              service_referentiel       sr
+              JOIN intervenant           i ON i.id = sr.intervenant_id
+              JOIN structure             s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
+              JOIN volume_horaire_ref  vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+            WHERE
+              sr.histo_destruction IS NULL
+            GROUP BY
+              i.annee_id, vhr.type_volume_horaire_id, i.id, s.id, s.plafond_referentiel
+          ) p
+        ) p
+        JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
+        WHERE
+          1=1
+          /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
+          /*@ANNEE_ID=p.ANNEE_ID*/
+          /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+          /*@INTERVENANT_ID=p.INTERVENANT_ID*/
+          /*@STRUCTURE_ID=p.STRUCTURE_ID*/';
+
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
+        AND t.HEURES                             = v.HEURES
+        AND t.PLAFOND                            = v.PLAFOND
+        AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
+      THEN -1 ELSE t.ID END ID,
+      v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
+      v.ANNEE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.INTERVENANT_ID,
+      v.STRUCTURE_ID,
+      v.HEURES,
+      v.PLAFOND,
+      v.DEROGATION,
+      v.DEPASSEMENT
+    FROM
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      FULL JOIN TBL_PLAFOND_STRUCTURE t ON
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
+    WHERE ' || filter;
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_PLAFOND_STRUCTURE_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_PLAFOND_STRUCTURE values d;
+      ELSIF
+            d.PLAFOND_ID IS NULL
+        AND d.ANNEE_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
+        AND d.STRUCTURE_ID IS NULL
+      THEN
+        DELETE FROM TBL_PLAFOND_STRUCTURE WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_PLAFOND_STRUCTURE SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
+  PROCEDURE C_PLAFOND_VOLUME_HORAIRE(param VARCHAR2, value VARCHAR2) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_PLAFOND_VOLUME_HORAIRE%rowtype;
+  filter VARCHAR2(150);
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          p.PLAFOND_ID,
+          pa.PLAFOND_ETAT_ID,
+          p.ANNEE_ID,
+          p.TYPE_VOLUME_HORAIRE_ID,
+          p.INTERVENANT_ID,
+          p.ELEMENT_PEDAGOGIQUE_ID,
+          p.TYPE_INTERVENTION_ID,
+          p.HEURES,
+          p.PLAFOND,
+          p.DEROGATION,
+          CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement
+        FROM
+        (
+          SELECT 9 PLAFOND_ID, 0 DEROGATION, p.* FROM (
+            WITH c AS (
+              SELECT
+                vhe.element_pedagogique_id,
+                vhe.type_intervention_id,
+                MAX(vhe.heures) heures,
+                COALESCE( MAX(vhe.groupes), ROUND(SUM(t.groupes),10) ) groupes
+
+              FROM
+                volume_horaire_ens     vhe
+                     JOIN parametre p ON p.nom = ''scenario_charges_services''
+                LEFT JOIN tbl_chargens   t ON t.element_pedagogique_id = vhe.element_pedagogique_id
+                                          AND t.type_intervention_id = vhe.type_intervention_id
+                                          AND t.scenario_id = to_number(p.valeur)
+              GROUP BY
+                vhe.element_pedagogique_id,
+                vhe.type_intervention_id
+            ), s AS (
+              SELECT
+                i.annee_id,
+                vh.type_volume_horaire_id,
+                s.intervenant_id,
+                s.element_pedagogique_id,
+                vh.type_intervention_id,
+                SUM(vh.heures) heures
+              FROM
+                volume_horaire vh
+                JOIN service     s ON s.id = vh.service_id
+                                  AND s.element_pedagogique_id IS NOT NULL
+                                  AND s.histo_destruction IS NULL
+                JOIN intervenant i ON i.id = s.intervenant_id
+                                  AND i.histo_destruction IS NULL
+              WHERE
+                vh.histo_destruction IS NULL
+              GROUP BY
+                i.annee_id,
+                vh.type_volume_horaire_id,
+                s.intervenant_id,
+                s.element_pedagogique_id,
+                vh.type_intervention_id
+            )
+            SELECT
+              s.annee_id                                  annee_id,
+              s.type_volume_horaire_id                    type_volume_horaire_id,
+              s.intervenant_id                            intervenant_id,
+              s.element_pedagogique_id                    element_pedagogique_id,
+              s.type_intervention_id                      type_intervention_id,
+              s.heures                                    heures,
+              COALESCE(c.heures * c.groupes,0)            plafond
+            FROM
+                        s
+                   JOIN type_intervention ti ON ti.id = s.type_intervention_id
+                   JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
+              LEFT JOIN c ON c.element_pedagogique_id = s.element_pedagogique_id
+                         AND c.type_intervention_id = COALESCE(ti.type_intervention_maquette_id,ti.id)
+            WHERE
+              s.heures - COALESCE(c.heures * c.groupes,0) > 0
+          ) p
+        ) p
+        JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)
+        WHERE
+          1=1
+          /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
+          /*@ANNEE_ID=p.ANNEE_ID*/
+          /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+          /*@INTERVENANT_ID=p.INTERVENANT_ID*/
+          /*@ELEMENT_PEDAGOGIQUE_ID=p.ELEMENT_PEDAGOGIQUE_ID*/
+          /*@TYPE_INTERVENTION_ID=p.TYPE_INTERVENTION_ID*/';
+
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
+        AND COALESCE(t.TYPE_INTERVENTION_ID,0)   = COALESCE(v.TYPE_INTERVENTION_ID,0)
+        AND t.HEURES                             = v.HEURES
+        AND t.PLAFOND                            = v.PLAFOND
+        AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
+      THEN -1 ELSE t.ID END ID,
+      v.PLAFOND_ID,
+      v.PLAFOND_ETAT_ID,
+      v.ANNEE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.INTERVENANT_ID,
+      v.ELEMENT_PEDAGOGIQUE_ID,
+      v.TYPE_INTERVENTION_ID,
+      v.HEURES,
+      v.PLAFOND,
+      v.DEROGATION,
+      v.DEPASSEMENT
+    FROM
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
+      FULL JOIN TBL_PLAFOND_VOLUME_HORAIRE t ON
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.ELEMENT_PEDAGOGIQUE_ID             = v.ELEMENT_PEDAGOGIQUE_ID
+        AND COALESCE(t.TYPE_INTERVENTION_ID,0)   = COALESCE(v.TYPE_INTERVENTION_ID,0)
+    WHERE ' || filter;
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_PLAFOND_VOLUME_HORA_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_PLAFOND_VOLUME_HORAIRE values d;
+      ELSIF
+            d.PLAFOND_ID IS NULL
+        AND d.ANNEE_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
+        AND d.ELEMENT_PEDAGOGIQUE_ID IS NULL
+        AND d.TYPE_INTERVENTION_ID IS NULL
+      THEN
+        DELETE FROM TBL_PLAFOND_VOLUME_HORAIRE WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_PLAFOND_VOLUME_HORAIRE SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
+  PROCEDURE C_SERVICE(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_SERVICE%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -1882,6 +2680,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           t.element_pedagogique_histo,
           t.etape_histo';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -1925,11 +2731,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES,
       v.VALIDE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_SERVICE t ON
             t.SERVICE_ID                                 = v.SERVICE_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)         = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -1951,10 +2757,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_SERVICE_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_SERVICE_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_SERVICE_REFERENTIEL%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'WITH t AS (
@@ -2005,6 +2812,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           type_volume_horaire_id,
           structure_id';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2024,12 +2839,12 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.NBVH,
       v.VALIDE
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_SERVICE_REFERENTIEL t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND COALESCE(t.STRUCTURE_ID,0)           = COALESCE(v.STRUCTURE_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2052,10 +2867,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_SERVICE_SAISIE(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_SERVICE_SAISIE(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_SERVICE_SAISIE%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT
@@ -2087,6 +2903,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           si.peut_saisir_service,
           si.peut_saisir_referentiel';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2108,10 +2932,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.HEURES_SERVICE_REAL,
       v.HEURES_REFERENTIEL_REAL
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_SERVICE_SAISIE t ON
             t.INTERVENANT_ID                      = v.INTERVENANT_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2132,10 +2956,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_VALIDATION_ENSEIGNEMENT(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_VALIDATION_ENSEIGNEMENT(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_VALIDATION_ENSEIGNEMENT%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT DISTINCT
@@ -2166,6 +2991,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2187,7 +3020,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.AUTO_VALIDATION,
       v.VALIDATION_ID
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_VALIDATION_ENSEIGNEMENT t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
@@ -2195,7 +3028,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.SERVICE_ID                         = v.SERVICE_ID
         AND t.VOLUME_HORAIRE_ID                  = v.VOLUME_HORAIRE_ID
         AND COALESCE(t.VALIDATION_ID,0)          = COALESCE(v.VALIDATION_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 
@@ -2221,10 +3054,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
-  PROCEDURE C_VALIDATION_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
+  PROCEDURE C_VALIDATION_REFERENTIEL(param VARCHAR2, value VARCHAR2) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
   d TBL_VALIDATION_REFERENTIEL%rowtype;
+  filter VARCHAR2(150);
   viewQuery CLOB;
   BEGIN
     viewQuery := 'SELECT DISTINCT
@@ -2253,6 +3087,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
+    IF param IS NULL THEN
+      filter := '1=1';
+    ELSIF value IS NULL THEN
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') IS NULL';
+    ELSE
+      filter := 'COALESCE(v.' || param || ', t.' || param || ') = q''[' || value || ']''';
+    END IF;
+
     OPEN c FOR '
     SELECT
       CASE WHEN
@@ -2274,7 +3116,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.AUTO_VALIDATION,
       v.VALIDATION_ID
     FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      (' || QUERY_APPLY_PARAM(viewQuery,param,value) || ') v
       FULL JOIN TBL_VALIDATION_REFERENTIEL t ON
             t.INTERVENANT_ID                     = v.INTERVENANT_ID
         AND t.STRUCTURE_ID                       = v.STRUCTURE_ID
@@ -2282,7 +3124,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.SERVICE_REFERENTIEL_ID             = v.SERVICE_REFERENTIEL_ID
         AND t.VOLUME_HORAIRE_REF_ID              = v.VOLUME_HORAIRE_REF_ID
         AND COALESCE(t.VALIDATION_ID,0)          = COALESCE(v.VALIDATION_ID,0)
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    WHERE ' || filter;
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
 

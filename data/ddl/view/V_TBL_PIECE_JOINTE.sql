@@ -1,4 +1,4 @@
---CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
+CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE AS
 WITH t AS (
   SELECT
     pjd.annee_id                                                annee_id,

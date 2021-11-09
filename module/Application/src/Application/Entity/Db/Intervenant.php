@@ -276,6 +276,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      */
     protected $hasMiseEnPaiement = null;
 
+    /**
+     * @var \DateTime
+     */
+    protected $exportDate;
+
 
 
     /**
@@ -906,6 +911,16 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
+     * @return bool
+     */
+    public function getRibHorsSepa(): bool
+    {
+        return $this->ribHorsSepa;
+    }
+
+
+
+    /**
      * @param bool $ribHorsSepa
      *
      * @return Intervenant
@@ -1201,6 +1216,30 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function setValiditeFin(?\DateTime $validiteFin): Intervenant
     {
         $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getExportDate(): ?\DateTime
+    {
+        return $this->exportDate;
+    }
+
+
+
+    /**
+     * @param \DateTime $exportDate
+     *
+     * @return Intervenant
+     */
+    public function setExportDate(?\DateTime $exportDate): Intervenant
+    {
+        $this->exportDate = $exportDate;
 
         return $this;
     }

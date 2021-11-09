@@ -143,7 +143,7 @@ FROM (
         WHEN statut_source_nautorise = 1 THEN 'drop'
         
         -- Si on est sur un statut "Autres" et qu'il y a un autre statut du même type
-        WHEN types_identiques = 0 AND statut_source_autre = 1 THEN 'drop'
+        WHEN types_identiques = 1 AND statut_source_autre = 1 THEN 'drop'
 
         -- sinon on laisse passer
         ELSE 'insert'

@@ -9,6 +9,21 @@ if (file_exists($versionFile)) {
 return [
     'unicaen-app' => [
 
+        'proxies' => [
+            '10.14.128.39',
+            '10.14.128.100',
+            '10.14.128.100',
+            '10.14.128.101',
+            '10.14.128.137',
+        ],
+
+        'reverse-proxies' => [
+            '193.55.120.23',
+            '193.55.120.24',
+            '193.55.120.25',
+        ],
+
+        'masque-ip'              => '10.',
         /**
          * Informations concernant cette application
          */

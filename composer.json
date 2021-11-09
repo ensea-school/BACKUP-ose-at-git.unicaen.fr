@@ -15,7 +15,8 @@
         "unicaen/code"           : "5.0",
         "unicaen/import"         : "3.1.6",
         "unicaen/tbl"            : "4.1",
-        "unicaen/open-document"  : "3.0.2"
+        "unicaen/open-document"  : "3.0.2",
+        "unicaen/siham"          : "^1.0"
     },
     "autoload": {
         "psr-4": {

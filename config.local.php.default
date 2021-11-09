@@ -260,6 +260,13 @@ return [
         'dir'      => __DIR__ . '/data/fichiers',
     ],
 
+    /* Export RH */
+    'export-rh' => [
+        //définition du connecteur SI RH à utiliser pour le module export RH de OSE
+        'actif'      => true,
+        'connecteur' => 'siham',
+    ],
+
 
     /* Base de données Actul+ */
     'actul'    => [

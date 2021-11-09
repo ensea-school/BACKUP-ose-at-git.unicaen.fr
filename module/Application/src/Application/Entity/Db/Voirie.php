@@ -28,6 +28,11 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @var string|null
      */
+    protected $codeRh;
+
+    /**
+     * @var string|null
+     */
     protected $libelle;
 
 
@@ -74,6 +79,30 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     public function setCode(?string $code): Voirie
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodeRh(): ?string
+    {
+        return $this->codeRh;
+    }
+
+
+
+    /**
+     * @param string|null $codeRh
+     *
+     * @return Voirie
+     */
+    public function setCodeRh(?string $codeRh): Voirie
+    {
+        $this->code = $codeRh;
 
         return $this;
     }

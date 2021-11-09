@@ -174,6 +174,17 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'type'       => 'Text',
         ]);
 
+        $this->add([
+            'name'       => 'code_rh',
+            'options'    => [
+                'label' => "Code RH",
+
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Text',
+        ]);
+
         //Gestion des agréments de façon dynamique par rapport au contenu de la table type_agrement
         $qb            = $this->getServiceTypeAgrement()->finderByHistorique();
         $typesAgrement = $this->getServiceTypeAgrement()->getList($qb);
@@ -366,6 +377,9 @@ class StatutIntervenantSaisieForm extends AbstractForm
             ],
             'code'                   => [
                 'required' => true,
+            ],
+            'code_rh'                => [
+                'required' => false,
             ],
             'plafond-h-c'            => [
                 'required'   => true,

@@ -26,6 +26,7 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use ExportRh\Connecteur\Siham\SihamConnecteurAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use LogicException;
 use Application\Entity\Db\Intervenant;
@@ -188,9 +189,12 @@ class  IntervenantController extends AbstractController
         $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire);
 
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
+
         if (!$campagneSaisie->estOuverte()) {
+            
             $role = $this->getServiceContext()->getSelectedIdentityRole();
             if ($role->getIntervenant()) {
+
                 $this->flashMessenger()->addErrorMessage($campagneSaisie->getMessage($role));
             } else {
                 $this->flashMessenger()->addWarningMessage($campagneSaisie->getMessage($role));

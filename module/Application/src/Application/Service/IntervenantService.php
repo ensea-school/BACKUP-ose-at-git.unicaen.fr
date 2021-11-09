@@ -125,6 +125,20 @@ class IntervenantService extends AbstractEntityService
 
 
 
+    public function getByCodeRh(string $codeRh): ?Intervenant
+    {
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
+        $statutId    = null;
+        $structureId = $this->getServiceContext()->getStructure();
+        if ($structureId) $structureId = $structureId->getId();
+
+        $bones = $this->getBones(['CODE_RH' => $codeRh, 'ANNEE_ID' => $anneeId]);
+
+        return $this->bestIntervenantByBones($bones, $codeRh, $anneeId, null, null);
+    }
+
+
+
     /**
      *
      * @param string $sourceCode
@@ -583,6 +597,18 @@ class IntervenantService extends AbstractEntityService
         $this->save($intervenant);
 
         $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+
+        return $intervenant;
+    }
+
+
+
+    public function updateExportDate(Intervenant $intervenant): Intervenant
+    {
+        $date = new \DateTime();
+        $intervenant->setExportDate($date);
+        $this->getEntityManager()->persist($intervenant);
+        $this->getEntityManager()->flush();
 
         return $intervenant;
     }

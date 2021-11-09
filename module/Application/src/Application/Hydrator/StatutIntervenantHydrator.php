@@ -55,6 +55,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setTemAtv($data['TEM-ATV']);
         $object->setTemBiatss($data['TEM-BIATSS']);
         $object->setCode($data['code']);
+        $object->setCodeRh($data['code_rh']);
         $object->setPlafondHcHorsRemuFc(FloatFromString::run($data['plafond-h-h-c']));
         $object->setPlafondHcRemuFc(FloatFromString::run($data['plafond-h-c']));
         $object->setPlafondHcFiHorsEad(FloatFromString::run($data['plafond-hc-fi-hors-ead']));
@@ -70,7 +71,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setDossierEmployeur($data['dossier-employeur']);
         $object->setDossierEmailPerso($data['dossier-email-perso']);
         $object->setDossierTelPerso($data['dossier-tel-perso']);
-        
+
         if (!empty($data['id'])) {
             $champsAutres = [];
             /* Gestion des champs autres */
@@ -163,6 +164,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'TEM-BIATSS'                      => $object->getTemBiatss(),
             'type-intervenant'                => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
             'code'                            => $object->getCode(),
+            'code_rh'                         => $object->getCodeRh(),
             'plafond-h-h-c'                   => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
             'plafond-h-c'                     => StringFromFloat::run($object->getPlafondHcRemuFc()),
             'plafond-hc-fi-hors-ead'          => StringFromFloat::run($object->getPlafondHcFiHorsEad()),

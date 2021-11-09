@@ -6,6 +6,7 @@ return [
     'ADRESSE_NUMERO_COMPL'           => [
         'ID',
         'CODE',
+        'CODE_RH',
         'LIBELLE',
     ],
     'AFFECTATION'                    => [
@@ -769,6 +770,8 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'AFFECTATION_FIN',
+        'EXPORT_DATE',
     ],
     'INTERVENANT_DOSSIER'            => [
         'ID',
@@ -1218,6 +1221,7 @@ return [
         'MAXIMUM_HETD',
         'TYPE_INTERVENANT_ID',
         'CODE',
+        'CODE_RH',
         'HISTO_CREATION',
         'HISTO_CREATEUR_ID',
         'HISTO_MODIFICATION',
@@ -1814,6 +1818,7 @@ return [
     'VOIRIE'                         => [
         'ID',
         'CODE',
+        'CODE_RH',
         'LIBELLE',
         'SOURCE_ID',
         'SOURCE_CODE',

@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CODE_RH'    => [
+        'CODE_RH' => [
             'name'        => 'CODE_RH',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'ID'      => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
     ],

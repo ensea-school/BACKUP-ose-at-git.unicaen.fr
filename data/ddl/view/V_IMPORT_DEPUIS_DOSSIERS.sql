@@ -80,7 +80,7 @@ FROM
          JOIN statut_intervenant     si ON si.id = i.statut_id
          JOIN intervenant_dossier     d ON d.intervenant_id = i.id
                                        AND d.histo_destruction IS NULL
-  
+
          JOIN type_validation        tv ON tv.code = 'DONNEES_PERSO_PAR_COMP'
          JOIN validation              v ON v.intervenant_id = i.id
                                        AND v.type_validation_id = tv.id

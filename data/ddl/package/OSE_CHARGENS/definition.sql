@@ -1,4 +1,4 @@
-create or replace PACKAGE "OSE_CHARGENS" AS
+CREATE OR REPLACE PACKAGE "OSE_CHARGENS" AS
 
   PROCEDURE CALC_EFFECTIF( noeud_id NUMERIC, scenario_id NUMERIC, type_heures_id NUMERIC, etape_id NUMERIC);
   PROCEDURE CALC_SUB_EFFECTIF( noeud_id NUMERIC, scenario_id NUMERIC, type_heures_id NUMERIC, etape_id NUMERIC);

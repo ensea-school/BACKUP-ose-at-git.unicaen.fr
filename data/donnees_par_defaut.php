@@ -69771,10 +69771,6 @@ return [
             "ROLE_ID" => "administrateur",
         ],
         [
-            "PRIVILEGE_ID" => "unicaen-tbl-update-actuproc",
-            "ROLE_ID" => "administrateur",
-        ],
-        [
             "PRIVILEGE_ID" => "unicaen-tbl-actualisation",
             "ROLE_ID" => "administrateur",
         ],

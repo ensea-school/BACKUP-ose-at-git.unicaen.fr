@@ -194,22 +194,6 @@ return [
         ],
     ],
 
-    'console' => [
-        'router' => [
-            'routes' => [
-                'chargens-calcul-effectifs' => [
-                    'options' => [
-                        'route'    => 'chargens-calcul-effectifs',
-                        'defaults' => [
-                            'controller' => 'Application\Controller\Chargens',
-                            'action'     => 'calcul-effectifs',
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
-
     'navigation'   => [
         'default' => [
             'home' => [

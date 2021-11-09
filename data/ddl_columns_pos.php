@@ -1602,12 +1602,6 @@ return [
         'TABLE_NAME',
         'DATA_ID',
     ],
-    'TMP_SCENARIO_NOEUD_EFFECTIF'    => [
-        'SCENARIO_NOEUD_ID',
-        'TYPE_HEURES_ID',
-        'ETAPE_ID',
-        'EFFECTIF',
-    ],
     'TYPE_AGREMENT'                  => [
         'ID',
         'CODE',

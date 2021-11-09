@@ -33,9 +33,7 @@ $c->print('Vue matérialisée TBL_NOEUD ... ');
 $ca->ose->exec('BEGIN UNICAEN_IMPORT.REFRESH_MV(\'TBL_NOEUD\'); END;');
 $c->println('OK');
 
-$c->print('Calcul de tous les effectifs ... ');
-$ca->ose->exec('BEGIN OSE_CHARGENS.CALC_ALL_EFFECTIFS(); END;');
-$c->println('OK');
+$oa->run('chargens-calcul-effectifs', true);
 
 $c->print('Tableau de bord des charges ... ');
 $ca->ose->exec('BEGIN UNICAEN_TBL.CALCULER(\'chargens\'); END;');

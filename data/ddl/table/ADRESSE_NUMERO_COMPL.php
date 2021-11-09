@@ -21,6 +21,18 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
+        'CODE_RH'    => [
+            'name'        => 'CODE_RH',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 10,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 4,
+            'commentaire' => NULL,
+        ],
         'ID'      => [
             'name'        => 'ID',
             'type'        => 'int',

@@ -21,6 +21,18 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
+        'CODE_RH'                  => [
+            'name'        => 'CODE_RH',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 10,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 12,
+            'commentaire' => NULL,
+        ],
         'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',

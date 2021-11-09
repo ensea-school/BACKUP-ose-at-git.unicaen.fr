@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4d7f73605fcc0171019b55994d8d94c",
+    "content-hash": "18f8830a24bceaafb795349271d75ec5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2891,6 +2891,39 @@
             },
             "description": "Bibliothèque utile lorsqu'on utilise un base de données Oracle",
             "time": "2020-03-05T15:42:28+00:00"
+        },
+        {
+            "name": "unicaen/siham",
+            "version": "1.4",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
+                "reference": "ca056ea766128de913435f2920c43f9e5fea2e23"
+            },
+            "require": {
+                "zendframework/zend-mail": "^2.10",
+                "zendframework/zend-mime": "^2.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenSiham": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "Antony Le Courtes",
+                    "email": "antony.lecourtes@unicaen.fr"
+                }
+            ],
+            "description": "PHP library for SIHAM webservices",
+            "time": "2021-10-28T13:19:26+00:00"
         },
         {
             "name": "unicaen/tbl",

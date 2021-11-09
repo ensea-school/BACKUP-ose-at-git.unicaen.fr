@@ -140,6 +140,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';
+    const INTERVENANT_EXPORTER                                = 'intervenant-exporter';
     const INTERVENANT_SUPPRESSION                             = 'intervenant-suppression';
     const INTERVENANT_VISUALISATION_HISTORISES                = 'intervenant-visualisation-historises';
     const MISE_EN_PAIEMENT_DEMANDE                            = 'mise-en-paiement-demande';
@@ -225,5 +226,5 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const UNICAEN_TBL_UPDATE_ACTUPROC                         = 'unicaen-tbl-update-actuproc';
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
-
+    
 }

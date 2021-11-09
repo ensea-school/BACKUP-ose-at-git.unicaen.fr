@@ -20,6 +20,11 @@ class AdresseNumeroCompl
     /**
      * @var string
      */
+    protected $codeRh;
+
+    /**
+     * @var string
+     */
     protected $libelle;
 
 
@@ -40,6 +45,16 @@ class AdresseNumeroCompl
     public function getCode(): string
     {
         return $this->code;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCodeRh(): ?string
+    {
+        return $this->codeRh;
     }
 
 

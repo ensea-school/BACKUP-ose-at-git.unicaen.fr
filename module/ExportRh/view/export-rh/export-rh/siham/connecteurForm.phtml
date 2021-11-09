@@ -1,0 +1,51 @@
+<div class="panel panel-default">
+    <?php
+    if ($priseEnCharge) {
+        $libelle = "de la prise en charge";
+    } else {
+        $libelle = "du renouvellement";
+    }
+    ?>
+
+    <div class="panel-heading">Configuration <?= $libelle ?> dans <?= $nameConnecteur; ?></div>
+    <div class="panel-body">
+        <!-- Année universitaire de prise en charge -->
+        <input type="hidden" name="connecteurForm[anneeUniversitaire]" value="<?= $intervenant->getAnnee()->getId() ?>"/>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Paramètres</th>
+                <th>Choix</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                <td><?= $this->formLabel($connecteurFieldset->get('emploi')) ?> :</td>
+                <td><?= $this->formSelect($connecteurFieldset->get('emploi')); ?></td>
+            </tr>
+
+            <tr>
+                <td><?= $this->formLabel($connecteurFieldset->get('affectation')) ?> :</td>
+                <td><?= $this->formSelect($connecteurFieldset->get('affectation')); ?></td>
+            </tr>
+            <tr>
+                <td><?= $this->formLabel($connecteurFieldset->get('position')) ?> :</td>
+                <td><?= $this->formSelect($connecteurFieldset->get('position')); ?></td>
+            </tr>
+            <tr>
+                <td><?= $this->formLabel($connecteurFieldset->get('statut')) ?> :</td>
+                <td><?= $this->formSelect($connecteurFieldset->get('statut')); ?></td>
+            </tr>
+            <tr>
+                <td><?= $this->formLabel($connecteurFieldset->get('modaliteService')) ?> :</td>
+                <td><?= $this->formSelect($connecteurFieldset->get('modaliteService')); ?></td>
+            </tr>
+
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

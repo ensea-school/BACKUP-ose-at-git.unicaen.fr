@@ -160,6 +160,7 @@ class  IntervenantController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Service::class,
             \Application\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\CheminPedagogique::class,
             \Application\Entity\Db\ServiceReferentiel::class,
             \Application\Entity\Db\VolumeHoraireReferentiel::class,
             \Application\Entity\Db\Validation::class,
@@ -191,7 +192,7 @@ class  IntervenantController extends AbstractController
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
 
         if (!$campagneSaisie->estOuverte()) {
-            
+
             $role = $this->getServiceContext()->getSelectedIdentityRole();
             if ($role->getIntervenant()) {
 

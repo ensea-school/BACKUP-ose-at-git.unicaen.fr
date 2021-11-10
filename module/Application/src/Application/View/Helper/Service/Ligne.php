@@ -120,7 +120,11 @@ class Ligne extends AbstractViewHelper
                 $out .= '<td>' . $this->renderStructure($element ? $element->getStructure() : null) . "</td>\n";
             }
             if ($liste->getColumnVisibility('formation')) {
-                $out .= '<td>' . $this->renderEtape($element ? $element->getEtape() : null) . "</td>\n";
+                $out .= '<td>';
+                if ($element && $element->getCheminPedagogique()->count() > 1) {
+                    $out .= '<small class="badge" style="font-size:8pt" title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement mutualisé</small><br />';
+                }
+                $out .= $this->renderEtape($element ? $element->getEtape() : null) . "</td>\n";
             }
             if ($liste->getColumnVisibility('periode')) {
                 $out .= '<td style="text-align:center">' . $this->renderPeriode($element ? $element->getPeriode() : null) . "</td>\n";

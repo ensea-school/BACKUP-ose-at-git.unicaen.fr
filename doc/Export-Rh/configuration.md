@@ -20,7 +20,7 @@ Pour utiliser le module ExportRh Siham vous devez ajouter dans le fichier de con
     ],
 ```
 
-L'utilisation du connecteur SIHAM du module ExportRh nécessite aussi l'ajout d'un fichier de configration spécifique à SIHAM dans le dossier à la racine /config/autoload/unicaen-siham.gloabl.php
+L'utilisation du connecteur SIHAM du module ExportRh nécessite aussi l'ajout d'un fichier de configration spécifique à SIHAM dans le dossier à la racine /config/autoload/unicaen-siham.local.php
 
 ```php
 <?php

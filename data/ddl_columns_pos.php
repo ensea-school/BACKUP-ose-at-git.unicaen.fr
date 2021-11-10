@@ -1871,6 +1871,7 @@ return [
     'VOIRIE'                         => [
         'ID',
         'CODE',
+        'CODE_RH',
         'LIBELLE',
         'SOURCE_ID',
         'SOURCE_CODE',
@@ -1880,7 +1881,6 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
-        'CODE_RH',
     ],
     'VOLUME_HORAIRE'                 => [
         'ID',

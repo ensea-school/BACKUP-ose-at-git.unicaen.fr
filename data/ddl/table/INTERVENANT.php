@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 45,
+            'position'    => 58,
             'commentaire' => NULL,
         ],
         'ANNEE_ID'                 => [

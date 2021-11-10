@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Indicateur;
+namespace Indicateur\Entity\Db\Indicateur;
 
 class Indicateur380 extends AbstractIndicateur
 {

@@ -217,6 +217,12 @@ return [
             'LIBELLE'      => 'Université de Caen (version 2021)',
             'PACKAGE_NAME' => 'FORMULE_UNICAEN',
         ],
+        20 => [
+            'LIBELLE'           => 'Université Paris-Est Créteil',
+            'PACKAGE_NAME'      => 'FORMULE_UPEC',
+            'I_PARAM_1_LIBELLE' => 'EC/Associé/Docteur',
+            'I_PARAM_2_LIBELLE' => 'Lecteur/ATER',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

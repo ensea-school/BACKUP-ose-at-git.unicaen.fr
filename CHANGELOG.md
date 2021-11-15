@@ -15,6 +15,7 @@ Objectif : Plafonds personnalisables
 
 * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
 * Depuis la fiche de service de l'intervenant, vous pouvez maintenant désactiver la possibilité de reporter le prévisionnal n-1 vers l'année en cours ou du prévisionnel vers le réalisé
+* Dans la fiche de service, les enseignements mutualisés sont précisés #40402
 
 ## Corrections de bugs
 
@@ -43,6 +44,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Synchronisation de l'email pro de la fiche intervenant avec le dossier de l'intervenant en cas de mise à jour (#39346)
 * Paiements : Pour du référentiel, la répartition AA/AC tient maintenant compte du ratio configuré dans les paramètres généraux (#39695).
 * Nouvelles optimisations du modules CHARGES, au niveau des seuils et des calculs d'effectifs
+* formule de calcul de l'Université Paris-Est Créteil
 
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement

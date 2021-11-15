@@ -44,7 +44,10 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Synchronisation de l'email pro de la fiche intervenant avec le dossier de l'intervenant en cas de mise à jour (#39346)
 * Paiements : Pour du référentiel, la répartition AA/AC tient maintenant compte du ratio configuré dans les paramètres généraux (#39695).
 * Nouvelles optimisations du modules CHARGES, au niveau des seuils et des calculs d'effectifs
-* formule de calcul de l'Université Paris-Est Créteil
+* Formule de calcul de l'Université Paris-Est Créteil
+* Nouvelle formule pour l'université d'Artois qui remplace la précédente (#40425)
+
+
 
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
@@ -57,6 +60,8 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 
 * [Connecteur en import avec Actul+](doc/Connecteurs-Import/Actul/Connecteur.md)
 * Outil différentiel d'export des charges d'enseignement
+
+
 
 # OSE 15.7 (14/09/2021)
 

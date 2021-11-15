@@ -1,8 +1,6 @@
-# Versions stables
+# Version stable
 
-[OSE 16.0](#ose-16-14092021)
-
-[OSE 15.7](#ose-157-14092021)
+[OSE 17.0](#ose-17-18112021)
 
 
 
@@ -21,7 +19,7 @@ Objectif : Plafonds personnalisables
 
 
 
-# OSE 17 (à venir)
+# OSE 17 (18/11/2021)
 Objectif : Connecteur Export OSE => Logiciel RH
 
 ## Corrections de bugs
@@ -29,6 +27,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Au niveau du connecteur Actul+, les formations fermées étaient ignorées, elles sont également synchronisées
 * La suppression d'un statut intervenant n'était plus possible (#39548)
 * Il était impossible de modifier les règles de validation des services via le formulaire de l'administration (#39194)
+* Amélioration ergonomique du champ de saisie sur recherche (#40618)
 
 ## Nouveautés
 

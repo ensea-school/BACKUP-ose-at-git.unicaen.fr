@@ -22,7 +22,7 @@ class ConfigFactory
                 'driver' => [
                     'orm_default_driver' => [
                         'paths' => [
-                            $dir . '/src/' . $namespace . '/Entity/Db/Mapping',
+                            $dir . '/src/Entity/Db/Mapping',
                         ],
                     ],
                     'orm_default'        => [
@@ -121,7 +121,7 @@ class ConfigFactory
             ],
             'Zend\Loader\StandardAutoloader' => [
                 'namespaces' => [
-                    $namespace => $dir . '/src/' . $namespace,
+                    $namespace => $dir . '/src',
                 ],
             ],
         ];

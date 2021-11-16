@@ -15,7 +15,6 @@ $actions    = [
     "formule-calcul"            => "Calcul de toutes les heures complémentaires à l'aide de la formule",
     "creer-utilisateur"         => "Création d'un nouvel utilisateur de OSE. Possibilité de créer une fiche intervenant dans la foulée",
     "changement-mot-de-passe"   => "Changement de mot de passe (pour un utilisateur local uniquement)",
-    "maj-public-links"          => "Mise à jour des liens vers les répertoires publics des dépendances",
     "maj-taux-mixite"           => "Met à jour les taux de mixité",
     "clear-cache"               => "Vidage du cache de l'application",
     "test-bdd"                  => "Test d'accès à la base de données",

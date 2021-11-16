@@ -76,10 +76,6 @@ Deux informations vous seront demandées :
 
 Valable uniquement pour des utilisateurs non connectés au LDAP!!
 
-### ```maj-public-links``` : Mise à jour des liens vers les répertoires publics des dépendances
-
-Pas de paramètre pour cette commande.
-
 ### ```clear-cache``` : Vidage du cache de l'application
 
 Pas de paramètre pour cette commande.

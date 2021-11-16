@@ -59,10 +59,6 @@ $c->passthru([
 ]);
 
 
-// Mise à jour des liens vers les répertoires publics des dépendances
-$oa->run('maj-public-links', true);
-
-
 // Conclusion
 $oa->writeVersion($version);
 $c->println("\nMise à jour des fichiers OK : la version installée est désormais la " . $version, $c::COLOR_LIGHT_GREEN);

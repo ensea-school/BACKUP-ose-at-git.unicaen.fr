@@ -75,9 +75,6 @@ if ($composerExists) {
     $c->passthru("cd $osedir;php composer.phar install");
 }
 
-// Mise à jour des liens vers les répertoires publics des dépendances
-$oa->run('maj-public-links');
-
 if (!file_exists($osedir . 'config.local.php')) {
     $c->exec([
         "cd $osedir",

@@ -104,8 +104,8 @@ $(function ()
 
     /* DateTime Picker */
     WidgetInitializer.add('bootstrap-datetimepicker', 'bootstrapDatetimepicker', function () {
-        WidgetInitializer.includeJs(Url('vendor/unicaen/app/js/bootstrap-datetimepicker.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/unicaen/app/css/bootstrap-datetimepicker.min.css'));
+        WidgetInitializer.includeJs(Url('vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css'));
     });
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)

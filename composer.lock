@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11e10d17206bb386b17e8645e355f2de",
+    "content-hash": "9a2b75153f247122e41edb1a7d104e4d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3404,11 +3404,11 @@
         },
         {
             "name": "unicaen/import",
-            "version": "3.1.6",
+            "version": "3.1.7",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "e645790fc9ba9f512dc1affff02c23c5638bd3e1"
+                "reference": "54f9f1c2e61c0533474fd560a63cc7b114f44750"
             },
             "require": {
                 "unicaen/auth": "dev-zf-3.x || ^3.0"
@@ -3427,7 +3427,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2021-10-05T10:02:40+00:00"
+            "time": "2021-11-16T14:12:12+00:00"
         },
         {
             "name": "unicaen/open-document",

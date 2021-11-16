@@ -16,6 +16,7 @@ return [
             // Code unique de la source à injecter (null pour désactiver le mécanisme).
             'source_code' => 'OSE',
         ],
+        'js_ace_url'                => '/vendor/ace-builds-master/src-min/ace.js',
     ],
 
     'navigation' => [

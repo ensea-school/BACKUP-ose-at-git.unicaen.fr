@@ -185,7 +185,7 @@ A adapter à vos besoins.
 	php_value memory_limit 1024M
 
 	<Directory /var/www/ose/public>
-		Options Indexes FollowSymLinks MultiViews
+		Options Indexes MultiViews
 		AllowOverride None
 	</Directory>
 </VirtualHost>
@@ -198,7 +198,7 @@ A adapter à vos besoins.
 Alias /ose			                /var/www/ose/public
 
 <Directory /var/www/ose/public>
-	Options Indexes FollowSymLinks MultiViews
+	Options Indexes MultiViews
 	AllowOverride All
 	Order allow,deny
 	allow from all

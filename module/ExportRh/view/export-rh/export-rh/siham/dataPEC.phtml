@@ -55,10 +55,9 @@
                     $adresse = (!empty($intervenantDossier->getAdresseLieuDit())) ? $intervenantDossier->getAdresseLieuDit() . '<br/>' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseNumero())) ? $intervenantDossier->getAdresseNumero() . ' ' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseNumeroCompl())) ? $intervenantDossier->getAdresseNumeroCompl() . ' ' : '';
-                    $adresse .= (!empty($intervenantDossier->getAdresseVoirie())) ? strtoupper($intervenantDossier->getAdresseVoirie()) . ' ' : '';
-                    $adresse .= (!empty($intervenantDossier->getAdresseVoie())) ? $intervenantDossier->getAdresseVoie() . ' ' : '';
-                    $adresse .= (!empty($intervenantDossier->getAdressePrecisions())) ? '<br/>' . $intervenantDossier->getAdressePrecisions() . ' ' : '';
-                    $adresse .= '<br/>';
+                    $adresse .= (!empty($intervenantDossier->getAdresseVoirie()) && !empty(trim($intervenantDossier->getAdresseVoie()))) ? strtoupper($intervenantDossier->getAdresseVoirie()) . ' ' : '';
+                    $adresse .= (!empty($intervenantDossier->getAdresseVoie())) ? $intervenantDossier->getAdresseVoie() . '<br/>' : '';
+                    $adresse .= (!empty($intervenantDossier->getAdressePrecisions())) ? $intervenantDossier->getAdressePrecisions() . '<br/>' : '';
                     $adresse .= $intervenantDossier->getAdresseCodePostal() . ' ' . $intervenantDossier->getAdresseCommune();
                     echo $adresse;
                     ?>

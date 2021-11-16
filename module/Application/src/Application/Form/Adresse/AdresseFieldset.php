@@ -115,12 +115,14 @@ class AdresseFieldset extends AbstractFieldset
         /**
          * voirie
          */
+        $qb      = $this->getServiceVoirie()->finderByHistorique();
+        $voiries = \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList($qb));
         $this->add([
             'name'       => 'voirie',
             'options'    => [
                 'label'         => 'Voirie',
                 'empty_option'  => ' ',
-                'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList()),
+                'value_options' => $voiries,
             ],
             'attributes' => [
                 'class'            => 'selectpicker dossierElement',

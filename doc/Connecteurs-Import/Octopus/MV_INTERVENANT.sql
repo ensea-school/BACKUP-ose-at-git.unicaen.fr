@@ -258,8 +258,8 @@ FROM i
          JOIN induni
               ON i.code = induni.c_individu_chaine --AND induni.c_source IN ('HARP', 'OCTO', 'SIHAM'))
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
-         LEFT JOIN octo.v_individu_insee@octoprod vindinsee ON ind.c_individu_chaine = vindinsee.individu_id
-         LEFT JOIN octo.v_individu_iban@octoprod vindiban ON vindiban.individu_id = ind.c_individu_chaine
+         LEFT JOIN octo.v_via_individu_insee@octoprod vindinsee ON ind.c_individu_chaine = vindinsee.individu_id
+         LEFT JOIN octo.v_via_individu_iban@octoprod vindiban ON vindiban.individu_id = ind.c_individu_chaine
          LEFT JOIN iban_dossier ibandossier ON ibandossier.code = ind.c_individu_chaine
          LEFT JOIN octo.v_individu@octoprod vind ON vind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu

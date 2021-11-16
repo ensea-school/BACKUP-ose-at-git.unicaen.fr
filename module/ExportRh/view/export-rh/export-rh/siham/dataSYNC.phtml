@@ -20,13 +20,12 @@
                 <td>
                     <?php
                     $adresse = '';
-                    $adresse = (!empty($intervenantDossier->getAdresseLieuDit())) ? $intervenantDossier->getAdresseLieuDit() . '<br>' : '';
+                    $adresse = (!empty($intervenantDossier->getAdresseLieuDit())) ? $intervenantDossier->getAdresseLieuDit() . '</br>' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseNumero())) ? $intervenantDossier->getAdresseNumero() . ' ' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseNumeroCompl())) ? $intervenantDossier->getAdresseNumeroCompl() . ' ' : '';
                     $adresse .= (!empty($intervenantDossier->getAdresseVoirie())) ? strtoupper($intervenantDossier->getAdresseVoirie()) . ' ' : '';
-                    $adresse .= (!empty($intervenantDossier->getAdresseVoie())) ? $intervenantDossier->getAdresseVoie() . ' ' : '';
-                    $adresse .= (!empty($intervenantDossier->getAdressePrecisions())) ? '<br/>' . $intervenantDossier->getAdressePrecisions() . ' ' : '';
-                    $adresse .= '<br/>';
+                    $adresse .= (!empty($intervenantDossier->getAdresseVoie()) && !empty(trim($intervenantDossier->getAdresseVoie()))) ? $intervenantDossier->getAdresseVoie() . '</br>' : '';
+                    $adresse .= (!empty($intervenantDossier->getAdressePrecisions())) ? $intervenantDossier->getAdressePrecisions() . '<br/>' : '';
                     $adresse .= $intervenantDossier->getAdresseCodePostal() . ' ' . $intervenantDossier->getAdresseCommune();
                     echo $adresse;
                     ?>
@@ -37,10 +36,9 @@
                         $adresse = '';
                         $adresse .= (!empty(trim($intervenantRh->getAdresseNumero()))) ? $intervenantRh->getAdresseNumero() . ' ' : '';
                         $adresse .= (!empty(trim($intervenantRh->getAdresseNumeroCompl()))) ? $intervenantRh->getAdresseNumeroCompl() . ' ' : '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdresseVoirie()))) ? strtoupper($intervenantRh->getAdresseVoirie()) . ' ' : '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdresseVoie()))) ? $intervenantRh->getAdresseVoie() . ' ' : '';
-                        $adresse .= (!empty(trim($intervenantRh->getAdressePrecisions()))) ? '<br/>' . $intervenantRh->getAdressePrecisions() . ' ' : '';
-                        $adresse .= '<br/>';
+                        $adresse .= (!empty(trim($intervenantRh->getAdresseVoirie())) && !empty(trim($intervenantRh->getAdresseVoie()))) ? strtoupper($intervenantRh->getAdresseVoirie()) . ' ' : '';
+                        $adresse .= (!empty(trim($intervenantRh->getAdresseVoie()))) ? $intervenantRh->getAdresseVoie() . '<br/>' : '';
+                        $adresse .= (!empty(trim($intervenantRh->getAdressePrecisions()))) ? $intervenantRh->getAdressePrecisions() . '<br/>' : '';
                         $adresse .= $intervenantRh->getAdresseCodePostal() . ' ' . $intervenantRh->getAdresseCommune();
                         echo $adresse;
                     }

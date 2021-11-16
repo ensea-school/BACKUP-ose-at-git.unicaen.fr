@@ -94,4 +94,10 @@ return [
             'do_not_send'       => AppConfig::get('mail', 'envoiDesactive'),
         ],
     ],
+
+    'view_helpers' => [
+        'invokables' => [
+            'formSearchAndSelect' => 'Application\Form\View\Helper\FormSearchAndSelect',
+        ],
+    ],
 ];

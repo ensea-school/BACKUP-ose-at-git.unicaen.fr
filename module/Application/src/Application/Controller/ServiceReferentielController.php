@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
-use Application\Processus\Traits\PlafondProcessusAwareTrait;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Processus\Traits\ValidationReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;

@@ -153,11 +153,11 @@ where rang = 1
 
         $params["limit"] = $filters["limit"];
 
-        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
 
 //        var_dump($sql, $params);die;
 
-        return $result->fetchAll();
+        return $result;
     }
 
 
@@ -447,7 +447,7 @@ where rang = 1
                 RETURN;
               END;
             END;";
-            $c->exec($plsql);
+            $c->executeStatement($plsql);
         }
     }
 

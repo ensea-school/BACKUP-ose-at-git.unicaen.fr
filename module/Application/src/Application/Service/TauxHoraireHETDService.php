@@ -35,7 +35,8 @@ class TauxHoraireHETDService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'thh';
     }
 
@@ -47,7 +48,7 @@ class TauxHoraireHETDService extends AbstractEntityService
      * @return TauxHoraireHETD
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getByDate( \DateTime $date = null )
+    public function getByDate(\DateTime $date = null)
     {
         if (!$date) $date = new \DateTime();
 
@@ -60,11 +61,10 @@ class TauxHoraireHETDService extends AbstractEntityService
         ORDER BY histo_creation DESC
         ";
 
-        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['date' => $date]);
-        $id = (int)$res[0]['ID'];
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['date' => $date]);
+        $id  = (int)$res[0]['ID'];
 
         return $this->getEntityManager()->getRepository(TauxHoraireHETD::class)->find($id);
-
     }
 
 }

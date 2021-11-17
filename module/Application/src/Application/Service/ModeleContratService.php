@@ -202,7 +202,7 @@ class ModeleContratService extends AbstractEntityService
 
         $blocs = $modele->getBlocs();
         foreach ($blocs as $bname => $bquery) {
-            $bdata = $connection->fetchAll($bquery, $params);
+            $bdata = $connection->fetchAllAssociative($bquery, $params);
             $bkey  = $bname . '@table:table-row';
 
             $data[0][$bkey] = $bdata;
@@ -214,7 +214,7 @@ class ModeleContratService extends AbstractEntityService
             && !isset($data[0]['serviceHeures@table:table-row'])
         ) {
             $data[0]['serviceCode@table:table-row'] =
-                $connection->fetchAll('SELECT * FROM V_CONTRAT_SERVICES WHERE CONTRAT_ID = :contrat', $params);
+                $connection->fetchAllAssociative('SELECT * FROM V_CONTRAT_SERVICES WHERE CONTRAT_ID = :contrat', $params);
         }
 
         if (isset($mainData['exemplaire1']) && $mainData['exemplaire1'] && ('0' !== $mainData['exemplaire1'])) {

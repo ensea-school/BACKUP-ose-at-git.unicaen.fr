@@ -61,7 +61,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
     public function calculer(FormuleTestIntervenant $formuleTestIntervenant): FormuleTestIntervenantService
     {
         $sql = "BEGIN ose_formule.test(" . ((int)$formuleTestIntervenant->getId()) . "); END;";
-        $this->getEntityManager()->getConnection()->exec($sql);
+        $this->getEntityManager()->getConnection()->executeStatement($sql);
 
         $this->getEntityManager()->refresh($formuleTestIntervenant);
         foreach ($formuleTestIntervenant->getVolumeHoraireTest() as $vhe) {
@@ -80,7 +80,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
     public function calculerTout(): FormuleTestIntervenantService
     {
         $sql = "BEGIN ose_formule.test_tout; END;";
-        $this->getEntityManager()->getConnection()->exec($sql);
+        $this->getEntityManager()->getConnection()->executeStatement($sql);
 
         return $this;
     }
@@ -96,14 +96,14 @@ class FormuleTestIntervenantService extends AbstractEntityService
         $volumeHoraireQuery = trim($conn->fetchColumn('SELECT ' . $formule->getPackageName() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL', [], 0));
 
         $sql = "BEGIN ose_formule.intervenant.id := " . $intervenant->getId() . "; END;";
-        $conn->exec($sql);
+        $conn->executeStatement($sql);
 
         $params = ['intervenant' => $intervenant->getId()];
 
-        $idata                       = $conn->fetchAll('SELECT * FROM (' . $intervenantQuery . ') q WHERE intervenant_id = :intervenant', $params)[0];
+        $idata                       = $conn->fetchAllAssociative('SELECT * FROM (' . $intervenantQuery . ') q WHERE intervenant_id = :intervenant', $params)[0];
         $params['typeVolumeHoraire'] = $typeVolumeHoraire->getId();
         $params['etatVolumeHoraire'] = $etatVolumeHoraire->getId();
-        $vhdata                      = $conn->fetchAll('SELECT * FROM (' . $volumeHoraireQuery . ') q WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND etat_volume_horaire_id >= :etatVolumeHoraire', $params);
+        $vhdata                      = $conn->fetchAllAssociative('SELECT * FROM (' . $volumeHoraireQuery . ') q WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND etat_volume_horaire_id >= :etatVolumeHoraire', $params);
 
         $fti = new FormuleTestIntervenant();
         $fti->setLibelle((string)$intervenant);

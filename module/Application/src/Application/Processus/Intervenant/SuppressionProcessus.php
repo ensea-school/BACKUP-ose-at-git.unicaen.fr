@@ -475,7 +475,7 @@ WHERE
                 }
                 $idList = implode(',', $ids);
                 $sql    = str_replace(':id', $idList, $sql);
-                $ds     = $bdd->fetchAll($sql);
+                $ds     = $bdd->fetchAllAssociative($sql);
                 foreach ($ds as $d) {
                     if (!isset($this->data[$dest])) {
                         $this->data[$dest] = [];
@@ -725,7 +725,7 @@ WHERE
         $data = &$this->data[$table][$id];
         try {
             foreach ($data['DELETE_QUERIES'] as $sql) {
-                $this->getEntityManager()->getConnection()->exec($sql);
+                $this->getEntityManager()->getConnection()->executeStatement($sql);
             }
             unset($this->data[$table][$id]);
             $res = true;

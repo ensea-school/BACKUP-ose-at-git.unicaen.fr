@@ -452,35 +452,6 @@ class ContextService extends AbstractService
 
 
     /**
-     * Détermine si l'application était opérationnelle l'année spécifiée.
-     *
-     * On considère que s'il existe des intervenants pour l'année spécifiée, alors
-     * l'application était opérationnelle.
-     *
-     * @param Annee $annee
-     *
-     * @return boolean
-     */
-    public function applicationExists(Annee $annee)
-    {
-        $sql = "
-        SELECT
-          'OK' ok
-        FROM
-          intervenant i 
-        WHERE
-          i.annee_id = " . ((int)$annee->getId()) . "
-          AND i.histo_destruction IS NULL
-          AND rownum = 1
-        ";
-        $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
-
-        return count($res) == 1;
-    }
-
-
-
-    /**
      * @return bool
      */
     public function isInInit(): bool

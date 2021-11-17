@@ -127,8 +127,8 @@ class ScenarioService extends AbstractEntityService
             scenario_id = $sid AND HISTO_DESTRUCTION IS NULL
         ";
 
-        $conn->exec(sprintf($sql, 'scenario_noeud'));
-        $conn->exec(sprintf($sql, 'scenario_lien'));
+        $conn->executeStatement(sprintf($sql, 'scenario_noeud'));
+        $conn->executeStatement(sprintf($sql, 'scenario_lien'));
 
         return parent::delete($entity, $softDelete);
     }

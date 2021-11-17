@@ -90,7 +90,7 @@ class AgrementService extends AbstractEntityService
             $params['structure'] = $structure->getId();
         }
 
-        $data = $this->getEntityManager()->getConnection()->fetchAll($sql, $params);
+        $data = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         $res  = [
             'head' => [
                 'annee'                        => 'Année',

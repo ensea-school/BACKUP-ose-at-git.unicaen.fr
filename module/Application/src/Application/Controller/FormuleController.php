@@ -163,7 +163,7 @@ class FormuleController extends AbstractController
 
     public function calculerToutAction()
     {
-        $this->em()->getConnection()->exec('BEGIN OSE_FORMULE.CALCULER_TOUT; END;');
+        $this->em()->getConnection()->executeStatement('BEGIN OSE_FORMULE.CALCULER_TOUT; END;');
     }
 
 }

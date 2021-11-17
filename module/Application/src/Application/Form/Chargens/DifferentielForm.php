@@ -113,7 +113,7 @@ class DifferentielForm extends AbstractForm
           annee_id, type DESC, scenario
         ";
 
-        $ss = $this->getServiceContext()->getEntityManager()->getConnection()->fetchAll($sql, $params);
+        $ss = $this->getServiceContext()->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         foreach ($ss as $s) {
             if (!isset($scenarios[(int)$s['ANNEE_ID']])) {
                 $scenarios[(int)$s['ANNEE_ID']] = [

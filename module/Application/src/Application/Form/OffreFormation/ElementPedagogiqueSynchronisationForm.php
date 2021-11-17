@@ -61,7 +61,7 @@ class ElementPedagogiqueSynchronisationForm extends AbstractForm implements Enti
             'annee'     => $this->getServiceContext()->getAnnee()->getId(),
             'structure' => $this->getStructure()->getId(),
         ];
-        $data     = $this->getEntityManager()->getConnection()->fetchAll($sql, $params);
+        $data     = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         foreach ($data as $d) {
             $elements[$d['CODE']] = $d['CODE'] . ' : ' . $d['LIBELLE'];
         }

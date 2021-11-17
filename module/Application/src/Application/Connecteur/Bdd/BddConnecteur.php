@@ -4,7 +4,8 @@ namespace Application\Connecteur\Bdd;
 
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
-class BddConnecteur{
+class BddConnecteur
+{
     use EntityManagerAwareTrait;
 
     /**
@@ -13,16 +14,17 @@ class BddConnecteur{
      *
      * @return array
      */
-    public function fetch($sql, $params = [], $key=null)
+    public function fetch($sql, $params = [], $key = null)
     {
-        $result = $this->getEntityManager()->getConnection()->fetchAll($sql, $this->prepareParams($params));
-        if (null === $key){
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $this->prepareParams($params));
+        if (null === $key) {
             return $result;
-        }else{
+        } else {
             $res = [];
-            foreach( $result as $d ){
+            foreach ($result as $d) {
                 $res[$d[$key]] = $d;
             }
+
             return $res;
         }
     }
@@ -35,27 +37,28 @@ class BddConnecteur{
      *
      * @return array|mixed
      */
-    public function fetchOne($sql, $params = [], $field=null, $type=null)
+    public function fetchOne($sql, $params = [], $field = null, $type = null)
     {
         $res = $this->fetch($sql, $params);
         if ($res) {
-            if ($field){
-                if (isset($res[0][$field])){
+            if ($field) {
+                if (isset($res[0][$field])) {
                     $res = $res[0][$field];
-                    if ($res && $type){
-                        settype($res,$type);
+                    if ($res && $type) {
+                        settype($res, $type);
                     }
+
                     return $res;
-                }else{
+                } else {
                     return null;
                 }
-            }else{
+            } else {
                 return $res[0];
             }
         } else {
-            if ($field){
+            if ($field) {
                 return null;
-            }else{
+            } else {
                 return [];
             }
         }
@@ -69,7 +72,7 @@ class BddConnecteur{
      *
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function exec( $sql, $params=[] )
+    public function exec($sql, $params = [])
     {
         return $this->getEntityManager()->getConnection()->executeQuery($sql, $this->prepareParams($params));
     }
@@ -84,7 +87,7 @@ class BddConnecteur{
      */
     public function execPlsql($plsql, $params = [])
     {
-        return $this->exec( 'BEGIN '.$plsql.' END;', $params );
+        return $this->exec('BEGIN ' . $plsql . ' END;', $params);
     }
 
 
@@ -96,7 +99,7 @@ class BddConnecteur{
      */
     public function sequenceNextVal($seqName)
     {
-        return (int)$this->fetchOne('SELECT '.$seqName.'.NEXTVAL val FROM DUAL', [], 'VAL');
+        return (int)$this->fetchOne('SELECT ' . $seqName . '.NEXTVAL val FROM DUAL', [], 'VAL');
     }
 
 
@@ -109,8 +112,8 @@ class BddConnecteur{
     private function prepareParams($params = [])
     {
         if (null == $params) $params = [];
-        foreach( $params as $n => $v){
-            if (is_object($v) && method_exists($v, 'getId')){
+        foreach ($params as $n => $v) {
+            if (is_object($v) && method_exists($v, 'getId')) {
                 $params[$n] = $v->getId();
             }
         }

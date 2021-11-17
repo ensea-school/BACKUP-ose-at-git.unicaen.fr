@@ -213,8 +213,7 @@ class ReconductionProcessus extends AbstractProcessus
           AND ETAPE_CODE IN (?)';
 
         $connection    = $this->getEntityManager()->getConnection();
-        $stmt          = $connection->executeQuery($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
-        $ccepN         = $stmt->fetchAll();
+        $ccepN         = $connection->fetchAssociative($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
         $nbCCReconduit = 0;
         foreach ($ccepN as $key => $value) {
             //Récupération de la dernière incrémentation ID CCEP
@@ -252,8 +251,7 @@ class ReconductionProcessus extends AbstractProcessus
             AND ETAPE_CODE IN (?)';
 
         $connection   = $this->getEntityManager()->getConnection();
-        $stmt         = $connection->executeQuery($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
-        $mepN         = $stmt->fetchAll();
+        $mepN         = $connection->fetchAssociative($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
         $nbMReconduit = 0;
 
 

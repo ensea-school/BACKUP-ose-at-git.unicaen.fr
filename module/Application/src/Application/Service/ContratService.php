@@ -141,7 +141,7 @@ class ContratService extends AbstractEntityService
           c.histo_destruction IS NULL AND c.intervenant_id = :intervenant
         ";
 
-        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['intervenant' => $intervenant->getId()]);
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
         if (isset($res[0]['NUMERO_AVENANT'])) {
             $numeroAvenant = (int)$res[0]['NUMERO_AVENANT'];
         } else {

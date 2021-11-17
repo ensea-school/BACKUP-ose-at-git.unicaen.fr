@@ -435,7 +435,7 @@ class ChargensController extends AbstractController
             $sql                 .= ' AND structure_id = :structure';
             $params['structure'] = $structure->getId();
         }
-        $data = $this->em()->getConnection()->fetchAll($sql, $params);
+        $data = $this->em()->getConnection()->fetchAllAssociative($sql, $params);
 
         $csvModel = new CsvModel();
         $csvModel->setHeader([

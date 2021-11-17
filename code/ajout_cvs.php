@@ -142,7 +142,7 @@ foreach ($intervenants as $code => $interv) {
         $container->get(FichierService::class)->save($fichier, 'bdd');
 
         $sql = "INSERT INTO piece_jointe_fichier(piece_jointe_id,fichier_id) values (" . $pj->getId() . "," . $fichier->getId() . ")";
-        $si->getEntityManager()->getConnection()->exec($sql);
+        $si->getEntityManager()->getConnection()->executeStatement($sql);
 
         // Validation
         if (!($pj->getValidation() && $pj->getValidation()->estNonHistorise())) {

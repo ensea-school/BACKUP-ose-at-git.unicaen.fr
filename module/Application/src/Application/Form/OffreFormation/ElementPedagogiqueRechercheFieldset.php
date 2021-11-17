@@ -13,9 +13,6 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Zend\Hydrator\HydratorInterface;
 
 
-
-
-
 /**
  * Description of ElementPedagogiqueRechercheFieldset
  *
@@ -54,7 +51,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
     public function init()
     {
         $hydrator = new ElementPedagogiqueRechercheHydrator;
-        $hydrator->setServiceElementPedagogique( $this->getServiceElementPedagogique() );
+        $hydrator->setServiceElementPedagogique($this->getServiceElementPedagogique());
 
         $this->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(ElementPedagogique::class);
@@ -195,10 +192,10 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
               AND ep.annee_id = :annee
               ";
 
-            $res = $query = $this->getEntityManager()->getConnection()->executeQuery(
+            $res = $this->getEntityManager()->getConnection()->fetchAllAssociative(
                 $sql,
                 ['annee' => $this->getServiceContext()->getAnnee()->getId()]
-            )->fetchAll();
+            );
 
             $result = [
                 'structures' => [],
@@ -380,6 +377,8 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
 
 
 
+
+
 /**
  *
  *
@@ -392,24 +391,30 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  object $object
+     * @param array  $data
+     * @param object $object
+     *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
         $id = (int)$data['element']['id'];
-        if ($id){
+        if ($id) {
             $object = $this->getServiceElementPedagogique()->get($id);
+
             return $object;
         }
+
         return null;
     }
+
+
 
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\ElementPedagogique $object
+     * @param \Application\Entity\Db\ElementPedagogique $object
+     *
      * @return array
      */
     public function extract($object)
@@ -422,11 +427,11 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface
         ];
 
         $etape = $object ? $object->getEtape() : null;
-        if ($etape){
+        if ($etape) {
             $data['etape'] = $etape->getId();
         }
         $structure = $object ? $object->getStructure() : null;
-        if ($structure){
+        if ($structure) {
             $data['structure'] = $structure->getId();
         }
 

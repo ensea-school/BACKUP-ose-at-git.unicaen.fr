@@ -33,7 +33,6 @@ class EtapeService extends AbstractEntityService
     use CheminPedagogiqueServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -89,10 +88,7 @@ class EtapeService extends AbstractEntityService
                    etape_libelle
                 ORDER BY etape_id ASC';
 
-        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->bindParam(':annee', $annee);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['annee' => $annee]);
         $etapes = [];
         foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;
@@ -133,10 +129,7 @@ class EtapeService extends AbstractEntityService
                    etape_libelle
                 ORDER BY etape_id ASC';
 
-        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->bindParam(':annee', $annee);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['annee' => $annee]);
         $etapes = [];
         foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;

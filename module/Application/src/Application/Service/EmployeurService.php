@@ -38,8 +38,7 @@ class EmployeurService extends AbstractEntityService
         SELECT * FROM EMPLOYEUR WHERE ROWNUM <= $limit
         ";
 
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        $res  = $stmt->fetchAll();
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
         return $res;
     }
@@ -55,8 +54,7 @@ class EmployeurService extends AbstractEntityService
             JOIN INTERVENANT i ON i.employeur_id = e.id
         ";
 
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        $res  = $stmt->fetchAll();
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
         return $res;
     }

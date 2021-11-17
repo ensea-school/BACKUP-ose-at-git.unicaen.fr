@@ -292,7 +292,7 @@ class WorkflowService extends AbstractService
     public function calculerTousTableauxBord($beforeTrigger = null, $afterTrigger = null)
     {
         $sql    = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
-        $tbls   = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $tbls   = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $result = true;
         foreach ($tbls as $tbl) {
             $begin = microtime(true);
@@ -304,7 +304,7 @@ class WorkflowService extends AbstractService
                 ]);
             }
             try {
-                $this->getEntityManager()->getConnection()->exec($sql);
+                $this->getEntityManager()->getConnection()->executeStatement($sql);
                 if (is_callable($afterTrigger)) {
                     $afterTrigger([
                         'tableau-bord' => $tbl,

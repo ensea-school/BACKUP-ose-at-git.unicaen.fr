@@ -783,7 +783,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
         if (!$this->getId()) return [];
 
         $sql = 'SELECT TYPE_INTERVENTION_ID FROM V_ELEMENT_TYPE_INTERV_POSSIBLE WHERE ELEMENT_PEDAGOGIQUE_ID = :element';
-        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['element' => $this->getId()]);
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['element' => $this->getId()]);
 
         $ids = [];
         foreach ($res as $r) {

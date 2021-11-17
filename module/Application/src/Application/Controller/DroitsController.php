@@ -194,7 +194,7 @@ class DroitsController extends AbstractController
     private function roleAddPrivilege(Role $role, Privilege $privilege)
     {
         $sql = "INSERT INTO ROLE_PRIVILEGE (role_id, privilege_id) VALUES (" . $role->getId() . ", " . $privilege->getId() . ")";
-        $this->em()->getConnection()->exec($sql);
+        $this->em()->getConnection()->executeStatement($sql);
         $this->em()->refresh($privilege);
         $this->em()->refresh($role);
     }
@@ -204,7 +204,7 @@ class DroitsController extends AbstractController
     private function roleRemovePrivilege(Role $role, Privilege $privilege)
     {
         $sql = "DELETE ROLE_PRIVILEGE WHERE role_id = " . $role->getId() . " AND privilege_id = " . $privilege->getId();
-        $this->em()->getConnection()->exec($sql);
+        $this->em()->getConnection()->executeStatement($sql);
         $this->em()->refresh($privilege);
         $this->em()->refresh($role);
     }
@@ -214,7 +214,7 @@ class DroitsController extends AbstractController
     private function statutAddPrivilege(StatutIntervenant $statut, Privilege $privilege)
     {
         $sql = "INSERT INTO STATUT_PRIVILEGE (statut_id, privilege_id) VALUES (" . $statut->getId() . ", " . $privilege->getId() . ")";
-        $this->em()->getConnection()->exec($sql);
+        $this->em()->getConnection()->executeStatement($sql);
         $this->em()->refresh($privilege);
         $this->em()->refresh($statut);
     }
@@ -224,7 +224,7 @@ class DroitsController extends AbstractController
     private function statutRemovePrivilege(StatutIntervenant $statut, Privilege $privilege)
     {
         $sql = "DELETE STATUT_PRIVILEGE WHERE statut_id = " . $statut->getId() . " AND privilege_id = " . $privilege->getId();
-        $this->em()->getConnection()->exec($sql);
+        $this->em()->getConnection()->executeStatement($sql);
         $this->em()->refresh($privilege);
         $this->em()->refresh($statut);
     }

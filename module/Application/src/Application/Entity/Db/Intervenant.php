@@ -388,7 +388,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
             $sql = "SELECT COUNT(*) res FROM tbl_paiement p "
                 . "WHERE p.intervenant_id = $id AND p.$heures > 0 AND rownum = 1";
 
-            $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
+            $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
             $this->hasMiseEnPaiement = $res[0]['RES'] == 1;
         }

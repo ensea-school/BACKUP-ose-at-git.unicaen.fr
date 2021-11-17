@@ -188,7 +188,7 @@ class IntervenantService extends AbstractEntityService
             si.ORDRE
         ";
 
-        return $this->getEntityManager()->getConnection()->fetchAll($isql, $params);
+        return $this->getEntityManager()->getConnection()->fetchAllAssociative($isql, $params);
     }
 
 
@@ -252,7 +252,7 @@ class IntervenantService extends AbstractEntityService
         if (!$code || !$anneeId) return null;
 
         $sql  = "SELECT intervenant_id FROM intervenant_par_defaut WHERE intervenant_code = :code AND annee_id = :annee";
-        $iDef = $this->getEntityManager()->getConnection()->fetchAll($sql, ['code' => $code, 'annee' => $anneeId]);
+        $iDef = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['code' => $code, 'annee' => $anneeId]);
         if (isset($iDef[0]['INTERVENANT_ID'])) {
             return (int)$iDef[0]['INTERVENANT_ID'];
         }

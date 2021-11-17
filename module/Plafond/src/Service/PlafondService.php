@@ -250,7 +250,7 @@ class PlafondService extends AbstractEntityService
                     $view .= "\n  /*@$col=p.$col*/";
                 }
             }
-            $this->getEntityManager()->getConnection()->exec($view);
+            $this->getEntityManager()->getConnection()->executeStatement($view);
         }
     }
 
@@ -264,7 +264,7 @@ class PlafondService extends AbstractEntityService
 
         try {
             $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';
-            $res = $this->getEntityManager()->getConnection()->fetchAll($sql);
+            $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
             foreach ($cols as $col) {
                 if (!isset($res[0][$col])) {

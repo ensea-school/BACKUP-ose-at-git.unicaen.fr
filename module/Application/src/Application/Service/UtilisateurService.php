@@ -24,7 +24,6 @@ class UtilisateurService extends AbstractEntityService
     use WorkflowServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -104,7 +103,7 @@ class UtilisateurService extends AbstractEntityService
 
         $sql = "SELECT username, display_name FROM utilisateur WHERE OSE_DIVERS.STR_REDUCE(display_name) LIKE '%$critere%' ORDER BY display_name";
 
-        $res = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
         $ul = [];
         foreach ($res as $r) {

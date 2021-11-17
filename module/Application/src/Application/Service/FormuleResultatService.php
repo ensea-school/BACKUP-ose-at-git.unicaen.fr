@@ -30,7 +30,6 @@ class FormuleResultatService extends AbstractEntityService
     use TypeInterventionServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -157,7 +156,7 @@ class FormuleResultatService extends AbstractEntityService
           AND FVH.TYPE_VOLUME_HORAIRE_ID = :typeVolumeHoraire
           AND FVH.ETAT_VOLUME_HORAIRE_ID >= :etatVolumeHoraire
         ";
-        $vhds = $conn->fetchAll($sql, $params);
+        $vhds = $conn->fetchAllAssociative($sql, $params);
         foreach ($vhds as $vhd) {
             if ($vhd['VOLUME_HORAIRE_ID']) {
                 $dsId = (int)$vhd['SERVICE_ID'];
@@ -223,7 +222,7 @@ class FormuleResultatService extends AbstractEntityService
                 + $data['HEURES_COMPL_FC_MAJOREES']
                 + $data['HEURES_COMPL_REFERENTIEL'];
             $sql                        = "SELECT * FROM FORMULE_RESULTAT_SERVICE WHERE FORMULE_RESULTAT_ID = :frId";
-            $frss                       = $conn->fetchAll($sql, compact('frId'));
+            $frss                       = $conn->fetchAllAssociative($sql, compact('frId'));
             foreach ($frss as $frs) {
                 $dsId = $frs['SERVICE_ID'];
                 if (isset($data['s'][$dsId])) {
@@ -236,7 +235,7 @@ class FormuleResultatService extends AbstractEntityService
             }
 
             $sql  = "SELECT * FROM FORMULE_RESULTAT_SERVICE_REF WHERE FORMULE_RESULTAT_ID = :frId";
-            $frss = $conn->fetchAll($sql, compact('frId'));
+            $frss = $conn->fetchAllAssociative($sql, compact('frId'));
             foreach ($frss as $frs) {
                 $drId = $frs['SERVICE_REFERENTIEL_ID'];
                 if (isset($data['r'][$drId])) {

@@ -17,7 +17,6 @@ class ModificationServiceDuService extends AbstractEntityService
     use Traits\IntervenantServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -53,7 +52,7 @@ class ModificationServiceDuService extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
         $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getannee(), $qb);
@@ -75,7 +74,7 @@ class ModificationServiceDuService extends AbstractEntityService
      */
     public function getTotal(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $list  = $this->getList($qb);
         $total = 0;
         foreach ($list as $modif) {
@@ -97,7 +96,7 @@ class ModificationServiceDuService extends AbstractEntityService
             $params['structure'] = $structure->getId();
         }
 
-        $data = $this->getEntityManager()->getConnection()->fetchAll($sql, $params);
+        $data = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         $res  = [
             'head' => [
                 'annee'                          => 'Année',

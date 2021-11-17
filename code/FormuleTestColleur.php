@@ -202,7 +202,7 @@ function cFloat($value): float
 }
 
 if ($save) {
-    $bdd->getConnection()->exec('DELETE FROM formule_test_volume_horaire WHERE intervenant_test_id = ' . $formuleTestIntervenantId);
+    $bdd->getConnection()->executeStatement('DELETE FROM formule_test_volume_horaire WHERE intervenant_test_id = ' . $formuleTestIntervenantId);
     foreach ($vhs as $vh) {
         $bdd->persist($vh);
         $bdd->flush($vh);

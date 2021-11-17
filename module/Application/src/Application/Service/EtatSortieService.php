@@ -323,7 +323,7 @@ class EtatSortieService extends AbstractEntityService
             }
         }
 
-        return $connection->fetchAll($query, $queryFilters);
+        return $connection->fetchAllAssociative($query, $queryFilters);
     }
 
 
@@ -353,7 +353,7 @@ class EtatSortieService extends AbstractEntityService
             }
         }
 
-        return $connection->fetchAll($query, $queryFilters);
+        return $connection->fetchAllAssociative($query, $queryFilters);
     }
 
 

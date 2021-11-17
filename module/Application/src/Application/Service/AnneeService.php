@@ -20,7 +20,6 @@ class AnneeService extends AbstractEntityService
     use SessionContainerTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -109,8 +108,7 @@ class AnneeService extends AbstractEntityService
                 $params = [];
             }
 
-            $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
 
             if (!$session->choixAnnees) {
                 $session->choixAnnees = [];
@@ -136,7 +134,7 @@ class AnneeService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
 
         return $qb;

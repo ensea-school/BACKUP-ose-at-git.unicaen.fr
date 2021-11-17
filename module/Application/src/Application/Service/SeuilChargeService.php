@@ -270,7 +270,7 @@ class SeuilChargeService extends AbstractEntityService
           ti.ordre
         ";
 
-        $data = $this->getEntityManager()->getConnection()->fetchAll($sql, ['annee' => $this->getServiceContext()->getAnnee()->getId()]);
+        $data = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['annee' => $this->getServiceContext()->getAnnee()->getId()]);
         $res  = [];
         foreach ($data as $t) {
             $id          = (int)$t['ID'];
@@ -316,7 +316,7 @@ class SeuilChargeService extends AbstractEntityService
           gtf.ordre
         ";
 
-        $data = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $data = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $res  = [];
         foreach ($data as $t) {
             $id          = (int)$t['ID'];

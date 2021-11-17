@@ -58,7 +58,7 @@ class PaysService extends AbstractEntityService
         if (!isset($this->idsByLibelle[$libelle])) {
             $sql = 'SELECT ID FROM PAYS WHERE OSE_DIVERS.str_reduce(LIBELLE) = :pays AND HISTO_DESTRUCTION IS NULL';
 
-            $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
+            $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['pays' => Util::reduce($libelle)]);
 
             if (isset($res[0]['ID'])) {
                 $this->idsByLibelle[$libelle] = (int)$res[0]['ID'];

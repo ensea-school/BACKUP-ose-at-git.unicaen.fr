@@ -14,7 +14,6 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
     use CacheContainerTrait;
 
 
-
     /**
      * Retourne un tableau à deux dimentions composé de chaînes de caractère UNIQUEMENT
      *
@@ -44,8 +43,8 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
     private function makePrivilegesRoles()
     {
         $privilegesRoles = [];
-        $sql                   = 'SELECT * FROM v_privileges_roles';
-        $prl                   = $this->getEntityManager()->getConnection()->query($sql)->fetchAll();
+        $sql             = 'SELECT * FROM v_privileges_roles';
+        $prl             = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         foreach ($prl as $pr) {
             extract(array_change_key_case($pr, CASE_LOWER));
 

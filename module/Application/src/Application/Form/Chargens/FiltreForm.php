@@ -105,7 +105,7 @@ class FiltreForm extends AbstractForm
                 'data-width'       => "100%",
                 'data-live-search' => "true",
                 'data-structures'  => json_encode($this->etapesStructure),
-            //    'multiple'         => 'multiple',
+                //    'multiple'         => 'multiple',
             ],
             'type'       => 'Select',
         ]);
@@ -174,7 +174,7 @@ class FiltreForm extends AbstractForm
             $this->structures = $this->getServiceStructure()->getList($qb);
         }
 
-        $etapesSql = '
+        $etapesSql    = '
         SELECT DISTINCT
             e.id,
             e.code,
@@ -188,13 +188,13 @@ class FiltreForm extends AbstractForm
           e.histo_destruction IS NULL
           AND n.histo_destruction IS NULL
           AND l.histo_destruction IS NULL
-          AND e.annee_id = '.$this->getServiceContext()->getAnnee()->getId().'
-          '.(($s=$this->getServiceContext()->getStructure()) ? 'AND e.structure_id = '.$s->getId() : '').' 
+          AND e.annee_id = ' . $this->getServiceContext()->getAnnee()->getId() . '
+          ' . (($s = $this->getServiceContext()->getStructure()) ? 'AND e.structure_id = ' . $s->getId() : '') . ' 
         ORDER BY
             e.libelle, e.code
         ';
         $this->etapes = [];
-        $dEtapes = $this->getServiceEtape()->getEntityManager()->getConnection()->fetchAll($etapesSql);
+        $dEtapes      = $this->getServiceEtape()->getEntityManager()->getConnection()->fetchAllAssociative($etapesSql);
 
         /*$qb = $this->getServiceEtape()->finderByHistorique();
         $this->getServiceEtape()->finderByContext($qb);
@@ -204,19 +204,19 @@ class FiltreForm extends AbstractForm
         $this->getServiceScenario()->finderByContext($qb);
         $this->scenarios = $this->getServiceScenario()->getList($qb);
 
-        $sEtapes = [];
+        $sEtapes     = [];
         $eStructures = [];
-        foreach( $dEtapes as $e ){
-            $id = (int)$e['ID'];
-            $label = $e['LIBELLE'].' ('.$e['CODE'].')';
-            $sid = (int)$e['STRUCTURE_ID'];
+        foreach ($dEtapes as $e) {
+            $id    = (int)$e['ID'];
+            $label = $e['LIBELLE'] . ' (' . $e['CODE'] . ')';
+            $sid   = (int)$e['STRUCTURE_ID'];
 
             $this->etapes[$id] = $label;
 
             if (!isset($sEtapes[$sid])) {
                 $sEtapes[$sid] = [];
             }
-            $sEtapes[$sid][] = $id;
+            $sEtapes[$sid][]  = $id;
             $eStructures[$id] = $sid;
         }
 

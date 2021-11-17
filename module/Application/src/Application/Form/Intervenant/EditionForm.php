@@ -3,6 +3,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
+use Application\Constants;
 use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
@@ -122,7 +123,7 @@ class EditionForm extends AbstractForm
             'type'       => 'DateTime',
             'options'    => [
                 'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'format'        => Util::DATE_FORMAT,
+                'format'        => Constants::DATE_FORMAT,
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
@@ -286,7 +287,7 @@ class EditionForm extends AbstractForm
             'type'       => 'DateTime',
             'options'    => [
                 'label'  => 'Début de validité',
-                'format' => Util::DATE_FORMAT,
+                'format' => Constants::DATE_FORMAT,
             ],
             'attributes' => [
                 'placeholder' => "jj/mm/aaaa",
@@ -298,7 +299,7 @@ class EditionForm extends AbstractForm
             'type'       => 'DateTime',
             'options'    => [
                 'label'  => 'Fin de validité',
-                'format' => Util::DATE_FORMAT,
+                'format' => Constants::DATE_FORMAT,
             ],
             'attributes' => [
                 'placeholder' => "jj/mm/aaaa",
@@ -310,7 +311,7 @@ class EditionForm extends AbstractForm
             'type'       => 'DateTime',
             'options'    => [
                 'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'format'        => Util::DATE_FORMAT,
+                'format'        => Constants::DATE_FORMAT,
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],

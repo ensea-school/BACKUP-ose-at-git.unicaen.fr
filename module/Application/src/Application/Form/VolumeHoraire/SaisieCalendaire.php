@@ -2,6 +2,7 @@
 
 namespace Application\Form\VolumeHoraire;
 
+use Application\Constants;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeIntervention;
@@ -96,7 +97,7 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
             'name'    => 'horaire-debut',
             'options' => [
                 'label'  => 'Horaire de début',
-                'format' => Util::DATETIME_FORMAT,
+                'format' => Constants::DATETIME_FORMAT,
             ],
         ]);
 
@@ -105,7 +106,7 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
             'name'    => 'horaire-fin',
             'options' => [
                 'label'  => 'Horaire de fin',
-                'format' => Util::DATETIME_FORMAT,
+                'format' => Constants::DATETIME_FORMAT,
             ],
         ]);
 
@@ -272,8 +273,8 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
                                          'callback' => function ($value, $context = []) {
                                              if (!$context['horaire-debut'] && $context['horaire-fin']) return true; // pas d'horaires de saisis
 
-                                             $horaireDebut = \DateTime::createFromFormat(Util::DATETIME_FORMAT, $context['horaire-debut']);
-                                             $horaireFin   = \DateTime::createFromFormat(Util::DATETIME_FORMAT, $context['horaire-fin']);
+                                             $horaireDebut = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-debut']);
+                                             $horaireFin   = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-fin']);
                                              $diff         = $horaireFin->diff($horaireDebut);
 
                                              return $diff->invert == 1;
@@ -363,7 +364,7 @@ class SaisieCalendaireHydrator implements HydratorInterface
         $lfh = new ListeFilterHydrator();
         $lfh->setEntityManager($this->getEntityManager());
 
-        $ho = ['format' => Util::DATETIME_FORMAT];
+        $ho = ['format' => Constants::DATETIME_FORMAT];
 
         $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'), $ho);
         $horaireDebut       = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'), $ho);

@@ -2,10 +2,10 @@
 
 namespace Application\Hydrator\VolumeHoraire;
 
+use Application\Constants;
 use Application\Entity\VolumeHoraireListe;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenApp\Util;
 use Zend\Hydrator\HydratorInterface;
 
 class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterface
@@ -22,7 +22,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     /**
      * Extract values from an object
      *
-     * @param  VolumeHoraireListe $object
+     * @param VolumeHoraireListe $object
      *
      * @return array
      */
@@ -97,11 +97,11 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
             case null:
                 return $valInt;
             case \DateTime::class:
-                if ((string)(int)$value === $value){
+                if ((string)(int)$value === $value) {
                     $dateTime = new \DateTime;
                     $dateTime->setTimestamp($valInt);
-                }else{
-                    $format = isset($options['format']) ? $options['format'] : Util::DATETIME_FORMAT;
+                } else {
+                    $format   = isset($options['format']) ? $options['format'] : Constants::DATETIME_FORMAT;
                     $dateTime = \DateTime::createFromFormat($format, $value);
                 }
 
@@ -120,11 +120,11 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     /**
      * Extract values from an object
      *
-     * @param  VolumeHoraireListe $object
+     * @param VolumeHoraireListe $object
      *
      * @return array
      */
-    public function extractInts($object, $withAll=false)
+    public function extractInts($object, $withAll = false)
     {
         $data = $this->extract($object);
         foreach ($data as $filter => $value) {
@@ -144,8 +144,8 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  VolumeHoraireListe $object
+     * @param array              $data
+     * @param VolumeHoraireListe $object
      *
      * @return object
      */

@@ -18,7 +18,6 @@ class MiseEnPaiementForm extends AbstractForm
     use PeriodeServiceAwareTrait;
 
 
-
     /**
      *
      */
@@ -32,11 +31,11 @@ class MiseEnPaiementForm extends AbstractForm
             $datesMiseEnPaiement[$periode->getId()] = $periode->getDatePaiement($annee)->format('d/m/Y');
         }
 
-
+        $paiementTardif = $this->getServicePeriode()->getPaiementTardif();
         $this->setAttribute('method', 'post')
             ->setAttribute('class', 'paiement-mise-en-paiement-form')
             ->setAttribute('data-dates-mise-en-paiement', json_encode($datesMiseEnPaiement))
-            ->setAttribute('data-periode-paiement-tardif-id', $this->getServicePeriode()->getPaiementTardif()->getId());
+            ->setAttribute('data-periode-paiement-tardif-id', ($paiementTardif ? $paiementTardif->getId() : null));
 
 
         $defaultPeriode = $this->getServicePeriode()->getPeriodePaiement();

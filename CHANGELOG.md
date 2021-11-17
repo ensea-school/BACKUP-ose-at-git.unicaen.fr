@@ -46,7 +46,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Formule de calcul de l'Université Paris-Est Créteil
 * Nouvelle formule pour l'université d'Artois qui remplace la précédente (#40425)
 * La saisie calendaire ne bloque plus lorsqu'un nouveau volume horaire a des horaires de début et de fin identiques (#40037)
-
+* Périodes : le paiement tardif peut être supprimé (en BDD) et les périodes peuvent être d'avantage personnalisées (en BDD aussi) (#31050)
 
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement

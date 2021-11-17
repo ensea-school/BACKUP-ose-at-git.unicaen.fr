@@ -2,6 +2,7 @@
 
 namespace Application\Form\VolumeHoraire;
 
+use Application\Constants;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeIntervention;
@@ -272,11 +273,13 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
                                          'callback' => function ($value, $context = []) {
                                              if (!$context['horaire-debut'] && $context['horaire-fin']) return true; // pas d'horaires de saisis
 
-                                             $horaireDebut = \DateTime::createFromFormat(Util::DATETIME_FORMAT, $context['horaire-debut']);
-                                             $horaireFin   = \DateTime::createFromFormat(Util::DATETIME_FORMAT, $context['horaire-fin']);
-                                             $diff         = $horaireFin->diff($horaireDebut);
+                                             $horaireDebut = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-debut']);
+                                             $horaireFin   = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-fin']);
+                                             $deb          = $horaireDebut->getTimestamp();
+                                             $fin          = $horaireFin->getTimestamp();
+                                             $diff         = $fin - $deb;
 
-                                             return $diff->invert == 1;
+                                             return $diff >= 0;
                                          },
                                      ],
                                  ]],

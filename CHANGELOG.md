@@ -45,7 +45,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Nouvelles optimisations du modules CHARGES, au niveau des seuils et des calculs d'effectifs
 * Formule de calcul de l'Université Paris-Est Créteil
 * Nouvelle formule pour l'université d'Artois qui remplace la précédente (#40425)
-
+* La saisie calendaire ne bloque plus lorsqu'un nouveau volume horaire a des horaires de début et de fin identiques (#40037)
 
 
 # OSE 16 (14/09/2021)

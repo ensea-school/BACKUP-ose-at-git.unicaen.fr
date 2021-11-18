@@ -49,6 +49,16 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * La saisie calendaire ne bloque plus lorsqu'un nouveau volume horaire a des horaires de début et de fin identiques (#40037)
 * Périodes : le paiement tardif peut être supprimé (en BDD) et les périodes peuvent être d'avantage personnalisées (en BDD aussi) (#31050)
 
+## Notes de mise à jour
+
+* Si vous souhaitez mettre en place l'export RH vers Siham, il vous faudra le configurer. Vous avez pour cela la documentation :
+  * [côté utilisateur](doc/Export-Rh/fonctionnalite.md) 
+  * [pour la configuration du connecteur](doc/Export-Rh/configuration.md)
+
+
+
+
+
 # OSE 16 (14/09/2021)
 Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
 

@@ -489,6 +489,18 @@ return [
             'position'    => 30,
             'commentaire' => NULL,
         ],
+        'TEM_VA'                        => [
+            'name'        => 'TEM_VA',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 44,
+            'commentaire' => NULL,
+        ],
         'TEM_BIATSS'                     => [
             'name'        => 'TEM_BIATSS',
             'type'        => 'bool',

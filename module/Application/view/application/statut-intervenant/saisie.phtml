@@ -55,8 +55,11 @@ echo $this->form()->openTag($form); ?>
                     <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('code_rh')); ?>
                     </div>
-                    <div class="col-md-2 atvb">
+                    <div class="col-md-1 atvb">
                         <?= $this->formControlGroup($form->get('TEM-ATV')); ?>
+                    </div>
+                    <div class="col-md-1 atvb">
+                        <?= $this->formControlGroup($form->get('TEM-VA')); ?>
                     </div>
                     <div class="col-md-2 atvb">
                         <?= $this->formControlGroup($form->get('TEM-BIATSS')); ?>

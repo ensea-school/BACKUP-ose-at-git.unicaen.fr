@@ -53,6 +53,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setPeutCloturerSaisie($data['peut-cloturer-saisie']);
         $object->setPeutSaisirServiceExt($data['peut-saisir-service-ext']);
         $object->setTemAtv($data['TEM-ATV']);
+        $object->setTemVa($data['TEM-VA']);
         $object->setTemBiatss($data['TEM-BIATSS']);
         $object->setCode($data['code']);
         $object->setCodeRh($data['code_rh']);
@@ -161,6 +162,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'peut-cloturer-saisie'            => $object->getPeutCloturerSaisie(),
             'peut-saisir-service-ext'         => $object->getPeutSaisirServiceExt(),
             'TEM-ATV'                         => $object->getTemAtv(),
+            'TEM-VA'                          => $object->getTemVa(),
             'TEM-BIATSS'                      => $object->getTemBiatss(),
             'type-intervenant'                => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
             'code'                            => $object->getCode(),

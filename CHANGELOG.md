@@ -44,6 +44,7 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Paiements : Pour du référentiel, la répartition AA/AC tient maintenant compte du ratio configuré dans les paramètres généraux (#39695).
 * Nouvelles optimisations du modules CHARGES, au niveau des seuils et des calculs d'effectifs
 * Formule de calcul de l'Université Paris-Est Créteil
+* Formule de calcul de l'Université de Guyane
 * Nouvelle formule pour l'université d'Artois qui remplace la précédente (#40425)
 * La saisie calendaire ne bloque plus lorsqu'un nouveau volume horaire a des horaires de début et de fin identiques (#40037)
 * Périodes : le paiement tardif peut être supprimé (en BDD) et les périodes peuvent être d'avantage personnalisées (en BDD aussi) (#31050)

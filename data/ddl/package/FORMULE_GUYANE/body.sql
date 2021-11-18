@@ -308,10 +308,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
         RETURN 0;
       ELSE
         --SI($E20+$F20=0;0;($AJ20+$AP20)/($E20+$F20))*E20+$BZ20
-        IF vh.taux_fa + vh.taux_fc = 0 THEN
+        IF vh.taux_fi + vh.taux_fa = 0 THEN
           RETURN cell('BZ', l);
         ELSE
-          RETURN (cell('AJ', l)+cell('AP', l)) / (vh.taux_fa+vh.taux_fc) * vh.taux_fa + cell('BZ', l);
+          RETURN ((cell('AJ', l)+cell('AP', l)) / (vh.taux_fi+vh.taux_fa) * vh.taux_fi) + cell('BZ', l);
         END IF;
       END IF;
 
@@ -323,10 +323,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
         RETURN 0;
       ELSE
         --SI($E20+$F20=0;0;($AJ20+$AP20)/($E20+$F20))*F20)
-        IF vh.taux_fa + vh.taux_fc = 0 THEN
+        IF vh.taux_fi + vh.taux_fa = 0 THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AJ', l)+cell('AP', l)) / (vh.taux_fa+vh.taux_fc) * vh.taux_fc;
+          RETURN (cell('AJ', l)+cell('AP', l)) / (vh.taux_fi+vh.taux_fa) * vh.taux_fa;
         END IF;
       END IF;
 
@@ -358,10 +358,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
         RETURN 0;
       ELSE
         --SI($E20+$F20=0;0;($AL20+$AR20)/($E20+$F20))*E20+$CB20
-        IF vh.taux_fa + vh.taux_fc = 0 THEN
+        IF vh.taux_fi + vh.taux_fa = 0 THEN
           RETURN cell('CB', l);
         ELSE
-          RETURN (cell('AL', l)+cell('AR', l)) / (vh.taux_fa+vh.taux_fc) * vh.taux_fa + cell('CB', l);
+          RETURN (cell('AL', l)+cell('AR', l)) / (vh.taux_fi+vh.taux_fa) * vh.taux_fi + cell('CB', l);
         END IF;
       END IF;
 
@@ -373,10 +373,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
         RETURN 0;
       ELSE
         --SI($E20+$F20=0;0;($AL20+$AR20)/($E20+$F20))*F20
-        IF vh.taux_fa + vh.taux_fc = 0 THEN
+        IF vh.taux_fi + vh.taux_fa = 0 THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL', l)+cell('AR', l)) / (vh.taux_fa+vh.taux_fc) * vh.taux_fc;
+          RETURN (cell('AL', l)+cell('AR', l)) / (vh.taux_fi+vh.taux_fa) * vh.taux_fa;
         END IF;
       END IF;
 
@@ -409,19 +409,33 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- AD=SI(ESTERREUR(I20);1;I20)*SI($A20="ES3";M20;0)
     WHEN c = 'AD' AND v >= 1 THEN
-      RETURN vh.taux_service_du;
+      IF LOWER(vh.structure_code) = 'es3' THEN
+        RETURN vh.taux_service_du * vh.heures;
+      ELSE
+        RETURN 0;
+      END IF;
+      
 
 
 
     -- AE=SI(ESTERREUR(I20);1;I20)*SI(ET($A20="ES3";i_structure_code<>"ES3";$AE$15>=12);4/3;1)
     WHEN c = 'AE' AND v >= 1 THEN
-      RETURN vh.taux_service_du;
+      IF LOWER(vh.structure_code) = 'es3' AND LOWER(i.structure_code) <> 'es3' AND cell('AE15') >= 12 THEN
+        RETURN vh.taux_service_du * 4 / 3;
+      ELSE
+        RETURN vh.taux_service_du;
+      END IF;
+      
 
 
 
     -- AF=SI(ESTERREUR(J20);1;J20)*SI(ET($A20="ES3";i_structure_code<>"ES3";$AE$15>=12);4/3;1)
     WHEN c = 'AF' AND v >= 1 THEN
-      RETURN vh.taux_service_compl;
+      IF LOWER(vh.structure_code) = 'es3' AND LOWER(i.structure_code) <> 'es3' AND cell('AE15') >= 12 THEN
+        RETURN vh.taux_service_compl * 4 / 3;
+      ELSE
+        RETURN vh.taux_service_compl;
+      END IF;
 
 
 

@@ -55,7 +55,7 @@ $c->println("\nMise à jour des dépendances à l'aide de Composer", $c::COLOR_L
 $c->passthru([
     "cd $osedir",
     "php composer.phar self-update --1",
-    "php composer.phar install",
+    "php composer.phar install --optimize-autoloader",
 ]);
 
 

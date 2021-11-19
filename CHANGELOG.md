@@ -15,7 +15,6 @@ Objectif : Plafonds personnalisables
 * Depuis la fiche de service de l'intervenant, vous pouvez maintenant désactiver la possibilité de reporter le prévisionnal n-1 vers l'année en cours ou du prévisionnel vers le réalisé
 * Dans la fiche de service, les enseignements mutualisés sont précisés #40402
 
-## Corrections de bugs
 
 
 
@@ -44,7 +43,18 @@ Objectif : Connecteur Export OSE => Logiciel RH
 * Paiements : Pour du référentiel, la répartition AA/AC tient maintenant compte du ratio configuré dans les paramètres généraux (#39695).
 * Nouvelles optimisations du modules CHARGES, au niveau des seuils et des calculs d'effectifs
 * Formule de calcul de l'Université Paris-Est Créteil
+* Formule de calcul de l'Université de Guyane
 * Nouvelle formule pour l'université d'Artois qui remplace la précédente (#40425)
+* La saisie calendaire ne bloque plus lorsqu'un nouveau volume horaire a des horaires de début et de fin identiques (#40037)
+* Périodes : le paiement tardif peut être supprimé (en BDD) et les périodes peuvent être d'avantage personnalisées (en BDD aussi) (#31050)
+
+## Notes de mise à jour
+
+* Si vous souhaitez mettre en place l'export RH vers Siham, il vous faudra le configurer. Vous avez pour cela la documentation :
+  * [côté utilisateur](doc/Export-Rh/fonctionnalite.md) 
+  * [pour la configuration du connecteur](doc/Export-Rh/configuration.md)
+
+
 
 
 

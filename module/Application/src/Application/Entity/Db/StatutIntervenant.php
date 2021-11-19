@@ -159,6 +159,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     /**
      * @var boolean
      */
+    protected $temVa;
+
+    /**
+     * @var boolean
+     */
     protected $temBiatss;
 
     /**
@@ -295,6 +300,30 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     public function setTemAtv($temAtv)
     {
         $this->temAtv = $temAtv;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getTemVa()
+    {
+        return $this->temVa;
+    }
+
+
+
+    /**
+     * @param boolean $temVa
+     *
+     * @return StatutIntervenant
+     */
+    public function setTemVa($temVa)
+    {
+        $this->temVa = $temVa;
 
         return $this;
     }

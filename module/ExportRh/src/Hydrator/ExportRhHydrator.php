@@ -22,13 +22,14 @@ class ExportRhHydrator implements HydratorInterface
     public function extract($object)
     {
         //On mappe automatiquement le bon statut RH selon le statut OSE
-        $statut   = $object->getStatut();
-        $statutRh = $statut->getCodeRh();
+        $statut     = $object->getStatut();
+        $statutRh   = $statut->getCodeRh();
+        $typeEmploi = ($statut->getTemVa()) ? 'UCNVA' : 'UCNVCE';
 
         $data['connecteurForm'] = [
             'statut' => $statutRh,
+            'emploi' => $typeEmploi,
         ];
-
 
         return $data;
     }

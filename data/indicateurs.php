@@ -315,8 +315,8 @@ return [
     380  => [
         'TYPE'              => 'Contrat / avenant',
         'ENABLED'           => true,
-        'LIBELLE_PLURIEL'   => '%s vacataires doivent être pris en charge ou renouvellés dans le SI RH',
-        'LIBELLE_SINGULIER' => '%s vacataire doit être pris en charge ou renouvellés dans le SI RH',
+        'LIBELLE_PLURIEL'   => '%s vacataires doivent être pris en charge ou renouvelés dans le SI RH',
+        'LIBELLE_SINGULIER' => '%s vacataire doit être pris en charge ou renouvelés dans le SI RH',
         'MESSAGE'           => null,
         'ROUTE'             => 'intervenant/exporter-rh',
         'TEM_DISTINCT'      => false,

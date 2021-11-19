@@ -130,6 +130,21 @@ class StatutIntervenantSaisieForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'TEM-VA',
+            'options'    => [
+                'label'              => '<abbr title="Définit si ce statut est un type d\'emploi vacataire administratif.">VA</abbr>',
+                'label_options'      => [
+                    'disable_html_escape' => true,
+                ],
+                'use_hidden_element' => true,
+            ],
+            'attributes' => [
+                'title' => 'VA',
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
             'name'       => 'TEM-BIATSS',
             'options'    => [
                 'label'              => '<abbr title="Définit si ce statut est propre aux BIATSS">BIATSS</abbr>',

@@ -110,7 +110,7 @@ class PeriodeService extends AbstractEntityService
      */
     public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.enseignement = 1");
 
         return $qb;
@@ -122,7 +122,7 @@ class PeriodeService extends AbstractEntityService
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
         $serviceMIS->join($this->getServiceMiseEnPaiement(), $qb, 'miseEnPaiement');
@@ -146,7 +146,7 @@ class PeriodeService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->orderBy("$alias.ordre");
 
@@ -198,9 +198,9 @@ class PeriodeService extends AbstractEntityService
     /**
      * Retourne le paiement tardif
      *
-     * @return Periode
+     * @return Periode|null
      */
-    public function getPaiementTardif()
+    public function getPaiementTardif(): ?Periode
     {
         return $this->getRepo()->findOneBy(['code' => Periode::PAIEMENT_TARDIF]);
     }

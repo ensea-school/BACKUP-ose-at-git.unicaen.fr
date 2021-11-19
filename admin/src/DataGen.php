@@ -140,7 +140,7 @@ class DataGen
         ],
         [
             'table'   => 'PERIODE',
-            'context' => ['install', 'update'],
+            'context' => ['install'],
             'key'     => 'CODE',
             'options' => ['delete' => false],
         ],

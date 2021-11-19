@@ -17,7 +17,7 @@ Objectif : Plafonds personnalisables
 
 ## Corrections de bugs
 
-* LE service dû s'affiche de nouveau normalement dans la page "Calcul HETD" de l'intervenant
+* Le service dû s'affiche de nouveau normalement dans la page "Calcul HETD" de l'intervenant
 
 
 # OSE 17 (18/11/2021)

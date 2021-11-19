@@ -275,9 +275,6 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
 
                                              $horaireDebut = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-debut']);
                                              $horaireFin   = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-fin']);
-                                             $diff         = $horaireFin->diff($horaireDebut);
-                                             $horaireDebut = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-debut']);
-                                             $horaireFin   = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-fin']);
                                              $deb          = $horaireDebut->getTimestamp();
                                              $fin          = $horaireFin->getTimestamp();
                                              $diff         = $fin - $deb;

@@ -55,7 +55,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
     </div>
 <?= $this->form()->closeTag(); ?>
 
-<?php if ($intervenant->getStatut()->estPermanent()): ?>
+<?php if ($intervenant->getStatut()->getServiceStatutaire() > 0): ?>
     <h2>Service Dû</h2>
     <div class="row">
         <div class="col-sm-4">Composante d'affectation</div>

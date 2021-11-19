@@ -142,11 +142,12 @@ class FormuleResultatService extends AbstractEntityService
         ];
 
         $sql = "SELECT * FROM V_FORMULE_INTERVENANT WHERE INTERVENANT_ID = :intervenant";
-        $id  = $conn->fetchAssoc($sql, $params);
+        $id  = $conn->fetchAssociative($sql, $params);
         if ($id) {
             $data['HEURES_SERVICE_STATUTAIRE']      = $id['HEURES_SERVICE_STATUTAIRE'];
             $data['HEURES_SERVICE_MODIFIE']         = $id['HEURES_SERVICE_MODIFIE'];
             $data['DEPASSEMENT_SERVICE_DU_SANS_HC'] = $id['DEPASSEMENT_SERVICE_DU_SANS_HC'] == '1';
+            $data['SERVICE_DU']                     = $data['HEURES_SERVICE_STATUTAIRE'] + $id['HEURES_SERVICE_MODIFIE'];
         }
 
         /* Volumes horaires */
@@ -204,7 +205,7 @@ class FormuleResultatService extends AbstractEntityService
         $sql = "SELECT * FROM FORMULE_RESULTAT WHERE INTERVENANT_ID = :intervenant
             AND TYPE_VOLUME_HORAIRE_ID = :typeVolumeHoraire
             AND ETAT_VOLUME_HORAIRE_ID = :etatVolumeHoraire";
-        $fr  = $conn->fetchAssoc($sql, $params);
+        $fr  = $conn->fetchAssociative($sql, $params);
         if ($fr) {
             $data['has-calcul'] = true;
             $frId               = $fr['ID'];

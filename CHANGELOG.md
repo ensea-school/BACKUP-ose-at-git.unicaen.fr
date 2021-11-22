@@ -19,6 +19,11 @@ Objectif : Plafonds personnalisables
 
 * Le service dû s'affiche de nouveau normalement dans la page "Calcul HETD" de l'intervenant
 
+## Notes de mise à jour
+
+* La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
+
+
 
 # OSE 17 (18/11/2021)
 Objectif : Connecteur Export OSE => Logiciel RH

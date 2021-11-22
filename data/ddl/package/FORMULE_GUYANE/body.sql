@@ -414,7 +414,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
       ELSE
         RETURN 0;
       END IF;
-      
+
 
 
 
@@ -425,7 +425,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
       ELSE
         RETURN vh.taux_service_du;
       END IF;
-      
+
 
 
 

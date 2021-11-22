@@ -347,10 +347,11 @@ Exemple d'utilisation pour lancer une tâche de synchronisation appelée `synchr
 | --------------------- | --------------------- | --------------------- |
 | Indicateurs : envoi des notifications par mail                         | Les jours de semaine entre 5h et 17h              | notifier-indicateurs |
 | Synchronisation : Mise en place d'un job pour l'import des données. Plusieurs jobs pourront être créés au besoin           | Tous les quarts d'heures entre 7h et 21h sauf le dimanche | synchronisation `<Nom du job>` |  
-| Calcul des effectifs du module Charges                                 | une fois par jour, à 20h tous les jours sauf le dimanche. | chargens-calcul-effectifs |
+| Calcul des effectifs du module Charges                                 | Une fois par jour, à 20h tous les jours sauf le dimanche. | chargens-calcul-effectifs |
 | Calcul des tableaux de bord                                            | Deux fois par jour sauf le dimanche (Calcul LONG) | calcul-tableaux-bord |
 | Calcul des heures complémentaires à l'aide de la formule (calcul LONG) | Les lundi et jeudi à 3h                           | formule-calcul |
 | MAJ des taux de mixité à partir des effectifs de l'année courante      | Tous les 15 décembre à 7h                         | maj-taux-mixite |
+| MAJ des vues matérialisées dédiées aux exports (BO, SID, etc.)         | Une fois par jour, à 4h tous les jours sauf le dimanche | maj-exports |
 
 Après la commande, on ajoute `> /tmp/oselog 2>&1` pour loguer le résultat dans le fichier`/tmp/oselog`.
 A adapter le cas échéant.
@@ -365,6 +366,7 @@ Voici un exemple de crontab :
 0    6,14 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose calcul-tableaux-bord      > /tmp/oselog 2>&1
 0       3 *   *   1,4 /usr/bin/php /var/www/ose/bin/ose formule-calcul            > /tmp/oselog 2>&1
 0      7 15  12     * /usr/bin/php /var/www/ose/bin/ose maj-taux-mixite           > /tmp/oselog 2>&1
+0       4 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose maj-exports               > /tmp/oselog 2>&1
 ```
 
 OSE est maintenant installé.

@@ -16,6 +16,7 @@ $actions    = [
     "creer-utilisateur"         => "Création d'un nouvel utilisateur de OSE. Possibilité de créer une fiche intervenant dans la foulée",
     "changement-mot-de-passe"   => "Changement de mot de passe (pour un utilisateur local uniquement)",
     "maj-taux-mixite"           => "Met à jour les taux de mixité",
+    "maj-exports"               => "Mise à jour des vues matérialisées utilisées pour les exports BO/SID",
     "clear-cache"               => "Vidage du cache de l'application",
     "test-bdd"                  => "Test d'accès à la base de données",
     "install-bdd"               => "Installe la base de données"

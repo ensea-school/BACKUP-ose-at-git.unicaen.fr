@@ -44,7 +44,7 @@ class ConfigFactory
         if (isset($config['console'])) {
             $finalConfig['console'] = [
                 'router' => [
-                    'routes' => $config['console'],
+                    'routes' => self::routeSimplified($config['console']),
                 ],
             ];
         }
@@ -52,7 +52,7 @@ class ConfigFactory
         if (isset($config['routes'])) {
             $finalConfig['router'] = [
                 'routes' => [
-                    strtolower($namespace) => $config['routes'],
+                    strtolower($namespace) => self::routeSimplified($config['routes']),
                 ],
             ];
         }
@@ -125,5 +125,49 @@ class ConfigFactory
                 ],
             ],
         ];
+    }
+
+
+
+    public static function routeSimplified(array $config): array
+    {
+        /* On remonte ces params dans le sous-menu options */
+        $optionsParams = ['route', 'defaults', 'constraints'];
+        foreach ($optionsParams as $param) {
+            if (isset($config[$param]) && !isset($config['options'][$param])) {
+                if (!isset($config['options'])) $config['options'] = [];
+                $config['options'][$param] = $config[$param];
+                unset($config[$param]);
+            }
+        }
+
+        /* on remonte controller et action dans options/default */
+        $defaultParams = ['controller', 'action'];
+        foreach ($defaultParams as $param) {
+            if (isset($config[$param]) && !isset($config['options']['defaults'][$param])) {
+                if (!isset($config['options'])) $config['options'] = [];
+                if (!isset($config['options']['defaults'])) $config['options']['defaults'] = [];
+                $config['options']['defaults'][$param] = $config[$param];
+                unset($config[$param]);
+            }
+        }
+
+        /* On détecte le type s'il n'eiste pas déjà */
+        if (!isset($config['type']) && isset($config['options']['route'])) {
+            if (false !== strpos($config['options']['route'], ':')) {
+                $config['type'] = 'Segment';
+            } else {
+                $config['type'] = 'Literal';
+            }
+        }
+
+        /* Si il y a des routes filles, on les parse aussi */
+        if (isset($config['child_routes'])) {
+            foreach ($config['child_routes'] as $sRoute => $sConfig) {
+                $config['child_routes'][$sRoute] = self::routeSimplified($sConfig);
+            }
+        }
+
+        return $config;
     }
 }

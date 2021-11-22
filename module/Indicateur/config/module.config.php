@@ -8,136 +8,84 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'console' => [
         'notifier-indicateurs' => [
-            'options' => [
-                'route'    => 'notifier indicateurs [--force]',
-                'defaults' => [
-                    'controller' => 'Indicateur\Controller\Indicateur',
-                    'action'     => 'envoi-notifications',
-                ],
-            ],
+            'route'      => 'notifier indicateurs [--force]',
+            'controller' => 'Indicateur\Controller\Indicateur',
+            'action'     => 'envoi-notifications',
         ],
     ],
 
     'routes' => [
-        'type'          => 'Literal',
-        'options'       => [
-            'route'    => '/gestion/indicateur',
-            'defaults' => [
-                'controller' => 'Indicateur\Controller\Indicateur',
-                'action'     => 'index',
-            ],
-        ],
+        'route'         => '/gestion/indicateur',
+        'controller'    => 'Indicateur\Controller\Indicateur',
+        'action'        => 'index',
         'may_terminate' => true,
         'child_routes'  => [
             'result'                  => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'       => '/result/:indicateur[/structure/:structure]',
-                    'constraints' => [
-                        'indicateur' => '[0-9]*',
-                        'structure'  => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'action' => 'result',
-                    ],
+                'route'       => '/result/:indicateur[/structure/:structure]',
+                'action'      => 'result',
+                'constraints' => [
+                    'indicateur' => '[0-9]*',
+                    'structure'  => '[0-9]*',
                 ],
             ],
             'abonner'                 => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'       => '/abonner/:indicateur',
-                    'constraints' => [
-                        'indicateur' => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'action' => 'abonner',
-                    ],
+                'route'       => '/abonner/:indicateur',
+                'action'      => 'abonner',
+                'constraints' => [
+                    'indicateur' => '[0-9]*',
                 ],
             ],
             'abonnements'             => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'    => '/abonnements',
-                    'defaults' => [
-                        'action' => 'abonnements',
-                    ],
-                ],
+                'route'  => '/abonnements',
+                'action' => 'abonnements',
             ],
             'envoi-mail-intervenants' => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'       => '/envoi-mail-intervenants/:indicateur',
-                    'constraints' => [
-                        'indicateur' => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'action' => 'envoi-mail-intervenants',
-                    ],
+                'route'       => '/envoi-mail-intervenants/:indicateur',
+                'action'      => 'envoi-mail-intervenants',
+                'constraints' => [
+                    'indicateur' => '[0-9]*',
                 ],
             ],
             'depassement-charges'     => [
-                'type'         => 'Segment',
-                'options'      => [
-                    'route'    => '/depassement-charges/:intervenant',
-                    'defaults' => [
-                        'action' => 'depassement-charges',
-                    ],
-                ],
+                'route'        => '/depassement-charges/:intervenant',
+                'action'       => 'depassement-charges',
                 'child_routes' => [
                     'prevu'   => [
-                        'type'         => 'Literal',
-                        'options'      => [
-                            'route'    => '/prevu',
-                            'defaults' => [
-                                'type-volume-horaire-code' => 'PREVU',
-                            ],
+                        'route'        => '/prevu',
+                        'defaults'     => [
+                            'type-volume-horaire-code' => 'PREVU',
                         ],
                         'child_routes' => [
                             's1' => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/s1',
-                                    'defaults' => [
-                                        'periode-code' => 'S1',
-                                    ],
+                                'route'    => '/s1',
+                                'defaults' => [
+                                    'periode-code' => 'S1',
                                 ],
                             ],
                             's2' => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/s2',
-                                    'defaults' => [
-                                        'periode-code' => 'S2',
-                                    ],
+                                'route'    => '/s2',
+                                'defaults' => [
+                                    'periode-code' => 'S2',
                                 ],
                             ],
                         ],
                     ],
                     'realise' => [
-                        'type'         => 'Literal',
-                        'options'      => [
-                            'route'    => '/realise',
-                            'defaults' => [
-                                'type-volume-horaire-code' => 'REALISE',
-                            ],
+                        'route'        => '/realise',
+                        'defaults'     => [
+                            'type-volume-horaire-code' => 'REALISE',
                         ],
                         'child_routes' => [
                             's1' => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/s1',
-                                    'defaults' => [
-                                        'periode-code' => 'S1',
-                                    ],
+                                'route'    => '/s1',
+                                'defaults' => [
+                                    'periode-code' => 'S1',
                                 ],
                             ],
                             's2' => [
-                                'type'    => 'Literal',
-                                'options' => [
-                                    'route'    => '/s2',
-                                    'defaults' => [
-                                        'periode-code' => 'S2',
-                                    ],
+                                'route'    => '/s2',
+                                'defaults' => [
+                                    'periode-code' => 'S2',
                                 ],
                             ],
                         ],

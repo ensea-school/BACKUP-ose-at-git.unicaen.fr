@@ -9,132 +9,87 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
 
     'routes' => [
-        'type'          => 'Literal',
-        'options'       => [
-            'route'    => '/plafond',
-            'defaults' => [
-                'controller' => 'Plafond\Controller\Plafond',
-                'action'     => 'index',
-            ],
-        ],
+        'route'         => '/plafond',
+        'controller'    => 'Plafond\Controller\Plafond',
+        'action'        => 'index',
         'may_terminate' => true,
         'child_routes'  => [
             'ajouter'   => [
-                'type'    => 'Literal',
-                'options' => [
-                    'route'    => '/ajouter',
-                    'defaults' => [
-                        'action' => 'editer',
-                    ],
-                ],
+                'route'  => '/ajouter',
+                'action' => 'editer',
             ],
             'modifier'  => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'       => '/modifier/:plafond',
-                    'constraints' => [
-                        'plafond' => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'action' => 'editer',
-                    ],
+                'route'       => '/modifier/:plafond',
+                'action'      => 'editer',
+                'constraints' => [
+                    'plafond' => '[0-9]*',
                 ],
             ],
             'supprimer' => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'       => '/supprimer/:plafond',
-                    'constraints' => [
-                        'plafond' => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'action' => 'supprimer',
-                    ],
+                'route'       => '/supprimer/:plafond',
+                'action'      => 'supprimer',
+                'constraints' => [
+                    'plafond' => '[0-9]*',
                 ],
             ],
 
             'editer-application'    => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'       => '/editer-application[/:plafondApplication]',
-                    'constraints' => [
-                        'plafondApplication' => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'action' => 'editerApplication',
-                    ],
+                'route'       => '/editer-application[/:plafondApplication]',
+                'action'      => 'editerApplication',
+                'constraints' => [
+                    'plafondApplication' => '[0-9]*',
                 ],
             ],
             'supprimer-application' => [
-                'type'    => 'Segment',
-                'options' => [
-                    'route'       => '/supprimer-application/:plafondApplication',
-                    'constraints' => [
-                        'plafondApplication' => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'action' => 'supprimerApplication',
-                    ],
+                'route'       => '/supprimer-application/:plafondApplication',
+                'action'      => 'supprimerApplication',
+                'constraints' => [
+                    'plafondApplication' => '[0-9]*',
                 ],
             ],
 
             'construire-calculer' => [
-                'type'    => 'Literal',
-                'options' => [
-                    'route'    => '/construire-calculer',
-                    'defaults' => [
-                        'action' => 'construire-calculer',
-                    ],
-                ],
+                'route'  => '/construire-calculer',
+                'action' => 'construire-calculer',
             ],
 
             'structure' => [
-                'type'          => 'Segment',
-                'options'       => [
-                    'route'       => '/structure/:structure',
-                    'constraints' => [
-                        'structure' => '[0-9]*',
-                    ],
-                    'defaults'    => [
-                        'controller' => 'Plafond\Controller\PlafondStructure',
-                        'action'     => 'index',
-                    ],
+                'route'         => '/structure/:structure',
+                'controller'    => 'Plafond\Controller\PlafondStructure',
+                'action'        => 'index',
+                'constraints'   => [
+                    'structure' => '[0-9]*',
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
                     'ajouter'   => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/ajouter',
-                            'defaults' => [
-                                'action' => 'editer',
-                            ],
-                        ],
+                        'route'  => '/ajouter',
+                        'action' => 'editer',
                     ],
                     'modifier'  => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/modifier/:plafondStructure',
-                            'constraints' => [
-                                'plafondStructure' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'editer',
-                            ],
+                        'route'       => '/modifier/:plafondStructure',
+                        'action'      => 'editer',
+                        'constraints' => [
+                            'plafondStructure' => '[0-9]*',
                         ],
                     ],
                     'supprimer' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/supprimer/:plafondStructure',
-                            'constraints' => [
-                                'plafondStructure' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'supprimer',
-                            ],
+                        'route'       => '/supprimer/:plafondStructure',
+                        'action'      => 'supprimer',
+                        'constraints' => [
+                            'plafondStructure' => '[0-9]*',
                         ],
                     ],
+                ],
+            ],
+
+            'derogation' => [
+                'route'         => '/derogation',
+                'controller'    => 'Plafond\Controller\Derogation',
+                'action'        => 'index',
+                'may_terminate' => true,
+                'child_routes'  => [
+                    /* Placez ici vos routes filles */
                 ],
             ],
         ],
@@ -142,22 +97,14 @@ return [
 
     'console' => [
         'construire' => [
-            'options' => [
-                'route'    => 'plafonds construire',
-                'defaults' => [
-                    'controller' => 'Plafond\Controller\Plafond',
-                    'action'     => 'construire',
-                ],
-            ],
+            'route'      => 'plafonds construire',
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => 'construire',
         ],
         'calculer'   => [
-            'options' => [
-                'route'    => 'plafonds calculer',
-                'defaults' => [
-                    'controller' => 'Plafond\Controller\Plafond',
-                    'action'     => 'calculer',
-                ],
-            ],
+            'route'      => 'plafonds calculer',
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => 'calculer',
         ],
     ],
 

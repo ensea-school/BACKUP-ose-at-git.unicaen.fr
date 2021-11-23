@@ -3,8 +3,8 @@
 namespace Application\Form\Agrement;
 
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\ClassMethods;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\ClassMethods;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 
 /**
@@ -49,7 +49,7 @@ class Saisie extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

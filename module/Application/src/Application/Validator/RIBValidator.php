@@ -2,7 +2,7 @@
 
 namespace Application\Validator;
 
-use Zend\Validator\Iban;
+use Laminas\Validator\Iban;
 
 class RIBValidator extends Iban
 {
@@ -14,9 +14,9 @@ class RIBValidator extends Iban
     public function __construct($options = [])
     {
         $options['messages'] = [
-            \Zend\Validator\Iban::FALSEFORMAT  => $message = "L'IBAN saisi n'est pas valide",
-            \Zend\Validator\Iban::CHECKFAILED  => $message,
-            \Zend\Validator\Iban::NOTSUPPORTED => $message,
+            \Laminas\Validator\Iban::FALSEFORMAT  => $message = "L'IBAN saisi n'est pas valide",
+            \Laminas\Validator\Iban::CHECKFAILED  => $message,
+            \Laminas\Validator\Iban::NOTSUPPORTED => $message,
         ];
 
         parent::__construct($options);

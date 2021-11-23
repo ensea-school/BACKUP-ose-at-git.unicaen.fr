@@ -113,7 +113,7 @@ class ElementPedagogiqueController extends AbstractController
      *
      * NB: Les résultats sont renvoyés au format JSON.
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function searchAction()
     {
@@ -192,7 +192,7 @@ class ElementPedagogiqueController extends AbstractController
 
         $result = \UnicaenApp\Form\Element\SearchAndSelect::truncatedResult($result, $limit - 1);
 
-        return new \Zend\View\Model\JsonModel($result);
+        return new \Laminas\View\Model\JsonModel($result);
     }
 
 
@@ -208,7 +208,7 @@ class ElementPedagogiqueController extends AbstractController
         }
         $result = ['periode' => ['code' => $code]];
 
-        return new \Zend\View\Model\JsonModel($result);
+        return new \Laminas\View\Model\JsonModel($result);
     }
 
 

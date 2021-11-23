@@ -11,8 +11,8 @@ use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Entity\Db\Etablissement;
-use Zend\Form\Element\Hidden;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Hidden;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -27,7 +27,6 @@ class Saisie extends AbstractForm
     use ContextServiceAwareTrait;
     use SaisieFieldsetAwareTrait;
     use SaisieMultipleFieldsetAwareTrait;
-
 
 
     /**
@@ -47,12 +46,12 @@ class Saisie extends AbstractForm
      *
      * Ensures the object is populated with validated values.
      *
-     * @param  object $object
-     * @param  int    $flags
+     * @param object $object
+     * @param int    $flags
      *
      * @return mixed|void
      */
-    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
+    public function bind($object, $flags = \Laminas\Form\FormInterface::VALUES_NORMALIZED)
     {
         if ($object instanceof Service && $object->getTypeVolumeHoraire()) {
             $this->get('type-volume-horaire')->setValue($object->getTypeVolumeHoraire()->getId());
@@ -78,7 +77,7 @@ class Saisie extends AbstractForm
         $this->add($this->getFieldsetServiceSaisie());
 
         // Product Fieldset
-        if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())){
+        if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
             foreach ($this->getPeriodes() as $periode) {
                 $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
                 $pf->setName($periode->getCode());
@@ -136,7 +135,6 @@ class SaisieHydrator implements HydratorInterface
     use PeriodeServiceAwareTrait;
 
 
-
     /**
      * Retourne la liste des périodes d'enseignement
      *
@@ -154,8 +152,8 @@ class SaisieHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array   $data
-     * @param  Service $object
+     * @param array   $data
+     * @param Service $object
      *
      * @return object
      */
@@ -171,11 +169,11 @@ class SaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Service $object
+     * @param Service $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data            = [];
         $data['service'] = $object;

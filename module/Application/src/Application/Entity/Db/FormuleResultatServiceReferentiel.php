@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * FormuleResultatServiceReferentiel
@@ -17,15 +17,20 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
      */
     private $serviceReferentiel;
 
+
+
     /**
      *
      * @param TypeHeures $typeHeures
+     *
      * @return CentreCout|null
      */
-    public function getDefaultCentreCout( TypeHeures $typeHeures )
+    public function getDefaultCentreCout(TypeHeures $typeHeures)
     {
         return null; // pas encore de centre de cout par défaut
     }
+
+
 
     /**
      *
@@ -36,6 +41,8 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
         return $this->getServiceReferentiel()->getFonction()->getDomaineFonctionnel();
     }
 
+
+
     /**
      * @return boolean
      */
@@ -44,15 +51,19 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
         return true;
     }
 
+
+
     /**
      * Get ServiceReferentiel
      *
-     * @return \Application\Entity\Db\ServiceReferentiel 
+     * @return \Application\Entity\Db\ServiceReferentiel
      */
     public function getServiceReferentiel()
     {
         return $this->serviceReferentiel;
     }
+
+
 
     /**
      * @return Structure
@@ -62,6 +73,8 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
         return $this->getServiceReferentiel()->getStructure();
     }
 
+
+
     /**
      * @return Intervenant
      */
@@ -69,6 +82,8 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
     {
         return $this->getServiceReferentiel()->getIntervenant();
     }
+
+
 
     public function getResourceId()
     {

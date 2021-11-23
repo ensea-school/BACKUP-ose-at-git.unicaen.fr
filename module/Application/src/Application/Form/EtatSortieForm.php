@@ -5,7 +5,7 @@ namespace Application\Form;
 use Application\Entity\Db\EtatSortie;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -179,7 +179,7 @@ class EtatSortieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -205,7 +205,6 @@ class EtatSortieHydrator implements HydratorInterface
 {
     use StatutIntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
-
 
 
     /**
@@ -253,7 +252,7 @@ class EtatSortieHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'code'           => $object->getCode(),

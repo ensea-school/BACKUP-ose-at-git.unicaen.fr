@@ -3,8 +3,8 @@
 namespace Application\Form\MotifModificationService;
 
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of MotifModificationServiceSaisieForm
@@ -41,10 +41,10 @@ class MotifModificationServiceSaisieForm extends AbstractForm
             ],
             'type'    => 'Select',
         ]);
-        $this->get('multiplicateur')->setValueOptions(Array(
+        $this->get('multiplicateur')->setValueOptions([
             '-1' => '-1 : retire du service dû',
-            '1' => '1 : ajoute du service dû',
-        ));
+            '1'  => '1 : ajoute du service dû',
+        ]);
 
         $this->add([
             'name'    => 'decharge',
@@ -71,7 +71,7 @@ class MotifModificationServiceSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -109,8 +109,8 @@ class MotifModificationServiceHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                             $data
-     * @param  \Application\Entity\Db\MotifModificationServiceDu $object
+     * @param array                                             $data
+     * @param \Application\Entity\Db\MotifModificationServiceDu $object
      *
      * @return object
      */
@@ -129,11 +129,11 @@ class MotifModificationServiceHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\MotifModificationServiceDu $object
+     * @param \Application\Entity\Db\MotifModificationServiceDu $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'               => $object->getId()

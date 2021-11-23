@@ -19,8 +19,8 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Zend\Hydrator\ClassMethods;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Hydrator\ClassMethods;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Intervenant

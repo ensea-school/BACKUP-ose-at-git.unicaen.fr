@@ -67,7 +67,7 @@ trait TranslatorTrait
             return $this->translateException($message, $textDomain = 'default', $locale = null);
         }
 
-        /** @var \Zend\I18n\Translator\Translator $translator */
+        /** @var \Laminas\I18n\Translator\Translator $translator */
         $translator = \Application::$container->get('translator');
 
         return $translator->translate($message, $textDomain, $locale);

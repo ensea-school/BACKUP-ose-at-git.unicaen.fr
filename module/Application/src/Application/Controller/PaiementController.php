@@ -26,7 +26,7 @@ use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use Zend\Json\Json;
+use Laminas\Json\Json;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 

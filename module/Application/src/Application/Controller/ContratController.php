@@ -28,9 +28,9 @@ use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Entity\Db\Contrat;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 use BjyAuthorize\Exception\UnAuthorizedException;
-use Zend\View\Renderer\PhpRenderer;
+use Laminas\View\Renderer\PhpRenderer;
 use DateTime;
 
 /**
@@ -178,7 +178,7 @@ class ContratController extends AbstractController
     /**
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      * @throws \LogicException
      */
     public function supprimerAction()
@@ -255,7 +255,7 @@ class ContratController extends AbstractController
     /**
      * Dévalidation du contrat/avenant par la composante d'intervention.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      * @throws \LogicException
      */
     public function devaliderAction()
@@ -290,7 +290,7 @@ class ContratController extends AbstractController
     /**
      * Saisie de la date de retour du contrat/avenant signé par l'intervenant.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      * @throws \LogicException
      */
     public function saisirRetourAction()

@@ -1,7 +1,8 @@
 <?php
+
 namespace Application\Hydrator\Chargens;
 
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Chargens\Lien;
 
 
@@ -15,8 +16,8 @@ class LienDiagrammeHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  Lien  $object
+     * @param array $data
+     * @param Lien  $object
      *
      * @return object
      */
@@ -60,11 +61,11 @@ class LienDiagrammeHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Lien $object
+     * @param Lien $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $scenarioLien = $object->getScenarioLien();
 

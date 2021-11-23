@@ -9,7 +9,7 @@ use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisi
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**

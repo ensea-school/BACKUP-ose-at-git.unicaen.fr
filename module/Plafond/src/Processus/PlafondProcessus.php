@@ -7,7 +7,7 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 
 /**

@@ -4,7 +4,7 @@ namespace Application\Hydrator;
 
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 class RegleStructureValidationHydrator implements HydratorInterface
 {
@@ -14,8 +14,8 @@ class RegleStructureValidationHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                             $data
-     * @param  \Application\Entity\Db\RegleStructureValidation $object
+     * @param array                                           $data
+     * @param \Application\Entity\Db\RegleStructureValidation $object
      *
      * @return object
      */
@@ -33,21 +33,23 @@ class RegleStructureValidationHydrator implements HydratorInterface
         return $object;
     }
 
+
+
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\RegleStructureValidation $object
+     * @param \Application\Entity\Db\RegleStructureValidation $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
-            'id'                       => $object->getId(),
-            'priorite'                 => $object->getPriorite(),
-            'message'                  => $object->getMessage(),
-            'type-volume-horaire'      => ($tvh = $object->getTypeVolumeHoraire()) ? $tvh->getId() : null,
-            'type-intervenant'         =>  ($ti = $object->getTypeIntervenant()) ? $ti->getId() : null,
+            'id'                  => $object->getId(),
+            'priorite'            => $object->getPriorite(),
+            'message'             => $object->getMessage(),
+            'type-volume-horaire' => ($tvh = $object->getTypeVolumeHoraire()) ? $tvh->getId() : null,
+            'type-intervenant'    => ($ti = $object->getTypeIntervenant()) ? $ti->getId() : null,
         ];
 
         return $data;

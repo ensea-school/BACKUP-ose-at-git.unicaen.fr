@@ -507,14 +507,14 @@ class WorkflowService extends AbstractService
      * @param bool              $reuseMatchedParams Whether to reuse matched parameters
      *
      * @return string Url                         For the link href attribute
-     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
+     * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
      *
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
         $url = \Application::$container->get('ViewHelperManager')->get('url');
 
-        /* @var $url \Zend\View\Helper\Url */
+        /* @var $url \Laminas\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);
     }
 }

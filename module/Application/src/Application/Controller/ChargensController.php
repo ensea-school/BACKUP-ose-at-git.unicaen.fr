@@ -22,8 +22,8 @@ use BjyAuthorize\Exception\UnAuthorizedException;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 
 /**

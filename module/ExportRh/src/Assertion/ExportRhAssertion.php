@@ -11,7 +11,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Description of ExportRhAssertion

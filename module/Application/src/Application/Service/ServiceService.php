@@ -33,7 +33,7 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Zend\Session\Container as SessionContainer;
+use Laminas\Session\Container as SessionContainer;
 
 /**
  * Description of Service

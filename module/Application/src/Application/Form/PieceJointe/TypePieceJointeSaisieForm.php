@@ -3,8 +3,8 @@
 namespace Application\Form\PieceJointe;
 
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\ClassMethods;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\ClassMethods;
 
 /**
  * Description of TypePieceJointeSaisieForm
@@ -67,7 +67,7 @@ class TypePieceJointeSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

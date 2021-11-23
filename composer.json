@@ -9,15 +9,16 @@
     ],
     "require"     : {
         "php"                    : ">=7.4",
-        "unicaen/app"            : "3.1.22",
-        "unicaen/auth"           : "3.2.5",
-        "unicaen/bjy-authorize"  : "3.0.4",
-        "zendframework/zend-file": "2.8.3",
-        "unicaen/code"           : "5.1",
-        "unicaen/import"         : "3.1.7",
-        "unicaen/tbl"            : "4.2.1",
+        "unicaen/app"            : "dev-laminas_migration",
+        "unicaen/zfc-user"       : "dev-laminas_migration",
+        "unicaen/bjy-authorize"  : "dev-laminas_migration",
+        "unicaen/auth"           : "dev-laminas_migration",
+        "laminas/laminas-file"   : "2.8.3",
+        "unicaen/code"           : "dev-laminas_migration",
+        "unicaen/import"         : "dev-laminas_migration",
+        "unicaen/tbl"            : "dev-laminas_migration",
         "unicaen/open-document"  : "3.0.2",
-        "unicaen/siham"          : "^1.0"
+        "unicaen/siham"          : "dev-laminas_migration"
     },
     "autoload": {
         "psr-4": {

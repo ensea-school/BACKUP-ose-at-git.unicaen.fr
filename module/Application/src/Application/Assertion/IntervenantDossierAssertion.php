@@ -11,7 +11,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
@@ -404,7 +404,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         $isValidate         = $this->getServiceDossier()->getValidation($intervenant);
-        
+
         return $this->asserts([
             (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->getCompletude() : false,
             !$isValidate,

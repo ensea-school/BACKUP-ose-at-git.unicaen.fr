@@ -1,7 +1,8 @@
 <?php
+
 namespace Application\Hydrator\Chargens;
 
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Chargens\ScenarioNoeudSeuil;
 
 
@@ -15,8 +16,8 @@ class ScenarioNoeudSeuilDbHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  ScenarioNoeudSeuil $object
+     * @param array              $data
+     * @param ScenarioNoeudSeuil $object
      *
      * @return object
      */
@@ -42,11 +43,11 @@ class ScenarioNoeudSeuilDbHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  ScenarioNoeudSeuil $object
+     * @param ScenarioNoeudSeuil $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'ID'                   => $object->getId(),

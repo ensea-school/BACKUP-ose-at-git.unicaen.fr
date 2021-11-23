@@ -14,7 +14,7 @@ use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\VoirieServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  *
@@ -51,7 +51,7 @@ class IntervenantDossierHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
 
         /* Extract fieldset dossier identite */

@@ -10,7 +10,7 @@ use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementStatutServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  *
@@ -142,7 +142,7 @@ class StatutIntervenantHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                              => $object->getId(),

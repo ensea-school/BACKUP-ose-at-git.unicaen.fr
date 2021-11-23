@@ -5,7 +5,7 @@ namespace Application\Service\Factory;
 use Application\Service\WorkflowService;
 use Psr\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
-use Zend\Console\Console;
+use Laminas\Console\Console;
 
 class WorkflowServiceFactory
 {

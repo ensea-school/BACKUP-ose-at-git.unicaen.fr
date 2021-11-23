@@ -15,8 +15,8 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
-use Zend\Form\Element\Hidden;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Hidden;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of Saisie
@@ -204,7 +204,7 @@ class Saisie extends AbstractForm implements EntityManagerAwareInterface
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -264,8 +264,8 @@ class SaisieHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  VolumeHoraireListe $object
+     * @param array              $data
+     * @param VolumeHoraireListe $object
      *
      * @return object
      */
@@ -301,11 +301,11 @@ class SaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  VolumeHoraireListe $object
+     * @param VolumeHoraireListe $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $lfh = new ListeFilterHydrator();
         $lfh->setEntityManager($this->getEntityManager());

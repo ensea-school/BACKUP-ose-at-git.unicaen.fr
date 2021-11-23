@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper\Paiement;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\Traits\TypeHeuresAwareTrait;
 
@@ -18,18 +18,24 @@ class TypeHeuresViewHelper extends AbstractHelper
     /**
      *
      * @param Entity $typeHeures
+     *
      * @return self
      */
-    public function __invoke( TypeHeures $typeHeures = null )
+    public function __invoke(TypeHeures $typeHeures = null)
     {
         if ($typeHeures) $this->setTypeHeures($typeHeures);
+
         return $this;
     }
+
+
 
     public function __toString()
     {
         return $this->render();
     }
+
+
 
     /**
      *
@@ -39,13 +45,14 @@ class TypeHeuresViewHelper extends AbstractHelper
     public function render()
     {
         $typeHeures = $this->getTypeHeures();
-        if (! $typeHeures) return '';
+        if (!$typeHeures) return '';
 
-        if ($typeHeures->getHistoDestruction()){
-            return '<p class="bg-danger"><abbr title="Ce type d\'heures n\'existe plus">'.$typeHeures.'</abbr></p>';
+        if ($typeHeures->getHistoDestruction()) {
+            return '<p class="bg-danger"><abbr title="Ce type d\'heures n\'existe plus">' . $typeHeures . '</abbr></p>';
         }
 
-        $out = '<abbr title="'.$typeHeures->getLibelleLong().'">'.$typeHeures.'</abbr>';
+        $out = '<abbr title="' . $typeHeures->getLibelleLong() . '">' . $typeHeures . '</abbr>';
+
         return $out;
     }
 }

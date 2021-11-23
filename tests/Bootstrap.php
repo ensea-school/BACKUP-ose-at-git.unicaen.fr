@@ -1,9 +1,10 @@
 <?php
+
 namespace OSETest;
 
-use Zend\Loader\AutoloaderFactory;
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Loader\AutoloaderFactory;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
 use RuntimeException;
 
 error_reporting(E_ALL | E_STRICT);
@@ -11,12 +12,18 @@ chdir(__DIR__);
 
 define('CONFIG_DIR', realpath(__DIR__ . '/config'));
 
+
+
+
+
 /**
  * Test bootstrap, for setting up autoloading
  */
 class Bootstrap
 {
     protected static $serviceManager;
+
+
 
     public static function init()
     {
@@ -36,14 +43,16 @@ class Bootstrap
                 'module_paths' => $zf2ModulePaths,
             ],
         ];
-        $config = \Zend\Stdlib\ArrayUtils::merge($config, require 'config/application.config.php');
+        $config = \Laminas\Stdlib\ArrayUtils::merge($config, require 'config/application.config.php');
 
-        $smConfig = isset($config['service_manager']) ? $config['service_manager'] : [];
+        $smConfig       = isset($config['service_manager']) ? $config['service_manager'] : [];
         $serviceManager = new ServiceManager(new ServiceManagerConfig($smConfig));
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
         static::$serviceManager = $serviceManager;
     }
+
+
 
     public static function chroot()
     {
@@ -51,10 +60,14 @@ class Bootstrap
         chdir($rootPath);
     }
 
+
+
     public static function getServiceManager()
     {
         return static::$serviceManager;
     }
+
+
 
     protected static function initAutoloader()
     {
@@ -66,8 +79,8 @@ class Bootstrap
                 $zf2Path = ZF2_PATH;
             } elseif (is_dir($vendorPath . '/ZF2/library')) {
                 $zf2Path = $vendorPath . '/ZF2/library';
-            } elseif (is_dir($vendorPath . '/zendframework/zend-loader')) {
-                $zf2Path = $vendorPath . '/zendframework/zend-loader';
+            } elseif (is_dir($vendorPath . '/Laminas/Laminas-loader')) {
+                $zf2Path = $vendorPath . '/Laminas/Laminas-loader';
             }
         }
 
@@ -82,20 +95,22 @@ class Bootstrap
             include $vendorPath . '/autoload.php';
         }
 
-        include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
+        include $zf2Path . '/Laminas/Loader/AutoloaderFactory.php';
         AutoloaderFactory::factory([
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'autoregister_zf' => true,
-                'namespaces' => [
+                'namespaces'      => [
                     __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
                 ],
             ],
         ]);
     }
 
+
+
     protected static function findParentPath($path)
     {
-        $dir = __DIR__;
+        $dir         = __DIR__;
         $previousDir = '.';
         while (!is_dir($dir . '/' . $path)) {
             $dir = dirname($dir);
@@ -104,9 +119,14 @@ class Bootstrap
             }
             $previousDir = $dir;
         }
+
         return $dir . '/' . $path;
     }
 }
+
+
+
+
 
 Bootstrap::init();
 Bootstrap::chroot();

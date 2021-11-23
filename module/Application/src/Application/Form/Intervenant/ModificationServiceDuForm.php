@@ -9,7 +9,8 @@ use Application\Form\Intervenant\Traits\ModificationServiceDuFieldsetAwareTrait;
  * Formulaire de modification de service dû d'un intervenant.
  *
  */
-class ModificationServiceDuForm extends AbstractForm {
+class ModificationServiceDuForm extends AbstractForm
+{
     use ModificationServiceDuFieldsetAwareTrait;
 
     /**
@@ -18,36 +19,35 @@ class ModificationServiceDuForm extends AbstractForm {
      */
     public function init()
     {
-        $this   ->setAttribute('method', 'post')
+        $this->setAttribute('method', 'post')
             ->setAttribute('class', 'modification-service-du')
-            ->setHydrator(new \Zend\Hydrator\ClassMethods(false))
-            ->setInputFilter(new \Zend\InputFilter\InputFilter())
-        ;
+            ->setHydrator(new \Laminas\Hydrator\ClassMethods(false))
+            ->setInputFilter(new \Laminas\InputFilter\InputFilter());
 
         $fs = $this->getFieldsetIntervenantModificationServiceDu();
         $fs->setUseAsBaseFieldset(true);
         $this->add($fs, ['name' => 'fs']);
 
         $this->add([
-            'type' => 'Button',
-            'name' => 'ajouter',
-            'options' => [
-                'label' => '<span class="glyphicon glyphicon-plus"></span> Ajouter',
+            'type'       => 'Button',
+            'name'       => 'ajouter',
+            'options'    => [
+                'label'         => '<span class="glyphicon glyphicon-plus"></span> Ajouter',
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
             ],
             'attributes' => [
                 'title' => "Ajouter une modification de service dû",
-                'class' => 'modification-service-du modification-service-du-ajouter btn btn-default btn-xs'
+                'class' => 'modification-service-du modification-service-du-ajouter btn btn-default btn-xs',
             ],
         ]);
 
-        $this->add(new \Zend\Form\Element\Csrf('security'));
+        $this->add(new \Laminas\Form\Element\Csrf('security'));
 
         $this->add([
-            'name' => 'submit',
-            'type'  => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => 'Enregistrer',
             ],
@@ -58,7 +58,7 @@ class ModificationServiceDuForm extends AbstractForm {
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

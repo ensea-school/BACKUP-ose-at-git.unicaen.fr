@@ -39,7 +39,7 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
             }
             ?>
             <tr>
-                <td style="text-align:center;vertical-align:middle"><?= $this->formCheckbox(new \Zend\Form\Element\Checkbox('mep[' . $paiement->getId() . ']')) ?></td>
+                <td style="text-align:center;vertical-align:middle"><?= $this->formCheckbox(new \Laminas\Form\Element\Checkbox('mep[' . $paiement->getId() . ']')) ?></td>
                 <td><?= $this->structure($composante)->renderLink() ?></td>
                 <td><?php
                     if ($service) {

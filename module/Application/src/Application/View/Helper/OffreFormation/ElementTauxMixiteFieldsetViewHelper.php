@@ -3,7 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\TauxMixite\TauxMixiteFieldset;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * ElementTauxMixiteFieldsetViewHelper *
@@ -51,7 +51,7 @@ class ElementTauxMixiteFieldsetViewHelper extends AbstractHtmlElement
                     $res .= '<td>';
                 }
                 $res .= '<div class="input-group">';
-                $res .= $this->getView()->formText( $fieldset->get($th->getCode()) );
+                $res .= $this->getView()->formText($fieldset->get($th->getCode()));
                 $res .= '<span class="input-group-addon">%</span>';
                 $res .= '</div>';
                 if ($inTable) {

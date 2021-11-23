@@ -23,11 +23,11 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Hidden;
+use Laminas\Form\Element\Select;
+use Laminas\Form\Element\Hidden;
 use UnicaenApp\Form\Element\SearchAndSelect;
-use Zend\Form\ElementInterface;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\ElementInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -110,7 +110,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
     /**
      * Retourne tous les boutons d'action
      *
-     * @return \Zend\Form\ElementInterface[]
+     * @return \Laminas\Form\ElementInterface[]
      */
     public function getActionButtons()
     {
@@ -136,7 +136,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
             ->setAttribute('class', 'service-recherche')
             ->setAttribute('id', $this->getId());
 
-        $typeIntervenant = new \Zend\Form\Element\Radio('type-intervenant');
+        $typeIntervenant = new \Laminas\Form\Element\Radio('type-intervenant');
         $typeIntervenant
             ->setValueOptions([
                 ''                                                          => "Peu importe",
@@ -219,7 +219,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -256,7 +256,6 @@ class RechercheFormHydrator implements HydratorInterface
     use EntityManagerAwareTrait;
     use IntervenantServiceAwareTrait;
     use NiveauEtapeServiceAwareTrait;
-
 
 
     /**
@@ -310,7 +309,7 @@ class RechercheFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'type-intervenant'    => $object->getTypeIntervenant() ? $object->getTypeIntervenant()->getId() : null,

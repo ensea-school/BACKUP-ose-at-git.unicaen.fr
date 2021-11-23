@@ -7,7 +7,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Service
@@ -145,26 +145,26 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
     {
         $vhs = $this->getVolumeHoraire($validation);
         $res = [];
-        foreach( $vhs as $vh ){
+        foreach ($vhs as $vh) {
             $res[] = $vh;
         }
 
-        usort($res, function(VolumeHoraire $a, VolumeHoraire $b){
-            if ($a->getHoraireDebut() != $b->getHoraireDebut()){
+        usort($res, function (VolumeHoraire $a, VolumeHoraire $b) {
+            if ($a->getHoraireDebut() != $b->getHoraireDebut()) {
                 $ahd = $a->getHoraireDebut() ? $a->getHoraireDebut()->getTimestamp() : 999999999999999999999999;
                 $bhd = $b->getHoraireDebut() ? $b->getHoraireDebut()->getTimestamp() : 999999999999999999999999;
 
                 return $ahd > $bhd;
             }
 
-            if ($a->getHoraireFin() != $b->getHoraireFin()){
+            if ($a->getHoraireFin() != $b->getHoraireFin()) {
                 $ahf = $a->getHoraireFin() ? $a->getHoraireFin()->getTimestamp() : 999999999999999999999999;
                 $bhf = $b->getHoraireFin() ? $b->getHoraireFin()->getTimestamp() : 999999999999999999999999;
 
                 return $ahf > $bhf;
             }
 
-            if ($a->getTypeIntervention() != $b->getTypeIntervention()){
+            if ($a->getTypeIntervention() != $b->getTypeIntervention()) {
                 $ati = $a->getTypeIntervention() ? $a->getTypeIntervention()->getOrdre() : 999999999999999999999999;
                 $bti = $b->getTypeIntervention() ? $b->getTypeIntervention()->getOrdre() : 999999999999999999999999;
 
@@ -205,9 +205,9 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
      */
     public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
-        if ($this->intervenant !== $intervenant){
+        if ($this->intervenant !== $intervenant) {
             $this->intervenant = $intervenant;
-            $this->changed = true;
+            $this->changed     = true;
         }
 
         return $this;
@@ -236,9 +236,9 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
      */
     public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
-        if ($this->elementPedagogique !== $elementPedagogique){
+        if ($this->elementPedagogique !== $elementPedagogique) {
             $this->elementPedagogique = $elementPedagogique;
-            $this->changed = true;
+            $this->changed            = true;
 
             if ($elementPedagogique) {
                 $vhl               = $this->getVolumeHoraireListe()->getVolumeHoraires();
@@ -282,9 +282,9 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
      */
     public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
     {
-        if ($this->etablissement !== $etablissement){
+        if ($this->etablissement !== $etablissement) {
             $this->etablissement = $etablissement;
-            $this->changed = true;
+            $this->changed       = true;
         }
 
         return $this;
@@ -321,9 +321,9 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
      */
     public function setDescription($description)
     {
-        if ($this->description != $description){
+        if ($this->description != $description) {
             $this->description = $description;
-            $this->changed = true;
+            $this->changed     = true;
         }
 
         return $this;
@@ -336,12 +336,13 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
      */
     public function getStructure()
     {
-        if ($this->getElementPedagogique()){
+        if ($this->getElementPedagogique()) {
             return $this->getElementPedagogique()->getStructure();
         }
-        if ($this->getIntervenant()){
+        if ($this->getIntervenant()) {
             return $this->getIntervenant()->getStructure();
         }
+
         return null;
     }
 

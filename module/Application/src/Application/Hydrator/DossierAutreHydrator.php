@@ -4,7 +4,7 @@ namespace Application\Hydrator;
 
 
 use Application\Service\Traits\DossierAutreTypeServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 class DossierAutreHydrator implements HydratorInterface
 {
@@ -42,7 +42,7 @@ class DossierAutreHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'libelle'     => $object->getLibelle(),

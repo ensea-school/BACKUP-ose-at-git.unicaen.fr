@@ -3,7 +3,7 @@
 namespace Application\View\Helper;
 
 use Psr\Container\ContainerInterface;
-use Zend\Console\Console;
+use Laminas\Console\Console;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 
@@ -18,7 +18,6 @@ class AppLinkFactory
     use AnneeServiceAwareTrait;
 
 
-
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $router = Console::isConsole() ? 'HttpRouter' : 'Router';
@@ -30,7 +29,7 @@ class AppLinkFactory
         $helper->setAnnees($this->getServiceAnnee()->getChoixAnnees());
         $helper->setAnnee($this->getServiceContext()->getAnnee());
 
-        if ($match instanceof \Zend\Router\RouteMatch) {
+        if ($match instanceof \Laminas\Router\RouteMatch) {
             $helper->setRouteMatch($match);
         }
 

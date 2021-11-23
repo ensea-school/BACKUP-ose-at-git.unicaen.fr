@@ -6,12 +6,12 @@ use Application\Processus\AbstractProcessus;
 use Indicateur\Entity\Db\NotificationIndicateur;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
-use Zend\View\Renderer\PhpRenderer;
+use Laminas\View\Renderer\PhpRenderer;
 use UnicaenApp\Controller\Plugin\Mail;
-use Zend\Mime\Part as MimePart;
-use Zend\Mime\Mime;
-use Zend\Mail\Message as MailMessage;
-use Zend\Mime\Message as MimeMessage;
+use Laminas\Mime\Part as MimePart;
+use Laminas\Mime\Mime;
+use Laminas\Mail\Message as MailMessage;
+use Laminas\Mime\Message as MimeMessage;
 
 
 /**

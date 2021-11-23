@@ -55,7 +55,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
                                 $seuil = isset($seuils['seuils'][$sid][$gtfid][$tiid]) ? $seuils['seuils'][$sid][$gtfid][$tiid] : null;
 
                                 if (($sid && $canEditcomp) || (!$sid && $canEditEtab)) {
-                                    $input = new \Zend\Form\Element\Text('sd-' . $sid . '-' . $gtfid . '-' . $tiid);
+                                    $input = new \Laminas\Form\Element\Text('sd-' . $sid . '-' . $gtfid . '-' . $tiid);
                                     $input->setAttributes([
                                         'class'                      => 'form-control',
                                         'onchange'                   => 'changementSeuil(this)',

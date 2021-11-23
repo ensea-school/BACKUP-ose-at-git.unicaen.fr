@@ -9,7 +9,7 @@ $this->headScript()->offsetSetFile(130, $this->basePath('/js/reconduction-centre
             <div class="panel-heading">Veuillez sélectionner une composante :</div>
             <div class="panel-body">
                 <?php
-                $selectStructure = new \Zend\Form\Element\Select('structure');
+                $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
                     ->setValueOptions(['' => "(Sélectionnez une composante)"] + \UnicaenApp\Util::collectionAsOptions($structures))
                     ->setValue($structure ? $structure->getId() : null)

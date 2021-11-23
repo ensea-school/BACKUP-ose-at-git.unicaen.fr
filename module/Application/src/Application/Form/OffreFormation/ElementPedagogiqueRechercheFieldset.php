@@ -10,7 +10,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -349,7 +349,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -417,7 +417,7 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [];
 

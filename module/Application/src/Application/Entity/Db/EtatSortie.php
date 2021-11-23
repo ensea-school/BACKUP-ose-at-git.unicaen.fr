@@ -3,7 +3,7 @@
 namespace Application\Entity\Db;
 
 
-use Zend\Json\Json;
+use Laminas\Json\Json;
 
 /**
  * EtatSortie

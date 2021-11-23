@@ -9,7 +9,7 @@ use Application\Form\OffreFormation\Traits\ElementModulateursFieldsetAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 /**
  * Description of ElementModulateurSaisie

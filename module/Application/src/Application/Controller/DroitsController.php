@@ -315,7 +315,7 @@ class DroitsController extends AbstractController
     /**
      * @param string $roleStatutCode
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     public function getFormDroitsSelection($roleStatutCode)
     {
@@ -339,10 +339,10 @@ class DroitsController extends AbstractController
             $options['statuts']['options']['s-' . $statut->getCode()] = (string)$statut;
         }
 
-        $form = new \Zend\Form\Form;
+        $form = new \Laminas\Form\Form;
         $form->add([
             'name'       => 'role',
-            'type'       => 'Zend\Form\Element\Select',
+            'type'       => 'Laminas\Form\Element\Select',
             'attributes' => ['onchange' => 'document.location.href=$(this).parents("form").attr("action")+"/"+$(this).val();'],
             'options'    => [
                 'label'         => 'Choix du rôle ou du statut à paramétrer :',

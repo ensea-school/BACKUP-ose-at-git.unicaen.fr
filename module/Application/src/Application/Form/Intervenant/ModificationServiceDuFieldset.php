@@ -6,8 +6,8 @@ use Application\Entity\Db\ModificationServiceDu;
 use Application\Form\AbstractFieldset;
 use Application\Form\Intervenant\Traits\MotifModificationServiceDuFieldsetAwareTrait;
 use Application\Entity\Db\Intervenant;
-use Zend\Stdlib\ArrayUtils;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Fieldset de saisie des modifications de service dû par un intervenant.
@@ -19,7 +19,6 @@ class ModificationServiceDuFieldset extends AbstractFieldset
     use MotifModificationServiceDuFieldsetAwareTrait;
 
 
-
     public function init()
     {
         $this
@@ -27,7 +26,7 @@ class ModificationServiceDuFieldset extends AbstractFieldset
             ->setObject(new Intervenant());
 
         $this->add([
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Laminas\Form\Element\Collection',
             'name'    => 'modificationServiceDu',
             'options' => [
                 'count'                  => 0,
@@ -43,7 +42,7 @@ class ModificationServiceDuFieldset extends AbstractFieldset
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -64,11 +63,11 @@ class ModificationServiceDuFieldsetHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Intervenant $intervenant
+     * @param Intervenant $intervenant
      *
      * @return array
      */
-    public function extract($intervenant)
+    public function extract($intervenant): array
     {
         return [
             'modificationServiceDu' => $intervenant->getModificationServiceDu(),
@@ -80,8 +79,8 @@ class ModificationServiceDuFieldsetHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array       $data
-     * @param  Intervenant $intervenant
+     * @param array       $data
+     * @param Intervenant $intervenant
      *
      * @return Intervenant
      */

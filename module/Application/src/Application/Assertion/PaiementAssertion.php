@@ -11,7 +11,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
@@ -36,6 +36,7 @@ class PaiementAssertion extends AbstractAssertion
     {
         return $this->assertPage($page);
     }
+
 
 
     /**
@@ -135,9 +136,11 @@ class PaiementAssertion extends AbstractAssertion
 
     protected function assertMiseEnPaiementDemande(Role $role, MiseEnPaiement $miseEnPaiement)
     {
-        if (! $this->asserts([
+        if (!$this->asserts([
             !$miseEnPaiement->getValidation(),
-        ])) return false;
+        ])) {
+            return false;
+        }
 
         if ($serviceAPayer = $miseEnPaiement->getServiceAPayer()) {
             return $this->assertServiceAPayerDemande($role, $serviceAPayer);
@@ -155,7 +158,7 @@ class PaiementAssertion extends AbstractAssertion
 
         return $this->asserts([
             $this->assertEtapeAtteignable(WfEtape::CODE_DEMANDE_MEP, $serviceAPayer->getIntervenant(), $destStructure),
-            empty($oriStructure) || empty($destStructure) || $oriStructure === $destStructure
+            empty($oriStructure) || empty($destStructure) || $oriStructure === $destStructure,
         ]);
     }
 

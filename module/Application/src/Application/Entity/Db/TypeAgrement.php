@@ -146,7 +146,7 @@ class TypeAgrement implements HistoriqueAwareInterface
      */
     public function getPrivilegeVisualisation()
     {
-        switch($this->getCode()){
+        switch ($this->getCode()) {
             case TypeAgrement::CODE_CONSEIL_ACADEMIQUE:
                 return Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
 
@@ -166,7 +166,7 @@ class TypeAgrement implements HistoriqueAwareInterface
      */
     public function getPrivilegeEdition()
     {
-        switch($this->getCode()){
+        switch ($this->getCode()) {
             case TypeAgrement::CODE_CONSEIL_ACADEMIQUE:
                 return Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION;
 
@@ -186,7 +186,7 @@ class TypeAgrement implements HistoriqueAwareInterface
      */
     public function getPrivilegeSuppression()
     {
-        switch($this->getCode()){
+        switch ($this->getCode()) {
             case TypeAgrement::CODE_CONSEIL_ACADEMIQUE:
                 return Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION;
 
@@ -211,7 +211,7 @@ class TypeAgrement implements HistoriqueAwareInterface
     {
         if (substr($name, 0, $len = 2) === 'is') {
             $code = substr($name, $len);
-            $f    = new \Zend\Filter\Word\CamelCaseToUnderscore();
+            $f    = new \Laminas\Filter\Word\CamelCaseToUnderscore();
             $code = strtoupper($f->filter($code));
             if (in_array($code, static::$codes)) {
                 return $this->getCode() === $code;

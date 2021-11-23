@@ -36,7 +36,7 @@ class Utilisateur extends AbstractUser implements UserInterface
 
 
     /**
-     * @return \Zend\Permissions\Acl\Role\RoleInterface[]
+     * @return \Laminas\Permissions\Acl\Role\RoleInterface[]
      */
     public function getRoles()
     {
@@ -116,10 +116,10 @@ class Utilisateur extends AbstractUser implements UserInterface
      *
      * @return void
      */
-    public function setPassword($password, $encrypt=false)
+    public function setPassword($password, $encrypt = false)
     {
-        if ($encrypt){
-            $bcrypt     = new \Zend\Crypt\Password\Bcrypt();
+        if ($encrypt) {
+            $bcrypt   = new \Laminas\Crypt\Password\Bcrypt();
             $password = $bcrypt->create($password);
         }
 

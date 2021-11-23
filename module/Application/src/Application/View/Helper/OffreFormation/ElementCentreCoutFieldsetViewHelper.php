@@ -3,7 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Dessine un fieldset de type ElementCentreCoutFieldsetViewHelper.

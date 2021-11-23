@@ -17,8 +17,8 @@ use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Application\Form\PieceJointe\Traits\TypePieceJointeSaisieFormAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
 

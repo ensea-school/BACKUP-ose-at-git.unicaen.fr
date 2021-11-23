@@ -14,7 +14,7 @@ use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 
 class SihamConnecteur implements ConnecteurRhInterface

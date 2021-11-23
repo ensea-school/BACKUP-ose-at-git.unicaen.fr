@@ -14,8 +14,8 @@ use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
-use Zend\Validator\Date;
-use Zend\View\Model\ViewModel;
+use Laminas\Validator\Date;
+use Laminas\View\Model\ViewModel;
 
 class ExportRhController extends AbstractController
 {

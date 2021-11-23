@@ -2,22 +2,19 @@
 
 namespace Application\Form\StatutIntervenant;
 
-use Application\Entity\Db\TypeAgrementStatut;
 use Application\Form\AbstractForm;
 use Application\Hydrator\StatutIntervenantHydrator;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementStatutServiceAwareTrait;
-use Zend\Form\Element\Checkbox;
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Number;
-use Zend\Form\Element\Select;
-use Zend\Form\Element\Text;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Checkbox;
+use Laminas\Form\Element\Csrf;
+use Laminas\Form\Element\Number;
+use Laminas\Form\Element\Select;
+use Laminas\Form\Element\Text;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Filter\FloatFromString;
-use Application\Filter\StringFromFloat;
 
 /**
  * Description of StatutIntervenantSaisieForm
@@ -217,7 +214,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
                 'attributes' => [
                     'value' => 0,
                 ],
-                'type'       => 'Zend\Form\Element\Radio',
+                'type'       => 'Laminas\Form\Element\Radio',
             ]);
 
             $this->add([
@@ -376,7 +373,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -399,8 +396,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'plafond-h-c'            => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -409,8 +406,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'plafond-h-h-c'          => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -419,8 +416,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'service-statutaire'     => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -429,8 +426,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'plafond-referentiel'    => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -439,8 +436,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'maximum-HETD'           => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -449,8 +446,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'charges-patronales'     => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -459,8 +456,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'plafond-hc-fi-hors-ead' => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -488,7 +485,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
 
     public function readOnly()
     {
-        /** @var $element \Zend\Form\Element */
+        /** @var $element \Laminas\Form\Element */
         foreach ($this->getElements() as $element) {
             switch (get_class($element)) {
                 case Number::class:

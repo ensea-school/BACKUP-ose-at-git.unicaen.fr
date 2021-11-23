@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -101,7 +101,7 @@ class ScenarioForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -124,9 +124,8 @@ class ScenarioFormHydrator implements HydratorInterface
     use StructureServiceAwareTrait;
 
 
-
     /**
-     * @param  array   $data
+     * @param array    $data
      * @param Scenario $object
      *
      * @return object
@@ -150,7 +149,7 @@ class ScenarioFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'        => $object->getId(),

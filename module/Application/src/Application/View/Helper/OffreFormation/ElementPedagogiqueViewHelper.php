@@ -5,7 +5,7 @@ namespace Application\View\Helper\OffreFormation;
 use Application\Entity\Db\ElementPedagogique as Entity;
 use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 use Application\Util;
 
 /**

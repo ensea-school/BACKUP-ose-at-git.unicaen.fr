@@ -5,7 +5,7 @@ namespace Application\Hydrator;
 use Application\Constants;
 use Doctrine\ORM\EntityManager;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 class GenericHydrator implements HydratorInterface
 {
@@ -48,8 +48,8 @@ class GenericHydrator implements HydratorInterface
     }
 
 
-    
-    public function extract($object)
+
+    public function extract($object): array
     {
         $data = [];
         foreach ($this->elements as $name => $params) {

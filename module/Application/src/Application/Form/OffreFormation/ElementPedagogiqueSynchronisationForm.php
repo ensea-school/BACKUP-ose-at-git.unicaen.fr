@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethods;
 
 /**
  * Description of ElementPedagogiqueSynchronisationForm
@@ -72,7 +72,7 @@ class ElementPedagogiqueSynchronisationForm extends AbstractForm implements Enti
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

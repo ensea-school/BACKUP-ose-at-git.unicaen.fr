@@ -3,7 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\TauxMixite\TauxMixiteForm;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Dessine le formulaire de type EtapeTauxMixiteFormViewHelper.

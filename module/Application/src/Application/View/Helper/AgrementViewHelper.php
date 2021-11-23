@@ -7,7 +7,7 @@ use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\Traits\AgrementAwareTrait;
 use Application\Constants;
 use Application\Entity\Db\Traits\TblAgrementAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of AgrementViewHelper
@@ -84,7 +84,7 @@ class AgrementViewHelper extends AbstractHtmlElement
      */
     public function render()
     {
-        $entity = $this->getAgrement();
+        $entity      = $this->getAgrement();
         $tblAgrement = $this->getTblAgrement();
 
         if (!$entity || !$tblAgrement) {
@@ -92,10 +92,10 @@ class AgrementViewHelper extends AbstractHtmlElement
         }
 
         $vars = [
-            "Type d'agrément" => (string)$entity->getType(),
-            "Date de la décision" => $entity->getDateDecision()->format(Constants::DATE_FORMAT),
+            "Type d'agrément"       => (string)$entity->getType(),
+            "Date de la décision"   => $entity->getDateDecision()->format(Constants::DATE_FORMAT),
             "Année d'agrémentation" => (string)$tblAgrement->getAnneeAgrement()->getLibelle(),
-            "Valable jusqu'en" => (integer)$tblAgrement->getAnneeAgrement()->getId()+(integer)$tblAgrement->getDureeVie()
+            "Valable jusqu'en"      => (integer)$tblAgrement->getAnneeAgrement()->getId() + (integer)$tblAgrement->getDureeVie(),
         ];
 
         if (!$this->short) {

@@ -8,7 +8,7 @@ use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of EtapeSaisie
@@ -59,15 +59,15 @@ class EtapeSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'    => 'type-formation',
-            'options' => [
+            'name'       => 'type-formation',
+            'options'    => [
                 'label' => 'Type de formation',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
-            'type'    => 'Select',
+            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -87,27 +87,27 @@ class EtapeSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'    => 'structure',
-            'options' => [
+            'name'       => 'structure',
+            'options'    => [
                 'label' => 'Structure',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
-            'type'    => 'Select',
+            'type'       => 'Select',
         ]);
 
         $this->add([
-            'name'    => 'domaine-fonctionnel',
-            'options' => [
+            'name'       => 'domaine-fonctionnel',
+            'options'    => [
                 'label' => 'Domaine fonctionnel',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
-            'type'    => 'Select',
+            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -214,14 +214,14 @@ class EtapeSaisie extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
     public function getInputFilterSpecification()
     {
         return [
-            'code'         => [
+            'code'                => [
                 'required' => true,
             ],
             'libelle'             => [
@@ -262,12 +262,11 @@ class EtapeSaisieHydrator implements HydratorInterface
     use TypeFormationServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                        $data
-     * @param  \Application\Entity\Db\Etape $object
+     * @param array                        $data
+     * @param \Application\Entity\Db\Etape $object
      *
      * @return object
      */
@@ -296,11 +295,11 @@ class EtapeSaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\Etape $object
+     * @param \Application\Entity\Db\Etape $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'code'                => $object->getCode(),

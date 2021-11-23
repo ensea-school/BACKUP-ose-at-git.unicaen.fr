@@ -4,8 +4,8 @@ namespace Application\Form\modulateur;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
@@ -27,7 +27,6 @@ class typeModulateurStructureSaisieForm extends AbstractForm
     use TypeModulateurServiceAwareTrait;
 
 
-
     public function init()
     {
         $hydrator = new typeModulateurStructureHydrator();
@@ -43,17 +42,17 @@ class typeModulateurStructureSaisieForm extends AbstractForm
             ]
         );
 
-           $this->add([
-               'name'       => 'structure',
-               'options'    => [
-                   'label' => 'Structure',
-               ],
-               'attributes' => [
-                   'class'            => 'selectpicker',
-                   'data-live-search' => 'true',
-               ],
-               'type'       => 'Select',
-           ]);
+        $this->add([
+            'name'       => 'structure',
+            'options'    => [
+                'label' => 'Structure',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
+        ]);
 
         $this->add([
             'type'       => 'Select',
@@ -109,7 +108,7 @@ class typeModulateurStructureSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -142,8 +141,8 @@ class typeModulateurStructureHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                 $data
-     * @param  \Application\Entity\Db\typeModulateurStructure $object
+     * @param array                                          $data
+     * @param \Application\Entity\Db\typeModulateurStructure $object
      *
      * @return object
      */
@@ -168,18 +167,18 @@ class typeModulateurStructureHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\typeModulateurStructure $object
+     * @param \Application\Entity\Db\typeModulateurStructure $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
-            'id'                => $object->getId(),
-            'type-modulateur'   => $object->getTypeModulateur()->getId(),
-            'structure'         => ($s = $object->getStructure()) ? $s->getId() : null,
-            'annee-debut'       => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
-            'annee-fin'         => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
+            'id'              => $object->getId(),
+            'type-modulateur' => $object->getTypeModulateur()->getId(),
+            'structure'       => ($s = $object->getStructure()) ? $s->getId() : null,
+            'annee-debut'     => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
+            'annee-fin'       => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
         ];
 
         return $data;

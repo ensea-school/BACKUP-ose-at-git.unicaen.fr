@@ -6,8 +6,8 @@ use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Zend\Form\Element\Email;
-use Zend\Form\Element\Tel;
+use Laminas\Form\Element\Email;
+use Laminas\Form\Element\Tel;
 
 /**
  * Description of DossierContactFieldset
@@ -127,7 +127,7 @@ class DossierContactFieldset extends AbstractFieldset
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

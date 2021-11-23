@@ -79,7 +79,7 @@ class ServiceProcessus extends AbstractProcessus
         //@formatter:on
 
         $service->finderByContext($qb);
-        $service->finderByFilterObject($recherche, new \Zend\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
+        $service->finderByFilterObject($recherche, new \Laminas\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
 
         if ($intervenant) {
             $service->finderByIntervenant($intervenant, $qb);

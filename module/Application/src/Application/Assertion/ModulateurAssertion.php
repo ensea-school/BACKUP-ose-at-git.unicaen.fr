@@ -7,7 +7,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeModulateur;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 

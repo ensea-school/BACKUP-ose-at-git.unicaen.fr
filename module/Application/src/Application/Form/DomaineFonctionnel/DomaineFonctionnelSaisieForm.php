@@ -3,8 +3,8 @@
 namespace Application\Form\DomaineFonctionnel;
 
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\SourceServiceAwareTrait;
 
 /**
@@ -15,7 +15,6 @@ use Application\Service\Traits\SourceServiceAwareTrait;
 class DomaineFonctionnelSaisieForm extends AbstractForm
 {
     use SourceServiceAwareTrait;
-
 
 
     public function init()
@@ -59,7 +58,7 @@ class DomaineFonctionnelSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -92,12 +91,11 @@ class DomaineFonctionnelHydrator implements HydratorInterface
     use SourceServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                     $data
-     * @param  \Application\Entity\Db\DomaineFonctionnel $object
+     * @param array                                     $data
+     * @param \Application\Entity\Db\DomaineFonctionnel $object
      *
      * @return object
      */
@@ -117,11 +115,11 @@ class DomaineFonctionnelHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\DomaineFonctionnel $object
+     * @param \Application\Entity\Db\DomaineFonctionnel $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'            => $object->getId()

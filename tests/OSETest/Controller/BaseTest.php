@@ -4,8 +4,8 @@ namespace OSETest\Controller;
 
 use OSETest\Bootstrap;
 use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
  * Classe mère des tests de contrôleur.

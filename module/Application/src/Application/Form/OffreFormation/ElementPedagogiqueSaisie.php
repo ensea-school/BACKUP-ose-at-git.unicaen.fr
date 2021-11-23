@@ -10,7 +10,7 @@ use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of ElementPedagogiqueSaisie
@@ -24,7 +24,6 @@ class ElementPedagogiqueSaisie extends AbstractForm
     use PeriodeServiceAwareTrait;
     use StructureServiceAwareTrait;
     use DisciplineServiceAwareTrait;
-
 
 
     /**
@@ -208,7 +207,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -275,12 +274,11 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     use DisciplineServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                     $data
-     * @param  \Application\Entity\Db\ElementPedagogique $object
+     * @param array                                     $data
+     * @param \Application\Entity\Db\ElementPedagogique $object
      *
      * @return object
      */
@@ -309,11 +307,11 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\ElementPedagogique $object
+     * @param \Application\Entity\Db\ElementPedagogique $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'etape'      => ($e = $object->getEtape()) ? $e->getId() : null,

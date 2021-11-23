@@ -3,7 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of FieldsetElementPedagogiqueRecherche

@@ -6,8 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Acl\Role;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
-
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
@@ -21,16 +20,17 @@ class ModificationServiceDuAssertion extends AbstractAssertion
     protected function assertEntity(ResourceInterface $entity, $privilege = null)
     {
         $role = $this->getRole();
-        if (! $role instanceof Role) return false;
+        if (!$role instanceof Role) return false;
 
-        if ($entity instanceof Intervenant){
-            switch ($privilege){
+        if ($entity instanceof Intervenant) {
+            switch ($privilege) {
                 case Privileges::MODIF_SERVICE_DU_EDITION:
                     return $this->assertIntervenant($entity);
                 case Privileges::MODIF_SERVICE_DU_VISUALISATION:
                     return $this->assertIntervenant($entity);
             }
         }
+
         return true;
     }
 
@@ -38,18 +38,19 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
     protected function assertController($controller, $action = null, $privilege = null)
     {
-        if ($controller == 'Application\Controller\ModificationServiceDu' && $action == 'saisir'){
+        if ($controller == 'Application\Controller\ModificationServiceDu' && $action == 'saisir') {
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
-            if ($intervenant){
+            if ($intervenant) {
                 return $this->assertIntervenant($intervenant);
             }
         }
+
         return true;
     }
 
 
 
-    protected function assertIntervenant( Intervenant $intervenant )
+    protected function assertIntervenant(Intervenant $intervenant)
     {
         return $intervenant->getStatut()->hasPrivilege(Privileges::MODIF_SERVICE_DU_ASSOCIATION);
     }

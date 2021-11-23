@@ -11,8 +11,8 @@ use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieField
 use Application\Form\OffreFormation\EtapeCentreCout\Traits\ElementCentreCoutFieldsetAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use RuntimeException;
-use Zend\Hydrator\HydratorInterface;
-use Zend\Form\Element\Select;
+use Laminas\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Select;
 
 
 /**
@@ -139,7 +139,7 @@ class EtapeCentreCoutForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -260,8 +260,8 @@ class EtapeCentreCoutFormHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  Etape $object
+     * @param array $data
+     * @param Etape $object
      *
      * @return object
      */
@@ -275,11 +275,11 @@ class EtapeCentreCoutFormHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Etape $object
+     * @param Etape $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id' => $object->getId(),

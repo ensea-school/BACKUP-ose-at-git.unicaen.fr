@@ -9,7 +9,7 @@ use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Db\FormuleTestIntervenant;
 
 
@@ -108,7 +108,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data    = [
         ];

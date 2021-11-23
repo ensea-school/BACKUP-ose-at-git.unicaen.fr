@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -21,7 +21,6 @@ class DependanceForm extends AbstractForm
     use TypeIntervenantServiceAwareTrait;
 
 
-
     public function init()
     {
         $hydrator = new DependanceFormHydrator;
@@ -31,7 +30,7 @@ class DependanceForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
-        $etapes = $this->getServiceWfEtape()->getList();
+        $etapes            = $this->getServiceWfEtape()->getList();
         $typesIntervenants = $this->getServiceTypeIntervenant()->getList();
 
         $this->add([
@@ -150,7 +149,7 @@ class DependanceForm extends AbstractForm
             'options'    => [
                 'label'         => 'Type d\'intervenant',
                 'value_options' => Util::collectionAsOptions($typesIntervenants),
-                'empty_option' => 'Tous',
+                'empty_option'  => 'Tous',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -173,7 +172,7 @@ class DependanceForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -203,10 +202,9 @@ class DependanceFormHydrator implements HydratorInterface
     use TypeIntervenantServiceAwareTrait;
 
 
-
     /**
-     * @param  array      $data
-     * @param  WfEtapeDep $object
+     * @param array      $data
+     * @param WfEtapeDep $object
      *
      * @return object
      */
@@ -232,7 +230,7 @@ class DependanceFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'etape-suivante'   => $object->getEtapeSuiv() ? $object->getEtapeSuiv()->getId() : null,

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 class Scenario implements HistoriqueAwareInterface, ResourceInterface
 {
@@ -100,10 +100,13 @@ class Scenario implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getTypeString()
     {
-        switch( $this->type ){
-            case 0: return 'Local';
-            case 1: return 'Prévisionnel';
-            case 2: return 'Réel';
+        switch ($this->type) {
+            case 0:
+                return 'Local';
+            case 1:
+                return 'Prévisionnel';
+            case 2:
+                return 'Réel';
         }
     }
 

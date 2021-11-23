@@ -3,7 +3,7 @@
 namespace Application\View\Helper;
 
 use Application\Form\Supprimer;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 
 /**
@@ -15,6 +15,8 @@ class FormSupprimerViewHelper extends AbstractHtmlElement
 {
 
     protected $form;
+
+
 
     /**
      *
@@ -51,13 +53,14 @@ class FormSupprimerViewHelper extends AbstractHtmlElement
     public function render()
     {
         $res = '';
-        if ($this->form){
+        if ($this->form) {
             $res .= $this->getView()->form()->openTag($this->form);
             $res .= $this->getView()->formHidden($this->form->get('id'));
             $res .= $this->getView()->formHidden($this->form->get('security'));
             $res .= $this->getView()->formSubmit($this->form->get('submit')->setAttribute('class', 'btn btn-primary'));
             $res .= $this->getView()->form()->closeTag();
         }
+
         return $res;
     }
 

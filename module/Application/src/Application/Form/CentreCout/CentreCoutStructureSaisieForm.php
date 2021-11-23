@@ -6,8 +6,8 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\CentreCoutStructureServiceAwareTrait;
 
 /**
@@ -19,7 +19,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
 {
     use StructureServiceAwareTrait;
     use CentreCoutStructureServiceAwareTrait;
-
 
 
     public function init()
@@ -78,7 +77,7 @@ class CentreCoutStructureSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -109,7 +108,6 @@ class CentreCoutStructureHydrator implements HydratorInterface
     use CentreCoutServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
@@ -137,7 +135,7 @@ class CentreCoutStructureHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'          => $object->getId(),

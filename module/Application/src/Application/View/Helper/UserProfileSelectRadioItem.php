@@ -20,7 +20,6 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
     use SessionContainerTrait;
 
 
-
     /**
      * Retourne le code HTML généré par cette aide de vue.
      *
@@ -35,7 +34,7 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
         if ($this->role->getPeutChangerStructure() && $perimetre && $perimetre->isEtablissement()) {
             $selectClass = 'user-profile-select-input-structure';
 
-            $select = new \Zend\Form\Element\Select('structure-' . $this->role->getRoleId());
+            $select = new \Laminas\Form\Element\Select('structure-' . $this->role->getRoleId());
             $select
                 ->setEmptyOption("(Aucune)")
                 ->setValueOptions($this->getStructures())

@@ -7,7 +7,7 @@ use DateTime;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Filter\BytesFormatter;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Controller\Plugin\Upload\UploadedFileInterface;
 
 /**

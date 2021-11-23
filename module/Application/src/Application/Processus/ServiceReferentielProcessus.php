@@ -22,7 +22,6 @@ class ServiceReferentielProcessus extends AbstractProcessus
     use VolumeHoraireReferentielServiceAwareTrait;
 
 
-
     /**
      *
      * @param Intervenant|null $intervenant
@@ -46,7 +45,7 @@ class ServiceReferentielProcessus extends AbstractProcessus
         $volumeHoraireReferentielService->leftJoin(EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);
 
         $serviceReferentiel->finderByContext($qb);
-        $serviceReferentiel->finderByFilterObject($recherche, new \Zend\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
+        $serviceReferentiel->finderByFilterObject($recherche, new \Laminas\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
 
         if ($intervenant) {
             $serviceReferentiel->finderByIntervenant($intervenant, $qb);
@@ -56,10 +55,10 @@ class ServiceReferentielProcessus extends AbstractProcessus
         }
 
         $services = $serviceReferentiel->getList($qb);
-        /* @var $services ServiceReferentiel[]  */
+        /* @var $services ServiceReferentiel[] */
 
-        foreach( $services as $k => $service ){
-            $service->setTypeVolumeHoraire( $recherche->getTypeVolumehoraire() );
+        foreach ($services as $k => $service) {
+            $service->setTypeVolumeHoraire($recherche->getTypeVolumehoraire());
         }
 
         return $services;

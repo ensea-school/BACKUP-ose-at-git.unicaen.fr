@@ -14,7 +14,7 @@ use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 use Application\Service\Traits\SourceServiceAwareTrait;
 
 
@@ -32,7 +32,6 @@ class BudgetController extends AbstractController
     use AnneeServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use SourceServiceAwareTrait;
-
 
 
     public function indexAction()
@@ -121,11 +120,12 @@ class BudgetController extends AbstractController
 
                 $data[$sid][$trid] = [
                     'dotation' => $hab,
-                    'usage' => $hli
+                    'usage'    => $hli,
                 ];
             }
         }
-        return new \Zend\View\Model\JsonModel($data);
+
+        return new \Laminas\View\Model\JsonModel($data);
     }
 
 

@@ -15,12 +15,12 @@ use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
 use UnicaenApp\Util;
-use Zend\Filter\PregReplace;
-use Zend\Validator\Callback;
-use Zend\Validator\NotEmpty;
+use Laminas\Filter\PregReplace;
+use Laminas\Validator\Callback;
+use Laminas\Validator\NotEmpty;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -263,7 +263,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -274,7 +274,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
                 'required'   => true,
                 'validators' => [
                     [
-                        'name'    => 'Zend\Validator\NotEmpty',
+                        'name'    => 'Laminas\Validator\NotEmpty',
                         'options' => [
                             'messages' => [
                                 NotEmpty::IS_EMPTY => "La structure est requise",
@@ -287,7 +287,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
                 'required'   => true,
                 'validators' => [
                     [
-                        'name'    => 'Zend\Validator\NotEmpty',
+                        'name'    => 'Laminas\Validator\NotEmpty',
                         'options' => [
                             'messages' => [
                                 NotEmpty::IS_EMPTY => "La fonction référentielle est requise",
@@ -299,20 +299,20 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
             'heures'       => [
                 'required' => true,
                 'filters'  => [
-                    ['name' => 'Zend\Filter\StringTrim'],
+                    ['name' => 'Laminas\Filter\StringTrim'],
                     new PregReplace(['pattern' => '/,/', 'replacement' => '.']),
                 ],
             ],
             'commentaires' => [
                 'required' => false,
                 'filters'  => [
-                    ['name' => 'Zend\Filter\StringTrim'],
+                    ['name' => 'Laminas\Filter\StringTrim'],
                 ],
             ],
             'formation'    => [
                 'required' => false,
                 'filters'  => [
-                    ['name' => 'Zend\Filter\StringTrim'],
+                    ['name' => 'Laminas\Filter\StringTrim'],
                 ],
             ],
         ];
@@ -382,7 +382,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [];
 

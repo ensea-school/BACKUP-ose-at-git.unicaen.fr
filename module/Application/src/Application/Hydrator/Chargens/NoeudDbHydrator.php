@@ -1,7 +1,8 @@
 <?php
+
 namespace Application\Hydrator\Chargens;
 
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Chargens\Noeud;
 
 
@@ -15,8 +16,8 @@ class NoeudDbHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  Noeud $object
+     * @param array $data
+     * @param Noeud $object
      *
      * @return object
      */
@@ -64,19 +65,19 @@ class NoeudDbHydrator implements HydratorInterface
     public function hydradeSeuilHeures(array $data, $object)
     {
         $seuilsParDefaut = isset($data['SEUILS_PAR_DEFAUT']) ? $data['SEUILS_PAR_DEFAUT'] : [];
-        foreach( $seuilsParDefaut as $scenario => $sd ){
-            foreach( $sd as $typeIntervention => $seuilParDefaut ){
+        foreach ($seuilsParDefaut as $scenario => $sd) {
+            foreach ($sd as $typeIntervention => $seuilParDefaut) {
                 $object->setSeuilParDefaut($scenario, $typeIntervention, $seuilParDefaut);
             }
         }
 
         $heures = isset($data['HEURES']) ? $data['HEURES'] : [];
-        foreach( $heures as $scenario => $h ){
+        foreach ($heures as $scenario => $h) {
             $object->setHeures($scenario, $h);
         }
 
         $hetd = isset($data['HETD']) ? $data['HETD'] : [];
-        foreach( $hetd as $scenario => $h ){
+        foreach ($hetd as $scenario => $h) {
             $object->setHetd($scenario, $h);
         }
 
@@ -88,11 +89,11 @@ class NoeudDbHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Noeud $object
+     * @param Noeud $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'CODE'                   => $object->getCode(),

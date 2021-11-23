@@ -10,7 +10,7 @@ use BjyAuthorize\Provider\Role\ProviderInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
-use Zend\Permissions\Acl\Role\RoleInterface;
+use Laminas\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;

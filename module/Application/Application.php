@@ -57,34 +57,34 @@ class Application
             include $appDir . '/vendor/autoload.php';
         }
 
-        if (!class_exists('Zend\Loader\AutoloaderFactory')) {
-            throw new RuntimeException('Unable to load ZF3. Run `php composer.phar install` or define a ZF3_PATH environment variable.');
+        if (!class_exists('Laminas\Loader\AutoloaderFactory')) {
+            throw new RuntimeException('Unable to load Laminas. Run `php composer.phar install` or define a LAMINAS_PATH environment variable.');
         }
     }
 
 
 
-    private static function zendApplicationStart()
+    private static function LaminasApplicationStart()
     {
         $configuration = AppConfig::getGlobal();
 
-        //Zend\Mvc\Application::init(AppConfig::getGlobal())->run();
+        //Laminas\Mvc\Application::init(AppConfig::getGlobal())->run();
 
         // Prepare the service manager
         $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
-        $smConfig = new \Zend\Mvc\Service\ServiceManagerConfig($smConfig);
+        $smConfig = new \Laminas\Mvc\Service\ServiceManagerConfig($smConfig);
 
-        $serviceManager  = new Zend\ServiceManager\ServiceManager();
+        $serviceManager  = new Laminas\ServiceManager\ServiceManager();
         self::$container = $serviceManager;
         $smConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('ApplicationConfig', $configuration);
 
         // Load modules
-        /** @var $moduleManager \Zend\ModuleManager\ModuleManager */
+        /** @var $moduleManager \Laminas\ModuleManager\ModuleManager */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
         $application = $serviceManager->get('Application')->bootstrap([]);
-        /** @var $application \Zend\Mvc\Application */
+        /** @var $application \Laminas\Mvc\Application */
         $application->run();
     }
 
@@ -117,7 +117,7 @@ class Application
             require 'public/maintenance.php';
             die();
         } else {
-            self::zendApplicationStart();
+            self::LaminasApplicationStart();
         }
     }
 

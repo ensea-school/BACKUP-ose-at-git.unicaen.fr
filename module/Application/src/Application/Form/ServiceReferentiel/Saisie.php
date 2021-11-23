@@ -6,9 +6,9 @@ use Application\Entity\Db\Service;
 use Application\Form\AbstractForm;
 use Application\Form\ServiceReferentiel\Traits\SaisieFieldsetAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
-use Zend\Form\FormInterface;
-use Zend\Form\Element\Hidden;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\FormInterface;
+use Laminas\Form\Element\Hidden;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -20,7 +20,6 @@ class Saisie extends AbstractForm
 {
     use SaisieFieldsetAwareTrait;
     use FonctionReferentielServiceAwareTrait;
-
 
 
     public function __construct($name = null, $options = [])
@@ -35,8 +34,8 @@ class Saisie extends AbstractForm
      *
      * Ensures the object is populated with validated values.
      *
-     * @param  \Application\Entity\Db\ServiceReferentiel $object
-     * @param  int                                       $flags
+     * @param \Application\Entity\Db\ServiceReferentiel $object
+     * @param int                                       $flags
      *
      * @return mixed|void
      */
@@ -102,13 +101,13 @@ class Saisie extends AbstractForm
 
         $data = [
             'etape-requise' => [],
-            'structures' => [],
+            'structures'    => [],
         ];
-        foreach( $fonctions as $fonction ){
-            if ($fonction->isEtapeRequise()){
+        foreach ($fonctions as $fonction) {
+            if ($fonction->isEtapeRequise()) {
                 $data['etape-requise'][] = $fonction->getId();
             }
-            if ($fonction->getStructure()){
+            if ($fonction->getStructure()) {
                 $data['structures'][$fonction->getId()] = $fonction->getStructure()->getId();
             }
         }
@@ -120,7 +119,7 @@ class Saisie extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -144,8 +143,8 @@ class SaisieHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                     $data
-     * @param  \Application\Entity\Db\ServiceReferentiel $object
+     * @param array                                     $data
+     * @param \Application\Entity\Db\ServiceReferentiel $object
      *
      * @return object
      */
@@ -161,11 +160,11 @@ class SaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\ServiceReferentiel $object
+     * @param \Application\Entity\Db\ServiceReferentiel $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data            = [];
         $data['service'] = $object;

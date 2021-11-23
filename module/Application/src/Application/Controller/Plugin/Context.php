@@ -4,7 +4,7 @@ namespace Application\Controller\Plugin;
 
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 use LogicException;
 use RuntimeException;
 

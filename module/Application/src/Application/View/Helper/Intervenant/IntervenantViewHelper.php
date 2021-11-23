@@ -7,7 +7,7 @@ use Application\Constants;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 
@@ -215,5 +215,5 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
         return $statuts;
     }
-    
+
 }

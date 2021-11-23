@@ -5,7 +5,7 @@ namespace Application\Form\Droits;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\PerimetreServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of RoleForm
@@ -15,7 +15,6 @@ use Zend\Hydrator\HydratorInterface;
 class RoleForm extends AbstractForm
 {
     use PerimetreServiceAwareTrait;
-
 
 
     public function init()
@@ -88,7 +87,7 @@ class RoleForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -123,7 +122,6 @@ class RoleFormHydrator implements HydratorInterface
     use PerimetreServiceAwareTrait;
 
 
-
     /**
      * @param array                       $data
      * @param \Application\Entity\Db\Role $object
@@ -148,7 +146,7 @@ class RoleFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                     => $object->getId(),

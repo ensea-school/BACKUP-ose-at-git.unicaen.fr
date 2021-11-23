@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**

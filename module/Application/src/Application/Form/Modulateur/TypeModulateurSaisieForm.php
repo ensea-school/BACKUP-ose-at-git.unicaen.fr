@@ -3,8 +3,8 @@
 namespace Application\Form\modulateur;
 
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 
@@ -17,7 +17,6 @@ class typeModulateurSaisieForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
     use TypeModulateurServiceAwareTrait;
-
 
 
     public function init()
@@ -63,7 +62,7 @@ class typeModulateurSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -90,12 +89,11 @@ class typeModulateurHydrator implements HydratorInterface
     use TypeModulateurServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                 $data
-     * @param  \Application\Entity\Db\typeModulateur $object
+     * @param array                                 $data
+     * @param \Application\Entity\Db\typeModulateur $object
      *
      * @return object
      */
@@ -112,16 +110,16 @@ class typeModulateurHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\typeModulateur $object
+     * @param \Application\Entity\Db\typeModulateur $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
-            'id'                    => $object->getId(),
-            'code'                  => $object->getCode(),
-            'libelle'               => $object->getLibelle(),
+            'id'      => $object->getId(),
+            'code'    => $object->getCode(),
+            'libelle' => $object->getLibelle(),
         ];
 
         return $data;

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Modulateur
@@ -248,10 +248,11 @@ class Modulateur implements HistoriqueAwareInterface, ResourceInterface
         return $this->elementModulateur;
     }
 
+
+
     public function getResourceId()
     {
         return "Modulateur";
     }
-
 
 }

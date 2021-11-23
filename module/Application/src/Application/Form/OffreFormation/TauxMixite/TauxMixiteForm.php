@@ -8,9 +8,8 @@ use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Entity\Db\TypeHeures;
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\TauxMixite\Traits\TauxMixiteFieldsetAwareTrait;
-use Zend\Form\Element\Text;
-use Zend\Hydrator\HydratorInterface;
-
+use Laminas\Form\Element\Text;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -122,7 +121,7 @@ class TauxMixiteForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -190,8 +189,8 @@ class TauxMixiteFormHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  Etape $object
+     * @param array $data
+     * @param Etape $object
      *
      * @return object
      */
@@ -205,11 +204,11 @@ class TauxMixiteFormHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Etape $object
+     * @param Etape $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id' => $object->getId(),

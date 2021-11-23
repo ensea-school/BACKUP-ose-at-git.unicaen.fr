@@ -5,7 +5,7 @@ namespace ExportRh\Form;
 use Application\Form\AbstractForm;
 use ExportRh\Form\Fieldset\GeneriqueFieldset;
 use ExportRh\Hydrator\ExportRhHydrator;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 class ExportRhForm extends AbstractForm
 {
@@ -49,7 +49,7 @@ class ExportRhForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

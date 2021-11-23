@@ -7,10 +7,10 @@ use Application\Entity\Db\ModeleContrat;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Unicaen\OpenDocument\Document;
-use Zend\Mail\Message as MailMessage;
-use Zend\Mime\Message;
-use Zend\Mime\Mime;
-use Zend\Mime\Part;
+use Laminas\Mail\Message as MailMessage;
+use Laminas\Mime\Message;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 
 /**
  * Description of ModeleContratService

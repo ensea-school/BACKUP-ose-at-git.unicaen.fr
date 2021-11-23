@@ -7,7 +7,7 @@ use Application\Service\Traits\CcActiviteServiceAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 class CentreCoutHydrator implements HydratorInterface
 {
@@ -19,8 +19,8 @@ class CentreCoutHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                             $data
-     * @param  \Application\Entity\Db\CentreCout $object
+     * @param array                             $data
+     * @param \Application\Entity\Db\CentreCout $object
      *
      * @return object
      */
@@ -49,11 +49,11 @@ class CentreCoutHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\CentreCout $object
+     * @param \Application\Entity\Db\CentreCout $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'               => $object->getId(),

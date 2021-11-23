@@ -3,7 +3,7 @@ namespace Application\View\Helper;
 
 
 use UnicaenApp\Exception\LogicException;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Class CartridgeViewHelper

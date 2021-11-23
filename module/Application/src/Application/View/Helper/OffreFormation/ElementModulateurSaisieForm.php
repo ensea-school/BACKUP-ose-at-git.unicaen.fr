@@ -3,9 +3,9 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\EtapeModulateursSaisie;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 /**
  * Description of EtapeModulateursSaisieForm

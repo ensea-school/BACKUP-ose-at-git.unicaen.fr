@@ -2,7 +2,7 @@
 
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $controller \Laminas\Mvc\Controller\AbstractController
  * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
@@ -19,7 +19,7 @@ $test4->run();
 class Test4
 {
     /**
-     * @var \Zend\Mvc\Controller\AbstractController
+     * @var \Laminas\Mvc\Controller\AbstractController
      */
     public $controller;
 

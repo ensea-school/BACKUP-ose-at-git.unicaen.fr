@@ -80,9 +80,9 @@ class DossierBancaireFieldset extends AbstractFieldset
                     ['name' => 'StringToUpper'],
                 ],
                 'validators' => [
-                    new \Zend\Validator\Regex([
+                    new \Laminas\Validator\Regex([
                         'pattern'  => "/[0-9a-zA-Z]{8,11}/",
-                        'messages' => [\Zend\Validator\Regex::NOT_MATCH => "Le BIC doit contenir 8 à 11 caractères"],
+                        'messages' => [\Laminas\Validator\Regex::NOT_MATCH => "Le BIC doit contenir 8 à 11 caractères"],
                     ]),
                 ],
             ],

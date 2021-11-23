@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 
 use Application\Service\Traits\EmployeurServiceAwareTrait;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Description of EmployeurController

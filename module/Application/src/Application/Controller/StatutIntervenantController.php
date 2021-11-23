@@ -13,7 +13,7 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use UnicaenAuth\Service\Traits\RoleServiceAwareTrait;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 class StatutIntervenantController extends AbstractController
 {
@@ -113,7 +113,7 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
 
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-        
+
 
         if (!$canEdit) {
             $this->flashMessenger()->addErrorMessage('Statut non modifiable : droit non accordé, car vous n\'avez pas le privilège pour cela ou bien le statut est synchronisé depuis un autre logiciel');

@@ -3,10 +3,10 @@
 namespace Application\Form\View\Helper;
 
 use UnicaenApp\Form\Element\SearchAndSelect;
-use Zend\Form\Element\Text;
-use Zend\Form\ElementInterface;
-use Zend\Form\Exception\InvalidElementException;
-use Zend\Form\View\Helper\FormText;
+use Laminas\Form\Element\Text;
+use Laminas\Form\ElementInterface;
+use Laminas\Form\Exception\InvalidElementException;
+use Laminas\Form\View\Helper\FormText;
 
 /**
  * Aide de vue générant le code HTML de l'élément de formulaire du même nom.

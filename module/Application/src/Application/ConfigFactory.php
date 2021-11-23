@@ -5,8 +5,8 @@ namespace Application;
 
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
-use Zend\Config\Factory;
-use Zend\Stdlib\Glob;
+use Laminas\Config\Factory;
+use Laminas\Stdlib\Glob;
 
 class ConfigFactory
 {
@@ -42,11 +42,10 @@ class ConfigFactory
         ];
 
         if (isset($config['console'])) {
-            $finalConfig['console'] = [
-                'router' => [
-                    'routes' => self::routeSimplified($config['console']),
-                ],
-            ];
+            $finalConfig['console'] = [];
+            foreach ($config['console'] as $cr => $cc) {
+                $finalConfig['console'][$cr] = self::routeSimplified($cc);
+            }
         }
 
         if (isset($config['routes'])) {
@@ -116,10 +115,10 @@ class ConfigFactory
     public static function autoloaderConfig(string $dir, string $namespace): array
     {
         return [
-            'Zend\Loader\ClassMapAutoloader' => [
+            'Laminas\Loader\ClassMapAutoloader' => [
                 $dir . '/autoload_classmap.php',
             ],
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
                     $namespace => $dir . '/src',
                 ],

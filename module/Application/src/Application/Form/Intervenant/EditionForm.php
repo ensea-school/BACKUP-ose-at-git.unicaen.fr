@@ -25,8 +25,8 @@ use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Source;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
-use Zend\Form\Element;
-use Zend\Form\FormInterface;
+use Laminas\Form\Element;
+use Laminas\Form\FormInterface;
 
 /**
  * Description of EditionForm
@@ -503,7 +503,7 @@ class EditionForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

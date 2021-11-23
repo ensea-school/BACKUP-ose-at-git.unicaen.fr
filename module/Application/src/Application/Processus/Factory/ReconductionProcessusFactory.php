@@ -10,8 +10,8 @@ use Application\Service\ElementPedagogiqueService;
 use Application\Service\EtapeService;
 use Application\Service\VolumeHoraireEnsService;
 use Psr\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  *

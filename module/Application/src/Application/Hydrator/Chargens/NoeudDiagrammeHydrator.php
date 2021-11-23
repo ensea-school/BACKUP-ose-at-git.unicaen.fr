@@ -1,10 +1,11 @@
 <?php
+
 namespace Application\Hydrator\Chargens;
 
 use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Chargens\ChargensProvider;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Chargens\Noeud;
 
 
@@ -37,8 +38,8 @@ class NoeudDiagrammeHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  Noeud $object
+     * @param array $data
+     * @param Noeud $object
      *
      * @return object
      */
@@ -92,8 +93,8 @@ class NoeudDiagrammeHydrator implements HydratorInterface
         if ($object->isCanEditAssiduite() && array_key_exists('seuils-assiduite', $data)) {
             $seuilsAssiduite = (array)$data['seuils-assiduite'];
             foreach ($seuilsAssiduite as $typeInterventionId => $seuilAssiduite) {
-                $typeIntervention  = $this->chargens->getEntities()->get(TypeIntervention::class, $typeInterventionId);
-                $seuilAssiduite = stringToFloat($seuilAssiduite);
+                $typeIntervention = $this->chargens->getEntities()->get(TypeIntervention::class, $typeInterventionId);
+                $seuilAssiduite   = stringToFloat($seuilAssiduite);
                 if ($seuilAssiduite !== null || $scenarioNoeud->hasSeuil($typeIntervention)) {
                     $scenarioNoeud->getSeuil($typeIntervention)->setAssiduite($seuilAssiduite);
                 }
@@ -108,11 +109,11 @@ class NoeudDiagrammeHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  Noeud $object
+     * @param Noeud $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $scenarioNoeud = $object->getScenarioNoeud();
 
@@ -163,7 +164,7 @@ class NoeudDiagrammeHydrator implements HydratorInterface
         }
 
         $seuilsDefaut = $scenarioNoeud->getSeuilParDefaut();
-        foreach( $seuilsDefaut as $typeIntervention => $dedoublement ){
+        foreach ($seuilsDefaut as $typeIntervention => $dedoublement) {
             $data['seuils-dedoublement-defaut'][$typeIntervention] = $dedoublement;
         }
 

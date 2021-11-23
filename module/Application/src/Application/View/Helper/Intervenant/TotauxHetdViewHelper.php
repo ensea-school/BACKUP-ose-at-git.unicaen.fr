@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper\Intervenant;
 
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\FormuleResultat;
 use Application\Entity\Db\Interfaces\FormuleResultatAwareInterface;
 use Application\Entity\Db\Traits\FormuleResultatAwareTrait;
@@ -15,7 +15,6 @@ use Application\Entity\Db\Traits\FormuleResultatAwareTrait;
 class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResultatAwareInterface
 {
     use FormuleResultatAwareTrait;
-
 
 
     /**

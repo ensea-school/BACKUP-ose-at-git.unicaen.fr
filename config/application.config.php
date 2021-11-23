@@ -78,23 +78,23 @@ class AppConfig
         $env = self::getEnv();
 
         $modules = [
-            'Zend\Cache',
-            'Zend\Filter',
-            'Zend\Form',
-            'Zend\Hydrator',
-            'Zend\I18n',
-            'Zend\InputFilter',
-            'Zend\Log',
-            'Zend\Mail',
-            'Zend\Mvc\Console',
-            'Zend\Mvc\I18n',
-            'Zend\Mvc\Plugin\FlashMessenger',
-            'Zend\Mvc\Plugin\Prg',
-            'Zend\Navigation',
-            'Zend\Paginator',
-            'Zend\Router',
-            'Zend\Session',
-            'Zend\Validator',
+            'Laminas\Cache',
+            'Laminas\Filter',
+            'Laminas\Form',
+            'Laminas\Hydrator',
+            'Laminas\I18n',
+            'Laminas\InputFilter',
+            'Laminas\Log',
+            'Laminas\Mail',
+            'Laminas\Mvc\Console',
+            'Laminas\Mvc\I18n',
+            'Laminas\Mvc\Plugin\FlashMessenger',
+            'Laminas\Mvc\Plugin\Prg',
+            'Laminas\Navigation',
+            'Laminas\Paginator',
+            'Laminas\Router',
+            'Laminas\Session',
+            'Laminas\Validator',
             'DoctrineModule',
             'DoctrineORMModule',
             'ZfcUser',
@@ -114,7 +114,7 @@ class AppConfig
         }
 
         if ('dev' == $env) {
-            $modules[] = 'ZendDeveloperTools';
+            $modules[] = 'Laminas\DeveloperTools';
         }
 
         if (self::inConsole() || 'dev' == $env) {

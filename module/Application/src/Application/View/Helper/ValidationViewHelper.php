@@ -4,7 +4,7 @@ namespace Application\View\Helper;
 
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\Traits\ValidationAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of ValidationViewHelper

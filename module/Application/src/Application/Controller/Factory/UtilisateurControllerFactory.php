@@ -8,7 +8,7 @@ use UnicaenApp\Mapper\Ldap\People as LdapPeopleMapper;
 use UnicaenAuth\Options\ModuleOptions;
 use UnicaenAuth\Service\ShibService;
 use UnicaenAuth\Service\UserContext;
-use Zend\Authentication\AuthenticationService;
+use Laminas\Authentication\AuthenticationService;
 use ZfcUser\Mapper\UserInterface;
 
 class UtilisateurControllerFactory

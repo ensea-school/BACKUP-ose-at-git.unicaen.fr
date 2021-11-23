@@ -3,7 +3,7 @@
 namespace Application\Hydrator;
 
 
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 class CentreCoutActiviteHydrator implements HydratorInterface
 {
@@ -11,8 +11,8 @@ class CentreCoutActiviteHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  \Application\Entity\Db\CcActivite $object
+     * @param array                             $data
+     * @param \Application\Entity\Db\CcActivite $object
      *
      * @return object
      */
@@ -30,24 +30,25 @@ class CentreCoutActiviteHydrator implements HydratorInterface
     }
 
 
+
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\CcActivite $object
+     * @param \Application\Entity\Db\CcActivite $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
-            'id'            => $object->getId(),
-            'code'          => $object->getCode(),
-            'libelle'       => $object->getLibelle(),
-            'fi'            => $object->getFi(),
-            'fa'            => $object->getFa(),
-            'fc'            => $object->getFc(),
-            'fc_majore'     => $object->getFcMajorees(),
-            'referentiel'   => $object->getReferentiel(),
+            'id'          => $object->getId(),
+            'code'        => $object->getCode(),
+            'libelle'     => $object->getLibelle(),
+            'fi'          => $object->getFi(),
+            'fa'          => $object->getFa(),
+            'fc'          => $object->getFc(),
+            'fc_majore'   => $object->getFcMajorees(),
+            'referentiel' => $object->getReferentiel(),
         ];
 
         return $data;

@@ -4,7 +4,7 @@ namespace Application\Assertion;
 
 use Application\Acl\Role;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**

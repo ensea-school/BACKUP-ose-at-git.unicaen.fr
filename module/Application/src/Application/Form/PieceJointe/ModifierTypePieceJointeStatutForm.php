@@ -6,9 +6,9 @@ use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
-use Zend\Form\Element\Csrf;
+use Laminas\Form\Element\Csrf;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -189,7 +189,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -203,12 +203,12 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
                 'required'   => false,
                 'validators' => [
                     [
-                        'name'    => 'Zend\Validator\GreaterThan',
+                        'name'    => 'Laminas\Validator\GreaterThan',
                         'options' => [
                             'min'       => 0,
                             'inclusive' => true,
                             'messages'  => [
-                                \Zend\Validator\GreaterThan::NOT_GREATER => "Le nombre d'heures doit être supérieur à 0",
+                                \Laminas\Validator\GreaterThan::NOT_GREATER => "Le nombre d'heures doit être supérieur à 0",
                             ],
                         ],
                     ],
@@ -282,7 +282,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'              => $object->getId(),

@@ -33,7 +33,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 
     /**
      *
-     * @var \Zend\Form\Form
+     * @var \Laminas\Form\Form
      */
     private        $form;
 
@@ -96,14 +96,14 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 
     /**
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     public function getForm()
     {
         if (null === $this->form) {
-            $this->form = new \Zend\Form\Form;
-            $this->form->add(new \Zend\Form\Element\Hidden('changements'));
-            $this->form->add(new \Zend\Form\Element\Hidden('change-index'));
+            $this->form = new \Laminas\Form\Form;
+            $this->form->add(new \Laminas\Form\Element\Hidden('changements'));
+            $this->form->add(new \Laminas\Form\Element\Hidden('change-index'));
             $this->form->add([
                 'name'       => 'submit',
                 'type'       => 'Submit',

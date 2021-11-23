@@ -16,7 +16,7 @@ use UnicaenImport\Entity\Db\Source;
 use Application\Entity\Db\Structure;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**

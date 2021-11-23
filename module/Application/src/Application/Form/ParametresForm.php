@@ -420,7 +420,7 @@ class ParametresForm extends AbstractForm
                 'data-size' => 20,
             ],
         ]);
-        
+
         $this->add([
             'type'       => 'Select',
             'name'       => 'centres_couts_paye',
@@ -546,7 +546,7 @@ class ParametresForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

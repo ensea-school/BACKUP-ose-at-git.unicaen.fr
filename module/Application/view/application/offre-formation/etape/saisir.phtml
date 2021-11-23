@@ -57,15 +57,15 @@ echo $this->form()->closeTag();
 ?>
 
 <script>
-    var pertinencesNiveau = <?= \Zend\Json\Json::encode($form->getPertinencesNiveau()) ?>;
-    $(function() {
+    var pertinencesNiveau = <?= \Laminas\Json\Json::encode($form->getPertinencesNiveau()) ?>;
+    $(function () {
         $("select[name=type-formation]")
-                .change(function() {
-                    var niveau = $("input[name=niveau]");
-                    var tfId = $(this).val();
-                    var pertinent = tfId in pertinencesNiveau && pertinencesNiveau[tfId];
-                    pertinent ? niveau.attr('disabled', false): niveau.attr('disabled', true).val("");
-                })
-                .change();
+            .change(function () {
+                var niveau = $("input[name=niveau]");
+                var tfId = $(this).val();
+                var pertinent = tfId in pertinencesNiveau && pertinencesNiveau[tfId];
+                pertinent ? niveau.attr('disabled', false) : niveau.attr('disabled', true).val("");
+            })
+            .change();
     });
 </script>

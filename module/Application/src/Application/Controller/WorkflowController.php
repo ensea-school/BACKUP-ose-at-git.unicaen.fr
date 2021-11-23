@@ -11,7 +11,7 @@ use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exception\LogicException;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\Console\Console;
+use Laminas\Console\Console;
 
 
 /**
@@ -28,7 +28,6 @@ class WorkflowController extends AbstractController
     use DependanceFormAwareTrait;
     use WorkflowServiceAwareTrait;
     use WfEtapeServiceAwareTrait;
-
 
 
     public function indexAction()
@@ -144,27 +143,27 @@ class WorkflowController extends AbstractController
     public function calculTableauxBordAction()
     {
         $result = $this->getServiceWorkflow()->calculerTousTableauxBord(function (array $d) {
-            $tblLine = 'Tableau de bord : '.str_pad($d['tableau-bord'],30);
-            $ci = Console::getInstance();
+            $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
+            $ci      = Console::getInstance();
             $ci->write($tblLine);
             $ci->write('Calcul en cours...', 6);
         }, function (array $d) {
-            $tblLine = 'Tableau de bord : '.str_pad($d['tableau-bord'],30);
-            $ci = Console::getInstance();
+            $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
+            $ci      = Console::getInstance();
             $ci->clearLine();
             $ci->write($tblLine);
-            if ($d['result']){
-                $duree = round($d['duree'],3).' secondes';
-                $ci->writeLine('Effectué en '.$duree, 3);
-            }else{
-                $ci->writeLine('Erreur : '.$d['exception']->getMessage(), 2);
+            if ($d['result']) {
+                $duree = round($d['duree'], 3) . ' secondes';
+                $ci->writeLine('Effectué en ' . $duree, 3);
+            } else {
+                $ci->writeLine('Erreur : ' . $d['exception']->getMessage(), 2);
             }
         });
 
         Console::getInstance()->writeLine('Fin du calcul des tableaux de bord');
-        if ($result){
+        if ($result) {
             Console::getInstance()->writeLine('Tout c\'est bien passé');
-        }else{
+        } else {
             Console::getInstance()->writeLine('Attention : des erreurs ont été rencontrées!!');
         }
     }

@@ -1,9 +1,9 @@
 <?php
 
 namespace Application\View\Helper;
-        
+
 use Application\Entity\Db\Utilisateur;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of UtilisateurViewHelper
@@ -13,20 +13,21 @@ use Zend\View\Helper\AbstractHtmlElement;
 class UtilisateurViewHelper extends AbstractHtmlElement
 {
     /**
-     * 
+     *
      * @param Utilisateur $utilisateur
-     * @param string $title
-     * @param string $subject
-     * @param string $body
+     * @param string      $title
+     * @param string      $subject
+     * @param string      $body
+     *
      * @return string
      */
     public function __invoke(Utilisateur $utilisateur, $title = null, $subject = null, $body = null)
     {
         return sprintf('<a title="%s" href="mailto:%s?subject=%s&body=%s">%s</a>',
-                $title ?: "Cliquez sur ce lien pour rédiger un mail à " . $utilisateur,
-                $utilisateur->getEmail(),
-                $subject, 
-                $body,
-                (string) $utilisateur);
+            $title ?: "Cliquez sur ce lien pour rédiger un mail à " . $utilisateur,
+            $utilisateur->getEmail(),
+            $subject,
+            $body,
+            (string)$utilisateur);
     }
 }

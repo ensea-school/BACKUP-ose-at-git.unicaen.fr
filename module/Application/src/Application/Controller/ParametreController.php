@@ -14,7 +14,7 @@ use Application\Service\Traits\EtablissementServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 
 /**

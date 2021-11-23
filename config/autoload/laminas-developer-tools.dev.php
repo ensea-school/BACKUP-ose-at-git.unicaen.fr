@@ -1,6 +1,6 @@
 <?php
 return [
-    'zenddevelopertools' => [
+    'laminas-developer-tools' => [
         /**
          * General Profiler settings
          */
@@ -54,8 +54,8 @@ return [
             'matcher'     => [],
 
             /**
-             * Contains a list with all collector the profiler should run. Zend Developer Tools ships with
-             * 'db' (Zend\Db), 'time', 'event', 'memory', 'exception', 'request' and 'mail' (Zend\Mail). If you wish to
+             * Contains a list with all collector the profiler should run. Laminas Developer Tools ships with
+             * 'db' (Laminas\Db), 'time', 'event', 'memory', 'exception', 'request' and 'mail' (Laminas\Mail). If you wish to
              * disable a default collector, simply set the value to null or false.
              *
              * Example: 'collectors' => array('db' => null)
@@ -75,7 +75,7 @@ return [
             'enabled'     => true,
 
             /**
-             * Contains a list with all event-level collectors that should run. Zend Developer Tools ships with 'time'
+             * Contains a list with all event-level collectors that should run. Laminas Developer Tools ships with 'time'
              * and 'memory'. If you wish to disable a default collector, simply set the value to null or false.
              *
              * Example: 'collectors' => array('memory' => null)
@@ -84,11 +84,11 @@ return [
             'collectors'  => [],
 
             /**
-             * Contains event identifiers used with the event listener. Zend Developer Tools defaults to listen to all
+             * Contains event identifiers used with the event listener. Laminas Developer Tools defaults to listen to all
              * events. If you wish to disable the default all-inclusive identifier, simply set the value to null or
              * false.
              *
-             * Example: 'identifiers' => array('all' => null, 'dispatchable' => 'Zend\Stdlib\DispatchableInterface')
+             * Example: 'identifiers' => array('all' => null, 'dispatchable' => 'Laminas\Stdlib\DispatchableInterface')
              * Expects: array
              */
             'identifiers' => [],
@@ -122,7 +122,7 @@ return [
             'position'      => 'bottom',
 
             /**
-             * If enabled, the Toolbar will check if your current Zend Framework version is up-to-date.
+             * If enabled, the Toolbar will check if your current Laminas Framework version is up-to-date.
              * Note: The check will only occur once every hour.
              *
              * Expects: bool

@@ -16,8 +16,8 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
-use Zend\Form\Element\Hidden;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Hidden;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of SaisieCalendaire
@@ -252,7 +252,7 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -268,7 +268,7 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
                                      'name'    => 'Callback',
                                      'options' => [
                                          'messages' => [
-                                             \Zend\Validator\Callback::INVALID_VALUE => 'L\'horaire de fin doit être ultérieur à l\'horaire de début',
+                                             \Laminas\Validator\Callback::INVALID_VALUE => 'L\'horaire de fin doit être ultérieur à l\'horaire de début',
                                          ],
                                          'callback' => function ($value, $context = []) {
                                              if (!$context['horaire-debut'] && $context['horaire-fin']) return true; // pas d'horaires de saisis
@@ -407,7 +407,7 @@ class SaisieCalendaireHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $lfh = new ListeFilterHydrator();
         $lfh->setEntityManager($this->getEntityManager());

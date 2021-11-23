@@ -9,7 +9,7 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\Db\TblWorkflow;
 use Application\Entity\WorkflowEtape;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 class WorkflowResource implements ResourceInterface
 {
@@ -28,8 +28,8 @@ class WorkflowResource implements ResourceInterface
      * WorkflowResource constructor.
      *
      * @param WfEtape|TblWorkflow|WorkflowEtape|string $etape
-     * @param Intervenant|null                                $intervenant
-     * @param Structure|null                                  $structure
+     * @param Intervenant|null                         $intervenant
+     * @param Structure|null                           $structure
      */
     public function __construct($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
@@ -44,8 +44,8 @@ class WorkflowResource implements ResourceInterface
      * WorkflowResource constructor.
      *
      * @param WfEtape|TblWorkflow|WorkflowEtape|string $etape
-     * @param Intervenant|null                                $intervenant
-     * @param Structure|null                                  $structure
+     * @param Intervenant|null                         $intervenant
+     * @param Structure|null                           $structure
      *
      * @return self
      */

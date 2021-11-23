@@ -4,7 +4,7 @@ namespace <namespace>;
 
 use Application\Form\AbstractForm;
 <if useHydrator>
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 <endif useHydrator>
 
 
@@ -42,7 +42,7 @@ class <classname> extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -81,7 +81,7 @@ class <classname>Hydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             /* On peuple le tableau avec les données de l'objet */

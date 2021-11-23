@@ -15,7 +15,7 @@ use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\PaysNaissanceValidator;
 use Application\Constants;
 use DoctrineORMModule\Form\Element\EntitySelect;
-use Zend\Validator\Date as DateValidator;
+use Laminas\Validator\Date as DateValidator;
 
 /**
  * Description of DossierFieldset
@@ -114,7 +114,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

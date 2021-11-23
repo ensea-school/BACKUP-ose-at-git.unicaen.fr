@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Traits\EtablissementAwareTrait;
 
@@ -14,7 +14,6 @@ use Application\Entity\Db\Traits\EtablissementAwareTrait;
 class EtablissementViewHelper extends AbstractHelper
 {
     use EtablissementAwareTrait;
-
 
 
     /**

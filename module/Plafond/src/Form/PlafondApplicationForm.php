@@ -10,7 +10,7 @@ use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Service\PlafondApplicationServiceAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -152,7 +152,7 @@ class PlafondApplicationForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -205,7 +205,7 @@ class PlafondApplicationFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'plafondEtat'       => $object->getPlafondEtat() ? $object->getPlafondEtat()->getId() : null,

@@ -6,7 +6,7 @@ use Application\Entity\Db\Pays as PaysEntity;
 use Application\Constants;
 use LogicException;
 use DateTime;
-use Zend\Validator\AbstractValidator;
+use Laminas\Validator\AbstractValidator;
 
 class PaysNaissanceValidator extends AbstractValidator
 {

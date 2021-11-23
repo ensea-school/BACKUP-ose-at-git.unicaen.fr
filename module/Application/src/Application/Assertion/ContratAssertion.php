@@ -7,10 +7,12 @@ use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Provider\Privilege\Privileges;
+
+// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
@@ -26,7 +28,6 @@ class ContratAssertion extends AbstractAssertion
     const PRIV_EXPORT            = 'contrat-export-all';
 
     use WorkflowServiceAwareTrait;
-
 
 
     /**
@@ -231,7 +232,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function  assertRole(Contrat $contrat, $checkStructure = true)
+    protected function assertRole(Contrat $contrat, $checkStructure = true)
     {
         if ($intervenant = $this->getRole()->getIntervenant()) {
             if (!$this->assertIntervenant($contrat, $intervenant)) return false;

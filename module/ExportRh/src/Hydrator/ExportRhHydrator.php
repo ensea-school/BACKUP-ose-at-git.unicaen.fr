@@ -3,7 +3,7 @@
 namespace ExportRh\Hydrator;
 
 
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  *
@@ -19,7 +19,7 @@ class ExportRhHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         //On mappe automatiquement le bon statut RH selon le statut OSE
         $statut     = $object->getStatut();

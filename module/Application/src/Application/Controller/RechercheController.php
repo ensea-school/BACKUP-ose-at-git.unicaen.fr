@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Constants;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Description of RechercheController
@@ -15,7 +15,6 @@ class RechercheController extends AbstractController
 {
     use UtilisateurServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
-
 
 
     public function intervenantFindAction()

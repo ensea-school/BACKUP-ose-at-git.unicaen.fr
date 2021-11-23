@@ -5,7 +5,7 @@ namespace Application\Form\TypeIntervention;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Zend\Form\Element\Csrf;
+use Laminas\Form\Element\Csrf;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 
@@ -53,7 +53,7 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -66,8 +66,8 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
             'taux-hetd-service' => [
                 'required' => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Laminas\Validator\Callback(array(
+                        'messages' => array(\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }))
@@ -76,8 +76,8 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
             'taux-hetd-complementaire' => [
                 'required' => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Laminas\Validator\Callback(array(
+                        'messages' => array(\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
                         'callback' => function ($value) {
                             return (StringFromFloat::run($value) >= 0.0 ? true : false);
                         }))

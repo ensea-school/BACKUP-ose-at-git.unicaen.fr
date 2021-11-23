@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use OSETest\Bootstrap;
 use OSETest\Entity\Db\EntityProvider;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Classe mère abstraite de toutes nos classes de tests unitaires/fonctionnels.

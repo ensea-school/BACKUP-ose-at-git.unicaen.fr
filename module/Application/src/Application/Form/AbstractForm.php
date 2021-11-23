@@ -6,10 +6,10 @@ use Application\Constants;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
 use Application\Traits\TranslatorTrait;
-use Zend\Form\Form;
-use Zend\Http\Request;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
+use Laminas\InputFilter\InputFilterProviderInterface;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 
 
 abstract class AbstractForm extends Form implements InputFilterProviderInterface
@@ -37,14 +37,14 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
      * @param bool              $reuseMatchedParams Whether to reuse matched parameters
      *
      * @return string Url                         For the link href attribute
-     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
+     * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
      *
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
         $url = \Application::$container->get('ViewHelperManager')->get('url');
 
-        /* @var $url \Zend\View\Helper\Url */
+        /* @var $url \Laminas\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);
     }
 

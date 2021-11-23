@@ -1,18 +1,18 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
+ * Laminas (http://framework.Laminas.com/)
  *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @link      http://github.com/Laminas/LaminasSkeletonApplication for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Laminas Technologies USA Inc. (http://www.Laminas.com)
+ * @license   http://framework.Laminas.com/license/new-bsd New BSD License
  */
 
 namespace ExportRh;
 
 
-use Zend\Mvc\MvcEvent;
-use Zend\Stdlib\Glob;
-use Zend\Config\Factory as ConfigFactory;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Stdlib\Glob;
+use Laminas\Config\Factory as ConfigFactory;
 
 class Module
 {
@@ -35,10 +35,10 @@ class Module
     public function getAutoloaderConfig()
     {
         return [
-            'Zend\Loader\ClassMapAutoloader' => [
+            'Laminas\Loader\ClassMapAutoloader' => [
                 __DIR__ . '/autoload_classmap.php',
             ],
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src',
                 ],

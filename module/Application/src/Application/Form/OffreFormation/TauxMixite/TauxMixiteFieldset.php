@@ -8,8 +8,8 @@ use Application\Filter\StringFromFloat;
 use Application\Form\AbstractFieldset;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\TypeHeures;
-use Zend\Form\Element\Text;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Text;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Fieldset de saisie d'un centre de coûts pour chacun des types d'heures éligibles
@@ -20,7 +20,6 @@ class TauxMixiteFieldset extends AbstractFieldset
 {
     use ElementPedagogiqueAwareTrait;
     use \Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-
 
 
     public function init()
@@ -93,7 +92,7 @@ class TauxMixiteFieldset extends AbstractFieldset
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -120,22 +119,21 @@ class TauxMixiteFieldsetHydrator implements HydratorInterface
     use \Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  ElementPedagogique $element
+     * @param array              $data
+     * @param ElementPedagogique $element
      *
      * @return object
      */
     public function hydrate(array $data, $element)
     {
-        $fi = FloatFromString::run(isset($data[TypeHeures::FI]) ? $data[TypeHeures::FI] : 0 ) / 100;
-        $fc = FloatFromString::run(isset($data[TypeHeures::FC]) ? $data[TypeHeures::FC] : 0 ) / 100;
-        $fa = FloatFromString::run(isset($data[TypeHeures::FA]) ? $data[TypeHeures::FA] : 0 ) / 100;
+        $fi = FloatFromString::run(isset($data[TypeHeures::FI]) ? $data[TypeHeures::FI] : 0) / 100;
+        $fc = FloatFromString::run(isset($data[TypeHeures::FC]) ? $data[TypeHeures::FC] : 0) / 100;
+        $fa = FloatFromString::run(isset($data[TypeHeures::FA]) ? $data[TypeHeures::FA] : 0) / 100;
 
-        $this->getServiceElementPedagogique()->forcerTauxMixite($element, $fi, $fc, $fa );
+        $this->getServiceElementPedagogique()->forcerTauxMixite($element, $fi, $fc, $fa);
 
         return $element;
     }
@@ -145,11 +143,11 @@ class TauxMixiteFieldsetHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  ElementPedagogique $element
+     * @param ElementPedagogique $element
      *
      * @return array
      */
-    public function extract($element)
+    public function extract($element): array
     {
         $data = [];
 

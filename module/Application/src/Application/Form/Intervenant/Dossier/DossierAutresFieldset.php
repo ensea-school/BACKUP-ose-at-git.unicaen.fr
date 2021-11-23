@@ -6,7 +6,7 @@ use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 /**
  * Description of DossierAutresFieldset

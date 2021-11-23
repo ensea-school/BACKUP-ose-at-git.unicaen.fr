@@ -16,7 +16,7 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
-use Zend\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethods;
 
 
 /**

@@ -3,7 +3,7 @@ namespace Application\Form\CentreCout;
 
 use Application\Form\AbstractForm;
 use Application\Hydrator\CentreCoutActiviteHydrator;
-use Zend\Form\Element\Csrf;
+use Laminas\Form\Element\Csrf;
 
 /**
  * Description of CentreCoutActiviteSaisieForm
@@ -87,7 +87,7 @@ class CentreCoutActiviteSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

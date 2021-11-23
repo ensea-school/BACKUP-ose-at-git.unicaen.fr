@@ -9,7 +9,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of MiseEnPaiementRechercheForm
@@ -59,7 +59,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
             ->setAttribute('id', $this->getId());
 
         $this->add([
-            'type'       => 'Zend\Form\Element\Radio',
+            'type'       => 'Laminas\Form\Element\Radio',
             'name'       => 'type-intervenant',
             'options'    => [
                 'label'         => 'Statut des intervenants',
@@ -94,7 +94,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'Zend\Form\Element\MultiCheckbox',
+            'type'       => 'Laminas\Form\Element\MultiCheckbox',
             'attributes' => [
                 'multiple' => 'multiple',
             ],
@@ -178,7 +178,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -218,12 +218,11 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
     use TypeIntervenantServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                                $data
-     * @param  \Application\Entity\Paiement\MiseEnPaiementRecherche $object
+     * @param array                                                $data
+     * @param \Application\Entity\Paiement\MiseEnPaiementRecherche $object
      *
      * @return \Application\Entity\Paiement\MiseEnPaiementRecherche
      */
@@ -252,11 +251,11 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Paiement\MiseEnPaiementRecherche $object
+     * @param \Application\Entity\Paiement\MiseEnPaiementRecherche $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'type-intervenant' => $object->getTypeIntervenant() ? $object->getTypeIntervenant()->getId() : null,

@@ -1,9 +1,10 @@
 <?php
+
 namespace Application\Form\TypeRessource;
 
 use Application\Form\AbstractForm;
 use Application\Hydrator\TypeRessourceHydrator;
-use Zend\Form\Element\Csrf;
+use Laminas\Form\Element\Csrf;
 
 /**
  * Description of TypeRessourceSaisieForm
@@ -20,89 +21,91 @@ class TypeRessourceSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
-            'name' => 'code',
+            'name'    => 'code',
             'options' => [
                 'label' => "Code",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'libelle',
+            'name'    => 'libelle',
             'options' => [
                 'label' => "Libellé",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
 
         $this->add([
-            'name' => 'fi',
+            'name'    => 'fi',
             'options' => [
                 'label' => 'FI',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
         $this->add([
-            'name' => 'fa',
+            'name'    => 'fa',
             'options' => [
                 'label' => 'FA',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
         $this->add([
-            'name' => 'fc',
+            'name'    => 'fc',
             'options' => [
                 'label' => 'FC',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
 
         $this->add([
-            'name' => 'fc_majore',
+            'name'    => 'fc_majore',
             'options' => [
                 'label' => 'FC Majoré',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
 
         $this->add([
-            'name' => 'referentiel',
+            'name'    => 'referentiel',
             'options' => [
                 'label' => 'Référentiel',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
 
         $this->add([
-            'name' => 'etablissement',
+            'name'    => 'etablissement',
             'options' => [
                 'label' => 'Etablissement',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
 
         $this->add(new Csrf('security'));
         $this->add([
-            'name' => 'submit',
-            'type' => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
             ],
         ]);
+
         return $this;
     }
 
 
+
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
     public function getInputFilterSpecification()
     {
         return [
-            'code' => [
+            'code'    => [
                 'required' => true,
             ],
             'libelle' => [

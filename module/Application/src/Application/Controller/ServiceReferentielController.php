@@ -60,7 +60,7 @@ class ServiceReferentielController extends AbstractController
         $viewHelperParams      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                  = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant           = $this->params()->fromRoute('intervenant');
-        $viewModel             = new \Zend\View\Model\ViewModel();
+        $viewModel             = new \Laminas\View\Model\ViewModel();
 
         if (!$intervenant) {
             $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement

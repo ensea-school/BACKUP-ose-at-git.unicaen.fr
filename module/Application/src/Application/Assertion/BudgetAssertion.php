@@ -8,7 +8,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
@@ -64,18 +64,20 @@ class BudgetAssertion extends AbstractAssertion
         // pareil si le rôle ne possède pas le privilège adéquat
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
-        if ($controller == 'Application\Controller\Budget' && $action == 'tableau-de-bord'){
-            return ! $role->getStructure(); // on n'a accès que si on n'est pas dans une structure spécifique!!
+        if ($controller == 'Application\Controller\Budget' && $action == 'tableau-de-bord') {
+            return !$role->getStructure(); // on n'a accès que si on n'est pas dans une structure spécifique!!
         }
+
         return true;
     }
 
 
 
-    protected function assertStructure( Structure $structure )
+    protected function assertStructure(Structure $structure)
     {
         $rs = $this->getRole()->getStructure();
-        return (! $rs || $rs == $structure);
+
+        return (!$rs || $rs == $structure);
     }
 
 }

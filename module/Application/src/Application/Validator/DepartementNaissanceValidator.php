@@ -4,7 +4,7 @@ namespace Application\Validator;
 
 use Application\Entity\Db\Pays;
 use Application\Service\Traits\PaysServiceAwareTrait;
-use Zend\Validator\AbstractValidator;
+use Laminas\Validator\AbstractValidator;
 
 class DepartementNaissanceValidator extends AbstractValidator
 {

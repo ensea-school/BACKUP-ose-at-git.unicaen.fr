@@ -7,9 +7,9 @@ use Application\Form\AbstractForm;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
-use Zend\Form\Element\Csrf;
-use Zend\Form\FormInterface;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Form\FormInterface;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
@@ -24,7 +24,6 @@ class StructureSaisieForm extends AbstractForm implements EntityManagerAwareInte
     use EntityManagerAwareTrait;
     use SourceServiceAwareTrait;
     use SchemaServiceAwareTrait;
-
 
 
     public function init()
@@ -111,7 +110,7 @@ class StructureSaisieForm extends AbstractForm implements EntityManagerAwareInte
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -139,8 +138,8 @@ class StructureSaisieForm extends AbstractForm implements EntityManagerAwareInte
             'plafondReferentiel' => [
                 'required'   => false,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             if ($value == null) return true;
 
@@ -161,7 +160,6 @@ class StructureSaisieForm extends AbstractForm implements EntityManagerAwareInte
 class StructureHydrator implements HydratorInterface
 {
     use SourceServiceAwareTrait;
-
 
 
     /**
@@ -193,7 +191,7 @@ class StructureHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                 => $object->getId(),

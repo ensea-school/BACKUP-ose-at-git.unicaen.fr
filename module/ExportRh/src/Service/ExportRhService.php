@@ -10,7 +10,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
 use phpDocumentor\Reflection\Types\Array_;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 /**
  * Description of FonctionReferentiel

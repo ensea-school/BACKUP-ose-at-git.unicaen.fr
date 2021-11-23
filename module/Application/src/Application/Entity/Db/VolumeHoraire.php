@@ -6,7 +6,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * VolumeHoraire
@@ -101,7 +101,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     public function __construct()
     {
         $this->formuleResultatVolumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->validation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation                   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 

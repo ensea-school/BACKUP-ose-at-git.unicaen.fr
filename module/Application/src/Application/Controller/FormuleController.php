@@ -13,7 +13,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FormuleTestIntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Description of FormuleController

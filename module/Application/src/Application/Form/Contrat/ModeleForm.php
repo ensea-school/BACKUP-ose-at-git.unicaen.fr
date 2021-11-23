@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -19,7 +19,6 @@ class ModeleForm extends AbstractForm
 {
     use StatutIntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
-
 
 
     public function getStructures()
@@ -87,7 +86,7 @@ class ModeleForm extends AbstractForm
             'type'       => 'File',
             'name'       => 'fichier',
             'options'    => [
-                'label' => "Modèle au format OpenDocument Texte (ODT) <small>(à fournir seulement si changement)</small>",
+                'label'         => "Modèle au format OpenDocument Texte (ODT) <small>(à fournir seulement si changement)</small>",
                 'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
@@ -148,7 +147,7 @@ class ModeleForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -182,9 +181,8 @@ class ModeleFormHydrator implements HydratorInterface
     use StructureServiceAwareTrait;
 
 
-
     /**
-     * @param  array        $data
+     * @param array         $data
      * @param ModeleContrat $object
      *
      * @return object
@@ -222,7 +220,7 @@ class ModeleFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'libelle'            => $object->getLibelle(),

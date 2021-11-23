@@ -10,7 +10,7 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of AffectationForm
@@ -23,7 +23,6 @@ class AffectationForm extends AbstractForm
     use UtilisateurServiceAwareTrait;
     use RoleServiceAwareTrait;
     use ContextServiceAwareTrait;
-
 
 
     public function init()
@@ -108,7 +107,7 @@ class AffectationForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -139,17 +138,16 @@ class AffectationFormHydrator implements HydratorInterface
     use UtilisateurServiceAwareTrait;
 
 
-
     /**
-     * @param  array                              $data
-     * @param  \Application\Entity\Db\Affectation $object
+     * @param array                              $data
+     * @param \Application\Entity\Db\Affectation $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
         $utilisateur = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
-        $structure = isset($data['structure']) ? (int)$data['structure'] : null;
+        $structure   = isset($data['structure']) ? (int)$data['structure'] : null;
 
         $object->setUtilisateur($this->getServiceUtilisateur()->getByUsername($utilisateur));
         $object->setRole($this->getServiceRole()->get($data['role']));
@@ -161,11 +159,11 @@ class AffectationFormHydrator implements HydratorInterface
 
 
     /**
-     * @param  \Application\Entity\Db\Affectation $object
+     * @param \Application\Entity\Db\Affectation $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id' => $object->getId(),

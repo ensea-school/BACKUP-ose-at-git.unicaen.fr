@@ -47,7 +47,7 @@ foreach ($modificationServiceDu->get('modificationServiceDu')->getIterator() as 
     /* @var $object \Application\Entity\Db\ModificationServiceDu */
 
     $motifElement = $fieldset->get('motif');
-    /* @var $motifElement \Zend\Form\Element\Select */
+    /* @var $motifElement \Laminas\Form\Element\Select */
 
     echo '<fieldset><div class="form-group">';
     if ($motif && $motif->getHistoDestruction()) {

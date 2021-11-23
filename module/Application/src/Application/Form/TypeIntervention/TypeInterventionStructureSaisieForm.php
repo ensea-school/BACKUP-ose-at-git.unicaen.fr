@@ -1,12 +1,13 @@
 <?php
+
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use UnicaenApp\Util;
@@ -23,7 +24,6 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
     use AnneeServiceAwareTrait;
-
 
 
     public function init()
@@ -106,7 +106,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -143,12 +143,11 @@ class TypeInterventionStructureHydrator implements HydratorInterface
     use AnneeServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                            $data
-     * @param  \Application\Entity\Db\TypeInterventionStructure $object
+     * @param array                                            $data
+     * @param \Application\Entity\Db\TypeInterventionStructure $object
      *
      * @return object
      */
@@ -174,11 +173,11 @@ class TypeInterventionStructureHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\TypeInterventionStructure $object
+     * @param \Application\Entity\Db\TypeInterventionStructure $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                => $object->getId(),

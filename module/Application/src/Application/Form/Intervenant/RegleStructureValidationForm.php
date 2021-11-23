@@ -4,10 +4,8 @@ namespace Application\Form\Intervenant;
 
 use Application\Form\AbstractForm;
 use Application\Hydrator\RegleStructureValidationHydrator;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of RegleStructureValidationForm
@@ -93,7 +91,7 @@ class RegleStructureValidationForm extends AbstractForm
             'type'       => 'Select',
         ]);
 
-        $this->add(new \Zend\Form\Element\Csrf('security'));
+        $this->add(new \Laminas\Form\Element\Csrf('security'));
 
         $this->add([
             'name'       => 'submit',
@@ -110,7 +108,7 @@ class RegleStructureValidationForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

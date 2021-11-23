@@ -5,7 +5,7 @@ namespace Application\Form\Intervenant;
 use Application\Form\AbstractForm;
 use Application\Hydrator\DossierAutreHydrator;
 use Application\Service\Traits\DossierAutreTypeServiceAwareTrait;
-use Zend\Form\Element\Csrf;
+use Laminas\Form\Element\Csrf;
 
 
 /**
@@ -109,7 +109,7 @@ class AutresForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Application\Entity\Db\TypeInterventionStatut;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * TypeIntervention
@@ -383,7 +383,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getTypeInterventionStructureValides(Annee $annee)
     {
-        return $this->typeInterventionStructure->filter(function(TypeInterventionStructure $tis) use ($annee){
+        return $this->typeInterventionStructure->filter(function (TypeInterventionStructure $tis) use ($annee) {
             return $tis->isValide($annee);
         });
     }
@@ -499,6 +499,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     {
         return 'TypeIntervention';
     }
+
+
 
     /**
      * Get typeInterventionStatut

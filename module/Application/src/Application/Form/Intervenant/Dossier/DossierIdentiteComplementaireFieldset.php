@@ -13,7 +13,7 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\PaysNaissanceValidator;
 use Application\Constants;
-use Zend\Validator\Date as DateValidator;
+use Laminas\Validator\Date as DateValidator;
 
 /**
  * Description of DossierIdentiteComplementaireFieldset
@@ -141,7 +141,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

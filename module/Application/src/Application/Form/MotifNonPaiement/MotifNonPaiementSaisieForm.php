@@ -3,8 +3,8 @@
 namespace Application\Form\MotifNonPaiement;
 
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of MotifNonPaiementSaisieForm
@@ -59,7 +59,7 @@ class MotifNonPaiementSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -93,8 +93,8 @@ class MotifNonPaiementHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                   $data
-     * @param  \Application\Entity\Db\MotifNonPaiement $object
+     * @param array                                   $data
+     * @param \Application\Entity\Db\MotifNonPaiement $object
      *
      * @return object
      */
@@ -112,11 +112,11 @@ class MotifNonPaiementHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\MotifNonPaiement $object
+     * @param \Application\Entity\Db\MotifNonPaiement $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'              => $object->getId()

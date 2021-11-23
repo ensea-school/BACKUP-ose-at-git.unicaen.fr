@@ -3,7 +3,7 @@
 namespace Indicateur\Controller;
 
 use Psr\Container\ContainerInterface;
-use Zend\View\Renderer\PhpRenderer;
+use Laminas\View\Renderer\PhpRenderer;
 
 class IndicateurControllerFactory
 {

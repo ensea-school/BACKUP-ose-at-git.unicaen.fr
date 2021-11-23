@@ -6,7 +6,7 @@ use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
-use Zend\Console\Console;
+use Laminas\Console\Console;
 
 /**
  *

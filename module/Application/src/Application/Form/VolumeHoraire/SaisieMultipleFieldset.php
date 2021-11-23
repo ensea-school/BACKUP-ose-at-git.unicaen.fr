@@ -6,9 +6,9 @@ use Application\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Zend\Form\Element\Hidden;
+use Laminas\Form\Element\Hidden;
 use Application\Filter\StringFromFloat;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
 use Application\Entity\Db\Service;
@@ -80,7 +80,7 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -172,7 +172,7 @@ class SaisieMultipleHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $vhl  = $object->createChild();
         $data = [

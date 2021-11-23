@@ -3,8 +3,8 @@
 namespace Application\Form\modulateur;
 
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Filter\FloatFromString;
@@ -19,7 +19,6 @@ class modulateurSaisieForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
     use TypeModulateurServiceAwareTrait;
-
 
 
     public function init()
@@ -90,7 +89,7 @@ class modulateurSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -106,8 +105,8 @@ class modulateurSaisieForm extends AbstractForm
             'ponderation-service-du'    => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -116,8 +115,8 @@ class modulateurSaisieForm extends AbstractForm
             'ponderation-service-compl' => [
                 'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
@@ -137,12 +136,11 @@ class modulateurHydrator implements HydratorInterface
     use TypeModulateurServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                             $data
-     * @param  \Application\Entity\Db\Modulateur $object
+     * @param array                             $data
+     * @param \Application\Entity\Db\Modulateur $object
      *
      * @return object
      */
@@ -162,11 +160,11 @@ class modulateurHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\modulateur $object
+     * @param \Application\Entity\Db\modulateur $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                        => $object->getId(),

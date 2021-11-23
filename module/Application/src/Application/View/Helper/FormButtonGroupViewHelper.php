@@ -1,9 +1,10 @@
 <?php
+
 namespace Application\View\Helper;
 
-use Zend\Form\View\Helper\FormRadio;
-use Zend\Form\Element\MultiCheckbox as MultiCheckboxElement;
-use Zend\Form\LabelAwareInterface;
+use Laminas\Form\View\Helper\FormRadio;
+use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
+use Laminas\Form\LabelAwareInterface;
 
 
 /**
@@ -16,10 +17,11 @@ class FormButtonGroupViewHelper extends FormRadio
     /**
      * Render options
      *
-     * @param  MultiCheckboxElement $element
-     * @param  array                $options
-     * @param  array                $selectedOptions
-     * @param  array                $attributes
+     * @param MultiCheckboxElement $element
+     * @param array                $options
+     * @param array                $selectedOptions
+     * @param array                $attributes
+     *
      * @return string
      */
     protected function renderOptions(MultiCheckboxElement $element, array $options, array $selectedOptions,
@@ -38,8 +40,8 @@ class FormButtonGroupViewHelper extends FormRadio
 
         $out = '<div class="btn-group" data-toggle="buttons">';
         foreach ($options as $key => $optionSpec) {
-            $value           = $key;
-            $label           = $optionSpec;
+            $value = $key;
+            $label = $optionSpec;
 
             if (isset($optionSpec['value'])) {
                 $value = $optionSpec['value'];
@@ -49,19 +51,19 @@ class FormButtonGroupViewHelper extends FormRadio
             }
             if (isset($optionSpec['selected'])) {
                 $selected = $optionSpec['selected'];
-            }else{
+            } else {
                 $selected = in_array($value, $selectedOptions);
             }
 
-            $inputAttributes = $attributes;
-            $inputAttributes['type'] = 'radio';
+            $inputAttributes          = $attributes;
+            $inputAttributes['type']  = 'radio';
             $inputAttributes['value'] = $value;
 
             $labelAttributes = [
-                'class' => 'btn btn-default'
+                'class' => 'btn btn-default',
             ];
-            if ($selected){
-                $labelAttributes['class'] .= ' active';
+            if ($selected) {
+                $labelAttributes['class']   .= ' active';
                 $inputAttributes['checked'] = 'checked';
             }
 
@@ -71,14 +73,13 @@ class FormButtonGroupViewHelper extends FormRadio
                 );
             }
 
-            if (! $element instanceof LabelAwareInterface || ! $element->getLabelOption('disable_html_escape')) {
+            if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
                 $label = $escapeHtmlHelper($label);
             }
 
             $out .= $labelHelper->openTag($labelAttributes);
-            $out .= '<input '.$this->createAttributesString($inputAttributes).$this->getInlineClosingBracket().' '.$label;
+            $out .= '<input ' . $this->createAttributesString($inputAttributes) . $this->getInlineClosingBracket() . ' ' . $label;
             $out .= $labelHelper->closeTag();
-
         }
         $out .= '</div>';
 

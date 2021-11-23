@@ -5,8 +5,8 @@ namespace Application\Form\Intervenant;
 use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Form\AbstractForm;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\ClassMethods;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\ClassMethods;
 
 /**
  * Formulaire de saisie de la date de retour du contrat/avenant signé.
@@ -51,7 +51,7 @@ class ContratRetour extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

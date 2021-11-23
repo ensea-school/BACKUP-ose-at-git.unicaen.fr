@@ -3,7 +3,7 @@
 namespace Application\Hydrator;
 
 
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 class TypeRessourceHydrator implements HydratorInterface
 {
@@ -11,8 +11,8 @@ class TypeRessourceHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  \Application\Entity\Db\TypeRessource $object
+     * @param array                                $data
+     * @param \Application\Entity\Db\TypeRessource $object
      *
      * @return object
      */
@@ -31,14 +31,15 @@ class TypeRessourceHydrator implements HydratorInterface
     }
 
 
+
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\TypeRessource $object
+     * @param \Application\Entity\Db\TypeRessource $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'            => $object->getId(),

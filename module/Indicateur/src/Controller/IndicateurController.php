@@ -19,20 +19,20 @@ use Application\Filter\IntervenantEmailFormatter;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Zend\Form\Element\Checkbox;
-use Zend\Router\Http\TreeRouteStack;
-use Zend\View\Renderer\PhpRenderer;
+use Laminas\Form\Element\Checkbox;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\View\Renderer\PhpRenderer;
 use Exception;
-use Zend\Form\Element\Hidden;
-use Zend\Form\Element\Text;
-use Zend\Form\Element\Textarea;
-use Zend\Form\Form;
-use Zend\Mail\Message as MailMessage;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Mime;
-use Zend\Mime\Part as MimePart;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Element\Hidden;
+use Laminas\Form\Element\Text;
+use Laminas\Form\Element\Textarea;
+use Laminas\Form\Form;
+use Laminas\Mail\Message as MailMessage;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part as MimePart;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 
 class IndicateurController extends AbstractController
@@ -285,7 +285,7 @@ class IndicateurController extends AbstractController
         // De plus, pour fonctionner, le HttpRouter a besoin du "prefixe" à utiliser pour assembler les URL
         // (ex: "http://localhost/ose"). Ce prefixe est fourni via un HttpUri initialisé à partir de 2 arguments
         // de la ligne de commande : "requestUriHost" (obligatoire) et "requestUriScheme" (facultatif, "http" par défaut).
-        $httpUri = (new \Zend\Uri\Http())
+        $httpUri = (new \Laminas\Uri\Http())
             ->setHost($this->cliConfig['domain'])// ex: "/localhost/ose", "ose.unicaen.fr"
             ->setScheme($this->cliConfig['scheme']);
         $this->httpRouter->setRequestUri($httpUri);
@@ -298,7 +298,7 @@ class IndicateurController extends AbstractController
         $this->getProcessusIndicateur()->envoiNotifications($force);
 
         // S'il s'agit d'une requête de type Console (CLI), rétablissement du router initial (cf. commentaires plus haut).
-        if ($this->getRequest() instanceof \Zend\Console\Request) {
+        if ($this->getRequest() instanceof \Laminas\Console\Request) {
             $event->setRouter($router);
         }
 

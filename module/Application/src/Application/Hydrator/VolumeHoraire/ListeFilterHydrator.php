@@ -6,7 +6,7 @@ use Application\Constants;
 use Application\Entity\VolumeHoraireListe;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterface
 {
@@ -26,7 +26,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [];
         foreach (VolumeHoraireListe::FILTRES_LIST as $filter => $rule) {

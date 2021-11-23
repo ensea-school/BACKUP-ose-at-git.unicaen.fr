@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Application\Service\DomaineFonctionnelService as DomaineFonctionnelService;
 
 /**
@@ -18,40 +18,49 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
      */
     private $service;
 
+
+
     /**
-     * 
+     *
      * @param TypeHeures $typeHeures
+     *
      * @return CentreCout|null
      */
-    public function getDefaultCentreCout( TypeHeures $typeHeures )
+    public function getDefaultCentreCout(TypeHeures $typeHeures)
     {
         $element = $this->getService()->getElementPedagogique();
-        if (! $element) return null;
+        if (!$element) return null;
         $result = $element->getCentreCoutEp($typeHeures->getTypeHeuresElement());
         if (false == $result) return null;
         $ccep = $result->first();
-        if ($ccep instanceof CentreCoutEp){
+        if ($ccep instanceof CentreCoutEp) {
             return $ccep->getCentreCout();
-        }else{
+        } else {
             return null;
         }
     }
+
+
 
     /**
      *
      * @return DomaineFonctionnel|null
      */
-    public function getDefaultDomaineFonctionnel( DomaineFonctionnelService $serviceDomaineFonctionnel=null )
+    public function getDefaultDomaineFonctionnel(DomaineFonctionnelService $serviceDomaineFonctionnel = null)
     {
         $element = $this->getService()->getElementPedagogique();
-        if (! $element){
-            if (! $serviceDomaineFonctionnel){
+        if (!$element) {
+            if (!$serviceDomaineFonctionnel) {
                 throw new \LogicException('Le service DomaineFonctionnel doit être fourni pour que le domaine fonctionnel par défaut soit identifié');
             }
+
             return $serviceDomaineFonctionnel->getForServiceExterieur();
         }
+
         return $element->getEtape()->getDomaineFonctionnel();
     }
+
+
 
     /**
      * @return boolean
@@ -61,15 +70,19 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
         return $this->getService()->getElementPedagogique() === null;
     }
 
+
+
     /**
      * Get Service
      *
-     * @return \Application\Entity\Db\Service 
+     * @return \Application\Entity\Db\Service
      */
     public function getService()
     {
         return $this->service;
     }
+
+
 
     /**
      * @return Structure
@@ -77,11 +90,14 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     public function getStructure()
     {
         $service = $this->getService();
-        if ($service->getElementPedagogique())
+        if ($service->getElementPedagogique()) {
             return $service->getElementPedagogique()->getStructure();
-        else
+        } else {
             return $service->getIntervenant()->getStructure();
+        }
     }
+
+
 
     /**
      * @return Intervenant
@@ -90,6 +106,8 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     {
         return $this->getService()->getIntervenant();
     }
+
+
 
     public function getResourceId()
     {

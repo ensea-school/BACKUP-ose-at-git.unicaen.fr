@@ -19,7 +19,7 @@ use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
-use Zend\Form\Element\Csrf;
+use Laminas\Form\Element\Csrf;
 
 /**
  * Formulaire de modification du dossier d'un intervenant extérieur.
@@ -162,7 +162,7 @@ class IntervenantDossierForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

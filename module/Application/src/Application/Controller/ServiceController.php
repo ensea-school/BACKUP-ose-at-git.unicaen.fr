@@ -18,7 +18,7 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\Http\Request;
+use Laminas\Http\Request;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
@@ -91,7 +91,7 @@ class ServiceController extends AbstractController
         $this->initFilters();
 
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $viewModel        = new \Zend\View\Model\ViewModel();
+        $viewModel        = new \Laminas\View\Model\ViewModel();
 
         $canAddService = Privileges::ENSEIGNEMENT_EDITION;
 
@@ -207,7 +207,7 @@ class ServiceController extends AbstractController
     /**
      * Totaux de services et de référentiel par intervenant.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function resumeAction()
     {
@@ -233,7 +233,7 @@ class ServiceController extends AbstractController
             $recherche->setIntervenant($intervenant);
         }
 
-        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel = new \Laminas\View\Model\ViewModel();
 
         $params           = $this->getEvent()->getRouteMatch()->getParams();
         $params['action'] = 'recherche';

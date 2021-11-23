@@ -1,10 +1,11 @@
 <?php
+
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\AnneeServiceAwareTrait;
@@ -27,54 +28,54 @@ class TypeInterventionSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
-            'name' => 'code',
+            'name'    => 'code',
             'options' => [
                 'label' => "Code",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'libelle',
+            'name'    => 'libelle',
             'options' => [
                 'label' => "Libellé",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'ordre',
+            'name'    => 'ordre',
             'options' => [
                 'label' => "",
             ],
-            'type' => 'hidden',
+            'type'    => 'hidden',
         ]);
         $this->add([
-            'name' => 'taux-hetd-service',
+            'name'    => 'taux-hetd-service',
             'options' => [
                 'label' => 'Taux Hetd Service',
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'taux-hetd-complementaire',
+            'name'    => 'taux-hetd-complementaire',
             'options' => [
                 'label' => 'Taux Hetd Complémentaire',
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'visible',
+            'name'    => 'visible',
             'options' => [
                 'label' => 'Visible ?',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
 
         $this->add([
-            'name' => 'visible-exterieur',
+            'name'    => 'visible-exterieur',
             'options' => [
                 'label' => 'Visible de l\'extérieur?',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
         $this->add([
             'type'       => 'Select',
@@ -104,88 +105,94 @@ class TypeInterventionSaisieForm extends AbstractForm
         ]);
 
         $this->add([
-            'name' => 'regle-foad',
+            'name'    => 'regle-foad',
             'options' => [
                 'label' => 'Limité à la FOAD',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
 
         $this->add([
-            'name' => 'regle-fc',
+            'name'    => 'regle-fc',
             'options' => [
                 'label' => 'Limité à la FC',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
 
         $this->add(new Csrf('security'));
         $this->add([
-            'name' => 'submit',
-            'type' => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
             ],
         ]);
+
         return $this;
     }
 
 
+
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
     public function getInputFilterSpecification()
     {
         return [
-            'code' => [
+            'code'                     => [
                 'required' => true,
             ],
-            'libelle' => [
+            'libelle'                  => [
                 'required' => true,
             ],
-            'taux-hetd-service' => [
-                'required' => true,
+            'taux-hetd-service'        => [
+                'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
-                           return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }))
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
                 ],
             ],
             'taux-hetd-complementaire' => [
-                'required' => true,
+                'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (StringFromFloat::run($value) >= 0.0 ? true : false);
-                        }))
+                        }]),
                 ],
             ],
-            'annee-debut' => [
+            'annee-debut'              => [
                 'required' => false,
             ],
-            'annee-fin'   => [
+            'annee-fin'                => [
                 'required' => false,
             ],
-            'regle-foad' => [
+            'regle-foad'               => [
                 'required' => true,
             ],
-            'regle-fc' => [
+            'regle-fc'                 => [
                 'required' => true,
             ],
-            'visible-exterieur' => [
+            'visible-exterieur'        => [
                 'equired' => true,
             ],
         ];
     }
 
 }
+
+
+
+
 
 class TypeInterventionHydrator implements HydratorInterface
 {
@@ -195,8 +202,8 @@ class TypeInterventionHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  \Application\Entity\Db\TypeIntervention $object
+     * @param array                                   $data
+     * @param \Application\Entity\Db\TypeIntervention $object
      *
      * @return object
      */
@@ -217,32 +224,34 @@ class TypeInterventionHydrator implements HydratorInterface
         }
         $object->setRegleFOAD($data['regle-foad']);
         $object->setRegleFC($data['regle-fc']);
+
         return $object;
     }
+
 
 
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\TypeIntervention $object
+     * @param \Application\Entity\Db\TypeIntervention $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
-            'id' => $object->getId(),
-            'code' => $object->getCode(),
-            'libelle' => $object->getLibelle(),
-            'ordre' => $object->getOrdre(),
-            'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
+            'id'                       => $object->getId(),
+            'code'                     => $object->getCode(),
+            'libelle'                  => $object->getLibelle(),
+            'ordre'                    => $object->getOrdre(),
+            'taux-hetd-service'        => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
-            'visible' => $object->isVisible(),
-            'visible-exterieur' => $object->isVisibleExterieur(),
-            'annee-debut'       => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
-            'annee-fin'         => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
-            'regle-foad'           => $object->getRegleFOAD(),
-            'regle-fc'           => $object->getRegleFC(),
+            'visible'                  => $object->isVisible(),
+            'visible-exterieur'        => $object->isVisibleExterieur(),
+            'annee-debut'              => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
+            'annee-fin'                => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
+            'regle-foad'               => $object->getRegleFOAD(),
+            'regle-fc'                 => $object->getRegleFC(),
         ];
 
         return $data;

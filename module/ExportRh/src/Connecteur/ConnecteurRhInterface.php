@@ -4,7 +4,7 @@ namespace ExportRh\Connecteur;
 
 
 use ExportRh\Entity\IntervenantRh;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 interface ConnecteurRhInterface
 {

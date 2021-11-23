@@ -6,7 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * TypeRessource
@@ -329,9 +329,9 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getPrivilegeBudgetEdition()
     {
-        if ($this->getEtablissement()){
+        if ($this->getEtablissement()) {
             return Privileges::BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT;
-        }else{
+        } else {
             return Privileges::BUDGET_EDITION_ENGAGEMENT_COMPOSANTE;
         }
     }
@@ -339,11 +339,11 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * @return array
      * @since PHP 5.6.0
      * This method is called by var_dump() when dumping an object to get the properties that should be shown.
      * If the method isn't defined on an object, then all public, protected and private properties will be shown.
      *
-     * @return array
      * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
      */
     function __debugInfo()

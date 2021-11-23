@@ -1,24 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
+ * Laminas Framework (http://framework.Laminas.com/)
  *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @link      http://github.com/Laminas/LaminasSkeletonApplication for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Laminas Technologies USA Inc. (http://www.Laminas.com)
+ * @license   http://framework.Laminas.com/license/new-bsd New BSD License
  */
 
 namespace Application;
 
 use Application\Service\ContextService;
 use Psr\Container\ContainerInterface;
-use Zend\ModuleManager\ModuleManager;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
-use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
-use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
-use Zend\Stdlib\Glob;
-use Zend\Config\Factory as ConfigFactory;
+use Laminas\ModuleManager\ModuleManager;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Laminas\Stdlib\Glob;
+use Laminas\Config\Factory as ConfigFactory;
 
 include_once(__DIR__ . '/src/Application/functions.php');
 
@@ -43,10 +43,10 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         $moduleRouteListener->attach($eventManager);
 
         /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
-        $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch',
+        $eventManager->getSharedManager()->attach('Laminas\Mvc\Controller\AbstractActionController', 'dispatch',
             function (MvcEvent $e) {
                 $request = $e->getRequest();
-                if ($request instanceof \Zend\Http\Request && $request->isXmlHttpRequest()) {
+                if ($request instanceof \Laminas\Http\Request && $request->isXmlHttpRequest()) {
                     $e->getTarget()->layout('layout/ajax.phtml');
                 }
             }
@@ -69,7 +69,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
      * Recherche de chaque entité spécifiée par son identifiant dans la requête courante,
      * et injection de cette entité dans l'événement MVC courant.
      *
-     * @param \Zend\Mvc\MvcEvent $e
+     * @param \Laminas\Mvc\MvcEvent $e
      *
      * @see Service\NavigationPagesProvider
      */
@@ -146,10 +146,10 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
     public function getAutoloaderConfig()
     {
         return [
-            'Zend\Loader\ClassMapAutoloader' => [
+            'Laminas\Loader\ClassMapAutoloader' => [
                 __DIR__ . '/autoload_classmap.php',
             ],
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ],

@@ -36,7 +36,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Description of IntervenantController

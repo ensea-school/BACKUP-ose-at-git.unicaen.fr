@@ -14,7 +14,7 @@ use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
@@ -26,7 +26,6 @@ class AgrementAssertion extends AbstractAssertion
 {
     use TypeAgrementServiceAwareTrait;
     use TblAgrementServiceAwareTrait;
-
 
 
     /* ---- Routage général ---- */
@@ -143,7 +142,7 @@ class AgrementAssertion extends AbstractAssertion
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
-        $wfEtape = null;
+        $wfEtape   = null;
         $privilege = null;
         if (false !== strpos($page['route'], 'conseil-restreint')) {
             $wfEtape   = WfEtape::CODE_CONSEIL_RESTREINT;

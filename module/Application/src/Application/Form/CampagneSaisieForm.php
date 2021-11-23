@@ -4,7 +4,7 @@ namespace Application\Form;
 
 use Application\Constants;
 use Application\Entity\Db\CampagneSaisie;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -91,23 +91,23 @@ class CampagneSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
     public function getInputFilterSpecification()
     {
         return [
-            'dateDebut' => [
+            'dateDebut'          => [
                 'required' => false,
             ],
-            'dateFin' => [
+            'dateFin'            => [
                 'required' => false,
             ],
             'messageIntervenant' => [
                 'required' => false,
             ],
-            'messageAutres' => [
+            'messageAutres'      => [
                 'required' => false,
             ],
         ];
@@ -145,7 +145,7 @@ class CampagneSaisieFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                 => $object->getId(),

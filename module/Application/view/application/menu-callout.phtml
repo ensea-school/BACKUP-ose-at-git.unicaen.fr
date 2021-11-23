@@ -3,11 +3,11 @@
 use UnicaenApp\View\Helper\TagViewHelper;
 
 /**
- * @var $container Zend\Navigation\Navigation
+ * @var $container Laminas\Navigation\Navigation
  * @var $this      \Application\View\Renderer\PhpRenderer
  */
 
-echo $this->tag('div', ['class'=>'callout-menu']);
+echo $this->tag('div', ['class' => 'callout-menu']);
 foreach ($container as $page) {
     if ($this->navigation()->accept($page)) {
         $attrs = [
@@ -20,7 +20,7 @@ foreach ($container as $page) {
             $attrs['title'] = $description;
         }
 
-        echo $this->tag('div', ['class'=>'callout-container']);
+        echo $this->tag('div', ['class' => 'callout-container']);
         echo $this->tag('div', $attrs);
         if ($icon = $page->get('icon')) {
             echo $this->tag('span', ['class' => $icon])->open(TagViewHelper::AUTOCLOSE_FULL);

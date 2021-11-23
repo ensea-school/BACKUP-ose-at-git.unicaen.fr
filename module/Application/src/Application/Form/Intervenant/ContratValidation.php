@@ -4,9 +4,9 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Form\AbstractForm;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\ClassMethods;
-use Zend\Validator\NotEmpty;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\ClassMethods;
+use Laminas\Validator\NotEmpty;
 
 /**
  * Formulaire de validation de contrat/avenant.
@@ -18,20 +18,20 @@ class ContratValidation extends AbstractForm
 
     public function init2()
     {
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
         $this->setHydrator(new ClassMethods(false));
         $this->setAttribute('method', 'POST');
 
         $contratToString = lcfirst($this->getContrat()->toString(true));
 
         $this->add([
-            'name' => 'valide',
-            'type'  => 'Checkbox',
-            'options' => [
-                'label' => "Cochez pour valider $contratToString",
+            'name'       => 'valide',
+            'type'       => 'Checkbox',
+            'options'    => [
+                'label'              => "Cochez pour valider $contratToString",
                 'use_hidden_element' => false,
-                'checked_value' => 1,
-                'unchecked_value' => 0
+                'checked_value'      => 1,
+                'unchecked_value'    => 0,
             ],
             'attributes' => [
             ],
@@ -40,8 +40,8 @@ class ContratValidation extends AbstractForm
         $this->add(new Csrf('security'));
 
         $this->add([
-            'name' => 'submit',
-            'type'  => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Valider $contratToString",
             ],
@@ -50,9 +50,11 @@ class ContratValidation extends AbstractForm
         return $this;
     }
 
+
+
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -60,10 +62,10 @@ class ContratValidation extends AbstractForm
     {
         return [
             'valide' => [
-                'required' => true,
+                'required'   => true,
                 'validators' => [
                     [
-                        'name' => 'NotEmpty',
+                        'name'    => 'NotEmpty',
                         'options' => [
                             'messages' => [
                                 NotEmpty::IS_EMPTY => "Vous devez cocher la case pour valider",

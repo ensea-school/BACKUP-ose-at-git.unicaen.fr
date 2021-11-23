@@ -7,9 +7,9 @@ use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 use Application\Entity\Db\ElementPedagogique;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of ElementModulateursFieldset
@@ -131,7 +131,7 @@ class ElementModulateursFieldset extends AbstractFieldset
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -165,12 +165,11 @@ class ElementModulateursHydrator implements HydratorInterface
     use ModulateurServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  ElementPedagogique $object
+     * @param array              $data
+     * @param ElementPedagogique $object
      *
      * @return object
      */
@@ -221,11 +220,11 @@ class ElementModulateursHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  ElementPedagogique $object
+     * @param ElementPedagogique $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $sm = $this->getServiceModulateur();
 

@@ -6,8 +6,8 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Form\Element\Csrf;
+use Laminas\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
@@ -22,7 +22,6 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
     use \Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
-
 
 
     public function init()
@@ -81,37 +80,37 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
     public function getInputFilterSpecification()
     {
         return [
-            'statut-intervenant' => [
+            'statut-intervenant'       => [
                 'required' => true,
             ],
-            'taux-hetd-service' => [
-                'required' => true,
+            'taux-hetd-service'        => [
+                'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }))
+                        }]),
                 ],
             ],
             'taux-hetd-complementaire' => [
-                'required' => true,
+                'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (StringFromFloat::run($value) >= 0.0 ? true : false);
-                        }))
+                        }]),
                 ],
             ],
-            'annee-debut' => [
+            'annee-debut'              => [
                 'required' => false,
             ],
         ];
@@ -131,12 +130,11 @@ class TypeInterventionStatutHydrator implements HydratorInterface
     use EntityManagerAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                         $data
-     * @param  \Application\Entity\Db\TypeInterventionStatut $object
+     * @param array                                         $data
+     * @param \Application\Entity\Db\TypeInterventionStatut $object
      *
      * @return object
      */
@@ -157,16 +155,16 @@ class TypeInterventionStatutHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\TypeInterventionStatut $object
+     * @param \Application\Entity\Db\TypeInterventionStatut $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                       => $object->getId(),
             'type-intervention'        => $object->getTypeIntervention()->getId(),
-            'statut-intervenant'                   => ($s = $object->getStatutIntervenant()) ? $s->getId() : null,
+            'statut-intervenant'       => ($s = $object->getStatutIntervenant()) ? $s->getId() : null,
             'taux-hetd-service'        => StringFromFloat::run($object->getTauxHETDService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHETDComplementaire()),
         ];

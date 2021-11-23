@@ -3,7 +3,7 @@
 namespace Application\Form;
 
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of DisciplineForm
@@ -15,10 +15,9 @@ class DisciplineForm extends AbstractForm
     use ParametresServiceAwareTrait;
 
 
-
     public function init()
     {
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
         $hydrator = new DisciplineFormHydrator;
         $this->setHydrator($hydrator);
 
@@ -46,12 +45,12 @@ class DisciplineForm extends AbstractForm
             ],
         ]);
 
-        for( $i = 1; $i <= 4; $i++ ){
-            $lcc = $this->getServiceParametres()->get('discipline_codes_corresp_'.$i.'_libelle');
-            if ($lcc){
+        for ($i = 1; $i <= 4; $i++) {
+            $lcc = $this->getServiceParametres()->get('discipline_codes_corresp_' . $i . '_libelle');
+            if ($lcc) {
                 $this->add([
                     'type'    => 'Text',
-                    'name'    => 'codes-corresp-'.$i,
+                    'name'    => 'codes-corresp-' . $i,
                     'options' => [
                         'label' => $lcc,
                     ],
@@ -78,20 +77,20 @@ class DisciplineForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
     public function getInputFilterSpecification()
     {
         return [
-            'source-code'   => [
+            'source-code'     => [
                 'required' => true,
             ],
-            'libelle-long'  => [
+            'libelle-long'    => [
                 'required' => true,
             ],
-            'libelle-court' => [
+            'libelle-court'   => [
                 'required' => true,
             ],
             'codes-corresp-1' => [
@@ -118,8 +117,8 @@ class DisciplineFormHydrator implements HydratorInterface
 {
 
     /**
-     * @param  array                             $data
-     * @param  \Application\Entity\Db\Discipline $object
+     * @param array                             $data
+     * @param \Application\Entity\Db\Discipline $object
      *
      * @return object
      */
@@ -132,27 +131,28 @@ class DisciplineFormHydrator implements HydratorInterface
         if (isset($data['codes-corresp-2'])) $object->setCodesCorresp2($data['codes-corresp-2']);
         if (isset($data['codes-corresp-3'])) $object->setCodesCorresp3($data['codes-corresp-3']);
         if (isset($data['codes-corresp-4'])) $object->setCodesCorresp4($data['codes-corresp-4']);
+
         return $object;
     }
 
 
 
     /**
-     * @param  \Application\Entity\Db\Discipline $object
+     * @param \Application\Entity\Db\Discipline $object
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
-            'id'                => $object->getId(),
-            'source-code'       => $object->getSourceCode(),
-            'libelle-long'      => $object->getLibelleLong(),
-            'libelle-court'     => $object->getLibelleCourt(),
-            'codes-corresp-1'   => $object->getCodesCorresp1(),
-            'codes-corresp-2'   => $object->getCodesCorresp2(),
-            'codes-corresp-3'   => $object->getCodesCorresp3(),
-            'codes-corresp-4'   => $object->getCodesCorresp4(),
+            'id'              => $object->getId(),
+            'source-code'     => $object->getSourceCode(),
+            'libelle-long'    => $object->getLibelleLong(),
+            'libelle-court'   => $object->getLibelleCourt(),
+            'codes-corresp-1' => $object->getCodesCorresp1(),
+            'codes-corresp-2' => $object->getCodesCorresp2(),
+            'codes-corresp-3' => $object->getCodesCorresp3(),
+            'codes-corresp-4' => $object->getCodesCorresp4(),
         ];
 
         return $data;

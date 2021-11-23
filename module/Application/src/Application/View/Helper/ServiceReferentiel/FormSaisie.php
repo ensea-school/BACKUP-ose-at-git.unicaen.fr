@@ -118,7 +118,7 @@ EOS;
             /**
              * Bouton Prévu->Réalisé
              */
-            $button = new \Zend\Form\Element\Button('referentiel-prevu-to-realise');
+            $button = new \Laminas\Form\Element\Button('referentiel-prevu-to-realise');
             $button
                 ->setAttributes([
                     'class' => 'btn btn-default referentiel-prevu-to-realise',

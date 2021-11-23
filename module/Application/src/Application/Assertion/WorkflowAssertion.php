@@ -8,7 +8,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Resource\WorkflowResource;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**

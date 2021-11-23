@@ -2,8 +2,8 @@
 
 namespace Application\Form;
 
-use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Hidden;
+use Laminas\Form\Element\Csrf;
+use Laminas\Form\Element\Hidden;
 
 /**
  * Description of Supprimer
@@ -36,8 +36,8 @@ class Supprimer extends AbstractForm
          * Submit
          */
         $this->add([
-            'name' => 'submit',
-            'type'  => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => 'Je confirme la suppression',
             ],
@@ -48,7 +48,7 @@ class Supprimer extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

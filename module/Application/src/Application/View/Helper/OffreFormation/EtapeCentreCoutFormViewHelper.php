@@ -3,7 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
-use Zend\View\Helper\AbstractHtmlElement;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Dessine le formulaire de type EtapeCentreCoutFormViewHelper.

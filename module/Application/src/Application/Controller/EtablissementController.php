@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 use RuntimeException;
 use LogicException;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Description of EtablissementController
@@ -25,7 +25,7 @@ class EtablissementController extends AbstractController
 
     /**
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      * @todo placer le formulaire danx une classe à part
      */
     public function choisirAction()
@@ -37,7 +37,7 @@ class EtablissementController extends AbstractController
                 ->setSelectionRequired(true)
                 ->setLabel("Recherchez l'établissement concerné :")
                 ->setAttributes(['title' => "Saisissez le nom de l'établissement"]);
-        $form = new \Zend\Form\Form('search');
+        $form = new \Laminas\Form\Form('search');
         $form->setAttributes(['class' => 'etablissement-rech']);
         $form->add($etablissement);
 
@@ -100,7 +100,7 @@ class EtablissementController extends AbstractController
             throw new RuntimeException("Etablissement '$id' spécifié introuvable.");
         }
 
-        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel = new \Laminas\View\Model\ViewModel();
         $viewModel->setTemplate('application/etablissement/voir')
                   ->setVariables(compact('etablissement', 'changements'));
 

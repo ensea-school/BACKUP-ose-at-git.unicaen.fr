@@ -6,7 +6,7 @@ use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Service\PlafondServiceAwareTrait;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
 
 /**
@@ -91,7 +91,7 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

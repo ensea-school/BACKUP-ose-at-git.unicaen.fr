@@ -3,7 +3,7 @@
 namespace Application\Filter;
 
 use UnicaenApp\Util;
-use Zend\Filter\AbstractFilter;
+use Laminas\Filter\AbstractFilter;
 
 class StringFromFloat extends AbstractFilter
 {

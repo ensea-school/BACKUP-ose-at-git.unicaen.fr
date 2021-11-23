@@ -8,7 +8,7 @@ use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Source;
-use Zend\Form\Element\Csrf;
+use Laminas\Form\Element\Csrf;
 
 /**
  * Description of VoirieForm
@@ -98,7 +98,7 @@ class VoirieSaisieForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

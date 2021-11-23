@@ -9,9 +9,9 @@ use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\TypeHeures;
 use RuntimeException;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 use Application\Entity\Db\CentreCoutEp;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Fieldset de saisie d'un centre de coûts pour chacun des types d'heures éligibles
@@ -81,7 +81,7 @@ class ElementCentreCoutFieldset extends AbstractFieldset
                 return $centreCout->getTypeHeures()->contains($th);
             };
             $this->centresCouts[$th->getCode()]
-                = $this->getElementPedagogique()->getStructure()->getCentreCout()->filter($filter);
+                    = $this->getElementPedagogique()->getStructure()->getCentreCout()->filter($filter);
         }
 
         return $this->centresCouts[$th->getCode()];
@@ -125,14 +125,16 @@ class ElementCentreCoutFieldset extends AbstractFieldset
     /**
      *
      * @param ElementPedagogique $object
+     *
      * @return self
      */
     public function setObject($object)
     {
-        if ($object instanceof ElementPedagogique){
-            $this->setElementPedagogique ($object);
+        if ($object instanceof ElementPedagogique) {
+            $this->setElementPedagogique($object);
             $this->build();
         }
+
         return parent::setObject($object);
     }
 
@@ -140,17 +142,17 @@ class ElementCentreCoutFieldset extends AbstractFieldset
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
     public function getInputFilterSpecification()
     {
         $typesHeures = $this->getTypesHeures();
-        $filters = [];
+        $filters     = [];
         foreach ($typesHeures as $th) {
             $filters[$th->getCode()] = [
-                'required' => false
+                'required' => false,
             ];
         }
 
@@ -199,12 +201,11 @@ class ElementCentreCoutFieldsetHydrator implements HydratorInterface
     use CentreCoutEpServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  ElementPedagogique $element
+     * @param array              $data
+     * @param ElementPedagogique $element
      *
      * @return object
      */
@@ -229,14 +230,14 @@ class ElementCentreCoutFieldsetHydrator implements HydratorInterface
                 $this->getServiceCentreCoutEp()->delete($ccEp);
             } elseif ($creating) {
                 $ccEp = $this->getServiceCentreCoutEp()->newEntity();
-                $cc = $this->getServiceCentreCout()->get($newCcId);
+                $cc   = $this->getServiceCentreCout()->get($newCcId);
                 $ccEp
                     ->setCentreCout($cc)
                     ->setTypeHeures($th)
                     ->setElementPedagogique($element);
                 $element->addCentreCoutEp($ccEp);
                 $this->getServiceCentreCoutEp()->save($ccEp);
-            }elseif($ccEp = $element->getCentreCoutEp($th)->first()){ // modification d'un existant
+            } elseif ($ccEp = $element->getCentreCoutEp($th)->first()) { // modification d'un existant
                 if ($newCcId != $ccEp->getCentreCout()->getId()) {
                     $cc = $this->getServiceCentreCout()->get($newCcId);
                     $ccEp->setCentreCout($cc);
@@ -253,18 +254,18 @@ class ElementCentreCoutFieldsetHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  ElementPedagogique $element
+     * @param ElementPedagogique $element
      *
      * @return array
      */
-    public function extract($element)
+    public function extract($element): array
     {
         $data = [];
 
         foreach ($element->getTypeHeures() as $th) {
             if (($ccEp = $element->getCentreCoutEp($th)->first())) {
-                $cc = $ccEp->getCentreCout();
-                $ccId = $cc->getId();
+                $cc                   = $ccEp->getCentreCout();
+                $ccId                 = $cc->getId();
                 $data[$th->getCode()] = $ccId;
             }
         }

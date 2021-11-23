@@ -4,8 +4,8 @@ namespace Application\Form\OffreFormation;
 
 use Application\Entity\Db\VolumeHoraireEns;
 use Application\Filter\StringFromFloat;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Laminas\Form\Form;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
 
 /**
@@ -59,7 +59,7 @@ class VolumeHoraireEnsForm extends Form implements InputFilterProviderInterface
 
 
 
-    public function getElement( VolumeHoraireEns $volumeHoraireEns, $type)
+    public function getElement(VolumeHoraireEns $volumeHoraireEns, $type)
     {
         return $this->get($this->getElementName($volumeHoraireEns, $type));
     }
@@ -68,14 +68,14 @@ class VolumeHoraireEnsForm extends Form implements InputFilterProviderInterface
 
     private function getElementName(VolumeHoraireEns $volumeHoraireEns, $type)
     {
-        return 'vhes['.$volumeHoraireEns->getTypeIntervention()->getId().']['.$type.']';
+        return 'vhes[' . $volumeHoraireEns->getTypeIntervention()->getId() . '][' . $type . ']';
     }
 
 
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */

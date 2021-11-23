@@ -5,7 +5,7 @@ namespace Application\Form\Chargens;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -31,7 +31,7 @@ class DuplicationScenarioForm extends AbstractForm
         $hydrator = new DuplicationScenarioFormHydrator;
         $this->setHydrator($hydrator);
 
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->add([
             'name' => 'noeuds',
@@ -74,7 +74,7 @@ class DuplicationScenarioForm extends AbstractForm
         $this->add([
             'name'       => 'button',
             'type'       => 'Button',
-            'options' => [
+            'options'    => [
                 'label' => 'Annuler',
             ],
             'attributes' => [
@@ -98,7 +98,7 @@ class DuplicationScenarioForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
@@ -113,11 +113,13 @@ class DuplicationScenarioForm extends AbstractForm
 
 
 
+
+
 class DuplicationScenarioFormHydrator implements HydratorInterface
 {
 
     /**
-     * @param  array    $data
+     * @param array     $data
      * @param           $object
      *
      * @return object
@@ -136,7 +138,7 @@ class DuplicationScenarioFormHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             /* On peuple le tableau avec les données de l'objet */

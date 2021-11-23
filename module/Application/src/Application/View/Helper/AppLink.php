@@ -1,12 +1,13 @@
 <?php
+
 namespace Application\View\Helper;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Zend\I18n\View\Helper\AbstractTranslatorHelper;
-use Zend\Router\RouteMatch;
-use Zend\Router\RouteStackInterface;
+use Laminas\I18n\View\Helper\AbstractTranslatorHelper;
+use Laminas\Router\RouteMatch;
+use Laminas\Router\RouteStackInterface;
 use UnicaenApp\Exception\LogicException;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 /**
  * Aide de vue dessinant le titre (de niveau 1) de l'application sous forme d'un lien
@@ -61,15 +62,18 @@ class AppLink extends AbstractTranslatorHelper
      *
      * @param string $title
      * @param string $subtitle
+     *
      * @return string Code HTML
      */
     public function __invoke($title = null, $subtitle = null)
     {
         $this->setTitle($title)
-             ->setSubtitle($subtitle);
+            ->setSubtitle($subtitle);
 
         return $this->render();
     }
+
+
 
     /**
      * Retourne le code généré par cette aide de vue.
@@ -88,83 +92,100 @@ class AppLink extends AbstractTranslatorHelper
         $select = new Select;
         $select->setName('annee');
         $select->setAttribute('id', 'annee');
-        $select->setAttribute('data-url', $this->router->assemble(array(), array('name' => $this->homeRouteName)));
+        $select->setAttribute('data-url', $this->router->assemble([], ['name' => $this->homeRouteName]));
         $select->setAttribute('onchange', 'Util.changementAnnee(this.value);');
         $select->setValueOptions($this->getAnnees());
         $select->setValue($this->getAnnee()->getId());
 
-        $appAnnee = '<span class="annee">'.$this->getView()->formSelect($select).'</span>';
+        $appAnnee = '<span class="annee">' . $this->getView()->formSelect($select) . '</span>';
 
         if ($this->subtitle) {
             $appDesc = sprintf('<span>%s</span>',
-                    $this->getTranslator()->translate($this->subtitle, $this->getTranslatorTextDomain()));
+                $this->getTranslator()->translate($this->subtitle, $this->getTranslatorTextDomain()));
         }
 
         if (!$this->routeMatch || $this->homeRouteName != $this->routeMatch->getMatchedRouteName()) {
             $out = sprintf('<a class="navbar-brand" href="%s" title="%s"><h1 class="title">%s%s</h1></a>%s',
-                    $this->router->assemble(array(), array('name' => $this->homeRouteName)),
-                    $this->getTranslator()->translate("Page d'accueil de l'application", $this->getTranslatorTextDomain()),
-                    $appName,
-                    $appDesc,
-                    $appAnnee);
-        }
-        else {
+                $this->router->assemble([], ['name' => $this->homeRouteName]),
+                $this->getTranslator()->translate("Page d'accueil de l'application", $this->getTranslatorTextDomain()),
+                $appName,
+                $appDesc,
+                $appAnnee);
+        } else {
             $out = sprintf('<a class="navbar-brand"><h1 class="title">%s%s</h1></a>%s',
-                    $appName,
-                    $appDesc,
-                    $appAnnee);
+                $appName,
+                $appDesc,
+                $appAnnee);
         }
 
         return $out;
     }
 
+
+
     /**
      * Spécifie le titre.
      *
      * @param string $title
+     *
      * @return self
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
+
+
 
     /**
      * Spécifie le sous-titre.
      *
      * @param string $subtitle
+     *
      * @return self
      */
     public function setSubtitle($subtitle)
     {
         $this->subtitle = $subtitle;
+
         return $this;
     }
+
+
 
     /**
      * Set the router to use for assembling.
      *
      * @param RouteStackInterface $router
+     *
      * @return self
      */
     public function setRouter(RouteStackInterface $router)
     {
         $this->router = $router;
+
         return $this;
     }
+
+
 
     /**
      * Set route match returned by the router.
      *
-     * @param  RouteMatch $routeMatch
+     * @param RouteMatch $routeMatch
+     *
      * @return self
      */
     public function setRouteMatch(RouteMatch $routeMatch)
     {
         $this->routeMatch = $routeMatch;
+
         return $this;
     }
+
+
 
     /**
      * Get route match returned by the router.
@@ -176,17 +197,23 @@ class AppLink extends AbstractTranslatorHelper
         return $this->routeMatch;
     }
 
+
+
     /**
      * Spécifie le nom de la route correspondant à la page d'accueil.
      *
      * @param string $homeRouteName
+     *
      * @return self
      */
     public function setHomeRouteName($homeRouteName)
     {
         $this->homeRouteName = $homeRouteName;
+
         return $this;
     }
+
+
 
     /**
      *
@@ -197,14 +224,18 @@ class AppLink extends AbstractTranslatorHelper
         return $this->annees;
     }
 
+
+
     /**
      *
      * @param array[] $annees
+     *
      * @return self
      */
     function setAnnees($annees)
     {
         $this->annees = $annees;
+
         return $this;
     }
 

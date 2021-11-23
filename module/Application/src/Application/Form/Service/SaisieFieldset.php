@@ -19,7 +19,7 @@ use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
-use Zend\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -247,7 +247,6 @@ class SaisieFieldsetHydrator implements HydratorInterface
     use EtablissementServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
@@ -287,7 +286,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $data = [
             'id'                  => $object->getId(),

@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Form\Supprimer;
 use Application\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManager;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 /**
  * Description of AbstractController
@@ -32,6 +32,7 @@ abstract class AbstractController extends AbstractActionController
                 $saveFnc();
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
+
                 return null;
             }
         }

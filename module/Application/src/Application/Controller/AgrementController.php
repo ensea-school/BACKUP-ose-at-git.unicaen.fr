@@ -17,8 +17,8 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Zend\Form\Element\Checkbox;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Element\Checkbox;
+use Laminas\View\Model\ViewModel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**

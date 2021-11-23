@@ -25,7 +25,7 @@ if (!$od->checkPhpModules([
     'ldap'         => 'Ldap',
     'mbstring'     => 'MbString',
     //  'mcrypt'       => 'MCrypt',
-    'Zend OPcache' => 'Zend OPcache',
+    'Laminas OPcache' => 'Laminas OPcache',
     'xml'          => 'XML',
     'zip'          => 'ZIP',
     'bcmath'       => 'BCMath',

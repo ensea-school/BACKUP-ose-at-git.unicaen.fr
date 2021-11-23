@@ -3,11 +3,11 @@
 namespace Application\Navigation;
 
 use Interop\Container\ContainerInterface;
-use Zend\Http\Request;
-use Zend\Router\RouteStackInterface as Router;
-use Zend\Router\RouteMatch;
-use Zend\Navigation\Navigation;
-use Zend\Navigation\Service\DefaultNavigationFactory;
+use Laminas\Http\Request;
+use Laminas\Router\RouteStackInterface as Router;
+use Laminas\Router\RouteMatch;
+use Laminas\Navigation\Navigation;
+use Laminas\Navigation\Service\DefaultNavigationFactory;
 
 /**
  * Factory de navigation prenant en charge :

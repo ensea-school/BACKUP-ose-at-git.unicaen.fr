@@ -114,7 +114,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
             <div class="panel-heading">Structure</div>
             <div class="panel-body">
                 <?php
-                $selectStructure = new \Zend\Form\Element\Select('structure');
+                $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
                     ->setValueOptions(['' => "(Sélectionnez...)"] + \UnicaenApp\Util::collectionAsOptions($structures))
                     ->setValue($structure ? $structure->getId() : null)

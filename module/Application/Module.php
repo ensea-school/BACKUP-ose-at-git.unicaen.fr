@@ -20,7 +20,7 @@ use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Laminas\Stdlib\Glob;
 use Laminas\Config\Factory as ConfigFactory;
 
-include_once(__DIR__ . '/src/Application/functions.php');
+include_once(__DIR__ . '/src/functions.php');
 
 
 
@@ -151,7 +151,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             ],
             'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                    __NAMESPACE__ => __DIR__ . '/src',
                 ],
             ],
         ];

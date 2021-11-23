@@ -19,10 +19,5 @@
         "unicaen/tbl"            : "dev-laminas_migration",
         "unicaen/open-document"  : "3.0.2",
         "unicaen/siham"          : "dev-laminas_migration"
-    },
-    "autoload": {
-        "psr-4": {
-            "Application\\": "module/Application/src/"
-        }
     }
 }

@@ -16,7 +16,7 @@ $config = [
             'orm_default_driver' => [
                 'class' => \Doctrine\ORM\Mapping\Driver\XmlDriver::class,
                 'paths' => [
-                    __DIR__ . '/../src/Application/Entity/Db/Mapping',
+                    __DIR__ . '/../src/Entity/Db/Mapping',
                 ],
             ],
             'orm_default'        => [
@@ -161,7 +161,7 @@ $config = [
             ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
         ],
         'factories'  => [
-            \Laminas\Navigation\Navigation::class          => Navigation\NavigationFactory::class,
+            \Laminas\Navigation\Navigation::class       => Navigation\NavigationFactory::class,
             Provider\Role\RoleProvider::class           => Provider\Role\RoleProviderFactory::class,
             Provider\Identity\IdentityProvider::class   => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class               => Service\Factory\ContextServiceFactory::class,

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f44fbeb9dbee236f21977e66c51e9e0",
+    "content-hash": "f9d1dd3a4bedbc959d4928f04acfd425",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3059,36 +3059,35 @@
         },
         {
             "name": "laminas/laminas-developer-tools",
-            "version": "2.2.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-developer-tools.git",
-                "reference": "cb8da43d6beafc756e8df2ee2825062921e25c8c"
+                "reference": "f8140318bd0cd9beab9359a6fe233ad73e11d7bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-developer-tools/zipball/cb8da43d6beafc756e8df2ee2825062921e25c8c",
-                "reference": "cb8da43d6beafc756e8df2ee2825062921e25c8c",
+                "url": "https://api.github.com/repos/laminas/laminas-developer-tools/zipball/f8140318bd0cd9beab9359a6fe233ad73e11d7bf",
+                "reference": "f8140318bd0cd9beab9359a6fe233ad73e11d7bf",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-eventmanager": "^3.3",
-                "laminas/laminas-http": "^2.15",
-                "laminas/laminas-modulemanager": "^2.10",
-                "laminas/laminas-mvc": "^3.1",
-                "laminas/laminas-servicemanager": "^3.0.3",
-                "laminas/laminas-stdlib": "^3.3",
-                "laminas/laminas-view": "^2.13.1",
-                "laminas/laminas-zendframework-bridge": "^1.1",
-                "php": "^7.3 || ~8.0.0 || ~8.1.0",
-                "symfony/var-dumper": "^5.0.1"
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-modulemanager": "^2.7",
+                "laminas/laminas-mvc": "^2.7 || ^3.0.1",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-view": "^2.6",
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^5.6 || ^7.0",
+                "symfony/var-dumper": "^3.4.36 || ^4.4.1 || ^5.0.1"
             },
             "replace": {
-                "zendframework/zend-developer-tools": "^2.0.0"
+                "zendframework/zend-developer-tools": "self.version"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
-                "phpunit/phpunit": "^9.3"
+                "phpunit/phpunit": "^5.7.25 || ^6.4.4 || ^7.1"
             },
             "suggest": {
                 "aist/aist-git-tools": "Show you information about current GIT repository",
@@ -3101,6 +3100,10 @@
             },
             "type": "library",
             "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev",
+                    "dev-develop": "2.1.x-dev"
+                },
                 "laminas": {
                     "module": "Laminas\\DeveloperTools"
                 }
@@ -3122,13 +3125,7 @@
                 "laminas",
                 "module"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2021-10-31T19:07:48+00:00"
+            "time": "2019-12-31T16:40:02+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
@@ -7273,7 +7270,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bjy-authorize.git",
-                "reference": "1ebd2fdfd3ed1423163e280a79fb713c1250b7b3"
+                "reference": "a5dd67a7af83f343213bfa4f1e8766b3a4760642"
             },
             "require": {
                 "doctrine/common": "^2.7",
@@ -7327,21 +7324,20 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2021-07-15T07:36:35+00:00"
+            "time": "2021-11-23T10:52:06+00:00"
         },
         {
             "name": "unicaen/code",
-            "version": "dev-laminas_migration",
+            "version": "6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "3d3e6b136a10db87af683b28c359c7d20e2bf150"
+                "reference": "ffa7c00ba402be2f644ed3fcfd1b46cf07f59f8b"
             },
             "require": {
-                "doctrine/dbal": "^2.5",
                 "easybook/geshi": ">=1.0",
-                "laminas/laminas-dependency-plugin": "^2.1",
-                "laminas/laminas-developer-tools": ">=1.0"
+                "laminas/laminas-developer-tools": "2.0.0",
+                "laminas/laminas-file": "^2.8"
             },
             "type": "library",
             "autoload": {
@@ -7354,15 +7350,15 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2021-11-22T16:06:43+00:00"
+            "time": "2021-11-23T16:11:29+00:00"
         },
         {
             "name": "unicaen/import",
-            "version": "dev-laminas_migration",
+            "version": "4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "311d922d7c30b4d6261e6a263c45a8474779f2bf"
+                "reference": "f9afa399aad2b4fce4ea0f2994ec18551326d383"
             },
             "require": {
                 "unicaen/auth": "dev-laminas_migration"
@@ -7381,15 +7377,15 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2021-11-22T15:50:48+00:00"
+            "time": "2021-11-23T16:15:21+00:00"
         },
         {
             "name": "unicaen/open-document",
-            "version": "3.0.2",
+            "version": "4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "17e61ca7f6de385a6bd4819ee01f16a16fff5725"
+                "reference": "079bff8110b1ccd0a99557aee33f87eb867813a5"
             },
             "type": "library",
             "autoload": {
@@ -7401,7 +7397,7 @@
                 ]
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2020-05-15T15:47:37+00:00"
+            "time": "2021-11-23T14:15:57+00:00"
         },
         {
             "name": "unicaen/siham",
@@ -7438,11 +7434,11 @@
         },
         {
             "name": "unicaen/tbl",
-            "version": "dev-laminas_migration",
+            "version": "5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "ccf7552d70d57b6e448bfc391b7e762bd7f0adee"
+                "reference": "239b58d2d052b060926d932848c9a07e3265da17"
             },
             "require": {
                 "unicaen/app": "dev-laminas_migration"
@@ -7461,7 +7457,7 @@
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2021-11-22T16:03:40+00:00"
+            "time": "2021-11-23T14:23:51+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -7578,9 +7574,6 @@
         "unicaen/zfc-user": 20,
         "unicaen/bjy-authorize": 20,
         "unicaen/auth": 20,
-        "unicaen/code": 20,
-        "unicaen/import": 20,
-        "unicaen/tbl": 20,
         "unicaen/siham": 20
     },
     "prefer-stable": false,

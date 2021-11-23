@@ -2,7 +2,7 @@
 
 namespace Plafond\Controller;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 
 /**

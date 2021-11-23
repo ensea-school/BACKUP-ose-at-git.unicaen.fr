@@ -24,7 +24,7 @@ class Test4
     public $controller;
 
     /**
-     * @var Interop\Container\ContainerInterface
+     * @var Psr\Container\ContainerInterface
      */
     public $container;
 

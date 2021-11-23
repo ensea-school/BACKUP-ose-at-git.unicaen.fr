@@ -3,7 +3,7 @@
 namespace Plafond\Service;
 
 use Application\Constants;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 
 /**

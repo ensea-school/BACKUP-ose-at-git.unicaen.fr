@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use UnicaenAuth\Options\ModuleOptions;
 use UnicaenAuth\View\Helper\LocalConnectViewHelper;
 

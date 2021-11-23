@@ -3,7 +3,7 @@
 namespace <namespace>;
 
 use Application\Constants;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 <if subDir>use <targetClass>;
 <endif subDir>
 

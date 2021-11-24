@@ -19,7 +19,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -1611,7 +1611,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     {
         $intervenant = new Intervenant();
 
-        $hydrator = new ClassMethods();
+        $hydrator = new ClassMethodsHydrator();
         $data     = $hydrator->extract($this);
         $hydrator->hydrate($data, $intervenant);
         $intervenant->setValiditeDebut(new \DateTime());

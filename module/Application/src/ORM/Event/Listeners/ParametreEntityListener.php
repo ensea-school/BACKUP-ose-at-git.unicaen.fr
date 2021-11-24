@@ -14,7 +14,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Laminas\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethodsHydrator;
 
 class ParametreEntityListener implements EventSubscriber
 {
@@ -33,7 +33,7 @@ class ParametreEntityListener implements EventSubscriber
 
     protected array                    $key      = [];
 
-    protected ClassMethods             $hydrator;
+    protected ClassMethodsHydrator     $hydrator;
 
     protected bool                     $isSaving = false;
 
@@ -48,7 +48,7 @@ class ParametreEntityListener implements EventSubscriber
         $this->em       = $args->getEntityManager();
         $this->entity   = $args->getEntity();
         $this->metadata = $this->em->getClassMetadata(get_class($this->entity));
-        $this->hydrator = new ClassMethods();
+        $this->hydrator = new ClassMethodsHydrator();
         $this->hydrator->setUnderscoreSeparatedKeys(false);
 
         /* Gestion de l'historique en délégation à l'HistoriqueListener */

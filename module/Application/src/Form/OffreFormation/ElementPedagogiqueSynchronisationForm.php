@@ -7,7 +7,6 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Laminas\Hydrator\ClassMethods;
 
 /**
  * Description of ElementPedagogiqueSynchronisationForm

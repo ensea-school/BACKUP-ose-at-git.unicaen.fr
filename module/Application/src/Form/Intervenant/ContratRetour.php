@@ -6,7 +6,7 @@ use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Form\AbstractForm;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 use Laminas\Form\Element\Csrf;
-use Laminas\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethodsHydrator;
 
 /**
  * Formulaire de saisie de la date de retour du contrat/avenant signé.
@@ -18,16 +18,16 @@ class ContratRetour extends AbstractForm
 
     public function init2()
     {
-        $this->setHydrator(new ClassMethods(false));
+        $this->setHydrator(new ClassMethodsHydrator(false));
         $this->setAttribute('method', 'POST');
         $this->setAttribute('action', $this->getCurrentUrl());
 
         $contratToString = lcfirst($this->getContrat()->toString(true, true));
 
         $this->add([
-            'name' => 'dateRetourSigne',
-            'type'  => 'UnicaenApp\Form\Element\Date',
-            'options' => [
+            'name'       => 'dateRetourSigne',
+            'type'       => 'UnicaenApp\Form\Element\Date',
+            'options'    => [
                 'label' => "Date de retour $contratToString signé",
             ],
             'attributes' => [
@@ -37,8 +37,8 @@ class ContratRetour extends AbstractForm
         $this->add(new Csrf('security'));
 
         $this->add([
-            'name' => 'submit',
-            'type'  => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
             ],
@@ -48,6 +48,8 @@ class ContratRetour extends AbstractForm
 
         return $this;
     }
+
+
 
     /**
      * Should return an array specification compatible with

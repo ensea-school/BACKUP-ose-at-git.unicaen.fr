@@ -21,7 +21,7 @@ class ModificationServiceDuForm extends AbstractForm
     {
         $this->setAttribute('method', 'post')
             ->setAttribute('class', 'modification-service-du')
-            ->setHydrator(new \Laminas\Hydrator\ClassMethods(false))
+            ->setHydrator(new \Laminas\Hydrator\ClassMethodsHydrator(false))
             ->setInputFilter(new \Laminas\InputFilter\InputFilter());
 
         $fs = $this->getFieldsetIntervenantModificationServiceDu();

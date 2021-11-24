@@ -5,7 +5,7 @@ namespace Application\Form\Intervenant;
 use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
-use Laminas\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Validator\NotEmpty;
 
 /**
@@ -19,7 +19,7 @@ class ContratValidation extends AbstractForm
     public function init2()
     {
         $this->setAttribute('action', $this->getCurrentUrl());
-        $this->setHydrator(new ClassMethods(false));
+        $this->setHydrator(new ClassMethodsHydrator(false));
         $this->setAttribute('method', 'POST');
 
         $contratToString = lcfirst($this->getContrat()->toString(true));

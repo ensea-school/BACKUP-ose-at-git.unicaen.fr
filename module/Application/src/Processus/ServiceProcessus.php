@@ -35,7 +35,6 @@ class ServiceProcessus extends AbstractProcessus
     use TypeInterventionServiceAwareTrait;
 
 
-
     /**
      *
      * @param Intervenant|null $intervenant
@@ -79,7 +78,7 @@ class ServiceProcessus extends AbstractProcessus
         //@formatter:on
 
         $service->finderByContext($qb);
-        $service->finderByFilterObject($recherche, new \Laminas\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
+        $service->finderByFilterObject($recherche, new \Laminas\Hydrator\ClassMethodsHydrator(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
 
         if ($intervenant) {
             $service->finderByIntervenant($intervenant, $qb);
@@ -87,7 +86,7 @@ class ServiceProcessus extends AbstractProcessus
         $structureService->orderBy($qb);
         $etapeService->orderBy($qb);
         $periodeService->orderBy($qb);
-        $qb->orderBy($elementPedagogiqueService->getAlias().'.code');
+        $qb->orderBy($elementPedagogiqueService->getAlias() . '.code');
         $this->getServiceVolumeHoraire()->orderBy($qb);
         $this->getServiceTypeIntervention()->orderBy($qb);
 

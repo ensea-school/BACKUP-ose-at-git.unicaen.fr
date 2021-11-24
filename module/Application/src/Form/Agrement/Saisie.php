@@ -4,7 +4,7 @@ namespace Application\Form\Agrement;
 
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
-use Laminas\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethodsHydrator;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 
 /**
@@ -16,7 +16,7 @@ class Saisie extends AbstractForm
 
     public function init()
     {
-        $this->setHydrator(new ClassMethods(false));
+        $this->setHydrator(new ClassMethodsHydrator(false));
 
         $this->setAttribute('action', $this->getCurrentUrl());
 

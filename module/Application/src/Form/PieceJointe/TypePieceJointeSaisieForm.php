@@ -4,7 +4,7 @@ namespace Application\Form\PieceJointe;
 
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
-use Laminas\Hydrator\ClassMethods;
+use Laminas\Hydrator\ClassMethodsHydrator;
 
 /**
  * Description of TypePieceJointeSaisieForm
@@ -16,7 +16,7 @@ class TypePieceJointeSaisieForm extends AbstractForm
 
     public function init()
     {
-        $this->setHydrator(new ClassMethods(false));
+        $this->setHydrator(new ClassMethodsHydrator(false));
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
@@ -44,11 +44,11 @@ class TypePieceJointeSaisieForm extends AbstractForm
             'type'       => 'Text',
         ]);
         $this->add([
-            'name'       => 'urlModeleDoc',
-            'options'    => [
+            'name'    => 'urlModeleDoc',
+            'options' => [
                 'label' => "Modèle",
             ],
-            'type'       => 'Text',
+            'type'    => 'Text',
         ]);
 
         $this->add(new Csrf('security'));
@@ -58,12 +58,14 @@ class TypePieceJointeSaisieForm extends AbstractForm
             'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
             ],
         ]);
 
         return $this;
     }
+
+
 
     /**
      * Should return an array specification compatible with
@@ -74,7 +76,7 @@ class TypePieceJointeSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'code' => [
+            'code'    => [
                 'required' => true,
             ],
             'libelle' => [
@@ -82,7 +84,7 @@ class TypePieceJointeSaisieForm extends AbstractForm
             ],
             'libelle' => [
                 'required' => false,
-            ]
+            ],
         ];
     }
 

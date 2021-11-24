@@ -14,9 +14,9 @@ use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTra
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Laminas\Hydrator\ClassMethodsHydrator;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
-use Laminas\Hydrator\ClassMethods;
 
 
 /**
@@ -538,7 +538,7 @@ class IntervenantService extends AbstractEntityService
         $url = \AppConfig::get('ldap', 'systemeInformationUrl');
         if (!$url) return null;
 
-        $hydrator = new ClassMethods();
+        $hydrator = new ClassMethodsHydrator();
         $data     = $hydrator->extract($intervenant);
         foreach ($data as $key => $value) {
             if (false !== strpos($url, ':' . $key)) {

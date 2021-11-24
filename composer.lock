@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aea063ac765bf8d9a82774011e5d823b",
+    "content-hash": "ac4dec3b88acb71f4fef50008acc49c5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7328,11 +7328,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "ffa7c00ba402be2f644ed3fcfd1b46cf07f59f8b"
+                "reference": "b341e3d2a92bcca8f908d705241bacba62ded0a0"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7342,23 +7342,22 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "UnicaenCode\\": "src/",
-                    "UnicaenCodeTest\\": "tests/"
+                    "UnicaenCode\\": "src/"
                 },
                 "classmap": [
                     "./Module.php"
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2021-11-23T16:11:29+00:00"
+            "time": "2021-11-24T10:46:48+00:00"
         },
         {
             "name": "unicaen/import",
-            "version": "4.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "f9afa399aad2b4fce4ea0f2994ec18551326d383"
+                "reference": "1e7db8f8e34317d14a9b3b3595785a97f2d26ca0"
             },
             "require": {
                 "unicaen/auth": "dev-laminas_migration"
@@ -7368,16 +7367,15 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "UnicaenImport": "src/",
-                    "UnicaenImportTest": "tests/"
+                "psr-4": {
+                    "UnicaenImport\\": "src/"
                 },
                 "classmap": [
                     "./Module.php"
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2021-11-23T16:15:21+00:00"
+            "time": "2021-11-24T10:58:26+00:00"
         },
         {
             "name": "unicaen/open-document",
@@ -7438,7 +7436,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "78a1b74dac49b6fc75ba2caba3c6a0690a7be096"
+                "reference": "917b99aff3e19f4a097515df1386c7113e57e3ae"
             },
             "require": {
                 "unicaen/app": "dev-laminas_migration"
@@ -7446,14 +7444,14 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "UnicaenTbl": "src/"
+                    "UnicaenTbl\\": "src/"
                 },
                 "classmap": [
                     "./Module.php"
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2021-11-24T10:30:55+00:00"
+            "time": "2021-11-24T10:46:48+00:00"
         },
         {
             "name": "unicaen/zfc-user",

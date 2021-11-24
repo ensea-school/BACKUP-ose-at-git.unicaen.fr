@@ -478,8 +478,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
 
     -- AD=SI(ESTERREUR(I20);1;I20)
+    -- AD=SI(ESTERREUR(I20);1;SI(H20="TP";1;I20))
     WHEN c = 'AD' AND v >= 1 THEN
-      RETURN vh.taux_service_du;
+      IF vh.type_intervention_code = 'TP' THEN
+        RETURN 1;
+      ELSE
+        RETURN vh.taux_service_du;
+      END IF;
 
 
 

@@ -35,11 +35,6 @@ class Application
         define('REQUEST_MICROTIME', microtime(true));
         chdir($appDir);
 
-//        if (!file_exists($appDir.'/cache/sessions')){
-//            mkdir($appDir.'/cache/sessions');
-//        }
-//        session_save_path ($appDir.'/cache/sessions' );
-
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if (AppConfig::get('global', 'affichageErreurs')) {
             error_reporting(E_ALL);
@@ -64,7 +59,7 @@ class Application
 
 
 
-    private static function LaminasApplicationStart()
+    public static function start(): \Laminas\Mvc\Application
     {
         $configuration = AppConfig::getGlobal();
 
@@ -84,8 +79,8 @@ class Application
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
         $application = $serviceManager->get('Application')->bootstrap([]);
-        /** @var $application \Laminas\Mvc\Application */
-        $application->run();
+
+        return $application;
     }
 
 
@@ -117,7 +112,8 @@ class Application
             require 'public/maintenance.php';
             die();
         } else {
-            self::LaminasApplicationStart();
+            $application = self::start();
+            $application->run();
         }
     }
 

@@ -23,7 +23,15 @@ Objectif : Plafonds personnalisables
 
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
 
+# OSE 17.1 (à venir)
 
+## Nouveautés
+
+* Ajout du numéro de SIRET au niveau de la table employeur et suppression de la contrainte d'unicité sur le SIREN (Tâche #40810)
+
+## Notes de mise à jour
+
+* Si vous utilisez la commande ./bin/ose update-employeur pour charger la liste des employeurs INSEE, en passant en 17.1 vous pourrez récupérer la notion de SIRET dans la table employeur, ainsi la contrainte d'unicité sur le SIREN sera également levée.
 
 # OSE 17 (18/11/2021)
 Objectif : Connecteur Export OSE => Logiciel RH

@@ -392,11 +392,13 @@ return [
     'plafonds' => [
         'libelle'    => 'Administration des Plafonds',
         'privileges' => [
-            'visualisation'           => 'Visualisation',
-            'edition'                 => 'Édition',
-            'application'             => 'Application',
-            'structure-visualisation' => 'Par structure (visualisation)',
-            'structure-edition'       => 'Par structure (édition)',
+            'visualisation'             => 'Visualisation',
+            'edition'                   => 'Édition',
+            'application'               => 'Application',
+            'structure-visualisation'   => 'Par structure (visualisation)',
+            'structure-edition'         => 'Par structure (édition)',
+            'derogations-visualisation' => 'Dérogations (visualisation)',
+            'derogations-edition'       => 'Dérogations (édition)',
         ],
     ],
 
@@ -422,6 +424,6 @@ return [
             'grades-edition'       => 'Édition grades',
         ],
     ],
-   
+
 
 ];

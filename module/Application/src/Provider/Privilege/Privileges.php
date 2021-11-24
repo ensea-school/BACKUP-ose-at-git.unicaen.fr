@@ -135,12 +135,12 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const INTERVENANT_CALCUL_HETD                             = 'intervenant-calcul-hetd';
     const INTERVENANT_CREATION                                = 'intervenant-creation';
     const INTERVENANT_EDITION                                 = 'intervenant-edition';
+    const INTERVENANT_EXPORTER                                = 'intervenant-exporter';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
     const INTERVENANT_LIEN_SYSTEME_INFORMATION                = 'intervenant-lien-systeme-information';
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';
-    const INTERVENANT_EXPORTER                                = 'intervenant-exporter';
     const INTERVENANT_SUPPRESSION                             = 'intervenant-suppression';
     const INTERVENANT_VISUALISATION_HISTORISES                = 'intervenant-visualisation-historises';
     const MISE_EN_PAIEMENT_DEMANDE                            = 'mise-en-paiement-demande';
@@ -202,6 +202,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const PILOTAGE_ECARTS_ETATS                               = 'pilotage-ecarts-etats';
     const PILOTAGE_VISUALISATION                              = 'pilotage-visualisation';
     const PLAFONDS_APPLICATION                                = 'plafonds-application';
+    const PLAFONDS_DEROGATIONS_EDITION                        = 'plafonds-derogations-edition';
+    const PLAFONDS_DEROGATIONS_VISUALISATION                  = 'plafonds-derogations-visualisation';
     const PLAFONDS_EDITION                                    = 'plafonds-edition';
     const PLAFONDS_STRUCTURE_EDITION                          = 'plafonds-structure-edition';
     const PLAFONDS_STRUCTURE_VISUALISATION                    = 'plafonds-structure-visualisation';
@@ -226,8 +228,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const TYPE_RESSOURCE_VISUALISATION                        = 'type-ressource-visualisation';
     const UNICAEN_TBL_ACTUALISATION                           = 'unicaen-tbl-actualisation';
     const UNICAEN_TBL_ADMIN                                   = 'unicaen-tbl-admin';
-    const UNICAEN_TBL_UPDATE_ACTUPROC                         = 'unicaen-tbl-update-actuproc';
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
-    
+
 }

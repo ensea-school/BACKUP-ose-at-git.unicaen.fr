@@ -88,11 +88,12 @@ class EmployeurService extends AbstractEntityService
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while ($r = $stmt->fetch()) {
             $siren                = $r['SIREN'];
+            $siret                = $r['SIRET'];
             $employeurs[$r['ID']] = [
                 'id'    => $r['ID'],
                 'label' => $r['RAISON_SOCIALE'],
-                'siren' => $siren,
-                'extra' => "<small>($siren)</small>",
+                'siret' => $siret,
+                'extra' => "<small>($siret)</small>",
             ];
         }
 

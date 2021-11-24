@@ -8,8 +8,8 @@ try {
         "cd $osedir",
         "rm -Rf cache/*",
         "php public/index.php orm:generate-proxies",
-        //"chmod -R 777 cache/DoctrineProxy",
-        //"chmod -R 777 cache/Doctrine",
+        "chmod -R 777 cache/DoctrineProxy",
+        "chmod -R 777 cache/Doctrine",
     ], false);
     $c->println('Cache nettoyé, proxies actualisés', $c::COLOR_GREEN);
 } catch (\Exception $e) {

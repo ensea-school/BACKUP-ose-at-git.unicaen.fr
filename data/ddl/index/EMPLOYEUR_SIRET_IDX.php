@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'EMPLOYEUR_SIREN_IDX',
-    'unique'  => FALSE,
+    'name'    => 'EMPLOYEUR_SIRET_IDX',
+    'unique'  => TRUE,
     'table'   => 'EMPLOYEUR',
     'columns' => [
-        'SIREN',
+        'SIRET',
     ],
 ];
 

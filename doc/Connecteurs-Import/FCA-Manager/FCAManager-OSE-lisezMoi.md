@@ -17,6 +17,7 @@ La nomenclature des noms de formation dans FCA Manager répond à des choix prop
 	- le nom d'une action est représenté ainsi : FCA-XXXXXX-ANNEE_UNIV
 	- le nom d'un enseignement suit la nomenclature : FCA-XXXXXX-ANNEE_UNIV-YY (Y variant de 0 à 20)
 	- le code source du logiciel est alors FCA Manager
+	- Le domaine fonctionnel SIFAC en dépense doit être complété
 
 - Les actions et enseignements diplômants sont intégrés depuis Apogee vers FCA:
 	- le nom de l'action et les enseignements sont au format APO-ETAPE-VET-ANNEE_UNIV

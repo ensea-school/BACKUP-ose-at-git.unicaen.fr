@@ -40,6 +40,12 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
      */
     protected $siren;
 
+    /**
+     * @var string
+     */
+    protected $siret;
+
+
 
     /**
      * Get id
@@ -51,6 +57,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
         return $this->id;
     }
 
+
+
     /**
      * @return string
      */
@@ -58,6 +66,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->raisonSociale;
     }
+
+
 
     /**
      * @param string $raisonSociale
@@ -69,6 +79,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
         return $this;
     }
 
+
+
     /**
      * @return string
      */
@@ -76,6 +88,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->siren;
     }
+
+
 
     /**
      * @param string $siren
@@ -87,6 +101,30 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
         return $this;
     }
 
+
+
+    /**
+     * @return string
+     */
+    public function getSiret()
+    {
+        return $this->siret;
+    }
+
+
+
+    /**
+     * @param string $siret
+     */
+    public function setSiret($siret)
+    {
+        $this->siret = $siret;
+
+        return $this;
+    }
+
+
+
     /**
      * @return string
      */
@@ -94,6 +132,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->nomCommercial;
     }
+
+
 
     /**
      * @param string $nomCommercial
@@ -105,6 +145,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
         return $this;
     }
 
+
+
     /**
      * @return string
      */
@@ -112,6 +154,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->identifiantAssociation;
     }
+
+
 
     /**
      * @param string $identifiantAssociation
@@ -122,6 +166,8 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
 
         return $this;
     }
+
+
 
     public function __toString()
     {

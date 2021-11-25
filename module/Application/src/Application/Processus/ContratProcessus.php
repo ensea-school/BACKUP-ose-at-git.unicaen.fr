@@ -10,6 +10,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
+use Application\ORM\Event\Listeners\HistoriqueListener;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
@@ -35,7 +36,6 @@ class ContratProcessus extends AbstractProcessus
     use TypeValidationServiceAwareTrait;
     use VolumeHoraireServiceAwareTrait;
     use ValidationServiceAwareTrait;
-
 
 
     /**
@@ -185,6 +185,7 @@ class ContratProcessus extends AbstractProcessus
             foreach ($service->getVolumeHoraire() as $vh) {
                 /* @var $vh VolumeHoraire */
                 $vh->setContrat($contrat);
+                $this->desactivateHistoriqueListenerEvent();
                 $this->getEntityManager()->persist($vh);
             }
         }
@@ -214,12 +215,12 @@ class ContratProcessus extends AbstractProcessus
         $vhs = $sVH->getList($sVH->finderByContrat($contrat));
 
         // détachement du contrat et des VH
+        $this->desactivateHistoriqueListenerEvent();
         foreach ($vhs as $vh) {
             /* @var $vh \Application\Entity\Db\VolumeHoraire */
             $vh->setContrat(null);
             $sVH->save($vh);
         }
-
         $this->getServiceContrat()->delete($contrat);
 
         return $this;
@@ -378,5 +379,20 @@ class ContratProcessus extends AbstractProcessus
         $fr = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
+    }
+
+
+
+    public function desactivateHistoriqueListenerEvent()
+    {
+        $eventManager = $this->getEntityManager()->getEventManager();
+        $allListeners = $eventManager->getListeners();
+        foreach ($allListeners as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                if ($listener instanceof HistoriqueListener) {
+                    $this->getEntityManager()->getEventManager()->removeEventListener(['prePersist', 'preUpdate'], $listener);
+                }
+            }
+        }
     }
 }

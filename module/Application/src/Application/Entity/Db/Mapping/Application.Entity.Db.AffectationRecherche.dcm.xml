@@ -20,7 +20,7 @@
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
-        <field name="structure_id" type="string" column="STRUCTURE_ID" length="100" nullable="true"/>
+        <field name="structureId" type="string" column="STRUCTURE_ID" length="100" nullable="true"/>
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-columns>
                 <join-column name="SOURCE_ID" referenced-column-name="ID"/>

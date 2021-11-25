@@ -23,9 +23,9 @@ class AffectationRecherche implements HistoriqueAwareInterface, ImportAwareInter
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var integer
      */
-    protected $structure;
+    protected $structureId;
 
     /**
      * @var \Application\Entity\Db\Intervenant
@@ -49,13 +49,13 @@ class AffectationRecherche implements HistoriqueAwareInterface, ImportAwareInter
     /**
      * Set structure
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param $structureId interger
      *
      * @return AffectationRecherche
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setStructureId($structureId)
     {
-        $this->structure = $structure;
+        $this->structureId = $structureId;
 
         return $this;
     }
@@ -65,11 +65,11 @@ class AffectationRecherche implements HistoriqueAwareInterface, ImportAwareInter
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return integer $structureId
      */
-    public function getStructure()
+    public function getStructureId()
     {
-        return $this->structure;
+        return $this->structureId;
     }
 
 

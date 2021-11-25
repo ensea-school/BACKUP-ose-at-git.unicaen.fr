@@ -29,6 +29,10 @@ Objectif : Plafonds personnalisables
 
 * Ajout du numéro de SIRET au niveau de la table employeur et suppression de la contrainte d'unicité sur le SIREN (Tâche #40810)
 
+## Correction de bug
+
+* Correction sur l'horodatage du service prévisionnel qui se mettait à jour lors de la création ou suppresion d'un contrat (#40925)
+
 ## Notes de mise à jour
 
 * Si vous utilisez la commande ./bin/ose update-employeur pour charger la liste des employeurs INSEE, en passant en 17.1 vous pourrez récupérer la notion de SIRET dans la table employeur, ainsi la contrainte d'unicité sur le SIREN sera également levée.

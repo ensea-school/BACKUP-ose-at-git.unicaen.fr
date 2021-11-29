@@ -171,7 +171,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       END IF;
     END IF;
 
-    IF filter = '' THEN
+    IF filter IS NULL THEN
       RETURN '1=1';
     END IF;
 

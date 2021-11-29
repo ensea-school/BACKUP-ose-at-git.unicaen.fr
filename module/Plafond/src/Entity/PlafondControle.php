@@ -14,6 +14,16 @@ class PlafondControle
     /**
      * @var string
      */
+    private $code;
+
+    /**
+     * @var string
+     */
+    private $libelle;
+
+    /**
+     * @var string
+     */
     private $message;
 
     /**
@@ -50,6 +60,54 @@ class PlafondControle
      * @var float
      */
     private $derogation;
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return PlafondControle
+     */
+    public function setCode(string $code): PlafondControle
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getLibelle(): string
+    {
+        return $this->libelle;
+    }
+
+
+
+    /**
+     * @param string $libelle
+     *
+     * @return PlafondControle
+     */
+    public function setLibelle(string $libelle): PlafondControle
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
 
 
 
@@ -268,6 +326,12 @@ class PlafondControle
     public static function fromArray(array $a): PlafondControle
     {
         $pc = new PlafondControle();
+        if (isset($a['CODE'])) {
+            $pc->setCode($a['CODE']);
+        }
+        if (isset($a['LIBELLE'])) {
+            $pc->setLibelle($a['LIBELLE']);
+        }
         if (isset($a['MESSAGE'])) {
             $pc->setMessage($a['MESSAGE']);
         }

@@ -163,6 +163,8 @@ class PlafondService extends AbstractEntityService
 
         $sql = "
             SELECT
+              p.code         code,
+              p.libelle      libelle,
               p.libelle      message,
               pp.code        perimetre,
               pe.code        etat,

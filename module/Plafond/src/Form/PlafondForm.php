@@ -142,7 +142,7 @@ class PlafondFormHydrator extends GenericHydrator
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $res = parent::extract($object);
 

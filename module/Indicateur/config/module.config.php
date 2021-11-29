@@ -15,77 +15,79 @@ return [
     ],
 
     'routes' => [
-        'route'         => '/gestion/indicateur',
-        'controller'    => 'Indicateur\Controller\Indicateur',
-        'action'        => 'index',
-        'may_terminate' => true,
-        'child_routes'  => [
-            'result'                  => [
-                'route'       => '/result/:indicateur[/structure/:structure]',
-                'action'      => 'result',
-                'constraints' => [
-                    'indicateur' => '[0-9]*',
-                    'structure'  => '[0-9]*',
-                ],
-            ],
-            'abonner'                 => [
-                'route'       => '/abonner/:indicateur',
-                'action'      => 'abonner',
-                'constraints' => [
-                    'indicateur' => '[0-9]*',
-                ],
-            ],
-            'abonnements'             => [
-                'route'  => '/abonnements',
-                'action' => 'abonnements',
-            ],
-            'envoi-mail-intervenants' => [
-                'route'       => '/envoi-mail-intervenants/:indicateur',
-                'action'      => 'envoi-mail-intervenants',
-                'constraints' => [
-                    'indicateur' => '[0-9]*',
-                ],
-            ],
-            'depassement-charges'     => [
-                'route'        => '/depassement-charges/:intervenant',
-                'action'       => 'depassement-charges',
-                'child_routes' => [
-                    'prevu'   => [
-                        'route'        => '/prevu',
-                        'defaults'     => [
-                            'type-volume-horaire-code' => 'PREVU',
-                        ],
-                        'child_routes' => [
-                            's1' => [
-                                'route'    => '/s1',
-                                'defaults' => [
-                                    'periode-code' => 'S1',
-                                ],
-                            ],
-                            's2' => [
-                                'route'    => '/s2',
-                                'defaults' => [
-                                    'periode-code' => 'S2',
-                                ],
-                            ],
-                        ],
+        'indicateur' => [
+            'route'         => '/gestion/indicateur',
+            'controller'    => 'Indicateur\Controller\Indicateur',
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'result'                  => [
+                    'route'       => '/result/:indicateur[/structure/:structure]',
+                    'action'      => 'result',
+                    'constraints' => [
+                        'indicateur' => '[0-9]*',
+                        'structure'  => '[0-9]*',
                     ],
-                    'realise' => [
-                        'route'        => '/realise',
-                        'defaults'     => [
-                            'type-volume-horaire-code' => 'REALISE',
-                        ],
-                        'child_routes' => [
-                            's1' => [
-                                'route'    => '/s1',
-                                'defaults' => [
-                                    'periode-code' => 'S1',
+                ],
+                'abonner'                 => [
+                    'route'       => '/abonner/:indicateur',
+                    'action'      => 'abonner',
+                    'constraints' => [
+                        'indicateur' => '[0-9]*',
+                    ],
+                ],
+                'abonnements'             => [
+                    'route'  => '/abonnements',
+                    'action' => 'abonnements',
+                ],
+                'envoi-mail-intervenants' => [
+                    'route'       => '/envoi-mail-intervenants/:indicateur',
+                    'action'      => 'envoi-mail-intervenants',
+                    'constraints' => [
+                        'indicateur' => '[0-9]*',
+                    ],
+                ],
+                'depassement-charges'     => [
+                    'route'        => '/depassement-charges/:intervenant',
+                    'action'       => 'depassement-charges',
+                    'child_routes' => [
+                        'prevu'   => [
+                            'route'        => '/prevu',
+                            'defaults'     => [
+                                'type-volume-horaire-code' => 'PREVU',
+                            ],
+                            'child_routes' => [
+                                's1' => [
+                                    'route'    => '/s1',
+                                    'defaults' => [
+                                        'periode-code' => 'S1',
+                                    ],
+                                ],
+                                's2' => [
+                                    'route'    => '/s2',
+                                    'defaults' => [
+                                        'periode-code' => 'S2',
+                                    ],
                                 ],
                             ],
-                            's2' => [
-                                'route'    => '/s2',
-                                'defaults' => [
-                                    'periode-code' => 'S2',
+                        ],
+                        'realise' => [
+                            'route'        => '/realise',
+                            'defaults'     => [
+                                'type-volume-horaire-code' => 'REALISE',
+                            ],
+                            'child_routes' => [
+                                's1' => [
+                                    'route'    => '/s1',
+                                    'defaults' => [
+                                        'periode-code' => 'S1',
+                                    ],
+                                ],
+                                's2' => [
+                                    'route'    => '/s2',
+                                    'defaults' => [
+                                        'periode-code' => 'S2',
+                                    ],
                                 ],
                             ],
                         ],

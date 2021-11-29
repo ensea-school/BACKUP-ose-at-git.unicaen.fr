@@ -14,7 +14,7 @@
         "unicaen/bjy-authorize"  : "dev-laminas_migration",
         "unicaen/auth"           : "dev-laminas_migration",
         "laminas/laminas-file"   : "2.8.3",
-        "unicaen/code"           : "6.0.1",
+        "unicaen/code"           : "6.0.2",
         "unicaen/import"         : "4.0.1",
         "unicaen/tbl"            : "5.0.1",
         "unicaen/open-document"  : "4.0",

@@ -49,11 +49,10 @@ class ConfigFactory
         }
 
         if (isset($config['routes'])) {
-            $finalConfig['router'] = [
-                'routes' => [
-                    strtolower($namespace) => self::routeSimplified($config['routes']),
-                ],
-            ];
+            $finalConfig['router']['routes'] = [];
+            foreach ($config['routes'] as $cr => $cc) {
+                $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc);
+            }
         }
 
         if (isset($config['navigation'])) {

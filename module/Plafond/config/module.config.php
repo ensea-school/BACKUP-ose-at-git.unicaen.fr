@@ -9,88 +9,90 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
 
     'routes' => [
-        'route'         => '/plafond',
-        'controller'    => 'Plafond\Controller\Plafond',
-        'action'        => 'index',
-        'may_terminate' => true,
-        'child_routes'  => [
-            'ajouter'   => [
-                'route'  => '/ajouter',
-                'action' => 'editer',
-            ],
-            'modifier'  => [
-                'route'       => '/modifier/:plafond',
-                'action'      => 'editer',
-                'constraints' => [
-                    'plafond' => '[0-9]*',
+        'plafond' => [
+            'route'         => '/plafond',
+            'controller'    => 'Plafond\Controller\Plafond',
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'ajouter'   => [
+                    'route'  => '/ajouter',
+                    'action' => 'editer',
                 ],
-            ],
-            'supprimer' => [
-                'route'       => '/supprimer/:plafond',
-                'action'      => 'supprimer',
-                'constraints' => [
-                    'plafond' => '[0-9]*',
-                ],
-            ],
-
-            'editer-application'    => [
-                'route'       => '/editer-application[/:plafondApplication]',
-                'action'      => 'editerApplication',
-                'constraints' => [
-                    'plafondApplication' => '[0-9]*',
-                ],
-            ],
-            'supprimer-application' => [
-                'route'       => '/supprimer-application/:plafondApplication',
-                'action'      => 'supprimerApplication',
-                'constraints' => [
-                    'plafondApplication' => '[0-9]*',
-                ],
-            ],
-
-            'construire-calculer' => [
-                'route'  => '/construire-calculer',
-                'action' => 'construire-calculer',
-            ],
-
-            'structure' => [
-                'route'         => '/structure/:structure',
-                'controller'    => 'Plafond\Controller\PlafondStructure',
-                'action'        => 'index',
-                'constraints'   => [
-                    'structure' => '[0-9]*',
-                ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'ajouter'   => [
-                        'route'  => '/ajouter',
-                        'action' => 'editer',
+                'modifier'  => [
+                    'route'       => '/modifier/:plafond',
+                    'action'      => 'editer',
+                    'constraints' => [
+                        'plafond' => '[0-9]*',
                     ],
-                    'modifier'  => [
-                        'route'       => '/modifier/:plafondStructure',
-                        'action'      => 'editer',
-                        'constraints' => [
-                            'plafondStructure' => '[0-9]*',
+                ],
+                'supprimer' => [
+                    'route'       => '/supprimer/:plafond',
+                    'action'      => 'supprimer',
+                    'constraints' => [
+                        'plafond' => '[0-9]*',
+                    ],
+                ],
+
+                'editer-application'    => [
+                    'route'       => '/editer-application[/:plafondApplication]',
+                    'action'      => 'editerApplication',
+                    'constraints' => [
+                        'plafondApplication' => '[0-9]*',
+                    ],
+                ],
+                'supprimer-application' => [
+                    'route'       => '/supprimer-application/:plafondApplication',
+                    'action'      => 'supprimerApplication',
+                    'constraints' => [
+                        'plafondApplication' => '[0-9]*',
+                    ],
+                ],
+
+                'construire-calculer' => [
+                    'route'  => '/construire-calculer',
+                    'action' => 'construire-calculer',
+                ],
+
+                'structure' => [
+                    'route'         => '/structure/:structure',
+                    'controller'    => 'Plafond\Controller\PlafondStructure',
+                    'action'        => 'index',
+                    'constraints'   => [
+                        'structure' => '[0-9]*',
+                    ],
+                    'may_terminate' => true,
+                    'child_routes'  => [
+                        'ajouter'   => [
+                            'route'  => '/ajouter',
+                            'action' => 'editer',
+                        ],
+                        'modifier'  => [
+                            'route'       => '/modifier/:plafondStructure',
+                            'action'      => 'editer',
+                            'constraints' => [
+                                'plafondStructure' => '[0-9]*',
+                            ],
+                        ],
+                        'supprimer' => [
+                            'route'       => '/supprimer/:plafondStructure',
+                            'action'      => 'supprimer',
+                            'constraints' => [
+                                'plafondStructure' => '[0-9]*',
+                            ],
                         ],
                     ],
-                    'supprimer' => [
-                        'route'       => '/supprimer/:plafondStructure',
-                        'action'      => 'supprimer',
-                        'constraints' => [
-                            'plafondStructure' => '[0-9]*',
-                        ],
-                    ],
                 ],
             ],
+        ],
 
-            'derogation' => [
-                'route'         => '/derogation',
-                'controller'    => 'Plafond\Controller\Derogation',
-                'action'        => 'index',
-                'may_terminate' => true,
-                'child_routes'  => [
-                    /* Placez ici vos routes filles */
-                ],
+        'derogations' => [
+            'route'         => '/intervenant/:intervenant/derogations',
+            'controller'    => 'Plafond\Controller\Derogation',
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                /* Placez ici vos routes filles */
             ],
         ],
     ],
@@ -151,6 +153,11 @@ return [
             'privileges' => Privileges::PLAFONDS_STRUCTURE_EDITION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
+        [
+            'controller' => 'Plafond\Controller\Derogation',
+            'action'     => ['index'],
+            'privileges' => Privileges::PLAFONDS_DEROGATIONS_VISUALISATION,
+        ],
     ],
 
     'rules' => [
@@ -167,6 +174,7 @@ return [
     'controllers' => [
         'Plafond\Controller\Plafond'          => Controller\PlafondControllerFactory::class,
         'Plafond\Controller\PlafondStructure' => Controller\PlafondStructureControllerFactory::class,
+        'Plafond\Controller\Derogation'       => Controller\DerogationControllerFactory::class,
     ],
 
     'services' => [

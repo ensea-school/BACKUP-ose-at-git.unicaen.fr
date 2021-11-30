@@ -9,14 +9,12 @@
     ],
     "require"     : {
         "php"                    : ">=7.4",
-        "unicaen/app"            : "dev-laminas_migration",
-        "unicaen/zfc-user"       : "dev-laminas_migration",
-        "unicaen/bjy-authorize"  : "dev-laminas_migration",
-        "unicaen/auth"           : "dev-laminas_migration",
+        "unicaen/app"            : "4.0.0",
+        "unicaen/auth"           : "4.0.0",
         "laminas/laminas-file"   : "2.8.3",
         "unicaen/code"           : "6.0.2",
-        "unicaen/import"         : "4.0.1",
-        "unicaen/tbl"            : "5.0.1",
+        "unicaen/import"         : "4.0.2",
+        "unicaen/tbl"            : "5.0.2",
         "unicaen/open-document"  : "4.0",
         "unicaen/siham"          : "dev-laminas_migration"
     }

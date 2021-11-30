@@ -1309,6 +1309,7 @@ return [
         'DOSSIER_IDENTITE_COMP',
         'DOSSIER_INSEE',
         'DOSSIER_TEL_PERSO',
+        'TEM_VA',
     ],
     'STATUT_PRIVILEGE'               => [
         'STATUT_ID',
@@ -2083,6 +2084,12 @@ return [
         'INTERVENANT_ID',
         'PLAFOND_ID',
         'HEURES',
+        'HISTO_CREATION',
+        'HISTO_CREATEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_DESTRUCTEUR_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
     ],
     'PLAFOND_STRUCTURE'              => [
         'ID',

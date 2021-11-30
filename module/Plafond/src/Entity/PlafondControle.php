@@ -2,8 +2,6 @@
 
 namespace Plafond\Entity;
 
-use Plafond\Controller\PlafondController;
-
 /**
  * Description of PlafondControle
  *
@@ -11,6 +9,11 @@ use Plafond\Controller\PlafondController;
  */
 class PlafondControle
 {
+    /**
+     * @var int
+     */
+    private $id;
+
     /**
      * @var string
      */
@@ -60,6 +63,30 @@ class PlafondControle
      * @var float
      */
     private $derogation;
+
+
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+
+
+    /**
+     * @param int $id
+     *
+     * @return PlafondControle
+     */
+    public function setId(int $id): PlafondControle
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
 
 
@@ -326,6 +353,9 @@ class PlafondControle
     public static function fromArray(array $a): PlafondControle
     {
         $pc = new PlafondControle();
+        if (isset($a['ID'])) {
+            $pc->setId((int)$a['ID']);
+        }
         if (isset($a['CODE'])) {
             $pc->setCode($a['CODE']);
         }

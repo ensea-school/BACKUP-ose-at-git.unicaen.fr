@@ -3,14 +3,17 @@
 namespace Plafond\Entity\Db;
 
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
  * PlafondDerogation
  */
-class PlafondDerogation
+class PlafondDerogation implements HistoriqueAwareInterface
 {
     use IntervenantAwareTrait;
     use PlafondAwareTrait;
+    use HistoriqueAwareTrait;
 
     /**
      * @var integer

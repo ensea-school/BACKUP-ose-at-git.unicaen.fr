@@ -8,6 +8,7 @@ return [
     'table'   => 'TYPE_AGREMENT',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

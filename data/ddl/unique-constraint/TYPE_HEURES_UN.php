@@ -8,6 +8,7 @@ return [
     'index'   => 'TYPE_HEURES_UN',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

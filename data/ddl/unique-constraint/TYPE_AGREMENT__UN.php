@@ -8,6 +8,7 @@ return [
     'index'   => 'TYPE_AGREMENT__UN',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

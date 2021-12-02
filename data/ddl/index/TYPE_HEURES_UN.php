@@ -8,6 +8,7 @@ return [
     'table'   => 'TYPE_HEURES',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

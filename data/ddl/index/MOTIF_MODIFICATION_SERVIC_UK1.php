@@ -8,6 +8,7 @@ return [
     'table'   => 'MOTIF_MODIFICATION_SERVICE',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

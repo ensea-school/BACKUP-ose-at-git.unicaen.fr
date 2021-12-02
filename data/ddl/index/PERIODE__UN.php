@@ -8,6 +8,7 @@ return [
     'table'   => 'PERIODE',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

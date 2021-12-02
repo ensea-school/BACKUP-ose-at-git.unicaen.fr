@@ -8,6 +8,7 @@ return [
     'index'   => 'MODULATEUR__UN',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

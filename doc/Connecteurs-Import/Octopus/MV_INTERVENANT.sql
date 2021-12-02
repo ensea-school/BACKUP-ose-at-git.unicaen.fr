@@ -72,10 +72,12 @@ WITH i AS (
 
      --Trouver le tel pro principal de l'intervenant
      telephone_pro_principal AS (
-         SELECT indtel.individu_id individu_id,
-                tel.numero         numero
-         FROM octo.individu_telephone@octoprod indtel
-                  JOIN octo.telephone@octoprod tel ON (tel.id = indtel.telephone_id AND tel.t_principal = 'O')
+        SELECT
+	        indtel.individu_id individu_id,
+	        MAX(tel.numero) keep (DENSE_RANK FIRST ORDER BY tel.type_id ASC) numero
+        FROM octo.individu_telephone@octoprod indtel
+        JOIN octo.telephone@octoprod tel ON (tel.id = indtel.telephone_id AND tel.t_principal = 'O')
+        GROUP BY indtel.individu_id
      ),
      --Trouver la structure d'affectation principale de l'intervenant
      structure_principale_individu AS (

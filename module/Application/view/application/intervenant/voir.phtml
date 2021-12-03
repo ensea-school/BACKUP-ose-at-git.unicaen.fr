@@ -54,4 +54,14 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSI
     ];
 }
 
+
+if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_VISUALISATION))) {
+    $tabs[] = [
+        'id'            => 'derogations',
+        'label'         => '<span class="glyphicon glyphicon-random"></span> Dérogations',
+        'url'           => $this->url('derogations', ['intervenant' => $intervenant->getId()]),
+        'force-refresh' => true,
+    ];
+}
+
 echo $this->tabajax($tabs, $tab);

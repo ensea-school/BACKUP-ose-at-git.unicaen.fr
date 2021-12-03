@@ -7,6 +7,9 @@ namespace Plafond\Entity\Db;
  */
 class PlafondEtat
 {
+    const DESACTIVE  = 'desactive';
+    const INFORMATIF = 'informatif';
+    const BLOQUANT   = 'bloquant';
 
     /**
      * @var integer

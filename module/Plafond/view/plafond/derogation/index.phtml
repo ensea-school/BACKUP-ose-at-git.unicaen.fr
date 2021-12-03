@@ -1,0 +1,64 @@
+<?php
+/**
+ * @var $this                 \Application\View\Renderer\PhpRenderer
+ * @var $typesVolumesHoraires \Application\Entity\Db\TypeVolumeHoraire[]
+ * @var $intervenant          \Application\Entity\Db\Intervenant
+ * @var $data                 array
+ *
+ */
+
+echo '<h1>Dérogations accordées</h1>';
+
+//var_dump($data);
+
+$canDerog = true;
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+?>
+<?php if ($canDerog): ?>
+
+    <form method="post" action="<?= $this->url('derogations', ['intervenant' => $intervenant->getId()]) ?>">
+
+<?php endif; ?>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th rowspan="2">Plafond</th>
+            <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
+                <th colspan="3"><?= $typeVolumeHoraire->getLibelle() ?></th>
+            <?php endforeach; ?>
+            <th rowspan="2">Dérogation</th>
+        </tr>
+        <tr>
+            <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
+                <th>État</th>
+                <th>Heures</th>
+                <th>Plafond</th>
+            <?php endforeach; ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($data as $id => $plafond): ?>
+            <tr>
+                <td><?= $plafond['libelle'] ?></td>
+                <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): $tvh = $typeVolumeHoraire->getCode() ?>
+                    <td><?= $plafond["$tvh-etat"] ?? 'Désactivé' ?></td>
+                    <td<?php if ($plafond["$tvh-class"] ?? false) echo ' class="' . $plafond["$tvh-class"] . '"'; ?>><?= $plafond["$tvh-heures"] ?? '' ?></td>
+                    <td><?= $plafond["$tvh-plafond"] ?? '' ?></td>
+                <?php endforeach; ?>
+
+                <td>
+                    <input class="form-control" type="text" name="plafond-<?= $id ?>" value="<?= $plafond['derogation'] ?>"/>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php if ($canDerog): ?>
+
+    <input type="hidden" name="action" value="save"/>
+    <button class="btn btn-primary" type="submit">Enregistrer les modifications</button>
+    </form>
+
+<?php endif;

@@ -10,6 +10,7 @@ use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Plafond\Entity\Db\PlafondEtat;
@@ -32,6 +33,7 @@ class PlafondService extends AbstractEntityService
 {
     use TableauBordServiceAwareTrait;
     use QueryGeneratorServiceAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
 
     /**
      * @var PlafondPerimetre[]
@@ -89,6 +91,35 @@ class PlafondService extends AbstractEntityService
         }
 
         $sql          = implode("\n\nUNION ALL\n\n", $sqls);
+        $res          = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
+        $depassements = [];
+        foreach ($res as $r) {
+            $depassements[] = PlafondControle::fromArray($r);
+        }
+
+        return $depassements;
+    }
+
+
+
+    /**
+     * @param TypeVolumeHoraire                                                          $typeVolumeHoraire
+     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity
+     *
+     * @return PlafondControle[]
+     */
+    public function derogations(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant): array
+    {
+        $sqls = [];
+
+        $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, null, false, false, false);
+        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::STRUCTURE, false, false, false);
+        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::ELEMENT, false, false, false);
+        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::REFERENTIEL, false, false, false);
+        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::VOLUME_HORAIRE, false, false, false);
+
+        $sql = implode("\n\nUNION ALL\n\n", $sqls);
+
         $res          = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $depassements = [];
         foreach ($res as $r) {
@@ -210,6 +241,9 @@ class PlafondService extends AbstractEntityService
         /** @var $perimetres PlafondPerimetre[] */
         $perimetres = $q->execute();
 
+        $tvhPrevuId   = $this->getServiceTypeVolumeHoraire()->getPrevu()->getId();
+        $tvhRealiseId = $this->getServiceTypeVolumeHoraire()->getRealise()->getId();
+
         foreach ($perimetres as $perimetre) {
             $cols = $colsPos['TBL_PLAFOND_' . strtoupper($perimetre->getCode())];
             $cols = array_diff($cols, ['ID', 'DEPASSEMENT']);
@@ -217,12 +251,18 @@ class PlafondService extends AbstractEntityService
             $view = "CREATE OR REPLACE FORCE VIEW V_TBL_PLAFOND_" . strtoupper($perimetre->getCode()) . ' AS';
             $view .= "\nSELECT";
             foreach ($cols as $col) {
-                $alias = 'p';
-                if ($col == 'PLAFOND_ETAT_ID') $alias = 'pa';
-                $view .= "\n  $alias.$col,";
+                if ($col != 'PLAFOND_ETAT_ID' && $col != 'DEROGATION' && $col != 'DEPASSEMENT') {
+                    $view .= "\n  p.$col,";
+                }
             }
-            $view     .= "\n  CASE WHEN p.heures > p.plafond + p.derogation + 0.05 THEN 1 ELSE 0 END depassement";
-            $view     .= "\nFROM\n(";
+            $view     .= "\n  CASE";
+            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId AND ps.plafond_etat_prevu_id IS NOT NULL THEN ps.plafond_etat_prevu_id";
+            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId AND ps.plafond_etat_realise_id IS NOT NULL THEN ps.plafond_etat_realise_id";
+            $view     .= "\n    ELSE pa.plafond_etat_id";
+            $view     .= "\n  END plafond_etat_id,";
+            $view     .= "\n  COALESCE(pd.heures, 0) derogation,";
+            $view     .= "\n  CASE WHEN p.heures > p.plafond + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
+            $view     .= "\nFROM\n  (";
             $plafonds = $perimetre->getPlafond();
             $first    = true;
             $hasQuery = false;
@@ -230,23 +270,26 @@ class PlafondService extends AbstractEntityService
                 if ($this->testRequete($plafond)) {
 
                     $hasQuery = true;
-                    if (!$first) $view .= "\n\n  UNION ALL\n";
-                    $view  .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID, 0 DEROGATION, p.* FROM (\n    ";
-                    $view  .= str_replace("\n", "\n    ", $plafond->getRequete());
-                    $view  .= "\n  ) p";
+                    if (!$first) $view .= "\n\n    UNION ALL\n";
+                    $view  .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID, p.* FROM (\n    ";
+                    $view  .= str_replace("\n", "\n      ", $plafond->getRequete());
+                    $view  .= "\n    ) p";
                     $first = false;
                 }
             }
             if (!$hasQuery) {
-                $view .= "\n  SELECT ";
+                $view .= "\n    SELECT ";
                 foreach ($cols as $col) {
                     $view .= "NULL $col,";
                 }
                 $view = substr($view, 0, -1);
                 $view .= " FROM dual WHERE 0 = 1";
             }
-            $view .= "\n) p";
-            $view .= "\nJOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)";
+            $view .= "\n  ) p";
+            $view .= "\n  JOIN intervenant i ON i.id = p.intervenant_id";
+            $view .= "\n  JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)";
+            $view .= "\n  LEFT JOIN plafond_statut ps ON ps.plafond_id = p.plafond_id AND ps.statut_intervenant_id = i.statut_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL";
+            $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
             $view .= "\nWHERE\n  1=1";
             foreach ($cols as $col) {
                 if ($col != 'PLAFOND' && $col != 'HEURES' && $col != 'DEROGATION') {
@@ -347,6 +390,20 @@ class PlafondService extends AbstractEntityService
                 $this->calculerDepuisEntite($entity->getService());
             }
         }
+    }
+
+
+
+    public function calculerPourIntervenant(Intervenant $intervenant): self
+    {
+        $perimetres = [
+            'structure', 'intervenant', 'element', 'volume_horaire', 'referentiel',
+        ];
+        foreach ($perimetres as $perimetre) {
+            $this->getServiceTableauBord()->calculer('plafond_' . $perimetre, 'INTERVENANT_ID', $intervenant->getId());
+        }
+
+        return $this;
     }
 
 

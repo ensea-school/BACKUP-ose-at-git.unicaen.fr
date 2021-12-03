@@ -11,6 +11,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
  * Description of AbstractController
  *
  * @method \Application\Controller\Plugin\Context context()
+ * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger flashMessenger()
  *
  */
 abstract class AbstractController extends AbstractActionController

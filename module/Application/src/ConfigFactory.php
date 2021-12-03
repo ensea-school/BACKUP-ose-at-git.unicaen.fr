@@ -42,16 +42,16 @@ class ConfigFactory
         ];
 
         if (isset($config['console'])) {
-            $finalConfig['console'] = [];
+            $finalConfig['console']['router']['routes'] = [];
             foreach ($config['console'] as $cr => $cc) {
-                $finalConfig['console'][$cr] = self::routeSimplified($cc);
+                $finalConfig['console']['router']['routes'][$cr] = self::routeSimplified($cc, true);
             }
         }
 
         if (isset($config['routes'])) {
             $finalConfig['router']['routes'] = [];
             foreach ($config['routes'] as $cr => $cc) {
-                $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc);
+                $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc, false);
             }
         }
 
@@ -127,7 +127,7 @@ class ConfigFactory
 
 
 
-    public static function routeSimplified(array $config): array
+    public static function routeSimplified(array $config, bool $isConsole = false): array
     {
         /* On remonte ces params dans le sous-menu options */
         $optionsParams = ['route', 'defaults', 'constraints'];
@@ -151,7 +151,7 @@ class ConfigFactory
         }
 
         /* On détecte le type s'il n'eiste pas déjà */
-        if (!isset($config['type']) && isset($config['options']['route'])) {
+        if (!isset($config['type']) && isset($config['options']['route']) && !$isConsole) {
             if (false !== strpos($config['options']['route'], ':')) {
                 $config['type'] = 'Segment';
             } else {

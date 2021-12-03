@@ -8,6 +8,7 @@ return [
     'index'   => 'MOTIF_MODIFICATION_SERVIC_UK1',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

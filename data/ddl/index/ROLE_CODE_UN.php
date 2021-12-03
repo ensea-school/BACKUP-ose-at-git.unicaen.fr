@@ -8,6 +8,7 @@ return [
     'table'   => 'ROLE',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

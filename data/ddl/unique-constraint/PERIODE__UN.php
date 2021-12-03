@@ -8,6 +8,7 @@ return [
     'index'   => 'PERIODE__UN',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

@@ -8,6 +8,7 @@ return [
     'index'   => 'FONCTION_REFERENTIEL_CODE_UN',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

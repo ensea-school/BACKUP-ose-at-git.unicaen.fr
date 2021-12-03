@@ -8,6 +8,7 @@ return [
     'table'   => 'MODULATEUR',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

@@ -8,6 +8,7 @@ return [
     'table'   => 'FONCTION_REFERENTIEL',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

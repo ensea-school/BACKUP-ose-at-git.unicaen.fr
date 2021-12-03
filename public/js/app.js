@@ -3,6 +3,7 @@ $(function ()
     WidgetInitializer.add('selectpicker', 'selectpicker', function () {
         WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js'));
         WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css'));
+        $('.selectpicker').data('liveSearchNormalize', true); // insensible aux accents
     });
 
     WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
@@ -23,6 +24,42 @@ $(function ()
         WidgetInitializer.includeCss(Url('vendor/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css'));
 
         WidgetInitializer.includeJs(Url('table-sort/widget.js'));
+
+        (function () {
+
+            function removeAccents(data)
+            {
+                if (data.normalize) {
+                    // Use I18n API if avaiable to split characters and accents, then remove
+                    // the accents wholesale. Note that we use the original data as well as
+                    // the new to allow for searching of either form.
+                    return data + ' ' + data
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+                }
+
+                return data;
+            }
+
+            var searchType = jQuery.fn.DataTable.ext.type.search;
+
+            searchType.string = function (data) {
+                return !data ?
+                    '' :
+                    typeof data === 'string' ?
+                        removeAccents(data) :
+                        data;
+            };
+
+            searchType.html = function (data) {
+                return !data ?
+                    '' :
+                    typeof data === 'string' ?
+                        removeAccents(data.replace(/<.*?>/g, '')) :
+                        data;
+            };
+
+        }());
     });
 
     /* Services */

@@ -308,7 +308,11 @@ class ServiceService extends AbstractEntityService
                 /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire */
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
-                    $serviceVolumeHoraire->delete($volumeHoraire);
+                    if ($volumeHoraire->getId()) {
+                        $serviceVolumeHoraire->delete($volumeHoraire);
+                    } else {
+                        $entity->removeVolumeHoraire($volumeHoraire);
+                    }
                 } else {
                     $serviceVolumeHoraire->save($volumeHoraire, false); // pas de contrôle de plafond sur le VH ! ! !
                 }

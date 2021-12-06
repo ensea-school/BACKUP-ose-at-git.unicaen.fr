@@ -43,7 +43,7 @@ class VolumeHoraireListe
         self::FILTRE_NEW,
     ];
 
-    CONST FILTRES_LIST = [
+    const FILTRES_LIST = [
         self::FILTRE_CONTRAT             => [
             'class'       => Contrat::class,
             'accessor'    => 'Contrat',
@@ -904,15 +904,15 @@ class VolumeHoraireListe
 
 
     /**
-     * @param \DateTime|null        $horaireDebut
-     * @param \DateTime|null        $horaireFin
-     * @param TypeIntervention      $typeIntervention
-     * @param Periode               $periode
-     * @param MotifNonPaiement|null $motifNonPaiement
+     * @param bool|\DateTime|null        $horaireDebut
+     * @param bool|\DateTime|null        $horaireFin
+     * @param bool|TypeIntervention      $typeIntervention
+     * @param bool|Periode               $periode
+     * @param bool|MotifNonPaiement|null $motifNonPaiement
      *
      * @return $this
      */
-    public function changeAll($horaireDebut, $horaireFin, TypeIntervention $typeIntervention, Periode $periode, $motifNonPaiement)
+    public function changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement)
     {
         if ($this->__debug) $this->__debug->dumpAction('changeAll', $horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement);
 
@@ -929,24 +929,21 @@ class VolumeHoraireListe
         ];
 
         foreach ($vhs as $vh) {
-            $change =
-                ($vh->getTypeIntervention() != $typeIntervention)
-                || ($vh->getPeriode() != $periode)
-                || (!is_bool($horaireDebut) && $vh->getHoraireDebut() != $horaireDebut)
-                || (!is_bool($horaireFin) && $vh->getHoraireFin() != $horaireFin)
-                || (!is_bool($motifNonPaiement) && $vh->getMotifNonPaiement() != $motifNonPaiement);
-
-            if ($change) {
+            if (!empty($reportFilters)) {
                 if ($this->isVolumeHoraireModifiable($vh)) {
-                    $vh->setTypeIntervention($typeIntervention);
-                    $vh->setPeriode($periode);
-                    if (!is_bool($horaireDebut)) {
+                    if ($typeIntervention !== false) {
+                        $vh->setTypeIntervention($typeIntervention);
+                    }
+                    if ($periode !== false) {
+                        $vh->setPeriode($periode);
+                    }
+                    if ($horaireDebut !== false) {
                         $vh->setHoraireDebut($horaireDebut);
                     }
-                    if (!is_bool($horaireFin)) {
+                    if ($horaireFin !== false) {
                         $vh->setHoraireFin($horaireFin);
                     }
-                    if (!is_bool($motifNonPaiement)) {
+                    if ($motifNonPaiement !== false) {
                         $vh->setMotifNonPaiement($motifNonPaiement);
                     }
                 } else {
@@ -969,21 +966,11 @@ class VolumeHoraireListe
         }
 
         /* On met à jour les filtres si besoin */
-        if ($this->getHoraireDebut() !== false) {
-            $this->setHoraireDebut($horaireDebut);
-        }
-        if ($this->getHoraireFin() !== false) {
-            $this->setHoraireFin($horaireFin);
-        }
-        if ($this->getTypeIntervention() instanceof TypeIntervention) {
-            $this->setTypeIntervention($typeIntervention);
-        }
-        if ($this->getPeriode() instanceof Periode) {
-            $this->setPeriode($periode);
-        }
-        if ($motifNonPaiement && ($this->getMotifNonPaiement() instanceof MotifNonPaiement || null === $this->getMotifNonPaiement())) {
-            $this->setMotifNonPaiement($motifNonPaiement);
-        }
+        $this->setHoraireDebut($horaireDebut);
+        $this->setHoraireFin($horaireFin);
+        $this->setTypeIntervention($typeIntervention);
+        $this->setPeriode($periode);
+        $this->setMotifNonPaiement($motifNonPaiement);
 
         /* On ajoute les heures correspondant aux nouveaux filtres */
         if ($heuresAReporter !== 0) {

@@ -37,6 +37,7 @@ Objectif : Plafonds personnalisables
 * Correction sur l'horodatage du service prévisionnel qui se mettait à jour lors de la création ou suppresion d'un contrat (#40925)
 * Correction de bug empêchant le calcul des charges d'enseignement (#40991)
 * Prise en compte des accents dans les recherches (#40917)
+* Correction sur la complétude des données personnelles lorsque la case 'INSEE provisoire' est cochée (#41141).
 
 ## Notes de mise à jour
 

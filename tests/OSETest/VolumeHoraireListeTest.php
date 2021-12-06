@@ -373,8 +373,7 @@ class VolumeHoraireListeTest
     public function dumpEndToFile($filename = null)
     {
         if (null === $filename) {
-            $filename = getcwd() . '/cache/dumps/vhl-' . uniqid(); // à revoir!!
-            var_dump($filename);
+            $filename = getcwd() . '/cache/vhl-' . uniqid();
         }
 
         file_put_contents($filename, var_export($this->dumpEnd(), true));

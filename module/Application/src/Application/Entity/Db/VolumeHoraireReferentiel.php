@@ -326,7 +326,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
      *
      * @return VolumeHoraire
      */
-    public function setAutoValidation(bool $autoValidation): VolumeHoraire
+    public function setAutoValidation(bool $autoValidation): self
     {
         $this->autoValidation = $autoValidation;
 

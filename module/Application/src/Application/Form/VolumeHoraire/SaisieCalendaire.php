@@ -389,9 +389,8 @@ class SaisieCalendaireHydrator implements HydratorInterface
         $object->setMotifNonPaiement($ancienMotifNonPaiement != $motifNonPaiement ? $ancienMotifNonPaiement : $motifNonPaiement);
 
         $heures = (float)$this->getVal('heures');
-        $object->setHeures($heures);
-
         $object->changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement);
+        $object->setHeures($heures);
 
         //$dumper->dumpEndToFile();
 

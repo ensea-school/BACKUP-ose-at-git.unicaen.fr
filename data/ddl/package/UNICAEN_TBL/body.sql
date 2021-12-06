@@ -1118,21 +1118,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
              CASE WHEN si.dossier_insee = 0 THEN 1
              ELSE
              (
-             	CASE WHEN
-             	(
-             	d.numero_insee IS NOT NULL OR COALESCE(d.numero_insee_provisoire,0) = 1
-             	) THEN 1 ELSE 0 END
+             	CASE
+     	           WHEN d.numero_insee IS NOT NULL THEN 1
+     	           ELSE 0 END
              ) END completude_insee,
              /*Complétude IBAN*/
              CASE WHEN si.dossier_iban = 0 THEN 1
              ELSE
              (
-             	CASE WHEN
-             	(
-             		(d.iban IS NOT NULL
-            		AND d.bic IS NOT NULL)
-            		OR COALESCE(d.rib_hors_sepa,0) = 1
-             	) THEN 1 ELSE 0 END
+             	CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END
              ) END completude_iban,
              /*Complétude employeur*/
              CASE WHEN si.dossier_employeur = 0 THEN 1

@@ -40,6 +40,7 @@ Objectif : Plafonds personnalisables
 * Correction sur la complétude des données personnelles lorsque la case 'INSEE provisoire' est cochée (#41141).
 * Les modifications de motifs de non paiement fonctionnement de nouveau en mode calendaire (#40037)
 * L'autovalidation fonctionne maintenant pour le référentiel (#41149)
+* La constatation d'heures réalisées à partir du prévisionnel tient maintenant compte des horaires et des motifs de non paiements (#39202)
 
 ## Notes de mise à jour
 

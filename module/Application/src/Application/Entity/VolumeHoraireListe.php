@@ -655,6 +655,56 @@ class VolumeHoraireListe
 
 
     /**
+     * @param VolumeHoraireListe $vhl
+     * @param array              $filtres
+     *
+     * @return VolumeHoraireListe
+     */
+    public function filterByVolumeHoraireListe(VolumeHoraireListe $vhl, array $filtres = []): VolumeHoraireListe
+    {
+        if (in_array(self::FILTRE_CONTRAT, $filtres)) {
+            $this->setContrat($vhl->getContrat());
+        }
+        if (in_array(self::FILTRE_ETAT_VOLUME_HORAIRE, $filtres)) {
+            $this->setEtatVolumeHoraire($vhl->getEtatVolumeHoraire());
+        }
+        if (in_array(self::FILTRE_HISTORIQUE, $filtres)) {
+            $this->setFilterByHistorique($vhl->getFilterByHistorique());
+        }
+        if (in_array(self::FILTRE_NEW, $filtres)) {
+            $this->setNew($vhl->getNew());
+        }
+        if (in_array(self::FILTRE_HORAIRE_DEBUT, $filtres)) {
+            $this->setHoraireDebut($vhl->getHoraireDebut());
+        }
+        if (in_array(self::FILTRE_HORAIRE_FIN, $filtres)) {
+            $this->setHoraireFin($vhl->getHoraireFin());
+        }
+        if (in_array(self::FILTRE_MOTIF_NON_PAIEMENT, $filtres)) {
+            $this->setMotifNonPaiement($vhl->getMotifNonPaiement());
+        }
+        if (in_array(self::FILTRE_PERIODE, $filtres)) {
+            $this->setPeriode($vhl->getPeriode());
+        }
+        if (in_array(self::FILTRE_SOURCE, $filtres)) {
+            $this->setSource($vhl->getSource());
+        }
+        if (in_array(self::FILTRE_TYPE_INTERVENTION, $filtres)) {
+            $this->setTypeIntervention($vhl->getTypeIntervention());
+        }
+        if (in_array(self::FILTRE_TYPE_VOLUME_HORAIRE, $filtres)) {
+            $this->setTypeVolumeHoraire($vhl->getTypeVolumeHoraire());
+        }
+        if (in_array(self::FILTRE_VALIDATION, $filtres)) {
+            $this->setValidation($vhl->getValidation());
+        }
+
+        return $this;
+    }
+
+
+
+    /**
      *
      * @return type
      */

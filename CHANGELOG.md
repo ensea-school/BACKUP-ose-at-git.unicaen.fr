@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 17.0](#ose-17-18112021)
+[OSE 17.1](#ose-171-07122021)
 
 
 
@@ -26,7 +26,7 @@ Objectif : Plafonds personnalisables
 
 
 
-# OSE 17.1 (à venir)
+# OSE 17.1 (07/12/2021)
 
 ## Nouveautés
 

@@ -91,9 +91,9 @@ class NumeroINSEEValidator extends NumeroINSEE
         $civilite               = $this->getOption('civilite');
 
         $this->provisoire = $this->getProvisoire();
-        
+
         if ($this->getProvisoire()) {
-            return true;
+            return !empty($value);
         }
 
         //Désactivation du test civilité sur l'insee (cas personnes changeant de sexe)

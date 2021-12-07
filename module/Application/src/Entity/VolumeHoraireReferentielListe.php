@@ -9,6 +9,7 @@ use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Hydrator\VolumeHoraireReferentiel\ListeFilterHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
 use LogicException;
 use RuntimeException;
 use UnicaenImport\Entity\Db\Source;
@@ -34,7 +35,7 @@ class VolumeHoraireReferentielListe
         self::FILTRE_NEW,
     ];
 
-    CONST FILTRES_LIST = [
+    const FILTRES_LIST = [
         self::FILTRE_ETAT_VOLUME_HORAIRE => [
             'class'       => EtatVolumeHoraire::class,
             'accessor'    => 'EtatVolumeHoraire',
@@ -78,6 +79,7 @@ class VolumeHoraireReferentielListe
     ];
 
     use SourceServiceAwareTrait;
+    use VolumeHoraireReferentielServiceAwareTrait;
 
     /**
      * @var ServiceReferentiel|boolean
@@ -482,12 +484,9 @@ class VolumeHoraireReferentielListe
 
 
 
-
-
-
     /**
      * @param VolumeHoraireReferentiel $vh
-     * @param array         $filtres
+     * @param array                    $filtres
      *
      * @return string
      */
@@ -556,6 +555,7 @@ class VolumeHoraireReferentielListe
         $vhlph              = new ListeFilterHydrator();
         $volumeHoraireListe = new VolumeHoraireReferentielListe($this->getService());
         $vhlph->hydrate($vhlph->extract($this), $volumeHoraireListe);
+
         //$volumeHoraireListe->__debug = $this->__debug;
 
         return $volumeHoraireListe;
@@ -565,7 +565,7 @@ class VolumeHoraireReferentielListe
 
     /**
      * @param VolumeHoraireReferentiel $vh
-     * @param array         $filtres
+     * @param array                    $filtres
      *
      * @return VolumeHoraireReferentielListe
      */
@@ -680,7 +680,6 @@ class VolumeHoraireReferentielListe
 
         return $heures;
     }
-
 
 
 
@@ -850,7 +849,7 @@ class VolumeHoraireReferentielListe
         }
 
         if (0 != $newHeures) {
-            $volumeHoraire = new VolumeHoraireReferentiel();
+            $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
             $volumeHoraire->setServiceReferentiel($this->getService());
             $volumeHoraire->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
             if ($this->getHoraireDebut() instanceof \DateTime) {
@@ -865,7 +864,6 @@ class VolumeHoraireReferentielListe
 
         return $this;
     }
-
 
 
 
@@ -910,7 +908,7 @@ class VolumeHoraireReferentielListe
                 return $this;
             } // Pas de modifications à prévoir
             $saisieHeures  = $newHeures;
-            $volumeHoraire = new VolumeHoraireReferentiel();
+            $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
             $volumeHoraire->setServiceReferentiel($vhl->getService());
             $volumeHoraire->setTypeVolumeHoraire($vhl->getTypeVolumeHoraire());
             $volumeHoraire->setHoraireDebut($vhl->getHoraireDebut());
@@ -999,7 +997,7 @@ class VolumeHoraireReferentielListe
         if ($this->getSource() instanceof Source) {
             $result[self::FILTRE_SOURCE] = $this->getSource()->getId();
         }
-        if ($this->getFilterByHistorique()){
+        if ($this->getFilterByHistorique()) {
             $result[self::FILTRE_HISTORIQUE] = $this->getFilterByHistorique();
         }
 

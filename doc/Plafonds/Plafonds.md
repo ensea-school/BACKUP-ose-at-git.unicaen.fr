@@ -31,10 +31,10 @@ Pour chaque plafond, deux indicateurs sont automatiquement créés :
 Il y a en plus de cela : 
 
 - Pour le plafond par intervenant :
-une gauge sur la page de saisie de service permet de savoir où on en est.
+une jauge sur la page de saisie de service permet de savoir où on en est.
 
 - Pour le plafond par volume horaire :
-une gauge est affichée dans le formulaire de la saisie de service, au plus près des heures saisies.
+une jauge est affichée dans le formulaire de la saisie de service, au plus près des heures saisies.
 
 ## Administration
 

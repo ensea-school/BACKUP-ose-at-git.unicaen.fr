@@ -29,7 +29,6 @@ Objectif : Plafonds personnalisables
 
 
 
-
 # OSE 17.1 (07/12/2021)
 
 ## Nouveautés
@@ -49,7 +48,7 @@ Objectif : Plafonds personnalisables
 ## Notes de mise à jour
 
 * Si vous utilisez la commande ./bin/ose update-employeur pour charger la liste des employeurs INSEE, en passant en 17.1 vous pourrez récupérer la notion de SIRET dans la table employeur, ainsi la contrainte d'unicité sur le SIREN sera également levée.
-
+* Attention : lors de la mise à jour, vous verrez apparaître des messages d'erreur liés aux contraintes d'unicité modifiées avec des indexes non conformes. Il n'est pas nécessaire d'en tenir compte, puisque la mise à jour des indexes se fait juste après, ce qui rétablit la situation.
 
 
 

@@ -15,6 +15,9 @@ Objectif : Plafonds personnalisables
 * Depuis la fiche de service de l'intervenant, vous pouvez maintenant désactiver la possibilité de reporter le prévisionnal n-1 vers l'année en cours ou du prévisionnel vers le réalisé
 * Dans la fiche de service, les enseignements mutualisés sont précisés #40402
 * Technique : migration vers Laminas et Composer 2
+* Les plafonds sont maintenant mersonnalisables : vous pouvez les modifier en retirer ou en créer
+* [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
+* Des dérogations aux plafonds sont possibles par intervenant
 
 ## Corrections de bugs
 

@@ -14,6 +14,7 @@ use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
 use Application\Entity\Service\Recherche;
+use Application\Entity\VolumeHoraireListe;
 use Application\Form\Service\RechercheHydrator;
 use Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -762,19 +763,38 @@ class ServiceService extends AbstractEntityService
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
 
-        $typesIntervention = $prevus->getTypesIntervention() + $realises->getTypesIntervention();
-        $periodes          = $prevus->getPeriodes() + $realises->getPeriodes();
+        $filtres = [
+            VolumeHoraireListe::FILTRE_PERIODE,
+            VolumeHoraireListe::FILTRE_TYPE_INTERVENTION,
+            VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT,
+            VolumeHoraireListe::FILTRE_HORAIRE_DEBUT,
+            VolumeHoraireListe::FILTRE_HORAIRE_FIN,
+        ];
 
-        foreach ($periodes as $periode) {
-            $prevus->setPeriode($periode);
-            $realises->setPeriode($periode);
-            foreach ($typesIntervention as $typeIntervention) {
-                $prevus->setTypeIntervention($typeIntervention);
-                $realises->setTypeIntervention($typeIntervention);
-
-                $realises->setHeures($prevus->getHeures());
-            }
+        $listes     = [];
+        $prevListes = $prevus->getSousListes($filtres);
+        foreach ($prevListes as $id => $prevListe) {
+            $listes[$id]['prev'] = $prevListe;
         }
+        $realListes = $realises->getSousListes($filtres);
+        foreach ($realListes as $id => $realListe) {
+            $listes[$id]['real'] = $realListe;
+        }
+
+        foreach ($listes as $liste) {
+            if (isset($liste['prev'])) {
+                $heures = $liste['prev']->getHeures();
+            } else {
+                $heures = 0;
+            }
+
+            if (!isset($liste['real'])) {
+                $liste['real'] = $realises->createChild()->filterByVolumeHoraireListe($liste['prev']);
+            }
+
+            $liste['real']->setHeures($heures);
+        }
+
         $this->save($service);
     }
 

@@ -32,7 +32,11 @@ $bdd = $container->get(\Application\Constants::BDD);
 /** @var \Application\Service\FormuleTestIntervenantService $ftiService */
 $ftiService = $container->get(\Application\Service\FormuleTestIntervenantService::class);
 $fti        = $ftiService->get($formuleTestIntervenantId);
+if (!$fti) {
+    echo 'Mauvais ID de formule';
 
+    return;
+}
 
 $lines = explode("\n", $vhdata);
 $vhs   = [];

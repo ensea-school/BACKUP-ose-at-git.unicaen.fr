@@ -17,6 +17,7 @@ $generator = function (array $params): array {
     $params['namespace'] = Util::classNamespace($params['class']);
     $params['classname'] = Util::classClassname($params['class']);
     $params['author']    = Util::getAuthor();
+    $params['filename']  = Util::classFilename($params['class']);
 
     return $params;
 };

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4d3de7c77097e23197ba0556f2b51ef",
+    "content-hash": "1b662e1fe4c4de190ac998ce218f5a82",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7982,11 +7982,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "dev-laminas_migration",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "7164e12648b8adac8141e120f62eec671cb22948"
+                "reference": "d1b4719f4c9f34665e5d89656de8bdfebe34a126"
             },
             "require": {
                 "laminas/laminas-mail": "^2.10",
@@ -8011,7 +8011,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2021-11-24T16:17:14+00:00"
+            "time": "2021-12-08T14:39:24+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -8208,9 +8208,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "unicaen/siham": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

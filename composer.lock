@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e317444de1a89d86e97c5229dce25456",
+    "content-hash": "1b662e1fe4c4de190ac998ce218f5a82",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4928,16 +4928,16 @@
         },
         {
             "name": "laminas/laminas-mvc-plugin-flashmessenger",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger.git",
-                "reference": "d683b79132990b48fc720259337ecd353cba4c43"
+                "reference": "178339e7eb0e34e220e2fe543832f4eed7fb5705"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-flashmessenger/zipball/d683b79132990b48fc720259337ecd353cba4c43",
-                "reference": "d683b79132990b48fc720259337ecd353cba4c43",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-flashmessenger/zipball/178339e7eb0e34e220e2fe543832f4eed7fb5705",
+                "reference": "178339e7eb0e34e220e2fe543832f4eed7fb5705",
                 "shasum": ""
             },
             "require": {
@@ -4945,14 +4945,11 @@
                 "laminas/laminas-session": "^2.8.5",
                 "laminas/laminas-stdlib": "^3.2.1",
                 "laminas/laminas-view": "^2.12",
-                "laminas/laminas-zendframework-bridge": "^1.0",
                 "php": "^7.3 || ~8.0.0 || ~8.1.0"
             },
             "conflict": {
-                "laminas/laminas-mvc": "<3.0.0"
-            },
-            "replace": {
-                "zendframework/zend-mvc-plugin-flashmessenger": "^1.2.0"
+                "laminas/laminas-mvc": "<3.0.0",
+                "zendframework/zend-mvc-plugin-flashmessenger": "*"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
@@ -4994,7 +4991,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-11-30T20:32:16+00:00"
+            "time": "2021-12-08T07:02:11+00:00"
         },
         {
             "name": "laminas/laminas-mvc-plugin-identity",
@@ -5662,16 +5659,16 @@
         },
         {
             "name": "laminas/laminas-stdlib",
-            "version": "3.6.1",
+            "version": "3.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "db581851a092246ad99e12d4fddf105184924c71"
+                "reference": "6fe0842909638ca6bea8401b7e8168fb154bffb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/db581851a092246ad99e12d4fddf105184924c71",
-                "reference": "db581851a092246ad99e12d4fddf105184924c71",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/6fe0842909638ca6bea8401b7e8168fb154bffb5",
+                "reference": "6fe0842909638ca6bea8401b7e8168fb154bffb5",
                 "shasum": ""
             },
             "require": {
@@ -5717,7 +5714,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-11-10T11:33:52+00:00"
+            "time": "2021-12-07T21:06:58+00:00"
         },
         {
             "name": "laminas/laminas-text",
@@ -7914,11 +7911,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.0.2",
+            "version": "6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "d9778b6459182e5495ba9f88a81122b6c948f8e7"
+                "reference": "e4cbbdb13e01c66b63162b754a2b4f5a7fcaba8d"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7935,7 +7932,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2021-11-26T14:21:59+00:00"
+            "time": "2021-12-08T09:51:14+00:00"
         },
         {
             "name": "unicaen/import",
@@ -7985,11 +7982,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "dev-laminas_migration",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "7164e12648b8adac8141e120f62eec671cb22948"
+                "reference": "d1b4719f4c9f34665e5d89656de8bdfebe34a126"
             },
             "require": {
                 "laminas/laminas-mail": "^2.10",
@@ -8014,7 +8011,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2021-11-24T16:17:14+00:00"
+            "time": "2021-12-08T14:39:24+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -8211,9 +8208,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "unicaen/siham": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

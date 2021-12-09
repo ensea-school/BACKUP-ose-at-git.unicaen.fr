@@ -2136,6 +2136,11 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
     ],
+    'INDICATEUR_TYPE'                => [
+        'ID',
+        'LIBELLE',
+        'ORDRE',
+    ],
 ];
 
 //@formatter:on

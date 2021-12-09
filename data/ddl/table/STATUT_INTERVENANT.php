@@ -501,7 +501,7 @@ return [
             'position'    => 28,
             'commentaire' => NULL,
         ],
-        'TEM_VA'                        => [
+        'TEM_VA'                         => [
             'name'        => 'TEM_VA',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',

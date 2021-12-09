@@ -68,7 +68,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
         $vars = [
             'identite'     => [
-                "Civilité"   => (string)$entity->getCivilite()->getLibelleLong(),
+                "Civilité"   => (string)($entity->getCivilite()) ? $entity->getCivilite()->getLibelleLong() : '',
                 "NOM prénom" => $entity,
                 //"Date de naissance" => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
             ],

@@ -8,7 +8,7 @@ $oseSource = $oa->getSourceOseId();
 $oseId     = $oa->getOseAppliId();
 $c->println("Mise à jour de la table employeur");
 
-ini_set('memory_limit', '6144M');
+ini_set('memory_limit', '8192M');
 $importDirectory = $osedir . 'cache/employeurs/';
 $importArchive   = 'employeurs.tar.gz';
 $importFilePath  = $importDirectory . $importArchive;
@@ -32,8 +32,9 @@ if (count($listFiles) > 0) {
 //$phar->extractTo($importDirectory);
 exec('cd ' . $importDirectory . ' && tar -xvf ' . $importFilePath);
 //Verification si des SIRET sont déjà chargé en base
-$bdd                  = $oa->getBdd();
-$haveAlreadySiret     = $bdd->select("SELECT siret FROM employeur e WHERE siret IS NOT null FETCH FIRST 5 ROWS ONLY", [], ['fetch' => $bdd::FETCH_ONE]);
+$bdd = $oa->getBdd();
+//$haveAlreadySiret     = $bdd->select("SELECT siret FROM employeur e WHERE siret IS NOT null FETCH FIRST 5 ROWS ONLY", [], ['fetch' => $bdd::FETCH_ONE]);
+$haveAlreadySiret     = $bdd->select("select siret from (select siret, rownum as rn FROM employeur e WHERE siret IS NOT NULL) e where e.rn < 10", [], ['fetch' => $bdd::FETCH_ONE]);
 $haveAlreadyEmployeur = $bdd->select("SELECT * FROM employeur e");
 
 

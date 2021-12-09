@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'SOURCE_CODE'             => [

@@ -119,6 +119,11 @@ class DataGen
             'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT ID FROM CATEGORIE_PRIVILEGE WHERE CODE = %s']]],
         ],
         [
+            'table'   => 'TYPE_INDICATEUR',
+            'context' => ['install', 'update'],
+            'key'     => 'ID',
+        ],
+        [
             'table'   => 'INDICATEUR',
             'context' => ['install', 'update'],
             'key'     => 'NUMERO',
@@ -688,15 +693,42 @@ class DataGen
 
 
 
+    public function TYPE_INDICATEUR()
+    {
+        $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $indicateurs = [];
+        $ordre       = 0;
+        foreach ($data as $libelle => $indicateur) {
+            $idata         = [
+                'ID'      => $indicateur['id'],
+                'LIBELLE' => $libelle,
+                'ORDRE'   => $ordre++,
+            ];
+            $indicateurs[] = $idata;
+        }
+
+        return $indicateurs;
+    }
+
+
+
     public function INDICATEUR()
     {
         $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
         $indicateurs = [];
         $ordre       = 0;
-        foreach ($data as $numero => $indicateur) {
-            $indicateur['NUMERO'] = $numero;
-            $indicateur['ORDRE']  = $ordre++;
-            $indicateurs[]        = $indicateur;
+        foreach ($data as $typeIndicateur) {
+            foreach ($typeIndicateur['indicateurs'] as $numero => $idata) {
+                $indicateur = [
+                    'NUMERO'             => (int)$numero,
+                    'ORDRE'              => $ordre++,
+                    'TYPE_INDICATEUR_ID' => (int)$typeIndicateur['id'],
+                ];
+                foreach ($idata as $k => $v) {
+                    $indicateur[strtoupper($k)] = $v;
+                }
+                $indicateurs[] = $indicateur;
+            }
         }
 
         return $indicateurs;

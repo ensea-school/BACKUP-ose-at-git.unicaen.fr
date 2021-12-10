@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'        => 'INDICATEUR_TYPE',
+    'name'        => 'TYPE_INDICATEUR',
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,

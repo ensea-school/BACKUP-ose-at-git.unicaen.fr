@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'INDICATEUR_TYPE_PK',
+    'name'    => 'TYPE_INDICATEUR_PK',
     'unique'  => TRUE,
-    'table'   => 'INDICATEUR_TYPE',
+    'table'   => 'TYPE_INDICATEUR',
     'columns' => [
         'ID',
     ],

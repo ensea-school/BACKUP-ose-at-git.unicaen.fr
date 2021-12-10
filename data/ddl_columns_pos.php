@@ -2142,6 +2142,11 @@ return [
         'LIBELLE',
         'ORDRE',
     ],
+    'TYPE_INDICATEUR'                => [
+        'ID',
+        'LIBELLE',
+        'ORDRE',
+    ],
 ];
 
 //@formatter:on

@@ -12,70 +12,295 @@ class Indicateur
 {
     use IndicateurServiceAwareTrait;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private int            $id;
+
+    private TypeIndicateur $typeIndicateur;
+
+    private int            $numero           = 0;
+
+    private bool           $enabled          = true;
+
+    private int            $ordre            = 0;
+
+    private string         $libelleSingulier = 'Nouvel indicateur';
+
+    private string         $libellePluriel   = 'Nouvel indicateur';
+
+    private ?string        $message;
+
+    private string         $route            = 'intervenant/voir';
+
+    private bool           $distinct         = true;
+
+    private bool           $notStructure     = false;
+
+    private array          $count            = [];
+
+    private array          $result           = [];
+
+
 
     /**
-     * @var integer
+     * @return int
      */
-    private $numero;
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+
 
     /**
-     * @var boolean
+     * @param int $id
+     *
+     * @return Indicateur
      */
-    private $enabled;
+    public function setId(int $id): Indicateur
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+
 
     /**
-     * @var string
+     * @return TypeIndicateur
      */
-    private $type;
+    public function getTypeIndicateur(): TypeIndicateur
+    {
+        return $this->typeIndicateur;
+    }
+
+
 
     /**
-     * @var integer
+     * @param TypeIndicateur $typeIndicateur
+     *
+     * @return Indicateur
      */
-    private $ordre;
+    public function setTypeIndicateur(TypeIndicateur $typeIndicateur): Indicateur
+    {
+        $this->typeIndicateur = $typeIndicateur;
+
+        return $this;
+    }
+
+
 
     /**
-     * @var string
+     * @return int
      */
-    private $libelleSingulier;
+    public function getNumero(): int
+    {
+        return $this->numero;
+    }
+
+
 
     /**
-     * @var string
+     * @param int $numero
+     *
+     * @return Indicateur
      */
-    private $libellePluriel;
+    public function setNumero(int $numero): Indicateur
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+
 
     /**
-     * @var string
+     * @return bool
      */
-    private $message;
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+
 
     /**
-     * @var string
+     * @param bool $enabled
+     *
+     * @return Indicateur
      */
-    private $route;
+    public function setEnabled(bool $enabled): Indicateur
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+
 
     /**
-     * @var boolean
+     * @return int
      */
-    private $distinct;
+    public function getOrdre(): int
+    {
+        return $this->ordre;
+    }
+
+
 
     /**
-     * @var boolean
+     * @param int $ordre
+     *
+     * @return Indicateur
      */
-    private $notStructure;
+    public function setOrdre(int $ordre): Indicateur
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+
 
     /**
-     * @var array
+     * @return string
      */
-    private $count = [];
+    public function getLibelleSingulier(): string
+    {
+        return $this->libelleSingulier;
+    }
+
+
 
     /**
-     * @var array
+     * @param string $libelleSingulier
+     *
+     * @return Indicateur
      */
-    private $result = [];
+    public function setLibelleSingulier(string $libelleSingulier): Indicateur
+    {
+        $this->libelleSingulier = $libelleSingulier;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getLibellePluriel(): string
+    {
+        return $this->libellePluriel;
+    }
+
+
+
+    /**
+     * @param string $libellePluriel
+     *
+     * @return Indicateur
+     */
+    public function setLibellePluriel(string $libellePluriel): Indicateur
+    {
+        $this->libellePluriel = $libellePluriel;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+
+
+    /**
+     * @param string|null $message
+     *
+     * @return Indicateur
+     */
+    public function setMessage(?string $message): Indicateur
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getRoute(): string
+    {
+        return $this->route;
+    }
+
+
+
+    /**
+     * @param string $route
+     *
+     * @return Indicateur
+     */
+    public function setRoute(string $route): Indicateur
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isDistinct(): bool
+    {
+        return $this->distinct;
+    }
+
+
+
+    /**
+     * @param bool $distinct
+     *
+     * @return Indicateur
+     */
+    public function setDistinct(bool $distinct): Indicateur
+    {
+        $this->distinct = $distinct;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isNotStructure(): bool
+    {
+        return $this->notStructure;
+    }
+
+
+
+    /**
+     * @param bool $notStructure
+     *
+     * @return Indicateur
+     */
+    public function setNotStructure(bool $notStructure): Indicateur
+    {
+        $this->notStructure = $notStructure;
+
+        return $this;
+    }
 
 
 
@@ -90,182 +315,7 @@ class Indicateur
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set id interne
-     *
-     * @param string $numero
-     *
-     * @return Indicateur
-     */
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get id interne
-     *
-     * @return string
-     */
-    public function getNumero()
-    {
-        return $this->numero;
-    }
-
-
-
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     *
-     * @return Indicateur
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get enabled
-     *
-     * @return boolean
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return Indicateur
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-
-
-    /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     *
-     * @return Indicateur
-     */
-    public function setOrdre($ordre)
-    {
-        $this->ordre = $ordre;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get ordre
-     *
-     * @return integer
-     */
-    public function getOrdre()
-    {
-        return $this->ordre;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getLibelleSingulier()
-    {
-        return $this->libelleSingulier;
-    }
-
-
-
-    /**
-     * @param string $libelleSingulier
-     *
-     * @return Indicateur
-     */
-    public function setLibelleSingulier($libelleSingulier)
-    {
-        $this->libelleSingulier = $libelleSingulier;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getLibellePluriel()
-    {
-        return $this->libellePluriel;
-    }
-
-
-
-    /**
-     * @param string $libellePluriel
-     *
-     * @return Indicateur
-     */
-    public function setLibellePluriel($libellePluriel)
-    {
-        $this->libellePluriel = $libellePluriel;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getLibelle(Structure $structure = null)
+    public function getLibelle(Structure $structure = null): string
     {
         $count = $this->getCount($structure);
 
@@ -278,108 +328,7 @@ class Indicateur
 
 
 
-    /**
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-
-
-    /**
-     * @param string $message
-     *
-     * @return Indicateur
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getRoute()
-    {
-        return $this->route;
-    }
-
-
-
-    /**
-     * @param string $route
-     *
-     * @return Indicateur
-     */
-    public function setRoute($route)
-    {
-        $this->route = $route;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getDistinct()
-    {
-        return $this->distinct;
-    }
-
-
-
-    /**
-     * @param boolean $distinct
-     *
-     * @return Indicateur
-     */
-    public function setDistinct($distinct)
-    {
-        $this->distinct = $distinct;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getNotStructure()
-    {
-        return $this->notStructure;
-    }
-
-
-
-    /**
-     * @param boolean $notStructure
-     *
-     * @return Indicateur
-     */
-    public function setNotStructure($notStructure)
-    {
-        $this->notStructure = $notStructure;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param Structure|null $structure
-     *
-     * @return int
-     */
-    public function getCount(Structure $structure = null)
+    public function getCount(?Structure $structure = null): int
     {
         $id = $structure ? $structure->getId() : 0;
         if (!isset($this->count[$id])) {
@@ -392,11 +341,10 @@ class Indicateur
 
 
     /**
-     * @param Structure|null $structure
      *
      * @return Indicateur\AbstractIndicateur[]
      */
-    public function getResult(Structure $structure = null)
+    public function getResult(?Structure $structure = null): array
     {
         $id = $structure ? $structure->getId() : 0;
         if (!isset($this->result[$id])) {

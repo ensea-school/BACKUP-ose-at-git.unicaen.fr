@@ -216,7 +216,13 @@ class Bdd
     public function exec(string $sql, array $params = [], array $types = [])
     {
         if ($this->debug) {
-            echo $sql;
+            foreach ($params as $p => $v) {
+                if (is_array($v)) {
+                    $v = 'array';
+                }
+                $sql = str_replace(':' . $p, $v, $sql);
+            }
+            echo $sql . ";\n";
         } else {
             $this->driver->exec($sql, $params, $types);
         }
@@ -828,7 +834,7 @@ class Bdd
         } else {
             $filters[Ddl::TABLE] = ['excludes' => '%'];
         }
-     
+
         $this->create($source, $filters);
 
         $this->logEnd();

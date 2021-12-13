@@ -525,13 +525,7 @@ abstract class AbstractEntityService extends AbstractService
 
         $hasHistorique = is_subclass_of($this->getEntityClass(), 'UnicaenApp\Entity\HistoriqueAwareInterface');
         if ($hasHistorique) {
-            $dateObservation = $this->getServiceContext()->getDateObservation();
-            if ($dateObservation) {
-                $qb->andWhere($alias . '.histoDestruction IS NULL');
-                $qb->setParameter('dateObservation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
-            } else {
-                $qb->andWhere($alias . '.histoDestruction IS NULL');
-            }
+            $qb->andWhere($alias . '.histoDestruction IS NULL');
         }
 
         return $qb;

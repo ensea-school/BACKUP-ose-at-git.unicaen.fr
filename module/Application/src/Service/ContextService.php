@@ -7,13 +7,13 @@ use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use DateTime;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 
 /**
@@ -32,72 +32,29 @@ class ContextService extends AbstractService
     use IntervenantServiceAwareTrait;
     use LdapConnecteurAwareTrait;
 
-    /**
-     * selectedIdentityRole
-     *
-     * @var RoleService
-     */
-    protected $selectedIdentityRole;
+    protected ?Role          $selectedIdentityRole = null;
 
-    /**
-     * @var Etablissement
-     */
-    protected $etablissement;
+    protected ?Etablissement $etablissement        = null;
 
-    /**
-     * @var Annee
-     */
-    protected $annee;
+    protected ?Annee         $annee                = null;
 
-    /**
-     * @var Annee
-     */
-    protected $anneeImport;
+    protected ?Annee         $anneeImport          = null;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    protected $intervenant = false;
+    protected ?Intervenant   $intervenant          = null;
 
-    /**
-     * @var Annee
-     */
-    protected $anneePrecedente;
+    protected bool           $intervenantInit      = false;
 
-    /**
-     * @var Annee
-     */
-    protected $anneeSuivante;
+    protected ?Annee         $anneePrecedente      = null;
 
-    /**
-     * @var DateTime
-     */
-    protected $dateObservation;
+    protected ?Annee         $anneeSuivante        = null;
 
-    /**
-     * @var Structure
-     */
-    protected $structure;
+    protected ?Structure     $structure            = null;
 
-    /**
-     * parametres
-     *
-     * @var ParametresService
-     */
-    protected $parametres;
-
-    /**
-     * @var bool
-     */
-    protected $inInit = false;
+    protected bool           $inInit               = false;
 
 
 
-    /**
-     *
-     * @return Role
-     */
-    public function getSelectedIdentityRole()
+    public function getSelectedIdentityRole(): ?Role
     {
         if (null === $this->selectedIdentityRole) {
             if ($this->serviceUserContext->getIdentity()) {
@@ -111,23 +68,18 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * @return Utilisateur|null
-     */
-    public function getUtilisateur()
+    public function getUtilisateur(): ?Utilisateur
     {
         return $this->getConnecteurLdap()->getUtilisateurCourant();
     }
 
 
 
-    /**
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): ?Intervenant
     {
-        if (false === $this->intervenant || $this->serviceUserContext->getNextSelectedIdentityRole()) {
-            $utilisateurCode = $this->getConnecteurLdap()->getUtilisateurCourantCode();
+        if (!$this->intervenantInit || $this->serviceUserContext->getNextSelectedIdentityRole()) {
+            $this->intervenantInit = true;
+            $utilisateurCode       = $this->getConnecteurLdap()->getUtilisateurCourantCode();
             if ($utilisateurCode) {
                 $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
             } else {
@@ -140,12 +92,9 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * @return Affectation|null
-     */
     public function getAffectation(): ?Affectation
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role        = $this->getSelectedIdentityRole();
         $utilisateur = $this->getUtilisateur();
 
         if (!$role) return null;
@@ -164,12 +113,7 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return ContextService
-     */
-    public function setIntervenant($intervenant)
+    public function setIntervenant(?Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
 
@@ -178,11 +122,7 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     *
-     * @return Etablissement
-     */
-    public function getEtablissement()
+    public function getEtablissement(): ?Etablissement
     {
         if (!$this->etablissement) {
             $sc = $this->getSessionContainer();
@@ -219,9 +159,6 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * @return bool
-     */
     public function isModaliteServicesSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
     {
         return $this->getModaliteServices($typeVolumeHoraire) == Parametre::SERVICES_MODALITE_SEMESTRIEL;
@@ -251,32 +188,9 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * @return bool
-     */
     public function isModaliteReferentielSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
     {
         return $this->getModaliteReferentiel() == Parametre::SERVICES_MODALITE_SEMESTRIEL;
-    }
-
-
-
-    /**
-     *
-     * @param Etablissement $etablissement
-     * @param boolean       $updateParametres
-     *
-     * @return self
-     */
-    public function setEtablissement(Etablissement $etablissement, $updateParametres = false)
-    {
-        $this->etablissement                        = $etablissement;
-        $this->getSessionContainer()->etablissement = $etablissement->getId();
-        if ($updateParametres) {
-            $this->getServiceParametres()->etablissement = (string)$etablissement->getId();
-        }
-
-        return $this;
     }
 
 
@@ -286,10 +200,8 @@ class ContextService extends AbstractService
      * C'est à dire :
      * - celle mémorisée en session (car sélectionnée par l'utilisateur) si elle existe ;
      * - ou sinon celle spécifiée dans les paramètres de l'appli.
-     *
-     * @return Annee
      */
-    public function getAnnee()
+    public function getAnnee(): Annee
     {
         if (!$this->annee) {
             $sc = $this->getSessionContainer();
@@ -310,10 +222,8 @@ class ContextService extends AbstractService
      * C'est à dire :
      * - celle mémorisée en session (car sélectionnée par l'utilisateur) si elle existe ;
      * - ou sinon celle spécifiée dans les paramètres de l'appli.
-     *
-     * @return Annee
      */
-    public function getAnneeImport()
+    public function getAnneeImport(): Annee
     {
         if (!$this->anneeImport) {
             $sc = $this->getSessionContainer();
@@ -329,25 +239,7 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * Retourne l'année N - x, N étant l'année courante.
-     *
-     * @param int $x Entier supérieur ou égal à zéro
-     *
-     * @return Annee
-     */
-    public function getAnneeNmoins($x)
-    {
-        return $this->getServiceAnnee()->getNmoins($this->getAnnee(), $x);
-    }
-
-
-
-    /**
-     *
-     * @return Annee
-     */
-    public function getAnneePrecedente()
+    public function getAnneePrecedente(): Annee
     {
         if (!$this->anneePrecedente) {
             $this->anneePrecedente = $this->getServiceAnnee()->getPrecedente($this->getAnnee());
@@ -358,11 +250,7 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     *
-     * @return Annee
-     */
-    public function getAnneeSuivante()
+    public function getAnneeSuivante(): Annee
     {
         if (!$this->anneeSuivante) {
             $this->anneeSuivante = $this->getServiceAnnee()->getSuivante($this->getAnnee());
@@ -373,20 +261,11 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     *
-     * @param Annee   $annee
-     * @param boolean $updateParametres
-     *
-     * @return self
-     */
-    public function setAnnee(Annee $annee, $updateParametres = false)
+    public function setAnnee(Annee $annee): self
     {
         $this->annee                        = $annee;
         $this->getSessionContainer()->annee = $annee->getId();
-        if ($updateParametres) {
-            $this->getServiceParametres()->annee = (string)$annee->getId();
-        }
+
         /* Rafraîchit les années précédentes et suivantes par la même occasion!! */
         $this->getAnneePrecedente();
         $this->getAnneeSuivante();
@@ -396,43 +275,7 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     *
-     * @return DateTime
-     */
-    function getDateObservation()
-    {
-        $sc = $this->getSessionContainer();
-        if (!$sc->offsetExists('dateObservation')) {
-            $sc->dateObservation = null;
-        }
-
-        return $sc->dateObservation;
-    }
-
-
-
-    /**
-     *
-     * @param DateTime $dateObservation
-     *
-     * @return self
-     */
-    public function setDateObservation(DateTime $dateObservation)
-    {
-        $sc                  = $this->getSessionContainer();
-        $sc->dateObservation = $dateObservation;
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return Structure
-     */
-    public function getStructure($checkInRole = true)
+    public function getStructure(bool $checkInRole = true): ?Structure
     {
         if ($checkInRole && !$this->isInInit()) {
             $role = $this->getSelectedIdentityRole();
@@ -454,14 +297,7 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     *
-     * @param Structure $structure
-     * @param boolean   $updateParametres
-     *
-     * @return self
-     */
-    public function setStructure($structure)
+    public function setStructure(?Structure $structure): self
     {
         if ($structure instanceof Structure) {
             $this->structure                        = $structure;
@@ -476,9 +312,6 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * @return bool
-     */
     public function isInInit(): bool
     {
         return $this->inInit;
@@ -486,11 +319,6 @@ class ContextService extends AbstractService
 
 
 
-    /**
-     * @param bool $inInit
-     *
-     * @return ContextService
-     */
     public function setInInit(bool $inInit): ContextService
     {
         $this->inInit = $inInit;

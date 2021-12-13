@@ -119,8 +119,8 @@ if ($structureElement) {
             'structure'     => $view->structure->getId(),
             'typeRessource' => $typeRessource->getId(),
         ];
-        $params1['dotation1'] = (isset($data['anneeCivile1']['s1Entity'])) ? $data['anneeCivile1']['s1Entity']->getId() : '';
-        $params1['dotation2'] = (isset($data['anneeCivile1']['s2Entity'])) ? $data['anneeCivile1']['s2Entity']->getId() : '';
+        $params1['dotation1'] = (isset($data['anneeCivile1']['s1Entity'])) ? $data['anneeCivile1']['s1Entity']->getId() : 'null';
+        $params1['dotation2'] = (isset($data['anneeCivile1']['s2Entity'])) ? $data['anneeCivile1']['s2Entity']->getId() : 'null';
         $dotEditUrl1          = $view->url('budget/saisie-dotation', $params1, ['query' => ['libelle' => $libelle]]);
 
 
@@ -129,8 +129,8 @@ if ($structureElement) {
             'structure'     => $view->structure->getId(),
             'typeRessource' => $typeRessource->getId(),
         ];
-        $params2['dotation1'] = (isset($data['anneeCivile2']['s1Entity'])) ? $data['anneeCivile2']['s1Entity']->getId() : '';
-        $params2['dotation2'] = (isset($data['anneeCivile2']['s2Entity'])) ? $data['anneeCivile2']['s2Entity']->getId() : '';
+        $params2['dotation1'] = (isset($data['anneeCivile2']['s1Entity'])) ? $data['anneeCivile2']['s1Entity']->getId() : 'null';
+        $params2['dotation2'] = (isset($data['anneeCivile2']['s2Entity'])) ? $data['anneeCivile2']['s2Entity']->getId() : 'null';
         $dotEditUrl2          = $view->url('budget/saisie-dotation', $params2, ['query' => ['libelle' => $libelle]]);
     }
 

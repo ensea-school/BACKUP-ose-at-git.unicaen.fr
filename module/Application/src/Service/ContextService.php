@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Acl\Role;
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
+use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Parametre;
@@ -135,6 +136,30 @@ class ContextService extends AbstractService
         }
 
         return $this->intervenant;
+    }
+
+
+
+    /**
+     * @return Affectation|null
+     */
+    public function getAffectation(): ?Affectation
+    {
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $utilisateur = $this->getUtilisateur();
+
+        if (!$role) return null;
+        if (!$utilisateur) return null;
+
+        $params      = [
+            'utilisateur'      => $utilisateur,
+            'role'             => $role->getDbRole(),
+            'structure'        => $role->getPerimetre()->isComposante() ? $this->getStructure() : null,
+            'histoDestruction' => null,
+        ];
+        $affectation = $this->getEntityManager()->getRepository(Affectation::class)->findOneBy($params);
+
+        return $affectation;
     }
 
 

@@ -1,103 +1,122 @@
 <?php
 
-namespace Application;
-
-use Indicateur\Entity\Db\Indicateur;
-use Indicateur\Entity\Db\NotificationIndicateur;
-use Laminas\Form\Element\Checkbox;
-use Laminas\Form\Element\Select;
-use Application\Provider\Privilege\Privileges;
+use \Laminas\Form\Element\Checkbox;
+use \Laminas\Form\Element\Select;
+use \Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $indicateurs Indicateur[]
- * @var $abonnements NotificationIndicateur[]
+ * @var $indicateurs \Indicateur\Entity\Db\TypeIndicateur[]
  */
 
 $showAbonnements = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
 
 $this->headTitle()->append($title = "Indicateurs");
 
-$indics = [];
-foreach ($indicateurs as $indicateur) {
-    $type   = $indicateur->getType();
-    $numero = $indicateur->getNumero();
-
-    if (!isset($indics[$type])) {
-        $indics[$type] = [];
-    }
-    $indics[$type][$numero] = $indicateur;
-}
-
-ksort($indics);
-
 $notif = new Select('abonnement');
 $notif->setEmptyOption('Aucune');
 $notif->setAttribute('class', 'notif');
-$notif->setValueOptions(NotificationIndicateur::$frequences);
+$notif->setValueOptions(\Indicateur\Entity\Db\NotificationIndicateur::$frequences);
 
 $inHome = new Checkbox('in-home');
 $inHome->setCheckedValue('1');
 $inHome->setAttribute('class', 'in-home');
 $inHome->setUncheckedValue('0');
 
-$noAbo = new NotificationIndicateur();
+$noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
 
 ?>
-    <h1 class="page-header"><?= $title ?></h1>
-    <?php foreach ($indics as $categorie => $cIndics): ?>
-    <div class="panel panel-default indicateurs">
-        <div class="panel-heading"><?= $categorie ?></div>
-        <table class="table table-bordered table-condensed">
-            <thead>
-            <tr>
-                <th class="numero">N°</th>
-                <th class="intitule">Intitulé de l'indicateur</th>
-                <?php if ($showAbonnements): ?>
-                    <th class="page-accueil">Page d'accueil</th>
-                    <th class="notification">Notification par mail</th>
-                <?php endif ?>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($cIndics as $indicateur):
-                /* @var $indicateur Indicateur */
-                $abonnement = isset($abonnements[$indicateur->getId()]) ? $abonnements[$indicateur->getId()] : $noAbo;
-                $urlAbonner = $this->url('indicateur/abonner', ['indicateur' => $indicateur->getId()]);
-                $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
-
-                ?>
-                <tr class="indicateur" id="<?= $indicateur->getId() ?>"
-                    data-url="<?= $urlAbonner ?>">
-
-                    <td class="numero">
-                        <?= $indicateur->getNumero() ?>
-                    </td>
-
-                    <td class="intitule">
-                        <?php if ($indicateur->getCount()): ?>
-                            <a href="<?= $urlResult ?>"
-                               title="Cliquez pour vous rendre à la page concernée"><?= $indicateur->getLibelle() ?></a>
-                        <?php else: ?>
-                            <?= $indicateur->getLibelle() ?>
-                        <?php endif ?>
-                    </td>
-
+<h1 class="page-header"><?= $title ?></h1>
+<div class="indicateurs-liste">
+    <?php foreach ($indicateurs as $typeIndicateur): ?>
+        <div class="panel panel-default indicateurs">
+            <div class="panel-heading"><?= $typeIndicateur ?></div>
+            <table class="table table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th class="numero">N°</th>
+                    <th class="intitule">Intitulé de l'indicateur</th>
                     <?php if ($showAbonnements): ?>
-                        <td class="page-accueil">
-                            <?= $this->formcheckbox($inHome->setValue($abonnement->getInHome())); ?>
-                        </td>
-                        <td class="notification">
-                            <?= $this->formSelect($notif->setValue($abonnement->getFrequence())); ?>
-                            <span class="indicateur-info glyphicon glyphicon-info-sign" aria-hidden="true"
-                                  data-toggle="tooltip" data-placement="auto" data-html="true"
-                                  title="<?= $abonnement->getFrequence() ? $abonnement->getExtraInfos() : '' ?>"
-                                  style="<?= $abonnement->getFrequence() ? '' : 'display: none' ?>"></span>
-                        </td>
+                        <th class="page-accueil">Page d'accueil</th>
+                        <th class="notification">Notification par mail</th>
                     <?php endif ?>
                 </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-<?php endforeach; ?>
+                </thead>
+                <tbody>
+                <?php foreach ($typeIndicateur->getIndicateur() as $indicateur):
+                    /* @var $indicateur Indicateur */
+                    $abonnement = $indicateur->getNotification()->first() ?: $noAbo;
+                    $urlAbonner = $this->url('indicateur/abonner', ['indicateur' => $indicateur->getId()]);
+                    $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
+
+                    ?>
+                    <tr class="indicateur" id="<?= $indicateur->getId() ?>"
+                        data-url="<?= $urlAbonner ?>">
+
+                        <td class="numero">
+                            <?= $indicateur->getNumero() ?>
+                        </td>
+                        <td class="intitule" data-url="<?= $urlResult ?>"></td>
+
+                        <?php if ($showAbonnements): ?>
+                            <td class="page-accueil">
+                                <?= $this->formcheckbox($inHome->setValue($abonnement->getInHome())); ?>
+                            </td>
+                            <td class="notification">
+                                <?= $this->formSelect($notif->setValue($abonnement->getFrequence())); ?>
+                                <span class="indicateur-info glyphicon glyphicon-info-sign" aria-hidden="true"
+                                      data-toggle="tooltip" data-placement="auto" data-html="true"
+                                      title="<?= $abonnement->getFrequence() ? $abonnement->getExtraInfos() : '' ?>"
+                                      style="<?= $abonnement->getFrequence() ? '' : 'display: none' ?>"></span>
+                            </td>
+                        <?php endif ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endforeach; ?>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        $.widget("ose.indicateursListe", {
+
+            calculer: function ()
+            {
+                var that = this;
+
+                that.element.find('td.intitule').html(
+                    'Calcul de l\'indicateur en cours <span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
+                );
+
+                $.post("<?= $this->url('indicateur/calcul') ?>", [], function (data)
+                    {
+                        for (id in data) {
+                            var td = that.element.find('.indicateur#' + id).find('.intitule');
+
+                            if (data[id].count == 0) {
+                                td.html(data[id].libelle);
+                            } else {
+                                td.html("<a href=" + td.data('url') + ">" + data[id].libelle + '</a>');
+                            }
+                        }
+                    }
+                ).fail(function (jqXHR)
+                {
+                    alertFlash(jqXHR.responseText, 'danger', 5000);
+                    console.log(jqXHR);
+                });
+            },
+
+            _create: function ()
+            {
+                this.calculer();
+            },
+
+        });
+
+        WidgetInitializer.add('indicateurs-liste', 'indicateursListe');
+
+    });
+</script>

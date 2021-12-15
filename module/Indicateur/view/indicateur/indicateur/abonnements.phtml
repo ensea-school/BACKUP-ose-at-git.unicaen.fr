@@ -3,11 +3,11 @@
 namespace Application;
 
 use Indicateur\Entity\Db\Indicateur;
-use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this        \Application\View\Renderer\PhpRenderer
  * @var $indicateurs Indicateur[]
+ * @var $counts      array
  */
 
 if (empty($indicateurs)): ?>
@@ -24,17 +24,18 @@ if (empty($indicateurs)): ?>
         <tbody>
         <?php foreach ($indicateurs as $indicateur):
             $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
+            $count = $counts[$indicateur->getId()];
             ?>
             <tr class="indicateur" id="<?= $indicateur->getId() ?>">
 
-                <td class="categorie"><?= $indicateur->getType() ?></td>
+                <td class="categorie"><?= $indicateur->getTypeIndicateur() ?></td>
                 <td class="numero"><?= $indicateur->getNumero() ?></td>
                 <td class="intitule">
-                    <?php if ($indicateur->getCount()): ?>
+                    <?php if ($count): ?>
                         <a href="<?= $urlResult ?>"
-                           title="Cliquez pour vous rendre à la page concernée"><?= $indicateur->getLibelle() ?></a>
+                           title="Cliquez pour vous rendre à la page concernée"><?= $indicateur->getLibelle($count) ?></a>
                     <?php else: ?>
-                        <?= $indicateur->getLibelle() ?>
+                        <?= $indicateur->getLibelle($count) ?>
                     <?php endif ?>
                 </td>
 

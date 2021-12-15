@@ -2,9 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Acl\Role as RoleAcl;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Affectation;
 
 /**
@@ -19,7 +17,6 @@ use Application\Entity\Db\Affectation;
 class AffectationService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
-
 
 
     /**
@@ -52,8 +49,8 @@ class AffectationService extends AbstractEntityService
      *
      * @param Affectation $entity
      *
-     * @throws \RuntimeException
      * @return mixed
+     * @throws \RuntimeException
      */
     public function save($entity)
     {
@@ -68,60 +65,4 @@ class AffectationService extends AbstractEntityService
         return parent::save($entity);
     }
 
-
-
-    /**
-     * @param RoleAcl|null $role
-     *
-     * @return null|Affectation
-     */
-    public function getByRole(RoleAcl $role = null)
-    {
-        $context = $this->getServiceContext();
-
-        if (!$role) {
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
-        }
-
-        if (!$context->getUtilisateur()) return null;
-
-        $this->getEntityManager()->getFilters()->enable('historique')->init([
-            Affectation::class,
-        ]);
-
-        $params = [
-            'utilisateur' => $context->getUtilisateur(),
-            'role'        => $role->getDbRole(),
-            'structure'   => $role->getPerimetre()->isComposante() ? $context->getStructure() : null,
-        ];
-        $affectation = $this->getRepo()->findOneBy($params);
-
-        return $affectation;
-    }
-
-
-
-    /**
-     *
-     * @param \Application\Entity\Db\Role|string $role
-     * @param QueryBuilder                       $qb
-     * @param string                             $alias
-     *
-     * @return QueryBuilder
-     * @todo A REVOIR! ! ! !
-     */
-    public function finderByRole($role, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        if ($role instanceof \Application\Entity\Db\Role) {
-            $role = $role->getCode();
-        }
-
-        $qb
-            ->innerJoin($alias . '.role', $ralias = uniqid('r'))
-            ->andWhere("$ralias.code = :code")->setParameter('code', $role);
-
-        return $qb;
-    }
 }

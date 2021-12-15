@@ -65,7 +65,14 @@ class TypeIndicateur
      */
     public function getIndicateur(): Collection
     {
-        return $this->formuleResultatService;
+        return $this->indicateur;
+    }
+
+
+
+    public function __toString()
+    {
+        return $this->getLibelle();
     }
 
 }

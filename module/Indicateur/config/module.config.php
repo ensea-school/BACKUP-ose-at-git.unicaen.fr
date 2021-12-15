@@ -21,6 +21,10 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
+                'calcul'                  => [
+                    'route'  => '/calcul',
+                    'action' => 'calcul',
+                ],
                 'result'                  => [
                     'route'       => '/result/:indicateur',
                     'action'      => 'result',
@@ -115,7 +119,7 @@ return [
     'guards' => [
         [
             'controller' => 'Indicateur\Controller\Indicateur',
-            'action'     => ['index', 'result', 'abonnements', 'depassement-charges'],
+            'action'     => ['index', 'calcul', 'result', 'abonnements', 'depassement-charges'],
             'privileges' => [Privileges::INDICATEUR_VISUALISATION],
         ],
         [

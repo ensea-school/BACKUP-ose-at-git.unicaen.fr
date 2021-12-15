@@ -37,8 +37,8 @@ return [
             ],
             1011 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s permanent n\'a pas fourni toutes les pièces justificatives obligatoires',
-                'libelle_pluriel'   => '%s permanent n\'a pas fourni toutes les pièces justificatives obligatoires',
+                'libelle_singulier' => '%s permanent n\'a pas fourni toutes ses pièces justificatives obligatoires',
+                'libelle_pluriel'   => '%s permanents n\'ont pas fourni toutes leurs pièces justificatives obligatoires',
                 'route'             => 'piece-jointe/intervenant',
                 'tem_distinct'      => true,
                 'tem_not_structure' => false,

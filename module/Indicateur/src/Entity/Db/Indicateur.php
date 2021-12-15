@@ -2,16 +2,14 @@
 
 namespace Indicateur\Entity\Db;
 
-use Application\Entity\Db\Structure;
-use Indicateur\Service\IndicateurServiceAwareTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Indicateur
  */
 class Indicateur
 {
-    use IndicateurServiceAwareTrait;
-
     private int            $id;
 
     private TypeIndicateur $typeIndicateur;
@@ -34,9 +32,14 @@ class Indicateur
 
     private bool           $notStructure     = false;
 
-    private array          $count            = [];
+    private Collection     $notification;
 
-    private array          $result           = [];
+
+
+    public function __construct()
+    {
+        $this->notification = new ArrayCollection();
+    }
 
 
 
@@ -305,6 +308,16 @@ class Indicateur
 
 
     /**
+     * @return Collection|NotificationIndicateur[]
+     */
+    public function getNotification()
+    {
+        return $this->notification;
+    }
+
+
+
+    /**
      *
      * @return string
      */
@@ -315,10 +328,8 @@ class Indicateur
 
 
 
-    public function getLibelle(Structure $structure = null): string
+    public function getLibelle(int $count): string
     {
-        $count = $this->getCount($structure);
-
         if ($count > 1) {
             return sprintf($this->getLibellePluriel(), $count);
         } else {
@@ -326,31 +337,4 @@ class Indicateur
         }
     }
 
-
-
-    public function getCount(?Structure $structure = null): int
-    {
-        $id = $structure ? $structure->getId() : 0;
-        if (!isset($this->count[$id])) {
-            $this->count[$id] = $this->getServiceIndicateur()->getCount($this, $structure);
-        }
-
-        return $this->count[$id];
-    }
-
-
-
-    /**
-     *
-     * @return Indicateur\AbstractIndicateur[]
-     */
-    public function getResult(?Structure $structure = null): array
-    {
-        $id = $structure ? $structure->getId() : 0;
-        if (!isset($this->result[$id])) {
-            $this->result[$id] = $this->getServiceIndicateur()->getResult($this, $structure);
-        }
-
-        return $this->result[$id];
-    }
 }

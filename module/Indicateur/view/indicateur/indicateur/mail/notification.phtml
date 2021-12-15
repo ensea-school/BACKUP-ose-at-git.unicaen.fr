@@ -3,12 +3,11 @@
 /**
  * @var $this         \Application\View\Renderer\PhpRenderer
  * @var $notification \Indicateur\Entity\Db\NotificationIndicateur
+ * @var $result       array
  *
  */
 
 use Application\Constants;
-
-$result = $notification->getIndicateur()->getResult($notification->getAffectation()->getStructure());
 
 $hasStructure = false;
 $hasDetails   = false;

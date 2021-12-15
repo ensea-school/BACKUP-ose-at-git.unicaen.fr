@@ -5,6 +5,7 @@ namespace Indicateur\Processus;
 use Application\Processus\AbstractProcessus;
 use Indicateur\Entity\Db\NotificationIndicateur;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Indicateur\Service\IndicateurServiceAwareTrait;
 use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
 use Laminas\View\Renderer\PhpRenderer;
 use UnicaenApp\Controller\Plugin\Mail;
@@ -23,6 +24,7 @@ class IndicateurProcessus extends AbstractProcessus
 {
     use NotificationIndicateurServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use IndicateurServiceAwareTrait;
 
     /**
      * @var PhpRenderer
@@ -69,17 +71,16 @@ class IndicateurProcessus extends AbstractProcessus
 
 
 
-    protected function creerMailNotification(NotificationIndicateur $notification)
+    protected function creerMailNotification(NotificationIndicateur $notification): ?MailMessage
     {
-        $structure = $notification->getAffectation()->getStructure();
-
-        $result = $notification->getIndicateur()->getResult($structure);
+        $result = $this->getServiceIndicateur()->getResult($notification->getIndicateur());
         $count  = count($result);
 
         if (0 == $count) return null; // pas de notification pour cet indicateur
 
         $html          = $this->renderer->render('indicateur/indicateur/mail/notification', [
             'notification' => $notification,
+            'result'       => $result,
         ]);
         $part          = new MimePart($html);
         $part->type    = Mime::TYPE_HTML;
@@ -96,7 +97,7 @@ class IndicateurProcessus extends AbstractProcessus
                 $this->getServiceContext()->getAnnee(),
                 $notification->getIndicateur()->getNumero(),
                 $notification->getFrequenceToString(),
-                strip_tags($notification->getIndicateur()->getLibelle($structure))
+                strip_tags($notification->getIndicateur()->getLibelle($count))
             ))
             ->setBody($body)
             ->addTo($notification->getAffectation()->getUtilisateur()->getEmail(), (string)$notification->getAffectation()->getUtilisateur());

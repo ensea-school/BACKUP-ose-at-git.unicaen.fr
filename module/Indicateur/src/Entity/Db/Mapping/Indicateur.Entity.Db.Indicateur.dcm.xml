@@ -17,5 +17,6 @@
     <many-to-one field="typeIndicateur" target-entity="Indicateur\Entity\Db\TypeIndicateur">
       <join-column name="TYPE_INDICATEUR_ID" referenced-column-name="ID"/>
     </many-to-one>
+    <one-to-many field="notification" target-entity="Indicateur\Entity\Db\NotificationIndicateur" mapped-by="indicateur"/>
   </entity>
 </doctrine-mapping>

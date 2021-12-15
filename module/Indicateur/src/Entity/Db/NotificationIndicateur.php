@@ -28,70 +28,37 @@ class NotificationIndicateur
      *
      * @var array
      */
-    static public $frequences = [
+    static public         $frequences     = [
         self::PERIODE_HEURE_3 => "4 par jour",
         self::PERIODE_HEURE_6 => "2 par jour",
         self::PERIODE_JOUR    => "1 par jour",
         self::PERIODE_SEMAINE => "1 par semaine",
     ];
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected int         $id;
 
-    /**
-     * @var Affectation
-     */
-    protected $affectation;
+    protected Affectation $affectation;
 
-    /**
-     * @var Indicateur
-     */
-    protected $indicateur;
+    protected Indicateur  $indicateur;
 
-    /**
-     * @var string
-     */
-    protected $frequence;
+    protected ?string     $frequence      = null;
 
-    /**
-     * @var boolean
-     */
-    protected $inHome;
+    protected bool        $inHome         = false;
 
-    /**
-     * @var DateTime
-     */
-    protected $dateAbonnement;
+    protected ?DateTime   $dateAbonnement = null;
 
-    /**
-     * @var DateTime
-     */
-    protected $dateDernNotif;
+    protected ?DateTime   $dateDernNotif  = null;
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Set indicateur
-     *
-     * @param Indicateur $indicateur
-     *
-     * @return NotificationIndicateur
-     */
-    public function setIndicateur(Indicateur $indicateur = null)
+    public function setIndicateur(Indicateur $indicateur): self
     {
         $this->indicateur = $indicateur;
 
@@ -100,34 +67,21 @@ class NotificationIndicateur
 
 
 
-    /**
-     * Get indicateur
-     *
-     * @return Indicateur
-     */
-    public function getIndicateur()
+    public function getIndicateur(): Indicateur
     {
         return $this->indicateur;
     }
 
 
 
-    /**
-     * @return Affectation
-     */
-    public function getAffectation()
+    public function getAffectation(): Affectation
     {
         return $this->affectation;
     }
 
 
 
-    /**
-     * @param Affectation $affectation
-     *
-     * @return NotificationIndicateur
-     */
-    public function setAffectation($affectation)
+    public function setAffectation(Affectation $affectation): self
     {
         $this->affectation = $affectation;
 
@@ -136,14 +90,7 @@ class NotificationIndicateur
 
 
 
-    /**
-     * Set frequence
-     *
-     * @param integer $frequence
-     *
-     * @return NotificationIndicateur
-     */
-    public function setFrequence($frequence)
+    public function setFrequence(string $frequence): self
     {
         $this->frequence = $frequence;
 
@@ -152,34 +99,21 @@ class NotificationIndicateur
 
 
 
-    /**
-     * Get frequence
-     *
-     * @return integer
-     */
-    public function getFrequence()
+    public function getFrequence(): ?string
     {
         return $this->frequence;
     }
 
 
 
-    /**
-     * @return boolean
-     */
-    public function getInHome()
+    public function getInHome(): bool
     {
         return $this->inHome;
     }
 
 
 
-    /**
-     * @param boolean $inHome
-     *
-     * @return NotificationIndicateur
-     */
-    public function setInHome($inHome)
+    public function setInHome(bool $inHome): self
     {
         $this->inHome = $inHome;
 
@@ -188,26 +122,14 @@ class NotificationIndicateur
 
 
 
-    /**
-     * Get frequence
-     *
-     * @return string
-     */
-    public function getFrequenceToString()
+    public function getFrequenceToString(): string
     {
         return static::$frequences[$this->getFrequence()];
     }
 
 
 
-    /**
-     * Set dateDernNotif
-     *
-     * @param DateTime $date
-     *
-     * @return NotificationIndicateur
-     */
-    public function setDateDernNotif(DateTime $date)
+    public function setDateDernNotif(DateTime $date): self
     {
         $this->dateDernNotif = $date;
 
@@ -216,56 +138,14 @@ class NotificationIndicateur
 
 
 
-    /**
-     * Get dateDernNotif
-     *
-     * @return DateTime
-     */
-    public function getDateDernNotif()
+    public function getDateDernNotif(): ?DateTime
     {
         return $this->dateDernNotif;
     }
 
 
 
-    /**
-     * Get dateDernNotif
-     *
-     * @return DateTime
-     */
-    public function getDateDernNotifToString()
-    {
-        return $this->dateDernNotif ? $this->dateDernNotif->format(Constants::DATETIME_FORMAT) : null;
-    }
-
-
-
-    /**
-     * Get dateDernNotif
-     *
-     * @return DateTime
-     */
-    public function getDateProchaineNotifToString()
-    {
-        if (!$this->dateDernNotif) {
-            return null;
-        }
-
-        $next = (new \DateTime())->setTimestamp($this->dateDernNotif->getTimestamp() + $this->getFrequence());
-
-        return $next->format(Constants::DATETIME_FORMAT);
-    }
-
-
-
-    /**
-     * Set dateAbonnement
-     *
-     * @param DateTime $date
-     *
-     * @return NotificationIndicateur
-     */
-    public function setDateAbonnement(DateTime $date)
+    public function setDateAbonnement(DateTime $date): self
     {
         $this->dateAbonnement = $date;
 
@@ -274,35 +154,14 @@ class NotificationIndicateur
 
 
 
-    /**
-     * Get dateAbonnement
-     *
-     * @return DateTime
-     */
-    public function getDateAbonnement()
+    public function getDateAbonnement(): ?DateTime
     {
         return $this->dateAbonnement;
     }
 
 
 
-    /**
-     * Get dateAbonnement
-     *
-     * @return DateTime
-     */
-    public function getDateAbonnementToString()
-    {
-        return $this->dateAbonnement->format(Constants::DATETIME_FORMAT);
-    }
-
-
-
-    /**
-     *
-     * @return string
-     */
-    public function getExtraInfos()
+    public function getExtraInfos(): string
     {
         $infos = "Abonnement : " . $this->getDateAbonnement()->format(Constants::DATETIME_FORMAT);
 

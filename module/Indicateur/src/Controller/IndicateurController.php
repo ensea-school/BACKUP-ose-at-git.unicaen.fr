@@ -5,7 +5,7 @@ namespace Indicateur\Controller;
 use Application\Controller\AbstractController;
 use Indicateur\Entity\Db\IndicateurDepassementCharges;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
+use Indicateur\Entity\Db\TypeIndicateur;
 use Indicateur\Processus\IndicateurProcessusAwareTrait;
 use Indicateur\Entity\Db\Indicateur;
 use Application\Service\ContextService;
@@ -93,33 +93,58 @@ class IndicateurController extends AbstractController
      */
     public function indexAction()
     {
-        $indicateurs   = $this->getServiceIndicateur()->getList();
-        $notifications = $this->getServiceNotificationIndicateur()->getList(
-            $this->getServiceNotificationIndicateur()->finderByRole()
-        );
+        $dql = "
+        SELECT
+          ti, i, n
+        FROM
+          " . TypeIndicateur::class . " ti 
+          JOIN ti.indicateur i
+          LEFT JOIN i.notification n WITH n.affectation = :affectation
+        WHERE
+          i.enabled = TRUE
+        ORDER BY
+          ti.ordre, i.ordre
+        ";
 
-        $abonnements = [];
-        foreach ($notifications as $notification) {
-            $abonnements[$notification->getIndicateur()->getId()] = $notification;
+        $params      = [
+            'affectation' => $this->getServiceContext()->getAffectation(),
+        ];
+        $indicateurs = $this->em()->createQuery($dql)->execute($params);
+
+        return compact('indicateurs');
+    }
+
+
+
+    public function calculAction()
+    {
+        $dql = "
+        SELECT i FROM " . Indicateur::class . " i WHERE i.enabled = TRUE";
+
+        /** @var Indicateur[] $indicateurs */
+        $indicateurs = $this->em()->createQuery($dql)->execute();
+        $data        = [];
+        foreach ($indicateurs as $indicateur) {
+            $count = $this->getServiceIndicateur()->getCount($indicateur);
+
+            $data[$indicateur->getId()] = [
+                'count'   => $count,
+                'libelle' => $indicateur->getLibelle($count),
+            ];
         }
 
-        return compact('indicateurs', 'abonnements');
+        return new \Laminas\View\Model\JsonModel($data);
     }
 
 
 
     public function resultAction()
     {
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
-        $indicateur = $this->getEvent()->getParam('indicateur');
         /* @var $indicateur Indicateur */
-        $indicateur->setServiceIndicateur($this->getServiceIndicateur());
+        $indicateur = $this->getEvent()->getParam('indicateur');
+        $result     = $this->getServiceIndicateur()->getResult($indicateur);
 
-        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
-
-        /* @var $structure Structure */
-
-        return compact('indicateur', 'structure');
+        return compact('indicateur', 'result');
     }
 
 
@@ -135,6 +160,7 @@ class IndicateurController extends AbstractController
             return $this->redirect()->toRoute('home');
         }
 
+        /** @var Indicateur $indicateur */
         $indicateur = $this->getEvent()->getParam('indicateur');
         $frequence  = $this->params()->fromPost('notification');
         $inHome     = $this->params()->fromPost('in-home') == '1';
@@ -170,27 +196,31 @@ class IndicateurController extends AbstractController
      */
     public function abonnementsAction()
     {
-        $sab = $this->getServiceNotificationIndicateur();
-        $saf = $this->getServiceAffectation();
-        $sid = $this->getServiceIndicateur();
+        $dql = "
+        SELECT
+          i, ti
+        FROM
+          " . Indicateur::class . " i
+          JOIN i.typeIndicateur ti 
+          JOIN i.notification n
+        WHERE
+          i.enabled = TRUE
+          AND n.affectation = :affectation
+          AND n.inHome = TRUE
+        ORDER BY
+          ti.ordre, i.ordre
+        ";
 
-        $qb = $sab->finderByRole(); // filtre selon le rôle courant
-        $sab->join($sid, $qb, 'indicateur', true);
-        $sab->finderByInHome(true, $qb);
-
-        $sab->join($saf, $qb, 'affectation');
-        $saf->finderByHistorique($qb);
-
-        $sid->orderBy($qb);
-
-        $notifications = $sab->getList($qb);
-
-        $indicateurs = [];
-        foreach ($notifications as $notification) {
-            $indicateurs[] = $notification->getIndicateur()->setServiceIndicateur($sid);
+        $params      = [
+            'affectation' => $this->getServiceContext()->getAffectation(),
+        ];
+        $indicateurs = $this->em()->createQuery($dql)->execute($params);
+        $counts      = [];
+        foreach ($indicateurs as $indicateur) {
+            $counts[$indicateur->getId()] = $this->getServiceIndicateur()->getCount($indicateur);
         }
 
-        return compact('indicateurs');
+        return compact('indicateurs', 'counts');
     }
 
 
@@ -199,7 +229,6 @@ class IndicateurController extends AbstractController
     {
         $indicateur = $this->getEvent()->getParam('indicateur');
         /* @var $indicateur Indicateur */
-        $indicateur->setServiceIndicateur($this->getServiceIndicateur());
 
         $intervenantsStringIds = $this->params()->fromQuery('intervenants', $this->params()->fromPost('intervenants', null));
         if ($intervenantsStringIds) {
@@ -209,7 +238,7 @@ class IndicateurController extends AbstractController
         }
 
 
-        $result       = $indicateur->getResult();
+        $result       = $this->getServiceIndicateur()->getResult($indicateur);
         $intervenants = [];
         foreach ($result as $index => $indicRes) {
             $intervenant = $indicRes->getIntervenant();
@@ -460,7 +489,7 @@ class IndicateurIntervenantsMailer
         $subject = sprintf("%s %s : %s",
             $this->controller->appInfos()->getNom(),
             $context->getAnnee(),
-            strip_tags($this->indicateur->getType())
+            strip_tags($this->indicateur->getTypeIndicateur())
         );
 
         return $subject;

@@ -3,91 +3,46 @@
 namespace Indicateur\Service;
 
 use Application\Entity\Db\Affectation;
-use Application\Service\AbstractEntityService;
+use Application\Service\AbstractService;
 use Indicateur\Entity\Db\Indicateur;
 use Indicateur\Entity\Db\NotificationIndicateur;
-use Application\Service\Traits\AffectationServiceAwareTrait;
 use LogicException;
 use DateTime;
-use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of WfEtapeDepService
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  *
- * @method NotificationIndicateur get($id)
- * @method NotificationIndicateur[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method NotificationIndicateur newEntity()
- *
  */
-class NotificationIndicateurService extends AbstractEntityService
+class NotificationIndicateurService extends AbstractService
 {
-    use AffectationServiceAwareTrait;
     use IndicateurServiceAwareTrait;
-
-    /**
-     * retourne la classe des entités
-     *
-     * @return string
-     */
-    public function getEntityClass()
-    {
-        return NotificationIndicateur::class;
-    }
-
-
-
-    /**
-     * Retourne l'alias d'entité courante
-     *
-     * @return string
-     */
-    public function getAlias()
-    {
-        return 'ni';
-    }
-
-
-
-    public function finderByRole($role = null, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $affectation = $this->getServiceAffectation()->getByRole($role);
-        $this->finderByAffectation($affectation, $qb, $alias);
-
-        return $qb;
-    }
-
 
 
     /**
      * Abonne un personnel à un indicateur.
-     *
-     * @param Indicateur $indicateur
-     * @param string     $frequence
-     *
-     * @return NotificationIndicateur
      */
-    public function abonner(Indicateur $indicateur, $frequence = null, $inHome = false, Affectation $affectation = null)
+    public function abonner(Indicateur $indicateur, ?string $frequence = null, bool $inHome = false, Affectation $affectation = null): ?NotificationIndicateur
     {
+        $em = $this->getEntityManager();
+
         if ($frequence && !array_key_exists($frequence, NotificationIndicateur::$frequences)) {
             throw new LogicException("Fréquence spécifiée inconnue: $frequence.");
         }
 
         if (!$affectation) {
-            $affectation = $this->getServiceAffectation()->getByRole();
+            $affectation = $this->getServiceContext()->getAffectation();
         }
 
-        $notification = $this->getRepo()->findOneBy([
+        $notification = $em->getRepository(NotificationIndicateur::class)->findOneBy([
             'indicateur'  => $indicateur,
             'affectation' => $affectation,
         ]);
 
         if ($frequence || $inHome) {
             if (!$notification) {
-                $notification = $this->newEntity();
+                $notification = new NotificationIndicateur();
                 $notification->setAffectation($affectation);
                 $notification->setIndicateur($indicateur);
             }
@@ -96,10 +51,12 @@ class NotificationIndicateurService extends AbstractEntityService
             $notification->setInHome($inHome);
             $notification->setDateAbonnement(new DateTime());
 
-            $this->save($notification);
+            $em->persist($notification);
+            $em->flush($notification);
         } else {
             if ($notification) {
-                $this->delete($notification);
+                $em->remove($notification);
+                $em->flush($notification);
                 $notification = null;
             }
         }
@@ -122,7 +79,9 @@ class NotificationIndicateurService extends AbstractEntityService
      */
     public function getNotifications($force = false)
     {
-        $qb = $this->getRepo()->createQueryBuilder("ni")
+        $repo = $this->getEntityManager()->getRepository(NotificationIndicateur::class);
+
+        $qb = $repo->createQueryBuilder("ni")
             ->select("ni, i, a, u, s")
             ->join('ni.indicateur', 'i')
             ->join('ni.affectation', 'a')
@@ -140,10 +99,6 @@ class NotificationIndicateurService extends AbstractEntityService
         }
 
         $nis = $qb->getQuery()->getResult();
-        /* @var $nis \Indicateur\Entity\Db\NotificationIndicateur[] */
-        foreach ($nis as $ni) {
-            $ni->getIndicateur()->setServiceIndicateur($this->getServiceIndicateur());
-        }
 
         return $nis;
     }

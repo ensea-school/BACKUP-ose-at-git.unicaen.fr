@@ -5,11 +5,10 @@ use Application\Provider\Privilege\Privileges;
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $indicateur \Indicateur\Entity\Db\Indicateur
+ * @var $result     array
  */
 
 $this->headTitle()->append((string)$this->indicateur);
-
-$result = $indicateur->getResult();
 
 $url = $indicateur->getRoute();
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ENVOI_MAIL_INTERVENANTS))) {
@@ -30,7 +29,7 @@ foreach ($result as $r) {
 echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de mail!!
 
 ?>
-    <h1 class="page-header"><?= $indicateur->getLibelle() ?>
+    <h1 class="page-header"><?= $indicateur->getLibelle(count($result)) ?>
         <small><?= $indicateur ?></small>
     </h1>
 

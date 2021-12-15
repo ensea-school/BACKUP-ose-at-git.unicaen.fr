@@ -2,11 +2,10 @@
 
 namespace Indicateur\Service;
 
-use Application\Service\AbstractEntityService;
+use Application\Service\AbstractService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Indicateur\Entity\Db\Indicateur;
-use Application\Entity\Db\Structure;
 
 
 /**
@@ -18,35 +17,9 @@ use Application\Entity\Db\Structure;
  * @method Indicateur newEntity()
  *
  */
-class IndicateurService extends AbstractEntityService
+class IndicateurService extends AbstractService
 {
-    protected $countCache = [];
-
     use IntervenantServiceAwareTrait;
-
-
-    /**
-     * retourne la classe des entités
-     *
-     * @return string
-     */
-    public function getEntityClass()
-    {
-        return Indicateur::class;
-    }
-
-
-
-    /**
-     * Retourne l'alias d'entité courante
-     *
-     * @return string
-     */
-    public function getAlias()
-    {
-        return 'indic';
-    }
-
 
 
     /**
@@ -55,7 +28,7 @@ class IndicateurService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    private function getBaseQueryBuilder(Indicateur $indicateur, $structure = null)
+    private function getBaseQueryBuilder(Indicateur $indicateur)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->from(\Indicateur\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero(), 'indicateur');
@@ -72,14 +45,13 @@ class IndicateurService extends AbstractEntityService
         $qb->andWhere('indicateur.annee = :annee')->setParameter('annee', $this->getServiceContext()->getAnnee());
 
         /* Filtrage par structure, si nécessaire */
-        if (!$structure) {
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($role) {
-                $structure = $role->getStructure();
-            }
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role) {
+            $structure = $role->getStructure();
         }
         if ($structure) {
-            $sign = $indicateur->getNotStructure() ? '<>' : '=';
+            $sign = $indicateur->isNotStructure() ? '<>' : '=';
             //$qb->andWhere('indicateur.structure IS NULL OR indicateur.structure ' . $sign . ' ' . $structure->getId());
             $qb->andWhere('indicateur.structure ' . $sign . ' ' . $structure->getId());
         }
@@ -91,20 +63,13 @@ class IndicateurService extends AbstractEntityService
 
     /**
      * @param integer|Indicateur $indicateur Indicateur concerné
-     * @param Structure|null     $structure
      */
-    public function getCount(Indicateur $indicateur, Structure $structure = null)
+    public function getCount(Indicateur $indicateur)
     {
-        $key = $indicateur->getNumero() . '_' . ($structure ? $structure->getId() : '0');
+        $qb = $this->getBaseQueryBuilder($indicateur);
+        $qb->addSelect('COUNT(' . ($indicateur->isDistinct() ? 'DISTINCT ' : '') . 'indicateur.intervenant) result');
 
-        if (!isset($this->countCache[$key])) {
-            $qb = $this->getBaseQueryBuilder($indicateur, $structure);
-            $qb->addSelect('COUNT(' . ($indicateur->getDistinct() ? 'DISTINCT ' : '') . 'indicateur.intervenant) result');
-
-            $this->countCache[$key] = (integer)$qb->getQuery()->getResult()[0]['result'];
-        }
-
-        return $this->countCache[$key];
+        return (integer)$qb->getQuery()->getResult()[0]['result'];
     }
 
 
@@ -114,9 +79,9 @@ class IndicateurService extends AbstractEntityService
      *
      * @return Indicateur\AbstractIndicateur[]
      */
-    public function getResult(Indicateur $indicateur, Structure $structure = null)
+    public function getResult(Indicateur $indicateur)
     {
-        $qb = $this->getBaseQueryBuilder($indicateur, $structure);
+        $qb = $this->getBaseQueryBuilder($indicateur);
 
         //$qb->join('indicateur.intervenant', 'intervenant');
 
@@ -139,83 +104,6 @@ class IndicateurService extends AbstractEntityService
         }
 
         return $result;
-    }
-
-
-
-    /**
-     *
-     * @param integer $numero
-     *
-     * @return \Indicateur\Entity\Db\Indicateur
-     */
-    public function getByNumero($numero)
-    {
-        if (null == $numero) return null;
-
-        $indicateur = $this->getRepo()->findOneBy(['numero' => $numero]);
-        $indicateur->setServiceIndicateur($this);
-
-        return $indicateur;
-    }
-
-
-
-    /**
-     *
-     * @param string $code
-     *
-     * @return \Indicateur\Entity\Db\Indicateur
-     */
-    public function getByCode($code)
-    {
-        if (null == $code) return null;
-
-        $indicateur = $this->getRepo()->findOneBy(['code' => $code]);
-        $indicateur->setServiceIndicateur($this);
-
-        return $indicateur;
-    }
-
-
-
-    /**
-     *
-     * @param QueryBuilder|null $qb
-     * @param string|null       $alias
-     */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $qb->addOrderBy("$alias.type, $alias.ordre");
-
-        return $qb;
-    }
-
-
-
-    /**
-     *
-     * @param QueryBuilder $qb
-     * @param string|null  $alias
-     *
-     * @return Indicateur[]
-     */
-    public function getList(QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $qb->andWhere("$alias.enabled = 1");
-
-        $list = parent::getList($qb, $alias);
-        /* @var $list Indicateur[] */
-
-        foreach ($list as $indicateur) {
-            $indicateur->setServiceIndicateur($this);
-        }
-
-        return $list;
     }
 
 }

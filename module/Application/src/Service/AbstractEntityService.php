@@ -18,31 +18,18 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
  */
 abstract class AbstractEntityService extends AbstractService
 {
-    /**
-     * EntityRepository
-     *
-     * @var EntityRepository
-     */
-    private $repo;
+    private ?EntityRepository $repo            = null;
 
-    /**
-     *
-     * @var \ReflectionClass
-     */
-    private $reflectionClass;
+    private ?\ReflectionClass $reflectionClass = null;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $hasHistorique;
+    private ?bool             $hasHistorique   = null;
 
     /**
      * Liste des propriétés des entités
      *
      * @var string[]
      */
-    private $properties;
+    private array $properties;
 
 
 
@@ -79,12 +66,7 @@ abstract class AbstractEntityService extends AbstractService
 
 
 
-    /**
-     * Retourne le repos des entités
-     *
-     * @return EntityRepository
-     */
-    public function getRepo()
+    public function getRepo(): EntityRepository
     {
         if (!$this->repo) {
             $this->repo = $this->getEntityManager()->getRepository($this->getEntityClass());
@@ -97,10 +79,8 @@ abstract class AbstractEntityService extends AbstractService
 
     /**
      * Détermine si les entités gèrent les historiques ou non
-     *
-     * @return boolean
      */
-    public function hasHistorique()
+    public function hasHistorique(): bool
     {
         if (null === $this->hasHistorique) {
             $this->hasHistorique = $this->getReflectionClass()->implementsInterface('UnicaenApp\Entity\HistoriqueAwareInterface');
@@ -116,7 +96,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return string[]
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         if (null === $this->properties) {
             $m = $this->getReflectionClass()->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -151,7 +131,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return array
      */
-    public function initQuery(QueryBuilder $qb = null, $alias = null, array $fields = [])
+    public function initQuery(QueryBuilder $qb = null, $alias = null, array $fields = []): array
     {
         if (null === $alias) $alias = $this->getAlias();
         if (empty($qb)) {
@@ -172,12 +152,7 @@ abstract class AbstractEntityService extends AbstractService
 
 
 
-    /**
-     * @param array $fields
-     *
-     * @return QueryBuilder
-     */
-    public function select(array $fields = [])
+    public function select(array $fields = []): QueryBuilder
     {
         return $this->initQuery(null, null, $fields)[0];
     }
@@ -195,7 +170,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return self
      */
-    public function join($service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null)
+    public function join($service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null): self
     {
         return $this->_join('join', $service, $qb, $relation, $addSelect, $leftAlias, $rightAlias);
     }
@@ -213,7 +188,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return self
      */
-    public function leftJoin($service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null)
+    public function leftJoin($service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null): self
     {
         return $this->_join('leftJoin', $service, $qb, $relation, $addSelect, $leftAlias, $rightAlias);
     }
@@ -231,7 +206,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return self
      */
-    private function _join($method = 'join', $service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null)
+    private function _join($method = 'join', $service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null): self
     {
         if (is_string($service)) {
             $service = \Application::$container->get($service);
@@ -266,7 +241,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return string[]
      */
-    public function getQbFromAliases(QueryBuilder $qb)
+    public function getQbFromAliases(QueryBuilder $qb): array
     {
         $aliases = [];
         $from    = $qb->getDQLPart('from');
@@ -345,13 +320,8 @@ abstract class AbstractEntityService extends AbstractService
 
     /**
      * Retourne le nombre d'entités trouvé
-     *
-     * @param QueryBuilder|null $qb
-     * @param string|null       $alias
-     *
-     * @return integer
      */
-    public function count(QueryBuilder $qb = null, $alias = null)
+    public function count(QueryBuilder $qb = null, ?string $alias = null): int
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $entities = $qb->getQuery()->execute();

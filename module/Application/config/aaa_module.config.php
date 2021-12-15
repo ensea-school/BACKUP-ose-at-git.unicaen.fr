@@ -172,6 +172,7 @@ $config = [
             Service\UtilisateurService::class           => Service\Factory\UtilisateurServiceFactory::class,
             Assertion\InformationAssertion::class       => \UnicaenAuth\Assertion\AssertionFactory::class,
             HostLocalization\HostLocalizationOse::class => HostLocalization\HostLocalizationOseFactory::class,
+            ORM\RouteEntitiesInjector::class            => ORM\RouteEntitiesInjectorFactory::class,
         ],
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,

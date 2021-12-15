@@ -181,7 +181,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
         // Chargement des rôles par statut d'intervenant
-        $si = $this->getStatutsInfo();
+        $si = $this->getCacheContainer()->statutsInfo('getStatutsInfo');
         foreach ($si as $statut) {
             $role = new Role($statut['role-id'], 'user', $statut['role-name']);
 
@@ -203,23 +203,19 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
 
-    public function getStatutsInfo()
+    public function getStatutsInfo(): array
     {
-        $cc = $this->getCacheContainer(self::class);
-        if (!isset($cc->statutsInfo)) {
-            $si      = [];
-            $statuts = $this->getServiceStatutIntervenant()->getList();
-            foreach ($statuts as $statut) {
-                $si[] = [
-                    'statut-id' => $statut->getId(),
-                    'role-id'   => $statut->getRoleId(),
-                    'role-name' => $statut->getTypeIntervenant()->getLibelle(),
-                ];
-            }
-            $cc->statutsInfo = $si;
+        $si      = [];
+        $statuts = $this->getServiceStatutIntervenant()->getList();
+        foreach ($statuts as $statut) {
+            $si[] = [
+                'statut-id' => $statut->getId(),
+                'role-id'   => $statut->getRoleId(),
+                'role-name' => $statut->getTypeIntervenant()->getLibelle(),
+            ];
         }
 
-        return $cc->statutsInfo;
+        return $si;
     }
 
 

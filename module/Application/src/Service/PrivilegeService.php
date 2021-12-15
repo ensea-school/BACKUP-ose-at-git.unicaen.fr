@@ -27,20 +27,12 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
      */
     public function getPrivilegesRoles()
     {
-        if (null === $this->privilegesRoles) {
-            $cc = $this->getCacheContainer();
-            if (!isset($cc->privilegesRoles)) {
-                $cc->privilegesRoles = $this->makePrivilegesRoles();
-            }
-            $this->privilegesRoles = $cc->privilegesRoles;
-        }
-
-        return $this->privilegesRoles;
+        return $this->getCacheContainer()->privilegesRoles('makePrivilegesRoles');
     }
 
 
 
-    private function makePrivilegesRoles()
+    public function makePrivilegesRoles()
     {
         $privilegesRoles = [];
         $sql             = 'SELECT * FROM v_privileges_roles';

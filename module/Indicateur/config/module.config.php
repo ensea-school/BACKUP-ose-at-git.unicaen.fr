@@ -22,11 +22,10 @@ return [
             'may_terminate' => true,
             'child_routes'  => [
                 'result'                  => [
-                    'route'       => '/result/:indicateur[/structure/:structure]',
+                    'route'       => '/result/:indicateur',
                     'action'      => 'result',
                     'constraints' => [
                         'indicateur' => '[0-9]*',
-                        'structure'  => '[0-9]*',
                     ],
                 ],
                 'abonner'                 => [

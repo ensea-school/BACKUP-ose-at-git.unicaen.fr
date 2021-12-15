@@ -16,15 +16,17 @@ trait CacheContainerTrait
      *
      * @return CacheContainer
      */
-    public function getCacheContainer($class=null)
+    public function getCacheContainer($class = null)
     {
-        /** @var CacheService $cacheService */
-        $cacheService = \Application::$container->get(CacheService::class);
+        if (!isset($this->__cacheContainer)) {
+            /** @var CacheService $cacheService */
+            $cacheService = \Application::$container->get(CacheService::class);
 
-        if (!$class) $class = $this;
-        $container = new CacheContainer($cacheService, $class);
+            if (!$class) $class = $this;
+            $this->__cacheContainer = new CacheContainer($cacheService, $class);
+        }
 
-        return $container;
+        return $this->__cacheContainer;
     }
 
 }

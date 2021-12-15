@@ -9,9 +9,7 @@
 
 namespace Application;
 
-use Application\Service\ContextService;
-use Psr\Container\ContainerInterface;
-use Laminas\ModuleManager\ModuleManager;
+use Application\ORM\RouteEntitiesInjector;
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ModuleManager\Feature\ConsoleUsageProviderInterface;
@@ -34,8 +32,10 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
     public function onBootstrap(MvcEvent $e)
     {
+        $container = $e->getApplication()->getServiceManager();
+
         if (empty(\Application::$container)) {
-            \Application::$container = $e->getApplication()->getServiceManager();
+            \Application::$container = $container;
         }
 
         $eventManager        = $e->getApplication()->getEventManager();
@@ -52,84 +52,15 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             }
         );
 
-        $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'injectRouteEntitiesInEvent'], -90);
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, $container->get(RouteEntitiesInjector::class), -90);
 
         /** @var $userContext \UnicaenAuth\Service\UserContext */
-        $userContext = \Application::$container->get('UnicaenAuth\Service\UserContext');
-        $adapter     = \Application::$container->get('ZfcUser\Authentication\Adapter\AdapterChain');
+        $userContext = $container->get('UnicaenAuth\Service\UserContext');
+        $adapter     = $container->get('ZfcUser\Authentication\Adapter\AdapterChain');
 
         $adapter->getEventManager()->attach('logout', function ($e) use ($userContext) {
             $userContext->setSelectedIdentityRole(null);
         });
-    }
-
-
-
-    /**
-     * Recherche de chaque entité spécifiée par son identifiant dans la requête courante,
-     * et injection de cette entité dans l'événement MVC courant.
-     *
-     * @param \Laminas\Mvc\MvcEvent $e
-     *
-     * @see Service\NavigationPagesProvider
-     */
-    public function injectRouteEntitiesInEvent(MvcEvent $e)
-    {
-        $sm     = $e->getApplication()->getServiceManager();
-        $params = $e->getRouteMatch()->getParams();
-        foreach ($params as $name => $value) {
-            $entityService = $this->getEntityService($sm, $name);
-
-            if ($entityService instanceof Service\AbstractEntityService) {
-                switch ($name) {
-                    case 'intervenant':
-                        /* @var $role \Application\Acl\Role */
-                        $role   = $sm->get(ContextService::class)->getSelectedIdentityRole();
-                        $entity = $entityService->getByRouteParam($value);
-                        if ($role && $role->getIntervenant()) {
-                            if ($role->getIntervenant()->getCode() != $entity->getCode()) {
-                                $entity = $role->getIntervenant(); // c'est l'intervenant du rôle qui prime
-                            } else {
-                                $role->setIntervenant($entity); // Si c'est la même personne, on lui donne sa fiche d'ID demandée
-                            }
-                        }
-                        $e->setParam($name, $entity);
-                    break;
-                    case 'typeAgrementCode':
-                        $entity = $entityService->getByCode($value);
-                        $e->setParam('typeAgrement', $entity);
-                    break;
-                    default:
-                        $entity = $entityService->get($value);
-                        $e->setParam($name, $entity);
-                }
-            }
-        }
-    }
-
-
-
-    private function getEntityService(ContainerInterface $container, $paramName)
-    {
-        if (empty($this->modules)) {
-            $moduleManager = $container->get('ModuleManager');
-            /* @var $moduleManager ModuleManager */
-
-            $this->modules = $moduleManager->getModules();
-        }
-
-        if ('typeAgrementCode' === $paramName) {
-            $paramName = 'typeAgrement';
-        }
-
-        foreach ($this->modules as $module) {
-            $serviceName = $module . '\\Service\\' . ucfirst($paramName) . 'Service';
-            if ($container->has($serviceName)) {
-                return $container->get($serviceName);
-            }
-        }
-
-        return null;
     }
 
 

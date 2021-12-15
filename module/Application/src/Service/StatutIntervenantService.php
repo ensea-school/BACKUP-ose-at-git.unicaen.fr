@@ -5,7 +5,6 @@ namespace Application\Service;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Laminas\Loader\StandardAutoloader;
 
 /**
  * Description of StatutIntervenant

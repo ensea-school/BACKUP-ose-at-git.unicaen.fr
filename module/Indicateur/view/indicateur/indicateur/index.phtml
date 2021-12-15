@@ -31,7 +31,7 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
     <?php foreach ($indicateurs as $typeIndicateur): ?>
         <div class="panel panel-default indicateurs">
             <div class="panel-heading"><?= $typeIndicateur ?></div>
-            <table class="table table-bordered table-condensed">
+            <table class="table table-bordered table-condensed type-indicateur" data-id="<?= $typeIndicateur->getId() ?>">
                 <thead>
                 <tr>
                     <th class="numero">N°</th>
@@ -56,7 +56,7 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                         <td class="numero">
                             <?= $indicateur->getNumero() ?>
                         </td>
-                        <td class="intitule" data-url="<?= $urlResult ?>"></td>
+                        <td class="intitule" data-url="<?= $urlResult ?>" style="width:70%"></td>
 
                         <?php if ($showAbonnements): ?>
                             <td class="page-accueil">
@@ -89,8 +89,16 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                 that.element.find('td.intitule').html(
                     'Calcul de l\'indicateur en cours <span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
                 );
+                that.element.find('.type-indicateur').each(function () {
+                    that.calculerType($(this).data('id'));
+                });
+            },
 
-                $.post("<?= $this->url('indicateur/calcul') ?>", [], function (data)
+            calculerType: function (typeIndicateur)
+            {
+                var that = this;
+
+                $.post("<?= $this->url('indicateur') ?>" + "/calcul/" + typeIndicateur, [], function (data)
                     {
                         for (id in data) {
                             var td = that.element.find('.indicateur#' + id).find('.intitule');
@@ -107,11 +115,14 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                     alertFlash(jqXHR.responseText, 'danger', 5000);
                     console.log(jqXHR);
                 });
+
             },
 
             _create: function ()
             {
-                this.calculer();
+                var that = this;
+
+                setTimeout(function () {that.calculer()}, 100);
             },
 
         });

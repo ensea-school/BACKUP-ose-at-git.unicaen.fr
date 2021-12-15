@@ -2,6 +2,7 @@
 
 namespace Indicateur\Service;
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Service\AbstractService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -20,6 +21,49 @@ use Indicateur\Entity\Db\Indicateur;
 class IndicateurService extends AbstractService
 {
     use IntervenantServiceAwareTrait;
+    use CacheContainerTrait;
+
+
+    protected function getViewDef(int $numero): string
+    {
+        $view    = 'V_INDICATEUR_' . $numero;
+        $sql     = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME = '$view'";
+        $viewDef = $this->getEntityManager()->getConnection()->fetchAssociative($sql, [])['TEXT'];
+
+        return $viewDef;
+    }
+
+
+
+    protected function fetchData(Indicateur $indicateur, string $select): array
+    {
+        $numero    = $indicateur->getNumero();
+        $structure = $this->getServiceContext()->getStructure();
+        $annee     = $this->getServiceContext()->getAnnee();
+
+        $viewDef = $this->getViewDef($numero);
+
+        $params = [
+            'annee' => $annee->getId(),
+        ];
+        $sql    = "SELECT
+          $select
+        FROM
+          ($viewDef) indic
+          JOIN intervenant i ON i.id = indic.intervenant_id AND i.histo_destruction IS NULL
+          JOIN statut_intervenant si ON si.id = i.statut_id AND si.non_autorise = 0
+          LEFT JOIN structure s ON s.id = indic.structure_id
+        WHERE
+          i.annee_id = :annee  
+        ";
+        if ($structure) {
+            $params['structure'] = $structure->getId();
+            $sql                 .= ' AND (indic.structure_id = :structure OR indic.structure_id IS NULL)';
+        }
+
+        return $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
+    }
+
 
 
     /**
@@ -30,6 +74,19 @@ class IndicateurService extends AbstractService
      */
     private function getBaseQueryBuilder(Indicateur $indicateur)
     {
+        $numero = $indicateur->getNumero();
+        $sql    = "
+          SELECT
+            indic.*,
+          FROM        
+            (SELECT * FROM V_INDICATEUR_$numero) indic
+            JOIN intervenant i ON i.id = indic.intervenant_id i.histo_destruction IS NULL
+            JOIN structure s ON s.id = indic.structure_id
+
+          WHERE
+        ";
+
+
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->from(\Indicateur\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero(), 'indicateur');
         $qb->join('indicateur.intervenant', 'intervenant');
@@ -66,10 +123,10 @@ class IndicateurService extends AbstractService
      */
     public function getCount(Indicateur $indicateur)
     {
-        $qb = $this->getBaseQueryBuilder($indicateur);
-        $qb->addSelect('COUNT(' . ($indicateur->isDistinct() ? 'DISTINCT ' : '') . 'indicateur.intervenant) result');
+        $select = "COUNT(DISTINCT i.id) NB";
+        $data   = $this->fetchData($indicateur, $select);
 
-        return (integer)$qb->getQuery()->getResult()[0]['result'];
+        return (integer)$data[0]['NB'];
     }
 
 

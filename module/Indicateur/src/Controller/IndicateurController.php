@@ -118,11 +118,13 @@ class IndicateurController extends AbstractController
 
     public function calculAction()
     {
-        $dql = "
-        SELECT i FROM " . Indicateur::class . " i WHERE i.enabled = TRUE";
+        /** @var TypeIndicateur $typeindicateur */
+        $typeindicateur = $this->params()->fromRoute('typeIndicateur');
+
+        $dql = "SELECT i FROM " . Indicateur::class . " i WHERE i.enabled = TRUE AND i.typeIndicateur = :type";
 
         /** @var Indicateur[] $indicateurs */
-        $indicateurs = $this->em()->createQuery($dql)->execute();
+        $indicateurs = $this->em()->createQuery($dql)->execute(['type' => $typeindicateur]);
         $data        = [];
         foreach ($indicateurs as $indicateur) {
             $count = $this->getServiceIndicateur()->getCount($indicateur);

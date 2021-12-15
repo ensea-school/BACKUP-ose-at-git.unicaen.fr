@@ -22,8 +22,11 @@ return [
             'may_terminate' => true,
             'child_routes'  => [
                 'calcul'                  => [
-                    'route'  => '/calcul',
-                    'action' => 'calcul',
+                    'route'       => '/calcul/:typeIndicateur',
+                    'action'      => 'calcul',
+                    'constraints' => [
+                        'typeIndicateur' => '[0-9]*',
+                    ],
                 ],
                 'result'                  => [
                     'route'       => '/result/:indicateur',

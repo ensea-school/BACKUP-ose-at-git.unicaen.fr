@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "710e141b708033be141b1f3bd51113f7",
+    "content-hash": "bf5e10dc1f0369a98fcd99076d8e0495",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7751,11 +7751,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "a76bf749793d7e9f8b381655c40363dcd46a4dc8"
+                "reference": "fab5b530556ff656d95b3551ec9facf64dc0618f"
             },
             "require": {
                 "beberlei/assert": "^2.9",
@@ -7811,7 +7811,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2021-12-10T09:29:19+00:00"
+            "time": "2021-12-15T10:17:53+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -7908,11 +7908,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.0.3",
+            "version": "6.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "e4cbbdb13e01c66b63162b754a2b4f5a7fcaba8d"
+                "reference": "e781da1b244a9132722de2f0ec0143464b945cb6"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7929,7 +7929,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2021-12-08T09:51:14+00:00"
+            "time": "2021-12-15T10:22:51+00:00"
         },
         {
             "name": "unicaen/import",
@@ -7979,11 +7979,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "dev-laminas_migration",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "7164e12648b8adac8141e120f62eec671cb22948"
+                "reference": "d1b4719f4c9f34665e5d89656de8bdfebe34a126"
             },
             "require": {
                 "laminas/laminas-mail": "^2.10",
@@ -8008,7 +8008,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2021-11-24T16:17:14+00:00"
+            "time": "2021-12-08T14:39:24+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -8205,9 +8205,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "unicaen/siham": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

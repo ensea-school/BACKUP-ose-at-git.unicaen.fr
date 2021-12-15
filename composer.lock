@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b662e1fe4c4de190ac998ce218f5a82",
+    "content-hash": "bf5e10dc1f0369a98fcd99076d8e0495",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3463,25 +3463,24 @@
         },
         {
             "name": "laminas/laminas-file",
-            "version": "2.8.3",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-file.git",
-                "reference": "cb0bf270cc3e7a4d7dd780b573e2481a09951993"
+                "reference": "e72846e943cfc3ac6578e4e69b259e741e6c9e05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-file/zipball/cb0bf270cc3e7a4d7dd780b573e2481a09951993",
-                "reference": "cb0bf270cc3e7a4d7dd780b573e2481a09951993",
+                "url": "https://api.github.com/repos/laminas/laminas-file/zipball/e72846e943cfc3ac6578e4e69b259e741e6c9e05",
+                "reference": "e72846e943cfc3ac6578e4e69b259e741e6c9e05",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-stdlib": "^2.7.7 || ^3.1",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
             },
-            "replace": {
-                "zendframework/zend-file": "self.version"
+            "conflict": {
+                "zendframework/zend-file": "*"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
@@ -3491,7 +3490,7 @@
                 "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
                 "laminas/laminas-session": "^2.8",
                 "laminas/laminas-validator": "^2.10.1",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2"
+                "phpunit/phpunit": "^9.3.0"
             },
             "suggest": {
                 "laminas/laminas-filter": "Laminas\\Filter component",
@@ -3499,12 +3498,6 @@
                 "laminas/laminas-validator": "Laminas\\Validator component"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.8.x-dev",
-                    "dev-develop": "2.9.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Laminas\\File\\": "src/"
@@ -3528,7 +3521,13 @@
                 "rss": "https://github.com/laminas/laminas-file/releases.atom",
                 "source": "https://github.com/laminas/laminas-file"
             },
-            "time": "2019-12-31T16:51:52+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2021-12-08T06:58:52+00:00"
         },
         {
             "name": "laminas/laminas-filter",
@@ -5062,23 +5061,23 @@
         },
         {
             "name": "laminas/laminas-mvc-plugin-prg",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc-plugin-prg.git",
-                "reference": "054b0a4c69d095de64869652ac24be89213f8d8f"
+                "reference": "f35eb80cbe8c0e1a5d8966e3b0a24fbaeb902f56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/054b0a4c69d095de64869652ac24be89213f8d8f",
-                "reference": "054b0a4c69d095de64869652ac24be89213f8d8f",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/f35eb80cbe8c0e1a5d8966e3b0a24fbaeb902f56",
+                "reference": "f35eb80cbe8c0e1a5d8966e3b0a24fbaeb902f56",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-mvc": "^3.0",
                 "laminas/laminas-session": "^2.8.5",
                 "laminas/laminas-stdlib": "^3.3.0",
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.3 || ~8.0.0 || ~8.1.0"
             },
             "conflict": {
                 "zendframework/zend-mvc-plugin-prg": "*"
@@ -5122,51 +5121,49 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-06T01:02:43+00:00"
+            "time": "2021-12-15T12:48:38+00:00"
         },
         {
             "name": "laminas/laminas-navigation",
-            "version": "2.12.0",
+            "version": "2.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-navigation.git",
-                "reference": "1d29047b49ea978756e6f10921ec3e96f5bc6147"
+                "reference": "a4343098b50942df1edcc2b035780068bac17ed5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-navigation/zipball/1d29047b49ea978756e6f10921ec3e96f5bc6147",
-                "reference": "1d29047b49ea978756e6f10921ec3e96f5bc6147",
+                "url": "https://api.github.com/repos/laminas/laminas-navigation/zipball/a4343098b50942df1edcc2b035780068bac17ed5",
+                "reference": "a4343098b50942df1edcc2b035780068bac17ed5",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-stdlib": "^2.7 || ^3.0",
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.4 || ~8.0.0 || ~8.1.0"
             },
             "conflict": {
                 "zendframework/zend-navigation": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "laminas/laminas-config": "^2.6 || ^3.1",
-                "laminas/laminas-console": "^2.6",
-                "laminas/laminas-http": "^2.6",
-                "laminas/laminas-i18n": "^2.7.3",
-                "laminas/laminas-log": "^2.9.1",
-                "laminas/laminas-mvc": "^2.7.9 || ^3.0.4",
-                "laminas/laminas-permissions-acl": "^2.6",
-                "laminas/laminas-router": "^3.0.2",
-                "laminas/laminas-servicemanager": "^3.2.1",
-                "laminas/laminas-uri": "^2.5.2",
-                "laminas/laminas-view": "^2.9",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.4.1"
+                "laminas/laminas-coding-standard": "^2.3.0",
+                "laminas/laminas-config": "^3.7.0",
+                "laminas/laminas-http": "^2.15.1",
+                "laminas/laminas-i18n": "^2.13.0",
+                "laminas/laminas-mvc": "^3.3.0",
+                "laminas/laminas-permissions-acl": "^2.9.0",
+                "laminas/laminas-router": "^3.5.0",
+                "laminas/laminas-servicemanager": "^3.10.0",
+                "laminas/laminas-uri": "^2.9.1",
+                "laminas/laminas-view": "^2.14.2",
+                "phpspec/prophecy-phpunit": "^2.0.1",
+                "phpunit/phpunit": "^9.5.10"
             },
             "suggest": {
-                "laminas/laminas-config": "^2.6 || ^3.1, to provide page configuration (optional, as arrays and Traversables are also allowed)",
-                "laminas/laminas-permissions-acl": "^2.6, to provide ACL-based access restrictions to pages",
-                "laminas/laminas-router": "^3.0, to use router-based URI generation with Mvc pages",
-                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3, to use the navigation factories",
-                "laminas/laminas-view": "^2.8.1, to use the navigation view helpers"
+                "laminas/laminas-config": "^3.7, to provide page configuration (optional, as arrays and Traversables are also allowed)",
+                "laminas/laminas-permissions-acl": "^2.9, to provide ACL-based access restrictions to pages",
+                "laminas/laminas-router": "^3.5, to use router-based URI generation with Mvc pages",
+                "laminas/laminas-servicemanager": "^3.10, to use the navigation factories",
+                "laminas/laminas-view": "^2.14, to use the navigation view helpers"
             },
             "type": "library",
             "extra": {
@@ -5204,7 +5201,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-06T01:40:32+00:00"
+            "time": "2021-12-12T19:57:52+00:00"
         },
         {
             "name": "laminas/laminas-paginator",
@@ -6794,23 +6791,23 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.4.0",
+            "version": "v5.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "ec3661faca1d110d6c307e124b44f99ac54179e3"
+                "reference": "9130e1a0fc93cb0faadca4ee917171bd2ca9e5f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/ec3661faca1d110d6c307e124b44f99ac54179e3",
-                "reference": "ec3661faca1d110d6c307e124b44f99ac54179e3",
+                "url": "https://api.github.com/repos/symfony/console/zipball/9130e1a0fc93cb0faadca4ee917171bd2ca9e5f4",
+                "reference": "9130e1a0fc93cb0faadca4ee917171bd2ca9e5f4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
                 "symfony/deprecation-contracts": "^2.1|^3",
                 "symfony/polyfill-mbstring": "~1.0",
-                "symfony/polyfill-php73": "^1.8",
+                "symfony/polyfill-php73": "^1.9",
                 "symfony/polyfill-php80": "^1.16",
                 "symfony/service-contracts": "^1.1|^2|^3",
                 "symfony/string": "^5.1|^6.0"
@@ -6873,7 +6870,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.4.0"
+                "source": "https://github.com/symfony/console/tree/v5.4.1"
             },
             "funding": [
                 {
@@ -6889,7 +6886,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-29T15:30:56+00:00"
+            "time": "2021-12-09T11:22:43+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -7615,16 +7612,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.4.0",
+            "version": "v5.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "89ab66eaef230c9cd1992de2e9a1b26652b127b9"
+                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/89ab66eaef230c9cd1992de2e9a1b26652b127b9",
-                "reference": "89ab66eaef230c9cd1992de2e9a1b26652b127b9",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
+                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
                 "shasum": ""
             },
             "require": {
@@ -7684,7 +7681,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.4.0"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.4.1"
             },
             "funding": [
                 {
@@ -7700,7 +7697,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-29T15:30:56+00:00"
+            "time": "2021-12-01T15:04:08+00:00"
         },
         {
             "name": "true/punycode",
@@ -7754,11 +7751,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "4.0.0",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "8e86b7ed64351e7a4005293ead0b6698df3f4a95"
+                "reference": "fab5b530556ff656d95b3551ec9facf64dc0618f"
             },
             "require": {
                 "beberlei/assert": "^2.9",
@@ -7791,9 +7788,9 @@
                 "laminas/laminas-servicemanager": "^3.4",
                 "laminas/laminas-session": "^2.8",
                 "laminas/laminas-view": "^2.11",
-                "mpdf/mpdf": "^7.1 || ^8.0",
+                "mpdf/mpdf": "^8.0",
                 "ocramius/proxy-manager": "^2.0",
-                "php": ">=5.6 || >=7.0"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "laminas/laminas-test": "^3.2",
@@ -7814,22 +7811,22 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2021-11-30T10:13:11+00:00"
+            "time": "2021-12-15T10:17:53+00:00"
         },
         {
             "name": "unicaen/auth",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "ab3b5f332c2ae6e6c4c67112f599846ce3749f58"
+                "reference": "4df82caf8e40c16ebfd96473f423e945ee5f766c"
             },
             "require": {
                 "jasig/phpcas": "^1.3",
                 "laminas/laminas-dependency-plugin": "^2.1",
                 "ramsey/uuid": "^3.7",
-                "unicaen/app": "4.0.0",
-                "unicaen/bjy-authorize": "4.0.0"
+                "unicaen/app": "^4.0",
+                "unicaen/bjy-authorize": "^4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.6"
@@ -7845,15 +7842,15 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2021-11-30T10:32:57+00:00"
+            "time": "2021-12-09T16:06:15+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bjy-authorize.git",
-                "reference": "5440e989778bc94dcc4ac59b85d144215c2bc790"
+                "reference": "d7097ef757303a3306d61cc375407e1e82f88652"
             },
             "require": {
                 "doctrine/common": "^2.7",
@@ -7865,8 +7862,8 @@
                 "laminas/laminas-permissions-acl": "^2.7",
                 "laminas/laminas-servicemanager": "^3.4",
                 "laminas/laminas-view": "^2.11",
-                "php": ">=7.3",
-                "unicaen/zfc-user": "4.0.0"
+                "php": ">=7.4",
+                "unicaen/zfc-user": "^4.0"
             },
             "require-dev": {
                 "laminas/laminas-developer-tools": "^1.2",
@@ -7907,15 +7904,15 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2021-11-30T10:25:52+00:00"
+            "time": "2021-12-10T09:24:28+00:00"
         },
         {
             "name": "unicaen/code",
-            "version": "6.0.3",
+            "version": "6.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "e4cbbdb13e01c66b63162b754a2b4f5a7fcaba8d"
+                "reference": "e781da1b244a9132722de2f0ec0143464b945cb6"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7932,18 +7929,18 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2021-12-08T09:51:14+00:00"
+            "time": "2021-12-15T10:22:51+00:00"
         },
         {
             "name": "unicaen/import",
-            "version": "4.0.2",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "bfadb53b02daf9333cc337d1f7f0d32df998a26a"
+                "reference": "1da8efb3df41a045429c56b3691c7c755e33d4d7"
             },
             "require": {
-                "unicaen/auth": ">=4.0.0"
+                "unicaen/auth": "^4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7"
@@ -7958,7 +7955,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2021-11-30T10:39:50+00:00"
+            "time": "2021-12-10T10:12:54+00:00"
         },
         {
             "name": "unicaen/open-document",
@@ -8015,14 +8012,14 @@
         },
         {
             "name": "unicaen/tbl",
-            "version": "5.0.2",
+            "version": "5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "16e34fbaaf4b1899bb83527716b9c64e7180a3a3"
+                "reference": "7d068f34ece2c0ba1bb09628a54c7f6c75c19347"
             },
             "require": {
-                "unicaen/app": ">=4.0.0"
+                "unicaen/app": "^4.0"
             },
             "type": "library",
             "autoload": {
@@ -8034,15 +8031,15 @@
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2021-11-30T10:42:09+00:00"
+            "time": "2021-12-10T10:15:05+00:00"
         },
         {
             "name": "unicaen/zfc-user",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/zfc-user.git",
-                "reference": "6f242d9638ea4f4bed83be38fa873aa44dd034d5"
+                "reference": "dfef6dfba649c0a6cee7e2938f32948fe93576ff"
             },
             "require": {
                 "laminas/laminas-authentication": "^2.5",
@@ -8064,7 +8061,7 @@
                 "laminas/laminas-stdlib": "^3.0",
                 "laminas/laminas-validator": "^2.8",
                 "laminas/laminas-view": "^2.8",
-                "php": "^5.5|^7.0"
+                "php": "^7.4"
             },
             "require-dev": {
                 "laminas/laminas-captcha": "^2.6",
@@ -8085,7 +8082,7 @@
                 ]
             },
             "description": "A generic user registration and authentication module for ZF2. Supports Laminas\\Db and Doctrine2.",
-            "time": "2021-11-30T10:22:57+00:00"
+            "time": "2021-12-10T09:12:21+00:00"
         },
         {
             "name": "webimpress/safe-writer",

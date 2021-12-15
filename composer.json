@@ -16,6 +16,6 @@
         "unicaen/import"         : "^4.0",
         "unicaen/tbl"            : "^5.0",
         "unicaen/open-document"  : "^4.0",
-        "unicaen/siham"          : "dev-laminas_migration"
+        "unicaen/siham"          : "^2.0"
     }
 }

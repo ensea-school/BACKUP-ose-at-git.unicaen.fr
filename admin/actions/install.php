@@ -62,14 +62,13 @@ if ($composerExists) {
     // Récupération des dépendances
     $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
     $c->println("\nPasser composer sur la version stable en cours et non la dev", $c::COLOR_LIGHT_CYAN);
-    $c->passthru("cd $osedir;composer  self-update --1");
+    $c->passthru("cd $osedir;composer  self-update --2");
     $c->passthru("cd $osedir;composer install");
 } else {
     // Récupération de Composer
     $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
-    $c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
-    $c->println("\nPasser composer sur la version stable en cours et non la dev", $c::COLOR_LIGHT_CYAN);
-    $c->passthru("cd $osedir;php composer.phar  self-update --1");
+    $c->passthru("cd $osedir;wget https://getcomposer.org/download/latest-2.x/composer.phar");
+
     // Récupération des dépendances
     $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
     $c->passthru("cd $osedir;php composer.phar install");

@@ -61,7 +61,8 @@ class IndicateurProcessus extends AbstractProcessus
                     $now = new \DateTime();
                     $now->setTime($now->format('H'), 0, 0); // raz minutes et secondes
                     $ni->setDateDernNotif($now);
-                    $this->getServiceNotificationIndicateur()->save($ni);
+                    $this->getEntityManager()->persist($ni);
+                    $this->getEntityManager()->flush($ni);
                 }
             }
         }

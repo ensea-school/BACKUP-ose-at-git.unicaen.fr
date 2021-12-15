@@ -46,13 +46,13 @@ class IndicateurService extends AbstractService
 
         /* Filtrage par structure, si nécessaire */
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = null;
         if ($role) {
             $structure = $role->getStructure();
         }
         if ($structure) {
             $sign = $indicateur->isNotStructure() ? '<>' : '=';
-            //$qb->andWhere('indicateur.structure IS NULL OR indicateur.structure ' . $sign . ' ' . $structure->getId());
             $qb->andWhere('indicateur.structure ' . $sign . ' ' . $structure->getId());
         }
 

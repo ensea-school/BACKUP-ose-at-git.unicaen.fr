@@ -18,6 +18,7 @@ Objectif : Plafonds personnalisables
 * Les plafonds sont maintenant personnalisables : vous pouvez les modifier en retirer ou en créer
 * [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
 * Des dérogations aux plafonds sont possibles par intervenant
+* Paramétrage du mail expéditeur du contrat (Tâche #41014)
 
 ## Corrections de bugs
 

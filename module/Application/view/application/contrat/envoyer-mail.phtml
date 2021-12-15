@@ -1,0 +1,34 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ */
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo $this->form()->openTag($form); ?>
+
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('expediteur-mail')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('destinataire-mail')); ?>
+        <?= $this->formControlGroup($form->get('destinataire-mail-hide')); ?>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('destinataire-cc-mail')); ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('security')); ?>
+        <?= $this->formSubmit($form->get('submit')); ?>
+    </div>
+</div>
+<?= $this->form()->closeTag(); ?>

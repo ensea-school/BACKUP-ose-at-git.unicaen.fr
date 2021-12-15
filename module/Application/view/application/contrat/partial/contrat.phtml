@@ -23,7 +23,7 @@ $urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
     : null;
 
 $urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
-    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()])
+    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
     : null;
 
 
@@ -65,13 +65,9 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                        title="L'intervenant du contrat n'a pas renseigné son email.">
                 <?php endif; ?>
                         <?php if (!$disableEmail): ?>
-                    <a class="btn btn-<?= $panel ?> pop-ajax"
+                    <a data-event="envoi-mail-contrat" class="ajax-modal btn btn-<?= $panel ?>"
                        title="Envoyer le contrat par mail"
-                       data-content="Souhaitez vous vraiment envoyer le contrat par email ?"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-cancel-button="Non"
-                       data-submit-reload="true"
+
                        href="<?= $urlEmail ?>">
                 <?php endif; ?>
                 <span class="glyphicon glyphicon-send"></span> Envoyer par mail

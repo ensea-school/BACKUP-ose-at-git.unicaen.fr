@@ -18,7 +18,8 @@ foreach ($contrats as $contrat) {
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 
-$this->messenger()->addMessagesFromFlashMessenger();
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
 if ($services['non-contractualises']) {
     $this->messenger()->addMessage('Des heures prévisionnelles d\'enseignement validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'danger');
 } else {
@@ -105,10 +106,10 @@ $this->messenger() ?>
 <?= $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
 
 <script>
-    $("body").on("event-contrat-suppr event-contrat-validation event-validation-suppr event-saisie-retour-suppr", function (event, data)
+    $("body").on("envoi-mail-contrat", function (event, data)
     {
         console.log('event envoyé et affiché');
-        //event.div.modal('hide'); // ferme la fenêtre modale
-        //window.location.reload();
+        event.div.modal('hide'); // ferme la fenêtre modale
+        window.location.reload();
     });
 </script>

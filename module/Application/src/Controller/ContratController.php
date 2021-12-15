@@ -10,6 +10,7 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
+use Application\Form\Contrat\Traits\EnvoiMailContratFormAwareTrait;
 use Application\Form\Contrat\Traits\ModeleFormAwareTrait;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
@@ -54,6 +55,7 @@ class ContratController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ModeleContratServiceAwareTrait;
     use ModeleFormAwareTrait;
+    use EnvoiMailContratFormAwareTrait;
 
     private $renderer;
 
@@ -345,44 +347,58 @@ class ContratController extends AbstractController
         /**
          * @var Contrat $contrat
          */
+
+
         $contrat = $this->getEvent()->getParam('contrat');
 
         if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
             throw new UnAuthorizedException("Interdiction d'envoyer le contrat par email");
         }
-
-        //Récupération email intervenant (Perso puis unicaen)
         $intervenant        = $contrat->getIntervenant();
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailDossierPerso  = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
         $emailIntervenant   = (!empty($emailDossierPerso)) ? $emailDossierPerso : $intervenant->getEmailPro();
-        if (!empty($emailIntervenant)) {
-            try {
-                //Utilisation ici du parametre email
-                $html = $this->getServiceParametres()->get('contrat_modele_mail');
-                //Ajout pour transformer les sauts de lignes en html <br/>
-                $html = nl2br($html);
+        $emailExpediteur    = (!empty($this->getServiceParametres()->get('contrat_mail_expediteur'))) ? $this->getServiceParametres()->get('contrat_mail_expediteur') : $this->getServiceContext()->getUtilisateur()->getEmail();
+        $form               = $this->getFormEnvoiMailContrat();
+        $form->get('destinataire-mail')->setValue($emailIntervenant);
+        $form->get('destinataire-mail-hide')->setValue($emailIntervenant);
+        $form->get('expediteur-mail')->setValue($emailExpediteur);
 
-                //Personnalisation des variables
-                $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
-                $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
-                $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
-                $html         = str_replace([':intervenant', ':utilisateur', ':annee'], [$vIntervenant, $vUtilisateur, $vAnnee], $html);
-                $subject      = $this->getServiceParametres()->get('contrat_modele_mail_objet');
-                $subject      = str_replace(':intervenant', $vIntervenant, $subject);
-                $message      = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $subject);
 
-                $mail           = $this->mail()->send($message);
-                $dateEnvoiEmail = new DateTime();
-                $contrat->setDateEnvoiEmail($dateEnvoiEmail);
-                $this->getServiceContrat()->save($contrat);
-                $this->flashMessenger()->addSuccessMessage('Contrat bien envoyé par email à ' . $emailIntervenant);
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
+        if ($this->getRequest()->isPost()) {
+            if (!empty($emailIntervenant)) {
+                try {
+                    //Utilisation ici du parametre email
+                    $html = $this->getServiceParametres()->get('contrat_modele_mail');
+                    //Ajout pour transformer les sauts de lignes en html <br/>
+                    $html = nl2br($html);
+                    //Personnalisation des variables
+                    $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
+                    $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
+                    $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
+                    $html         = str_replace([':intervenant', ':utilisateur', ':annee'], [$vIntervenant, $vUtilisateur, $vAnnee], $html);
+                    $subject      = $this->getServiceParametres()->get('contrat_modele_mail_objet');
+                    $subject      = str_replace(':intervenant', $vIntervenant, $subject);
+                    $from         = $this->getRequest()->getPost('expediteur-mail');
+                    $to           = $this->getRequest()->getPost('destinataire-mail-hide');
+                    $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
+
+                    $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject);
+
+                    $mail           = $this->mail()->send($message);
+                    $dateEnvoiEmail = new DateTime();
+                    $contrat->setDateEnvoiEmail($dateEnvoiEmail);
+                    $this->getServiceContrat()->save($contrat);
+                    $this->flashMessenger()->addSuccessMessage('Contrat bien envoyé par email à ' . $emailIntervenant);
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                }
             }
+
+            return $this->getResponse();
         }
 
-        return $this->getResponse();
+        return compact('form');
     }
 
 

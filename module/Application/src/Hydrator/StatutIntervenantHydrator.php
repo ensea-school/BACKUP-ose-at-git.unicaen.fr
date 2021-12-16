@@ -72,6 +72,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setDossierEmployeur($data['dossier-employeur']);
         $object->setDossierEmailPerso($data['dossier-email-perso']);
         $object->setDossierTelPerso($data['dossier-tel-perso']);
+        $object->setPrioritaireIndicateurs((bool)$data['prioritaire-indicateurs']);
 
         if (!empty($data['id'])) {
             $champsAutres = [];
@@ -181,6 +182,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'dossier-employeur'               => $object->getDossierEmployeur(),
             'dossier-email-perso'             => $object->getDossierEmailPerso(),
             'dossier-tel-perso'               => $object->getDossierTelPerso(),
+            'prioritaire-indicateurs'         => $object->isPrioritaireIndicateurs(),
         ];
 
         /*Gestion des champs autres*/

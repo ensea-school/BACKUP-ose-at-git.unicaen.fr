@@ -219,7 +219,9 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     /**
      * @var string
      */
-    protected $codeRh;
+    protected      $codeRh;
+
+    protected bool $prioritaireIndicateurs = false;
 
 
 
@@ -1346,6 +1348,30 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
 
 
+    /**
+     * @return bool
+     */
+    public function isPrioritaireIndicateurs(): bool
+    {
+        return $this->prioritaireIndicateurs;
+    }
+
+
+
+    /**
+     * @param bool $prioritaireIndicateurs
+     *
+     * @return StatutIntervenant
+     */
+    public function setPrioritaireIndicateurs(bool $prioritaireIndicateurs): StatutIntervenant
+    {
+        $this->prioritaireIndicateurs = $prioritaireIndicateurs;
+
+        return $this;
+    }
+
+
+    
     /**
      * Add champ autre
      *

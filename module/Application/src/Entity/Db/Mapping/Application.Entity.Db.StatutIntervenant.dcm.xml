@@ -49,6 +49,7 @@
         <field name="dossierEmployeur" type="boolean" column="DOSSIER_EMPLOYEUR" nullable="false"/>
         <field name="dossierEmailPerso" type="boolean" column="DOSSIER_EMAIL_PERSO" nullable="false"/>
         <field name="dossierTelPerso" type="boolean" column="DOSSIER_TEL_PERSO" nullable="false"/>
+        <field name="prioritaireIndicateurs" type="boolean" column="PRIORITAIRE_INDICATEURS" nullable="false"/>
         <many-to-many field="champsAutres" target-entity="Application\Entity\Db\DossierAutre" fetch="EXTRA_LAZY">
             <join-table name="DOSSIER_CHAMP_AUTRE_PAR_STATUT">
                 <join-columns>

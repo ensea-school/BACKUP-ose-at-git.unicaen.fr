@@ -736,16 +736,12 @@ return [
     ],
     'INDICATEUR'                     => [
         'ID',
-        'TYPE',
         'ORDRE',
         'ENABLED',
         'NUMERO',
         'LIBELLE_PLURIEL',
         'LIBELLE_SINGULIER',
-        'MESSAGE',
         'ROUTE',
-        'TEM_DISTINCT',
-        'TEM_NOT_STRUCTURE',
         'TYPE_INDICATEUR_ID',
     ],
     'INDIC_MODIF_DOSSIER'            => [

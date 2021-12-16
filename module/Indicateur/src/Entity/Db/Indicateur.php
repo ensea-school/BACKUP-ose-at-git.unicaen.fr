@@ -24,13 +24,7 @@ class Indicateur
 
     private string         $libellePluriel   = 'Nouvel indicateur';
 
-    private ?string        $message;
-
     private string         $route            = 'intervenant/voir';
-
-    private bool           $distinct         = true;
-
-    private bool           $notStructure     = false;
 
     private Collection     $notification;
 
@@ -212,30 +206,6 @@ class Indicateur
 
 
     /**
-     * @return string|null
-     */
-    public function getMessage(): ?string
-    {
-        return $this->message;
-    }
-
-
-
-    /**
-     * @param string|null $message
-     *
-     * @return Indicateur
-     */
-    public function setMessage(?string $message): Indicateur
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-
-
-    /**
      * @return string
      */
     public function getRoute(): string
@@ -253,54 +223,6 @@ class Indicateur
     public function setRoute(string $route): Indicateur
     {
         $this->route = $route;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isDistinct(): bool
-    {
-        return $this->distinct;
-    }
-
-
-
-    /**
-     * @param bool $distinct
-     *
-     * @return Indicateur
-     */
-    public function setDistinct(bool $distinct): Indicateur
-    {
-        $this->distinct = $distinct;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isNotStructure(): bool
-    {
-        return $this->notStructure;
-    }
-
-
-
-    /**
-     * @param bool $notStructure
-     *
-     * @return Indicateur
-     */
-    public function setNotStructure(bool $notStructure): Indicateur
-    {
-        $this->notStructure = $notStructure;
 
         return $this;
     }

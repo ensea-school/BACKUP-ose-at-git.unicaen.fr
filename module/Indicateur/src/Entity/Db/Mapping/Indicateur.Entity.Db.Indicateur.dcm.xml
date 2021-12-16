@@ -9,11 +9,7 @@
     <field name="enabled" type="boolean" column="ENABLED" nullable="false"/>
     <field name="libelleSingulier" type="string" column="LIBELLE_SINGULIER" length="255" nullable="false"/>
     <field name="libellePluriel" type="string" column="LIBELLE_PLURIEL" length="255" nullable="false"/>
-    <field name="message" type="string" column="MESSAGE" length="800" nullable="true"/>
     <field name="route" type="string" column="ROUTE" length="250" nullable="false"/>
-    <field name="distinct" type="boolean" column="TEM_DISTINCT" nullable="false"/>
-    <field name="notStructure" type="boolean" column="TEM_NOT_STRUCTURE" nullable="false"/>
-
     <many-to-one field="typeIndicateur" target-entity="Indicateur\Entity\Db\TypeIndicateur">
       <join-column name="TYPE_INDICATEUR_ID" referenced-column-name="ID"/>
     </many-to-one>

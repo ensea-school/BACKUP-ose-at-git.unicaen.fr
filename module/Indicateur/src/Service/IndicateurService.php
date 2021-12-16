@@ -35,7 +35,7 @@ class IndicateurService extends AbstractService
 
 
 
-    protected function fetchData(Indicateur $indicateur, string $select): array
+    protected function fetchData(Indicateur $indicateur, bool $onlyCount = true): array
     {
         $numero    = $indicateur->getNumero();
         $structure = $this->getServiceContext()->getStructure();
@@ -46,7 +46,25 @@ class IndicateurService extends AbstractService
         $params = [
             'annee' => $annee->getId(),
         ];
-        $sql    = "SELECT
+        if ($onlyCount) {
+            $select  = "COUNT(DISTINCT i.id) NB";
+            $orderBy = "";
+        } else {
+            $select  = "
+            i.annee_id                 \"annee-id\",
+            si.libelle                 \"statut-libelle\",
+            si.prioritaire_indicateurs \"prioritaire\",
+            i.code_rh                  \"intervenant-code\",
+            i.prenom                   \"intervenant-prenom\",
+            i.nom_usuel                \"intervenant-nom\",
+            i.email_perso              \"intervenant-email-perso\",
+            i.email_pro                \"intervenant-email-pro\",
+            s.libelle_court            \"structure-libelle\",
+            indic.*";
+            $orderBy = " ORDER BY si.prioritaire_indicateurs DESC, s.libelle_court, i.nom_usuel, i.prenom";
+        }
+
+        $sql = "SELECT
           $select
         FROM
           ($viewDef) indic
@@ -54,66 +72,16 @@ class IndicateurService extends AbstractService
           JOIN statut_intervenant si ON si.id = i.statut_id AND si.non_autorise = 0
           LEFT JOIN structure s ON s.id = indic.structure_id
         WHERE
-          i.annee_id = :annee  
+          i.annee_id = :annee
+          AND si.non_autorise = 0  
         ";
         if ($structure) {
             $params['structure'] = $structure->getId();
             $sql                 .= ' AND (indic.structure_id = :structure OR indic.structure_id IS NULL)';
         }
+        $sql .= $orderBy;
 
         return $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
-    }
-
-
-
-    /**
-     * @param Indicateur $indicateur Indicateur concerné
-     * @param null       $structure
-     *
-     * @return QueryBuilder
-     */
-    private function getBaseQueryBuilder(Indicateur $indicateur)
-    {
-        $numero = $indicateur->getNumero();
-        $sql    = "
-          SELECT
-            indic.*,
-          FROM        
-            (SELECT * FROM V_INDICATEUR_$numero) indic
-            JOIN intervenant i ON i.id = indic.intervenant_id i.histo_destruction IS NULL
-            JOIN structure s ON s.id = indic.structure_id
-
-          WHERE
-        ";
-
-
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->from(\Indicateur\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero(), 'indicateur');
-        $qb->join('indicateur.intervenant', 'intervenant');
-        $qb->join('intervenant.statut', 'statut');
-        $qb->andWhere('statut.nonAutorise = 0');
-
-        /* Filtrage par intervenant */
-        //$qb->join('indicateur.intervenant', 'intervenant');
-
-        //$this->getServiceIntervenant()->finderByHistorique($qb, 'intervenant');
-        //$this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb, 'intervenant');
-
-        $qb->andWhere('indicateur.annee = :annee')->setParameter('annee', $this->getServiceContext()->getAnnee());
-
-        /* Filtrage par structure, si nécessaire */
-
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure = null;
-        if ($role) {
-            $structure = $role->getStructure();
-        }
-        if ($structure) {
-            $sign = $indicateur->isNotStructure() ? '<>' : '=';
-            $qb->andWhere('indicateur.structure ' . $sign . ' ' . $structure->getId());
-        }
-
-        return $qb;
     }
 
 
@@ -123,8 +91,7 @@ class IndicateurService extends AbstractService
      */
     public function getCount(Indicateur $indicateur)
     {
-        $select = "COUNT(DISTINCT i.id) NB";
-        $data   = $this->fetchData($indicateur, $select);
+        $data = $this->fetchData($indicateur, true);
 
         return (integer)$data[0]['NB'];
     }
@@ -134,30 +101,57 @@ class IndicateurService extends AbstractService
     /**
      * @param Indicateur $indicateur Indicateur concerné
      *
-     * @return Indicateur\AbstractIndicateur[]
+     * @return array
      */
-    public function getResult(Indicateur $indicateur)
+    public function getResult(Indicateur $indicateur): array
     {
-        $qb = $this->getBaseQueryBuilder($indicateur);
-
-        //$qb->join('indicateur.intervenant', 'intervenant');
-
-        $qb->addSelect('indicateur');
-        $qb->addSelect('partial intervenant.{id, nomUsuel, prenom, emailPerso, emailPro, code}');
-
-        $qb->addSelect('partial structure.{id, libelleCourt, libelleLong}');
-        $qb->leftJoin('indicateur.structure', 'structure');
-
-        $indicateurClass = \Indicateur\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero();
-        $indicateurClass::appendQueryBuilder($qb);
-        $qb->addOrderBy('structure.libelleCourt');
-        $this->getServiceIntervenant()->orderBy($qb, 'intervenant');
-
-        $entities = $qb->getQuery()->execute();
-        /* @var $entities Indicateur\AbstractIndicateur[] */
+        $data   = $this->fetchData($indicateur, false);
         $result = [];
-        foreach ($entities as $entity) {
-            $result[$entity->getId()] = $entity;
+
+        foreach ($data as $d) {
+            $id = (int)$d['INTERVENANT_ID'];
+            // on initialise les données communes à tous les indicateurs
+            if (!isset($result[$id])) {
+                $result[$id] = [
+                    'annee-id'                => (int)$d['annee-id'],
+                    'statut-libelle'          => $d['statut-libelle'],
+                    'prioritaire'             => (bool)$d['prioritaire'],
+                    'intervenant-code'        => $d['intervenant-code'],
+                    'intervenant-prenom'      => $d['intervenant-prenom'],
+                    'intervenant-nom'         => $d['intervenant-nom'],
+                    'intervenant-email-pro'   => $d['intervenant-email-pro'],
+                    'intervenant-email-perso' => $d['intervenant-email-perso'],
+                ];
+            }
+
+            // on n'en a plus besoin pour la suite
+            unset($d['annee-id']);
+            unset($d['statut-libelle']);
+            unset($d['prioritaire']);
+            unset($d['intervenant-code']);
+            unset($d['intervenant-prenom']);
+            unset($d['intervenant-nom']);
+            unset($d['intervenant-email-pro']);
+            unset($d['intervenant-email-perso']);
+            unset($d['INTERVENANT_ID']);
+            unset($d['STRUCTURE_ID']);
+
+            // on injecte les données supplémentaires s'il y en a
+            foreach ($d as $field => $value) {
+                if (array_key_exists($field, $result[$id])) {
+                    if (is_array($result[$id][$field])) {
+                        if (!in_array($value, $result[$id][$field])) {
+                            $result[$id][$field][] = $value;
+                        }
+                    } else {
+                        if ($result[$id][$field] !== $value) {
+                            $result[$id][$field] = [$result[$id][$field], $value];
+                        }
+                    }
+                } else {
+                    $result[$id][$field] = $value;
+                }
+            }
         }
 
         return $result;

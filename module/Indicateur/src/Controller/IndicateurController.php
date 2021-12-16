@@ -15,7 +15,6 @@ use Application\Service\Traits\DossierServiceAwareTrait;
 use Indicateur\Service\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
-use Application\Filter\IntervenantEmailFormatter;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
@@ -233,30 +232,24 @@ class IndicateurController extends AbstractController
         /* @var $indicateur Indicateur */
 
         $intervenantsStringIds = $this->params()->fromQuery('intervenants', $this->params()->fromPost('intervenants', null));
-        if ($intervenantsStringIds) {
-            $intervenantsIds = explode('-', $intervenantsStringIds);
-        } else {
-            $intervenantsIds = [];
-        }
 
+        $result = $this->getServiceIndicateur()->getResult($indicateur);
 
-        $result       = $this->getServiceIndicateur()->getResult($indicateur);
-        $intervenants = [];
-        foreach ($result as $index => $indicRes) {
-            $intervenant = $indicRes->getIntervenant();
-            if (empty($intervenantsIds) || in_array($intervenant->getId(), $intervenantsIds)) {
-                $intervenants[$intervenant->getId()] = $intervenant;
+        $emails                  = [];
+        $intervenantsWithNoEmail = [];
+        foreach ($result as $intervenantId => $indicRes) {
+            $email = $indicRes['intervenant-email-perso'] ?: $indicRes['intervenant-email-pro'];
+            if ($email) {
+                $emails[$email] = $indicRes['intervenant-nom'] . ' ' . $indicRes['intervenant-prenom'];
+            } else {
+                $intervenantsWithNoEmail[$intervenantId] = $indicRes;
             }
         }
 
-        $formatter = new IntervenantEmailFormatter();
-        $formatter->setServiceDossier($this->getServiceDossier());
-        $emails                  = $formatter->filter($intervenants);
-        $intervenantsWithNoEmail = $formatter->getIntervenantsWithNoEmail();
-        $mailer                  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
-        $from                    = $mailer->getFrom();
-        $subject                 = $mailer->getDefaultSubject();
-        $body                    = $mailer->getDefaultBody();
+        $mailer  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
+        $from    = $mailer->getFrom();
+        $subject = $mailer->getDefaultSubject();
+        $body    = $mailer->getDefaultBody();
 
         $form = new Form();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -279,7 +272,7 @@ class IndicateurController extends AbstractController
                     $emailUtilisateur[$utilisateur->getEmail()] = $utilisateur->getDisplayName();
                     $mailer->sendCopyEmail($emailUtilisateur, $emails, $post);
                 }
-                $count   = count($intervenants);
+                $count   = count($result);
                 $pluriel = $count > 1 ? 's' : '';
                 $this->flashMessenger()->addSuccessMessage("Le mail a été envoyé à $count intervenant$pluriel");
                 $this->redirect()->toRoute('indicateur/result', ['indicateur' => $indicateur->getId()]);
@@ -506,7 +499,7 @@ class IndicateurIntervenantsMailer
 
         // corps au format HTML
         $html = $this->renderer->render('indicateur/indicateur/mail/intervenants', [
-            'phrase'    => $this->indicateur->getMessage(),
+            'phrase'    => '',
             'signature' => $context->getUtilisateur(),
             'structure' => $context->getStructure(),
         ]);

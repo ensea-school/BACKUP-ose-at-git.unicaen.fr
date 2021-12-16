@@ -420,7 +420,6 @@ return [
     'Application\Entity\VolumeHoraireReferentielListe'                                                   => __DIR__ . '/src/Entity/VolumeHoraireReferentielListe.php',
     'Application\Entity\WorkflowEtape'                                                                   => __DIR__ . '/src/Entity/WorkflowEtape.php',
     'Application\Filter\FloatFromString'                                                                 => __DIR__ . '/src/Filter/FloatFromString.php',
-    'Application\Filter\IntervenantEmailFormatter'                                                       => __DIR__ . '/src/Filter/IntervenantEmailFormatter.php',
     'Application\Filter\StringFromFloat'                                                                 => __DIR__ . '/src/Filter/StringFromFloat.php',
     'Application\Form\AbstractFieldset'                                                                  => __DIR__ . '/src/Form/AbstractFieldset.php',
     'Application\Form\AbstractForm'                                                                      => __DIR__ . '/src/Form/AbstractForm.php',

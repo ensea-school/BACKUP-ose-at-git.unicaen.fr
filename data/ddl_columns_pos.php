@@ -746,6 +746,7 @@ return [
         'ROUTE',
         'TEM_DISTINCT',
         'TEM_NOT_STRUCTURE',
+        'TYPE_INDICATEUR_ID',
     ],
     'INDIC_MODIF_DOSSIER'            => [
         'ID',
@@ -1311,6 +1312,7 @@ return [
         'DOSSIER_INSEE',
         'DOSSIER_TEL_PERSO',
         'TEM_VA',
+        'PRIORITAIRE_INDICATEURS',
     ],
     'STATUT_PRIVILEGE'               => [
         'STATUT_ID',

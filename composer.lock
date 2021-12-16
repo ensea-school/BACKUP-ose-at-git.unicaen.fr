@@ -5061,23 +5061,23 @@
         },
         {
             "name": "laminas/laminas-mvc-plugin-prg",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc-plugin-prg.git",
-                "reference": "054b0a4c69d095de64869652ac24be89213f8d8f"
+                "reference": "f35eb80cbe8c0e1a5d8966e3b0a24fbaeb902f56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/054b0a4c69d095de64869652ac24be89213f8d8f",
-                "reference": "054b0a4c69d095de64869652ac24be89213f8d8f",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/f35eb80cbe8c0e1a5d8966e3b0a24fbaeb902f56",
+                "reference": "f35eb80cbe8c0e1a5d8966e3b0a24fbaeb902f56",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-mvc": "^3.0",
                 "laminas/laminas-session": "^2.8.5",
                 "laminas/laminas-stdlib": "^3.3.0",
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.3 || ~8.0.0 || ~8.1.0"
             },
             "conflict": {
                 "zendframework/zend-mvc-plugin-prg": "*"
@@ -5121,7 +5121,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-06T01:02:43+00:00"
+            "time": "2021-12-15T12:48:38+00:00"
         },
         {
             "name": "laminas/laminas-navigation",

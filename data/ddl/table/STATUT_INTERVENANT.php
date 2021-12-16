@@ -465,6 +465,18 @@ return [
             'position'    => 35,
             'commentaire' => NULL,
         ],
+        'PRIORITAIRE_INDICATEURS'        => [
+            'name'        => 'PRIORITAIRE_INDICATEURS',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 45,
+            'commentaire' => NULL,
+        ],
         'SERVICE_STATUTAIRE'             => [
             'name'        => 'SERVICE_STATUTAIRE',
             'type'        => 'float',

@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'INDICATEUR_ID_SEQ',
     'columns'     => [
-        'ENABLED'           => [
+        'ENABLED'            => [
             'name'        => 'ENABLED',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 4,
             'commentaire' => 'Témoin indiquant si l\'indicateur est actif ou non',
         ],
-        'ID'                => [
+        'ID'                 => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +33,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE_PLURIEL'   => [
+        'LIBELLE_PLURIEL'    => [
             'name'        => 'LIBELLE_PLURIEL',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -45,7 +45,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'LIBELLE_SINGULIER' => [
+        'LIBELLE_SINGULIER'  => [
             'name'        => 'LIBELLE_SINGULIER',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -57,7 +57,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'MESSAGE'           => [
+        'MESSAGE'            => [
             'name'        => 'MESSAGE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -69,7 +69,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'NUMERO'            => [
+        'NUMERO'             => [
             'name'        => 'NUMERO',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +81,7 @@ return [
             'position'    => 5,
             'commentaire' => 'Numero unique pérenne user-friendly',
         ],
-        'ORDRE'             => [
+        'ORDRE'              => [
             'name'        => 'ORDRE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -93,7 +93,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ROUTE'             => [
+        'ROUTE'              => [
             'name'        => 'ROUTE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -105,7 +105,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'TEM_DISTINCT'      => [
+        'TEM_DISTINCT'       => [
             'name'        => 'TEM_DISTINCT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -117,7 +117,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'TEM_NOT_STRUCTURE' => [
+        'TEM_NOT_STRUCTURE'  => [
             'name'        => 'TEM_NOT_STRUCTURE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -129,7 +129,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'TYPE'              => [
+        'TYPE'               => [
             'name'        => 'TYPE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -140,6 +140,18 @@ return [
             'default'     => NULL,
             'position'    => 2,
             'commentaire' => 'Type de l\'indicateur (alerte, info, etc.)',
+        ],
+        'TYPE_INDICATEUR_ID' => [
+            'name'        => 'TYPE_INDICATEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 12,
+            'commentaire' => NULL,
         ],
     ],
 ];

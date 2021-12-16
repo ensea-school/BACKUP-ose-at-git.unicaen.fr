@@ -230,6 +230,7 @@ class IndicateurController extends AbstractController
         $form = new Form();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->add((new Text('from'))->setValue($from));
+        $form->add(new Text('cci'));
         $form->add((new Text('nombre'))->setValue(count($emails)));
         $form->add((new Text('subject'))->setValue($subject));
         $form->add((new Textarea('body'))->setValue($body));
@@ -247,6 +248,14 @@ class IndicateurController extends AbstractController
                     $utilisateur                                = $this->getServiceContext()->getUtilisateur();
                     $emailUtilisateur[$utilisateur->getEmail()] = $utilisateur->getDisplayName();
                     $mailer->sendCopyEmail($emailUtilisateur, $emails, $post);
+                }
+                if ($post['cci'] && !empty($post['cci'])) {
+                    $emailsCci = explode(';', $post['cci']);
+                    foreach ($emailsCci as $emailCci) {
+                        $listEmailsCci            = [];
+                        $listEmailsCci[$emailCci] = $emailCci;
+                        $mailer->sendCopyEmail($listEmailsCci, $emails, $post);
+                    }
                 }
                 $count   = count($intervenants);
                 $pluriel = $count > 1 ? 's' : '';

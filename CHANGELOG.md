@@ -19,6 +19,7 @@ Objectif : Plafonds personnalisables
 * [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
 * Des dérogations aux plafonds sont possibles par intervenant
 * Paramétrage du mail expéditeur du contrat (Tâche #41014)
+* Possibilité d'envoyer en cci l'email des indicateurs (#40999)
 
 ## Corrections de bugs
 

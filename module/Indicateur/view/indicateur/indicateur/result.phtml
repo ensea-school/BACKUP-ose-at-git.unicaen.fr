@@ -64,6 +64,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                         <?php if ($mailUrl): ?>
                             <th>&nbsp;</th>
                         <?php endif; ?>
+                        <th><span title="Public à traiter en priorité">Prioritaire</span></th>
                         <th>Composante</th>
                         <th>Intervenant</th>
                         <?php foreach ($supCols as $supCol): ?>
@@ -77,6 +78,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                             <?php if ($mailUrl): ?>
                                 <th class="cc"><input type="checkbox" checked="checked" value="<?= $intervenantId ?>" class="indic-intervenant"/></th>
                             <?php endif; ?>
+                            <td style="text-align: center"><?= $r['prioritaire'] ? '<span class="glyphicon glyphicon-star"></span>' : '' ?></td>
                             <td><?php printValue($r['structure-libelle']); ?></td>
                             <td>
                                 <a href="<?= $this->url($indicateur->getRoute(), ['intervenant' => $intervenantId]) ?>">

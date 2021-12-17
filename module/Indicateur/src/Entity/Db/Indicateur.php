@@ -26,6 +26,8 @@ class Indicateur
 
     private string         $route            = 'intervenant/voir';
 
+    private bool           $irrecevables     = false;
+
     private Collection     $notification;
 
 
@@ -223,6 +225,30 @@ class Indicateur
     public function setRoute(string $route): Indicateur
     {
         $this->route = $route;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isIrrecevables(): bool
+    {
+        return $this->irrecevables;
+    }
+
+
+
+    /**
+     * @param bool $irrecevables
+     *
+     * @return Indicateur
+     */
+    public function setIrrecevables(bool $irrecevables): Indicateur
+    {
+        $this->irrecevables = $irrecevables;
 
         return $this;
     }

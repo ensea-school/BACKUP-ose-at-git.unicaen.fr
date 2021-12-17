@@ -33,6 +33,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'IRRECEVABLES'       => [
+            'name'        => 'IRRECEVABLES',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 9,
+            'commentaire' => NULL,
+        ],
         'LIBELLE_PLURIEL'    => [
             'name'        => 'LIBELLE_PLURIEL',
             'type'        => 'string',

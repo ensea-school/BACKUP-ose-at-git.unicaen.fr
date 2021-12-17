@@ -743,6 +743,7 @@ return [
         'LIBELLE_SINGULIER',
         'ROUTE',
         'TYPE_INDICATEUR_ID',
+        'IRRECEVABLES',
     ],
     'INDIC_MODIF_DOSSIER'            => [
         'ID',
@@ -820,6 +821,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'EXPORT_DATE',
+        'IRRECEVABLE',
     ],
     'INTERVENANT_DOSSIER'            => [
         'ID',

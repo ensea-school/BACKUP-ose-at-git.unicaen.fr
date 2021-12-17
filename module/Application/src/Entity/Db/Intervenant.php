@@ -279,7 +279,9 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var \DateTime
      */
-    protected $exportDate;
+    protected      $exportDate;
+
+    protected bool $irrecevable = false;
 
 
 
@@ -1581,6 +1583,30 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
 
+    /**
+     * @return bool
+     */
+    public function isIrrecevable(): bool
+    {
+        return $this->irrecevable;
+    }
+
+
+
+    /**
+     * @param bool $irrecevable
+     *
+     * @return Intervenant
+     */
+    public function setIrrecevable(bool $irrecevable): Intervenant
+    {
+        $this->irrecevable = $irrecevable;
+
+        return $this;
+    }
+
+
+    
     /**
      * Get validation
      *

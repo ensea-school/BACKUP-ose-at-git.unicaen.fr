@@ -74,6 +74,9 @@ class IndicateurService extends AbstractService
           i.annee_id = :annee
           AND si.non_autorise = 0  
         ";
+        if (!$indicateur->isIrrecevables()) {
+            $sql .= ' AND i.irrecevable = 0';
+        }
         if ($structure) {
             $params['structure'] = $structure->getId();
             $sql                 .= ' AND (indic.structure_id = :structure OR indic.structure_id IS NULL)';

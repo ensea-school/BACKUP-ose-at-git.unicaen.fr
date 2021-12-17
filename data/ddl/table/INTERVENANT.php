@@ -465,6 +465,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'IRRECEVABLE'              => [
+            'name'        => 'IRRECEVABLE',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 60,
+            'commentaire' => NULL,
+        ],
         'MONTANT_INDEMNITE_FC'     => [
             'name'        => 'MONTANT_INDEMNITE_FC',
             'type'        => 'float',

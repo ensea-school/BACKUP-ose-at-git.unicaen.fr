@@ -63,6 +63,7 @@ class EditionForm extends AbstractForm
         'sourceCode'         => ['type' => 'string'],
         'syncStatut'         => ['type' => 'bool'],
         'syncStructure'      => ['type' => 'bool'],
+        'irrecevable'        => ['type' => 'bool'],
         'montantIndemniteFc' => ['type' => 'float'],
         'validiteDebut'      => ['type' => \DateTime::class],
         'validiteFin'        => ['type' => \DateTime::class],
@@ -342,6 +343,14 @@ class EditionForm extends AbstractForm
                 'title' => 'Si pas coché, alors la structure ne sera plus définie par le connecteur, mais uniquement par la valeur renseignée ci-dessus',
             ],
             'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name'    => 'irrecevable',
+            'options' => [
+                'label' => 'Fiche considérée comme irrecevable (sortie des indicateurs)',
+            ],
+            'type'    => 'Checkbox',
         ]);
 
         $this->add([

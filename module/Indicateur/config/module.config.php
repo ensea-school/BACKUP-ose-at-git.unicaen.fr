@@ -35,6 +35,13 @@ return [
                         'indicateur' => '[0-9]*',
                     ],
                 ],
+                'export-csv'              => [
+                    'route'       => '/export-csv/:indicateur',
+                    'action'      => 'export-csv',
+                    'constraints' => [
+                        'indicateur' => '[0-9]*',
+                    ],
+                ],
                 'abonner'                 => [
                     'route'       => '/abonner/:indicateur',
                     'action'      => 'abonner',
@@ -122,7 +129,7 @@ return [
     'guards' => [
         [
             'controller' => 'Indicateur\Controller\Indicateur',
-            'action'     => ['index', 'calcul', 'result', 'abonnements', 'depassement-charges'],
+            'action'     => ['index', 'calcul', 'result', 'abonnements', 'depassement-charges', 'export-csv'],
             'privileges' => [Privileges::INDICATEUR_VISUALISATION],
         ],
         [

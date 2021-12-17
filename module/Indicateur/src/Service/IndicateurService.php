@@ -5,7 +5,6 @@ namespace Indicateur\Service;
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Service\AbstractService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Doctrine\ORM\QueryBuilder;
 use Indicateur\Entity\Db\Indicateur;
 
 
@@ -152,6 +151,24 @@ class IndicateurService extends AbstractService
                     $result[$id][$field] = $value;
                 }
             }
+        }
+
+        return $result;
+    }
+
+
+
+    public function getCsv(Indicateur $indicateur): array
+    {
+        $data   = $this->fetchData($indicateur, false);
+        $result = [];
+
+        foreach ($data as $d) {
+            unset($d['INTERVENANT_ID']);
+            unset($d['STRUCTURE_ID']);
+            $d['annee-id']    = $d['annee-id'] . '/' . ((int)$d['annee-id'] + 1);
+            $d['prioritaire'] = $d['prioritaire'] ? 'Oui' : 'Non';
+            $result[]         = $d;
         }
 
         return $result;

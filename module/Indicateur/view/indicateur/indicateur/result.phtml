@@ -100,6 +100,10 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             <i class="fa fa-undo" aria-hidden="true"></i>
             Retour à la liste des indicateurs
         </a>
+        <a class="btn btn-default" href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+            Export de la liste au format CSV
+        </a>
         <?php if ($mailUrl): ?>
             <a id="send-mail-link"
                class="btn btn-primary"

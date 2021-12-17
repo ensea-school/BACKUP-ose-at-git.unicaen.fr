@@ -2,6 +2,7 @@
 
 namespace Indicateur\Controller;
 
+use Application\Constants;
 use Application\Controller\AbstractController;
 use Indicateur\Entity\Db\IndicateurDepassementCharges;
 use Application\Entity\Db\Intervenant;
@@ -32,6 +33,7 @@ use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use UnicaenApp\View\Model\CsvModel;
 
 
 class IndicateurController extends AbstractController
@@ -146,6 +148,41 @@ class IndicateurController extends AbstractController
         $result     = $this->getServiceIndicateur()->getResult($indicateur);
 
         return compact('indicateur', 'result');
+    }
+
+
+
+    public function exportCsvAction()
+    {
+        /* @var $indicateur Indicateur */
+        $indicateur = $this->getEvent()->getParam('indicateur');
+        $result     = $this->getServiceIndicateur()->getCsv($indicateur);
+
+        $csvModel = new CsvModel();
+        if (!empty($result)) {
+            $heads = [
+                'annee-id'                => 'Année universitaire',
+                'statut-libelle'          => 'Statut de l\'intervenant',
+                'prioritaire'             => 'Prioritaire',
+                'intervenant-code'        => 'Code RH',
+                'intervenant-prenom'      => 'Prénom',
+                'intervenant-nom'         => 'Nom usuel',
+                'intervenant-email-perso' => 'Email personnel',
+                'intervenant-email-pro'   => 'Email professionnel',
+                'structure-libelle'       => 'Composante',
+            ];
+
+            $head = array_keys($result[0]);
+            foreach ($head as $i => $h) {
+                $head[$i] = $heads[$h] ?? $h;
+            }
+
+            $csvModel->setHeader($head);
+        }
+        $csvModel->addLines($result);
+        $csvModel->setFilename('indicateur-' . $indicateur->getNumero() . '-' . date('yyyy-mm-dd') . '.csv');
+
+        return $csvModel;
     }
 
 

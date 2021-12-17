@@ -20,7 +20,7 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
 
     protected $hydratorElements = [
         'id'               => ['type' => 'int'],
-        'code'             => ['type' => 'string'],
+        'numero'           => ['type' => 'int'],
         'libelle'          => ['type' => 'string'],
         'plafondPerimetre' => ['type' => PlafondPerimetre::class],
         'requete'          => ['type' => 'string'],
@@ -36,9 +36,9 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
         $this->setAttributes(['action' => $this->getCurrentUrl(), 'class' => 'plafond-form']);
 
         $this->add([
-            'name'    => 'code',
+            'name'    => 'numero',
             'options' => [
-                'label' => 'Code',
+                'label' => 'Numéro (3 chiffres max.)',
             ],
             'type'    => 'Text',
         ]);
@@ -98,7 +98,7 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
     public function getInputFilterSpecification()
     {
         return [
-            'code'             => [
+            'numero'           => [
                 'required' => true,
             ],
             'libelle'          => [

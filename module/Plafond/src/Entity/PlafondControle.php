@@ -9,60 +9,27 @@ namespace Plafond\Entity;
  */
 class PlafondControle
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private int    $id;
 
-    /**
-     * @var string
-     */
-    private $code;
+    private int    $numero;
 
-    /**
-     * @var string
-     */
-    private $libelle;
+    private string $libelle;
 
-    /**
-     * @var string
-     */
-    private $message;
+    private string $message;
 
-    /**
-     * @var string
-     */
-    private $perimetre;
+    private string $perimetre;
 
-    /**
-     * @var string
-     */
-    private $etat;
+    private string $etat;
 
-    /**
-     * @var bool
-     */
-    private $bloquant = false;
+    private bool   $bloquant    = false;
 
-    /**
-     * @var bool
-     */
-    private $depassement = false;
+    private bool   $depassement = false;
 
-    /**
-     * @var float
-     */
-    private $heures;
+    private float  $heures      = 0;
 
-    /**
-     * @var float
-     */
-    private $plafond;
+    private float  $plafond     = 0;
 
-    /**
-     * @var float
-     */
-    private $derogation;
+    private float  $derogation  = 0;
 
 
 
@@ -90,24 +57,16 @@ class PlafondControle
 
 
 
-    /**
-     * @return string
-     */
-    public function getCode(): string
+    public function getNumero(): int
     {
-        return $this->code;
+        return $this->numero;
     }
 
 
 
-    /**
-     * @param string $code
-     *
-     * @return PlafondControle
-     */
-    public function setCode(string $code): PlafondControle
+    public function setNumero(int $numero): PlafondControle
     {
-        $this->code = $code;
+        $this->numero = $numero;
 
         return $this;
     }
@@ -356,8 +315,8 @@ class PlafondControle
         if (isset($a['ID'])) {
             $pc->setId((int)$a['ID']);
         }
-        if (isset($a['CODE'])) {
-            $pc->setCode($a['CODE']);
+        if (isset($a['NUMERO'])) {
+            $pc->setNumero($a['NUMERO']);
         }
         if (isset($a['LIBELLE'])) {
             $pc->setLibelle($a['LIBELLE']);

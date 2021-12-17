@@ -12,30 +12,15 @@ class Plafond
 {
     use PlafondPerimetreAwareTrait;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected int        $id;
 
-    /**
-     * @var string
-     */
-    protected $code;
+    protected int        $numero  = 0;
 
-    /**
-     * @var string
-     */
-    protected $libelle;
+    protected string     $libelle = 'Nouveau plafond';
 
-    /**
-     * @var string
-     */
-    protected $requete;
+    protected string     $requete = '';
 
-    /**
-     * @var Collection
-     */
-    protected $plafondApplication;
+    protected Collection $plafondApplication;
 
 
 
@@ -46,9 +31,6 @@ class Plafond
 
 
 
-    /**
-     * @return int
-     */
     public function getId(): ?int
     {
         return $this->id;
@@ -56,46 +38,30 @@ class Plafond
 
 
 
-    /**
-     * @return string
-     */
-    public function getCode(): ?string
+    public function getNumero(): int
     {
-        return $this->code;
+        return $this->numero;
     }
 
 
 
-    /**
-     * @param string $code
-     *
-     * @return Plafond
-     */
-    public function setCode($code): Plafond
+    public function setNumero(int $numero): Plafond
     {
-        $this->code = $code;
+        $this->numero = $numero;
 
         return $this;
     }
 
 
 
-    /**
-     * @return string
-     */
-    public function getLibelle(): ?string
+    public function getLibelle(): string
     {
         return $this->libelle;
     }
 
 
 
-    /**
-     * @param string $libelle
-     *
-     * @return Plafond
-     */
-    public function setLibelle($libelle): Plafond
+    public function setLibelle(string $libelle): Plafond
     {
         $this->libelle = $libelle;
 
@@ -104,21 +70,13 @@ class Plafond
 
 
 
-    /**
-     * @return string|null
-     */
-    public function getRequete(): ?string
+    public function getRequete(): string
     {
         return $this->requete;
     }
 
 
 
-    /**
-     * @param string $requete
-     *
-     * @return Plafond
-     */
     public function setRequete(string $requete): Plafond
     {
         $this->requete = $requete;

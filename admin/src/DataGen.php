@@ -53,8 +53,9 @@ class DataGen
         ],
         [
             'table'   => 'PLAFOND',
-            'context' => ['install'],
-            'key'     => 'CODE',
+            'context' => ['install', 'update'],
+            'options' => ['update' => false, 'delete' => false],
+            'key'     => 'NUMERO',
         ],
         [
             'table'   => 'PLAFOND_ETAT',
@@ -639,12 +640,16 @@ class DataGen
         $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
 
-        foreach ($data['plafonds'] as $code => $libelle) {
-            $plafond    = [
-                'CODE'    => $code,
-                'LIBELLE' => $libelle,
+        foreach ($data['plafonds'] as $numero => $p) {
+            $psql        = 'SELECT id FROM plafond_perimetre WHERE code = :code';
+            $perimetreId = $this->oseAdmin->getBdd()->select($psql, ['code' => $p['perimetre']], ['fetch' => \BddAdmin\Bdd::FETCH_ONE])['ID'];
+            $plafond     = [
+                'NUMERO'               => $numero,
+                'LIBELLE'              => $p['libelle'],
+                'PLAFOND_PERIMETRE_ID' => $perimetreId,
+                'REQUETE'              => $p['requete'],
             ];
-            $plafonds[] = $plafond;
+            $plafonds[]  = $plafond;
         }
 
         return $plafonds;

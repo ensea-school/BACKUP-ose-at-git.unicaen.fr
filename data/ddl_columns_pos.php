@@ -1095,10 +1095,10 @@ return [
     ],
     'PLAFOND'                        => [
         'ID',
-        'CODE',
         'LIBELLE',
         'PLAFOND_PERIMETRE_ID',
         'REQUETE',
+        'NUMERO',
     ],
     'PLAFOND_APPLICATION'            => [
         'ID',

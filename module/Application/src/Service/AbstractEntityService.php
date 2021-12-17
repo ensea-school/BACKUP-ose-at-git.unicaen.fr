@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\StatutIntervenant;
 use Doctrine\ORM\EntityRepository;
 use Laminas\Hydrator\HydratorInterface;
-use Laminas\Hydrator\ObjectProperty;
+use Laminas\Hydrator\ObjectPropertyHydrator;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Exception\RuntimeException;
 use Doctrine\ORM\Query\Expr;
@@ -29,7 +29,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @var string[]
      */
-    private array $properties;
+    private array $properties = [];
 
 
 
@@ -428,7 +428,7 @@ abstract class AbstractEntityService extends AbstractService
     /**
      * Filtre une liste d'entités à partir d'un objet chargé de lui préciser les filtres à appliquer
      * Si l'hydrateur n'est pas précisé et que l'objet implémente HydratorAwareInterface, alors l'hydrateur de l'objet est
-     * utilisé. Si lhydrateur n'a toujours pas pu être déterminé, alors l'hydrateur ObjectProperty est utilisé.
+     * utilisé. Si lhydrateur n'a toujours pas pu être déterminé, alors l'hydrateur ObjectPropertyHydrator est utilisé.
      *
      * @param \StdClass         $object   Objet contenant les filtres
      * @param HydratorInterface $hydrator Hydrateur
@@ -445,7 +445,7 @@ abstract class AbstractEntityService extends AbstractService
             $hydrator = $object->getHydrator();
         }
         if (!$hydrator) {
-            $hydrator = new ObjectProperty();
+            $hydrator = new ObjectPropertyHydrator();
         }
 
         return $this->finderByFilterArray($hydrator->extract($object), $qb, $alias, $exclude);

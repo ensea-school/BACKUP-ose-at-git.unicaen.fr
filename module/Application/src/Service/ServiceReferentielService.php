@@ -72,7 +72,7 @@ class ServiceReferentielService extends AbstractEntityService
      *
      * @return array
      */
-    public function initQuery(QueryBuilder $qb = null, $alias = null, array $fields = [])
+    public function initQuery(QueryBuilder $qb = null, $alias = null, array $fields = []): array
     {
         [$qb, $alias] = parent::initQuery($qb, $alias, $fields);
 
@@ -429,11 +429,11 @@ class ServiceReferentielService extends AbstractEntityService
 
                 // pour ne pas écraser les serices précédemment saisis avec des heures
                 if (
-                !(
-                    $newService
-                    && $newService->estNonHistorise()
-                    && $newService->getVolumeHoraireReferentielListe()->getHeures() > 0
-                )
+                    !(
+                        $newService
+                        && $newService->estNonHistorise()
+                        && $newService->getVolumeHoraireReferentielListe()->getHeures() > 0
+                    )
                 ) {
                     $old[] = $o;
                 }

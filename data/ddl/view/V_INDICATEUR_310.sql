@@ -10,8 +10,6 @@ WITH caok AS (
     AND w.realisation = w.objectif
 )
 SELECT
-  rownum id,
-  w.annee_id,
   w.intervenant_id,
   w.structure_id
 FROM

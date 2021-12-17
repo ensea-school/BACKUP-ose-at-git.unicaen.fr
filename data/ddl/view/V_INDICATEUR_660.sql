@@ -1,8 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_660 AS
-SELECT rownum id, t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID" FROM
-(
 SELECT
-  w.annee_id,
   w.intervenant_id,
   i.structure_id
 FROM
@@ -22,4 +19,3 @@ GROUP BY
   w.annee_id,
   w.intervenant_id,
   i.structure_id
-) t

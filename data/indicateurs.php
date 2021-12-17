@@ -69,6 +69,7 @@ return [
         ],
     ],
 
+
     'Contrat / avenant' => [
         'id'          => 4,
         'indicateurs' => [
@@ -129,6 +130,7 @@ return [
         ],
     ],
 
+
     'Enseignements et référentiel' => [
         'id'          => 5,
         'indicateurs' => [
@@ -138,149 +140,54 @@ return [
                 'libelle_pluriel'   => '%s intervenants ont saisi des enseignements dont l\'étape, l\'élément pédagogique ou la période ont disparu',
                 'route'             => 'intervenant/services',
             ],
-            520 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a un total HC hors rémunération FC D714-60 <i>prévisionnel saisi</i> qui dépasse le plafond correspondant à son statut',
-                'libelle_pluriel'   => '%s intervenants ont un total HC hors rémunération FC D714-60 <i>prévisionnel saisi</i> qui dépasse le plafond correspondant à leur statut',
-                'route'             => 'intervenant/services',
-            ],
-            530 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a un total HC hors rémunération FC D714-60 <i>réalisé saisi</i> qui dépasse le plafond correspondant à son statut',
-                'libelle_pluriel'   => '%s intervenants ont un total HC hors rémunération FC D714-60 <i>réalisé saisi</i> qui dépasse le plafond correspondant à leur statut',
-                'route'             => 'intervenant/services-realises',
-            ],
-            540 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a un total HC <i>prévisionnel saisi</i> qui dépasse le plafond de la rémunération FC D714-60',
-                'libelle_pluriel'   => '%s intervenants ont un total HC <i>prévisionnel saisi</i> qui dépasse le plafond de la rémunération FC D714-60',
-                'route'             => 'intervenant/services',
-            ],
-            550 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a un total HC <i>réalisé saisi</i> qui dépasse le plafond de la rémunération FC D714-60',
-                'libelle_pluriel'   => '%s intervenants ont un total HC <i>réalisé saisi</i> qui dépasse le plafond de la rémunération FC D714-60',
-                'route'             => 'intervenant/services',
-            ],
-            560 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures équivalent TD (HETD) <i>prévisionnelles</i> au-delà du plafond autorisé de part son statut',
-                'libelle_pluriel'   => '%s intervenants ont des heures équivalent TD (HETD) <i>prévisionnelles</i> au-delà du plafond autorisé de part leur statut',
-                'route'             => 'intervenant/services',
-            ],
-            570 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures équivalent TD (HETD) <i>réalisées</i> au-delà du plafond autorisé de part son statut',
-                'libelle_pluriel'   => '%s intervenants ont des heures équivalent TD (HETD) <i>réalisées</i> au-delà du plafond autorisé de part leur statut',
-                'route'             => 'intervenant/services',
-            ],
-            580 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures équivalent TD (HETD) <i>prévisionnelles</i> en FI hors EAD au-delà du plafond autorisé de part son statut',
-                'libelle_pluriel'   => '%s intervenants ont des heures équivalent TD (HETD) <i>prévisionnelles</i> en FI hors EAD au-delà du plafond autorisé de part leur statut',
-                'route'             => 'intervenant/services',
-            ],
-            590 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures équivalent TD (HETD) <i>réalisées</i> en FI hors EAD au-delà du plafond autorisé de part son statut',
-                'libelle_pluriel'   => '%s intervenants ont des heures équivalent TD (HETD) <i>réalisées</i> en FI hors EAD au-delà du plafond autorisé de part leur statut',
-                'route'             => 'intervenant/services',
-            ],
         ],
     ],
+
 
     'Enseignements et référentiel <em>Permanents</em>' => [
         'id'          => 6,
         'indicateurs' => [
-            610  => [
+            610 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de ses enseignements <i>prévisionnels</i>',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leurs enseignements <i>prévisionnels</i>',
                 'route'             => 'intervenant/validation/service/prevu',
             ],
-            620  => [
+            620 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de son référentiel <i>prévisionnel</i>',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leur référentiel <i>prévisionnel</i>',
                 'route'             => 'intervenant/validation/referentiel/prevu',
             ],
-            630  => [
+            630 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent n\'a pas clôturé la saisie de ses services <i>réalisés</i>',
                 'libelle_pluriel'   => '%s permanents n\'ont pas clôturé la saisie de leurs services <i>réalisés</i>',
                 'route'             => 'intervenant/services-realises',
             ],
-            640  => [
+            640 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de ses enseignements <i>réalisés</i>',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leurs enseignements <i>réalisés</i>',
                 'route'             => 'intervenant/validation/service/realise',
             ],
-            650  => [
+            650 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de ses enseignements <i>réalisés</i> par d\'autres composantes',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leurs enseignements <i>réalisés</i> par d\'autres composantes',
                 'route'             => 'intervenant/validation/service/realise',
             ],
-            660  => [
+            660 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de son référentiel <i>réalisé</i>',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leur référentiel <i>réalisé</i>',
                 'route'             => 'intervenant/validation/referentiel/realise',
             ],
-            670  => [
+            670 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de son référentiel <i>réalisé</i> par d\'autres composantes',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leur référentiel <i>réalisé</i> par d\'autres composantes',
                 'route'             => 'intervenant/validation/referentiel/realise',
-            ],
-            680  => [
-                'enabled'           => false,
-                'libelle_singulier' => '%s intervenant a un total Référentiel <i>prévisionnel</i> qui dépasse le plafond correspondant à son statut',
-                'libelle_pluriel'   => '%s intervenants ont un total Référentiel <i>prévisionnel</i> qui dépasse les plafonds correspondant à leurs statuts',
-                'route'             => 'intervenant/services',
-            ],
-            690  => [
-                'enabled'           => false,
-                'libelle_singulier' => '%s intervenant a un total Référentiel <i>réalisé</i> qui dépasse le plafond correspondant à son statut',
-                'libelle_pluriel'   => '%s intervenants ont un total Référentiel <i>réalisé</i> qui dépasse le plafond correspondant à leur statut',
-                'route'             => 'intervenant/services-realises',
-            ],
-            1210 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour la fonction correspondante',
-                'libelle_pluriel'   => '%s intervenants ont des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour la fonction correspondante',
-                'route'             => 'intervenant/services',
-            ],
-            1211 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour le type de fonction correspondant',
-                'libelle_pluriel'   => '%s intervenants ont des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour le type de fonction correspondant',
-                'route'             => 'intervenant/services',
-            ],
-            1220 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour la fonction correspondante',
-                'libelle_pluriel'   => '%s intervenants ont des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour la fonction correspondante',
-                'route'             => 'intervenant/services',
-            ],
-            1221 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour le type de fonction correspondant',
-                'libelle_pluriel'   => '%s intervenants ont des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour le type de fonction correspondant',
-                'route'             => 'intervenant/services',
-            ],
-            1230 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour la composante correspondante',
-                'libelle_pluriel'   => '%s intervenants ont des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour la composante correspondante',
-                'route'             => 'intervenant/services',
-            ],
-            1240 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour la composante correspondante',
-                'libelle_pluriel'   => '%s intervenants ont des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour la composante correspondante',
-                'route'             => 'intervenant/services',
             ],
         ],
     ],
@@ -315,6 +222,7 @@ return [
         ],
     ],
 
+
     'Affectation' => [
         'id'          => 8,
         'indicateurs' => [
@@ -338,6 +246,7 @@ return [
             ],
         ],
     ],
+
 
     'Charges d\'enseignement' => [
         'id'          => 9,
@@ -369,6 +278,7 @@ return [
         ],
     ],
 
+
     'Mise en paiement <em>Vacataires</em>' => [
         'id'          => 10,
         'indicateurs' => [
@@ -386,6 +296,7 @@ return [
             ],
         ],
     ],
+
 
     'Mise en paiement <em>Permanents</em>' => [
         'id'          => 11,

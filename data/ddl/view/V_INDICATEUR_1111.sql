@@ -1,7 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1111 AS
-SELECT rownum id, t.ANNEE_ID,t.INTERVENANT_ID,t.STRUCTURE_ID FROM (
 SELECT DISTINCT
-  idc.annee_id,
   idc.intervenant_id,
   idc.structure_id
 FROM
@@ -11,4 +9,3 @@ FROM
 WHERE
   (p.code = 'S2' OR p.id IS NULL)
   AND tvh.code = 'PREVU'
-) t

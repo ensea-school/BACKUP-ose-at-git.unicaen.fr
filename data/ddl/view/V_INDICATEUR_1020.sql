@@ -1,8 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1020 AS
-SELECT rownum id, t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID" FROM
-(
 SELECT DISTINCT
-  w.annee_id,
   w.intervenant_id,
   i.structure_id
 FROM
@@ -16,4 +13,3 @@ WHERE
   AND wc.objectif = wc.realisation
   AND w.atteignable = 1
   AND w.objectif > w.realisation
-) t

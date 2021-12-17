@@ -1,10 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_320 AS
-SELECT
-  rownum id,
-  t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID"
-FROM (
 SELECT DISTINCT
-	w.annee_id,
 	w.intervenant_id,
 	w.structure_id
 FROM
@@ -22,4 +17,3 @@ WHERE
 	AND si.histo_destruction IS NULL
 	AND c.id IS NULL
 	AND si.peut_avoir_contrat = 1
-) t

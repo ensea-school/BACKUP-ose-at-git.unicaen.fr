@@ -1,7 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_340 AS
 SELECT
-  rownum id,
-  s.annee_id,
   s.intervenant_id,
   s.structure_id
 FROM

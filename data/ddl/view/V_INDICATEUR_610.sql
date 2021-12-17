@@ -1,11 +1,7 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_610 AS
-SELECT rownum id, t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID",t."STATUT_INTERVENANT_ID" FROM
-(
 SELECT DISTINCT
-  w.annee_id,
   w.intervenant_id,
-  w.structure_id,
-  w.statut_intervenant_id
+  w.structure_id
 FROM
   tbl_workflow w
 WHERE
@@ -13,4 +9,3 @@ WHERE
   AND w.type_intervenant_code = 'P'
   AND w.atteignable = 1
   AND w.objectif > w.realisation
-) t

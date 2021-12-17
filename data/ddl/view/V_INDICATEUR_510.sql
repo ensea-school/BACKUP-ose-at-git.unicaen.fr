@@ -1,10 +1,8 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_510 AS
-WITH t AS (
-SELECT
+SELECT DISTINCT
   s.intervenant_id,
-  s.annee_id,
   s.structure_id,
-  listagg( ep.source_code || ' - ' || ep.libelle, '||') WITHIN GROUP (ORDER BY ep.libelle) elements
+  ep.source_code || ' - ' || ep.libelle "Enseignements concernés"
 FROM
   tbl_service s
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
@@ -15,11 +13,3 @@ WHERE
     OR s.element_pedagogique_histo = 0
   )
   AND s.heures > 0
-GROUP BY
-  s.intervenant_id,
-  s.annee_id,
-  s.structure_id
-)
-SELECT
-  rownum id, t."INTERVENANT_ID",t."ANNEE_ID",t."STRUCTURE_ID", t.elements
-FROM t

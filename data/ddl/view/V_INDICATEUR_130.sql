@@ -1,10 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_130 AS
-SELECT
-  rownum id,
-  t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID" FROM (
-
 SELECT DISTINCT
-  s.annee_id annee_id,
   s.intervenant_id intervenant_id,
   i.structure_id structure_id
 FROM
@@ -17,5 +12,3 @@ WHERE
   AND s.intervenant_structure_id <> s.structure_id
   AND s.valide > 0
   AND s.structure_id IS NOT NULL
-
-) t

@@ -10,7 +10,6 @@ return [
     'Indicateur\Entity\Db\IndicateurAwareTrait'                   => __DIR__ . '/src/Entity/Db/IndicateurAwareTrait.php',
     'Indicateur\Entity\Db\IndicateurDepassementCharges'           => __DIR__ . '/src/Entity/Db/IndicateurDepassementCharges.php',
     'Indicateur\Entity\Db\IndicateurDepassementChargesAwareTrait' => __DIR__ . '/src/Entity/Db/IndicateurDepassementChargesAwareTrait.php',
-    'Indicateur\Entity\Db\Indicateur\AbstractIndicateur'          => __DIR__ . '/src/Entity/Db/Indicateur/AbstractIndicateur.php',
     'Indicateur\Entity\Db\Indicateur\Indicateur1010'              => __DIR__ . '/src/Entity/Db/Indicateur/Indicateur1010.php',
     'Indicateur\Entity\Db\Indicateur\Indicateur1011'              => __DIR__ . '/src/Entity/Db/Indicateur/Indicateur1011.php',
     'Indicateur\Entity\Db\Indicateur\Indicateur1020'              => __DIR__ . '/src/Entity/Db/Indicateur/Indicateur1020.php',

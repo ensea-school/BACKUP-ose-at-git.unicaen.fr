@@ -92,13 +92,15 @@ WITH i AS (
      --Autre façon de trouver les structures d'affectation d'enseignement
      structure_aff_enseigne AS
          (
-             -- On prend en priorite l'affectation principale
+             -- On prend en priorite l'affectation siham, sinon l'affectation principale dans Octopus
              -- Si plusieurs, alors c'est celle qui commence le + tard qui est prise en comtpe
-             SELECT individu_id,
-                    max(structure_id) KEEP (DENSE_RANK  LAST ORDER BY t_principale, date_debut)   structure_id
+            SELECT
+                individu_id,
+                max(structure_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 ELSE 999 END DESC , t_principale, date_debut)   structure_id,
+                max(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 ELSE 999 END DESC,t_principale, date_debut) source_id
              FROM octo.individu_affectation@octoprod
              WHERE type_id = 4
-               AND date_fin + 1 >= (SYSDATE - (365 * 2))
+             AND date_fin + 1 >= (SYSDATE - (365 * 2))
              GROUP BY individu_id
          ),
      --CNU arrangé

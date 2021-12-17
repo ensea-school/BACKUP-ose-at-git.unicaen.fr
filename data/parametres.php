@@ -174,6 +174,10 @@ Cordialement,
         "VALEUR"      => "Contrat :intervenant",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
+    "contrat_mail_expediteur"                    => [
+        "VALEUR"      => "",
+        "DESCRIPTION" => "Email souhaité pour l'expéditeur du contrat",
+    ],
 
 
     /* Messages informatifs */

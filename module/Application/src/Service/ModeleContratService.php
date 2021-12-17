@@ -112,7 +112,7 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    public function prepareMail(Contrat $contrat, string $htmlContent, string $subject = null)
+    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             $contrat->getStructure()->getCode(),
@@ -125,30 +125,27 @@ class ModeleContratService extends AbstractEntityService
         if (empty($subject)) {
             $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
         }
-        $intervenant        = $contrat->getIntervenant();
-        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
-        if (empty($emailIntervenant)) {
-            throw new \Exception("Aucun email disponible / Envoi du contrat impossible");
+
+
+        if (empty($to)) {
+            throw new \Exception("Aucun email disponible pour le destinataire / Envoi du contrat impossible");
+        }
+        if (empty($from)) {
+            throw new \Exception("Aucun email disponible pour l'expéditeur / Envoi du contrat impossible");
+        }
+        $bcc = [];
+        if (!empty($cci)) {
+            $bcc = explode(';', $cci);
         }
 
         $body = new Message();
 
-        // Contenu HTML du mail
         $text          = new Part($htmlContent);
         $text->type    = Mime::TYPE_HTML;
         $text->charset = 'utf-8';
         $body->addPart($text);
+        $nameFrom = "Application OSE";
 
-        //From on met le mail de l'utilisateur qui envoie le contrat
-        $emailFrom = $this->getServiceContext()->getUtilisateur()->getEmail();
-        $nameFrom  = $this->getServiceContext()->getUtilisateur()->getDisplayName();
-        if (empty($emailFrom)) {
-            //Si pas d'email utilisateur on met la config par défault pour le from
-            $emailFrom = \AppConfig::get('mail', 'from');
-            $nameFrom  = "Application OSE";
-        }
 
         //Contrat en pièce jointe
         $attachment              = new Part($content);
@@ -161,9 +158,10 @@ class ModeleContratService extends AbstractEntityService
         $message     = new MailMessage();
         $messageType = 'multipart/related';
         $message->setEncoding('UTF-8')
-            ->setFrom($emailFrom, $nameFrom)
+            ->setFrom($from, $nameFrom)
             ->setSubject($subject)
-            ->addTo($emailIntervenant)
+            ->addTo($to)
+            ->addBcc($bcc)
             ->setBody($body)
             ->getHeaders()->get('content-type')->setType($messageType);
 
@@ -175,14 +173,16 @@ class ModeleContratService extends AbstractEntityService
     /**
      * @return string
      */
-    public function getModeleGeneriqueFile(): string
+    public
+    function getModeleGeneriqueFile(): string
     {
         return getcwd() . '/data/modele_contrat.odt';
     }
 
 
 
-    private function generateData(ModeleContrat $modele, Contrat $contrat)
+    private
+    function generateData(ModeleContrat $modele, Contrat $contrat)
     {
         $connection = $this->getEntityManager()->getConnection();
 
@@ -237,7 +237,8 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    private function getRank(ModeleContrat $modele, Contrat $contrat)
+    private
+    function getRank(ModeleContrat $modele, Contrat $contrat)
     {
         $rank = 100;
 
@@ -267,7 +268,8 @@ class ModeleContratService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public
+    function getAlias()
     {
         return 'modele_contrat';
     }
@@ -277,7 +279,8 @@ class ModeleContratService extends AbstractEntityService
     /**
      * @return array
      */
-    public function getConfig()
+    public
+    function getConfig()
     {
         return $this->config;
     }
@@ -289,11 +292,11 @@ class ModeleContratService extends AbstractEntityService
      *
      * @return ModeleContratService
      */
-    public function setConfig(array $config): ModeleContratService
+    public
+    function setConfig(array $config): ModeleContratService
     {
         $this->config = $config;
 
         return $this;
     }
-
 }

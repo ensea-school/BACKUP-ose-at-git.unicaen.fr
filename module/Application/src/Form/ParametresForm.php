@@ -12,6 +12,7 @@ use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Laminas\Form\Element;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 
@@ -464,6 +465,16 @@ class ParametresForm extends AbstractForm
             'type'    => 'Text',
             'options' => [
                 'label' => 'Objet du mail',
+
+            ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'contrat_mail_expediteur',
+            'type'    => Element\Email::class,
+            'options' => [
+                'label' => 'Expéditeur du mail (si vide, l\'email de l\'utilisateur sera utilisé)',
 
             ],
 

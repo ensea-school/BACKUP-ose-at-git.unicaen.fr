@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
-  SELECT contrat_id, sum(heures) "serviceTotal" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
+  SELECT contrat_id, sum(heures) "serviceTotal", listagg(libelleAutres, ', ') WITHIN GROUP (ORDER BY libelleAutres) "libelleAutres" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 )
 SELECT
   ct.annee_id,
@@ -8,7 +8,6 @@ SELECT
   ct.intervenant_id,
   ct.formule_resultat_id,
   ct.id contrat_id,
-
   ct."composante",
   ct."annee",
   ct."nom",
@@ -31,6 +30,8 @@ SELECT
   'Exemplaire à conserver' "exemplaire1",
   'Exemplaire à retourner' || ct."exemplaire2" "exemplaire2",
   ct."serviceTotal",
+  ct."legendeAutresHeures",
+  ct."enteteAutresHeures",
 
   CASE ct.est_contrat
     WHEN 1 THEN -- contrat
@@ -92,6 +93,8 @@ FROM
       ), CHR(13), ' - ')
     ELSE '' END                                                                                   "exemplaire2",
     replace(ltrim(to_char(COALESCE(hs."serviceTotal",0), '999999.00')),'.',',')                   "serviceTotal",
+    CASE WHEN hs."libelleAutres" IS NOT NULL THEN '*Dont type(s) intervention(s) : ' ||  hs."libelleAutres" END "legendeAutresHeures",
+    CASE WHEN hs."libelleAutres" IS NOT NULL THEN 'Autres heures*' ELSE 'Autres heures' END                         "enteteAutresHeures",
     CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                              est_contrat,
     CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                                      est_projet,
     si.tem_atv                                                                                    est_atv
@@ -114,4 +117,4 @@ FROM
     LEFT JOIN contrat              cp ON cp.id = c.contrat_id
   WHERE
     c.histo_destruction IS NULL
-) ct
+) ct;

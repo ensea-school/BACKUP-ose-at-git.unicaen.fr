@@ -26,6 +26,7 @@ Objectif : Plafonds personnalisables
 * Le service dû s'affiche de nouveau normalement dans la page "Calcul HETD" de l'intervenant
 * Adaptation de la commande update-employeur pour assurer la compatibilité avec les différentes versions d'oracle
 * Correction sur un problème de route dans l'écran Engagements & Liquidation (#38763)
+* Export CSV des agréments : inversion de colonnes (#41513)
 
 ## Notes de mise à jour
 

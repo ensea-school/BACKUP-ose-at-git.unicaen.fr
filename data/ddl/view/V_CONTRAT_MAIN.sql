@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
-  SELECT contrat_id, sum(heures) "serviceTotal", listagg(libelleAutres, ', ') WITHIN GROUP (ORDER BY libelleAutres) "libelleAutres" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
+  SELECT contrat_id, sum(heures) "serviceTotal", max(libelleAutres) "libelleAutres" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 )
 SELECT
   ct.annee_id,

@@ -22,15 +22,21 @@ WITH services AS (
 
 )  ,
 servicesAutres AS (
-	SELECT DISTINCT
-	  c.id                                             						contrat_id,
-	  ti.libelle                                                            type_intervenation_libelle
-	FROM
-	            contrat                  c
-	       JOIN volume_horaire          vh ON vh.contrat_id = c.id AND vh.histo_destruction IS NULL
-	       JOIN type_intervention       ti ON ti.id = vh.type_intervention_id
-	WHERE ti.code NOT IN ('CM','TD','TP')
-	GROUP BY c.id
+	SELECT
+		t.contrat_id                  																	   contrat_id,
+		listagg(t.type_intervention_libelle, ', ') WITHIN GROUP (ORDER BY t.type_intervention_libelle)	   type_intervention_libelle
+		FROM (
+			SELECT DISTINCT
+			  c.id                                             						contrat_id,
+			  ti.libelle                                                            type_intervention_libelle
+			FROM
+			            contrat                  c
+			       JOIN volume_horaire          vh ON vh.contrat_id = c.id AND vh.histo_destruction IS NULL
+			       JOIN type_intervention       ti ON ti.id = vh.type_intervention_id
+			WHERE ti.code NOT IN ('CM','TD','TP')
+		) t
+		GROUP by
+		t.contrat_id
 
 
 )
@@ -46,7 +52,7 @@ SELECT
   CASE WHEN sum(s.heures_autres) = 0 THEN to_char(0) ELSE replace(ltrim(to_char(sum(s.heures_autres), '999999.00')),'.',',') END "autres",
   SUM(heures_totales)																			                                 heures,
   SUM(heures_totales) 																									 		 "serviceHeures",
-  LISTAGG(sa.type_intervention_libelle, ', ') WITHIN GROUP (ORDER BY sa.type_intervention_libelle)									 "libelleAutres"
+  MAX(sa.type_intervention_libelle)																								 "libelleAutres"
   FROM services s
   LEFT JOIN servicesAutres sa ON sa.contrat_id = s.contrat_id
   GROUP BY
@@ -54,3 +60,4 @@ SELECT
   s."serviceComposante",
   s."serviceCode",
   s."serviceLibelle"
+

@@ -117,8 +117,8 @@ class AgrementService extends AbstractEntityService
         foreach ($data as $d) {
             $res['data'][] = [
                 'annee'                        => $d['ANNEE'],
-                'structure-libelle'            => $d['STRUCTURE_LIBELLE'],
                 'intervenant-code'             => $d['INTERVENANT_CODE'],
+                'structure-libelle'            => $d['STRUCTURE_LIBELLE'],
                 'intervenant-structure'        => $d['INTERVENANT_STRUCTURE_LIBELLE'],
                 'intervenant-nom-usuel'        => $d['INTERVENANT_NOM_USUEL'],
                 'intervenant-nom-patronymique' => $d['INTERVENANT_NOM_PATRONYMIQUE'],

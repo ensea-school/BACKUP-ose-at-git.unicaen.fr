@@ -530,8 +530,8 @@ return [
         [
             'ID'                 => 2,
             'VALEUR'             => 41.41,
-            'HISTO_CREATION'     => '2017-04-28 00:00:00',
-            'HISTO_MODIFICATION' => '2017-04-28 00:00:00',
+            'HISTO_CREATION'     => '2017-02-01 00:00:00',
+            'HISTO_MODIFICATION' => '2017-02-01 00:00:00',
         ],
     ],
 

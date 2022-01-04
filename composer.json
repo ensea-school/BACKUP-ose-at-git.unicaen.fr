@@ -9,14 +9,20 @@
     ],
     "require"     : {
         "php"                    : ">=7.4",
-        "unicaen/app"            : "dev-ll-php8 as ^4.0",
+        "unicaen/app"            : "dev-ll-php8 as 4.0.2",
         "unicaen/auth"           : "^4.0",
         "laminas/laminas-file"   : "^2.8",
-        "unicaen/code"           : "dev-ll-php8 as ^6.0",
+        "unicaen/code"           : "dev-ll-php8 as 6.0.4",
         "unicaen/import"         : "^4.0",
         "unicaen/tbl"            : "^5.0",
         "unicaen/open-document"  : "^4.0",
         "unicaen/siham"          : "^2.0",
         "laminas/laminas-developer-tools": "2.3.0 as 2.0.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "laminas/laminas-dependency-plugin": true,
+            "composer/package-versions-deprecated": true
+        }
     }
 }

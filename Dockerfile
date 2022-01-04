@@ -9,6 +9,9 @@
 ARG PHP_VERSION
 
 FROM unicaen-dev-php${PHP_VERSION}-apache
+
+ARG APPLICATION_ENV
+
 LABEL maintainer="Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>"
 
 ENV APACHE_CONF_DIR=/etc/apache2 \
@@ -37,7 +40,6 @@ ADD docker/${APPLICATION_ENV}/php.conf ${PHP_CONF_DIR}/cli/conf.d/app.ini
 # Configuration Apache et FPM
 ADD docker/${APPLICATION_ENV}/apache-ports.conf    ${APACHE_CONF_DIR}/ports.conf
 ADD docker/${APPLICATION_ENV}/apache-site.conf     ${APACHE_CONF_DIR}/sites-available/app.conf
-ADD docker/${APPLICATION_ENV}/apache-site-ssl.conf ${APACHE_CONF_DIR}/sites-available/app-ssl.conf
 ADD docker/${APPLICATION_ENV}/fpm/pool.d/app.conf  ${PHP_CONF_DIR}/fpm/pool.d/app.conf
 
 COPY /docker/${APPLICATION_ENV}/entrypoint.d /entrypoint.d/

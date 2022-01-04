@@ -206,7 +206,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return self
      */
-    private function _join($method = 'join', $service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null): self
+    private function _join(string $method, $service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null): self
     {
         if (is_string($service)) {
             $service = \Application::$container->get($service);

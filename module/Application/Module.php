@@ -12,9 +12,6 @@ namespace Application;
 use Application\ORM\RouteEntitiesInjector;
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
-use Laminas\ModuleManager\Feature\ConsoleUsageProviderInterface;
-use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Laminas\Stdlib\Glob;
 use Laminas\Config\Factory as ConfigFactory;
 
@@ -24,7 +21,7 @@ include_once(__DIR__ . '/src/functions.php');
 
 
 
-class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
+class Module
 {
     private $modules = [];
 
@@ -90,7 +87,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
 
 
-    public function getConsoleUsage(ConsoleAdapterInterface $console)
+    public function getConsoleUsage()
     {
         return [
             "Notifications",
@@ -112,7 +109,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
 
 
-    public function getConsoleBanner(ConsoleAdapterInterface $console)
+    public function getConsoleBanner()
     {
         return "OSE";
     }

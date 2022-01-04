@@ -4,8 +4,8 @@ namespace Application\Service\Factory;
 
 use Application\Service\WorkflowService;
 use Psr\Container\ContainerInterface;
+use UnicaenApp\Util;
 use UnicaenTbl\Service\TableauBordService;
-use Laminas\Console\Console;
 
 class WorkflowServiceFactory
 {
@@ -17,7 +17,7 @@ class WorkflowServiceFactory
             $container->get(TableauBordService::class)
         );
 
-        if (!Console::isConsole()) {
+        if (!Util::isConsole()) {
             $service->setServiceAuthorize(
                 $container->get('BjyAuthorize\Service\Authorize')
             );

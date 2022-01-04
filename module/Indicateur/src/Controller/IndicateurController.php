@@ -33,6 +33,7 @@ use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use UnicaenApp\Util;
 use UnicaenApp\View\Model\CsvModel;
 
 
@@ -368,7 +369,7 @@ class IndicateurController extends AbstractController
         $this->getProcessusIndicateur()->envoiNotifications($force);
 
         // S'il s'agit d'une requête de type Console (CLI), rétablissement du router initial (cf. commentaires plus haut).
-        if ($this->getRequest() instanceof \Laminas\Console\Request) {
+        if (Util::isConsole()) {
             $event->setRouter($router);
         }
 

@@ -127,3 +127,17 @@ function adminBdd(): \BddAdmin\Bdd
 
     return $bdd;
 }
+
+
+function adminConsole(): Console
+{
+    if (!class_exists('Console')) {
+        $dir = getcwd() . '/admin/src/';
+        require_once $dir . '/BddAdmin/Logger/LoggerInterface.php';
+        require_once $dir . '/Console.php';
+    }
+
+    $console = new Console;
+
+    return $console;
+}

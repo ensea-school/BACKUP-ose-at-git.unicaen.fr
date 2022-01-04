@@ -331,10 +331,10 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param array           $tableauxBords
+     * @param array|string    $tableauxBords
      * @param Intervenant|int $intervenant
      */
-    public function calculerTableauxBord($tableauxBords = [], $intervenant): array
+    public function calculerTableauxBord($tableauxBords, $intervenant): array
     {
         $errors = [];
 

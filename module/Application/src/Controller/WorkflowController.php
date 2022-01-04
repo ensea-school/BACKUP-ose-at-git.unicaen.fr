@@ -11,7 +11,6 @@ use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exception\LogicException;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Laminas\Console\Console;
 
 
 /**
@@ -142,29 +141,30 @@ class WorkflowController extends AbstractController
 
     public function calculTableauxBordAction()
     {
+
+
         $result = $this->getServiceWorkflow()->calculerTousTableauxBord(function (array $d) {
             $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
-            $ci      = Console::getInstance();
-            $ci->write($tblLine);
-            $ci->write('Calcul en cours...', 6);
+            $c       = adminConsole();
+            $c->print($tblLine);
+            $c->print('Calcul en cours...', $c::COLOR_LIGHT_PURPLE);
         }, function (array $d) {
+            $c       = adminConsole();
             $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
-            $ci      = Console::getInstance();
-            $ci->clearLine();
-            $ci->write($tblLine);
+            $c->print("\r" . $tblLine);
             if ($d['result']) {
                 $duree = round($d['duree'], 3) . ' secondes';
-                $ci->writeLine('Effectué en ' . $duree, 3);
+                $c->println('Effectué en ' . $duree, $c::COLOR_GREEN);
             } else {
-                $ci->writeLine('Erreur : ' . $d['exception']->getMessage(), 2);
+                $c->println('Erreur : ' . $d['exception']->getMessage(), $c::BG_RED);
             }
         });
-
-        Console::getInstance()->writeLine('Fin du calcul des tableaux de bord');
+        $c      = adminConsole();
+        $c->println('Fin du calcul des tableaux de bord');
         if ($result) {
-            Console::getInstance()->writeLine('Tout c\'est bien passé');
+            $c->println('Tout c\'est bien passé', $c::COLOR_GREEN);
         } else {
-            Console::getInstance()->writeLine('Attention : des erreurs ont été rencontrées!!');
+            $c->println('Attention : des erreurs ont été rencontrées!!', $c::BG_RED);
         }
     }
 

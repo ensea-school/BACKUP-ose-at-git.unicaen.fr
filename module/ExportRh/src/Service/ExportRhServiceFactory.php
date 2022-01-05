@@ -7,9 +7,9 @@ use Psr\Container\ContainerInterface;
 
 
 /**
- * Description of IntervenantServiceFactory
+ * Description of ExportRhServiceFactory
  *
- * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
  */
 class ExportRhServiceFactory
 {

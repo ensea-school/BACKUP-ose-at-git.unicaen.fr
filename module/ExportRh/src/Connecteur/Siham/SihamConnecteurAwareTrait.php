@@ -6,7 +6,7 @@ namespace ExportRh\Connecteur\Siham;
 /**
  * Description of SihamConnecteurAwareTrait
  *
- * @author UnicaenCode
+ * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
  */
 trait SihamConnecteurAwareTrait
 {

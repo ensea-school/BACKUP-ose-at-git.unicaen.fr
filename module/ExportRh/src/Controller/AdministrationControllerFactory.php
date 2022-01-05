@@ -9,7 +9,7 @@ use UnicaenSiham\Service\Siham;
 /**
  * Description of AdministrationControllerFactory
  *
- * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
  */
 class AdministrationControllerFactory
 {

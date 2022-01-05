@@ -17,8 +17,7 @@
         "unicaen/tbl"            : "dev-ll-php8",
         "unicaen/open-document"  : "^4.0",
         "unicaen/siham"          : "^2.0",
-        "laminas/laminas-developer-tools": "2.3.0 as 2.0.0",
-        "laminas/laminas-cli": "*"
+        "laminas/laminas-developer-tools": "2.3.0"
     },
     "config": {
         "allow-plugins": {

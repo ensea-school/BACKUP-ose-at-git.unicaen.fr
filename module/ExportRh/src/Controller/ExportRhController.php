@@ -12,7 +12,6 @@ use ExportRh\Form\ExportRhForm;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
-use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
 use Laminas\Validator\Date;
 use Laminas\View\Model\ViewModel;

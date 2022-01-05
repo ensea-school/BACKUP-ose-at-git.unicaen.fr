@@ -8,6 +8,6 @@
  * @var $viewFile   string
  */
 
-/* @var $a \Plafond\Service\PlafondStructureService::class */
-$a = $container->get(\Plafond\Service\PlafondStructureService::class);
+echo 'salut';
+
 phpinfo();

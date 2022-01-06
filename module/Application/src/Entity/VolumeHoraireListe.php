@@ -486,7 +486,7 @@ class VolumeHoraireListe
             $periodes[$volumeHoraire->getPeriode()->getId()] = $volumeHoraire->getPeriode();
         }
         uasort($periodes, function ($a, $b) {
-            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
+            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '') ? 1 : 0;
         });
 
         return $periodes;
@@ -516,7 +516,7 @@ class VolumeHoraireListe
             }
         }
         uasort($mnps, function ($a, $b) {
-            return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '');
+            return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '') ? 1 : 0;
         });
 
         return $mnps;
@@ -832,12 +832,12 @@ class VolumeHoraireListe
 
                 /* Sinon on supprime les plus petits */
                 if ($newHeures > 0) {
-                    return $aHeures < $bHeures;
+                    return $bHeures - $aHeures;
                 } else {
-                    return $aHeures > $bHeures;
+                    return $aHeures - $bHeures;
                 }
 
-                return $hca < $hcb;
+                return $hcb - $hca;
             });
 
             /* Ensuite on calcule pour obtenir le nouveau nombre d'heures */

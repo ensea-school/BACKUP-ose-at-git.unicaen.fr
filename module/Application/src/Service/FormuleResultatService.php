@@ -251,7 +251,7 @@ class FormuleResultatService extends AbstractEntityService
 
         /* Tri final */
         usort($data['types-intervention'], function ($ti1, $ti2) {
-            return $ti1->getOrdre() > $ti2->getOrdre();
+            return $ti1->getOrdre() - $ti2->getOrdre();
         });
 
         usort($data['s'], function ($ee1, $ee2) {
@@ -267,11 +267,11 @@ class FormuleResultatService extends AbstractEntityService
                 $ee2Code = $ee2['element-etablissement']->getLibelle();
             }
 
-            return $ee1Code > $ee2Code;
+            return $ee1Code > $ee2Code ? 1 : 0;
         });
 
         usort($data['r'], function ($r1, $r2) {
-            return $r1['fonction']->getLibelleCourt() > $r2['fonction']->getLibelleCourt();
+            return $r1['fonction']->getLibelleCourt() > $r2['fonction']->getLibelleCourt() ? 1 : 0;
         });
 
 

@@ -297,7 +297,7 @@ class Liste extends AbstractViewHelper
                 $this->typesIntervention[] = $ti;
             }
             uasort($this->typesIntervention, function ($a, $b) {
-                return $a->getordre() > $b->getOrdre();
+                return $a->getordre() - $b->getOrdre();
             });
         }
 
@@ -318,7 +318,7 @@ class Liste extends AbstractViewHelper
             if (!isset($periodes[$periode->getId()])) $periodes[$periode->getId()] = $periode;
         }
         uasort($periodes, function ($a, $b) {
-            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
+            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '') ? 1 : 0;
         });
 
         return $periodes;

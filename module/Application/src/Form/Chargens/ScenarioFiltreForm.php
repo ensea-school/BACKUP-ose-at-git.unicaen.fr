@@ -6,7 +6,6 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 
 
-
 /**
  * Description of ScenarioFiltreForm
  *
@@ -15,7 +14,6 @@ use Application\Service\Traits\ScenarioServiceAwareTrait;
 class ScenarioFiltreForm extends AbstractForm
 {
     use ScenarioServiceAwareTrait;
-
 
 
     public function init()
@@ -63,27 +61,27 @@ class ScenarioFiltreForm extends AbstractForm
         $options = [];
         foreach ($scenarios as $scenario) {
             if ($scenario->getStructure()) {
-                $sid = $scenario->getStructure()->getId();
+                $sid       = $scenario->getStructure()->getId();
                 $structure = (string)$scenario->getStructure();
             } else {
-                $sid = 0;
+                $sid       = 0;
                 $structure = '000';
             }
 
             if (!isset($options[$sid])) {
                 $options[$sid] = [
-                    'label' => $structure,
+                    'label'   => $structure,
                     'options' => [],
                 ];
             }
             $options[$sid]['options'][$scenario->getId()] = (string)$scenario;
         }
 
-        uasort($options, function($a,$b){
-           return $a['label'] > $b['label'];
+        uasort($options, function ($a, $b) {
+            return $a['label'] > $b['label'] ? 1 : 0;
         });
 
-        if (isset($options[0])){
+        if (isset($options[0])) {
             $options[0]['label'] = 'Établissement';
         }
 

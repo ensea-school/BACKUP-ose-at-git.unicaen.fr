@@ -314,7 +314,7 @@ class Ddl implements \Iterator, \ArrayAccess
         foreach ($this->data[Ddl::TABLE] as $table) {
             $columns = $table['columns'];
             uasort($columns, function ($a, $b) {
-                return $a['position'] > $b['position'];
+                return $a['position'] - $b['position'];
             });
 
             $this->data[Ddl::TABLE][$table['name']]['columns'] = $columns;

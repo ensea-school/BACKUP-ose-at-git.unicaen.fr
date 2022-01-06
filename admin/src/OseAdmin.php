@@ -122,7 +122,7 @@ class OseAdmin
 
                 if ($va == $vb) return $a > $b;
 
-                return $va > $vb;
+                return $va - $vb;
             });
         }
 

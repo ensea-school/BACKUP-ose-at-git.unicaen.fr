@@ -329,9 +329,9 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
     {
         uasort($this->children, function ($a, $b) {
             if ($a->getOrdre() && $b->getOrdre()) {
-                return $a->getOrdre() > $b->getOrdre();
+                return $a->getOrdre() - $b->getOrdre();
             } else {
-                return $a->getLabel() > $b->getLabel();
+                return $a->getLabel() > $b->getLabel() ? 1 : 0;
             }
         });
 

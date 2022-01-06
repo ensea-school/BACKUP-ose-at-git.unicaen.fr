@@ -20,7 +20,7 @@ class FormSearchAndSelect extends \UnicaenApp\Form\View\Helper\FormSearchAndSele
     /**
      * {@inheritdoc}
      */
-    public function render(ElementInterface $element)
+    public function render(ElementInterface $element): string
     {
         if (!$element instanceof SearchAndSelect) {
             throw new InvalidElementException("L'élément spécifié n'est pas du type attendu.");

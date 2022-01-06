@@ -19,7 +19,6 @@ class ServiceAPayerService extends AbstractService
     use EtatVolumeHoraireServiceAwareTrait;
 
 
-
     /**
      *
      * @param Intervenant $intervenant
@@ -74,7 +73,7 @@ class ServiceAPayerService extends AbstractService
                 $bTriStr .= ' zzzzzzz ' . $b->getService()->getEtablissement()->getLibelle();
             }
 
-            return $aTriStr > $bTriStr;
+            return $aTriStr > $bTriStr ? 1 : 0;
         });
 
         usort($frsrList, function ($a, $b) {
@@ -86,7 +85,7 @@ class ServiceAPayerService extends AbstractService
             $bTriStr = $b->getStructure()->getLibelleCourt();
             $bTriStr .= ' ' . $b->getServiceReferentiel()->getFonction()->getLibelleCourt();
 
-            return $aTriStr > $bTriStr;
+            return $aTriStr > $bTriStr ? 1 : 0;
         });
 
         $result = [];

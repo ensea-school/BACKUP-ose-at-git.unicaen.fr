@@ -84,7 +84,7 @@ foreach ($paiements as $paiement) {
 }
 
 uasort($periodes, function ($p1, $p2) {
-    return $p1->getOrdre() > $p2->getOrdre();
+    return $p1->getOrdre() - $p2->getOrdre();
 });
 
 foreach ($periodes as $id => $periode) {

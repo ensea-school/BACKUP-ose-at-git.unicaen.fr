@@ -143,7 +143,7 @@ class IntervenantDossierForm extends AbstractForm
 
 
 
-    public function isValid()
+    public function isValid(): bool
     {
 
         return parent::isValid();

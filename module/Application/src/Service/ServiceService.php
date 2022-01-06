@@ -1060,7 +1060,7 @@ class ServiceService extends AbstractEntityService
             'heures-non-payees'             => 'Heures non payées',
         ];
         uasort($typesIntervention, function ($ti1, $ti2) {
-            return $ti1->getOrdre() > $ti2->getOrdre();
+            return $ti1->getOrdre() - $ti2->getOrdre();
         });
         foreach ($typesIntervention as $typeIntervention) {
             /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
@@ -1193,7 +1193,7 @@ class ServiceService extends AbstractEntityService
             }
         }
         usort($typesIntervention, function ($ti1, $ti2) {
-            return $ti1->getOrdre() > $ti2->getOrdre();
+            return $ti1->getOrdre() - $ti2->getOrdre();
         });
 
         return $typesIntervention;

@@ -997,7 +997,7 @@ class FormuleTestIntervenant
             $diffLen = strlen($a) - strlen($b);
             if ($diffLen) return $diffLen;
 
-            return $a > $b;
+            return $a > $b ? 1 : 0;
         });
 
         return $data;

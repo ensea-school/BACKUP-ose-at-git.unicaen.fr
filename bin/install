@@ -308,7 +308,7 @@ class OseDeploy
 
                 if ($va == $vb) return $a > $b;
 
-                return $va > $vb;
+                return $va - $vb;
             });
         }
 

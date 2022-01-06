@@ -467,7 +467,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 
         // tri du buffer et mise en paramètres
         usort($mepBuffer, function ($a, $b) {
-            return $a['periode']->getOrdre() > $b['periode']->getOrdre();
+            return $a['periode']->getOrdre() - $b['periode']->getOrdre();
         });
         foreach ($mepBuffer as $mb) {
             $params['mises-en-paiement'][$mb['periode']->getLibelleAnnuel($this->getServiceContext()->getAnnee())] = $mb['heures'];

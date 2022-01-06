@@ -154,21 +154,21 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
                 $ahd = $a->getHoraireDebut() ? $a->getHoraireDebut()->getTimestamp() : 999999999999999999999999;
                 $bhd = $b->getHoraireDebut() ? $b->getHoraireDebut()->getTimestamp() : 999999999999999999999999;
 
-                return $ahd > $bhd;
+                return $ahd - $bhd;
             }
 
             if ($a->getHoraireFin() != $b->getHoraireFin()) {
                 $ahf = $a->getHoraireFin() ? $a->getHoraireFin()->getTimestamp() : 999999999999999999999999;
                 $bhf = $b->getHoraireFin() ? $b->getHoraireFin()->getTimestamp() : 999999999999999999999999;
 
-                return $ahf > $bhf;
+                return $ahf - $bhf;
             }
 
             if ($a->getTypeIntervention() != $b->getTypeIntervention()) {
                 $ati = $a->getTypeIntervention() ? $a->getTypeIntervention()->getOrdre() : 999999999999999999999999;
                 $bti = $b->getTypeIntervention() ? $b->getTypeIntervention()->getOrdre() : 999999999999999999999999;
 
-                return $ati > $bti;
+                return $ati - $bti;
             }
         });
 

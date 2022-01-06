@@ -188,7 +188,7 @@ class EtapeCentreCoutForm extends AbstractForm
             uasort($this->typesHeures, function ($a, $b) {
                 /* @var $a TypeHeures */
                 /* @var $b TypeHeures */
-                return $a->getOrdre() > $b->getOrdre();
+                return $a->getOrdre() - $b->getOrdre();
             });
         }
 

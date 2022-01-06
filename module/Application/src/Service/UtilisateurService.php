@@ -89,7 +89,7 @@ class UtilisateurService extends AbstractEntityService
         $result = array_merge($locaUsers, $ldapUsers);
 
         uasort($result, function ($a, $b) {
-            return $a['label'] > $b['label'];
+            return $a['label'] > $b['label'] ? 1 : 0;
         });
 
         return $result;

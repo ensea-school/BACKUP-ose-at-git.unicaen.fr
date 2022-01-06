@@ -780,12 +780,12 @@ class VolumeHoraireReferentielListe
 
                 /* Sinon on supprime les plus petits */
                 if ($newHeures > 0) {
-                    return $aHeures < $bHeures;
+                    return $bHeures - $aHeures;
                 } else {
-                    return $aHeures > $bHeures;
+                    return $aHeures - $bHeures;
                 }
 
-                return $hca < $hcb;
+                return $hcb - $hca;
             });
 
             /* Ensuite on calcule pour obtenir le nouveau nombre d'heures */

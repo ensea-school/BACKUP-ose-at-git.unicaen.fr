@@ -206,7 +206,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
             $apos = isset($a['position']) ? $a['position'] : 1;
             $bpos = isset($b['position']) ? $b['position'] : 1;
 
-            return $apos > $bpos;
+            return $apos - $bpos;
         });
         foreach ($columns as $column) {
             $cp = ['"' . $column['name'] . '"', $this->makeColumnType($column)];

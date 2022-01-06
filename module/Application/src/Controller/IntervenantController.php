@@ -657,7 +657,7 @@ class  IntervenantController extends AbstractController
         }
 
         uasort($container->recents, function ($a, $b) {
-            return $a['nom'] . ' ' . $a['prenom'] > $b['nom'] . ' ' . $b['prenom'];
+            return $a['nom'] . ' ' . $a['prenom'] > $b['nom'] . ' ' . $b['prenom'] ? 1 : 0;
         });
 
         return $this;

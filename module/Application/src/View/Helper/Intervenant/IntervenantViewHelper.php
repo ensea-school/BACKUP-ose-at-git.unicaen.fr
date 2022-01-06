@@ -210,7 +210,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
             }
         }
         uasort($statuts, function ($a, $b) {
-            return $a->getStatut()->getOrdre() > $b->getStatut()->getOrdre();
+            return $a->getStatut()->getOrdre() - $b->getStatut()->getOrdre();
         });
 
         return $statuts;

@@ -59,7 +59,7 @@ class ModeleContratService extends AbstractEntityService
         $modeles = $this->getList();
 
         usort($modeles, function (ModeleContrat $m1, ModeleContrat $m2) use ($contrat) {
-            return $this->getRank($m1, $contrat) < $this->getRank($m2, $contrat);
+            return $this->getRank($m1, $contrat) < $this->getRank($m2, $contrat) ? 1 : 0;
         });
 
         $modele = reset($modeles);

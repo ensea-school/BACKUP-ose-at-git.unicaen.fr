@@ -112,14 +112,14 @@ class OffreFormationService extends AbstractEntityService
             $e1Lib = ($e1->getElementPedagogique()->isEmpty() ? 'a_' : 'z_') . strtolower(trim($e1->getLibelle()));
             $e2Lib = ($e2->getElementPedagogique()->isEmpty() ? 'a_' : 'z_') . strtolower(trim($e2->getLibelle()));
 
-            return $e1Lib > $e2Lib;
+            return $e1Lib > $e2Lib ? 1 : 0;
         });
 
         uasort($elements, function (ElementPedagogique $e1, ElementPedagogique $e2) {
             $e1Lib = strtolower(trim($e1->getEtape()->getLibelle() . ' ' . $e1->getLibelle()));
             $e2Lib = strtolower(trim($e2->getEtape()->getLibelle() . ' ' . $e2->getLibelle()));
 
-            return $e1Lib > $e2Lib;
+            return $e1Lib > $e2Lib ? 1 : 0;
         });
 
         return [$niveaux, $etapes, $elements];
@@ -169,7 +169,7 @@ class OffreFormationService extends AbstractEntityService
             $e1Lib = strtolower(trim($e1->getEtape()->getLibelle() . ' ' . $e1->getLibelle()));
             $e2Lib = strtolower(trim($e2->getEtape()->getLibelle() . ' ' . $e2->getLibelle()));
 
-            return $e1Lib > $e2Lib;
+            return $e1Lib > $e2Lib ? 1 : 0;
         });
 
         return [$niveaux, $etapes, $elements];

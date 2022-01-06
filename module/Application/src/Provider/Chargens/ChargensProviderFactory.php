@@ -5,7 +5,7 @@ namespace Application\Provider\Chargens;
 use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
-use UnicaenApp\Util;
+use Unicaen\Console\Console;
 use UnicaenTbl\Service\TableauBordService;
 
 /**
@@ -26,7 +26,7 @@ class ChargensProviderFactory
         $chargensProvider = new ChargensProvider();
         $chargensProvider->setBdd($bdd);
 
-        if (!Util::isConsole()) {
+        if (!Console::isConsole()) {
             $serviceAuthorize = $container->get('BjyAuthorize\Service\Authorize');
             $chargensProvider->setServiceAuthorize($serviceAuthorize);
         }

@@ -17,7 +17,8 @@
         "unicaen/tbl"            : "dev-ll-php8",
         "unicaen/open-document"  : "^4.0",
         "unicaen/siham"          : "^2.0",
-        "laminas/laminas-cache-storage-adapter-memory": "2.1.x-dev"
+        "laminas/laminas-cache-storage-adapter-memory": "2.1.x-dev",
+        "laminas/laminas-text": "2.10.x-dev"
     },
     "config": {
         "allow-plugins": {

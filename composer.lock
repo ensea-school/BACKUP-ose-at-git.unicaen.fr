@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "364951e2a3541c058668e27ab1c28efa",
+    "content-hash": "3fbe249085b458a86fbf6999062edd61",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1432,12 +1432,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "ceaefcb18d09026b528b36726eadd04f4c200fea"
+                "reference": "7190ac512797516353c7774ac0d7ad6c9ac0c252"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/ceaefcb18d09026b528b36726eadd04f4c200fea",
-                "reference": "ceaefcb18d09026b528b36726eadd04f4c200fea",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/7190ac512797516353c7774ac0d7ad6c9ac0c252",
+                "reference": "7190ac512797516353c7774ac0d7ad6c9ac0c252",
                 "shasum": ""
             },
             "require": {
@@ -1523,7 +1523,7 @@
                 "issues": "https://github.com/doctrine/orm/issues",
                 "source": "https://github.com/doctrine/orm/tree/2.11.x"
             },
-            "time": "2022-01-05T09:03:45+00:00"
+            "time": "2022-01-06T09:19:42+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -4767,6 +4767,65 @@
             "time": "2021-12-29T14:38:44+00:00"
         },
         {
+            "name": "laminas/laminas-text",
+            "version": "2.10.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-text.git",
+                "reference": "8879e75d03e09b0d6787e6680cfa255afd4645a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-text/zipball/8879e75d03e09b0d6787e6680cfa255afd4645a7",
+                "reference": "8879e75d03e09b0d6787e6680cfa255afd4645a7",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-servicemanager": "^3.4",
+                "laminas/laminas-stdlib": "^3.6",
+                "php": "^7.3 || ~8.0.0 || ~8.1.0"
+            },
+            "conflict": {
+                "zendframework/zend-text": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "phpunit/phpunit": "^9.3"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Text\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Create FIGlets and text-based tables",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "laminas",
+                "text"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-text/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-text/issues",
+                "rss": "https://github.com/laminas/laminas-text/releases.atom",
+                "source": "https://github.com/laminas/laminas-text"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2021-09-02T16:50:53+00:00"
+        },
+        {
             "name": "laminas/laminas-uri",
             "version": "2.10.x-dev",
             "source": {
@@ -6831,7 +6890,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "cb3947d53690da26caaf2d8e8af79d8199cba757"
+                "reference": "41ef2fe2e183adb9f1f574214b6b7fdb5bffebed"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -6865,7 +6924,7 @@
                 "mpdf/mpdf": "^8.0",
                 "ocramius/proxy-manager": "^2.0",
                 "php": ">=7.4 || >=8.0",
-                "unicaen/unicaen-console": "dev-main"
+                "unicaen/console": "dev-main"
             },
             "require-dev": {
                 "laminas/laminas-test": "^3.2",
@@ -6886,7 +6945,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2022-01-05T15:55:45+00:00"
+            "time": "2022-01-06T09:49:45+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -6894,7 +6953,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "52c908ba3e7bfb04cac6be3ab17189210c518155"
+                "reference": "d0a82b1a9c62a7b76fb702584101b83dcd47bd72"
             },
             "require": {
                 "jasig/phpcas": "^1.4",
@@ -6916,7 +6975,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2022-01-05T15:55:45+00:00"
+            "time": "2022-01-06T08:51:24+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -6988,7 +7047,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "1050ded1f63dc369abd85cc9800c43381c95c4f6"
+                "reference": "96ea430011f0254a57e2b0f4d6ce053b53d9286a"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7005,7 +7064,55 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2022-01-05T15:55:44+00:00"
+            "time": "2022-01-06T09:16:07+00:00"
+        },
+        {
+            "name": "unicaen/console",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/console.git",
+                "reference": "15c3b5d7251f122421e22351269e89e213241912"
+            },
+            "require": {
+                "laminas/laminas-stdlib": "^3.2",
+                "php": "^8.0"
+            },
+            "replace": {
+                "zendframework/zend-console": "^2.8.0"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-filter": "^2.7.2",
+                "laminas/laminas-json": "^2.6 || ^3.0",
+                "laminas/laminas-validator": "^2.10.1",
+                "phpunit/phpunit": "^5.7.23 || ^6.4.3 || ^7.5.18"
+            },
+            "suggest": {
+                "laminas/laminas-filter": "To support DefaultRouteMatcher usage",
+                "laminas/laminas-validator": "To support DefaultRouteMatcher usage"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Unicaen\\Console\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "UnicaenTest\\Console\\": "test/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit --colors=always"
+                ],
+                "test-coverage": [
+                    "phpunit --colors=always --coverage-clover clover.xml"
+                ]
+            },
+            "description": "Build console applications using getopt syntax or routing, complete with prompts",
+            "time": "2022-01-06T09:49:10+00:00"
         },
         {
             "name": "unicaen/import",
@@ -7108,54 +7215,6 @@
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
             "time": "2022-01-05T15:23:27+00:00"
-        },
-        {
-            "name": "unicaen/unicaen-console",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://git.unicaen.fr/lib/unicaen/console.git",
-                "reference": "2d3441a964e5647ca04539f339bcf083a634aefc"
-            },
-            "require": {
-                "laminas/laminas-stdlib": "^3.2",
-                "php": "^8.0"
-            },
-            "replace": {
-                "zendframework/zend-console": "^2.8.0"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "laminas/laminas-filter": "^2.7.2",
-                "laminas/laminas-json": "^2.6 || ^3.0",
-                "laminas/laminas-validator": "^2.10.1",
-                "phpunit/phpunit": "^5.7.23 || ^6.4.3 || ^7.5.18"
-            },
-            "suggest": {
-                "laminas/laminas-filter": "To support DefaultRouteMatcher usage",
-                "laminas/laminas-validator": "To support DefaultRouteMatcher usage"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Unicaen\\Console\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "UnicaenTest\\Console\\": "test/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ]
-            },
-            "description": "Build console applications using getopt syntax or routing, complete with prompts",
-            "time": "2022-01-05T15:08:49+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -7336,7 +7395,8 @@
         "unicaen/code": 20,
         "unicaen/import": 20,
         "unicaen/tbl": 20,
-        "laminas/laminas-cache-storage-adapter-memory": 20
+        "laminas/laminas-cache-storage-adapter-memory": 20,
+        "laminas/laminas-text": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

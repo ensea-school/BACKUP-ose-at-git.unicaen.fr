@@ -5,7 +5,7 @@ namespace Application\View\Helper;
 use Psr\Container\ContainerInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use UnicaenApp\Util;
+use Unicaen\Console\Console;
 
 /**
  * Description of AppLinkFactory
@@ -20,7 +20,7 @@ class AppLinkFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $router = Util::isConsole() ? 'HttpRouter' : 'Router';
+        $router = Console::isConsole() ? 'HttpRouter' : 'Router';
         $match  = $container->get('application')->getMvcEvent()->getRouteMatch();
         $helper = new AppLink();
 

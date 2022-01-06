@@ -12,12 +12,12 @@
         "unicaen/app"            : "dev-ll-php8",
         "unicaen/auth"           : "dev-ll-php8",
         "laminas/laminas-file"   : "^2.8",
-        "unicaen/code"           : "^6.0",
+        "unicaen/code"           : "dev-ll-php8",
         "unicaen/import"         : "dev-ll-php8",
         "unicaen/tbl"            : "dev-ll-php8",
         "unicaen/open-document"  : "^4.0",
         "unicaen/siham"          : "^2.0",
-        "laminas/laminas-developer-tools": "2.3.0"
+        "laminas/laminas-cache-storage-adapter-memory": "2.1.x-dev"
     },
     "config": {
         "allow-plugins": {

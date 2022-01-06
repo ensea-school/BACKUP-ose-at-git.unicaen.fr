@@ -117,4 +117,4 @@ FROM
     LEFT JOIN contrat              cp ON cp.id = c.contrat_id
   WHERE
     c.histo_destruction IS NULL
-) ct;
+) ct

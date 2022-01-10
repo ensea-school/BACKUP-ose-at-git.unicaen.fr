@@ -13,11 +13,11 @@ trait PlafondConfigTrait
     use ParametreEntityTrait;
     use PlafondAwareTrait;
 
-    protected float       $heures = 0;
+    protected float        $heures      = 0;
 
-    protected PlafondEtat $etatPrevu;
+    protected ?PlafondEtat $etatPrevu   = null;
 
-    protected PlafondEtat $etatRealise;
+    protected ?PlafondEtat $etatRealise = null;
 
 
 
@@ -44,7 +44,7 @@ trait PlafondConfigTrait
 
 
 
-    public function setEtatPrevu(PlafondEtat $etat): PlafondConfigInterface
+    public function setEtatPrevu(?PlafondEtat $etat): PlafondConfigInterface
     {
         $this->etatPrevu = $etat;
 
@@ -60,7 +60,7 @@ trait PlafondConfigTrait
 
 
 
-    public function setEtatRealise(PlafondEtat $etat): PlafondConfigInterface
+    public function setEtatRealise(?PlafondEtat $etat): PlafondConfigInterface
     {
         $this->etatRealise = $etat;
 

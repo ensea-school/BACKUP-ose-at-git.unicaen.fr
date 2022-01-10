@@ -241,8 +241,15 @@ class PlafondService extends AbstractEntityService
         /** @var $perimetres PlafondPerimetre[] */
         $perimetres = $q->execute();
 
-        $tvhPrevuId   = $this->getServiceTypeVolumeHoraire()->getPrevu()->getId();
-        $tvhRealiseId = $this->getServiceTypeVolumeHoraire()->getRealise()->getId();
+        $tvhPrevuId       = $this->getServiceTypeVolumeHoraire()->getPrevu()->getId();
+        $tvhRealiseId     = $this->getServiceTypeVolumeHoraire()->getRealise()->getId();
+        $configTablesJoin = [
+            "structure"      => "plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
+            "intervenant"    => "plafond_statut ps ON ps.plafond_id = p.plafond_id AND ps.statut_intervenant_id = i.statut_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
+            "element"        => "plafond_statut ps ON 1 = 0",
+            "volume_horaire" => "plafond_statut ps ON 1 = 0",
+            "referentiel"    => "plafond_referentiel ps ON ps.plafond_id = p.plafond_id AND ps.fonction_referentiel_id = p.fonction_referentiel_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
+        ];
 
         foreach ($perimetres as $perimetre) {
             $cols = $colsPos['TBL_PLAFOND_' . strtoupper($perimetre->getCode())];
@@ -288,7 +295,7 @@ class PlafondService extends AbstractEntityService
             $view .= "\n  ) p";
             $view .= "\n  JOIN intervenant i ON i.id = p.intervenant_id";
             $view .= "\n  JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)";
-            $view .= "\n  LEFT JOIN plafond_statut ps ON ps.plafond_id = p.plafond_id AND ps.statut_intervenant_id = i.statut_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL";
+            $view .= "\n  LEFT JOIN " . $configTablesJoin[$perimetre->getCode()];
             $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
             $view .= "\nWHERE\n  1=1";
             foreach ($cols as $col) {

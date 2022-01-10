@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'PLAFONDAPP_PLAFOND_ETAT_FK',
+    'name'    => 'PLAFOND_APPLICATION_HCFK',
     'unique'  => FALSE,
     'table'   => 'PLAFOND_APPLICATION',
     'columns' => [
-        'PLAFOND_ETAT_ID',
+        'HISTO_CREATEUR_ID',
     ],
 ];
 

@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'PLAFONDAPP_TVH_FK',
+    'name'    => 'PLAFONDAPP_ETAT_PREVU_FK',
     'unique'  => FALSE,
     'table'   => 'PLAFOND_APPLICATION',
     'columns' => [
-        'TYPE_VOLUME_HORAIRE_ID',
+        'PLAFOND_ETAT_PREVU_ID',
     ],
 ];
 

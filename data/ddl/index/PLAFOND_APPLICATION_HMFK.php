@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'PLAFONDAPP_ANNEE_FFK',
+    'name'    => 'PLAFOND_APPLICATION_HMFK',
     'unique'  => FALSE,
     'table'   => 'PLAFOND_APPLICATION',
     'columns' => [
-        'ANNEE_FIN_ID',
+        'HISTO_MODIFICATEUR_ID',
     ],
 ];
 

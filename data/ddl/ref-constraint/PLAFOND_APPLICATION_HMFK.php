@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'PLAFONDAPP_PLAFOND_ETAT_FK',
+    'name'        => 'PLAFOND_APPLICATION_HMFK',
     'table'       => 'PLAFOND_APPLICATION',
-    'rtable'      => 'PLAFOND_ETAT',
-    'delete_rule' => 'CASCADE',
+    'rtable'      => 'UTILISATEUR',
+    'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
-        'PLAFOND_ETAT_ID' => 'ID',
+        'HISTO_MODIFICATEUR_ID' => 'ID',
     ],
 ];
 

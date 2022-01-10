@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'PLAFONDAPP_ANNEE_FFK',
+    'name'        => 'PLAFOND_APPLICATION_ANNEE_FK',
     'table'       => 'PLAFOND_APPLICATION',
     'rtable'      => 'ANNEE',
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
-        'ANNEE_FIN_ID' => 'ID',
+        'ANNEE_ID' => 'ID',
     ],
 ];
 

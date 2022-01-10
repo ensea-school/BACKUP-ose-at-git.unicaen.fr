@@ -131,7 +131,7 @@ class SihamFieldset extends AbstractFieldset
             ],
             'type'       => 'Select',
         ]);
-
+        
         $valuesAffectation = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeUO());
 
         if (count($valuesAffectation) == 1) {

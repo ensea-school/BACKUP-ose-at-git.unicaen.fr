@@ -665,7 +665,7 @@ class SihamConnecteur implements ConnecteurRhInterface
         $params = [
             'codeAdministration' => '',
             'listeUO'            => [[
-                                         'typeUO' => 'COP',
+                                         'typeUO' => $this->siham->getConfig()['code-type-structure-affectation'],
                                      ]],
         ];
 

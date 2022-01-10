@@ -17,6 +17,7 @@ Pour utiliser le module ExportRh Siham vous devez ajouter dans le fichier de con
         //définition du connecteur SI RH à utiliser pour le module export RH de OSE
         'actif'      => true,//False pour désactiver l'export RH
         'connecteur' => 'siham',//Le nom du connecteur dont vous avez besoin, pour le moment seul le connecteur SIHAM a été développé.
+        'sync-code'  => false,//Permet de venir forcer le code de l'intervenant avec le matricule siham en retour d'un renouvellement ou d'une prise en charge
     ],
 ```
 

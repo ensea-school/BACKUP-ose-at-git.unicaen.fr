@@ -1,10 +1,11 @@
 <?php
+
 use Application\Provider\Privilege\Privileges;
 
 $this->headTitle()->append("Types d'activité des centres de coûts");
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION));
-$canEdit = true;
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::BUDGET_CC_ACTIVITE_EDITION));
+
 
 ?>
 <h1 class="page-header">Types d'activité des centres de coûts</h1>
@@ -30,11 +31,11 @@ $canEdit = true;
                 <?= $activite->getCode() ?>&nbsp;
             </td>
             <td><?= $activite->getLibelle() ?></td>
-            <td><?= ($activite->getFi())?'OUI':'NON'; ?></td>
-            <td><?= ($activite->getFa())?'OUI':'NON'; ?></td>
-            <td><?= ($activite->getFc())?'OUI':'NON'; ?></td>
-            <td><?= ($activite->getFcMajorees())?'OUI':'NON'; ?></td>
-            <td><?= ($activite->getReferentiel())?'OUI':'NON'; ?></td>
+            <td><?= ($activite->getFi()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= ($activite->getFa()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= ($activite->getFc()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= ($activite->getFcMajorees()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= ($activite->getReferentiel()) ? 'OUI' : 'NON'; ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal"

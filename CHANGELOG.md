@@ -33,6 +33,18 @@ Objectif : Plafonds personnalisables
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
 
 
+# OSE 17.2 (05/01/2022)
+
+## Nouveautés
+
+* Ajout d'un nouveau paramètre 'code-type-structure-affectation' dans le fichier de config unicaen-siham.local.php pour le module exportRH afin de rendre paramétrable le code type structure pour la remontée des structures d'affectation de SIHAM.
+
+## Notes de mise à jour
+
+* Pour les utilisateurs du module ExportRH Siham, il faut rajouter un nouveau paramètre dans le fichier unicaen-siham.local.php, qui correspond au code de type de structure SIHAM que vous souhaitez remonter pour la liste des structures d'affectation via les Webservices, exemple : 
+
+`'code-type-structure-affectation' => 'COP',`
+
 
 # OSE 17.1 (07/12/2021)
 

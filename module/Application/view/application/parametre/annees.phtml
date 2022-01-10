@@ -6,7 +6,11 @@
  * @var $canEdit boolean
  */
 
-$annees = array_chunk($annees, 10);
+use Application\Provider\Privilege\Privileges;
+
+$annees  = array_chunk($annees, 10);
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANNEES_EDITION));
+
 
 ?>
 <h1 class="page-header">Gestion des années</h1>
@@ -16,7 +20,7 @@ $annees = array_chunk($annees, 10);
         <?php foreach ($al as $annee): ?>
 
             <div style="margin:5px">
-                <button type="button" data-id="<?= $annee->getId() ?>" class="btn btn-annee <?= $annee->isActive() ? 'btn-info active' : 'btn-default' ?>"><?= $annee ?></button>
+                <button type="button" <?= (!$canEdit) ? 'disabled="disabled"' : ''; ?> data-id="<?= $annee->getId() ?>" class="btn btn-annee <?= $annee->isActive() ? 'btn-info active' : 'btn-default' ?>"><?= $annee ?></button>
             </div>
 
         <?php endforeach; ?>
@@ -24,24 +28,24 @@ $annees = array_chunk($annees, 10);
 <?php endif; endforeach; ?>
 <script>
 
-    $('.btn-annee').click(function(){
+    $('.btn-annee').click(function () {
 
         var isActive = $(this).hasClass('active');
         var anneeId = $(this).data('id');
 
-        if (isActive){
+        if (isActive) {
             $(this).removeClass('active');
             $(this).removeClass('btn-info');
             $(this).addClass('btn-default');
             isActive = false;
-        }else{
+        } else {
             $(this).addClass('active');
             $(this).addClass('btn-info');
             $(this).removeClass('btn-default');
             isActive = true;
         }
 
-        $.post( <?= var_export( $this->url('parametres/annees'), true) ?>, {annee: anneeId}, function(data) {
+        $.post(<?= var_export($this->url('parametres/annees'), true) ?>, {annee: anneeId}, function (data) {
             alertFlash(data.message, data.status, 5000);
         });
 

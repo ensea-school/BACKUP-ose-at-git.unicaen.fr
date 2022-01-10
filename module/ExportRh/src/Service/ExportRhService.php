@@ -13,9 +13,9 @@ use phpDocumentor\Reflection\Types\Array_;
 use Laminas\Form\Fieldset;
 
 /**
- * Description of FonctionReferentiel
+ * ExportRhService
  *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
  */
 class ExportRhService extends AbstractService
 {

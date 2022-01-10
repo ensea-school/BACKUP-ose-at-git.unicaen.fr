@@ -34,6 +34,9 @@ Toutes ces informations sont paramétrables à l'aide du formulaire personnalis�
 
 ![Formulaire SIHAM](formulaire-connecteur-siham.png)
 
+Si vous avez activé le paramètre 'sync-code', la prise en charge va venir remplacer le code de l'intervenant par le matricule SIHAM. Ce paramètre est utile surtout dans le cas où vous proposez des comptes locaux à ose pour vos vacataires. (Attention, dans ce cas le connecteur MV_INTERVENANT.sql qui
+alimente OSE avec les intervenants doit bien évidement utiliser le matricule SIHAM comme CODE intervenant afin que la synchronisationne ne produise pas de doublon)
+
 ## Renouvellement d'un intervenant (REN)
 
 On appelle renouvellement (REN), le fait d'exporter vers SIHAM un intervenant déjà connu du SI RH.
@@ -47,6 +50,9 @@ Le renouvellement va d'abord mettre à jour certaines données personnelles de l
 De la même façon, OSE va créer un nouvelle affectation pour l'année universitaire en cours, et mettre à jour le statut, le type d'emploi, la position administrative et le service dans SIHAM, le tout en auto validé dans SIHAM.
 
 ![Formulaire SIHAM](formulaire-connecteur-siham.png)
+
+Si vous avez activé le paramètre 'sync-code', le renouvellement va venir remplacer le code de l'intervenant par le matricule SIHAM. Ce paramètre est utile surtout dans le cas où vous proposez des comptes locaux ose pour vos vacataires. (Attention, dans ce cas le connecteur MV_INTERVENANT.sql qui
+alimente OSE avec les intervenants doit bien évidement utiliser le matricule SIHAM comme CODE intervenant afin que la synchronisationne ne produise pas de doublon)
 
 ## Suite à la PEC ou au REN
 

@@ -5,7 +5,7 @@ namespace ExportRh\Service;
 /**
  * Description of ExportRhServiceAwareTrait
  *
- * @author UnicaenCode
+ * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
  */
 trait ExportRhServiceAwareTrait
 {

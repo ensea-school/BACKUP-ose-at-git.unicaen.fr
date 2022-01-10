@@ -31,7 +31,7 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
     <?php foreach ($indicateurs as $typeIndicateur): ?>
         <div class="panel panel-default indicateurs">
             <div class="panel-heading"><?= $typeIndicateur ?></div>
-            <table class="table table-bordered table-condensed type-indicateur" data-id="<?= $typeIndicateur->getId() ?>">
+            <table class="table table-bordered table-condensed type-indicateur non-calcule" data-id="<?= $typeIndicateur->getId() ?>">
                 <thead>
                 <tr>
                     <th class="numero">N°</th>
@@ -89,16 +89,24 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                 that.element.find('td.intitule').html(
                     'Calcul de l\'indicateur en cours <span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
                 );
-                that.element.find('.type-indicateur').each(function () {
-                    that.calculerType($(this).data('id'));
-                });
+
+                that.calculerNextType();
+            },
+
+            calculerNextType: function ()
+            {
+                var typeIndicateur = this.element.find('.type-indicateur.non-calcule:first');
+                if (typeIndicateur.length == 1) {
+                    this.calculerType(typeIndicateur);
+                }
             },
 
             calculerType: function (typeIndicateur)
             {
                 var that = this;
 
-                $.post("<?= $this->url('indicateur') ?>" + "/calcul/" + typeIndicateur, [], function (data)
+                typeIndicateur.removeClass("non-calcule");
+                $.post("<?= $this->url('indicateur') ?>" + "/calcul/" + typeIndicateur.data('id'), [], function (data)
                     {
                         for (id in data) {
                             var td = that.element.find('.indicateur#' + id).find('.intitule');
@@ -109,11 +117,13 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                                 td.html("<a href=" + td.data('url') + ">" + data[id].libelle + '</a>');
                             }
                         }
+                        that.calculerNextType();
                     }
                 ).fail(function (jqXHR)
                 {
                     alertFlash(jqXHR.responseText, 'danger', 5000);
                     console.log(jqXHR);
+                    that.calculerNextType();
                 });
 
             },

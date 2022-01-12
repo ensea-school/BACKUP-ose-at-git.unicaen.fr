@@ -96,6 +96,11 @@ WidgetInitializer = {
      */
     add: function (className, widgetName, onInitialize)
     {
+        if (typeof widgetName === "object") {
+            $.widget("wi." + className, widgetName);
+            widgetName = className;
+        }
+
         WidgetInitializer.widgets[className] = {
             widgetName: widgetName,
             onInitialize: onInitialize,

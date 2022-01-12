@@ -92,7 +92,8 @@ echo $this->form()->closeTag();
 
     $(function ()
     {
-        $.widget("ose.etatSortieSaisir", {
+
+        WidgetInitializer.add('etat-sortie-saisir', {
             requeteEditor: null,
             paramsEditor: null,
             traitementPdfEditor: null,
@@ -208,7 +209,6 @@ echo $this->form()->closeTag();
             }
         });
 
-        WidgetInitializer.add('etat-sortie-saisir', 'etatSortieSaisir');
     });
 
 </script>

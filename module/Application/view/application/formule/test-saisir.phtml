@@ -487,7 +487,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 <script type="text/javascript">
     $(function () {
 
-        $.widget("ose.formuleTestIntervenant", {
+        WidgetInitializer.add('formule-test-intervenant', {
             id: null,
             saving: false,
             structures: [],
@@ -1006,8 +1006,6 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             }
 
         });
-
-        WidgetInitializer.add('formule-test-intervenant', 'formuleTestIntervenant');
 
     });
 </script>

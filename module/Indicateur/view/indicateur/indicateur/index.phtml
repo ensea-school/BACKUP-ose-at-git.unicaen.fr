@@ -80,7 +80,7 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
 <script type="text/javascript">
     $(function () {
 
-        $.widget("ose.indicateursListe", {
+        WidgetInitializer.add('indicateurs-liste', {
 
             calculer: function ()
             {
@@ -136,8 +136,6 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
             },
 
         });
-
-        WidgetInitializer.add('indicateurs-liste', 'indicateursListe');
 
     });
 </script>

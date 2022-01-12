@@ -133,7 +133,7 @@ if ($errors) {
 
         $(function ()
         {
-            $.widget("ose.formIntervenantEdition", {
+            WidgetInitializer.add('form-intervenant-edition', {
 
                 _create: function ()
                 {
@@ -192,7 +192,6 @@ if ($errors) {
                 getUserUtilisateurElement: function () { return this.element.find('input[name="utilisateur[id]"]'); }
             });
 
-            WidgetInitializer.add('form-intervenant-edition', 'formIntervenantEdition');
         })
         ;
     </script>

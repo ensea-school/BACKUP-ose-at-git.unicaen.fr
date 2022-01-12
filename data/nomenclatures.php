@@ -189,8 +189,9 @@ return [
             'I_PARAM_3_LIBELLE' => 'Heures max. enseignement en HC',
         ],
         13 => [
-            'LIBELLE'      => 'Université Paris 8',
-            'PACKAGE_NAME' => 'FORMULE_PARIS8',
+            'LIBELLE'            => 'Université Paris 8',
+            'PACKAGE_NAME'       => 'FORMULE_PARIS8',
+            'VH_PARAM_1_LIBELLE' => 'Code EP',
         ],
         14 => [
             'LIBELLE'      => 'Université d\'Artois',

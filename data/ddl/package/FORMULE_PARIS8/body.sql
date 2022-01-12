@@ -154,72 +154,180 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-    -- T=SI($H20="Référentiel";0;($AO20+$BA20)*E20)
+    -- AH15=SOMME(AG:AG)
+    WHEN c = 'AH15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AG');
+
+
+
+    -- AN15=SOMME(AM:AM)
+    WHEN c = 'AN15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AM');
+
+
+
+    -- AT15=SOMME(AS:AS)
+    WHEN c = 'AT15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AS');
+
+
+
+    -- AZ15=SOMME(AY:AY)
+    WHEN c = 'AZ15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'AY');
+
+
+
+    -- BF15=SOMME(BE:BE)
+    WHEN c = 'BF15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BE');
+
+
+
+    -- BL15=SOMME(BK:BK)
+    WHEN c = 'BL15' AND v >= 1 THEN
+      RETURN calcFnc('total', 'BK');
+
+
+
+    -- AH16=MIN(AH15;i_service_du)
+    WHEN c = 'AH16' AND v >= 1 THEN
+      RETURN LEAST(cell('AH15'), i.service_du);
+
+
+
+    -- AN16=MIN(AN15;AH17)
+    WHEN c = 'AN16' AND v >= 1 THEN
+      RETURN LEAST(cell('AN15'), cell('AH17'));
+
+
+
+    -- AT16=MIN(AT15;AN17)
+    WHEN c = 'AT16' AND v >= 1 THEN
+      RETURN LEAST(cell('AT15'), cell('AN17'));
+
+
+
+    -- AZ16=MIN(AZ15;AT17)
+    WHEN c = 'AZ16' AND v >= 1 THEN
+      RETURN LEAST(cell('AZ15'), cell('AT17'));
+
+
+
+    -- BF16=MIN(BF15;AZ17)
+    WHEN c = 'BF16' AND v >= 1 THEN
+      RETURN LEAST(cell('BF15'), cell('AZ17'));
+
+
+
+    -- BL16=MIN(BL15;BF17)
+    WHEN c = 'BL16' AND v >= 1 THEN
+      RETURN LEAST(cell('BL15'), cell('BF17'));
+
+
+
+    -- AH17=i_service_du-AH16
+    WHEN c = 'AH17' AND v >= 1 THEN
+      RETURN i.service_du - cell('AH16');
+
+
+
+    -- AN17=AH17-AN16
+    WHEN c = 'AN17' AND v >= 1 THEN
+      RETURN cell('AH17') - cell('AN16');
+
+
+
+    -- AT17=AN17-AT16
+    WHEN c = 'AT17' AND v >= 1 THEN
+      RETURN cell('AN17') - cell('AT16');
+
+
+
+    -- AZ17=AT17-AZ16
+    WHEN c = 'AZ17' AND v >= 1 THEN
+      RETURN cell('AT17') - cell('AZ16');
+
+
+
+    -- BF17=AZ17-BF16
+    WHEN c = 'BF17' AND v >= 1 THEN
+      RETURN cell('AZ17') - cell('BF16');
+
+
+
+    -- BL17=BF17-BL16
+    WHEN c = 'BL17' AND v >= 1 THEN
+      RETURN cell('BF17') - cell('BL16');
+
+
+
+    -- T=SI($H20="Référentiel";0;($AI20+$AU20+$BG20)*E20)
     WHEN c = 'T' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN (cell('AO',l) + cell('BA',l)) * vh.taux_fi;
+        RETURN (cell('AI',l) + cell('AU',l) + cell('BG',l)) * vh.taux_fi;
       END IF;
 
 
 
-    -- U=SI($H20="Référentiel";0;($AO20+$BA20)*F20)
+    -- U=SI($H20="Référentiel";0;($AI20+$AU20+$BG20)*F20)
     WHEN c = 'U' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN (cell('AO',l) + cell('BA',l)) * vh.taux_fa;
+        RETURN (cell('AI',l) + cell('AU',l) + cell('BG',l)) * vh.taux_fa;
       END IF;
 
 
 
-    -- V=SI($H20="Référentiel";0;($AO20+$BA20)*G20)
+    -- V=SI($H20="Référentiel";0;($AI20+$AU20+$BG20)*G20)
     WHEN c = 'V' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN (cell('AO',l) + cell('BA',l)) * vh.taux_fc;
+        RETURN (cell('AI',l) + cell('AU',l) + cell('BG',l)) * vh.taux_fc;
       END IF;
 
 
 
-    -- W=SI($H20="Référentiel";$AI20+$AU20+$BG20;0)
+    -- W=SI($H20="Référentiel";$AO20+$BA20+$BM20;0)
     WHEN c = 'W' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
-        RETURN cell('AI',l) + cell('AU',l) + cell('BG',l);
+        RETURN cell('AO',l) + cell('BA',l) + cell('BM',l);
       ELSE
         RETURN 0;
       END IF;
 
 
 
-    -- X=SI($H20="Référentiel";0;($AQ20+$BC20)*E20)
+    -- X=SI($H20="Référentiel";0;($AK20+$AW20+$BI20)*E20)
     WHEN c = 'X' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN (cell('AQ',l) + cell('BC',l)) * vh.taux_fi;
+        RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l)) * vh.taux_fi;
       END IF;
 
 
 
-    -- Y=SI($H20="Référentiel";0;($AQ20+$BC20)*F20)
+    -- Y=SI($H20="Référentiel";0;($AK20+$AW20+$BI20)*F20)
     WHEN c = 'Y' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN (cell('AQ',l) + cell('BC',l)) * vh.taux_fa;
+        RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l)) * vh.taux_fa;
       END IF;
 
 
 
-    -- Z=SI($H20="Référentiel";0;($AQ20+$BC20)*G20)
+    -- Z=SI($H20="Référentiel";0;($AK20+$AW20+$BI20)*G20)
     WHEN c = 'Z' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        RETURN (cell('AQ',l) + cell('BC',l)) * vh.taux_fc;
+        RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l)) * vh.taux_fc;
       END IF;
 
 
@@ -230,10 +338,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-    -- AB=SI($H20="Référentiel";$AK20+$AW20+$BI20;0)
+    -- AB=SI($H20="Référentiel";$AQ20+$BC20+$BO20;0)
     WHEN c = 'AB' AND v >= 1 THEN
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
-        RETURN cell('AK',l) + cell('AW',l) + cell('BI',l);
+        RETURN cell('AQ',l) + cell('BC',l) + cell('BO',l);
       ELSE
         RETURN 0;
       END IF;
@@ -251,16 +359,17 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
       RETURN vh.taux_service_compl;
 
 
-    -- AG=SI($D20="Oui";SI(ET($H20="Référentiel";$A20=$K$10);$M20*$AD20;0);0)
+
+    -- AG=SI($H20="Référentiel";0;SI(STXT($N20;1;4)="PRIO";$M20*$AD20;0))
     WHEN c = 'AG' AND v >= 1 THEN
-      IF vh.service_statutaire THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        IF UPPER(SUBSTR(vh.param_1, 1, 4)) = 'PRIO' THEN
           RETURN vh.heures * cell('AD', l);
         ELSE
           RETURN 0;
         END IF;
-      ELSE
-        RETURN 0;
       END IF;
 
 
@@ -301,14 +410,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-    -- AM=SI($D20="Oui";SI(ET($H20<>"Référentiel";$A20=i_structure_code);$M20*$AD20;0);0)
+    -- AM=SI(ET($H20="Référentiel";$A20=$K$10);$M20*$AD20;0)
     WHEN c = 'AM' AND v >= 1 THEN
-      IF vh.service_statutaire THEN
-        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
-          RETURN vh.heures * cell('AD', l);
-        ELSE
-          RETURN 0;
-        END IF;
+      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ THEN
+        RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
       END IF;
@@ -351,14 +456,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-    -- AS=SI($D20="Oui";SI(ET($H20="Référentiel";$A20=i_structure_code);$M20*$AD20;0);0)
+    -- AS=SI(ET($H20<>"Référentiel";$A20=i_structure_code;STXT($N20;1;4)<>"PRIO");$M20*$AD20;0)
     WHEN c = 'AS' AND v >= 1 THEN
-      IF vh.service_statutaire THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
-          RETURN vh.heures * cell('AD', l);
-        ELSE
-          RETURN 0;
-        END IF;
+      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND UPPER(SUBSTR(vh.param_1, 1, 4)) <> 'PRIO' THEN
+        RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
       END IF;
@@ -400,15 +501,11 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
       END IF;
 
 
---       =SI($D20="Oui";SI(ET($H20="Référentiel";$A20=i_structure_code);$M20*$AD20;0);0)
-    -- AY=SI($D20="Oui";SI(ET($H20<>"Référentiel";$A20<>i_structure_code);$M20*$AD20;0);0)
+
+    -- AY=SI(ET($H20="Référentiel";$A20=i_structure_code);$M20*$AD20;0)
     WHEN c = 'AY' AND v >= 1 THEN
-      IF vh.service_statutaire THEN
-        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * cell('AD', l);
-        ELSE
-          RETURN 0;
-        END IF;
+      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
+        RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
       END IF;
@@ -451,14 +548,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-    -- BE=SI($D20="Oui";SI(ET($H20="Référentiel";$A20<>i_structure_code;$A20<>$K$10);$M20*$AD20;0);0)
+    -- BE=SI(ET($H20<>"Référentiel";$A20<>i_structure_code;STXT($N20;1;4)<>"PRIO");$M20*$AD20;0)
     WHEN c = 'BE' AND v >= 1 THEN
-      IF vh.service_statutaire THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
-          RETURN vh.heures * cell('AD', l);
-        ELSE
-          RETURN 0;
-        END IF;
+      IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND UPPER(SUBSTR(vh.param_1, 1, 4)) <> 'PRIO' THEN
+        RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
       END IF;
@@ -501,95 +594,49 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-    -- AH15=SOMME(AG:AG)
-    WHEN c = 'AH15' AND v >= 1 THEN
-      RETURN calcFnc('total', 'AG');
+    -- BK=SI(ET($H20="Référentiel";$A20<>i_structure_code;$A20<>$K$10);$M20*$AD20;0)
+    WHEN c = 'BK' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
+        RETURN vh.heures * cell('AD',l);
+      ELSE
+        RETURN 0;
+      END IF;
 
 
 
-    -- AH16=MIN(AH15;i_service_du)
-    WHEN c = 'AH16' AND v >= 1 THEN
-      RETURN LEAST(cell('AH15'), i.service_du);
+    -- BL=SI(BL$15>0;BK20/BL$15;0)
+    WHEN c = 'BL' AND v >= 1 THEN
+      IF cell('BL15') > 0 THEN
+        RETURN cell('BK',l) / cell('BL15');
+      ELSE
+        RETURN 0;
+      END IF;
 
 
 
-    -- AH17=i_service_du-AH16
-    WHEN c = 'AH17' AND v >= 1 THEN
-      RETURN i.service_du - cell('AH16');
+    -- BM=BL$16*BL20
+    WHEN c = 'BM' AND v >= 1 THEN
+      RETURN cell('BL16') * cell('BL',l);
 
 
 
-    -- AN15=SOMME(AM:AM)
-    WHEN c = 'AN15' AND v >= 1 THEN
-      RETURN calcFnc('total', 'AM');
+    -- BN=SI(BL$17=0;(BK20-BM20)/$AD20;0)
+    WHEN c = 'BN' AND v >= 1 THEN
+      IF cell('BL17') = 0 THEN
+        RETURN (cell('BK',l) - cell('BM',l)) / cell('AD', l);
+      ELSE
+        RETURN 0;
+      END IF;
 
 
 
-    -- AN16=MIN(AN15;AH17)
-    WHEN c = 'AN16' AND v >= 1 THEN
-      RETURN LEAST(cell('AN15'), cell('AH17'));
-
-
-
-    -- AN17=AH17-AN16
-    WHEN c = 'AN17' AND v >= 1 THEN
-      RETURN cell('AH17') - cell('AN16');
-
-
-
-    -- AT15=SOMME(AS:AS)
-    WHEN c = 'AT15' AND v >= 1 THEN
-      RETURN calcFnc('total', 'AS');
-
-
-
-    -- AT16=MIN(AT15;AN17)
-    WHEN c = 'AT16' AND v >= 1 THEN
-      RETURN LEAST(cell('AT15'), cell('AN17'));
-
-
-
-    -- AT17=AN17-AT16
-    WHEN c = 'AT17' AND v >= 1 THEN
-      RETURN cell('AN17') - cell('AT16');
-
-
-
-    -- AZ15=SOMME(AY:AY)
-    WHEN c = 'AZ15' AND v >= 1 THEN
-      RETURN calcFnc('total', 'AY');
-
-
-
-    -- AZ16=MIN(AZ15;AT17)
-    WHEN c = 'AZ16' AND v >= 1 THEN
-      RETURN LEAST(cell('AZ15'), cell('AT17'));
-
-
-
-    -- AZ17=AT17-AZ16
-    WHEN c = 'AZ17' AND v >= 1 THEN
-      RETURN cell('AT17') - cell('AZ16');
-
-
-
-    -- BF15=SOMME(BE:BE)
-    WHEN c = 'BF15' AND v >= 1 THEN
-      RETURN calcFnc('total', 'BE');
-
-
-
-    -- BF16=MIN(BF15;AZ17)
-    WHEN c = 'BF16' AND v >= 1 THEN
-      RETURN LEAST(cell('BF15'), cell('AZ17'));
-
-
-
-    -- BF17=AZ17-BF16
-    WHEN c = 'BF17' AND v >= 1 THEN
-      RETURN cell('AZ17') - cell('BF16');
-
-
+    -- BO=SI(i_depassement_service_du_sans_hc="Non";BN20*$AE20;0)
+    WHEN c = 'BO' AND v >= 1 THEN
+      IF NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell('BN',l) * cell('AE',l);
+      ELSE
+        RETURN 0;
+      END IF;
 
 
 
@@ -642,13 +689,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
     RETURN '
     SELECT
       fvh.*,
-      NULL param_1,
+      ep.code param_1,
       NULL param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
       V_FORMULE_VOLUME_HORAIRE fvh
+      LEFT JOIN service s ON s.id = fvh.service_id
+      LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
     ORDER BY
       ordre';
   END;

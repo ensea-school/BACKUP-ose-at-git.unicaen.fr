@@ -3,10 +3,12 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
+use Laminas\View\Model\JsonModel;
 use Plafond\Entity\Db\Plafond;
-use Plafond\Entity\Db\PlafondApplication;
+use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Form\PlafondApplicationFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Form\PlafondFormAwareTrait;
 use Plafond\Service\PlafondApplicationServiceAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
@@ -27,39 +29,31 @@ class PlafondController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use ContextServiceAwareTrait;
     use PlafondFormAwareTrait;
+    use PlafondConfigFormAwareTrait;
 
 
     public function indexAction()
     {
         $title = 'Gestion des plafonds';
-
-        $anneeId = $this->getServiceContext()->getAnnee()->getId();
-
-        $plafonds             = $this->getServicePlafond()->getList();
-        $typesVolumesHoraires = $this->getServiceTypeVolumeHoraire()->getList();
+        $form  = $this->getFormPlafondConfig();
+        $annee = $this->getServiceContext()->getAnnee();
 
         $dql = "
         SELECT
-          plapp, adeb, afin
+          p, prm, pa
         FROM
-          " . PlafondApplication::class . " plapp
-          LEFT JOIN plapp.anneeDebut adeb
-          LEFT JOIN plapp.anneeFin afin
-        WHERE
-          COALESCE($anneeId,$anneeId) BETWEEN COALESCE(adeb.id,$anneeId) AND COALESCE(afin.id,$anneeId)
-        "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
+          " . Plafond::class . " p
+          JOIN p.plafondPerimetre prm
+          LEFT JOIN p.plafondApplication pa WITH pa.annee = :annee AND pa.histoDestruction IS NULL
+        ORDER BY
+            prm.libelle, p.libelle
+        ";
 
-        /* @var $plapps PlafondApplication[] */
-        $plapps = $this->em()->createQuery($dql)->getResult();
-        $regles = [];
-        foreach ($plapps as $plapp) {
-            $plaId                  = $plapp->getPlafond()->getId();
-            $tvhId                  = $plapp->getTypeVolumeHoraire()->getId();
-            $regles[$plaId][$tvhId] = $plapp;
-        }
+        /* @var $plafonds Plafond[] */
+        $query = $this->em()->createQuery($dql)->setParameter('annee', $annee);
+        $form->setPlafonds($query->getResult());
 
-
-        return compact('title', 'plafonds', 'typesVolumesHoraires', 'regles');
+        return compact('title', 'form');
     }
 
 
@@ -112,53 +106,27 @@ class PlafondController extends AbstractController
 
     public function editerApplicationAction()
     {
-        $plafondApplication = $this->getEvent()->getParam('plafondApplication');
+        /** @var Plafond $plafond */
+        $plafond = $this->em()->find(Plafond::class, $this->params()->fromPost('plafond'));
+        $name    = $this->params()->fromPost('name');
+        $value   = $this->params()->fromPost('value');
 
-        if ($plafondApplication) {
-            $title = 'Modification d\'une règle d\'application de plafond';
-        } else {
-            $title = 'Création d\'une nouvelle règle d\'application de plafond';
+        $application = $plafond->getPlafondApplication();
 
-            $plafondId = $this->params()->fromPost('plafond', $this->params()->fromQuery('plafond'));
-            $plafond   = $this->getServicePlafond()->get($plafondId);
-
-            $typeVolumeHoraireId = $this->params()->fromPost('typeVolumeHoraire', $this->params()->fromQuery('typeVolumeHoraire'));
-            $typeVolumeHoraire   = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId);
-
-            if (!$plafond) {
-                throw new \Exception('Le plafond n\'est pas spécifié');
-            }
-
-            if (!$typeVolumeHoraire && !$plafondApplication) {
-                throw new \Exception('Vous ne précisez pas si la règle de gestion du plafond s\'applique à du service prévisionnel ou à du service réalisé');
-            }
-
-            $plafondApplication = $this->getServicePlafondApplication()->newEntity();
-            $plafondApplication->setPlafond($plafond);
-            $plafondApplication->setTypeVolumeHoraire($typeVolumeHoraire);
+        switch ($name) {
+            case 'plafondEtatPrevu':
+                $application->setEtatPrevu($this->em()->find(PlafondEtat::class, $value));
+            break;
+            case 'plafondEtatRealise':
+                $application->setEtatRealise($this->em()->find(PlafondEtat::class, $value));
+            break;
+            case 'heures':
+                $application->setHeures(stringToFloat($value));
+            break;
         }
+        $this->getServicePlafondApplication()->save($application);
 
-        $form = $this->getFormPlafondPlafondApplication();
-        $form->buildAnnees($plafondApplication);
-        $form->bindRequestSave($plafondApplication, $this->getRequest(), $this->getServicePlafondApplication());
-
-        return compact('title', 'form');
-    }
-
-
-
-    public function supprimerApplicationAction()
-    {
-        $plafondApplication = $this->getEvent()->getParam('plafondApplication');
-
-        try {
-            $this->getServicePlafondApplication()->delete($plafondApplication);
-            $this->flashMessenger()->addSuccessMessage("Règle de plafond supprimée avec succès.");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
-        }
-
-        return new MessengerViewModel();
+        return new JsonModel([]);
     }
 
 

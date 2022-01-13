@@ -15,9 +15,9 @@ interface ParametreEntityInterface extends HistoriqueAwareInterface
 
 
     /**
-     * @return Annee
+     * @return Annee|null
      */
-    public function getAnnee(): Annee;
+    public function getAnnee(): ?Annee;
 
 
 

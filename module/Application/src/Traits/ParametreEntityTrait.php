@@ -10,9 +10,9 @@ trait ParametreEntityTrait
 {
     use HistoriqueAwareTrait;
 
-    protected ?int  $id = null;
+    protected ?int   $id    = null;
 
-    protected Annee $annee;
+    protected ?Annee $annee = null;
 
 
 
@@ -27,9 +27,9 @@ trait ParametreEntityTrait
 
 
     /**
-     * @return Annee
+     * @return Annee|null
      */
-    public function getAnnee(): Annee
+    public function getAnnee(): ?Annee
     {
         return $this->annee;
     }

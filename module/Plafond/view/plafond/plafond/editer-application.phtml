@@ -20,10 +20,6 @@ echo $this->formHidden($form->get('typeVolumeHoraire'));
     <div class="row">
         <div class="col-md-12"><?= $this->formControlGroup($form->get('plafondEtat')); ?></div>
     </div>
-    <div class="row">
-        <div class="col-md-6"><?= $this->formControlGroup($form->get('anneeDebut')); ?></div>
-        <div class="col-md-6"><?= $this->formControlGroup($form->get('anneeFin')); ?></div>
-    </div>
 <?php
 echo $this->formRow($form->get('submit'));
 if ($form->getObject()->getId()) {

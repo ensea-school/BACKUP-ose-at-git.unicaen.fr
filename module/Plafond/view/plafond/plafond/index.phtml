@@ -1,16 +1,12 @@
 <?php
 
-use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\PlafondApplication;
-use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
- * @var $plafonds             Plafond[]
- * @var $typesVolumesHoraires TypeVolumeHoraire[]
- * @var $regles               PlafondApplication[][]
+ * @var $form                 \Plafond\Form\PlafondConfigForm
  */
 
 $canApply = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_APPLICATION));
@@ -19,27 +15,31 @@ $canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDIT
 ?>
 <h1 class="page-header"><?= $title ?></h1>
 
-<table class="table table-condensed table-hover table-bordered table-sort">
+<table class="table table-condensed table-hover table-bordered plafonds-admin">
     <thead>
     <tr>
-        <th>Périmètre</th>
-        <th>Plafond</th>
+        <th rowspan="2">Périmètre</th>
+        <th rowspan="2">Plafond</th>
         <?php if ($canEdit): ?>
-            <th>Actions</th>
+            <th rowspan="2">Actions</th>
         <?php endif; ?>
-        <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
-            <th><?= $typeVolumeHoraire ?></th>
-        <?php endforeach; ?>
+        <th colspan="3">Application</th>
+    </tr>
+    <tr>
+        <th>Prévisionnel</th>
+        <th>Réalisé</th>
+        <th rowspan="2">Heures<sup>*</sup></th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($plafonds as $plafond): ?>
+    <?php foreach ($form->getPlafonds() as $plafond): ?>
         <tr>
             <td><?= $plafond->getPlafondPerimetre() ?></td>
             <td style="width:50%"><?= $plafond ?></td>
             <?php if ($canEdit): ?>
                 <td>
-                    <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>"><span class="glyphicon glyphicon-edit"</a>
+                    <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>" title="Modifier le plafond"><span
+                                class="glyphicon glyphicon-edit"</a>
                     <a class="pop-ajax"
                        href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getId()]) ?>"
                        title="Supprimer le plafond"
@@ -53,42 +53,15 @@ $canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDIT
                     </a>
                 </td>
             <?php endif; ?>
-            <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
-                <td style="text-align:center;width:25%"><?php
-
-                    $regle = isset($regles[$plafond->getId()][$typeVolumeHoraire->getId()]) ? $regles[$plafond->getId()][$typeVolumeHoraire->getId()] : null;
-
-                    if ($regle) {
-                        if ($canApply) {
-                            $url = $this->url('plafond/editer-application', [
-                                'plafondApplication' => $regle->getId(),
-                            ]);
-                            echo $this->tag('a', [
-                                'class'              => 'pop-ajax',
-                                'href'               => $url,
-                                'data-submit-reload' => 'true',
-                                'data-min-width'     => '400px',
-                            ])->html((string)$regle);
-                        } else {
-                            echo (string)$regle;
-                        }
-                    } else {
-                        if ($canApply) {
-                            $url = $this->url('plafond/editer-application', [], ['query' => [
-                                'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
-                                'plafond'           => $plafond->getId(),
-                            ]]);
-                            echo $this->tag('a', [
-                                'class'              => 'pop-ajax',
-                                'href'               => $url,
-                                'data-submit-reload' => 'true',
-                                'data-min-width'     => '400px',
-                            ])->html('Désactivé');
-                        }
-                    }
-
-                    ?></td>
-            <?php endforeach; ?>
+            <?php if ($canApply): ?>
+                <td><?php echo $this->formControlGroup($form->getElement($plafond, 'plafondEtatPrevu')); ?></td>
+                <td><?php echo $this->formControlGroup($form->getElement($plafond, 'plafondEtatRealise')); ?></td>
+                <td><?php echo $this->formControlGroup($form->getElement($plafond, 'heures')); ?></td>
+            <?php else: ?>
+                <td><?php echo $plafond->getPlafondApplication()->getEtatPrevu(); ?></td>
+                <td><?php echo $plafond->getPlafondApplication()->getEtatRealise(); ?></td>
+                <td><?php echo floatToString($plafond->getPlafondApplication()->getHeures()); ?></td>
+            <?php endif; ?>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -97,3 +70,40 @@ $canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDIT
     <a href="<?= $this->url('plafond/ajouter') ?>" class="btn btn-default">Création d'un nouveau plafond</a>
     <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
 <?php endif; ?>
+<script type="text/javascript">
+    $(function () {
+
+        WidgetInitializer.add('plafonds-admin', {
+
+            change: function (el)
+            {
+
+                var params = {
+                    plafond: el.data('plafond-id'),
+                    name: el.data('name'),
+                    value: el.val()
+                };
+                $.post("<?= $this->url('plafond/editer-application') ?>", params, function (data)
+                {
+                    alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
+                }).fail(function (jqXHR)
+                {
+                    alertFlash(jqXHR.responseText, 'danger', 3000);
+                });
+            },
+
+            _create: function ()
+            {
+                var that = this;
+                var elsel = '[data-name="plafondEtatPrevu"],[data-name="plafondEtatRealise"],[data-name="heures"]';
+
+                this.element.find(elsel).each(function () {
+                    var thatthat = $(this);
+                    thatthat.change(function () { that.change(thatthat) });
+                });
+            },
+
+        });
+
+    });
+</script>

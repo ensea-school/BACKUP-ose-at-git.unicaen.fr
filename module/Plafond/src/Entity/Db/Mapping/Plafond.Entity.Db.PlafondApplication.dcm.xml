@@ -6,6 +6,9 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
+        <unique-constraints>
+            <unique-constraint name="PLAFOND_APPLICATION_UN" columns="PLAFOND_ID,ANNEE_ID,HISTO_DESTRUCTION"/>
+        </unique-constraints>
         <many-to-one field="plafond" target-entity="Plafond\Entity\Db\Plafond">
             <join-columns>
                 <join-column name="PLAFOND_ID" referenced-column-name="ID"/>

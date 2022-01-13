@@ -90,8 +90,9 @@ class PlafondStructureForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'plafond' => ['required' => true],
-            'heures'  => ['required' => true],
+            'plafond'     => ['required' => true],
+            'plafondEtat' => ['required' => true],
+            'heures'      => ['required' => true],
         ];
     }
 

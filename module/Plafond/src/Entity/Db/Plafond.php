@@ -87,41 +87,21 @@ class Plafond
 
 
     /**
-     * add PlafondApplication
-     *
-     * @param PlafondApplication $plafondApplication
-     *
-     * @return $this
-     */
-    public function addPlafondApplication(PlafondApplication $plafondApplication): self
-    {
-        $this->plafondApplication[] = $plafondApplication;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove PlafondApplication
-     *
-     * @param PlafondApplication $plafondApplication
-     */
-    public function removePlafondApplication(PlafondApplication $plafondApplication)
-    {
-        $this->plafondApplication->removeElement($plafondApplication);
-    }
-
-
-
-    /**
      * Get PlafondApplication
      *
-     * @return Collection|PlafondApplication[]
+     * @return PlafondApplication
      */
-    public function getPlafondApplication(): Collection
+    public function getPlafondApplication(): PlafondApplication
     {
-        return $this->plafondApplication;
+        $pl = $this->plafondApplication->first();
+        if ($pl) {
+            return $pl;
+        } else {
+            $pl = new PlafondApplication();
+            $pl->setPlafond($this);
+
+            return $pl;
+        }
     }
 
 

@@ -34,19 +34,9 @@ return [
                     ],
                 ],
 
-                'editer-application'    => [
-                    'route'       => '/editer-application[/:plafondApplication]',
-                    'action'      => 'editerApplication',
-                    'constraints' => [
-                        'plafondApplication' => '[0-9]*',
-                    ],
-                ],
-                'supprimer-application' => [
-                    'route'       => '/supprimer-application/:plafondApplication',
-                    'action'      => 'supprimerApplication',
-                    'constraints' => [
-                        'plafondApplication' => '[0-9]*',
-                    ],
+                'editer-application' => [
+                    'route'  => '/editer-application',
+                    'action' => 'editerApplication',
                 ],
 
                 'construire-calculer' => [
@@ -138,7 +128,7 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
-            'action'     => ['editerApplication', 'supprimerApplication'],
+            'action'     => ['editerApplication'],
             'privileges' => Privileges::PLAFONDS_APPLICATION,
         ],
         [

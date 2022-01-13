@@ -10,6 +10,7 @@ return [
         'FONCTION_REFERENTIEL_ID',
         'PLAFOND_ID',
         'ANNEE_ID',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

@@ -3,14 +3,13 @@
 //@formatter:off
 
 return [
-    'name'    => 'PLAFOND_STRUCTURE_UN',
+    'name'    => 'PLAFOND_APPLICATION_UN',
     'unique'  => TRUE,
-    'table'   => 'PLAFOND_STRUCTURE',
+    'table'   => 'PLAFOND_APPLICATION',
     'columns' => [
-        'STRUCTURE_ID',
         'PLAFOND_ID',
-        'ANNEE_ID',
         'HISTO_DESTRUCTION',
+        'ANNEE_ID',
     ],
 ];
 

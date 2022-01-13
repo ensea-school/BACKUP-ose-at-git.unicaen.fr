@@ -10,6 +10,7 @@ return [
         'STATUT_INTERVENANT_ID',
         'PLAFOND_ID',
         'ANNEE_ID',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

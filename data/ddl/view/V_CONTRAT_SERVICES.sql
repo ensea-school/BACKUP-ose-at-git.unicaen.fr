@@ -60,5 +60,3 @@ SELECT
   s."serviceComposante",
   s."serviceCode",
   s."serviceLibelle"
-
-

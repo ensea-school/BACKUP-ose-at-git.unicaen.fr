@@ -10,14 +10,12 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
 
 
-
 class UtilisateurController extends BaseController
 {
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use UserServiceAwareTrait;
-
 
 
     /**
@@ -28,7 +26,7 @@ class UtilisateurController extends BaseController
     {
         parent::selectionnerProfilAction($addFlashMessage = false);
 
-        $role        = $this->serviceUserContext->getSelectedIdentityRole();
+        $role = $this->serviceUserContext->getSelectedIdentityRole();
         /* @var $role Role */
         $structureId = $this->getRequest()->getPost('structure-' . $role->getRoleId());
 

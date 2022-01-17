@@ -48,8 +48,10 @@ class RouteEntitiesInjector
                 break;
                 default:
                     if (array_key_exists($name, $entityParams)) {
-                        $repo = $this->getEntityManager()->getRepository($entityParams[$name]);
-                        $e->setParam($name, $repo->find($value));
+                        if (0 !== (int)$value) {
+                            $repo = $this->getEntityManager()->getRepository($entityParams[$name]);
+                            $e->setParam($name, $repo->find($value));
+                        }
                     }
                 break;
             }

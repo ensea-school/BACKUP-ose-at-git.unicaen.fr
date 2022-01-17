@@ -32,7 +32,7 @@ if ($c->hasOption('oseappli-pwd')) {
     }
 }
 
-$c->println('Application du de mot de passe de oseappli...');
+$c->println('Application du mot de passe de oseappli...');
 $oa->exec("changement-mot-de-passe --utilisateur=oseappli --mot-de-passe=$pwd1");
 
 $c->println('Mot de passe changé', $c::COLOR_LIGHT_GREEN);

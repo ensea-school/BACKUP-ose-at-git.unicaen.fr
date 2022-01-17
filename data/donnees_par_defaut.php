@@ -69995,14 +69995,6 @@ return [
             "ROLE_ID" => "administrateur",
         ],
         [
-            "PRIVILEGE_ID" => "plafonds-gestion-visualisation",
-            "ROLE_ID" => "administrateur",
-        ],
-        [
-            "PRIVILEGE_ID" => "plafonds-gestion-edition",
-            "ROLE_ID" => "administrateur",
-        ],
-        [
             "PRIVILEGE_ID" => "formule-tests",
             "ROLE_ID" => "administrateur",
         ],
@@ -70645,11 +70637,7 @@ return [
         [
             "PRIVILEGE_ID" => "parametres-campagnes-saisie-visualisation",
             "ROLE_ID" => "superviseur-etablissement",
-        ],
-        [
-            "PRIVILEGE_ID" => "plafonds-gestion-visualisation",
-            "ROLE_ID" => "superviseur-etablissement",
-        ],
+        ]
     ],
     "FONCTION_REFERENTIEL" => [
         [

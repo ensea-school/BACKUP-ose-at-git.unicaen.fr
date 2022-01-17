@@ -52,12 +52,6 @@ class DataGen
             'key'     => ['LIBELLE_COURT'],
         ],
         [
-            'table'   => 'PLAFOND',
-            'context' => ['install', 'update'],
-            'options' => ['update' => false, 'delete' => false],
-            'key'     => 'NUMERO',
-        ],
-        [
             'table'   => 'PLAFOND_ETAT',
             'context' => ['install', 'update'],
             'key'     => 'ID',
@@ -66,6 +60,12 @@ class DataGen
             'table'   => 'PLAFOND_PERIMETRE',
             'context' => ['install', 'update'],
             'key'     => 'CODE',
+        ],
+        [
+            'table'   => 'PLAFOND',
+            'context' => ['install', 'update'],
+            'options' => ['update' => false, 'delete' => false],
+            'key'     => 'NUMERO',
         ],
         [
             'table'   => 'TYPE_VOLUME_HORAIRE',

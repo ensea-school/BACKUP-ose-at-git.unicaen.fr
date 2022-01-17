@@ -307,7 +307,6 @@ class PlafondService extends AbstractEntityService
                     $view .= "\n  /*@$col=p.$col*/";
                 }
             }
-            echo $view;
             $this->getEntityManager()->getConnection()->executeStatement($view);
         }
     }

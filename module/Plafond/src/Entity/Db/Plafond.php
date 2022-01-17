@@ -22,11 +22,20 @@ class Plafond
 
     protected Collection $plafondApplication;
 
+    protected Collection $plafondStructure;
+
+    protected Collection $plafondReferentiel;
+
+    protected Collection $plafondStatut;
+
 
 
     public function __construct()
     {
         $this->plafondApplication = new ArrayCollection();
+        $this->plafondStructure   = new ArrayCollection();
+        $this->plafondReferentiel = new ArrayCollection();
+        $this->plafondStatut      = new ArrayCollection();
     }
 
 
@@ -98,6 +107,66 @@ class Plafond
             return $pl;
         } else {
             $pl = new PlafondApplication();
+            $pl->setPlafond($this);
+
+            return $pl;
+        }
+    }
+
+
+
+    /**
+     * Get PlafondStructure
+     *
+     * @return PlafondStructure
+     */
+    public function getPlafondStructure(): PlafondStructure
+    {
+        $pl = $this->plafondStructure->first();
+        if ($pl) {
+            return $pl;
+        } else {
+            $pl = new PlafondStructure();
+            $pl->setPlafond($this);
+
+            return $pl;
+        }
+    }
+
+
+
+    /**
+     * Get PlafondReferentiel
+     *
+     * @return PlafondReferentiel
+     */
+    public function getPlafondReferentiel(): PlafondReferentiel
+    {
+        $pl = $this->plafondReferentiel->first();
+        if ($pl) {
+            return $pl;
+        } else {
+            $pl = new PlafondReferentiel();
+            $pl->setPlafond($this);
+
+            return $pl;
+        }
+    }
+
+
+
+    /**
+     * Get PlafondStatut
+     *
+     * @return PlafondStatut
+     */
+    public function getPlafondStatut(): PlafondStatut
+    {
+        $pl = $this->plafondStatut->first();
+        if ($pl) {
+            return $pl;
+        } else {
+            $pl = new PlafondStatut();
             $pl->setPlafond($this);
 
             return $pl;

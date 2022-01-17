@@ -4,8 +4,8 @@ namespace Plafond\Form;
 
 use Application\Form\AbstractForm;
 use Laminas\Form\Element;
-use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
+use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\Util;
 
@@ -18,13 +18,6 @@ use UnicaenApp\Util;
 class PlafondConfigForm extends AbstractForm
 {
     use PlafondServiceAwareTrait;
-
-    /**
-     * @var array Plafond[]
-     */
-    protected array $plafonds = [];
-
-
 
     public function init()
     {
@@ -62,13 +55,12 @@ class PlafondConfigForm extends AbstractForm
 
 
 
-    public function getElement(Plafond $plafond, string $name): Element
+    public function getElement(PlafondConfigInterface $plafondConfig, string $name): Element
     {
-        $pa = $plafond->getPlafondApplication();
         switch ($name) {
             case 'plafondEtatPrevu':
                 $e    = $this->get('etat');
-                $etat = $pa->getEtatPrevu();
+                $etat = $plafondConfig->getEtatPrevu();
                 if (!empty($etat)) {
                     $e->setValue($etat->getId());
                 } else {
@@ -77,7 +69,7 @@ class PlafondConfigForm extends AbstractForm
             break;
             case 'plafondEtatRealise':
                 $e    = $this->get('etat');
-                $etat = $pa->getEtatRealise();
+                $etat = $plafondConfig->getEtatRealise();
                 if (!empty($etat)) {
                     $e->setValue($etat->getId());
                 } else {
@@ -86,14 +78,14 @@ class PlafondConfigForm extends AbstractForm
             break;
             case 'heures':
                 $e = $this->get('heures');
-                $e->setValue($pa->getHeures());
+                $e->setValue($plafondConfig->getHeures());
             break;
             default:
                 throw new \Exception('L\'élément "' . $name . '" n\'existe pas');
         }
-        $e->setName($name . '[' . $plafond->getId() . ']');
+        $e->setName($name . '[' . $plafondConfig->getPlafond()->getId() . ']');
         $e->setAttribute('data-name', $name);
-        $e->setAttribute('data-plafond-id', $plafond->getId());
+        $e->setAttribute('data-plafond-id', $plafondConfig->getPlafond()->getId());
 
         return $e;
     }
@@ -111,30 +103,6 @@ class PlafondConfigForm extends AbstractForm
         return [
             /* Filtres et validateurs */
         ];
-    }
-
-
-
-    /**
-     * @return Plafond[]
-     */
-    public function getPlafonds(): array
-    {
-        return $this->plafonds;
-    }
-
-
-
-    /**
-     * @param array $plafonds
-     *
-     * @return PlafondConfigForm
-     */
-    public function setPlafonds(array $plafonds): PlafondConfigForm
-    {
-        $this->plafonds = $plafonds;
-
-        return $this;
     }
 
 }

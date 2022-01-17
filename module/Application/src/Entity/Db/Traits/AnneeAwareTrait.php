@@ -14,7 +14,7 @@ trait AnneeAwareTrait
     /**
      * @var Annee
      */
-    private ?Annee $annee;
+    private ?Annee $annee = null;
 
 
 
@@ -35,7 +35,7 @@ trait AnneeAwareTrait
     /**
      * @return Annee
      */
-    public function getAnnee(): Annee
+    public function getAnnee(): ?Annee
     {
         return $this->annee;
     }

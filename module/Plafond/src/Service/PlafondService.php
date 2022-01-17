@@ -16,6 +16,7 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Entity\PlafondControle;
+use Plafond\Interfaces\PlafondConfigInterface;
 use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
@@ -263,9 +264,8 @@ class PlafondService extends AbstractEntityService
                 }
             }
             $view     .= "\n  CASE";
-            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId AND ps.plafond_etat_prevu_id IS NOT NULL THEN ps.plafond_etat_prevu_id";
-            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId AND ps.plafond_etat_realise_id IS NOT NULL THEN ps.plafond_etat_realise_id";
-            $view     .= "\n    ELSE pa.plafond_etat_id";
+            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)";
+            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)";
             $view     .= "\n  END plafond_etat_id,";
             $view     .= "\n  COALESCE(pd.heures, 0) derogation,";
             $view     .= "\n  CASE WHEN p.heures > p.plafond + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
@@ -294,15 +294,20 @@ class PlafondService extends AbstractEntityService
             }
             $view .= "\n  ) p";
             $view .= "\n  JOIN intervenant i ON i.id = p.intervenant_id";
-            $view .= "\n  JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND pa.type_volume_horaire_id = p.type_volume_horaire_id AND p.annee_id BETWEEN COALESCE(pa.annee_debut_id,p.annee_id) AND COALESCE(pa.annee_fin_id,p.annee_id)";
+            $view .= "\n  LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id";
             $view .= "\n  LEFT JOIN " . $configTablesJoin[$perimetre->getCode()];
             $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
-            $view .= "\nWHERE\n  1=1";
+            $view .= "\nWHERE\n";
+            $view .= "  CASE\n";
+            $view .= "    WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)\n";
+            $view .= "    WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)\n";
+            $view .= "  END IS NOT NULL";
             foreach ($cols as $col) {
                 if ($col != 'PLAFOND' && $col != 'HEURES' && $col != 'DEROGATION') {
                     $view .= "\n  /*@$col=p.$col*/";
                 }
             }
+            echo $view;
             $this->getEntityManager()->getConnection()->executeStatement($view);
         }
     }
@@ -488,6 +493,44 @@ class PlafondService extends AbstractEntityService
         }
 
         return $this->etats;
+    }
+
+
+
+    public function getApplications()
+    {
+        $dql = "
+        SELECT
+          p, prm, pa
+        FROM
+          " . Plafond::class . " p
+          JOIN p.plafondPerimetre prm
+          LEFT JOIN p.plafondApplication pa WITH pa.annee = :annee AND pa.histoDestruction IS NULL
+        ORDER BY
+            prm.libelle, p.libelle
+        ";
+    }
+
+
+
+    /**
+     * @param PlafondConfigInterface $plafondConfig
+     *
+     * @return PlafondConfigInterface
+     */
+    public function saveConfig(PlafondConfigInterface $plafondConfig): PlafondConfigInterface
+    {
+        if (empty($plafondConfig->getEtatPrevu())) {
+            $plafondConfig->setEtatPrevu($this->getEtat(PlafondEtat::DESACTIVE));
+        }
+        if (empty($plafondConfig->getEtatRealise())) {
+            $plafondConfig->setEtatRealise($this->getEtat(PlafondEtat::DESACTIVE));
+        }
+
+        $this->getEntityManager()->persist($plafondConfig);
+        $this->getEntityManager()->flush($plafondConfig);
+
+        return $plafondConfig;
     }
 
 

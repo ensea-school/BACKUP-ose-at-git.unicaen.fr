@@ -32,16 +32,16 @@ $canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDIT
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($form->getPlafonds() as $plafond): ?>
+    <?php foreach ($form->getPlafonds() as $plafond): $pa = $plafond->getPlafondApplication(); ?>
         <tr>
-            <td><?= $plafond->getPlafondPerimetre() ?></td>
-            <td style="width:50%"><?= $plafond ?></td>
+            <td><?= $pa->getPlafond()->getPlafondPerimetre() ?></td>
+            <td style="width:50%"><?= $pa->getPlafond(); ?></td>
             <?php if ($canEdit): ?>
                 <td>
-                    <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>" title="Modifier le plafond"><span
+                    <a href="<?= $this->url('plafond/modifier', ['plafond' => $pa->getPlafond()]) ?>" title="Modifier le plafond"><span
                                 class="glyphicon glyphicon-edit"</a>
                     <a class="pop-ajax"
-                       href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getId()]) ?>"
+                       href="<?= $this->url('plafond/supprimer', ['plafond' => $pa->getPlafond()]) ?>"
                        title="Supprimer le plafond"
                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                        data-confirm="true"
@@ -54,13 +54,13 @@ $canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDIT
                 </td>
             <?php endif; ?>
             <?php if ($canApply): ?>
-                <td><?php echo $this->formControlGroup($form->getElement($plafond, 'plafondEtatPrevu')); ?></td>
-                <td><?php echo $this->formControlGroup($form->getElement($plafond, 'plafondEtatRealise')); ?></td>
-                <td><?php echo $this->formControlGroup($form->getElement($plafond, 'heures')); ?></td>
+                <td><?php echo $this->formControlGroup($form->getElement($pa, 'plafondEtatPrevu')); ?></td>
+                <td><?php echo $this->formControlGroup($form->getElement($pa, 'plafondEtatRealise')); ?></td>
+                <td><?php echo $this->formControlGroup($form->getElement($pa, 'heures')); ?></td>
             <?php else: ?>
-                <td><?php echo $plafond->getPlafondApplication()->getEtatPrevu(); ?></td>
-                <td><?php echo $plafond->getPlafondApplication()->getEtatRealise(); ?></td>
-                <td><?php echo floatToString($plafond->getPlafondApplication()->getHeures()); ?></td>
+                <td><?php echo $pa->getEtatPrevu(); ?></td>
+                <td><?php echo $pa->getEtatRealise(); ?></td>
+                <td><?php echo floatToString($pa->getHeures()); ?></td>
             <?php endif; ?>
         </tr>
     <?php endforeach; ?>

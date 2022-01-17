@@ -16,5 +16,8 @@
             </join-columns>
         </many-to-one>
         <one-to-many field="plafondApplication" target-entity="Plafond\Entity\Db\PlafondApplication" mapped-by="plafond"/>
+        <one-to-many field="plafondStructure" target-entity="Plafond\Entity\Db\PlafondStructure" mapped-by="plafond"/>
+        <one-to-many field="plafondReferentiel" target-entity="Plafond\Entity\Db\PlafondReferentiel" mapped-by="plafond"/>
+        <one-to-many field="plafondStatut" target-entity="Plafond\Entity\Db\PlafondStatut" mapped-by="plafond"/>
     </entity>
 </doctrine-mapping>

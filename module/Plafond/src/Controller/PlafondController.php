@@ -6,11 +6,9 @@ use Application\Controller\AbstractController;
 use Laminas\View\Model\JsonModel;
 use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
-use Plafond\Form\PlafondApplicationFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Form\PlafondFormAwareTrait;
-use Plafond\Service\PlafondApplicationServiceAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -23,8 +21,6 @@ use UnicaenApp\View\Model\MessengerViewModel;
  */
 class PlafondController extends AbstractController
 {
-    use PlafondApplicationServiceAwareTrait;
-    use PlafondApplicationFormAwareTrait;
     use PlafondServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -124,7 +120,7 @@ class PlafondController extends AbstractController
                 $application->setHeures(stringToFloat($value));
             break;
         }
-        $this->getServicePlafondApplication()->save($application);
+        $this->getServicePlafond()->saveConfig($application);
 
         return new JsonModel([]);
     }

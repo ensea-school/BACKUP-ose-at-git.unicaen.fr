@@ -53,23 +53,13 @@ return [
                     ],
                     'may_terminate' => true,
                     'child_routes'  => [
-                        'ajouter'   => [
+                        'ajouter'  => [
                             'route'  => '/ajouter',
                             'action' => 'editer',
                         ],
-                        'modifier'  => [
-                            'route'       => '/modifier/:plafondStructure',
-                            'action'      => 'editer',
-                            'constraints' => [
-                                'plafondStructure' => '[0-9]*',
-                            ],
-                        ],
-                        'supprimer' => [
-                            'route'       => '/supprimer/:plafondStructure',
-                            'action'      => 'supprimer',
-                            'constraints' => [
-                                'plafondStructure' => '[0-9]*',
-                            ],
+                        'modifier' => [
+                            'route'  => '/modifier',
+                            'action' => 'editer',
                         ],
                     ],
                 ],
@@ -139,7 +129,7 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\PlafondStructure',
-            'action'     => ['editer', 'supprimer'],
+            'action'     => ['editer'],
             'privileges' => Privileges::PLAFONDS_STRUCTURE_EDITION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
@@ -168,16 +158,13 @@ return [
     ],
 
     'services' => [
-        Assertion\PlafondAssertion::class        => AssertionFactory::class,
-        Service\PlafondApplicationService::class => Service\PlafondApplicationServiceFactory::class,
-        Service\PlafondService::class            => Service\PlafondServiceFactory::class,
-        Service\PlafondStructureService::class   => Service\PlafondStructureServiceFactory::class,
-        Processus\PlafondProcessus::class        => Processus\PlafondProcessusFactory::class,
+        Assertion\PlafondAssertion::class      => AssertionFactory::class,
+        Service\PlafondService::class          => Service\PlafondServiceFactory::class,
+        Service\PlafondStructureService::class => Service\PlafondStructureServiceFactory::class,
+        Processus\PlafondProcessus::class      => Processus\PlafondProcessusFactory::class,
     ],
 
     'forms' => [
-        Form\PlafondApplicationForm::class => Form\PlafondApplicationFormFactory::class,
-        Form\PlafondForm::class            => Form\PlafondFormFactory::class,
-        Form\PlafondStructureForm::class   => Form\PlafondStructureFormFactory::class,
+        Form\PlafondForm::class => Form\PlafondFormFactory::class,
     ],
 ];

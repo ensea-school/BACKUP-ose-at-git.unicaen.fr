@@ -1,63 +1,80 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
  * @var $structure            \Application\Entity\Db\Structure
- * @var $plafonds             \Plafond\Entity\Db\PlafondStructure[]
+ * @var $form                 \Plafond\Form\PlafondConfigForm
  */
 
-use Application\Provider\Privilege\Privileges;
-
-
-$canEdit = $this->isAllowed($structure, Privileges::PLAFONDS_STRUCTURE_EDITION);
-
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_STRUCTURE_EDITION));
 
 ?>
-    <table class="table table-bordered table-condensed table-hover">
-        <thead>
+<h1 class="page-header"><?= $title ?></h1>
+
+<table class="table table-condensed table-hover table-bordered plafonds-admin">
+    <thead>
+    <tr>
+        <th rowspan="2">Plafond</th>
+        <th>Prévisionnel</th>
+        <th>Réalisé</th>
+        <th>Heures<sup>*</sup></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($form->getPlafonds() as $plafond): $ps = $plafond->getPlafondStructure() ?>
         <tr>
-            <th>Plafond</th>
-            <th>Heures</th>
+            <td style="width:50%"><?= $ps->getPlafond() ?></td>
             <?php if ($canEdit): ?>
-                <th>Actions</th><?php endif; ?>
+                <td><?php echo $this->formControlGroup($form->getElement($ps, 'plafondEtatPrevu')); ?></td>
+                <td><?php echo $this->formControlGroup($form->getElement($ps, 'plafondEtatRealise')); ?></td>
+                <td><?php echo $this->formControlGroup($form->getElement($ps, 'heures')); ?></td>
+            <?php else: ?>
+                <td><?php echo $ps->getEtatPrevu(); ?></td>
+                <td><?php echo $ps->getEtatRealise(); ?></td>
+                <td><?php echo floatToString($ps->getHeures()); ?></td>
+            <?php endif; ?>
         </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($plafonds as $plafond): ?>
-            <tr>
-                <td><?= $plafond->getPlafond() ?></td>
-                <td><?= floatToString($plafond->getHeures()) ?></td>
-                <?php if ($canEdit): ?>
-                    <td>
-                    <a href="<?= $this->url('plafond/structure/modifier', ['structure' => $structure->getId(), 'plafondStructure' => $plafond->getId()]) ?>"><span
-                                class="glyphicon glyphicon-pencil"></span></a>
-                    <a class="pop-ajax"
-                       title="Supprimer le plafond"
-                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-cancel-button="Non"
-                       data-submit-event="delete-plafond-structure"
-                       href="<?= $this->url('plafond/structure/supprimer', ['structure' => $structure->getId(), 'plafondStructure' => $plafond->getId()]) ?>"><span
-                                class="glyphicon glyphicon-trash"
-                        ></span></a>
-                    </td><?php endif; ?>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
 
-<?php if ($canEdit): ?>
-    <a href="<?= $this->url('plafond/structure/ajouter', ['structure' => $structure->getId()]) ?>" class="btn btn-default">Ajout d'une
-        nouvelle valeur</a>
+        WidgetInitializer.add('plafonds-admin', {
 
-    <script type="application/javascript">
+            change: function (el)
+            {
 
-        $("body").on('delete-plafond-structure', function (event, popAjax) {
-            $(".tab-pane#plafonds").refresh();
+                var params = {
+                    plafond: el.data('plafond-id'),
+                    name: el.data('name'),
+                    value: el.val()
+                };
+
+                $.post("<?= $this->url('plafond/structure/modifier', ['structure' => $structure->getId()]) ?>", params, function (data)
+                {
+                    alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
+                }).fail(function (jqXHR)
+                {
+                    alertFlash(jqXHR.responseText, 'danger', 3000);
+                });
+            },
+
+            _create: function ()
+            {
+                var that = this;
+                var elsel = '[data-name="plafondEtatPrevu"],[data-name="plafondEtatRealise"],[data-name="heures"]';
+
+                this.element.find(elsel).each(function () {
+                    var thatthat = $(this);
+                    thatthat.change(function () { that.change(thatthat) });
+                });
+            },
+
         });
 
-    </script>
-<?php endif; ?>
+    });
+</script>

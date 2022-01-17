@@ -7,7 +7,3 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
-
-echo 'salut';
-
-phpinfo();

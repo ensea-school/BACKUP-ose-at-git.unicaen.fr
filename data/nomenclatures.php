@@ -229,6 +229,10 @@ return [
             'PACKAGE_NAME'       => 'FORMULE_GUYANE',
             'VH_PARAM_1_LIBELLE' => 'Autre établissement (Oui/Non)',
         ],
+        22 => [
+            'LIBELLE'      => 'Université Rennes 1',
+            'PACKAGE_NAME' => 'FORMULE_RENNES1',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

@@ -394,9 +394,10 @@ return [
         'privileges' => [
             'visualisation'             => 'Visualisation',
             'edition'                   => 'Édition',
-            'application'               => 'Application',
-            'structure-visualisation'   => 'Par structure (visualisation)',
-            'structure-edition'         => 'Par structure (édition)',
+            'config-application'        => 'Application',
+            'config-structure'          => 'Configuration par composante',
+            'config-referentiel'        => 'Configuration par fonction référentielle',
+            'config-statut'             => 'Configuration par statut d\'intervenant',
             'derogations-visualisation' => 'Dérogations (visualisation)',
             'derogations-edition'       => 'Dérogations (édition)',
         ],

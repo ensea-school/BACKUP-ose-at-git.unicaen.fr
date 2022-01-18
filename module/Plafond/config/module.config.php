@@ -3,6 +3,7 @@
 namespace Plafond;
 
 use Application\Provider\Privilege\Privileges;
+use Plafond\View\Helper\PlafondConfigElementViewHelperFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
@@ -34,9 +35,24 @@ return [
                     ],
                 ],
 
-                'editer-application' => [
-                    'route'  => '/editer-application',
-                    'action' => 'editerApplication',
+                'config-application' => [
+                    'route'  => '/config/application',
+                    'action' => 'config-application',
+                ],
+
+                'config-structure' => [
+                    'route'  => '/config/structure',
+                    'action' => 'config-structure',
+                ],
+
+                'config-statut' => [
+                    'route'  => '/config/statut',
+                    'action' => 'config-statut',
+                ],
+
+                'config-referentiel' => [
+                    'route'  => '/config/referentiel',
+                    'action' => 'config-referentiel',
                 ],
 
                 'construire-calculer' => [
@@ -118,19 +134,31 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
-            'action'     => ['editerApplication'],
-            'privileges' => Privileges::PLAFONDS_APPLICATION,
+            'action'     => ['config-application'],
+            'privileges' => Privileges::PLAFONDS_CONFIG_APPLICATION,
         ],
         [
-            'controller' => 'Plafond\Controller\PlafondStructure',
-            'action'     => ['index'],
-            'privileges' => Privileges::PLAFONDS_STRUCTURE_VISUALISATION,
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['config-structure'],
+            'privileges' => Privileges::PLAFONDS_CONFIG_STRUCTURE,
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+        [
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['config-statut'],
+            'privileges' => Privileges::PLAFONDS_CONFIG_STATUT,
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+        [
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['config-referentiel'],
+            'privileges' => Privileges::PLAFONDS_CONFIG_REFERENTIEL,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
             'controller' => 'Plafond\Controller\PlafondStructure',
-            'action'     => ['editer'],
-            'privileges' => Privileges::PLAFONDS_STRUCTURE_EDITION,
+            'action'     => ['index'],
+            'privileges' => Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
@@ -140,16 +168,15 @@ return [
         ],
     ],
 
-    'rules' => [
-        [
-            'privileges' => [
-                Privileges::PLAFONDS_STRUCTURE_VISUALISATION,
-                Privileges::PLAFONDS_STRUCTURE_EDITION,
+    /*    'rules' => [
+            [
+                'privileges' => [
+
+                ],
+                'resources'  => 'Structure',
+                'assertion'  => Assertion\PlafondAssertion::class,
             ],
-            'resources'  => 'Structure',
-            'assertion'  => Assertion\PlafondAssertion::class,
-        ],
-    ],
+        ],*/
 
     'controllers' => [
         'Plafond\Controller\Plafond'          => Controller\PlafondControllerFactory::class,
@@ -166,5 +193,9 @@ return [
 
     'forms' => [
         Form\PlafondForm::class => Form\PlafondFormFactory::class,
+    ],
+
+    'view_helpers' => [
+        'plafondConfig' => PlafondConfigElementViewHelperFactory::class,
     ],
 ];

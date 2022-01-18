@@ -6,104 +6,62 @@ use Application\Provider\Privilege\Privileges;
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
- * @var $form                 \Plafond\Form\PlafondConfigForm
+ * @var $applications         PlafondApplication[]
  */
 
-$canApply = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_APPLICATION));
-$canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITION));
+$canEdit   = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITION));
+$canConfig = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_APPLICATION));
 
 ?>
-<h1 class="page-header"><?= $title ?></h1>
+    <h1 class="page-header"><?= $title ?></h1>
 
-<table class="table table-condensed table-hover table-bordered plafonds-admin">
-    <thead>
-    <tr>
-        <th rowspan="2">Périmètre</th>
-        <th rowspan="2">Plafond</th>
-        <?php if ($canEdit): ?>
-            <th rowspan="2">Actions</th>
-        <?php endif; ?>
-        <th colspan="3">Application</th>
-    </tr>
-    <tr>
-        <th>Prévisionnel</th>
-        <th>Réalisé</th>
-        <th rowspan="2">Heures<sup>*</sup></th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($form->getPlafonds() as $plafond): $pa = $plafond->getPlafondApplication(); ?>
+    <table class="table table-condensed table-hover table-bordered plafonds-config">
+        <thead>
         <tr>
-            <td><?= $pa->getPlafond()->getPlafondPerimetre() ?></td>
-            <td style="width:50%"><?= $pa->getPlafond(); ?></td>
+            <th rowspan="2">Périmètre</th>
+            <th rowspan="2">Plafond</th>
             <?php if ($canEdit): ?>
-                <td>
-                    <a href="<?= $this->url('plafond/modifier', ['plafond' => $pa->getPlafond()]) ?>" title="Modifier le plafond"><span
-                                class="glyphicon glyphicon-edit"</a>
-                    <a class="pop-ajax"
-                       href="<?= $this->url('plafond/supprimer', ['plafond' => $pa->getPlafond()]) ?>"
-                       title="Supprimer le plafond"
-                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-cancel-button="Non"
-                       data-submit-reload="true"
-                    >
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </a>
-                </td>
+                <th rowspan="2">Actions</th>
             <?php endif; ?>
-            <?php if ($canApply): ?>
-                <td><?php echo $this->formControlGroup($form->getElement($pa, 'plafondEtatPrevu')); ?></td>
-                <td><?php echo $this->formControlGroup($form->getElement($pa, 'plafondEtatRealise')); ?></td>
-                <td><?php echo $this->formControlGroup($form->getElement($pa, 'heures')); ?></td>
-            <?php else: ?>
-                <td><?php echo $pa->getEtatPrevu(); ?></td>
-                <td><?php echo $pa->getEtatRealise(); ?></td>
-                <td><?php echo floatToString($pa->getHeures()); ?></td>
-            <?php endif; ?>
+            <th colspan="3">Application</th>
         </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+        <tr>
+            <th>Prévisionnel</th>
+            <th>Réalisé</th>
+            <th rowspan="2">Heures<sup>*</sup></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($applications as $application): ?>
+            <tr>
+                <td><?= $application->getPlafond()->getPlafondPerimetre() ?></td>
+                <td style="width:50%"><?= $application->getPlafond(); ?></td>
+                <?php if ($canEdit): ?>
+                    <td>
+                        <a href="<?= $this->url('plafond/modifier', ['plafond' => $application->getPlafond()]) ?>" title="Modifier le plafond"><span
+                                    class="glyphicon glyphicon-edit"</a>
+                        <a class="pop-ajax"
+                           href="<?= $this->url('plafond/supprimer', ['plafond' => $application->getPlafond()]) ?>"
+                           title="Supprimer le plafond"
+                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                           data-confirm="true"
+                           data-confirm-button="Oui"
+                           data-cancel-button="Non"
+                           data-submit-reload="true"
+                        >
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                <?php endif; ?>
+                <td><?= $this->plafondConfig($application)->etatPrevu($canConfig); ?></td>
+                <td><?= $this->plafondConfig($application)->etatRealise($canConfig); ?></td>
+                <td><?= $this->plafondConfig($application)->heures($canConfig); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 <?php if ($canEdit): ?>
     <a href="<?= $this->url('plafond/ajouter') ?>" class="btn btn-default">Création d'un nouveau plafond</a>
     <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
 <?php endif; ?>
-<script type="text/javascript">
-    $(function () {
-
-        WidgetInitializer.add('plafonds-admin', {
-
-            change: function (el)
-            {
-
-                var params = {
-                    plafond: el.data('plafond-id'),
-                    name: el.data('name'),
-                    value: el.val()
-                };
-                $.post("<?= $this->url('plafond/editer-application') ?>", params, function (data)
-                {
-                    alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
-                }).fail(function (jqXHR)
-                {
-                    alertFlash(jqXHR.responseText, 'danger', 3000);
-                });
-            },
-
-            _create: function ()
-            {
-                var that = this;
-                var elsel = '[data-name="plafondEtatPrevu"],[data-name="plafondEtatRealise"],[data-name="heures"]';
-
-                this.element.find(elsel).each(function () {
-                    var thatthat = $(this);
-                    thatthat.change(function () { that.change(thatthat) });
-                });
-            },
-
-        });
-
-    });
-</script>
+<?= $this->plafondConfig($application)->script() ?>

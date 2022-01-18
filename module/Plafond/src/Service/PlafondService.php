@@ -7,14 +7,19 @@ use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Plafond\Entity\Db\PlafondApplication;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Entity\Db\PlafondPerimetre;
+use Plafond\Entity\Db\PlafondReferentiel;
+use Plafond\Entity\Db\PlafondStatut;
+use Plafond\Entity\Db\PlafondStructure;
 use Plafond\Entity\PlafondControle;
 use Plafond\Interfaces\PlafondConfigInterface;
 use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
@@ -496,18 +501,117 @@ class PlafondService extends AbstractEntityService
 
 
 
-    public function getApplications()
+    protected function entityToConfigClass($entity = null): string
     {
+        if (empty($entity)) {
+            return PlafondApplication::class;
+        }
+        if ($entity instanceof Structure) {
+            return PlafondStructure::class;
+        }
+        if ($entity instanceof StatutIntervenant) {
+            return PlafondStatut::class;
+        }
+        if ($entity instanceof FonctionReferentiel) {
+            return PlafondReferentiel::class;
+        }
+        throw new \Exception("L'entité fournie ne permet pas e récupérer une configuration de plafond");
+    }
+
+
+
+    /**
+     * @param Plafond|int                                          $plafond
+     * @param null|Structure|FonctionReferentiel|StatutIntervenant $entity
+     *
+     * @return PlafondConfigInterface
+     */
+    public function getPlafondConfig($plafond, $entity = null): PlafondConfigInterface
+    {
+        $pid = (int)($plafond instanceof Plafond ? $plafond->getId() : $plafond);
+        if ($pid === 0) {
+            throw new \Exception("Le plafond transmis n'est pas correct ou bien il n'a pas encore d'ID attribué");
+        }
+
+        $pf = $this->getterPlafondConfig($pid, $entity);
+        if (!isset($pf[$pid])) {
+            throw new Exception("Le plafond n'a pas été trouvé");
+        }
+
+        return $pf[$pid];
+    }
+
+
+
+    /**
+     * @return PlafondConfigInterface[]
+     */
+    public function getPlafondsConfig($entity = null): array
+    {
+        return $this->getterPlafondConfig(0, $entity);
+    }
+
+
+
+    private function getterPlafondConfig(int $plafondId, $entity = null): array
+    {
+        $joins = [
+            PlafondApplication::class => 'p.plafondApplication pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL',
+            PlafondStructure::class   => 'p.plafondStructure pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.structure = :entity',
+            PlafondStatut::class      => 'p.plafondStatut pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.statutIntervenant = :entity',
+            PlafondReferentiel::class => 'p.plafondReferentiel pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.fonctionReferentiel = :entity',
+        ];
+
+        $annee  = $this->getServiceContext()->getAnnee();
+        $class  = $this->entityToConfigClass($entity);
+        $getter = 'get' . substr($class, strrpos($class, '\\') + 1);
+
+        $params = ['annee' => $annee];
+        if ($entity) {
+            $params['entity'] = $entity->getId();
+        }
+
+        if ($plafondId > 0) {
+            $where         = "WHERE p.id = :pid";
+            $params['pid'] = $plafondId;
+        } else {
+            $where = "";
+        }
+
         $dql = "
         SELECT
-          p, prm, pa
+          p, prm, pc
         FROM
           " . Plafond::class . " p
           JOIN p.plafondPerimetre prm
-          LEFT JOIN p.plafondApplication pa WITH pa.annee = :annee AND pa.histoDestruction IS NULL
+          LEFT JOIN " . $joins[$class] . "
+        $where
         ORDER BY
             prm.libelle, p.libelle
         ";
+
+        /** @var Plafond[] $plafonds */
+        $plafonds = $this->getEntityManager()->createQuery($dql)->setParameters($params)->getResult();
+        $papps    = [];
+        foreach ($plafonds as $plafond) {
+            $configCount = $plafond->$getter()->count();
+            switch ($configCount) {
+                case 0:
+                    $papp = new $class;
+                    $papp->setPlafond($plafond);
+                    $papp->setEtatPrevu($this->getEtat(PlafondEtat::DESACTIVE));
+                    $papp->setEtatRealise($this->getEtat(PlafondEtat::DESACTIVE));
+                    $papps[$plafond->getId()] = $papp;
+                break;
+                case 1:
+                    $papps[$plafond->getId()] = $plafond->$getter()->first();
+                break;
+                default:
+                    throw new \Exception('Erreur : trop de paramètres (' . $configCount . ') de configuration retournées pour le plafond numéro ' . $plafond->getNumero());
+            }
+        }
+
+        return $papps;
     }
 
 
@@ -560,5 +664,4 @@ class PlafondService extends AbstractEntityService
     {
         return 'plafond';
     }
-
 }

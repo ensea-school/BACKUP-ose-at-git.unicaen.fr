@@ -98,19 +98,11 @@ class Plafond
     /**
      * Get PlafondApplication
      *
-     * @return PlafondApplication
+     * @return PlafondApplication[]
      */
-    public function getPlafondApplication(): PlafondApplication
+    public function getPlafondApplication(): Collection
     {
-        $pl = $this->plafondApplication->first();
-        if ($pl) {
-            return $pl;
-        } else {
-            $pl = new PlafondApplication();
-            $pl->setPlafond($this);
-
-            return $pl;
-        }
+        return $this->plafondApplication;
     }
 
 
@@ -118,19 +110,11 @@ class Plafond
     /**
      * Get PlafondStructure
      *
-     * @return PlafondStructure
+     * @return PlafondStructure[]
      */
-    public function getPlafondStructure(): PlafondStructure
+    public function getPlafondStructure(): Collection
     {
-        $pl = $this->plafondStructure->first();
-        if ($pl) {
-            return $pl;
-        } else {
-            $pl = new PlafondStructure();
-            $pl->setPlafond($this);
-
-            return $pl;
-        }
+        return $this->plafondStructure;
     }
 
 
@@ -138,19 +122,11 @@ class Plafond
     /**
      * Get PlafondReferentiel
      *
-     * @return PlafondReferentiel
+     * @return PlafondReferentiel[]
      */
-    public function getPlafondReferentiel(): PlafondReferentiel
+    public function getPlafondReferentiel(): Collection
     {
-        $pl = $this->plafondReferentiel->first();
-        if ($pl) {
-            return $pl;
-        } else {
-            $pl = new PlafondReferentiel();
-            $pl->setPlafond($this);
-
-            return $pl;
-        }
+        $this->plafondReferentiel;
     }
 
 
@@ -158,19 +134,11 @@ class Plafond
     /**
      * Get PlafondStatut
      *
-     * @return PlafondStatut
+     * @return PlafondStatut[]
      */
-    public function getPlafondStatut(): PlafondStatut
+    public function getPlafondStatut(): Collection
     {
-        $pl = $this->plafondStatut->first();
-        if ($pl) {
-            return $pl;
-        } else {
-            $pl = new PlafondStatut();
-            $pl->setPlafond($this);
-
-            return $pl;
-        }
+        return $this->plafondStatut;
     }
 
 

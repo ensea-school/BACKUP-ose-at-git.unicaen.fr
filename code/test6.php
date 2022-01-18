@@ -7,3 +7,10 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+$class = \Plafond\Entity\Db\PlafondApplication::class;
+
+
+echo substr($class, strrpos($class, '\\') + 1);
+
+

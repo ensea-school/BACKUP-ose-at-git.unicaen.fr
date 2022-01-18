@@ -30,26 +30,10 @@ class PlafondController extends AbstractController
 
     public function indexAction()
     {
-        $title = 'Gestion des plafonds';
-        $form  = $this->getFormPlafondConfig();
-        $annee = $this->getServiceContext()->getAnnee();
+        $title        = 'Gestion des plafonds';
+        $applications = $this->getServicePlafond()->getPlafondsConfig();
 
-        $dql = "
-        SELECT
-          p, prm, pa
-        FROM
-          " . Plafond::class . " p
-          JOIN p.plafondPerimetre prm
-          LEFT JOIN p.plafondApplication pa WITH pa.annee = :annee AND pa.histoDestruction IS NULL
-        ORDER BY
-            prm.libelle, p.libelle
-        ";
-
-        /* @var $plafonds Plafond[] */
-        $query = $this->em()->createQuery($dql)->setParameter('annee', $annee);
-        $form->setPlafonds($query->getResult());
-
-        return compact('title', 'form');
+        return compact('title', 'applications');
     }
 
 
@@ -100,27 +84,55 @@ class PlafondController extends AbstractController
 
 
 
-    public function editerApplicationAction()
+    public function configApplicationAction()
+    {
+        return $this->configAction(null);
+    }
+
+
+
+    public function configStructureAction()
+    {
+        return $this->configAction(null);
+    }
+
+
+
+    public function configStatutAction()
+    {
+        return $this->configAction(null);
+    }
+
+
+
+    public function configReferentielAction()
+    {
+        return $this->configAction(null);
+    }
+    
+
+
+    private function configAction($entity)
     {
         /** @var Plafond $plafond */
-        $plafond = $this->em()->find(Plafond::class, $this->params()->fromPost('plafond'));
-        $name    = $this->params()->fromPost('name');
-        $value   = $this->params()->fromPost('value');
+        $plafondId = $this->params()->fromPost('plafond');
+        $name      = $this->params()->fromPost('name');
+        $value     = $this->params()->fromPost('value');
 
-        $application = $plafond->getPlafondApplication();
+        $config = $this->getServicePlafond()->getPlafondConfig($plafondId, $entity);
 
         switch ($name) {
             case 'plafondEtatPrevu':
-                $application->setEtatPrevu($this->em()->find(PlafondEtat::class, $value));
+                $config->setEtatPrevu($this->em()->find(PlafondEtat::class, $value));
             break;
             case 'plafondEtatRealise':
-                $application->setEtatRealise($this->em()->find(PlafondEtat::class, $value));
+                $config->setEtatRealise($this->em()->find(PlafondEtat::class, $value));
             break;
             case 'heures':
-                $application->setHeures(stringToFloat($value));
+                $config->setHeures(stringToFloat($value));
             break;
         }
-        $this->getServicePlafond()->saveConfig($application);
+        $this->getServicePlafond()->saveConfig($config);
 
         return new JsonModel([]);
     }

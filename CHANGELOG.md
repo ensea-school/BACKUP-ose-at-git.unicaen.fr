@@ -13,7 +13,6 @@ Objectif : Plafonds personnalisables
 
 * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
 * Depuis la fiche de service de l'intervenant, vous pouvez maintenant désactiver la possibilité de reporter le prévisionnel n-1 vers l'année en cours ou du prévisionnel vers le réalisé
-* Dans la fiche de service, les enseignements mutualisés sont précisés #40402
 * Technique : migration vers Laminas et Composer 2
 * Les plafonds sont maintenant personnalisables : vous pouvez les modifier en retirer ou en créer
 * [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
@@ -61,6 +60,7 @@ Objectif : Plafonds personnalisables
 * Les modifications de motifs de non paiement fonctionnement de nouveau en mode calendaire (#40037)
 * L'autovalidation fonctionne maintenant pour le référentiel (#41149)
 * La constatation d'heures réalisées à partir du prévisionnel tient maintenant compte des horaires et des motifs de non paiements (#39202)
+* Dans la fiche de service, les enseignements mutualisés sont précisés #40402
 
 ## Notes de mise à jour
 

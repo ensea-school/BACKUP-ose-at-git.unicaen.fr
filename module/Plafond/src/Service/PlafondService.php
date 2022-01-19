@@ -562,9 +562,17 @@ class PlafondService extends AbstractEntityService
             PlafondReferentiel::class => 'p.plafondReferentiel pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.fonctionReferentiel = :entity',
         ];
 
+        $perimetres = [
+            PlafondApplication::class => null,
+            PlafondStructure::class   => PlafondPerimetre::STRUCTURE,
+            PlafondStatut::class      => PlafondPerimetre::INTERVENANT,
+            PlafondReferentiel::class => PlafondPerimetre::REFERENTIEL,
+        ];
+
         $annee  = $this->getServiceContext()->getAnnee();
         $class  = $this->entityToConfigClass($entity);
         $getter = 'get' . substr($class, strrpos($class, '\\') + 1);
+        $where  = [];
 
         $params = ['annee' => $annee];
         if ($entity) {
@@ -572,10 +580,13 @@ class PlafondService extends AbstractEntityService
         }
 
         if ($plafondId > 0) {
-            $where         = "WHERE p.id = :pid";
+            $where[]       = "p.id = :pid";
             $params['pid'] = $plafondId;
-        } else {
-            $where = "";
+        }
+
+        if ($perimetres[$class]) {
+            $where[]             = "prm.code = :perimetre";
+            $params['perimetre'] = $perimetres[$class];
         }
 
         $dql = "
@@ -585,7 +596,7 @@ class PlafondService extends AbstractEntityService
           " . Plafond::class . " p
           JOIN p.plafondPerimetre prm
           LEFT JOIN " . $joins[$class] . "
-        $where
+        " . (empty($where) ? '' : ('WHERE ' . implode(' AND ', $where))) . "
         ORDER BY
             prm.libelle, p.libelle
         ";

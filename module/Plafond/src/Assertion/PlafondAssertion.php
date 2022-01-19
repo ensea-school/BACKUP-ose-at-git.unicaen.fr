@@ -61,8 +61,7 @@ class PlafondAssertion extends AbstractAssertion
         switch (true) {
             case $entity instanceof Structure:
                 switch ($privilege) {
-                    case Privileges::PLAFONDS_STRUCTURE_VISUALISATION:
-                    case Privileges::PLAFONDS_STRUCTURE_EDITION:
+                    case Privileges::PLAFONDS_CONFIG_STRUCTURE:
                         return $this->assertStructure($role, $entity);
                 }
             break;

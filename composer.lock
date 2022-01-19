@@ -550,12 +550,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "a4b37db6f186b6843474189b424aed6a7cc5de4b"
+                "reference": "53e2416b0f57aa61b03e64991681b4529f8f6ff5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a4b37db6f186b6843474189b424aed6a7cc5de4b",
-                "reference": "a4b37db6f186b6843474189b424aed6a7cc5de4b",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/53e2416b0f57aa61b03e64991681b4529f8f6ff5",
+                "reference": "53e2416b0f57aa61b03e64991681b4529f8f6ff5",
                 "shasum": ""
             },
             "require": {
@@ -637,7 +637,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.3.0"
+                "source": "https://github.com/doctrine/dbal/tree/3.4.x"
             },
             "funding": [
                 {
@@ -653,7 +653,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-18T00:13:52+00:00"
+            "time": "2022-01-18T20:02:15+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1359,12 +1359,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "07f1c4e8f8acecd33c2db687d4955bf84e50064c"
+                "reference": "026bba23f15d7623eead23ebc5759b336bf5ec59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/07f1c4e8f8acecd33c2db687d4955bf84e50064c",
-                "reference": "07f1c4e8f8acecd33c2db687d4955bf84e50064c",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/026bba23f15d7623eead23ebc5759b336bf5ec59",
+                "reference": "026bba23f15d7623eead23ebc5759b336bf5ec59",
                 "shasum": ""
             },
             "require": {
@@ -1394,7 +1394,7 @@
                 "doctrine/annotations": "^1.13",
                 "doctrine/coding-standard": "^9.0",
                 "phpbench/phpbench": "^0.16.10 || ^1.0",
-                "phpstan/phpstan": "1.4.0",
+                "phpstan/phpstan": "1.4.1",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.4",
                 "squizlabs/php_codesniffer": "3.6.2",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
@@ -1450,7 +1450,7 @@
                 "issues": "https://github.com/doctrine/orm/issues",
                 "source": "https://github.com/doctrine/orm/tree/2.12.x"
             },
-            "time": "2022-01-16T20:39:56+00:00"
+            "time": "2022-01-18T22:35:01+00:00"
         },
         {
             "name": "doctrine/persistence",

@@ -62,22 +62,12 @@ return [
 
                 'structure' => [
                     'route'         => '/structure/:structure',
-                    'controller'    => 'Plafond\Controller\PlafondStructure',
-                    'action'        => 'index',
+                    'controller'    => 'Plafond\Controller\Plafond',
+                    'action'        => 'index-structure',
                     'constraints'   => [
                         'structure' => '[0-9]*',
                     ],
                     'may_terminate' => true,
-                    'child_routes'  => [
-                        'ajouter'  => [
-                            'route'  => '/ajouter',
-                            'action' => 'editer',
-                        ],
-                        'modifier' => [
-                            'route'  => '/modifier',
-                            'action' => 'editer',
-                        ],
-                    ],
                 ],
             ],
         ],
@@ -156,8 +146,8 @@ return [
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\PlafondStructure',
-            'action'     => ['index'],
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['index-structure'],
             'privileges' => Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],

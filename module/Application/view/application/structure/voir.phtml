@@ -20,26 +20,20 @@ $tabs = [
 
 $structureId = $structure->getId();
 
-$canEdit     = $this->isAllowed($structure, Privileges::STRUCTURES_ADMINISTRATION_EDITION);
-$canPlafonds = $this->isAllowed($structure, Privileges::PLAFONDS_STRUCTURE_VISUALISATION);
+$canEdit = $this->isAllowed($structure, Privileges::STRUCTURES_ADMINISTRATION_EDITION);
 
-if ($structureId && ($canEdit || $canPlafonds)) {
+if ($structureId && $canEdit) {
 
-    if ($canEdit) {
-        $tabs[] = [
-            'id'    => 'edition',
-            'label' => '<span class="glyphicon glyphicon-pencil"></span> Modification',
-            'url'   => $this->url('structure/saisie', ['structure' => $structureId]),
-        ];
-    }
-
-    if ($canPlafonds) {
-        $tabs[] = [
-            'id'    => 'plafonds',
-            'label' => '<span class="glyphicon glyphicon-signal"></span> Plafonds',
-            'url'   => $this->url('plafond/structure', ['structure' => $structureId]),
-        ];
-    }
+    $tabs[] = [
+        'id'    => 'edition',
+        'label' => '<span class="glyphicon glyphicon-pencil"></span> Modification',
+        'url'   => $this->url('structure/saisie', ['structure' => $structureId]),
+    ];
+    $tabs[] = [
+        'id'    => 'plafonds',
+        'label' => '<span class="glyphicon glyphicon-signal"></span> Plafonds',
+        'url'   => $this->url('plafond/structure', ['structure' => $structureId]),
+    ];
 
     echo $this->tabajax($tabs, $tab);
 } else {

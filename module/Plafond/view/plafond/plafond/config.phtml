@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @var $this                 \Application\View\Renderer\PhpRenderer
+ * @var $title                string
+ * @var $structure            \Application\Entity\Db\Structure
+ * @var $configs              \Plafond\Entity\Db\PlafondStructure[]
+ * @var $canEdit              bool
+ */
+
+?>
+    <h1 class="page-header"><?= $title ?></h1>
+
+    <table class="table table-condensed table-hover table-bordered plafonds-config">
+        <thead>
+        <tr>
+            <th rowspan="2">Plafond</th>
+            <th>Prévisionnel</th>
+            <th>Réalisé</th>
+            <th>Heures<sup>*</sup></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($configs as $config): ?>
+            <tr>
+                <td style="width:50%"><?= $config->getPlafond() ?></td>
+                <td><?= $this->plafondConfig($config)->etatPrevu($canEdit); ?></td>
+                <td><?= $this->plafondConfig($config)->etatRealise($canEdit); ?></td>
+                <td><?= $this->plafondConfig($config)->heures($canEdit); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?= $this->plafondConfig()->script(); ?>

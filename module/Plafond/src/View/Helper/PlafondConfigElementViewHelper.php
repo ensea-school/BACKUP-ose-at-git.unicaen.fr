@@ -24,9 +24,11 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(PlafondConfigInterface $plafondConfig)
+    public function __invoke(?PlafondConfigInterface $plafondConfig = null)
     {
-        $this->plafondConfig = $plafondConfig;
+        if ($plafondConfig) {
+            $this->plafondConfig = $plafondConfig;
+        }
 
         return $this;
     }

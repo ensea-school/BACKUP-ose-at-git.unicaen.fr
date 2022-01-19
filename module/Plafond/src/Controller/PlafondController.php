@@ -3,7 +3,9 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -30,10 +32,10 @@ class PlafondController extends AbstractController
 
     public function indexAction()
     {
-        $title        = 'Gestion des plafonds';
-        $applications = $this->getServicePlafond()->getPlafondsConfig();
+        $title    = 'Gestion des plafonds';
+        $plafonds = $this->getServicePlafond()->getPlafondsConfig();
 
-        return compact('title', 'applications');
+        return compact('title', 'plafonds');
     }
 
 
@@ -84,6 +86,22 @@ class PlafondController extends AbstractController
 
 
 
+    public function indexStructureAction()
+    {
+        $title     = 'Gestion des plafonds';
+        $structure = $this->getEvent()->getParam('structure');
+        $configs   = $this->getServicePlafond()->getPlafondsConfig($structure);
+        $canEdit   = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_STRUCTURE));
+
+        $vh = new ViewModel();
+        $vh->setTemplate('plafond/plafond/config');
+        $vh->setVariables(compact('title', 'configs', 'canEdit'));
+
+        return $vh;
+    }
+
+
+
     public function configApplicationAction()
     {
         return $this->configAction(null);
@@ -109,7 +127,7 @@ class PlafondController extends AbstractController
     {
         return $this->configAction(null);
     }
-    
+
 
 
     private function configAction($entity)

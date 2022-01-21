@@ -27,6 +27,7 @@ class FonctionReferentielController extends AbstractController
         /* @var $fonctionReferentiel FonctionReferentiel */
 
         $fonctionReferentiel = $this->getEvent()->getParam('fonctionReferentiel');
+        $tab                 = $this->params()->fromQuery('tab', 'fiche');
 
         $form = $this->getFormFonctionReferentielSaisie();
         if (empty($fonctionReferentiel)) {
@@ -45,7 +46,7 @@ class FonctionReferentielController extends AbstractController
             }
         });
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'tab');
     }
 
 

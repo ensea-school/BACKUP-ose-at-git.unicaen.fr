@@ -3,6 +3,9 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
@@ -88,14 +91,30 @@ class PlafondController extends AbstractController
 
     public function indexStructureAction()
     {
-        $title     = 'Gestion des plafonds';
-        $structure = $this->getEvent()->getParam('structure');
-        $configs   = $this->getServicePlafond()->getPlafondsConfig($structure);
-        $canEdit   = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_STRUCTURE));
+        $title   = 'Gestion des plafonds';
+        $entity  = $this->getEvent()->getParam('structure');
+        $configs = $this->getServicePlafond()->getPlafondsConfig($entity);
+        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_STRUCTURE));
 
         $vh = new ViewModel();
         $vh->setTemplate('plafond/plafond/config');
-        $vh->setVariables(compact('title', 'configs', 'canEdit'));
+        $vh->setVariables(compact('title', 'configs', 'canEdit', 'entity'));
+
+        return $vh;
+    }
+
+
+
+    public function indexReferentielAction()
+    {
+        $title   = 'Gestion des plafonds';
+        $entity  = $this->getEvent()->getParam('fonctionReferentiel');
+        $configs = $this->getServicePlafond()->getPlafondsConfig($entity);
+        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_REFERENTIEL));
+
+        $vh = new ViewModel();
+        $vh->setTemplate('plafond/plafond/config');
+        $vh->setVariables(compact('title', 'configs', 'canEdit', 'entity'));
 
         return $vh;
     }
@@ -111,21 +130,30 @@ class PlafondController extends AbstractController
 
     public function configStructureAction()
     {
-        return $this->configAction(null);
+        $entityId = $this->params()->fromPost('entityId');
+        $entity   = $this->em()->find(Structure::class, (int)$entityId);
+
+        return $this->configAction($entity);
     }
 
 
 
     public function configStatutAction()
     {
-        return $this->configAction(null);
+        $entityId = $this->params()->fromPost('entityId');
+        $entity   = $this->em()->find(StatutIntervenant::class, (int)$entityId);
+
+        return $this->configAction($entity);
     }
 
 
 
     public function configReferentielAction()
     {
-        return $this->configAction(null);
+        $entityId = $this->params()->fromPost('entityId');
+        $entity   = $this->em()->find(FonctionReferentiel::class, (int)$entityId);
+
+        return $this->configAction($entity);
     }
 
 

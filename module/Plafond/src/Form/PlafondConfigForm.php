@@ -87,6 +87,16 @@ class PlafondConfigForm extends AbstractForm
         $e->setAttribute('data-name', $name);
         $e->setAttribute('data-plafond-id', $plafondConfig->getPlafond()->getId());
 
+        $entity = $plafondConfig->getEntity();
+        if ($entity) {
+            $e->setAttribute('data-entity-id', $entity->getId());
+        } else {
+            $e->setAttribute('data-entity-id', null);
+        }
+
+        $e->setAttribute('data-url', get_class($plafondConfig));
+
+
         return $e;
     }
 

@@ -5,7 +5,7 @@
 return [
     'name'        => 'PLAFOND_REFERENTIEL_REF_FK',
     'table'       => 'PLAFOND_REFERENTIEL',
-    'rtable'      => 'STRUCTURE',
+    'rtable'      => 'FONCTION_REFERENTIEL',
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [

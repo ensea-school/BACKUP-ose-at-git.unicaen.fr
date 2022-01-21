@@ -30,4 +30,20 @@ interface PlafondConfigInterface extends ParametreEntityInterface, PlafondAwareI
 
 
     public function setEtatRealise(PlafondEtat $etat): PlafondConfigInterface;
+
+
+
+    public function getEntity();
+
+
+
+    public function setEntity($entity): PlafondConfigInterface;
+
+
+
+    public static function getEntityClass(): ?string;
+
+
+
+    public static function getPerimetreCode(): ?string;
 }

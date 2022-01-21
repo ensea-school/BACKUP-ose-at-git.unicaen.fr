@@ -556,17 +556,10 @@ class PlafondService extends AbstractEntityService
     private function getterPlafondConfig(int $plafondId, $entity = null): array
     {
         $joins = [
-            PlafondApplication::class => 'p.plafondApplication pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL',
-            PlafondStructure::class   => 'p.plafondStructure pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.structure = :entity',
-            PlafondStatut::class      => 'p.plafondStatut pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.statutIntervenant = :entity',
-            PlafondReferentiel::class => 'p.plafondReferentiel pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.fonctionReferentiel = :entity',
-        ];
-
-        $perimetres = [
             PlafondApplication::class => null,
-            PlafondStructure::class   => PlafondPerimetre::STRUCTURE,
-            PlafondStatut::class      => PlafondPerimetre::INTERVENANT,
-            PlafondReferentiel::class => PlafondPerimetre::REFERENTIEL,
+            PlafondStructure::class   => 'LEFT JOIN p.plafondStructure pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.structure = :entity',
+            PlafondStatut::class      => 'LEFT JOIN p.plafondStatut pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.statutIntervenant = :entity',
+            PlafondReferentiel::class => 'LEFT JOIN p.plafondReferentiel pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.fonctionReferentiel = :entity',
         ];
 
         $annee  = $this->getServiceContext()->getAnnee();
@@ -584,18 +577,19 @@ class PlafondService extends AbstractEntityService
             $params['pid'] = $plafondId;
         }
 
-        if ($perimetres[$class]) {
+        if ($perimetre = $class::getPerimetreCode()) {
             $where[]             = "prm.code = :perimetre";
-            $params['perimetre'] = $perimetres[$class];
+            $params['perimetre'] = $perimetre;
         }
 
         $dql = "
         SELECT
-          p, prm, pc
+          p, prm, papp" . ($joins[$class] ? ', pc' : '') . "
         FROM
           " . Plafond::class . " p
           JOIN p.plafondPerimetre prm
-          LEFT JOIN " . $joins[$class] . "
+          LEFT JOIN p.plafondApplication papp WITH papp.annee = :annee AND papp.histoDestruction IS NULL
+          " . $joins[$class] . "
         " . (empty($where) ? '' : ('WHERE ' . implode(' AND ', $where))) . "
         ORDER BY
             prm.libelle, p.libelle
@@ -603,26 +597,30 @@ class PlafondService extends AbstractEntityService
 
         /** @var Plafond[] $plafonds */
         $plafonds = $this->getEntityManager()->createQuery($dql)->setParameters($params)->getResult();
-        $papps    = [];
+        $pcs      = [];
         foreach ($plafonds as $plafond) {
             $configCount = $plafond->$getter()->count();
             switch ($configCount) {
                 case 0:
-                    $papp = new $class;
-                    $papp->setPlafond($plafond);
-                    $papp->setEtatPrevu($this->getEtat(PlafondEtat::DESACTIVE));
-                    $papp->setEtatRealise($this->getEtat(PlafondEtat::DESACTIVE));
-                    $papps[$plafond->getId()] = $papp;
+                    /* @var $papp PlafondApplication */
+                    $papp = $plafond->getPlafondApplication()->first();
+                    $pc   = new $class;
+                    $pc->setPlafond($plafond);
+                    if ($entity) $pc->setEntity($entity);
+                    $pc->setEtatPrevu($papp ? $papp->getEtatPrevu() : $this->getEtat(PlafondEtat::DESACTIVE));
+                    $pc->setEtatRealise($papp ? $papp->getEtatRealise() : $this->getEtat(PlafondEtat::DESACTIVE));
+                    $pc->setHeures($papp ? $papp->getHeures() : 0);
+                    $pcs[$plafond->getId()] = $pc;
                 break;
                 case 1:
-                    $papps[$plafond->getId()] = $plafond->$getter()->first();
+                    $pcs[$plafond->getId()] = $plafond->$getter()->first();
                 break;
                 default:
                     throw new \Exception('Erreur : trop de paramètres (' . $configCount . ') de configuration retournées pour le plafond numéro ' . $plafond->getNumero());
             }
         }
 
-        return $papps;
+        return $pcs;
     }
 
 

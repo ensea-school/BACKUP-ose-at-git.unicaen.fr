@@ -126,7 +126,7 @@ class Plafond
      */
     public function getPlafondReferentiel(): Collection
     {
-        $this->plafondReferentiel;
+        return $this->plafondReferentiel;
     }
 
 

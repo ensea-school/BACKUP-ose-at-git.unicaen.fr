@@ -3,8 +3,8 @@
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
- * @var $structure            \Application\Entity\Db\Structure
  * @var $configs              \Plafond\Entity\Db\PlafondStructure[]
+ * @var $entity               object
  * @var $canEdit              bool
  */
 
@@ -31,4 +31,4 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-<?= $this->plafondConfig()->script(); ?>
+<?= $this->plafondConfig()->script($entity); ?>

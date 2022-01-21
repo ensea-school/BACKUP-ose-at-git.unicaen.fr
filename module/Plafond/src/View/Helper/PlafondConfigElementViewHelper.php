@@ -2,6 +2,9 @@
 
 namespace Plafond\View\Helper;
 
+use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Structure;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Interfaces\PlafondConfigInterface;
@@ -74,44 +77,60 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
 
 
 
-    public function script(): string
+    public function script($entity = null)
     {
-        return "<script type=\"text/javascript\">
-        $(function () {
+        $urls = [
+            '*'                        => 'plafond/config-application',
+            FonctionReferentiel::class => 'plafond/config-referentiel',
+            Structure::class           => 'plafond/config-structure',
+            StatutIntervenant::class   => 'plafond/config-statut',
+        ];
+        if (is_object($entity)) {
+            $url      = $this->getView()->url($urls[get_class($entity)]);
+            $entityId = $entity->getId();
+        } else {
+            $url      = $this->getView()->url($urls['*']);
+            $entityId = null;
+        }
 
-            WidgetInitializer.add('plafonds-config', {
+        ?>
+        <script> $(function () {
 
-            change: function (el)
-            {
-                var params = {
-                plafond: el.data('plafond-id'),
-                    entity: null,
-                    name: el.data('name'),
-                    value: el.val()
-                };
-                $.post('" . $this->getView()->url('plafond/config-application') . "', params, function (data)
-                {
-                    alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
-                }).fail(function (jqXHR)
-                {
-                    alertFlash(jqXHR.responseText, 'danger', 3000);
+                WidgetInitializer.add('plafonds-config', {
+
+                    change: function (el)
+                    {
+                        $.ajax({
+                            url: '<?= $url ?>',
+                            type: 'POST',
+                            data: {
+                                plafond: el.data('plafond-id'),
+                                name: el.data('name'),
+                                value: el.val(),
+                                entityId: <?= $entityId ?: 'null' ?>
+                            },
+                            success: function () {
+                                alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
+                            },
+                            error: function () {
+                                alertFlash(jqXHR.responseText, 'danger', 3000);
+                            }
+                        });
+                    },
+
+                    _create: function ()
+                    {
+                        var that = this;
+                        var elsel = '[data-name=\"plafondEtatPrevu\"],[data-name=\"plafondEtatRealise\"],[data-name=\"heures\"]';
+
+                        this.element.find(elsel).each(function () {
+                            var thatthat = $(this);
+                            thatthat.change(function () { that.change(thatthat) });
+                        });
+                    },
+
                 });
-            },
 
-            _create: function ()
-            {
-                var that = this;
-                var elsel = '[data-name=\"plafondEtatPrevu\"],[data-name=\"plafondEtatRealise\"],[data-name=\"heures\"]';
-
-                this.element.find(elsel).each(function () {
-                    var thatthat = $(this);
-                    thatthat.change(function () { that.change(thatthat) });
-                });
-            },
-
-            });
-
-        });
-        </script>";
+            }); </script><?php
     }
 }

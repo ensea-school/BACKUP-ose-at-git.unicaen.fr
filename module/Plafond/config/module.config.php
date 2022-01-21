@@ -69,6 +69,16 @@ return [
                     ],
                     'may_terminate' => true,
                 ],
+
+                'referentiel' => [
+                    'route'         => '/referentiel/:fonctionReferentiel',
+                    'controller'    => 'Plafond\Controller\Plafond',
+                    'action'        => 'index-referentiel',
+                    'constraints'   => [
+                        'fonctionReferentiel' => '[0-9]*',
+                    ],
+                    'may_terminate' => true,
+                ],
             ],
         ],
 
@@ -149,6 +159,12 @@ return [
             'controller' => 'Plafond\Controller\Plafond',
             'action'     => ['index-structure'],
             'privileges' => Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+        [
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['index-referentiel'],
+            'privileges' => Privileges::REFERENTIEL_ADMIN_VISUALISATION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [

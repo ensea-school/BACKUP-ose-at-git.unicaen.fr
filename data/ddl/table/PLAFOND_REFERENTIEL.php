@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'PLAFOND_REFERENTIEL_ID_SEQ',
     'columns'     => [
         'ANNEE_ID'                => [
             'name'        => 'ANNEE_ID',

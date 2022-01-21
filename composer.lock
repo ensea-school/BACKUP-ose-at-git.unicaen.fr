@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1b02da9fe2e2f7aaafaee8c3229b9d0",
+    "content-hash": "2cad00a9215a127e8e2408139963aa82",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1359,12 +1359,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "026bba23f15d7623eead23ebc5759b336bf5ec59"
+                "reference": "f7822c775d11a33369f6c4f416bee7c0967a112d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/026bba23f15d7623eead23ebc5759b336bf5ec59",
-                "reference": "026bba23f15d7623eead23ebc5759b336bf5ec59",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/f7822c775d11a33369f6c4f416bee7c0967a112d",
+                "reference": "f7822c775d11a33369f6c4f416bee7c0967a112d",
                 "shasum": ""
             },
             "require": {
@@ -1450,7 +1450,7 @@
                 "issues": "https://github.com/doctrine/orm/issues",
                 "source": "https://github.com/doctrine/orm/tree/2.12.x"
             },
-            "time": "2022-01-18T22:35:01+00:00"
+            "time": "2022-01-19T23:29:39+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -7427,7 +7427,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4"
+        "php": ">=8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"

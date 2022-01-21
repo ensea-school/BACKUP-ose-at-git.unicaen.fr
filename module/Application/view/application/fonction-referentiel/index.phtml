@@ -19,7 +19,6 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
     <th>Libelle</th>
     <th>Libelle court</th>
     <th>Domaine Fonctionnel</th>
-    <th>Plafond</th>
     <th>Structure</th>
     <th>Formation à préciser</th>
     <th>
@@ -36,7 +35,6 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
             <td><?= $fr->getLibelleLong() ?></td>
             <td><?= $fr->getLibelleCourt() ?></td>
             <td><?= $fr->getDomaineFonctionnel() ?></td>
-            <td><?= $fr->getPlafond() ?></td>
             <td><?= $this->structure($fr->getStructure())->renderLink() ?></td>
             <td style="text-align:center"><?php if ($fr->isEtapeRequise()): ?><span
                         class="text-success glyphicon glyphicon-ok"></span><?php else: ?><span

@@ -15,7 +15,6 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="90" nullable="false"/>
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="150" nullable="false"/>
-    <field name="plafond" type="float" column="PLAFOND" precision="126" scale="0" nullable="true"/>
     <field name="etapeRequise" type="boolean" column="ETAPE_REQUISE" nullable="false"/>
     <field name="serviceStatutaire" type="boolean" column="SERVICE_STATUTAIRE" nullable="false"/>
     <many-to-one field="parent" target-entity="Application\Entity\Db\FonctionReferentiel">

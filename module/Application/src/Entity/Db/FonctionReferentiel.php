@@ -35,11 +35,6 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     protected $libelleLong;
 
     /**
-     * @var float
-     */
-    protected $plafond;
-
-    /**
      * @var integer
      */
     protected $id;
@@ -232,34 +227,6 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     public function getLibelleLong()
     {
         return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Set plafond
-     *
-     * @param float $plafond
-     *
-     * @return FonctionReferentiel
-     */
-    public function setPlafond($plafond)
-    {
-        $this->plafond = $plafond;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get plafond
-     *
-     * @return float
-     */
-    public function getPlafond()
-    {
-        return $this->plafond;
     }
 
 

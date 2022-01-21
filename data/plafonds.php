@@ -47,20 +47,15 @@ return [
             'perimetre' => 'structure',
             'requete'   => file_get_contents($sqlDir . '15.sql'),
         ],
-        16 => [
-            'libelle'   => 'Heures max. de référentiel par intervenant et par type de fonction référentielle',
-            'perimetre' => 'referentiel',
-            'requete'   => file_get_contents($sqlDir . '16.sql'),
-        ],
         17 => [
             'libelle'   => 'Heures max. de référentiel par intervenant et par fonction référentielle',
             'perimetre' => 'referentiel',
-            'requete'   => file_get_contents($sqlDir . '18.sql'),
+            'requete'   => file_get_contents($sqlDir . '17.sql'),
         ],
         18 => [
             'libelle'   => 'Heures max. de référentiel par intervenant selon son statut',
             'perimetre' => 'intervenant',
-            'requete'   => file_get_contents($sqlDir . '17.sql'),
+            'requete'   => file_get_contents($sqlDir . '18.sql'),
         ],
 
     ],

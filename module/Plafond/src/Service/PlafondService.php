@@ -264,16 +264,17 @@ class PlafondService extends AbstractEntityService
             $view = "CREATE OR REPLACE FORCE VIEW V_TBL_PLAFOND_" . strtoupper($perimetre->getCode()) . ' AS';
             $view .= "\nSELECT";
             foreach ($cols as $col) {
-                if ($col != 'PLAFOND_ETAT_ID' && $col != 'DEROGATION' && $col != 'DEPASSEMENT') {
+                if ($col != 'PLAFOND_ETAT_ID' && $col != 'DEROGATION' && $col != 'DEPASSEMENT' && $col != 'PLAFOND') {
                     $view .= "\n  p.$col,";
                 }
             }
+            $view     .= "\n  COALESCE(p.PLAFOND,ps.heures,pa.heures,0) PLAFOND,";
             $view     .= "\n  CASE";
             $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)";
             $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)";
             $view     .= "\n  END plafond_etat_id,";
             $view     .= "\n  COALESCE(pd.heures, 0) derogation,";
-            $view     .= "\n  CASE WHEN p.heures > p.plafond + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
+            $view     .= "\n  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
             $view     .= "\nFROM\n  (";
             $plafonds = $perimetre->getPlafond();
             $first    = true;

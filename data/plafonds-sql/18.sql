@@ -1,16 +1,11 @@
 SELECT
-  i.annee_id                        annee_id,
-  vhr.type_volume_horaire_id        type_volume_horaire_id,
-  i.id                              intervenant_id,
-  fr.id                             fonction_referentiel_id,
-  SUM(vhr.heures)                   heures,
-  fr.plafond                        plafond
+  i.annee_id                             annee_id,
+  fr.type_volume_horaire_id              type_volume_horaire_id,
+  i.id                                   intervenant_id,
+  fr.total - fr.heures_compl_fc_majorees heures,
+  si.maximum_hetd                        plafond
 FROM
-       service_referentiel       sr
-  JOIN intervenant                i ON i.id = sr.intervenant_id
-  JOIN fonction_referentiel      fr ON fr.id = sr.fonction_id
-  JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
-WHERE
-  sr.histo_destruction IS NULL
-GROUP BY
-  i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+  intervenant                     i
+  JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+  JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+  JOIN statut_intervenant        si ON si.id = i.statut_id

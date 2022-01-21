@@ -82,13 +82,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
             'type'       => 'Select',
         ]);
         $this->add([
-            'name'    => 'plafond',
-            'options' => [
-                'label' => "Plafond",
-            ],
-            'type'    => 'Text',
-        ]);
-        $this->add([
             'name'       => 'structure',
             'options'    => [
                 'label' => 'Structure',
@@ -193,9 +186,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
             'domaine-fonctionnel' => [
                 'required' => true,
             ],
-            'plafond'             => [
-                'required' => true,
-            ],
             'structure'           => [
                 'required' => false,
             ],
@@ -232,7 +222,6 @@ class FonctionReferentielHydrator implements HydratorInterface
         if (array_key_exists('domaine-fonctionnel', $data)) {
             $object->setDomaineFonctionnel($this->getServiceDomaineFonctionnel()->get($data['domaine-fonctionnel']));
         }
-        $object->setPlafond($data['plafond']);
         if (array_key_exists('structure', $data)) {
             $object->setStructure($this->getServiceStructure()->get($data['structure']));
         }
@@ -261,7 +250,6 @@ class FonctionReferentielHydrator implements HydratorInterface
             'libelle-court'       => $object->getLibelleCourt(),
             'libelle-long'        => $object->getLibelleLong(),
             'domaine-fonctionnel' => ($s = $object->getDomaineFonctionnel()) ? $s->getId() : null,
-            'plafond'             => $object->getPlafond(),
             'structure'           => ($s = $object->getStructure()) ? $s->getId() : null,
             'etape-requise'       => $object->isEtapeRequise(),
             'service-statutaire'  => $object->isServiceStatutaire(),

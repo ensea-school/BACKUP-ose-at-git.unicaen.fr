@@ -5,7 +5,7 @@ WITH t AS (
     evh.id                              etat_volume_horaire_id,
     a.id                                annee_id,
     i.id                                intervenant_id,
-    si.id                               statut_intervenant_id,
+    si.id                               statut_id,
     ti.id                               type_intervenant_id,
     g.id                                grade_id,
     str.id                              structure_id,
@@ -39,7 +39,7 @@ WITH t AS (
          JOIN type_volume_horaire       tvh ON tvh.id = fr.type_volume_horaire_id
          JOIN intervenant                 i ON i.id = fr.intervenant_id
          JOIN annee                       a ON a.id = i.annee_id
-         JOIN statut_intervenant         si ON si.id = i.statut_id
+         JOIN statut                     si ON si.id = i.statut_id
          JOIN type_intervenant           ti ON ti.id = si.type_intervenant_id
          JOIN service                     s ON s.id = frs.service_id
     LEFT JOIN grade                       g ON g.id = i.grade_id
@@ -56,7 +56,7 @@ WITH t AS (
   UNION ALL
 
   SELECT
-    type_volume_horaire_id, etat_volume_horaire_id, annee_id, intervenant_id, statut_intervenant_id, type_intervenant_id,
+    type_volume_horaire_id, etat_volume_horaire_id, annee_id, intervenant_id, statut_id, type_intervenant_id,
     grade_id, structure_id, groupe_type_formation_id, type_formation_id, etape_id,
 
     type_volume_horaire, etat_volume_horaire, annee, code_intervenant, intervenant, statut_intervenant,
@@ -69,7 +69,7 @@ WITH t AS (
     evh.id                              etat_volume_horaire_id,
     a.id                                annee_id,
     i.id                                intervenant_id,
-    si.id                               statut_intervenant_id,
+    si.id                               statut_id,
     ti.id                               type_intervenant_id,
     g.id                                grade_id,
     str.id                              structure_id,
@@ -99,7 +99,7 @@ WITH t AS (
          JOIN type_volume_horaire       tvh ON tvh.id = fr.type_volume_horaire_id
          JOIN intervenant                 i ON i.id = fr.intervenant_id
          JOIN annee                       a ON a.id = i.annee_id
-         JOIN statut_intervenant         si ON si.id = i.statut_id
+         JOIN statut                     si ON si.id = i.statut_id
          JOIN type_intervenant           ti ON ti.id = si.type_intervenant_id
          JOIN service                     s ON s.id = frs.service_id
     LEFT JOIN grade                       g ON g.id = i.grade_id
@@ -117,7 +117,7 @@ SELECT
   etat_volume_horaire_id,
   annee_id,
   intervenant_id,
-  statut_intervenant_id,
+  statut_id,
   type_intervenant_id,
   grade_id,
   structure_id,
@@ -147,7 +147,7 @@ GROUP BY
   etat_volume_horaire_id,
   annee_id,
   intervenant_id,
-  statut_intervenant_id,
+  statut_id,
   type_intervenant_id,
   grade_id,
   structure_id,

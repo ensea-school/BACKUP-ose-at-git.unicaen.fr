@@ -14,7 +14,7 @@ SELECT
   'statut/' || s.code role
 FROM
   statut_privilege sp
-  JOIN statut_intervenant s ON s.id = sp.statut_id AND s.histo_destruction IS NULL
+  JOIN statut s ON s.id = sp.statut_id AND s.histo_destruction IS NULL
 )
 SELECT
   cp.code || '-' || p.code privilege,

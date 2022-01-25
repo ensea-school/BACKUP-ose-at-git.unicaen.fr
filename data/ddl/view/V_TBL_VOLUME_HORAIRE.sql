@@ -38,7 +38,7 @@ SELECT
 
 FROM
   intervenant                                   i
-  JOIN statut_intervenant                      si ON si.id = i.statut_id
+  JOIN statut                                  si ON si.id = i.statut_id
   JOIN type_intervenant                        ti ON ti.id = si.type_intervenant_id
   JOIN service                                  s ON s.intervenant_id = i.id
                                                  AND s.histo_destruction IS NULL

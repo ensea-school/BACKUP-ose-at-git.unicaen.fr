@@ -6,6 +6,6 @@ SELECT
   si.plafond_hc_hors_remu_fc          plafond
 FROM
        intervenant                i
-  JOIN statut_intervenant        si ON si.id = i.statut_id
+  JOIN statut                    si ON si.id = i.statut_id
   JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
   JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id

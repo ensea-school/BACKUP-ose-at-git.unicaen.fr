@@ -258,11 +258,11 @@ FROM (
                 mv_intervenant          s
            JOIN (SELECT unicaen_import.get_current_annee id FROM dual) current_annee ON 1=1
            JOIN annee                   a ON a.id >= current_annee.id - 1 AND a.active = 1 AND COALESCE(s.validite_debut,a.date_fin-1) < a.date_fin AND COALESCE(s.validite_fin,a.date_debut+1) > a.date_debut
-           JOIN statut_intervenant    ssi ON ssi.code           = s.z_statut_id
+           JOIN statut                ssi ON ssi.code           = s.z_statut_id
            JOIN source               ssrc ON ssrc.code          = s.z_source_id
       LEFT JOIN intervenant             i ON i.code             = s.code AND i.annee_id = a.id
       LEFT JOIN source               isrc ON isrc.id            = i.source_id
-      LEFT JOIN statut_intervenant    isi ON isi.id             = i.statut_id
+      LEFT JOIN statut                isi ON isi.id             = i.statut_id
       LEFT JOIN structure             str ON str.source_code    = s.z_structure_id
       LEFT JOIN grade                   g ON g.source_code      = s.z_grade_id
       LEFT JOIN discipline              d ON d.source_code      = s.z_discipline_id

@@ -40,7 +40,7 @@ SELECT
   etp.id                          etape_id,
   tf.id                           type_formation_id,
   gtf.id                          groupe_type_formation_id,
-  si.id                           statut_intervenant_id,
+  si.id                           statut_id,
   p.id                            periode_id,
 
   i.source_code                   intervenant_code,
@@ -103,7 +103,7 @@ FROM
     LEFT JOIN service_referentiel       sr ON sr.id   = mep.service_referentiel_id
     LEFT JOIN fonction_referentiel      fr ON fr.id   = sr.fonction_id
          JOIN intervenant                i ON i.id    = NVL( s.intervenant_id, sr.intervenant_id )
-         JOIN statut_intervenant        si ON si.id   = i.statut_id
+         JOIN statut                    si ON si.id   = i.statut_id
          JOIN type_intervenant          ti ON ti.id   = si.type_intervenant_id
     LEFT JOIN grade                      g ON g.id    = i.grade_id
     LEFT JOIN discipline                di ON di.id   = i.discipline_id

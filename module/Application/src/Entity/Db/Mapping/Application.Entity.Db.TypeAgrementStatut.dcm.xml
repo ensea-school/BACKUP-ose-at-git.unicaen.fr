@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\TypeAgrementStatut" table="TYPE_AGREMENT_STATUT">
-    <indexes>
-      <index name="IDX_52F2ED39CA248E54" columns="STATUT_INTERVENANT_ID"/>
-      <index name="IDX_52F2ED39F202337" columns="TYPE_AGREMENT_ID"/>
-      <index name="IDX_52F2ED3959860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_52F2ED397E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_52F2ED3963F06898" columns="HISTO_MODIFICATEUR_ID"/>
-    </indexes>
     <unique-constraints>
       <unique-constraint name="type_agrement_statut__un" columns="TYPE_AGREMENT_ID,STATUT_INTERVENANT_ID,HISTO_DESTRUCTION"/>
     </unique-constraints>
@@ -40,7 +33,7 @@
     </many-to-one>
     <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
       <join-columns>
-        <join-column name="STATUT_INTERVENANT_ID" referenced-column-name="ID"/>
+        <join-column name="STATUT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <field name="dureeVie" type="integer" column="DUREE_VIE" nullable="true"/>

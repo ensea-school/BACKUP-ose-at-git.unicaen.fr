@@ -4,8 +4,8 @@ SELECT DISTINCT
 	w.structure_id
 FROM
 	tbl_workflow w
-	JOIN intervenant i ON w.intervenant_id = i.id
-	JOIN statut_intervenant si ON si.id = i.statut_id
+	JOIN intervenant  i ON w.intervenant_id = i.id
+	JOIN statut      si ON si.id = i.statut_id
 	LEFT JOIN contrat c ON c.intervenant_id = w.intervenant_id
 WHERE
 	w.atteignable = 1

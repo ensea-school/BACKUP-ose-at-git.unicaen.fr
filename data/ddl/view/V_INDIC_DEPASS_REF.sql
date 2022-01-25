@@ -9,7 +9,7 @@ with totaux as (
 depass as (
   select i.id intervenant_id, t.type_volume_horaire_id, t.total, si.plafond_referentiel plafond
   from intervenant i
-  join statut_intervenant si on i.statut_id = si.id and si.plafond_referentiel is not null and si.plafond_referentiel <> 0
+  join statut si on i.statut_id = si.id and si.plafond_referentiel is not null and si.plafond_referentiel <> 0
   join totaux t on t.intervenant_id = i.id
   where t.total > si.plafond_referentiel
 ),

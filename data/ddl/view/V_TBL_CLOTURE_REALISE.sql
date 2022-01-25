@@ -7,7 +7,7 @@ WITH t AS (
     CASE WHEN v.id IS NULL THEN 0 ELSE 1 END cloture
   FROM
               intervenant         i
-         JOIN statut_intervenant si ON si.id = i.statut_id
+         JOIN statut             si ON si.id = i.statut_id
          JOIN type_validation    tv ON tv.code = 'CLOTURE_REALISE'
 
     LEFT JOIN validation          v ON v.intervenant_id = i.id

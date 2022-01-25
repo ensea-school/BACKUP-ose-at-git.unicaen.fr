@@ -314,7 +314,7 @@ class DataGen
             'key'     => 'CODE',
         ],
         [
-            'table'   => 'STATUT_INTERVENANT',
+            'table'   => 'STATUT',
             'context' => ['install'],
             'key'     => 'CODE',
             'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
@@ -324,17 +324,17 @@ class DataGen
             'context' => ['install'],
             'key'     => ['STATUT_ID', 'PRIVILEGE_ID'],
             'options' => ['columns' => [
-                'STATUT_ID'    => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'STATUT_ID'    => ['transformer' => 'SELECT ID FROM STATUT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
                 'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
             ],],
         ],
         [
             'table'   => 'TYPE_AGREMENT_STATUT',
             'context' => ['install'],
-            'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_AGREMENT_ID'],
+            'key'     => ['STATUT_ID', 'TYPE_AGREMENT_ID'],
             'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'TYPE_AGREMENT_ID'      => ['transformer' => 'SELECT ID FROM TYPE_AGREMENT WHERE CODE = %s'],
+                'STATUT_ID'        => ['transformer' => 'SELECT ID FROM STATUT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'TYPE_AGREMENT_ID' => ['transformer' => 'SELECT ID FROM TYPE_AGREMENT WHERE CODE = %s'],
             ],],
         ],
         [
@@ -345,10 +345,10 @@ class DataGen
         [
             'table'   => 'TYPE_PIECE_JOINTE_STATUT',
             'context' => ['install'],
-            'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_PIECE_JOINTE_ID'],
+            'key'     => ['STATUT_ID', 'TYPE_PIECE_JOINTE_ID'],
             'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'TYPE_PIECE_JOINTE_ID'  => ['transformer' => 'SELECT ID FROM TYPE_PIECE_JOINTE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'STATUT_ID'            => ['transformer' => 'SELECT ID FROM STATUT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'TYPE_PIECE_JOINTE_ID' => ['transformer' => 'SELECT ID FROM TYPE_PIECE_JOINTE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
             ],],
         ],
         [

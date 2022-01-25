@@ -251,7 +251,7 @@ class PlafondService extends AbstractEntityService
         $tvhRealiseId     = $this->getServiceTypeVolumeHoraire()->getRealise()->getId();
         $configTablesJoin = [
             "structure"      => "plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
-            "intervenant"    => "plafond_statut ps ON ps.plafond_id = p.plafond_id AND ps.statut_intervenant_id = i.statut_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
+            "intervenant"    => "plafond_statut ps ON ps.plafond_id = p.plafond_id AND ps.statut_id = i.statut_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
             "element"        => "plafond_statut ps ON 1 = 0",
             "volume_horaire" => "plafond_statut ps ON 1 = 0",
             "referentiel"    => "plafond_referentiel ps ON ps.plafond_id = p.plafond_id AND ps.fonction_referentiel_id = p.fonction_referentiel_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",

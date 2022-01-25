@@ -20,7 +20,7 @@ FROM
        JOIN piece_jointe_fichier pjf ON pjf.piece_jointe_id = pj.id
        JOIN fichier                f ON f.id = pjf.fichier_id
                                     AND f.histo_destruction IS NULL
-        LEFT JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
+        LEFT JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
                                            AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
                                            AND i.annee_id BETWEEN COALESCE(tpjs.annee_debut_id,i.annee_id) AND COALESCE(tpjs.annee_fin_id,i.annee_id)
                                            AND tpjs.HISTO_DESTRUCTION IS NULL

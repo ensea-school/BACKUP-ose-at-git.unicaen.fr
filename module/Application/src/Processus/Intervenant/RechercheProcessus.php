@@ -95,7 +95,7 @@ class RechercheProcessus
           intervenant i
           LEFT JOIN structure s ON s.id = i.structure_id
           LEFT JOIN civilite c ON c.id = i.civilite_id
-          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
+          LEFT JOIN statut si ON si.id = i.statut_id
         ";
         if (!$this->showHisto) {
             $sql .= "WHERE i.histo_destruction IS NULL";
@@ -127,7 +127,7 @@ class RechercheProcessus
           src_intervenant i
           LEFT JOIN structure s ON s.id = i.structure_id
           LEFT JOIN civilite c ON c.id = i.civilite_id
-          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
+          LEFT JOIN statut si ON si.id = i.statut_id
         ";
     }
 

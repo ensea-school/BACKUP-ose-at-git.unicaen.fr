@@ -80,7 +80,7 @@ class TypePieceJointeStatutService extends AbstractEntityService
           TYPE_PIECE_JOINTE_STATUT TPJS
         WHERE
           TPJS.HISTO_DESTRUCTION IS NULL
-          AND TPJS.STATUT_INTERVENANT_ID = :statut
+          AND TPJS.STATUT_ID = :statut
           AND TPJS.TYPE_PIECE_JOINTE_ID = :tpj
           AND TPJS.ID <> :id
           AND TPJS.ANNEE_FIN_ID IS NOT NULL
@@ -116,7 +116,7 @@ class TypePieceJointeStatutService extends AbstractEntityService
           TYPE_PIECE_JOINTE_STATUT TPJS
         WHERE
           TPJS.HISTO_DESTRUCTION IS NULL
-          AND TPJS.STATUT_INTERVENANT_ID = :statut
+          AND TPJS.STATUT_ID = :statut
           AND TPJS.TYPE_PIECE_JOINTE_ID = :tpj
           AND TPJS.ID <> :id
           AND TPJS.ANNEE_DEBUT_ID IS NOT NULL

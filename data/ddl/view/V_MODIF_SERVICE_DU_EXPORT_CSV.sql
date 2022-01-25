@@ -27,7 +27,7 @@ FROM
   JOIN intervenant                  i ON i.id = msd.intervenant_id
   JOIN annee                        a ON a.id = i.annee_id
   JOIN structure                    s ON s.id = i.structure_id
-  JOIN statut_intervenant          si ON si.id = i.statut_id
+  JOIN statut                      si ON si.id = i.statut_id
   JOIN motif_modification_service mss ON mss.id = msd.motif_id
   JOIN utilisateur                  u ON u.id = msd.histo_modificateur_id
 WHERE

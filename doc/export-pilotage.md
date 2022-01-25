@@ -21,7 +21,7 @@ Voici les colonnes qui la composent :
 |ID                            |Identifiant unique de ligne|
 |SERVICE_ID                    |==> SERVICE.ID|
 |INTERVENANT_ID                |==> INTERVENANT.ID|
-|STATUT_INTERVENANT_ID         |==> STATUT_INTERVENANT.ID|
+|STATUT_ID                     |==> STATUT.ID|
 |TYPE_INTERVENANT_ID           |==> TYPE_INTERVENANT.ID|
 |ANNEE_ID                      |==> ANNEE.ID|
 |TYPE_VOLUME_HORAIRE_ID        |==> TYPE_VOLUME_HORAIRE.ID|
@@ -420,17 +420,17 @@ Suivi des validations du référentiel
 
 Workflow (feuilles de routes : avancement par étape par intervenant et le cas échéant par composante)
 
-|Colonne              |Description                                                     |
-|---------------------|----------------------------------------------------------------|
-|ID                   |                                                                |
-|INTERVENANT_ID       |==> INTERVENANT.ID (Identifiant de l'intervenant concerné)      |
-|ETAPE_ID             |==> WF_ETAPE.ID (Identifiant de l'étape concernée)              |
-|STRUCTURE_ID         |==> STRUCTURE.ID (Eventuelle structure concernée)               |
-|ATTEIGNABLE          |Témoin indiquant si l'étape est atteignable ou non              |
-|REALISATION          |Pourcentage de réalisation de l'étape de Workflow (entre 0 et 1)|
-|OBJECTIF             |Objectif de réalisation de l'étape de Workflow (entre 0 et 1)   |
-|ANNEE_ID             |==> ANNEE.ID                                                    |
-|TYPE_INTERVENANT_ID  |==> TYPE_INTERVENANT.ID                                         |
-|TYPE_INTERVENANT_CODE|Code du type d'intevention (CM / TD / TP, etc)                  |
-|ETAPE_CODE           |Code de l'étape du workflow concernée                           |
-|STATUT_INTERVENANT_ID|==> STATUT_INTERVENANT.ID                                       |
+| Colonne              | Description                                                      |
+|----------------------|------------------------------------------------------------------|
+| ID                   |                                                                  |
+| INTERVENANT_ID       | ==> INTERVENANT.ID (Identifiant de l'intervenant concerné)       |
+| ETAPE_ID             | ==> WF_ETAPE.ID (Identifiant de l'étape concernée)               |
+| STRUCTURE_ID         | ==> STRUCTURE.ID (Eventuelle structure concernée)                |
+| ATTEIGNABLE          | Témoin indiquant si l'étape est atteignable ou non               |
+| REALISATION          | Pourcentage de réalisation de l'étape de Workflow (entre 0 et 1) |
+| OBJECTIF             | Objectif de réalisation de l'étape de Workflow (entre 0 et 1)    |
+| ANNEE_ID             | ==> ANNEE.ID                                                     |
+| TYPE_INTERVENANT_ID  | ==> TYPE_INTERVENANT.ID                                          |
+| TYPE_INTERVENANT_CODE | Code du type d'intevention (CM / TD / TP, etc)                   |
+| ETAPE_CODE           | Code de l'étape du workflow concernée                            |
+| STATUT_ID            | ==> STATUT.ID                                                    |

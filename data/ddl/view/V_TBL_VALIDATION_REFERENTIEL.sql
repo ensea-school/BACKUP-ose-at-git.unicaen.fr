@@ -16,7 +16,7 @@ FROM
   service_referentiel s
   JOIN volume_horaire_ref vh ON vh.service_referentiel_id = s.id AND vh.histo_destruction IS NULL
   JOIN intervenant i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
-  JOIN statut_intervenant si ON si.id = i.statut_id
+  JOIN statut si ON si.id = i.statut_id
   JOIN regle_structure_validation rsv ON rsv.type_intervenant_id = si.type_intervenant_id AND rsv.type_volume_horaire_id = vh.type_volume_horaire_id
   LEFT JOIN validation_vol_horaire_ref vvh ON vvh.volume_horaire_ref_id = vh.id
   LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL

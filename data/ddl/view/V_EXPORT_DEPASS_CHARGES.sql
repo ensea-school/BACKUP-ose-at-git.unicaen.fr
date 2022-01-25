@@ -85,7 +85,7 @@ FROM
        JOIN annee                   a ON a.id = s.annee_id
        JOIN type_volume_horaire   tvh ON tvh.id = s.type_volume_horaire_id
        JOIN intervenant             i ON i.id = s.intervenant_id
-       JOIN statut_intervenant     si ON si.id = i.statut_id
+       JOIN statut                 si ON si.id = i.statut_id
        JOIN type_intervenant       ti ON ti.id = si.type_intervenant_id
        JOIN element_pedagogique    ep ON ep.id = s.element_pedagogique_id
        JOIN etape                 etp ON etp.id = ep.etape_id

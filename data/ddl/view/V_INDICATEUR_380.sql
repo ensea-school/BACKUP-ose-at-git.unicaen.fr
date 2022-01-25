@@ -3,11 +3,11 @@ SELECT
 	i.id   intervenant_id,
 	i.structure_id structure_id
 FROM
-  intervenant i
-  JOIN contrat c ON c.intervenant_id = i.id  AND c.histo_destruction IS NULL
-  JOIN statut_intervenant si ON si.id = i.statut_id
+  intervenant            i
+  JOIN contrat           c ON c.intervenant_id = i.id  AND c.histo_destruction IS NULL
+  JOIN statut           si ON si.id = i.statut_id
   JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-  JOIN parametre p ON p.nom='annee'
+  JOIN parametre         p ON p.nom='annee'
 WHERE
   i.export_date IS NULL
   AND ti.code = 'E'

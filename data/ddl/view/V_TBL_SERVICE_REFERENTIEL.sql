@@ -11,7 +11,7 @@ WITH t AS (
   FROM
               intervenant                     i
 
-         JOIN statut_intervenant          si ON si.id = i.statut_id
+         JOIN statut                      si ON si.id = i.statut_id
 
     LEFT JOIN service_referentiel          s ON s.intervenant_id = i.id
                                             AND s.histo_destruction IS NULL

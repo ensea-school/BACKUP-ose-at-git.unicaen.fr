@@ -54,7 +54,7 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
                                         AND tas.histo_destruction IS NULL
 
       JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                        AND i.statut_id = tas.statut_intervenant_id
+                                        AND i.statut_id = tas.statut_id
 
       JOIN                           i_s ON i_s.intervenant_id = i.id
 
@@ -100,7 +100,7 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
                                         AND tas.histo_destruction IS NULL
 
       JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                        AND i.statut_id = tas.statut_intervenant_id
+                                        AND i.statut_id = tas.statut_id
 
       JOIN                           i_s ON i_s.intervenant_id = i.id
 

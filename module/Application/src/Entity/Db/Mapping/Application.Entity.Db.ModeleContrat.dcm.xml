@@ -31,7 +31,7 @@
         <field name="bloc10Requete" type="string" column="BLOC10_REQUETE" nullable="true"/>
         <many-to-one field="statutIntervenant" target-entity="Application\Entity\Db\StatutIntervenant">
             <join-columns>
-                <join-column name="STATUT_INTERVENANT_ID" referenced-column-name="ID"/>
+                <join-column name="STATUT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">

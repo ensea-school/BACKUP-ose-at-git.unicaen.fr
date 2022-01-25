@@ -180,7 +180,7 @@ class IntervenantService extends AbstractEntityService
             rownum POIDS
           FROM 
             intervenant i
-            JOIN statut_intervenant si ON si.id = i.statut_id 
+            JOIN statut si ON si.id = i.statut_id 
           WHERE 
             1=1
             $psql

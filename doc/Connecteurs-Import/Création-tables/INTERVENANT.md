@@ -19,7 +19,7 @@ Votre vue matérialisée MV_INTERVENANT devra contenir les colonnes suivantes :
 |SOURCE_CODE               |VARCHAR2|100     |Oui     |                             |
 |UTILISATEUR_CODE          |VARCHAR2|60      |Oui     | Identifiant pour faire lien avec le LDAP |
 |Z_STRUCTURE_ID            |NUMBER  |        |Oui     |==> STRUCTURE.SOURCE_CODE    |
-|Z_STATUT_ID               |NUMBER  |        |Non     |==> STATUT_INTERVENANT.CODE  |
+|Z_STATUT_ID               |NUMBER  |        |Non     |==> STATUT.CODE  |
 |Z_GRADE_ID                |NUMBER  |        |Oui     |==> GRADE.SOURCE_CODE        |
 |Z_DISCIPLINE_ID           |NUMBER  |        |Oui     |==> DISCIPLINE.SOURCE_CODE   |
 |Z_CIVILITE_ID             |NUMBER  |        |Oui     |==> CIVILITE.LIBELLE_COURT   |

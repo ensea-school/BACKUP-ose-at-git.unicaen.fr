@@ -66,9 +66,9 @@ SELECT
   sum(valide) valide
 FROM
   t
-  JOIN intervenant                              i ON i.id = t.intervenant_id
-  JOIN statut_intervenant                      si ON si.id = i.statut_id
-  JOIN type_intervenant                        ti ON ti.id = si.type_intervenant_id
+  JOIN intervenant                  i ON i.id = t.intervenant_id
+  JOIN statut                      si ON si.id = i.statut_id
+  JOIN type_intervenant            ti ON ti.id = si.type_intervenant_id
 WHERE
   1=1
   /*@INTERVENANT_ID=i.id*/

@@ -73,7 +73,7 @@ FROM
   LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
                                         AND em.histo_destruction IS NULL
   LEFT JOIN modulateur                 m ON m.id = em.modulateur_id
-  LEFT JOIN type_intervention_statut tis ON tis.type_intervention_id = ti.id AND tis.statut_intervenant_id = i.statut_id
+  LEFT JOIN type_intervention_statut tis ON tis.type_intervention_id = ti.id AND tis.statut_id = i.statut_id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL

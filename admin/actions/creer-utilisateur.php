@@ -27,7 +27,7 @@ if ($params['params']['creer-intervenant']) {
     $params['params']['annee'] = $c->getInput('annee', 'Année universitaire (' . $annee . ' par défaut, sinon entrez 2020 pour 2020/2021, etc.)');
 
     if (!$c->hasOption('statut')) {
-        $statuts = $bdd->select("SELECT CODE CODE, LIBELLE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE <> 'AUTRES' ORDER BY ORDRE");
+        $statuts = $bdd->select("SELECT CODE CODE, LIBELLE FROM STATUT WHERE HISTO_DESTRUCTION IS NULL AND CODE <> 'AUTRES' ORDER BY ORDRE");
         $c->println('Statut de \'intervenant ("AUTRES" par défaut, sinon entrez le code parmi les propositions suivantes) :');
         $maxCodeLength = 0;
         foreach ($statuts as $statut) {

@@ -13,7 +13,7 @@
             <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="statutIntervenant" target-entity="Application\Entity\Db\StatutIntervenant">
-            <join-column name="STATUT_INTERVENANT_ID" referenced-column-name="ID"/>
+            <join-column name="STATUT_ID" referenced-column-name="ID"/>
         </many-to-one>
     </entity>
 </doctrine-mapping>

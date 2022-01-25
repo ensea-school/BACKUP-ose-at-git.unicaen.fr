@@ -118,7 +118,7 @@ SELECT
                                 JOIN centre_cout              cc ON  cc.id = mep.centre_cout_id      -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur
                                 JOIN intervenant               i ON   i.id = mis.intervenant_id      AND i.histo_destruction IS NULL
                                 JOIN annee                     a ON   a.id = i.annee_id
-                                JOIN statut_intervenant       si ON  si.id = i.statut_id
+                                JOIN statut                   si ON  si.id = i.statut_id
                                 JOIN type_intervenant         ti ON  ti.id = si.type_intervenant_id
                                 JOIN structure                 s ON   s.id = mis.structure_id
                            LEFT JOIN validation                v ON   v.id = mep.validation_id       AND v.histo_destruction IS NULL

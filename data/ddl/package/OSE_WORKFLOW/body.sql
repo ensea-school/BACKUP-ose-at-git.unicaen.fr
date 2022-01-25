@@ -22,7 +22,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   TYPE t_intervenant IS RECORD (
     annee_id NUMERIC,
     intervenant_id NUMERIC,
-    statut_intervenant_id NUMERIC,
+    statut_id NUMERIC,
     type_intervenant_id NUMERIC,
     type_intervenant_code VARCHAR2(1),
     feuille_de_route t_workflow
@@ -78,7 +78,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     ose_test.echo('');
     */
     ose_test.echo('annee_id              = ' || intervenant.annee_id );
-    ose_test.echo('statut_intervenant_id = ' || intervenant.statut_intervenant_id );
+    ose_test.echo('statut_id = ' || intervenant.statut_id );
     ose_test.echo('type_intervenant_id   = ' || intervenant.type_intervenant_id );
     ose_test.echo('type_intervenant_code = ' || intervenant.type_intervenant_code );
     ose_test.echo('feuille_de_route      = [');
@@ -139,7 +139,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     ELSE
       w.annee_id              := intervenant.annee_id;
       w.intervenant_id        := intervenant.intervenant_id;
-      w.statut_intervenant_id := intervenant.statut_intervenant_id;
+      w.statut_id             := intervenant.statut_id;
       w.type_intervenant_id   := intervenant.type_intervenant_id;
       w.type_intervenant_code := intervenant.type_intervenant_code;
       w.etape_id              := e.etape_id;
@@ -700,7 +700,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       objectif              FLOAT,
       atteignable           NUMERIC,
       realisation           FLOAT,
-      statut_intervenant_id NUMERIC,
+      statut_id             NUMERIC,
       type_intervenant_id   NUMERIC,
       type_intervenant_code VARCHAR2(1)
     );
@@ -736,7 +736,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       IF NOT intervenants.exists(t.intervenant_id) THEN
         intervenants(t.intervenant_id).annee_id              := t.annee_id;
         intervenants(t.intervenant_id).intervenant_id        := t.intervenant_id;
-        intervenants(t.intervenant_id).statut_intervenant_id := t.statut_intervenant_id;
+        intervenants(t.intervenant_id).statut_id             := t.statut_id;
         intervenants(t.intervenant_id).type_intervenant_id   := t.type_intervenant_id;
         intervenants(t.intervenant_id).type_intervenant_code := t.type_intervenant_code;
       END IF;
@@ -768,8 +768,8 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           intervenants(v.intervenant_id).annee_id := v.annee_id;
           u := TRUE;
         END IF;
-        IF ci.statut_intervenant_id <> v.statut_intervenant_id THEN
-          intervenants(v.intervenant_id).statut_intervenant_id := v.statut_intervenant_id;
+        IF ci.statut_id <> v.statut_id THEN
+          intervenants(v.intervenant_id).statut_id := v.statut_id;
           u := TRUE;
         END IF;
         IF ci.type_intervenant_id <> v.type_intervenant_id THEN
@@ -783,7 +783,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       ELSE
         intervenants(v.intervenant_id).annee_id              := v.annee_id;
         intervenants(v.intervenant_id).intervenant_id        := v.intervenant_id;
-        intervenants(v.intervenant_id).statut_intervenant_id := v.statut_intervenant_id;
+        intervenants(v.intervenant_id).statut_id             := v.statut_id;
         intervenants(v.intervenant_id).type_intervenant_id   := v.type_intervenant_id;
         intervenants(v.intervenant_id).type_intervenant_code := v.type_intervenant_code;
       END IF;

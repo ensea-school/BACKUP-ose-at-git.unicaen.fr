@@ -66,7 +66,7 @@ SELECT
 FROM
             tbl_agrement             ta
        JOIN intervenant               i ON i.id = ta.intervenant_id
-       JOIN statut_intervenant       si ON si.id = i.statut_id
+       JOIN statut                   si ON si.id = i.statut_id
        JOIN annee                     a ON a.id = ta.annee_id
        JOIN type_agrement          tagr ON tagr.id = ta.type_agrement_id
        JOIN type_volume_horaire     tvh ON tvh.code = 'PREVU'

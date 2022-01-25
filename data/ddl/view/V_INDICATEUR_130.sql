@@ -5,7 +5,7 @@ SELECT DISTINCT
 FROM
   tbl_service s
   JOIN intervenant i ON i.id = s.intervenant_id
-  JOIN statut_intervenant si ON si.id = i.statut_id
+  JOIN statut     si ON si.id = i.statut_id
 WHERE
   si.tem_biatss = 1
   AND s.type_volume_horaire_code = 'PREVU'

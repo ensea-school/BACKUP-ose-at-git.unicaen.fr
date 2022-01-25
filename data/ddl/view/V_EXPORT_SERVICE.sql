@@ -169,7 +169,7 @@ SELECT
   NULL                              commentaires
 FROM
   intervenant i
-  JOIN statut_intervenant si ON si.id = i.statut_id
+  JOIN statut               si ON si.id = i.statut_id
   JOIN etat_volume_horaire evh ON evh.code IN ('saisi','valide')
   JOIN type_volume_horaire tvh ON tvh.code IN ('PREVU','REALISE')
   LEFT JOIN modification_service_du msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
@@ -203,7 +203,7 @@ SELECT
   t.service_id                      service_id,
   t.service_referentiel_id          service_referentiel_id,
   i.id                              intervenant_id,
-  si.id                             statut_intervenant_id,
+  si.id                             statut_id,
   ti.id                             type_intervenant_id,
   i.annee_id                        annee_id,
   t.type_volume_horaire_id          type_volume_horaire_id,
@@ -284,7 +284,7 @@ SELECT
 FROM
   t
   JOIN intervenant                        i ON i.id     = t.intervenant_id AND i.histo_destruction IS NULL
-  JOIN statut_intervenant                si ON si.id    = i.statut_id
+  JOIN statut                            si ON si.id    = i.statut_id
   JOIN type_intervenant                  ti ON ti.id    = si.type_intervenant_id
   JOIN etablissement                   etab ON etab.id  = t.etablissement_id
   JOIN type_volume_horaire              tvh ON tvh.id   = t.type_volume_horaire_id

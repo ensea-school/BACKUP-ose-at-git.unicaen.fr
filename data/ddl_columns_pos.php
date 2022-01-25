@@ -911,7 +911,7 @@ return [
     'MODELE_CONTRAT'                 => [
         'ID',
         'LIBELLE',
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
         'STRUCTURE_ID',
         'FICHIER',
         'REQUETE',

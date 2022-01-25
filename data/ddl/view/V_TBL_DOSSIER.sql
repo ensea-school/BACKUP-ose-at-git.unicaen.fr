@@ -96,7 +96,7 @@ SELECT
 
 FROM
             intervenant         i
-       JOIN statut_intervenant si ON si.id = i.statut_id
+       JOIN statut             si ON si.id = i.statut_id
   LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id
                                  AND d.histo_destruction IS NULL
   LEFT JOIN pays               pn ON pn.id = d.pays_naissance_id

@@ -4,14 +4,14 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Plafond\Entity\Db\PlafondStatut" table="PLAFOND_STATUT">
         <unique-constraints>
-            <unique-constraint name="PLAFOND_STATUT_UN" columns="STATUT_INTERVENANT_ID,PLAFOND_ID,ANNEE_ID"/>
+            <unique-constraint name="PLAFOND_STATUT_UN" columns="STATUT_ID,PLAFOND_ID,ANNEE_ID"/>
         </unique-constraints>
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
         <many-to-one field="statutIntervenant" target-entity="Application\Entity\Db\StatutIntervenant">
             <join-columns>
-                <join-column name="STATUT_INTERVENANT_ID" referenced-column-name="ID"/>
+                <join-column name="STATUT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
         <many-to-one field="plafond" target-entity="Plafond\Entity\Db\Plafond">

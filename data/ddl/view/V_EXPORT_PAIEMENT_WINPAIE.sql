@@ -107,7 +107,7 @@ FROM (
   ) t2
   JOIN (SELECT level ind, 99 max_nbu FROM dual CONNECT BY 1=1 AND LEVEL <= 11) tnbu ON ceil(t2.nbu / max_nbu) >= ind
   JOIN intervenant         i ON i.id = t2.intervenant_id
-  JOIN statut_intervenant si ON si.id = i.statut_id
+  JOIN statut             si ON si.id = i.statut_id
   JOIN type_intervenant   ti ON ti.id = si.type_intervenant_id
   JOIN structure           s ON s.id = t2.structure_id
 ) t3

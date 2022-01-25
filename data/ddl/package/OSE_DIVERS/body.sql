@@ -188,12 +188,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
 
 
   FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC IS
-    statut statut_intervenant%rowtype;
+    statut statut%rowtype;
     itype  type_intervenant%rowtype;
     res NUMERIC;
   BEGIN
     res := 1;
-    SELECT si.* INTO statut FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id WHERE i.id = intervenant_id;
+    SELECT si.* INTO statut FROM statut si JOIN intervenant i ON i.statut_id = si.id WHERE i.id = intervenant_id;
     SELECT ti.* INTO itype  FROM type_intervenant ti WHERE ti.id = statut.type_intervenant_id;
 
     /* DEPRECATED */

@@ -11,7 +11,7 @@ FROM
   JOIN formule_resultat_vh     frvh ON frvh.formule_resultat_id = fr.id
   JOIN volume_horaire            vh ON vh.id = frvh.volume_horaire_id
   JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
-  JOIN statut_intervenant        si ON si.id = i.statut_id
+  JOIN statut                    si ON si.id = i.statut_id
 WHERE
   ti.regle_foad = 0
 GROUP BY

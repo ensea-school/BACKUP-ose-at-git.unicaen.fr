@@ -10,7 +10,7 @@ SELECT
   SUM( CASE WHEN tvhrs.code = 'REALISE' THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_real
 FROM
   intervenant i
-  JOIN statut_intervenant si ON si.id = i.statut_id
+  JOIN statut si ON si.id = i.statut_id
   LEFT JOIN service s ON s.intervenant_id = i.id AND s.histo_destruction IS NULL
   LEFT JOIN volume_horaire vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
   LEFT JOIN type_volume_horaire tvhs ON tvhs.id = vh.type_volume_horaire_id

@@ -31,7 +31,7 @@ FROM
   LEFT JOIN intervenant_dossier         d ON d.intervenant_id = i.id
                                          AND d.histo_destruction IS NULL
 
-       JOIN type_piece_jointe_statut tpjs ON tpjs.statut_intervenant_id = i.statut_id
+       JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
                                          AND tpjs.histo_destruction IS NULL
                                          AND i.annee_id BETWEEN COALESCE(tpjs.annee_debut_id,i.annee_id) AND COALESCE(tpjs.annee_fin_id,i.annee_id)
 

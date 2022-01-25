@@ -68244,7 +68244,7 @@ return [
             "LIBELLE_LONG" => "Surnombre",
         ],
     ],
-    "STATUT_INTERVENANT" => [
+    "STATUT" => [
         [
             "CHARGES_PATRONALES" => 1.0,
             "CODE" => "ENS_2ND_DEG",
@@ -73290,91 +73290,91 @@ return [
         [
             "DUREE_VIE" => 1,
             "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "BIATSS",
+            "STATUT_ID" => "BIATSS",
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
         ],
         [
             "DUREE_VIE" => 1,
             "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
-            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
-        ],
-        [
-            "DUREE_VIE" => 99,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
-            "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
-        ],
-        [
-            "DUREE_VIE" => 1,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
-            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
-        ],
-        [
-            "DUREE_VIE" => 1,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
-            "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
-        ],
-        [
-            "DUREE_VIE" => 1,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
         ],
         [
             "DUREE_VIE" => 99,
             "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
         ],
         [
             "DUREE_VIE" => 1,
             "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "RETR_HORS_UCBN",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
         ],
         [
             "DUREE_VIE" => 1,
             "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "ETUD_UCBN",
-            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
-        ],
-        [
-            "DUREE_VIE" => 1,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "ETUD_HORS_UCBN",
-            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
-        ],
-        [
-            "DUREE_VIE" => 1,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "SS_EMPLOI_NON_ETUD",
-            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
-        ],
-        [
-            "DUREE_VIE" => 1,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
-            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
-        ],
-        [
-            "DUREE_VIE" => 99,
-            "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
         ],
         [
             "DUREE_VIE" => 1,
             "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
             "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
         ],
         [
             "DUREE_VIE" => 99,
             "OBLIGATOIRE" => 1,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
+            "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
+        ],
+        [
+            "DUREE_VIE" => 1,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "RETR_HORS_UCBN",
+            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
+        ],
+        [
+            "DUREE_VIE" => 1,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "ETUD_UCBN",
+            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
+        ],
+        [
+            "DUREE_VIE" => 1,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "ETUD_HORS_UCBN",
+            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
+        ],
+        [
+            "DUREE_VIE" => 1,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "SS_EMPLOI_NON_ETUD",
+            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
+        ],
+        [
+            "DUREE_VIE" => 1,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "SALAR_ETRANGER",
+            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
+        ],
+        [
+            "DUREE_VIE" => 99,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "SALAR_ETRANGER",
+            "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
+        ],
+        [
+            "DUREE_VIE" => 1,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "INTERMITTENT",
+            "TYPE_AGREMENT_ID" => "CONSEIL_RESTREINT",
+        ],
+        [
+            "DUREE_VIE" => 99,
+            "OBLIGATOIRE" => 1,
+            "STATUT_ID" => "INTERMITTENT",
             "TYPE_AGREMENT_ID" => "CONSEIL_ACADEMIQUE",
         ],
     ],
@@ -73468,7 +73468,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ENS_2ND_DEG",
+            "STATUT_ID" => "ENS_2ND_DEG",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73478,7 +73478,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ENS_CH",
+            "STATUT_ID" => "ENS_CH",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73488,7 +73488,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ASS_MI_TPS",
+            "STATUT_ID" => "ASS_MI_TPS",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73498,7 +73498,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ATER",
+            "STATUT_ID" => "ATER",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73508,7 +73508,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ATER_MI_TPS",
+            "STATUT_ID" => "ATER_MI_TPS",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73518,7 +73518,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ENS_CONTRACT_CDD",
+            "STATUT_ID" => "ENS_CONTRACT_CDD",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73528,7 +73528,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "LECTEUR",
+            "STATUT_ID" => "LECTEUR",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73538,7 +73538,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "MAITRE_LANG",
+            "STATUT_ID" => "MAITRE_LANG",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73548,7 +73548,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "BIATSS",
+            "STATUT_ID" => "BIATSS",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73557,7 +73557,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73567,7 +73567,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73576,7 +73576,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73585,7 +73585,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_PIECE_JOINTE_ID" => "DERN_BUL_SALAIR",
         ],
         [
@@ -73595,7 +73595,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_PIECE_JOINTE_ID" => "ATT_ACT_SAL_900",
         ],
         [
@@ -73605,7 +73605,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PRIVE",
+            "STATUT_ID" => "SALAR_PRIVE",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -73614,7 +73614,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_PIECE_JOINTE_ID" => "AUTORIS_CUMUL",
         ],
         [
@@ -73624,7 +73624,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73634,7 +73634,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73643,7 +73643,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73652,7 +73652,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_PIECE_JOINTE_ID" => "DERN_BUL_SALAIR",
         ],
         [
@@ -73662,7 +73662,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_PUBLIC",
+            "STATUT_ID" => "SALAR_PUBLIC",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -73672,7 +73672,7 @@ return [
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 20,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
             "TYPE_PIECE_JOINTE_ID" => "CONT_TER_ATT_HON",
         ],
         [
@@ -73682,7 +73682,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73692,7 +73692,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73701,7 +73701,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73712,7 +73712,7 @@ return [
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 20,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
             "TYPE_PIECE_JOINTE_ID" => "KBIS",
         ],
         [
@@ -73722,7 +73722,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "AUTO_LIBER_INDEP",
+            "STATUT_ID" => "AUTO_LIBER_INDEP",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -73731,7 +73731,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "RETR_HORS_UCBN",
+            "STATUT_ID" => "RETR_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "TITRE_PENSION",
         ],
         [
@@ -73741,7 +73741,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "RETR_HORS_UCBN",
+            "STATUT_ID" => "RETR_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73751,7 +73751,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "RETR_HORS_UCBN",
+            "STATUT_ID" => "RETR_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73760,7 +73760,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "RETR_HORS_UCBN",
+            "STATUT_ID" => "RETR_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73770,7 +73770,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "RETR_HORS_UCBN",
+            "STATUT_ID" => "RETR_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -73780,7 +73780,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_UCBN",
+            "STATUT_ID" => "ETUD_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73790,7 +73790,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_UCBN",
+            "STATUT_ID" => "ETUD_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73799,7 +73799,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_UCBN",
+            "STATUT_ID" => "ETUD_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73809,7 +73809,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_UCBN",
+            "STATUT_ID" => "ETUD_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -73818,7 +73818,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_HORS_UCBN",
+            "STATUT_ID" => "ETUD_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_ETUD",
         ],
         [
@@ -73827,7 +73827,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_HORS_UCBN",
+            "STATUT_ID" => "ETUD_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73837,7 +73837,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_HORS_UCBN",
+            "STATUT_ID" => "ETUD_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73846,7 +73846,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_HORS_UCBN",
+            "STATUT_ID" => "ETUD_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73856,7 +73856,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ETUD_HORS_UCBN",
+            "STATUT_ID" => "ETUD_HORS_UCBN",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -73866,7 +73866,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SS_EMPLOI_NON_ETUD",
+            "STATUT_ID" => "SS_EMPLOI_NON_ETUD",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73876,7 +73876,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SS_EMPLOI_NON_ETUD",
+            "STATUT_ID" => "SS_EMPLOI_NON_ETUD",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73886,7 +73886,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "AUTRES",
+            "STATUT_ID" => "AUTRES",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73896,7 +73896,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "AUTRES",
+            "STATUT_ID" => "AUTRES",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73906,7 +73906,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "AUTRES",
+            "STATUT_ID" => "AUTRES",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -73915,7 +73915,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
+            "STATUT_ID" => "SALAR_ETRANGER",
             "TYPE_PIECE_JOINTE_ID" => "PASSEPORT",
         ],
         [
@@ -73924,7 +73924,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
+            "STATUT_ID" => "SALAR_ETRANGER",
             "TYPE_PIECE_JOINTE_ID" => "ATT_ACT_SAL",
         ],
         [
@@ -73934,7 +73934,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
+            "STATUT_ID" => "SALAR_ETRANGER",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73944,7 +73944,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
+            "STATUT_ID" => "SALAR_ETRANGER",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73953,7 +73953,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "SALAR_ETRANGER",
+            "STATUT_ID" => "SALAR_ETRANGER",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73963,7 +73963,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "HOSPITALO_UNIV",
+            "STATUT_ID" => "HOSPITALO_UNIV",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73972,7 +73972,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "INTERMITTENT",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -73981,7 +73981,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "INTERMITTENT",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -73990,7 +73990,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "INTERMITTENT",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -73999,7 +73999,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "INTERMITTENT",
             "TYPE_PIECE_JOINTE_ID" => "carte_pole_emploi_ou_ct_507h",
         ],
         [
@@ -74008,7 +74008,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "INTERMITTENT",
             "TYPE_PIECE_JOINTE_ID" => "AGESSA_GUSO_CC_MA",
         ],
         [
@@ -74018,7 +74018,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "INTERMITTENT",
+            "STATUT_ID" => "INTERMITTENT",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -74027,7 +74027,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "DOCTOR",
+            "STATUT_ID" => "DOCTOR",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -74036,7 +74036,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VAC.SUAPS",
+            "STATUT_ID" => "VAC.SUAPS",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -74046,7 +74046,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACFONCSUAPS",
+            "STATUT_ID" => "VACFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "AUTORIS_CUMUL",
         ],
         [
@@ -74056,7 +74056,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACFONCSUAPS",
+            "STATUT_ID" => "VACFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -74066,7 +74066,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACFONCSUAPS",
+            "STATUT_ID" => "VACFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -74076,7 +74076,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACFONCSUAPS",
+            "STATUT_ID" => "VACFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -74085,7 +74085,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACFONCSUAPS",
+            "STATUT_ID" => "VACFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "DERN_BUL_SALAIR",
         ],
         [
@@ -74095,7 +74095,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACFONCSUAPS",
+            "STATUT_ID" => "VACFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "FICHRENS",
         ],
         [
@@ -74105,7 +74105,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACFONCSUAPS",
+            "STATUT_ID" => "VACFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -74115,7 +74115,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACNONFONCSUAPS",
+            "STATUT_ID" => "VACNONFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
         [
@@ -74125,7 +74125,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACNONFONCSUAPS",
+            "STATUT_ID" => "VACNONFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "RIB",
         ],
         [
@@ -74135,7 +74135,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACNONFONCSUAPS",
+            "STATUT_ID" => "VACNONFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "CARTE_VITALE",
         ],
         [
@@ -74145,7 +74145,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACNONFONCSUAPS",
+            "STATUT_ID" => "VACNONFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "FICHRENS",
         ],
         [
@@ -74155,7 +74155,7 @@ return [
             "FC" => FALSE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "VACNONFONCSUAPS",
+            "STATUT_ID" => "VACNONFONCSUAPS",
             "TYPE_PIECE_JOINTE_ID" => "Pièce d'indentité",
         ],
         [
@@ -74164,7 +74164,7 @@ return [
             "FC" => TRUE,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
-            "STATUT_INTERVENANT_ID" => "ENS_CONTRACT_CDI",
+            "STATUT_ID" => "ENS_CONTRACT_CDI",
             "TYPE_PIECE_JOINTE_ID" => "CV",
         ],
     ],

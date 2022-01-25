@@ -27,7 +27,7 @@ SELECT
   'glyphicon glyphicon-user' icon
 FROM
   intervenant i
-  JOIN statut_intervenant si ON si.id = i.statut_id 
+  JOIN statut si ON si.id = i.statut_id 
   JOIN annee a ON a.id = i.annee_id
 WHERE 
   i.id IN (:id)

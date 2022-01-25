@@ -219,7 +219,7 @@ ORDER BY
   annee_id, ordre
 
 ) t3
-  JOIN intervenant i ON i.id = t3.intervenant_id
-  JOIN statut_intervenant si ON si.id = i.statut_id
+  JOIN intervenant       i ON i.id = t3.intervenant_id
+  JOIN statut           si ON si.id = i.statut_id
   JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-  JOIN structure s ON s.id = t3.structure_id
+  JOIN structure         s ON s.id = t3.structure_id

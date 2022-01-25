@@ -4,7 +4,7 @@ AFTER UPDATE OF
   depassement,
   type_intervenant_id,
   non_autorise
-ON STATUT_INTERVENANT
+ON "STATUT"
 FOR EACH ROW
 BEGIN return; /* Désactivation du trigger... */
 

@@ -5,7 +5,7 @@
 return [
     'name'        => 'PLAFOND_STATUT_STATUT_FK',
     'table'       => 'PLAFOND_STATUT',
-    'rtable'      => 'STATUT_INTERVENANT',
+    'rtable'      => 'STATUT',
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [

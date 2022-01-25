@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'        => 'STATUT_INTERVENANT',
+    'name'        => 'STATUT',
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'STATUT_INTERVENANT_ID_SEQ',
+    'sequence'    => NULL,
     'columns'     => [
         'CHARGES_PATRONALES'             => [
             'name'        => 'CHARGES_PATRONALES',
@@ -18,7 +18,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 33,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'CODE'                           => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 43,
             'commentaire' => 'Code de correspondance avec le SI RH',
         ],
         'DEPASSEMENT'                    => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 26,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'DOSSIER_ADRESSE'                => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 36,
+            'position'    => 35,
             'commentaire' => NULL,
         ],
         'DOSSIER_CONTACT'                => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 37,
+            'position'    => 36,
             'commentaire' => NULL,
         ],
         'DOSSIER_EMAIL_PERSO'            => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 38,
+            'position'    => 37,
             'commentaire' => NULL,
         ],
         'DOSSIER_EMPLOYEUR'              => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 39,
+            'position'    => 38,
             'commentaire' => NULL,
         ],
         'DOSSIER_IBAN'                   => [
@@ -126,7 +126,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 40,
+            'position'    => 39,
             'commentaire' => NULL,
         ],
         'DOSSIER_IDENTITE_COMP'          => [
@@ -138,7 +138,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 41,
+            'position'    => 40,
             'commentaire' => NULL,
         ],
         'DOSSIER_INSEE'                  => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 42,
+            'position'    => 41,
             'commentaire' => NULL,
         ],
         'DOSSIER_TEL_PERSO'              => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 43,
+            'position'    => 42,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'              => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'                 => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 10,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'           => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'              => [
@@ -210,7 +210,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'          => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'             => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 12,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'ID'                             => [
@@ -282,7 +282,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'ORDRE'                          => [
@@ -294,7 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'PEUT_AVOIR_CONTRAT'             => [
@@ -306,7 +306,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 22,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'PEUT_CHOISIR_DANS_DOSSIER'      => [
@@ -318,7 +318,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'PEUT_CLOTURER_SAISIE'           => [
@@ -330,7 +330,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 27,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_DOSSIER'            => [
@@ -342,7 +342,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_MOTIF_NON_PAIEMENT' => [
@@ -354,7 +354,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_REFERENTIEL'        => [
@@ -366,7 +366,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_SERVICE'            => [
@@ -378,7 +378,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'PEUT_SAISIR_SERVICE_EXT'        => [
@@ -390,7 +390,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 29,
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'PLAFOND_HC_FI_HORS_EAD'         => [
@@ -402,7 +402,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '9999',
-            'position'    => 31,
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'PLAFOND_HC_HORS_REMU_FC'        => [
@@ -414,7 +414,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '9999',
-            'position'    => 24,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'PLAFOND_HC_REMU_FC'             => [
@@ -426,7 +426,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '13502',
-            'position'    => 25,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'PLAFOND_REFERENTIEL'            => [
@@ -450,7 +450,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '9999',
-            'position'    => 34,
+            'position'    => 33,
             'commentaire' => NULL,
         ],
         'PLAFOND_REFERENTIEL_SERVICE'    => [
@@ -462,7 +462,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '9999',
-            'position'    => 35,
+            'position'    => 34,
             'commentaire' => NULL,
         ],
         'PRIORITAIRE_INDICATEURS'        => [
@@ -498,7 +498,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 30,
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'TEM_BIATSS'                     => [
@@ -510,7 +510,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 28,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'TEM_VA'                         => [
@@ -534,7 +534,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 32,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [

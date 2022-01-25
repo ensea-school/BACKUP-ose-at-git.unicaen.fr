@@ -5,7 +5,7 @@
 return [
     'name'        => 'TPJS_STATUT_INTERVENANT_FK',
     'table'       => 'TYPE_PIECE_JOINTE_STATUT',
-    'rtable'      => 'STATUT_INTERVENANT',
+    'rtable'      => 'STATUT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [

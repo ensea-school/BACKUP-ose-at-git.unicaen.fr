@@ -5,7 +5,7 @@
 return [
     'name'        => 'STAT_PRIV_STATUT_FK',
     'table'       => 'STATUT_PRIVILEGE',
-    'rtable'      => 'STATUT_INTERVENANT',
+    'rtable'      => 'STATUT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [

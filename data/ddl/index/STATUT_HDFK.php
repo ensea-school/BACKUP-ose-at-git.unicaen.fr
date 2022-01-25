@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'STATUT_INTERVENANT_HDFK',
+    'name'    => 'STATUT_HDFK',
     'unique'  => FALSE,
-    'table'   => 'STATUT_INTERVENANT',
+    'table'   => 'STATUT',
     'columns' => [
         'HISTO_DESTRUCTEUR_ID',
     ],

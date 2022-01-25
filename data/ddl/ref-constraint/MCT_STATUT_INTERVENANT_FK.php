@@ -5,7 +5,7 @@
 return [
     'name'        => 'MCT_STATUT_INTERVENANT_FK',
     'table'       => 'MODELE_CONTRAT',
-    'rtable'      => 'STATUT_INTERVENANT',
+    'rtable'      => 'STATUT',
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [

@@ -3,8 +3,8 @@
 //@formatter:off
 
 return [
-    'name'        => 'STATUT_INTERVENANT_HMFK',
-    'table'       => 'STATUT_INTERVENANT',
+    'name'        => 'STATUT_HMFK',
+    'table'       => 'STATUT',
     'rtable'      => 'UTILISATEUR',
     'delete_rule' => NULL,
     'index'       => NULL,

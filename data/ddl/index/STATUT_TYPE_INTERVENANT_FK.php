@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'STATUT_INTERVENANT_TYPE_FK',
+    'name'    => 'STATUT_TYPE_INTERVENANT_FK',
     'unique'  => FALSE,
-    'table'   => 'STATUT_INTERVENANT',
+    'table'   => 'STATUT',
     'columns' => [
         'TYPE_INTERVENANT_ID',
     ],

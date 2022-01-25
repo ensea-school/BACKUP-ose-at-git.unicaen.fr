@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'STATUT_INTERVENANT_CODE_UN',
-    'unique'  => TRUE,
-    'table'   => 'STATUT_INTERVENANT',
+    'name'    => 'STATUT_CODE_UN',
+    'table'   => 'STATUT',
+    'index'   => 'STATUT_CODE_UN',
     'columns' => [
         'CODE',
         'HISTO_DESTRUCTION',

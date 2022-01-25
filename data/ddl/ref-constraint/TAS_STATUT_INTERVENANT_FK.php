@@ -5,7 +5,7 @@
 return [
     'name'        => 'TAS_STATUT_INTERVENANT_FK',
     'table'       => 'TYPE_AGREMENT_STATUT',
-    'rtable'      => 'STATUT_INTERVENANT',
+    'rtable'      => 'STATUT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [

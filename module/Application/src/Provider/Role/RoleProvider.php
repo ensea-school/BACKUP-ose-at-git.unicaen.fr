@@ -12,7 +12,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 
@@ -25,7 +25,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use SessionContainerTrait;
     use IntervenantServiceAwareTrait;
     use PrivilegeProviderAwareTrait;
@@ -206,7 +206,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     public function getStatutsInfo(): array
     {
         $si      = [];
-        $statuts = $this->getServiceStatutIntervenant()->getList();
+        $statuts = $this->getServiceStatut()->getList();
         foreach ($statuts as $statut) {
             $si[] = [
                 'statut-id' => $statut->getId(),

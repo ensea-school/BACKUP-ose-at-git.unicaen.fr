@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypePieceJointeStatut;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 
 /**
  * Description of TypePieceJointeStatut

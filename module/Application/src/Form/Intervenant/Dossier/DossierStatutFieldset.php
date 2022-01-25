@@ -2,11 +2,11 @@
 
 namespace Application\Form\Intervenant\Dossier;
 
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 
 /**
  * Description of DossierStatutFieldset
@@ -15,7 +15,7 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 class DossierStatutFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use IntervenantServiceAwareTrait;
 
     public function init()
@@ -43,8 +43,8 @@ class DossierStatutFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
-        $statutIntervenant = $this->getOption('statutIntervenant');
-        $intervenant       = $this->getOption('intervenant');
+        $statut      = $this->getOption('statut');
+        $intervenant = $this->getOption('intervenant');
         /*On va chercher les statuts que l'intervenant possède
         déjà pour ne pas les afficher dans la liste car il
         ne peut pas avoir deux fois le même statut*/
@@ -55,19 +55,19 @@ class DossierStatutFieldset extends AbstractFieldset
                 $statuts[] = $intervenant->getStatut()->getCode();
             }
         }
-        $statutSelectable = $this->getServiceStatutIntervenant()->getStatutSelectable($statutIntervenant);
+        $statutSelectable = $this->getServiceStatut()->getStatutSelectable($statut);
         foreach ($statutSelectable as $k => $statut) {
-            if (in_array($statut->getCode(), $statuts) && $statut->getCode() != $statutIntervenant->getCode()) {
+            if (in_array($statut->getCode(), $statuts) && $statut->getCode() != $statut->getCode()) {
                 unset($statutSelectable[$k]);
             }
         }
         //Si statut intervenant n'est pas selectionnable dans la liste alors liste en lecture seule
-        if ($statutIntervenant->getPeutChoisirDansDossier() || $statutIntervenant->getCode() == 'AUTRES') {
+        if ($statut->getPeutChoisirDansDossier() || $statut->getCode() == 'AUTRES') {
             $this->get('statut')
                 ->setValueOptions(['' => '(Sélectionnez un statut)'] + \UnicaenApp\Util::collectionAsOptions($statutSelectable));
         } else {
             $this->get('statut')
-                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions([$statutIntervenant]));
+                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions([$statut]));
         }
 
 

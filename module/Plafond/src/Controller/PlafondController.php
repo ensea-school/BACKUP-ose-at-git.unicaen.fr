@@ -4,7 +4,7 @@ namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Laminas\View\Model\JsonModel;

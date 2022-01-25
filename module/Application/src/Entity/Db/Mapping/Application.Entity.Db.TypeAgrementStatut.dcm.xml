@@ -31,7 +31,7 @@
         <join-column name="TYPE_AGREMENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
+    <many-to-one field="statut" target-entity="Intervenant\Entity\Db\Statut">
       <join-columns>
         <join-column name="STATUT_ID" referenced-column-name="ID"/>
       </join-columns>

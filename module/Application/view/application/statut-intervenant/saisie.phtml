@@ -4,7 +4,7 @@ use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $form  \Application\Form\StatutIntervenant\StatutIntervenantSaisieForm
+ * @var $form  \Intervenant\Form\StatutSaisieForm
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
@@ -221,16 +221,16 @@ echo $this->form()->openTag($form); ?>
                             <?= $this->formElement($form->get('security')); ?>
                             <?php if ($canEdit) echo $this->formSubmit($form->get('submit')); ?>
                             <?php if (($canEdit) && ($form->get('id')->getValue())) { ?>
-                                <a class="pop-ajax btn btn-danger" data-event="statut-intervenant-clone"
-                                   href="<?php echo $this->url('statut-intervenant/delete', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
+                                <a class="pop-ajax btn btn-danger" data-event="statut-clone"
+                                   href="<?php echo $this->url('statut/delete', ['statut' => $form->get('id')->getValue()]) ?>"
                                    title="Supprimer le statut d'intervenant"
                                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                    data-confirm="true" data-confirm-button="Oui"
                                    data-cancel-button="Non"
                                    data-submit-reload="true">
                                     <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
-                                <a class="ajax-modal btn btn-warning" data-event="statut-intervenant-clone"
-                                   href="<?php echo $this->url('statut-intervenant/clone', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
+                                <a class="ajax-modal btn btn-warning" data-event="statut-clone"
+                                   href="<?php echo $this->url('statut/clone', ['statut' => $form->get('id')->getValue()]) ?>"
                                    title="Dupliquer le statut d'intervenant">
                                     <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
                             <?php } ?>
@@ -262,7 +262,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
 <script type="text/javascript">
     $(function () {
-        $("body").on("statut-intervenant-clone", function (event, data) {
+        $("body").on("statut-clone", function (event, data) {
             window.location.reload();
         });
         $(".statut-libelle-<?= $form->get('id')->getValue() ?>").html("<?= $form->get('libelle')->getValue() ?>");

@@ -1,11 +1,11 @@
 <?php
 
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this                \Application\View\Renderer\PhpRenderer
- * @var $statutsIntervenants \Application\Entity\Db\Statut[]
+ * @var $statutsIntervenants \Intervenant\Entity\Db\Statut[]
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
@@ -32,7 +32,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
     {
         var ancre = '#c_' + $(element).data('id');
         var ti = $(element).data('id');
-        adr = "<?php echo $this->url('statut-intervenant/saisie') ?>" + "/" + ti;
+        adr = "<?php echo $this->url('statut/saisie') ?>" + "/" + ti;
         $(ancre).load(adr);
     }
 
@@ -47,7 +47,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
                     console.log($(this)[0]['id']);
                     champsIds += $(this)[0]['id'];
                 });
-                $.post(Url('statut-intervenant/statut-intervenant-trier'), {champsIds: champsIds}).done(function (res) {
+                $.post(Url('statut/trier'), {champsIds: champsIds}).done(function (res) {
                     alertFlash(res.msg, 'success', 3000);
                 });
             }
@@ -87,22 +87,22 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
             </div>
             <div id="<?php echo 'c_' . $ti->getId() ?>" class="panel-collapse collapse intranavigator" role="tabpanel"
                  aria-labelledby="<?php echo 'h_' . $ti->getId() ?>">
-                <div class="panel-body" data-statut-intervenant="<?php echo $ti->getId() ?>">
+                <div class="panel-body" data-statut="<?php echo $ti->getId() ?>">
                 </div>
             </div>
         </div>
     <?php } ?>
 </div>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="statut-intervenant-saisie"
-       href="<?= $this->url('statut-intervenant/saisie') ?>"
+    <a class="btn btn-primary ajax-modal" data-event="statut-saisie"
+       href="<?= $this->url('statut/saisie') ?>"
        title="Ajouter un statut d'intervenant">
         <span class="glyphicon glyphicon-plus"></span>
         Ajouter un statut d'intervenant</a>
 
     <script type="text/javascript">
         $(function () {
-            $("body").on("statut-intervenant-saisie", function (event, data) {
+            $("body").on("statut-saisie", function (event, data) {
                 window.location.reload();
             });
         });

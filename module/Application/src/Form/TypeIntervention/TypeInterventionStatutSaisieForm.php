@@ -5,7 +5,7 @@ namespace Application\Form\TypeIntervention;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -21,7 +21,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
     use TypeInterventionServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
 
 
     public function init()
@@ -36,7 +36,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
             ]
         );
         $this->add([
-            'name'       => 'statut-intervenant',
+            'name'       => 'statut',
             'options'    => [
                 'label' => 'Statut de l\'intervenant',
             ],
@@ -70,8 +70,8 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-        $this->get('statut-intervenant')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatutIntervenant()->getList($this->getServiceStatutIntervenant()->finderByHistorique())));
+        $this->get('statut')
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatut()->getList($this->getServiceStatut()->finderByHistorique())));
 
         return $this;
     }
@@ -87,7 +87,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'statut-intervenant'       => [
+            'statut'                   => [
                 'required' => true,
             ],
             'taux-hetd-service'        => [
@@ -125,7 +125,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
 class TypeInterventionStatutHydrator implements HydratorInterface
 {
     use TypeInterventionServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use TypeInterventionStatutServiceAwareTrait;
     use EntityManagerAwareTrait;
 
@@ -141,8 +141,8 @@ class TypeInterventionStatutHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $object->setTypeIntervention($this->getServiceTypeIntervention()->get($data['type-intervention']));
-        if (array_key_exists('statut-intervenant', $data)) {
-            $object->setStatutIntervenant($this->getServiceStatutIntervenant()->get($data['statut-intervenant']));
+        if (array_key_exists('statut', $data)) {
+            $object->setStatut($this->getServiceStatut()->get($data['statut']));
         }
         $object->setTauxHETDService(FloatFromString::run($data['taux-hetd-service']));
         $object->setTauxHETDComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
@@ -164,7 +164,7 @@ class TypeInterventionStatutHydrator implements HydratorInterface
         $data = [
             'id'                       => $object->getId(),
             'type-intervention'        => $object->getTypeIntervention()->getId(),
-            'statut-intervenant'       => ($s = $object->getStatutIntervenant()) ? $s->getId() : null,
+            'statut'                   => ($s = $object->getStatut()) ? $s->getId() : null,
             'taux-hetd-service'        => StringFromFloat::run($object->getTauxHETDService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHETDComplementaire()),
         ];

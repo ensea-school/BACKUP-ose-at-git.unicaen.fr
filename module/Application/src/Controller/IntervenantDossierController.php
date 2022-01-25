@@ -15,7 +15,7 @@ use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Util;
@@ -39,7 +39,7 @@ class IntervenantDossierController extends AbstractController
     use DossierAutreServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use AnneeServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use ImportProcessusAwareTrait;
 
 
@@ -167,11 +167,11 @@ class IntervenantDossierController extends AbstractController
             }
 
             $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $statutIntervenant  = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
-            if ($statutIntervenant) {
-                $intervenantDossier->setStatut($statutIntervenant);
+            $statut             = $this->getServiceStatut()->get($data['DossierStatut']['statut']);
+            if ($statut) {
+                $intervenantDossier->setStatut($statut);
                 $this->getServiceDossier()->save($intervenantDossier);
-                $intervenant->setStatut($statutIntervenant);
+                $intervenant->setStatut($statut);
                 $intervenant->setSyncStatut(false);
                 $this->getServiceIntervenant()->save($intervenant);
                 $this->updateTableauxBord($intervenant);
@@ -182,7 +182,7 @@ class IntervenantDossierController extends AbstractController
                     $this->serviceUserContext->clearIdentityRoles();
                     \Application::$container->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
                     \Application::$container->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
-                    $this->serviceUserContext->setSelectedIdentityRole($statutIntervenant->getRoleId());
+                    $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
                 }
             }
         }

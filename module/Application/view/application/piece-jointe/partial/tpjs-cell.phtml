@@ -1,6 +1,6 @@
 <?php
 
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 
@@ -8,7 +8,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
  * @var $this                \Application\View\Renderer\PhpRenderer
  * @var $canEdit             boolean
  * @var $typePieceJointe     TypePieceJointe
- * @var $statutIntervenant   Statut
+ * @var $statut              Statut
  * @var $tpjss               TypePieceJointeStatut[]
  * @var $i                   int
  * @var $j                   int
@@ -27,7 +27,7 @@ if (empty($tpjss)) {
         echo $this->tag('a', [
             'class'      => 'ajax-modal',
             'data-event' => 'event-update-tpjs',
-            'href'       => $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statutIntervenant' => $statutIntervenant->getId()]),
+            'href'       => $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statut' => $statut->getId()]),
             'title'      => $title,
         ])->text($text);
     } else {
@@ -45,7 +45,7 @@ if (empty($tpjss)) {
             echo $this->tag('a', [
                 'class'      => 'ajax-modal',
                 'data-event' => 'event-update-tpjs',
-                'href'       => $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statutIntervenant' => $statutIntervenant->getId(), 'typePieceJointeStatut' => $tpjs->getId()]),
+                'href'       => $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statut' => $statut->getId(), 'typePieceJointeStatut' => $tpjs->getId()]),
                 'title'      => $tpjs->getTitle(),
             ])->text($tpjs);
         } else {

@@ -3,7 +3,7 @@
 namespace Application\View\Helper\Import;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervenant;
 use UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne;

@@ -61,7 +61,7 @@ class StatutService extends AbstractEntityService
 
 
 
-    public function getStatutSelectable(StatutIntervenant $statutIntervenant, QueryBuilder $qb = null, $alias = null)
+    public function getStatutSelectable(Statut $statut, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.peutChoisirDansDossier = 1");
@@ -73,11 +73,11 @@ class StatutService extends AbstractEntityService
         foreach ($entities as $entity) {
             if ($entity instanceof $entityClass) {
                 /**
-                 * @var StatutIntervenant $entity
+                 * @var Statut $entity
                  */
                 //Je prends le statut si il n'est pas détruit ou si l'intervenant a ce statut
                 if (is_null($entity->getHistoDestruction()) ||
-                    $statutIntervenant->getCode() == $entity->getCode()) {
+                    $statut->getCode() == $entity->getCode()) {
                     $result[] = $entity;
                 }
             }
@@ -107,11 +107,10 @@ class StatutService extends AbstractEntityService
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
-     * @return StatutIntervenant
      */
-    public function newEntity()
+    public function newEntity(): Statut
     {
-        /** @var StatutIntervenant $entity */
+        /** @var Statut $entity */
         $entity = parent::newEntity();
 
         return $entity;

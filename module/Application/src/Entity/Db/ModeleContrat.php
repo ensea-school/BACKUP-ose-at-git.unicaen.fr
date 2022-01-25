@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\StatutAwareTrait;
+use Intervenant\Entity\Db\StatutAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**

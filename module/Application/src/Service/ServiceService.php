@@ -25,7 +25,7 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
@@ -60,7 +60,7 @@ class ServiceService extends AbstractEntityService
     use LocalContextServiceAwareTrait;
     use RechercheHydratorAwareTrait;
     use ValidationServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
@@ -482,12 +482,12 @@ class ServiceService extends AbstractEntityService
         $serviceStructure          = $this->getServiceStructure();
         $serviceIntervenant        = $this->getServiceIntervenant();
         $serviceElementPedagogique = $this->getServiceElementPedagogique();
-        $serviceStatutIntervenant  = $this->getServiceStatutIntervenant();
+        $serviceStatut             = $this->getServiceStatut();
         $iAlias                    = $serviceIntervenant->getAlias();
-        $sAlias                    = $serviceStatutIntervenant->getAlias();
+        $sAlias                    = $serviceStatut->getAlias();
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
-        $serviceIntervenant->join($serviceStatutIntervenant, $qb, 'statut', false);
+        $serviceIntervenant->join($serviceStatut, $qb, 'statut', false);
         $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
         $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
 

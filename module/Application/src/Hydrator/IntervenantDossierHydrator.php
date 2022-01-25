@@ -3,16 +3,15 @@
 namespace Application\Hydrator;
 
 use Application\Entity\Db\IntervenantDossier;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\EmployeurServiceAwareTrait;
-use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\VoirieServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
@@ -29,7 +28,7 @@ class IntervenantDossierHydrator implements HydratorInterface
     use DepartementServiceAwareTrait;
     use AdresseNumeroComplServiceAwareTrait;
     use VoirieServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use EmployeurServiceAwareTrait;
 
 
@@ -246,7 +245,7 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         //Hydratation statut
         if (!empty($data['DossierStatut']['statut'])) {
-            $statut = $this->getServiceStatutIntervenant()->get($data['DossierStatut']['statut']);
+            $statut = $this->getServiceStatut()->get($data['DossierStatut']['statut']);
             $object->setStatut($statut);
         } else {
             $object->setStatut(null);

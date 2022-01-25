@@ -4,7 +4,7 @@ namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
@@ -18,8 +18,7 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
     use TypeInterventionServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
-
+    use StatutServiceAwareTrait;
 
 
     public function init()
@@ -43,8 +42,8 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-//        $this->get('statut-intervenant')
-//            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatutIntervenant()->getList($this->getServiceStatutIntervenant()->finderByHistorique())));
+//        $this->get('statut')
+//            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatut()->getList($this->getServiceStatut()->finderByHistorique())));
 
         return $this;
     }
@@ -60,32 +59,32 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-//            'statut-intervenant' => [
+//            'statut' => [
 //                'required' => true,
 //            ],
-            'taux-hetd-service' => [
-                'required' => true,
-                'validators' => [
-                    new \Laminas\Validator\Callback(array(
-                        'messages' => array(\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
-                        'callback' => function ($value) {
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }))
-                ],
-            ],
-            'taux-hetd-complementaire' => [
-                'required' => true,
-                'validators' => [
-                    new \Laminas\Validator\Callback(array(
-                        'messages' => array(\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
-                        'callback' => function ($value) {
-                            return (StringFromFloat::run($value) >= 0.0 ? true : false);
-                        }))
-                ],
-            ],
-            'annee-debut' => [
-                'required' => false,
-            ],
+'taux-hetd-service'        => [
+    'required'   => true,
+    'validators' => [
+        new \Laminas\Validator\Callback([
+            'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+            'callback' => function ($value) {
+                return (FloatFromString::run($value) >= 0.0 ? true : false);
+            }]),
+    ],
+],
+'taux-hetd-complementaire' => [
+    'required'   => true,
+    'validators' => [
+        new \Laminas\Validator\Callback([
+            'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+            'callback' => function ($value) {
+                return (StringFromFloat::run($value) >= 0.0 ? true : false);
+            }]),
+    ],
+],
+'annee-debut'              => [
+    'required' => false,
+],
         ];
     }
 

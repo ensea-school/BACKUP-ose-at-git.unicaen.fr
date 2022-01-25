@@ -9,7 +9,7 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
-        <many-to-one field="statutIntervenant" target-entity="Application\Entity\Db\StatutIntervenant">
+        <many-to-one field="statut" target-entity="Intervenant\Entity\Db\Statut">
             <join-columns>
                 <join-column name="STATUT_ID" referenced-column-name="ID"/>
             </join-columns>

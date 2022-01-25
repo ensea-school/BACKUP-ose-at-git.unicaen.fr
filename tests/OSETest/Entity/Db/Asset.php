@@ -4,7 +4,7 @@ namespace OSETest\Entity\Db;
 
 use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Corps;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
@@ -170,7 +170,7 @@ class Asset
         Civilite $civilite,
         $premierRecrutement,
         $perteEmploi,
-        Statut $statutIntervenant)
+        Statut $statut)
     {
         $e = new Dossier();
         $e
@@ -186,7 +186,7 @@ class Asset
             ->setRib("YYYYFRPPXXX-FR6541107987540063147191234")
             ->setPremierRecrutement($premierRecrutement)
             ->setPerteEmploi($perteEmploi)
-            ->setStatut($statutIntervenant);
+            ->setStatut($statut);
 
         return $e;
     }

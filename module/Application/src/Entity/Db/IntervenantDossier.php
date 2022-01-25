@@ -32,7 +32,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\Statut
+     * @var \Intervenant\Entity\Db\Statut
      */
     protected $statut;
 

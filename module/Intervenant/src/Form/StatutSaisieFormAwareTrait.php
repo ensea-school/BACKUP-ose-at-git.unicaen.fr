@@ -2,28 +2,28 @@
 
 namespace Application\Form\StatutIntervenant\Traits;
 
-use Application\Form\StatutIntervenant\StatutIntervenantSaisieForm;
+use Application\Form\StatutIntervenant\StatutSaisieForm;
 
 /**
  * Description of StatutIntervenantSaisieFormAwareTrait
  *
  * @author UnicaenCode
  */
-trait StatutIntervenantSaisieFormAwareTrait
+trait StatutSaisieFormAwareTrait
 {
     /**
-     * @var StatutIntervenantSaisieForm
+     * @var StatutSaisieForm
      */
     private $formStatutIntervenantSaisie;
 
 
 
     /**
-     * @param StatutIntervenantSaisieForm $formStatutIntervenantSaisie
+     * @param StatutSaisieForm $formStatutIntervenantSaisie
      *
      * @return self
      */
-    public function setFormStatutIntervenantSaisie(StatutIntervenantSaisieForm $formStatutIntervenantSaisie)
+    public function setFormStatutIntervenantSaisie(StatutSaisieForm $formStatutIntervenantSaisie)
     {
         $this->formStatutIntervenantSaisie = $formStatutIntervenantSaisie;
 
@@ -35,7 +35,7 @@ trait StatutIntervenantSaisieFormAwareTrait
     /**
      * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
      *
-     * @return StatutIntervenantSaisieForm
+     * @return StatutSaisieForm
      */
     public function getFormStatutIntervenantSaisie()
     {
@@ -43,7 +43,7 @@ trait StatutIntervenantSaisieFormAwareTrait
             return $this->formStatutIntervenantSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(StatutIntervenantSaisieForm::class);
+        return \Application::$container->get('FormElementManager')->get(StatutSaisieForm::class);
     }
 }
 

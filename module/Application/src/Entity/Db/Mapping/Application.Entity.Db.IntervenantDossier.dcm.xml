@@ -9,7 +9,7 @@
         <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
             <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
+        <many-to-one field="statut" target-entity="Intervenant\Entity\Db\Statut">
             <join-column name="STATUT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">

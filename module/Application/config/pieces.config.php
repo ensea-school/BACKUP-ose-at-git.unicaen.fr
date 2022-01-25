@@ -220,7 +220,7 @@ return [
                     'modifier-type-piece-jointe-statut' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/modifier-type-piece-jointe-statut/:typePieceJointe/:statutIntervenant[/:typePieceJointeStatut]',
+                            'route'    => '/modifier-type-piece-jointe-statut/:typePieceJointe/:statut[/:typePieceJointeStatut]',
                             'defaults' => [
                                 'action' => 'modifier-type-piece-jointe-statut',
                             ],

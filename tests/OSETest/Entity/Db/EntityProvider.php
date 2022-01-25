@@ -11,7 +11,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
@@ -399,7 +399,7 @@ class EntityProvider
         }
 
         if (!isset($this->statuts[$sourceCode])) {
-            $this->statuts[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\Statut')
+            $this->statuts[$sourceCode] = $this->getEntityManager()->getRepository('Intervenant\Entity\Db\Statut')
                 ->findOneBySourceCode($sourceCode);
             if (!$this->statuts[$sourceCode]) {
                 throw new RuntimeException("Statut intervenant introuvable avec le code '$sourceCode'.");

@@ -1,24 +1,22 @@
 <?php
 
-namespace Application\Controller;
+namespace Intervenant\Controller;
 
 use Application\Cache\Traits\CacheContainerTrait;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
-use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
+use Intervenant\Form\StatutSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
-use Application\Provider\Role\RoleProviderAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
-use UnicaenAuth\Service\Traits\RoleServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 
-class StatutIntervenantController extends AbstractController
+class StatutController extends AbstractController
 {
-    use StatutIntervenantServiceAwareTrait;
-    use StatutIntervenantSaisieFormAwareTrait;
+    use StatutServiceAwareTrait;
+    use StatutSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
     use DossierAutreServiceAwareTrait;
@@ -29,7 +27,7 @@ class StatutIntervenantController extends AbstractController
             Statut::class,
         ]);
 
-        $statutsIntervenants = $this->getServiceStatutIntervenant()->getList();
+        $statutsIntervenants = $this->getServiceStatut()->getList();
 
         return compact('statutsIntervenants');
     }
@@ -41,22 +39,22 @@ class StatutIntervenantController extends AbstractController
         try {
 
 
-            $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
-            $form              = $this->getFormStatutIntervenantSaisie();
-            $champsAutres      = $this->getServiceDossierAutre()->getList();
-            if (empty($statutIntervenant)) {
-                $title             = 'Création d\'un nouveau statut d\'intervenant';
-                $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
-                $statutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
+            $statut       = $this->getEvent()->getParam('statut');
+            $form         = $this->getFormStatutSaisie();
+            $champsAutres = $this->getServiceDossierAutre()->getList();
+            if (empty($statut)) {
+                $title  = 'Création d\'un nouveau statut d\'intervenant';
+                $statut = $this->getServiceStatut()->newEntity();
+                $statut->setOrdre($this->getServiceStatut()->fetchMaxOrdre() + 1);
             } else {
                 $title = 'Édition d\'un statut d\'intervenant';
             }
 
             $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
             if ($canEdit) {
-                $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (Statut $si) {
+                $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) {
                     try {
-                        $this->getServiceStatutIntervenant()->save($si);
+                        $this->getServiceStatut()->save($si);
                         unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                         unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                         $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
@@ -65,7 +63,7 @@ class StatutIntervenantController extends AbstractController
                     }
                 });
             } else {
-                $form->bind($statutIntervenant);
+                $form->bind($statut);
                 $form->readOnly();
             }
         } catch (\Exception $e) {
@@ -80,17 +78,17 @@ class StatutIntervenantController extends AbstractController
 
     public function cloneAction()
     {
-        /* @var $statutIntervenant Statut */
-        $statutIntervenant    = $this->getEvent()->getParam('statutIntervenant');
-        $newStatutIntervenant = $statutIntervenant->dupliquer();
-        $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
-        $form         = $this->getFormStatutIntervenantSaisie();
+        /* @var $statut Statut */
+        $statut    = $this->getEvent()->getParam('statut');
+        $newStatut = $statut->dupliquer();
+        $newStatut->setOrdre($this->getServiceStatut()->fetchMaxOrdre() + 1);
+        $form         = $this->getFormStatutSaisie();
         $title        = 'Duplication d\'un statut d\'intervenant';
         $champsAutres = $this->getServiceDossierAutre()->getList();
 
-        $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (Statut $si) {
+        $form->bindRequestSave($newStatut, $this->getRequest(), function (Statut $si) {
             try {
-                $this->getServiceStatutIntervenant()->save($si);
+                $this->getServiceStatut()->save($si);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                 unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
@@ -101,7 +99,7 @@ class StatutIntervenantController extends AbstractController
 
         $viewModel = new ViewModel();
         $viewModel->setVariables(compact('form', 'title'));
-        $viewModel->setTemplate('application/statut-intervenant/saisie');
+        $viewModel->setTemplate('application/statut/saisie');
 
         return $viewModel;
     }
@@ -110,7 +108,7 @@ class StatutIntervenantController extends AbstractController
 
     public function deleteAction()
     {
-        $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
+        $statut = $this->getEvent()->getParam('statut');
 
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
 
@@ -119,7 +117,7 @@ class StatutIntervenantController extends AbstractController
             $this->flashMessenger()->addErrorMessage('Statut non modifiable : droit non accordé, car vous n\'avez pas le privilège pour cela ou bien le statut est synchronisé depuis un autre logiciel');
         } else {
             try {
-                $this->getServiceStatutIntervenant()->delete($statutIntervenant);
+                $this->getServiceStatut()->delete($statut);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                 unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
@@ -128,22 +126,22 @@ class StatutIntervenantController extends AbstractController
             }
         }
 
-        return new MessengerViewModel(compact('statutIntervenant'));
+        return new MessengerViewModel(compact('statut'));
     }
 
 
 
-    public function statutIntervenantTrierAction()
+    public function trierAction()
     {
         $champsIds = explode(',', $this->params()->fromPost('champsIds', ''));
-        $ordre     = $this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1; // Pour éviter tout doublon!!
+        $ordre     = $this->getServiceStatut()->fetchMaxOrdre() + 1; // Pour éviter tout doublon!!
         foreach ($champsIds as $champId) {
-            $si = $this->getServiceStatutIntervenant()->get($champId);
+            $si = $this->getServiceStatut()->get($champId);
             if ($si) {
                 $si->setOrdre($ordre);
                 $ordre++;
                 try {
-                    $this->getServiceStatutIntervenant()->save($si);
+                    $this->getServiceStatut()->save($si);
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }

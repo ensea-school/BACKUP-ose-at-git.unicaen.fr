@@ -60,7 +60,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $utilisateurCode;
 
     /**
-     * @var \Application\Entity\Db\Statut
+     * @var \Intervenant\Entity\Db\Statut
      */
     protected $statut;
 

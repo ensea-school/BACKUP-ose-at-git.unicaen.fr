@@ -1,31 +1,30 @@
 <?php
 
-namespace Application;
+namespace Intervenant;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'routes' => [
-        'statut-intervenant' => [
+        'statut' => [
             'options'       => [
-                'route'       => '/statut-intervenant',
+                'route'       => '/statut',
                 'constraints' => [
-                    'statutIntervenant' => '[0-9]*',
+                    'statut' => '[0-9]*',
                 ],
                 'defaults'    => [
                     '__NAMESPACE__' => 'Application\Controller',
-                    'controller'    => 'StatutIntervenant',
+                    'controller'    => 'Statut',
                     'action'        => 'index',
                 ],
             ],
             'may_terminate' => true,
             'child_routes'  => [
-                'saisie'                   => [
+                'saisie' => [
                     'options'       => [
-                        'route'       => '/saisie[/:statutIntervenant]',
+                        'route'       => '/saisie[/:statut]',
                         'constraints' => [
-                            'statutIntervenant' => '[0-9]*',
+                            'statut' => '[0-9]*',
                         ],
                         'defaults'    => [
                             'action' => 'saisie',
@@ -33,11 +32,11 @@ return [
                     ],
                     'may_terminate' => true,
                 ],
-                'delete'                   => [
+                'delete' => [
                     'options'       => [
-                        'route'       => '/delete/:statutIntervenant',
+                        'route'       => '/delete/:statut',
                         'constraints' => [
-                            'statutIntervenant' => '[0-9]*',
+                            'statut' => '[0-9]*',
                         ],
                         'defaults'    => [
                             'action' => 'delete',
@@ -45,22 +44,22 @@ return [
                     ],
                     'may_terminate' => true,
                 ],
-                'statut-intervenant-trier' => [
+                'trier'  => [
                     'options'       => [
-                        'route'      => '/statut-intervenant-trier',
+                        'route'      => '/trier',
                         'contraints' => [
                         ],
                         'defaults'   => [
-                            'action' => 'statut-intervenant-trier',
+                            'action' => 'trier',
                         ],
                     ],
                     'may_terminate' => 'true',
                 ],
-                'clone'                    => [
+                'clone'  => [
                     'options'       => [
-                        'route'       => '/clone/:statutIntervenant',
+                        'route'       => '/clone/:statut',
                         'constraints' => [
-                            'statutIntervenant' => '[0-9]*',
+                            'statut' => '[0-9]*',
                         ],
                         'defaults'    => [
                             'action' => 'clone',
@@ -72,33 +71,29 @@ return [
         ],
     ],
 
-    'guards'          => [
-        PrivilegeController::class => [
-            [
-                'controller' => 'Application\Controller\StatutIntervenant',
-                'action'     => ['index', 'saisie'],
-                'privileges' => [Privileges::INTERVENANT_STATUT_VISUALISATION],
-            ],
-            [
-                'controller' => 'Application\Controller\StatutIntervenant',
-                'action'     => ['delete', 'statut-intervenant-trier', 'clone'],
-                'privileges' => [Privileges::INTERVENANT_STATUT_EDITION],
-            ],
+    'guards' => [
+        [
+            'controller' => 'Intervenant\Controller\Statut',
+            'action'     => ['index', 'saisie'],
+            'privileges' => [Privileges::INTERVENANT_STATUT_VISUALISATION],
+        ],
+        [
+            'controller' => 'Intervenant\Controller\Statut',
+            'action'     => ['delete', 'trier', 'clone'],
+            'privileges' => [Privileges::INTERVENANT_STATUT_EDITION],
         ],
     ],
-    'service_manager' => [
-        'invokables' => [
-            'ApplicationStatutIntervenant' => Service\StatutService::class,
-        ],
+
+    'controllers' => [
+        'Intervenant\Controller\Statut' => Controller\StatutControllerFactory::class,
     ],
-    'controllers'     => [
-        'invokables' => [
-            'Application\Controller\StatutIntervenant' => Controller\StatutIntervenantController::class,
-        ],
+
+    'services' => [
+        Service\StatutService::class => Service\StatutServiceFactory::class,
     ],
-    'form_elements'   => [
-        'invokables' => [
-            'statutIntervenantSaisie' => Form\StatutIntervenant\StatutIntervenantSaisieForm::class,
-        ],
+
+
+    'forms' => [
+        Form\StatutSaisieForm::class => Form\StatutSaisieFormFactory::class,
     ],
 ];

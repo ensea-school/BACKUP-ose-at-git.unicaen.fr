@@ -12,13 +12,13 @@ use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Traits\DoctrineCacheAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use UnicaenAuth\Entity\Db\Privilege;
 
 /**
@@ -30,7 +30,7 @@ use UnicaenAuth\Entity\Db\Privilege;
 class DroitsController extends AbstractController
 {
     use RoleServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use PrivilegeServiceAwareTrait;
     use AffectationServiceAwareTrait;
     use StructureServiceAwareTrait;
@@ -153,8 +153,8 @@ class DroitsController extends AbstractController
         }
 
         if ($rsFilter == 's' || !$rsFilter) {
-            $qb      = $this->getServiceStatutIntervenant()->finderByHistorique();
-            $statuts = $this->getServiceStatutIntervenant()->getList($qb);
+            $qb      = $this->getServiceStatut()->finderByHistorique();
+            $statuts = $this->getServiceStatut()->getList($qb);
         } else {
             $statuts = [];
         }
@@ -167,7 +167,7 @@ class DroitsController extends AbstractController
     public function privilegesModifierAction()
     {
         $role      = $this->context()->roleFromPost();
-        $statut    = $this->context()->statutIntervenantFromPost('statut');
+        $statut    = $this->context()->statutFromPost('statut');
         $privilege = $this->getServicePrivilege()->get($this->params()->fromPost('privilege'));
         $action    = $this->params()->fromPost('action');
         $cc        = $this->getCacheContainer(PrivilegeService::class);
@@ -333,8 +333,8 @@ class DroitsController extends AbstractController
             $options['roles']['options']['r-' . $role->getCode()] = (string)$role;
         }
 
-        $qb      = $this->getServiceStatutIntervenant()->finderByHistorique();
-        $statuts = $this->getServiceStatutIntervenant()->getList($qb);
+        $qb      = $this->getServiceStatut()->finderByHistorique();
+        $statuts = $this->getServiceStatut()->getList($qb);
         foreach ($statuts as $statut) {
             $options['statuts']['options']['s-' . $statut->getCode()] = (string)$statut;
         }

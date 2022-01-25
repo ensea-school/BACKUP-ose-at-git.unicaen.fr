@@ -8,7 +8,7 @@ use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
@@ -18,7 +18,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\GradeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
@@ -38,7 +38,7 @@ class EditionForm extends AbstractForm
     use SourceServiceAwareTrait;
     use SchemaServiceAwareTrait;
     use CiviliteServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
     use GradeServiceAwareTrait;
@@ -409,7 +409,7 @@ class EditionForm extends AbstractForm
 
     public function getStatuts(): array
     {
-        $statuts = $this->getServiceStatutIntervenant()->getList($this->getServiceStatutIntervenant()->finderByHistorique());
+        $statuts = $this->getServiceStatut()->getList($this->getServiceStatut()->finderByHistorique());
         $res     = [];
         foreach ($statuts as $statut) {
             $ti = $statut->getTypeIntervenant();

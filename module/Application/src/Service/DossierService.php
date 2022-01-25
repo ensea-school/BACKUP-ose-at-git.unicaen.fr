@@ -2,11 +2,9 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Annee;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
-use Application\Entity\Db\TblDossier;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
@@ -14,9 +12,8 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\IntervenantDossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Doctrine\ORM\NoResultException;
 
 /**
  * Description of Intervenant Dossier
@@ -32,7 +29,7 @@ class DossierService extends AbstractEntityService
     use IntervenantServiceAwareTrait;
     use IntervenantDossierServiceAwareTrait;
     use ValidationServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use AnneeServiceAwareTrait;
 

@@ -179,7 +179,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                         <a href="<?= $this->getView()->url('intervenant/voir', ['intervenant' => $intervenantId]); ?>">
                             <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
                             <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
-                            <span class="statut-intervenant"><?= $iStatut->getStatut()->getLibelle() ?></span>
+                            <span class="statut"><?= $iStatut->getStatut()->getLibelle() ?></span>
                             <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger glyphicon glyphicon-warning-sign', 'title' => 'Intervenant historisé'])->text('') ?>
                         </a>
                         </li>

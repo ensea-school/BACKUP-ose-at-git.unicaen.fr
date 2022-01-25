@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Doctrine\ORM\EntityRepository;
 use Laminas\Hydrator\HydratorInterface;
 use Laminas\Hydrator\ObjectPropertyHydrator;

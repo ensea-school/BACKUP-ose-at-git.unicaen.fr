@@ -9,7 +9,7 @@ use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Pays;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Voirie;
 

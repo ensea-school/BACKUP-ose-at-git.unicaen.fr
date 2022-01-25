@@ -3,7 +3,7 @@
 namespace Application\Form\Intervenant\Dossier;
 
 use Application\Entity\Db\IntervenantDossier;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Form\Element\Email;

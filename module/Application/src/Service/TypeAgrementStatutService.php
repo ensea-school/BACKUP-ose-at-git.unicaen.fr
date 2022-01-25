@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypeAgrementStatut;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 
 /**
  * Description of TypeAgrementStatut

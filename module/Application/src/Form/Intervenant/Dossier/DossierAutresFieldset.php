@@ -5,7 +5,7 @@ namespace Application\Form\Intervenant\Dossier;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Select;
 
 /**
@@ -16,7 +16,7 @@ class DossierAutresFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
 
     const AUTRE_TEXT  = 'texte';
     const SELECT_FIXE = 'select-fixe';

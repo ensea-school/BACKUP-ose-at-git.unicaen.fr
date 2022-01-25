@@ -3,7 +3,7 @@
 namespace Plafond\View\Helper;
 
 use Application\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Plafond\Form\PlafondConfigFormAwareTrait;

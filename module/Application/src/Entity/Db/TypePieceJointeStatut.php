@@ -2,7 +2,9 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\TypePieceJointeAwareTrait;
 use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
+use Intervenant\Entity\Db\StatutAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -14,21 +16,13 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
     use ObligatoireSelonSeuilHeuresAwareTrait;
+    use StatutAwareTrait;
+    use TypePieceJointeAwareTrait;
 
     /**
      * @var integer
      */
     private $id;
-
-    /**
-     * @var \Application\Entity\Db\TypePieceJointe
-     */
-    private $typePieceJointe;
-
-    /**
-     * @var \Application\Entity\Db\Statut
-     */
-    private $statutIntervenant;
 
     /**
      * @var float
@@ -123,62 +117,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set typePieceJointe
-     *
-     * @param \Application\Entity\Db\TypePieceJointe $typePieceJointe
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setTypePieceJointe(\Application\Entity\Db\TypePieceJointe $typePieceJointe = null)
-    {
-        $this->typePieceJointe = $typePieceJointe;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get typePieceJointe
-     *
-     * @return \Application\Entity\Db\TypePieceJointe
-     */
-    public function getTypePieceJointe()
-    {
-        return $this->typePieceJointe;
-    }
-
-
-
-    /**
-     * Set statutIntervenant
-     *
-     * @param \Application\Entity\Db\Statut $statutIntervenant
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setStatutIntervenant(\Application\Entity\Db\Statut $statutIntervenant = null)
-    {
-        $this->statutIntervenant = $statutIntervenant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get statutIntervenant
-     *
-     * @return \Application\Entity\Db\Statut
-     */
-    public function getStatutIntervenant()
-    {
-        return $this->statutIntervenant;
     }
 
 

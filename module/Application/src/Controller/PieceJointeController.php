@@ -11,7 +11,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Application\Form\PieceJointe\Traits\TypePieceJointeSaisieFormAwareTrait;
@@ -30,7 +30,7 @@ class PieceJointeController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use PieceJointeServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use TypePieceJointeSaisieFormAwareTrait;
     use ModifierTypePieceJointeStatutFormAwareTrait;
@@ -341,14 +341,14 @@ class PieceJointeController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\TypePieceJointe::class,
-            \Application\Entity\Db\Statut::class,
+            \Intervenant\Entity\Db\Statut::class,
             \Application\Entity\Db\TypePieceJointeStatut::class,
         ]);
 
         $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
         $typesPiecesJointes  = $this->getServiceTypePieceJointe()->getList();
-        $statuts             = $this->getServiceStatutIntervenant()->getList();
+        $statuts             = $this->getServiceStatut()->getList();
         $statutsIntervenants = [];
         foreach ($statuts as $statut) {
             $statutsIntervenants[$statut->getTypeIntervenant()->getId()][] = $statut;
@@ -370,7 +370,7 @@ class PieceJointeController extends AbstractController
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
             $tpjID = $tpjs->getTypePieceJointe()->getId();
-            $siId  = $tpjs->getStatutIntervenant()->getId();
+            $siId  = $tpjs->getStatut()->getId();
 
             if (!isset($typesPiecesJointesStatuts[$tpjID][$siId])) {
                 $typesPiecesJointesStatuts[$tpjID][$siId] = [];
@@ -426,22 +426,22 @@ class PieceJointeController extends AbstractController
 
         $form = $this->getFormModifierTypePieceJointeStatut();
         if (empty($tpjs)) {
-            $title             = 'Nouveau paramètre de gestion de pièce justificative';
-            $tpjs              = $this->getServiceTypePieceJointeStatut()->newEntity();
-            $typePieceJointe   = $this->getEvent()->getParam('typePieceJointe');
-            $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
+            $title           = 'Nouveau paramètre de gestion de pièce justificative';
+            $tpjs            = $this->getServiceTypePieceJointeStatut()->newEntity();
+            $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
+            $statut          = $this->getEvent()->getParam('statut');
             $tpjs->setTypePieceJointe($typePieceJointe);
-            $tpjs->setStatutIntervenant($statutIntervenant);
+            $tpjs->setStatut($statut);
             $tpjs->setObligatoire(true);
         } else {
-            $title             = 'Édition du paramètre de gestion de pièce justificative';
-            $typePieceJointe   = $tpjs->getTypePieceJointe();
-            $statutIntervenant = $tpjs->getStatutIntervenant();
+            $title           = 'Édition du paramètre de gestion de pièce justificative';
+            $typePieceJointe = $tpjs->getTypePieceJointe();
+            $statut          = $tpjs->getStatut();
         }
         $form->buildAnnees($tpjs);
         $form->bindRequestSave($tpjs, $this->getRequest(), $this->getServiceTypePieceJointeStatut());
 
-        return compact('form', 'title', 'typePieceJointe', 'statutIntervenant');
+        return compact('form', 'title', 'typePieceJointe', 'statut');
     }
 
 

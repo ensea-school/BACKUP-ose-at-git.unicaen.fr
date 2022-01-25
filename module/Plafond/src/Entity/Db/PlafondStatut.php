@@ -2,8 +2,8 @@
 
 namespace Plafond\Entity\Db;
 
-use Application\Entity\Db\Statut;
-use Application\Entity\Db\Traits\StatutAwareTrait;
+use Intervenant\Entity\Db\Statut;
+use Intervenant\Entity\Db\StatutAwareTrait;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Traits\PlafondConfigTrait;
 

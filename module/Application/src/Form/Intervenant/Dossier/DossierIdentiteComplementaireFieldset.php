@@ -9,7 +9,7 @@ use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\PaysNaissanceValidator;
 use Application\Constants;
@@ -22,7 +22,7 @@ use Laminas\Validator\Date as DateValidator;
 class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use PaysServiceAwareTrait;
     use DepartementServiceAwareTrait;
     use CiviliteServiceAwareTrait;

@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Statut;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
@@ -12,7 +12,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use RuntimeException;
@@ -29,7 +29,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class IntervenantService extends AbstractEntityService
 {
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
@@ -396,7 +396,7 @@ class IntervenantService extends AbstractEntityService
     {
         $intervenant = parent::newEntity();
         $intervenant->setStructure($this->getServiceContext()->getStructure());
-        $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
+        $intervenant->setStatut($this->getServiceStatut()->getAutres());
         $intervenant->setAnnee($this->getServiceContext()->getAnnee());
         $intervenant->setSource($this->getServiceSource()->getOse());
         $intervenant->setCode(uniqid('OSE'));
@@ -457,7 +457,7 @@ class IntervenantService extends AbstractEntityService
     public function finderByType(TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        $sStatut = $this->getServiceStatutIntervenant();
+        $sStatut = $this->getServiceStatut();
 
         $this->join($sStatut, $qb, 'statut', false, $alias);
         $sStatut->finderByTypeIntervenant($typeIntervenant, $qb);
@@ -560,7 +560,7 @@ class IntervenantService extends AbstractEntityService
      * Params :
      *   code   : null | string                     => généré si non fourni
      *   annee  : null | int | Annee                => Année en cours si non fournie
-     *   statut : null | string | StatutIntervenant => AUTRES si non fourni, si string alors c'est le code du statut
+     *   statut : null | string | Statut => AUTRES si non fourni, si string alors c'est le code du statut
      *
      * @return Intervenant
      */
@@ -577,9 +577,9 @@ class IntervenantService extends AbstractEntityService
         }
 
         if (!isset($params['statut']) || empty($params['statut'])) {
-            $params['statut'] = $this->getServiceStatutIntervenant()->getAutres();
+            $params['statut'] = $this->getServiceStatut()->getAutres();
         } elseif (!$params['statut'] instanceof Statut) {
-            $params['statut'] = $this->getServiceStatutIntervenant()->getByCode($params['statut']);
+            $params['statut'] = $this->getServiceStatut()->getByCode($params['statut']);
         }
 
         $intervenant = new Intervenant;

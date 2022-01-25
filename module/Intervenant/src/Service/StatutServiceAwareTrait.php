@@ -1,15 +1,14 @@
 <?php
 
-namespace Application\Service\Traits;
+namespace Intervenant\Service;
 
-use Application\Service\StatutService;
 
 /**
  * Description of StatutIntervenantServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait StatutIntervenantServiceAwareTrait
+trait StatutServiceAwareTrait
 {
     /**
      * @var StatutService
@@ -23,7 +22,7 @@ trait StatutIntervenantServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceStatutIntervenant(StatutService $serviceStatutIntervenant)
+    public function setServiceStatut(StatutService $serviceStatutIntervenant)
     {
         $this->serviceStatutIntervenant = $serviceStatutIntervenant;
 
@@ -35,7 +34,7 @@ trait StatutIntervenantServiceAwareTrait
     /**
      * @return StatutService
      */
-    public function getServiceStatutIntervenant()
+    public function getServiceStatut()
     {
         if (empty($this->serviceStatutIntervenant)) {
             $this->serviceStatutIntervenant = \Application::$container->get(StatutService::class);

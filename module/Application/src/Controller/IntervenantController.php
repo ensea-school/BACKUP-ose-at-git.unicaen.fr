@@ -21,7 +21,7 @@ use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -61,7 +61,7 @@ class  IntervenantController extends AbstractController
     use FormuleResultatServiceAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
     use RegleStructureValidationFormAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use DossierServiceAwareTrait;
@@ -317,7 +317,7 @@ class  IntervenantController extends AbstractController
         if ($actionDetail == 'dupliquer') {
             $intervenant = $intervenant->dupliquer();
             $intervenant->setSource($this->getServiceSource()->getOse());
-            $intervenant->setStatut($this->getServiceStatutIntervenant()->getAutres());
+            $intervenant->setStatut($this->getServiceStatut()->getAutres());
         }
 
         $canEdit = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION);

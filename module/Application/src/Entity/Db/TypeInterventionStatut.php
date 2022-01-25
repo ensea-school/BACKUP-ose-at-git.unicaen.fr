@@ -2,11 +2,15 @@
 
 namespace Application\Entity\Db;
 
+use Intervenant\Entity\Db\StatutAwareTrait;
+
 /**
  * TypeInterventionStatut
  */
 class TypeInterventionStatut
 {
+    use StatutAwareTrait;
+
     /**
      * @var integer
      */
@@ -16,11 +20,6 @@ class TypeInterventionStatut
      * @var integer
      */
     protected $typeIntervention;
-
-    /**
-     * @var integer
-     */
-    protected $statutIntervenant;
 
     /**
      * @var float
@@ -70,34 +69,6 @@ class TypeInterventionStatut
     public function getTypeIntervention()
     {
         return $this->typeIntervention;
-    }
-
-
-
-    /**
-     * Set statutIntervenant
-     *
-     * @param integer $statutIntervenant
-     *
-     * @return Statut
-     */
-    public function setStatutIntervenant($statutIntervenant)
-    {
-        $this->statutIntervenant = $statutIntervenant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get statutIntervenant
-     *
-     * @return integer
-     */
-    public function getStatutIntervenant()
-    {
-        return $this->statutIntervenant;
     }
 
 

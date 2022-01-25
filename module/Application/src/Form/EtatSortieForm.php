@@ -3,7 +3,7 @@
 namespace Application\Form;
 
 use Application\Entity\Db\EtatSortie;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
@@ -203,7 +203,7 @@ class EtatSortieForm extends AbstractForm
 
 class EtatSortieHydrator implements HydratorInterface
 {
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use StructureServiceAwareTrait;
 
 

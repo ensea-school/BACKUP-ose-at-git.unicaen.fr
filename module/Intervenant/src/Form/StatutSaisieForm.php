@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\StatutIntervenant;
+namespace Intervenant\Form;
 
 use Application\Form\AbstractForm;
 use Application\Hydrator\StatutIntervenantHydrator;
@@ -17,11 +17,11 @@ use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Filter\FloatFromString;
 
 /**
- * Description of StatutIntervenantSaisieForm
+ * Description of StatutSaisieForm
  *
  * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky at unicaen.fr>
  */
-class StatutIntervenantSaisieForm extends AbstractForm
+class StatutSaisieForm extends AbstractForm
 {
     use TypeIntervenantServiceAwareTrait;
     use TypeAgrementServiceAwareTrait;

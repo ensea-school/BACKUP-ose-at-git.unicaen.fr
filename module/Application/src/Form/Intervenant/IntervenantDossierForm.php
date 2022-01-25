@@ -17,7 +17,7 @@ use Application\Hydrator\IntervenantDossierHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use Laminas\Form\Element\Csrf;
 
@@ -27,7 +27,7 @@ use Laminas\Form\Element\Csrf;
  */
 class IntervenantDossierForm extends AbstractForm
 {
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use ContextServiceAwareTrait;
     use DossierServiceAwareTrait;
     use ServiceServiceAwareTrait;
@@ -63,7 +63,7 @@ class IntervenantDossierForm extends AbstractForm
     {
 
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
-        $statutIntervenant  = $this->intervenant->getStatut();
+        $statut             = $this->intervenant->getStatut();
         $intervenant        = $dossierIntervenant->getIntervenant();
 
         $this->setAttribute('action', $this->getCurrentUrl());
@@ -73,8 +73,8 @@ class IntervenantDossierForm extends AbstractForm
 
 
         $this->dossierStatutFieldset = new DossierStatutFieldset('DossierStatut', [
-            'statutIntervenant' => $statutIntervenant,
-            'intervenant'       => $intervenant,
+            'statut'      => $statut,
+            'intervenant' => $intervenant,
         ]);
         $this->dossierStatutFieldset->init();
 

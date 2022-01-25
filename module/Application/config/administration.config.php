@@ -141,11 +141,11 @@ return [
                                 'order'          => 80,
                                 'border - color' => '#111',
                                 'pages'          => [
-                                    'statut-intervenant'                         => [
+                                    'statut'                                     => [
                                         'label'        => 'Edition des statuts des intervenants',
                                         'icon'         => 'fa fa-graduation-cap',
-                                        'route'        => 'statut-intervenant',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\StatutIntervenant', 'index'),
+                                        'route'        => 'statut',
+                                        'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
                                         'order'        => 90,
                                         'border-color' => '#BBCF55',
                                     ],

@@ -7,7 +7,7 @@ use Application\Form\Elements\PaysSelect;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\VoirieServiceAwareTrait;
 
 /**
@@ -17,7 +17,7 @@ use Application\Service\Traits\VoirieServiceAwareTrait;
 class AdresseFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use PaysServiceAwareTrait;
     use VoirieServiceAwareTrait;
     use AdresseNumeroComplServiceAwareTrait;

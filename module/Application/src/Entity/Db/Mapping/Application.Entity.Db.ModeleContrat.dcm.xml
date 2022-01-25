@@ -29,7 +29,7 @@
         <field name="bloc9Requete" type="string" column="BLOC9_REQUETE" nullable="true"/>
         <field name="bloc10Nom" type="string" column="BLOC10_NOM" nullable="true"/>
         <field name="bloc10Requete" type="string" column="BLOC10_REQUETE" nullable="true"/>
-        <many-to-one field="statutIntervenant" target-entity="Application\Entity\Db\StatutIntervenant">
+        <many-to-one field="statut" target-entity="Intervenant\Entity\Db\Statut">
             <join-columns>
                 <join-column name="STATUT_ID" referenced-column-name="ID"/>
             </join-columns>

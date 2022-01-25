@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\TypeAgrementAwareTrait;
+use Intervenant\Entity\Db\StatutAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -12,6 +14,7 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
     use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
+    use StatutAwareTrait;
 
     /**
      * @var integer
@@ -22,11 +25,6 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\TypeAgrement
      */
     private $type;
-
-    /**
-     * @var \Application\Entity\Db\Statut
-     */
-    private $statut;
 
     /**
      * @var integer
@@ -107,34 +105,6 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     public function getType()
     {
         return $this->type;
-    }
-
-
-
-    /**
-     * Set statutIntervenant
-     *
-     * @param \Application\Entity\Db\Statut $statut
-     *
-     * @return TypeAgrementStatut
-     */
-    public function setStatut(\Application\Entity\Db\Statut $statut = null)
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get statutIntervenant
-     *
-     * @return \Application\Entity\Db\Statut
-     */
-    public function getStatut()
-    {
-        return $this->statut;
     }
 
 

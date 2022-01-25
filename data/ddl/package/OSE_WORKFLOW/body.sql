@@ -369,7 +369,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
         WHEN e.code = ''PJ_SAISIE'' OR e.code = ''PJ_VALIDATION'' THEN
           CASE WHEN EXISTS(
-            SELECT statut_intervenant_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_intervenant_id = si.id
+            SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id
             --SELECT intervenant_id FROM tbl_piece_jointe_demande WHERE intervenant_id = i.id
           ) THEN 1 ELSE 0 END
 
@@ -381,11 +381,11 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
         WHEN e.code = ''CONSEIL_ACADEMIQUE'' OR e.code = ''CONSEIL_RESTREINT'' THEN
           CASE WHEN EXISTS(
-            SELECT statut_intervenant_id
+            SELECT statut_id
             FROM type_agrement_statut tas JOIN type_agrement ta ON ta.id = tas.type_agrement_id
             WHERE tas.histo_destruction IS NULL
               AND ta.code = e.code
-              AND tas.statut_intervenant_id = si.id
+              AND tas.statut_id = si.id
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = ''CONTRAT'' THEN
@@ -410,7 +410,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       SELECT
         id                  intervenant_id,
         annee_id            annee_id,
-        statut_id           statut_intervenant_id
+        statut_id           statut_id
       FROM
         intervenant
       WHERE
@@ -666,12 +666,12 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       ROUND(COALESCE(w.objectif,0),2)                      objectif,
       CASE WHEN w.intervenant_id IS NULL THEN 0 ELSE 1 END atteignable,
       ROUND(COALESCE(w.realisation,0),2)                   realisation,
-      i.statut_intervenant_id                              statut_intervenant_id,
+      i.statut_id                                          statut_id,
       ti.id                                                type_intervenant_id,
       ti.code                                              type_intervenant_code
     FROM
       ( ' || intervenant || ') i
-      JOIN statut_intervenant      si ON si.id = i.statut_intervenant_id
+      JOIN statut                  si ON si.id = i.statut_id
       JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
       JOIN wf_etape                 e ON 1 = CASE ' || dems || ' END
       LEFT JOIN ( ' || dossier || '

@@ -1,13 +1,13 @@
 <?php
 
 use Application\Entity\Db\TypePieceJointe;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $typesPiecesJointes        TypePieceJointe[]
- * @var $statutsIntervenants       StatutIntervenant[][]
+ * @var $statutsIntervenants       Statut[][]
  * @var $typesPiecesJointesStatuts TypePieceJointeStatut[][][]
  */
 
@@ -136,10 +136,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
         <thead>
         <tr>
             <th class="rotate-45 si" data-si=""><span>&nbsp;</span></th>
-            <?php $i = 0; foreach ($statutsIntervenants as $statuts): foreach ($statuts as $statut): $i++;
+            <?php $i = 0;
+            foreach ($statutsIntervenants as $statuts): foreach ($statuts as $statut): $i++;
 
                 ?>
-                <th class="rotate-45 si <?= $i==1 ? 'first' : '' ?>" data-si="<?php $statut->getLibelle() ?>">
+                <th class="rotate-45 si <?= $i == 1 ? 'first' : '' ?>" data-si="<?php $statut->getLibelle() ?>">
                     <div id="<?= 'th' . $i ?>"><span><?= $statut; ?></span></div>
                 </th>
             <?php endforeach; endforeach; ?>

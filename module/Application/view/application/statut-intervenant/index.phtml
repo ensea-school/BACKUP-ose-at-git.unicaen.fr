@@ -1,10 +1,11 @@
 <?php
-use Application\Entity\Db\StatutIntervenant;
+
+use Application\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
- * @var $statutsIntervenants \Application\Entity\Db\StatutIntervenant[]
+ * @var $this                \Application\View\Renderer\PhpRenderer
+ * @var $statutsIntervenants \Application\Entity\Db\Statut[]
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
@@ -19,6 +20,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
     .champ-triable div {
         align: left;
     }
+
     .modal.in .modal-dialog {
         transform: translate(0px, 0px);
         width: 950px;
@@ -26,30 +28,31 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
 </style>
 
 <script type="text/javascript">
-    function injecte(element){
+    function injecte(element)
+    {
         var ancre = '#c_' + $(element).data('id');
         var ti = $(element).data('id');
-        adr="<?php echo $this->url('statut-intervenant/saisie') ?>" + "/"+ti;
+        adr = "<?php echo $this->url('statut-intervenant/saisie') ?>" + "/" + ti;
         $(ancre).load(adr);
     }
 
-        $(function () {
-            $(".triables").sortable({
-                handle: '.glyphicon-move',
-                axis: 'y',
-                update: function (event, ui) {
-                    var champsIds = '';
-                    ui.item.parent().find('div.champ-triable').each(function () {
-                        if (champsIds != '') champsIds += ',';
-                        console.log($(this)[0]['id']);
-                        champsIds += $(this)[0]['id'];
-                    });
-                    $.post(Url('statut-intervenant/statut-intervenant-trier'), {champsIds: champsIds}).done(function (res) {
-                        alertFlash(res.msg, 'success', 3000);
-                    });
-                }
-            });
+    $(function () {
+        $(".triables").sortable({
+            handle: '.glyphicon-move',
+            axis: 'y',
+            update: function (event, ui) {
+                var champsIds = '';
+                ui.item.parent().find('div.champ-triable').each(function () {
+                    if (champsIds != '') champsIds += ',';
+                    console.log($(this)[0]['id']);
+                    champsIds += $(this)[0]['id'];
+                });
+                $.post(Url('statut-intervenant/statut-intervenant-trier'), {champsIds: champsIds}).done(function (res) {
+                    alertFlash(res.msg, 'success', 3000);
+                });
+            }
         });
+    });
 
 </script>
 
@@ -57,30 +60,33 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<div class="alert alert-info">Un intervenant ne peut avoir qu'un seul statut dans OSE. Celui de rang plus élevé lui sera donné prioritairement en cas de doute.</div>
+<div class="alert alert-info">Un intervenant ne peut avoir qu'un seul statut dans OSE. Celui de rang plus élevé lui sera donné prioritairement en cas de
+    doute.
+</div>
 
 <div class="panel-group triables" id="bloc" role="tablist" aria-multiselectable="true">
-    <?php foreach ($statutsIntervenants as $ti){ ?>
+    <?php foreach ($statutsIntervenants as $ti) { ?>
         <div class="champ-triable panel panel-default" id="<?php echo $ti->getId() ?>">
-            <div class="panel-heading" role="tab" id="<?php echo 'h_'.$ti->getId() ?>">
+            <div class="panel-heading" role="tab" id="<?php echo 'h_' . $ti->getId() ?>">
                 <h4 class="panel-title">
                     <a role="button"
                        data-toggle="collapse"
-                       href="#<?php echo 'c_'.$ti->getId() ?>"
+                       href="#<?php echo 'c_' . $ti->getId() ?>"
                        aria-expanded="false"
-                       aria-controls="<?php echo 'c_'.$ti->getId() ?>"
+                       aria-controls="<?php echo 'c_' . $ti->getId() ?>"
                        data-id="<?php echo $ti->getId() ?>"
                        onclick="injecte(this); ">
-                           <?php
-                           echo '<span class="badge">'.$ti->getTypeIntervenant()->getLibelle().'</span><span class="statut-libelle-'.$ti->getId().'"> '.$ti->getLibelle() . '</span>';
-                           if ($canEdit) {
-                               echo '<span class="pull-right glyphicon glyphicon-move"';
-                                echo 'title = "Vous pouvez trier les champs en déplaçant les lignes" ></span >&nbsp';
-                               } ?>
+                        <?php
+                        echo '<span class="badge">' . $ti->getTypeIntervenant()->getLibelle() . '</span><span class="statut-libelle-' . $ti->getId() . '"> ' . $ti->getLibelle() . '</span>';
+                        if ($canEdit) {
+                            echo '<span class="pull-right glyphicon glyphicon-move"';
+                            echo 'title = "Vous pouvez trier les champs en déplaçant les lignes" ></span >&nbsp';
+                        } ?>
                     </a>
                 </h4>
             </div>
-            <div id="<?php echo 'c_'.$ti->getId() ?>" class="panel-collapse collapse intranavigator" role="tabpanel" aria-labelledby="<?php echo 'h_'.$ti->getId() ?>">
+            <div id="<?php echo 'c_' . $ti->getId() ?>" class="panel-collapse collapse intranavigator" role="tabpanel"
+                 aria-labelledby="<?php echo 'h_' . $ti->getId() ?>">
                 <div class="panel-body" data-statut-intervenant="<?php echo $ti->getId() ?>">
                 </div>
             </div>

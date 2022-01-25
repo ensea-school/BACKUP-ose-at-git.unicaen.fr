@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Cache\Traits\CacheContainerTrait;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
@@ -26,7 +26,7 @@ class StatutIntervenantController extends AbstractController
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            StatutIntervenant::class,
+            Statut::class,
         ]);
 
         $statutsIntervenants = $this->getServiceStatutIntervenant()->getList();
@@ -54,7 +54,7 @@ class StatutIntervenantController extends AbstractController
 
             $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
             if ($canEdit) {
-                $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
+                $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (Statut $si) {
                     try {
                         $this->getServiceStatutIntervenant()->save($si);
                         unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
@@ -80,7 +80,7 @@ class StatutIntervenantController extends AbstractController
 
     public function cloneAction()
     {
-        /* @var $statutIntervenant StatutIntervenant */
+        /* @var $statutIntervenant Statut */
         $statutIntervenant    = $this->getEvent()->getParam('statutIntervenant');
         $newStatutIntervenant = $statutIntervenant->dupliquer();
         $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
@@ -88,7 +88,7 @@ class StatutIntervenantController extends AbstractController
         $title        = 'Duplication d\'un statut d\'intervenant';
         $champsAutres = $this->getServiceDossierAutre()->getList();
 
-        $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
+        $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (Statut $si) {
             try {
                 $this->getServiceStatutIntervenant()->save($si);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);

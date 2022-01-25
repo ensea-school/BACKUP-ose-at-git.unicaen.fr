@@ -2,7 +2,7 @@
 
 namespace Application\Form\Intervenant\Dossier;
 
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;

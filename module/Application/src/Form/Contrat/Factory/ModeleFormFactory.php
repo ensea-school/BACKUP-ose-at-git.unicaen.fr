@@ -2,7 +2,7 @@
 
 namespace Application\Form\Contrat\Factory;
 
-use Application\Service\StatutIntervenantService;
+use Application\Service\StatutService;
 use Application\Service\StructureService;
 use Psr\Container\ContainerInterface;
 use Application\Form\Contrat\ModeleForm;
@@ -26,7 +26,7 @@ class ModeleFormFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $form = new ModeleForm;
-        $form->setServiceStatutIntervenant($container->get(StatutIntervenantService::class));
+        $form->setServiceStatutIntervenant($container->get(StatutService::class));
         $form->setServiceStructure($container->get(StructureService::class));
 
         return $form;

@@ -2,7 +2,7 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\StatutIntervenantService;
+use Application\Service\StatutService;
 
 /**
  * Description of StatutIntervenantServiceAwareTrait
@@ -12,18 +12,18 @@ use Application\Service\StatutIntervenantService;
 trait StatutIntervenantServiceAwareTrait
 {
     /**
-     * @var StatutIntervenantService
+     * @var StatutService
      */
     private $serviceStatutIntervenant;
 
 
 
     /**
-     * @param StatutIntervenantService $serviceStatutIntervenant
+     * @param StatutService $serviceStatutIntervenant
      *
      * @return self
      */
-    public function setServiceStatutIntervenant(StatutIntervenantService $serviceStatutIntervenant)
+    public function setServiceStatutIntervenant(StatutService $serviceStatutIntervenant)
     {
         $this->serviceStatutIntervenant = $serviceStatutIntervenant;
 
@@ -33,12 +33,12 @@ trait StatutIntervenantServiceAwareTrait
 
 
     /**
-     * @return StatutIntervenantService
+     * @return StatutService
      */
     public function getServiceStatutIntervenant()
     {
         if (empty($this->serviceStatutIntervenant)) {
-            $this->serviceStatutIntervenant = \Application::$container->get(StatutIntervenantService::class);
+            $this->serviceStatutIntervenant = \Application::$container->get(StatutService::class);
         }
 
         return $this->serviceStatutIntervenant;

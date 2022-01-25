@@ -3,7 +3,7 @@
 namespace Application\Hydrator;
 
 use Application\Entity\Db\IntervenantDossier;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -35,9 +35,9 @@ class IntervenantDossierHydrator implements HydratorInterface
 
     /**
      *
-     * @param StatutIntervenant $defaultStatut
+     * @param Statut $defaultStatut
      */
-    public function __construct(StatutIntervenant $defaultStatut = null)
+    public function __construct(Statut $defaultStatut = null)
     {
         $this->setDefaultStatut($defaultStatut);
     }

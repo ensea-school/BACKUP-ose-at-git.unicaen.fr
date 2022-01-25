@@ -3,7 +3,7 @@
 namespace Plafond\View\Helper;
 
 use Application\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Plafond\Form\PlafondConfigFormAwareTrait;
@@ -83,7 +83,7 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
             '*'                        => 'plafond/config-application',
             FonctionReferentiel::class => 'plafond/config-referentiel',
             Structure::class           => 'plafond/config-structure',
-            StatutIntervenant::class   => 'plafond/config-statut',
+            Statut::class              => 'plafond/config-statut',
         ];
         if (is_object($entity)) {
             $url      = $this->getView()->url($urls[get_class($entity)]);

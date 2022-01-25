@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -23,7 +24,7 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     private $type;
 
     /**
-     * @var \Application\Entity\Db\StatutIntervenant
+     * @var \Application\Entity\Db\Statut
      */
     private $statut;
 
@@ -51,6 +52,7 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
             sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
         );
     }
+
 
 
     /**
@@ -109,15 +111,14 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
 
 
 
-
     /**
      * Set statutIntervenant
      *
-     * @param \Application\Entity\Db\StatutIntervenant $statut
+     * @param \Application\Entity\Db\Statut $statut
      *
      * @return TypeAgrementStatut
      */
-    public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
+    public function setStatut(\Application\Entity\Db\Statut $statut = null)
     {
         $this->statut = $statut;
 
@@ -129,14 +130,16 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     /**
      * Get statutIntervenant
      *
-     * @return \Application\Entity\Db\StatutIntervenant
+     * @return \Application\Entity\Db\Statut
      */
     public function getStatut()
     {
         return $this->statut;
     }
 
-     /**
+
+
+    /**
      * Get dureeVie
      *
      * @return integer
@@ -145,6 +148,8 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     {
         return $this->dureeVie;
     }
+
+
 
     /**
      * Set dureeVie

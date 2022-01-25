@@ -1,23 +1,18 @@
 <?php
 
-namespace Application\Service;
+namespace Intervenant\Service;
 
-use Application\Entity\Db\StatutIntervenant;
-use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\AbstractEntityService;
+use Intervenant\Entity\Db\Statut;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Description of StatutIntervenant
+ * Description of Statut
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class StatutIntervenantService extends AbstractEntityService
+class StatutService extends AbstractEntityService
 {
-    use SourceServiceAwareTrait;
-
-    const CODE_AUTRES = 'AUTRES';
-
-
 
     /**
      * retourne la classe des entités
@@ -27,7 +22,7 @@ class StatutIntervenantService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return StatutIntervenant::class;
+        return Statut::class;
     }
 
 
@@ -39,7 +34,7 @@ class StatutIntervenantService extends AbstractEntityService
      */
     public function getAlias()
     {
-        return 'si';
+        return 'statut';
     }
 
 
@@ -47,23 +42,21 @@ class StatutIntervenantService extends AbstractEntityService
     /**
      * @param string $code
      *
-     * @return StatutIntervenant|null
+     * @return Statut
      */
-    public function getByCode(string $code = null)
+    public function getByCode(string $code): Statut
     {
-        if (!$code) $code = self::CODE_AUTRES;
-
         return $this->getRepo()->findOneBy(['code' => $code]);
     }
 
 
 
     /**
-     * @return StatutIntervenant|null
+     * @return Statut
      */
     public function getAutres()
     {
-        return $this->getByCode();
+        return $this->getByCode(Statut::CODE_AUTRES);
     }
 
 
@@ -107,20 +100,6 @@ class StatutIntervenantService extends AbstractEntityService
         $qb->addOrderBy("$alias.ordre");
 
         return $qb;
-    }
-
-
-
-    /**
-     * @return int
-     */
-    public function fetchMaxOrdre(): int
-    {
-        $sql = 'SELECT MAX(ORDRE) MAX_ORDRE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS null';
-
-        $res = $this->getEntityManager()->getConnection()->fetchColumn($sql, [], 0);
-
-        return (int)$res;
     }
 
 

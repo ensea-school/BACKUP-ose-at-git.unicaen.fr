@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
@@ -578,7 +578,7 @@ class IntervenantService extends AbstractEntityService
 
         if (!isset($params['statut']) || empty($params['statut'])) {
             $params['statut'] = $this->getServiceStatutIntervenant()->getAutres();
-        } elseif (!$params['statut'] instanceof StatutIntervenant) {
+        } elseif (!$params['statut'] instanceof Statut) {
             $params['statut'] = $this->getServiceStatutIntervenant()->getByCode($params['statut']);
         }
 

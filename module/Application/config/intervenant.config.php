@@ -601,7 +601,7 @@ return [
             Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
             Service\CiviliteService::class                   => Service\CiviliteService::class,
             Service\GradeService::class                      => Service\GradeService::class,
-            Service\StatutIntervenantService::class          => Service\StatutIntervenantService::class,
+            Service\StatutService::class                     => Service\StatutService::class,
             Service\TypeIntervenantService::class            => Service\TypeIntervenantService::class,
         ],
     ],

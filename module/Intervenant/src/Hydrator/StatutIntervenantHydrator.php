@@ -28,8 +28,8 @@ class StatutIntervenantHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                    $data
-     * @param \Application\Entity\Db\StatutIntervenant $object
+     * @param array                         $data
+     * @param \Application\Entity\Db\Statut $object
      *
      * @return object
      */
@@ -139,7 +139,7 @@ class StatutIntervenantHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\StatutIntervenant $object
+     * @param \Application\Entity\Db\Statut $object
      *
      * @return array
      */

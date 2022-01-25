@@ -26,7 +26,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     private $typePieceJointe;
 
     /**
-     * @var \Application\Entity\Db\StatutIntervenant
+     * @var \Application\Entity\Db\Statut
      */
     private $statutIntervenant;
 
@@ -68,6 +68,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     private $obligatoireHNP;
 
 
+
     /**
      * Get seuilHeures
      *
@@ -79,6 +80,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         return $this->seuilHetd;
     }
+
 
 
     /**
@@ -156,11 +158,11 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     /**
      * Set statutIntervenant
      *
-     * @param \Application\Entity\Db\StatutIntervenant $statutIntervenant
+     * @param \Application\Entity\Db\Statut $statutIntervenant
      *
      * @return TypePieceJointeStatut
      */
-    public function setStatutIntervenant(\Application\Entity\Db\StatutIntervenant $statutIntervenant = null)
+    public function setStatutIntervenant(\Application\Entity\Db\Statut $statutIntervenant = null)
     {
         $this->statutIntervenant = $statutIntervenant;
 
@@ -172,7 +174,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     /**
      * Get statutIntervenant
      *
-     * @return \Application\Entity\Db\StatutIntervenant
+     * @return \Application\Entity\Db\Statut
      */
     public function getStatutIntervenant()
     {
@@ -305,6 +307,8 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * @return bool
      */
@@ -312,6 +316,8 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         return $this->obligatoireHNP;
     }
+
+
 
     /**
      * @param bool $obligatoireHNP
@@ -331,7 +337,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         if ($this->getSeuilHeures()) $txt .= ' >' . $this->getSeuilHeures();
         if ($this->getFC()) $txt .= ' FC ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
-        if ($this->getDureeVie() && $this->getDureeVie() > 1 ) $txt .= ' ' . $this->getDureeVie() . 'ans';
+        if ($this->getDureeVie() && $this->getDureeVie() > 1) $txt .= ' ' . $this->getDureeVie() . 'ans';
 
 
         return $txt;

@@ -7,7 +7,7 @@ use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
@@ -510,7 +510,7 @@ class PlafondService extends AbstractEntityService
         if ($entity instanceof Structure) {
             return PlafondStructure::class;
         }
-        if ($entity instanceof StatutIntervenant) {
+        if ($entity instanceof Statut) {
             return PlafondStatut::class;
         }
         if ($entity instanceof FonctionReferentiel) {
@@ -522,8 +522,8 @@ class PlafondService extends AbstractEntityService
 
 
     /**
-     * @param Plafond|int                                          $plafond
-     * @param null|Structure|FonctionReferentiel|StatutIntervenant $entity
+     * @param Plafond|int                               $plafond
+     * @param null|Structure|FonctionReferentiel|Statut $entity
      *
      * @return PlafondConfigInterface
      */

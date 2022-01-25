@@ -3,7 +3,7 @@
 namespace Application\View\Helper\Import;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervenant;
 use UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne;
@@ -19,8 +19,8 @@ class IntervenantViewHelper extends DifferentielLigne
     {
         $format = '%s %s (n° %s, %s, %s)';
         if ('insert' == $this->ligne->getAction() || 'undelete' == $this->ligne->getAction()) {
-            $statut = $this->ligne->getEntityManager()->find(StatutIntervenant::class, $this->ligne->get('STATUT_ID'));
-            
+            $statut = $this->ligne->getEntityManager()->find(Statut::class, $this->ligne->get('STATUT_ID'));
+
             return sprintf(
                 $format,
                 $this->ligne->get('NOM_USUEL'),
@@ -66,7 +66,7 @@ class IntervenantViewHelper extends DifferentielLigne
                 } else {
                     $oldStatut = 'Aucun';
                 }
-                $statut = $this->ligne->getEntityManager()->find(StatutIntervenant::class, $value);
+                $statut = $this->ligne->getEntityManager()->find(Statut::class, $value);
 
                 return 'changement de statut (' . $oldStatut . ' vers ' . $statut . ')';
             case 'TYPE_ID':

@@ -10,27 +10,29 @@ class TypeInterventionStatut
     /**
      * @var integer
      */
-protected $id;
+    protected $id;
 
     /**
      * @var integer
      */
-protected $typeIntervention;
+    protected $typeIntervention;
 
     /**
      * @var integer
      */
-protected $statutIntervenant;
+    protected $statutIntervenant;
 
     /**
      * @var float
      */
-protected $tauxHETDService;
+    protected $tauxHETDService;
 
     /**
      * @var float
      */
-protected $tauxHETDComplementaire;
+    protected $tauxHETDComplementaire;
+
+
 
     /**
      * Get id
@@ -42,6 +44,8 @@ protected $tauxHETDComplementaire;
         return $this->id;
     }
 
+
+
     /**
      * Set typeIntervention
      *
@@ -51,10 +55,12 @@ protected $tauxHETDComplementaire;
      */
     public function setTypeIntervention($typeIntervention)
     {
-        $this->typeIntervention=$typeIntervention;
+        $this->typeIntervention = $typeIntervention;
 
         return $this;
     }
+
+
 
     /**
      * Get typeIntevention
@@ -66,12 +72,14 @@ protected $tauxHETDComplementaire;
         return $this->typeIntervention;
     }
 
+
+
     /**
      * Set statutIntervenant
      *
      * @param integer $statutIntervenant
      *
-     * @return statutIntervenant
+     * @return Statut
      */
     public function setStatutIntervenant($statutIntervenant)
     {
@@ -79,6 +87,8 @@ protected $tauxHETDComplementaire;
 
         return $this;
     }
+
+
 
     /**
      * Get statutIntervenant
@@ -89,6 +99,8 @@ protected $tauxHETDComplementaire;
     {
         return $this->statutIntervenant;
     }
+
+
 
     /**
      * Set tauxHetdService
@@ -104,6 +116,8 @@ protected $tauxHETDComplementaire;
         return $this;
     }
 
+
+
     /**
      * Get tauxHETDService
      *
@@ -114,6 +128,8 @@ protected $tauxHETDComplementaire;
         return $this->tauxHETDService;
     }
 
+
+
     /**
      * Set tauxHETDComplementaire
      *
@@ -123,10 +139,12 @@ protected $tauxHETDComplementaire;
      */
     public function setTauxHETDComplementaire($tauxHETDComplementaire)
     {
-        $this->tauxHETDComplementaire=$tauxHETDComplementaire;
+        $this->tauxHETDComplementaire = $tauxHETDComplementaire;
 
         return $this;
     }
+
+
 
     /**
      * Get tauxHETDComplementaire

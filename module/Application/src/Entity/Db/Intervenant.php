@@ -60,7 +60,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $utilisateurCode;
 
     /**
-     * @var \Application\Entity\Db\StatutIntervenant
+     * @var \Application\Entity\Db\Statut
      */
     protected $statut;
 
@@ -475,7 +475,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get statut
      *
-     * @return StatutIntervenant
+     * @return Statut
      */
     public function getStatut()
     {
@@ -487,11 +487,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Set statut
      *
-     * @param StatutIntervenant $statut
+     * @param Statut $statut
      *
      * @return Intervenant
      */
-    public function setStatut(StatutIntervenant $statut = null)
+    public function setStatut(Statut $statut = null)
     {
         $this->statut = $statut;
 
@@ -1606,7 +1606,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     }
 
 
-    
+
     /**
      * Get validation
      *

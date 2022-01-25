@@ -11,7 +11,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
@@ -79,7 +79,7 @@ class EntityProvider
     private $structureEns;
 
     /**
-     * @var StatutIntervenant[]
+     * @var Statut[]
      */
     private $statuts;
 
@@ -369,7 +369,7 @@ class EntityProvider
      *
      * @param boolean $permanent
      *
-     * @return StatutIntervenant
+     * @return Statut
      */
     public function getStatutIntervenant($permanent = true)
     {
@@ -390,7 +390,7 @@ class EntityProvider
      *
      * @param string $sourceCode Code "source" du statut, ex: StatutIntervenant::SALAR_PRIVE
      *
-     * @return StatutIntervenant
+     * @return Statut
      */
     public function getStatutIntervenantByCode($sourceCode)
     {
@@ -399,7 +399,7 @@ class EntityProvider
         }
 
         if (!isset($this->statuts[$sourceCode])) {
-            $this->statuts[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\StatutIntervenant')
+            $this->statuts[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\Statut')
                 ->findOneBySourceCode($sourceCode);
             if (!$this->statuts[$sourceCode]) {
                 throw new RuntimeException("Statut intervenant introuvable avec le code '$sourceCode'.");
@@ -695,12 +695,12 @@ class EntityProvider
     /**
      * Retourne à chaque appel une nouvelle instance de TypePieceJointeStatut persistée.
      *
-     * @param StatutIntervenant $statut
-     * @param TypePieceJointe   $type
+     * @param Statut          $statut
+     * @param TypePieceJointe $type
      *
      * @return TypePieceJointeStatut
      */
-    public function getTypePieceJointeStatut(StatutIntervenant $statut, TypePieceJointe $type = null)
+    public function getTypePieceJointeStatut(Statut $statut, TypePieceJointe $type = null)
     {
         $tpjs = Asset::newTypePieceJointeStatut(
             $statut,
@@ -775,12 +775,12 @@ class EntityProvider
     /**
      * Retourne à chaque appel une nouvelle instance de TypeAgrementStatut persistée.
      *
-     * @param StatutIntervenant $statut
-     * @param TypeAgrement      $type
+     * @param Statut       $statut
+     * @param TypeAgrement $type
      *
      * @return TypeAgrementStatut
      */
-    public function getTypeAgrementStatut(StatutIntervenant $statut, TypeAgrement $type = null)
+    public function getTypeAgrementStatut(Statut $statut, TypeAgrement $type = null)
     {
         $tas = Asset::newTypeAgrementStatut(
             $statut,

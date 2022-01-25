@@ -4,7 +4,7 @@ namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Laminas\View\Model\JsonModel;
@@ -141,7 +141,7 @@ class PlafondController extends AbstractController
     public function configStatutAction()
     {
         $entityId = $this->params()->fromPost('entityId');
-        $entity   = $this->em()->find(StatutIntervenant::class, (int)$entityId);
+        $entity   = $this->em()->find(Statut::class, (int)$entityId);
 
         return $this->configAction($entity);
     }

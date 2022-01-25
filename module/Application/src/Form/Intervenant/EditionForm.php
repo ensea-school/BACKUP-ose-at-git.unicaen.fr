@@ -8,7 +8,7 @@ use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
@@ -52,7 +52,7 @@ class EditionForm extends AbstractForm
         'nomPatronymique'    => ['type' => 'string'],
         'prenom'             => ['type' => 'string'],
         'dateNaissance'      => ['type' => \DateTime::class],
-        'statut'             => ['type' => StatutIntervenant::class],
+        'statut'             => ['type' => Statut::class],
         'structure'          => ['type' => Structure::class],
         'discipline'         => ['type' => Discipline::class],
         'grade'              => ['type' => Grade::class],

@@ -32,7 +32,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\StatutIntervenant
+     * @var \Application\Entity\Db\Statut
      */
     protected $statut;
 
@@ -234,7 +234,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Get statut
      *
-     * @return StatutIntervenant
+     * @return Statut
      */
     public function getStatut()
     {
@@ -246,11 +246,11 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Set statut
      *
-     * @param StatutIntervenant $statut
+     * @param Statut $statut
      *
      * @return IntervenantDossier
      */
-    public function setStatut(StatutIntervenant $statut = null)
+    public function setStatut(Statut $statut = null)
     {
         $this->statut = $statut;
 

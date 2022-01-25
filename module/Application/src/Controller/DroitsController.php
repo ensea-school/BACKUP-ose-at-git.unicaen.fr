@@ -18,7 +18,7 @@ use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Traits\DoctrineCacheAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Statut;
 use UnicaenAuth\Entity\Db\Privilege;
 
 /**
@@ -211,7 +211,7 @@ class DroitsController extends AbstractController
 
 
 
-    private function statutAddPrivilege(StatutIntervenant $statut, Privilege $privilege)
+    private function statutAddPrivilege(Statut $statut, Privilege $privilege)
     {
         $sql = "INSERT INTO STATUT_PRIVILEGE (statut_id, privilege_id) VALUES (" . $statut->getId() . ", " . $privilege->getId() . ")";
         $this->em()->getConnection()->executeStatement($sql);
@@ -221,7 +221,7 @@ class DroitsController extends AbstractController
 
 
 
-    private function statutRemovePrivilege(StatutIntervenant $statut, Privilege $privilege)
+    private function statutRemovePrivilege(Statut $statut, Privilege $privilege)
     {
         $sql = "DELETE STATUT_PRIVILEGE WHERE statut_id = " . $statut->getId() . " AND privilege_id = " . $privilege->getId();
         $this->em()->getConnection()->executeStatement($sql);

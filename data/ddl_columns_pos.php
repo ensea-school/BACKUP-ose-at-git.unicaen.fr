@@ -1605,7 +1605,7 @@ return [
         'TYPE_INTERVENANT_ID',
         'TYPE_INTERVENANT_CODE',
         'ETAPE_CODE',
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
     ],
     'TEST_BUFFER'                    => [
         'ID',
@@ -1626,7 +1626,6 @@ return [
     'TYPE_AGREMENT_STATUT'           => [
         'ID',
         'TYPE_AGREMENT_ID',
-        'STATUT_INTERVENANT_ID',
         'OBLIGATOIRE',
         'HISTO_CREATION',
         'HISTO_CREATEUR_ID',
@@ -1635,6 +1634,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'DUREE_VIE',
+        'STATUT_ID',
     ],
     'TYPE_CONTRAT'                   => [
         'ID',
@@ -1727,9 +1727,9 @@ return [
     'TYPE_INTERVENTION_STATUT'       => [
         'ID',
         'TYPE_INTERVENTION_ID',
-        'STATUT_INTERVENANT_ID',
         'TAUX_HETD_SERVICE',
         'TAUX_HETD_COMPLEMENTAIRE',
+        'STATUT_ID',
     ],
     'TYPE_INTERVENTION_STRUCTURE'    => [
         'ID',
@@ -1798,7 +1798,6 @@ return [
     'TYPE_PIECE_JOINTE_STATUT'       => [
         'ID',
         'TYPE_PIECE_JOINTE_ID',
-        'STATUT_INTERVENANT_ID',
         'OBLIGATOIRE',
         'SEUIL_HETD',
         'HISTO_CREATION',
@@ -1813,6 +1812,7 @@ return [
         'CHANGEMENT_RIB',
         'DUREE_VIE',
         'OBLIGATOIRE_HNP',
+        'STATUT_ID',
     ],
     'TYPE_RESSOURCE'                 => [
         'ID',
@@ -2129,7 +2129,6 @@ return [
     ],
     'PLAFOND_STATUT'                 => [
         'ID',
-        'STATUT_INTERVENANT_ID',
         'PLAFOND_ID',
         'ANNEE_ID',
         'PLAFOND_ETAT_PREVU_ID',
@@ -2141,6 +2140,7 @@ return [
         'HISTO_CREATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'STATUT_ID',
     ],
     'INDICATEUR_TYPE'                => [
         'ID',

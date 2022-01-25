@@ -9,7 +9,7 @@ return [
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
-        'STATUT_INTERVENANT_ID' => 'ID',
+        'STATUT_ID' => 'ID',
     ],
 ];
 

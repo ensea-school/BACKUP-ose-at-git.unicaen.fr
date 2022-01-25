@@ -8,7 +8,7 @@ return [
     'table'   => 'TYPE_AGREMENT_STATUT',
     'columns' => [
         'TYPE_AGREMENT_ID',
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
         'HISTO_DESTRUCTION',
     ],
 ];

@@ -8,7 +8,7 @@ return [
     'index'   => 'TYPE_AGREMENT_STATUT__UN',
     'columns' => [
         'TYPE_AGREMENT_ID',
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
         'HISTO_DESTRUCTION',
     ],
 ];

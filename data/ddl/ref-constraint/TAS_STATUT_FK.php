@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'TAS_STATUT_INTERVENANT_FK',
+    'name'        => 'TAS_STATUT_FK',
     'table'       => 'TYPE_AGREMENT_STATUT',
     'rtable'      => 'STATUT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
-        'STATUT_INTERVENANT_ID' => 'ID',
+        'STATUT_ID' => 'ID',
     ],
 ];
 

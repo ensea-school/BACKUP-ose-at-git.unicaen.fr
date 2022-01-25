@@ -7,7 +7,7 @@ return [
     'table'   => 'PLAFOND_STATUT',
     'index'   => 'PLAFOND_STATUT_UN',
     'columns' => [
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
         'PLAFOND_ID',
         'ANNEE_ID',
         'HISTO_DESTRUCTION',

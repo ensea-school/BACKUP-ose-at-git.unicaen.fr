@@ -21,8 +21,8 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'STATUT_INTERVENANT_ID'    => [
-            'name'        => 'STATUT_INTERVENANT_ID',
+        'STATUT_ID'                => [
+            'name'        => 'STATUT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TAUX_HETD_COMPLEMENTAIRE' => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'TAUX_HETD_SERVICE'        => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENTION_ID'     => [

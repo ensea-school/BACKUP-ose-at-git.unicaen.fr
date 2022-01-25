@@ -8,7 +8,7 @@ return [
     'table'   => 'TYPE_INTERVENTION_STATUT',
     'columns' => [
         'TYPE_INTERVENTION_ID',
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
     ],
 ];
 

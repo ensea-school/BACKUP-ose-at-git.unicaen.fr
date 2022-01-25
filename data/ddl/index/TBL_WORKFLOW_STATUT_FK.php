@@ -7,7 +7,7 @@ return [
     'unique'  => FALSE,
     'table'   => 'TBL_WORKFLOW',
     'columns' => [
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
     ],
 ];
 

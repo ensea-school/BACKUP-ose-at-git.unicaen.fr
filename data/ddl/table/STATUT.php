@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'STATUT_ID_SEQ',
     'columns'     => [
         'CHARGES_PATRONALES'             => [
             'name'        => 'CHARGES_PATRONALES',

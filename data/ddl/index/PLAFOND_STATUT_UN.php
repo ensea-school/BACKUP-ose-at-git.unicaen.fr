@@ -7,7 +7,7 @@ return [
     'unique'  => TRUE,
     'table'   => 'PLAFOND_STATUT',
     'columns' => [
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
         'PLAFOND_ID',
         'ANNEE_ID',
         'HISTO_DESTRUCTION',

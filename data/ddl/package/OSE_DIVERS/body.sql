@@ -188,17 +188,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
 
 
   FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC IS
-    statut statut%rowtype;
+    stt statut%rowtype;
     itype  type_intervenant%rowtype;
     res NUMERIC;
   BEGIN
     res := 1;
-    SELECT si.* INTO statut FROM statut si JOIN intervenant i ON i.statut_id = si.id WHERE i.id = intervenant_id;
-    SELECT ti.* INTO itype  FROM type_intervenant ti WHERE ti.id = statut.type_intervenant_id;
+    SELECT si.* INTO stt FROM statut si JOIN intervenant i ON i.statut_id = si.id WHERE i.id = intervenant_id;
+    SELECT ti.* INTO itype  FROM type_intervenant ti WHERE ti.id = stt.type_intervenant_id;
 
     /* DEPRECATED */
     IF 'saisie_service' = privilege_name THEN
-      res := statut.peut_saisir_service;
+      res := stt.peut_saisir_service;
       RETURN res;
     ELSIF 'saisie_service_exterieur' = privilege_name THEN
       --IF INTERVENANT_HAS_PRIVILEGE( intervenant_id, 'saisie_service' ) = 0 OR itype.code = 'E' THEN -- cascade
@@ -215,7 +215,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
       res := 1;
       RETURN res;
     ELSIF 'saisie_motif_non_paiement' = privilege_name THEN
-      res := statut.peut_saisir_motif_non_paiement;
+      res := stt.peut_saisir_motif_non_paiement;
       RETURN res;
     END IF;
     /* FIN DE DEPRECATED */

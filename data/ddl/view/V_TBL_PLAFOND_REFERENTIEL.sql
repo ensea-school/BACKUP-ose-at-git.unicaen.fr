@@ -22,7 +22,7 @@ FROM
         i.id                              intervenant_id,
         fr.id                             fonction_referentiel_id,
         SUM(vhr.heures)                   heures,
-        fr.plafond                        plafond
+        0                        plafond
       FROM
              service_referentiel       sr
         JOIN intervenant                i ON i.id = sr.intervenant_id
@@ -31,7 +31,7 @@ FROM
       WHERE
         sr.histo_destruction IS NULL
       GROUP BY
-        i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+        i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id
     ) p
 
     UNION ALL
@@ -43,7 +43,7 @@ FROM
         i.id                       intervenant_id,
         fr.id                      fonction_referentiel_id,
         SUM(vhr.heures)            heures,
-        fr.plafond                 plafond
+        0                 plafond
       FROM
         service_referentiel       sr
         JOIN intervenant i ON i.id = sr.intervenant_id
@@ -53,7 +53,7 @@ FROM
       WHERE
         sr.histo_destruction IS NULL
       GROUP BY
-        i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+        i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id
     ) p
   ) p
   JOIN intervenant i ON i.id = p.intervenant_id

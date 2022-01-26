@@ -13,12 +13,26 @@ Objectif : Plafonds personnalisables
 
 * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
 * Depuis la fiche de service de l'intervenant, vous pouvez maintenant désactiver la possibilité de reporter le prévisionnel n-1 vers l'année en cours ou du prévisionnel vers le réalisé
-* Technique : migration vers Laminas et Composer 2
-* Les plafonds sont maintenant personnalisables : vous pouvez les modifier en retirer ou en créer
-* [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
-* Des dérogations aux plafonds sont possibles par intervenant
+* Technique : 
+  * migration vers Laminas et Composer 2
+  * migration vers PHP 8
+* Nouvelle infrastructure de gestion des plafonds 
+  * Les plafonds sont maintenant personnalisables : vous pouvez les modifier en retirer ou en créer
+  * [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
+  * Les plafonds pourront être personnalisés le cas échéant :
+    * par composante
+    * par statut d'intervenant
+    * par fonction référentielle
+  * Les paramétrages liés aux plafonds sont annualisés
+  * Des dérogations aux plafonds sont possibles par intervenant
 * Paramétrage du mail expéditeur du contrat (Tâche #41014)
 * Possibilité d'envoyer en cci l'email des indicateurs (#40999)
+* Evolution des indicateurs
+  * gestion des dossiers irrecevables (#18307)
+  * extraction CSV des indicateurs (#19405)
+  * certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
+* Refonte de l'interface d'administration des statuts
+  * Les paramétrages de statuts sont maintenant annualisés  
 
 ## Corrections de bugs
 
@@ -29,7 +43,11 @@ Objectif : Plafonds personnalisables
 
 ## Notes de mise à jour
 
+* **ATTENTION : OSE 18** ne pourra être mis à jour **qu'à partir de OSE 17.x**. Si vous utilisez une version plus ancienne de OSE, veuillez **d'abord** mettre à jour en version 17.
+* **ATTENTION : PHP 8.0** est requis
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
+
+
 
 
 # OSE 17.2 (05/01/2022)

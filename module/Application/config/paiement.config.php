@@ -76,6 +76,18 @@ return [
                             ],
                         ],
                     ],
+                    'imputation-siham'      => [
+                        'type'          => 'Literal',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'    => '/imputation-siham',
+                            'defaults' => [
+                                'action' => 'imputationSiham',
+                                'etat'   => Entity\Db\MiseEnPaiement::IMPUTATION_BUDGETAIRE,
+
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -161,6 +173,12 @@ return [
                                         'route'    => 'paiement/extraction-winpaie',
                                         'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                                     ],
+                                    'imputation-siham'      => [
+                                        'label'    => "Imputation budgétaire SIHAM",
+                                        'title'    => "Export des données pour chargement en masse des imputations budgétaires dans SIHAM",
+                                        'route'    => 'paiement/imputation-siham',
+                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
+                                    ],
                                 ],
                             ],
                         ],
@@ -227,7 +245,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['extractionWinpaie'],
+                    'action'     => ['extractionWinpaie', 'imputationSiham'],
                     'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
                 ],
             ],

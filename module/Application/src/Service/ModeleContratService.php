@@ -188,9 +188,9 @@ class ModeleContratService extends AbstractEntityService
 
         $params = ['contrat' => $contrat->getId()];
 
-        $mainData = $connection->fetchAssoc('SELECT * FROM V_CONTRAT_MAIN WHERE CONTRAT_ID = :contrat', $params);
+        $mainData = $connection->fetchAssociative('SELECT * FROM V_CONTRAT_MAIN WHERE CONTRAT_ID = :contrat', $params);
         if ($modele->getRequete()) {
-            $mainDataPerso = $connection->fetchAssoc($modele->getRequete(), $params);
+            $mainDataPerso = $connection->fetchAssociative($modele->getRequete(), $params);
             foreach ($mainDataPerso as $key => $value) {
                 if ($value) {
                     $mainData[$key] = $value;

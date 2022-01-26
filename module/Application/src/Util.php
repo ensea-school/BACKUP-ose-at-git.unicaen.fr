@@ -39,6 +39,13 @@ class Util
         $result          = array_merge($attribs1, $attribs2);
         $result['class'] = array_unique($classes);
 
+        foreach ($result as $att => $value) {
+            if (is_int($value)) {
+                $result[$att] = (string)$value;
+            }
+        }
+
+
         return $result;
     }
 
@@ -129,7 +136,7 @@ class Util
      */
     static public function routeToActionResource($route)
     {
-        list($controller, $action) = self::routeToControllerAction($route);
+        [$controller, $action] = self::routeToControllerAction($route);
 
         if (!$controller || !$action) {
             throw new \LogicException('Les contrôleur et action de la route "' . $route . '" n\'ont pas pu être calculées.');

@@ -32,10 +32,7 @@ trait LdapConnecteurAwareTrait
 
 
 
-    /**
-     * @return LdapConnecteur
-     */
-    public function getConnecteurLdap()
+    public function getConnecteurLdap(): LdapConnecteur
     {
         if (empty($this->connecteurLdap)) {
             $this->connecteurLdap = \Application::$container->get(LdapConnecteur::class);

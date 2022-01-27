@@ -31,7 +31,7 @@ trait VoirieSaisieFormAwareTrait
 
 
 
-    public function getFormVoirieSaisie()
+    public function getFormVoirieSaisie(): VoirieSaisieForm
     {
         if (!empty($this->formVoirieSaisie)) {
             return $this->formVoirieSaisie;

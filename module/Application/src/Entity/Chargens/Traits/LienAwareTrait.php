@@ -17,24 +17,21 @@ trait LienAwareTrait
 
 
 
-
-
     /**
      * @param Lien $lien
+     *
      * @return self
      */
-    public function setLien( Lien $lien = null )
+    public function setLien(Lien $lien = null)
     {
         $this->lien = $lien;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Lien
-     */
-    public function getLien()
+    public function getLien(): Lien
     {
         return $this->lien;
     }

@@ -31,7 +31,7 @@ trait GradeSaisieFormAwareTrait
 
 
 
-    public function getFormGradeSaisie()
+    public function getFormGradeSaisie(): GradeSaisieForm
     {
         if (!empty($this->formGradeSaisie)) {
             return $this->formGradeSaisie;

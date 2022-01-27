@@ -12,10 +12,7 @@ trait BddConnecteurAwareTrait
 
 
 
-    /**
-     * @return BddConnecteur
-     */
-    public function getBdd()
+    public function getBdd(): BddConnecteur
     {
         return $this->bdd;
     }

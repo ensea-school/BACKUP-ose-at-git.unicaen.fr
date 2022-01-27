@@ -31,10 +31,7 @@ trait NoeudAwareTrait
 
 
 
-    /**
-     * @return Noeud
-     */
-    public function getNoeud()
+    public function getNoeud(): Noeud
     {
         return $this->noeud;
     }

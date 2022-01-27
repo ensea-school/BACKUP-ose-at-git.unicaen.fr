@@ -4,6 +4,7 @@ $settings = [
     'view-dirs'            => [getcwd() . '/code'],
     'template-dirs'        => [getcwd() . '/code/template'],
     'generator-output-dir' => '/app/cache/UnicaenCode',
+    'author'               => 'Laurent Lécluse <laurent.lecluse at unicaen.fr>',
     'triggers'             => [
         [
             'template' => 'AwareTrait',

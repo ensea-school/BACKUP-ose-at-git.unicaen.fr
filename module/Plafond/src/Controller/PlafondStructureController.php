@@ -16,7 +16,7 @@ use Plafond\Service\PlafondStructureServiceAwareTrait;
 /**
  * Description of PlafondStructureController
  *
- * @author UnicaenCode
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
 class PlafondStructureController extends AbstractController
 {

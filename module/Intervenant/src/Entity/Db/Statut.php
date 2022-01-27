@@ -13,6 +13,11 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenAuth\Entity\Db\Privilege;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 
+/**
+ * Description of Statut
+ *
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ */
 class Statut implements HistoriqueAwareInterface, RoleInterface
 {
     const CODE_AUTRES       = 'AUTRES';

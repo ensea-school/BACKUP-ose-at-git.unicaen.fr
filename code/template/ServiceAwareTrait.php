@@ -12,19 +12,16 @@ namespace <namespace>;
  */
 trait <classname>
 {
-    /**
-     * @var <targetClassname>
-     */
-    protected $<variable>;
+    protected ?<targetClassname> $<variable>;
 
 
 
     /**
-     * @param <targetClassname> $<variable>
+     * @param <targetClassname>|null $<variable>
      *
      * @return self
      */
-    public function set<method>( <targetClassname> $<variable> )
+    public function set<method>( ?<targetClassname> $<variable> )
     {
         $this-><variable> = $<variable>;
 

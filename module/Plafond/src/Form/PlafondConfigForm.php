@@ -13,7 +13,7 @@ use UnicaenApp\Util;
 /**
  * Description of PlafondConfigForm
  *
- * @author UnicaenCode
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class PlafondConfigForm extends AbstractForm
 {

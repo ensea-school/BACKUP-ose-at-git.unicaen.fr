@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 /**
  * Description of RouteEntitiesInjectorFactory
  *
- * @author UnicaenCode
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class RouteEntitiesInjectorFactory
 {

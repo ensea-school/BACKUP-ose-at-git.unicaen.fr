@@ -550,12 +550,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "b347cdbeed02ea884919ba7e94937e0892232b0b"
+                "reference": "41d6f44ff92d42e29845fe5de615444ec636966c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/b347cdbeed02ea884919ba7e94937e0892232b0b",
-                "reference": "b347cdbeed02ea884919ba7e94937e0892232b0b",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/41d6f44ff92d42e29845fe5de615444ec636966c",
+                "reference": "41d6f44ff92d42e29845fe5de615444ec636966c",
                 "shasum": ""
             },
             "require": {
@@ -653,7 +653,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-23T21:21:39+00:00"
+            "time": "2022-01-26T16:05:04+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -3670,12 +3670,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc.git",
-                "reference": "215d0ff1b504bfbc299346aae20acb362c38d139"
+                "reference": "7d11bcc603c7e9986fcf701264382d3f763a133c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/215d0ff1b504bfbc299346aae20acb362c38d139",
-                "reference": "215d0ff1b504bfbc299346aae20acb362c38d139",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/7d11bcc603c7e9986fcf701264382d3f763a133c",
+                "reference": "7d11bcc603c7e9986fcf701264382d3f763a133c",
                 "shasum": ""
             },
             "require": {
@@ -3744,7 +3744,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-10-13T17:48:28+00:00"
+            "time": "2022-01-26T21:33:49+00:00"
         },
         {
             "name": "laminas/laminas-mvc-i18n",
@@ -4472,12 +4472,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "e918e9d2d55360cf7aeaf56f2f967f5f35ad19e8"
+                "reference": "84935fcf1229c37ce330baa26470dde8e294f83c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/e918e9d2d55360cf7aeaf56f2f967f5f35ad19e8",
-                "reference": "e918e9d2d55360cf7aeaf56f2f967f5f35ad19e8",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/84935fcf1229c37ce330baa26470dde8e294f83c",
+                "reference": "84935fcf1229c37ce330baa26470dde8e294f83c",
                 "shasum": ""
             },
             "require": {
@@ -4497,8 +4497,8 @@
             },
             "require-dev": {
                 "composer/package-versions-deprecated": "^1.0",
-                "laminas/laminas-coding-standard": "~2.2.1",
-                "laminas/laminas-container-config-test": "^0.3",
+                "laminas/laminas-coding-standard": "~2.3.0",
+                "laminas/laminas-container-config-test": "^0.5",
                 "laminas/laminas-dependency-plugin": "^2.1.2",
                 "mikey179/vfsstream": "^1.6.10@alpha",
                 "ocramius/proxy-manager": "^2.11",
@@ -4551,7 +4551,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-01-23T02:08:09+00:00"
+            "time": "2022-01-26T00:00:24+00:00"
         },
         {
             "name": "laminas/laminas-session",
@@ -5783,12 +5783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "a1025d1985ef2aa3f3b83c6b200745ce4656b0de"
+                "reference": "d17ef891bd42ecb5b50267aeb2e44817fdcbabb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/a1025d1985ef2aa3f3b83c6b200745ce4656b0de",
-                "reference": "a1025d1985ef2aa3f3b83c6b200745ce4656b0de",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d17ef891bd42ecb5b50267aeb2e44817fdcbabb3",
+                "reference": "d17ef891bd42ecb5b50267aeb2e44817fdcbabb3",
                 "shasum": ""
             },
             "require": {
@@ -5870,7 +5870,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-22T06:59:39+00:00"
+            "time": "2022-01-24T15:12:01+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

@@ -12,7 +12,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 /**
  * Description of StructureAssertion
  *
- * @author UnicaenCode
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class StructureAssertion extends AbstractAssertion
 {

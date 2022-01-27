@@ -61,7 +61,7 @@ class StructureAssertion extends AbstractAssertion
         /* @var $structure Structure */
 
         // Si c'est bon alors on affine...
-        switch ($action) {
+        if ($structure) switch ($action) {
             case 'saisie':
             case 'delete':
                 return $this->assertStructure($role, $structure);

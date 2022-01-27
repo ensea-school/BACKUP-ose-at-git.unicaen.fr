@@ -3,8 +3,8 @@
 namespace Application\Entity;
 
 use Application\Entity\Db\ServiceAPayerInterface;
-use Application\Entity\Db\Interfaces\ServiceAPayerAwareInterface;
-use Application\Entity\Db\Traits\ServiceAPayerAwareTrait;
+use Application\Interfaces\ServiceAPayerAwareInterface;
+use Application\Traits\ServiceAPayerAwareTrait;
 use Application\Entity\Db\Periode;
 
 /**

@@ -5,6 +5,7 @@ namespace Application\Form\Intervenant;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractFieldset;
+use Doctrine\Laminas\Hydrator\DoctrineObject;
 use Laminas\Validator\LessThan;
 use Application\Entity\Db\ModificationServiceDu;
 use Application\Entity\Db\MotifModificationService;
@@ -151,7 +152,7 @@ class MotifModificationServiceDuFieldset extends AbstractFieldset
 
 
 
-class MotifModificationServiceDuHydrator extends \DoctrineModule\Stdlib\Hydrator\DoctrineObject
+class MotifModificationServiceDuHydrator extends DoctrineObject
 {
     /**
      * Extract values from an object
@@ -160,7 +161,7 @@ class MotifModificationServiceDuHydrator extends \DoctrineModule\Stdlib\Hydrator
      *
      * @return array
      */
-    public function extract($object)
+    public function extract($object): array
     {
         $array = parent::extract($object);
 
@@ -180,7 +181,7 @@ class MotifModificationServiceDuHydrator extends \DoctrineModule\Stdlib\Hydrator
      *
      * @return object
      */
-    public function hydrate(array $data, $object)
+    public function hydrate(array $data, object $object): object
     {
         parent::hydrate($data, $object);
 

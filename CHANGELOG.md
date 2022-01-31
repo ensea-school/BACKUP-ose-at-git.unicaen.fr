@@ -33,6 +33,7 @@ Objectif : Plafonds personnalisables
   * certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
 * Refonte de l'interface d'administration des statuts
   * Les paramétrages de statuts sont maintenant annualisés  
+* Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un intervenant vers le SIRH  
 
 ## Corrections de bugs
 

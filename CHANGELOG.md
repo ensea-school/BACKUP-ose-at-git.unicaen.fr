@@ -40,6 +40,7 @@ Objectif : Plafonds personnalisables
 * Adaptation de la commande update-employeur pour assurer la compatibilité avec les différentes versions d'oracle
 * Correction sur un problème de route dans l'écran Engagements & Liquidation (#38763)
 * Export CSV des agréments : inversion de colonnes (#41513)
+* Correction sur la suppression de service lorsque la clôture de service a été historisé (#42046)
 
 ## Notes de mise à jour
 

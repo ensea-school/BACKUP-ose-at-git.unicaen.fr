@@ -80,8 +80,9 @@ class ValidationService extends AbstractEntityService
         $tv = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_CLOTURE_REALISE);
 
         $validation = $this->getRepo()->findOneBy([
-            'typeValidation' => $tv,
-            'intervenant'    => $intervenant,
+            'typeValidation'   => $tv,
+            'intervenant'      => $intervenant,
+            'histoDestruction' => null,
         ]);
 
         if (!$validation) {

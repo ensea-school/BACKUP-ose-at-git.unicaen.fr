@@ -125,6 +125,7 @@ class ParametreController extends AbstractController
             $posted = [];// rien ne peut être modifié!!
         }
 
+
         $parametres = $sp->getList();
         foreach ($parametres as $parametre => $value) {
             if (isset($posted[$parametre])) {

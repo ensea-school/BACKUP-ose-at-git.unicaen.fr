@@ -179,6 +179,12 @@ Cordialement,
         "DESCRIPTION" => "Email souhaité pour l'expéditeur du contrat",
     ],
 
+    /* Export RH*/
+    "export_rh_franchissement"                   => [
+        "VALEUR"      => "",
+        "DESCRIPTION" => "Etape de la feuille de route à franchir pour autoriser un export vers le SIRH",
+    ],
+
 
     /* Messages informatifs */
     "page_contact"                               => [

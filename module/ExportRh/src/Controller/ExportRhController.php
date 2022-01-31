@@ -5,9 +5,13 @@ namespace ExportRh\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Contrat;
+use Application\Entity\Db\WfEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
+use Application\Service\Traits\WfEtapeServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use ExportRh\Form\ExportRhForm;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
@@ -24,6 +28,10 @@ class ExportRhController extends AbstractController
     use DossierServiceAwareTrait;
     use ExportRhFormAwareTrait;
     use IntervenantServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
+    use ParametresServiceAwareTrait;
+    use WfEtapeServiceAwareTrait;
+
 
     /**
      * @var ExportRhService $exportRhService
@@ -100,18 +108,24 @@ class ExportRhController extends AbstractController
         $renouvellement               = false;
         $priseEnCharge                = false;
 
-        /*Vérification si contrat avec date de retour*/
-        $haveContratOse = false;
-        $contratsOse    = $intervenant->getContrat();
-        foreach ($contratsOse as $contrat) {
-            /**
-             * @var Contrat $contrat
-             */
-            if (!empty($contrat->getDateRetourSigne())) {
-                $haveContratOse = true;
+        /*Vérifier si l'étape du worflow pour faire une PEC ou REN est franchie*/
+        $canExport                    = false;
+        $etapeFranchissementParametre = $this->getServiceParametres()->get('export_rh_franchissement');
+        $etapeFranchissement          = $this->getServiceWorkflow()?->getEtape($this->getServiceWfEtape()?->get($etapeFranchissementParametre), $intervenant);
+        $etapeFranchissementLibelle   = ($etapeFranchissement->getEtape()->getCode() == WfEtape::CODE_CONTRAT) ? $etapeFranchissement->getEtape()->getLibelle($role) . ' et une date de retour signé de renseignée' : $etapeFranchissement->getEtape()->getLibelle($role);
+        if ($etapeFranchissement->getFranchie()) {
+            //Si l'étape de franchissement du worklow pour la PEC est le contrat on vérifie si au moins un contrat est signé
+            if ($etapeFranchissement->getEtape()->getCode() == WfEtape::CODE_CONTRAT) {
+                $contratsOse = $intervenant->getContrat();
+                foreach ($contratsOse as $contrat) {
+                    if (!empty($contrat->getDateRetourSigne())) {
+                        $canExport = true;
+                    }
+                }
+            } else {
+                $canExport = true;
             }
         }
-
         /**
          * Etape 1 : On cherche si l'intervenant est déjà dans le SI RH
          * Etape 2 : Si pas dans le SI RH alors c'est une prise en charge
@@ -160,7 +174,8 @@ class ExportRhController extends AbstractController
             'intervenantRh',
             'intervenantDossier',
             'intervenantDossierValidation',
-            'haveContratOse',
+            'canExport',
+            'etapeFranchissementLibelle',
             'form',
             'renouvellement',
             'priseEnCharge',

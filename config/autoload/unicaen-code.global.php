@@ -3,6 +3,7 @@
 $settings = [
     'view-dirs'            => [getcwd() . '/code'],
     'template-dirs'        => [getcwd() . '/code/template'],
+    'generator-dirs'       => [getcwd() . '/code/generator'],
     'generator-output-dir' => '/app/cache/UnicaenCode',
     'author'               => 'Laurent Lécluse <laurent.lecluse at unicaen.fr>',
     'triggers'             => [

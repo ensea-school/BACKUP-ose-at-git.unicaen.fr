@@ -459,12 +459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "e927fc2410c8723d053b8032e591cdff76587cdb"
+                "reference": "91d90e90950b5a51d337b2f712a2389261fe77a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/e927fc2410c8723d053b8032e591cdff76587cdb",
-                "reference": "e927fc2410c8723d053b8032e591cdff76587cdb",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/91d90e90950b5a51d337b2f712a2389261fe77a8",
+                "reference": "91d90e90950b5a51d337b2f712a2389261fe77a8",
                 "shasum": ""
             },
             "require": {
@@ -526,7 +526,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/common/issues",
-                "source": "https://github.com/doctrine/common/tree/3.2.1"
+                "source": "https://github.com/doctrine/common/tree/3.2.x"
             },
             "funding": [
                 {
@@ -542,7 +542,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-26T22:39:45+00:00"
+            "time": "2022-01-28T10:36:22+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -550,12 +550,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "41d6f44ff92d42e29845fe5de615444ec636966c"
+                "reference": "83addc0e8a229e10ebdd5d2b08f00af538f427a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/41d6f44ff92d42e29845fe5de615444ec636966c",
-                "reference": "41d6f44ff92d42e29845fe5de615444ec636966c",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/83addc0e8a229e10ebdd5d2b08f00af538f427a9",
+                "reference": "83addc0e8a229e10ebdd5d2b08f00af538f427a9",
                 "shasum": ""
             },
             "require": {
@@ -653,7 +653,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-26T16:05:04+00:00"
+            "time": "2022-01-30T19:51:38+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1359,12 +1359,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "f5be4183cece3223ab3b6683759c4425c45a021b"
+                "reference": "f8de44c35f990f60680dc1973df3a618f316a35a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/f5be4183cece3223ab3b6683759c4425c45a021b",
-                "reference": "f5be4183cece3223ab3b6683759c4425c45a021b",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/f8de44c35f990f60680dc1973df3a618f316a35a",
+                "reference": "f8de44c35f990f60680dc1973df3a618f316a35a",
                 "shasum": ""
             },
             "require": {
@@ -1394,13 +1394,13 @@
                 "doctrine/annotations": "^1.13",
                 "doctrine/coding-standard": "^9.0",
                 "phpbench/phpbench": "^0.16.10 || ^1.0",
-                "phpstan/phpstan": "1.4.1",
+                "phpstan/phpstan": "1.4.3",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.4",
                 "psr/log": "^1 || ^2 || ^3",
                 "squizlabs/php_codesniffer": "3.6.2",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
                 "symfony/yaml": "^3.4 || ^4.0 || ^5.0 || ^6.0",
-                "vimeo/psalm": "4.18.1"
+                "vimeo/psalm": "4.19.0"
             },
             "suggest": {
                 "symfony/cache": "Provides cache support for Setup Tool with doctrine/cache 2.0",
@@ -1451,7 +1451,7 @@
                 "issues": "https://github.com/doctrine/orm/issues",
                 "source": "https://github.com/doctrine/orm/tree/2.12.x"
             },
-            "time": "2022-01-24T08:39:48+00:00"
+            "time": "2022-01-31T07:13:10+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -2651,12 +2651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-form.git",
-                "reference": "beee25df568f1140d5553eabe51f97c6643f0464"
+                "reference": "ac8e8b1663a7cd44e06c7adede38ba140b936845"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-form/zipball/beee25df568f1140d5553eabe51f97c6643f0464",
-                "reference": "beee25df568f1140d5553eabe51f97c6643f0464",
+                "url": "https://api.github.com/repos/laminas/laminas-form/zipball/ac8e8b1663a7cd44e06c7adede38ba140b936845",
+                "reference": "ac8e8b1663a7cd44e06c7adede38ba140b936845",
                 "shasum": ""
             },
             "require": {
@@ -2742,7 +2742,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-03T06:38:20+00:00"
+            "time": "2022-01-28T16:03:11+00:00"
         },
         {
             "name": "laminas/laminas-http",
@@ -3830,12 +3830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc-plugin-fileprg.git",
-                "reference": "8c795ed57b83858ea032a44045a6642b05c27ee6"
+                "reference": "a2ec22e7051530cda0ed84f459dec512168cba01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-fileprg/zipball/8c795ed57b83858ea032a44045a6642b05c27ee6",
-                "reference": "8c795ed57b83858ea032a44045a6642b05c27ee6",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-fileprg/zipball/a2ec22e7051530cda0ed84f459dec512168cba01",
+                "reference": "a2ec22e7051530cda0ed84f459dec512168cba01",
                 "shasum": ""
             },
             "require": {
@@ -3892,7 +3892,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-01-05T23:34:13+00:00"
+            "time": "2022-01-29T01:02:20+00:00"
         },
         {
             "name": "laminas/laminas-mvc-plugin-flashmessenger",
@@ -4472,12 +4472,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "84935fcf1229c37ce330baa26470dde8e294f83c"
+                "reference": "d609ce1abed497cebad35f59878060110b479697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/84935fcf1229c37ce330baa26470dde8e294f83c",
-                "reference": "84935fcf1229c37ce330baa26470dde8e294f83c",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/d609ce1abed497cebad35f59878060110b479697",
+                "reference": "d609ce1abed497cebad35f59878060110b479697",
                 "shasum": ""
             },
             "require": {
@@ -4551,7 +4551,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-01-26T00:00:24+00:00"
+            "time": "2022-01-29T01:16:33+00:00"
         },
         {
             "name": "laminas/laminas-session",
@@ -5612,12 +5612,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "785bcf264db2fb29adaf1f968cd40873f2ad0b59"
+                "reference": "e3e9179f275a44b8e462816d1c65958ff90c4c96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/785bcf264db2fb29adaf1f968cd40873f2ad0b59",
-                "reference": "785bcf264db2fb29adaf1f968cd40873f2ad0b59",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/e3e9179f275a44b8e462816d1c65958ff90c4c96",
+                "reference": "e3e9179f275a44b8e462816d1c65958ff90c4c96",
                 "shasum": ""
             },
             "require": {
@@ -5703,7 +5703,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-05T01:27:30+00:00"
+            "time": "2022-01-29T19:05:59+00:00"
         },
         {
             "name": "setasign/fpdi",
@@ -5783,12 +5783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d17ef891bd42ecb5b50267aeb2e44817fdcbabb3"
+                "reference": "045a69969ae7c54240452dec7399aaedd0476a2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d17ef891bd42ecb5b50267aeb2e44817fdcbabb3",
-                "reference": "d17ef891bd42ecb5b50267aeb2e44817fdcbabb3",
+                "url": "https://api.github.com/repos/symfony/console/zipball/045a69969ae7c54240452dec7399aaedd0476a2b",
+                "reference": "045a69969ae7c54240452dec7399aaedd0476a2b",
                 "shasum": ""
             },
             "require": {
@@ -5870,7 +5870,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-24T15:12:01+00:00"
+            "time": "2022-01-27T10:12:23+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -7016,7 +7016,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "6f4fcc2fee9aa59a8d3cccccd01cd52bb0b0b1bf"
+                "reference": "e3ae361e8b847f467ff994de65fe5765f3aaa396"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7034,7 +7034,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2022-01-06T14:12:23+00:00"
+            "time": "2022-01-27T08:06:47+00:00"
         },
         {
             "name": "unicaen/console",

@@ -18,7 +18,7 @@ trait <classname>
 
     /**
      * @param <targetClassname>|null $<variable>
-     *
+     *                      
      * @return self
      */
     public function set<method>( ?<targetClassname> $<variable> )
@@ -30,15 +30,12 @@ trait <classname>
 <if useGetter notrim>
 
 
-    /**
-     * @return <targetClassname>
-     */
     public function get<method>(): ?<targetClassname>
     {
         if (!$this-><variable>){
             $this-><variable> = \Application::$container->get('FormElementManager')->get(<targetClassname>::class);
         }
-
+        
         return $this-><variable>;
     }
 <endif useGetter>

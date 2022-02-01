@@ -12,16 +12,16 @@ namespace <namespace>;
  */
 trait <classname>
 {
-    protected ?<targetClassname> $<variable>;
+    protected ?<targetClassname> $<variable> = null;
 
 
 
     /**
-     * @param <targetClassname>|null $<variable>
+     * @param <targetClassname> $<variable>
      *                      
      * @return self
      */
-    public function set<method>( ?<targetClassname> $<variable> )
+    public function set<method>( <targetClassname> $<variable> )
     {
         $this-><variable> = $<variable>;
 
@@ -32,7 +32,7 @@ trait <classname>
 
     public function get<method>(): ?<targetClassname>
     {
-        if (!$this-><variable>){
+        if (empty($this-><variable>)){
             $this-><variable> = \Application::$container->get('FormElementManager')->get(<targetClassname>::class);
         }
         

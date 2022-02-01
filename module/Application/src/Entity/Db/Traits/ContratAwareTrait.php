@@ -11,31 +11,25 @@ use Application\Entity\Db\Contrat;
  */
 trait ContratAwareTrait
 {
-    /**
-     * @var Contrat
-     */
-    private $contrat;
-
-
+    protected ?Contrat $contrat;
 
 
 
     /**
-     * @param Contrat $contrat
+     * @param Contrat|null $contrat
+     *
      * @return self
      */
-    public function setContrat( Contrat $contrat = null )
+    public function setContrat( ?Contrat $contrat )
     {
         $this->contrat = $contrat;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Contrat
-     */
-    public function getContrat()
+    public function getContrat(): ?Contrat
     {
         return $this->contrat;
     }

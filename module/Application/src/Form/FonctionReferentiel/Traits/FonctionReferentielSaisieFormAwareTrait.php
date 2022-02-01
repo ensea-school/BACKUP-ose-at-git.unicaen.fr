@@ -11,39 +11,30 @@ use Application\Form\FonctionReferentiel\FonctionReferentielSaisieForm;
  */
 trait FonctionReferentielSaisieFormAwareTrait
 {
-    /**
-     * @var FonctionReferentielSaisieForm
-     */
-    private $formFonctionReferentielSaisie;
+    protected ?FonctionReferentielSaisieForm $formFonctionReferentielFonctionReferentielSaisie;
 
 
 
     /**
-     * @param FonctionReferentielSaisieForm $formFonctionReferentielSaisie
+     * @param FonctionReferentielSaisieForm|null $formFonctionReferentielFonctionReferentielSaisie
      *
      * @return self
      */
-    public function setFormFonctionReferentielSaisie(FonctionReferentielSaisieForm $formFonctionReferentielSaisie)
+    public function setFormFonctionReferentielFonctionReferentielSaisie( ?FonctionReferentielSaisieForm $formFonctionReferentielFonctionReferentielSaisie )
     {
-        $this->formFonctionReferentielSaisie = $formFonctionReferentielSaisie;
+        $this->formFonctionReferentielFonctionReferentielSaisie = $formFonctionReferentielFonctionReferentielSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return FonctionReferentielSaisieForm
-     */
-    public function getFormFonctionReferentielSaisie()
+    public function getFormFonctionReferentielFonctionReferentielSaisie(): ?FonctionReferentielSaisieForm
     {
-        if (!empty($this->formFonctionReferentielSaisie)) {
-            return $this->formFonctionReferentielSaisie;
+        if (!$this->formFonctionReferentielFonctionReferentielSaisie){
+            $this->formFonctionReferentielFonctionReferentielSaisie = \Application::$container->get('FormElementManager')->get(FonctionReferentielSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(FonctionReferentielSaisieForm::class);
+        return $this->formFonctionReferentielFonctionReferentielSaisie;
     }
 }
-

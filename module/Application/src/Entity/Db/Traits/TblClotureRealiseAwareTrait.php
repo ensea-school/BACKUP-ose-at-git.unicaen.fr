@@ -11,31 +11,25 @@ use Application\Entity\Db\TblClotureRealise;
  */
 trait TblClotureRealiseAwareTrait
 {
-    /**
-     * @var TblClotureRealise
-     */
-    private $tblClotureRealise;
-
-
+    protected ?TblClotureRealise $tblClotureRealise;
 
 
 
     /**
-     * @param TblClotureRealise $tblClotureRealise
+     * @param TblClotureRealise|null $tblClotureRealise
+     *
      * @return self
      */
-    public function setTblClotureRealise( TblClotureRealise $tblClotureRealise = null )
+    public function setTblClotureRealise( ?TblClotureRealise $tblClotureRealise )
     {
         $this->tblClotureRealise = $tblClotureRealise;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblClotureRealise
-     */
-    public function getTblClotureRealise()
+    public function getTblClotureRealise(): ?TblClotureRealise
     {
         return $this->tblClotureRealise;
     }

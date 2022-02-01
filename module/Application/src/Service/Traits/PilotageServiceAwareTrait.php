@@ -11,19 +11,16 @@ use Application\Service\PilotageService;
  */
 trait PilotageServiceAwareTrait
 {
-    /**
-     * @var PilotageService
-     */
-    private $servicePilotage;
+    protected ?PilotageService $servicePilotage;
 
 
 
     /**
-     * @param PilotageService $servicePilotage
+     * @param PilotageService|null $servicePilotage
      *
      * @return self
      */
-    public function setServicePilotage(PilotageService $servicePilotage)
+    public function setServicePilotage( ?PilotageService $servicePilotage )
     {
         $this->servicePilotage = $servicePilotage;
 
@@ -32,12 +29,9 @@ trait PilotageServiceAwareTrait
 
 
 
-    /**
-     * @return PilotageService
-     */
-    public function getServicePilotage()
+    public function getServicePilotage(): ?PilotageService
     {
-        if (empty($this->servicePilotage)) {
+        if (!$this->servicePilotage){
             $this->servicePilotage = \Application::$container->get(PilotageService::class);
         }
 

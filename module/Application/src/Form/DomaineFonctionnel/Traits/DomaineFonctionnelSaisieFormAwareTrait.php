@@ -11,38 +11,30 @@ use Application\Form\DomaineFonctionnel\DomaineFonctionnelSaisieForm;
  */
 trait DomaineFonctionnelSaisieFormAwareTrait
 {
-    /**
-     * @var DomaineFonctionnelSaisieForm
-     */
-    private $formDomaineFonctionnelSaisie;
+    protected ?DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie;
 
 
 
     /**
-     * @param DomaineFonctionnelSaisieForm $formDomaineFonctionnelSaisie
+     * @param DomaineFonctionnelSaisieForm|null $formDomaineFonctionnelDomaineFonctionnelSaisie
      *
      * @return self
      */
-    public function setFormDomaineFonctionnelSaisie(DomaineFonctionnelSaisieForm $formDomaineFonctionnelSaisie)
+    public function setFormDomaineFonctionnelDomaineFonctionnelSaisie( ?DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie )
     {
-        $this->formDomaineFonctionnelSaisie = $formDomaineFonctionnelSaisie;
+        $this->formDomaineFonctionnelDomaineFonctionnelSaisie = $formDomaineFonctionnelDomaineFonctionnelSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return DomaineFonctionnelSaisieForm
-     */
-    public function getFormDomaineFonctionnelSaisie()
+    public function getFormDomaineFonctionnelDomaineFonctionnelSaisie(): ?DomaineFonctionnelSaisieForm
     {
-        if (!empty($this->formDomaineFonctionnelSaisie)) {
-            return $this->formDomaineFonctionnelSaisie;
+        if (!$this->formDomaineFonctionnelDomaineFonctionnelSaisie){
+            $this->formDomaineFonctionnelDomaineFonctionnelSaisie = \Application::$container->get('FormElementManager')->get(DomaineFonctionnelSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(DomaineFonctionnelSaisieForm::class);
+        return $this->formDomaineFonctionnelDomaineFonctionnelSaisie;
     }
 }

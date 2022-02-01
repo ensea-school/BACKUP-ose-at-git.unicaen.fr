@@ -7,41 +7,34 @@ use Application\Form\OffreFormation\TauxMixite\TauxMixiteFieldset;
 /**
  * Description of TauxMixiteFieldsetAwareTrait
  *
+ * @author UnicaenCode
  */
 trait TauxMixiteFieldsetAwareTrait
 {
-    /**
-     * @var TauxMixiteFieldset
-     */
-    private $fieldsetOffreFormationTauxMixite;
+    protected ?TauxMixiteFieldset $formOffreFormationTauxMixiteTauxMixiteFieldset;
 
 
 
     /**
-     * @param TauxMixiteFieldset $fieldsetOffreFormationTauxMixite
+     * @param TauxMixiteFieldset|null $formOffreFormationTauxMixiteTauxMixiteFieldset
      *
      * @return self
      */
-    public function setFieldsetOffreFormationTauxMixite(TauxMixiteFieldset $fieldsetOffreFormationTauxMixite)
+    public function setFormOffreFormationTauxMixiteTauxMixiteFieldset( ?TauxMixiteFieldset $formOffreFormationTauxMixiteTauxMixiteFieldset )
     {
-        $this->fieldsetOffreFormationTauxMixite = $fieldsetOffreFormationTauxMixite;
+        $this->formOffreFormationTauxMixiteTauxMixiteFieldset = $formOffreFormationTauxMixiteTauxMixiteFieldset;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TauxMixiteFieldset
-     */
-    public function getFieldsetOffreFormationTauxMixite()
+    public function getFormOffreFormationTauxMixiteTauxMixiteFieldset(): ?TauxMixiteFieldset
     {
-        if (!empty($this->fieldsetOffreFormationTauxMixite)) {
-            return $this->fieldsetOffreFormationTauxMixite;
+        if (!$this->formOffreFormationTauxMixiteTauxMixiteFieldset){
+            $this->formOffreFormationTauxMixiteTauxMixiteFieldset = \Application::$container->get('FormElementManager')->get(TauxMixiteFieldset::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(TauxMixiteFieldset::class);
+        return $this->formOffreFormationTauxMixiteTauxMixiteFieldset;
     }
 }

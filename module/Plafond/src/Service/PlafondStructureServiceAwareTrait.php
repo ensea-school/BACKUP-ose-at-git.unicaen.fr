@@ -10,19 +10,16 @@ namespace Plafond\Service;
  */
 trait PlafondStructureServiceAwareTrait
 {
-    /**
-     * @var PlafondStructureService
-     */
-    protected $servicePlafondStructure;
+    protected ?PlafondStructureService $servicePlafondStructure;
 
 
 
     /**
-     * @param PlafondStructureService $servicePlafondStructure
+     * @param PlafondStructureService|null $servicePlafondStructure
      *
      * @return self
      */
-    public function setServicePlafondStructure( PlafondStructureService $servicePlafondStructure )
+    public function setServicePlafondStructure( ?PlafondStructureService $servicePlafondStructure )
     {
         $this->servicePlafondStructure = $servicePlafondStructure;
 
@@ -31,9 +28,6 @@ trait PlafondStructureServiceAwareTrait
 
 
 
-    /**
-     * @return PlafondStructureService
-     */
     public function getServicePlafondStructure(): ?PlafondStructureService
     {
         if (!$this->servicePlafondStructure){

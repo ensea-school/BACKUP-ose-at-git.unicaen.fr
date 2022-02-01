@@ -4,40 +4,37 @@ namespace Application\Form\CentreCout\Traits;
 
 use Application\Form\CentreCout\CentreCoutActiviteSaisieForm;
 
+/**
+ * Description of CentreCoutActiviteSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait CentreCoutActiviteSaisieFormAwareTrait
 {
-    /**
-     * @var CentreCoutActiviteSaisieForm
-     */
-    private $formCentreCoutActiviteSaisie;
+    protected ?CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie;
 
 
 
     /**
-     * @param CentreCoutSaisieForm $formCentreCoutActiviteSaisie
+     * @param CentreCoutActiviteSaisieForm|null $formCentreCoutCentreCoutActiviteSaisie
      *
      * @return self
      */
-    public function setFormCentreCoutActiviteSaisie(CentreCoutActiviteSaisieForm $formCentreCoutActiviteSaisie)
+    public function setFormCentreCoutCentreCoutActiviteSaisie( ?CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie )
     {
-        $this->formCentreCoutActiviteSaisie = $formCentreCoutActiviteSaisie;
+        $this->formCentreCoutCentreCoutActiviteSaisie = $formCentreCoutCentreCoutActiviteSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return CentreCoutActiviteSaisieForm
-     */
-    public function getFormCentreCoutActiviteSaisie()
+    public function getFormCentreCoutCentreCoutActiviteSaisie(): ?CentreCoutActiviteSaisieForm
     {
-        if (!empty($this->formCentreCoutActiviteSaisie)) {
-            return $this->formCentreCoutActiviteSaisie;
+        if (!$this->formCentreCoutCentreCoutActiviteSaisie){
+            $this->formCentreCoutCentreCoutActiviteSaisie = \Application::$container->get('FormElementManager')->get(CentreCoutActiviteSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(CentreCoutActiviteSaisieForm::class);
+        return $this->formCentreCoutCentreCoutActiviteSaisie;
     }
 }

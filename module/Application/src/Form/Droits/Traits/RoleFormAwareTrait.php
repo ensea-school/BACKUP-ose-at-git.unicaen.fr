@@ -11,19 +11,16 @@ use Application\Form\Droits\RoleForm;
  */
 trait RoleFormAwareTrait
 {
-    /**
-     * @var RoleForm
-     */
-    private $formDroitsRole;
+    protected ?RoleForm $formDroitsRole;
 
 
 
     /**
-     * @param RoleForm $formDroitsRole
+     * @param RoleForm|null $formDroitsRole
      *
      * @return self
      */
-    public function setFormDroitsRole(RoleForm $formDroitsRole)
+    public function setFormDroitsRole( ?RoleForm $formDroitsRole )
     {
         $this->formDroitsRole = $formDroitsRole;
 
@@ -32,17 +29,12 @@ trait RoleFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return RoleForm
-     */
-    public function getFormDroitsRole()
+    public function getFormDroitsRole(): ?RoleForm
     {
-        if (!empty($this->formDroitsRole)) {
-            return $this->formDroitsRole;
+        if (!$this->formDroitsRole){
+            $this->formDroitsRole = \Application::$container->get('FormElementManager')->get(RoleForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get('UnicaenAuth\Form\Droits\Role');
+        return $this->formDroitsRole;
     }
 }

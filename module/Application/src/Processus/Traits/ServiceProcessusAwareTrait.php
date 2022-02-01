@@ -11,19 +11,16 @@ use Application\Processus\ServiceProcessus;
  */
 trait ServiceProcessusAwareTrait
 {
-    /**
-     * @var ServiceProcessus
-     */
-    private $processusService;
+    protected ?ServiceProcessus $processusService;
 
 
 
     /**
-     * @param ServiceProcessus $processusService
+     * @param ServiceProcessus|null $processusService
      *
      * @return self
      */
-    public function setProcessusService(ServiceProcessus $processusService)
+    public function setProcessusService( ?ServiceProcessus $processusService )
     {
         $this->processusService = $processusService;
 
@@ -32,12 +29,9 @@ trait ServiceProcessusAwareTrait
 
 
 
-    /**
-     * @return ServiceProcessus
-     */
-    public function getProcessusService()
+    public function getProcessusService(): ?ServiceProcessus
     {
-        if (empty($this->processusService)) {
+        if (!$this->processusService){
             $this->processusService = \Application::$container->get(ServiceProcessus::class);
         }
 

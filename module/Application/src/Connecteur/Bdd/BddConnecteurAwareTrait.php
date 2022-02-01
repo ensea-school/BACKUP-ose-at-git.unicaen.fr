@@ -3,32 +3,33 @@
 namespace Application\Connecteur\Bdd;
 
 
+/**
+ * Description of BddConnecteurAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait BddConnecteurAwareTrait
 {
-    /**
-     * @var BddConnecteur
-     */
-    private $bdd;
-
-
-
-    public function getBdd(): BddConnecteur
-    {
-        return $this->bdd;
-    }
+    protected ?BddConnecteur $connecteurBddBdd;
 
 
 
     /**
-     * @param BddConnecteur $bdd
+     * @param BddConnecteur|null $connecteurBddBdd
      *
-     * @return BddConnecteurAwareTrait
+     * @return self
      */
-    public function setBdd($bdd)
+    public function setConnecteurBddBdd( ?BddConnecteur $connecteurBddBdd )
     {
-        $this->bdd = $bdd;
+        $this->connecteurBddBdd = $connecteurBddBdd;
 
         return $this;
     }
 
+
+
+    public function getConnecteurBddBdd(): ?BddConnecteur
+    {
+        return $this->connecteurBddBdd;
+    }
 }

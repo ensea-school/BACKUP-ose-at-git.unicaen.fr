@@ -11,31 +11,25 @@ use Application\Entity\Db\TauxHoraireHETD;
  */
 trait TauxHoraireHETDAwareTrait
 {
-    /**
-     * @var TauxHoraireHETD
-     */
-    private $tauxHoraireHETD;
-
-
+    protected ?TauxHoraireHETD $tauxHoraireHETD;
 
 
 
     /**
-     * @param TauxHoraireHETD $tauxHoraireHETD
+     * @param TauxHoraireHETD|null $tauxHoraireHETD
+     *
      * @return self
      */
-    public function setTauxHoraireHETD( TauxHoraireHETD $tauxHoraireHETD = null )
+    public function setTauxHoraireHETD( ?TauxHoraireHETD $tauxHoraireHETD )
     {
         $this->tauxHoraireHETD = $tauxHoraireHETD;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TauxHoraireHETD
-     */
-    public function getTauxHoraireHETD()
+    public function getTauxHoraireHETD(): ?TauxHoraireHETD
     {
         return $this->tauxHoraireHETD;
     }

@@ -2,42 +2,39 @@
 
 namespace Application\Form\Voirie\Traits;
 
-
 use Application\Form\Voirie\VoirieSaisieForm;
 
 /**
  * Description of VoirieSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait VoirieSaisieFormAwareTrait
 {
-    /**
-     * @var VoirieSaisieForm
-     */
-    private $formVoirieSaisie;
+    protected ?VoirieSaisieForm $formVoirieVoirieSaisie;
 
 
 
     /**
-     * @param VoirieSaisieForm $formVoirieSaisie
+     * @param VoirieSaisieForm|null $formVoirieVoirieSaisie
      *
      * @return self
      */
-    public function setFormVoirieSaisie(VoirieSaisieForm $formVoirieSaisie)
+    public function setFormVoirieVoirieSaisie( ?VoirieSaisieForm $formVoirieVoirieSaisie )
     {
-        $this->formVoirieSaisie = $formVoirieSaisie;
+        $this->formVoirieVoirieSaisie = $formVoirieVoirieSaisie;
 
         return $this;
     }
 
 
 
-    public function getFormVoirieSaisie(): VoirieSaisieForm
+    public function getFormVoirieVoirieSaisie(): ?VoirieSaisieForm
     {
-        if (!empty($this->formVoirieSaisie)) {
-            return $this->formVoirieSaisie;
+        if (!$this->formVoirieVoirieSaisie){
+            $this->formVoirieVoirieSaisie = \Application::$container->get('FormElementManager')->get(VoirieSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(VoirieSaisieForm::class);
+        return $this->formVoirieVoirieSaisie;
     }
 }
-

@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\TypePieceJointeStatutService;
 
 /**
- * Description of TypePieceJointeStatutAwareTrait
+ * Description of TypePieceJointeStatutServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypePieceJointeStatutServiceAwareTrait
 {
-    /**
-     * @var TypePieceJointeStatutService
-     */
-    private $serviceTypePieceJointeStatut;
+    protected ?TypePieceJointeStatutService $serviceTypePieceJointeStatut;
 
 
 
     /**
-     * @param TypePieceJointeStatutService $serviceTypePieceJointeStatut
+     * @param TypePieceJointeStatutService|null $serviceTypePieceJointeStatut
      *
      * @return self
      */
-    public function setServiceTypePieceJointeStatut(TypePieceJointeStatutService $serviceTypePieceJointeStatut)
+    public function setServiceTypePieceJointeStatut( ?TypePieceJointeStatutService $serviceTypePieceJointeStatut )
     {
         $this->serviceTypePieceJointeStatut = $serviceTypePieceJointeStatut;
 
@@ -32,12 +29,9 @@ trait TypePieceJointeStatutServiceAwareTrait
 
 
 
-    /**
-     * @return TypePieceJointeStatutService
-     */
-    public function getServiceTypePieceJointeStatut()
+    public function getServiceTypePieceJointeStatut(): ?TypePieceJointeStatutService
     {
-        if (empty($this->serviceTypePieceJointeStatut)) {
+        if (!$this->serviceTypePieceJointeStatut){
             $this->serviceTypePieceJointeStatut = \Application::$container->get(TypePieceJointeStatutService::class);
         }
 

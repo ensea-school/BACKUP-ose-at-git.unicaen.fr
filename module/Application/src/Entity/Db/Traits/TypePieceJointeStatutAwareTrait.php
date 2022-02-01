@@ -11,31 +11,25 @@ use Application\Entity\Db\TypePieceJointeStatut;
  */
 trait TypePieceJointeStatutAwareTrait
 {
-    /**
-     * @var TypePieceJointeStatut
-     */
-    private $typePieceJointeStatut;
-
-
+    protected ?TypePieceJointeStatut $typePieceJointeStatut;
 
 
 
     /**
-     * @param TypePieceJointeStatut $typePieceJointeStatut
+     * @param TypePieceJointeStatut|null $typePieceJointeStatut
+     *
      * @return self
      */
-    public function setTypePieceJointeStatut( TypePieceJointeStatut $typePieceJointeStatut = null )
+    public function setTypePieceJointeStatut( ?TypePieceJointeStatut $typePieceJointeStatut )
     {
         $this->typePieceJointeStatut = $typePieceJointeStatut;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypePieceJointeStatut
-     */
-    public function getTypePieceJointeStatut()
+    public function getTypePieceJointeStatut(): ?TypePieceJointeStatut
     {
         return $this->typePieceJointeStatut;
     }

@@ -2,6 +2,7 @@
 
 namespace Plafond\Form;
 
+
 /**
  * Description of PlafondFormAwareTrait
  *
@@ -9,19 +10,16 @@ namespace Plafond\Form;
  */
 trait PlafondFormAwareTrait
 {
-    /**
-     * @var PlafondForm
-     */
-    protected $formPlafond;
+    protected ?PlafondForm $formPlafond;
 
 
 
     /**
-     * @param PlafondForm $formPlafond
+     * @param PlafondForm|null $formPlafond
      *
      * @return self
      */
-    public function setFormPlafond(PlafondForm $formPlafond)
+    public function setFormPlafond( ?PlafondForm $formPlafond )
     {
         $this->formPlafond = $formPlafond;
 
@@ -30,15 +28,12 @@ trait PlafondFormAwareTrait
 
 
 
-    /**
-     * @return PlafondForm
-     */
     public function getFormPlafond(): ?PlafondForm
     {
-        if ($this->formPlafond) {
-            return $this->formPlafond;
-        } else {
-            return \Application::$container->get('FormElementManager')->get(PlafondForm::class);
+        if (!$this->formPlafond){
+            $this->formPlafond = \Application::$container->get('FormElementManager')->get(PlafondForm::class);
         }
+
+        return $this->formPlafond;
     }
 }

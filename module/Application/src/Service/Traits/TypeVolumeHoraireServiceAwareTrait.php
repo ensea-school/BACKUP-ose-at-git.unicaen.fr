@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\TypeVolumeHoraireService;
 
 /**
- * Description of TypeVolumeHoraireAwareTrait
+ * Description of TypeVolumeHoraireServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeVolumeHoraireServiceAwareTrait
 {
-    /**
-     * @var TypeVolumeHoraireService
-     */
-    private $serviceTypeVolumeHoraire;
+    protected ?TypeVolumeHoraireService $serviceTypeVolumeHoraire;
 
 
 
     /**
-     * @param TypeVolumeHoraireService $serviceTypeVolumeHoraire
+     * @param TypeVolumeHoraireService|null $serviceTypeVolumeHoraire
      *
      * @return self
      */
-    public function setServiceTypeVolumeHoraire(TypeVolumeHoraireService $serviceTypeVolumeHoraire)
+    public function setServiceTypeVolumeHoraire( ?TypeVolumeHoraireService $serviceTypeVolumeHoraire )
     {
         $this->serviceTypeVolumeHoraire = $serviceTypeVolumeHoraire;
 
@@ -32,12 +29,9 @@ trait TypeVolumeHoraireServiceAwareTrait
 
 
 
-    /**
-     * @return TypeVolumeHoraireService
-     */
-    public function getServiceTypeVolumeHoraire()
+    public function getServiceTypeVolumeHoraire(): ?TypeVolumeHoraireService
     {
-        if (empty($this->serviceTypeVolumeHoraire)) {
+        if (!$this->serviceTypeVolumeHoraire){
             $this->serviceTypeVolumeHoraire = \Application::$container->get(TypeVolumeHoraireService::class);
         }
 

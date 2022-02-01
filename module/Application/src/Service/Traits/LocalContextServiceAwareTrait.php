@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\LocalContextService;
 
 /**
- * Description of LocalContextAwareTrait
+ * Description of LocalContextServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait LocalContextServiceAwareTrait
 {
-    /**
-     * @var LocalContextService
-     */
-    private $serviceLocalContext;
+    protected ?LocalContextService $serviceLocalContext;
 
 
 
     /**
-     * @param LocalContextService $serviceLocalContext
+     * @param LocalContextService|null $serviceLocalContext
      *
      * @return self
      */
-    public function setServiceLocalContext(LocalContextService $serviceLocalContext)
+    public function setServiceLocalContext( ?LocalContextService $serviceLocalContext )
     {
         $this->serviceLocalContext = $serviceLocalContext;
 
@@ -32,12 +29,9 @@ trait LocalContextServiceAwareTrait
 
 
 
-    /**
-     * @return LocalContextService
-     */
-    public function getServiceLocalContext()
+    public function getServiceLocalContext(): ?LocalContextService
     {
-        if (empty($this->serviceLocalContext)) {
+        if (!$this->serviceLocalContext){
             $this->serviceLocalContext = \Application::$container->get(LocalContextService::class);
         }
 

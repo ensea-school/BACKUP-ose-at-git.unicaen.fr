@@ -11,31 +11,25 @@ use Application\Entity\Db\CentreCout;
  */
 trait CentreCoutAwareTrait
 {
-    /**
-     * @var CentreCout
-     */
-    private $centreCout;
-
-
+    protected ?CentreCout $centreCout;
 
 
 
     /**
-     * @param CentreCout $centreCout
+     * @param CentreCout|null $centreCout
+     *
      * @return self
      */
-    public function setCentreCout( CentreCout $centreCout = null )
+    public function setCentreCout( ?CentreCout $centreCout )
     {
         $this->centreCout = $centreCout;
+
         return $this;
     }
 
 
 
-    /**
-     * @return CentreCout
-     */
-    public function getCentreCout()
+    public function getCentreCout(): ?CentreCout
     {
         return $this->centreCout;
     }

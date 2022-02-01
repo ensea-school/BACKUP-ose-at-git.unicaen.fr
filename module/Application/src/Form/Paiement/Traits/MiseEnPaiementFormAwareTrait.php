@@ -11,19 +11,16 @@ use Application\Form\Paiement\MiseEnPaiementForm;
  */
 trait MiseEnPaiementFormAwareTrait
 {
-    /**
-     * @var MiseEnPaiementForm
-     */
-    private $formPaiementMiseEnPaiement;
+    protected ?MiseEnPaiementForm $formPaiementMiseEnPaiement;
 
 
 
     /**
-     * @param MiseEnPaiementForm $formPaiementMiseEnPaiement
+     * @param MiseEnPaiementForm|null $formPaiementMiseEnPaiement
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiement(MiseEnPaiementForm $formPaiementMiseEnPaiement)
+    public function setFormPaiementMiseEnPaiement( ?MiseEnPaiementForm $formPaiementMiseEnPaiement )
     {
         $this->formPaiementMiseEnPaiement = $formPaiementMiseEnPaiement;
 
@@ -32,17 +29,12 @@ trait MiseEnPaiementFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return MiseEnPaiementForm
-     */
-    public function getFormPaiementMiseEnPaiement()
+    public function getFormPaiementMiseEnPaiement(): ?MiseEnPaiementForm
     {
-        if (!empty($this->formPaiementMiseEnPaiement)) {
-            return $this->formPaiementMiseEnPaiement;
+        if (!$this->formPaiementMiseEnPaiement){
+            $this->formPaiementMiseEnPaiement = \Application::$container->get('FormElementManager')->get(MiseEnPaiementForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(MiseEnPaiementForm::class);
+        return $this->formPaiementMiseEnPaiement;
     }
 }

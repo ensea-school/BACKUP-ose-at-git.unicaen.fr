@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeAgrement;
  */
 trait TypeAgrementAwareTrait
 {
-    /**
-     * @var TypeAgrement
-     */
-    private $typeAgrement;
-
-
+    protected ?TypeAgrement $typeAgrement;
 
 
 
     /**
-     * @param TypeAgrement $typeAgrement
+     * @param TypeAgrement|null $typeAgrement
+     *
      * @return self
      */
-    public function setTypeAgrement( TypeAgrement $typeAgrement = null )
+    public function setTypeAgrement( ?TypeAgrement $typeAgrement )
     {
         $this->typeAgrement = $typeAgrement;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeAgrement
-     */
-    public function getTypeAgrement()
+    public function getTypeAgrement(): ?TypeAgrement
     {
         return $this->typeAgrement;
     }

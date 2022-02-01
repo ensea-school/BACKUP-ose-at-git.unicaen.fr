@@ -10,19 +10,16 @@ namespace Plafond\Form;
  */
 trait PlafondConfigFormAwareTrait
 {
-    /**
-     * @var PlafondConfigForm
-     */
-    protected $formPlafondConfig;
+    protected ?PlafondConfigForm $formPlafondConfig;
 
 
 
     /**
-     * @param PlafondConfigForm $formPlafondConfig
+     * @param PlafondConfigForm|null $formPlafondConfig
      *
      * @return self
      */
-    public function setFormPlafondConfig( PlafondConfigForm $formPlafondConfig )
+    public function setFormPlafondConfig( ?PlafondConfigForm $formPlafondConfig )
     {
         $this->formPlafondConfig = $formPlafondConfig;
 
@@ -31,9 +28,6 @@ trait PlafondConfigFormAwareTrait
 
 
 
-    /**
-     * @return PlafondConfigForm
-     */
     public function getFormPlafondConfig(): ?PlafondConfigForm
     {
         if (!$this->formPlafondConfig){

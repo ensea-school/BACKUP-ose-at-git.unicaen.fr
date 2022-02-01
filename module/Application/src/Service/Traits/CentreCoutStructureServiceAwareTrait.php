@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\CentreCoutStructureService;
 
 /**
- * Description of ParametresAwareTrait
+ * Description of CentreCoutStructureServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait CentreCoutStructureServiceAwareTrait
 {
-    /**
-     * @var ParametresService
-     */
-    private $serviceCentreCoutStructure;
+    protected ?CentreCoutStructureService $serviceCentreCoutStructure;
 
 
 
     /**
-     * @param CentreCoutStructureService $serviceCentreCoutStructure
+     * @param CentreCoutStructureService|null $serviceCentreCoutStructure
      *
      * @return self
      */
-    public function setServiceCentreCoutStructure(CentreCoutStructureService $serviceCentreCoutStructure)
+    public function setServiceCentreCoutStructure( ?CentreCoutStructureService $serviceCentreCoutStructure )
     {
         $this->serviceCentreCoutStructure = $serviceCentreCoutStructure;
 
@@ -32,12 +29,9 @@ trait CentreCoutStructureServiceAwareTrait
 
 
 
-    /**
-     * @return CentreCoutStructureService
-     */
-    public function getServiceCentreCoutStructure()
+    public function getServiceCentreCoutStructure(): ?CentreCoutStructureService
     {
-        if (empty($this->serviceCentreCoutStructure)) {
+        if (!$this->serviceCentreCoutStructure){
             $this->serviceCentreCoutStructure = \Application::$container->get(CentreCoutStructureService::class);
         }
 

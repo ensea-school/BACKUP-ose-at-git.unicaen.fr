@@ -11,38 +11,30 @@ use Application\Form\PieceJointe\TypePieceJointeSaisieForm;
  */
 trait TypePieceJointeSaisieFormAwareTrait
 {
-    /**
-     * @var TypePieceJointeSaisieForm
-     */
-    private $formTypePieceJointeSaisie;
+    protected ?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie;
 
 
 
     /**
-     * @param TypePieceJointeSaisieForm $formTypePieceJointeSaisie
+     * @param TypePieceJointeSaisieForm|null $formPieceJointeTypePieceJointeSaisie
      *
      * @return self
      */
-    public function setFormTypePieceJointeSaisie(TypePieceJointeSaisieForm $formTypePieceJointeSaisie)
+    public function setFormPieceJointeTypePieceJointeSaisie( ?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie )
     {
-        $this->formTypePieceJointeSaisie = $formTypePieceJointeSaisie;
+        $this->formPieceJointeTypePieceJointeSaisie = $formPieceJointeTypePieceJointeSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypePieceJointeSaisieForm
-     */
-    public function getFormTypePieceJointeSaisie()
+    public function getFormPieceJointeTypePieceJointeSaisie(): ?TypePieceJointeSaisieForm
     {
-        if (!empty($this->formTypePieceJointeSaisie)) {
-            return $this->formTypePieceJointeSaisie;
+        if (!$this->formPieceJointeTypePieceJointeSaisie){
+            $this->formPieceJointeTypePieceJointeSaisie = \Application::$container->get('FormElementManager')->get(TypePieceJointeSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(TypePieceJointeSaisieForm::class);
+        return $this->formPieceJointeTypePieceJointeSaisie;
     }
 }

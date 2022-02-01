@@ -11,19 +11,16 @@ use Application\Service\AdresseNumeroComplService;
  */
 trait AdresseNumeroComplServiceAwareTrait
 {
-    /**
-     * @var AdresseNumeroComplService
-     */
-    private $serviceAdresseNumeroCompl;
+    protected ?AdresseNumeroComplService $serviceAdresseNumeroCompl;
 
 
 
     /**
-     * @param AdresseNumeroComplService $serviceAdresseNumeroCompl
+     * @param AdresseNumeroComplService|null $serviceAdresseNumeroCompl
      *
      * @return self
      */
-    public function setServiceAdresseNumeroCompl(AdresseNumeroComplService $serviceAdresseNumeroCompl)
+    public function setServiceAdresseNumeroCompl( ?AdresseNumeroComplService $serviceAdresseNumeroCompl )
     {
         $this->serviceAdresseNumeroCompl = $serviceAdresseNumeroCompl;
 
@@ -32,12 +29,9 @@ trait AdresseNumeroComplServiceAwareTrait
 
 
 
-    /**
-     * @return AdresseNumeroComplService
-     */
-    public function getServiceAdresseNumeroCompl()
+    public function getServiceAdresseNumeroCompl(): ?AdresseNumeroComplService
     {
-        if (empty($this->serviceAdresseNumeroCompl)) {
+        if (!$this->serviceAdresseNumeroCompl){
             $this->serviceAdresseNumeroCompl = \Application::$container->get(AdresseNumeroComplService::class);
         }
 

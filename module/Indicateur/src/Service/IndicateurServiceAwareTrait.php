@@ -2,6 +2,7 @@
 
 namespace Indicateur\Service;
 
+
 /**
  * Description of IndicateurServiceAwareTrait
  *
@@ -9,19 +10,16 @@ namespace Indicateur\Service;
  */
 trait IndicateurServiceAwareTrait
 {
-    /**
-     * @var IndicateurService
-     */
-    private $serviceIndicateur;
+    protected ?IndicateurService $serviceIndicateur;
 
 
 
     /**
-     * @param IndicateurService $serviceIndicateur
+     * @param IndicateurService|null $serviceIndicateur
      *
      * @return self
      */
-    public function setServiceIndicateur(IndicateurService $serviceIndicateur)
+    public function setServiceIndicateur( ?IndicateurService $serviceIndicateur )
     {
         $this->serviceIndicateur = $serviceIndicateur;
 
@@ -30,12 +28,9 @@ trait IndicateurServiceAwareTrait
 
 
 
-    /**
-     * @return IndicateurService
-     */
-    public function getServiceIndicateur()
+    public function getServiceIndicateur(): ?IndicateurService
     {
-        if (empty($this->serviceIndicateur)) {
+        if (!$this->serviceIndicateur){
             $this->serviceIndicateur = \Application::$container->get(IndicateurService::class);
         }
 

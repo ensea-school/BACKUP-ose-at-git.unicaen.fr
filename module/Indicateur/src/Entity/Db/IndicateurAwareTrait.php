@@ -2,6 +2,7 @@
 
 namespace Indicateur\Entity\Db;
 
+
 /**
  * Description of IndicateurAwareTrait
  *
@@ -9,19 +10,16 @@ namespace Indicateur\Entity\Db;
  */
 trait IndicateurAwareTrait
 {
-    /**
-     * @var Indicateur
-     */
-    private $indicateur;
+    protected ?Indicateur $indicateur;
 
 
 
     /**
-     * @param Indicateur $indicateur
+     * @param Indicateur|null $indicateur
      *
      * @return self
      */
-    public function setIndicateur(Indicateur $indicateur = null)
+    public function setIndicateur( ?Indicateur $indicateur )
     {
         $this->indicateur = $indicateur;
 
@@ -30,10 +28,7 @@ trait IndicateurAwareTrait
 
 
 
-    /**
-     * @return Indicateur
-     */
-    public function getIndicateur()
+    public function getIndicateur(): ?Indicateur
     {
         return $this->indicateur;
     }

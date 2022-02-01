@@ -2,6 +2,7 @@
 
 namespace Indicateur\Entity\Db;
 
+
 /**
  * Description of NotificationIndicateurAwareTrait
  *
@@ -9,19 +10,16 @@ namespace Indicateur\Entity\Db;
  */
 trait NotificationIndicateurAwareTrait
 {
-    /**
-     * @var NotificationIndicateur
-     */
-    private $notificationIndicateur;
+    protected ?NotificationIndicateur $notificationIndicateur;
 
 
 
     /**
-     * @param NotificationIndicateur $notificationIndicateur
+     * @param NotificationIndicateur|null $notificationIndicateur
      *
      * @return self
      */
-    public function setNotificationIndicateur(NotificationIndicateur $notificationIndicateur = null)
+    public function setNotificationIndicateur( ?NotificationIndicateur $notificationIndicateur )
     {
         $this->notificationIndicateur = $notificationIndicateur;
 
@@ -30,10 +28,7 @@ trait NotificationIndicateurAwareTrait
 
 
 
-    /**
-     * @return NotificationIndicateur
-     */
-    public function getNotificationIndicateur()
+    public function getNotificationIndicateur(): ?NotificationIndicateur
     {
         return $this->notificationIndicateur;
     }

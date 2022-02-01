@@ -11,19 +11,16 @@ use Application\Service\ScenarioService;
  */
 trait ScenarioServiceAwareTrait
 {
-    /**
-     * @var ScenarioService
-     */
-    private $serviceScenario;
+    protected ?ScenarioService $serviceScenario;
 
 
 
     /**
-     * @param ScenarioService $serviceScenario
+     * @param ScenarioService|null $serviceScenario
      *
      * @return self
      */
-    public function setServiceScenario(ScenarioService $serviceScenario)
+    public function setServiceScenario( ?ScenarioService $serviceScenario )
     {
         $this->serviceScenario = $serviceScenario;
 
@@ -32,12 +29,9 @@ trait ScenarioServiceAwareTrait
 
 
 
-    /**
-     * @return ScenarioService
-     */
-    public function getServiceScenario()
+    public function getServiceScenario(): ?ScenarioService
     {
-        if (empty($this->serviceScenario)) {
+        if (!$this->serviceScenario){
             $this->serviceScenario = \Application::$container->get(ScenarioService::class);
         }
 

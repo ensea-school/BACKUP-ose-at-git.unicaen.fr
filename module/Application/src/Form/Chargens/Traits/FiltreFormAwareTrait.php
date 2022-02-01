@@ -11,19 +11,16 @@ use Application\Form\Chargens\FiltreForm;
  */
 trait FiltreFormAwareTrait
 {
-    /**
-     * @var FiltreForm
-     */
-    private $formChargensFiltre;
+    protected ?FiltreForm $formChargensFiltre;
 
 
 
     /**
-     * @param FiltreForm $formChargensFiltre
+     * @param FiltreForm|null $formChargensFiltre
      *
      * @return self
      */
-    public function setFormChargensFiltre(FiltreForm $formChargensFiltre)
+    public function setFormChargensFiltre( ?FiltreForm $formChargensFiltre )
     {
         $this->formChargensFiltre = $formChargensFiltre;
 
@@ -32,17 +29,12 @@ trait FiltreFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return FiltreForm
-     */
-    public function getFormChargensFiltre()
+    public function getFormChargensFiltre(): ?FiltreForm
     {
-        if (!empty($this->formChargensFiltre)) {
-            return $this->formChargensFiltre;
+        if (!$this->formChargensFiltre){
+            $this->formChargensFiltre = \Application::$container->get('FormElementManager')->get(FiltreForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(FiltreForm::class);
+        return $this->formChargensFiltre;
     }
 }

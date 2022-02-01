@@ -11,39 +11,30 @@ use Application\Form\Structure\StructureSaisieForm;
  */
 trait StructureSaisieFormAwareTrait
 {
-    /**
-     * @var StructureSaisieForm
-     */
-    private $formStructureSaisie;
+    protected ?StructureSaisieForm $formStructureStructureSaisie;
 
 
 
     /**
-     * @param StructureSaisieForm $formStructureSaisie
+     * @param StructureSaisieForm|null $formStructureStructureSaisie
      *
      * @return self
      */
-    public function setFormStructureSaisie(StructureSaisieForm $formStructureSaisie)
+    public function setFormStructureStructureSaisie( ?StructureSaisieForm $formStructureStructureSaisie )
     {
-        $this->formStructureSaisie = $formStructureSaisie;
+        $this->formStructureStructureSaisie = $formStructureStructureSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return StructureSaisieForm
-     */
-    public function getFormStructureSaisie()
+    public function getFormStructureStructureSaisie(): ?StructureSaisieForm
     {
-        if (!empty($this->formStructureSaisie)) {
-            return $this->formStructureSaisie;
+        if (!$this->formStructureStructureSaisie){
+            $this->formStructureStructureSaisie = \Application::$container->get('FormElementManager')->get(StructureSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(StructureSaisieForm::class);
+        return $this->formStructureStructureSaisie;
     }
 }
-

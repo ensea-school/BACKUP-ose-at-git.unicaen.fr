@@ -11,32 +11,30 @@ use Application\Entity\Db\TblServiceReferentiel;
  */
 trait TblServiceReferentielAwareTrait
 {
-    /**
-     * @var TblServiceReferentiel
-     */
-    private $tblServiceReferentiel;
-
-
+    protected ?TblServiceReferentiel $entityDbTblServiceReferentiel;
 
 
 
     /**
-     * @param TblServiceReferentiel $tblServiceReferentiel
+     * @param TblServiceReferentiel|null $entityDbTblServiceReferentiel
+     *
      * @return self
      */
-    public function setTblServiceReferentiel( TblServiceReferentiel $tblServiceReferentiel = null )
+    public function setEntityDbTblServiceReferentiel( ?TblServiceReferentiel $entityDbTblServiceReferentiel )
     {
-        $this->tblServiceReferentiel = $tblServiceReferentiel;
+        $this->entityDbTblServiceReferentiel = $entityDbTblServiceReferentiel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblServiceReferentiel
-     */
-    public function getTblServiceReferentiel()
+    public function getEntityDbTblServiceReferentiel(): ?TblServiceReferentiel
     {
-        return $this->tblServiceReferentiel;
+        if (!$this->entityDbTblServiceReferentiel){
+            $this->entityDbTblServiceReferentiel = \Application::$container->get(TblServiceReferentiel::class);
+        }
+
+        return $this->entityDbTblServiceReferentiel;
     }
 }

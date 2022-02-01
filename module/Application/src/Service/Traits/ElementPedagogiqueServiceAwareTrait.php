@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\ElementPedagogiqueService;
 
 /**
- * Description of ElementPedagogiqueAwareTrait
+ * Description of ElementPedagogiqueServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait ElementPedagogiqueServiceAwareTrait
 {
-    /**
-     * @var ElementPedagogiqueService
-     */
-    private $serviceElementPedagogique;
+    protected ?ElementPedagogiqueService $serviceElementPedagogique;
 
 
 
     /**
-     * @param ElementPedagogiqueService $serviceElementPedagogique
+     * @param ElementPedagogiqueService|null $serviceElementPedagogique
      *
      * @return self
      */
-    public function setServiceElementPedagogique(ElementPedagogiqueService $serviceElementPedagogique)
+    public function setServiceElementPedagogique( ?ElementPedagogiqueService $serviceElementPedagogique )
     {
         $this->serviceElementPedagogique = $serviceElementPedagogique;
 
@@ -32,12 +29,9 @@ trait ElementPedagogiqueServiceAwareTrait
 
 
 
-    /**
-     * @return ElementPedagogiqueService
-     */
-    public function getServiceElementPedagogique()
+    public function getServiceElementPedagogique(): ?ElementPedagogiqueService
     {
-        if (empty($this->serviceElementPedagogique)) {
+        if (!$this->serviceElementPedagogique){
             $this->serviceElementPedagogique = \Application::$container->get(ElementPedagogiqueService::class);
         }
 

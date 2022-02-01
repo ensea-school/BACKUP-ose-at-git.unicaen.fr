@@ -11,31 +11,25 @@ use Application\Entity\Db\TblPieceJointeDemande;
  */
 trait TblPieceJointeDemandeAwareTrait
 {
-    /**
-     * @var TblPieceJointeDemande
-     */
-    private $tblPieceJointeDemande;
-
-
+    protected ?TblPieceJointeDemande $tblPieceJointeDemande;
 
 
 
     /**
-     * @param TblPieceJointeDemande $tblPieceJointeDemande
+     * @param TblPieceJointeDemande|null $tblPieceJointeDemande
+     *
      * @return self
      */
-    public function setTblPieceJointeDemande( TblPieceJointeDemande $tblPieceJointeDemande = null )
+    public function setTblPieceJointeDemande( ?TblPieceJointeDemande $tblPieceJointeDemande )
     {
         $this->tblPieceJointeDemande = $tblPieceJointeDemande;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblPieceJointeDemande
-     */
-    public function getTblPieceJointeDemande()
+    public function getTblPieceJointeDemande(): ?TblPieceJointeDemande
     {
         return $this->tblPieceJointeDemande;
     }

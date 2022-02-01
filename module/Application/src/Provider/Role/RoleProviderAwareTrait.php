@@ -2,40 +2,38 @@
 
 namespace Application\Provider\Role;
 
+
+/**
+ * Description of RoleProviderAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait RoleProviderAwareTrait
 {
-
-    /**
-     * @var RoleProvider
-     */
-    private $providerRole;
+    protected ?RoleProvider $providerRoleRole;
 
 
 
     /**
-     * @param RoleProvider $providerRole
+     * @param RoleProvider|null $providerRoleRole
      *
      * @return self
      */
-    public function setProviderRole(RoleProvider $providerRole)
+    public function setProviderRoleRole( ?RoleProvider $providerRoleRole )
     {
-        $this->providerRole = $providerRole;
+        $this->providerRoleRole = $providerRoleRole;
 
         return $this;
     }
 
 
 
-    /**
-     * @return RoleProvider
-     */
-    public function getProviderRole()
+    public function getProviderRoleRole(): ?RoleProvider
     {
-        if (!$this->providerRole) {
-            $this->providerRole = \Application::$container->get(RoleProvider::class);
+        if (!$this->providerRoleRole){
+            $this->providerRoleRole = \Application::$container->get(RoleProvider::class);
         }
 
-        return $this->providerRole;
+        return $this->providerRoleRole;
     }
-
 }

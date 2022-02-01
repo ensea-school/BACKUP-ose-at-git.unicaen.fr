@@ -11,31 +11,25 @@ use Application\Entity\Db\TypePoste;
  */
 trait TypePosteAwareTrait
 {
-    /**
-     * @var TypePoste
-     */
-    private $typePoste;
-
-
+    protected ?TypePoste $typePoste;
 
 
 
     /**
-     * @param TypePoste $typePoste
+     * @param TypePoste|null $typePoste
+     *
      * @return self
      */
-    public function setTypePoste( TypePoste $typePoste = null )
+    public function setTypePoste( ?TypePoste $typePoste )
     {
         $this->typePoste = $typePoste;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypePoste
-     */
-    public function getTypePoste()
+    public function getTypePoste(): ?TypePoste
     {
         return $this->typePoste;
     }

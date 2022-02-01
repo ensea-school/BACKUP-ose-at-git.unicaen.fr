@@ -11,38 +11,30 @@ use Application\Form\TypeIntervention\TypeInterventionStructureSaisieForm;
  */
 trait TypeInterventionStructureSaisieFormAwareTrait
 {
-    /**
-     * @var TypeInterventionStructureSaisieForm
-     */
-    private $formTypeInterventionStructureSaisie;
+    protected ?TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie;
 
 
 
     /**
-     * @param TypeInterventionStructureSaisieForm $formTypeInterventionStructureSaisie
+     * @param TypeInterventionStructureSaisieForm|null $formTypeInterventionTypeInterventionStructureSaisie
      *
      * @return self
      */
-    public function setFormTypeInterventionStructureSaisie(TypeInterventionStructureSaisieForm $formTypeInterventionStructureSaisie)
+    public function setFormTypeInterventionTypeInterventionStructureSaisie( ?TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie )
     {
-        $this->formTypeInterventionStructureSaisie = $formTypeInterventionStructureSaisie;
+        $this->formTypeInterventionTypeInterventionStructureSaisie = $formTypeInterventionTypeInterventionStructureSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypeInterventionStructureSaisieForm
-     */
-    public function getFormTypeInterventionStructureSaisie()
+    public function getFormTypeInterventionTypeInterventionStructureSaisie(): ?TypeInterventionStructureSaisieForm
     {
-        if (!empty($this->formTypeInterventionStructureSaisie)) {
-            return $this->formTypeInterventionStructureSaisie;
+        if (!$this->formTypeInterventionTypeInterventionStructureSaisie){
+            $this->formTypeInterventionTypeInterventionStructureSaisie = \Application::$container->get('FormElementManager')->get(TypeInterventionStructureSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(TypeInterventionStructureSaisieForm::class);
+        return $this->formTypeInterventionTypeInterventionStructureSaisie;
     }
 }

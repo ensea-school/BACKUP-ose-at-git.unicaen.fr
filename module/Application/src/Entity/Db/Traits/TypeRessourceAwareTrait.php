@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeRessource;
  */
 trait TypeRessourceAwareTrait
 {
-    /**
-     * @var TypeRessource
-     */
-    private $typeRessource;
-
-
+    protected ?TypeRessource $typeRessource;
 
 
 
     /**
-     * @param TypeRessource $typeRessource
+     * @param TypeRessource|null $typeRessource
+     *
      * @return self
      */
-    public function setTypeRessource( TypeRessource $typeRessource = null )
+    public function setTypeRessource( ?TypeRessource $typeRessource )
     {
         $this->typeRessource = $typeRessource;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeRessource
-     */
-    public function getTypeRessource()
+    public function getTypeRessource(): ?TypeRessource
     {
         return $this->typeRessource;
     }

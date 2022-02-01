@@ -5,37 +5,31 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\TypeIntervenant;
 
 /**
- * Description of TypeIntervenantServiceAwareTrait
+ * Description of TypeIntervenantAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeIntervenantAwareTrait
 {
-    /**
-     * @var TypeIntervenant
-     */
-    private $typeIntervenant;
-
-
+    protected ?TypeIntervenant $typeIntervenant;
 
 
 
     /**
-     * @param TypeIntervenant $typeIntervenant
+     * @param TypeIntervenant|null $typeIntervenant
+     *
      * @return self
      */
-    public function setTypeIntervenant( TypeIntervenant $typeIntervenant = null )
+    public function setTypeIntervenant( ?TypeIntervenant $typeIntervenant )
     {
         $this->typeIntervenant = $typeIntervenant;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeIntervenant
-     */
-    public function getTypeIntervenant()
+    public function getTypeIntervenant(): ?TypeIntervenant
     {
         return $this->typeIntervenant;
     }

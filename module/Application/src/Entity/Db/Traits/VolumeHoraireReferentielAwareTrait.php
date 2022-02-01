@@ -11,31 +11,25 @@ use Application\Entity\Db\VolumeHoraireReferentiel;
  */
 trait VolumeHoraireReferentielAwareTrait
 {
-    /**
-     * @var VolumeHoraireReferentiel
-     */
-    private $volumeHoraireReferentiel;
-
-
+    protected ?VolumeHoraireReferentiel $volumeHoraireReferentiel;
 
 
 
     /**
-     * @param VolumeHoraireReferentiel $volumeHoraireReferentiel
+     * @param VolumeHoraireReferentiel|null $volumeHoraireReferentiel
+     *
      * @return self
      */
-    public function setVolumeHoraireReferentiel( VolumeHoraireReferentiel $volumeHoraireReferentiel = null )
+    public function setVolumeHoraireReferentiel( ?VolumeHoraireReferentiel $volumeHoraireReferentiel )
     {
         $this->volumeHoraireReferentiel = $volumeHoraireReferentiel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return VolumeHoraireReferentiel
-     */
-    public function getVolumeHoraireReferentiel()
+    public function getVolumeHoraireReferentiel(): ?VolumeHoraireReferentiel
     {
         return $this->volumeHoraireReferentiel;
     }

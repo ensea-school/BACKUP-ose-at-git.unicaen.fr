@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\TypeInterventionService;
 
 /**
- * Description of TypeInterventionAwareTrait
+ * Description of TypeInterventionServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeInterventionServiceAwareTrait
 {
-    /**
-     * @var TypeInterventionService
-     */
-    private $serviceTypeIntervention;
+    protected ?TypeInterventionService $serviceTypeIntervention;
 
 
 
     /**
-     * @param TypeInterventionService $serviceTypeIntervention
+     * @param TypeInterventionService|null $serviceTypeIntervention
      *
      * @return self
      */
-    public function setServiceTypeIntervention(TypeInterventionService $serviceTypeIntervention)
+    public function setServiceTypeIntervention( ?TypeInterventionService $serviceTypeIntervention )
     {
         $this->serviceTypeIntervention = $serviceTypeIntervention;
 
@@ -32,12 +29,9 @@ trait TypeInterventionServiceAwareTrait
 
 
 
-    /**
-     * @return TypeInterventionService
-     */
-    public function getServiceTypeIntervention()
+    public function getServiceTypeIntervention(): ?TypeInterventionService
     {
-        if (empty($this->serviceTypeIntervention)) {
+        if (!$this->serviceTypeIntervention){
             $this->serviceTypeIntervention = \Application::$container->get(TypeInterventionService::class);
         }
 

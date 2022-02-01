@@ -5,37 +5,31 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Structure;
 
 /**
- * Description of StructureServiceAwareTrait
+ * Description of StructureAwareTrait
  *
  * @author UnicaenCode
  */
 trait StructureAwareTrait
 {
-    /**
-     * @var Structure
-     */
-    private $structure;
-
-
+    protected ?Structure $structure;
 
 
 
     /**
-     * @param Structure $structure
+     * @param Structure|null $structure
+     *
      * @return self
      */
-    public function setStructure( Structure $structure = null )
+    public function setStructure( ?Structure $structure )
     {
         $this->structure = $structure;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Structure
-     */
-    public function getStructure()
+    public function getStructure(): ?Structure
     {
         return $this->structure;
     }

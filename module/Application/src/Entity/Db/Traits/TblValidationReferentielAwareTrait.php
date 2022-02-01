@@ -11,31 +11,25 @@ use Application\Entity\Db\TblValidationReferentiel;
  */
 trait TblValidationReferentielAwareTrait
 {
-    /**
-     * @var TblValidationReferentiel
-     */
-    private $tblValidationReferentiel;
-
-
+    protected ?TblValidationReferentiel $tblValidationReferentiel;
 
 
 
     /**
-     * @param TblValidationReferentiel $tblValidationReferentiel
+     * @param TblValidationReferentiel|null $tblValidationReferentiel
+     *
      * @return self
      */
-    public function setTblValidationReferentiel( TblValidationReferentiel $tblValidationReferentiel = null )
+    public function setTblValidationReferentiel( ?TblValidationReferentiel $tblValidationReferentiel )
     {
         $this->tblValidationReferentiel = $tblValidationReferentiel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblValidationReferentiel
-     */
-    public function getTblValidationReferentiel()
+    public function getTblValidationReferentiel(): ?TblValidationReferentiel
     {
         return $this->tblValidationReferentiel;
     }

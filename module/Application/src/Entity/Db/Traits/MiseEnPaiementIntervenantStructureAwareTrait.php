@@ -11,31 +11,25 @@ use Application\Entity\Db\MiseEnPaiementIntervenantStructure;
  */
 trait MiseEnPaiementIntervenantStructureAwareTrait
 {
-    /**
-     * @var MiseEnPaiementIntervenantStructure
-     */
-    private $miseEnPaiementIntervenantStructure;
-
-
+    protected ?MiseEnPaiementIntervenantStructure $miseEnPaiementIntervenantStructure;
 
 
 
     /**
-     * @param MiseEnPaiementIntervenantStructure $miseEnPaiementIntervenantStructure
+     * @param MiseEnPaiementIntervenantStructure|null $miseEnPaiementIntervenantStructure
+     *
      * @return self
      */
-    public function setMiseEnPaiementIntervenantStructure( MiseEnPaiementIntervenantStructure $miseEnPaiementIntervenantStructure = null )
+    public function setMiseEnPaiementIntervenantStructure( ?MiseEnPaiementIntervenantStructure $miseEnPaiementIntervenantStructure )
     {
         $this->miseEnPaiementIntervenantStructure = $miseEnPaiementIntervenantStructure;
+
         return $this;
     }
 
 
 
-    /**
-     * @return MiseEnPaiementIntervenantStructure
-     */
-    public function getMiseEnPaiementIntervenantStructure()
+    public function getMiseEnPaiementIntervenantStructure(): ?MiseEnPaiementIntervenantStructure
     {
         return $this->miseEnPaiementIntervenantStructure;
     }

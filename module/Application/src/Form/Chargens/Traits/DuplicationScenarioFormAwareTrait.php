@@ -11,19 +11,16 @@ use Application\Form\Chargens\DuplicationScenarioForm;
  */
 trait DuplicationScenarioFormAwareTrait
 {
-    /**
-     * @var DuplicationScenarioForm
-     */
-    private $formChargensDuplicationScenario;
+    protected ?DuplicationScenarioForm $formChargensDuplicationScenario;
 
 
 
     /**
-     * @param DuplicationScenarioForm $formChargensDuplicationScenario
+     * @param DuplicationScenarioForm|null $formChargensDuplicationScenario
      *
      * @return self
      */
-    public function setFormChargensDuplicationScenario(DuplicationScenarioForm $formChargensDuplicationScenario)
+    public function setFormChargensDuplicationScenario( ?DuplicationScenarioForm $formChargensDuplicationScenario )
     {
         $this->formChargensDuplicationScenario = $formChargensDuplicationScenario;
 
@@ -32,18 +29,12 @@ trait DuplicationScenarioFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return DuplicationScenarioForm
-     * @throws RuntimeException
-     */
-    public function getFormChargensDuplicationScenario()
+    public function getFormChargensDuplicationScenario(): ?DuplicationScenarioForm
     {
-        if (!empty($this->formChargensDuplicationScenario)) {
-            return $this->formChargensDuplicationScenario;
+        if (!$this->formChargensDuplicationScenario){
+            $this->formChargensDuplicationScenario = \Application::$container->get('FormElementManager')->get(DuplicationScenarioForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(DuplicationScenarioForm::class);
+        return $this->formChargensDuplicationScenario;
     }
 }

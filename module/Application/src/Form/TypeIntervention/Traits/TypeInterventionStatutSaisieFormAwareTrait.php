@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Form\TypeIntervention\Traits;
 
 use Application\Form\TypeIntervention\TypeInterventionStatutSaisieForm;
@@ -10,38 +11,30 @@ use Application\Form\TypeIntervention\TypeInterventionStatutSaisieForm;
  */
 trait TypeInterventionStatutSaisieFormAwareTrait
 {
-    /**
-     * @var TypeInterventionStatutSaisieForm
-     */
-    private $formTypeInterventionStatutSaisie;
+    protected ?TypeInterventionStatutSaisieForm $formTypeInterventionTypeInterventionStatutSaisie;
 
 
 
     /**
-     * @param TypeInterventionStatutSaisieForm $formTypeInterventionStatutSaisie
+     * @param TypeInterventionStatutSaisieForm|null $formTypeInterventionTypeInterventionStatutSaisie
      *
      * @return self
      */
-    public function setFormTypeInterventionStatutSaisie(TypeInterventionStatutSaisieForm $formTypeInterventionStatutSaisie)
+    public function setFormTypeInterventionTypeInterventionStatutSaisie( ?TypeInterventionStatutSaisieForm $formTypeInterventionTypeInterventionStatutSaisie )
     {
-        $this->formTypeInterventionStatutSaisie = $formTypeInterventionStatutSaisie;
+        $this->formTypeInterventionTypeInterventionStatutSaisie = $formTypeInterventionTypeInterventionStatutSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypeInterventionStatutSaisieForm
-     */
-    public function getFormTypeInterventionStatutSaisie()
+    public function getFormTypeInterventionTypeInterventionStatutSaisie(): ?TypeInterventionStatutSaisieForm
     {
-        if (!empty($this->formTypeInterventionStatutSaisie)) {
-            return $this->formTypeInterventionStatutSaisie;
+        if (!$this->formTypeInterventionTypeInterventionStatutSaisie){
+            $this->formTypeInterventionTypeInterventionStatutSaisie = \Application::$container->get('FormElementManager')->get(TypeInterventionStatutSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(TypeInterventionStatutSaisieForm::class);
+        return $this->formTypeInterventionTypeInterventionStatutSaisie;
     }
 }

@@ -11,38 +11,30 @@ use Application\Form\ServiceReferentiel\SaisieFieldset;
  */
 trait SaisieFieldsetAwareTrait
 {
-    /**
-     * @var SaisieFieldset
-     */
-    private $fieldsetServiceReferentielSaisie;
+    protected ?SaisieFieldset $formServiceReferentielSaisieFieldset;
 
 
 
     /**
-     * @param SaisieFieldset $fieldsetServiceReferentielSaisie
+     * @param SaisieFieldset|null $formServiceReferentielSaisieFieldset
      *
      * @return self
      */
-    public function setFieldsetServiceReferentielSaisie(SaisieFieldset $fieldsetServiceReferentielSaisie)
+    public function setFormServiceReferentielSaisieFieldset( ?SaisieFieldset $formServiceReferentielSaisieFieldset )
     {
-        $this->fieldsetServiceReferentielSaisie = $fieldsetServiceReferentielSaisie;
+        $this->formServiceReferentielSaisieFieldset = $formServiceReferentielSaisieFieldset;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return SaisieFieldset
-     */
-    public function getFieldsetServiceReferentielSaisie()
+    public function getFormServiceReferentielSaisieFieldset(): ?SaisieFieldset
     {
-        if (!empty($this->fieldsetServiceReferentielSaisie)) {
-            return $this->fieldsetServiceReferentielSaisie;
+        if (!$this->formServiceReferentielSaisieFieldset){
+            $this->formServiceReferentielSaisieFieldset = \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
+        return $this->formServiceReferentielSaisieFieldset;
     }
 }

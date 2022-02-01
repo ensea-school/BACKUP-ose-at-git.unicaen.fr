@@ -11,38 +11,30 @@ use Application\Form\VolumeHoraire\SaisieMultipleFieldset;
  */
 trait SaisieMultipleFieldsetAwareTrait
 {
-    /**
-     * @var SaisieMultipleFieldset
-     */
-    private $fieldsetVolumeHoraireSaisieMultiple;
+    protected ?SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset;
 
 
 
     /**
-     * @param SaisieMultipleFieldset $fieldsetVolumeHoraireSaisieMultiple
+     * @param SaisieMultipleFieldset|null $formVolumeHoraireSaisieMultipleFieldset
      *
      * @return self
      */
-    public function setFieldsetVolumeHoraireSaisieMultiple(SaisieMultipleFieldset $fieldsetVolumeHoraireSaisieMultiple)
+    public function setFormVolumeHoraireSaisieMultipleFieldset( ?SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset )
     {
-        $this->fieldsetVolumeHoraireSaisieMultiple = $fieldsetVolumeHoraireSaisieMultiple;
+        $this->formVolumeHoraireSaisieMultipleFieldset = $formVolumeHoraireSaisieMultipleFieldset;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return SaisieMultipleFieldset
-     */
-    public function getFieldsetVolumeHoraireSaisieMultiple()
+    public function getFormVolumeHoraireSaisieMultipleFieldset(): ?SaisieMultipleFieldset
     {
-        if (!empty($this->fieldsetVolumeHoraireSaisieMultiple)) {
-            return $this->fieldsetVolumeHoraireSaisieMultiple;
+        if (!$this->formVolumeHoraireSaisieMultipleFieldset){
+            $this->formVolumeHoraireSaisieMultipleFieldset = \Application::$container->get('FormElementManager')->get(SaisieMultipleFieldset::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(SaisieMultipleFieldset::class);
+        return $this->formVolumeHoraireSaisieMultipleFieldset;
     }
 }

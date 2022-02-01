@@ -11,32 +11,30 @@ use Application\Entity\Db\HistoIntervenantService;
  */
 trait HistoIntervenantServiceAwareTrait
 {
-    /**
-     * @var HistoIntervenantService
-     */
-    private $histoIntervenantService;
-
-
+    protected ?HistoIntervenantService $entityDbHistoIntervenantService;
 
 
 
     /**
-     * @param HistoIntervenantService $histoIntervenantService
+     * @param HistoIntervenantService|null $entityDbHistoIntervenantService
+     *
      * @return self
      */
-    public function setHistoIntervenantService( HistoIntervenantService $histoIntervenantService = null )
+    public function setEntityDbHistoIntervenantService( ?HistoIntervenantService $entityDbHistoIntervenantService )
     {
-        $this->histoIntervenantService = $histoIntervenantService;
+        $this->entityDbHistoIntervenantService = $entityDbHistoIntervenantService;
+
         return $this;
     }
 
 
 
-    /**
-     * @return HistoIntervenantService
-     */
-    public function getHistoIntervenantService()
+    public function getEntityDbHistoIntervenantService(): ?HistoIntervenantService
     {
-        return $this->histoIntervenantService;
+        if (!$this->entityDbHistoIntervenantService){
+            $this->entityDbHistoIntervenantService = \Application::$container->get(HistoIntervenantService::class);
+        }
+
+        return $this->entityDbHistoIntervenantService;
     }
 }

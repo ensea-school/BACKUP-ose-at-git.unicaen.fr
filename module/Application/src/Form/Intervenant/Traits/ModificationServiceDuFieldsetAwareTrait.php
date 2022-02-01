@@ -11,38 +11,30 @@ use Application\Form\Intervenant\ModificationServiceDuFieldset;
  */
 trait ModificationServiceDuFieldsetAwareTrait
 {
-    /**
-     * @var ModificationServiceDuFieldset
-     */
-    private $fieldsetIntervenantModificationServiceDu;
+    protected ?ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset;
 
 
 
     /**
-     * @param ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu
+     * @param ModificationServiceDuFieldset|null $formIntervenantModificationServiceDuFieldset
      *
      * @return self
      */
-    public function setFieldsetIntervenantModificationServiceDu(ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu)
+    public function setFormIntervenantModificationServiceDuFieldset( ?ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset )
     {
-        $this->fieldsetIntervenantModificationServiceDu = $fieldsetIntervenantModificationServiceDu;
+        $this->formIntervenantModificationServiceDuFieldset = $formIntervenantModificationServiceDuFieldset;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ModificationServiceDuFieldset
-     */
-    public function getFieldsetIntervenantModificationServiceDu()
+    public function getFormIntervenantModificationServiceDuFieldset(): ?ModificationServiceDuFieldset
     {
-        if (!empty($this->fieldsetIntervenantModificationServiceDu)) {
-            return $this->fieldsetIntervenantModificationServiceDu;
+        if (!$this->formIntervenantModificationServiceDuFieldset){
+            $this->formIntervenantModificationServiceDuFieldset = \Application::$container->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
+        return $this->formIntervenantModificationServiceDuFieldset;
     }
 }

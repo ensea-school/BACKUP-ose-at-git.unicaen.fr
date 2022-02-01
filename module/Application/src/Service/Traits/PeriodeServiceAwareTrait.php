@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\PeriodeService;
 
 /**
- * Description of PeriodeAwareTrait
+ * Description of PeriodeServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait PeriodeServiceAwareTrait
 {
-    /**
-     * @var PeriodeService
-     */
-    private $servicePeriode;
+    protected ?PeriodeService $servicePeriode;
 
 
 
     /**
-     * @param PeriodeService $servicePeriode
+     * @param PeriodeService|null $servicePeriode
      *
      * @return self
      */
-    public function setServicePeriode(PeriodeService $servicePeriode)
+    public function setServicePeriode( ?PeriodeService $servicePeriode )
     {
         $this->servicePeriode = $servicePeriode;
 
@@ -32,12 +29,9 @@ trait PeriodeServiceAwareTrait
 
 
 
-    /**
-     * @return PeriodeService
-     */
-    public function getServicePeriode()
+    public function getServicePeriode(): ?PeriodeService
     {
-        if (empty($this->servicePeriode)) {
+        if (!$this->servicePeriode){
             $this->servicePeriode = \Application::$container->get(PeriodeService::class);
         }
 

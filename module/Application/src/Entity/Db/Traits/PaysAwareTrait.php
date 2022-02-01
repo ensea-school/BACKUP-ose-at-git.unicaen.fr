@@ -11,31 +11,25 @@ use Application\Entity\Db\Pays;
  */
 trait PaysAwareTrait
 {
-    /**
-     * @var Pays
-     */
-    private $pays;
-
-
+    protected ?Pays $pays;
 
 
 
     /**
-     * @param Pays $pays
+     * @param Pays|null $pays
+     *
      * @return self
      */
-    public function setPays( Pays $pays = null )
+    public function setPays( ?Pays $pays )
     {
         $this->pays = $pays;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Pays
-     */
-    public function getPays()
+    public function getPays(): ?Pays
     {
         return $this->pays;
     }

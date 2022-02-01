@@ -11,31 +11,25 @@ use Application\Entity\Db\AffectationRecherche;
  */
 trait AffectationRechercheAwareTrait
 {
-    /**
-     * @var AffectationRecherche
-     */
-    private $affectationRecherche;
-
-
+    protected ?AffectationRecherche $affectationRecherche;
 
 
 
     /**
-     * @param AffectationRecherche $affectationRecherche
+     * @param AffectationRecherche|null $affectationRecherche
+     *
      * @return self
      */
-    public function setAffectationRecherche( AffectationRecherche $affectationRecherche = null )
+    public function setAffectationRecherche( ?AffectationRecherche $affectationRecherche )
     {
         $this->affectationRecherche = $affectationRecherche;
+
         return $this;
     }
 
 
 
-    /**
-     * @return AffectationRecherche
-     */
-    public function getAffectationRecherche()
+    public function getAffectationRecherche(): ?AffectationRecherche
     {
         return $this->affectationRecherche;
     }

@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\EtapeService;
 
 /**
- * Description of EtapeAwareTrait
+ * Description of EtapeServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait EtapeServiceAwareTrait
 {
-    /**
-     * @var EtapeService
-     */
-    private $serviceEtape;
+    protected ?EtapeService $serviceEtape;
 
 
 
     /**
-     * @param EtapeService $serviceEtape
+     * @param EtapeService|null $serviceEtape
      *
      * @return self
      */
-    public function setServiceEtape(EtapeService $serviceEtape)
+    public function setServiceEtape( ?EtapeService $serviceEtape )
     {
         $this->serviceEtape = $serviceEtape;
 
@@ -32,12 +29,9 @@ trait EtapeServiceAwareTrait
 
 
 
-    /**
-     * @return EtapeService
-     */
-    public function getServiceEtape()
+    public function getServiceEtape(): ?EtapeService
     {
-        if (empty($this->serviceEtape)) {
+        if (!$this->serviceEtape){
             $this->serviceEtape = \Application::$container->get(EtapeService::class);
         }
 

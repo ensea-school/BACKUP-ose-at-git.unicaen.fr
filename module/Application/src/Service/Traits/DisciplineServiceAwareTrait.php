@@ -11,19 +11,16 @@ use Application\Service\DisciplineService;
  */
 trait DisciplineServiceAwareTrait
 {
-    /**
-     * @var DisciplineService
-     */
-    private $serviceDiscipline;
+    protected ?DisciplineService $serviceDiscipline;
 
 
 
     /**
-     * @param DisciplineService $serviceDiscipline
+     * @param DisciplineService|null $serviceDiscipline
      *
      * @return self
      */
-    public function setServiceDiscipline(DisciplineService $serviceDiscipline)
+    public function setServiceDiscipline( ?DisciplineService $serviceDiscipline )
     {
         $this->serviceDiscipline = $serviceDiscipline;
 
@@ -32,12 +29,9 @@ trait DisciplineServiceAwareTrait
 
 
 
-    /**
-     * @return DisciplineService
-     */
-    public function getServiceDiscipline()
+    public function getServiceDiscipline(): ?DisciplineService
     {
-        if (empty($this->serviceDiscipline)) {
+        if (!$this->serviceDiscipline){
             $this->serviceDiscipline = \Application::$container->get(DisciplineService::class);
         }
 

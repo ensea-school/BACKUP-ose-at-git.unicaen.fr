@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\EtablissementService;
 
 /**
- * Description of EtablissementAwareTrait
+ * Description of EtablissementServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait EtablissementServiceAwareTrait
 {
-    /**
-     * @var EtablissementService
-     */
-    private $serviceEtablissement;
+    protected ?EtablissementService $serviceEtablissement;
 
 
 
     /**
-     * @param EtablissementService $serviceEtablissement
+     * @param EtablissementService|null $serviceEtablissement
      *
      * @return self
      */
-    public function setServiceEtablissement(EtablissementService $serviceEtablissement)
+    public function setServiceEtablissement( ?EtablissementService $serviceEtablissement )
     {
         $this->serviceEtablissement = $serviceEtablissement;
 
@@ -32,12 +29,9 @@ trait EtablissementServiceAwareTrait
 
 
 
-    /**
-     * @return EtablissementService
-     */
-    public function getServiceEtablissement()
+    public function getServiceEtablissement(): ?EtablissementService
     {
-        if (empty($this->serviceEtablissement)) {
+        if (!$this->serviceEtablissement){
             $this->serviceEtablissement = \Application::$container->get(EtablissementService::class);
         }
 

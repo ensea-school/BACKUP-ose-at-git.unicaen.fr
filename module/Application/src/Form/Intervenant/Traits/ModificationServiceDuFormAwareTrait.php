@@ -11,19 +11,16 @@ use Application\Form\Intervenant\ModificationServiceDuForm;
  */
 trait ModificationServiceDuFormAwareTrait
 {
-    /**
-     * @var ModificationServiceDuForm
-     */
-    private $formIntervenantModificationServiceDu;
+    protected ?ModificationServiceDuForm $formIntervenantModificationServiceDu;
 
 
 
     /**
-     * @param ModificationServiceDuForm $formIntervenantModificationServiceDu
+     * @param ModificationServiceDuForm|null $formIntervenantModificationServiceDu
      *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDu(ModificationServiceDuForm $formIntervenantModificationServiceDu)
+    public function setFormIntervenantModificationServiceDu( ?ModificationServiceDuForm $formIntervenantModificationServiceDu )
     {
         $this->formIntervenantModificationServiceDu = $formIntervenantModificationServiceDu;
 
@@ -32,17 +29,12 @@ trait ModificationServiceDuFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ModificationServiceDuForm
-     */
-    public function getFormIntervenantModificationServiceDu()
+    public function getFormIntervenantModificationServiceDu(): ?ModificationServiceDuForm
     {
-        if (!empty($this->formIntervenantModificationServiceDu)) {
-            return $this->formIntervenantModificationServiceDu;
+        if (!$this->formIntervenantModificationServiceDu){
+            $this->formIntervenantModificationServiceDu = \Application::$container->get('FormElementManager')->get(ModificationServiceDuForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(ModificationServiceDuForm::class);
+        return $this->formIntervenantModificationServiceDu;
     }
 }

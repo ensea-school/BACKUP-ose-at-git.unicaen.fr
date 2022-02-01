@@ -11,31 +11,25 @@ use Application\Entity\Db\MiseEnPaiement;
  */
 trait MiseEnPaiementAwareTrait
 {
-    /**
-     * @var MiseEnPaiement
-     */
-    private $miseEnPaiement;
-
-
+    protected ?MiseEnPaiement $miseEnPaiement;
 
 
 
     /**
-     * @param MiseEnPaiement $miseEnPaiement
+     * @param MiseEnPaiement|null $miseEnPaiement
+     *
      * @return self
      */
-    public function setMiseEnPaiement( MiseEnPaiement $miseEnPaiement = null )
+    public function setMiseEnPaiement( ?MiseEnPaiement $miseEnPaiement )
     {
         $this->miseEnPaiement = $miseEnPaiement;
+
         return $this;
     }
 
 
 
-    /**
-     * @return MiseEnPaiement
-     */
-    public function getMiseEnPaiement()
+    public function getMiseEnPaiement(): ?MiseEnPaiement
     {
         return $this->miseEnPaiement;
     }

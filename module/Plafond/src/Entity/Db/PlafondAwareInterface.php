@@ -9,7 +9,7 @@ namespace Plafond\Entity\Db;
  */
 interface PlafondAwareInterface
 {
-    public function setPlafond(Plafond $plafond = null);
+    public function setPlafond(Plafond $plafond);
 
 
 

@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeAgrementStatut;
  */
 trait TypeAgrementStatutAwareTrait
 {
-    /**
-     * @var TypeAgrementStatut
-     */
-    private $typeAgrementStatut;
-
-
+    protected ?TypeAgrementStatut $typeAgrementStatut;
 
 
 
     /**
-     * @param TypeAgrementStatut $typeAgrementStatut
+     * @param TypeAgrementStatut|null $typeAgrementStatut
+     *
      * @return self
      */
-    public function setTypeAgrementStatut( TypeAgrementStatut $typeAgrementStatut = null )
+    public function setTypeAgrementStatut( ?TypeAgrementStatut $typeAgrementStatut )
     {
         $this->typeAgrementStatut = $typeAgrementStatut;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeAgrementStatut
-     */
-    public function getTypeAgrementStatut()
+    public function getTypeAgrementStatut(): ?TypeAgrementStatut
     {
         return $this->typeAgrementStatut;
     }

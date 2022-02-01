@@ -2,46 +2,39 @@
 
 namespace Application\Processus\Traits;
 
-
 use Application\Processus\ReconductionProcessus;
 
 /**
  * Description of ReconductionProcessusAwareTrait
  *
- * @author LECOURTES Anthony <antony.lecourtes@unicaen.fr>
+ * @author UnicaenCode
  */
 trait ReconductionProcessusAwareTrait
 {
-    /**
-     * @var ReconductionProcessus
-     */
-    private $reconductionProcessus;
+    protected ?ReconductionProcessus $processusReconduction;
 
 
 
     /**
-     * @param ReconductionProcessus $reconductionProcessus
+     * @param ReconductionProcessus|null $processusReconduction
      *
      * @return self
      */
-    public function setProcessusReconduction(ReconductionProcessus $reconductionProcessus)
+    public function setProcessusReconduction( ?ReconductionProcessus $processusReconduction )
     {
-        $this->reconductionProcessus = $reconductionProcessus;
+        $this->processusReconduction = $processusReconduction;
 
         return $this;
     }
 
 
 
-    /**
-     * @return ReconductionProcessus
-     */
-    public function getProcessusReconduction()
+    public function getProcessusReconduction(): ?ReconductionProcessus
     {
-        if (empty($this->reconductionProcessus)) {
-            $this->reconductionProcessus = \Application::$container->get(ReconductionProcessus::class);
+        if (!$this->processusReconduction){
+            $this->processusReconduction = \Application::$container->get(ReconductionProcessus::class);
         }
 
-        return $this->reconductionProcessus;
+        return $this->processusReconduction;
     }
 }

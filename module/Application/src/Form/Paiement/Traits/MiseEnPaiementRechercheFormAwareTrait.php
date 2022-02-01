@@ -11,19 +11,16 @@ use Application\Form\Paiement\MiseEnPaiementRechercheForm;
  */
 trait MiseEnPaiementRechercheFormAwareTrait
 {
-    /**
-     * @var MiseEnPaiementRechercheForm
-     */
-    private $formPaiementMiseEnPaiementRecherche;
+    protected ?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche;
 
 
 
     /**
-     * @param MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche
+     * @param MiseEnPaiementRechercheForm|null $formPaiementMiseEnPaiementRecherche
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiementRecherche(MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche)
+    public function setFormPaiementMiseEnPaiementRecherche( ?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche )
     {
         $this->formPaiementMiseEnPaiementRecherche = $formPaiementMiseEnPaiementRecherche;
 
@@ -32,17 +29,12 @@ trait MiseEnPaiementRechercheFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return MiseEnPaiementRechercheForm
-     */
-    public function getFormPaiementMiseEnPaiementRecherche()
+    public function getFormPaiementMiseEnPaiementRecherche(): ?MiseEnPaiementRechercheForm
     {
-        if (!empty($this->formPaiementMiseEnPaiementRecherche)) {
-            return $this->formPaiementMiseEnPaiementRecherche;
+        if (!$this->formPaiementMiseEnPaiementRecherche){
+            $this->formPaiementMiseEnPaiementRecherche = \Application::$container->get('FormElementManager')->get(MiseEnPaiementRechercheForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(MiseEnPaiementRechercheForm::class);
+        return $this->formPaiementMiseEnPaiementRecherche;
     }
 }

@@ -11,31 +11,25 @@ use Application\Entity\Db\Corps;
  */
 trait CorpsAwareTrait
 {
-    /**
-     * @var Corps
-     */
-    private $corps;
-
-
+    protected ?Corps $corps;
 
 
 
     /**
-     * @param Corps $corps
+     * @param Corps|null $corps
+     *
      * @return self
      */
-    public function setCorps( Corps $corps = null )
+    public function setCorps( ?Corps $corps )
     {
         $this->corps = $corps;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Corps
-     */
-    public function getCorps()
+    public function getCorps(): ?Corps
     {
         return $this->corps;
     }

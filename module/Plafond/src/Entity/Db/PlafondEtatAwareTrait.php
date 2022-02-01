@@ -2,6 +2,7 @@
 
 namespace Plafond\Entity\Db;
 
+
 /**
  * Description of PlafondEtatAwareTrait
  *
@@ -9,19 +10,16 @@ namespace Plafond\Entity\Db;
  */
 trait PlafondEtatAwareTrait
 {
-    /**
-     * @var PlafondEtat
-     */
-    protected $plafondEtat;
+    protected ?PlafondEtat $plafondEtat;
 
 
 
     /**
-     * @param PlafondEtat $plafondEtat
+     * @param PlafondEtat|null $plafondEtat
      *
      * @return self
      */
-    public function setPlafondEtat(PlafondEtat $plafondEtat = null)
+    public function setPlafondEtat( ?PlafondEtat $plafondEtat )
     {
         $this->plafondEtat = $plafondEtat;
 

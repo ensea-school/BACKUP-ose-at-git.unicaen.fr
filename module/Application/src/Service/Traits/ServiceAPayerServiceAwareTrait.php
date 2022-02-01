@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\ServiceAPayerService;
 
 /**
- * Description of ServiceAPayerAwareTrait
+ * Description of ServiceAPayerServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait ServiceAPayerServiceAwareTrait
 {
-    /**
-     * @var ServiceAPayerService
-     */
-    private $serviceServiceAPayer;
+    protected ?ServiceAPayerService $serviceServiceAPayer;
 
 
 
     /**
-     * @param ServiceAPayerService $serviceServiceAPayer
+     * @param ServiceAPayerService|null $serviceServiceAPayer
      *
      * @return self
      */
-    public function setServiceServiceAPayer(ServiceAPayerService $serviceServiceAPayer)
+    public function setServiceServiceAPayer( ?ServiceAPayerService $serviceServiceAPayer )
     {
         $this->serviceServiceAPayer = $serviceServiceAPayer;
 
@@ -32,12 +29,9 @@ trait ServiceAPayerServiceAwareTrait
 
 
 
-    /**
-     * @return ServiceAPayerService
-     */
-    public function getServiceServiceAPayer()
+    public function getServiceServiceAPayer(): ?ServiceAPayerService
     {
-        if (empty($this->serviceServiceAPayer)) {
+        if (!$this->serviceServiceAPayer){
             $this->serviceServiceAPayer = \Application::$container->get(ServiceAPayerService::class);
         }
 

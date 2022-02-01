@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeValidation;
  */
 trait TypeValidationAwareTrait
 {
-    /**
-     * @var TypeValidation
-     */
-    private $typeValidation;
-
-
+    protected ?TypeValidation $typeValidation;
 
 
 
     /**
-     * @param TypeValidation $typeValidation
+     * @param TypeValidation|null $typeValidation
+     *
      * @return self
      */
-    public function setTypeValidation( TypeValidation $typeValidation = null )
+    public function setTypeValidation( ?TypeValidation $typeValidation )
     {
         $this->typeValidation = $typeValidation;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeValidation
-     */
-    public function getTypeValidation()
+    public function getTypeValidation(): ?TypeValidation
     {
         return $this->typeValidation;
     }

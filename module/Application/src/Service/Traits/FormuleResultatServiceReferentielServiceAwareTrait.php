@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\FormuleResultatServiceReferentielService;
 
 /**
- * Description of FormuleResultatServiceReferentielAwareTrait
+ * Description of FormuleResultatServiceReferentielServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait FormuleResultatServiceReferentielServiceAwareTrait
 {
-    /**
-     * @var FormuleResultatServiceReferentielService
-     */
-    private $serviceFormuleResultatServiceReferentiel;
+    protected ?FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel;
 
 
 
     /**
-     * @param FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel
+     * @param FormuleResultatServiceReferentielService|null $serviceFormuleResultatServiceReferentiel
      *
      * @return self
      */
-    public function setServiceFormuleResultatServiceReferentiel(FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel)
+    public function setServiceFormuleResultatServiceReferentiel( ?FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel )
     {
         $this->serviceFormuleResultatServiceReferentiel = $serviceFormuleResultatServiceReferentiel;
 
@@ -32,13 +29,10 @@ trait FormuleResultatServiceReferentielServiceAwareTrait
 
 
 
-    /**
-     * @return FormuleResultatServiceReferentielService
-     */
-    public function getServiceFormuleResultatServiceReferentiel()
+    public function getServiceFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentielService
     {
-        if (empty($this->serviceFormuleResultatServiceReferentiel)) {
-            $this->serviceFormuleResultatServiceReferentiel = \Application::$container->get(FormuleResultatServiceReferentielService::class);
+        if (!$this->serviceFormuleResultatServiceReferentiel){
+            $this->serviceFormuleResultatServiceReferentiel = \Application::$container->get('FormElementManager')->get(FormuleResultatServiceReferentielService::class);
         }
 
         return $this->serviceFormuleResultatServiceReferentiel;

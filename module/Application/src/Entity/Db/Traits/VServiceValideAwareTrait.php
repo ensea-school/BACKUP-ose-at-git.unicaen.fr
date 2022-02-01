@@ -11,32 +11,30 @@ use Application\Entity\Db\VServiceValide;
  */
 trait VServiceValideAwareTrait
 {
-    /**
-     * @var VServiceValide
-     */
-    private $vServiceValide;
-
-
+    protected ?VServiceValide $entityDbVServiceValide;
 
 
 
     /**
-     * @param VServiceValide $vServiceValide
+     * @param VServiceValide|null $entityDbVServiceValide
+     *
      * @return self
      */
-    public function setVServiceValide( VServiceValide $vServiceValide = null )
+    public function setEntityDbVServiceValide( ?VServiceValide $entityDbVServiceValide )
     {
-        $this->vServiceValide = $vServiceValide;
+        $this->entityDbVServiceValide = $entityDbVServiceValide;
+
         return $this;
     }
 
 
 
-    /**
-     * @return VServiceValide
-     */
-    public function getVServiceValide()
+    public function getEntityDbVServiceValide(): ?VServiceValide
     {
-        return $this->vServiceValide;
+        if (!$this->entityDbVServiceValide){
+            $this->entityDbVServiceValide = \Application::$container->get(VServiceValide::class);
+        }
+
+        return $this->entityDbVServiceValide;
     }
 }

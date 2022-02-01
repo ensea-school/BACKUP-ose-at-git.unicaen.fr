@@ -11,32 +11,30 @@ use Application\Entity\Db\ModificationServiceDu;
  */
 trait ModificationServiceDuAwareTrait
 {
-    /**
-     * @var ModificationServiceDu
-     */
-    private $modificationServiceDu;
-
-
+    protected ?ModificationServiceDu $entityDbModificationServiceDu;
 
 
 
     /**
-     * @param ModificationServiceDu $modificationServiceDu
+     * @param ModificationServiceDu|null $entityDbModificationServiceDu
+     *
      * @return self
      */
-    public function setModificationServiceDu( ModificationServiceDu $modificationServiceDu = null )
+    public function setEntityDbModificationServiceDu( ?ModificationServiceDu $entityDbModificationServiceDu )
     {
-        $this->modificationServiceDu = $modificationServiceDu;
+        $this->entityDbModificationServiceDu = $entityDbModificationServiceDu;
+
         return $this;
     }
 
 
 
-    /**
-     * @return ModificationServiceDu
-     */
-    public function getModificationServiceDu()
+    public function getEntityDbModificationServiceDu(): ?ModificationServiceDu
     {
-        return $this->modificationServiceDu;
+        if (!$this->entityDbModificationServiceDu){
+            $this->entityDbModificationServiceDu = \Application::$container->get(ModificationServiceDu::class);
+        }
+
+        return $this->entityDbModificationServiceDu;
     }
 }

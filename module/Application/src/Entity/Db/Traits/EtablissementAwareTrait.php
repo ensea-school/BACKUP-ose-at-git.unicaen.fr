@@ -11,31 +11,25 @@ use Application\Entity\Db\Etablissement;
  */
 trait EtablissementAwareTrait
 {
-    /**
-     * @var Etablissement
-     */
-    private $etablissement;
-
-
+    protected ?Etablissement $etablissement;
 
 
 
     /**
-     * @param Etablissement $etablissement
+     * @param Etablissement|null $etablissement
+     *
      * @return self
      */
-    public function setEtablissement( Etablissement $etablissement = null )
+    public function setEtablissement( ?Etablissement $etablissement )
     {
         $this->etablissement = $etablissement;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Etablissement
-     */
-    public function getEtablissement()
+    public function getEtablissement(): ?Etablissement
     {
         return $this->etablissement;
     }

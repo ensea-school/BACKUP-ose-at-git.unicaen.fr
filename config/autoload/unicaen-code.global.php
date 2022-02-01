@@ -9,7 +9,7 @@ $settings = [
     'triggers'             => [
         [
             'template'  => 'AwareTrait',
-            'type'      => ['Service', 'Hydrator', 'Provider', 'Processus'],
+            'type'      => ['Service', 'Hydrator', 'Provider', 'Processus', 'Connecteur'],
             'generator' => function (array $params): array {
                 $params['template'] = 'ServiceAwareTrait';
 

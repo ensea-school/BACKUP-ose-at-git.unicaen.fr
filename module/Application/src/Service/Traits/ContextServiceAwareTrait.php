@@ -4,7 +4,6 @@ namespace Application\Service\Traits;
 
 use Application\Service\ContextService;
 
-
 /**
  * Description of ContextServiceAwareTrait
  *
@@ -12,19 +11,16 @@ use Application\Service\ContextService;
  */
 trait ContextServiceAwareTrait
 {
-    /**
-     * @var ContextService
-     */
-    private $serviceContext;
+    protected ?ContextService $serviceContext = null;
 
 
 
     /**
-     * @param ContextService $serviceContext
+     * @param ContextService|null $serviceContext
      *
      * @return self
      */
-    public function setServiceContext(ContextService $serviceContext)
+    public function setServiceContext(?ContextService $serviceContext)
     {
         $this->serviceContext = $serviceContext;
 
@@ -33,13 +29,9 @@ trait ContextServiceAwareTrait
 
 
 
-    /**
-     * @return ContextService
-     * @throws RuntimeException
-     */
-    public function getServiceContext()
+    public function getServiceContext(): ?ContextService
     {
-        if (empty($this->serviceContext)) {
+        if (!$this->serviceContext) {
             $this->serviceContext = \Application::$container->get(ContextService::class);
         }
 

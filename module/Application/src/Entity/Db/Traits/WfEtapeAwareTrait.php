@@ -11,31 +11,25 @@ use Application\Entity\Db\WfEtape;
  */
 trait WfEtapeAwareTrait
 {
-    /**
-     * @var WfEtape
-     */
-    private $wfEtape;
-
-
+    protected ?WfEtape $wfEtape;
 
 
 
     /**
-     * @param WfEtape $wfEtape
+     * @param WfEtape|null $wfEtape
+     *
      * @return self
      */
-    public function setWfEtape( WfEtape $wfEtape = null )
+    public function setWfEtape( ?WfEtape $wfEtape )
     {
         $this->wfEtape = $wfEtape;
+
         return $this;
     }
 
 
 
-    /**
-     * @return WfEtape
-     */
-    public function getWfEtape()
+    public function getWfEtape(): ?WfEtape
     {
         return $this->wfEtape;
     }

@@ -11,31 +11,25 @@ use Application\Entity\Db\Grade;
  */
 trait GradeAwareTrait
 {
-    /**
-     * @var Grade
-     */
-    private $grade;
-
-
+    protected ?Grade $grade;
 
 
 
     /**
-     * @param Grade $grade
+     * @param Grade|null $grade
+     *
      * @return self
      */
-    public function setGrade( Grade $grade = null )
+    public function setGrade( ?Grade $grade )
     {
         $this->grade = $grade;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Grade
-     */
-    public function getGrade()
+    public function getGrade(): ?Grade
     {
         return $this->grade;
     }

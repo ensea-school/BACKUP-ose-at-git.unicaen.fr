@@ -11,31 +11,25 @@ use Application\Entity\Db\DomaineFonctionnel;
  */
 trait DomaineFonctionnelAwareTrait
 {
-    /**
-     * @var DomaineFonctionnel
-     */
-    private $domaineFonctionnel;
-
-
+    protected ?DomaineFonctionnel $domaineFonctionnel;
 
 
 
     /**
-     * @param DomaineFonctionnel $domaineFonctionnel
+     * @param DomaineFonctionnel|null $domaineFonctionnel
+     *
      * @return self
      */
-    public function setDomaineFonctionnel( DomaineFonctionnel $domaineFonctionnel = null )
+    public function setDomaineFonctionnel( ?DomaineFonctionnel $domaineFonctionnel )
     {
         $this->domaineFonctionnel = $domaineFonctionnel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return DomaineFonctionnel
-     */
-    public function getDomaineFonctionnel()
+    public function getDomaineFonctionnel(): ?DomaineFonctionnel
     {
         return $this->domaineFonctionnel;
     }

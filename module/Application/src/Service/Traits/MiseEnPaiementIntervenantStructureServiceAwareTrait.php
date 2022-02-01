@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\MiseEnPaiementIntervenantStructureService;
 
 /**
- * Description of MiseEnPaiementIntervenantStructureAwareTrait
+ * Description of MiseEnPaiementIntervenantStructureServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait MiseEnPaiementIntervenantStructureServiceAwareTrait
 {
-    /**
-     * @var MiseEnPaiementIntervenantStructureService
-     */
-    private $serviceMiseEnPaiementIntervenantStructure;
+    protected ?MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure;
 
 
 
     /**
-     * @param MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure
+     * @param MiseEnPaiementIntervenantStructureService|null $serviceMiseEnPaiementIntervenantStructure
      *
      * @return self
      */
-    public function setServiceMiseEnPaiementIntervenantStructure(MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure)
+    public function setServiceMiseEnPaiementIntervenantStructure( ?MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure )
     {
         $this->serviceMiseEnPaiementIntervenantStructure = $serviceMiseEnPaiementIntervenantStructure;
 
@@ -32,12 +29,9 @@ trait MiseEnPaiementIntervenantStructureServiceAwareTrait
 
 
 
-    /**
-     * @return MiseEnPaiementIntervenantStructureService
-     */
-    public function getServiceMiseEnPaiementIntervenantStructure()
+    public function getServiceMiseEnPaiementIntervenantStructure(): ?MiseEnPaiementIntervenantStructureService
     {
-        if (empty($this->serviceMiseEnPaiementIntervenantStructure)) {
+        if (!$this->serviceMiseEnPaiementIntervenantStructure){
             $this->serviceMiseEnPaiementIntervenantStructure = \Application::$container->get(MiseEnPaiementIntervenantStructureService::class);
         }
 

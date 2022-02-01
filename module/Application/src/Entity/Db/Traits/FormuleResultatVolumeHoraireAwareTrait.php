@@ -11,32 +11,30 @@ use Application\Entity\Db\FormuleResultatVolumeHoraire;
  */
 trait FormuleResultatVolumeHoraireAwareTrait
 {
-    /**
-     * @var FormuleResultatVolumeHoraire
-     */
-    private $formuleResultatVolumeHoraire;
-
-
+    protected ?FormuleResultatVolumeHoraire $entityDbFormuleResultatVolumeHoraire;
 
 
 
     /**
-     * @param FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire
+     * @param FormuleResultatVolumeHoraire|null $entityDbFormuleResultatVolumeHoraire
+     *
      * @return self
      */
-    public function setFormuleResultatVolumeHoraire( FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire = null )
+    public function setEntityDbFormuleResultatVolumeHoraire( ?FormuleResultatVolumeHoraire $entityDbFormuleResultatVolumeHoraire )
     {
-        $this->formuleResultatVolumeHoraire = $formuleResultatVolumeHoraire;
+        $this->entityDbFormuleResultatVolumeHoraire = $entityDbFormuleResultatVolumeHoraire;
+
         return $this;
     }
 
 
 
-    /**
-     * @return FormuleResultatVolumeHoraire
-     */
-    public function getFormuleResultatVolumeHoraire()
+    public function getEntityDbFormuleResultatVolumeHoraire(): ?FormuleResultatVolumeHoraire
     {
-        return $this->formuleResultatVolumeHoraire;
+        if (!$this->entityDbFormuleResultatVolumeHoraire){
+            $this->entityDbFormuleResultatVolumeHoraire = \Application::$container->get('FormElementManager')->get(FormuleResultatVolumeHoraire::class);
+        }
+
+        return $this->entityDbFormuleResultatVolumeHoraire;
     }
 }

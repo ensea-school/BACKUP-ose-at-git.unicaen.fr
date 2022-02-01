@@ -11,19 +11,16 @@ use Application\Form\DisciplineForm;
  */
 trait DisciplineFormAwareTrait
 {
-    /**
-     * @var DisciplineForm
-     */
-    private $formDiscipline;
+    protected ?DisciplineForm $formDiscipline;
 
 
 
     /**
-     * @param DisciplineForm $formDiscipline
+     * @param DisciplineForm|null $formDiscipline
      *
      * @return self
      */
-    public function setFormDiscipline(DisciplineForm $formDiscipline)
+    public function setFormDiscipline( ?DisciplineForm $formDiscipline )
     {
         $this->formDiscipline = $formDiscipline;
 
@@ -32,17 +29,12 @@ trait DisciplineFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return DisciplineForm
-     */
-    public function getFormDiscipline()
+    public function getFormDiscipline(): ?DisciplineForm
     {
-        if (!empty($this->formDiscipline)) {
-            return $this->formDiscipline;
+        if (!$this->formDiscipline){
+            $this->formDiscipline = \Application::$container->get('FormElementManager')->get(DisciplineForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(DisciplineForm::class);
+        return $this->formDiscipline;
     }
 }

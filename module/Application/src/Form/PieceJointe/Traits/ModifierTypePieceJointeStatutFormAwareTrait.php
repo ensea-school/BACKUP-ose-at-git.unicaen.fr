@@ -11,38 +11,30 @@ use Application\Form\PieceJointe\ModifierTypePieceJointeStatutForm;
  */
 trait ModifierTypePieceJointeStatutFormAwareTrait
 {
-    /**
-     * @var ModifierTypePieceJointeStatutForm
-     */
-    private $formModifierTypePieceJointeStatut;
+    protected ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut;
 
 
 
     /**
-     * @param ModifierTypePieceJointeStatutForm $formModifierTypePieceJointeStatut
+     * @param ModifierTypePieceJointeStatutForm|null $formPieceJointeModifierTypePieceJointeStatut
      *
      * @return self
      */
-    public function setFormModifierTypePieceJointeStatut(ModifierTypePieceJointeStatutForm $formModifierTypePieceJointeStatut)
+    public function setFormPieceJointeModifierTypePieceJointeStatut( ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut )
     {
-        $this->formModifierTypePieceJointeStatut = $formModifierTypePieceJointeStatut;
+        $this->formPieceJointeModifierTypePieceJointeStatut = $formPieceJointeModifierTypePieceJointeStatut;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ModifierTypePieceJointeStatutForm
-     */
-    public function getFormModifierTypePieceJointeStatut()
+    public function getFormPieceJointeModifierTypePieceJointeStatut(): ?ModifierTypePieceJointeStatutForm
     {
-        if (!empty($this->formModifierTypePieceJointeStatut)) {
-            return $this->formModifierTypePieceJointeStatut;
+        if (!$this->formPieceJointeModifierTypePieceJointeStatut){
+            $this->formPieceJointeModifierTypePieceJointeStatut = \Application::$container->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);
+        return $this->formPieceJointeModifierTypePieceJointeStatut;
     }
 }

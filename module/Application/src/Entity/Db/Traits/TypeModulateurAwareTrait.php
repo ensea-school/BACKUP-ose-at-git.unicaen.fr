@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeModulateur;
  */
 trait TypeModulateurAwareTrait
 {
-    /**
-     * @var TypeModulateur
-     */
-    private $typeModulateur;
-
-
+    protected ?TypeModulateur $typeModulateur;
 
 
 
     /**
-     * @param TypeModulateur $typeModulateur
+     * @param TypeModulateur|null $typeModulateur
+     *
      * @return self
      */
-    public function setTypeModulateur( TypeModulateur $typeModulateur = null )
+    public function setTypeModulateur( ?TypeModulateur $typeModulateur )
     {
         $this->typeModulateur = $typeModulateur;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeModulateur
-     */
-    public function getTypeModulateur()
+    public function getTypeModulateur(): ?TypeModulateur
     {
         return $this->typeModulateur;
     }

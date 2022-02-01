@@ -11,19 +11,16 @@ use Application\Service\WorkflowService;
  */
 trait WorkflowServiceAwareTrait
 {
-    /**
-     * @var WorkflowService
-     */
-    private $serviceWorkflow;
+    protected ?WorkflowService $serviceWorkflow;
 
 
 
     /**
-     * @param WorkflowService $serviceWorkflow
+     * @param WorkflowService|null $serviceWorkflow
      *
      * @return self
      */
-    public function setServiceWorkflow(WorkflowService $serviceWorkflow)
+    public function setServiceWorkflow( ?WorkflowService $serviceWorkflow )
     {
         $this->serviceWorkflow = $serviceWorkflow;
 
@@ -32,12 +29,9 @@ trait WorkflowServiceAwareTrait
 
 
 
-    /**
-     * @return WorkflowService
-     */
-    public function getServiceWorkflow()
+    public function getServiceWorkflow(): ?WorkflowService
     {
-        if (empty($this->serviceWorkflow)) {
+        if (!$this->serviceWorkflow){
             $this->serviceWorkflow = \Application::$container->get(WorkflowService::class);
         }
 

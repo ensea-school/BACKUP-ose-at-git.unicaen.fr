@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\ElementModulateurService;
 
 /**
- * Description of ElementModulateurAwareTrait
+ * Description of ElementModulateurServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait ElementModulateurServiceAwareTrait
 {
-    /**
-     * @var ElementModulateurService
-     */
-    private $serviceElementModulateur;
+    protected ?ElementModulateurService $serviceElementModulateur;
 
 
 
     /**
-     * @param ElementModulateurService $serviceElementModulateur
+     * @param ElementModulateurService|null $serviceElementModulateur
      *
      * @return self
      */
-    public function setServiceElementModulateur(ElementModulateurService $serviceElementModulateur)
+    public function setServiceElementModulateur( ?ElementModulateurService $serviceElementModulateur )
     {
         $this->serviceElementModulateur = $serviceElementModulateur;
 
@@ -32,12 +29,9 @@ trait ElementModulateurServiceAwareTrait
 
 
 
-    /**
-     * @return ElementModulateurService
-     */
-    public function getServiceElementModulateur()
+    public function getServiceElementModulateur(): ?ElementModulateurService
     {
-        if (empty($this->serviceElementModulateur)) {
+        if (!$this->serviceElementModulateur){
             $this->serviceElementModulateur = \Application::$container->get(ElementModulateurService::class);
         }
 

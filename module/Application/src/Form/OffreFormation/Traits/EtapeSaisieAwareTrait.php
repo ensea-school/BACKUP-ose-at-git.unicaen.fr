@@ -11,19 +11,16 @@ use Application\Form\OffreFormation\EtapeSaisie;
  */
 trait EtapeSaisieAwareTrait
 {
-    /**
-     * @var EtapeSaisie
-     */
-    private $formOffreFormationEtapeSaisie;
+    protected ?EtapeSaisie $formOffreFormationEtapeSaisie;
 
 
 
     /**
-     * @param EtapeSaisie $formOffreFormationEtapeSaisie
+     * @param EtapeSaisie|null $formOffreFormationEtapeSaisie
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeSaisie(EtapeSaisie $formOffreFormationEtapeSaisie)
+    public function setFormOffreFormationEtapeSaisie( ?EtapeSaisie $formOffreFormationEtapeSaisie )
     {
         $this->formOffreFormationEtapeSaisie = $formOffreFormationEtapeSaisie;
 
@@ -32,17 +29,12 @@ trait EtapeSaisieAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return EtapeSaisie
-     */
-    public function getFormOffreFormationEtapeSaisie()
+    public function getFormOffreFormationEtapeSaisie(): ?EtapeSaisie
     {
-        if (!empty($this->formOffreFormationEtapeSaisie)) {
-            return $this->formOffreFormationEtapeSaisie;
+        if (!$this->formOffreFormationEtapeSaisie){
+            $this->formOffreFormationEtapeSaisie = \Application::$container->get('FormElementManager')->get(EtapeSaisie::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(EtapeSaisie::class);
+        return $this->formOffreFormationEtapeSaisie;
     }
 }

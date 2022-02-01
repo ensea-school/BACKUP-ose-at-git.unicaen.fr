@@ -11,31 +11,25 @@ use Application\Entity\Db\MotifNonPaiement;
  */
 trait MotifNonPaiementAwareTrait
 {
-    /**
-     * @var MotifNonPaiement
-     */
-    private $motifNonPaiement;
-
-
+    protected ?MotifNonPaiement $motifNonPaiement;
 
 
 
     /**
-     * @param MotifNonPaiement $motifNonPaiement
+     * @param MotifNonPaiement|null $motifNonPaiement
+     *
      * @return self
      */
-    public function setMotifNonPaiement( MotifNonPaiement $motifNonPaiement = null )
+    public function setMotifNonPaiement( ?MotifNonPaiement $motifNonPaiement )
     {
         $this->motifNonPaiement = $motifNonPaiement;
+
         return $this;
     }
 
 
 
-    /**
-     * @return MotifNonPaiement
-     */
-    public function getMotifNonPaiement()
+    public function getMotifNonPaiement(): ?MotifNonPaiement
     {
         return $this->motifNonPaiement;
     }

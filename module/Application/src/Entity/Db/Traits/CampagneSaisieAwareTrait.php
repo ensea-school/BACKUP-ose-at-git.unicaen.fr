@@ -11,31 +11,25 @@ use Application\Entity\Db\CampagneSaisie;
  */
 trait CampagneSaisieAwareTrait
 {
-    /**
-     * @var CampagneSaisie
-     */
-    private $campagneSaisie;
-
-
+    protected ?CampagneSaisie $campagneSaisie;
 
 
 
     /**
-     * @param CampagneSaisie $campagneSaisie
+     * @param CampagneSaisie|null $campagneSaisie
+     *
      * @return self
      */
-    public function setCampagneSaisie( CampagneSaisie $campagneSaisie = null )
+    public function setCampagneSaisie( ?CampagneSaisie $campagneSaisie )
     {
         $this->campagneSaisie = $campagneSaisie;
+
         return $this;
     }
 
 
 
-    /**
-     * @return CampagneSaisie
-     */
-    public function getCampagneSaisie()
+    public function getCampagneSaisie(): ?CampagneSaisie
     {
         return $this->campagneSaisie;
     }

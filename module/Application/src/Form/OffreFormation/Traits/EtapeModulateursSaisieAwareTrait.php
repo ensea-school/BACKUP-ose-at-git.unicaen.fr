@@ -11,19 +11,16 @@ use Application\Form\OffreFormation\EtapeModulateursSaisie;
  */
 trait EtapeModulateursSaisieAwareTrait
 {
-    /**
-     * @var EtapeModulateursSaisie
-     */
-    private $formOffreFormationEtapeModulateursSaisie;
+    protected ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie;
 
 
 
     /**
-     * @param EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie
+     * @param EtapeModulateursSaisie|null $formOffreFormationEtapeModulateursSaisie
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeModulateursSaisie(EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie)
+    public function setFormOffreFormationEtapeModulateursSaisie( ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie )
     {
         $this->formOffreFormationEtapeModulateursSaisie = $formOffreFormationEtapeModulateursSaisie;
 
@@ -32,17 +29,12 @@ trait EtapeModulateursSaisieAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return EtapeModulateursSaisie
-     */
-    public function getFormOffreFormationEtapeModulateursSaisie()
+    public function getFormOffreFormationEtapeModulateursSaisie(): ?EtapeModulateursSaisie
     {
-        if (!empty($this->formOffreFormationEtapeModulateursSaisie)) {
-            return $this->formOffreFormationEtapeModulateursSaisie;
+        if (!$this->formOffreFormationEtapeModulateursSaisie){
+            $this->formOffreFormationEtapeModulateursSaisie = \Application::$container->get('FormElementManager')->get(EtapeModulateursSaisie::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(EtapeModulateursSaisie::class);
+        return $this->formOffreFormationEtapeModulateursSaisie;
     }
 }

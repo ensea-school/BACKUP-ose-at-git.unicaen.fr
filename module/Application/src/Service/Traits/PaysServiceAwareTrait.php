@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\PaysService;
 
 /**
- * Description of PaysAwareTrait
+ * Description of PaysServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait PaysServiceAwareTrait
 {
-    /**
-     * @var PaysService
-     */
-    private $servicePays;
+    protected ?PaysService $servicePays;
 
 
 
     /**
-     * @param PaysService $servicePays
+     * @param PaysService|null $servicePays
      *
      * @return self
      */
-    public function setServicePays(PaysService $servicePays)
+    public function setServicePays( ?PaysService $servicePays )
     {
         $this->servicePays = $servicePays;
 
@@ -32,12 +29,9 @@ trait PaysServiceAwareTrait
 
 
 
-    /**
-     * @return PaysService
-     */
-    public function getServicePays()
+    public function getServicePays(): ?PaysService
     {
-        if (empty($this->servicePays)) {
+        if (!$this->servicePays){
             $this->servicePays = \Application::$container->get(PaysService::class);
         }
 

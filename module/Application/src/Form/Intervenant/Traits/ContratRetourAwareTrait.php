@@ -11,19 +11,16 @@ use Application\Form\Intervenant\ContratRetour;
  */
 trait ContratRetourAwareTrait
 {
-    /**
-     * @var ContratRetour
-     */
-    private $formIntervenantContratRetour;
+    protected ?ContratRetour $formIntervenantContratRetour;
 
 
 
     /**
-     * @param ContratRetour $formIntervenantContratRetour
+     * @param ContratRetour|null $formIntervenantContratRetour
      *
      * @return self
      */
-    public function setFormIntervenantContratRetour(ContratRetour $formIntervenantContratRetour)
+    public function setFormIntervenantContratRetour( ?ContratRetour $formIntervenantContratRetour )
     {
         $this->formIntervenantContratRetour = $formIntervenantContratRetour;
 
@@ -32,17 +29,12 @@ trait ContratRetourAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ContratRetour
-     */
-    public function getFormIntervenantContratRetour()
+    public function getFormIntervenantContratRetour(): ?ContratRetour
     {
-        if (!empty($this->formIntervenantContratRetour)) {
-            return $this->formIntervenantContratRetour;
+        if (!$this->formIntervenantContratRetour){
+            $this->formIntervenantContratRetour = \Application::$container->get('FormElementManager')->get(ContratRetour::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(ContratRetour::class);
+        return $this->formIntervenantContratRetour;
     }
 }

@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\RoleService;
 
 /**
- * Description of RoleAwareTrait
+ * Description of RoleServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait RoleServiceAwareTrait
 {
-    /**
-     * @var RoleService
-     */
-    private $serviceRole;
+    protected ?RoleService $serviceRole;
 
 
 
     /**
-     * @param RoleService $serviceRole
+     * @param RoleService|null $serviceRole
      *
      * @return self
      */
-    public function setServiceRole(RoleService $serviceRole)
+    public function setServiceRole( ?RoleService $serviceRole )
     {
         $this->serviceRole = $serviceRole;
 
@@ -32,12 +29,9 @@ trait RoleServiceAwareTrait
 
 
 
-    /**
-     * @return RoleService
-     */
-    public function getServiceRole()
+    public function getServiceRole(): ?RoleService
     {
-        if (empty($this->serviceRole)) {
+        if (!$this->serviceRole){
             $this->serviceRole = \Application::$container->get(RoleService::class);
         }
 

@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeVolumeHoraire;
  */
 trait TypeVolumeHoraireAwareTrait
 {
-    /**
-     * @var TypeVolumeHoraire
-     */
-    private $typeVolumeHoraire;
-
-
+    protected ?TypeVolumeHoraire $typeVolumeHoraire;
 
 
 
     /**
-     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param TypeVolumeHoraire|null $typeVolumeHoraire
+     *
      * @return self
      */
-    public function setTypeVolumeHoraire( TypeVolumeHoraire $typeVolumeHoraire = null )
+    public function setTypeVolumeHoraire( ?TypeVolumeHoraire $typeVolumeHoraire )
     {
         $this->typeVolumeHoraire = $typeVolumeHoraire;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeVolumeHoraire
-     */
-    public function getTypeVolumeHoraire()
+    public function getTypeVolumeHoraire(): ?TypeVolumeHoraire
     {
         return $this->typeVolumeHoraire;
     }

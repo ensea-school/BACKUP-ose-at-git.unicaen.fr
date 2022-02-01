@@ -11,38 +11,30 @@ use Application\Form\MotifModificationService\MotifModificationServiceSaisieForm
  */
 trait MotifModificationServiceSaisieFormAwareTrait
 {
-    /**
-     * @var MotifModificationServiceSaisieForm
-     */
-    private $formMotifModificationServiceSaisie;
+    protected ?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie;
 
 
 
     /**
-     * @param MotifModificationServiceSaisieForm $formMotifModificationServiceSaisie
+     * @param MotifModificationServiceSaisieForm|null $formMotifModificationServiceMotifModificationServiceSaisie
      *
      * @return self
      */
-    public function setFormMotifModificationServiceSaisie(MotifModificationServiceSaisieForm $formMotifModificationServiceSaisie)
+    public function setFormMotifModificationServiceMotifModificationServiceSaisie( ?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie )
     {
-        $this->formMotifModificationServiceSaisie = $formMotifModificationServiceSaisie;
+        $this->formMotifModificationServiceMotifModificationServiceSaisie = $formMotifModificationServiceMotifModificationServiceSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return MotifModificationServiceSaisieForm
-     */
-    public function getFormMotifModificationServiceSaisie()
+    public function getFormMotifModificationServiceMotifModificationServiceSaisie(): ?MotifModificationServiceSaisieForm
     {
-        if (!empty($this->formMotifModificationServiceSaisie)) {
-            return $this->formMotifModificationServiceSaisie;
+        if (!$this->formMotifModificationServiceMotifModificationServiceSaisie){
+            $this->formMotifModificationServiceMotifModificationServiceSaisie = \Application::$container->get('FormElementManager')->get(MotifModificationServiceSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(MotifModificationServiceSaisieForm::class);
+        return $this->formMotifModificationServiceMotifModificationServiceSaisie;
     }
 }

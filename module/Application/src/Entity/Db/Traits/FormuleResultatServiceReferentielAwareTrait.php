@@ -11,32 +11,30 @@ use Application\Entity\Db\FormuleResultatServiceReferentiel;
  */
 trait FormuleResultatServiceReferentielAwareTrait
 {
-    /**
-     * @var FormuleResultatServiceReferentiel
-     */
-    private $formuleResultatServiceReferentiel;
-
-
+    protected ?FormuleResultatServiceReferentiel $entityDbFormuleResultatServiceReferentiel;
 
 
 
     /**
-     * @param FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
+     * @param FormuleResultatServiceReferentiel|null $entityDbFormuleResultatServiceReferentiel
+     *
      * @return self
      */
-    public function setFormuleResultatServiceReferentiel( FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null )
+    public function setEntityDbFormuleResultatServiceReferentiel( ?FormuleResultatServiceReferentiel $entityDbFormuleResultatServiceReferentiel )
     {
-        $this->formuleResultatServiceReferentiel = $formuleResultatServiceReferentiel;
+        $this->entityDbFormuleResultatServiceReferentiel = $entityDbFormuleResultatServiceReferentiel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return FormuleResultatServiceReferentiel
-     */
-    public function getFormuleResultatServiceReferentiel()
+    public function getEntityDbFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentiel
     {
-        return $this->formuleResultatServiceReferentiel;
+        if (!$this->entityDbFormuleResultatServiceReferentiel){
+            $this->entityDbFormuleResultatServiceReferentiel = \Application::$container->get('FormElementManager')->get(FormuleResultatServiceReferentiel::class);
+        }
+
+        return $this->entityDbFormuleResultatServiceReferentiel;
     }
 }

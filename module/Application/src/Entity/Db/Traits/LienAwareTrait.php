@@ -11,19 +11,16 @@ use Application\Entity\Db\Lien;
  */
 trait LienAwareTrait
 {
-    /**
-     * @var Lien
-     */
-    private $lien;
+    protected ?Lien $lien;
 
 
 
     /**
-     * @param Lien $lien
+     * @param Lien|null $lien
      *
      * @return self
      */
-    public function setLien(Lien $lien = null)
+    public function setLien( ?Lien $lien )
     {
         $this->lien = $lien;
 
@@ -32,7 +29,7 @@ trait LienAwareTrait
 
 
 
-    public function getLien(): Lien
+    public function getLien(): ?Lien
     {
         return $this->lien;
     }

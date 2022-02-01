@@ -11,19 +11,16 @@ use Application\Form\Service\Saisie;
  */
 trait SaisieAwareTrait
 {
-    /**
-     * @var Saisie
-     */
-    private $formServiceSaisie;
+    protected ?Saisie $formServiceSaisie;
 
 
 
     /**
-     * @param Saisie $formServiceSaisie
+     * @param Saisie|null $formServiceSaisie
      *
      * @return self
      */
-    public function setFormServiceSaisie(Saisie $formServiceSaisie)
+    public function setFormServiceSaisie( ?Saisie $formServiceSaisie )
     {
         $this->formServiceSaisie = $formServiceSaisie;
 
@@ -32,17 +29,12 @@ trait SaisieAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return Saisie
-     */
-    public function getFormServiceSaisie()
+    public function getFormServiceSaisie(): ?Saisie
     {
-        if (!empty($this->formServiceSaisie)) {
-            return $this->formServiceSaisie;
+        if (!$this->formServiceSaisie){
+            $this->formServiceSaisie = \Application::$container->get('FormElementManager')->get(Saisie::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(Saisie::class);
+        return $this->formServiceSaisie;
     }
 }

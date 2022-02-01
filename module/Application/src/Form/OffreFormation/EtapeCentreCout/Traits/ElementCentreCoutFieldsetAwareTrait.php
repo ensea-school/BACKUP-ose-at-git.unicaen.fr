@@ -11,38 +11,30 @@ use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset;
  */
 trait ElementCentreCoutFieldsetAwareTrait
 {
-    /**
-     * @var ElementCentreCoutFieldset
-     */
-    private $fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
+    protected ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset;
 
 
 
     /**
-     * @param ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout
+     * @param ElementCentreCoutFieldset|null $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset
      *
      * @return self
      */
-    public function setFieldsetOffreFormationEtapeCentreCoutElementCentreCout(ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout)
+    public function setFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset( ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset )
     {
-        $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = $fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
+        $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ElementCentreCoutFieldset
-     */
-    public function getFieldsetOffreFormationEtapeCentreCoutElementCentreCout()
+    public function getFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset(): ?ElementCentreCoutFieldset
     {
-        if (!empty($this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout)) {
-            return $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
+        if (!$this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset){
+            $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = \Application::$container->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
+        return $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset;
     }
 }

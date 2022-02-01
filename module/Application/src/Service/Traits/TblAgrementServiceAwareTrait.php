@@ -11,19 +11,16 @@ use Application\Service\TblAgrementService;
  */
 trait TblAgrementServiceAwareTrait
 {
-    /**
-     * @var TblAgrementService
-     */
-    private $serviceTblAgrement;
+    protected ?TblAgrementService $serviceTblAgrement;
 
 
 
     /**
-     * @param TblAgrementService $serviceTblAgrement
+     * @param TblAgrementService|null $serviceTblAgrement
      *
      * @return self
      */
-    public function setServiceTblAgrement(TblAgrementService $serviceTblAgrement)
+    public function setServiceTblAgrement( ?TblAgrementService $serviceTblAgrement )
     {
         $this->serviceTblAgrement = $serviceTblAgrement;
 
@@ -32,12 +29,9 @@ trait TblAgrementServiceAwareTrait
 
 
 
-    /**
-     * @return TblAgrementService
-     */
-    public function getServiceTblAgrement()
+    public function getServiceTblAgrement(): ?TblAgrementService
     {
-        if (empty($this->serviceTblAgrement)) {
+        if (!$this->serviceTblAgrement){
             $this->serviceTblAgrement = \Application::$container->get(TblAgrementService::class);
         }
 

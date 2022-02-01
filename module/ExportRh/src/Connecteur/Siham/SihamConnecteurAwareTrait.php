@@ -6,40 +6,30 @@ namespace ExportRh\Connecteur\Siham;
 /**
  * Description of SihamConnecteurAwareTrait
  *
- * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
+ * @author UnicaenCode
  */
 trait SihamConnecteurAwareTrait
 {
-    /**
-     * @var SihamConnecteur
-     */
-    protected $sihamConnecteur;
+    protected ?SihamConnecteur $connecteurSihamSiham;
 
 
 
     /**
-     * @param SihamConnecteur $exportRhService
+     * @param SihamConnecteur|null $connecteurSihamSiham
      *
      * @return self
      */
-    public function setSihamConnecteur(SihamConnecteur $sihamConnecteur)
+    public function setConnecteurSihamSiham( ?SihamConnecteur $connecteurSihamSiham )
     {
-        $this->sihamConnecteur = $sihamConnecteur;
+        $this->connecteurSihamSiham = $connecteurSihamSiham;
 
         return $this;
     }
 
 
 
-    /**
-     * @return SihamConnecteur
-     */
-    public function getSihamConnecteur(): SihamConnecteur
+    public function getConnecteurSihamSiham(): ?SihamConnecteur
     {
-        if (!$this->sihamConnecteur) {
-            $this->sihamConnecteur = \Application::$container->get(SihamConnecteur::class);
-        }
-
-        return $this->sihamConnecteur;
+        return $this->connecteurSihamSiham;
     }
 }

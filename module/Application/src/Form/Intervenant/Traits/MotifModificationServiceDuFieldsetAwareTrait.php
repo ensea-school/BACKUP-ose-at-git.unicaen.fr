@@ -11,38 +11,30 @@ use Application\Form\Intervenant\MotifModificationServiceDuFieldset;
  */
 trait MotifModificationServiceDuFieldsetAwareTrait
 {
-    /**
-     * @var MotifModificationServiceDuFieldset
-     */
-    private $fieldsetIntervenantMotifModificationServiceDu;
+    protected ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset;
 
 
 
     /**
-     * @param MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu
+     * @param MotifModificationServiceDuFieldset|null $formIntervenantMotifModificationServiceDuFieldset
      *
      * @return self
      */
-    public function setFieldsetIntervenantMotifModificationServiceDu(MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu)
+    public function setFormIntervenantMotifModificationServiceDuFieldset( ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset )
     {
-        $this->fieldsetIntervenantMotifModificationServiceDu = $fieldsetIntervenantMotifModificationServiceDu;
+        $this->formIntervenantMotifModificationServiceDuFieldset = $formIntervenantMotifModificationServiceDuFieldset;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return MotifModificationServiceDuFieldset
-     */
-    public function getFieldsetIntervenantMotifModificationServiceDu()
+    public function getFormIntervenantMotifModificationServiceDuFieldset(): ?MotifModificationServiceDuFieldset
     {
-        if (!empty($this->fieldsetIntervenantMotifModificationServiceDu)) {
-            return $this->fieldsetIntervenantMotifModificationServiceDu;
+        if (!$this->formIntervenantMotifModificationServiceDuFieldset){
+            $this->formIntervenantMotifModificationServiceDuFieldset = \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
+        return $this->formIntervenantMotifModificationServiceDuFieldset;
     }
 }

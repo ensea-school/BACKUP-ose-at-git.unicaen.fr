@@ -11,31 +11,25 @@ use Application\Entity\Db\Perimetre;
  */
 trait PerimetreAwareTrait
 {
-    /**
-     * @var Perimetre
-     */
-    private $perimetre;
-
-
+    protected ?Perimetre $perimetre;
 
 
 
     /**
-     * @param Perimetre $perimetre
+     * @param Perimetre|null $perimetre
+     *
      * @return self
      */
-    public function setPerimetre( Perimetre $perimetre = null )
+    public function setPerimetre( ?Perimetre $perimetre )
     {
         $this->perimetre = $perimetre;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Perimetre
-     */
-    public function getPerimetre()
+    public function getPerimetre(): ?Perimetre
     {
         return $this->perimetre;
     }

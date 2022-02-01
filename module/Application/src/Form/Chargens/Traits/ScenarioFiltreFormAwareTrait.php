@@ -11,19 +11,16 @@ use Application\Form\Chargens\ScenarioFiltreForm;
  */
 trait ScenarioFiltreFormAwareTrait
 {
-    /**
-     * @var ScenarioFiltreForm
-     */
-    private $formChargensScenarioFiltre;
+    protected ?ScenarioFiltreForm $formChargensScenarioFiltre;
 
 
 
     /**
-     * @param ScenarioFiltreForm $formChargensScenarioFiltre
+     * @param ScenarioFiltreForm|null $formChargensScenarioFiltre
      *
      * @return self
      */
-    public function setFormChargensScenarioFiltre(ScenarioFiltreForm $formChargensScenarioFiltre)
+    public function setFormChargensScenarioFiltre( ?ScenarioFiltreForm $formChargensScenarioFiltre )
     {
         $this->formChargensScenarioFiltre = $formChargensScenarioFiltre;
 
@@ -32,17 +29,12 @@ trait ScenarioFiltreFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ScenarioFiltreForm
-     */
-    public function getFormChargensScenarioFiltre()
+    public function getFormChargensScenarioFiltre(): ?ScenarioFiltreForm
     {
-        if (!empty($this->formChargensScenarioFiltre)) {
-            return $this->formChargensScenarioFiltre;
+        if (!$this->formChargensScenarioFiltre){
+            $this->formChargensScenarioFiltre = \Application::$container->get('FormElementManager')->get(ScenarioFiltreForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(ScenarioFiltreForm::class);
+        return $this->formChargensScenarioFiltre;
     }
 }

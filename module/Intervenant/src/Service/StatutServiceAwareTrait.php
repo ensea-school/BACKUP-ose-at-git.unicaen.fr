@@ -4,42 +4,36 @@ namespace Intervenant\Service;
 
 
 /**
- * Description of StatutIntervenantServiceAwareTrait
+ * Description of StatutServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait StatutServiceAwareTrait
 {
-    /**
-     * @var StatutService
-     */
-    private $serviceStatutIntervenant;
+    protected ?StatutService $serviceStatut;
 
 
 
     /**
-     * @param StatutService $serviceStatutIntervenant
+     * @param StatutService|null $serviceStatut
      *
      * @return self
      */
-    public function setServiceStatut(StatutService $serviceStatutIntervenant)
+    public function setServiceStatut( ?StatutService $serviceStatut )
     {
-        $this->serviceStatutIntervenant = $serviceStatutIntervenant;
+        $this->serviceStatut = $serviceStatut;
 
         return $this;
     }
 
 
 
-    /**
-     * @return StatutService
-     */
-    public function getServiceStatut()
+    public function getServiceStatut(): ?StatutService
     {
-        if (empty($this->serviceStatutIntervenant)) {
-            $this->serviceStatutIntervenant = \Application::$container->get(StatutService::class);
+        if (!$this->serviceStatut){
+            $this->serviceStatut = \Application::$container->get(StatutService::class);
         }
 
-        return $this->serviceStatutIntervenant;
+        return $this->serviceStatut;
     }
 }

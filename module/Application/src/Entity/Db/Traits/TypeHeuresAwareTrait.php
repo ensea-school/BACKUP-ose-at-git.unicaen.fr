@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeHeures;
  */
 trait TypeHeuresAwareTrait
 {
-    /**
-     * @var TypeHeures
-     */
-    private $typeHeures;
-
-
+    protected ?TypeHeures $typeHeures;
 
 
 
     /**
-     * @param TypeHeures $typeHeures
+     * @param TypeHeures|null $typeHeures
+     *
      * @return self
      */
-    public function setTypeHeures( TypeHeures $typeHeures = null )
+    public function setTypeHeures( ?TypeHeures $typeHeures )
     {
         $this->typeHeures = $typeHeures;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeHeures
-     */
-    public function getTypeHeures()
+    public function getTypeHeures(): ?TypeHeures
     {
         return $this->typeHeures;
     }

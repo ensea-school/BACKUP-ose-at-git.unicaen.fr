@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeCentreCout;
  */
 trait TypeCentreCoutAwareTrait
 {
-    /**
-     * @var TypeCentreCout
-     */
-    private $typeCentreCout;
-
-
+    protected ?TypeCentreCout $typeCentreCout;
 
 
 
     /**
-     * @param TypeCentreCout $typeCentreCout
+     * @param TypeCentreCout|null $typeCentreCout
+     *
      * @return self
      */
-    public function setTypeCentreCout( TypeCentreCout $typeCentreCout = null )
+    public function setTypeCentreCout( ?TypeCentreCout $typeCentreCout )
     {
         $this->typeCentreCout = $typeCentreCout;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeCentreCout
-     */
-    public function getTypeCentreCout()
+    public function getTypeCentreCout(): ?TypeCentreCout
     {
         return $this->typeCentreCout;
     }

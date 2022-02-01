@@ -11,38 +11,30 @@ use Application\Form\Service\SaisieFieldset;
  */
 trait SaisieFieldsetAwareTrait
 {
-    /**
-     * @var SaisieFieldset
-     */
-    private $fieldsetServiceSaisie;
+    protected ?SaisieFieldset $formServiceSaisieFieldset;
 
 
 
     /**
-     * @param SaisieFieldset $fieldsetServiceSaisie
+     * @param SaisieFieldset|null $formServiceSaisieFieldset
      *
      * @return self
      */
-    public function setFieldsetServiceSaisie(SaisieFieldset $fieldsetServiceSaisie)
+    public function setFormServiceSaisieFieldset( ?SaisieFieldset $formServiceSaisieFieldset )
     {
-        $this->fieldsetServiceSaisie = $fieldsetServiceSaisie;
+        $this->formServiceSaisieFieldset = $formServiceSaisieFieldset;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return SaisieFieldset
-     */
-    public function getFieldsetServiceSaisie()
+    public function getFormServiceSaisieFieldset(): ?SaisieFieldset
     {
-        if (!empty($this->fieldsetServiceSaisie)) {
-            return $this->fieldsetServiceSaisie;
+        if (!$this->formServiceSaisieFieldset){
+            $this->formServiceSaisieFieldset = \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
+        return $this->formServiceSaisieFieldset;
     }
 }

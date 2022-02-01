@@ -11,19 +11,16 @@ use Application\Form\VolumeHoraire\Saisie;
  */
 trait SaisieAwareTrait
 {
-    /**
-     * @var Saisie
-     */
-    private $formVolumeHoraireSaisie;
+    protected ?Saisie $formVolumeHoraireSaisie;
 
 
 
     /**
-     * @param Saisie $formVolumeHoraireSaisie
+     * @param Saisie|null $formVolumeHoraireSaisie
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisie(Saisie $formVolumeHoraireSaisie)
+    public function setFormVolumeHoraireSaisie( ?Saisie $formVolumeHoraireSaisie )
     {
         $this->formVolumeHoraireSaisie = $formVolumeHoraireSaisie;
 
@@ -32,17 +29,12 @@ trait SaisieAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return Saisie
-     */
-    public function getFormVolumeHoraireSaisie()
+    public function getFormVolumeHoraireSaisie(): ?Saisie
     {
-        if (!empty($this->formVolumeHoraireSaisie)) {
-            return $this->formVolumeHoraireSaisie;
+        if (!$this->formVolumeHoraireSaisie){
+            $this->formVolumeHoraireSaisie = \Application::$container->get('FormElementManager')->get(Saisie::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(Saisie::class);
+        return $this->formVolumeHoraireSaisie;
     }
 }

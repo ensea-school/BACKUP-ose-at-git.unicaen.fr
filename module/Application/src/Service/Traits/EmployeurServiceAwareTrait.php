@@ -5,36 +5,33 @@ namespace Application\Service\Traits;
 use Application\Service\EmployeurService;
 
 /**
- * Description of EmployeurAwareTrait
+ * Description of EmployeurServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait EmployeurServiceAwareTrait
 {
-    /**
-     * @var EmployeurService
-     */
-    private $serviceEmployeur;
+    protected ?EmployeurService $serviceEmployeur;
+
+
 
     /**
-     * @param EmployeurService $serviceEmployeur
+     * @param EmployeurService|null $serviceEmployeur
      *
      * @return self
      */
-    public function setServiceEmployeur(EmployeurService $serviceEmployeur)
+    public function setServiceEmployeur( ?EmployeurService $serviceEmployeur )
     {
         $this->serviceEmployeur = $serviceEmployeur;
 
         return $this;
     }
 
-    /**
-     * @return EmployeurService
-     */
-    public function getServiceEmployeur()
+
+
+    public function getServiceEmployeur(): ?EmployeurService
     {
-        if(empty($this->serviceEmployeur))
-        {
+        if (!$this->serviceEmployeur){
             $this->serviceEmployeur = \Application::$container->get(EmployeurService::class);
         }
 

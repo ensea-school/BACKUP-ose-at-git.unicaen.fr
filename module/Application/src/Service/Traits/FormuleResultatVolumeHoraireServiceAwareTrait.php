@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\FormuleResultatVolumeHoraireService;
 
 /**
- * Description of FormuleResultatVolumeHoraireAwareTrait
+ * Description of FormuleResultatVolumeHoraireServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait FormuleResultatVolumeHoraireServiceAwareTrait
 {
-    /**
-     * @var FormuleResultatVolumeHoraireService
-     */
-    private $serviceFormuleResultatVolumeHoraire;
+    protected ?FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire;
 
 
 
     /**
-     * @param FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire
+     * @param FormuleResultatVolumeHoraireService|null $serviceFormuleResultatVolumeHoraire
      *
      * @return self
      */
-    public function setServiceFormuleResultatVolumeHoraire(FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire)
+    public function setServiceFormuleResultatVolumeHoraire( ?FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire )
     {
         $this->serviceFormuleResultatVolumeHoraire = $serviceFormuleResultatVolumeHoraire;
 
@@ -32,13 +29,10 @@ trait FormuleResultatVolumeHoraireServiceAwareTrait
 
 
 
-    /**
-     * @return FormuleResultatVolumeHoraireService
-     */
-    public function getServiceFormuleResultatVolumeHoraire()
+    public function getServiceFormuleResultatVolumeHoraire(): ?FormuleResultatVolumeHoraireService
     {
-        if (empty($this->serviceFormuleResultatVolumeHoraire)) {
-            $this->serviceFormuleResultatVolumeHoraire = \Application::$container->get(FormuleResultatVolumeHoraireService::class);
+        if (!$this->serviceFormuleResultatVolumeHoraire){
+            $this->serviceFormuleResultatVolumeHoraire = \Application::$container->get('FormElementManager')->get(FormuleResultatVolumeHoraireService::class);
         }
 
         return $this->serviceFormuleResultatVolumeHoraire;

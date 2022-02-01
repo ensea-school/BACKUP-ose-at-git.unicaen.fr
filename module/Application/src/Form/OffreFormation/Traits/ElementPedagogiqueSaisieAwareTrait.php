@@ -11,19 +11,16 @@ use Application\Form\OffreFormation\ElementPedagogiqueSaisie;
  */
 trait ElementPedagogiqueSaisieAwareTrait
 {
-    /**
-     * @var ElementPedagogiqueSaisie
-     */
-    private $formOffreFormationElementPedagogiqueSaisie;
+    protected ?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie;
 
 
 
     /**
-     * @param ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie
+     * @param ElementPedagogiqueSaisie|null $formOffreFormationElementPedagogiqueSaisie
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSaisie(ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie)
+    public function setFormOffreFormationElementPedagogiqueSaisie( ?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie )
     {
         $this->formOffreFormationElementPedagogiqueSaisie = $formOffreFormationElementPedagogiqueSaisie;
 
@@ -32,17 +29,12 @@ trait ElementPedagogiqueSaisieAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ElementPedagogiqueSaisie
-     */
-    public function getFormOffreFormationElementPedagogiqueSaisie()
+    public function getFormOffreFormationElementPedagogiqueSaisie(): ?ElementPedagogiqueSaisie
     {
-        if (!empty($this->formOffreFormationElementPedagogiqueSaisie)) {
-            return $this->formOffreFormationElementPedagogiqueSaisie;
+        if (!$this->formOffreFormationElementPedagogiqueSaisie){
+            $this->formOffreFormationElementPedagogiqueSaisie = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSaisie::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSaisie::class);
+        return $this->formOffreFormationElementPedagogiqueSaisie;
     }
 }

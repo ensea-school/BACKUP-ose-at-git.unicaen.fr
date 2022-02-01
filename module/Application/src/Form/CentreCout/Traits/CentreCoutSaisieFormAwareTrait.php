@@ -11,38 +11,30 @@ use Application\Form\CentreCout\CentreCoutSaisieForm;
  */
 trait CentreCoutSaisieFormAwareTrait
 {
-    /**
-     * @var CentreCoutSaisieForm
-     */
-    private $formCentreCoutSaisie;
+    protected ?CentreCoutSaisieForm $formCentreCoutCentreCoutSaisie;
 
 
 
     /**
-     * @param CentreCoutSaisieForm $formCentreCoutSaisie
+     * @param CentreCoutSaisieForm|null $formCentreCoutCentreCoutSaisie
      *
      * @return self
      */
-    public function setFormCentreCoutSaisie(CentreCoutSaisieForm $formCentreCoutSaisie)
+    public function setFormCentreCoutCentreCoutSaisie( ?CentreCoutSaisieForm $formCentreCoutCentreCoutSaisie )
     {
-        $this->formCentreCoutSaisie = $formCentreCoutSaisie;
+        $this->formCentreCoutCentreCoutSaisie = $formCentreCoutCentreCoutSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return CentreCoutSaisieForm
-     */
-    public function getFormCentreCoutSaisie()
+    public function getFormCentreCoutCentreCoutSaisie(): ?CentreCoutSaisieForm
     {
-        if (!empty($this->formCentreCoutSaisie)) {
-            return $this->formCentreCoutSaisie;
+        if (!$this->formCentreCoutCentreCoutSaisie){
+            $this->formCentreCoutCentreCoutSaisie = \Application::$container->get('FormElementManager')->get(CentreCoutSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(CentreCoutSaisieForm::class);
+        return $this->formCentreCoutCentreCoutSaisie;
     }
 }

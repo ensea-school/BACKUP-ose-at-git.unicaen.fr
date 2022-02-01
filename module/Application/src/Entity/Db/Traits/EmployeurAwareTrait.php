@@ -11,10 +11,7 @@ use Application\Entity\Db\Employeur;
  */
 trait EmployeurAwareTrait
 {
-    /**
-     * @var Employeur|null
-     */
-    private $employeur;
+    protected ?Employeur $employeur;
 
 
 
@@ -23,7 +20,7 @@ trait EmployeurAwareTrait
      *
      * @return self
      */
-    public function setEmployeur(?Employeur $employeur = null)
+    public function setEmployeur( ?Employeur $employeur )
     {
         $this->employeur = $employeur;
 
@@ -32,9 +29,6 @@ trait EmployeurAwareTrait
 
 
 
-    /**
-     * @return Employeur|null
-     */
     public function getEmployeur(): ?Employeur
     {
         return $this->employeur;

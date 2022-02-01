@@ -3,28 +3,24 @@
 namespace Application\Service\Traits;
 
 use Application\Service\VolumeHoraireReferentielService;
-use RuntimeException;
 
 /**
- * Description of VolumeHoraireReferentielAwareTrait
+ * Description of VolumeHoraireReferentielServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait VolumeHoraireReferentielServiceAwareTrait
 {
-    /**
-     * @var VolumeHoraireReferentielService
-     */
-    private $serviceVolumeHoraireReferentiel;
+    protected ?VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel;
 
 
 
     /**
-     * @param VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel
+     * @param VolumeHoraireReferentielService|null $serviceVolumeHoraireReferentiel
      *
      * @return self
      */
-    public function setServiceVolumeHoraireReferentiel(VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel)
+    public function setServiceVolumeHoraireReferentiel( ?VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel )
     {
         $this->serviceVolumeHoraireReferentiel = $serviceVolumeHoraireReferentiel;
 
@@ -33,12 +29,9 @@ trait VolumeHoraireReferentielServiceAwareTrait
 
 
 
-    /**
-     * @return VolumeHoraireReferentielService
-     */
-    public function getServiceVolumeHoraireReferentiel()
+    public function getServiceVolumeHoraireReferentiel(): ?VolumeHoraireReferentielService
     {
-        if (empty($this->serviceVolumeHoraireReferentiel)) {
+        if (!$this->serviceVolumeHoraireReferentiel){
             $this->serviceVolumeHoraireReferentiel = \Application::$container->get(VolumeHoraireReferentielService::class);
         }
 

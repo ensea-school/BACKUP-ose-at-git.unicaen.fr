@@ -11,31 +11,25 @@ use Application\Entity\Db\TblAgrement;
  */
 trait TblAgrementAwareTrait
 {
-    /**
-     * @var TblAgrement
-     */
-    private $tblAgrement;
-
-
+    protected ?TblAgrement $tblAgrement;
 
 
 
     /**
-     * @param TblAgrement $tblAgrement
+     * @param TblAgrement|null $tblAgrement
+     *
      * @return self
      */
-    public function setTblAgrement( TblAgrement $tblAgrement = null )
+    public function setTblAgrement( ?TblAgrement $tblAgrement )
     {
         $this->tblAgrement = $tblAgrement;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblAgrement
-     */
-    public function getTblAgrement()
+    public function getTblAgrement(): ?TblAgrement
     {
         return $this->tblAgrement;
     }

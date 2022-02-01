@@ -2,34 +2,38 @@
 
 namespace Application\Provider\Chargens;
 
-trait ChargensProviderAwareTrait {
+
+/**
+ * Description of ChargensProviderAwareTrait
+ *
+ * @author UnicaenCode
+ */
+trait ChargensProviderAwareTrait
+{
+    protected ?ChargensProvider $providerChargensChargens;
+
+
 
     /**
-     * @var ChargensProvider
-     */
-    private $providerChargens;
-
-    /**
-     * @param ChargensProvider $providerChargens
+     * @param ChargensProvider|null $providerChargensChargens
+     *
      * @return self
      */
-    public function setProviderChargens( ChargensProvider $providerChargens )
+    public function setProviderChargensChargens( ?ChargensProvider $providerChargensChargens )
     {
-        $this->providerChargens = $providerChargens;
+        $this->providerChargensChargens = $providerChargensChargens;
+
         return $this;
     }
 
 
 
-    /**
-     * @return ChargensProvider
-     */
-    public function getProviderChargens()
+    public function getProviderChargensChargens(): ?ChargensProvider
     {
-        if (!$this->providerChargens){
-            $this->providerChargens = \Application::$container->get(ChargensProvider::class);
+        if (!$this->providerChargensChargens){
+            $this->providerChargensChargens = \Application::$container->get(ChargensProvider::class);
         }
-        return $this->providerChargens;
-    }
 
+        return $this->providerChargensChargens;
+    }
 }

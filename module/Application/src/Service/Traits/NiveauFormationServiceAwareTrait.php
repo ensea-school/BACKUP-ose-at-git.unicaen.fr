@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\NiveauFormationService;
 
 /**
- * Description of NiveauFormationAwareTrait
+ * Description of NiveauFormationServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait NiveauFormationServiceAwareTrait
 {
-    /**
-     * @var NiveauFormationService
-     */
-    private $serviceNiveauFormation;
+    protected ?NiveauFormationService $serviceNiveauFormation;
 
 
 
     /**
-     * @param NiveauFormationService $serviceNiveauFormation
+     * @param NiveauFormationService|null $serviceNiveauFormation
      *
      * @return self
      */
-    public function setServiceNiveauFormation(NiveauFormationService $serviceNiveauFormation)
+    public function setServiceNiveauFormation( ?NiveauFormationService $serviceNiveauFormation )
     {
         $this->serviceNiveauFormation = $serviceNiveauFormation;
 
@@ -32,13 +29,10 @@ trait NiveauFormationServiceAwareTrait
 
 
 
-    /**
-     * @return NiveauFormationService
-     */
-    public function getServiceNiveauFormation()
+    public function getServiceNiveauFormation(): ?NiveauFormationService
     {
-        if (empty($this->serviceNiveauFormation)) {
-            $this->serviceNiveauFormation = \Application::$container->get(NiveauFormationService::class);
+        if (!$this->serviceNiveauFormation){
+            $this->serviceNiveauFormation = \Application::$container->get('FormElementManager')->get(NiveauFormationService::class);
         }
 
         return $this->serviceNiveauFormation;

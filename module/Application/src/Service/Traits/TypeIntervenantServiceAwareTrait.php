@@ -11,19 +11,16 @@ use Application\Service\TypeIntervenantService;
  */
 trait TypeIntervenantServiceAwareTrait
 {
-    /**
-     * @var TypeIntervenantService
-     */
-    private $serviceTypeIntervenant;
+    protected ?TypeIntervenantService $serviceTypeIntervenant;
 
 
 
     /**
-     * @param TypeIntervenantService $serviceTypeIntervenant
+     * @param TypeIntervenantService|null $serviceTypeIntervenant
      *
      * @return self
      */
-    public function setServiceTypeIntervenant(TypeIntervenantService $serviceTypeIntervenant)
+    public function setServiceTypeIntervenant( ?TypeIntervenantService $serviceTypeIntervenant )
     {
         $this->serviceTypeIntervenant = $serviceTypeIntervenant;
 
@@ -32,12 +29,9 @@ trait TypeIntervenantServiceAwareTrait
 
 
 
-    /**
-     * @return TypeIntervenantService
-     */
-    public function getServiceTypeIntervenant()
+    public function getServiceTypeIntervenant(): ?TypeIntervenantService
     {
-        if (empty($this->serviceTypeIntervenant)) {
+        if (!$this->serviceTypeIntervenant){
             $this->serviceTypeIntervenant = \Application::$container->get(TypeIntervenantService::class);
         }
 

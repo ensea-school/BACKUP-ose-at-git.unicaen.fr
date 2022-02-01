@@ -11,19 +11,16 @@ use Application\Service\TblPieceJointeService;
  */
 trait TblPieceJointeServiceAwareTrait
 {
-    /**
-     * @var TblPieceJointeService
-     */
-    private $serviceTblPieceJointe;
+    protected ?TblPieceJointeService $serviceTblPieceJointe;
 
 
 
     /**
-     * @param TblPieceJointeService $serviceTblPieceJointe
+     * @param TblPieceJointeService|null $serviceTblPieceJointe
      *
      * @return self
      */
-    public function setServiceTblPieceJointe(TblPieceJointeService $serviceTblPieceJointe)
+    public function setServiceTblPieceJointe( ?TblPieceJointeService $serviceTblPieceJointe )
     {
         $this->serviceTblPieceJointe = $serviceTblPieceJointe;
 
@@ -32,12 +29,9 @@ trait TblPieceJointeServiceAwareTrait
 
 
 
-    /**
-     * @return TblPieceJointeService
-     */
-    public function getServiceTblPieceJointe()
+    public function getServiceTblPieceJointe(): ?TblPieceJointeService
     {
-        if (empty($this->serviceTblPieceJointe)) {
+        if (!$this->serviceTblPieceJointe){
             $this->serviceTblPieceJointe = \Application::$container->get(TblPieceJointeService::class);
         }
 

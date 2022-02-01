@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeInterventionStructure;
  */
 trait TypeInterventionStructureAwareTrait
 {
-    /**
-     * @var TypeInterventionStructure
-     */
-    private $typeInterventionStructure;
-
-
+    protected ?TypeInterventionStructure $typeInterventionStructure;
 
 
 
     /**
-     * @param TypeInterventionStructure $typeInterventionStructure
+     * @param TypeInterventionStructure|null $typeInterventionStructure
+     *
      * @return self
      */
-    public function setTypeInterventionStructure( TypeInterventionStructure $typeInterventionStructure = null )
+    public function setTypeInterventionStructure( ?TypeInterventionStructure $typeInterventionStructure )
     {
         $this->typeInterventionStructure = $typeInterventionStructure;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeInterventionStructure
-     */
-    public function getTypeInterventionStructure()
+    public function getTypeInterventionStructure(): ?TypeInterventionStructure
     {
         return $this->typeInterventionStructure;
     }

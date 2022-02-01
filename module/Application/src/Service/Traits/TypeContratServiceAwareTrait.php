@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\TypeContratService;
 
 /**
- * Description of TypeContratAwareTrait
+ * Description of TypeContratServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeContratServiceAwareTrait
 {
-    /**
-     * @var TypeContratService
-     */
-    private $serviceTypeContrat;
+    protected ?TypeContratService $serviceTypeContrat;
 
 
 
     /**
-     * @param TypeContratService $serviceTypeContrat
+     * @param TypeContratService|null $serviceTypeContrat
      *
      * @return self
      */
-    public function setServiceTypeContrat(TypeContratService $serviceTypeContrat)
+    public function setServiceTypeContrat( ?TypeContratService $serviceTypeContrat )
     {
         $this->serviceTypeContrat = $serviceTypeContrat;
 
@@ -32,12 +29,9 @@ trait TypeContratServiceAwareTrait
 
 
 
-    /**
-     * @return TypeContratService
-     */
-    public function getServiceTypeContrat()
+    public function getServiceTypeContrat(): ?TypeContratService
     {
-        if (empty($this->serviceTypeContrat)) {
+        if (!$this->serviceTypeContrat){
             $this->serviceTypeContrat = \Application::$container->get(TypeContratService::class);
         }
 

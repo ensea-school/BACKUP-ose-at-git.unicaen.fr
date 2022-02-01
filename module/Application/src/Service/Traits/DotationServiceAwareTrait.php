@@ -11,19 +11,16 @@ use Application\Service\DotationService;
  */
 trait DotationServiceAwareTrait
 {
-    /**
-     * @var DotationService
-     */
-    private $serviceDotation;
+    protected ?DotationService $serviceDotation;
 
 
 
     /**
-     * @param DotationService $serviceDotation
+     * @param DotationService|null $serviceDotation
      *
      * @return self
      */
-    public function setServiceDotation(DotationService $serviceDotation)
+    public function setServiceDotation( ?DotationService $serviceDotation )
     {
         $this->serviceDotation = $serviceDotation;
 
@@ -32,12 +29,9 @@ trait DotationServiceAwareTrait
 
 
 
-    /**
-     * @return DotationService
-     */
-    public function getServiceDotation()
+    public function getServiceDotation(): ?DotationService
     {
-        if (empty($this->serviceDotation)) {
+        if (!$this->serviceDotation){
             $this->serviceDotation = \Application::$container->get(DotationService::class);
         }
 

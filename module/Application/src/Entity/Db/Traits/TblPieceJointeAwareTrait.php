@@ -11,31 +11,25 @@ use Application\Entity\Db\TblPieceJointe;
  */
 trait TblPieceJointeAwareTrait
 {
-    /**
-     * @var TblPieceJointe
-     */
-    private $tblPieceJointe;
-
-
+    protected ?TblPieceJointe $tblPieceJointe;
 
 
 
     /**
-     * @param TblPieceJointe $tblPieceJointe
+     * @param TblPieceJointe|null $tblPieceJointe
+     *
      * @return self
      */
-    public function setTblPieceJointe( TblPieceJointe $tblPieceJointe = null )
+    public function setTblPieceJointe( ?TblPieceJointe $tblPieceJointe )
     {
         $this->tblPieceJointe = $tblPieceJointe;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblPieceJointe
-     */
-    public function getTblPieceJointe()
+    public function getTblPieceJointe(): ?TblPieceJointe
     {
         return $this->tblPieceJointe;
     }

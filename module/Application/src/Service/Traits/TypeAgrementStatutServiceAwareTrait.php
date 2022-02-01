@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\TypeAgrementStatutService;
 
 /**
- * Description of TypeAgrementStatutAwareTrait
+ * Description of TypeAgrementStatutServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeAgrementStatutServiceAwareTrait
 {
-    /**
-     * @var TypeAgrementStatutService
-     */
-    private $serviceTypeAgrementStatut;
+    protected ?TypeAgrementStatutService $serviceTypeAgrementStatut;
 
 
 
     /**
-     * @param TypeAgrementStatutService $serviceTypeAgrementStatut
+     * @param TypeAgrementStatutService|null $serviceTypeAgrementStatut
      *
      * @return self
      */
-    public function setServiceTypeAgrementStatut(TypeAgrementStatutService $serviceTypeAgrementStatut)
+    public function setServiceTypeAgrementStatut( ?TypeAgrementStatutService $serviceTypeAgrementStatut )
     {
         $this->serviceTypeAgrementStatut = $serviceTypeAgrementStatut;
 
@@ -32,12 +29,9 @@ trait TypeAgrementStatutServiceAwareTrait
 
 
 
-    /**
-     * @return TypeAgrementStatutService
-     */
-    public function getServiceTypeAgrementStatut()
+    public function getServiceTypeAgrementStatut(): ?TypeAgrementStatutService
     {
-        if (empty($this->serviceTypeAgrementStatut)) {
+        if (!$this->serviceTypeAgrementStatut){
             $this->serviceTypeAgrementStatut = \Application::$container->get(TypeAgrementStatutService::class);
         }
 

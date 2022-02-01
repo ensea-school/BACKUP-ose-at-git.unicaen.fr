@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\EtatVolumeHoraireService;
 
 /**
- * Description of EtatVolumeHoraireAwareTrait
+ * Description of EtatVolumeHoraireServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait EtatVolumeHoraireServiceAwareTrait
 {
-    /**
-     * @var EtatVolumeHoraireService
-     */
-    private $serviceEtatVolumeHoraire;
+    protected ?EtatVolumeHoraireService $serviceEtatVolumeHoraire;
 
 
 
     /**
-     * @param EtatVolumeHoraireService $serviceEtatVolumeHoraire
+     * @param EtatVolumeHoraireService|null $serviceEtatVolumeHoraire
      *
      * @return self
      */
-    public function setServiceEtatVolumeHoraire(EtatVolumeHoraireService $serviceEtatVolumeHoraire)
+    public function setServiceEtatVolumeHoraire( ?EtatVolumeHoraireService $serviceEtatVolumeHoraire )
     {
         $this->serviceEtatVolumeHoraire = $serviceEtatVolumeHoraire;
 
@@ -32,12 +29,9 @@ trait EtatVolumeHoraireServiceAwareTrait
 
 
 
-    /**
-     * @return EtatVolumeHoraireService
-     */
-    public function getServiceEtatVolumeHoraire()
+    public function getServiceEtatVolumeHoraire(): ?EtatVolumeHoraireService
     {
-        if (empty($this->serviceEtatVolumeHoraire)) {
+        if (!$this->serviceEtatVolumeHoraire){
             $this->serviceEtatVolumeHoraire = \Application::$container->get(EtatVolumeHoraireService::class);
         }
 

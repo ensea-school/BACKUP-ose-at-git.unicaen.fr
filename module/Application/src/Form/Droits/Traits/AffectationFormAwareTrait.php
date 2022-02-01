@@ -11,19 +11,16 @@ use Application\Form\Droits\AffectationForm;
  */
 trait AffectationFormAwareTrait
 {
-    /**
-     * @var AffectationForm
-     */
-    private $formDroitsAffectation;
+    protected ?AffectationForm $formDroitsAffectation;
 
 
 
     /**
-     * @param AffectationForm $formDroitsAffectation
+     * @param AffectationForm|null $formDroitsAffectation
      *
      * @return self
      */
-    public function setFormDroitsAffectation(AffectationForm $formDroitsAffectation)
+    public function setFormDroitsAffectation( ?AffectationForm $formDroitsAffectation )
     {
         $this->formDroitsAffectation = $formDroitsAffectation;
 
@@ -32,17 +29,12 @@ trait AffectationFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return AffectationForm
-     */
-    public function getFormDroitsAffectation()
+    public function getFormDroitsAffectation(): ?AffectationForm
     {
-        if (!empty($this->formDroitsAffectation)) {
-            return $this->formDroitsAffectation;
+        if (!$this->formDroitsAffectation){
+            $this->formDroitsAffectation = \Application::$container->get('FormElementManager')->get(AffectationForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(AffectationForm::class);
+        return $this->formDroitsAffectation;
     }
 }

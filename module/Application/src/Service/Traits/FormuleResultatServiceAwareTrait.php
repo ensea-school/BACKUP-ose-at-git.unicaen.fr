@@ -5,25 +5,22 @@ namespace Application\Service\Traits;
 use Application\Service\FormuleResultatService;
 
 /**
- * Description of FormuleResultatAwareTrait
+ * Description of FormuleResultatServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait FormuleResultatServiceAwareTrait
 {
-    /**
-     * @var FormuleResultatService
-     */
-    private $serviceFormuleResultat;
+    protected ?FormuleResultatService $serviceFormuleResultat;
 
 
 
     /**
-     * @param FormuleResultatService $serviceFormuleResultat
+     * @param FormuleResultatService|null $serviceFormuleResultat
      *
      * @return self
      */
-    public function setServiceFormuleResultat(FormuleResultatService $serviceFormuleResultat)
+    public function setServiceFormuleResultat( ?FormuleResultatService $serviceFormuleResultat )
     {
         $this->serviceFormuleResultat = $serviceFormuleResultat;
 
@@ -32,13 +29,10 @@ trait FormuleResultatServiceAwareTrait
 
 
 
-    /**
-     * @return FormuleResultatService
-     */
-    public function getServiceFormuleResultat()
+    public function getServiceFormuleResultat(): ?FormuleResultatService
     {
-        if (empty($this->serviceFormuleResultat)) {
-            $this->serviceFormuleResultat = \Application::$container->get(FormuleResultatService::class);
+        if (!$this->serviceFormuleResultat){
+            $this->serviceFormuleResultat = \Application::$container->get('FormElementManager')->get(FormuleResultatService::class);
         }
 
         return $this->serviceFormuleResultat;

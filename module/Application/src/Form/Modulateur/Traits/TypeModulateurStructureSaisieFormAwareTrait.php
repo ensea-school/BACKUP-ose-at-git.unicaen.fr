@@ -11,39 +11,30 @@ use Application\Form\Modulateur\TypeModulateurStructureSaisieForm;
  */
 trait TypeModulateurStructureSaisieFormAwareTrait
 {
-    /**
-     * @var TypeModulateurStructureSaisieForm
-     */
-    private $formTypeModulateurStructureSaisie;
+    protected ?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie;
 
 
 
     /**
-     * @param TypeModulateurStrucureSaisieForm $formTypeModulateurStructureSaisie
+     * @param TypeModulateurStructureSaisieForm|null $formModulateurTypeModulateurStructureSaisie
      *
      * @return self
      */
-    public function setFormTypeModulateurStructureSaisie(TypeModulateurStructureSaisieForm $formTypeModulateurStructureSaisie)
+    public function setFormModulateurTypeModulateurStructureSaisie( ?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie )
     {
-        $this->formTypeModulateurStrucureSaisie = $formTypeModulateurStructureSaisie;
+        $this->formModulateurTypeModulateurStructureSaisie = $formModulateurTypeModulateurStructureSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypeModulateurStructureSaisieForm
-     */
-    public function getFormTypeModulateurStructureSaisie()
+    public function getFormModulateurTypeModulateurStructureSaisie(): ?TypeModulateurStructureSaisieForm
     {
-        if (!empty($this->formTypeModulateurStructureSaisie)) {
-            return $this->formTypeModulateurStructureSaisie;
+        if (!$this->formModulateurTypeModulateurStructureSaisie){
+            $this->formModulateurTypeModulateurStructureSaisie = \Application::$container->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
+        return $this->formModulateurTypeModulateurStructureSaisie;
     }
 }
-

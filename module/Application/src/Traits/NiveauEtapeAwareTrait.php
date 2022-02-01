@@ -16,6 +16,8 @@ trait NiveauEtapeAwareTrait
      */
     protected $niveauEtape;
 
+
+
     /**
      * Spécifie le niveau d'étape concerné.
      *
@@ -28,12 +30,14 @@ trait NiveauEtapeAwareTrait
         return $this;
     }
 
+
+
     /**
      * Retourne le niveau d'étape concerné.
      *
      * @return NiveauEtape
      */
-    public function getNiveauEtape()
+    public function getNiveauEtape(): NiveauEtape
     {
         return $this->niveauEtape;
     }

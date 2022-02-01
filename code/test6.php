@@ -10,16 +10,19 @@
 
 $introspection = \UnicaenCode\Util::introspection();
 
-$traits = $introspection->getTraits();
 
+$traits = $introspection->getTraits();
 foreach ($traits as $trait) {
     $params = $introspection->getTraitParams($trait);
     if ($params['aware']) {
-        var_dump($params);
+        if ($params['targetClass']) {
+            \UnicaenCode\Util::codeGenerator()->generer('awareTrait', [
+                'class'     => $params['targetClass'],
+                'useGetter' => true,
+                'subDir'    => $params['subDir'],
+            ]);
+        } else {
+            echo "ATTENTION : Le trait $trait ne fait référence à aucune classe connue et identifiée<br />\n";
+        }
     }
-    \UnicaenCode\Util::codeGenerator()->generer('awareTrait', [
-        'class'     => $trait['targetClass'],
-        'useGetter' => true,
-        'subDir'    => $params['subDir'],
-    ]);
 }

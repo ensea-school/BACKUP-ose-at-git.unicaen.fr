@@ -3,7 +3,7 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\TypePieceJointeAwareTrait;
-use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
+use \Application\Traits\ObligatoireSelonSeuilHeuresTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -15,7 +15,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class TypePieceJointeStatut implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
-    use ObligatoireSelonSeuilHeuresAwareTrait;
+    use ObligatoireSelonSeuilHeuresTrait;
     use StatutAwareTrait;
     use TypePieceJointeAwareTrait;
 
@@ -26,7 +26,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
     /**
      * @var float
-     * @see  ObligatoireSelonSeuilHeuresAwareTrait
+     * @see  ObligatoireSelonSeuilHeuresTrait
      * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
      */
     private $seuilHetd;
@@ -67,7 +67,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      * Get seuilHeures
      *
      * @return integer
-     * @see  ObligatoireSelonSeuilHeuresAwareTrait
+     * @see  ObligatoireSelonSeuilHeuresTrait
      * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
      */
     public function getSeuilHeures()

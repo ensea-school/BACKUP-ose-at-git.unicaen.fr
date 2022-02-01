@@ -13,7 +13,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class TypeAgrementStatut implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
-    use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
+    use \Application\Traits\ObligatoireSelonSeuilHeuresTrait;
     use StatutAwareTrait;
 
     /**

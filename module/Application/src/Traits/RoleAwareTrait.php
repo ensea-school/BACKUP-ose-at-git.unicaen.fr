@@ -36,7 +36,7 @@ trait RoleAwareTrait
      *
      * @return RoleInterface
      */
-    public function getRole()
+    public function getRole(): RoleInterface
     {
         return $this->role;
     }

@@ -20,7 +20,7 @@ trait EtablissementAwareTrait
      *
      * @return self
      */
-    public function setEtablissement( Etablissement $etablissement )
+    public function setEtablissement( ?Etablissement $etablissement )
     {
         $this->etablissement = $etablissement;
 

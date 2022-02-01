@@ -21,7 +21,7 @@ trait <classname>
      *                      
      * @return self
      */
-    public function set<method>( <targetClassname> $<variable> )
+    public function set<method>( ?<targetClassname> $<variable> )
     {
         $this-><variable> = $<variable>;
 

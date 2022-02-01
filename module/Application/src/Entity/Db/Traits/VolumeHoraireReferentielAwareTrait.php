@@ -20,7 +20,7 @@ trait VolumeHoraireReferentielAwareTrait
      *
      * @return self
      */
-    public function setVolumeHoraireReferentiel( VolumeHoraireReferentiel $volumeHoraireReferentiel )
+    public function setVolumeHoraireReferentiel( ?VolumeHoraireReferentiel $volumeHoraireReferentiel )
     {
         $this->volumeHoraireReferentiel = $volumeHoraireReferentiel;
 

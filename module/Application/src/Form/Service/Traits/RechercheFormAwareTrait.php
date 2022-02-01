@@ -20,7 +20,7 @@ trait RechercheFormAwareTrait
      *
      * @return self
      */
-    public function setFormServiceRecherche( RechercheForm $formServiceRecherche )
+    public function setFormServiceRecherche( ?RechercheForm $formServiceRecherche )
     {
         $this->formServiceRecherche = $formServiceRecherche;
 

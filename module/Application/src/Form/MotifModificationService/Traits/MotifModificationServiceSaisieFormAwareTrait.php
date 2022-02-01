@@ -20,7 +20,7 @@ trait MotifModificationServiceSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormMotifModificationServiceMotifModificationServiceSaisie( MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie )
+    public function setFormMotifModificationServiceMotifModificationServiceSaisie( ?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie )
     {
         $this->formMotifModificationServiceMotifModificationServiceSaisie = $formMotifModificationServiceMotifModificationServiceSaisie;
 

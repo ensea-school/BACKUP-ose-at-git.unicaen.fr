@@ -20,7 +20,7 @@ trait TypeFormationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeFormation( TypeFormationService $serviceTypeFormation )
+    public function setServiceTypeFormation( ?TypeFormationService $serviceTypeFormation )
     {
         $this->serviceTypeFormation = $serviceTypeFormation;
 

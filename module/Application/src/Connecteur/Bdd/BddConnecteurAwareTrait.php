@@ -19,7 +19,7 @@ trait BddConnecteurAwareTrait
      *
      * @return self
      */
-    public function setConnecteurBddBdd( BddConnecteur $connecteurBddBdd )
+    public function setConnecteurBddBdd( ?BddConnecteur $connecteurBddBdd )
     {
         $this->connecteurBddBdd = $connecteurBddBdd;
 

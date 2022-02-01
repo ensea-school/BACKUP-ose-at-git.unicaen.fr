@@ -20,7 +20,7 @@ trait CcActiviteAwareTrait
      *
      * @return self
      */
-    public function setCcActivite( CcActivite $ccActivite )
+    public function setCcActivite( ?CcActivite $ccActivite )
     {
         $this->ccActivite = $ccActivite;
 

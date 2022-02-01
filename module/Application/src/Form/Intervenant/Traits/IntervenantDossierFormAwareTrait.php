@@ -20,7 +20,7 @@ trait IntervenantDossierFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantIntervenantDossier( IntervenantDossierForm $formIntervenantIntervenantDossier )
+    public function setFormIntervenantIntervenantDossier( ?IntervenantDossierForm $formIntervenantIntervenantDossier )
     {
         $this->formIntervenantIntervenantDossier = $formIntervenantIntervenantDossier;
 

@@ -20,7 +20,7 @@ trait VServiceValideAwareTrait
      *
      * @return self
      */
-    public function setVServiceValide( VServiceValide $vServiceValide )
+    public function setVServiceValide( ?VServiceValide $vServiceValide )
     {
         $this->vServiceValide = $vServiceValide;
 

@@ -20,7 +20,7 @@ trait SaisieCalendaireAwareTrait
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisieCalendaire( SaisieCalendaire $formVolumeHoraireSaisieCalendaire )
+    public function setFormVolumeHoraireSaisieCalendaire( ?SaisieCalendaire $formVolumeHoraireSaisieCalendaire )
     {
         $this->formVolumeHoraireSaisieCalendaire = $formVolumeHoraireSaisieCalendaire;
 

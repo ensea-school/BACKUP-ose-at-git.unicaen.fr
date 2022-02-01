@@ -20,7 +20,7 @@ trait TypeInterventionStructureAwareTrait
      *
      * @return self
      */
-    public function setTypeInterventionStructure( TypeInterventionStructure $typeInterventionStructure )
+    public function setTypeInterventionStructure( ?TypeInterventionStructure $typeInterventionStructure )
     {
         $this->typeInterventionStructure = $typeInterventionStructure;
 

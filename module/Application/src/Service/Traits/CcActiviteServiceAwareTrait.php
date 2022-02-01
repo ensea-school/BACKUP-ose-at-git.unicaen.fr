@@ -20,7 +20,7 @@ trait CcActiviteServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCcActivite( CcActiviteService $serviceCcActivite )
+    public function setServiceCcActivite( ?CcActiviteService $serviceCcActivite )
     {
         $this->serviceCcActivite = $serviceCcActivite;
 

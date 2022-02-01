@@ -16,7 +16,7 @@ interface MiseEnPaiementFormAwareInterface
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiement( MiseEnPaiementForm $formPaiementMiseEnPaiement );
+    public function setFormPaiementMiseEnPaiement( ?MiseEnPaiementForm $formPaiementMiseEnPaiement );
 
 
 

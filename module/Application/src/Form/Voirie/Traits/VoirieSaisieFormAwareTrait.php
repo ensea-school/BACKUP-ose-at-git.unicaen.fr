@@ -20,7 +20,7 @@ trait VoirieSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormVoirieVoirieSaisie( VoirieSaisieForm $formVoirieVoirieSaisie )
+    public function setFormVoirieVoirieSaisie( ?VoirieSaisieForm $formVoirieVoirieSaisie )
     {
         $this->formVoirieVoirieSaisie = $formVoirieVoirieSaisie;
 

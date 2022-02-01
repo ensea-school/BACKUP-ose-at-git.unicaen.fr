@@ -20,7 +20,7 @@ trait EtatSortieServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceEtatSortie( EtatSortieService $serviceEtatSortie )
+    public function setServiceEtatSortie( ?EtatSortieService $serviceEtatSortie )
     {
         $this->serviceEtatSortie = $serviceEtatSortie;
 

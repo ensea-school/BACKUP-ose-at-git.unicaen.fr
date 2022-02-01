@@ -20,7 +20,7 @@ trait TblDmepLiquidationAwareTrait
      *
      * @return self
      */
-    public function setTblDmepLiquidation( TblDmepLiquidation $tblDmepLiquidation )
+    public function setTblDmepLiquidation( ?TblDmepLiquidation $tblDmepLiquidation )
     {
         $this->tblDmepLiquidation = $tblDmepLiquidation;
 

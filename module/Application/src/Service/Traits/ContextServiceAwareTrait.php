@@ -20,7 +20,7 @@ trait ContextServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceContext( ContextService $serviceContext )
+    public function setServiceContext( ?ContextService $serviceContext )
     {
         $this->serviceContext = $serviceContext;
 

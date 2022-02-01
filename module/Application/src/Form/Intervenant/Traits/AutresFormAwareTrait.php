@@ -20,7 +20,7 @@ trait AutresFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantAutres( AutresForm $formIntervenantAutres )
+    public function setFormIntervenantAutres( ?AutresForm $formIntervenantAutres )
     {
         $this->formIntervenantAutres = $formIntervenantAutres;
 

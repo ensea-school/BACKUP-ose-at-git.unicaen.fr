@@ -20,7 +20,7 @@ trait DepartementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDepartement( DepartementService $serviceDepartement )
+    public function setServiceDepartement( ?DepartementService $serviceDepartement )
     {
         $this->serviceDepartement = $serviceDepartement;
 

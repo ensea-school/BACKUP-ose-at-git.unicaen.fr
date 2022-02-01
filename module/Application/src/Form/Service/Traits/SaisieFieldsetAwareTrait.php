@@ -20,7 +20,7 @@ trait SaisieFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFormServiceSaisieFieldset( SaisieFieldset $formServiceSaisieFieldset )
+    public function setFormServiceSaisieFieldset( ?SaisieFieldset $formServiceSaisieFieldset )
     {
         $this->formServiceSaisieFieldset = $formServiceSaisieFieldset;
 

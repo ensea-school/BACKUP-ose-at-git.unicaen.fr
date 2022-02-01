@@ -20,7 +20,7 @@ trait WorkflowServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceWorkflow( WorkflowService $serviceWorkflow )
+    public function setServiceWorkflow( ?WorkflowService $serviceWorkflow )
     {
         $this->serviceWorkflow = $serviceWorkflow;
 

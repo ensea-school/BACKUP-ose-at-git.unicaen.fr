@@ -19,7 +19,7 @@ trait ChargensProviderAwareTrait
      *
      * @return self
      */
-    public function setProviderChargensChargens( ChargensProvider $providerChargensChargens )
+    public function setProviderChargensChargens( ?ChargensProvider $providerChargensChargens )
     {
         $this->providerChargensChargens = $providerChargensChargens;
 

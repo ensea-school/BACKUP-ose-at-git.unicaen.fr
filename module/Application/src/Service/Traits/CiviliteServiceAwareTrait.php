@@ -20,7 +20,7 @@ trait CiviliteServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCivilite( CiviliteService $serviceCivilite )
+    public function setServiceCivilite( ?CiviliteService $serviceCivilite )
     {
         $this->serviceCivilite = $serviceCivilite;
 

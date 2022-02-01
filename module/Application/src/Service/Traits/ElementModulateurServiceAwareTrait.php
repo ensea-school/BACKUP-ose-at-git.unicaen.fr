@@ -20,7 +20,7 @@ trait ElementModulateurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceElementModulateur( ElementModulateurService $serviceElementModulateur )
+    public function setServiceElementModulateur( ?ElementModulateurService $serviceElementModulateur )
     {
         $this->serviceElementModulateur = $serviceElementModulateur;
 

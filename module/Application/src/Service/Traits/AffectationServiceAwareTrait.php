@@ -20,7 +20,7 @@ trait AffectationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceAffectation( AffectationService $serviceAffectation )
+    public function setServiceAffectation( ?AffectationService $serviceAffectation )
     {
         $this->serviceAffectation = $serviceAffectation;
 

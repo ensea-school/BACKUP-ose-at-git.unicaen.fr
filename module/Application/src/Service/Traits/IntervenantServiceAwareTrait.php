@@ -20,7 +20,7 @@ trait IntervenantServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceIntervenant( IntervenantService $serviceIntervenant )
+    public function setServiceIntervenant( ?IntervenantService $serviceIntervenant )
     {
         $this->serviceIntervenant = $serviceIntervenant;
 

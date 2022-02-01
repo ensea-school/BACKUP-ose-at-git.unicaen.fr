@@ -20,7 +20,7 @@ trait CampagneSaisieAwareTrait
      *
      * @return self
      */
-    public function setCampagneSaisie( CampagneSaisie $campagneSaisie )
+    public function setCampagneSaisie( ?CampagneSaisie $campagneSaisie )
     {
         $this->campagneSaisie = $campagneSaisie;
 

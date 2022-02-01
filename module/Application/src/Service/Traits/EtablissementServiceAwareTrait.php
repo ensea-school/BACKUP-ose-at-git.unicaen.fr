@@ -20,7 +20,7 @@ trait EtablissementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceEtablissement( EtablissementService $serviceEtablissement )
+    public function setServiceEtablissement( ?EtablissementService $serviceEtablissement )
     {
         $this->serviceEtablissement = $serviceEtablissement;
 

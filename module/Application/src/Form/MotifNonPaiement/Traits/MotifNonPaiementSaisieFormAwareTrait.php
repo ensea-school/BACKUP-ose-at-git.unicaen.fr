@@ -20,7 +20,7 @@ trait MotifNonPaiementSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormMotifNonPaiementMotifNonPaiementSaisie( MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie )
+    public function setFormMotifNonPaiementMotifNonPaiementSaisie( ?MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie )
     {
         $this->formMotifNonPaiementMotifNonPaiementSaisie = $formMotifNonPaiementMotifNonPaiementSaisie;
 

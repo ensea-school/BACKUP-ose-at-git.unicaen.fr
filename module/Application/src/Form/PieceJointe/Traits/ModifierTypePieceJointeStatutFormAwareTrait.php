@@ -20,7 +20,7 @@ trait ModifierTypePieceJointeStatutFormAwareTrait
      *
      * @return self
      */
-    public function setFormPieceJointeModifierTypePieceJointeStatut( ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut )
+    public function setFormPieceJointeModifierTypePieceJointeStatut( ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut )
     {
         $this->formPieceJointeModifierTypePieceJointeStatut = $formPieceJointeModifierTypePieceJointeStatut;
 

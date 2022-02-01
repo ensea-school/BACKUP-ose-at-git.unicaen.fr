@@ -16,7 +16,7 @@ interface ModificationServiceDuFieldsetAwareInterface
      *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDuFieldset( ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset );
+    public function setFormIntervenantModificationServiceDuFieldset( ?ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset );
 
 
 

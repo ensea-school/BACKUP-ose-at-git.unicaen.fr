@@ -20,7 +20,7 @@ trait TauxHoraireHETDAwareTrait
      *
      * @return self
      */
-    public function setTauxHoraireHETD( TauxHoraireHETD $tauxHoraireHETD )
+    public function setTauxHoraireHETD( ?TauxHoraireHETD $tauxHoraireHETD )
     {
         $this->tauxHoraireHETD = $tauxHoraireHETD;
 

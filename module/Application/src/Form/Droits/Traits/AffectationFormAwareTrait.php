@@ -20,7 +20,7 @@ trait AffectationFormAwareTrait
      *
      * @return self
      */
-    public function setFormDroitsAffectation( AffectationForm $formDroitsAffectation )
+    public function setFormDroitsAffectation( ?AffectationForm $formDroitsAffectation )
     {
         $this->formDroitsAffectation = $formDroitsAffectation;
 

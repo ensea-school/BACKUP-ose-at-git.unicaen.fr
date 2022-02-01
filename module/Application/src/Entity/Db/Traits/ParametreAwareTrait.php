@@ -20,7 +20,7 @@ trait ParametreAwareTrait
      *
      * @return self
      */
-    public function setParametre( Parametre $parametre )
+    public function setParametre( ?Parametre $parametre )
     {
         $this->parametre = $parametre;
 

@@ -20,7 +20,7 @@ trait PieceJointeAwareTrait
      *
      * @return self
      */
-    public function setPieceJointe( PieceJointe $pieceJointe )
+    public function setPieceJointe( ?PieceJointe $pieceJointe )
     {
         $this->pieceJointe = $pieceJointe;
 

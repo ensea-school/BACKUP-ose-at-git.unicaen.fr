@@ -20,7 +20,7 @@ trait ServiceProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusService( ServiceProcessus $processusService )
+    public function setProcessusService( ?ServiceProcessus $processusService )
     {
         $this->processusService = $processusService;
 

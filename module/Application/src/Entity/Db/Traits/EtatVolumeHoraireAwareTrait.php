@@ -20,7 +20,7 @@ trait EtatVolumeHoraireAwareTrait
      *
      * @return self
      */
-    public function setEtatVolumeHoraire( EtatVolumeHoraire $etatVolumeHoraire )
+    public function setEtatVolumeHoraire( ?EtatVolumeHoraire $etatVolumeHoraire )
     {
         $this->etatVolumeHoraire = $etatVolumeHoraire;
 

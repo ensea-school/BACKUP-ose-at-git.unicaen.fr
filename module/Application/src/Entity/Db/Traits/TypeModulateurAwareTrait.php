@@ -20,7 +20,7 @@ trait TypeModulateurAwareTrait
      *
      * @return self
      */
-    public function setTypeModulateur( TypeModulateur $typeModulateur )
+    public function setTypeModulateur( ?TypeModulateur $typeModulateur )
     {
         $this->typeModulateur = $typeModulateur;
 

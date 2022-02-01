@@ -20,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormAgrementSaisie( Saisie $formAgrementSaisie )
+    public function setFormAgrementSaisie( ?Saisie $formAgrementSaisie )
     {
         $this->formAgrementSaisie = $formAgrementSaisie;
 

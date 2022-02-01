@@ -20,7 +20,7 @@ trait ModificationServiceDuFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDu( ModificationServiceDuForm $formIntervenantModificationServiceDu )
+    public function setFormIntervenantModificationServiceDu( ?ModificationServiceDuForm $formIntervenantModificationServiceDu )
     {
         $this->formIntervenantModificationServiceDu = $formIntervenantModificationServiceDu;
 

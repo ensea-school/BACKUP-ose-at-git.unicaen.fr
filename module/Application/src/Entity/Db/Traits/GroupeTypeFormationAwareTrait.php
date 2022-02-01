@@ -20,7 +20,7 @@ trait GroupeTypeFormationAwareTrait
      *
      * @return self
      */
-    public function setGroupeTypeFormation( GroupeTypeFormation $groupeTypeFormation )
+    public function setGroupeTypeFormation( ?GroupeTypeFormation $groupeTypeFormation )
     {
         $this->groupeTypeFormation = $groupeTypeFormation;
 

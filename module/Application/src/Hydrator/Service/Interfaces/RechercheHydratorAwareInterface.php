@@ -16,7 +16,7 @@ interface RechercheHydratorAwareInterface
      *
      * @return self
      */
-    public function setHydratorServiceRecherche( RechercheHydrator $hydratorServiceRecherche );
+    public function setHydratorServiceRecherche( ?RechercheHydrator $hydratorServiceRecherche );
 
 
 

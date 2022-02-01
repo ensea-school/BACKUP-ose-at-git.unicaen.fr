@@ -20,7 +20,7 @@ trait SeuilChargeAwareTrait
      *
      * @return self
      */
-    public function setSeuilCharge( SeuilCharge $seuilCharge )
+    public function setSeuilCharge( ?SeuilCharge $seuilCharge )
     {
         $this->seuilCharge = $seuilCharge;
 

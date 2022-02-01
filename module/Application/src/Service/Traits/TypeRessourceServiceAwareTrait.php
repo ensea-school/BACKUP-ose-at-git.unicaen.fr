@@ -20,7 +20,7 @@ trait TypeRessourceServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeRessource( TypeRessourceService $serviceTypeRessource )
+    public function setServiceTypeRessource( ?TypeRessourceService $serviceTypeRessource )
     {
         $this->serviceTypeRessource = $serviceTypeRessource;
 

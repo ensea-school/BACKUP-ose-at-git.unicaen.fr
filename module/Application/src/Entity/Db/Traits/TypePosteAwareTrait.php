@@ -20,7 +20,7 @@ trait TypePosteAwareTrait
      *
      * @return self
      */
-    public function setTypePoste( TypePoste $typePoste )
+    public function setTypePoste( ?TypePoste $typePoste )
     {
         $this->typePoste = $typePoste;
 

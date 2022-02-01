@@ -20,7 +20,7 @@ trait TypeHeuresServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeHeures( TypeHeuresService $serviceTypeHeures )
+    public function setServiceTypeHeures( ?TypeHeuresService $serviceTypeHeures )
     {
         $this->serviceTypeHeures = $serviceTypeHeures;
 

@@ -20,7 +20,7 @@ trait GradeAwareTrait
      *
      * @return self
      */
-    public function setGrade( Grade $grade )
+    public function setGrade( ?Grade $grade )
     {
         $this->grade = $grade;
 

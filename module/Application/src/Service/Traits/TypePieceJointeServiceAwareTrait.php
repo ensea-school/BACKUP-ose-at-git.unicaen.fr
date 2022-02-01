@@ -20,7 +20,7 @@ trait TypePieceJointeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypePieceJointe( TypePieceJointeService $serviceTypePieceJointe )
+    public function setServiceTypePieceJointe( ?TypePieceJointeService $serviceTypePieceJointe )
     {
         $this->serviceTypePieceJointe = $serviceTypePieceJointe;
 

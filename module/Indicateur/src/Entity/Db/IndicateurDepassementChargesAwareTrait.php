@@ -19,7 +19,7 @@ trait IndicateurDepassementChargesAwareTrait
      *
      * @return self
      */
-    public function setIndicateurDepassementCharges( IndicateurDepassementCharges $indicateurDepassementCharges )
+    public function setIndicateurDepassementCharges( ?IndicateurDepassementCharges $indicateurDepassementCharges )
     {
         $this->indicateurDepassementCharges = $indicateurDepassementCharges;
 

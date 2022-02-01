@@ -20,7 +20,7 @@ trait DomaineFonctionnelAwareTrait
      *
      * @return self
      */
-    public function setDomaineFonctionnel( DomaineFonctionnel $domaineFonctionnel )
+    public function setDomaineFonctionnel( ?DomaineFonctionnel $domaineFonctionnel )
     {
         $this->domaineFonctionnel = $domaineFonctionnel;
 

@@ -20,7 +20,7 @@ trait ScenarioServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceScenario( ScenarioService $serviceScenario )
+    public function setServiceScenario( ?ScenarioService $serviceScenario )
     {
         $this->serviceScenario = $serviceScenario;
 

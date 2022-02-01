@@ -20,7 +20,7 @@ trait FiltreFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensFiltre( FiltreForm $formChargensFiltre )
+    public function setFormChargensFiltre( ?FiltreForm $formChargensFiltre )
     {
         $this->formChargensFiltre = $formChargensFiltre;
 

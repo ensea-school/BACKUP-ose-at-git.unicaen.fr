@@ -20,7 +20,7 @@ trait AgrementAwareTrait
      *
      * @return self
      */
-    public function setAgrement( Agrement $agrement )
+    public function setAgrement( ?Agrement $agrement )
     {
         $this->agrement = $agrement;
 

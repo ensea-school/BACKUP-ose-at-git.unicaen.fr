@@ -20,7 +20,7 @@ trait TypeAgrementAwareTrait
      *
      * @return self
      */
-    public function setTypeAgrement( TypeAgrement $typeAgrement )
+    public function setTypeAgrement( ?TypeAgrement $typeAgrement )
     {
         $this->typeAgrement = $typeAgrement;
 

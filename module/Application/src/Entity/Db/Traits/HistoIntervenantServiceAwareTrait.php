@@ -20,7 +20,7 @@ trait HistoIntervenantServiceAwareTrait
      *
      * @return self
      */
-    public function setHistoIntervenantService( HistoIntervenantService $histoIntervenantService )
+    public function setHistoIntervenantService( ?HistoIntervenantService $histoIntervenantService )
     {
         $this->histoIntervenantService = $histoIntervenantService;
 

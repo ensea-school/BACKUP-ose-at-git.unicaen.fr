@@ -20,7 +20,7 @@ trait GradeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceGrade( GradeService $serviceGrade )
+    public function setServiceGrade( ?GradeService $serviceGrade )
     {
         $this->serviceGrade = $serviceGrade;
 

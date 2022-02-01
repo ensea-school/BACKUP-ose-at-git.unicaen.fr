@@ -20,7 +20,7 @@ trait DisciplineAwareTrait
      *
      * @return self
      */
-    public function setDiscipline( Discipline $discipline )
+    public function setDiscipline( ?Discipline $discipline )
     {
         $this->discipline = $discipline;
 

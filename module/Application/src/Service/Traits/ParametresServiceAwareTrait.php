@@ -20,7 +20,7 @@ trait ParametresServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceParametres( ParametresService $serviceParametres )
+    public function setServiceParametres( ?ParametresService $serviceParametres )
     {
         $this->serviceParametres = $serviceParametres;
 

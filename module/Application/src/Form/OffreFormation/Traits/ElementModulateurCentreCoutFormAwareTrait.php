@@ -20,7 +20,7 @@ trait ElementModulateurCentreCoutFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementModulateurCentreCout( ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout )
+    public function setFormOffreFormationElementModulateurCentreCout( ?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout )
     {
         $this->formOffreFormationElementModulateurCentreCout = $formOffreFormationElementModulateurCentreCout;
 

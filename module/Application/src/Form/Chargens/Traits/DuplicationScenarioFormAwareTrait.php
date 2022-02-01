@@ -20,7 +20,7 @@ trait DuplicationScenarioFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensDuplicationScenario( DuplicationScenarioForm $formChargensDuplicationScenario )
+    public function setFormChargensDuplicationScenario( ?DuplicationScenarioForm $formChargensDuplicationScenario )
     {
         $this->formChargensDuplicationScenario = $formChargensDuplicationScenario;
 

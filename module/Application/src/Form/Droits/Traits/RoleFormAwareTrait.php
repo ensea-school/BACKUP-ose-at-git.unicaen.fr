@@ -20,7 +20,7 @@ trait RoleFormAwareTrait
      *
      * @return self
      */
-    public function setFormDroitsRole( RoleForm $formDroitsRole )
+    public function setFormDroitsRole( ?RoleForm $formDroitsRole )
     {
         $this->formDroitsRole = $formDroitsRole;
 

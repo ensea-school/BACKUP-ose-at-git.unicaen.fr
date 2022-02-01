@@ -20,7 +20,7 @@ trait MiseEnPaiementFormAwareTrait
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiement( MiseEnPaiementForm $formPaiementMiseEnPaiement )
+    public function setFormPaiementMiseEnPaiement( ?MiseEnPaiementForm $formPaiementMiseEnPaiement )
     {
         $this->formPaiementMiseEnPaiement = $formPaiementMiseEnPaiement;
 

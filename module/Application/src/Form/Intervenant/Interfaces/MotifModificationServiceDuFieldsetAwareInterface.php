@@ -16,7 +16,7 @@ interface MotifModificationServiceDuFieldsetAwareInterface
      *
      * @return self
      */
-    public function setFormIntervenantMotifModificationServiceDuFieldset( MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset );
+    public function setFormIntervenantMotifModificationServiceDuFieldset( ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset );
 
 
 

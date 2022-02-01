@@ -20,7 +20,7 @@ trait TblAgrementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTblAgrement( TblAgrementService $serviceTblAgrement )
+    public function setServiceTblAgrement( ?TblAgrementService $serviceTblAgrement )
     {
         $this->serviceTblAgrement = $serviceTblAgrement;
 

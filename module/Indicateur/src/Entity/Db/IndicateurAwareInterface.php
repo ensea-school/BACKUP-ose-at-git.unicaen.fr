@@ -15,7 +15,7 @@ interface IndicateurAwareInterface
      *
      * @return self
      */
-    public function setIndicateur( Indicateur $indicateur );
+    public function setIndicateur( ?Indicateur $indicateur );
 
 
 

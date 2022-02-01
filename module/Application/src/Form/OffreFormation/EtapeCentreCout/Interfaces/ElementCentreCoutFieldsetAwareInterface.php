@@ -16,7 +16,7 @@ interface ElementCentreCoutFieldsetAwareInterface
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset( ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset );
+    public function setFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset( ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset );
 
 
 

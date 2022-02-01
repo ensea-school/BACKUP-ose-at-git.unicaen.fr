@@ -20,7 +20,7 @@ trait MotifModificationServiceDuFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantMotifModificationServiceDuFieldset( MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset )
+    public function setFormIntervenantMotifModificationServiceDuFieldset( ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset )
     {
         $this->formIntervenantMotifModificationServiceDuFieldset = $formIntervenantMotifModificationServiceDuFieldset;
 

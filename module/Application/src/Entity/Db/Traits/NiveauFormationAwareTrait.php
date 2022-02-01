@@ -20,7 +20,7 @@ trait NiveauFormationAwareTrait
      *
      * @return self
      */
-    public function setNiveauFormation( NiveauFormation $niveauFormation )
+    public function setNiveauFormation( ?NiveauFormation $niveauFormation )
     {
         $this->niveauFormation = $niveauFormation;
 

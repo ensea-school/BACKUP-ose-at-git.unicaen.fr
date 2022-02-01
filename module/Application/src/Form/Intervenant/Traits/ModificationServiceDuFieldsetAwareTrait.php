@@ -20,7 +20,7 @@ trait ModificationServiceDuFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDuFieldset( ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset )
+    public function setFormIntervenantModificationServiceDuFieldset( ?ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset )
     {
         $this->formIntervenantModificationServiceDuFieldset = $formIntervenantModificationServiceDuFieldset;
 

@@ -20,7 +20,7 @@ trait TypeFormationAwareTrait
      *
      * @return self
      */
-    public function setTypeFormation( TypeFormation $typeFormation )
+    public function setTypeFormation( ?TypeFormation $typeFormation )
     {
         $this->typeFormation = $typeFormation;
 

@@ -20,7 +20,7 @@ trait CentreCoutStructureSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormCentreCoutCentreCoutStructureSaisie( CentreCoutStructureSaisieForm $formCentreCoutCentreCoutStructureSaisie )
+    public function setFormCentreCoutCentreCoutStructureSaisie( ?CentreCoutStructureSaisieForm $formCentreCoutCentreCoutStructureSaisie )
     {
         $this->formCentreCoutCentreCoutStructureSaisie = $formCentreCoutCentreCoutStructureSaisie;
 

@@ -19,7 +19,7 @@ trait IndicateurProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusIndicateur( IndicateurProcessus $processusIndicateur )
+    public function setProcessusIndicateur( ?IndicateurProcessus $processusIndicateur )
     {
         $this->processusIndicateur = $processusIndicateur;
 

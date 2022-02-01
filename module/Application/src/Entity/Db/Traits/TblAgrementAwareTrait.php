@@ -20,7 +20,7 @@ trait TblAgrementAwareTrait
      *
      * @return self
      */
-    public function setTblAgrement( TblAgrement $tblAgrement )
+    public function setTblAgrement( ?TblAgrement $tblAgrement )
     {
         $this->tblAgrement = $tblAgrement;
 

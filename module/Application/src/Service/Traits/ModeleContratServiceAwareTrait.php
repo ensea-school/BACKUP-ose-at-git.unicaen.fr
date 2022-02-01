@@ -20,7 +20,7 @@ trait ModeleContratServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceModeleContrat( ModeleContratService $serviceModeleContrat )
+    public function setServiceModeleContrat( ?ModeleContratService $serviceModeleContrat )
     {
         $this->serviceModeleContrat = $serviceModeleContrat;
 

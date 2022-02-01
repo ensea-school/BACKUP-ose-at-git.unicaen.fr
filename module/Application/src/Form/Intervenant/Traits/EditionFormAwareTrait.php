@@ -20,7 +20,7 @@ trait EditionFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantEdition( EditionForm $formIntervenantEdition )
+    public function setFormIntervenantEdition( ?EditionForm $formIntervenantEdition )
     {
         $this->formIntervenantEdition = $formIntervenantEdition;
 

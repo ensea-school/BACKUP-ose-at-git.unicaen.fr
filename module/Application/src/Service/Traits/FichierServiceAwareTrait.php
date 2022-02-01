@@ -20,7 +20,7 @@ trait FichierServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFichier( FichierService $serviceFichier )
+    public function setServiceFichier( ?FichierService $serviceFichier )
     {
         $this->serviceFichier = $serviceFichier;
 

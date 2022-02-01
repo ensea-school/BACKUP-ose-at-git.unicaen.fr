@@ -20,7 +20,7 @@ trait StructureSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormStructureStructureSaisie( StructureSaisieForm $formStructureStructureSaisie )
+    public function setFormStructureStructureSaisie( ?StructureSaisieForm $formStructureStructureSaisie )
     {
         $this->formStructureStructureSaisie = $formStructureStructureSaisie;
 

@@ -20,7 +20,7 @@ trait EmployeurAwareTrait
      *
      * @return self
      */
-    public function setEmployeur( Employeur $employeur )
+    public function setEmployeur( ?Employeur $employeur )
     {
         $this->employeur = $employeur;
 

@@ -19,7 +19,7 @@ trait PlafondServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePlafond( PlafondService $servicePlafond )
+    public function setServicePlafond( ?PlafondService $servicePlafond )
     {
         $this->servicePlafond = $servicePlafond;
 

@@ -20,7 +20,7 @@ trait DisciplineServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDiscipline( DisciplineService $serviceDiscipline )
+    public function setServiceDiscipline( ?DisciplineService $serviceDiscipline )
     {
         $this->serviceDiscipline = $serviceDiscipline;
 

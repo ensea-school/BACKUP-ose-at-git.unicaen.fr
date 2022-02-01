@@ -15,7 +15,7 @@ interface NotificationIndicateurAwareInterface
      *
      * @return self
      */
-    public function setNotificationIndicateur( NotificationIndicateur $notificationIndicateur );
+    public function setNotificationIndicateur( ?NotificationIndicateur $notificationIndicateur );
 
 
 

@@ -20,7 +20,7 @@ trait FichierAwareTrait
      *
      * @return self
      */
-    public function setFichier( Fichier $fichier )
+    public function setFichier( ?Fichier $fichier )
     {
         $this->fichier = $fichier;
 

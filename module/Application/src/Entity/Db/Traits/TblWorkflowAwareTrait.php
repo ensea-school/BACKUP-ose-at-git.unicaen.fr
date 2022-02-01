@@ -20,7 +20,7 @@ trait TblWorkflowAwareTrait
      *
      * @return self
      */
-    public function setTblWorkflow( TblWorkflow $tblWorkflow )
+    public function setTblWorkflow( ?TblWorkflow $tblWorkflow )
     {
         $this->tblWorkflow = $tblWorkflow;
 

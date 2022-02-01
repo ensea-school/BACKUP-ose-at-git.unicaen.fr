@@ -20,7 +20,7 @@ trait EmployeurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceEmployeur( EmployeurService $serviceEmployeur )
+    public function setServiceEmployeur( ?EmployeurService $serviceEmployeur )
     {
         $this->serviceEmployeur = $serviceEmployeur;
 

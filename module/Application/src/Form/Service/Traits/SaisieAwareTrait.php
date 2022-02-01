@@ -20,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormServiceSaisie( Saisie $formServiceSaisie )
+    public function setFormServiceSaisie( ?Saisie $formServiceSaisie )
     {
         $this->formServiceSaisie = $formServiceSaisie;
 

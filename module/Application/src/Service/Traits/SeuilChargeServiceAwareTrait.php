@@ -20,7 +20,7 @@ trait SeuilChargeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceSeuilCharge( SeuilChargeService $serviceSeuilCharge )
+    public function setServiceSeuilCharge( ?SeuilChargeService $serviceSeuilCharge )
     {
         $this->serviceSeuilCharge = $serviceSeuilCharge;
 

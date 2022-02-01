@@ -16,7 +16,7 @@ interface SaisieAwareInterface
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisie( Saisie $formVolumeHoraireSaisie );
+    public function setFormVolumeHoraireSaisie( ?Saisie $formVolumeHoraireSaisie );
 
 
 

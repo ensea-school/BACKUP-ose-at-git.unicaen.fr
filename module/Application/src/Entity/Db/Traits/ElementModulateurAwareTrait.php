@@ -20,7 +20,7 @@ trait ElementModulateurAwareTrait
      *
      * @return self
      */
-    public function setElementModulateur( ElementModulateur $elementModulateur )
+    public function setElementModulateur( ?ElementModulateur $elementModulateur )
     {
         $this->elementModulateur = $elementModulateur;
 

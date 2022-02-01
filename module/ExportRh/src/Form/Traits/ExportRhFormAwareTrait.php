@@ -20,7 +20,7 @@ trait ExportRhFormAwareTrait
      *
      * @return self
      */
-    public function setFormExportRh( ExportRhForm $formExportRh )
+    public function setFormExportRh( ?ExportRhForm $formExportRh )
     {
         $this->formExportRh = $formExportRh;
 

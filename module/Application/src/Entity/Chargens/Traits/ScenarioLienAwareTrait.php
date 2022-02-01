@@ -20,7 +20,7 @@ trait ScenarioLienAwareTrait
      *
      * @return self
      */
-    public function setScenarioLien( ScenarioLien $scenarioLien )
+    public function setScenarioLien( ?ScenarioLien $scenarioLien )
     {
         $this->scenarioLien = $scenarioLien;
 

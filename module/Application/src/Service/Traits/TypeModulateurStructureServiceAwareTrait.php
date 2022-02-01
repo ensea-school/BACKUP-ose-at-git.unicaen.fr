@@ -20,7 +20,7 @@ trait TypeModulateurStructureServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeModulateurStructure( TypeModulateurStructureService $serviceTypeModulateurStructure )
+    public function setServiceTypeModulateurStructure( ?TypeModulateurStructureService $serviceTypeModulateurStructure )
     {
         $this->serviceTypeModulateurStructure = $serviceTypeModulateurStructure;
 

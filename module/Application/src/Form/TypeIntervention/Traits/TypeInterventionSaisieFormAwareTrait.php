@@ -20,7 +20,7 @@ trait TypeInterventionSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormTypeInterventionTypeInterventionSaisie( TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie )
+    public function setFormTypeInterventionTypeInterventionSaisie( ?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie )
     {
         $this->formTypeInterventionTypeInterventionSaisie = $formTypeInterventionTypeInterventionSaisie;
 

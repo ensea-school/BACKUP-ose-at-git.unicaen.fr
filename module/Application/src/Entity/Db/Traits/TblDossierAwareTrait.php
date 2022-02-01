@@ -20,7 +20,7 @@ trait TblDossierAwareTrait
      *
      * @return self
      */
-    public function setTblDossier( TblDossier $tblDossier )
+    public function setTblDossier( ?TblDossier $tblDossier )
     {
         $this->tblDossier = $tblDossier;
 

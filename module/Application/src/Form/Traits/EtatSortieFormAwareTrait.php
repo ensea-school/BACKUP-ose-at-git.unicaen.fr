@@ -20,7 +20,7 @@ trait EtatSortieFormAwareTrait
      *
      * @return self
      */
-    public function setFormEtatSortie( EtatSortieForm $formEtatSortie )
+    public function setFormEtatSortie( ?EtatSortieForm $formEtatSortie )
     {
         $this->formEtatSortie = $formEtatSortie;
 

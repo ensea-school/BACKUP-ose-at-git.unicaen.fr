@@ -16,7 +16,7 @@ interface HeuresCompFormAwareInterface
      *
      * @return self
      */
-    public function setFormIntervenantHeuresComp( HeuresCompForm $formIntervenantHeuresComp );
+    public function setFormIntervenantHeuresComp( ?HeuresCompForm $formIntervenantHeuresComp );
 
 
 

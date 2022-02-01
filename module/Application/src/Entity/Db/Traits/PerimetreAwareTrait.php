@@ -20,7 +20,7 @@ trait PerimetreAwareTrait
      *
      * @return self
      */
-    public function setPerimetre( Perimetre $perimetre )
+    public function setPerimetre( ?Perimetre $perimetre )
     {
         $this->perimetre = $perimetre;
 

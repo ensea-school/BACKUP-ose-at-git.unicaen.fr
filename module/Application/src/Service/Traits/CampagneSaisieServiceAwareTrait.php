@@ -20,7 +20,7 @@ trait CampagneSaisieServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCampagneSaisie( CampagneSaisieService $serviceCampagneSaisie )
+    public function setServiceCampagneSaisie( ?CampagneSaisieService $serviceCampagneSaisie )
     {
         $this->serviceCampagneSaisie = $serviceCampagneSaisie;
 

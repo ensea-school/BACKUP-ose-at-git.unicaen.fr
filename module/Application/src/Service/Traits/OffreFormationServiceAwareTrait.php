@@ -20,7 +20,7 @@ trait OffreFormationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceOffreFormation( OffreFormationService $serviceOffreFormation )
+    public function setServiceOffreFormation( ?OffreFormationService $serviceOffreFormation )
     {
         $this->serviceOffreFormation = $serviceOffreFormation;
 

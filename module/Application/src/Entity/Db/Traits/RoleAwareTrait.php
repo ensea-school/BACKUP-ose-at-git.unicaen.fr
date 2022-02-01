@@ -20,7 +20,7 @@ trait RoleAwareTrait
      *
      * @return self
      */
-    public function setRole( Role $role )
+    public function setRole( ?Role $role )
     {
         $this->role = $role;
 

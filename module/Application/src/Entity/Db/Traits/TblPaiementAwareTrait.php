@@ -20,7 +20,7 @@ trait TblPaiementAwareTrait
      *
      * @return self
      */
-    public function setTblPaiement( TblPaiement $tblPaiement )
+    public function setTblPaiement( ?TblPaiement $tblPaiement )
     {
         $this->tblPaiement = $tblPaiement;
 

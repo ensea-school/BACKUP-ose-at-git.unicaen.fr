@@ -20,7 +20,7 @@ trait CentreCoutServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCentreCout( CentreCoutService $serviceCentreCout )
+    public function setServiceCentreCout( ?CentreCoutService $serviceCentreCout )
     {
         $this->serviceCentreCout = $serviceCentreCout;
 

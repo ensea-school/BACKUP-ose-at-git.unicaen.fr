@@ -20,7 +20,7 @@ trait TblContratAwareTrait
      *
      * @return self
      */
-    public function setTblContrat( TblContrat $tblContrat )
+    public function setTblContrat( ?TblContrat $tblContrat )
     {
         $this->tblContrat = $tblContrat;
 

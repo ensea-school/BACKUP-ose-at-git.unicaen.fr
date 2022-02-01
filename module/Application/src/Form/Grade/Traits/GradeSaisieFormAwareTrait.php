@@ -20,7 +20,7 @@ trait GradeSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormGradeGradeSaisie( GradeSaisieForm $formGradeGradeSaisie )
+    public function setFormGradeGradeSaisie( ?GradeSaisieForm $formGradeGradeSaisie )
     {
         $this->formGradeGradeSaisie = $formGradeGradeSaisie;
 

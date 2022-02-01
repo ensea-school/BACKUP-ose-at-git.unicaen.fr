@@ -20,7 +20,7 @@ trait TypeCentreCoutAwareTrait
      *
      * @return self
      */
-    public function setTypeCentreCout( TypeCentreCout $typeCentreCout )
+    public function setTypeCentreCout( ?TypeCentreCout $typeCentreCout )
     {
         $this->typeCentreCout = $typeCentreCout;
 

@@ -20,7 +20,7 @@ trait TauxMixiteFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationTauxMixiteTauxMixite( TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite )
+    public function setFormOffreFormationTauxMixiteTauxMixite( ?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite )
     {
         $this->formOffreFormationTauxMixiteTauxMixite = $formOffreFormationTauxMixiteTauxMixite;
 

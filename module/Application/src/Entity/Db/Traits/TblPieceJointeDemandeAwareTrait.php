@@ -20,7 +20,7 @@ trait TblPieceJointeDemandeAwareTrait
      *
      * @return self
      */
-    public function setTblPieceJointeDemande( TblPieceJointeDemande $tblPieceJointeDemande )
+    public function setTblPieceJointeDemande( ?TblPieceJointeDemande $tblPieceJointeDemande )
     {
         $this->tblPieceJointeDemande = $tblPieceJointeDemande;
 

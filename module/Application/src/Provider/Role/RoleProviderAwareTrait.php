@@ -19,7 +19,7 @@ trait RoleProviderAwareTrait
      *
      * @return self
      */
-    public function setProviderRoleRole( RoleProvider $providerRoleRole )
+    public function setProviderRoleRole( ?RoleProvider $providerRoleRole )
     {
         $this->providerRoleRole = $providerRoleRole;
 

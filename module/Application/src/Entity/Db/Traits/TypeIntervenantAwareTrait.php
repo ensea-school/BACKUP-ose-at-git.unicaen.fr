@@ -20,7 +20,7 @@ trait TypeIntervenantAwareTrait
      *
      * @return self
      */
-    public function setTypeIntervenant( TypeIntervenant $typeIntervenant )
+    public function setTypeIntervenant( ?TypeIntervenant $typeIntervenant )
     {
         $this->typeIntervenant = $typeIntervenant;
 

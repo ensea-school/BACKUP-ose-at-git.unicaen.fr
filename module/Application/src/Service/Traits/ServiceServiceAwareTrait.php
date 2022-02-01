@@ -20,7 +20,7 @@ trait ServiceServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceService( ServiceService $serviceService )
+    public function setServiceService( ?ServiceService $serviceService )
     {
         $this->serviceService = $serviceService;
 

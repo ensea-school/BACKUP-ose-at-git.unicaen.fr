@@ -20,7 +20,7 @@ trait TblServiceAwareTrait
      *
      * @return self
      */
-    public function setTblService( TblService $tblService )
+    public function setTblService( ?TblService $tblService )
     {
         $this->tblService = $tblService;
 

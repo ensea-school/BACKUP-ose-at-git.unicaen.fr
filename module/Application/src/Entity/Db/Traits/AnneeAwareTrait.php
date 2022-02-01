@@ -20,7 +20,7 @@ trait AnneeAwareTrait
      *
      * @return self
      */
-    public function setAnnee( Annee $annee )
+    public function setAnnee( ?Annee $annee )
     {
         $this->annee = $annee;
 

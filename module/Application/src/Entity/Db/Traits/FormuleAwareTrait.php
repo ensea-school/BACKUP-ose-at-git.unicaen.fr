@@ -20,7 +20,7 @@ trait FormuleAwareTrait
      *
      * @return self
      */
-    public function setFormule( Formule $formule )
+    public function setFormule( ?Formule $formule )
     {
         $this->formule = $formule;
 

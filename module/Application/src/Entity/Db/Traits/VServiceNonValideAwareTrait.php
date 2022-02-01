@@ -20,7 +20,7 @@ trait VServiceNonValideAwareTrait
      *
      * @return self
      */
-    public function setVServiceNonValide( VServiceNonValide $vServiceNonValide )
+    public function setVServiceNonValide( ?VServiceNonValide $vServiceNonValide )
     {
         $this->vServiceNonValide = $vServiceNonValide;
 

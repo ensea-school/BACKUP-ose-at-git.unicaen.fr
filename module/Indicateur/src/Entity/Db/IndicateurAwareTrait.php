@@ -19,7 +19,7 @@ trait IndicateurAwareTrait
      *
      * @return self
      */
-    public function setIndicateur( Indicateur $indicateur )
+    public function setIndicateur( ?Indicateur $indicateur )
     {
         $this->indicateur = $indicateur;
 

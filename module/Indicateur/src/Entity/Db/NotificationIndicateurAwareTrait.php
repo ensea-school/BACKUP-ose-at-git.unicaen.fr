@@ -19,7 +19,7 @@ trait NotificationIndicateurAwareTrait
      *
      * @return self
      */
-    public function setNotificationIndicateur( NotificationIndicateur $notificationIndicateur )
+    public function setNotificationIndicateur( ?NotificationIndicateur $notificationIndicateur )
     {
         $this->notificationIndicateur = $notificationIndicateur;
 

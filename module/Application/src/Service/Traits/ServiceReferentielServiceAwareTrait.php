@@ -20,7 +20,7 @@ trait ServiceReferentielServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceServiceReferentiel( ServiceReferentielService $serviceServiceReferentiel )
+    public function setServiceServiceReferentiel( ?ServiceReferentielService $serviceServiceReferentiel )
     {
         $this->serviceServiceReferentiel = $serviceServiceReferentiel;
 

@@ -20,7 +20,7 @@ trait SaisieMultipleFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisieMultipleFieldset( SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset )
+    public function setFormVolumeHoraireSaisieMultipleFieldset( ?SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset )
     {
         $this->formVolumeHoraireSaisieMultipleFieldset = $formVolumeHoraireSaisieMultipleFieldset;
 

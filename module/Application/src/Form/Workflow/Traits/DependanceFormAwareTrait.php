@@ -20,7 +20,7 @@ trait DependanceFormAwareTrait
      *
      * @return self
      */
-    public function setFormWorkflowDependance( DependanceForm $formWorkflowDependance )
+    public function setFormWorkflowDependance( ?DependanceForm $formWorkflowDependance )
     {
         $this->formWorkflowDependance = $formWorkflowDependance;
 

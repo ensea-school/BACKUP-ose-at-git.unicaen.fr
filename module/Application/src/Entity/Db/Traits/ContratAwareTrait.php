@@ -20,7 +20,7 @@ trait ContratAwareTrait
      *
      * @return self
      */
-    public function setContrat( Contrat $contrat )
+    public function setContrat( ?Contrat $contrat )
     {
         $this->contrat = $contrat;
 

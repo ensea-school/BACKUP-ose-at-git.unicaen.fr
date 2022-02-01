@@ -20,7 +20,7 @@ trait MiseEnPaiementAwareTrait
      *
      * @return self
      */
-    public function setMiseEnPaiement( MiseEnPaiement $miseEnPaiement )
+    public function setMiseEnPaiement( ?MiseEnPaiement $miseEnPaiement )
     {
         $this->miseEnPaiement = $miseEnPaiement;
 

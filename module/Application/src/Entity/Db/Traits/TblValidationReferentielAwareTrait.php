@@ -20,7 +20,7 @@ trait TblValidationReferentielAwareTrait
      *
      * @return self
      */
-    public function setTblValidationReferentiel( TblValidationReferentiel $tblValidationReferentiel )
+    public function setTblValidationReferentiel( ?TblValidationReferentiel $tblValidationReferentiel )
     {
         $this->tblValidationReferentiel = $tblValidationReferentiel;
 

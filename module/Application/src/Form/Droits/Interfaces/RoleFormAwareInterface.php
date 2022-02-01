@@ -16,7 +16,7 @@ interface RoleFormAwareInterface
      *
      * @return self
      */
-    public function setFormDroitsRole( RoleForm $formDroitsRole );
+    public function setFormDroitsRole( ?RoleForm $formDroitsRole );
 
 
 

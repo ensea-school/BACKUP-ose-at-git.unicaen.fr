@@ -20,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisie( Saisie $formVolumeHoraireSaisie )
+    public function setFormVolumeHoraireSaisie( ?Saisie $formVolumeHoraireSaisie )
     {
         $this->formVolumeHoraireSaisie = $formVolumeHoraireSaisie;
 

@@ -19,7 +19,7 @@ trait PlafondProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusPlafond( PlafondProcessus $processusPlafond )
+    public function setProcessusPlafond( ?PlafondProcessus $processusPlafond )
     {
         $this->processusPlafond = $processusPlafond;
 

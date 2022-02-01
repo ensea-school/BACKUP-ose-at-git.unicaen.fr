@@ -20,7 +20,7 @@ trait TypeRessourceAwareTrait
      *
      * @return self
      */
-    public function setTypeRessource( TypeRessource $typeRessource )
+    public function setTypeRessource( ?TypeRessource $typeRessource )
     {
         $this->typeRessource = $typeRessource;
 

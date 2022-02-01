@@ -20,7 +20,7 @@ trait UtilisateurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceUtilisateur( UtilisateurService $serviceUtilisateur )
+    public function setServiceUtilisateur( ?UtilisateurService $serviceUtilisateur )
     {
         $this->serviceUtilisateur = $serviceUtilisateur;
 

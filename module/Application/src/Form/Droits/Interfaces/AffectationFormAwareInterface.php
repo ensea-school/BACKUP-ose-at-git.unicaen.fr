@@ -16,7 +16,7 @@ interface AffectationFormAwareInterface
      *
      * @return self
      */
-    public function setFormDroitsAffectation( AffectationForm $formDroitsAffectation );
+    public function setFormDroitsAffectation( ?AffectationForm $formDroitsAffectation );
 
 
 

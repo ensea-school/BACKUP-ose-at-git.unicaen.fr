@@ -19,7 +19,7 @@ trait IndicateurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceIndicateur( IndicateurService $serviceIndicateur )
+    public function setServiceIndicateur( ?IndicateurService $serviceIndicateur )
     {
         $this->serviceIndicateur = $serviceIndicateur;
 

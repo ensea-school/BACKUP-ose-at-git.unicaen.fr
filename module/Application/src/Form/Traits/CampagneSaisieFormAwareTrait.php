@@ -20,7 +20,7 @@ trait CampagneSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormCampagneSaisie( CampagneSaisieForm $formCampagneSaisie )
+    public function setFormCampagneSaisie( ?CampagneSaisieForm $formCampagneSaisie )
     {
         $this->formCampagneSaisie = $formCampagneSaisie;
 

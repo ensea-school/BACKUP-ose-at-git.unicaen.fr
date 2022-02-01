@@ -20,7 +20,7 @@ trait DotationSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormBudgetDotationSaisie( DotationSaisieForm $formBudgetDotationSaisie )
+    public function setFormBudgetDotationSaisie( ?DotationSaisieForm $formBudgetDotationSaisie )
     {
         $this->formBudgetDotationSaisie = $formBudgetDotationSaisie;
 

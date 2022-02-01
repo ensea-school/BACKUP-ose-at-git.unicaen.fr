@@ -20,7 +20,7 @@ trait FormuleResultatVolumeHoraireReferentielServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFormuleResultatVolumeHoraireReferentiel( FormuleResultatVolumeHoraireReferentielService $serviceFormuleResultatVolumeHoraireReferentiel )
+    public function setServiceFormuleResultatVolumeHoraireReferentiel( ?FormuleResultatVolumeHoraireReferentielService $serviceFormuleResultatVolumeHoraireReferentiel )
     {
         $this->serviceFormuleResultatVolumeHoraireReferentiel = $serviceFormuleResultatVolumeHoraireReferentiel;
 

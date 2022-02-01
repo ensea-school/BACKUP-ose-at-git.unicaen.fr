@@ -20,7 +20,7 @@ trait TypeInterventionStatutServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeInterventionStatut( TypeInterventionStatutService $serviceTypeInterventionStatut )
+    public function setServiceTypeInterventionStatut( ?TypeInterventionStatutService $serviceTypeInterventionStatut )
     {
         $this->serviceTypeInterventionStatut = $serviceTypeInterventionStatut;
 

@@ -20,7 +20,7 @@ trait TypeModulateurStructureAwareTrait
      *
      * @return self
      */
-    public function setTypeModulateurStructure( TypeModulateurStructure $typeModulateurStructure )
+    public function setTypeModulateurStructure( ?TypeModulateurStructure $typeModulateurStructure )
     {
         $this->typeModulateurStructure = $typeModulateurStructure;
 

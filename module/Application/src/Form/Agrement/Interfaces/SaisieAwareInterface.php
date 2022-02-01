@@ -16,7 +16,7 @@ interface SaisieAwareInterface
      *
      * @return self
      */
-    public function setFormAgrementSaisie( Saisie $formAgrementSaisie );
+    public function setFormAgrementSaisie( ?Saisie $formAgrementSaisie );
 
 
 

@@ -16,7 +16,7 @@ interface DisciplineFormAwareInterface
      *
      * @return self
      */
-    public function setFormDiscipline( DisciplineForm $formDiscipline );
+    public function setFormDiscipline( ?DisciplineForm $formDiscipline );
 
 
 

@@ -20,7 +20,7 @@ trait DomaineFonctionnelSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormDomaineFonctionnelDomaineFonctionnelSaisie( DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie )
+    public function setFormDomaineFonctionnelDomaineFonctionnelSaisie( ?DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie )
     {
         $this->formDomaineFonctionnelDomaineFonctionnelSaisie = $formDomaineFonctionnelDomaineFonctionnelSaisie;
 

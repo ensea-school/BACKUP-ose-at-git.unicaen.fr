@@ -20,7 +20,7 @@ trait ScenarioAwareTrait
      *
      * @return self
      */
-    public function setScenario( Scenario $scenario )
+    public function setScenario( ?Scenario $scenario )
     {
         $this->scenario = $scenario;
 

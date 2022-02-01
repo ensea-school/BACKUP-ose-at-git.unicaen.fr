@@ -19,7 +19,7 @@ trait PlafondEtatAwareTrait
      *
      * @return self
      */
-    public function setPlafondEtat( PlafondEtat $plafondEtat )
+    public function setPlafondEtat( ?PlafondEtat $plafondEtat )
     {
         $this->plafondEtat = $plafondEtat;
 

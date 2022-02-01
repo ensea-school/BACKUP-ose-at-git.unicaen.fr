@@ -20,7 +20,7 @@ trait MotifNonPaiementAwareTrait
      *
      * @return self
      */
-    public function setMotifNonPaiement( MotifNonPaiement $motifNonPaiement )
+    public function setMotifNonPaiement( ?MotifNonPaiement $motifNonPaiement )
     {
         $this->motifNonPaiement = $motifNonPaiement;
 

@@ -20,7 +20,7 @@ trait LocalContextServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceLocalContext( LocalContextService $serviceLocalContext )
+    public function setServiceLocalContext( ?LocalContextService $serviceLocalContext )
     {
         $this->serviceLocalContext = $serviceLocalContext;
 

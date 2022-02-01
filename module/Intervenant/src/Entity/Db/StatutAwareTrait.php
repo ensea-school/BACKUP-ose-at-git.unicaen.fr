@@ -19,7 +19,7 @@ trait StatutAwareTrait
      *
      * @return self
      */
-    public function setStatut( Statut $statut )
+    public function setStatut( ?Statut $statut )
     {
         $this->statut = $statut;
 

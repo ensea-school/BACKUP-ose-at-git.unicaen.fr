@@ -20,7 +20,7 @@ trait ValidationAwareTrait
      *
      * @return self
      */
-    public function setValidation( Validation $validation )
+    public function setValidation( ?Validation $validation )
     {
         $this->validation = $validation;
 

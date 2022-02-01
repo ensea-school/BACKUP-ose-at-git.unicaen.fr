@@ -20,7 +20,7 @@ trait TypeInterventionStatutAwareTrait
      *
      * @return self
      */
-    public function setTypeInterventionStatut( TypeInterventionStatut $typeInterventionStatut )
+    public function setTypeInterventionStatut( ?TypeInterventionStatut $typeInterventionStatut )
     {
         $this->typeInterventionStatut = $typeInterventionStatut;
 

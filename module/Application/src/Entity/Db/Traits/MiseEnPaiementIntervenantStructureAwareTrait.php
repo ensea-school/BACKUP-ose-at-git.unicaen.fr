@@ -20,7 +20,7 @@ trait MiseEnPaiementIntervenantStructureAwareTrait
      *
      * @return self
      */
-    public function setMiseEnPaiementIntervenantStructure( MiseEnPaiementIntervenantStructure $miseEnPaiementIntervenantStructure )
+    public function setMiseEnPaiementIntervenantStructure( ?MiseEnPaiementIntervenantStructure $miseEnPaiementIntervenantStructure )
     {
         $this->miseEnPaiementIntervenantStructure = $miseEnPaiementIntervenantStructure;
 

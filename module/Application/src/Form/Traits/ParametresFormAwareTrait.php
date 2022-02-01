@@ -20,7 +20,7 @@ trait ParametresFormAwareTrait
      *
      * @return self
      */
-    public function setFormParametres( ParametresForm $formParametres )
+    public function setFormParametres( ?ParametresForm $formParametres )
     {
         $this->formParametres = $formParametres;
 

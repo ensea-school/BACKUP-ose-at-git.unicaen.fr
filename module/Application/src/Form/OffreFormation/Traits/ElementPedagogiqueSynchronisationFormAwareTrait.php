@@ -20,7 +20,7 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSynchronisation( ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation )
+    public function setFormOffreFormationElementPedagogiqueSynchronisation( ?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation )
     {
         $this->formOffreFormationElementPedagogiqueSynchronisation = $formOffreFormationElementPedagogiqueSynchronisation;
 

@@ -20,7 +20,7 @@ trait ModulateurAwareTrait
      *
      * @return self
      */
-    public function setModulateur( Modulateur $modulateur )
+    public function setModulateur( ?Modulateur $modulateur )
     {
         $this->modulateur = $modulateur;
 

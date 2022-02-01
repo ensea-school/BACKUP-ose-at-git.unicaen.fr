@@ -16,7 +16,7 @@ interface ElementPedagogiqueRechercheFieldsetAwareInterface
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueRechercheFieldset( ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset );
+    public function setFormOffreFormationElementPedagogiqueRechercheFieldset( ?ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset );
 
 
 

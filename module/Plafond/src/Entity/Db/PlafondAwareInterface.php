@@ -15,7 +15,7 @@ interface PlafondAwareInterface
      *
      * @return self
      */
-    public function setPlafond( Plafond $plafond );
+    public function setPlafond( ?Plafond $plafond );
 
 
 

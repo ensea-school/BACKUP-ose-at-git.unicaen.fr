@@ -16,7 +16,7 @@ interface DotationSaisieFormAwareInterface
      *
      * @return self
      */
-    public function setFormBudgetDotationSaisie( DotationSaisieForm $formBudgetDotationSaisie );
+    public function setFormBudgetDotationSaisie( ?DotationSaisieForm $formBudgetDotationSaisie );
 
 
 

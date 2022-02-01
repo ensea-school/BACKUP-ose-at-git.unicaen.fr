@@ -20,7 +20,7 @@ trait IntervenantProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusIntervenant( IntervenantProcessus $processusIntervenant )
+    public function setProcessusIntervenant( ?IntervenantProcessus $processusIntervenant )
     {
         $this->processusIntervenant = $processusIntervenant;
 

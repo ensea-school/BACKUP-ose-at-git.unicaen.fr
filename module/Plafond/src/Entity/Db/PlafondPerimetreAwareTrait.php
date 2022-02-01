@@ -19,7 +19,7 @@ trait PlafondPerimetreAwareTrait
      *
      * @return self
      */
-    public function setPlafondPerimetre( PlafondPerimetre $plafondPerimetre )
+    public function setPlafondPerimetre( ?PlafondPerimetre $plafondPerimetre )
     {
         $this->plafondPerimetre = $plafondPerimetre;
 

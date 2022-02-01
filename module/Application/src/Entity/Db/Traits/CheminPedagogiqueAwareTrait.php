@@ -20,7 +20,7 @@ trait CheminPedagogiqueAwareTrait
      *
      * @return self
      */
-    public function setCheminPedagogique( CheminPedagogique $cheminPedagogique )
+    public function setCheminPedagogique( ?CheminPedagogique $cheminPedagogique )
     {
         $this->cheminPedagogique = $cheminPedagogique;
 

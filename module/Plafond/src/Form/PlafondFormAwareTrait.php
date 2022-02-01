@@ -19,7 +19,7 @@ trait PlafondFormAwareTrait
      *
      * @return self
      */
-    public function setFormPlafond( PlafondForm $formPlafond )
+    public function setFormPlafond( ?PlafondForm $formPlafond )
     {
         $this->formPlafond = $formPlafond;
 

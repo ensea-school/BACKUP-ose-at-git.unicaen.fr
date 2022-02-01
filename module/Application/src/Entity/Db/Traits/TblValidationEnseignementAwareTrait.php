@@ -20,7 +20,7 @@ trait TblValidationEnseignementAwareTrait
      *
      * @return self
      */
-    public function setTblValidationEnseignement( TblValidationEnseignement $tblValidationEnseignement )
+    public function setTblValidationEnseignement( ?TblValidationEnseignement $tblValidationEnseignement )
     {
         $this->tblValidationEnseignement = $tblValidationEnseignement;
 

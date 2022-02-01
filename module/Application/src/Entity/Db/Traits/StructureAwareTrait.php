@@ -20,7 +20,7 @@ trait StructureAwareTrait
      *
      * @return self
      */
-    public function setStructure( Structure $structure )
+    public function setStructure( ?Structure $structure )
     {
         $this->structure = $structure;
 

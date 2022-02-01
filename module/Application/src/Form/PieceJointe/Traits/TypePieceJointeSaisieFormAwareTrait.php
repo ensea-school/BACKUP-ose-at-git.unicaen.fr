@@ -20,7 +20,7 @@ trait TypePieceJointeSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormPieceJointeTypePieceJointeSaisie( TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie )
+    public function setFormPieceJointeTypePieceJointeSaisie( ?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie )
     {
         $this->formPieceJointeTypePieceJointeSaisie = $formPieceJointeTypePieceJointeSaisie;
 

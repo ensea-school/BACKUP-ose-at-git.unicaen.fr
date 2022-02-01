@@ -20,7 +20,7 @@ trait RegleStructureValidationAwareTrait
      *
      * @return self
      */
-    public function setRegleStructureValidation( RegleStructureValidation $regleStructureValidation )
+    public function setRegleStructureValidation( ?RegleStructureValidation $regleStructureValidation )
     {
         $this->regleStructureValidation = $regleStructureValidation;
 

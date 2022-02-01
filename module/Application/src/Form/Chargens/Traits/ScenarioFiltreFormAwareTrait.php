@@ -20,7 +20,7 @@ trait ScenarioFiltreFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensScenarioFiltre( ScenarioFiltreForm $formChargensScenarioFiltre )
+    public function setFormChargensScenarioFiltre( ?ScenarioFiltreForm $formChargensScenarioFiltre )
     {
         $this->formChargensScenarioFiltre = $formChargensScenarioFiltre;
 

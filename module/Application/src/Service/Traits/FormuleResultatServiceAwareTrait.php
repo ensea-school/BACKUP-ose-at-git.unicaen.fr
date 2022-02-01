@@ -20,7 +20,7 @@ trait FormuleResultatServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFormuleResultat( FormuleResultatService $serviceFormuleResultat )
+    public function setServiceFormuleResultat( ?FormuleResultatService $serviceFormuleResultat )
     {
         $this->serviceFormuleResultat = $serviceFormuleResultat;
 

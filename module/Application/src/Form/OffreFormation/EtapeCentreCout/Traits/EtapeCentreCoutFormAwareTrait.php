@@ -20,7 +20,7 @@ trait EtapeCentreCoutFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout )
+    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( ?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout )
     {
         $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = $formOffreFormationEtapeCentreCoutEtapeCentreCout;
 

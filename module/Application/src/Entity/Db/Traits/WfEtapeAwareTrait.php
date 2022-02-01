@@ -20,7 +20,7 @@ trait WfEtapeAwareTrait
      *
      * @return self
      */
-    public function setWfEtape( WfEtape $wfEtape )
+    public function setWfEtape( ?WfEtape $wfEtape )
     {
         $this->wfEtape = $wfEtape;
 

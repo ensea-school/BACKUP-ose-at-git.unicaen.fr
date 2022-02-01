@@ -10,7 +10,7 @@
 
 $introspection = \UnicaenCode\Util::introspection();
 
-/*
+
 $traits = $introspection->getTraits();
 
 foreach ($traits as $trait) {
@@ -27,7 +27,7 @@ foreach ($traits as $trait) {
             echo "ATTENTION : L'awareTrait $trait ne fait référence à aucune classe connue et identifiée<br />\n";
         }
     }
-}*/
+}
 
 $interfaces = $introspection->getInterfaces();
 foreach ($interfaces as $interface) {

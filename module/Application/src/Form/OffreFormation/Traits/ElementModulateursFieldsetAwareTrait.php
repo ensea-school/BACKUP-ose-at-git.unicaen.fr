@@ -20,7 +20,7 @@ trait ElementModulateursFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementModulateursFieldset( ElementModulateursFieldset $formOffreFormationElementModulateursFieldset )
+    public function setFormOffreFormationElementModulateursFieldset( ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset )
     {
         $this->formOffreFormationElementModulateursFieldset = $formOffreFormationElementModulateursFieldset;
 

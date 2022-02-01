@@ -20,7 +20,7 @@ trait ScenarioFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensScenario( ScenarioForm $formChargensScenario )
+    public function setFormChargensScenario( ?ScenarioForm $formChargensScenario )
     {
         $this->formChargensScenario = $formChargensScenario;
 

@@ -20,7 +20,7 @@ trait PeriodeServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePeriode( PeriodeService $servicePeriode )
+    public function setServicePeriode( ?PeriodeService $servicePeriode )
     {
         $this->servicePeriode = $servicePeriode;
 

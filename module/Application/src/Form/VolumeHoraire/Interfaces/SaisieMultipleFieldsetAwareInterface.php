@@ -16,7 +16,7 @@ interface SaisieMultipleFieldsetAwareInterface
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisieMultipleFieldset( SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset );
+    public function setFormVolumeHoraireSaisieMultipleFieldset( ?SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset );
 
 
 

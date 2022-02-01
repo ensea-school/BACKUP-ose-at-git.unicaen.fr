@@ -20,7 +20,7 @@ trait EtapeAwareTrait
      *
      * @return self
      */
-    public function setEtape( Etape $etape )
+    public function setEtape( ?Etape $etape )
     {
         $this->etape = $etape;
 

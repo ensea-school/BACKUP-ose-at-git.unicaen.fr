@@ -16,7 +16,7 @@ interface EtapeCentreCoutFormAwareInterface
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout );
+    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( ?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout );
 
 
 

@@ -20,7 +20,7 @@ trait TblPieceJointeFournieAwareTrait
      *
      * @return self
      */
-    public function setTblPieceJointeFournie( TblPieceJointeFournie $tblPieceJointeFournie )
+    public function setTblPieceJointeFournie( ?TblPieceJointeFournie $tblPieceJointeFournie )
     {
         $this->tblPieceJointeFournie = $tblPieceJointeFournie;
 

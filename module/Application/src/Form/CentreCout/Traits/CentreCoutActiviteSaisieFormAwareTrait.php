@@ -20,7 +20,7 @@ trait CentreCoutActiviteSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormCentreCoutCentreCoutActiviteSaisie( CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie )
+    public function setFormCentreCoutCentreCoutActiviteSaisie( ?CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie )
     {
         $this->formCentreCoutCentreCoutActiviteSaisie = $formCentreCoutCentreCoutActiviteSaisie;
 

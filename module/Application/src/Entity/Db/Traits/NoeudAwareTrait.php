@@ -20,7 +20,7 @@ trait NoeudAwareTrait
      *
      * @return self
      */
-    public function setNoeud( Noeud $noeud )
+    public function setNoeud( ?Noeud $noeud )
     {
         $this->noeud = $noeud;
 

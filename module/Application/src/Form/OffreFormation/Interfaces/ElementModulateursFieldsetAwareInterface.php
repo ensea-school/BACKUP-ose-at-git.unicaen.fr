@@ -16,7 +16,7 @@ interface ElementModulateursFieldsetAwareInterface
      *
      * @return self
      */
-    public function setFormOffreFormationElementModulateursFieldset( ElementModulateursFieldset $formOffreFormationElementModulateursFieldset );
+    public function setFormOffreFormationElementModulateursFieldset( ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset );
 
 
 

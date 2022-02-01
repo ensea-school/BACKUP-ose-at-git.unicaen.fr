@@ -20,7 +20,7 @@ trait PaysAwareTrait
      *
      * @return self
      */
-    public function setPays( Pays $pays )
+    public function setPays( ?Pays $pays )
     {
         $this->pays = $pays;
 

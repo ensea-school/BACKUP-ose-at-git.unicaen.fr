@@ -19,7 +19,7 @@ trait PlafondStructureServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePlafondStructure( PlafondStructureService $servicePlafondStructure )
+    public function setServicePlafondStructure( ?PlafondStructureService $servicePlafondStructure )
     {
         $this->servicePlafondStructure = $servicePlafondStructure;
 

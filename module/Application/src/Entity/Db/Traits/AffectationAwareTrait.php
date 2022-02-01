@@ -20,7 +20,7 @@ trait AffectationAwareTrait
      *
      * @return self
      */
-    public function setAffectation( Affectation $affectation )
+    public function setAffectation( ?Affectation $affectation )
     {
         $this->affectation = $affectation;
 

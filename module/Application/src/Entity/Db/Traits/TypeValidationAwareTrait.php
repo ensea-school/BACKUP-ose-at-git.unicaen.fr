@@ -20,7 +20,7 @@ trait TypeValidationAwareTrait
      *
      * @return self
      */
-    public function setTypeValidation( TypeValidation $typeValidation )
+    public function setTypeValidation( ?TypeValidation $typeValidation )
     {
         $this->typeValidation = $typeValidation;
 

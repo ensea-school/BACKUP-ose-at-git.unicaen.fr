@@ -16,7 +16,7 @@ interface EditionFormAwareInterface
      *
      * @return self
      */
-    public function setFormIntervenantEdition( EditionForm $formIntervenantEdition );
+    public function setFormIntervenantEdition( ?EditionForm $formIntervenantEdition );
 
 
 

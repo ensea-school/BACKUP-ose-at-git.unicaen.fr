@@ -20,7 +20,7 @@ trait AnneeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceAnnee( AnneeService $serviceAnnee )
+    public function setServiceAnnee( ?AnneeService $serviceAnnee )
     {
         $this->serviceAnnee = $serviceAnnee;
 

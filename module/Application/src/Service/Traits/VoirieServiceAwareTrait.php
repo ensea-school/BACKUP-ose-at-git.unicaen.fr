@@ -20,7 +20,7 @@ trait VoirieServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceVoirie( VoirieService $serviceVoirie )
+    public function setServiceVoirie( ?VoirieService $serviceVoirie )
     {
         $this->serviceVoirie = $serviceVoirie;
 

@@ -16,7 +16,7 @@ interface EtapeModulateursSaisieAwareInterface
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeModulateursSaisie( EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie );
+    public function setFormOffreFormationEtapeModulateursSaisie( ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie );
 
 
 

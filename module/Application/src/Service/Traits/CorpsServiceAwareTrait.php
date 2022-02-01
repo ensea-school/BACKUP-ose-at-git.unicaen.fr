@@ -20,7 +20,7 @@ trait CorpsServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCorps( CorpsService $serviceCorps )
+    public function setServiceCorps( ?CorpsService $serviceCorps )
     {
         $this->serviceCorps = $serviceCorps;
 

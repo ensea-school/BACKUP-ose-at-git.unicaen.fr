@@ -20,7 +20,7 @@ trait ServiceAPayerServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceServiceAPayer( ServiceAPayerService $serviceServiceAPayer )
+    public function setServiceServiceAPayer( ?ServiceAPayerService $serviceServiceAPayer )
     {
         $this->serviceServiceAPayer = $serviceServiceAPayer;
 

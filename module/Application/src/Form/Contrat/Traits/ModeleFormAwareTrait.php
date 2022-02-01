@@ -20,7 +20,7 @@ trait ModeleFormAwareTrait
      *
      * @return self
      */
-    public function setFormContratModele( ModeleForm $formContratModele )
+    public function setFormContratModele( ?ModeleForm $formContratModele )
     {
         $this->formContratModele = $formContratModele;
 

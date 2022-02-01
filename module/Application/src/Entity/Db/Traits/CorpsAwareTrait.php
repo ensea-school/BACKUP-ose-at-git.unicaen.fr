@@ -20,7 +20,7 @@ trait CorpsAwareTrait
      *
      * @return self
      */
-    public function setCorps( Corps $corps )
+    public function setCorps( ?Corps $corps )
     {
         $this->corps = $corps;
 

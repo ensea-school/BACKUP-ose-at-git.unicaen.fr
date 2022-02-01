@@ -20,7 +20,7 @@ trait TblServiceSaisieAwareTrait
      *
      * @return self
      */
-    public function setTblServiceSaisie( TblServiceSaisie $tblServiceSaisie )
+    public function setTblServiceSaisie( ?TblServiceSaisie $tblServiceSaisie )
     {
         $this->tblServiceSaisie = $tblServiceSaisie;
 

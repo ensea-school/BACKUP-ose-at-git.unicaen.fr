@@ -20,7 +20,7 @@ trait ElementTauxRegimesAwareTrait
      *
      * @return self
      */
-    public function setElementTauxRegimes( ElementTauxRegimes $elementTauxRegimes )
+    public function setElementTauxRegimes( ?ElementTauxRegimes $elementTauxRegimes )
     {
         $this->elementTauxRegimes = $elementTauxRegimes;
 

@@ -20,7 +20,7 @@ trait VolumeHoraireEnsFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationVolumeHoraireEns( VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns )
+    public function setFormOffreFormationVolumeHoraireEns( ?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns )
     {
         $this->formOffreFormationVolumeHoraireEns = $formOffreFormationVolumeHoraireEns;
 

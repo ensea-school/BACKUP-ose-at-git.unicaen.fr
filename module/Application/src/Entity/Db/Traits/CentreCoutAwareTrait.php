@@ -20,7 +20,7 @@ trait CentreCoutAwareTrait
      *
      * @return self
      */
-    public function setCentreCout( CentreCout $centreCout )
+    public function setCentreCout( ?CentreCout $centreCout )
     {
         $this->centreCout = $centreCout;
 

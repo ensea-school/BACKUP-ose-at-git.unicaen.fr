@@ -20,7 +20,7 @@ trait DossierServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDossier( DossierService $serviceDossier )
+    public function setServiceDossier( ?DossierService $serviceDossier )
     {
         $this->serviceDossier = $serviceDossier;
 

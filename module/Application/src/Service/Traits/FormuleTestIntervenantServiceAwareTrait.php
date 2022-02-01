@@ -20,7 +20,7 @@ trait FormuleTestIntervenantServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFormuleTestIntervenant( FormuleTestIntervenantService $serviceFormuleTestIntervenant )
+    public function setServiceFormuleTestIntervenant( ?FormuleTestIntervenantService $serviceFormuleTestIntervenant )
     {
         $this->serviceFormuleTestIntervenant = $serviceFormuleTestIntervenant;
 

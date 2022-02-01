@@ -20,7 +20,7 @@ trait TypeInterventionStructureSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormTypeInterventionTypeInterventionStructureSaisie( TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie )
+    public function setFormTypeInterventionTypeInterventionStructureSaisie( ?TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie )
     {
         $this->formTypeInterventionTypeInterventionStructureSaisie = $formTypeInterventionTypeInterventionStructureSaisie;
 

@@ -20,7 +20,7 @@ trait DotationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDotation( DotationService $serviceDotation )
+    public function setServiceDotation( ?DotationService $serviceDotation )
     {
         $this->serviceDotation = $serviceDotation;
 

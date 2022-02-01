@@ -20,7 +20,7 @@ trait NiveauFormationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceNiveauFormation( NiveauFormationService $serviceNiveauFormation )
+    public function setServiceNiveauFormation( ?NiveauFormationService $serviceNiveauFormation )
     {
         $this->serviceNiveauFormation = $serviceNiveauFormation;
 

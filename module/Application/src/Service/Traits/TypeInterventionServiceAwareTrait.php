@@ -20,7 +20,7 @@ trait TypeInterventionServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeIntervention( TypeInterventionService $serviceTypeIntervention )
+    public function setServiceTypeIntervention( ?TypeInterventionService $serviceTypeIntervention )
     {
         $this->serviceTypeIntervention = $serviceTypeIntervention;
 

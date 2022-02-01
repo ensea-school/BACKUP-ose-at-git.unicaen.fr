@@ -20,7 +20,7 @@ trait TypePieceJointeAwareTrait
      *
      * @return self
      */
-    public function setTypePieceJointe( TypePieceJointe $typePieceJointe )
+    public function setTypePieceJointe( ?TypePieceJointe $typePieceJointe )
     {
         $this->typePieceJointe = $typePieceJointe;
 

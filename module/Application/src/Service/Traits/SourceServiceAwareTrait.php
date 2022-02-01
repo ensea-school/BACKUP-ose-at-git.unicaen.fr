@@ -20,7 +20,7 @@ trait SourceServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceSource( SourceService $serviceSource )
+    public function setServiceSource( ?SourceService $serviceSource )
     {
         $this->serviceSource = $serviceSource;
 

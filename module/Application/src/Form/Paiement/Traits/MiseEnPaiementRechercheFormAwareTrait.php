@@ -20,7 +20,7 @@ trait MiseEnPaiementRechercheFormAwareTrait
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiementRecherche( MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche )
+    public function setFormPaiementMiseEnPaiementRecherche( ?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche )
     {
         $this->formPaiementMiseEnPaiementRecherche = $formPaiementMiseEnPaiementRecherche;
 

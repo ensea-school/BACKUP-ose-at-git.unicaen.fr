@@ -20,7 +20,7 @@ trait CiviliteAwareTrait
      *
      * @return self
      */
-    public function setCivilite( Civilite $civilite )
+    public function setCivilite( ?Civilite $civilite )
     {
         $this->civilite = $civilite;
 

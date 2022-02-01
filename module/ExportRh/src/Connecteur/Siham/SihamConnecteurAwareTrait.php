@@ -19,7 +19,7 @@ trait SihamConnecteurAwareTrait
      *
      * @return self
      */
-    public function setConnecteurSihamSiham( SihamConnecteur $connecteurSihamSiham )
+    public function setConnecteurSihamSiham( ?SihamConnecteur $connecteurSihamSiham )
     {
         $this->connecteurSihamSiham = $connecteurSihamSiham;
 

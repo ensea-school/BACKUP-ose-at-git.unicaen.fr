@@ -20,7 +20,7 @@ trait WfDepBloquanteAwareTrait
      *
      * @return self
      */
-    public function setWfDepBloquante( WfDepBloquante $wfDepBloquante )
+    public function setWfDepBloquante( ?WfDepBloquante $wfDepBloquante )
     {
         $this->wfDepBloquante = $wfDepBloquante;
 

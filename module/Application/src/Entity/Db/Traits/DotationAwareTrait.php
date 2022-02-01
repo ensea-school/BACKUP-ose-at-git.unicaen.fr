@@ -20,7 +20,7 @@ trait DotationAwareTrait
      *
      * @return self
      */
-    public function setDotation( Dotation $dotation )
+    public function setDotation( ?Dotation $dotation )
     {
         $this->dotation = $dotation;
 

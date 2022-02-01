@@ -20,7 +20,7 @@ trait ValidationEnseignementProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusValidationEnseignement( ValidationEnseignementProcessus $processusValidationEnseignement )
+    public function setProcessusValidationEnseignement( ?ValidationEnseignementProcessus $processusValidationEnseignement )
     {
         $this->processusValidationEnseignement = $processusValidationEnseignement;
 

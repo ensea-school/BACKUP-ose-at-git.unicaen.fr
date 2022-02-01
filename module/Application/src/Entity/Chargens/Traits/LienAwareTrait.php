@@ -20,7 +20,7 @@ trait LienAwareTrait
      *
      * @return self
      */
-    public function setLien( Lien $lien )
+    public function setLien( ?Lien $lien )
     {
         $this->lien = $lien;
 

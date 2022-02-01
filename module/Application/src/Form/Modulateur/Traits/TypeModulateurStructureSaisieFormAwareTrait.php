@@ -20,7 +20,7 @@ trait TypeModulateurStructureSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormModulateurTypeModulateurStructureSaisie( TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie )
+    public function setFormModulateurTypeModulateurStructureSaisie( ?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie )
     {
         $this->formModulateurTypeModulateurStructureSaisie = $formModulateurTypeModulateurStructureSaisie;
 

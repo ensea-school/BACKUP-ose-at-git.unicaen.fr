@@ -20,7 +20,7 @@ trait TypeRessourceSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormTypeRessourceTypeRessourceSaisie( TypeRessourceSaisieForm $formTypeRessourceTypeRessourceSaisie )
+    public function setFormTypeRessourceTypeRessourceSaisie( ?TypeRessourceSaisieForm $formTypeRessourceTypeRessourceSaisie )
     {
         $this->formTypeRessourceTypeRessourceSaisie = $formTypeRessourceTypeRessourceSaisie;
 

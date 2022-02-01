@@ -20,7 +20,7 @@ trait UtilisateurAwareTrait
      *
      * @return self
      */
-    public function setUtilisateur( Utilisateur $utilisateur )
+    public function setUtilisateur( ?Utilisateur $utilisateur )
     {
         $this->utilisateur = $utilisateur;
 

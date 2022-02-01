@@ -20,7 +20,7 @@ trait RegleStructureValidationFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantRegleStructureValidation( RegleStructureValidationForm $formIntervenantRegleStructureValidation )
+    public function setFormIntervenantRegleStructureValidation( ?RegleStructureValidationForm $formIntervenantRegleStructureValidation )
     {
         $this->formIntervenantRegleStructureValidation = $formIntervenantRegleStructureValidation;
 

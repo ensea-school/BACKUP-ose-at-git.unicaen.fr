@@ -20,7 +20,7 @@ trait WfEtapeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceWfEtape( WfEtapeService $serviceWfEtape )
+    public function setServiceWfEtape( ?WfEtapeService $serviceWfEtape )
     {
         $this->serviceWfEtape = $serviceWfEtape;
 

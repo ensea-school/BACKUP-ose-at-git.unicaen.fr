@@ -20,7 +20,7 @@ trait ElementPedagogiqueAwareTrait
      *
      * @return self
      */
-    public function setElementPedagogique( ElementPedagogique $elementPedagogique )
+    public function setElementPedagogique( ?ElementPedagogique $elementPedagogique )
     {
         $this->elementPedagogique = $elementPedagogique;
 

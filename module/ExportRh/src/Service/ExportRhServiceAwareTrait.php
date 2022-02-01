@@ -19,7 +19,7 @@ trait ExportRhServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceExportRh( ExportRhService $serviceExportRh )
+    public function setServiceExportRh( ?ExportRhService $serviceExportRh )
     {
         $this->serviceExportRh = $serviceExportRh;
 

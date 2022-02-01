@@ -20,7 +20,7 @@ trait StructureServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceStructure( StructureService $serviceStructure )
+    public function setServiceStructure( ?StructureService $serviceStructure )
     {
         $this->serviceStructure = $serviceStructure;
 

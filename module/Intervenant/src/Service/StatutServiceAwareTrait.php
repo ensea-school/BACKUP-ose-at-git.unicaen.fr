@@ -19,7 +19,7 @@ trait StatutServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceStatut( StatutService $serviceStatut )
+    public function setServiceStatut( ?StatutService $serviceStatut )
     {
         $this->serviceStatut = $serviceStatut;
 

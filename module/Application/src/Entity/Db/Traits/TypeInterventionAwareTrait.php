@@ -20,7 +20,7 @@ trait TypeInterventionAwareTrait
      *
      * @return self
      */
-    public function setTypeIntervention( TypeIntervention $typeIntervention )
+    public function setTypeIntervention( ?TypeIntervention $typeIntervention )
     {
         $this->typeIntervention = $typeIntervention;
 

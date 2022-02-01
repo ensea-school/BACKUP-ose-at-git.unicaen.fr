@@ -20,7 +20,7 @@ trait EnvoiMailContratFormAwareTrait
      *
      * @return self
      */
-    public function setFormContratEnvoiMailContrat( EnvoiMailContratForm $formContratEnvoiMailContrat )
+    public function setFormContratEnvoiMailContrat( ?EnvoiMailContratForm $formContratEnvoiMailContrat )
     {
         $this->formContratEnvoiMailContrat = $formContratEnvoiMailContrat;
 

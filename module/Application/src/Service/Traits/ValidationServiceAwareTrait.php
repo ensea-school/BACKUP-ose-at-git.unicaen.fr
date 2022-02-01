@@ -20,7 +20,7 @@ trait ValidationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceValidation( ValidationService $serviceValidation )
+    public function setServiceValidation( ?ValidationService $serviceValidation )
     {
         $this->serviceValidation = $serviceValidation;
 

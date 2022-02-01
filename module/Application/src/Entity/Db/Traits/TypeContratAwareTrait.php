@@ -20,7 +20,7 @@ trait TypeContratAwareTrait
      *
      * @return self
      */
-    public function setTypeContrat( TypeContrat $typeContrat )
+    public function setTypeContrat( ?TypeContrat $typeContrat )
     {
         $this->typeContrat = $typeContrat;
 

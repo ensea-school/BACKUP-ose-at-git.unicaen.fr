@@ -20,7 +20,7 @@ trait DifferentielFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensDifferentiel( DifferentielForm $formChargensDifferentiel )
+    public function setFormChargensDifferentiel( ?DifferentielForm $formChargensDifferentiel )
     {
         $this->formChargensDifferentiel = $formChargensDifferentiel;
 

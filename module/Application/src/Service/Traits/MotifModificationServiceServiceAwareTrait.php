@@ -20,7 +20,7 @@ trait MotifModificationServiceServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceMotifModificationService( MotifModificationServiceService $serviceMotifModificationService )
+    public function setServiceMotifModificationService( ?MotifModificationServiceService $serviceMotifModificationService )
     {
         $this->serviceMotifModificationService = $serviceMotifModificationService;
 

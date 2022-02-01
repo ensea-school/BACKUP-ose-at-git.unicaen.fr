@@ -20,7 +20,7 @@ trait TblClotureRealiseAwareTrait
      *
      * @return self
      */
-    public function setTblClotureRealise( TblClotureRealise $tblClotureRealise )
+    public function setTblClotureRealise( ?TblClotureRealise $tblClotureRealise )
     {
         $this->tblClotureRealise = $tblClotureRealise;
 

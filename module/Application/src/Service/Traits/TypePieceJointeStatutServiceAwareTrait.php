@@ -20,7 +20,7 @@ trait TypePieceJointeStatutServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypePieceJointeStatut( TypePieceJointeStatutService $serviceTypePieceJointeStatut )
+    public function setServiceTypePieceJointeStatut( ?TypePieceJointeStatutService $serviceTypePieceJointeStatut )
     {
         $this->serviceTypePieceJointeStatut = $serviceTypePieceJointeStatut;
 

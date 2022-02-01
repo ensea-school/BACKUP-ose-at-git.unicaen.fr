@@ -20,7 +20,7 @@ trait PeriodeAwareTrait
      *
      * @return self
      */
-    public function setPeriode( Periode $periode )
+    public function setPeriode( ?Periode $periode )
     {
         $this->periode = $periode;
 

@@ -16,7 +16,7 @@ interface ModificationServiceDuFormAwareInterface
      *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDu( ModificationServiceDuForm $formIntervenantModificationServiceDu );
+    public function setFormIntervenantModificationServiceDu( ?ModificationServiceDuForm $formIntervenantModificationServiceDu );
 
 
 

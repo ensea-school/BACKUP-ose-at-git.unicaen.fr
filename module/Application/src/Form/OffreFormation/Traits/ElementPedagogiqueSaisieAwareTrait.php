@@ -20,7 +20,7 @@ trait ElementPedagogiqueSaisieAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSaisie( ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie )
+    public function setFormOffreFormationElementPedagogiqueSaisie( ?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie )
     {
         $this->formOffreFormationElementPedagogiqueSaisie = $formOffreFormationElementPedagogiqueSaisie;
 

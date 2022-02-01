@@ -20,7 +20,7 @@ trait TblPieceJointeAwareTrait
      *
      * @return self
      */
-    public function setTblPieceJointe( TblPieceJointe $tblPieceJointe )
+    public function setTblPieceJointe( ?TblPieceJointe $tblPieceJointe )
     {
         $this->tblPieceJointe = $tblPieceJointe;
 

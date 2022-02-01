@@ -16,7 +16,7 @@ interface SaisieAwareInterface
      *
      * @return self
      */
-    public function setFormServiceSaisie( Saisie $formServiceSaisie );
+    public function setFormServiceSaisie( ?Saisie $formServiceSaisie );
 
 
 

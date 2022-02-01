@@ -20,7 +20,7 @@ trait TblServiceReferentielAwareTrait
      *
      * @return self
      */
-    public function setTblServiceReferentiel( TblServiceReferentiel $tblServiceReferentiel )
+    public function setTblServiceReferentiel( ?TblServiceReferentiel $tblServiceReferentiel )
     {
         $this->tblServiceReferentiel = $tblServiceReferentiel;
 

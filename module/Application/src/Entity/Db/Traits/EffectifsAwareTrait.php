@@ -20,7 +20,7 @@ trait EffectifsAwareTrait
      *
      * @return self
      */
-    public function setEffectifs( Effectifs $effectifs )
+    public function setEffectifs( ?Effectifs $effectifs )
     {
         $this->effectifs = $effectifs;
 

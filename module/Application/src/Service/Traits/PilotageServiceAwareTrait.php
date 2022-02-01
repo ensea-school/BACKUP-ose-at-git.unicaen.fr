@@ -20,7 +20,7 @@ trait PilotageServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePilotage( PilotageService $servicePilotage )
+    public function setServicePilotage( ?PilotageService $servicePilotage )
     {
         $this->servicePilotage = $servicePilotage;
 

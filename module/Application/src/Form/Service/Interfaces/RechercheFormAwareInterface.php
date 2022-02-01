@@ -16,7 +16,7 @@ interface RechercheFormAwareInterface
      *
      * @return self
      */
-    public function setFormServiceRecherche( RechercheForm $formServiceRecherche );
+    public function setFormServiceRecherche( ?RechercheForm $formServiceRecherche );
 
 
 

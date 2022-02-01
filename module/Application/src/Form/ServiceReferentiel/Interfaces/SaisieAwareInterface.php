@@ -16,7 +16,7 @@ interface SaisieAwareInterface
      *
      * @return self
      */
-    public function setFormServiceReferentielSaisie( Saisie $formServiceReferentielSaisie );
+    public function setFormServiceReferentielSaisie( ?Saisie $formServiceReferentielSaisie );
 
 
 

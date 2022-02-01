@@ -20,7 +20,7 @@ trait EtapeSaisieAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeSaisie( EtapeSaisie $formOffreFormationEtapeSaisie )
+    public function setFormOffreFormationEtapeSaisie( ?EtapeSaisie $formOffreFormationEtapeSaisie )
     {
         $this->formOffreFormationEtapeSaisie = $formOffreFormationEtapeSaisie;
 

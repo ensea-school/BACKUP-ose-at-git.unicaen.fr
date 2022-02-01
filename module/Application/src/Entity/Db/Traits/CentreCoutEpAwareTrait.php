@@ -20,7 +20,7 @@ trait CentreCoutEpAwareTrait
      *
      * @return self
      */
-    public function setCentreCoutEp( CentreCoutEp $centreCoutEp )
+    public function setCentreCoutEp( ?CentreCoutEp $centreCoutEp )
     {
         $this->centreCoutEp = $centreCoutEp;
 

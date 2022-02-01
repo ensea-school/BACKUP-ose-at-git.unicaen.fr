@@ -16,7 +16,7 @@ interface SaisieFieldsetAwareInterface
      *
      * @return self
      */
-    public function setFormServiceReferentielSaisieFieldset( SaisieFieldset $formServiceReferentielSaisieFieldset );
+    public function setFormServiceReferentielSaisieFieldset( ?SaisieFieldset $formServiceReferentielSaisieFieldset );
 
 
 

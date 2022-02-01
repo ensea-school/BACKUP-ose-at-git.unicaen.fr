@@ -20,7 +20,7 @@ trait FonctionReferentielAwareTrait
      *
      * @return self
      */
-    public function setFonctionReferentiel( FonctionReferentiel $fonctionReferentiel )
+    public function setFonctionReferentiel( ?FonctionReferentiel $fonctionReferentiel )
     {
         $this->fonctionReferentiel = $fonctionReferentiel;
 

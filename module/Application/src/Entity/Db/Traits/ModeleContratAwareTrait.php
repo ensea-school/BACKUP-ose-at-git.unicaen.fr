@@ -2,39 +2,35 @@
 
 namespace Application\Entity\Db\Traits;
 
+use Application\Entity\Db\ModeleContrat;
+
 /**
  * Description of ModeleContratAwareTrait
  *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ * @author UnicaenCode
  */
 trait ModeleContratAwareTrait
 {
-    /**
-     * @var ModeleContrat
-     */
-    private $modeleContrat;
-
-
-
-    /**
-     * @return ModeleContrat
-     */
-    public function getModeleContrat(): ModeleContrat
-    {
-        return $this->modeleContrat;
-    }
+    protected ?ModeleContrat $modeleContrat = null;
 
 
 
     /**
      * @param ModeleContrat $modeleContrat
      *
+     * @return self
      */
-    public function setModeleContrat(ModeleContrat $modeleContrat)
+    public function setModeleContrat( ?ModeleContrat $modeleContrat )
     {
         $this->modeleContrat = $modeleContrat;
 
         return $this;
     }
 
+
+
+    public function getModeleContrat(): ?ModeleContrat
+    {
+        return $this->modeleContrat;
+    }
 }

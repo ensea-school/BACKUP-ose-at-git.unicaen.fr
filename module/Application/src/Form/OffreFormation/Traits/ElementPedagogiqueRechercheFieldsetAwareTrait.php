@@ -11,30 +11,30 @@ use Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset;
  */
 trait ElementPedagogiqueRechercheFieldsetAwareTrait
 {
-    protected ?ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset = null;
+    protected ?ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche = null;
 
 
 
     /**
-     * @param ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset
+     * @param ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueRechercheFieldset( ?ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset )
+    public function setFieldsetOffreFormationElementPedagogiqueRecherche( ?ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche )
     {
-        $this->formOffreFormationElementPedagogiqueRechercheFieldset = $formOffreFormationElementPedagogiqueRechercheFieldset;
+        $this->fieldsetOffreFormationElementPedagogiqueRecherche = $fieldsetOffreFormationElementPedagogiqueRecherche;
 
         return $this;
     }
 
 
 
-    public function getFormOffreFormationElementPedagogiqueRechercheFieldset(): ?ElementPedagogiqueRechercheFieldset
+    public function getFieldsetOffreFormationElementPedagogiqueRecherche(): ?ElementPedagogiqueRechercheFieldset
     {
-        if (empty($this->formOffreFormationElementPedagogiqueRechercheFieldset)){
-            $this->formOffreFormationElementPedagogiqueRechercheFieldset = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueRechercheFieldset::class);
+        if (empty($this->fieldsetOffreFormationElementPedagogiqueRecherche)){
+            $this->fieldsetOffreFormationElementPedagogiqueRecherche = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueRechercheFieldset::class);
         }
 
-        return $this->formOffreFormationElementPedagogiqueRechercheFieldset;
+        return $this->fieldsetOffreFormationElementPedagogiqueRecherche;
     }
 }

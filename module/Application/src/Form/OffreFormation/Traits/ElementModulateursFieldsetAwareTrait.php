@@ -11,30 +11,30 @@ use Application\Form\OffreFormation\ElementModulateursFieldset;
  */
 trait ElementModulateursFieldsetAwareTrait
 {
-    protected ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset = null;
+    protected ?ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs = null;
 
 
 
     /**
-     * @param ElementModulateursFieldset $formOffreFormationElementModulateursFieldset
+     * @param ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs
      *
      * @return self
      */
-    public function setFormOffreFormationElementModulateursFieldset( ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset )
+    public function setFieldsetOffreFormationElementModulateurs( ?ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs )
     {
-        $this->formOffreFormationElementModulateursFieldset = $formOffreFormationElementModulateursFieldset;
+        $this->fieldsetOffreFormationElementModulateurs = $fieldsetOffreFormationElementModulateurs;
 
         return $this;
     }
 
 
 
-    public function getFormOffreFormationElementModulateursFieldset(): ?ElementModulateursFieldset
+    public function getFieldsetOffreFormationElementModulateurs(): ?ElementModulateursFieldset
     {
-        if (empty($this->formOffreFormationElementModulateursFieldset)){
-            $this->formOffreFormationElementModulateursFieldset = \Application::$container->get('FormElementManager')->get(ElementModulateursFieldset::class);
+        if (empty($this->fieldsetOffreFormationElementModulateurs)){
+            $this->fieldsetOffreFormationElementModulateurs = \Application::$container->get('FormElementManager')->get(ElementModulateursFieldset::class);
         }
 
-        return $this->formOffreFormationElementModulateursFieldset;
+        return $this->fieldsetOffreFormationElementModulateurs;
     }
 }

@@ -11,30 +11,30 @@ use Application\Form\OffreFormation\TauxMixite\TauxMixiteFieldset;
  */
 trait TauxMixiteFieldsetAwareTrait
 {
-    protected ?TauxMixiteFieldset $formOffreFormationTauxMixiteTauxMixiteFieldset = null;
+    protected ?TauxMixiteFieldset $fieldsetOffreFormationTauxMixiteTauxMixite = null;
 
 
 
     /**
-     * @param TauxMixiteFieldset $formOffreFormationTauxMixiteTauxMixiteFieldset
+     * @param TauxMixiteFieldset $fieldsetOffreFormationTauxMixiteTauxMixite
      *
      * @return self
      */
-    public function setFormOffreFormationTauxMixiteTauxMixiteFieldset( ?TauxMixiteFieldset $formOffreFormationTauxMixiteTauxMixiteFieldset )
+    public function setFieldsetOffreFormationTauxMixiteTauxMixite( ?TauxMixiteFieldset $fieldsetOffreFormationTauxMixiteTauxMixite )
     {
-        $this->formOffreFormationTauxMixiteTauxMixiteFieldset = $formOffreFormationTauxMixiteTauxMixiteFieldset;
+        $this->fieldsetOffreFormationTauxMixiteTauxMixite = $fieldsetOffreFormationTauxMixiteTauxMixite;
 
         return $this;
     }
 
 
 
-    public function getFormOffreFormationTauxMixiteTauxMixiteFieldset(): ?TauxMixiteFieldset
+    public function getFieldsetOffreFormationTauxMixiteTauxMixite(): ?TauxMixiteFieldset
     {
-        if (empty($this->formOffreFormationTauxMixiteTauxMixiteFieldset)){
-            $this->formOffreFormationTauxMixiteTauxMixiteFieldset = \Application::$container->get('FormElementManager')->get(TauxMixiteFieldset::class);
+        if (empty($this->fieldsetOffreFormationTauxMixiteTauxMixite)){
+            $this->fieldsetOffreFormationTauxMixiteTauxMixite = \Application::$container->get('FormElementManager')->get(TauxMixiteFieldset::class);
         }
 
-        return $this->formOffreFormationTauxMixiteTauxMixiteFieldset;
+        return $this->fieldsetOffreFormationTauxMixiteTauxMixite;
     }
 }

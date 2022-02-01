@@ -11,30 +11,30 @@ use Application\Form\Intervenant\MotifModificationServiceDuFieldset;
  */
 trait MotifModificationServiceDuFieldsetAwareTrait
 {
-    protected ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset = null;
+    protected ?MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu = null;
 
 
 
     /**
-     * @param MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset
+     * @param MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu
      *
      * @return self
      */
-    public function setFormIntervenantMotifModificationServiceDuFieldset( ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset )
+    public function setFieldsetIntervenantMotifModificationServiceDu( ?MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu )
     {
-        $this->formIntervenantMotifModificationServiceDuFieldset = $formIntervenantMotifModificationServiceDuFieldset;
+        $this->fieldsetIntervenantMotifModificationServiceDu = $fieldsetIntervenantMotifModificationServiceDu;
 
         return $this;
     }
 
 
 
-    public function getFormIntervenantMotifModificationServiceDuFieldset(): ?MotifModificationServiceDuFieldset
+    public function getFieldsetIntervenantMotifModificationServiceDu(): ?MotifModificationServiceDuFieldset
     {
-        if (empty($this->formIntervenantMotifModificationServiceDuFieldset)){
-            $this->formIntervenantMotifModificationServiceDuFieldset = \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
+        if (empty($this->fieldsetIntervenantMotifModificationServiceDu)){
+            $this->fieldsetIntervenantMotifModificationServiceDu = \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
         }
 
-        return $this->formIntervenantMotifModificationServiceDuFieldset;
+        return $this->fieldsetIntervenantMotifModificationServiceDu;
     }
 }

@@ -11,30 +11,30 @@ use Application\Form\Intervenant\ModificationServiceDuFieldset;
  */
 trait ModificationServiceDuFieldsetAwareTrait
 {
-    protected ?ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset = null;
+    protected ?ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu = null;
 
 
 
     /**
-     * @param ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset
+     * @param ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu
      *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDuFieldset( ?ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset )
+    public function setFieldsetIntervenantModificationServiceDu( ?ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu )
     {
-        $this->formIntervenantModificationServiceDuFieldset = $formIntervenantModificationServiceDuFieldset;
+        $this->fieldsetIntervenantModificationServiceDu = $fieldsetIntervenantModificationServiceDu;
 
         return $this;
     }
 
 
 
-    public function getFormIntervenantModificationServiceDuFieldset(): ?ModificationServiceDuFieldset
+    public function getFieldsetIntervenantModificationServiceDu(): ?ModificationServiceDuFieldset
     {
-        if (empty($this->formIntervenantModificationServiceDuFieldset)){
-            $this->formIntervenantModificationServiceDuFieldset = \Application::$container->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
+        if (empty($this->fieldsetIntervenantModificationServiceDu)){
+            $this->fieldsetIntervenantModificationServiceDu = \Application::$container->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
         }
 
-        return $this->formIntervenantModificationServiceDuFieldset;
+        return $this->fieldsetIntervenantModificationServiceDu;
     }
 }

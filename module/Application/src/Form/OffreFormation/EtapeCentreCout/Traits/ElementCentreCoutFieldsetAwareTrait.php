@@ -11,30 +11,30 @@ use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset;
  */
 trait ElementCentreCoutFieldsetAwareTrait
 {
-    protected ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = null;
+    protected ?ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout = null;
 
 
 
     /**
-     * @param ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset
+     * @param ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset( ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset )
+    public function setFieldsetOffreFormationEtapeCentreCoutElementCentreCout( ?ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout )
     {
-        $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset;
+        $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = $fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
 
         return $this;
     }
 
 
 
-    public function getFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset(): ?ElementCentreCoutFieldset
+    public function getFieldsetOffreFormationEtapeCentreCoutElementCentreCout(): ?ElementCentreCoutFieldset
     {
-        if (empty($this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset)){
-            $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = \Application::$container->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
+        if (empty($this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout)){
+            $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = \Application::$container->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
         }
 
-        return $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset;
+        return $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
     }
 }

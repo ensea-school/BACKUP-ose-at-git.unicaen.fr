@@ -3,7 +3,6 @@
 namespace Application\Form\OffreFormation\Interfaces;
 
 use Application\Form\OffreFormation\ElementPedagogiqueSaisie;
-use RuntimeException;
 
 /**
  * Description of ElementPedagogiqueSaisieAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface ElementPedagogiqueSaisieAwareInterface
 {
     /**
-     * @param ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie
+     * @param ElementPedagogiqueSaisie|null $formOffreFormationElementPedagogiqueSaisie
+     *
      * @return self
      */
     public function setFormOffreFormationElementPedagogiqueSaisie( ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie );
 
 
 
-    /**
-     * @return ElementPedagogiqueSaisieAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormOffreFormationElementPedagogiqueSaisie();
+    public function getFormOffreFormationElementPedagogiqueSaisie(): ?ElementPedagogiqueSaisie;
 }

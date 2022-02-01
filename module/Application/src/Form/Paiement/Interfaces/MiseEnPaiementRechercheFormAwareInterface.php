@@ -3,7 +3,6 @@
 namespace Application\Form\Paiement\Interfaces;
 
 use Application\Form\Paiement\MiseEnPaiementRechercheForm;
-use RuntimeException;
 
 /**
  * Description of MiseEnPaiementRechercheFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface MiseEnPaiementRechercheFormAwareInterface
 {
     /**
-     * @param MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche
+     * @param MiseEnPaiementRechercheForm|null $formPaiementMiseEnPaiementRecherche
+     *
      * @return self
      */
     public function setFormPaiementMiseEnPaiementRecherche( MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche );
 
 
 
-    /**
-     * @return MiseEnPaiementRechercheFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormPaiementMiseEnPaiementRecherche();
+    public function getFormPaiementMiseEnPaiementRecherche(): ?MiseEnPaiementRechercheForm;
 }

@@ -3,7 +3,6 @@
 namespace Application\Form\Service\Interfaces;
 
 use Application\Form\Service\SaisieFieldset;
-use RuntimeException;
 
 /**
  * Description of SaisieFieldsetAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface SaisieFieldsetAwareInterface
 {
     /**
-     * @param SaisieFieldset $fieldsetServiceSaisie
+     * @param SaisieFieldset|null $formServiceSaisieFieldset
+     *
      * @return self
      */
-    public function setFieldsetServiceSaisie( SaisieFieldset $fieldsetServiceSaisie );
+    public function setFormServiceSaisieFieldset( SaisieFieldset $formServiceSaisieFieldset );
 
 
 
-    /**
-     * @return SaisieFieldsetAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFieldsetServiceSaisie();
+    public function getFormServiceSaisieFieldset(): ?SaisieFieldset;
 }

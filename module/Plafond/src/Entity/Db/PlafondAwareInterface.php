@@ -2,6 +2,7 @@
 
 namespace Plafond\Entity\Db;
 
+
 /**
  * Description of PlafondAwareInterface
  *
@@ -9,7 +10,12 @@ namespace Plafond\Entity\Db;
  */
 interface PlafondAwareInterface
 {
-    public function setPlafond(Plafond $plafond);
+    /**
+     * @param Plafond|null $plafond
+     *
+     * @return self
+     */
+    public function setPlafond( Plafond $plafond );
 
 
 

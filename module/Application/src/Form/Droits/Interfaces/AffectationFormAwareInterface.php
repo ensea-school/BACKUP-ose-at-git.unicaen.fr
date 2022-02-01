@@ -3,7 +3,6 @@
 namespace Application\Form\Droits\Interfaces;
 
 use Application\Form\Droits\AffectationForm;
-use RuntimeException;
 
 /**
  * Description of AffectationFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface AffectationFormAwareInterface
 {
     /**
-     * @param AffectationForm $formDroitsAffectation
+     * @param AffectationForm|null $formDroitsAffectation
+     *
      * @return self
      */
     public function setFormDroitsAffectation( AffectationForm $formDroitsAffectation );
 
 
 
-    /**
-     * @return AffectationFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormDroitsAffectation();
+    public function getFormDroitsAffectation(): ?AffectationForm;
 }

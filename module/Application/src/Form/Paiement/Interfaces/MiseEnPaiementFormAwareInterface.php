@@ -3,7 +3,6 @@
 namespace Application\Form\Paiement\Interfaces;
 
 use Application\Form\Paiement\MiseEnPaiementForm;
-use RuntimeException;
 
 /**
  * Description of MiseEnPaiementFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface MiseEnPaiementFormAwareInterface
 {
     /**
-     * @param MiseEnPaiementForm $formPaiementMiseEnPaiement
+     * @param MiseEnPaiementForm|null $formPaiementMiseEnPaiement
+     *
      * @return self
      */
     public function setFormPaiementMiseEnPaiement( MiseEnPaiementForm $formPaiementMiseEnPaiement );
 
 
 
-    /**
-     * @return MiseEnPaiementFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormPaiementMiseEnPaiement();
+    public function getFormPaiementMiseEnPaiement(): ?MiseEnPaiementForm;
 }

@@ -3,7 +3,6 @@
 namespace Application\Form\Droits\Interfaces;
 
 use Application\Form\Droits\RoleForm;
-use RuntimeException;
 
 /**
  * Description of RoleFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface RoleFormAwareInterface
 {
     /**
-     * @param RoleForm $formDroitsRole
+     * @param RoleForm|null $formDroitsRole
+     *
      * @return self
      */
     public function setFormDroitsRole( RoleForm $formDroitsRole );
 
 
 
-    /**
-     * @return RoleFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormDroitsRole();
+    public function getFormDroitsRole(): ?RoleForm;
 }

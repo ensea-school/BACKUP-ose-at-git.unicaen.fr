@@ -3,7 +3,6 @@
 namespace Application\Form\Intervenant\Interfaces;
 
 use Application\Form\Intervenant\HeuresCompForm;
-use RuntimeException;
 
 /**
  * Description of HeuresCompFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface HeuresCompFormAwareInterface
 {
     /**
-     * @param HeuresCompForm $formIntervenantHeuresComp
+     * @param HeuresCompForm|null $formIntervenantHeuresComp
+     *
      * @return self
      */
     public function setFormIntervenantHeuresComp( HeuresCompForm $formIntervenantHeuresComp );
 
 
 
-    /**
-     * @return HeuresCompFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormIntervenantHeuresComp();
+    public function getFormIntervenantHeuresComp(): ?HeuresCompForm;
 }

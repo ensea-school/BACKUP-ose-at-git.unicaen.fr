@@ -3,7 +3,6 @@
 namespace Application\Form\VolumeHoraire\Interfaces;
 
 use Application\Form\VolumeHoraire\SaisieMultipleFieldset;
-use RuntimeException;
 
 /**
  * Description of SaisieMultipleFieldsetAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface SaisieMultipleFieldsetAwareInterface
 {
     /**
-     * @param SaisieMultipleFieldset $fieldsetVolumeHoraireSaisieMultiple
+     * @param SaisieMultipleFieldset|null $formVolumeHoraireSaisieMultipleFieldset
+     *
      * @return self
      */
-    public function setFieldsetVolumeHoraireSaisieMultiple( SaisieMultipleFieldset $fieldsetVolumeHoraireSaisieMultiple );
+    public function setFormVolumeHoraireSaisieMultipleFieldset( SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset );
 
 
 
-    /**
-     * @return SaisieMultipleFieldsetAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFieldsetVolumeHoraireSaisieMultiple();
+    public function getFormVolumeHoraireSaisieMultipleFieldset(): ?SaisieMultipleFieldset;
 }

@@ -3,7 +3,6 @@
 namespace Application\Form\OffreFormation\Interfaces;
 
 use Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset;
-use RuntimeException;
 
 /**
  * Description of ElementPedagogiqueRechercheFieldsetAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface ElementPedagogiqueRechercheFieldsetAwareInterface
 {
     /**
-     * @param ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche
+     * @param ElementPedagogiqueRechercheFieldset|null $formOffreFormationElementPedagogiqueRechercheFieldset
+     *
      * @return self
      */
-    public function setFieldsetOffreFormationElementPedagogiqueRecherche( ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche );
+    public function setFormOffreFormationElementPedagogiqueRechercheFieldset( ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset );
 
 
 
-    /**
-     * @return ElementPedagogiqueRechercheFieldsetAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFieldsetOffreFormationElementPedagogiqueRecherche();
+    public function getFormOffreFormationElementPedagogiqueRechercheFieldset(): ?ElementPedagogiqueRechercheFieldset;
 }

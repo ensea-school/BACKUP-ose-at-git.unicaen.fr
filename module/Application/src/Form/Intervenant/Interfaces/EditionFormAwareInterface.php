@@ -3,7 +3,6 @@
 namespace Application\Form\Intervenant\Interfaces;
 
 use Application\Form\Intervenant\EditionForm;
-use RuntimeException;
 
 /**
  * Description of EditionFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface EditionFormAwareInterface
 {
     /**
-     * @param EditionForm $formIntervenantEdition
+     * @param EditionForm|null $formIntervenantEdition
+     *
      * @return self
      */
     public function setFormIntervenantEdition( EditionForm $formIntervenantEdition );
 
 
 
-    /**
-     * @return EditionFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormIntervenantEdition();
+    public function getFormIntervenantEdition(): ?EditionForm;
 }

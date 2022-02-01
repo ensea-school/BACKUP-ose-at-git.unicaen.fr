@@ -20,7 +20,6 @@ class EtapeViewHelper extends AbstractViewHelper
     use ServiceEtapeAwareTrait;
 
 
-
     /**
      *
      * @param Entity $etape
@@ -124,7 +123,7 @@ class EtapeViewHelper extends AbstractViewHelper
         $default = [
             'href'  => $this->getView()->url('of/etape/voir', ['etape' => $etape->getId()]),
             'class' => ['etape-link', 'ajax-modal'],
-            'id'    => $etape->getId(),
+            'id'    => (string)$etape->getId(),
         ];
 
 
@@ -134,7 +133,7 @@ class EtapeViewHelper extends AbstractViewHelper
         }
 
         $tag = 'a';
-        if (! $this->getView()->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION))) $tag = 'span';
+        if (!$this->getView()->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION))) $tag = 'span';
 
         return "<$tag " . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . "</$tag>";
     }

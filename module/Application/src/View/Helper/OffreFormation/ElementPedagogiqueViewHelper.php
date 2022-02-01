@@ -126,7 +126,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
         $default = [
             'href'  => $this->getView()->url('of/element/voir', ['elementPedagogique' => $element->getId()]),
             'class' => ['element-pedagogique-link', 'ajax-modal'],
-            'id'    => $element->getId(),
+            'id'    => (string)$element->getId(),
         ];
 
         if ($element->getHistoDestruction()) {

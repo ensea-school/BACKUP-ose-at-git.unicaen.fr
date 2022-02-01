@@ -1,0 +1,95 @@
+<?php
+/*
+* @author JORIOT Florian <florian.joriot at unicaen.fr>
+*/
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+function affBooleen($flg)
+{
+    // affiche booléen avec des glypheIcon
+    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
+}
+
+$this->headTitle()->append("Gestion des periodes");
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_PERIODES_EDITION));
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+?>
+
+<h1 class="page-header">Gestion des periodes</h1>
+
+<table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+        <th style="text-align: center">Code</th>
+        <th style="text-align: center">Libellé court</th>
+        <th style="text-align: center">Libellé long</th>
+        <th style="text-align: center">Enseignement</th>
+        <th style="text-align: center">Paiement</th>
+        <th style="text-align: center">EcartMois</th>
+        <th style="text-align: center">EcartMoisPaiement</th>
+        <?php if ($canEdit): ?>
+            <th style="text-align: center">Actions</th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables ui-sortable">
+    <?php foreach ($periodes as $periode): ?>
+        <tr class="champ-triable" data-id= <?php echo $periode->getId() ?>>
+            <td style="text-align: center"><?= $periode->getCode(); ?></td>
+            <td style="text-align: center"><?= $periode->getLibelleCourt(); ?></td>
+            <td style="text-align: center"><?= $periode->getLibelleLong(); ?></td>
+            <td style="text-align: center"><?= affBooleen($periode->getEnseignement()); ?></td>
+            <td style="text-align: center"><?= affBooleen($periode->getPaiement()); ?></td>
+            <td style="text-align: center"><?= $periode->getEcartMois(); ?></td>
+            <td style="text-align: center"><?= $periode->getEcartMoisPaiement(); ?></td>
+            <?php if ($canEdit): ?>
+                <td style="text-align: center">
+                    <a class="ajax-modal" data-event="periodes-edition"
+                       href="<?= $this->url('periodes/saisie', ['periode' => $periode->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                       title="Modifier la periode"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a class="pop-ajax" data-title="Suppression de période" data-content="Etes vous sur de supprimer" data-confirm="true"
+                       data-submit-reload="true"
+                       href="<?= $this->url('periodes/supprimer', ['periode' => $periode->getId()]) ?>"
+                       title="Supprimer la periode"><span class="glyphicon glyphicon-remove"></span></a>
+                    <span class="glyphicon glyphicon-move"
+                          title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="periodes-edition" href="<?= $this->url('periodes/saisie'); ?>"><span
+                class="glyphicon glyphicon-plus"></span> Ajout d'une nouvelle periode</a>
+<?php endif; ?>
+
+<script type="text/javascript">
+    $(function () {
+        $(".triables").sortable({
+            handle: '.glyphicon-move',
+            axis: 'y',
+            update: function (event, ui) {
+                var champsIds = '';
+                ui.item.parent().find('tr.champ-triable').each(function () {
+                    if (champsIds != '') champsIds += ',';
+                    champsIds += $(this).data('id');
+                });
+                $.post(Url('periodes/trier'), {champsIds: champsIds}).done(function (res) {
+                    alertFlash(res.msg, 'success', 3000);
+                });
+            }
+        });
+    });
+
+    $(function () {
+        $("body").on("periodes-edition", function (event, data) {
+            window.location.reload();
+        });
+    });
+</script>

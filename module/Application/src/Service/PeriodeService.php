@@ -204,4 +204,23 @@ class PeriodeService extends AbstractEntityService
     {
         return $this->getRepo()->findOneBy(['code' => Periode::PAIEMENT_TARDIF]);
     }
+
+
+
+    /**
+     * Sauvegarde la periode
+     *
+     * @param Periode $entity
+     */
+    public function save($entity)
+    {
+        if (empty($entity->getOrdre())) {
+            $ordre = (int)$this->getEntityManager()->getConnection()->fetchOne("SELECT MAX(ORDRE) M FROM PERIODE P");
+            $ordre++;
+            $entity->setOrdre($ordre);
+        }
+
+        return parent::save($entity);
+    }
+
 }

@@ -11,16 +11,16 @@ use Application\Entity\Db\Agrement;
  */
 trait AgrementAwareTrait
 {
-    protected ?Agrement $agrement;
+    protected ?Agrement $agrement = null;
 
 
 
     /**
-     * @param Agrement|null $agrement
+     * @param Agrement $agrement
      *
      * @return self
      */
-    public function setAgrement( ?Agrement $agrement )
+    public function setAgrement( Agrement $agrement )
     {
         $this->agrement = $agrement;
 

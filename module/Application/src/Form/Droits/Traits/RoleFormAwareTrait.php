@@ -11,16 +11,16 @@ use Application\Form\Droits\RoleForm;
  */
 trait RoleFormAwareTrait
 {
-    protected ?RoleForm $formDroitsRole;
+    protected ?RoleForm $formDroitsRole = null;
 
 
 
     /**
-     * @param RoleForm|null $formDroitsRole
+     * @param RoleForm $formDroitsRole
      *
      * @return self
      */
-    public function setFormDroitsRole( ?RoleForm $formDroitsRole )
+    public function setFormDroitsRole( RoleForm $formDroitsRole )
     {
         $this->formDroitsRole = $formDroitsRole;
 
@@ -31,7 +31,7 @@ trait RoleFormAwareTrait
 
     public function getFormDroitsRole(): ?RoleForm
     {
-        if (!$this->formDroitsRole){
+        if (empty($this->formDroitsRole)){
             $this->formDroitsRole = \Application::$container->get('FormElementManager')->get(RoleForm::class);
         }
 

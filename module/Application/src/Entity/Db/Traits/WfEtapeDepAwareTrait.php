@@ -11,16 +11,16 @@ use Application\Entity\Db\WfEtapeDep;
  */
 trait WfEtapeDepAwareTrait
 {
-    protected ?WfEtapeDep $wfEtapeDep;
+    protected ?WfEtapeDep $wfEtapeDep = null;
 
 
 
     /**
-     * @param WfEtapeDep|null $wfEtapeDep
+     * @param WfEtapeDep $wfEtapeDep
      *
      * @return self
      */
-    public function setWfEtapeDep( ?WfEtapeDep $wfEtapeDep )
+    public function setWfEtapeDep( WfEtapeDep $wfEtapeDep )
     {
         $this->wfEtapeDep = $wfEtapeDep;
 

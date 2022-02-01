@@ -11,16 +11,16 @@ use Application\Service\PieceJointeService;
  */
 trait PieceJointeServiceAwareTrait
 {
-    protected ?PieceJointeService $servicePieceJointe;
+    protected ?PieceJointeService $servicePieceJointe = null;
 
 
 
     /**
-     * @param PieceJointeService|null $servicePieceJointe
+     * @param PieceJointeService $servicePieceJointe
      *
      * @return self
      */
-    public function setServicePieceJointe( ?PieceJointeService $servicePieceJointe )
+    public function setServicePieceJointe( PieceJointeService $servicePieceJointe )
     {
         $this->servicePieceJointe = $servicePieceJointe;
 
@@ -31,7 +31,7 @@ trait PieceJointeServiceAwareTrait
 
     public function getServicePieceJointe(): ?PieceJointeService
     {
-        if (!$this->servicePieceJointe){
+        if (empty($this->servicePieceJointe)){
             $this->servicePieceJointe = \Application::$container->get(PieceJointeService::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Service\TypePieceJointeStatutService;
  */
 trait TypePieceJointeStatutServiceAwareTrait
 {
-    protected ?TypePieceJointeStatutService $serviceTypePieceJointeStatut;
+    protected ?TypePieceJointeStatutService $serviceTypePieceJointeStatut = null;
 
 
 
     /**
-     * @param TypePieceJointeStatutService|null $serviceTypePieceJointeStatut
+     * @param TypePieceJointeStatutService $serviceTypePieceJointeStatut
      *
      * @return self
      */
-    public function setServiceTypePieceJointeStatut( ?TypePieceJointeStatutService $serviceTypePieceJointeStatut )
+    public function setServiceTypePieceJointeStatut( TypePieceJointeStatutService $serviceTypePieceJointeStatut )
     {
         $this->serviceTypePieceJointeStatut = $serviceTypePieceJointeStatut;
 
@@ -31,7 +31,7 @@ trait TypePieceJointeStatutServiceAwareTrait
 
     public function getServiceTypePieceJointeStatut(): ?TypePieceJointeStatutService
     {
-        if (!$this->serviceTypePieceJointeStatut){
+        if (empty($this->serviceTypePieceJointeStatut)){
             $this->serviceTypePieceJointeStatut = \Application::$container->get(TypePieceJointeStatutService::class);
         }
 

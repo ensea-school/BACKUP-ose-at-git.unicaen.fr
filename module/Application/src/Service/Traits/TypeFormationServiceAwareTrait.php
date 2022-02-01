@@ -11,16 +11,16 @@ use Application\Service\TypeFormationService;
  */
 trait TypeFormationServiceAwareTrait
 {
-    protected ?TypeFormationService $serviceTypeFormation;
+    protected ?TypeFormationService $serviceTypeFormation = null;
 
 
 
     /**
-     * @param TypeFormationService|null $serviceTypeFormation
+     * @param TypeFormationService $serviceTypeFormation
      *
      * @return self
      */
-    public function setServiceTypeFormation( ?TypeFormationService $serviceTypeFormation )
+    public function setServiceTypeFormation( TypeFormationService $serviceTypeFormation )
     {
         $this->serviceTypeFormation = $serviceTypeFormation;
 
@@ -31,8 +31,8 @@ trait TypeFormationServiceAwareTrait
 
     public function getServiceTypeFormation(): ?TypeFormationService
     {
-        if (!$this->serviceTypeFormation){
-            $this->serviceTypeFormation = \Application::$container->get('FormElementManager')->get(TypeFormationService::class);
+        if (empty($this->serviceTypeFormation)){
+            $this->serviceTypeFormation = \Application::$container->get(TypeFormationService::class);
         }
 
         return $this->serviceTypeFormation;

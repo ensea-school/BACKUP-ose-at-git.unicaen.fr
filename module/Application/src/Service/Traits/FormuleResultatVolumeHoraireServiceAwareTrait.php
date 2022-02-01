@@ -11,16 +11,16 @@ use Application\Service\FormuleResultatVolumeHoraireService;
  */
 trait FormuleResultatVolumeHoraireServiceAwareTrait
 {
-    protected ?FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire;
+    protected ?FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire = null;
 
 
 
     /**
-     * @param FormuleResultatVolumeHoraireService|null $serviceFormuleResultatVolumeHoraire
+     * @param FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire
      *
      * @return self
      */
-    public function setServiceFormuleResultatVolumeHoraire( ?FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire )
+    public function setServiceFormuleResultatVolumeHoraire( FormuleResultatVolumeHoraireService $serviceFormuleResultatVolumeHoraire )
     {
         $this->serviceFormuleResultatVolumeHoraire = $serviceFormuleResultatVolumeHoraire;
 
@@ -31,8 +31,8 @@ trait FormuleResultatVolumeHoraireServiceAwareTrait
 
     public function getServiceFormuleResultatVolumeHoraire(): ?FormuleResultatVolumeHoraireService
     {
-        if (!$this->serviceFormuleResultatVolumeHoraire){
-            $this->serviceFormuleResultatVolumeHoraire = \Application::$container->get('FormElementManager')->get(FormuleResultatVolumeHoraireService::class);
+        if (empty($this->serviceFormuleResultatVolumeHoraire)){
+            $this->serviceFormuleResultatVolumeHoraire = \Application::$container->get(FormuleResultatVolumeHoraireService::class);
         }
 
         return $this->serviceFormuleResultatVolumeHoraire;

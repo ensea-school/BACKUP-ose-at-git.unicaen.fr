@@ -11,16 +11,16 @@ use Application\Form\Chargens\DifferentielForm;
  */
 trait DifferentielFormAwareTrait
 {
-    protected ?DifferentielForm $formChargensDifferentiel;
+    protected ?DifferentielForm $formChargensDifferentiel = null;
 
 
 
     /**
-     * @param DifferentielForm|null $formChargensDifferentiel
+     * @param DifferentielForm $formChargensDifferentiel
      *
      * @return self
      */
-    public function setFormChargensDifferentiel( ?DifferentielForm $formChargensDifferentiel )
+    public function setFormChargensDifferentiel( DifferentielForm $formChargensDifferentiel )
     {
         $this->formChargensDifferentiel = $formChargensDifferentiel;
 
@@ -31,7 +31,7 @@ trait DifferentielFormAwareTrait
 
     public function getFormChargensDifferentiel(): ?DifferentielForm
     {
-        if (!$this->formChargensDifferentiel){
+        if (empty($this->formChargensDifferentiel)){
             $this->formChargensDifferentiel = \Application::$container->get('FormElementManager')->get(DifferentielForm::class);
         }
 

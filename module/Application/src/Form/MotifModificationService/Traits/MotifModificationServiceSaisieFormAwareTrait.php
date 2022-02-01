@@ -11,16 +11,16 @@ use Application\Form\MotifModificationService\MotifModificationServiceSaisieForm
  */
 trait MotifModificationServiceSaisieFormAwareTrait
 {
-    protected ?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie;
+    protected ?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie = null;
 
 
 
     /**
-     * @param MotifModificationServiceSaisieForm|null $formMotifModificationServiceMotifModificationServiceSaisie
+     * @param MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie
      *
      * @return self
      */
-    public function setFormMotifModificationServiceMotifModificationServiceSaisie( ?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie )
+    public function setFormMotifModificationServiceMotifModificationServiceSaisie( MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie )
     {
         $this->formMotifModificationServiceMotifModificationServiceSaisie = $formMotifModificationServiceMotifModificationServiceSaisie;
 
@@ -31,7 +31,7 @@ trait MotifModificationServiceSaisieFormAwareTrait
 
     public function getFormMotifModificationServiceMotifModificationServiceSaisie(): ?MotifModificationServiceSaisieForm
     {
-        if (!$this->formMotifModificationServiceMotifModificationServiceSaisie){
+        if (empty($this->formMotifModificationServiceMotifModificationServiceSaisie)){
             $this->formMotifModificationServiceMotifModificationServiceSaisie = \Application::$container->get('FormElementManager')->get(MotifModificationServiceSaisieForm::class);
         }
 

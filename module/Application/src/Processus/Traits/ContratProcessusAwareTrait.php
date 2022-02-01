@@ -11,16 +11,16 @@ use Application\Processus\ContratProcessus;
  */
 trait ContratProcessusAwareTrait
 {
-    protected ?ContratProcessus $processusContrat;
+    protected ?ContratProcessus $processusContrat = null;
 
 
 
     /**
-     * @param ContratProcessus|null $processusContrat
+     * @param ContratProcessus $processusContrat
      *
      * @return self
      */
-    public function setProcessusContrat( ?ContratProcessus $processusContrat )
+    public function setProcessusContrat( ContratProcessus $processusContrat )
     {
         $this->processusContrat = $processusContrat;
 
@@ -31,7 +31,7 @@ trait ContratProcessusAwareTrait
 
     public function getProcessusContrat(): ?ContratProcessus
     {
-        if (!$this->processusContrat){
+        if (empty($this->processusContrat)){
             $this->processusContrat = \Application::$container->get(ContratProcessus::class);
         }
 

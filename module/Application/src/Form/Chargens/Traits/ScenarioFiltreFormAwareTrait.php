@@ -11,16 +11,16 @@ use Application\Form\Chargens\ScenarioFiltreForm;
  */
 trait ScenarioFiltreFormAwareTrait
 {
-    protected ?ScenarioFiltreForm $formChargensScenarioFiltre;
+    protected ?ScenarioFiltreForm $formChargensScenarioFiltre = null;
 
 
 
     /**
-     * @param ScenarioFiltreForm|null $formChargensScenarioFiltre
+     * @param ScenarioFiltreForm $formChargensScenarioFiltre
      *
      * @return self
      */
-    public function setFormChargensScenarioFiltre( ?ScenarioFiltreForm $formChargensScenarioFiltre )
+    public function setFormChargensScenarioFiltre( ScenarioFiltreForm $formChargensScenarioFiltre )
     {
         $this->formChargensScenarioFiltre = $formChargensScenarioFiltre;
 
@@ -31,7 +31,7 @@ trait ScenarioFiltreFormAwareTrait
 
     public function getFormChargensScenarioFiltre(): ?ScenarioFiltreForm
     {
-        if (!$this->formChargensScenarioFiltre){
+        if (empty($this->formChargensScenarioFiltre)){
             $this->formChargensScenarioFiltre = \Application::$container->get('FormElementManager')->get(ScenarioFiltreForm::class);
         }
 

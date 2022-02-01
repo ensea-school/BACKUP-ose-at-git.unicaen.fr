@@ -11,16 +11,16 @@ use Application\Entity\Db\TypeIntervention;
  */
 trait TypeInterventionAwareTrait
 {
-    protected ?TypeIntervention $typeIntervention;
+    protected ?TypeIntervention $typeIntervention = null;
 
 
 
     /**
-     * @param TypeIntervention|null $typeIntervention
+     * @param TypeIntervention $typeIntervention
      *
      * @return self
      */
-    public function setTypeIntervention( ?TypeIntervention $typeIntervention )
+    public function setTypeIntervention( TypeIntervention $typeIntervention )
     {
         $this->typeIntervention = $typeIntervention;
 

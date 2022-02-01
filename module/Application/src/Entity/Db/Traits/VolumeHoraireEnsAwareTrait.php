@@ -11,16 +11,16 @@ use Application\Entity\Db\VolumeHoraireEns;
  */
 trait VolumeHoraireEnsAwareTrait
 {
-    protected ?VolumeHoraireEns $volumeHoraireEns;
+    protected ?VolumeHoraireEns $volumeHoraireEns = null;
 
 
 
     /**
-     * @param VolumeHoraireEns|null $volumeHoraireEns
+     * @param VolumeHoraireEns $volumeHoraireEns
      *
      * @return self
      */
-    public function setVolumeHoraireEns( ?VolumeHoraireEns $volumeHoraireEns )
+    public function setVolumeHoraireEns( VolumeHoraireEns $volumeHoraireEns )
     {
         $this->volumeHoraireEns = $volumeHoraireEns;
 

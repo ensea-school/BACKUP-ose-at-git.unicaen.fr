@@ -11,16 +11,16 @@ use Application\Entity\Db\SeuilCharge;
  */
 trait SeuilChargeAwareTrait
 {
-    protected ?SeuilCharge $seuilCharge;
+    protected ?SeuilCharge $seuilCharge = null;
 
 
 
     /**
-     * @param SeuilCharge|null $seuilCharge
+     * @param SeuilCharge $seuilCharge
      *
      * @return self
      */
-    public function setSeuilCharge( ?SeuilCharge $seuilCharge )
+    public function setSeuilCharge( SeuilCharge $seuilCharge )
     {
         $this->seuilCharge = $seuilCharge;
 

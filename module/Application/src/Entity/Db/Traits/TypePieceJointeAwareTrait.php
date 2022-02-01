@@ -11,16 +11,16 @@ use Application\Entity\Db\TypePieceJointe;
  */
 trait TypePieceJointeAwareTrait
 {
-    protected ?TypePieceJointe $typePieceJointe;
+    protected ?TypePieceJointe $typePieceJointe = null;
 
 
 
     /**
-     * @param TypePieceJointe|null $typePieceJointe
+     * @param TypePieceJointe $typePieceJointe
      *
      * @return self
      */
-    public function setTypePieceJointe( ?TypePieceJointe $typePieceJointe )
+    public function setTypePieceJointe( TypePieceJointe $typePieceJointe )
     {
         $this->typePieceJointe = $typePieceJointe;
 

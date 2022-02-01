@@ -11,16 +11,16 @@ use Application\Service\TypeInterventionService;
  */
 trait TypeInterventionServiceAwareTrait
 {
-    protected ?TypeInterventionService $serviceTypeIntervention;
+    protected ?TypeInterventionService $serviceTypeIntervention = null;
 
 
 
     /**
-     * @param TypeInterventionService|null $serviceTypeIntervention
+     * @param TypeInterventionService $serviceTypeIntervention
      *
      * @return self
      */
-    public function setServiceTypeIntervention( ?TypeInterventionService $serviceTypeIntervention )
+    public function setServiceTypeIntervention( TypeInterventionService $serviceTypeIntervention )
     {
         $this->serviceTypeIntervention = $serviceTypeIntervention;
 
@@ -31,7 +31,7 @@ trait TypeInterventionServiceAwareTrait
 
     public function getServiceTypeIntervention(): ?TypeInterventionService
     {
-        if (!$this->serviceTypeIntervention){
+        if (empty($this->serviceTypeIntervention)){
             $this->serviceTypeIntervention = \Application::$container->get(TypeInterventionService::class);
         }
 

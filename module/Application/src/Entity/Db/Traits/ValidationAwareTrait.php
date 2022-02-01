@@ -11,16 +11,16 @@ use Application\Entity\Db\Validation;
  */
 trait ValidationAwareTrait
 {
-    protected ?Validation $validation;
+    protected ?Validation $validation = null;
 
 
 
     /**
-     * @param Validation|null $validation
+     * @param Validation $validation
      *
      * @return self
      */
-    public function setValidation( ?Validation $validation )
+    public function setValidation( Validation $validation )
     {
         $this->validation = $validation;
 

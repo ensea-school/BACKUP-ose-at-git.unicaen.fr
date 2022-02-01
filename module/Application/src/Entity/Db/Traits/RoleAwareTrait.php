@@ -11,16 +11,16 @@ use Application\Entity\Db\Role;
  */
 trait RoleAwareTrait
 {
-    protected ?Role $role;
+    protected ?Role $role = null;
 
 
 
     /**
-     * @param Role|null $role
+     * @param Role $role
      *
      * @return self
      */
-    public function setRole( ?Role $role )
+    public function setRole( Role $role )
     {
         $this->role = $role;
 

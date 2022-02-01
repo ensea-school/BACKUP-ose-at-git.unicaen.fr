@@ -11,30 +11,26 @@ use Application\Entity\Db\NiveauFormation;
  */
 trait NiveauFormationAwareTrait
 {
-    protected ?NiveauFormation $entityDbNiveauFormation;
+    protected ?NiveauFormation $niveauFormation = null;
 
 
 
     /**
-     * @param NiveauFormation|null $entityDbNiveauFormation
+     * @param NiveauFormation $niveauFormation
      *
      * @return self
      */
-    public function setEntityDbNiveauFormation( ?NiveauFormation $entityDbNiveauFormation )
+    public function setNiveauFormation( NiveauFormation $niveauFormation )
     {
-        $this->entityDbNiveauFormation = $entityDbNiveauFormation;
+        $this->niveauFormation = $niveauFormation;
 
         return $this;
     }
 
 
 
-    public function getEntityDbNiveauFormation(): ?NiveauFormation
+    public function getNiveauFormation(): ?NiveauFormation
     {
-        if (!$this->entityDbNiveauFormation){
-            $this->entityDbNiveauFormation = \Application::$container->get('FormElementManager')->get(NiveauFormation::class);
-        }
-
-        return $this->entityDbNiveauFormation;
+        return $this->niveauFormation;
     }
 }

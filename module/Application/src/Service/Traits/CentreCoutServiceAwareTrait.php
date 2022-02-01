@@ -11,16 +11,16 @@ use Application\Service\CentreCoutService;
  */
 trait CentreCoutServiceAwareTrait
 {
-    protected ?CentreCoutService $serviceCentreCout;
+    protected ?CentreCoutService $serviceCentreCout = null;
 
 
 
     /**
-     * @param CentreCoutService|null $serviceCentreCout
+     * @param CentreCoutService $serviceCentreCout
      *
      * @return self
      */
-    public function setServiceCentreCout( ?CentreCoutService $serviceCentreCout )
+    public function setServiceCentreCout( CentreCoutService $serviceCentreCout )
     {
         $this->serviceCentreCout = $serviceCentreCout;
 
@@ -31,7 +31,7 @@ trait CentreCoutServiceAwareTrait
 
     public function getServiceCentreCout(): ?CentreCoutService
     {
-        if (!$this->serviceCentreCout){
+        if (empty($this->serviceCentreCout)){
             $this->serviceCentreCout = \Application::$container->get(CentreCoutService::class);
         }
 

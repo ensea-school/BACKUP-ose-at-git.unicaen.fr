@@ -11,16 +11,16 @@ use Application\Service\MotifModificationServiceDuService;
  */
 trait MotifModificationServiceDuServiceAwareTrait
 {
-    protected ?MotifModificationServiceDuService $serviceMotifModificationServiceDu;
+    protected ?MotifModificationServiceDuService $serviceMotifModificationServiceDu = null;
 
 
 
     /**
-     * @param MotifModificationServiceDuService|null $serviceMotifModificationServiceDu
+     * @param MotifModificationServiceDuService $serviceMotifModificationServiceDu
      *
      * @return self
      */
-    public function setServiceMotifModificationServiceDu( ?MotifModificationServiceDuService $serviceMotifModificationServiceDu )
+    public function setServiceMotifModificationServiceDu( MotifModificationServiceDuService $serviceMotifModificationServiceDu )
     {
         $this->serviceMotifModificationServiceDu = $serviceMotifModificationServiceDu;
 
@@ -31,7 +31,7 @@ trait MotifModificationServiceDuServiceAwareTrait
 
     public function getServiceMotifModificationServiceDu(): ?MotifModificationServiceDuService
     {
-        if (!$this->serviceMotifModificationServiceDu){
+        if (empty($this->serviceMotifModificationServiceDu)){
             $this->serviceMotifModificationServiceDu = \Application::$container->get(MotifModificationServiceDuService::class);
         }
 

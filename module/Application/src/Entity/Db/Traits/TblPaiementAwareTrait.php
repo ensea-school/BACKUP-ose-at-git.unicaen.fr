@@ -11,16 +11,16 @@ use Application\Entity\Db\TblPaiement;
  */
 trait TblPaiementAwareTrait
 {
-    protected ?TblPaiement $tblPaiement;
+    protected ?TblPaiement $tblPaiement = null;
 
 
 
     /**
-     * @param TblPaiement|null $tblPaiement
+     * @param TblPaiement $tblPaiement
      *
      * @return self
      */
-    public function setTblPaiement( ?TblPaiement $tblPaiement )
+    public function setTblPaiement( TblPaiement $tblPaiement )
     {
         $this->tblPaiement = $tblPaiement;
 

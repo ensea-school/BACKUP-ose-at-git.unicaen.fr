@@ -11,16 +11,16 @@ use Application\Service\TypeVolumeHoraireService;
  */
 trait TypeVolumeHoraireServiceAwareTrait
 {
-    protected ?TypeVolumeHoraireService $serviceTypeVolumeHoraire;
+    protected ?TypeVolumeHoraireService $serviceTypeVolumeHoraire = null;
 
 
 
     /**
-     * @param TypeVolumeHoraireService|null $serviceTypeVolumeHoraire
+     * @param TypeVolumeHoraireService $serviceTypeVolumeHoraire
      *
      * @return self
      */
-    public function setServiceTypeVolumeHoraire( ?TypeVolumeHoraireService $serviceTypeVolumeHoraire )
+    public function setServiceTypeVolumeHoraire( TypeVolumeHoraireService $serviceTypeVolumeHoraire )
     {
         $this->serviceTypeVolumeHoraire = $serviceTypeVolumeHoraire;
 
@@ -31,7 +31,7 @@ trait TypeVolumeHoraireServiceAwareTrait
 
     public function getServiceTypeVolumeHoraire(): ?TypeVolumeHoraireService
     {
-        if (!$this->serviceTypeVolumeHoraire){
+        if (empty($this->serviceTypeVolumeHoraire)){
             $this->serviceTypeVolumeHoraire = \Application::$container->get(TypeVolumeHoraireService::class);
         }
 

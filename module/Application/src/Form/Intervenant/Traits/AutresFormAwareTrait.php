@@ -11,16 +11,16 @@ use Application\Form\Intervenant\AutresForm;
  */
 trait AutresFormAwareTrait
 {
-    protected ?AutresForm $formIntervenantAutres;
+    protected ?AutresForm $formIntervenantAutres = null;
 
 
 
     /**
-     * @param AutresForm|null $formIntervenantAutres
+     * @param AutresForm $formIntervenantAutres
      *
      * @return self
      */
-    public function setFormIntervenantAutres( ?AutresForm $formIntervenantAutres )
+    public function setFormIntervenantAutres( AutresForm $formIntervenantAutres )
     {
         $this->formIntervenantAutres = $formIntervenantAutres;
 
@@ -31,7 +31,7 @@ trait AutresFormAwareTrait
 
     public function getFormIntervenantAutres(): ?AutresForm
     {
-        if (!$this->formIntervenantAutres){
+        if (empty($this->formIntervenantAutres)){
             $this->formIntervenantAutres = \Application::$container->get('FormElementManager')->get(AutresForm::class);
         }
 

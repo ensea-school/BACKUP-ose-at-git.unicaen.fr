@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\ElementModulateurCentreCoutForm;
  */
 trait ElementModulateurCentreCoutFormAwareTrait
 {
-    protected ?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout;
+    protected ?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout = null;
 
 
 
     /**
-     * @param ElementModulateurCentreCoutForm|null $formOffreFormationElementModulateurCentreCout
+     * @param ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout
      *
      * @return self
      */
-    public function setFormOffreFormationElementModulateurCentreCout( ?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout )
+    public function setFormOffreFormationElementModulateurCentreCout( ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout )
     {
         $this->formOffreFormationElementModulateurCentreCout = $formOffreFormationElementModulateurCentreCout;
 
@@ -31,7 +31,7 @@ trait ElementModulateurCentreCoutFormAwareTrait
 
     public function getFormOffreFormationElementModulateurCentreCout(): ?ElementModulateurCentreCoutForm
     {
-        if (!$this->formOffreFormationElementModulateurCentreCout){
+        if (empty($this->formOffreFormationElementModulateurCentreCout)){
             $this->formOffreFormationElementModulateurCentreCout = \Application::$container->get('FormElementManager')->get(ElementModulateurCentreCoutForm::class);
         }
 

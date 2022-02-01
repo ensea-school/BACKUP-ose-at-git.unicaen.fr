@@ -11,16 +11,16 @@ use Application\Entity\Db\TypeIntervenant;
  */
 trait TypeIntervenantAwareTrait
 {
-    protected ?TypeIntervenant $typeIntervenant;
+    protected ?TypeIntervenant $typeIntervenant = null;
 
 
 
     /**
-     * @param TypeIntervenant|null $typeIntervenant
+     * @param TypeIntervenant $typeIntervenant
      *
      * @return self
      */
-    public function setTypeIntervenant( ?TypeIntervenant $typeIntervenant )
+    public function setTypeIntervenant( TypeIntervenant $typeIntervenant )
     {
         $this->typeIntervenant = $typeIntervenant;
 

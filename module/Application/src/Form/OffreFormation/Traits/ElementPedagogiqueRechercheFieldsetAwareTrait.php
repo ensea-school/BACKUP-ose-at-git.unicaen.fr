@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset;
  */
 trait ElementPedagogiqueRechercheFieldsetAwareTrait
 {
-    protected ?ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset;
+    protected ?ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset = null;
 
 
 
     /**
-     * @param ElementPedagogiqueRechercheFieldset|null $formOffreFormationElementPedagogiqueRechercheFieldset
+     * @param ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueRechercheFieldset( ?ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset )
+    public function setFormOffreFormationElementPedagogiqueRechercheFieldset( ElementPedagogiqueRechercheFieldset $formOffreFormationElementPedagogiqueRechercheFieldset )
     {
         $this->formOffreFormationElementPedagogiqueRechercheFieldset = $formOffreFormationElementPedagogiqueRechercheFieldset;
 
@@ -31,7 +31,7 @@ trait ElementPedagogiqueRechercheFieldsetAwareTrait
 
     public function getFormOffreFormationElementPedagogiqueRechercheFieldset(): ?ElementPedagogiqueRechercheFieldset
     {
-        if (!$this->formOffreFormationElementPedagogiqueRechercheFieldset){
+        if (empty($this->formOffreFormationElementPedagogiqueRechercheFieldset)){
             $this->formOffreFormationElementPedagogiqueRechercheFieldset = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueRechercheFieldset::class);
         }
 

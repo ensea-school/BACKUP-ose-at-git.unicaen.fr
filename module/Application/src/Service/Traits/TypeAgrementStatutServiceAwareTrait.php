@@ -11,16 +11,16 @@ use Application\Service\TypeAgrementStatutService;
  */
 trait TypeAgrementStatutServiceAwareTrait
 {
-    protected ?TypeAgrementStatutService $serviceTypeAgrementStatut;
+    protected ?TypeAgrementStatutService $serviceTypeAgrementStatut = null;
 
 
 
     /**
-     * @param TypeAgrementStatutService|null $serviceTypeAgrementStatut
+     * @param TypeAgrementStatutService $serviceTypeAgrementStatut
      *
      * @return self
      */
-    public function setServiceTypeAgrementStatut( ?TypeAgrementStatutService $serviceTypeAgrementStatut )
+    public function setServiceTypeAgrementStatut( TypeAgrementStatutService $serviceTypeAgrementStatut )
     {
         $this->serviceTypeAgrementStatut = $serviceTypeAgrementStatut;
 
@@ -31,7 +31,7 @@ trait TypeAgrementStatutServiceAwareTrait
 
     public function getServiceTypeAgrementStatut(): ?TypeAgrementStatutService
     {
-        if (!$this->serviceTypeAgrementStatut){
+        if (empty($this->serviceTypeAgrementStatut)){
             $this->serviceTypeAgrementStatut = \Application::$container->get(TypeAgrementStatutService::class);
         }
 

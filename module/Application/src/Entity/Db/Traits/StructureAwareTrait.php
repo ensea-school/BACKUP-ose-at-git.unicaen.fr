@@ -11,16 +11,16 @@ use Application\Entity\Db\Structure;
  */
 trait StructureAwareTrait
 {
-    protected ?Structure $structure;
+    protected ?Structure $structure = null;
 
 
 
     /**
-     * @param Structure|null $structure
+     * @param Structure $structure
      *
      * @return self
      */
-    public function setStructure( ?Structure $structure )
+    public function setStructure( Structure $structure )
     {
         $this->structure = $structure;
 

@@ -11,16 +11,16 @@ use Application\Entity\Db\Intervenant;
  */
 trait IntervenantAwareTrait
 {
-    protected ?Intervenant $intervenant;
+    protected ?Intervenant $intervenant = null;
 
 
 
     /**
-     * @param Intervenant|null $intervenant
+     * @param Intervenant $intervenant
      *
      * @return self
      */
-    public function setIntervenant( ?Intervenant $intervenant )
+    public function setIntervenant( Intervenant $intervenant )
     {
         $this->intervenant = $intervenant;
 

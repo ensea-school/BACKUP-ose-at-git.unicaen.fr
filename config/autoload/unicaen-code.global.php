@@ -17,6 +17,13 @@ $settings = [
             },
         ],
         [
+            'template'    => 'AwareTrait',
+            'targetClass' => [\Application\Connecteur\LdapConnecteur::class, \Application\Entity\Db\FormuleTestIntervenant::class],
+            'generator'   => function (array $params): array {
+                return [];
+            },
+        ],
+        [
             'template'  => 'AwareTrait',
             'type'      => ['Form', 'Fieldset'],
             'generator' => function (array $params): array {

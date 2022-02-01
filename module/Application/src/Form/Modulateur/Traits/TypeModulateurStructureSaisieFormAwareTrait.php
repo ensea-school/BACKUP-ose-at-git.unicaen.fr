@@ -11,16 +11,16 @@ use Application\Form\Modulateur\TypeModulateurStructureSaisieForm;
  */
 trait TypeModulateurStructureSaisieFormAwareTrait
 {
-    protected ?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie;
+    protected ?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie = null;
 
 
 
     /**
-     * @param TypeModulateurStructureSaisieForm|null $formModulateurTypeModulateurStructureSaisie
+     * @param TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie
      *
      * @return self
      */
-    public function setFormModulateurTypeModulateurStructureSaisie( ?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie )
+    public function setFormModulateurTypeModulateurStructureSaisie( TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie )
     {
         $this->formModulateurTypeModulateurStructureSaisie = $formModulateurTypeModulateurStructureSaisie;
 
@@ -31,7 +31,7 @@ trait TypeModulateurStructureSaisieFormAwareTrait
 
     public function getFormModulateurTypeModulateurStructureSaisie(): ?TypeModulateurStructureSaisieForm
     {
-        if (!$this->formModulateurTypeModulateurStructureSaisie){
+        if (empty($this->formModulateurTypeModulateurStructureSaisie)){
             $this->formModulateurTypeModulateurStructureSaisie = \Application::$container->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
         }
 

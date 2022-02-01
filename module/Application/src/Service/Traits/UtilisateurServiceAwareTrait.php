@@ -11,16 +11,16 @@ use Application\Service\UtilisateurService;
  */
 trait UtilisateurServiceAwareTrait
 {
-    protected ?UtilisateurService $serviceUtilisateur;
+    protected ?UtilisateurService $serviceUtilisateur = null;
 
 
 
     /**
-     * @param UtilisateurService|null $serviceUtilisateur
+     * @param UtilisateurService $serviceUtilisateur
      *
      * @return self
      */
-    public function setServiceUtilisateur( ?UtilisateurService $serviceUtilisateur )
+    public function setServiceUtilisateur( UtilisateurService $serviceUtilisateur )
     {
         $this->serviceUtilisateur = $serviceUtilisateur;
 
@@ -31,7 +31,7 @@ trait UtilisateurServiceAwareTrait
 
     public function getServiceUtilisateur(): ?UtilisateurService
     {
-        if (!$this->serviceUtilisateur){
+        if (empty($this->serviceUtilisateur)){
             $this->serviceUtilisateur = \Application::$container->get(UtilisateurService::class);
         }
 

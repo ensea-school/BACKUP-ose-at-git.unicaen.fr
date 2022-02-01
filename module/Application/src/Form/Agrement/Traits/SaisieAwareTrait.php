@@ -11,16 +11,16 @@ use Application\Form\Agrement\Saisie;
  */
 trait SaisieAwareTrait
 {
-    protected ?Saisie $formAgrementSaisie;
+    protected ?Saisie $formAgrementSaisie = null;
 
 
 
     /**
-     * @param Saisie|null $formAgrementSaisie
+     * @param Saisie $formAgrementSaisie
      *
      * @return self
      */
-    public function setFormAgrementSaisie( ?Saisie $formAgrementSaisie )
+    public function setFormAgrementSaisie( Saisie $formAgrementSaisie )
     {
         $this->formAgrementSaisie = $formAgrementSaisie;
 
@@ -31,7 +31,7 @@ trait SaisieAwareTrait
 
     public function getFormAgrementSaisie(): ?Saisie
     {
-        if (!$this->formAgrementSaisie){
+        if (empty($this->formAgrementSaisie)){
             $this->formAgrementSaisie = \Application::$container->get('FormElementManager')->get(Saisie::class);
         }
 

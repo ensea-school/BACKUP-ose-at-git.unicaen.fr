@@ -11,16 +11,16 @@ use Application\Service\SeuilChargeService;
  */
 trait SeuilChargeServiceAwareTrait
 {
-    protected ?SeuilChargeService $serviceSeuilCharge;
+    protected ?SeuilChargeService $serviceSeuilCharge = null;
 
 
 
     /**
-     * @param SeuilChargeService|null $serviceSeuilCharge
+     * @param SeuilChargeService $serviceSeuilCharge
      *
      * @return self
      */
-    public function setServiceSeuilCharge( ?SeuilChargeService $serviceSeuilCharge )
+    public function setServiceSeuilCharge( SeuilChargeService $serviceSeuilCharge )
     {
         $this->serviceSeuilCharge = $serviceSeuilCharge;
 
@@ -31,7 +31,7 @@ trait SeuilChargeServiceAwareTrait
 
     public function getServiceSeuilCharge(): ?SeuilChargeService
     {
-        if (!$this->serviceSeuilCharge){
+        if (empty($this->serviceSeuilCharge)){
             $this->serviceSeuilCharge = \Application::$container->get(SeuilChargeService::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\VolumeHoraireEnsForm;
  */
 trait VolumeHoraireEnsFormAwareTrait
 {
-    protected ?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns;
+    protected ?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns = null;
 
 
 
     /**
-     * @param VolumeHoraireEnsForm|null $formOffreFormationVolumeHoraireEns
+     * @param VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns
      *
      * @return self
      */
-    public function setFormOffreFormationVolumeHoraireEns( ?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns )
+    public function setFormOffreFormationVolumeHoraireEns( VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns )
     {
         $this->formOffreFormationVolumeHoraireEns = $formOffreFormationVolumeHoraireEns;
 
@@ -31,7 +31,7 @@ trait VolumeHoraireEnsFormAwareTrait
 
     public function getFormOffreFormationVolumeHoraireEns(): ?VolumeHoraireEnsForm
     {
-        if (!$this->formOffreFormationVolumeHoraireEns){
+        if (empty($this->formOffreFormationVolumeHoraireEns)){
             $this->formOffreFormationVolumeHoraireEns = \Application::$container->get('FormElementManager')->get(VolumeHoraireEnsForm::class);
         }
 

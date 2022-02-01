@@ -11,16 +11,16 @@ use Application\Entity\Db\Scenario;
  */
 trait ScenarioAwareTrait
 {
-    protected ?Scenario $scenario;
+    protected ?Scenario $scenario = null;
 
 
 
     /**
-     * @param Scenario|null $scenario
+     * @param Scenario $scenario
      *
      * @return self
      */
-    public function setScenario( ?Scenario $scenario )
+    public function setScenario( Scenario $scenario )
     {
         $this->scenario = $scenario;
 

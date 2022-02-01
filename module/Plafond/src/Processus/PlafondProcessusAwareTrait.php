@@ -10,16 +10,16 @@ namespace Plafond\Processus;
  */
 trait PlafondProcessusAwareTrait
 {
-    protected ?PlafondProcessus $processusPlafond;
+    protected ?PlafondProcessus $processusPlafond = null;
 
 
 
     /**
-     * @param PlafondProcessus|null $processusPlafond
+     * @param PlafondProcessus $processusPlafond
      *
      * @return self
      */
-    public function setProcessusPlafond( ?PlafondProcessus $processusPlafond )
+    public function setProcessusPlafond( PlafondProcessus $processusPlafond )
     {
         $this->processusPlafond = $processusPlafond;
 
@@ -30,7 +30,7 @@ trait PlafondProcessusAwareTrait
 
     public function getProcessusPlafond(): ?PlafondProcessus
     {
-        if (!$this->processusPlafond){
+        if (empty($this->processusPlafond)){
             $this->processusPlafond = \Application::$container->get(PlafondProcessus::class);
         }
 

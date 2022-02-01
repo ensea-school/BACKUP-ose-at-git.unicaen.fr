@@ -11,16 +11,16 @@ use ExportRh\Form\ExportRhForm;
  */
 trait ExportRhFormAwareTrait
 {
-    protected ?ExportRhForm $formExportRh;
+    protected ?ExportRhForm $formExportRh = null;
 
 
 
     /**
-     * @param ExportRhForm|null $formExportRh
+     * @param ExportRhForm $formExportRh
      *
      * @return self
      */
-    public function setFormExportRh( ?ExportRhForm $formExportRh )
+    public function setFormExportRh( ExportRhForm $formExportRh )
     {
         $this->formExportRh = $formExportRh;
 
@@ -31,7 +31,7 @@ trait ExportRhFormAwareTrait
 
     public function getFormExportRh(): ?ExportRhForm
     {
-        if (!$this->formExportRh){
+        if (empty($this->formExportRh)){
             $this->formExportRh = \Application::$container->get('FormElementManager')->get(ExportRhForm::class);
         }
 

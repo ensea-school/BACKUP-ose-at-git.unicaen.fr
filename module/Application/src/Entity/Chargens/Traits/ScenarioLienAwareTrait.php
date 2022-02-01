@@ -11,16 +11,16 @@ use Application\Entity\Chargens\ScenarioLien;
  */
 trait ScenarioLienAwareTrait
 {
-    protected ?ScenarioLien $scenarioLien;
+    protected ?ScenarioLien $scenarioLien = null;
 
 
 
     /**
-     * @param ScenarioLien|null $scenarioLien
+     * @param ScenarioLien $scenarioLien
      *
      * @return self
      */
-    public function setScenarioLien( ?ScenarioLien $scenarioLien )
+    public function setScenarioLien( ScenarioLien $scenarioLien )
     {
         $this->scenarioLien = $scenarioLien;
 

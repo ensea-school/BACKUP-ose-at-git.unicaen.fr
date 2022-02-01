@@ -11,16 +11,16 @@ use Application\Entity\Db\FonctionReferentiel;
  */
 trait FonctionReferentielAwareTrait
 {
-    protected ?FonctionReferentiel $fonctionReferentiel;
+    protected ?FonctionReferentiel $fonctionReferentiel = null;
 
 
 
     /**
-     * @param FonctionReferentiel|null $fonctionReferentiel
+     * @param FonctionReferentiel $fonctionReferentiel
      *
      * @return self
      */
-    public function setFonctionReferentiel( ?FonctionReferentiel $fonctionReferentiel )
+    public function setFonctionReferentiel( FonctionReferentiel $fonctionReferentiel )
     {
         $this->fonctionReferentiel = $fonctionReferentiel;
 

@@ -11,16 +11,16 @@ use Application\Form\VolumeHoraire\SaisieMultipleFieldset;
  */
 trait SaisieMultipleFieldsetAwareTrait
 {
-    protected ?SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset;
+    protected ?SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset = null;
 
 
 
     /**
-     * @param SaisieMultipleFieldset|null $formVolumeHoraireSaisieMultipleFieldset
+     * @param SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisieMultipleFieldset( ?SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset )
+    public function setFormVolumeHoraireSaisieMultipleFieldset( SaisieMultipleFieldset $formVolumeHoraireSaisieMultipleFieldset )
     {
         $this->formVolumeHoraireSaisieMultipleFieldset = $formVolumeHoraireSaisieMultipleFieldset;
 
@@ -31,7 +31,7 @@ trait SaisieMultipleFieldsetAwareTrait
 
     public function getFormVolumeHoraireSaisieMultipleFieldset(): ?SaisieMultipleFieldset
     {
-        if (!$this->formVolumeHoraireSaisieMultipleFieldset){
+        if (empty($this->formVolumeHoraireSaisieMultipleFieldset)){
             $this->formVolumeHoraireSaisieMultipleFieldset = \Application::$container->get('FormElementManager')->get(SaisieMultipleFieldset::class);
         }
 

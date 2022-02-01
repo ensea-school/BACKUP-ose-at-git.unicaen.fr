@@ -11,16 +11,16 @@ use Application\Form\Intervenant\MotifModificationServiceDuFieldset;
  */
 trait MotifModificationServiceDuFieldsetAwareTrait
 {
-    protected ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset;
+    protected ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset = null;
 
 
 
     /**
-     * @param MotifModificationServiceDuFieldset|null $formIntervenantMotifModificationServiceDuFieldset
+     * @param MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset
      *
      * @return self
      */
-    public function setFormIntervenantMotifModificationServiceDuFieldset( ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset )
+    public function setFormIntervenantMotifModificationServiceDuFieldset( MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset )
     {
         $this->formIntervenantMotifModificationServiceDuFieldset = $formIntervenantMotifModificationServiceDuFieldset;
 
@@ -31,7 +31,7 @@ trait MotifModificationServiceDuFieldsetAwareTrait
 
     public function getFormIntervenantMotifModificationServiceDuFieldset(): ?MotifModificationServiceDuFieldset
     {
-        if (!$this->formIntervenantMotifModificationServiceDuFieldset){
+        if (empty($this->formIntervenantMotifModificationServiceDuFieldset)){
             $this->formIntervenantMotifModificationServiceDuFieldset = \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
         }
 

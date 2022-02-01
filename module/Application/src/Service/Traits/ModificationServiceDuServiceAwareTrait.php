@@ -11,16 +11,16 @@ use Application\Service\ModificationServiceDuService;
  */
 trait ModificationServiceDuServiceAwareTrait
 {
-    protected ?ModificationServiceDuService $serviceModificationServiceDu;
+    protected ?ModificationServiceDuService $serviceModificationServiceDu = null;
 
 
 
     /**
-     * @param ModificationServiceDuService|null $serviceModificationServiceDu
+     * @param ModificationServiceDuService $serviceModificationServiceDu
      *
      * @return self
      */
-    public function setServiceModificationServiceDu( ?ModificationServiceDuService $serviceModificationServiceDu )
+    public function setServiceModificationServiceDu( ModificationServiceDuService $serviceModificationServiceDu )
     {
         $this->serviceModificationServiceDu = $serviceModificationServiceDu;
 
@@ -31,7 +31,7 @@ trait ModificationServiceDuServiceAwareTrait
 
     public function getServiceModificationServiceDu(): ?ModificationServiceDuService
     {
-        if (!$this->serviceModificationServiceDu){
+        if (empty($this->serviceModificationServiceDu)){
             $this->serviceModificationServiceDu = \Application::$container->get(ModificationServiceDuService::class);
         }
 

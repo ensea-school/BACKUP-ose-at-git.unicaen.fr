@@ -11,16 +11,16 @@ use Application\Service\EtablissementService;
  */
 trait EtablissementServiceAwareTrait
 {
-    protected ?EtablissementService $serviceEtablissement;
+    protected ?EtablissementService $serviceEtablissement = null;
 
 
 
     /**
-     * @param EtablissementService|null $serviceEtablissement
+     * @param EtablissementService $serviceEtablissement
      *
      * @return self
      */
-    public function setServiceEtablissement( ?EtablissementService $serviceEtablissement )
+    public function setServiceEtablissement( EtablissementService $serviceEtablissement )
     {
         $this->serviceEtablissement = $serviceEtablissement;
 
@@ -31,7 +31,7 @@ trait EtablissementServiceAwareTrait
 
     public function getServiceEtablissement(): ?EtablissementService
     {
-        if (!$this->serviceEtablissement){
+        if (empty($this->serviceEtablissement)){
             $this->serviceEtablissement = \Application::$container->get(EtablissementService::class);
         }
 

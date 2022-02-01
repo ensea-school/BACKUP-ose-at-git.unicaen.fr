@@ -10,16 +10,16 @@ namespace Application\Provider\Chargens;
  */
 trait ChargensProviderAwareTrait
 {
-    protected ?ChargensProvider $providerChargensChargens;
+    protected ?ChargensProvider $providerChargensChargens = null;
 
 
 
     /**
-     * @param ChargensProvider|null $providerChargensChargens
+     * @param ChargensProvider $providerChargensChargens
      *
      * @return self
      */
-    public function setProviderChargensChargens( ?ChargensProvider $providerChargensChargens )
+    public function setProviderChargensChargens( ChargensProvider $providerChargensChargens )
     {
         $this->providerChargensChargens = $providerChargensChargens;
 
@@ -30,7 +30,7 @@ trait ChargensProviderAwareTrait
 
     public function getProviderChargensChargens(): ?ChargensProvider
     {
-        if (!$this->providerChargensChargens){
+        if (empty($this->providerChargensChargens)){
             $this->providerChargensChargens = \Application::$container->get(ChargensProvider::class);
         }
 

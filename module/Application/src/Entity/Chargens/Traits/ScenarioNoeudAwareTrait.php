@@ -11,16 +11,16 @@ use Application\Entity\Chargens\ScenarioNoeud;
  */
 trait ScenarioNoeudAwareTrait
 {
-    protected ?ScenarioNoeud $scenarioNoeud;
+    protected ?ScenarioNoeud $scenarioNoeud = null;
 
 
 
     /**
-     * @param ScenarioNoeud|null $scenarioNoeud
+     * @param ScenarioNoeud $scenarioNoeud
      *
      * @return self
      */
-    public function setScenarioNoeud( ?ScenarioNoeud $scenarioNoeud )
+    public function setScenarioNoeud( ScenarioNoeud $scenarioNoeud )
     {
         $this->scenarioNoeud = $scenarioNoeud;
 

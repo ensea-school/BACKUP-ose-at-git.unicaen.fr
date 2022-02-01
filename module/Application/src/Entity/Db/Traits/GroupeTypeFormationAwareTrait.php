@@ -11,31 +11,25 @@ use Application\Entity\Db\GroupeTypeFormation;
  */
 trait GroupeTypeFormationAwareTrait
 {
-    /**
-     * @var GroupeTypeFormation
-     */
-    private $groupeTypeFormation;
-
-
+    protected ?GroupeTypeFormation $groupeTypeFormation = null;
 
 
 
     /**
      * @param GroupeTypeFormation $groupeTypeFormation
+     *
      * @return self
      */
-    public function setGroupeTypeFormation( GroupeTypeFormation $groupeTypeFormation = null )
+    public function setGroupeTypeFormation( GroupeTypeFormation $groupeTypeFormation )
     {
         $this->groupeTypeFormation = $groupeTypeFormation;
+
         return $this;
     }
 
 
 
-    /**
-     * @return GroupeTypeFormation
-     */
-    public function getGroupeTypeFormation()
+    public function getGroupeTypeFormation(): ?GroupeTypeFormation
     {
         return $this->groupeTypeFormation;
     }

@@ -11,16 +11,16 @@ use Application\Entity\Db\TblClotureRealise;
  */
 trait TblClotureRealiseAwareTrait
 {
-    protected ?TblClotureRealise $tblClotureRealise;
+    protected ?TblClotureRealise $tblClotureRealise = null;
 
 
 
     /**
-     * @param TblClotureRealise|null $tblClotureRealise
+     * @param TblClotureRealise $tblClotureRealise
      *
      * @return self
      */
-    public function setTblClotureRealise( ?TblClotureRealise $tblClotureRealise )
+    public function setTblClotureRealise( TblClotureRealise $tblClotureRealise )
     {
         $this->tblClotureRealise = $tblClotureRealise;
 

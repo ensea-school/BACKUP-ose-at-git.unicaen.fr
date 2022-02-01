@@ -11,16 +11,16 @@ use Application\Form\PieceJointe\TypePieceJointeSaisieForm;
  */
 trait TypePieceJointeSaisieFormAwareTrait
 {
-    protected ?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie;
+    protected ?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie = null;
 
 
 
     /**
-     * @param TypePieceJointeSaisieForm|null $formPieceJointeTypePieceJointeSaisie
+     * @param TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie
      *
      * @return self
      */
-    public function setFormPieceJointeTypePieceJointeSaisie( ?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie )
+    public function setFormPieceJointeTypePieceJointeSaisie( TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie )
     {
         $this->formPieceJointeTypePieceJointeSaisie = $formPieceJointeTypePieceJointeSaisie;
 
@@ -31,7 +31,7 @@ trait TypePieceJointeSaisieFormAwareTrait
 
     public function getFormPieceJointeTypePieceJointeSaisie(): ?TypePieceJointeSaisieForm
     {
-        if (!$this->formPieceJointeTypePieceJointeSaisie){
+        if (empty($this->formPieceJointeTypePieceJointeSaisie)){
             $this->formPieceJointeTypePieceJointeSaisie = \Application::$container->get('FormElementManager')->get(TypePieceJointeSaisieForm::class);
         }
 

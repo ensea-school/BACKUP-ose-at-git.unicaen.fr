@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\ElementPedagogiqueSynchronisationForm;
  */
 trait ElementPedagogiqueSynchronisationFormAwareTrait
 {
-    protected ?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation;
+    protected ?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation = null;
 
 
 
     /**
-     * @param ElementPedagogiqueSynchronisationForm|null $formOffreFormationElementPedagogiqueSynchronisation
+     * @param ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSynchronisation( ?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation )
+    public function setFormOffreFormationElementPedagogiqueSynchronisation( ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation )
     {
         $this->formOffreFormationElementPedagogiqueSynchronisation = $formOffreFormationElementPedagogiqueSynchronisation;
 
@@ -31,7 +31,7 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
 
     public function getFormOffreFormationElementPedagogiqueSynchronisation(): ?ElementPedagogiqueSynchronisationForm
     {
-        if (!$this->formOffreFormationElementPedagogiqueSynchronisation){
+        if (empty($this->formOffreFormationElementPedagogiqueSynchronisation)){
             $this->formOffreFormationElementPedagogiqueSynchronisation = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSynchronisationForm::class);
         }
 

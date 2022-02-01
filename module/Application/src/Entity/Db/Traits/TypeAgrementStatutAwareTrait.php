@@ -11,16 +11,16 @@ use Application\Entity\Db\TypeAgrementStatut;
  */
 trait TypeAgrementStatutAwareTrait
 {
-    protected ?TypeAgrementStatut $typeAgrementStatut;
+    protected ?TypeAgrementStatut $typeAgrementStatut = null;
 
 
 
     /**
-     * @param TypeAgrementStatut|null $typeAgrementStatut
+     * @param TypeAgrementStatut $typeAgrementStatut
      *
      * @return self
      */
-    public function setTypeAgrementStatut( ?TypeAgrementStatut $typeAgrementStatut )
+    public function setTypeAgrementStatut( TypeAgrementStatut $typeAgrementStatut )
     {
         $this->typeAgrementStatut = $typeAgrementStatut;
 

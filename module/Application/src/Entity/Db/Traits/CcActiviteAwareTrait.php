@@ -11,16 +11,16 @@ use Application\Entity\Db\CcActivite;
  */
 trait CcActiviteAwareTrait
 {
-    protected ?CcActivite $ccActivite;
+    protected ?CcActivite $ccActivite = null;
 
 
 
     /**
-     * @param CcActivite|null $ccActivite
+     * @param CcActivite $ccActivite
      *
      * @return self
      */
-    public function setCcActivite( ?CcActivite $ccActivite )
+    public function setCcActivite( CcActivite $ccActivite )
     {
         $this->ccActivite = $ccActivite;
 

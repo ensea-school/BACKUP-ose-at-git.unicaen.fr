@@ -11,30 +11,26 @@ use Application\Entity\Db\TblService;
  */
 trait TblServiceAwareTrait
 {
-    protected ?TblService $entityDbTblService;
+    protected ?TblService $tblService = null;
 
 
 
     /**
-     * @param TblService|null $entityDbTblService
+     * @param TblService $tblService
      *
      * @return self
      */
-    public function setEntityDbTblService( ?TblService $entityDbTblService )
+    public function setTblService( TblService $tblService )
     {
-        $this->entityDbTblService = $entityDbTblService;
+        $this->tblService = $tblService;
 
         return $this;
     }
 
 
 
-    public function getEntityDbTblService(): ?TblService
+    public function getTblService(): ?TblService
     {
-        if (!$this->entityDbTblService){
-            $this->entityDbTblService = \Application::$container->get(TblService::class);
-        }
-
-        return $this->entityDbTblService;
+        return $this->tblService;
     }
 }

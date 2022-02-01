@@ -11,16 +11,16 @@ use Application\Form\VolumeHoraire\SaisieCalendaire;
  */
 trait SaisieCalendaireAwareTrait
 {
-    protected ?SaisieCalendaire $formVolumeHoraireSaisieCalendaire;
+    protected ?SaisieCalendaire $formVolumeHoraireSaisieCalendaire = null;
 
 
 
     /**
-     * @param SaisieCalendaire|null $formVolumeHoraireSaisieCalendaire
+     * @param SaisieCalendaire $formVolumeHoraireSaisieCalendaire
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisieCalendaire( ?SaisieCalendaire $formVolumeHoraireSaisieCalendaire )
+    public function setFormVolumeHoraireSaisieCalendaire( SaisieCalendaire $formVolumeHoraireSaisieCalendaire )
     {
         $this->formVolumeHoraireSaisieCalendaire = $formVolumeHoraireSaisieCalendaire;
 
@@ -31,7 +31,7 @@ trait SaisieCalendaireAwareTrait
 
     public function getFormVolumeHoraireSaisieCalendaire(): ?SaisieCalendaire
     {
-        if (!$this->formVolumeHoraireSaisieCalendaire){
+        if (empty($this->formVolumeHoraireSaisieCalendaire)){
             $this->formVolumeHoraireSaisieCalendaire = \Application::$container->get('FormElementManager')->get(SaisieCalendaire::class);
         }
 

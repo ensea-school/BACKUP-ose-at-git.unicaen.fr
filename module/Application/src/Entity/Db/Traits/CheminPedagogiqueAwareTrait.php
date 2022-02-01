@@ -11,16 +11,16 @@ use Application\Entity\Db\CheminPedagogique;
  */
 trait CheminPedagogiqueAwareTrait
 {
-    protected ?CheminPedagogique $cheminPedagogique;
+    protected ?CheminPedagogique $cheminPedagogique = null;
 
 
 
     /**
-     * @param CheminPedagogique|null $cheminPedagogique
+     * @param CheminPedagogique $cheminPedagogique
      *
      * @return self
      */
-    public function setCheminPedagogique( ?CheminPedagogique $cheminPedagogique )
+    public function setCheminPedagogique( CheminPedagogique $cheminPedagogique )
     {
         $this->cheminPedagogique = $cheminPedagogique;
 

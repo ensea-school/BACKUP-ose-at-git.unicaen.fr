@@ -11,16 +11,16 @@ use Application\Form\Intervenant\RegleStructureValidationForm;
  */
 trait RegleStructureValidationFormAwareTrait
 {
-    protected ?RegleStructureValidationForm $formIntervenantRegleStructureValidation;
+    protected ?RegleStructureValidationForm $formIntervenantRegleStructureValidation = null;
 
 
 
     /**
-     * @param RegleStructureValidationForm|null $formIntervenantRegleStructureValidation
+     * @param RegleStructureValidationForm $formIntervenantRegleStructureValidation
      *
      * @return self
      */
-    public function setFormIntervenantRegleStructureValidation( ?RegleStructureValidationForm $formIntervenantRegleStructureValidation )
+    public function setFormIntervenantRegleStructureValidation( RegleStructureValidationForm $formIntervenantRegleStructureValidation )
     {
         $this->formIntervenantRegleStructureValidation = $formIntervenantRegleStructureValidation;
 
@@ -31,7 +31,7 @@ trait RegleStructureValidationFormAwareTrait
 
     public function getFormIntervenantRegleStructureValidation(): ?RegleStructureValidationForm
     {
-        if (!$this->formIntervenantRegleStructureValidation){
+        if (empty($this->formIntervenantRegleStructureValidation)){
             $this->formIntervenantRegleStructureValidation = \Application::$container->get('FormElementManager')->get(RegleStructureValidationForm::class);
         }
 

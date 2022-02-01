@@ -11,16 +11,16 @@ use Application\Form\CentreCout\CentreCoutActiviteSaisieForm;
  */
 trait CentreCoutActiviteSaisieFormAwareTrait
 {
-    protected ?CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie;
+    protected ?CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie = null;
 
 
 
     /**
-     * @param CentreCoutActiviteSaisieForm|null $formCentreCoutCentreCoutActiviteSaisie
+     * @param CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie
      *
      * @return self
      */
-    public function setFormCentreCoutCentreCoutActiviteSaisie( ?CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie )
+    public function setFormCentreCoutCentreCoutActiviteSaisie( CentreCoutActiviteSaisieForm $formCentreCoutCentreCoutActiviteSaisie )
     {
         $this->formCentreCoutCentreCoutActiviteSaisie = $formCentreCoutCentreCoutActiviteSaisie;
 
@@ -31,7 +31,7 @@ trait CentreCoutActiviteSaisieFormAwareTrait
 
     public function getFormCentreCoutCentreCoutActiviteSaisie(): ?CentreCoutActiviteSaisieForm
     {
-        if (!$this->formCentreCoutCentreCoutActiviteSaisie){
+        if (empty($this->formCentreCoutCentreCoutActiviteSaisie)){
             $this->formCentreCoutCentreCoutActiviteSaisie = \Application::$container->get('FormElementManager')->get(CentreCoutActiviteSaisieForm::class);
         }
 

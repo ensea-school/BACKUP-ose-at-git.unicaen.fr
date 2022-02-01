@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset;
  */
 trait ElementCentreCoutFieldsetAwareTrait
 {
-    protected ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset;
+    protected ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = null;
 
 
 
     /**
-     * @param ElementCentreCoutFieldset|null $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset
+     * @param ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset( ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset )
+    public function setFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset( ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset )
     {
         $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset;
 
@@ -31,7 +31,7 @@ trait ElementCentreCoutFieldsetAwareTrait
 
     public function getFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset(): ?ElementCentreCoutFieldset
     {
-        if (!$this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset){
+        if (empty($this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset)){
             $this->formOffreFormationEtapeCentreCoutElementCentreCoutFieldset = \Application::$container->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
         }
 

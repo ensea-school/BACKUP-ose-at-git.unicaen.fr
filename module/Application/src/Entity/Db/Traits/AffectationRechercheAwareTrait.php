@@ -11,16 +11,16 @@ use Application\Entity\Db\AffectationRecherche;
  */
 trait AffectationRechercheAwareTrait
 {
-    protected ?AffectationRecherche $affectationRecherche;
+    protected ?AffectationRecherche $affectationRecherche = null;
 
 
 
     /**
-     * @param AffectationRecherche|null $affectationRecherche
+     * @param AffectationRecherche $affectationRecherche
      *
      * @return self
      */
-    public function setAffectationRecherche( ?AffectationRecherche $affectationRecherche )
+    public function setAffectationRecherche( AffectationRecherche $affectationRecherche )
     {
         $this->affectationRecherche = $affectationRecherche;
 

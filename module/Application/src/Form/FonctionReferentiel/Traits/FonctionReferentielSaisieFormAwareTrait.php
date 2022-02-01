@@ -11,16 +11,16 @@ use Application\Form\FonctionReferentiel\FonctionReferentielSaisieForm;
  */
 trait FonctionReferentielSaisieFormAwareTrait
 {
-    protected ?FonctionReferentielSaisieForm $formFonctionReferentielFonctionReferentielSaisie;
+    protected ?FonctionReferentielSaisieForm $formFonctionReferentielFonctionReferentielSaisie = null;
 
 
 
     /**
-     * @param FonctionReferentielSaisieForm|null $formFonctionReferentielFonctionReferentielSaisie
+     * @param FonctionReferentielSaisieForm $formFonctionReferentielFonctionReferentielSaisie
      *
      * @return self
      */
-    public function setFormFonctionReferentielFonctionReferentielSaisie( ?FonctionReferentielSaisieForm $formFonctionReferentielFonctionReferentielSaisie )
+    public function setFormFonctionReferentielFonctionReferentielSaisie( FonctionReferentielSaisieForm $formFonctionReferentielFonctionReferentielSaisie )
     {
         $this->formFonctionReferentielFonctionReferentielSaisie = $formFonctionReferentielFonctionReferentielSaisie;
 
@@ -31,7 +31,7 @@ trait FonctionReferentielSaisieFormAwareTrait
 
     public function getFormFonctionReferentielFonctionReferentielSaisie(): ?FonctionReferentielSaisieForm
     {
-        if (!$this->formFonctionReferentielFonctionReferentielSaisie){
+        if (empty($this->formFonctionReferentielFonctionReferentielSaisie)){
             $this->formFonctionReferentielFonctionReferentielSaisie = \Application::$container->get('FormElementManager')->get(FonctionReferentielSaisieForm::class);
         }
 

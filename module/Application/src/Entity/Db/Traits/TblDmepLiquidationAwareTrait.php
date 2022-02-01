@@ -11,16 +11,16 @@ use Application\Entity\Db\TblDmepLiquidation;
  */
 trait TblDmepLiquidationAwareTrait
 {
-    protected ?TblDmepLiquidation $tblDmepLiquidation;
+    protected ?TblDmepLiquidation $tblDmepLiquidation = null;
 
 
 
     /**
-     * @param TblDmepLiquidation|null $tblDmepLiquidation
+     * @param TblDmepLiquidation $tblDmepLiquidation
      *
      * @return self
      */
-    public function setTblDmepLiquidation( ?TblDmepLiquidation $tblDmepLiquidation )
+    public function setTblDmepLiquidation( TblDmepLiquidation $tblDmepLiquidation )
     {
         $this->tblDmepLiquidation = $tblDmepLiquidation;
 

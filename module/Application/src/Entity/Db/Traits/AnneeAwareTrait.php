@@ -11,16 +11,16 @@ use Application\Entity\Db\Annee;
  */
 trait AnneeAwareTrait
 {
-    protected ?Annee $annee;
+    protected ?Annee $annee = null;
 
 
 
     /**
-     * @param Annee|null $annee
+     * @param Annee $annee
      *
      * @return self
      */
-    public function setAnnee( ?Annee $annee )
+    public function setAnnee( Annee $annee )
     {
         $this->annee = $annee;
 

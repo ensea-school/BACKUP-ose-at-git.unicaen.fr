@@ -11,16 +11,16 @@ use Application\Form\Droits\AffectationForm;
  */
 trait AffectationFormAwareTrait
 {
-    protected ?AffectationForm $formDroitsAffectation;
+    protected ?AffectationForm $formDroitsAffectation = null;
 
 
 
     /**
-     * @param AffectationForm|null $formDroitsAffectation
+     * @param AffectationForm $formDroitsAffectation
      *
      * @return self
      */
-    public function setFormDroitsAffectation( ?AffectationForm $formDroitsAffectation )
+    public function setFormDroitsAffectation( AffectationForm $formDroitsAffectation )
     {
         $this->formDroitsAffectation = $formDroitsAffectation;
 
@@ -31,7 +31,7 @@ trait AffectationFormAwareTrait
 
     public function getFormDroitsAffectation(): ?AffectationForm
     {
-        if (!$this->formDroitsAffectation){
+        if (empty($this->formDroitsAffectation)){
             $this->formDroitsAffectation = \Application::$container->get('FormElementManager')->get(AffectationForm::class);
         }
 

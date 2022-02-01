@@ -11,16 +11,16 @@ use Application\Form\Paiement\MiseEnPaiementRechercheForm;
  */
 trait MiseEnPaiementRechercheFormAwareTrait
 {
-    protected ?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche;
+    protected ?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche = null;
 
 
 
     /**
-     * @param MiseEnPaiementRechercheForm|null $formPaiementMiseEnPaiementRecherche
+     * @param MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiementRecherche( ?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche )
+    public function setFormPaiementMiseEnPaiementRecherche( MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche )
     {
         $this->formPaiementMiseEnPaiementRecherche = $formPaiementMiseEnPaiementRecherche;
 
@@ -31,7 +31,7 @@ trait MiseEnPaiementRechercheFormAwareTrait
 
     public function getFormPaiementMiseEnPaiementRecherche(): ?MiseEnPaiementRechercheForm
     {
-        if (!$this->formPaiementMiseEnPaiementRecherche){
+        if (empty($this->formPaiementMiseEnPaiementRecherche)){
             $this->formPaiementMiseEnPaiementRecherche = \Application::$container->get('FormElementManager')->get(MiseEnPaiementRechercheForm::class);
         }
 

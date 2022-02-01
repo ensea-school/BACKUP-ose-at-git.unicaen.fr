@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
  */
 trait EtapeCentreCoutFormAwareTrait
 {
-    protected ?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout;
+    protected ?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout = null;
 
 
 
     /**
-     * @param EtapeCentreCoutForm|null $formOffreFormationEtapeCentreCoutEtapeCentreCout
+     * @param EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( ?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout )
+    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout )
     {
         $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = $formOffreFormationEtapeCentreCoutEtapeCentreCout;
 
@@ -31,7 +31,7 @@ trait EtapeCentreCoutFormAwareTrait
 
     public function getFormOffreFormationEtapeCentreCoutEtapeCentreCout(): ?EtapeCentreCoutForm
     {
-        if (!$this->formOffreFormationEtapeCentreCoutEtapeCentreCout){
+        if (empty($this->formOffreFormationEtapeCentreCoutEtapeCentreCout)){
             $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = \Application::$container->get('FormElementManager')->get(EtapeCentreCoutForm::class);
         }
 

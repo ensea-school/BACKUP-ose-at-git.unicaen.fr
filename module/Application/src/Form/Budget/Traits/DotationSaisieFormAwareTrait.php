@@ -11,16 +11,16 @@ use Application\Form\Budget\DotationSaisieForm;
  */
 trait DotationSaisieFormAwareTrait
 {
-    protected ?DotationSaisieForm $formBudgetDotationSaisie;
+    protected ?DotationSaisieForm $formBudgetDotationSaisie = null;
 
 
 
     /**
-     * @param DotationSaisieForm|null $formBudgetDotationSaisie
+     * @param DotationSaisieForm $formBudgetDotationSaisie
      *
      * @return self
      */
-    public function setFormBudgetDotationSaisie( ?DotationSaisieForm $formBudgetDotationSaisie )
+    public function setFormBudgetDotationSaisie( DotationSaisieForm $formBudgetDotationSaisie )
     {
         $this->formBudgetDotationSaisie = $formBudgetDotationSaisie;
 
@@ -31,7 +31,7 @@ trait DotationSaisieFormAwareTrait
 
     public function getFormBudgetDotationSaisie(): ?DotationSaisieForm
     {
-        if (!$this->formBudgetDotationSaisie){
+        if (empty($this->formBudgetDotationSaisie)){
             $this->formBudgetDotationSaisie = \Application::$container->get('FormElementManager')->get(DotationSaisieForm::class);
         }
 

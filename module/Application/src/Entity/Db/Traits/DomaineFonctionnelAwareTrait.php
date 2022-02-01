@@ -11,16 +11,16 @@ use Application\Entity\Db\DomaineFonctionnel;
  */
 trait DomaineFonctionnelAwareTrait
 {
-    protected ?DomaineFonctionnel $domaineFonctionnel;
+    protected ?DomaineFonctionnel $domaineFonctionnel = null;
 
 
 
     /**
-     * @param DomaineFonctionnel|null $domaineFonctionnel
+     * @param DomaineFonctionnel $domaineFonctionnel
      *
      * @return self
      */
-    public function setDomaineFonctionnel( ?DomaineFonctionnel $domaineFonctionnel )
+    public function setDomaineFonctionnel( DomaineFonctionnel $domaineFonctionnel )
     {
         $this->domaineFonctionnel = $domaineFonctionnel;
 

@@ -11,16 +11,16 @@ use Application\Entity\Db\TblDossier;
  */
 trait TblDossierAwareTrait
 {
-    protected ?TblDossier $tblDossier;
+    protected ?TblDossier $tblDossier = null;
 
 
 
     /**
-     * @param TblDossier|null $tblDossier
+     * @param TblDossier $tblDossier
      *
      * @return self
      */
-    public function setTblDossier( ?TblDossier $tblDossier )
+    public function setTblDossier( TblDossier $tblDossier )
     {
         $this->tblDossier = $tblDossier;
 

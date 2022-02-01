@@ -10,16 +10,16 @@ namespace Application\Connecteur\Bdd;
  */
 trait BddConnecteurAwareTrait
 {
-    protected ?BddConnecteur $connecteurBddBdd;
+    protected ?BddConnecteur $connecteurBddBdd = null;
 
 
 
     /**
-     * @param BddConnecteur|null $connecteurBddBdd
+     * @param BddConnecteur $connecteurBddBdd
      *
      * @return self
      */
-    public function setConnecteurBddBdd( ?BddConnecteur $connecteurBddBdd )
+    public function setConnecteurBddBdd( BddConnecteur $connecteurBddBdd )
     {
         $this->connecteurBddBdd = $connecteurBddBdd;
 

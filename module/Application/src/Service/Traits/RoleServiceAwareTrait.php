@@ -11,16 +11,16 @@ use Application\Service\RoleService;
  */
 trait RoleServiceAwareTrait
 {
-    protected ?RoleService $serviceRole;
+    protected ?RoleService $serviceRole = null;
 
 
 
     /**
-     * @param RoleService|null $serviceRole
+     * @param RoleService $serviceRole
      *
      * @return self
      */
-    public function setServiceRole( ?RoleService $serviceRole )
+    public function setServiceRole( RoleService $serviceRole )
     {
         $this->serviceRole = $serviceRole;
 
@@ -31,7 +31,7 @@ trait RoleServiceAwareTrait
 
     public function getServiceRole(): ?RoleService
     {
-        if (!$this->serviceRole){
+        if (empty($this->serviceRole)){
             $this->serviceRole = \Application::$container->get(RoleService::class);
         }
 

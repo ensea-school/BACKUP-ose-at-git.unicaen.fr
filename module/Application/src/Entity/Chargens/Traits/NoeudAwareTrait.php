@@ -11,16 +11,16 @@ use Application\Entity\Chargens\Noeud;
  */
 trait NoeudAwareTrait
 {
-    protected ?Noeud $noeud;
+    protected ?Noeud $noeud = null;
 
 
 
     /**
-     * @param Noeud|null $noeud
+     * @param Noeud $noeud
      *
      * @return self
      */
-    public function setNoeud( ?Noeud $noeud )
+    public function setNoeud( Noeud $noeud )
     {
         $this->noeud = $noeud;
 

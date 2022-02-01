@@ -11,16 +11,16 @@ use Application\Service\DepartementService;
  */
 trait DepartementServiceAwareTrait
 {
-    protected ?DepartementService $serviceDepartement;
+    protected ?DepartementService $serviceDepartement = null;
 
 
 
     /**
-     * @param DepartementService|null $serviceDepartement
+     * @param DepartementService $serviceDepartement
      *
      * @return self
      */
-    public function setServiceDepartement( ?DepartementService $serviceDepartement )
+    public function setServiceDepartement( DepartementService $serviceDepartement )
     {
         $this->serviceDepartement = $serviceDepartement;
 
@@ -31,7 +31,7 @@ trait DepartementServiceAwareTrait
 
     public function getServiceDepartement(): ?DepartementService
     {
-        if (!$this->serviceDepartement){
+        if (empty($this->serviceDepartement)){
             $this->serviceDepartement = \Application::$container->get(DepartementService::class);
         }
 

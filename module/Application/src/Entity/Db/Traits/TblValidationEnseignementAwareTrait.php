@@ -11,31 +11,25 @@ use Application\Entity\Db\TblValidationEnseignement;
  */
 trait TblValidationEnseignementAwareTrait
 {
-    /**
-     * @var TblValidationEnseignement
-     */
-    private $tblValidationEnseignement;
-
-
+    protected ?TblValidationEnseignement $tblValidationEnseignement = null;
 
 
 
     /**
      * @param TblValidationEnseignement $tblValidationEnseignement
+     *
      * @return self
      */
-    public function setTblValidationEnseignement( TblValidationEnseignement $tblValidationEnseignement = null )
+    public function setTblValidationEnseignement( TblValidationEnseignement $tblValidationEnseignement )
     {
         $this->tblValidationEnseignement = $tblValidationEnseignement;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblValidationEnseignement
-     */
-    public function getTblValidationEnseignement()
+    public function getTblValidationEnseignement(): ?TblValidationEnseignement
     {
         return $this->tblValidationEnseignement;
     }

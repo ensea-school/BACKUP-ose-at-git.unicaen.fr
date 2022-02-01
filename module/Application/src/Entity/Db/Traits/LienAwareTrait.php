@@ -11,16 +11,16 @@ use Application\Entity\Db\Lien;
  */
 trait LienAwareTrait
 {
-    protected ?Lien $lien;
+    protected ?Lien $lien = null;
 
 
 
     /**
-     * @param Lien|null $lien
+     * @param Lien $lien
      *
      * @return self
      */
-    public function setLien( ?Lien $lien )
+    public function setLien( Lien $lien )
     {
         $this->lien = $lien;
 

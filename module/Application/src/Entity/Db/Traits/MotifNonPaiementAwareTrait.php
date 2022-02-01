@@ -11,16 +11,16 @@ use Application\Entity\Db\MotifNonPaiement;
  */
 trait MotifNonPaiementAwareTrait
 {
-    protected ?MotifNonPaiement $motifNonPaiement;
+    protected ?MotifNonPaiement $motifNonPaiement = null;
 
 
 
     /**
-     * @param MotifNonPaiement|null $motifNonPaiement
+     * @param MotifNonPaiement $motifNonPaiement
      *
      * @return self
      */
-    public function setMotifNonPaiement( ?MotifNonPaiement $motifNonPaiement )
+    public function setMotifNonPaiement( MotifNonPaiement $motifNonPaiement )
     {
         $this->motifNonPaiement = $motifNonPaiement;
 

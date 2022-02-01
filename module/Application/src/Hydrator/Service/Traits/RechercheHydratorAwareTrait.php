@@ -11,16 +11,16 @@ use Application\Hydrator\Service\RechercheHydrator;
  */
 trait RechercheHydratorAwareTrait
 {
-    protected ?RechercheHydrator $hydratorServiceRecherche;
+    protected ?RechercheHydrator $hydratorServiceRecherche = null;
 
 
 
     /**
-     * @param RechercheHydrator|null $hydratorServiceRecherche
+     * @param RechercheHydrator $hydratorServiceRecherche
      *
      * @return self
      */
-    public function setHydratorServiceRecherche( ?RechercheHydrator $hydratorServiceRecherche )
+    public function setHydratorServiceRecherche( RechercheHydrator $hydratorServiceRecherche )
     {
         $this->hydratorServiceRecherche = $hydratorServiceRecherche;
 
@@ -31,7 +31,7 @@ trait RechercheHydratorAwareTrait
 
     public function getHydratorServiceRecherche(): ?RechercheHydrator
     {
-        if (!$this->hydratorServiceRecherche){
+        if (empty($this->hydratorServiceRecherche)){
             $this->hydratorServiceRecherche = \Application::$container->get(RechercheHydrator::class);
         }
 

@@ -10,16 +10,16 @@ namespace Indicateur\Entity\Db;
  */
 trait IndicateurAwareTrait
 {
-    protected ?Indicateur $indicateur;
+    protected ?Indicateur $indicateur = null;
 
 
 
     /**
-     * @param Indicateur|null $indicateur
+     * @param Indicateur $indicateur
      *
      * @return self
      */
-    public function setIndicateur( ?Indicateur $indicateur )
+    public function setIndicateur( Indicateur $indicateur )
     {
         $this->indicateur = $indicateur;
 

@@ -11,16 +11,16 @@ use Application\Service\OffreFormationService;
  */
 trait OffreFormationServiceAwareTrait
 {
-    protected ?OffreFormationService $serviceOffreFormation;
+    protected ?OffreFormationService $serviceOffreFormation = null;
 
 
 
     /**
-     * @param OffreFormationService|null $serviceOffreFormation
+     * @param OffreFormationService $serviceOffreFormation
      *
      * @return self
      */
-    public function setServiceOffreFormation( ?OffreFormationService $serviceOffreFormation )
+    public function setServiceOffreFormation( OffreFormationService $serviceOffreFormation )
     {
         $this->serviceOffreFormation = $serviceOffreFormation;
 
@@ -31,8 +31,8 @@ trait OffreFormationServiceAwareTrait
 
     public function getServiceOffreFormation(): ?OffreFormationService
     {
-        if (!$this->serviceOffreFormation){
-            $this->serviceOffreFormation = \Application::$container->get('FormElementManager')->get(OffreFormationService::class);
+        if (empty($this->serviceOffreFormation)){
+            $this->serviceOffreFormation = \Application::$container->get(OffreFormationService::class);
         }
 
         return $this->serviceOffreFormation;

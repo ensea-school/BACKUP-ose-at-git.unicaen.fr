@@ -11,30 +11,26 @@ use Application\Entity\Db\FormuleResultatService;
  */
 trait FormuleResultatServiceAwareTrait
 {
-    protected ?FormuleResultatService $entityDbFormuleResultatService;
+    protected ?FormuleResultatService $formuleResultatService = null;
 
 
 
     /**
-     * @param FormuleResultatService|null $entityDbFormuleResultatService
+     * @param FormuleResultatService $formuleResultatService
      *
      * @return self
      */
-    public function setEntityDbFormuleResultatService( ?FormuleResultatService $entityDbFormuleResultatService )
+    public function setFormuleResultatService( FormuleResultatService $formuleResultatService )
     {
-        $this->entityDbFormuleResultatService = $entityDbFormuleResultatService;
+        $this->formuleResultatService = $formuleResultatService;
 
         return $this;
     }
 
 
 
-    public function getEntityDbFormuleResultatService(): ?FormuleResultatService
+    public function getFormuleResultatService(): ?FormuleResultatService
     {
-        if (!$this->entityDbFormuleResultatService){
-            $this->entityDbFormuleResultatService = \Application::$container->get('FormElementManager')->get(FormuleResultatService::class);
-        }
-
-        return $this->entityDbFormuleResultatService;
+        return $this->formuleResultatService;
     }
 }

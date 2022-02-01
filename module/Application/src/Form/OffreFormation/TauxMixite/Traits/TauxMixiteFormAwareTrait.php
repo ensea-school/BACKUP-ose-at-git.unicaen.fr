@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\TauxMixite\TauxMixiteForm;
  */
 trait TauxMixiteFormAwareTrait
 {
-    protected ?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite;
+    protected ?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite = null;
 
 
 
     /**
-     * @param TauxMixiteForm|null $formOffreFormationTauxMixiteTauxMixite
+     * @param TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite
      *
      * @return self
      */
-    public function setFormOffreFormationTauxMixiteTauxMixite( ?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite )
+    public function setFormOffreFormationTauxMixiteTauxMixite( TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite )
     {
         $this->formOffreFormationTauxMixiteTauxMixite = $formOffreFormationTauxMixiteTauxMixite;
 
@@ -31,7 +31,7 @@ trait TauxMixiteFormAwareTrait
 
     public function getFormOffreFormationTauxMixiteTauxMixite(): ?TauxMixiteForm
     {
-        if (!$this->formOffreFormationTauxMixiteTauxMixite){
+        if (empty($this->formOffreFormationTauxMixiteTauxMixite)){
             $this->formOffreFormationTauxMixiteTauxMixite = \Application::$container->get('FormElementManager')->get(TauxMixiteForm::class);
         }
 

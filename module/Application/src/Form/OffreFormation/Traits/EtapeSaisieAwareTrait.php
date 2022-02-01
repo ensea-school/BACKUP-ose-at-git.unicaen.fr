@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\EtapeSaisie;
  */
 trait EtapeSaisieAwareTrait
 {
-    protected ?EtapeSaisie $formOffreFormationEtapeSaisie;
+    protected ?EtapeSaisie $formOffreFormationEtapeSaisie = null;
 
 
 
     /**
-     * @param EtapeSaisie|null $formOffreFormationEtapeSaisie
+     * @param EtapeSaisie $formOffreFormationEtapeSaisie
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeSaisie( ?EtapeSaisie $formOffreFormationEtapeSaisie )
+    public function setFormOffreFormationEtapeSaisie( EtapeSaisie $formOffreFormationEtapeSaisie )
     {
         $this->formOffreFormationEtapeSaisie = $formOffreFormationEtapeSaisie;
 
@@ -31,7 +31,7 @@ trait EtapeSaisieAwareTrait
 
     public function getFormOffreFormationEtapeSaisie(): ?EtapeSaisie
     {
-        if (!$this->formOffreFormationEtapeSaisie){
+        if (empty($this->formOffreFormationEtapeSaisie)){
             $this->formOffreFormationEtapeSaisie = \Application::$container->get('FormElementManager')->get(EtapeSaisie::class);
         }
 

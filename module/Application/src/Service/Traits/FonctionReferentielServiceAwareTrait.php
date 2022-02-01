@@ -11,16 +11,16 @@ use Application\Service\FonctionReferentielService;
  */
 trait FonctionReferentielServiceAwareTrait
 {
-    protected ?FonctionReferentielService $serviceFonctionReferentiel;
+    protected ?FonctionReferentielService $serviceFonctionReferentiel = null;
 
 
 
     /**
-     * @param FonctionReferentielService|null $serviceFonctionReferentiel
+     * @param FonctionReferentielService $serviceFonctionReferentiel
      *
      * @return self
      */
-    public function setServiceFonctionReferentiel( ?FonctionReferentielService $serviceFonctionReferentiel )
+    public function setServiceFonctionReferentiel( FonctionReferentielService $serviceFonctionReferentiel )
     {
         $this->serviceFonctionReferentiel = $serviceFonctionReferentiel;
 
@@ -31,7 +31,7 @@ trait FonctionReferentielServiceAwareTrait
 
     public function getServiceFonctionReferentiel(): ?FonctionReferentielService
     {
-        if (!$this->serviceFonctionReferentiel){
+        if (empty($this->serviceFonctionReferentiel)){
             $this->serviceFonctionReferentiel = \Application::$container->get(FonctionReferentielService::class);
         }
 

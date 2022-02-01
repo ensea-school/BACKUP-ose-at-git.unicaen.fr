@@ -11,16 +11,16 @@ use Application\Entity\Db\Discipline;
  */
 trait DisciplineAwareTrait
 {
-    protected ?Discipline $discipline;
+    protected ?Discipline $discipline = null;
 
 
 
     /**
-     * @param Discipline|null $discipline
+     * @param Discipline $discipline
      *
      * @return self
      */
-    public function setDiscipline( ?Discipline $discipline )
+    public function setDiscipline( Discipline $discipline )
     {
         $this->discipline = $discipline;
 

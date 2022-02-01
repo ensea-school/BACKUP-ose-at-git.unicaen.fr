@@ -10,16 +10,16 @@ namespace Intervenant\Service;
  */
 trait StatutServiceAwareTrait
 {
-    protected ?StatutService $serviceStatut;
+    protected ?StatutService $serviceStatut = null;
 
 
 
     /**
-     * @param StatutService|null $serviceStatut
+     * @param StatutService $serviceStatut
      *
      * @return self
      */
-    public function setServiceStatut( ?StatutService $serviceStatut )
+    public function setServiceStatut( StatutService $serviceStatut )
     {
         $this->serviceStatut = $serviceStatut;
 
@@ -30,7 +30,7 @@ trait StatutServiceAwareTrait
 
     public function getServiceStatut(): ?StatutService
     {
-        if (!$this->serviceStatut){
+        if (empty($this->serviceStatut)){
             $this->serviceStatut = \Application::$container->get(StatutService::class);
         }
 

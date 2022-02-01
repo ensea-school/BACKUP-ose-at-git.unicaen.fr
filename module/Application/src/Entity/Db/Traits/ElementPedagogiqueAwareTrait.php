@@ -11,16 +11,16 @@ use Application\Entity\Db\ElementPedagogique;
  */
 trait ElementPedagogiqueAwareTrait
 {
-    protected ?ElementPedagogique $elementPedagogique;
+    protected ?ElementPedagogique $elementPedagogique = null;
 
 
 
     /**
-     * @param ElementPedagogique|null $elementPedagogique
+     * @param ElementPedagogique $elementPedagogique
      *
      * @return self
      */
-    public function setElementPedagogique( ?ElementPedagogique $elementPedagogique )
+    public function setElementPedagogique( ElementPedagogique $elementPedagogique )
     {
         $this->elementPedagogique = $elementPedagogique;
 

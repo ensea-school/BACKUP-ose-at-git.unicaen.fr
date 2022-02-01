@@ -11,16 +11,16 @@ use Application\Entity\Db\Pays;
  */
 trait PaysAwareTrait
 {
-    protected ?Pays $pays;
+    protected ?Pays $pays = null;
 
 
 
     /**
-     * @param Pays|null $pays
+     * @param Pays $pays
      *
      * @return self
      */
-    public function setPays( ?Pays $pays )
+    public function setPays( Pays $pays )
     {
         $this->pays = $pays;
 

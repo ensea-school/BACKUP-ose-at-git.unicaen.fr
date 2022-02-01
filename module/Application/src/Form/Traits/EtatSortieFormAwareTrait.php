@@ -11,16 +11,16 @@ use Application\Form\EtatSortieForm;
  */
 trait EtatSortieFormAwareTrait
 {
-    protected ?EtatSortieForm $formEtatSortie;
+    protected ?EtatSortieForm $formEtatSortie = null;
 
 
 
     /**
-     * @param EtatSortieForm|null $formEtatSortie
+     * @param EtatSortieForm $formEtatSortie
      *
      * @return self
      */
-    public function setFormEtatSortie( ?EtatSortieForm $formEtatSortie )
+    public function setFormEtatSortie( EtatSortieForm $formEtatSortie )
     {
         $this->formEtatSortie = $formEtatSortie;
 
@@ -31,7 +31,7 @@ trait EtatSortieFormAwareTrait
 
     public function getFormEtatSortie(): ?EtatSortieForm
     {
-        if (!$this->formEtatSortie){
+        if (empty($this->formEtatSortie)){
             $this->formEtatSortie = \Application::$container->get('FormElementManager')->get(EtatSortieForm::class);
         }
 

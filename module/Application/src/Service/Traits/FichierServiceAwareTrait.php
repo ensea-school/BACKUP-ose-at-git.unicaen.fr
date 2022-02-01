@@ -11,16 +11,16 @@ use Application\Service\FichierService;
  */
 trait FichierServiceAwareTrait
 {
-    protected ?FichierService $serviceFichier;
+    protected ?FichierService $serviceFichier = null;
 
 
 
     /**
-     * @param FichierService|null $serviceFichier
+     * @param FichierService $serviceFichier
      *
      * @return self
      */
-    public function setServiceFichier( ?FichierService $serviceFichier )
+    public function setServiceFichier( FichierService $serviceFichier )
     {
         $this->serviceFichier = $serviceFichier;
 
@@ -31,7 +31,7 @@ trait FichierServiceAwareTrait
 
     public function getServiceFichier(): ?FichierService
     {
-        if (!$this->serviceFichier){
+        if (empty($this->serviceFichier)){
             $this->serviceFichier = \Application::$container->get(FichierService::class);
         }
 

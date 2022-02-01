@@ -11,16 +11,16 @@ use Application\Form\Workflow\DependanceForm;
  */
 trait DependanceFormAwareTrait
 {
-    protected ?DependanceForm $formWorkflowDependance;
+    protected ?DependanceForm $formWorkflowDependance = null;
 
 
 
     /**
-     * @param DependanceForm|null $formWorkflowDependance
+     * @param DependanceForm $formWorkflowDependance
      *
      * @return self
      */
-    public function setFormWorkflowDependance( ?DependanceForm $formWorkflowDependance )
+    public function setFormWorkflowDependance( DependanceForm $formWorkflowDependance )
     {
         $this->formWorkflowDependance = $formWorkflowDependance;
 
@@ -31,7 +31,7 @@ trait DependanceFormAwareTrait
 
     public function getFormWorkflowDependance(): ?DependanceForm
     {
-        if (!$this->formWorkflowDependance){
+        if (empty($this->formWorkflowDependance)){
             $this->formWorkflowDependance = \Application::$container->get('FormElementManager')->get(DependanceForm::class);
         }
 

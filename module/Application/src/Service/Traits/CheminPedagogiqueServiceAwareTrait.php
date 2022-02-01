@@ -11,16 +11,16 @@ use Application\Service\CheminPedagogiqueService;
  */
 trait CheminPedagogiqueServiceAwareTrait
 {
-    protected ?CheminPedagogiqueService $serviceCheminPedagogique;
+    protected ?CheminPedagogiqueService $serviceCheminPedagogique = null;
 
 
 
     /**
-     * @param CheminPedagogiqueService|null $serviceCheminPedagogique
+     * @param CheminPedagogiqueService $serviceCheminPedagogique
      *
      * @return self
      */
-    public function setServiceCheminPedagogique( ?CheminPedagogiqueService $serviceCheminPedagogique )
+    public function setServiceCheminPedagogique( CheminPedagogiqueService $serviceCheminPedagogique )
     {
         $this->serviceCheminPedagogique = $serviceCheminPedagogique;
 
@@ -31,7 +31,7 @@ trait CheminPedagogiqueServiceAwareTrait
 
     public function getServiceCheminPedagogique(): ?CheminPedagogiqueService
     {
-        if (!$this->serviceCheminPedagogique){
+        if (empty($this->serviceCheminPedagogique)){
             $this->serviceCheminPedagogique = \Application::$container->get(CheminPedagogiqueService::class);
         }
 

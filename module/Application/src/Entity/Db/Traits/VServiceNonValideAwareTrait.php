@@ -11,30 +11,26 @@ use Application\Entity\Db\VServiceNonValide;
  */
 trait VServiceNonValideAwareTrait
 {
-    protected ?VServiceNonValide $entityDbVServiceNonValide;
+    protected ?VServiceNonValide $vServiceNonValide = null;
 
 
 
     /**
-     * @param VServiceNonValide|null $entityDbVServiceNonValide
+     * @param VServiceNonValide $vServiceNonValide
      *
      * @return self
      */
-    public function setEntityDbVServiceNonValide( ?VServiceNonValide $entityDbVServiceNonValide )
+    public function setVServiceNonValide( VServiceNonValide $vServiceNonValide )
     {
-        $this->entityDbVServiceNonValide = $entityDbVServiceNonValide;
+        $this->vServiceNonValide = $vServiceNonValide;
 
         return $this;
     }
 
 
 
-    public function getEntityDbVServiceNonValide(): ?VServiceNonValide
+    public function getVServiceNonValide(): ?VServiceNonValide
     {
-        if (!$this->entityDbVServiceNonValide){
-            $this->entityDbVServiceNonValide = \Application::$container->get(VServiceNonValide::class);
-        }
-
-        return $this->entityDbVServiceNonValide;
+        return $this->vServiceNonValide;
     }
 }

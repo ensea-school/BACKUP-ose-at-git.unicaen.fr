@@ -11,16 +11,16 @@ use Application\Service\DomaineFonctionnelService;
  */
 trait DomaineFonctionnelServiceAwareTrait
 {
-    protected ?DomaineFonctionnelService $serviceDomaineFonctionnel;
+    protected ?DomaineFonctionnelService $serviceDomaineFonctionnel = null;
 
 
 
     /**
-     * @param DomaineFonctionnelService|null $serviceDomaineFonctionnel
+     * @param DomaineFonctionnelService $serviceDomaineFonctionnel
      *
      * @return self
      */
-    public function setServiceDomaineFonctionnel( ?DomaineFonctionnelService $serviceDomaineFonctionnel )
+    public function setServiceDomaineFonctionnel( DomaineFonctionnelService $serviceDomaineFonctionnel )
     {
         $this->serviceDomaineFonctionnel = $serviceDomaineFonctionnel;
 
@@ -31,7 +31,7 @@ trait DomaineFonctionnelServiceAwareTrait
 
     public function getServiceDomaineFonctionnel(): ?DomaineFonctionnelService
     {
-        if (!$this->serviceDomaineFonctionnel){
+        if (empty($this->serviceDomaineFonctionnel)){
             $this->serviceDomaineFonctionnel = \Application::$container->get(DomaineFonctionnelService::class);
         }
 

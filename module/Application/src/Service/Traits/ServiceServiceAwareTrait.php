@@ -11,16 +11,16 @@ use Application\Service\ServiceService;
  */
 trait ServiceServiceAwareTrait
 {
-    protected ?ServiceService $serviceService;
+    protected ?ServiceService $serviceService = null;
 
 
 
     /**
-     * @param ServiceService|null $serviceService
+     * @param ServiceService $serviceService
      *
      * @return self
      */
-    public function setServiceService( ?ServiceService $serviceService )
+    public function setServiceService( ServiceService $serviceService )
     {
         $this->serviceService = $serviceService;
 
@@ -31,7 +31,7 @@ trait ServiceServiceAwareTrait
 
     public function getServiceService(): ?ServiceService
     {
-        if (!$this->serviceService){
+        if (empty($this->serviceService)){
             $this->serviceService = \Application::$container->get(ServiceService::class);
         }
 

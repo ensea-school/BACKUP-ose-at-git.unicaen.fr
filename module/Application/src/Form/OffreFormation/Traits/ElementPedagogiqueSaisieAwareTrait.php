@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\ElementPedagogiqueSaisie;
  */
 trait ElementPedagogiqueSaisieAwareTrait
 {
-    protected ?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie;
+    protected ?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie = null;
 
 
 
     /**
-     * @param ElementPedagogiqueSaisie|null $formOffreFormationElementPedagogiqueSaisie
+     * @param ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSaisie( ?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie )
+    public function setFormOffreFormationElementPedagogiqueSaisie( ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie )
     {
         $this->formOffreFormationElementPedagogiqueSaisie = $formOffreFormationElementPedagogiqueSaisie;
 
@@ -31,7 +31,7 @@ trait ElementPedagogiqueSaisieAwareTrait
 
     public function getFormOffreFormationElementPedagogiqueSaisie(): ?ElementPedagogiqueSaisie
     {
-        if (!$this->formOffreFormationElementPedagogiqueSaisie){
+        if (empty($this->formOffreFormationElementPedagogiqueSaisie)){
             $this->formOffreFormationElementPedagogiqueSaisie = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSaisie::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Form\Service\SaisieFieldset;
  */
 trait SaisieFieldsetAwareTrait
 {
-    protected ?SaisieFieldset $formServiceSaisieFieldset;
+    protected ?SaisieFieldset $formServiceSaisieFieldset = null;
 
 
 
     /**
-     * @param SaisieFieldset|null $formServiceSaisieFieldset
+     * @param SaisieFieldset $formServiceSaisieFieldset
      *
      * @return self
      */
-    public function setFormServiceSaisieFieldset( ?SaisieFieldset $formServiceSaisieFieldset )
+    public function setFormServiceSaisieFieldset( SaisieFieldset $formServiceSaisieFieldset )
     {
         $this->formServiceSaisieFieldset = $formServiceSaisieFieldset;
 
@@ -31,7 +31,7 @@ trait SaisieFieldsetAwareTrait
 
     public function getFormServiceSaisieFieldset(): ?SaisieFieldset
     {
-        if (!$this->formServiceSaisieFieldset){
+        if (empty($this->formServiceSaisieFieldset)){
             $this->formServiceSaisieFieldset = \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
         }
 

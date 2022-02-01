@@ -11,16 +11,16 @@ use Application\Entity\Db\TypePieceJointeStatut;
  */
 trait TypePieceJointeStatutAwareTrait
 {
-    protected ?TypePieceJointeStatut $typePieceJointeStatut;
+    protected ?TypePieceJointeStatut $typePieceJointeStatut = null;
 
 
 
     /**
-     * @param TypePieceJointeStatut|null $typePieceJointeStatut
+     * @param TypePieceJointeStatut $typePieceJointeStatut
      *
      * @return self
      */
-    public function setTypePieceJointeStatut( ?TypePieceJointeStatut $typePieceJointeStatut )
+    public function setTypePieceJointeStatut( TypePieceJointeStatut $typePieceJointeStatut )
     {
         $this->typePieceJointeStatut = $typePieceJointeStatut;
 

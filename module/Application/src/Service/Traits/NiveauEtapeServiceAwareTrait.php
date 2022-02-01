@@ -11,16 +11,16 @@ use Application\Service\NiveauEtapeService;
  */
 trait NiveauEtapeServiceAwareTrait
 {
-    protected ?NiveauEtapeService $serviceNiveauEtape;
+    protected ?NiveauEtapeService $serviceNiveauEtape = null;
 
 
 
     /**
-     * @param NiveauEtapeService|null $serviceNiveauEtape
+     * @param NiveauEtapeService $serviceNiveauEtape
      *
      * @return self
      */
-    public function setServiceNiveauEtape( ?NiveauEtapeService $serviceNiveauEtape )
+    public function setServiceNiveauEtape( NiveauEtapeService $serviceNiveauEtape )
     {
         $this->serviceNiveauEtape = $serviceNiveauEtape;
 
@@ -31,7 +31,7 @@ trait NiveauEtapeServiceAwareTrait
 
     public function getServiceNiveauEtape(): ?NiveauEtapeService
     {
-        if (!$this->serviceNiveauEtape){
+        if (empty($this->serviceNiveauEtape)){
             $this->serviceNiveauEtape = \Application::$container->get(NiveauEtapeService::class);
         }
 

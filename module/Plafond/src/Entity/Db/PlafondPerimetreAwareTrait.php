@@ -10,16 +10,16 @@ namespace Plafond\Entity\Db;
  */
 trait PlafondPerimetreAwareTrait
 {
-    protected ?PlafondPerimetre $plafondPerimetre;
+    protected ?PlafondPerimetre $plafondPerimetre = null;
 
 
 
     /**
-     * @param PlafondPerimetre|null $plafondPerimetre
+     * @param PlafondPerimetre $plafondPerimetre
      *
      * @return self
      */
-    public function setPlafondPerimetre( ?PlafondPerimetre $plafondPerimetre )
+    public function setPlafondPerimetre( PlafondPerimetre $plafondPerimetre )
     {
         $this->plafondPerimetre = $plafondPerimetre;
 

@@ -10,16 +10,16 @@ namespace Indicateur\Processus;
  */
 trait IndicateurProcessusAwareTrait
 {
-    protected ?IndicateurProcessus $processusIndicateur;
+    protected ?IndicateurProcessus $processusIndicateur = null;
 
 
 
     /**
-     * @param IndicateurProcessus|null $processusIndicateur
+     * @param IndicateurProcessus $processusIndicateur
      *
      * @return self
      */
-    public function setProcessusIndicateur( ?IndicateurProcessus $processusIndicateur )
+    public function setProcessusIndicateur( IndicateurProcessus $processusIndicateur )
     {
         $this->processusIndicateur = $processusIndicateur;
 
@@ -30,7 +30,7 @@ trait IndicateurProcessusAwareTrait
 
     public function getProcessusIndicateur(): ?IndicateurProcessus
     {
-        if (!$this->processusIndicateur){
+        if (empty($this->processusIndicateur)){
             $this->processusIndicateur = \Application::$container->get(IndicateurProcessus::class);
         }
 

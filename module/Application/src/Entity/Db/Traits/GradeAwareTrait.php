@@ -11,16 +11,16 @@ use Application\Entity\Db\Grade;
  */
 trait GradeAwareTrait
 {
-    protected ?Grade $grade;
+    protected ?Grade $grade = null;
 
 
 
     /**
-     * @param Grade|null $grade
+     * @param Grade $grade
      *
      * @return self
      */
-    public function setGrade( ?Grade $grade )
+    public function setGrade( Grade $grade )
     {
         $this->grade = $grade;
 

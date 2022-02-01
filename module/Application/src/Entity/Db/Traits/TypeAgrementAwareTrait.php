@@ -11,16 +11,16 @@ use Application\Entity\Db\TypeAgrement;
  */
 trait TypeAgrementAwareTrait
 {
-    protected ?TypeAgrement $typeAgrement;
+    protected ?TypeAgrement $typeAgrement = null;
 
 
 
     /**
-     * @param TypeAgrement|null $typeAgrement
+     * @param TypeAgrement $typeAgrement
      *
      * @return self
      */
-    public function setTypeAgrement( ?TypeAgrement $typeAgrement )
+    public function setTypeAgrement( TypeAgrement $typeAgrement )
     {
         $this->typeAgrement = $typeAgrement;
 

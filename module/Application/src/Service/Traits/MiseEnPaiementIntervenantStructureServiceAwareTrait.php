@@ -11,16 +11,16 @@ use Application\Service\MiseEnPaiementIntervenantStructureService;
  */
 trait MiseEnPaiementIntervenantStructureServiceAwareTrait
 {
-    protected ?MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure;
+    protected ?MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure = null;
 
 
 
     /**
-     * @param MiseEnPaiementIntervenantStructureService|null $serviceMiseEnPaiementIntervenantStructure
+     * @param MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure
      *
      * @return self
      */
-    public function setServiceMiseEnPaiementIntervenantStructure( ?MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure )
+    public function setServiceMiseEnPaiementIntervenantStructure( MiseEnPaiementIntervenantStructureService $serviceMiseEnPaiementIntervenantStructure )
     {
         $this->serviceMiseEnPaiementIntervenantStructure = $serviceMiseEnPaiementIntervenantStructure;
 
@@ -31,7 +31,7 @@ trait MiseEnPaiementIntervenantStructureServiceAwareTrait
 
     public function getServiceMiseEnPaiementIntervenantStructure(): ?MiseEnPaiementIntervenantStructureService
     {
-        if (!$this->serviceMiseEnPaiementIntervenantStructure){
+        if (empty($this->serviceMiseEnPaiementIntervenantStructure)){
             $this->serviceMiseEnPaiementIntervenantStructure = \Application::$container->get(MiseEnPaiementIntervenantStructureService::class);
         }
 

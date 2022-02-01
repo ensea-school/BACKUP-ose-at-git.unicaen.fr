@@ -11,16 +11,16 @@ use Application\Form\ServiceReferentiel\Saisie;
  */
 trait SaisieAwareTrait
 {
-    protected ?Saisie $formServiceReferentielSaisie;
+    protected ?Saisie $formServiceReferentielSaisie = null;
 
 
 
     /**
-     * @param Saisie|null $formServiceReferentielSaisie
+     * @param Saisie $formServiceReferentielSaisie
      *
      * @return self
      */
-    public function setFormServiceReferentielSaisie( ?Saisie $formServiceReferentielSaisie )
+    public function setFormServiceReferentielSaisie( Saisie $formServiceReferentielSaisie )
     {
         $this->formServiceReferentielSaisie = $formServiceReferentielSaisie;
 
@@ -31,7 +31,7 @@ trait SaisieAwareTrait
 
     public function getFormServiceReferentielSaisie(): ?Saisie
     {
-        if (!$this->formServiceReferentielSaisie){
+        if (empty($this->formServiceReferentielSaisie)){
             $this->formServiceReferentielSaisie = \Application::$container->get('FormElementManager')->get(Saisie::class);
         }
 

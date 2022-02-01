@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\EtapeModulateursSaisie;
  */
 trait EtapeModulateursSaisieAwareTrait
 {
-    protected ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie;
+    protected ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie = null;
 
 
 
     /**
-     * @param EtapeModulateursSaisie|null $formOffreFormationEtapeModulateursSaisie
+     * @param EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeModulateursSaisie( ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie )
+    public function setFormOffreFormationEtapeModulateursSaisie( EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie )
     {
         $this->formOffreFormationEtapeModulateursSaisie = $formOffreFormationEtapeModulateursSaisie;
 
@@ -31,7 +31,7 @@ trait EtapeModulateursSaisieAwareTrait
 
     public function getFormOffreFormationEtapeModulateursSaisie(): ?EtapeModulateursSaisie
     {
-        if (!$this->formOffreFormationEtapeModulateursSaisie){
+        if (empty($this->formOffreFormationEtapeModulateursSaisie)){
             $this->formOffreFormationEtapeModulateursSaisie = \Application::$container->get('FormElementManager')->get(EtapeModulateursSaisie::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Service\ContratService;
  */
 trait ContratServiceAwareTrait
 {
-    protected ?ContratService $serviceContrat;
+    protected ?ContratService $serviceContrat = null;
 
 
 
     /**
-     * @param ContratService|null $serviceContrat
+     * @param ContratService $serviceContrat
      *
      * @return self
      */
-    public function setServiceContrat( ?ContratService $serviceContrat )
+    public function setServiceContrat( ContratService $serviceContrat )
     {
         $this->serviceContrat = $serviceContrat;
 
@@ -31,7 +31,7 @@ trait ContratServiceAwareTrait
 
     public function getServiceContrat(): ?ContratService
     {
-        if (!$this->serviceContrat){
+        if (empty($this->serviceContrat)){
             $this->serviceContrat = \Application::$container->get(ContratService::class);
         }
 

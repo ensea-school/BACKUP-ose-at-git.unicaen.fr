@@ -11,16 +11,16 @@ use Application\Entity\Db\TypePoste;
  */
 trait TypePosteAwareTrait
 {
-    protected ?TypePoste $typePoste;
+    protected ?TypePoste $typePoste = null;
 
 
 
     /**
-     * @param TypePoste|null $typePoste
+     * @param TypePoste $typePoste
      *
      * @return self
      */
-    public function setTypePoste( ?TypePoste $typePoste )
+    public function setTypePoste( TypePoste $typePoste )
     {
         $this->typePoste = $typePoste;
 

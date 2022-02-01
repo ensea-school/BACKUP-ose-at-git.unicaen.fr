@@ -11,16 +11,16 @@ use Application\Service\WfEtapeService;
  */
 trait WfEtapeServiceAwareTrait
 {
-    protected ?WfEtapeService $serviceWfEtape;
+    protected ?WfEtapeService $serviceWfEtape = null;
 
 
 
     /**
-     * @param WfEtapeService|null $serviceWfEtape
+     * @param WfEtapeService $serviceWfEtape
      *
      * @return self
      */
-    public function setServiceWfEtape( ?WfEtapeService $serviceWfEtape )
+    public function setServiceWfEtape( WfEtapeService $serviceWfEtape )
     {
         $this->serviceWfEtape = $serviceWfEtape;
 
@@ -31,7 +31,7 @@ trait WfEtapeServiceAwareTrait
 
     public function getServiceWfEtape(): ?WfEtapeService
     {
-        if (!$this->serviceWfEtape){
+        if (empty($this->serviceWfEtape)){
             $this->serviceWfEtape = \Application::$container->get(WfEtapeService::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Service\TypeModulateurService;
  */
 trait TypeModulateurServiceAwareTrait
 {
-    protected ?TypeModulateurService $serviceTypeModulateur;
+    protected ?TypeModulateurService $serviceTypeModulateur = null;
 
 
 
     /**
-     * @param TypeModulateurService|null $serviceTypeModulateur
+     * @param TypeModulateurService $serviceTypeModulateur
      *
      * @return self
      */
-    public function setServiceTypeModulateur( ?TypeModulateurService $serviceTypeModulateur )
+    public function setServiceTypeModulateur( TypeModulateurService $serviceTypeModulateur )
     {
         $this->serviceTypeModulateur = $serviceTypeModulateur;
 
@@ -31,7 +31,7 @@ trait TypeModulateurServiceAwareTrait
 
     public function getServiceTypeModulateur(): ?TypeModulateurService
     {
-        if (!$this->serviceTypeModulateur){
+        if (empty($this->serviceTypeModulateur)){
             $this->serviceTypeModulateur = \Application::$container->get(TypeModulateurService::class);
         }
 

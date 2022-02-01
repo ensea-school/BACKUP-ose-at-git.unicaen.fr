@@ -11,16 +11,16 @@ use Application\Service\ElementPedagogiqueService;
  */
 trait ElementPedagogiqueServiceAwareTrait
 {
-    protected ?ElementPedagogiqueService $serviceElementPedagogique;
+    protected ?ElementPedagogiqueService $serviceElementPedagogique = null;
 
 
 
     /**
-     * @param ElementPedagogiqueService|null $serviceElementPedagogique
+     * @param ElementPedagogiqueService $serviceElementPedagogique
      *
      * @return self
      */
-    public function setServiceElementPedagogique( ?ElementPedagogiqueService $serviceElementPedagogique )
+    public function setServiceElementPedagogique( ElementPedagogiqueService $serviceElementPedagogique )
     {
         $this->serviceElementPedagogique = $serviceElementPedagogique;
 
@@ -31,7 +31,7 @@ trait ElementPedagogiqueServiceAwareTrait
 
     public function getServiceElementPedagogique(): ?ElementPedagogiqueService
     {
-        if (!$this->serviceElementPedagogique){
+        if (empty($this->serviceElementPedagogique)){
             $this->serviceElementPedagogique = \Application::$container->get(ElementPedagogiqueService::class);
         }
 

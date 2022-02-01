@@ -11,16 +11,16 @@ use Application\Service\TypeContratService;
  */
 trait TypeContratServiceAwareTrait
 {
-    protected ?TypeContratService $serviceTypeContrat;
+    protected ?TypeContratService $serviceTypeContrat = null;
 
 
 
     /**
-     * @param TypeContratService|null $serviceTypeContrat
+     * @param TypeContratService $serviceTypeContrat
      *
      * @return self
      */
-    public function setServiceTypeContrat( ?TypeContratService $serviceTypeContrat )
+    public function setServiceTypeContrat( TypeContratService $serviceTypeContrat )
     {
         $this->serviceTypeContrat = $serviceTypeContrat;
 
@@ -31,7 +31,7 @@ trait TypeContratServiceAwareTrait
 
     public function getServiceTypeContrat(): ?TypeContratService
     {
-        if (!$this->serviceTypeContrat){
+        if (empty($this->serviceTypeContrat)){
             $this->serviceTypeContrat = \Application::$container->get(TypeContratService::class);
         }
 

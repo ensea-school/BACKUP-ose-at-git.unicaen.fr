@@ -11,16 +11,16 @@ use Application\Entity\Db\TypeContrat;
  */
 trait TypeContratAwareTrait
 {
-    protected ?TypeContrat $typeContrat;
+    protected ?TypeContrat $typeContrat = null;
 
 
 
     /**
-     * @param TypeContrat|null $typeContrat
+     * @param TypeContrat $typeContrat
      *
      * @return self
      */
-    public function setTypeContrat( ?TypeContrat $typeContrat )
+    public function setTypeContrat( TypeContrat $typeContrat )
     {
         $this->typeContrat = $typeContrat;
 

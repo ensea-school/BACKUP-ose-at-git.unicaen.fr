@@ -10,16 +10,16 @@ namespace ExportRh\Connecteur\Siham;
  */
 trait SihamConnecteurAwareTrait
 {
-    protected ?SihamConnecteur $connecteurSihamSiham;
+    protected ?SihamConnecteur $connecteurSihamSiham = null;
 
 
 
     /**
-     * @param SihamConnecteur|null $connecteurSihamSiham
+     * @param SihamConnecteur $connecteurSihamSiham
      *
      * @return self
      */
-    public function setConnecteurSihamSiham( ?SihamConnecteur $connecteurSihamSiham )
+    public function setConnecteurSihamSiham( SihamConnecteur $connecteurSihamSiham )
     {
         $this->connecteurSihamSiham = $connecteurSihamSiham;
 

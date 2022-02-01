@@ -11,16 +11,16 @@ use Application\Form\OffreFormation\ElementModulateursFieldset;
  */
 trait ElementModulateursFieldsetAwareTrait
 {
-    protected ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset;
+    protected ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset = null;
 
 
 
     /**
-     * @param ElementModulateursFieldset|null $formOffreFormationElementModulateursFieldset
+     * @param ElementModulateursFieldset $formOffreFormationElementModulateursFieldset
      *
      * @return self
      */
-    public function setFormOffreFormationElementModulateursFieldset( ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset )
+    public function setFormOffreFormationElementModulateursFieldset( ElementModulateursFieldset $formOffreFormationElementModulateursFieldset )
     {
         $this->formOffreFormationElementModulateursFieldset = $formOffreFormationElementModulateursFieldset;
 
@@ -31,7 +31,7 @@ trait ElementModulateursFieldsetAwareTrait
 
     public function getFormOffreFormationElementModulateursFieldset(): ?ElementModulateursFieldset
     {
-        if (!$this->formOffreFormationElementModulateursFieldset){
+        if (empty($this->formOffreFormationElementModulateursFieldset)){
             $this->formOffreFormationElementModulateursFieldset = \Application::$container->get('FormElementManager')->get(ElementModulateursFieldset::class);
         }
 

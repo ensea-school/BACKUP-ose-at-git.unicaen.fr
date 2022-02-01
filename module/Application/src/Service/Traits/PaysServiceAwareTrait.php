@@ -11,16 +11,16 @@ use Application\Service\PaysService;
  */
 trait PaysServiceAwareTrait
 {
-    protected ?PaysService $servicePays;
+    protected ?PaysService $servicePays = null;
 
 
 
     /**
-     * @param PaysService|null $servicePays
+     * @param PaysService $servicePays
      *
      * @return self
      */
-    public function setServicePays( ?PaysService $servicePays )
+    public function setServicePays( PaysService $servicePays )
     {
         $this->servicePays = $servicePays;
 
@@ -31,7 +31,7 @@ trait PaysServiceAwareTrait
 
     public function getServicePays(): ?PaysService
     {
-        if (!$this->servicePays){
+        if (empty($this->servicePays)){
             $this->servicePays = \Application::$container->get(PaysService::class);
         }
 

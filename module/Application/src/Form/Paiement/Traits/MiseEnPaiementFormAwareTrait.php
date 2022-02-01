@@ -11,16 +11,16 @@ use Application\Form\Paiement\MiseEnPaiementForm;
  */
 trait MiseEnPaiementFormAwareTrait
 {
-    protected ?MiseEnPaiementForm $formPaiementMiseEnPaiement;
+    protected ?MiseEnPaiementForm $formPaiementMiseEnPaiement = null;
 
 
 
     /**
-     * @param MiseEnPaiementForm|null $formPaiementMiseEnPaiement
+     * @param MiseEnPaiementForm $formPaiementMiseEnPaiement
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiement( ?MiseEnPaiementForm $formPaiementMiseEnPaiement )
+    public function setFormPaiementMiseEnPaiement( MiseEnPaiementForm $formPaiementMiseEnPaiement )
     {
         $this->formPaiementMiseEnPaiement = $formPaiementMiseEnPaiement;
 
@@ -31,7 +31,7 @@ trait MiseEnPaiementFormAwareTrait
 
     public function getFormPaiementMiseEnPaiement(): ?MiseEnPaiementForm
     {
-        if (!$this->formPaiementMiseEnPaiement){
+        if (empty($this->formPaiementMiseEnPaiement)){
             $this->formPaiementMiseEnPaiement = \Application::$container->get('FormElementManager')->get(MiseEnPaiementForm::class);
         }
 

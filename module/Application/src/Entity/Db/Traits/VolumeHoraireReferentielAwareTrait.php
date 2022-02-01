@@ -11,16 +11,16 @@ use Application\Entity\Db\VolumeHoraireReferentiel;
  */
 trait VolumeHoraireReferentielAwareTrait
 {
-    protected ?VolumeHoraireReferentiel $volumeHoraireReferentiel;
+    protected ?VolumeHoraireReferentiel $volumeHoraireReferentiel = null;
 
 
 
     /**
-     * @param VolumeHoraireReferentiel|null $volumeHoraireReferentiel
+     * @param VolumeHoraireReferentiel $volumeHoraireReferentiel
      *
      * @return self
      */
-    public function setVolumeHoraireReferentiel( ?VolumeHoraireReferentiel $volumeHoraireReferentiel )
+    public function setVolumeHoraireReferentiel( VolumeHoraireReferentiel $volumeHoraireReferentiel )
     {
         $this->volumeHoraireReferentiel = $volumeHoraireReferentiel;
 

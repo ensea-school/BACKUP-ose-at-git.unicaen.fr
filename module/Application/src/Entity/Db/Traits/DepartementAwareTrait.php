@@ -11,16 +11,16 @@ use Application\Entity\Db\Departement;
  */
 trait DepartementAwareTrait
 {
-    protected ?Departement $departement;
+    protected ?Departement $departement = null;
 
 
 
     /**
-     * @param Departement|null $departement
+     * @param Departement $departement
      *
      * @return self
      */
-    public function setDepartement( ?Departement $departement )
+    public function setDepartement( Departement $departement )
     {
         $this->departement = $departement;
 

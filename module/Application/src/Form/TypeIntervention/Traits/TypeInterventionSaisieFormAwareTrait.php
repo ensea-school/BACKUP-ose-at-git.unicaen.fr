@@ -11,16 +11,16 @@ use Application\Form\TypeIntervention\TypeInterventionSaisieForm;
  */
 trait TypeInterventionSaisieFormAwareTrait
 {
-    protected ?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie;
+    protected ?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie = null;
 
 
 
     /**
-     * @param TypeInterventionSaisieForm|null $formTypeInterventionTypeInterventionSaisie
+     * @param TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie
      *
      * @return self
      */
-    public function setFormTypeInterventionTypeInterventionSaisie( ?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie )
+    public function setFormTypeInterventionTypeInterventionSaisie( TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie )
     {
         $this->formTypeInterventionTypeInterventionSaisie = $formTypeInterventionTypeInterventionSaisie;
 
@@ -31,7 +31,7 @@ trait TypeInterventionSaisieFormAwareTrait
 
     public function getFormTypeInterventionTypeInterventionSaisie(): ?TypeInterventionSaisieForm
     {
-        if (!$this->formTypeInterventionTypeInterventionSaisie){
+        if (empty($this->formTypeInterventionTypeInterventionSaisie)){
             $this->formTypeInterventionTypeInterventionSaisie = \Application::$container->get('FormElementManager')->get(TypeInterventionSaisieForm::class);
         }
 

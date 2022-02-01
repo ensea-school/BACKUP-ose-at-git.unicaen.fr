@@ -11,16 +11,16 @@ use Application\Entity\Db\Fichier;
  */
 trait FichierAwareTrait
 {
-    protected ?Fichier $fichier;
+    protected ?Fichier $fichier = null;
 
 
 
     /**
-     * @param Fichier|null $fichier
+     * @param Fichier $fichier
      *
      * @return self
      */
-    public function setFichier( ?Fichier $fichier )
+    public function setFichier( Fichier $fichier )
     {
         $this->fichier = $fichier;
 

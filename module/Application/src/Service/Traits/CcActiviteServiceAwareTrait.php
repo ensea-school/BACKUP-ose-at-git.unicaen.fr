@@ -11,16 +11,16 @@ use Application\Service\CcActiviteService;
  */
 trait CcActiviteServiceAwareTrait
 {
-    protected ?CcActiviteService $serviceCcActivite;
+    protected ?CcActiviteService $serviceCcActivite = null;
 
 
 
     /**
-     * @param CcActiviteService|null $serviceCcActivite
+     * @param CcActiviteService $serviceCcActivite
      *
      * @return self
      */
-    public function setServiceCcActivite( ?CcActiviteService $serviceCcActivite )
+    public function setServiceCcActivite( CcActiviteService $serviceCcActivite )
     {
         $this->serviceCcActivite = $serviceCcActivite;
 
@@ -31,7 +31,7 @@ trait CcActiviteServiceAwareTrait
 
     public function getServiceCcActivite(): ?CcActiviteService
     {
-        if (!$this->serviceCcActivite){
+        if (empty($this->serviceCcActivite)){
             $this->serviceCcActivite = \Application::$container->get(CcActiviteService::class);
         }
 

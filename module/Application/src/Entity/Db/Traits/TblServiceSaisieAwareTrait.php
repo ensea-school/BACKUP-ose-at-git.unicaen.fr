@@ -11,30 +11,26 @@ use Application\Entity\Db\TblServiceSaisie;
  */
 trait TblServiceSaisieAwareTrait
 {
-    protected ?TblServiceSaisie $entityDbTblServiceSaisie;
+    protected ?TblServiceSaisie $tblServiceSaisie = null;
 
 
 
     /**
-     * @param TblServiceSaisie|null $entityDbTblServiceSaisie
+     * @param TblServiceSaisie $tblServiceSaisie
      *
      * @return self
      */
-    public function setEntityDbTblServiceSaisie( ?TblServiceSaisie $entityDbTblServiceSaisie )
+    public function setTblServiceSaisie( TblServiceSaisie $tblServiceSaisie )
     {
-        $this->entityDbTblServiceSaisie = $entityDbTblServiceSaisie;
+        $this->tblServiceSaisie = $tblServiceSaisie;
 
         return $this;
     }
 
 
 
-    public function getEntityDbTblServiceSaisie(): ?TblServiceSaisie
+    public function getTblServiceSaisie(): ?TblServiceSaisie
     {
-        if (!$this->entityDbTblServiceSaisie){
-            $this->entityDbTblServiceSaisie = \Application::$container->get(TblServiceSaisie::class);
-        }
-
-        return $this->entityDbTblServiceSaisie;
+        return $this->tblServiceSaisie;
     }
 }

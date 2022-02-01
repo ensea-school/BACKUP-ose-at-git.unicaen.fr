@@ -11,16 +11,16 @@ use Application\Form\Intervenant\EditionForm;
  */
 trait EditionFormAwareTrait
 {
-    protected ?EditionForm $formIntervenantEdition;
+    protected ?EditionForm $formIntervenantEdition = null;
 
 
 
     /**
-     * @param EditionForm|null $formIntervenantEdition
+     * @param EditionForm $formIntervenantEdition
      *
      * @return self
      */
-    public function setFormIntervenantEdition( ?EditionForm $formIntervenantEdition )
+    public function setFormIntervenantEdition( EditionForm $formIntervenantEdition )
     {
         $this->formIntervenantEdition = $formIntervenantEdition;
 
@@ -31,7 +31,7 @@ trait EditionFormAwareTrait
 
     public function getFormIntervenantEdition(): ?EditionForm
     {
-        if (!$this->formIntervenantEdition){
+        if (empty($this->formIntervenantEdition)){
             $this->formIntervenantEdition = \Application::$container->get('FormElementManager')->get(EditionForm::class);
         }
 

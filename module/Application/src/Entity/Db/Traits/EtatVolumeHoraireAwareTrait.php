@@ -11,16 +11,16 @@ use Application\Entity\Db\EtatVolumeHoraire;
  */
 trait EtatVolumeHoraireAwareTrait
 {
-    protected ?EtatVolumeHoraire $etatVolumeHoraire;
+    protected ?EtatVolumeHoraire $etatVolumeHoraire = null;
 
 
 
     /**
-     * @param EtatVolumeHoraire|null $etatVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumeHoraire
      *
      * @return self
      */
-    public function setEtatVolumeHoraire( ?EtatVolumeHoraire $etatVolumeHoraire )
+    public function setEtatVolumeHoraire( EtatVolumeHoraire $etatVolumeHoraire )
     {
         $this->etatVolumeHoraire = $etatVolumeHoraire;
 

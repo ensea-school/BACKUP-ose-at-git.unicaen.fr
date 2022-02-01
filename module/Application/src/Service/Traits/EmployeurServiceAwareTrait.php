@@ -11,16 +11,16 @@ use Application\Service\EmployeurService;
  */
 trait EmployeurServiceAwareTrait
 {
-    protected ?EmployeurService $serviceEmployeur;
+    protected ?EmployeurService $serviceEmployeur = null;
 
 
 
     /**
-     * @param EmployeurService|null $serviceEmployeur
+     * @param EmployeurService $serviceEmployeur
      *
      * @return self
      */
-    public function setServiceEmployeur( ?EmployeurService $serviceEmployeur )
+    public function setServiceEmployeur( EmployeurService $serviceEmployeur )
     {
         $this->serviceEmployeur = $serviceEmployeur;
 
@@ -31,7 +31,7 @@ trait EmployeurServiceAwareTrait
 
     public function getServiceEmployeur(): ?EmployeurService
     {
-        if (!$this->serviceEmployeur){
+        if (empty($this->serviceEmployeur)){
             $this->serviceEmployeur = \Application::$container->get(EmployeurService::class);
         }
 

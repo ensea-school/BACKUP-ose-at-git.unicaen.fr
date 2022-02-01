@@ -10,16 +10,16 @@ namespace Plafond\Entity\Db;
  */
 trait PlafondAwareTrait
 {
-    protected ?Plafond $plafond;
+    protected ?Plafond $plafond = null;
 
 
 
     /**
-     * @param Plafond|null $plafond
+     * @param Plafond $plafond
      *
      * @return self
      */
-    public function setPlafond( ?Plafond $plafond )
+    public function setPlafond( Plafond $plafond )
     {
         $this->plafond = $plafond;
 

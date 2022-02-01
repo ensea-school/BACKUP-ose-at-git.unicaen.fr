@@ -11,16 +11,16 @@ use Application\Service\MotifNonPaiementService;
  */
 trait MotifNonPaiementServiceAwareTrait
 {
-    protected ?MotifNonPaiementService $serviceMotifNonPaiement;
+    protected ?MotifNonPaiementService $serviceMotifNonPaiement = null;
 
 
 
     /**
-     * @param MotifNonPaiementService|null $serviceMotifNonPaiement
+     * @param MotifNonPaiementService $serviceMotifNonPaiement
      *
      * @return self
      */
-    public function setServiceMotifNonPaiement( ?MotifNonPaiementService $serviceMotifNonPaiement )
+    public function setServiceMotifNonPaiement( MotifNonPaiementService $serviceMotifNonPaiement )
     {
         $this->serviceMotifNonPaiement = $serviceMotifNonPaiement;
 
@@ -31,7 +31,7 @@ trait MotifNonPaiementServiceAwareTrait
 
     public function getServiceMotifNonPaiement(): ?MotifNonPaiementService
     {
-        if (!$this->serviceMotifNonPaiement){
+        if (empty($this->serviceMotifNonPaiement)){
             $this->serviceMotifNonPaiement = \Application::$container->get(MotifNonPaiementService::class);
         }
 

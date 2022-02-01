@@ -11,16 +11,16 @@ use Application\Service\TypeValidationService;
  */
 trait TypeValidationServiceAwareTrait
 {
-    protected ?TypeValidationService $serviceTypeValidation;
+    protected ?TypeValidationService $serviceTypeValidation = null;
 
 
 
     /**
-     * @param TypeValidationService|null $serviceTypeValidation
+     * @param TypeValidationService $serviceTypeValidation
      *
      * @return self
      */
-    public function setServiceTypeValidation( ?TypeValidationService $serviceTypeValidation )
+    public function setServiceTypeValidation( TypeValidationService $serviceTypeValidation )
     {
         $this->serviceTypeValidation = $serviceTypeValidation;
 
@@ -31,7 +31,7 @@ trait TypeValidationServiceAwareTrait
 
     public function getServiceTypeValidation(): ?TypeValidationService
     {
-        if (!$this->serviceTypeValidation){
+        if (empty($this->serviceTypeValidation)){
             $this->serviceTypeValidation = \Application::$container->get(TypeValidationService::class);
         }
 

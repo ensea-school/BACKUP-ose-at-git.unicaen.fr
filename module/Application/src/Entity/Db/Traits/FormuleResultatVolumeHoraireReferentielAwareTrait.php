@@ -11,30 +11,26 @@ use Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel;
  */
 trait FormuleResultatVolumeHoraireReferentielAwareTrait
 {
-    protected ?FormuleResultatVolumeHoraireReferentiel $entityDbFormuleResultatVolumeHoraireReferentiel;
+    protected ?FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel = null;
 
 
 
     /**
-     * @param FormuleResultatVolumeHoraireReferentiel|null $entityDbFormuleResultatVolumeHoraireReferentiel
+     * @param FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel
      *
      * @return self
      */
-    public function setEntityDbFormuleResultatVolumeHoraireReferentiel( ?FormuleResultatVolumeHoraireReferentiel $entityDbFormuleResultatVolumeHoraireReferentiel )
+    public function setFormuleResultatVolumeHoraireReferentiel( FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel )
     {
-        $this->entityDbFormuleResultatVolumeHoraireReferentiel = $entityDbFormuleResultatVolumeHoraireReferentiel;
+        $this->formuleResultatVolumeHoraireReferentiel = $formuleResultatVolumeHoraireReferentiel;
 
         return $this;
     }
 
 
 
-    public function getEntityDbFormuleResultatVolumeHoraireReferentiel(): ?FormuleResultatVolumeHoraireReferentiel
+    public function getFormuleResultatVolumeHoraireReferentiel(): ?FormuleResultatVolumeHoraireReferentiel
     {
-        if (!$this->entityDbFormuleResultatVolumeHoraireReferentiel){
-            $this->entityDbFormuleResultatVolumeHoraireReferentiel = \Application::$container->get('FormElementManager')->get(FormuleResultatVolumeHoraireReferentiel::class);
-        }
-
-        return $this->entityDbFormuleResultatVolumeHoraireReferentiel;
+        return $this->formuleResultatVolumeHoraireReferentiel;
     }
 }

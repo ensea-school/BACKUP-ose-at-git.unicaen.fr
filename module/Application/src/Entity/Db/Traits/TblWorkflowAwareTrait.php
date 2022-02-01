@@ -11,16 +11,16 @@ use Application\Entity\Db\TblWorkflow;
  */
 trait TblWorkflowAwareTrait
 {
-    protected ?TblWorkflow $tblWorkflow;
+    protected ?TblWorkflow $tblWorkflow = null;
 
 
 
     /**
-     * @param TblWorkflow|null $tblWorkflow
+     * @param TblWorkflow $tblWorkflow
      *
      * @return self
      */
-    public function setTblWorkflow( ?TblWorkflow $tblWorkflow )
+    public function setTblWorkflow( TblWorkflow $tblWorkflow )
     {
         $this->tblWorkflow = $tblWorkflow;
 

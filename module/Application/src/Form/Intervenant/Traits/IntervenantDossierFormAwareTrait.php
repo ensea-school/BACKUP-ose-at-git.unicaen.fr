@@ -11,16 +11,16 @@ use Application\Form\Intervenant\IntervenantDossierForm;
  */
 trait IntervenantDossierFormAwareTrait
 {
-    protected ?IntervenantDossierForm $formIntervenantIntervenantDossier;
+    protected ?IntervenantDossierForm $formIntervenantIntervenantDossier = null;
 
 
 
     /**
-     * @param IntervenantDossierForm|null $formIntervenantIntervenantDossier
+     * @param IntervenantDossierForm $formIntervenantIntervenantDossier
      *
      * @return self
      */
-    public function setFormIntervenantIntervenantDossier( ?IntervenantDossierForm $formIntervenantIntervenantDossier )
+    public function setFormIntervenantIntervenantDossier( IntervenantDossierForm $formIntervenantIntervenantDossier )
     {
         $this->formIntervenantIntervenantDossier = $formIntervenantIntervenantDossier;
 
@@ -31,7 +31,7 @@ trait IntervenantDossierFormAwareTrait
 
     public function getFormIntervenantIntervenantDossier(): ?IntervenantDossierForm
     {
-        if (!$this->formIntervenantIntervenantDossier){
+        if (empty($this->formIntervenantIntervenantDossier)){
             $this->formIntervenantIntervenantDossier = \Application::$container->get('FormElementManager')->get(IntervenantDossierForm::class);
         }
 

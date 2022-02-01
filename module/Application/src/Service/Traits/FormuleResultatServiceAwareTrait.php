@@ -11,16 +11,16 @@ use Application\Service\FormuleResultatService;
  */
 trait FormuleResultatServiceAwareTrait
 {
-    protected ?FormuleResultatService $serviceFormuleResultat;
+    protected ?FormuleResultatService $serviceFormuleResultat = null;
 
 
 
     /**
-     * @param FormuleResultatService|null $serviceFormuleResultat
+     * @param FormuleResultatService $serviceFormuleResultat
      *
      * @return self
      */
-    public function setServiceFormuleResultat( ?FormuleResultatService $serviceFormuleResultat )
+    public function setServiceFormuleResultat( FormuleResultatService $serviceFormuleResultat )
     {
         $this->serviceFormuleResultat = $serviceFormuleResultat;
 
@@ -31,8 +31,8 @@ trait FormuleResultatServiceAwareTrait
 
     public function getServiceFormuleResultat(): ?FormuleResultatService
     {
-        if (!$this->serviceFormuleResultat){
-            $this->serviceFormuleResultat = \Application::$container->get('FormElementManager')->get(FormuleResultatService::class);
+        if (empty($this->serviceFormuleResultat)){
+            $this->serviceFormuleResultat = \Application::$container->get(FormuleResultatService::class);
         }
 
         return $this->serviceFormuleResultat;

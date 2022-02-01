@@ -11,16 +11,16 @@ use Application\Service\CiviliteService;
  */
 trait CiviliteServiceAwareTrait
 {
-    protected ?CiviliteService $serviceCivilite;
+    protected ?CiviliteService $serviceCivilite = null;
 
 
 
     /**
-     * @param CiviliteService|null $serviceCivilite
+     * @param CiviliteService $serviceCivilite
      *
      * @return self
      */
-    public function setServiceCivilite( ?CiviliteService $serviceCivilite )
+    public function setServiceCivilite( CiviliteService $serviceCivilite )
     {
         $this->serviceCivilite = $serviceCivilite;
 
@@ -31,7 +31,7 @@ trait CiviliteServiceAwareTrait
 
     public function getServiceCivilite(): ?CiviliteService
     {
-        if (!$this->serviceCivilite){
+        if (empty($this->serviceCivilite)){
             $this->serviceCivilite = \Application::$container->get(CiviliteService::class);
         }
 

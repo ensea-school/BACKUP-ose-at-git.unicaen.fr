@@ -11,16 +11,16 @@ use Application\Entity\Db\TypeCentreCout;
  */
 trait TypeCentreCoutAwareTrait
 {
-    protected ?TypeCentreCout $typeCentreCout;
+    protected ?TypeCentreCout $typeCentreCout = null;
 
 
 
     /**
-     * @param TypeCentreCout|null $typeCentreCout
+     * @param TypeCentreCout $typeCentreCout
      *
      * @return self
      */
-    public function setTypeCentreCout( ?TypeCentreCout $typeCentreCout )
+    public function setTypeCentreCout( TypeCentreCout $typeCentreCout )
     {
         $this->typeCentreCout = $typeCentreCout;
 

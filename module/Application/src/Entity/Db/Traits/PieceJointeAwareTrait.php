@@ -11,16 +11,16 @@ use Application\Entity\Db\PieceJointe;
  */
 trait PieceJointeAwareTrait
 {
-    protected ?PieceJointe $pieceJointe;
+    protected ?PieceJointe $pieceJointe = null;
 
 
 
     /**
-     * @param PieceJointe|null $pieceJointe
+     * @param PieceJointe $pieceJointe
      *
      * @return self
      */
-    public function setPieceJointe( ?PieceJointe $pieceJointe )
+    public function setPieceJointe( PieceJointe $pieceJointe )
     {
         $this->pieceJointe = $pieceJointe;
 

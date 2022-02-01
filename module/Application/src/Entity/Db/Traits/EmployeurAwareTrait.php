@@ -11,16 +11,16 @@ use Application\Entity\Db\Employeur;
  */
 trait EmployeurAwareTrait
 {
-    protected ?Employeur $employeur;
+    protected ?Employeur $employeur = null;
 
 
 
     /**
-     * @param Employeur|null $employeur
+     * @param Employeur $employeur
      *
      * @return self
      */
-    public function setEmployeur( ?Employeur $employeur )
+    public function setEmployeur( Employeur $employeur )
     {
         $this->employeur = $employeur;
 

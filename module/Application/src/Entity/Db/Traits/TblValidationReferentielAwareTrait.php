@@ -11,16 +11,16 @@ use Application\Entity\Db\TblValidationReferentiel;
  */
 trait TblValidationReferentielAwareTrait
 {
-    protected ?TblValidationReferentiel $tblValidationReferentiel;
+    protected ?TblValidationReferentiel $tblValidationReferentiel = null;
 
 
 
     /**
-     * @param TblValidationReferentiel|null $tblValidationReferentiel
+     * @param TblValidationReferentiel $tblValidationReferentiel
      *
      * @return self
      */
-    public function setTblValidationReferentiel( ?TblValidationReferentiel $tblValidationReferentiel )
+    public function setTblValidationReferentiel( TblValidationReferentiel $tblValidationReferentiel )
     {
         $this->tblValidationReferentiel = $tblValidationReferentiel;
 

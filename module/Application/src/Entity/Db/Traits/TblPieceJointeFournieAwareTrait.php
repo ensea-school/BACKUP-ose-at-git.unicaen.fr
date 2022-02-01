@@ -11,16 +11,16 @@ use Application\Entity\Db\TblPieceJointeFournie;
  */
 trait TblPieceJointeFournieAwareTrait
 {
-    protected ?TblPieceJointeFournie $tblPieceJointeFournie;
+    protected ?TblPieceJointeFournie $tblPieceJointeFournie = null;
 
 
 
     /**
-     * @param TblPieceJointeFournie|null $tblPieceJointeFournie
+     * @param TblPieceJointeFournie $tblPieceJointeFournie
      *
      * @return self
      */
-    public function setTblPieceJointeFournie( ?TblPieceJointeFournie $tblPieceJointeFournie )
+    public function setTblPieceJointeFournie( TblPieceJointeFournie $tblPieceJointeFournie )
     {
         $this->tblPieceJointeFournie = $tblPieceJointeFournie;
 

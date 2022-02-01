@@ -10,16 +10,16 @@ namespace Application\Provider\Role;
  */
 trait RoleProviderAwareTrait
 {
-    protected ?RoleProvider $providerRoleRole;
+    protected ?RoleProvider $providerRoleRole = null;
 
 
 
     /**
-     * @param RoleProvider|null $providerRoleRole
+     * @param RoleProvider $providerRoleRole
      *
      * @return self
      */
-    public function setProviderRoleRole( ?RoleProvider $providerRoleRole )
+    public function setProviderRoleRole( RoleProvider $providerRoleRole )
     {
         $this->providerRoleRole = $providerRoleRole;
 
@@ -30,7 +30,7 @@ trait RoleProviderAwareTrait
 
     public function getProviderRoleRole(): ?RoleProvider
     {
-        if (!$this->providerRoleRole){
+        if (empty($this->providerRoleRole)){
             $this->providerRoleRole = \Application::$container->get(RoleProvider::class);
         }
 

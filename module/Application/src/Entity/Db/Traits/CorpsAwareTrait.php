@@ -11,16 +11,16 @@ use Application\Entity\Db\Corps;
  */
 trait CorpsAwareTrait
 {
-    protected ?Corps $corps;
+    protected ?Corps $corps = null;
 
 
 
     /**
-     * @param Corps|null $corps
+     * @param Corps $corps
      *
      * @return self
      */
-    public function setCorps( ?Corps $corps )
+    public function setCorps( Corps $corps )
     {
         $this->corps = $corps;
 

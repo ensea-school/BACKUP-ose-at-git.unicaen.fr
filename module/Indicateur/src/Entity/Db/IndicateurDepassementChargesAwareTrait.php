@@ -10,16 +10,16 @@ namespace Indicateur\Entity\Db;
  */
 trait IndicateurDepassementChargesAwareTrait
 {
-    protected ?IndicateurDepassementCharges $indicateurDepassementCharges;
+    protected ?IndicateurDepassementCharges $indicateurDepassementCharges = null;
 
 
 
     /**
-     * @param IndicateurDepassementCharges|null $indicateurDepassementCharges
+     * @param IndicateurDepassementCharges $indicateurDepassementCharges
      *
      * @return self
      */
-    public function setIndicateurDepassementCharges( ?IndicateurDepassementCharges $indicateurDepassementCharges )
+    public function setIndicateurDepassementCharges( IndicateurDepassementCharges $indicateurDepassementCharges )
     {
         $this->indicateurDepassementCharges = $indicateurDepassementCharges;
 

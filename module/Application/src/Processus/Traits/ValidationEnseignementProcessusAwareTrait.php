@@ -11,16 +11,16 @@ use Application\Processus\ValidationEnseignementProcessus;
  */
 trait ValidationEnseignementProcessusAwareTrait
 {
-    protected ?ValidationEnseignementProcessus $processusValidationEnseignement;
+    protected ?ValidationEnseignementProcessus $processusValidationEnseignement = null;
 
 
 
     /**
-     * @param ValidationEnseignementProcessus|null $processusValidationEnseignement
+     * @param ValidationEnseignementProcessus $processusValidationEnseignement
      *
      * @return self
      */
-    public function setProcessusValidationEnseignement( ?ValidationEnseignementProcessus $processusValidationEnseignement )
+    public function setProcessusValidationEnseignement( ValidationEnseignementProcessus $processusValidationEnseignement )
     {
         $this->processusValidationEnseignement = $processusValidationEnseignement;
 
@@ -31,7 +31,7 @@ trait ValidationEnseignementProcessusAwareTrait
 
     public function getProcessusValidationEnseignement(): ?ValidationEnseignementProcessus
     {
-        if (!$this->processusValidationEnseignement){
+        if (empty($this->processusValidationEnseignement)){
             $this->processusValidationEnseignement = \Application::$container->get(ValidationEnseignementProcessus::class);
         }
 

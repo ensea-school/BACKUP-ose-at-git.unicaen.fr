@@ -11,16 +11,16 @@ use Application\Service\VolumeHoraireReferentielService;
  */
 trait VolumeHoraireReferentielServiceAwareTrait
 {
-    protected ?VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel;
+    protected ?VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel = null;
 
 
 
     /**
-     * @param VolumeHoraireReferentielService|null $serviceVolumeHoraireReferentiel
+     * @param VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel
      *
      * @return self
      */
-    public function setServiceVolumeHoraireReferentiel( ?VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel )
+    public function setServiceVolumeHoraireReferentiel( VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel )
     {
         $this->serviceVolumeHoraireReferentiel = $serviceVolumeHoraireReferentiel;
 
@@ -31,7 +31,7 @@ trait VolumeHoraireReferentielServiceAwareTrait
 
     public function getServiceVolumeHoraireReferentiel(): ?VolumeHoraireReferentielService
     {
-        if (!$this->serviceVolumeHoraireReferentiel){
+        if (empty($this->serviceVolumeHoraireReferentiel)){
             $this->serviceVolumeHoraireReferentiel = \Application::$container->get(VolumeHoraireReferentielService::class);
         }
 

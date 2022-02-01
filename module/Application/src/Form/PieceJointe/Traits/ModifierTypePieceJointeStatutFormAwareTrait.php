@@ -11,16 +11,16 @@ use Application\Form\PieceJointe\ModifierTypePieceJointeStatutForm;
  */
 trait ModifierTypePieceJointeStatutFormAwareTrait
 {
-    protected ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut;
+    protected ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut = null;
 
 
 
     /**
-     * @param ModifierTypePieceJointeStatutForm|null $formPieceJointeModifierTypePieceJointeStatut
+     * @param ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut
      *
      * @return self
      */
-    public function setFormPieceJointeModifierTypePieceJointeStatut( ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut )
+    public function setFormPieceJointeModifierTypePieceJointeStatut( ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut )
     {
         $this->formPieceJointeModifierTypePieceJointeStatut = $formPieceJointeModifierTypePieceJointeStatut;
 
@@ -31,7 +31,7 @@ trait ModifierTypePieceJointeStatutFormAwareTrait
 
     public function getFormPieceJointeModifierTypePieceJointeStatut(): ?ModifierTypePieceJointeStatutForm
     {
-        if (!$this->formPieceJointeModifierTypePieceJointeStatut){
+        if (empty($this->formPieceJointeModifierTypePieceJointeStatut)){
             $this->formPieceJointeModifierTypePieceJointeStatut = \Application::$container->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);
         }
 

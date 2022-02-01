@@ -11,16 +11,16 @@ use Application\Entity\Db\ElementModulateur;
  */
 trait ElementModulateurAwareTrait
 {
-    protected ?ElementModulateur $elementModulateur;
+    protected ?ElementModulateur $elementModulateur = null;
 
 
 
     /**
-     * @param ElementModulateur|null $elementModulateur
+     * @param ElementModulateur $elementModulateur
      *
      * @return self
      */
-    public function setElementModulateur( ?ElementModulateur $elementModulateur )
+    public function setElementModulateur( ElementModulateur $elementModulateur )
     {
         $this->elementModulateur = $elementModulateur;
 

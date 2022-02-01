@@ -11,16 +11,16 @@ use Application\Entity\Db\Dotation;
  */
 trait DotationAwareTrait
 {
-    protected ?Dotation $dotation;
+    protected ?Dotation $dotation = null;
 
 
 
     /**
-     * @param Dotation|null $dotation
+     * @param Dotation $dotation
      *
      * @return self
      */
-    public function setDotation( ?Dotation $dotation )
+    public function setDotation( Dotation $dotation )
     {
         $this->dotation = $dotation;
 

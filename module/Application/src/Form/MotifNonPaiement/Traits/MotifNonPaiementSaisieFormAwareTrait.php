@@ -11,16 +11,16 @@ use Application\Form\MotifNonPaiement\MotifNonPaiementSaisieForm;
  */
 trait MotifNonPaiementSaisieFormAwareTrait
 {
-    protected ?MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie;
+    protected ?MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie = null;
 
 
 
     /**
-     * @param MotifNonPaiementSaisieForm|null $formMotifNonPaiementMotifNonPaiementSaisie
+     * @param MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie
      *
      * @return self
      */
-    public function setFormMotifNonPaiementMotifNonPaiementSaisie( ?MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie )
+    public function setFormMotifNonPaiementMotifNonPaiementSaisie( MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie )
     {
         $this->formMotifNonPaiementMotifNonPaiementSaisie = $formMotifNonPaiementMotifNonPaiementSaisie;
 
@@ -31,7 +31,7 @@ trait MotifNonPaiementSaisieFormAwareTrait
 
     public function getFormMotifNonPaiementMotifNonPaiementSaisie(): ?MotifNonPaiementSaisieForm
     {
-        if (!$this->formMotifNonPaiementMotifNonPaiementSaisie){
+        if (empty($this->formMotifNonPaiementMotifNonPaiementSaisie)){
             $this->formMotifNonPaiementMotifNonPaiementSaisie = \Application::$container->get('FormElementManager')->get(MotifNonPaiementSaisieForm::class);
         }
 

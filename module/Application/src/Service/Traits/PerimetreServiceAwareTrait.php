@@ -11,16 +11,16 @@ use Application\Service\PerimetreService;
  */
 trait PerimetreServiceAwareTrait
 {
-    protected ?PerimetreService $servicePerimetre;
+    protected ?PerimetreService $servicePerimetre = null;
 
 
 
     /**
-     * @param PerimetreService|null $servicePerimetre
+     * @param PerimetreService $servicePerimetre
      *
      * @return self
      */
-    public function setServicePerimetre( ?PerimetreService $servicePerimetre )
+    public function setServicePerimetre( PerimetreService $servicePerimetre )
     {
         $this->servicePerimetre = $servicePerimetre;
 
@@ -31,7 +31,7 @@ trait PerimetreServiceAwareTrait
 
     public function getServicePerimetre(): ?PerimetreService
     {
-        if (!$this->servicePerimetre){
+        if (empty($this->servicePerimetre)){
             $this->servicePerimetre = \Application::$container->get(PerimetreService::class);
         }
 

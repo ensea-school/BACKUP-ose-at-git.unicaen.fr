@@ -11,16 +11,16 @@ use Application\Service\LocalContextService;
  */
 trait LocalContextServiceAwareTrait
 {
-    protected ?LocalContextService $serviceLocalContext;
+    protected ?LocalContextService $serviceLocalContext = null;
 
 
 
     /**
-     * @param LocalContextService|null $serviceLocalContext
+     * @param LocalContextService $serviceLocalContext
      *
      * @return self
      */
-    public function setServiceLocalContext( ?LocalContextService $serviceLocalContext )
+    public function setServiceLocalContext( LocalContextService $serviceLocalContext )
     {
         $this->serviceLocalContext = $serviceLocalContext;
 
@@ -31,7 +31,7 @@ trait LocalContextServiceAwareTrait
 
     public function getServiceLocalContext(): ?LocalContextService
     {
-        if (!$this->serviceLocalContext){
+        if (empty($this->serviceLocalContext)){
             $this->serviceLocalContext = \Application::$container->get(LocalContextService::class);
         }
 

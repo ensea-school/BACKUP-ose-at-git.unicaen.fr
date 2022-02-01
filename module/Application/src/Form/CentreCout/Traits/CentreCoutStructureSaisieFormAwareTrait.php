@@ -11,16 +11,16 @@ use Application\Form\CentreCout\CentreCoutStructureSaisieForm;
  */
 trait CentreCoutStructureSaisieFormAwareTrait
 {
-    protected ?CentreCoutStructureSaisieForm $formCentreCoutCentreCoutStructureSaisie;
+    protected ?CentreCoutStructureSaisieForm $formCentreCoutCentreCoutStructureSaisie = null;
 
 
 
     /**
-     * @param CentreCoutStructureSaisieForm|null $formCentreCoutCentreCoutStructureSaisie
+     * @param CentreCoutStructureSaisieForm $formCentreCoutCentreCoutStructureSaisie
      *
      * @return self
      */
-    public function setFormCentreCoutCentreCoutStructureSaisie( ?CentreCoutStructureSaisieForm $formCentreCoutCentreCoutStructureSaisie )
+    public function setFormCentreCoutCentreCoutStructureSaisie( CentreCoutStructureSaisieForm $formCentreCoutCentreCoutStructureSaisie )
     {
         $this->formCentreCoutCentreCoutStructureSaisie = $formCentreCoutCentreCoutStructureSaisie;
 
@@ -31,7 +31,7 @@ trait CentreCoutStructureSaisieFormAwareTrait
 
     public function getFormCentreCoutCentreCoutStructureSaisie(): ?CentreCoutStructureSaisieForm
     {
-        if (!$this->formCentreCoutCentreCoutStructureSaisie){
+        if (empty($this->formCentreCoutCentreCoutStructureSaisie)){
             $this->formCentreCoutCentreCoutStructureSaisie = \Application::$container->get('FormElementManager')->get(CentreCoutStructureSaisieForm::class);
         }
 

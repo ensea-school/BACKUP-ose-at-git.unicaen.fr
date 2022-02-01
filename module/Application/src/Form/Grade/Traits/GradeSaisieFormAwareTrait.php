@@ -11,16 +11,16 @@ use Application\Form\Grade\GradeSaisieForm;
  */
 trait GradeSaisieFormAwareTrait
 {
-    protected ?GradeSaisieForm $formGradeGradeSaisie;
+    protected ?GradeSaisieForm $formGradeGradeSaisie = null;
 
 
 
     /**
-     * @param GradeSaisieForm|null $formGradeGradeSaisie
+     * @param GradeSaisieForm $formGradeGradeSaisie
      *
      * @return self
      */
-    public function setFormGradeGradeSaisie( ?GradeSaisieForm $formGradeGradeSaisie )
+    public function setFormGradeGradeSaisie( GradeSaisieForm $formGradeGradeSaisie )
     {
         $this->formGradeGradeSaisie = $formGradeGradeSaisie;
 
@@ -31,7 +31,7 @@ trait GradeSaisieFormAwareTrait
 
     public function getFormGradeGradeSaisie(): ?GradeSaisieForm
     {
-        if (!$this->formGradeGradeSaisie){
+        if (empty($this->formGradeGradeSaisie)){
             $this->formGradeGradeSaisie = \Application::$container->get('FormElementManager')->get(GradeSaisieForm::class);
         }
 

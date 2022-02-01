@@ -10,16 +10,16 @@ namespace Indicateur\Entity\Db;
  */
 trait NotificationIndicateurAwareTrait
 {
-    protected ?NotificationIndicateur $notificationIndicateur;
+    protected ?NotificationIndicateur $notificationIndicateur = null;
 
 
 
     /**
-     * @param NotificationIndicateur|null $notificationIndicateur
+     * @param NotificationIndicateur $notificationIndicateur
      *
      * @return self
      */
-    public function setNotificationIndicateur( ?NotificationIndicateur $notificationIndicateur )
+    public function setNotificationIndicateur( NotificationIndicateur $notificationIndicateur )
     {
         $this->notificationIndicateur = $notificationIndicateur;
 

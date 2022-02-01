@@ -11,16 +11,16 @@ use Application\Service\TypeHeuresService;
  */
 trait TypeHeuresServiceAwareTrait
 {
-    protected ?TypeHeuresService $serviceTypeHeures;
+    protected ?TypeHeuresService $serviceTypeHeures = null;
 
 
 
     /**
-     * @param TypeHeuresService|null $serviceTypeHeures
+     * @param TypeHeuresService $serviceTypeHeures
      *
      * @return self
      */
-    public function setServiceTypeHeures( ?TypeHeuresService $serviceTypeHeures )
+    public function setServiceTypeHeures( TypeHeuresService $serviceTypeHeures )
     {
         $this->serviceTypeHeures = $serviceTypeHeures;
 
@@ -31,7 +31,7 @@ trait TypeHeuresServiceAwareTrait
 
     public function getServiceTypeHeures(): ?TypeHeuresService
     {
-        if (!$this->serviceTypeHeures){
+        if (empty($this->serviceTypeHeures)){
             $this->serviceTypeHeures = \Application::$container->get(TypeHeuresService::class);
         }
 

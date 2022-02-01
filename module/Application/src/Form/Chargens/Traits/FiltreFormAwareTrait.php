@@ -11,16 +11,16 @@ use Application\Form\Chargens\FiltreForm;
  */
 trait FiltreFormAwareTrait
 {
-    protected ?FiltreForm $formChargensFiltre;
+    protected ?FiltreForm $formChargensFiltre = null;
 
 
 
     /**
-     * @param FiltreForm|null $formChargensFiltre
+     * @param FiltreForm $formChargensFiltre
      *
      * @return self
      */
-    public function setFormChargensFiltre( ?FiltreForm $formChargensFiltre )
+    public function setFormChargensFiltre( FiltreForm $formChargensFiltre )
     {
         $this->formChargensFiltre = $formChargensFiltre;
 
@@ -31,7 +31,7 @@ trait FiltreFormAwareTrait
 
     public function getFormChargensFiltre(): ?FiltreForm
     {
-        if (!$this->formChargensFiltre){
+        if (empty($this->formChargensFiltre)){
             $this->formChargensFiltre = \Application::$container->get('FormElementManager')->get(FiltreForm::class);
         }
 

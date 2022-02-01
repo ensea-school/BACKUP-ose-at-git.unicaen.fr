@@ -11,16 +11,16 @@ use Application\Service\PeriodeService;
  */
 trait PeriodeServiceAwareTrait
 {
-    protected ?PeriodeService $servicePeriode;
+    protected ?PeriodeService $servicePeriode = null;
 
 
 
     /**
-     * @param PeriodeService|null $servicePeriode
+     * @param PeriodeService $servicePeriode
      *
      * @return self
      */
-    public function setServicePeriode( ?PeriodeService $servicePeriode )
+    public function setServicePeriode( PeriodeService $servicePeriode )
     {
         $this->servicePeriode = $servicePeriode;
 
@@ -31,7 +31,7 @@ trait PeriodeServiceAwareTrait
 
     public function getServicePeriode(): ?PeriodeService
     {
-        if (!$this->servicePeriode){
+        if (empty($this->servicePeriode)){
             $this->servicePeriode = \Application::$container->get(PeriodeService::class);
         }
 

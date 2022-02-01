@@ -16,11 +16,11 @@ trait AnneeServiceAwareTrait
 
 
     /**
-     * @param AnneeService|null $serviceAnnee
+     * @param AnneeService $serviceAnnee
      *
      * @return self
      */
-    public function setServiceAnnee(?AnneeService $serviceAnnee)
+    public function setServiceAnnee( AnneeService $serviceAnnee )
     {
         $this->serviceAnnee = $serviceAnnee;
 
@@ -31,7 +31,7 @@ trait AnneeServiceAwareTrait
 
     public function getServiceAnnee(): ?AnneeService
     {
-        if (!$this->serviceAnnee) {
+        if (empty($this->serviceAnnee)){
             $this->serviceAnnee = \Application::$container->get(AnneeService::class);
         }
 

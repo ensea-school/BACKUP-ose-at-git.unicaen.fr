@@ -11,16 +11,16 @@ use Application\Service\NiveauFormationService;
  */
 trait NiveauFormationServiceAwareTrait
 {
-    protected ?NiveauFormationService $serviceNiveauFormation;
+    protected ?NiveauFormationService $serviceNiveauFormation = null;
 
 
 
     /**
-     * @param NiveauFormationService|null $serviceNiveauFormation
+     * @param NiveauFormationService $serviceNiveauFormation
      *
      * @return self
      */
-    public function setServiceNiveauFormation( ?NiveauFormationService $serviceNiveauFormation )
+    public function setServiceNiveauFormation( NiveauFormationService $serviceNiveauFormation )
     {
         $this->serviceNiveauFormation = $serviceNiveauFormation;
 
@@ -31,8 +31,8 @@ trait NiveauFormationServiceAwareTrait
 
     public function getServiceNiveauFormation(): ?NiveauFormationService
     {
-        if (!$this->serviceNiveauFormation){
-            $this->serviceNiveauFormation = \Application::$container->get('FormElementManager')->get(NiveauFormationService::class);
+        if (empty($this->serviceNiveauFormation)){
+            $this->serviceNiveauFormation = \Application::$container->get(NiveauFormationService::class);
         }
 
         return $this->serviceNiveauFormation;

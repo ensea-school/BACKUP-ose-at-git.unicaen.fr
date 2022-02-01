@@ -11,16 +11,16 @@ use Application\Entity\Db\Affectation;
  */
 trait AffectationAwareTrait
 {
-    protected ?Affectation $affectation;
+    protected ?Affectation $affectation = null;
 
 
 
     /**
-     * @param Affectation|null $affectation
+     * @param Affectation $affectation
      *
      * @return self
      */
-    public function setAffectation( ?Affectation $affectation )
+    public function setAffectation( Affectation $affectation )
     {
         $this->affectation = $affectation;
 

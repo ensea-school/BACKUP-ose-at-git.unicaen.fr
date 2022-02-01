@@ -11,16 +11,16 @@ use Application\Form\ParametresForm;
  */
 trait ParametresFormAwareTrait
 {
-    protected ?ParametresForm $formParametres;
+    protected ?ParametresForm $formParametres = null;
 
 
 
     /**
-     * @param ParametresForm|null $formParametres
+     * @param ParametresForm $formParametres
      *
      * @return self
      */
-    public function setFormParametres( ?ParametresForm $formParametres )
+    public function setFormParametres( ParametresForm $formParametres )
     {
         $this->formParametres = $formParametres;
 
@@ -31,7 +31,7 @@ trait ParametresFormAwareTrait
 
     public function getFormParametres(): ?ParametresForm
     {
-        if (!$this->formParametres){
+        if (empty($this->formParametres)){
             $this->formParametres = \Application::$container->get('FormElementManager')->get(ParametresForm::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Service\ElementModulateurService;
  */
 trait ElementModulateurServiceAwareTrait
 {
-    protected ?ElementModulateurService $serviceElementModulateur;
+    protected ?ElementModulateurService $serviceElementModulateur = null;
 
 
 
     /**
-     * @param ElementModulateurService|null $serviceElementModulateur
+     * @param ElementModulateurService $serviceElementModulateur
      *
      * @return self
      */
-    public function setServiceElementModulateur( ?ElementModulateurService $serviceElementModulateur )
+    public function setServiceElementModulateur( ElementModulateurService $serviceElementModulateur )
     {
         $this->serviceElementModulateur = $serviceElementModulateur;
 
@@ -31,7 +31,7 @@ trait ElementModulateurServiceAwareTrait
 
     public function getServiceElementModulateur(): ?ElementModulateurService
     {
-        if (!$this->serviceElementModulateur){
+        if (empty($this->serviceElementModulateur)){
             $this->serviceElementModulateur = \Application::$container->get(ElementModulateurService::class);
         }
 

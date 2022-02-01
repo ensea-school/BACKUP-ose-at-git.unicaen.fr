@@ -11,16 +11,16 @@ use Application\Form\TypeRessource\TypeRessourceSaisieForm;
  */
 trait TypeRessourceSaisieFormAwareTrait
 {
-    protected ?TypeRessourceSaisieForm $formTypeRessourceTypeRessourceSaisie;
+    protected ?TypeRessourceSaisieForm $formTypeRessourceTypeRessourceSaisie = null;
 
 
 
     /**
-     * @param TypeRessourceSaisieForm|null $formTypeRessourceTypeRessourceSaisie
+     * @param TypeRessourceSaisieForm $formTypeRessourceTypeRessourceSaisie
      *
      * @return self
      */
-    public function setFormTypeRessourceTypeRessourceSaisie( ?TypeRessourceSaisieForm $formTypeRessourceTypeRessourceSaisie )
+    public function setFormTypeRessourceTypeRessourceSaisie( TypeRessourceSaisieForm $formTypeRessourceTypeRessourceSaisie )
     {
         $this->formTypeRessourceTypeRessourceSaisie = $formTypeRessourceTypeRessourceSaisie;
 
@@ -31,7 +31,7 @@ trait TypeRessourceSaisieFormAwareTrait
 
     public function getFormTypeRessourceTypeRessourceSaisie(): ?TypeRessourceSaisieForm
     {
-        if (!$this->formTypeRessourceTypeRessourceSaisie){
+        if (empty($this->formTypeRessourceTypeRessourceSaisie)){
             $this->formTypeRessourceTypeRessourceSaisie = \Application::$container->get('FormElementManager')->get(TypeRessourceSaisieForm::class);
         }
 

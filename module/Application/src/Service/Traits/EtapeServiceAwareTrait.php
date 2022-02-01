@@ -11,16 +11,16 @@ use Application\Service\EtapeService;
  */
 trait EtapeServiceAwareTrait
 {
-    protected ?EtapeService $serviceEtape;
+    protected ?EtapeService $serviceEtape = null;
 
 
 
     /**
-     * @param EtapeService|null $serviceEtape
+     * @param EtapeService $serviceEtape
      *
      * @return self
      */
-    public function setServiceEtape( ?EtapeService $serviceEtape )
+    public function setServiceEtape( EtapeService $serviceEtape )
     {
         $this->serviceEtape = $serviceEtape;
 
@@ -31,7 +31,7 @@ trait EtapeServiceAwareTrait
 
     public function getServiceEtape(): ?EtapeService
     {
-        if (!$this->serviceEtape){
+        if (empty($this->serviceEtape)){
             $this->serviceEtape = \Application::$container->get(EtapeService::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Entity\Db\Utilisateur;
  */
 trait UtilisateurAwareTrait
 {
-    protected ?Utilisateur $utilisateur;
+    protected ?Utilisateur $utilisateur = null;
 
 
 
     /**
-     * @param Utilisateur|null $utilisateur
+     * @param Utilisateur $utilisateur
      *
      * @return self
      */
-    public function setUtilisateur( ?Utilisateur $utilisateur )
+    public function setUtilisateur( Utilisateur $utilisateur )
     {
         $this->utilisateur = $utilisateur;
 

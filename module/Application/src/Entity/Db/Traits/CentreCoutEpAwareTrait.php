@@ -11,16 +11,16 @@ use Application\Entity\Db\CentreCoutEp;
  */
 trait CentreCoutEpAwareTrait
 {
-    protected ?CentreCoutEp $centreCoutEp;
+    protected ?CentreCoutEp $centreCoutEp = null;
 
 
 
     /**
-     * @param CentreCoutEp|null $centreCoutEp
+     * @param CentreCoutEp $centreCoutEp
      *
      * @return self
      */
-    public function setCentreCoutEp( ?CentreCoutEp $centreCoutEp )
+    public function setCentreCoutEp( CentreCoutEp $centreCoutEp )
     {
         $this->centreCoutEp = $centreCoutEp;
 

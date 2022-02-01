@@ -11,16 +11,16 @@ use Application\Form\DomaineFonctionnel\DomaineFonctionnelSaisieForm;
  */
 trait DomaineFonctionnelSaisieFormAwareTrait
 {
-    protected ?DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie;
+    protected ?DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie = null;
 
 
 
     /**
-     * @param DomaineFonctionnelSaisieForm|null $formDomaineFonctionnelDomaineFonctionnelSaisie
+     * @param DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie
      *
      * @return self
      */
-    public function setFormDomaineFonctionnelDomaineFonctionnelSaisie( ?DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie )
+    public function setFormDomaineFonctionnelDomaineFonctionnelSaisie( DomaineFonctionnelSaisieForm $formDomaineFonctionnelDomaineFonctionnelSaisie )
     {
         $this->formDomaineFonctionnelDomaineFonctionnelSaisie = $formDomaineFonctionnelDomaineFonctionnelSaisie;
 
@@ -31,7 +31,7 @@ trait DomaineFonctionnelSaisieFormAwareTrait
 
     public function getFormDomaineFonctionnelDomaineFonctionnelSaisie(): ?DomaineFonctionnelSaisieForm
     {
-        if (!$this->formDomaineFonctionnelDomaineFonctionnelSaisie){
+        if (empty($this->formDomaineFonctionnelDomaineFonctionnelSaisie)){
             $this->formDomaineFonctionnelDomaineFonctionnelSaisie = \Application::$container->get('FormElementManager')->get(DomaineFonctionnelSaisieForm::class);
         }
 

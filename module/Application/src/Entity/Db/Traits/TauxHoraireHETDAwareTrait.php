@@ -11,16 +11,16 @@ use Application\Entity\Db\TauxHoraireHETD;
  */
 trait TauxHoraireHETDAwareTrait
 {
-    protected ?TauxHoraireHETD $tauxHoraireHETD;
+    protected ?TauxHoraireHETD $tauxHoraireHETD = null;
 
 
 
     /**
-     * @param TauxHoraireHETD|null $tauxHoraireHETD
+     * @param TauxHoraireHETD $tauxHoraireHETD
      *
      * @return self
      */
-    public function setTauxHoraireHETD( ?TauxHoraireHETD $tauxHoraireHETD )
+    public function setTauxHoraireHETD( TauxHoraireHETD $tauxHoraireHETD )
     {
         $this->tauxHoraireHETD = $tauxHoraireHETD;
 

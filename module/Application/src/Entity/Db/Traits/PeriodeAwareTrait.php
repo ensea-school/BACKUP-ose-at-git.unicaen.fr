@@ -11,16 +11,16 @@ use Application\Entity\Db\Periode;
  */
 trait PeriodeAwareTrait
 {
-    protected ?Periode $periode;
+    protected ?Periode $periode = null;
 
 
 
     /**
-     * @param Periode|null $periode
+     * @param Periode $periode
      *
      * @return self
      */
-    public function setPeriode( ?Periode $periode )
+    public function setPeriode( Periode $periode )
     {
         $this->periode = $periode;
 

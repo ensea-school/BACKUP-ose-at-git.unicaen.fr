@@ -11,16 +11,16 @@ use Application\Service\GroupeTypeFormationService;
  */
 trait GroupeTypeFormationServiceAwareTrait
 {
-    protected ?GroupeTypeFormationService $serviceGroupeTypeFormation;
+    protected ?GroupeTypeFormationService $serviceGroupeTypeFormation = null;
 
 
 
     /**
-     * @param GroupeTypeFormationService|null $serviceGroupeTypeFormation
+     * @param GroupeTypeFormationService $serviceGroupeTypeFormation
      *
      * @return self
      */
-    public function setServiceGroupeTypeFormation( ?GroupeTypeFormationService $serviceGroupeTypeFormation )
+    public function setServiceGroupeTypeFormation( GroupeTypeFormationService $serviceGroupeTypeFormation )
     {
         $this->serviceGroupeTypeFormation = $serviceGroupeTypeFormation;
 
@@ -31,8 +31,8 @@ trait GroupeTypeFormationServiceAwareTrait
 
     public function getServiceGroupeTypeFormation(): ?GroupeTypeFormationService
     {
-        if (!$this->serviceGroupeTypeFormation){
-            $this->serviceGroupeTypeFormation = \Application::$container->get('FormElementManager')->get(GroupeTypeFormationService::class);
+        if (empty($this->serviceGroupeTypeFormation)){
+            $this->serviceGroupeTypeFormation = \Application::$container->get(GroupeTypeFormationService::class);
         }
 
         return $this->serviceGroupeTypeFormation;

@@ -11,16 +11,16 @@ use Application\Form\Chargens\ScenarioForm;
  */
 trait ScenarioFormAwareTrait
 {
-    protected ?ScenarioForm $formChargensScenario;
+    protected ?ScenarioForm $formChargensScenario = null;
 
 
 
     /**
-     * @param ScenarioForm|null $formChargensScenario
+     * @param ScenarioForm $formChargensScenario
      *
      * @return self
      */
-    public function setFormChargensScenario( ?ScenarioForm $formChargensScenario )
+    public function setFormChargensScenario( ScenarioForm $formChargensScenario )
     {
         $this->formChargensScenario = $formChargensScenario;
 
@@ -31,7 +31,7 @@ trait ScenarioFormAwareTrait
 
     public function getFormChargensScenario(): ?ScenarioForm
     {
-        if (!$this->formChargensScenario){
+        if (empty($this->formChargensScenario)){
             $this->formChargensScenario = \Application::$container->get('FormElementManager')->get(ScenarioForm::class);
         }
 

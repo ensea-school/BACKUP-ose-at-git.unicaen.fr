@@ -11,31 +11,25 @@ use Application\Entity\Db\Service;
  */
 trait ServiceAwareTrait
 {
-    /**
-     * @var Service
-     */
-    private $service;
-
-
+    protected ?Service $service = null;
 
 
 
     /**
      * @param Service $service
+     *
      * @return self
      */
-    public function setService( Service $service = null )
+    public function setService( Service $service )
     {
         $this->service = $service;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Service
-     */
-    public function getService()
+    public function getService(): ?Service
     {
         return $this->service;
     }

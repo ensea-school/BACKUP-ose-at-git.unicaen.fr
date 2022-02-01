@@ -11,16 +11,16 @@ use Application\Entity\Db\Etablissement;
  */
 trait EtablissementAwareTrait
 {
-    protected ?Etablissement $etablissement;
+    protected ?Etablissement $etablissement = null;
 
 
 
     /**
-     * @param Etablissement|null $etablissement
+     * @param Etablissement $etablissement
      *
      * @return self
      */
-    public function setEtablissement( ?Etablissement $etablissement )
+    public function setEtablissement( Etablissement $etablissement )
     {
         $this->etablissement = $etablissement;
 

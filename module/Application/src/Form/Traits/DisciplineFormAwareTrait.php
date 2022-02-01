@@ -11,16 +11,16 @@ use Application\Form\DisciplineForm;
  */
 trait DisciplineFormAwareTrait
 {
-    protected ?DisciplineForm $formDiscipline;
+    protected ?DisciplineForm $formDiscipline = null;
 
 
 
     /**
-     * @param DisciplineForm|null $formDiscipline
+     * @param DisciplineForm $formDiscipline
      *
      * @return self
      */
-    public function setFormDiscipline( ?DisciplineForm $formDiscipline )
+    public function setFormDiscipline( DisciplineForm $formDiscipline )
     {
         $this->formDiscipline = $formDiscipline;
 
@@ -31,7 +31,7 @@ trait DisciplineFormAwareTrait
 
     public function getFormDiscipline(): ?DisciplineForm
     {
-        if (!$this->formDiscipline){
+        if (empty($this->formDiscipline)){
             $this->formDiscipline = \Application::$container->get('FormElementManager')->get(DisciplineForm::class);
         }
 

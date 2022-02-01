@@ -11,16 +11,16 @@ use Application\Form\Intervenant\ModificationServiceDuForm;
  */
 trait ModificationServiceDuFormAwareTrait
 {
-    protected ?ModificationServiceDuForm $formIntervenantModificationServiceDu;
+    protected ?ModificationServiceDuForm $formIntervenantModificationServiceDu = null;
 
 
 
     /**
-     * @param ModificationServiceDuForm|null $formIntervenantModificationServiceDu
+     * @param ModificationServiceDuForm $formIntervenantModificationServiceDu
      *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDu( ?ModificationServiceDuForm $formIntervenantModificationServiceDu )
+    public function setFormIntervenantModificationServiceDu( ModificationServiceDuForm $formIntervenantModificationServiceDu )
     {
         $this->formIntervenantModificationServiceDu = $formIntervenantModificationServiceDu;
 
@@ -31,7 +31,7 @@ trait ModificationServiceDuFormAwareTrait
 
     public function getFormIntervenantModificationServiceDu(): ?ModificationServiceDuForm
     {
-        if (!$this->formIntervenantModificationServiceDu){
+        if (empty($this->formIntervenantModificationServiceDu)){
             $this->formIntervenantModificationServiceDu = \Application::$container->get('FormElementManager')->get(ModificationServiceDuForm::class);
         }
 

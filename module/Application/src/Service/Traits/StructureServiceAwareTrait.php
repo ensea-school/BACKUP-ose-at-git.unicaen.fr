@@ -11,16 +11,16 @@ use Application\Service\StructureService;
  */
 trait StructureServiceAwareTrait
 {
-    protected ?StructureService $serviceStructure;
+    protected ?StructureService $serviceStructure = null;
 
 
 
     /**
-     * @param StructureService|null $serviceStructure
+     * @param StructureService $serviceStructure
      *
      * @return self
      */
-    public function setServiceStructure( ?StructureService $serviceStructure )
+    public function setServiceStructure( StructureService $serviceStructure )
     {
         $this->serviceStructure = $serviceStructure;
 
@@ -31,7 +31,7 @@ trait StructureServiceAwareTrait
 
     public function getServiceStructure(): ?StructureService
     {
-        if (!$this->serviceStructure){
+        if (empty($this->serviceStructure)){
             $this->serviceStructure = \Application::$container->get(StructureService::class);
         }
 

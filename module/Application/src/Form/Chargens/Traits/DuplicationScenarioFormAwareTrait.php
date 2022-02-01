@@ -11,16 +11,16 @@ use Application\Form\Chargens\DuplicationScenarioForm;
  */
 trait DuplicationScenarioFormAwareTrait
 {
-    protected ?DuplicationScenarioForm $formChargensDuplicationScenario;
+    protected ?DuplicationScenarioForm $formChargensDuplicationScenario = null;
 
 
 
     /**
-     * @param DuplicationScenarioForm|null $formChargensDuplicationScenario
+     * @param DuplicationScenarioForm $formChargensDuplicationScenario
      *
      * @return self
      */
-    public function setFormChargensDuplicationScenario( ?DuplicationScenarioForm $formChargensDuplicationScenario )
+    public function setFormChargensDuplicationScenario( DuplicationScenarioForm $formChargensDuplicationScenario )
     {
         $this->formChargensDuplicationScenario = $formChargensDuplicationScenario;
 
@@ -31,7 +31,7 @@ trait DuplicationScenarioFormAwareTrait
 
     public function getFormChargensDuplicationScenario(): ?DuplicationScenarioForm
     {
-        if (!$this->formChargensDuplicationScenario){
+        if (empty($this->formChargensDuplicationScenario)){
             $this->formChargensDuplicationScenario = \Application::$container->get('FormElementManager')->get(DuplicationScenarioForm::class);
         }
 

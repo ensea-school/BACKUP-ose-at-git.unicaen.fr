@@ -11,16 +11,16 @@ use Application\Entity\Db\TypeModulateurStructure;
  */
 trait TypeModulateurStructureAwareTrait
 {
-    protected ?TypeModulateurStructure $typeModulateurStructure;
+    protected ?TypeModulateurStructure $typeModulateurStructure = null;
 
 
 
     /**
-     * @param TypeModulateurStructure|null $typeModulateurStructure
+     * @param TypeModulateurStructure $typeModulateurStructure
      *
      * @return self
      */
-    public function setTypeModulateurStructure( ?TypeModulateurStructure $typeModulateurStructure )
+    public function setTypeModulateurStructure( TypeModulateurStructure $typeModulateurStructure )
     {
         $this->typeModulateurStructure = $typeModulateurStructure;
 

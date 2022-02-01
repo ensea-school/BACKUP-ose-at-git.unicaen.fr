@@ -11,16 +11,16 @@ use Application\Form\Structure\StructureSaisieForm;
  */
 trait StructureSaisieFormAwareTrait
 {
-    protected ?StructureSaisieForm $formStructureStructureSaisie;
+    protected ?StructureSaisieForm $formStructureStructureSaisie = null;
 
 
 
     /**
-     * @param StructureSaisieForm|null $formStructureStructureSaisie
+     * @param StructureSaisieForm $formStructureStructureSaisie
      *
      * @return self
      */
-    public function setFormStructureStructureSaisie( ?StructureSaisieForm $formStructureStructureSaisie )
+    public function setFormStructureStructureSaisie( StructureSaisieForm $formStructureStructureSaisie )
     {
         $this->formStructureStructureSaisie = $formStructureStructureSaisie;
 
@@ -31,7 +31,7 @@ trait StructureSaisieFormAwareTrait
 
     public function getFormStructureStructureSaisie(): ?StructureSaisieForm
     {
-        if (!$this->formStructureStructureSaisie){
+        if (empty($this->formStructureStructureSaisie)){
             $this->formStructureStructureSaisie = \Application::$container->get('FormElementManager')->get(StructureSaisieForm::class);
         }
 

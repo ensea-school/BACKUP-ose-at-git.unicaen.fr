@@ -11,16 +11,16 @@ use Application\Form\Service\RechercheForm;
  */
 trait RechercheFormAwareTrait
 {
-    protected ?RechercheForm $formServiceRecherche;
+    protected ?RechercheForm $formServiceRecherche = null;
 
 
 
     /**
-     * @param RechercheForm|null $formServiceRecherche
+     * @param RechercheForm $formServiceRecherche
      *
      * @return self
      */
-    public function setFormServiceRecherche( ?RechercheForm $formServiceRecherche )
+    public function setFormServiceRecherche( RechercheForm $formServiceRecherche )
     {
         $this->formServiceRecherche = $formServiceRecherche;
 
@@ -31,7 +31,7 @@ trait RechercheFormAwareTrait
 
     public function getFormServiceRecherche(): ?RechercheForm
     {
-        if (!$this->formServiceRecherche){
+        if (empty($this->formServiceRecherche)){
             $this->formServiceRecherche = \Application::$container->get('FormElementManager')->get(RechercheForm::class);
         }
 

@@ -11,16 +11,16 @@ use Application\Entity\Db\Effectifs;
  */
 trait EffectifsAwareTrait
 {
-    protected ?Effectifs $effectifs;
+    protected ?Effectifs $effectifs = null;
 
 
 
     /**
-     * @param Effectifs|null $effectifs
+     * @param Effectifs $effectifs
      *
      * @return self
      */
-    public function setEffectifs( ?Effectifs $effectifs )
+    public function setEffectifs( Effectifs $effectifs )
     {
         $this->effectifs = $effectifs;
 

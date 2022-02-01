@@ -11,16 +11,16 @@ use Application\Processus\ReconductionProcessus;
  */
 trait ReconductionProcessusAwareTrait
 {
-    protected ?ReconductionProcessus $processusReconduction;
+    protected ?ReconductionProcessus $processusReconduction = null;
 
 
 
     /**
-     * @param ReconductionProcessus|null $processusReconduction
+     * @param ReconductionProcessus $processusReconduction
      *
      * @return self
      */
-    public function setProcessusReconduction( ?ReconductionProcessus $processusReconduction )
+    public function setProcessusReconduction( ReconductionProcessus $processusReconduction )
     {
         $this->processusReconduction = $processusReconduction;
 
@@ -31,7 +31,7 @@ trait ReconductionProcessusAwareTrait
 
     public function getProcessusReconduction(): ?ReconductionProcessus
     {
-        if (!$this->processusReconduction){
+        if (empty($this->processusReconduction)){
             $this->processusReconduction = \Application::$container->get(ReconductionProcessus::class);
         }
 

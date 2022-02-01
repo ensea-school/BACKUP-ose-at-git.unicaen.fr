@@ -11,16 +11,16 @@ use Application\Processus\ServiceReferentielProcessus;
  */
 trait ServiceReferentielProcessusAwareTrait
 {
-    protected ?ServiceReferentielProcessus $processusServiceReferentiel;
+    protected ?ServiceReferentielProcessus $processusServiceReferentiel = null;
 
 
 
     /**
-     * @param ServiceReferentielProcessus|null $processusServiceReferentiel
+     * @param ServiceReferentielProcessus $processusServiceReferentiel
      *
      * @return self
      */
-    public function setProcessusServiceReferentiel( ?ServiceReferentielProcessus $processusServiceReferentiel )
+    public function setProcessusServiceReferentiel( ServiceReferentielProcessus $processusServiceReferentiel )
     {
         $this->processusServiceReferentiel = $processusServiceReferentiel;
 
@@ -31,7 +31,7 @@ trait ServiceReferentielProcessusAwareTrait
 
     public function getProcessusServiceReferentiel(): ?ServiceReferentielProcessus
     {
-        if (!$this->processusServiceReferentiel){
+        if (empty($this->processusServiceReferentiel)){
             $this->processusServiceReferentiel = \Application::$container->get(ServiceReferentielProcessus::class);
         }
 

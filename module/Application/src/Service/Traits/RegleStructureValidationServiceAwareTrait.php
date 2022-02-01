@@ -11,16 +11,16 @@ use Application\Service\RegleStructureValidationService;
  */
 trait RegleStructureValidationServiceAwareTrait
 {
-    protected ?RegleStructureValidationService $serviceRegleStructureValidation;
+    protected ?RegleStructureValidationService $serviceRegleStructureValidation = null;
 
 
 
     /**
-     * @param RegleStructureValidationService|null $serviceRegleStructureValidation
+     * @param RegleStructureValidationService $serviceRegleStructureValidation
      *
      * @return self
      */
-    public function setServiceRegleStructureValidation( ?RegleStructureValidationService $serviceRegleStructureValidation )
+    public function setServiceRegleStructureValidation( RegleStructureValidationService $serviceRegleStructureValidation )
     {
         $this->serviceRegleStructureValidation = $serviceRegleStructureValidation;
 
@@ -31,7 +31,7 @@ trait RegleStructureValidationServiceAwareTrait
 
     public function getServiceRegleStructureValidation(): ?RegleStructureValidationService
     {
-        if (!$this->serviceRegleStructureValidation){
+        if (empty($this->serviceRegleStructureValidation)){
             $this->serviceRegleStructureValidation = \Application::$container->get(RegleStructureValidationService::class);
         }
 

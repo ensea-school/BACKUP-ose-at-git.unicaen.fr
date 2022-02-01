@@ -11,16 +11,16 @@ use Application\Form\Voirie\VoirieSaisieForm;
  */
 trait VoirieSaisieFormAwareTrait
 {
-    protected ?VoirieSaisieForm $formVoirieVoirieSaisie;
+    protected ?VoirieSaisieForm $formVoirieVoirieSaisie = null;
 
 
 
     /**
-     * @param VoirieSaisieForm|null $formVoirieVoirieSaisie
+     * @param VoirieSaisieForm $formVoirieVoirieSaisie
      *
      * @return self
      */
-    public function setFormVoirieVoirieSaisie( ?VoirieSaisieForm $formVoirieVoirieSaisie )
+    public function setFormVoirieVoirieSaisie( VoirieSaisieForm $formVoirieVoirieSaisie )
     {
         $this->formVoirieVoirieSaisie = $formVoirieVoirieSaisie;
 
@@ -31,7 +31,7 @@ trait VoirieSaisieFormAwareTrait
 
     public function getFormVoirieVoirieSaisie(): ?VoirieSaisieForm
     {
-        if (!$this->formVoirieVoirieSaisie){
+        if (empty($this->formVoirieVoirieSaisie)){
             $this->formVoirieVoirieSaisie = \Application::$container->get('FormElementManager')->get(VoirieSaisieForm::class);
         }
 

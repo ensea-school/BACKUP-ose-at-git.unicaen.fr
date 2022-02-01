@@ -11,16 +11,16 @@ use Application\Entity\Db\Etape;
  */
 trait EtapeAwareTrait
 {
-    protected ?Etape $etape;
+    protected ?Etape $etape = null;
 
 
 
     /**
-     * @param Etape|null $etape
+     * @param Etape $etape
      *
      * @return self
      */
-    public function setEtape( ?Etape $etape )
+    public function setEtape( Etape $etape )
     {
         $this->etape = $etape;
 

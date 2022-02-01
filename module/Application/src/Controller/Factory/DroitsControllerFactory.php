@@ -16,7 +16,9 @@ class DroitsControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new DroitsController();
+        $doctrineCache = $container->get('doctrine.cache.filesystem');
+
+        $controller = new DroitsController($doctrineCache);
         $controller->setServicePrivilege($container->get('UnicaenAuth\Service\Privilege'));
 
         return $controller;

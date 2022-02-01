@@ -12,11 +12,11 @@ use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Doctrine\Common\Cache\FilesystemCache;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use Application\Traits\DoctrineCacheAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use UnicaenAuth\Entity\Db\Privilege;
@@ -40,7 +40,19 @@ class DroitsController extends AbstractController
     use AffectationFormAwareTrait;
     use ContextServiceAwareTrait;
     use CacheContainerTrait;
-    use DoctrineCacheAwareTrait;
+
+    protected FilesystemCache $doctrineCache;
+
+
+
+    /**
+     * @param FilesystemCache $doctrineCache
+     */
+    public function __construct(FilesystemCache $doctrineCache)
+    {
+        $this->doctrineCache = $doctrineCache;
+    }
+
 
 
     /**
@@ -85,7 +97,7 @@ class DroitsController extends AbstractController
             if ($form->isValid()) {
                 try {
                     $this->getServiceRole()->save($role);
-                    $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+                    $this->doctrineCache->delete(RoleProvider::class . '/affectations');
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $errors[] = $this->translate($e);
@@ -105,7 +117,7 @@ class DroitsController extends AbstractController
         $title = "Suppression du rôle";
         $form  = $this->makeFormSupprimer(function () use ($role) {
             $this->getServiceRole()->delete($role);
-            $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+            $this->doctrineCache->delete(RoleProvider::class . '/affectations');
             $cc = $this->getCacheContainer(PrivilegeService::class);
             unset($cc->privilegesRoles);
         });
@@ -183,7 +195,7 @@ class DroitsController extends AbstractController
                 if ($statut) $this->statutRemovePrivilege($statut, $privilege);
             break;
         }
-        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+        $this->doctrineCache->delete(RoleProvider::class . '/affectations');
 
         return compact('role', 'statut', 'privilege');
     }
@@ -289,7 +301,7 @@ class DroitsController extends AbstractController
                 }
             }
         }
-        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+        $this->doctrineCache->delete(RoleProvider::class . '/affectations');
 
         return compact('form', 'title', 'errors');
     }
@@ -305,7 +317,7 @@ class DroitsController extends AbstractController
         $form = $this->makeFormSupprimer(function () use ($affectation) {
             $this->getServiceAffectation()->delete($affectation);
         });
-        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+        $this->doctrineCache->delete(RoleProvider::class . '/affectations');
 
         return compact('affectation', 'title', 'form');
     }

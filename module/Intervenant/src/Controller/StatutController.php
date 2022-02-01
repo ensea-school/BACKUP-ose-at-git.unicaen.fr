@@ -3,6 +3,7 @@
 namespace Intervenant\Controller;
 
 use Application\Cache\Traits\CacheContainerTrait;
+use Application\Controller\AbstractController;
 use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 use Intervenant\Form\StatutSaisieFormAwareTrait;
@@ -16,7 +17,8 @@ use Laminas\View\Model\ViewModel;
 class StatutController extends AbstractController
 {
     use StatutServiceAwareTrait;
-    use StatutSaisieFormAwareTrait;
+
+    //use StatutSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
     use DossierAutreServiceAwareTrait;

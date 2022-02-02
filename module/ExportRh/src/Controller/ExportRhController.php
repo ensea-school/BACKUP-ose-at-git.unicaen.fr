@@ -112,8 +112,9 @@ class ExportRhController extends AbstractController
         $canExport                    = false;
         $etapeFranchissementParametre = $this->getServiceParametres()->get('export_rh_franchissement');
         $etapeFranchissement          = $this->getServiceWorkflow()?->getEtape($this->getServiceWfEtape()?->get($etapeFranchissementParametre), $intervenant);
-        $etapeFranchissementLibelle   = ($etapeFranchissement->getEtape()->getCode() == WfEtape::CODE_CONTRAT) ? $etapeFranchissement->getEtape()->getLibelle($role) . ' et une date de retour signé de renseignée' : $etapeFranchissement->getEtape()->getLibelle($role);
-        if ($etapeFranchissement->getFranchie()) {
+
+        $etapeFranchissementLibelle = ($etapeFranchissement?->getEtape()->getCode() == WfEtape::CODE_CONTRAT) ? $etapeFranchissement?->getEtape()?->getLibelle($role) . ' et une date de retour signé de renseignée' : $etapeFranchissement?->getEtape()?->getLibelle($role);
+        if ($etapeFranchissement && $etapeFranchissement->getFranchie()) {
             //Si l'étape de franchissement du worklow pour la PEC est le contrat on vérifie si au moins un contrat est signé
             if ($etapeFranchissement->getEtape()->getCode() == WfEtape::CODE_CONTRAT) {
                 $contratsOse = $intervenant->getContrat();

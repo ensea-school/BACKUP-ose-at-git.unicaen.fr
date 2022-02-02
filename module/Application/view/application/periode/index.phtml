@@ -30,7 +30,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <th style="text-align: center">Libellé long</th>
         <th style="text-align: center">Enseignement</th>
         <th style="text-align: center">Paiement</th>
-        <th style="text-align: center">EcartMois</th>
+        <th style="text-align: center" title="Ecart de mois avec le début de l'année universitaire choisie">EcartMois</th>
         <th style="text-align: center">EcartMoisPaiement</th>
         <?php if ($canEdit): ?>
             <th style="text-align: center">Actions</th>
@@ -45,13 +45,13 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <td style="text-align: center"><?= $periode->getLibelleLong(); ?></td>
             <td style="text-align: center"><?= affBooleen($periode->getEnseignement()); ?></td>
             <td style="text-align: center"><?= affBooleen($periode->getPaiement()); ?></td>
-            <td style="text-align: center"><?= $periode->getEcartMois(); ?></td>
+            <td style="text-align: center" title="Écart de mois avec le début de l'année universitaire choisie"><?= $periode->getEcartMois(); ?></td>
             <td style="text-align: center"><?= $periode->getEcartMoisPaiement(); ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align: center">
                     <a class="ajax-modal" data-event="periodes-edition"
                        href="<?= $this->url('periodes/saisie', ['periode' => $periode->getId()], ['query' => ['tab' => 'edition']]) ?>"
-                       title="Modifier la periode"><span class="glyphicon glyphicon-edit"></span></a>
+                       title="Modifier la période"><span class="glyphicon glyphicon-edit"></span></a>
                     <a class="pop-ajax" data-title="Suppression de période" data-content="Etes vous sur de supprimer" data-confirm="true"
                        data-submit-reload="true"
                        href="<?= $this->url('periodes/supprimer', ['periode' => $periode->getId()]) ?>"
@@ -70,6 +70,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <?php endif; ?>
 
 <script type="text/javascript">
+
     $(function () {
         $(".triables").sortable({
             handle: '.glyphicon-move',
@@ -80,9 +81,16 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     if (champsIds != '') champsIds += ',';
                     champsIds += $(this).data('id');
                 });
-                $.post(Url('periodes/trier'), {champsIds: champsIds}).done(function (res) {
-                    alertFlash(res.msg, 'success', 3000);
+
+                $.ajax({
+                    type: 'POST',
+                    url: Url('periodes/trier'),
+                    data: {champsIds: champsIds},
+                    success: function () { alertFlash("Tri effectué", 'success', 3000); },
                 });
+
+
+
             }
         });
     });

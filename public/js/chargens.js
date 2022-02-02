@@ -721,16 +721,16 @@ $.widget("ose.chargens", {
         $.post(url, params, function (data)
         {
             if (data.erreur) {
-                alertFlash(data.erreur, 'danger', 5000);
+                alertFlash(data.erreur, 'error', 5000);
             } else if (data.noeuds) {
                 that.chargerDonnees(p.etape, p.scenario, data);
             } else {
-                alertFlash(data, 'danger', 15000);
+                alertFlash(data, 'error', 15000);
             }
 
         }).fail(function (jqXHR)
         {
-            alertFlash(jqXHR.responseText, 'danger', 5000);
+            alertFlash(jqXHR.responseText, 'error', 5000);
             console.log(jqXHR);
         });
     },

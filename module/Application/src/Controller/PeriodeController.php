@@ -8,6 +8,7 @@ namespace Application\Controller;
 
 use Application\Form\Periode\Traits\PeriodeSaisieFormAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Cassandra\Exception\ExecutionException;
 use Laminas\View\Model\JsonModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -26,7 +27,7 @@ class PeriodeController extends AbstractController
 
     public function indexAction()
     {
-        $query    = $this->em()->createQuery('SELECT p FROM Application\Entity\Db\Periode p ORDER BY p.ordre');
+        $query    = $this->em()->createQuery('SELECT p FROM Application\Entity\Db\Periode p WHERE p.histoDestruction is null ORDER BY p.ordre');
         $periodes = $query->getResult();
 
         return compact('periodes');
@@ -78,17 +79,12 @@ class PeriodeController extends AbstractController
             if ($sp) {
                 $sp->setOrdre($ordre);
                 $ordre++;
-                try {
+                throw new \Exception("coucou ça plante");
                     $this->getServicePeriode()->save($sp);
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
+
             }
         }
 
-        $json = new JsonModel();
-        $json->setVariable('msg', 'Tri des champs effectué');
-
-        return $json;
+        return new MessengerViewModel();
     }
 }

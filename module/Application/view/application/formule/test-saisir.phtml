@@ -583,7 +583,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     that.saving = false;
                 }).fail(function (jqXHR)
                 {
-                    alertFlash(jqXHR.responseText, 'danger', 5000);
+                    alertFlash(jqXHR.responseText, 'error', 5000);
                     console.log(jqXHR);
                     that.saving = false;
                 });

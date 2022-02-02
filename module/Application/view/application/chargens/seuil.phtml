@@ -98,7 +98,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
             seuilCalcHeures();
         }).fail(function (jqXHR)
         {
-            alertFlash(data, 'danger', 3000);
+            alertFlash(data, 'error', 3000);
             console.log(jqXHR);
         });
     }

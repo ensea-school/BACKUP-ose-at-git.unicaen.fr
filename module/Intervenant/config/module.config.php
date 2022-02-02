@@ -13,7 +13,7 @@ return [
                     'statut' => '[0-9]*',
                 ],
                 'defaults'    => [
-                    '__NAMESPACE__' => 'Application\Controller',
+                    '__NAMESPACE__' => 'Intervenant\Controller',
                     'controller'    => 'Statut',
                     'action'        => 'index',
                 ],

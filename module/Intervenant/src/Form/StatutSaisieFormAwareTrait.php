@@ -1,49 +1,39 @@
 <?php
 
-namespace Application\Form\StatutIntervenant\Traits;
+namespace Intervenant\Form;
 
-use Application\Form\StatutIntervenant\StatutSaisieForm;
 
 /**
- * Description of StatutIntervenantSaisieFormAwareTrait
+ * Description of StatutSaisieFormAwareTrait
  *
  * @author UnicaenCode
  */
 trait StatutSaisieFormAwareTrait
 {
-    /**
-     * @var StatutSaisieForm
-     */
-    private $formStatutIntervenantSaisie;
+    protected ?StatutSaisieForm $formStatutSaisie = null;
 
 
 
     /**
-     * @param StatutSaisieForm $formStatutIntervenantSaisie
+     * @param StatutSaisieForm $formStatutSaisie
      *
      * @return self
      */
-    public function setFormStatutIntervenantSaisie(StatutSaisieForm $formStatutIntervenantSaisie)
+    public function setFormStatutSaisie(?StatutSaisieForm $formStatutSaisie)
     {
-        $this->formStatutIntervenantSaisie = $formStatutIntervenantSaisie;
+        $this->formStatutSaisie = $formStatutSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return StatutSaisieForm
-     */
-    public function getFormStatutIntervenantSaisie()
+    public function getFormStatutSaisie(): ?StatutSaisieForm
     {
-        if (!empty($this->formStatutIntervenantSaisie)) {
-            return $this->formStatutIntervenantSaisie;
+        if (empty($this->formStatutSaisie)) {
+            $this->formStatutSaisie = \Application::$container->get('FormElementManager')->get(StatutSaisieForm::class);
         }
 
-        return \Application::$container->get('FormElementManager')->get(StatutSaisieForm::class);
+        return $this->formStatutSaisie;
     }
 }
-

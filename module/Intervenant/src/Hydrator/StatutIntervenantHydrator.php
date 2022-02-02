@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Hydrator;
+namespace Intervenant\Hydrator;
 
 
 use Application\Entity\Db\TypeAgrementStatut;

@@ -3,7 +3,7 @@
 namespace Intervenant\Form;
 
 use Application\Form\AbstractForm;
-use Application\Hydrator\StatutIntervenantHydrator;
+use Intervenant\Hydrator\StatutIntervenantHydrator;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementServiceAwareTrait;

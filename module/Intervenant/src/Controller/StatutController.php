@@ -18,7 +18,7 @@ class StatutController extends AbstractController
 {
     use StatutServiceAwareTrait;
 
-    //use StatutSaisieFormAwareTrait;
+    use StatutSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
     use DossierAutreServiceAwareTrait;

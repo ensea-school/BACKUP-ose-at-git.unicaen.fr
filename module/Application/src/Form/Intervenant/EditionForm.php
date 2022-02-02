@@ -461,9 +461,26 @@ class EditionForm extends AbstractForm
 
 
 
+    public function activerEditionAvancee()
+    {
+        $elements = ['source', 'code'];
+        foreach ($this->getElements() as $element) {
+            if (in_array($element->getName(), $elements)) {
+
+                /** @var Element $element */
+                $element->removeAttribute('readonly');
+                $element->removeAttribute('disabled');
+                $element->removeAttribute('title');
+            }
+        }
+    }
+
+
+
     public function protection($object)
     {
         if ($this->isReadOnly()) {
+
             foreach ($this->getElements() as $element) {
                 /** @var Element $element */
                 $element->setAttribute('readonly', true);

@@ -9,7 +9,8 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                 = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION             = 'agrement-conseil-academique-suppression';
@@ -135,6 +136,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const INTERVENANT_CALCUL_HETD                             = 'intervenant-calcul-hetd';
     const INTERVENANT_CREATION                                = 'intervenant-creation';
     const INTERVENANT_EDITION                                 = 'intervenant-edition';
+    const INTERVENANT_EDITION_AVANCEE                         = 'intervenant-edition-avancee';
     const INTERVENANT_EXPORTER                                = 'intervenant-exporter';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
     const INTERVENANT_LIEN_SYSTEME_INFORMATION                = 'intervenant-lien-systeme-information';

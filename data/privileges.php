@@ -47,6 +47,7 @@ return [
             'ajout-statut'             => 'Ajout d\'un nouveau statut',
             'visualisation-historises' => 'Voir les intervenants historisés',
             'edition'                  => 'Edition',
+            'edition-avancee'          => 'Edition avancée',
             'suppression'              => 'Suppression',
             'exporter'                 => 'Exporter vers SIRH',
             'statut-edition'           => 'Statuts (Édition)',

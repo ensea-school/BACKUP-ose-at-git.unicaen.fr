@@ -35,11 +35,11 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE AS
              hetd_montant,
              rem_fc_d714
 
+
       FROM
            (
            SELECT
                   dep3.*,
-
                   1-CASE WHEN hetd > 0 THEN SUM( hetd_pourc ) OVER ( PARTITION BY periode_id, intervenant_id, etat, structure_id) ELSE 0 END pourc_ecart
 
 
@@ -110,10 +110,10 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE AS
                                 i.code_rh                                                           intervenant_matricule,
                                 i.nom_usuel || ' ' || i.prenom                                      intervenant_nom,
                                 i.numero_insee                                                      intervenant_numero_insee,
-                                cc.source_code                                                      centre_cout_code,
-                                cc.libelle                                                          centre_cout_libelle,
-                                cc2.source_code														eotp_code,
-                                cc2.source_code														eotp_libelle,
+                                CASE WHEN cc.parent_id IS NULL THEN cc.source_code ELSE cc2.source_code END    centre_cout_code,
+                                CASE WHEN cc.parent_id IS NULL THEN cc.libelle ELSE cc2.libelle END            centre_cout_libelle,
+                                CASE WHEN cc.parent_id IS NOT NULL THEN cc.source_code ELSE NULL END          eotp_code,
+                                CASE WHEN cc.parent_id IS NOT NULL THEN cc.libelle ELSE NULL END              eotp_libelle,
                                 df.source_code                                                      domaine_fonctionnel_code,
                                 df.libelle                                                          domaine_fonctionnel_libelle,
                                 CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE mep.heures END        hetd,
@@ -200,6 +200,7 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE AS
                     dep3
            )
                dep4
+
 
       ORDER BY
                annee_id,

@@ -206,6 +206,6 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE AS
                type_intervenant_id,
                structure_id,
                periode_id,
-               intervenant_nom;
+               intervenant_nom
 
 

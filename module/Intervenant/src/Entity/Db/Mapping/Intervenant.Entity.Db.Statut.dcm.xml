@@ -12,7 +12,6 @@
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="128" nullable="false"/>
         <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
-        <field name="maximumHETD" type="float" column="MAXIMUM_HETD" precision="126" scale="0" nullable="false"/>
         <field name="chargesPatronales" type="float" column="CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
         <field name="code" type="string" column="CODE" length="50" nullable="false"/>
         <field name="codeRh" type="string" column="CODE_RH" length="50" nullable="false"/>

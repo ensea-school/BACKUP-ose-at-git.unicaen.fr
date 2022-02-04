@@ -1,109 +1,97 @@
 <?php
 
-use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this                \Application\View\Renderer\PhpRenderer
- * @var $statutsIntervenants \Intervenant\Entity\Db\Statut[]
+ * @var $this    \Application\View\Renderer\PhpRenderer
+ * @var $statuts \Intervenant\Entity\Db\Statut[]
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
 
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+$this->headTitle()->append($title = "Statuts des intervenants");
+
 ?>
-
-<style>
-    .triables {
-        align: left;
-    }
-
-    .champ-triable div {
-        align: left;
-    }
-
-    .modal.in .modal-dialog {
-        transform: translate(0px, 0px);
-        width: 950px;
-    }
-</style>
-
-<script type="text/javascript">
-    function injecte(element)
-    {
-        var ancre = '#c_' + $(element).data('id');
-        var ti = $(element).data('id');
-        adr = "<?php echo $this->url('statut/saisie') ?>" + "/" + ti;
-        $(ancre).load(adr);
-    }
-
-    $(function () {
-        $(".triables").sortable({
-            handle: '.glyphicon-move',
-            axis: 'y',
-            update: function (event, ui) {
-                var champsIds = '';
-                ui.item.parent().find('div.champ-triable').each(function () {
-                    if (champsIds != '') champsIds += ',';
-                    console.log($(this)[0]['id']);
-                    champsIds += $(this)[0]['id'];
-                });
-                $.post(Url('statut/trier'), {champsIds: champsIds}).done(function (res) {
-                    alertFlash(res.msg, 'success', 3000);
-                });
-            }
-        });
-    });
-
-</script>
-
-<?php $this->headTitle()->append($title = "Statuts des intervenants") ?>
-
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<div class="alert alert-info">Un intervenant ne peut avoir qu'un seul statut dans OSE. Celui de rang plus élevé lui sera donné prioritairement en cas de
-    doute.
-</div>
-
-<div class="panel-group triables" id="bloc" role="tablist" aria-multiselectable="true">
-    <?php foreach ($statutsIntervenants as $ti) { ?>
-        <div class="champ-triable panel panel-default" id="<?php echo $ti->getId() ?>">
-            <div class="panel-heading" role="tab" id="<?php echo 'h_' . $ti->getId() ?>">
-                <h4 class="panel-title">
-                    <a role="button"
-                       data-toggle="collapse"
-                       href="#<?php echo 'c_' . $ti->getId() ?>"
-                       aria-expanded="false"
-                       aria-controls="<?php echo 'c_' . $ti->getId() ?>"
-                       data-id="<?php echo $ti->getId() ?>"
-                       onclick="injecte(this); ">
-                        <?php
-                        echo '<span class="badge">' . $ti->getTypeIntervenant()->getLibelle() . '</span><span class="statut-libelle-' . $ti->getId() . '"> ' . $ti->getLibelle() . '</span>';
-                        if ($canEdit) {
-                            echo '<span class="pull-right glyphicon glyphicon-move"';
-                            echo 'title = "Vous pouvez trier les champs en déplaçant les lignes" ></span >&nbsp';
-                        } ?>
+<table class="table table-bordered table-hover table-condensed">
+    <head>
+        <tr>
+            <th>Type d'intervenant</th>
+            <th>Code</th>
+            <th>Libellé</th>
+            <?php if ($canEdit): ?>
+                <th>Actions</th>
+            <?php endif; ?>
+        </tr>
+    </head>
+    <body>
+    <?php foreach ($statuts as $statut): ?>
+        <tr class="statut" data-id="<?= $statut->getId() ?>">
+            <td><?= $statut->getTypeIntervenant() ?></td>
+            <td><?= $statut->getCode() ?></td>
+            <td><?= $statut->getLibelle() ?></td>
+            <?php if ($canEdit): ?>
+                <th style="text-align: center">
+                    <a href="<?= $this->url('statut/saisie', ['statut' => $statut->getId()]) ?>" title="Modifier le statut">
+                        <span class="glyphicon glyphicon-edit"></span>
                     </a>
-                </h4>
-            </div>
-            <div id="<?php echo 'c_' . $ti->getId() ?>" class="panel-collapse collapse intranavigator" role="tabpanel"
-                 aria-labelledby="<?php echo 'h_' . $ti->getId() ?>">
-                <div class="panel-body" data-statut="<?php echo $ti->getId() ?>">
-                </div>
-            </div>
-        </div>
-    <?php } ?>
-</div>
+
+                    <a class="pop-ajax"
+                       href="<?= $this->url('statut/delete', ['statut' => $statut->getId()]) ?>"
+                       title="Supprimer le statut"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+
+                    <a role="button" data-toggle="collapse" title="Vous pouvez trier les statuts en déplaçant les lignes">
+                        <span class="glyphicon glyphicon-move"></span>
+                    </a>
+                </th>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </body>
+</table>
+
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="statut-saisie"
-       href="<?= $this->url('statut/saisie') ?>"
-       title="Ajouter un statut d'intervenant">
-        <span class="glyphicon glyphicon-plus"></span>
-        Ajouter un statut d'intervenant</a>
+    <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut d'intervenant">
+        <span class="glyphicon glyphicon-plus"></span> Ajouter un statut d'intervenant
+    </a>
 
     <script type="text/javascript">
         $(function () {
-            $("body").on("statut-saisie", function (event, data) {
-                window.location.reload();
+            function injecte(element)
+            {
+                var ancre = '#c_' + $(element).data('id');
+                var ti = $(element).data('id');
+                adr = "<?php echo $this->url('statut/saisie') ?>" + "/" + ti;
+                $(ancre).load(adr);
+            }
+
+            $(function () {
+                $(".triables").sortable({
+                    handle: '.glyphicon-move',
+                    axis: 'y',
+                    update: function (event, ui) {
+                        var champsIds = '';
+                        ui.item.parent().find('div.champ-triable').each(function () {
+                            if (champsIds != '') champsIds += ',';
+                            console.log($(this)[0]['id']);
+                            champsIds += $(this)[0]['id'];
+                        });
+                        $.post(Url('statut/trier'), {champsIds: champsIds}).done(function (res) {
+                            alertFlash(res.msg, 'success', 3000);
+                        });
+                    }
+                });
             });
         });
     </script>

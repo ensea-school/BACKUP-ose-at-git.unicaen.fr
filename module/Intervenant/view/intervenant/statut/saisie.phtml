@@ -8,257 +8,276 @@ use Application\Provider\Privilege\Privileges;
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-echo $this->form()->openTag($form); ?>
 
-<style>
-    .temoins {
-        margin-left: 0px;
-    }
+/** @var $statut \Intervenant\Entity\Db\Statut */
+$statut = $form->getObject();
 
-    .temoins .form-group {
-        margin-bottom: 1px;
-    }
 
-    .temoins .form-group .checkbox {
-        margin-top: 1px;
-        margin-bottom: 1px;
-    }
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-    .atvb {
-        margin-top: 20px;
-    }
+echo $this->form()->openTag($form);
 
-    .hetd {
-        background-color: white;
-        vertical-align: bottom;
-        border-width: 0;
-    }
+$this->headTitle()->append($title = "Modification d'un statut d'intervenant");
+echo $this->tag('h1')->text($title);
 
-</style>
+echo $this->formHidden($form->get('id'));
+echo $this->formElement($form->get('security'));
+
+
+?>
+<!-- Informations générales -->
 <div class="panel panel-default">
+    <div class="panel-heading">Informations générales</div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-9">
-                <div class="row">
-                    <div class="col-md-4">
-                        <?= $this->formHidden($form->get('id')); ?>
-                        <?= $this->formControlGroup($form->get('type-intervenant')); ?>
-                    </div>
-                    <div class="col-md-8">
-                        <?= $this->formControlGroup($form->get('libelle')); ?>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('code')); ?>
-                    </div>
-                    <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('code_rh')); ?>
-                    </div>
-                    <div class="col-md-1 atvb">
-                        <?= $this->formControlGroup($form->get('TEM-ATV')); ?>
-                    </div>
-                    <div class="col-md-1 atvb">
-                        <?= $this->formControlGroup($form->get('TEM-VA')); ?>
-                    </div>
-                    <div class="col-md-2 atvb">
-                        <?= $this->formControlGroup($form->get('TEM-BIATSS')); ?>
-                    </div>
-                </div>
+            <div class="col-md-4">
 
-
-                <div class="row temoins">
-                    <?= $this->formControlGroup($form->get('non-autorise')); ?>
-                    <?= $this->formControlGroup($form->get('depassement')); ?>
-                    <?= $this->formControlGroup($form->get('peut-saisir-referentiel')); ?>
-                    <?= $this->formControlGroup($form->get('peut-saisir-service')); ?>
-                    <?= $this->formControlGroup($form->get('peut-choisir-dans-dossier')); ?>
-                    <?= $this->formControlGroup($form->get('peut-avoir-contrat')); ?>
-                    <?= $this->formControlGroup($form->get('peut-saisir-dossier')); ?>
-                    <?= $this->formControlGroup($form->get('peut-saisir-motif-non-paiement')); ?>
-                    <?= $this->formControlGroup($form->get('peut-cloturer-saisie')); ?>
-                    <?= $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
-                    <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
-                    <?= $this->formControlGroup($form->get('prioritaire-indicateurs')); ?>
-                    <br/>
-                </div>
-                <!--Uniquement si le statut existe déjà en base (avec un id)-->
-                <?php if (empty($form->get('id')->getValue())): ?>
-                <div class="row temoins hidden">
-                    <?php else: ?>
-                    <div class="row temoins">
-                        <?php endif; ?>
-                        <fieldset>
-                            <legend style="font-size: 14px;font-weight: 700;">Gestion des agréments pour le statut :</legend>
-                            <table class="table table-bordered">
-                                <thead>
-                                <th></th>
-                                <th>Activé</th>
-                                <th>Valable pendant</th>
-                                </thead>
-                                <tbody>
-                                <?php foreach ($form->getElements() as $element): ?>
-                                    <?php if (preg_match('#^CONSEIL[A-Z_]+\b(?!-DUREE_VIE)#', $element->getName())): ?>
-
-                                        <tr>
-                                            <td><?= $this->formLabel($form->get($element->getName())); ?></td>
-                                            <td><?= $this->formRadio($form->get($element->getName())); ?></td>
-                                            <td><?= $this->formControlGroup($form->get($element->getName() . '-DUREE_VIE')); ?></td>
-                                        </tr>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </fieldset>
-
-                    </div>
-                    <div class="row temoins">
-                        <fieldset>
-                            <legend style="font-size: 14px;font-weight: 700;">Paramétrage des modules du dossier
-                                intervenant :
-                            </legend>
-                            <table class="table table-bordered">
-                                <thead>
-                                <th>Activer</th>
-                                <th>Module</th>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td><?= $this->formElement($form->get('dossier-identite-complementaire')); ?></td>
-                                    <td><?= $form->get('dossier-identite-complementaire')->getLabel(); ?></td>
-                                </tr>
-                                <tr>
-                                    <td><?= $this->formElement($form->get('dossier-adresse')); ?></td>
-                                    <td><?= $form->get('dossier-adresse')->getLabel(); ?></td>
-                                </tr>
-                                <tr>
-                                    <td><?= $this->formElement($form->get('dossier-contact')); ?></td>
-                                    <td><?= $form->get('dossier-contact')->getLabel(); ?></td>
-                                </tr>
-                                <tr>
-                                    <td><?= $this->formElement($form->get('dossier-insee')); ?></td>
-                                    <td><?= $form->get('dossier-insee')->getLabel(); ?></td>
-                                </tr>
-                                <tr>
-                                    <td><?= $this->formElement($form->get('dossier-iban')); ?></td>
-                                    <td><?= $form->get('dossier-iban')->getLabel(); ?></td>
-                                </tr>
-                                <tr>
-                                    <td><?= $this->formElement($form->get('dossier-employeur')); ?></td>
-                                    <td><?= $form->get('dossier-employeur')->getLabel(); ?></td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-                        </fieldset>
-                        <br/>
-                    </div>
-                    <?php if (empty($form->get('id')->getValue())): ?>
-                    <div class="row temoins hidden">
-                        <?php else: ?>
-                        <div class="row temoins">
-                            <?php endif; ?>
-
-                            <fieldset>
-                                <legend style="font-size: 14px;font-weight: 700;">Activation des champs personnalisables du
-                                    dossier
-                                    intervenant :
-                                </legend>
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <th>Activer</th>
-                                    <th>Libellé</th>
-                                    <th>Obligatoire</th>
-                                    <th>Description</th>
-                                    </thead>
-                                    <tbody>
-                                    <?php foreach ($champsAutres as $champ): ?>
-                                        <tr>
-                                            <td><?= $this->formElement($form->get('champ-autre-' . $champ->getId())); ?></td>
-                                            <td><?= $champ->getLibelle(); ?></td>
-                                            <td><?= ($champ->isObligatoire()) ? 'OUI' : 'NON'; ?></td>
-                                            <td><?= $champ->getDescription(); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </fieldset>
-                            <br/>
-                        </div>
-                        <!--Régles sur les informations contact du dossier intervenant-->
-                        <div class="row temoins">
-                            <fieldset>
-                                <legend style="font-size: 14px;font-weight: 700;">Règles sur les informations de contact du
-                                    dossier intervenant :
-                                </legend>
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <th>Activer</th>
-                                    <th>Description</th>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><?= $this->formElement($form->get('dossier-email-perso')); ?></td>
-                                        <td><?= $form->get('dossier-email-perso')->getLabel(); ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><?= $this->formElement($form->get('dossier-tel-perso')); ?></td>
-                                        <td><?= $form->get('dossier-tel-perso')->getLabel(); ?></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </fieldset>
-                            <br/>
-                        </div>
-
-
-                        <div class="row">
-                            <?= $this->formElement($form->get('security')); ?>
-                            <?php if ($canEdit) echo $this->formSubmit($form->get('submit')); ?>
-                            <?php if (($canEdit) && ($form->get('id')->getValue())) { ?>
-                                <a class="pop-ajax btn btn-danger" data-event="statut-clone"
-                                   href="<?php echo $this->url('statut/delete', ['statut' => $form->get('id')->getValue()]) ?>"
-                                   title="Supprimer le statut d'intervenant"
-                                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                                   data-confirm="true" data-confirm-button="Oui"
-                                   data-cancel-button="Non"
-                                   data-submit-reload="true">
-                                    <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
-                                <a class="ajax-modal btn btn-warning" data-event="statut-clone"
-                                   href="<?php echo $this->url('statut/clone', ['statut' => $form->get('id')->getValue()]) ?>"
-                                   title="Dupliquer le statut d'intervenant">
-                                    <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
-                            <?php } ?>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <?= $this->formControlGroup($form->get('service-statutaire')); ?>
-                        <?= $this->formControlGroup($form->get('plafond-referentiel')); ?>
-                        <?= $this->formControlGroup($form->get('plafond-referentiel-service')); ?>
-                        <?= $this->formControlGroup($form->get('plafond-referentiel-hc')); ?>
-                        <?= $this->formControlGroup($form->get('maximum-HETD')); ?>
-                        <?= $this->formControlGroup($form->get('charges-patronales')); ?>
-                        <?= $this->formControlGroup($form->get('plafond-h-h-c')); ?>
-                        <?= $this->formControlGroup($form->get('plafond-hc-fi-hors-ead')); ?>
-                        <?= $this->formControlGroup($form->get('plafond-h-c')); ?>
-                    </div>
-                </div>
+                <?= $this->formControlGroup($form->get('type-intervenant')); ?>
             </div>
-
+            <div class="col-md-8">
+                <?= $this->formControlGroup($form->get('libelle')); ?>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-md-4">
+                <?= $this->formControlGroup($form->get('code')); ?>
+            </div>
+            <div class="col-md-4">
+                <?= $this->formControlGroup($form->get('code_rh')); ?>
+            </div>
+            <div class="col-md-1 atvb">
+                <?= $this->formControlGroup($form->get('TEM-ATV')); ?>
+            </div>
+            <div class="col-md-1 atvb">
+                <?= $this->formControlGroup($form->get('TEM-VA')); ?>
+            </div>
+            <div class="col-md-2 atvb">
+                <?= $this->formControlGroup($form->get('TEM-BIATSS')); ?>
+            </div>
+        </div>
+        <?= $this->formControlGroup($form->get('non-autorise')); ?>
+        <?= $this->formControlGroup($form->get('prioritaire-indicateurs')); ?>
+    </div>
+</div>
+
+
+<!-- Données personnelles -->
+<div class="panel panel-default">
+    <div class="panel-heading"><?= $this->formControlGroup($form->get('peut-saisir-dossier')); ?> </div>
+    <div class="panel-body">
+        <fieldset>
+            <legend style="font-size: 14px;font-weight: 700;">Paramétrage des modules du dossier
+                intervenant :
+            </legend>
+            <table class="table table-bordered">
+                <thead>
+                <th>Activer</th>
+                <th>Module</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-identite-complementaire')); ?></td>
+                    <td><?= $form->get('dossier-identite-complementaire')->getLabel(); ?></td>
+                </tr>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-adresse')); ?></td>
+                    <td><?= $form->get('dossier-adresse')->getLabel(); ?></td>
+                </tr>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-contact')); ?></td>
+                    <td><?= $form->get('dossier-contact')->getLabel(); ?></td>
+                </tr>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-insee')); ?></td>
+                    <td><?= $form->get('dossier-insee')->getLabel(); ?></td>
+                </tr>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-iban')); ?></td>
+                    <td><?= $form->get('dossier-iban')->getLabel(); ?></td>
+                </tr>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-employeur')); ?></td>
+                    <td><?= $form->get('dossier-employeur')->getLabel(); ?></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </fieldset>
+
+        <fieldset>
+            <legend style="font-size: 14px;font-weight: 700;">Activation des champs personnalisables du
+                dossier
+                intervenant :
+            </legend>
+            <table class="table table-bordered">
+                <thead>
+                <th>Activer</th>
+                <th>Libellé</th>
+                <th>Obligatoire</th>
+                <th>Description</th>
+                </thead>
+                <tbody>
+                <?php foreach ($champsAutres as $champ): ?>
+                    <tr>
+                        <td><?= $this->formElement($form->get('champ-autre-' . $champ->getId())); ?></td>
+                        <td><?= $champ->getLibelle(); ?></td>
+                        <td><?= ($champ->isObligatoire()) ? 'OUI' : 'NON'; ?></td>
+                        <td><?= $champ->getDescription(); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </fieldset>
+
+        <fieldset>
+            <legend style="font-size: 14px;font-weight: 700;">Règles sur les informations de contact du
+                dossier intervenant :
+            </legend>
+            <table class="table table-bordered">
+                <thead>
+                <th>Activer</th>
+                <th>Description</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-email-perso')); ?></td>
+                    <td><?= $form->get('dossier-email-perso')->getLabel(); ?></td>
+                </tr>
+                <tr>
+                    <td><?= $this->formElement($form->get('dossier-tel-perso')); ?></td>
+                    <td><?= $form->get('dossier-tel-perso')->getLabel(); ?></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </fieldset>
+    </div>
+</div>
+
+
+<!-- Pièces justificatives -->
+<div class="panel panel-default">
+    <div class="panel-heading">Pièces justificatives</div>
+    <div class="panel-body">
+        ==> Lien vers la page des PJ
+    </div>
+</div>
+
+
+<!-- Agréments -->
+<div class="panel panel-default">
+    <div class="panel-heading">Agréments</div>
+    <div class="panel-body">
+        <table class="table table-bordered">
+            <thead>
+            <th></th>
+            <th>Activé</th>
+            <th>Valable pendant</th>
+            </thead>
+            <tbody>
+            <?php foreach ($form->getElements() as $element): ?>
+                <?php if (preg_match('#^CONSEIL[A-Z_]+\b(?!-DUREE_VIE)#', $element->getName())): ?>
+
+                    <tr>
+                        <td><?= $this->formLabel($form->get($element->getName())); ?></td>
+                        <td><?= $this->formRadio($form->get($element->getName())); ?></td>
+                        <td><?= $this->formControlGroup($form->get($element->getName() . '-DUREE_VIE')); ?></td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Contrat -->
+<div class="panel panel-default">
+    <div class="panel-heading"><?= $this->formControlGroup($form->get('peut-avoir-contrat')); ?></div>
+    <div class="panel-body">
 
     </div>
 </div>
 
 
+<!-- Services -->
+<div class="panel panel-default">
+    <div class="panel-heading"><?= $this->formControlGroup($form->get('peut-saisir-service')); ?></div>
+    <div class="panel-body">
+        <?= $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
+    </div>
+</div>
+
+
+<!-- Référentiel -->
+<div class="panel panel-default">
+    <div class="panel-heading"><?= $this->formControlGroup($form->get('peut-saisir-referentiel')); ?></div>
+    <div class="panel-body">
+
+    </div>
+</div>
+
+
+<!-- Clôture du service réalisé-->
+<div class="panel panel-default">
+    <div class="panel-heading"><?= $this->formControlGroup($form->get('peut-cloturer-saisie')); ?></div>
+    <div class="panel-body">
+
+    </div>
+</div>
+
+
+<!-- calcul des HETD & Paiement-->
+<div class="panel panel-default">
+    <div class="panel-heading">Calcul des HETD & Paiement</div>
+    <div class="panel-body">
+        <?= $this->formControlGroup($form->get('depassement')); ?>
+        <?= $this->formControlGroup($form->get('peut-saisir-motif-non-paiement')); ?>
+        <?= $this->formControlGroup($form->get('service-statutaire')); ?>
+        <?= $this->formControlGroup($form->get('charges-patronales')); ?>
+    </div>
+</div>
+
+
+<?= $this->formControlGroup($form->get('peut-choisir-dans-dossier')); ?>
+
+
+
+
+
+<?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
+
+<!-- Boutons d'actions -->
+<a href="<?= $this->url('statut') ?>" class="btn btn-default">
+    <i class="fa fa-undo"></i> Retour à la liste des statuts
+</a>
+<?php if ($canEdit): ?>
+    <?= $this->formSubmit($form->get('submit')); ?>
+    <?php if ($statut->getId()): ?>
+        <a class="pop-ajax btn btn-danger" data-event="statut-clone"
+           href="<?php echo $this->url('statut/delete', ['statut' => $form->get('id')->getValue()]) ?>"
+           title="Supprimer le statut d'intervenant"
+           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+           data-confirm="true" data-confirm-button="Oui"
+           data-cancel-button="Non"
+           data-submit-reload="true">
+            <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+        <a class="ajax-modal btn btn-warning" data-event="statut-clone"
+           href="<?php echo $this->url('statut/clone', ['statut' => $form->get('id')->getValue()]) ?>"
+           title="Dupliquer le statut d'intervenant">
+            <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
+    <?php endif; ?>
+<?php endif; ?>
+
+
+
+
 <?php
 echo $this->form()->closeTag();
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
 <script type="text/javascript">
     $(function () {
@@ -268,4 +287,3 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         $(".statut-libelle-<?= $form->get('id')->getValue() ?>").html("<?= $form->get('libelle')->getValue() ?>");
     });
 </script>
-

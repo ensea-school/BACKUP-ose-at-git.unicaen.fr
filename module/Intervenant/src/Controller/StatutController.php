@@ -29,9 +29,9 @@ class StatutController extends AbstractController
             Statut::class,
         ]);
 
-        $statutsIntervenants = $this->getServiceStatut()->getList();
+        $statuts = $this->getServiceStatut()->getList();
 
-        return compact('statutsIntervenants');
+        return compact('statuts');
     }
 
 

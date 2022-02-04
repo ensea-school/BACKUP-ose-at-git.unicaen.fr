@@ -37,9 +37,6 @@ class StatutIntervenantHydrator implements HydratorInterface
     {
         $object->setLibelle($data['libelle']);
         $object->setDepassement($data['depassement']);
-        $object->setPlafondReferentiel(isset($data['plafond-referentiel']) ? FloatFromString::run($data['plafond-referentiel']) : 0);
-        $object->setPlafondReferentielService(isset($data['plafond-referentiel-service']) ? FloatFromString::run($data['plafond-referentiel-service']) : 9999);
-        $object->setPlafondReferentielHc(isset($data['plafond-referentiel-hc']) ? FloatFromString::run($data['plafond-referentiel-hc']) : 9999);
         $object->setServiceStatutaire(FloatFromString::run($data['service-statutaire']));
         if (array_key_exists('type-intervenant', $data)) {
             $object->setTypeIntervenant($this->getServiceTypeIntervenant()->get($data['type-intervenant']));
@@ -57,9 +54,6 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setTemBiatss($data['TEM-BIATSS']);
         $object->setCode($data['code']);
         $object->setCodeRh($data['code_rh']);
-        $object->setPlafondHcHorsRemuFc(FloatFromString::run($data['plafond-h-h-c']));
-        $object->setPlafondHcRemuFc(FloatFromString::run($data['plafond-h-c']));
-        $object->setPlafondHcFiHorsEad(FloatFromString::run($data['plafond-hc-fi-hors-ead']));
         $object->setPeutChoisirDansDossier($data['peut-choisir-dans-dossier']);
         $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
@@ -150,9 +144,6 @@ class StatutIntervenantHydrator implements HydratorInterface
             'libelle'                         => $object->getLibelle(),
             'depassement'                     => $object->getDepassement(),
             'service-statutaire'              => StringFromFloat::run($object->getServiceStatutaire()),
-            'plafond-referentiel'             => StringFromFloat::run($object->getPlafondReferentiel()),
-            'plafond-referentiel-service'     => StringFromFloat::run($object->getPlafondReferentielService()),
-            'plafond-referentiel-hc'          => StringFromFloat::run($object->getPlafondReferentielHc()),
             'peut-choisir-dans-dossier'       => $object->getPeutChoisirDansDossier(),
             'peut-saisir-dossier'             => $object->getPeutSaisirDossier(),
             'non-autorise'                    => $object->getNonAutorise(),
@@ -168,9 +159,6 @@ class StatutIntervenantHydrator implements HydratorInterface
             'type-intervenant'                => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
             'code'                            => $object->getCode(),
             'code_rh'                         => $object->getCodeRh(),
-            'plafond-h-h-c'                   => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
-            'plafond-h-c'                     => StringFromFloat::run($object->getPlafondHcRemuFc()),
-            'plafond-hc-fi-hors-ead'          => StringFromFloat::run($object->getPlafondHcFiHorsEad()),
             'maximum-HETD'                    => StringFromFloat::run($object->getMaximumHETD()),
             'charges-patronales'              => StringFromFloat::run($object->getChargesPatronales() * 100),
             'depassement-sdshc'               => $object->getDepassementSDSHC(),
@@ -182,7 +170,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'dossier-employeur'               => $object->getDossierEmployeur(),
             'dossier-email-perso'             => $object->getDossierEmailPerso(),
             'dossier-tel-perso'               => $object->getDossierTelPerso(),
-            'prioritaire-indicateurs'         => $object->isPrioritaireIndicateurs(),
+            'prioritaire-indicateurs'         => $object->getPrioritaireIndicateurs(),
         ];
 
         /*Gestion des champs autres*/

@@ -62,11 +62,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     protected $enseignement;
 
     /**
-     * @var float
-     */
-    protected $plafondReferentiel;
-
-    /**
      * @var boolean
      */
     protected $affAdresseContrat;
@@ -315,34 +310,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
         $this->enseignement = $enseignement;
 
         return $this;
-    }
-
-
-
-    /**
-     * Set plafondReferentiel
-     *
-     * @param string $plafondReferentiel
-     *
-     * @return Structure
-     */
-    public function setPlafondReferentiel($plafondReferentiel)
-    {
-        $this->plafondReferentiel = $plafondReferentiel;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get plafondReferentiel
-     *
-     * @return float
-     */
-    public function getPlafondReferentiel()
-    {
-        return $this->plafondReferentiel;
     }
 
 

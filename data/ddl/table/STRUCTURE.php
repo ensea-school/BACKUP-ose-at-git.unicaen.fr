@@ -261,18 +261,6 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'PLAFOND_REFERENTIEL'     => [
-            'name'        => 'PLAFOND_REFERENTIEL',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 15,
-            'commentaire' => NULL,
-        ],
         'SOURCE_CODE'             => [
             'name'        => 'SOURCE_CODE',
             'type'        => 'string',

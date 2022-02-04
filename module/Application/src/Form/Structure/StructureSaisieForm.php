@@ -61,13 +61,6 @@ class StructureSaisieForm extends AbstractForm implements EntityManagerAwareInte
             'type'    => 'Checkbox',
         ]);
         $this->add([
-            'name'    => 'plafondReferentiel',
-            'options' => [
-                'label' => "Plafond d'heures pour le référentiel",
-            ],
-            'type'    => 'Text',
-        ]);
-        $this->add([
             'name'    => 'affAdresseContrat',
             'options' => [
                 'label' => "Affichage de l'adresse sur le contrat de travail",
@@ -129,25 +122,12 @@ class StructureSaisieForm extends AbstractForm implements EntityManagerAwareInte
                 'required' => true,
             ],
 
-            'enseignement'       => [
+            'enseignement'      => [
                 'required' => true,
             ],
-            'affAdresseContrat'  => [
+            'affAdresseContrat' => [
                 'required' => true,
             ],
-            'plafondReferentiel' => [
-                'required'   => false,
-                'validators' => [
-                    new \Laminas\Validator\Callback([
-                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
-                        'callback' => function ($value) {
-                            if ($value == null) return true;
-
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }]),
-                ],
-            ],
-
         ];
     }
 
@@ -176,7 +156,6 @@ class StructureHydrator implements HydratorInterface
         $object->setLibelleCourt($data['libelleCourt']);
         $object->setLibelleLong($data['libelleLong']);
         $object->setEnseignement($data['enseignement']);
-        $object->setPlafondReferentiel(FloatFromString::run($data['plafondReferentiel']));
         $object->setAffAdresseContrat($data['affAdresseContrat']);
 
         return $object;
@@ -194,13 +173,12 @@ class StructureHydrator implements HydratorInterface
     public function extract($object): array
     {
         $data = [
-            'id'                 => $object->getId(),
-            'code'               => $object->getCode(),
-            'libelleCourt'       => $object->getLibelleCourt(),
-            'libelleLong'        => $object->getLibelleLong(),
-            'enseignement'       => $object->isEnseignement(),
-            'plafondReferentiel' => StringFromFloat::run($object->getPlafondReferentiel()),
-            'affAdresseContrat'  => $object->isAffAdresseContrat(),
+            'id'                => $object->getId(),
+            'code'              => $object->getCode(),
+            'libelleCourt'      => $object->getLibelleCourt(),
+            'libelleLong'       => $object->getLibelleLong(),
+            'enseignement'      => $object->isEnseignement(),
+            'affAdresseContrat' => $object->isAffAdresseContrat(),
         ];
 
         return $data;

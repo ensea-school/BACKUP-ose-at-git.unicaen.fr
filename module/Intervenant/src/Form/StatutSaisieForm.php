@@ -113,51 +113,6 @@ class StatutSaisieForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'TEM-ATV',
-            'options'    => [
-                'label'              => '<abbr title="Définit si ce statut est propre aux ATV (Attaché Temporaire Vacataire)">ATV</abbr>',
-                'label_options'      => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => 'ATV',
-            ],
-            'type'       => 'Checkbox',
-        ]);
-
-        $this->add([
-            'name'       => 'TEM-VA',
-            'options'    => [
-                'label'              => '<abbr title="Définit si ce statut est un type d\'emploi vacataire administratif.">VA</abbr>',
-                'label_options'      => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => 'VA',
-            ],
-            'type'       => 'Checkbox',
-        ]);
-
-        $this->add([
-            'name'       => 'TEM-BIATSS',
-            'options'    => [
-                'label'              => '<abbr title="Définit si ce statut est propre aux BIATSS">BIATSS</abbr>',
-                'label_options'      => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => 'BIATSS',
-            ],
-            'type'       => 'Checkbox',
-        ]);
-
-        $this->add([
             'name'       => 'type-intervenant',
             'options'    => [
                 'label' => 'Type d\'intervenant',
@@ -259,18 +214,6 @@ class StatutSaisieForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'maximum-HETD',
-            'options'    => [
-                'label'  => "Plafond des HETD",
-                'suffix' => 'HETD',
-            ],
-            'attributes' => [
-                'title' => "Nombre maximal d'heures (en équivalent TD) autorisées pour l'intervenant, service et complémentaire",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
             'name'       => 'charges-patronales',
             'options'    => [
                 'label'  => "Taux de charges patronales",
@@ -278,78 +221,6 @@ class StatutSaisieForm extends AbstractForm
             ],
             'attributes' => [
                 'title' => "Taux de charges patronales exprimé en pourcentage",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'plafond-referentiel',
-            'options'    => [
-                'label'  => "Plafond du référentiel",
-                'suffix' => 'HETD',
-            ],
-            'attributes' => [
-                'title' => "Nombre maximal d'heures de référentiel autorisées pour l'intervenant",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'plafond-referentiel-service',
-            'options'    => [
-                'label'  => "Plafond du référentiel en service",
-                'suffix' => 'HETD',
-            ],
-            'attributes' => [
-                'title' => "Nombre maximal d'heures de référentiel autorisées en service pour l'intervenant",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'plafond-referentiel-hc',
-            'options'    => [
-                'label'  => "Plafond du référentiel en HC",
-                'suffix' => 'HETD',
-            ],
-            'attributes' => [
-                'title' => "Nombre maximal d'heures de référentiel autorisées en heures complémentaires pour l'intervenant",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'plafond-h-h-c',
-            'options'    => [
-                'label'  => "Plafond des HC (hors prime FC D714-60)",
-                'suffix' => 'HETD',
-            ],
-            'attributes' => [
-                'title' => "Nombre maximal d'heures complémentaires (hors heures relevant de la prime de formation continue au titre de l'article D714-60 du code de l'éducation)",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'plafond-h-c',
-            'options'    => [
-                'label'  => "Plafond prime FC D714-60",
-                'suffix' => '&euro;',
-            ],
-            'attributes' => [
-                'title' => "Montant maximal de la prime de formation continue relevant de l'article D714-60 du code de l'éducation",
-            ],
-            'type'       => 'Text',
-        ]);
-
-        $this->add([
-            'name'       => 'plafond-hc-fi-hors-ead',
-            'options'    => [
-                'label'  => "Plafond HC en FI hors EAD",
-                'suffix' => 'HETD',
-            ],
-            'attributes' => [
-                'title' => "Nombre maximal d'heures complémentaires en formation initiale hors enseignement à distance",
             ],
             'type'       => 'Text',
         ]);
@@ -382,19 +253,19 @@ class StatutSaisieForm extends AbstractForm
     {
 
         return [
-            'libelle'                => [
+            'libelle'             => [
                 'required' => true,
             ],
-            'type-intervenant'       => [
+            'type-intervenant'    => [
                 'required' => true,
             ],
-            'code'                   => [
+            'code'                => [
                 'required' => true,
             ],
-            'code_rh'                => [
+            'code_rh'             => [
                 'required' => false,
             ],
-            'plafond-h-c'            => [
+            'service-statutaire'  => [
                 'required'   => true,
                 'validators' => [
                     new \Laminas\Validator\Callback([
@@ -404,7 +275,7 @@ class StatutSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
-            'plafond-h-h-c'          => [
+            'plafond-referentiel' => [
                 'required'   => true,
                 'validators' => [
                     new \Laminas\Validator\Callback([
@@ -414,7 +285,7 @@ class StatutSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
-            'service-statutaire'     => [
+            'charges-patronales'  => [
                 'required'   => true,
                 'validators' => [
                     new \Laminas\Validator\Callback([
@@ -424,59 +295,19 @@ class StatutSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
-            'plafond-referentiel'    => [
-                'required'   => true,
-                'validators' => [
-                    new \Laminas\Validator\Callback([
-                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
-                        'callback' => function ($value) {
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }]),
-                ],
-            ],
-            'maximum-HETD'           => [
-                'required'   => true,
-                'validators' => [
-                    new \Laminas\Validator\Callback([
-                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
-                        'callback' => function ($value) {
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }]),
-                ],
-            ],
-            'charges-patronales'     => [
-                'required'   => true,
-                'validators' => [
-                    new \Laminas\Validator\Callback([
-                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
-                        'callback' => function ($value) {
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }]),
-                ],
-            ],
-            'plafond-hc-fi-hors-ead' => [
-                'required'   => true,
-                'validators' => [
-                    new \Laminas\Validator\Callback([
-                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
-                        'callback' => function ($value) {
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }]),
-                ],
-            ],
-            'champ-autre-1'          => [
+            'champ-autre-1'       => [
                 'required' => false,
             ],
-            'champ-autre-2'          => [
+            'champ-autre-2'       => [
                 'required' => false,
             ],
-            'champ-autre-3'          => [
+            'champ-autre-3'       => [
                 'required' => false,
             ],
-            'champ-autre-4'          => [
+            'champ-autre-4'       => [
                 'required' => false,
             ],
-            'champ-autre-5'          => [
+            'champ-autre-5'       => [
                 'required' => false,
             ],
         ];

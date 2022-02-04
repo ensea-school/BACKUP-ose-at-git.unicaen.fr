@@ -38,12 +38,6 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
     protected bool    $prioritaireIndicateurs        = false;
 
-    protected bool    $temAtv                        = false;
-
-    protected bool    $temVa                         = false;
-
-    protected bool    $temBiatss                     = false;
-
     protected bool    $nonAutorise                   = false;
 
     protected bool    $depassement                   = true;
@@ -443,78 +437,6 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     public function setPrioritaireIndicateurs(bool $prioritaireIndicateurs): Statut
     {
         $this->prioritaireIndicateurs = $prioritaireIndicateurs;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getTemAtv(): bool
-    {
-        return $this->temAtv;
-    }
-
-
-
-    /**
-     * @param bool $temAtv
-     *
-     * @return Statut
-     */
-    public function setTemAtv(bool $temAtv): Statut
-    {
-        $this->temAtv = $temAtv;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getTemVa(): bool
-    {
-        return $this->temVa;
-    }
-
-
-
-    /**
-     * @param bool $temVa
-     *
-     * @return Statut
-     */
-    public function setTemVa(bool $temVa): Statut
-    {
-        $this->temVa = $temVa;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getTemBiatss(): bool
-    {
-        return $this->temBiatss;
-    }
-
-
-
-    /**
-     * @param bool $temBiatss
-     *
-     * @return Statut
-     */
-    public function setTemBiatss(bool $temBiatss): Statut
-    {
-        $this->temBiatss = $temBiatss;
 
         return $this;
     }

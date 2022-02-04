@@ -25,9 +25,6 @@
         <field name="peutCloturerSaisie" type="boolean" column="PEUT_CLOTURER_SAISIE" nullable="false"/>
         <field name="peutSaisirMotifNonPaiement" type="boolean" column="PEUT_SAISIR_MOTIF_NON_PAIEMENT" nullable="false"/>
         <field name="peutSaisirServiceExt" type="boolean" column="PEUT_SAISIR_SERVICE_EXT" nullable="false"/>
-        <field name="temAtv" type="boolean" column="TEM_ATV" nullable="false"/>
-        <field name="temVa" type="boolean" column="TEM_VA" nullable="false"/>
-        <field name="temBiatss" type="boolean" column="TEM_BIATSS" nullable="false"/>
         <field name="depassementSDSHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
         <field name="dossierIdentiteComplementaire" type="boolean" column="DOSSIER_IDENTITE_COMP" nullable="false"/>
         <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>

@@ -51,8 +51,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
                         if (champsIds != '') champsIds += ',';
                         champsIds += $(this).data('id');
                     });
-                    $.post(Url('piece-jointe/type-piece-jointe-trier'), {champsIds: champsIds}).done(function (res) {
-                        alertFlash(res.msg, 'success', 3000);
+                    $.ajax({
+                        type: 'POST',
+                        url: Url('piece-jointe/type-piece-jointe-trier'),
+                        data: {champsIds: champsIds},
+                        success: function (res) { alertFlash(res.msg, 'success', 3000); },
                     });
                 }
             });

@@ -23,7 +23,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
     <?= $this->formSelect($filtre->get('scenario')) ?>
     <button class="btn btn-default" type="button" onclick="changeScenario()"><span class="glyphicon glyphicon-expand"></span> Afficher</button>
 </div>
-<br />
+<br/>
 
 <?php if ($scenario) {
     foreach ($seuils['structures'] as $sid => $structure): ?>
@@ -88,37 +88,36 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 
     function changementSeuil(element)
     {
-        var url = "<?= $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>";
         var params = $(element).data();
         params.dedoublement = $(element).val();
 
-        $.post(url, params, function (data)
-        {
-            alertFlash(data, 'success', 3000);
-            seuilCalcHeures();
-        }).fail(function (jqXHR)
-        {
-            alertFlash(data, 'error', 3000);
-            console.log(jqXHR);
+        $.ajax({
+            type: 'POST',
+            url: "<?= $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>",
+            data: {params: params},
+            success: function () {
+                alertFlash("Tri effectué", 'success', 3000);
+                seuilCalcHeures();
+            },
         });
     }
 
     function seuilCalcHeures()
     {
-        var url = "<?= $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>";
-
-        $.post(url, {}, function (data)
-        {
-            for( sid in data ){
-                $('#heures-'+sid).html(
-                    'Heures (FI) : ' + Formatter.floatToString(data[sid]['heures'])
-                    + '; HETD (FI) : '+  Formatter.floatToString(data[sid]['hetd'])
-                );
+        $.ajax({
+            type: 'POST',
+            url: "<?= $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>",
+            data: {},
+            success: function (data) {
+                for (sid in data) {
+                    $('#heures-' + sid).html(
+                        'Heures (FI) : ' + Formatter.floatToString(data[sid]['heures'])
+                        + '; HETD (FI) : ' + Formatter.floatToString(data[sid]['hetd'])
+                    );
+                }
             }
-        }).fail(function (jqXHR)
-        {
-            console.log(jqXHR);
         });
+
     }
 
     function changeScenario()

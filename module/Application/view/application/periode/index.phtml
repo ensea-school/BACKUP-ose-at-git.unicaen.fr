@@ -84,7 +84,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
                 $.ajax({
                     type: 'POST',
-                    url: Url('periodes/trier'),
+                    url: "<?= $this->url('periodes/trier')?>",
                     data: {champsIds: champsIds},
                     success: function () { alertFlash("Tri effectué", 'success', 3000); },
                 });

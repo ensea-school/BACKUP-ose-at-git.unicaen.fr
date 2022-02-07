@@ -59,7 +59,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_STRUC
                     alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
                 }).fail(function (jqXHR)
                 {
-                    alertFlash(jqXHR.responseText, 'error', 3000);
+                    alertFlash(jqXHR.responseText, 'danger', 3000);
                 });
             },
 

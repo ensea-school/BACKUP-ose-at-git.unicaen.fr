@@ -79,9 +79,7 @@ class PeriodeController extends AbstractController
             if ($sp) {
                 $sp->setOrdre($ordre);
                 $ordre++;
-                throw new \Exception("coucou ça plante");
-                    $this->getServicePeriode()->save($sp);
-
+                $this->getServicePeriode()->save($sp);
             }
         }
 

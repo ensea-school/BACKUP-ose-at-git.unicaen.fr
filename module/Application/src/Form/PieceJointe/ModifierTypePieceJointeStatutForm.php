@@ -225,6 +225,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'changement-rib'  => [
                 'required' => true,
             ],
+            'type-heure-hetd' => [
+                'required' => true,
+            ],
             'fc'              => [
                 'required' => true,
             ],
@@ -264,10 +267,11 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
+
         $object->setChangementRIB($data['changement-rib']);
         $object->setObligatoire($data['typePieceJointe']);
         $object->setSeuilHetd((empty($data['seuil-hetd']) ? null : $data['seuil-hetd']));
-        $object->setTypeHeureHetd((empty($data['type-heure-hetd']) ? null : $data['type-heure-hetd']));
+        $object->setTypeHeureHetd($data['type-heure-hetd']);
 
         if (array_key_exists('annee-debut', $data)) {
             $object->setAnneeDebut($this->getServiceAnnee()->get($data['annee-debut']));

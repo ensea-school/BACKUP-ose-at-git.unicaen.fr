@@ -9,6 +9,18 @@ return [
     'commentaire' => 'Contrats de travail',
     'sequence'    => 'TBL_CONTRAT_ID_SEQ',
     'columns'     => [
+        'ACTIF'          => [
+            'name'        => 'ACTIF',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 4,
+            'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
+        ],
         'ANNEE_ID'       => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
@@ -20,18 +32,6 @@ return [
             'default'     => NULL,
             'position'    => 2,
             'commentaire' => NULL,
-        ],
-        'ACTIF'        => [
-            'name'        => 'ACTIF',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 4,
-            'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ],
         'EDITE'          => [
             'name'        => 'EDITE',

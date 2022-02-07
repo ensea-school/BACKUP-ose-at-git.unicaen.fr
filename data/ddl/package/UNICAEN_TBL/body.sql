@@ -783,8 +783,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SELECT
             i.annee_id              annee_id,
             i.id                    intervenant_id,
-            si.cloture has_cloture,
-            CASE WHEN v.id IS NULL THEN 0 ELSE 1 END est_cloture
+            si.peut_cloturer_saisie peut_cloturer_saisie,
+            CASE WHEN v.id IS NULL THEN 0 ELSE 1 END cloture
           FROM
                       intervenant         i
                  JOIN statut_intervenant si ON si.id = i.statut_id
@@ -809,20 +809,20 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         GROUP BY
           annee_id,
           intervenant_id,
-          has_cloture';
+          peut_cloturer_saisie';
 
     OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                         = v.ANNEE_ID
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
-        AND t.has_cloture             = v.has_cloture
-        AND t.est_cloture                          = v.est_cloture
+        AND t.PEUT_CLOTURER_SAISIE             = v.PEUT_CLOTURER_SAISIE
+        AND t.CLOTURE                          = v.CLOTURE
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
-      v.has_cloture,
-      v.est_cloture
+      v.PEUT_CLOTURER_SAISIE,
+      v.CLOTURE
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_CLOTURE_REALISE t ON
@@ -858,7 +858,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SELECT
             i.annee_id                                                                annee_id,
             i.id                                                                      intervenant_id,
-            si.contrat                                                     contrat,
+            si.peut_avoir_contrat                                                     peut_avoir_contrat,
             NVL(ep.structure_id, i.structure_id)                                      structure_id,
             CASE WHEN evh.code IN (''contrat-edite'',''contrat-signe'') THEN 1 ELSE 0 END edite,
             CASE WHEN evh.code IN (''contrat-signe'')                 THEN 1 ELSE 0 END signe
@@ -889,12 +889,12 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             i.histo_destruction IS NULL
             /*@INTERVENANT_ID=i.id*/
             /*@ANNEE_ID=i.annee_id*/
-            AND NOT (si.contrat = 0 AND evh.code = ''valide'')
+            AND NOT (si.peut_avoir_contrat = 0 AND evh.code = ''valide'')
         )
         SELECT
           annee_id,
           intervenant_id,
-          contrat,
+          peut_avoir_contrat,
           structure_id,
           count(*) as nbvh,
           sum(edite) as edite,
@@ -904,7 +904,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         GROUP BY
           annee_id,
           intervenant_id,
-          contrat,
+          peut_avoir_contrat,
           structure_id';
 
     OPEN c FOR '
@@ -912,7 +912,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       CASE WHEN
             t.ANNEE_ID                       = v.ANNEE_ID
         AND t.INTERVENANT_ID                 = v.INTERVENANT_ID
-        AND t.CONTRAT             = v.CONTRAT
+        AND t.PEUT_AVOIR_CONTRAT             = v.PEUT_AVOIR_CONTRAT
         AND COALESCE(t.STRUCTURE_ID,0)       = COALESCE(v.STRUCTURE_ID,0)
         AND t.NBVH                           = v.NBVH
         AND t.EDITE                          = v.EDITE
@@ -920,7 +920,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
-      v.CONTRAT,
+      v.PEUT_AVOIR_CONTRAT,
       v.STRUCTURE_ID,
       v.NBVH,
       v.EDITE,
@@ -1055,7 +1055,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     viewQuery := 'SELECT
           i.annee_id,
           i.id intervenant_id,
-          si.dossier,
+          si.peut_saisir_dossier,
           d.id dossier_id,
           v.id validation_id,
           /*Complétude statut*/
@@ -1123,11 +1123,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
              	    ELSE 0 END
              ) END completude_insee,
              /*Complétude IBAN*/
-             CASE WHEN si.dossier_banque = 0 THEN 1
+             CASE WHEN si.dossier_iban = 0 THEN 1
              ELSE
              (
              	CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END
-             ) END completude_banque,
+             ) END completude_iban,
              /*Complétude employeur*/
              CASE WHEN si.dossier_employeur = 0 THEN 1
              ELSE
@@ -1183,7 +1183,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       CASE WHEN
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.INTERVENANT_ID                       = v.INTERVENANT_ID
-        AND t.DOSSIER                              = v.DOSSIER
+        AND t.PEUT_SAISIR_DOSSIER                  = v.PEUT_SAISIR_DOSSIER
         AND COALESCE(t.DOSSIER_ID,0)               = COALESCE(v.DOSSIER_ID,0)
         AND COALESCE(t.VALIDATION_ID,0)            = COALESCE(v.VALIDATION_ID,0)
         AND COALESCE(t.COMPLETUDE_STATUT,0)        = COALESCE(v.COMPLETUDE_STATUT,0)
@@ -1192,13 +1192,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.COMPLETUDE_CONTACT,0)       = COALESCE(v.COMPLETUDE_CONTACT,0)
         AND COALESCE(t.COMPLETUDE_ADRESSE,0)       = COALESCE(v.COMPLETUDE_ADRESSE,0)
         AND COALESCE(t.COMPLETUDE_INSEE,0)         = COALESCE(v.COMPLETUDE_INSEE,0)
-        AND COALESCE(t.COMPLETUDE_BANque,0)          = COALESCE(v.COMPLETUDE_BANque,0)
+        AND COALESCE(t.COMPLETUDE_IBAN,0)          = COALESCE(v.COMPLETUDE_IBAN,0)
         AND COALESCE(t.COMPLETUDE_EMPLOYEUR,0)     = COALESCE(v.COMPLETUDE_EMPLOYEUR,0)
         AND COALESCE(t.COMPLETUDE_AUTRES,0)        = COALESCE(v.COMPLETUDE_AUTRES,0)
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
-      v.DOSSIER,
+      v.PEUT_SAISIR_DOSSIER,
       v.DOSSIER_ID,
       v.VALIDATION_ID,
       v.COMPLETUDE_STATUT,
@@ -1207,7 +1207,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.COMPLETUDE_CONTACT,
       v.COMPLETUDE_ADRESSE,
       v.COMPLETUDE_INSEE,
-      v.COMPLETUDE_BANque,
+      v.COMPLETUDE_IBAN,
       v.COMPLETUDE_EMPLOYEUR,
       v.COMPLETUDE_AUTRES
     FROM
@@ -2531,7 +2531,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           NVL( t.structure_id, i.structure_id )                                                     structure_id,
           ti.id                                                                                     type_intervenant_id,
           ti.code                                                                                   type_intervenant_code,
-          si.service                                                                    service,
+          si.peut_saisir_service                                                                    peut_saisir_service,
 
           t.element_pedagogique_id,
           t.service_id,
@@ -2564,7 +2564,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           i.structure_id,
           ti.id,
           ti.code,
-          si.service,
+          si.peut_saisir_service,
           t.element_pedagogique_id,
           t.service_id,
           t.element_pedagogique_periode_id,
@@ -2583,7 +2583,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.STRUCTURE_ID,0)                   = COALESCE(v.STRUCTURE_ID,0)
         AND t.TYPE_INTERVENANT_ID                        = v.TYPE_INTERVENANT_ID
         AND t.TYPE_INTERVENANT_CODE                      = v.TYPE_INTERVENANT_CODE
-        AND t.SERVICE                        = v.SERVICE
+        AND t.PEUT_SAISIR_SERVICE                        = v.PEUT_SAISIR_SERVICE
         AND COALESCE(t.ELEMENT_PEDAGOGIQUE_ID,0)         = COALESCE(v.ELEMENT_PEDAGOGIQUE_ID,0)
         AND t.SERVICE_ID                                 = v.SERVICE_ID
         AND COALESCE(t.ELEMENT_PEDAGOGIQUE_PERIODE_ID,0) = COALESCE(v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,0)
@@ -2603,7 +2603,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.STRUCTURE_ID,
       v.TYPE_INTERVENANT_ID,
       v.TYPE_INTERVENANT_CODE,
-      v.SERVICE,
+      v.PEUT_SAISIR_SERVICE,
       v.ELEMENT_PEDAGOGIQUE_ID,
       v.SERVICE_ID,
       v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,
@@ -2654,7 +2654,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SELECT
             i.annee_id,
             i.id intervenant_id,
-            si.referentiel referentiel,
+            si.peut_saisir_referentiel peut_saisir_service,
             vh.type_volume_horaire_id,
             s.structure_id,
             CASE WHEN v.id IS NULL AND vh.auto_validation=0 THEN 0 ELSE 1 END valide
@@ -2681,7 +2681,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         SELECT
           annee_id,
           intervenant_id,
-          referentiel,
+          peut_saisir_service,
           type_volume_horaire_id,
           structure_id,
           CASE WHEN type_volume_horaire_id IS NULL THEN 0 ELSE count(*) END nbvh,
@@ -2693,7 +2693,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         GROUP BY
           annee_id,
           intervenant_id,
-          referentiel,
+          peut_saisir_service,
           type_volume_horaire_id,
           structure_id';
 
@@ -2702,7 +2702,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       CASE WHEN
             t.ANNEE_ID                           = v.ANNEE_ID
         AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
-        AND t.referentiel                = v.referentiel
+        AND t.PEUT_SAISIR_SERVICE                = v.PEUT_SAISIR_SERVICE
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
         AND COALESCE(t.STRUCTURE_ID,0)           = COALESCE(v.STRUCTURE_ID,0)
         AND t.NBVH                               = v.NBVH
@@ -2710,7 +2710,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
-      v.referentiel,
+      v.PEUT_SAISIR_SERVICE,
       v.TYPE_VOLUME_HORAIRE_ID,
       v.STRUCTURE_ID,
       v.NBVH,
@@ -2753,8 +2753,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     viewQuery := 'SELECT
           i.annee_id,
           i.id intervenant_id,
-          si.service,
-          si.referentiel,
+          si.peut_saisir_service,
+          si.peut_saisir_referentiel,
           SUM( CASE WHEN tvhs.code = ''PREVU''   THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_prev,
           SUM( CASE WHEN tvhrs.code = ''PREVU''   THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_prev,
           SUM( CASE WHEN tvhs.code = ''REALISE'' THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_real,
@@ -2776,16 +2776,16 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         GROUP BY
           i.annee_id,
           i.id,
-          si.service,
-          si.referentiel';
+          si.peut_saisir_service,
+          si.peut_saisir_referentiel';
 
     OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                            = v.ANNEE_ID
         AND t.INTERVENANT_ID                      = v.INTERVENANT_ID
-        AND t.SERVICE                 = v.SERVICE
-        AND t.REFERENTIEL                         = v.REFERENTIEL
+        AND t.PEUT_SAISIR_SERVICE                 = v.PEUT_SAISIR_SERVICE
+        AND t.PEUT_SAISIR_REFERENTIEL             = v.PEUT_SAISIR_REFERENTIEL
         AND t.HEURES_SERVICE_PREV                 = v.HEURES_SERVICE_PREV
         AND t.HEURES_REFERENTIEL_PREV             = v.HEURES_REFERENTIEL_PREV
         AND t.HEURES_SERVICE_REAL                 = v.HEURES_SERVICE_REAL
@@ -2793,8 +2793,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
-      v.SERVICE,
-      v.REFERENTIEL,
+      v.PEUT_SAISIR_SERVICE,
+      v.PEUT_SAISIR_REFERENTIEL,
       v.HEURES_SERVICE_PREV,
       v.HEURES_REFERENTIEL_PREV,
       v.HEURES_SERVICE_REAL,

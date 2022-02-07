@@ -150,7 +150,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       w.objectif              := e.objectif;
       IF e.id IS NULL THEN
         w.id := tbl_workflow_id_seq.NEXTVAL;
-        INSERT INTO tbl_workflow values w;
+        INSERT INTO tbl_workflow VALUES w;
       ELSE
         w.id := e.id;
         IF e.old_atteignable <> e.atteignable
@@ -160,7 +160,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           e.to_update := TRUE;
         END IF;
         IF e.to_update THEN
-          UPDATE tbl_workflow SET row = w WHERE id = w.id;
+          UPDATE tbl_workflow SET ROW = w WHERE id = w.id;
         END IF;
       END IF;
 
@@ -188,7 +188,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
 
 
-  FUNCTION ETAPE_FRANCHIE( etape IN t_workflow_etape, need_done boolean default false ) RETURN FLOAT IS
+  FUNCTION ETAPE_FRANCHIE( etape IN t_workflow_etape, need_done BOOLEAN DEFAULT FALSE ) RETURN FLOAT IS
     res FLOAT DEFAULT 0;
   BEGIN
     IF etape.objectif = 0 THEN
@@ -346,7 +346,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
 
 
-  FUNCTION MAKE_V_TBL_WORKFLOW(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL) RETURN CLOB IS
+  FUNCTION MAKE_V_TBL_WORKFLOW(param VARCHAR2 DEFAULT NULL, VALUE VARCHAR2 DEFAULT NULL) RETURN CLOB IS
     p VARCHAR2(30);
     dems CLOB;
     intervenant CLOB;
@@ -414,7 +414,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       FROM
         intervenant
       WHERE
-        ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, value) || '
+        ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, VALUE) || '
     ';
 
 
@@ -440,7 +440,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             UNION SELECT ''DONNEES_PERSO_VALIDATION'' code FROM dual
           ) e ON 1=1
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND d.actif = 1
     ';
 
@@ -467,7 +467,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             UNION SELECT ''SERVICE_SAISIE_REALISE''         code FROM dual
           ) e ON 1=1
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND (tss.service = 1 OR tss.referentiel = 1)
     ';
 
@@ -487,7 +487,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_validation_enseignement tve
           JOIN type_volume_horaire tvh ON tvh.id = tve.type_volume_horaire_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND tve.auto_validation = 0
         GROUP BY
           tve.intervenant_id,
@@ -511,7 +511,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_validation_referentiel tvr
           JOIN type_volume_horaire tvh ON tvh.id = tvr.type_volume_horaire_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND tvr.auto_validation = 0
         GROUP BY
           tvr.intervenant_id,
@@ -544,7 +544,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           FROM
             tbl_piece_jointe
           WHERE
-            ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+            ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
             AND demandee > 0
             AND obligatoire = 1
           GROUP BY
@@ -573,7 +573,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_agrement a
           JOIN type_agrement ta ON ta.id = a.type_agrement_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
     ';
 
 
@@ -588,7 +588,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         FROM
           tbl_cloture_realise c
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND c.has_cloture = 1
     ';
 
@@ -618,7 +618,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             FROM
               tbl_paiement
             WHERE
-              ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+              ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
             GROUP BY
               annee_id,
               intervenant_id,
@@ -649,7 +649,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_contrat c
           JOIN parametre p on p.nom = ''contrat_regle_franchissement''
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND actif = 1
           AND nbvh > 0
     ';
@@ -691,7 +691,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
 
 
-  PROCEDURE CALCULER_TBL( param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL ) IS
+  PROCEDURE CALCULER_TBL( param VARCHAR2 DEFAULT NULL, VALUE VARCHAR2 DEFAULT NULL ) IS
     TYPE t_v_tbl_workflow IS RECORD(
       annee_id              NUMERIC,
       intervenant_id        NUMERIC,
@@ -730,7 +730,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     u BOOLEAN;
   BEGIN
     INITIALISATION;
-    OPEN c FOR 'SELECT * FROM tbl_workflow WHERE ' || unicaen_tbl.MAKE_WHERE(param, value);
+    OPEN c FOR 'SELECT * FROM tbl_workflow WHERE ' || unicaen_tbl.MAKE_WHERE(param, VALUE);
     LOOP
       FETCH c INTO t; EXIT WHEN c%NOTFOUND;
       IF NOT intervenants.exists(t.intervenant_id) THEN
@@ -757,7 +757,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     END LOOP;
     CLOSE c;
 
-    OPEN c FOR MAKE_V_TBL_WORKFLOW(param, value);
+    OPEN c FOR MAKE_V_TBL_WORKFLOW(param, VALUE);
     LOOP
       FETCH c INTO v; EXIT WHEN c%NOTFOUND;
 
@@ -810,7 +810,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     FROM
       wf_dep_bloquante wdb
       JOIN tbl_workflow v ON v.id= wdb.tbl_workflow_id
-    WHERE ' || unicaen_tbl.MAKE_WHERE( param, value, 'v' );
+    WHERE ' || unicaen_tbl.MAKE_WHERE( param, VALUE, 'v' );
     LOOP
       FETCH c INTO wdb; EXIT WHEN c%NOTFOUND;
       we_ec := MAKE_FR_ETAPE_INDEX( wdb.etape_id, wdb.structure_id );

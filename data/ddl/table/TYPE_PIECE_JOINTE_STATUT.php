@@ -189,6 +189,18 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
+        'TYPE_HEURE_HETD'        => [
+            'name'        => 'TYPE_HEURE_HETD',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 18,
+            'commentaire' => NULL,
+        ],
         'STATUT_INTERVENANT_ID' => [
             'name'        => 'STATUT_INTERVENANT_ID',
             'type'        => 'int',

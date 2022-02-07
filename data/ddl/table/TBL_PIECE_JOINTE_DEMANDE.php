@@ -93,6 +93,18 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
+        'HEURES_POUR_SEUIL_HETD'    => [
+            'name'        => 'HEURES_POUR_SEUIL_HETD',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

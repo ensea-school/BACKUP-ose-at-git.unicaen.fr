@@ -38,6 +38,11 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     private $seuilHetd;
 
     /**
+     * @var boolean
+     */
+    private $typeHeureHetd;
+
+    /**
      * @var Annee
      */
     private $anneeDebut;
@@ -68,18 +73,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     private $obligatoireHNP;
 
 
-    /**
-     * Get seuilHeures
-     *
-     * @return integer
-     * @see  ObligatoireSelonSeuilHeuresAwareTrait
-     * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
-     */
-    public function getSeuilHeures()
-    {
-        return $this->seuilHetd;
-    }
-
 
     /**
      * Set obligatoire
@@ -109,6 +102,46 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         $this->seuilHetd = $seuilHetd;
 
         return $this;
+    }
+
+
+
+    /**
+     * Get seuilHetd
+     *
+     * @return integer
+     */
+    public function getSeuilHetd()
+    {
+        return $this->seuilHetd;
+    }
+
+
+
+    /**
+     * Set typeHeure
+     *
+     * @param integer $typeHeureHetd
+     *
+     * @return TypePieceJointeStatut
+     */
+    public function setTypeHeureHetd($typeHeureHetd)
+    {
+        $this->typeHeureHetd = $typeHeureHetd;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get typeHeure
+     *
+     * @return integer
+     */
+    public function getTypeHeureHetd()
+    {
+        return $this->typeHeureHetd;
     }
 
 
@@ -305,6 +338,8 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * @return bool
      */
@@ -312,6 +347,8 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         return $this->obligatoireHNP;
     }
+
+
 
     /**
      * @param bool $obligatoireHNP
@@ -328,10 +365,10 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     public function __toString()
     {
         $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
-        if ($this->getSeuilHeures()) $txt .= ' >' . $this->getSeuilHeures();
+        if ($this->getSeuilHetd()) $txt .= ' >' . $this->getSeuilHetd();
         if ($this->getFC()) $txt .= ' FC ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
-        if ($this->getDureeVie() && $this->getDureeVie() > 1 ) $txt .= ' ' . $this->getDureeVie() . 'ans';
+        if ($this->getDureeVie() && $this->getDureeVie() > 1) $txt .= ' ' . $this->getDureeVie() . 'ans';
 
 
         return $txt;
@@ -346,7 +383,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         $t   = [];
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
-        if ($this->getSeuilHeures()) $t[] = 'À partir de ' . $this->getSeuilHeures() . ' heures';
+        if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
         if ($this->getFC()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
         if ($this->getAnneeDebut()) $t[] = 'Actif à partir de ' . $this->getAnneeDebut();

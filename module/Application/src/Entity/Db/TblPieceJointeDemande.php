@@ -27,7 +27,12 @@ class TblPieceJointeDemande
      * @var float
      */
     private $heuresPourSeuil;
-    
+
+    /**
+     * @var float
+     */
+    private $heuresPourSeuilHetd;
+
     /**
      * @var \Application\Entity\Db\Annee
      */
@@ -37,7 +42,6 @@ class TblPieceJointeDemande
      * @var varchar
      */
     private $codeIntervenant;
-
 
     /**
      * @var integer
@@ -69,6 +73,7 @@ class TblPieceJointeDemande
     }
 
 
+
     /**
      * Get intervenant
      *
@@ -89,7 +94,17 @@ class TblPieceJointeDemande
         return $this->heuresPourSeuil;
     }
 
-    
+
+
+    /**
+     * @return float
+     */
+    public function getHeuresPourSeuilHetd()
+    {
+        return $this->heuresPourSeuilHetd;
+    }
+
+
 
     /**
      * Get annee
@@ -100,6 +115,7 @@ class TblPieceJointeDemande
     {
         return $this->annee;
     }
+
 
 
     /**

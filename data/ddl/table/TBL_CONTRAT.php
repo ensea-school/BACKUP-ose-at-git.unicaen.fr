@@ -21,8 +21,8 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CONTRAT'        => [
-            'name'        => 'CONTRAT',
+        'ACTIF'        => [
+            'name'        => 'ACTIF',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

@@ -2,7 +2,6 @@ SELECT
   i.annee_id                annee_id,
   fr.type_volume_horaire_id type_volume_horaire_id,
   i.id                      intervenant_id,
-  si.plafond_hc_fi_hors_ead plafond,
   SUM(frvh.heures_compl_fi) heures
 FROM
   intervenant                     i
@@ -18,5 +17,4 @@ GROUP BY
   fr.type_volume_horaire_id,
   i.annee_id,
   i.id,
-  i.statut_id,
-  si.plafond_hc_fi_hors_ead
+  i.statut_id

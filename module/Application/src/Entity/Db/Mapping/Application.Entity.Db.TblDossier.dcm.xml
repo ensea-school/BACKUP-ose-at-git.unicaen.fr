@@ -3,48 +3,28 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Application\Entity\Db\TblDossier" table="TBL_DOSSIER">
-        <unique-constraints>
-            <unique-constraint name="tbl_dossier__un" columns="INTERVENANT_ID"/>
-        </unique-constraints>
-        <id name="id" type="integer" column="ID">
-            <generator strategy="SEQUENCE"/>
-        </id>
-        <field name="dossier" type="boolean" column="DOSSIER" nullable="false">
-            <options>
-                <option name="default">0</option>
-            </options>
-        </field>
-        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation" fetch="LAZY">
-            <join-columns>
-                <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
-            </join-columns>
+        <id name="id" type="integer" column="ID" />
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" fetch="LAZY">
-            <join-columns>
-                <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <!--<one-to-one field="dossier" target-entity="Application\Entity\Db\IntervenantDossier" fetch="LAZY">
-            <join-columns>
-                <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
-            </join-columns>
-        </one-to-one>-->
+        <field name="actif" type="boolean" column="ACTIF" nullable="false" />
         <one-to-one field="dossier" target-entity="Application\Entity\Db\IntervenantDossier" inversed-by="tblDossier">
             <join-column name="DOSSIER_ID" referenced-column-name="ID" />
         </one-to-one>
-        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
-            <join-columns>
-                <join-column name="ANNEE_ID" referenced-column-name="ID"/>
-            </join-columns>
+        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation" fetch="LAZY">
+            <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="completudeIdentite" type="boolean" column="COMPLETUDE_IDENTITE" nullable="false"/>
         <field name="completudeIdentiteComp" type="boolean" column="COMPLETUDE_IDENTITE_COMP" nullable="false"/>
+        <field name="completudeStatut" type="boolean" column="COMPLETUDE_STATUT" nullable="false"/>
         <field name="completudeContact" type="boolean" column="COMPLETUDE_CONTACT" nullable="false"/>
         <field name="completudeAdresse" type="boolean" column="COMPLETUDE_ADRESSE" nullable="false"/>
         <field name="completudeInsee" type="boolean" column="COMPLETUDE_INSEE" nullable="false"/>
-        <field name="completudeIban" type="boolean" column="COMPLETUDE_IBAN" nullable="false"/>
+        <field name="completudeBanque" type="boolean" column="COMPLETUDE_BANQUE" nullable="false"/>
         <field name="completudeEmployeur" type="boolean" column="COMPLETUDE_EMPLOYEUR" nullable="false"/>
         <field name="completudeAutres" type="boolean" column="COMPLETUDE_AUTRES" nullable="false"/>
-        <field name="completudeStatut" type="boolean" column="COMPLETUDE_STATUT" nullable="false"/>
     </entity>
 </doctrine-mapping>

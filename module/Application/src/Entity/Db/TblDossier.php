@@ -2,106 +2,44 @@
 
 namespace Application\Entity\Db;
 
-/**
- * TblDossier
- */
 class TblDossier
 {
-    /**
-     * @var boolean
-     */
-    private $dossier = false;
+    private int                 $id;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private Annee               $annee;
 
-    /**
-     * @var \Application\Entity\Db\Validation
-     */
-    private $validation;
+    private Intervenant         $intervenant;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private bool                $actif;
 
-    /**
-     * @var \Application\Entity\Db\IntervenantDossier
-     */
-    private $dossier;
+    private ?IntervenantDossier $dossier;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
+    private ?Validation         $validation;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeIdentite;
+    private bool                $completudeIdentite;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeIdentiteComp;
+    private bool                $completudeIdentiteComp;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeContact;
+    private bool                $completudeStatut;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeAdresse;
+    private bool                $completudeContact;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeInsee;
+    private bool                $completudeAdresse;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeIban;
+    private bool                $completudeInsee;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeEmployeur;
+    private bool                $completudeBanque;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeAutres;
+    private bool                $completudeEmployeur;
 
-    /**
-     * @var boolean
-     */
-    protected $completudeStatut;
+    private bool                $completudeAutres;
 
 
 
     /**
-     * Get dossier
-     *
-     * @return boolean
+     * @return int
      */
-    public function getDossier(): bool
-    {
-        return $this->dossier;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -109,47 +47,9 @@ class TblDossier
 
 
     /**
-     * Get validation
-     *
-     * @return \Application\Entity\Db\Validation
+     * @return Annee
      */
-    public function getValidation()
-    {
-        return $this->validation;
-    }
-
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
-    }
-
-
-
-    /**
-     * Get dossier
-     *
-     * @return \Application\Entity\Db\IntervenantDossier
-     */
-    public function getDossier()
-    {
-        return $this->dossier;
-    }
-
-
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
+    public function getAnnee(): Annee
     {
         return $this->annee;
     }
@@ -157,12 +57,49 @@ class TblDossier
 
 
     /**
-     * Get complétude identité
-     *
-     * @return boolean
+     * @return Intervenant
      */
+    public function getIntervenant(): Intervenant
+    {
+        return $this->intervenant;
+    }
 
-    public function getCompletudeIdentite()
+
+
+    /**
+     * @return bool
+     */
+    public function getActif(): bool
+    {
+        return $this->actif;
+    }
+
+
+
+    /**
+     * @return IntervenantDossier|null
+     */
+    public function getDossier(): ?IntervenantDossier
+    {
+        return $this->dossier;
+    }
+
+
+
+    /**
+     * @return Validation|null
+     */
+    public function getValidation(): ?Validation
+    {
+        return $this->validation;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getCompletudeIdentite(): bool
     {
         return $this->completudeIdentite;
     }
@@ -170,12 +107,9 @@ class TblDossier
 
 
     /**
-     * Get complétude identité complementaire
-     *
-     * @return boolean
+     * @return bool
      */
-
-    public function getCompletudeIdentiteComp()
+    public function getCompletudeIdentiteComp(): bool
     {
         return $this->completudeIdentiteComp;
     }
@@ -183,12 +117,19 @@ class TblDossier
 
 
     /**
-     * Get complétude contact
-     *
-     * @return boolean
+     * @return bool
      */
+    public function getCompletudeStatut(): bool
+    {
+        return $this->completudeStatut;
+    }
 
-    public function getCompletudeContact()
+
+
+    /**
+     * @return bool
+     */
+    public function getCompletudeContact(): bool
     {
         return $this->completudeContact;
     }
@@ -196,12 +137,9 @@ class TblDossier
 
 
     /**
-     * Get complétude adresse
-     *
-     * @return boolean
+     * @return bool
      */
-
-    public function getCompletudeAdresse()
+    public function getCompletudeAdresse(): bool
     {
         return $this->completudeAdresse;
     }
@@ -209,12 +147,9 @@ class TblDossier
 
 
     /**
-     * Get complétude INSEE
-     *
-     * @return boolean
+     * @return bool
      */
-
-    public function getCompletudeInsee()
+    public function getCompletudeInsee(): bool
     {
         return $this->completudeInsee;
     }
@@ -222,25 +157,19 @@ class TblDossier
 
 
     /**
-     * Get complétude iban
-     *
-     * @return boolean
+     * @return bool
      */
-
-    public function getCompletudeIban()
+    public function getCompletudeBanque(): bool
     {
-        return $this->completudeIban;
+        return $this->completudeBanque;
     }
 
 
 
     /**
-     * Get complétude employeur
-     *
-     * @return boolean
+     * @return bool
      */
-
-    public function getCompletudeEmployeur()
+    public function getCompletudeEmployeur(): bool
     {
         return $this->completudeEmployeur;
     }
@@ -248,27 +177,11 @@ class TblDossier
 
 
     /**
-     * Get complétude autres
-     *
-     * @return boolean
+     * @return bool
      */
-
-    public function getCompletudeAutres()
+    public function getCompletudeAutres(): bool
     {
         return $this->completudeAutres;
-    }
-
-
-
-    /**
-     * Get complétude statut
-     *
-     * @return boolean
-     */
-
-    public function getCompletudeStatut()
-    {
-        return $this->completudeStatut;
     }
 
 
@@ -280,10 +193,9 @@ class TblDossier
             $this->getCompletudeAdresse() &&
             $this->getCompletudeContact() &&
             $this->getCompletudeInsee() &&
-            $this->getCompletudeIban() &&
+            $this->getCompletudeBanque() &&
             $this->getCompletudeEmployeur() &&
             $this->getCompletudeAutres() &&
             $this->getCompletudeStatut();
     }
 }
-

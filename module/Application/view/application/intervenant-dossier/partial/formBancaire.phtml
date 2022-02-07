@@ -28,7 +28,7 @@ $dossierBancaire = $form->get('DossierBancaire');
         <div class="panel-heading">
             COORDONNÉES BANCAIRES
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$tblDossier->getCompletudeIban()): ?>
+                <?php if (!$tblDossier->getCompletudeBanque()): ?>
                     <span class="label label-warning">A compléter</span>
                 <?php else: ?>
                     <span class="label label-success">Complet</span>

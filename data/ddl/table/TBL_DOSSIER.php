@@ -69,8 +69,8 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_IBAN'          => [
-            'name'        => 'COMPLETUDE_IBAN',
+        'COMPLETUDE_BANQUE'          => [
+            'name'        => 'COMPLETUDE_BANQUE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -129,8 +129,8 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'DOSSIER'                  => [
-            'name'        => 'DOSSIER',
+        'ACTIF'                  => [
+            'name'        => 'ACTIF',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

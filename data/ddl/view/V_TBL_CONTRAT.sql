@@ -3,7 +3,7 @@ WITH t AS (
   SELECT
     i.annee_id                                                                annee_id,
     i.id                                                                      intervenant_id,
-    si.contrat                                                                contrat,
+    si.contrat                                                                actif,
     NVL(ep.structure_id, i.structure_id)                                      structure_id,
     CASE WHEN evh.code IN ('contrat-edite','contrat-signe') THEN 1 ELSE 0 END edite,
     CASE WHEN evh.code IN ('contrat-signe')                 THEN 1 ELSE 0 END signe
@@ -39,7 +39,7 @@ WITH t AS (
 SELECT
   annee_id,
   intervenant_id,
-  contrat,
+  actif,
   structure_id,
   COUNT(*) AS nbvh,
   SUM(edite) AS edite,
@@ -49,5 +49,5 @@ FROM
 GROUP BY
   annee_id,
   intervenant_id,
-  contrat,
+  actif,
   structure_id

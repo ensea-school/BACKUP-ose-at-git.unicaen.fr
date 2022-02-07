@@ -3,8 +3,7 @@ SELECT
   vhr.type_volume_horaire_id        type_volume_horaire_id,
   i.id                              intervenant_id,
   fr.id                             fonction_referentiel_id,
-  SUM(vhr.heures)                   heures,
-  NULL                              plafond
+  SUM(vhr.heures)                   heures
 FROM
        service_referentiel       sr
   JOIN intervenant                i ON i.id = sr.intervenant_id

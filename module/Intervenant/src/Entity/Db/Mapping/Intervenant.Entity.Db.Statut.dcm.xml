@@ -13,7 +13,6 @@
         <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
         <field name="tauxChargesPatronales" type="float" column="TAUX_CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
         <field name="code" type="string" column="CODE" length="50" nullable="false"/>
-        <field name="codeRh" type="string" column="CODE_RH" length="50" nullable="false"/>
         <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
         <field name="peutSaisirService" type="boolean" column="SERVICE" nullable="false"/>
         <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false"/>

@@ -13,9 +13,9 @@ WHERE
   AND d.completude_contact = 1
   AND d.completude_adresse = 1
   AND d.completude_insee = 1
-  AND d.completude_iban = 1
+  AND d.completude_banque = 1
   AND d.completude_employeur = 1
   AND d.completude_autres = 1
   AND d.completude_statut = 1
   AND d.validation_id IS NULL
-  AND d.dossier = 1
+  AND d.actif = 1

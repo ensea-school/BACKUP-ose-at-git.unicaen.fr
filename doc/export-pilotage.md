@@ -199,7 +199,7 @@ Contrats de travail
 | ID             |                                                          |
 | ANNEE_ID       |==> ANNEE.ID                                              |
 | INTERVENANT_ID |==> INTERVENANT.ID                                        |
-| CONTRAT        |Témoin (0 ou 1 : 1 si l'intervenant doit avoir un contrat)|
+| ACTIF          |Témoin (0 ou 1 : 1 si l'intervenant doit avoir un contrat)|
 | STRUCTURE_ID   |==> STRUCTURE.ID                                          |
 | NBVH           |Nombre de volumes horaires contractualisables             |
 | EDITE          |Nombre de volumes horaires contractualisés                |
@@ -223,14 +223,14 @@ Gestion budgétaire (enveloppes)
 
 Données personnelles
 
-| Colonne        |Description                             |
-|----------------|----------------------------------------|
-| ID             |                                        |
-| ANNEE_ID       |==> ANNEE.ID                            |
-| INTERVENANT_ID |==> INTERVENANT.ID                      |
-| DOSSIER        |1 Si l'intervenant a un dossier, 0 sinon|
-| DOSSIER_ID     |==> DOSSIER.ID                          |
-| VALIDATION_ID  |==> VALIDATION.ID                       |
+| Colonne        | Description                              |
+|----------------|------------------------------------------|
+| ID             |                                          |
+| ANNEE_ID       | ==> ANNEE.ID                             |
+| INTERVENANT_ID | ==> INTERVENANT.ID                       |
+| ACTIF          | 1 Si l'intervenant a un dossier, 0 sinon |
+| DOSSIER_ID     | ==> INTERVENANT_DOSSIER.ID               |
+| VALIDATION_ID  | ==> VALIDATION.ID                        |
 
 
 ## Table TBL_LIEN

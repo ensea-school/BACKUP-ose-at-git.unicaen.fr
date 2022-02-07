@@ -2,8 +2,7 @@ SELECT
   i.annee_id                          annee_id,
   fr.type_volume_horaire_id           type_volume_horaire_id,
   fr.intervenant_id                   intervenant_id,
-  fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures,
-  si.plafond_hc_hors_remu_fc          plafond
+  fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
 FROM
        intervenant                i
   JOIN statut                    si ON si.id = i.statut_id

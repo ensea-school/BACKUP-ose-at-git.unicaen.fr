@@ -427,7 +427,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           1                                                         objectif,
           CASE
             WHEN e.code = ''DONNEES_PERSO_SAISIE'' THEN
-              (d.completude_statut + d.completude_identite + d.completude_identite_comp + d.completude_contact + d.completude_adresse + d.completude_insee + d.completude_iban + d.completude_employeur) / 8
+              (d.completude_statut + d.completude_identite + d.completude_identite_comp + d.completude_contact + d.completude_adresse + d.completude_insee + d.completude_banque + d.completude_employeur) / 8
 
             WHEN e.code = ''DONNEES_PERSO_VALIDATION'' THEN
               CASE WHEN d.validation_id IS NULL THEN 0 ELSE 1 END
@@ -441,7 +441,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ) e ON 1=1
         WHERE
           ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND d.dossier = 1
+          AND d.actif = 1
     ';
 
 
@@ -650,7 +650,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           JOIN parametre p on p.nom = ''contrat_regle_franchissement''
         WHERE
           ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND contrat = 1
+          AND actif = 1
           AND nbvh > 0
     ';
 

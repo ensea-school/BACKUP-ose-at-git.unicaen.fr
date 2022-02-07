@@ -48,7 +48,7 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
     protected float   $maximumHETD                   = 9999;
 
-    protected float   $chargesPatronales             = 1.0;
+    protected float   $tauxChargesPatronales         = 1.0;
 
     protected bool    $peutSaisirService             = true;
 
@@ -58,7 +58,7 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
     protected bool    $dossier                       = true;
 
-    protected bool    $contrat                       = true;
+    protected bool    $peutAvoirContrat              = true;
 
     protected bool    $peutCloturerSaisie            = false;
 

@@ -5,7 +5,7 @@ AFTER UPDATE OF
   DEPASSEMENT_SERVICE_DU_SANS_HC
 ON "STATUT"
 FOR EACH ROW
-BEGIN return; /* Désactivation du trigger... */
+BEGIN RETURN; /* Désactivation du trigger... */
 
   IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 

@@ -93,7 +93,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL' => [
+        'REFERENTIEL'             => [
             'name'        => 'REFERENTIEL',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -105,7 +105,7 @@ return [
             'position'    => 5,
             'commentaire' => 'Témoin (0 ou 1)',
         ],
-        'SERVICE'     => [
+        'SERVICE'                 => [
             'name'        => 'SERVICE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',

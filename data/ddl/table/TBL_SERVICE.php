@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'                 => [
@@ -153,7 +153,7 @@ return [
             'position'    => 18,
             'commentaire' => 'Nombre de volumes horaires saisis',
         ],
-        'SERVICE'            => [
+        'SERVICE'                        => [
             'name'        => 'SERVICE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',

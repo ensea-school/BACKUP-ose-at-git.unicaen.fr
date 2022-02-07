@@ -34,8 +34,8 @@ SELECT
   referentiel,
   type_volume_horaire_id,
   structure_id,
-  CASE WHEN type_volume_horaire_id IS NULL THEN 0 ELSE count(*) END nbvh,
-  sum(valide) valide
+  CASE WHEN type_volume_horaire_id IS NULL THEN 0 ELSE COUNT(*) END nbvh,
+  SUM(valide) valide
 FROM
   t
 WHERE

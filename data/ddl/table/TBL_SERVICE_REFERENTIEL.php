@@ -57,7 +57,7 @@ return [
             'position'    => 7,
             'commentaire' => 'Nombre de volumes horaires',
         ],
-        'REFERENTIEL'    => [
+        'REFERENTIEL'            => [
             'name'        => 'REFERENTIEL',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',

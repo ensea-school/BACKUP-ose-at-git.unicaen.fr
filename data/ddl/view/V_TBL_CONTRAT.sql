@@ -41,9 +41,9 @@ SELECT
   intervenant_id,
   contrat,
   structure_id,
-  count(*) as nbvh,
-  sum(edite) as edite,
-  sum(signe) as signe
+  COUNT(*) AS nbvh,
+  SUM(edite) AS edite,
+  SUM(signe) AS signe
 FROM
   t
 GROUP BY

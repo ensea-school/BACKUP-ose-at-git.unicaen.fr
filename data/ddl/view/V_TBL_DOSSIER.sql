@@ -18,14 +18,14 @@ SELECT
    /*Complétude identité complémentaire*/
   CASE WHEN si.dossier_identite_comp = 0 THEN 1
   ELSE
-  	  	CASE WHEN
-  	  	(
-  	  	   d.date_naissance IS NOT NULL
-		   AND NOT (OSE_DIVERS.str_reduce(pn.LIBELLE) = 'france' AND d.departement_naissance_id IS NULL)
+        CASE WHEN
+        (
+           d.date_naissance IS NOT NULL
+       AND NOT (OSE_DIVERS.str_reduce(pn.LIBELLE) = 'france' AND d.departement_naissance_id IS NULL)
            AND d.pays_naissance_id IS NOT NULL
            AND d.pays_nationalite_id IS NOT NULL
            AND d.commune_naissance IS NOT NULL
-  	  	) THEN 1 ELSE 0 END
+        ) THEN 1 ELSE 0 END
    END completude_identite_comp,
    /*Complétude contact*/
    CASE WHEN si.dossier_contact = 0 THEN 1
@@ -40,9 +40,9 @@ SELECT
            END) = 1
            AND
           (CASE WHEN si.dossier_tel_perso = 1 THEN
-      	     CASE WHEN d.tel_perso IS NOT NULL AND d.tel_pro IS NOT NULL THEN 1 ELSE 0 END
+             CASE WHEN d.tel_perso IS NOT NULL AND d.tel_pro IS NOT NULL THEN 1 ELSE 0 END
            ELSE
-      	     CASE WHEN d.tel_pro IS NOT NULL OR d.tel_perso IS NOT NULL THEN 1 ELSE 0 END
+             CASE WHEN d.tel_pro IS NOT NULL OR d.tel_perso IS NOT NULL THEN 1 ELSE 0 END
            END) = 1
         ) THEN 1 ELSE 0 END
    ) END completude_contact,
@@ -50,39 +50,39 @@ SELECT
    CASE WHEN si.dossier_adresse = 0 THEN 1
    ELSE
    (
-    	CASE WHEN
-	    (
-	       d.adresse_precisions IS NOT NULL
-	       OR d.adresse_lieu_dit IS NOT NULL
-	       OR (d.adresse_voie IS NOT NULL AND d.adresse_numero IS NOT NULL)
-	    ) AND
-	    (
-		   d.adresse_commune IS NOT NULL
-	       AND d.adresse_code_postal IS NOT NULL
-	    ) THEN 1 ELSE 0 END
+      CASE WHEN
+      (
+         d.adresse_precisions IS NOT NULL
+         OR d.adresse_lieu_dit IS NOT NULL
+         OR (d.adresse_voie IS NOT NULL AND d.adresse_numero IS NOT NULL)
+      ) AND
+      (
+       d.adresse_commune IS NOT NULL
+         AND d.adresse_code_postal IS NOT NULL
+      ) THEN 1 ELSE 0 END
     ) END completude_adresse,
      /*Complétude INSEE*/
      CASE WHEN si.dossier_insee = 0 THEN 1
      ELSE
      (
-     	CASE
-     	    WHEN d.numero_insee IS NOT NULL THEN 1
-     	    ELSE 0 END
+       CASE
+           WHEN d.numero_insee IS NOT NULL THEN 1
+           ELSE 0 END
      ) END completude_insee,
      /*Complétude IBAN*/
      CASE WHEN si.dossier_banque = 0 THEN 1
      ELSE
      (
-     	CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END
+       CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END
      ) END completude_iban,
      /*Complétude employeur*/
      CASE WHEN si.dossier_employeur = 0 THEN 1
      ELSE
      (
-     	CASE WHEN
-     	(
-     		d.employeur_id IS NOT NULL
-     	) THEN 1 ELSE 0 END
+       CASE WHEN
+       (
+         d.employeur_id IS NOT NULL
+       ) THEN 1 ELSE 0 END
      ) END completude_employeur,
      /*Complétude champs autres*/
      CASE WHEN

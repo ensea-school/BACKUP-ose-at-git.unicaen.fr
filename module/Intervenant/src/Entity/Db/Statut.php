@@ -52,13 +52,13 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
     protected bool    $peutSaisirService             = true;
 
-    protected bool    $peutSaisirReferentiel         = false;
+    protected bool    $referentiel                   = false;
 
-    protected bool    $peutChoisirDansDossier        = true;
+    protected bool    $dossierSelectionnable         = true;
 
-    protected bool    $peutSaisirDossier             = true;
+    protected bool    $dossier                       = true;
 
-    protected bool    $peutAvoirContrat              = true;
+    protected bool    $contrat                       = true;
 
     protected bool    $peutCloturerSaisie            = false;
 
@@ -74,7 +74,7 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
     protected bool    $dossierInsee                  = true;
 
-    protected bool    $dossierIban                   = true;
+    protected bool    $dossierBanque                 = true;
 
     protected bool    $dossierEmployeur              = false;
 
@@ -614,21 +614,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getPeutSaisirReferentiel(): bool
+    public function getReferentiel(): bool
     {
-        return $this->peutSaisirReferentiel;
+        return $this->referentiel;
     }
 
 
 
     /**
-     * @param bool $peutSaisirReferentiel
+     * @param bool $referentiel
      *
      * @return Statut
      */
-    public function setPeutSaisirReferentiel(bool $peutSaisirReferentiel): Statut
+    public function setReferentiel(bool $referentiel): Statut
     {
-        $this->peutSaisirReferentiel = $peutSaisirReferentiel;
+        $this->referentiel = $referentiel;
 
         return $this;
     }
@@ -638,21 +638,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getPeutChoisirDansDossier(): bool
+    public function isDossierSelectionnable(): bool
     {
-        return $this->peutChoisirDansDossier;
+        return $this->dossierSelectionnable;
     }
 
 
 
     /**
-     * @param bool $peutChoisirDansDossier
+     * @param bool $dossierSelectionnable
      *
      * @return Statut
      */
-    public function setPeutChoisirDansDossier(bool $peutChoisirDansDossier): Statut
+    public function setDossierSelectionnable(bool $dossierSelectionnable): Statut
     {
-        $this->peutChoisirDansDossier = $peutChoisirDansDossier;
+        $this->dossierSelectionnable = $dossierSelectionnable;
 
         return $this;
     }
@@ -662,21 +662,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getPeutSaisirDossier(): bool
+    public function getDossier(): bool
     {
-        return $this->peutSaisirDossier;
+        return $this->dossier;
     }
 
 
 
     /**
-     * @param bool $peutSaisirDossier
+     * @param bool $dossier
      *
      * @return Statut
      */
-    public function setPeutSaisirDossier(bool $peutSaisirDossier): Statut
+    public function setDossier(bool $dossier): Statut
     {
-        $this->peutSaisirDossier = $peutSaisirDossier;
+        $this->dossier = $dossier;
 
         return $this;
     }
@@ -686,21 +686,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getPeutAvoirContrat(): bool
+    public function hasContrat(): bool
     {
-        return $this->peutAvoirContrat;
+        return $this->contrat;
     }
 
 
 
     /**
-     * @param bool $peutAvoirContrat
+     * @param bool $contrat
      *
      * @return Statut
      */
-    public function setPeutAvoirContrat(bool $peutAvoirContrat): Statut
+    public function setContrat(bool $contrat): Statut
     {
-        $this->peutAvoirContrat = $peutAvoirContrat;
+        $this->contrat = $contrat;
 
         return $this;
     }
@@ -878,21 +878,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getDossierIban(): bool
+    public function getDossierBanque(): bool
     {
-        return $this->dossierIban;
+        return $this->dossierBanque;
     }
 
 
 
     /**
-     * @param bool $dossierIban
+     * @param bool $dossierBanque
      *
      * @return Statut
      */
-    public function setDossierIban(bool $dossierIban): Statut
+    public function setDossierBanque(bool $dossierBanque): Statut
     {
-        $this->dossierIban = $dossierIban;
+        $this->dossierBanque = $dossierBanque;
 
         return $this;
     }
@@ -993,4 +993,10 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
         return $this;
     }
 
+
+
+    public function isNonAutorise(): bool
+    {
+        return $this->code === self::CODE_NON_AUTORISE;
+    }
 }

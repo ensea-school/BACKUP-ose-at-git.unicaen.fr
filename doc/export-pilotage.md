@@ -181,29 +181,29 @@ Pré-calculs des seuils par défaut
 
 Clôture de saisie du service réalisé par les intervenants
 
-|Colonne             |Description                   |
-|--------------------|------------------------------|
-|ID                  |                              |
-|ANNEE_ID            |==> ANNEE.ID                  |
-|INTERVENANT_ID      |==> INTERVENANT.ID            |
-|PEUT_CLOTURER_SAISIE|Témoin (0 ou 1)               |
-|CLOTURE             |Témoin (0 ou 1 : 1 si clôturé)|
+| Colonne        | Description                                           |
+|----------------|-------------------------------------------------------|
+| ID             |                                                       |
+| ANNEE_ID       | ==> ANNEE.ID                                          |
+| INTERVENANT_ID | ==> INTERVENANT.ID                                    |
+| HAS_CLOTURE    | Témoin (0 ou 1 : si la clôture est nécessaire ou non) |
+| EST_CLOTURE    | Témoin (0 ou 1 : 1 si clôturé)                        |
 
 
 ## Table TBL_CONTRAT
 
 Contrats de travail
 
-|Colonne           |Description                                               |
-|------------------|----------------------------------------------------------|
-|ID                |                                                          |
-|ANNEE_ID          |==> ANNEE.ID                                              |
-|INTERVENANT_ID    |==> INTERVENANT.ID                                        |
-|PEUT_AVOIR_CONTRAT|Témoin (0 ou 1 : 1 si l'intervenant doit avoir un contrat)|
-|STRUCTURE_ID      |==> STRUCTURE.ID                                          |
-|NBVH              |Nombre de volumes horaires contractualisables             |
-|EDITE             |Nombre de volumes horaires contractualisés                |
-|SIGNE             |Nombre de volumes horaires signés                         |
+| Colonne        |Description                                               |
+|----------------|----------------------------------------------------------|
+| ID             |                                                          |
+| ANNEE_ID       |==> ANNEE.ID                                              |
+| INTERVENANT_ID |==> INTERVENANT.ID                                        |
+| CONTRAT        |Témoin (0 ou 1 : 1 si l'intervenant doit avoir un contrat)|
+| STRUCTURE_ID   |==> STRUCTURE.ID                                          |
+| NBVH           |Nombre de volumes horaires contractualisables             |
+| EDITE          |Nombre de volumes horaires contractualisés                |
+| SIGNE          |Nombre de volumes horaires signés                         |
 
 
 ## Table TBL_DMEP_LIQUIDATION
@@ -223,14 +223,14 @@ Gestion budgétaire (enveloppes)
 
 Données personnelles
 
-|Colonne            |Description                             |
-|-------------------|----------------------------------------|
-|ID                 |                                        |
-|ANNEE_ID           |==> ANNEE.ID                            |
-|INTERVENANT_ID     |==> INTERVENANT.ID                      |
-|PEUT_SAISIR_DOSSIER|1 Si l'intervenant a un dossier, 0 sinon|
-|DOSSIER_ID         |==> DOSSIER.ID                          |
-|VALIDATION_ID      |==> VALIDATION.ID                       |
+| Colonne        |Description                             |
+|----------------|----------------------------------------|
+| ID             |                                        |
+| ANNEE_ID       |==> ANNEE.ID                            |
+| INTERVENANT_ID |==> INTERVENANT.ID                      |
+| DOSSIER        |1 Si l'intervenant a un dossier, 0 sinon|
+| DOSSIER_ID     |==> DOSSIER.ID                          |
+| VALIDATION_ID  |==> VALIDATION.ID                       |
 
 
 ## Table TBL_LIEN
@@ -325,61 +325,61 @@ Pièces justificatives fournies
 
 Services d'ensiegnement
 
-|Colonne                       |Description                                     |
-|------------------------------|------------------------------------------------|
-|ID                            |                                                |
-|ANNEE_ID                      |==> ANNEE.ID                                    |
-|INTERVENANT_ID                |==> INTERVENANT.ID                              |
-|PEUT_SAISIR_SERVICE           |                                                |
-|TYPE_VOLUME_HORAIRE_ID        |==> TYPE_VOLUME_HORAIRE.ID                      |
-|STRUCTURE_ID                  |==> STRUCTURE.ID                                |
-|NBVH                          |Nombre de volumes horaires saisis               |
-|VALIDE                        |Nombre de volumes horaires validés              |
-|ELEMENT_PEDAGOGIQUE_ID        |==> ELEMENT_PEDAGOGIQUE.ID                      |
-|ELEMENT_PEDAGOGIQUE_PERIODE_ID|==> PERIODE.ID                                  |
-|ETAPE_ID                      |==> ETAPE.ID                                    |
-|ELEMENT_PEDAGOGIQUE_HISTO     |                                                |
-|ETAPE_HISTO                   |Témoin (1 si l'étape est supprimée)             |
-|HAS_HEURES_MAUVAISE_PERIODE   |Témoin (1 si heures saisies au mauvais semestre)|
-|SERVICE_ID                    |==> SERVICE.ID                                  |
-|INTERVENANT_STRUCTURE_ID      |==> STRUCTURE.ID                                |
-|TYPE_INTERVENANT_ID           |==> TYPE_INTERVENANT.ID                         |
-|TYPE_INTERVENANT_CODE         |                                                |
-|TYPE_VOLUME_HORAIRE_CODE      |                                                |
-|HEURES                        |NB d'heures saisi                               |
+| Colonne                        | Description                                      |
+|--------------------------------|--------------------------------------------------|
+| ID                             |                                                  |
+| ANNEE_ID                       | ==> ANNEE.ID                                     |
+| INTERVENANT_ID                 | ==> INTERVENANT.ID                               |
+| SERVICE                        | Témoin (1 si l'intervenant a du service)         |
+| TYPE_VOLUME_HORAIRE_ID         | ==> TYPE_VOLUME_HORAIRE.ID                       |
+| STRUCTURE_ID                   | ==> STRUCTURE.ID                                 |
+| NBVH                           | Nombre de volumes horaires saisis                |
+| VALIDE                         | Nombre de volumes horaires validés               |
+| ELEMENT_PEDAGOGIQUE_ID         | ==> ELEMENT_PEDAGOGIQUE.ID                       |
+| ELEMENT_PEDAGOGIQUE_PERIODE_ID | ==> PERIODE.ID                                   |
+| ETAPE_ID                       | ==> ETAPE.ID                                     |
+| ELEMENT_PEDAGOGIQUE_HISTO      |                                                  |
+| ETAPE_HISTO                    | Témoin (1 si l'étape est supprimée)              |
+| HAS_HEURES_MAUVAISE_PERIODE    | Témoin (1 si heures saisies au mauvais semestre) |
+| SERVICE_ID                     | ==> SERVICE.ID                                   |
+| INTERVENANT_STRUCTURE_ID       | ==> STRUCTURE.ID                                 |
+| TYPE_INTERVENANT_ID            | ==> TYPE_INTERVENANT.ID                          |
+| TYPE_INTERVENANT_CODE          |                                                  |
+| TYPE_VOLUME_HORAIRE_CODE       |                                                  |
+| HEURES                         | NB d'heures saisi                                |
 
 
 ## Table TBL_SERVICE_REFERENTIEL
 
 Référentiel
 
-|Colonne               |Description                          |
-|----------------------|-------------------------------------|
-|ID                    |                                     |
-|ANNEE_ID              |==> ANNEE.ID                         |
-|INTERVENANT_ID        |==> INTERVENANT.ID                   |
-|PEUT_SAISIR_SERVICE   |Témoin (1=peut saisir du référentiel)|
-|TYPE_VOLUME_HORAIRE_ID|==> TYPE_VOLUME_HORAIRE.ID           |
-|STRUCTURE_ID          |==> STRUCTURE.ID                     |
-|NBVH                  |Nombre de volumes horaires           |
-|VALIDE                |Nombre de volumes horaires validés   |
+| Colonne                |Description                          |
+|------------------------|-------------------------------------|
+| ID                     |                                     |
+| ANNEE_ID               |==> ANNEE.ID                         |
+| INTERVENANT_ID         |==> INTERVENANT.ID                   |
+| REFERENTIEL            |Témoin (1=peut saisir du référentiel)|
+| TYPE_VOLUME_HORAIRE_ID |==> TYPE_VOLUME_HORAIRE.ID           |
+| STRUCTURE_ID           |==> STRUCTURE.ID                     |
+| NBVH                   |Nombre de volumes horaires           |
+| VALIDE                 |Nombre de volumes horaires validés   |
 
 
 ## Table TBL_SERVICE_SAISIE
 
 Service (pour alimenter le Workflow)
 
-|Colonne                |Description                            |
-|-----------------------|---------------------------------------|
-|ID                     |                                       |
-|ANNEE_ID               |==> ANNEE.ID                           |
-|INTERVENANT_ID         |==> INTERVENANT.ID                     |
-|PEUT_SAISIR_SERVICE    |Témoin (0 ou 1)                        |
-|PEUT_SAISIR_REFERENTIEL|Témoin (0 ou 1)                        |
-|HEURES_SERVICE_PREV    |NB d'heures de service prévisionnel    |
-|HEURES_REFERENTIEL_PREV|NB d'heures de référentiel prévisionnel|
-|HEURES_SERVICE_REAL    |NB d'heures de service réalisé         |
-|HEURES_REFERENTIEL_REAL|NB d'heures de référentiel réalisé     |
+| Colonne                 |Description                            |
+|-------------------------|---------------------------------------|
+| ID                      |                                       |
+| ANNEE_ID                |==> ANNEE.ID                           |
+| INTERVENANT_ID          |==> INTERVENANT.ID                     |
+| SERVICE                 |Témoin (0 ou 1)                        |
+| REFERENTIEL             |Témoin (0 ou 1)                        |
+| HEURES_SERVICE_PREV     |NB d'heures de service prévisionnel    |
+| HEURES_REFERENTIEL_PREV |NB d'heures de référentiel prévisionnel|
+| HEURES_SERVICE_REAL     |NB d'heures de service réalisé         |
+| HEURES_REFERENTIEL_REAL |NB d'heures de référentiel réalisé     |
 
 
 ## Table TBL_VALIDATION_ENSEIGNEMENT

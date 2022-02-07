@@ -97,18 +97,9 @@ class Asset
             ->setLibelle("Statut TEST " . $typeIntervenant)
             ->setTypeIntervenant($typeIntervenant)
             ->setServiceStatutaire(100)
-            ->setDepassement(false)
-            ->setMaximumHETD(0)
-            ->setNonAutorise(false)
-            ->setPeutChoisirDansDossier(true)
-            ->setPeutSaisirDossier(true)
-            ->setPeutSaisirReferentiel(true)
-            ->setPeutSaisirService(true)
-            ->setPeutAvoirContrat(0)
-            ->setPlafondReferentiel(100)
+            ->setDossier(true)
             ->setOrdre(1)
-            ->setSource(static::getSource())
-            ->setSourceCode(uniqid());
+            ->setCode(uniqid());
 
         return $e;
     }

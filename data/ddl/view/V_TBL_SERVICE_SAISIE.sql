@@ -2,8 +2,8 @@ CREATE OR REPLACE FORCE VIEW V_TBL_SERVICE_SAISIE AS
 SELECT
   i.annee_id,
   i.id intervenant_id,
-  si.peut_saisir_service,
-  si.peut_saisir_referentiel,
+  si.service,
+  si.referentiel,
   SUM( CASE WHEN tvhs.code = 'PREVU'   THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_prev,
   SUM( CASE WHEN tvhrs.code = 'PREVU'   THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_prev,
   SUM( CASE WHEN tvhs.code = 'REALISE' THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_real,
@@ -25,5 +25,5 @@ WHERE
 GROUP BY
   i.annee_id,
   i.id,
-  si.peut_saisir_service,
-  si.peut_saisir_referentiel
+  si.service,
+  si.referentiel

@@ -165,8 +165,8 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'PEUT_SAISIR_DOSSIER'      => [
-            'name'        => 'PEUT_SAISIR_DOSSIER',
+        'DOSSIER'      => [
+            'name'        => 'DOSSIER',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

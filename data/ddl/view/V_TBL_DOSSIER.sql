@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_TBL_DOSSIER AS
 SELECT
   i.annee_id,
   i.id intervenant_id,
-  si.peut_saisir_dossier,
+  si.dossier,
   d.id dossier_id,
   v.id validation_id,
   /*Complétude statut*/
@@ -70,7 +70,7 @@ SELECT
      	    ELSE 0 END
      ) END completude_insee,
      /*Complétude IBAN*/
-     CASE WHEN si.dossier_iban = 0 THEN 1
+     CASE WHEN si.dossier_banque = 0 THEN 1
      ELSE
      (
      	CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END

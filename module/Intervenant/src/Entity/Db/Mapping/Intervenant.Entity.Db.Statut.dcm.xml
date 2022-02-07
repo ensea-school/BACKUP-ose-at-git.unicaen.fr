@@ -14,22 +14,21 @@
         <field name="tauxChargesPatronales" type="float" column="TAUX_CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
         <field name="code" type="string" column="CODE" length="50" nullable="false"/>
         <field name="codeRh" type="string" column="CODE_RH" length="50" nullable="false"/>
-        <field name="nonAutorise" type="boolean" column="NON_AUTORISE" nullable="false"/>
         <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
-        <field name="peutSaisirService" type="boolean" column="PEUT_SAISIR_SERVICE" nullable="false"/>
-        <field name="peutSaisirReferentiel" type="boolean" column="PEUT_SAISIR_REFERENTIEL" nullable="false"/>
-        <field name="peutChoisirDansDossier" type="boolean" column="PEUT_CHOISIR_DANS_DOSSIER" nullable="false"/>
-        <field name="peutSaisirDossier" type="boolean" column="PEUT_SAISIR_DOSSIER" nullable="false"/>
-        <field name="peutAvoirContrat" type="boolean" column="PEUT_AVOIR_CONTRAT" nullable="false"/>
-        <field name="peutCloturerSaisie" type="boolean" column="PEUT_CLOTURER_SAISIE" nullable="false"/>
-        <field name="peutSaisirMotifNonPaiement" type="boolean" column="PEUT_SAISIR_MOTIF_NON_PAIEMENT" nullable="false"/>
-        <field name="peutSaisirServiceExt" type="boolean" column="PEUT_SAISIR_SERVICE_EXT" nullable="false"/>
+        <field name="peutSaisirService" type="boolean" column="SERVICE" nullable="false"/>
+        <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false"/>
+        <field name="dossierSelectionnable" type="boolean" column="DOSSIER_SELECTIONNABLE" nullable="false"/>
+        <field name="dossier" type="boolean" column="DOSSIER" nullable="false"/>
+        <field name="peutAvoirContrat" type="boolean" column="CONTRAT" nullable="false"/>
+        <field name="peutCloturerSaisie" type="boolean" column="CLOTURE" nullable="false"/>
+        <field name="peutSaisirMotifNonPaiement" type="boolean" column="MOTIF_NON_PAIEMENT" nullable="false"/>
+        <field name="peutSaisirServiceExt" type="boolean" column="SERVICE_EXTERIEUR" nullable="false"/>
         <field name="depassementSDSHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
         <field name="dossierIdentiteComplementaire" type="boolean" column="DOSSIER_IDENTITE_COMP" nullable="false"/>
         <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
         <field name="dossierContact" type="boolean" column="DOSSIER_CONTACT" nullable="false"/>
         <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>
-        <field name="dossierIban" type="boolean" column="DOSSIER_IBAN" nullable="false"/>
+        <field name="dossierBanque" type="boolean" column="DOSSIER_BANQUE" nullable="false"/>
         <field name="dossierEmployeur" type="boolean" column="DOSSIER_EMPLOYEUR" nullable="false"/>
         <field name="dossierEmailPerso" type="boolean" column="DOSSIER_EMAIL_PERSO" nullable="false"/>
         <field name="dossierTelPerso" type="boolean" column="DOSSIER_TEL_PERSO" nullable="false"/>

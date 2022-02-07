@@ -57,8 +57,8 @@ return [
             'position'    => 7,
             'commentaire' => 'Nombre de volumes horaires',
         ],
-        'PEUT_SAISIR_SERVICE'    => [
-            'name'        => 'PEUT_SAISIR_SERVICE',
+        'REFERENTIEL'    => [
+            'name'        => 'REFERENTIEL',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

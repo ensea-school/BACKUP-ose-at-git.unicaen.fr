@@ -97,7 +97,7 @@ FROM
   WHERE
     i.histo_destruction IS NULL
     AND si.code NOT IN ('AUTRES')
-    AND si.peut_saisir_dossier = 1
+    AND si.dossier = 1
   GROUP BY
     i.annee_id, i.code
   ) t

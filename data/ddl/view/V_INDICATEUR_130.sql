@@ -7,7 +7,7 @@ FROM
   JOIN intervenant i ON i.id = s.intervenant_id
   JOIN statut     si ON si.id = i.statut_id
 WHERE
-  si.tem_biatss = 1
+  si.code = 'BIATSS'
   AND s.type_volume_horaire_code = 'PREVU'
   AND s.intervenant_structure_id <> s.structure_id
   AND s.valide > 0

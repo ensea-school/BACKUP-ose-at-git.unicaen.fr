@@ -119,7 +119,7 @@ class IntervenantDossierController extends AbstractController
             'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
             'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
             'fieldset-contact'                 => $intervenantDossier->getStatut()->getDossierContact(),
-            'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierIban(),
+            'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierBanque(),
             'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
             'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
             'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre

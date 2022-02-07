@@ -31,12 +31,12 @@
         <option name="default">0</option>
       </options>
     </field>
-    <field name="peutSaisirReferentiel" type="boolean" column="PEUT_SAISIR_REFERENTIEL" nullable="false">
+    <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false">
       <options>
         <option name="default">0</option>
       </options>
     </field>
-    <field name="peutSaisirService" type="boolean" column="PEUT_SAISIR_SERVICE" nullable="false">
+    <field name="peutSaisirService" type="boolean" column="SERVICE" nullable="false">
       <options>
         <option name="default">0</option>
       </options>

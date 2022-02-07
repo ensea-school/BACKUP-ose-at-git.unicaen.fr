@@ -68,11 +68,10 @@ class IndicateurService extends AbstractService
         FROM
           ($viewDef) indic
           JOIN intervenant    i ON i.id = indic.intervenant_id AND i.histo_destruction IS NULL
-          JOIN statut        si ON si.id = i.statut_id AND si.non_autorise = 0
+          JOIN statut        si ON si.id = i.statut_id AND si.code <> 'NON_AUTORISE'
           LEFT JOIN structure s ON s.id = indic.structure_id
         WHERE
           i.annee_id = :annee
-          AND si.non_autorise = 0  
         ";
         if (!$indicateur->isIrrecevables()) {
             $sql .= ' AND i.irrecevable = 0';

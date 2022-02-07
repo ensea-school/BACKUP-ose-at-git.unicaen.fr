@@ -3,7 +3,7 @@ WITH t AS (
   SELECT
     i.annee_id                                                                annee_id,
     i.id                                                                      intervenant_id,
-    si.peut_avoir_contrat                                                     peut_avoir_contrat,
+    si.contrat                                                                contrat,
     NVL(ep.structure_id, i.structure_id)                                      structure_id,
     CASE WHEN evh.code IN ('contrat-edite','contrat-signe') THEN 1 ELSE 0 END edite,
     CASE WHEN evh.code IN ('contrat-signe')                 THEN 1 ELSE 0 END signe
@@ -34,12 +34,12 @@ WITH t AS (
     i.histo_destruction IS NULL
     /*@INTERVENANT_ID=i.id*/
     /*@ANNEE_ID=i.annee_id*/
-    AND NOT (si.peut_avoir_contrat = 0 AND evh.code = 'valide')
+    AND NOT (si.contrat = 0 AND evh.code = 'valide')
 )
 SELECT
   annee_id,
   intervenant_id,
-  peut_avoir_contrat,
+  contrat,
   structure_id,
   count(*) as nbvh,
   sum(edite) as edite,
@@ -49,5 +49,5 @@ FROM
 GROUP BY
   annee_id,
   intervenant_id,
-  peut_avoir_contrat,
+  contrat,
   structure_id

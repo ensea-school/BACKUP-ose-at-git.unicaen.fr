@@ -18,4 +18,4 @@ WHERE
   AND d.completude_autres = 1
   AND d.completude_statut = 1
   AND d.validation_id IS NULL
-  AND d.peut_saisir_dossier = 1
+  AND d.dossier = 1

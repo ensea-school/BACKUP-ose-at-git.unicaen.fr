@@ -30,7 +30,7 @@ class TblServiceSaisie
     /**
      * @var boolean
      */
-    private $peutSaisirReferentiel = false;
+    private $referentiel = false;
 
     /**
      * @var boolean
@@ -103,13 +103,11 @@ class TblServiceSaisie
 
 
     /**
-     * Get peutSaisirReferentiel
-     *
-     * @return boolean
+     * @return bool
      */
-    public function getPeutSaisirReferentiel()
+    public function getReferentiel(): bool
     {
-        return $this->peutSaisirReferentiel;
+        return $this->referentiel;
     }
 
 

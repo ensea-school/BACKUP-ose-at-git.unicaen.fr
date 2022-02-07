@@ -9,7 +9,7 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
-        <field name="peutSaisirDossier" type="boolean" column="PEUT_SAISIR_DOSSIER" nullable="false">
+        <field name="dossier" type="boolean" column="DOSSIER" nullable="false">
             <options>
                 <option name="default">0</option>
             </options>

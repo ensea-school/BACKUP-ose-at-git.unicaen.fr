@@ -11,12 +11,12 @@
       <generator strategy="SEQUENCE"/>
       <sequence-generator sequence-name="TBL_CLOTURE_REALISE_ID_seq" allocation-size="1" initial-value="1"/>
     </id>
-    <field name="cloture" type="boolean" column="CLOTURE" nullable="false">
+    <field name="estCloture" type="boolean" column="EST_CLOTURE" nullable="false">
       <options>
         <option name="default">0</option>
       </options>
     </field>
-    <field name="peutCloturerSaisie" type="boolean" column="PEUT_CLOTURER_SAISIE" nullable="false">
+    <field name="hasCloture" type="boolean" column="HAS_CLOTURE" nullable="false">
       <options>
         <option name="default">0</option>
       </options>

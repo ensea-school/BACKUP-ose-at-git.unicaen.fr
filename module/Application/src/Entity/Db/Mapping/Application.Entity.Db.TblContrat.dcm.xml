@@ -23,7 +23,7 @@
         <option name="default">0</option>
       </options>
     </field>
-    <field name="peutAvoirContrat" type="boolean" column="PEUT_AVOIR_CONTRAT" nullable="false">
+    <field name="peutAvoirContrat" type="boolean" column="CONTRAT" nullable="false">
       <options>
         <option name="default">0</option>
       </options>

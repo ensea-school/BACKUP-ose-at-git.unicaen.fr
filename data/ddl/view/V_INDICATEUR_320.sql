@@ -16,4 +16,4 @@ WHERE
 	AND i.histo_destruction IS NULL
 	AND si.histo_destruction IS NULL
 	AND c.id IS NULL
-	AND si.peut_avoir_contrat = 1
+	AND si.contrat = 1

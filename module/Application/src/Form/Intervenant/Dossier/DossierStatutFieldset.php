@@ -43,6 +43,7 @@ class DossierStatutFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+        /** @var Statut $statut */
         $statut      = $this->getOption('statut');
         $intervenant = $this->getOption('intervenant');
         /*On va chercher les statuts que l'intervenant possède
@@ -62,7 +63,7 @@ class DossierStatutFieldset extends AbstractFieldset
             }
         }
         //Si statut intervenant n'est pas selectionnable dans la liste alors liste en lecture seule
-        if ($statut->getPeutChoisirDansDossier() || $statut->getCode() == 'AUTRES') {
+        if ($statut->isDossierSelectionnable() || $statut->getCode() == Statut::CODE_AUTRES) {
             $this->get('statut')
                 ->setValueOptions(['' => '(Sélectionnez un statut)'] + \UnicaenApp\Util::collectionAsOptions($statutSelectable));
         } else {

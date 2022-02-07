@@ -93,8 +93,8 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'PEUT_SAISIR_REFERENTIEL' => [
-            'name'        => 'PEUT_SAISIR_REFERENTIEL',
+        'REFERENTIEL' => [
+            'name'        => 'REFERENTIEL',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -105,8 +105,8 @@ return [
             'position'    => 5,
             'commentaire' => 'Témoin (0 ou 1)',
         ],
-        'PEUT_SAISIR_SERVICE'     => [
-            'name'        => 'PEUT_SAISIR_SERVICE',
+        'SERVICE'     => [
+            'name'        => 'SERVICE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

@@ -69,8 +69,8 @@ return [
             'position'    => 6,
             'commentaire' => 'Nombre de volumes horaires contractualisables',
         ],
-        'PEUT_AVOIR_CONTRAT' => [
-            'name'        => 'PEUT_AVOIR_CONTRAT',
+        'CONTRAT' => [
+            'name'        => 'CONTRAT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

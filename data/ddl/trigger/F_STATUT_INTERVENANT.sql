@@ -1,9 +1,8 @@
 CREATE OR REPLACE TRIGGER "F_STATUT_INTERVENANT"
 AFTER UPDATE OF
-  service_statutaire,
-  depassement,
-  type_intervenant_id,
-  non_autorise
+  SERVICE_STATUTAIRE,
+  TYPE_INTERVENANT_ID,
+  DEPASSEMENT_SERVICE_DU_SANS_HC
 ON "STATUT"
 FOR EACH ROW
 BEGIN return; /* Désactivation du trigger... */

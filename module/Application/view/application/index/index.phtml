@@ -29,7 +29,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
         if ($context->getUtilisateur()) {
 
             if ($onlyIntervenant) {
-                if ($intervenant->getStatut()->getNonAutorise()) {
+                if ($intervenant->getStatut()->isNonAutorise()) {
 
                     ?><p>
                     <div class='alert alert-danger'> <?= $connexionNonAutorise ?></div></p><?php

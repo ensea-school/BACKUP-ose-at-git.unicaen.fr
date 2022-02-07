@@ -216,7 +216,7 @@ class  IntervenantController extends AbstractController
         }
 
         /* Services référentiels (si nécessaire) */
-        if ($intervenant->getStatut()->getPeutSaisirReferentiel() && $this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION)) {
+        if ($intervenant->getStatut()->getReferentiel() && $this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION)) {
             $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
         } else {
             $servicesReferentiel = false;

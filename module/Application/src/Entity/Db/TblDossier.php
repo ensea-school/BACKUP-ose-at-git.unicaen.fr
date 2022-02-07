@@ -10,7 +10,7 @@ class TblDossier
     /**
      * @var boolean
      */
-    private $peutSaisirDossier = false;
+    private $dossier = false;
 
     /**
      * @var integer
@@ -85,13 +85,13 @@ class TblDossier
 
 
     /**
-     * Get peutSaisirDossier
+     * Get dossier
      *
      * @return boolean
      */
-    public function getPeutSaisirDossier()
+    public function getDossier(): bool
     {
-        return $this->peutSaisirDossier;
+        return $this->dossier;
     }
 
 

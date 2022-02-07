@@ -64,7 +64,7 @@ class StatutService extends AbstractEntityService
     public function getStatutSelectable(Statut $statut, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        $qb->andWhere("$alias.peutChoisirDansDossier = 1");
+        $qb->andWhere("$alias.dossierSelectionnable = 1");
         $qb->addOrderBy("$alias.code");
 
         $entities    = $qb->getQuery()->execute();

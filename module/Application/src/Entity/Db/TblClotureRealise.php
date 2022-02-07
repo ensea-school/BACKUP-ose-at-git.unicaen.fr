@@ -2,92 +2,42 @@
 
 namespace Application\Entity\Db;
 
-/**
- * TblClotureRealise
- */
 class TblClotureRealise
 {
-    /**
-     * @var boolean
-     */
-    private $cloture = false;
+    private int         $id;
 
-    /**
-     * @var boolean
-     */
-    private $peutCloturerSaisie = false;
+    private bool        $estCloture = false;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private bool        $hasCloture = false;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private Intervenant $intervenant;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
+    private Annee       $annee;
 
 
 
-    /**
-     * Get cloture
-     *
-     * @return boolean
-     */
-    public function getCloture()
+    public function estCloture(): bool
     {
-        return $this->cloture;
+        return $this->estCloture;
     }
 
 
 
-    /**
-     * Get peutCloturerSaisie
-     *
-     * @return boolean
-     */
-    public function getPeutCloturerSaisie()
+    public function hasCloture(): bool
     {
-        return $this->peutCloturerSaisie;
+        return $this->hasCloture;
     }
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
 
 
 
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
+    public function getAnnee(): Annee
     {
         return $this->annee;
     }

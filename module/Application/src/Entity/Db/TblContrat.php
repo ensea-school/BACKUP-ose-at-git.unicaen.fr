@@ -20,7 +20,7 @@ class TblContrat
     /**
      * @var boolean
      */
-    private $peutAvoirContrat = false;
+    private $contrat = false;
 
     /**
      * @var float
@@ -78,9 +78,9 @@ class TblContrat
      *
      * @return boolean
      */
-    public function getPeutAvoirContrat()
+    public function hasContrat()
     {
-        return $this->peutAvoirContrat;
+        return $this->contrat;
     }
 
 

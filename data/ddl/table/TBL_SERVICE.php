@@ -153,8 +153,8 @@ return [
             'position'    => 18,
             'commentaire' => 'Nombre de volumes horaires saisis',
         ],
-        'PEUT_SAISIR_SERVICE'            => [
-            'name'        => 'PEUT_SAISIR_SERVICE',
+        'SERVICE'            => [
+            'name'        => 'SERVICE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

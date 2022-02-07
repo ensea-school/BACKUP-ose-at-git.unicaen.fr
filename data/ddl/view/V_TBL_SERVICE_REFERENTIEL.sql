@@ -4,7 +4,7 @@ WITH t AS (
   SELECT
     i.annee_id,
     i.id intervenant_id,
-    si.peut_saisir_referentiel peut_saisir_service,
+    si.referentiel referentiel,
     vh.type_volume_horaire_id,
     s.structure_id,
     CASE WHEN v.id IS NULL AND vh.auto_validation=0 THEN 0 ELSE 1 END valide
@@ -31,7 +31,7 @@ WITH t AS (
 SELECT
   annee_id,
   intervenant_id,
-  peut_saisir_service,
+  referentiel,
   type_volume_horaire_id,
   structure_id,
   CASE WHEN type_volume_horaire_id IS NULL THEN 0 ELSE count(*) END nbvh,
@@ -43,6 +43,6 @@ WHERE
 GROUP BY
   annee_id,
   intervenant_id,
-  peut_saisir_service,
+  referentiel,
   type_volume_horaire_id,
   structure_id

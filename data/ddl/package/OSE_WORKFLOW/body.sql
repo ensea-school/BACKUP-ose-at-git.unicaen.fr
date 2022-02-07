@@ -362,10 +362,10 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   BEGIN
     dems := '
         WHEN e.code = ''DONNEES_PERSO_SAISIE'' OR e.code = ''DONNEES_PERSO_VALIDATION'' THEN
-          si.peut_saisir_dossier
+          si.dossier
 
         WHEN e.code = ''SERVICE_SAISIE'' THEN
-          CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
+          CASE WHEN si.service + si.referentiel = 0 THEN 0 ELSE 1 END
 
         WHEN e.code = ''PJ_SAISIE'' OR e.code = ''PJ_VALIDATION'' THEN
           CASE WHEN EXISTS(
@@ -374,10 +374,10 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = ''SERVICE_VALIDATION'' THEN
-          si.peut_saisir_service
+          si.service
 
         WHEN e.code = ''REFERENTIEL_VALIDATION'' THEN
-          si.peut_saisir_referentiel
+          si.referentiel
 
         WHEN e.code = ''CONSEIL_ACADEMIQUE'' OR e.code = ''CONSEIL_RESTREINT'' THEN
           CASE WHEN EXISTS(
@@ -389,19 +389,19 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = ''CONTRAT'' THEN
-          si.peut_avoir_contrat
+          si.contrat
 
         WHEN e.code = ''SERVICE_SAISIE_REALISE'' OR e.code = ''DEMANDE_MEP'' OR e.code = ''SAISIE_MEP'' THEN
-          CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
+          CASE WHEN si.service + si.referentiel = 0 THEN 0 ELSE 1 END
 
         WHEN e.code = ''CLOTURE_REALISE'' THEN
-          si.peut_cloturer_saisie
+          si.cloture
 
         WHEN e.code = ''SERVICE_VALIDATION_REALISE'' THEN
-          si.peut_saisir_service
+          si.service
 
         WHEN e.code = ''REFERENTIEL_VALIDATION_REALISE'' THEN
-          si.peut_saisir_referentiel
+          si.referentiel
     ';
 
 
@@ -441,7 +441,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ) e ON 1=1
         WHERE
           ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND d.peut_saisir_dossier = 1
+          AND d.dossier = 1
     ';
 
 
@@ -468,7 +468,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ) e ON 1=1
         WHERE
           ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND (tss.peut_saisir_service = 1 OR tss.peut_saisir_referentiel = 1)
+          AND (tss.service = 1 OR tss.referentiel = 1)
     ';
 
 
@@ -589,7 +589,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_cloture_realise c
         WHERE
           ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND c.peut_cloturer_saisie = 1
+          AND c.has_cloture = 1
     ';
 
 
@@ -650,7 +650,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           JOIN parametre p on p.nom = ''contrat_regle_franchissement''
         WHERE
           ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND peut_avoir_contrat = 1
+          AND contrat = 1
           AND nbvh > 0
     ';
 

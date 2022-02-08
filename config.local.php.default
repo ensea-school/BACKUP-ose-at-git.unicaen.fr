@@ -115,6 +115,9 @@ return [
 
         /* Générer systématiquement les proxies de la base de données (utile uniquement en mode développement) */
         'generateProxies' => true,
+
+        /* ConnectionString pour Doctrine (équivalent à la ligne dans le fichier tnsnames.ora)*/
+        'connectstring' => '',
     ],
 
 

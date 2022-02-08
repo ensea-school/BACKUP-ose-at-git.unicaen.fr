@@ -45,7 +45,7 @@ SELECT * FROM V_DIFF_PAYS
 va vous afficher le différentiel existant entre la vue source et la table PAYS.
 Attention : ce différentiel ne prend en compte que les données synchronisables. Si vous ajoutez un pays à la main dans la base de données avec OSE comme source, celui-ci n'apparaitra pas dans cette vue.
 
-Dans cette vue, vous retrouverez le colonnes suivantes :
+Dans cette vue, vous retrouverez les colonnes suivantes :
 - ID qui vous renseigne sur l'ID dans la table destination si l'enregistrement existe déjà.
 - IMPORT_ACTION qui vous donne l'action à effectuer (insert, update, delete, undelete).
 - La liste des colonnes synchronisables de la table avec comme valeurs celles de la vue.

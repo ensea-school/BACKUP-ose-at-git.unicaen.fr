@@ -10,12 +10,11 @@ return [
         'routes' => [
             'pilotage' => [
                 'type'          => 'Literal',
-                'may_terminate' => true,
                 'options'       => [
                     'route'    => '/pilotage',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Pilotage',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Pilotage',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,

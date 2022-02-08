@@ -133,7 +133,7 @@ class DdlFilter implements \ArrayAccess
 
     static public function normalize2($includes = [], $excludes = [])
     {
-        if ($includes instanceof self) return $includes;
+        if ($includes instanceof DdlFilter) return $includes;
 
         return self::normalize(compact('includes', 'excludes'));
     }

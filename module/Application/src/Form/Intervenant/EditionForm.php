@@ -554,7 +554,6 @@ class EditionForm extends AbstractForm
             ],
             'source'                       => ['required' => false],
             'sourceCode'                   => ['required' => false],
-            'montantIndemniteFc'           => ['required' => false],
         ];
     }
 }

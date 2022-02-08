@@ -73,7 +73,7 @@ class ExportRhAssertion extends AbstractAssertion
         }
 
         $config                    = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
-        $anneeUniversitaireEnCours = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+        $anneeUniversitaireEnCours = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
         $anneeContexte             = $this->getServiceContext()->getAnnee();
 
         //Si nous ne sommes dans l'année universitaire en cours le module export reste inactif

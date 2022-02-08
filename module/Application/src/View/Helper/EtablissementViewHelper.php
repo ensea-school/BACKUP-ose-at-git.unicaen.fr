@@ -58,7 +58,6 @@ class EtablissementViewHelper extends AbstractHelper
 
         $vars = [
             "Libellé"                                   => $entity->getLibelle(),
-            "Localisation :"                            => $entity->getLocalisation(),
             "Département :"                             => $entity->getDepartement(),
             "Localisation :"                            => $entity->getLocalisation() . " (" . $entity->getDepartement() . ")",
             "N° {$entity->getSource()->getLibelle()} :" => $entity->getSourceCode(),

@@ -21,7 +21,8 @@
         "laminas/laminas-text": "2.10.x-dev"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer" : "*"
+        "squizlabs/php_codesniffer" : "*",
+        "phpmd/phpmd": "*"
     },
     "config": {
         "allow-plugins": {

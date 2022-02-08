@@ -49,7 +49,7 @@ class ExportRhController extends AbstractController
 
     public function chercherIntervenantRhAction(): array
     {
-        $connecteurRh = $this->getExportRhService();
+        $connecteurRh = $this->getServiceExportRh();
 
         $params = [
             'nomUsuel' => '',

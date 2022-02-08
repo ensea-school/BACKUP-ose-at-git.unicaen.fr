@@ -300,7 +300,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             //Fait planter les WS SIHAM....
             /*if ($datas['generiqueFieldset']['iban']) {
-                $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+                $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
                 $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
                 $coordonnees        = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
 
@@ -363,7 +363,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
-            $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
             $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
 
@@ -537,7 +537,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
 
             $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin   = $anneeUniversitaire->getDateFin()->format('Y-m-d');
@@ -633,7 +633,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     {
 
         try {
-            $anneeUniversitaire = $this->getExportRhService()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
             $dateSortie         = $anneeUniversitaire->getDateFin()->format('Y-m-d');
 
             $matricule = '';

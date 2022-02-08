@@ -197,7 +197,7 @@ class DataGen
             'table'   => 'IMPORT_TABLES',
             'context' => ['install', 'update'],
             'key'     => 'TABLE_NAME',
-            'options' => ['update' => true, 'delete' => true],
+            //'options' => ['update' => true, 'delete' => true],
             'options' => ['update-ignore-cols' => ['SYNC_FILTRE', 'SYNC_ENABLED', 'SYNC_JOB', 'SYNC_HOOK_BEFORE', 'SYNC_HOOK_AFTER']],
         ],
         [

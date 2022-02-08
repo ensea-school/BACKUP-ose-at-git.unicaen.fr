@@ -20,7 +20,7 @@ class AdministrationController extends AbstractController
 
     public function indexAction()
     {
-        $erhs = $this->getExportRhService();
+        $erhs = $this->getServiceExportRh();
 
         $intervenantParams = $erhs->getIntervenantRHExportParams();
         $champs            = $erhs->getIntervenantRHParamsDescription();
@@ -32,7 +32,7 @@ class AdministrationController extends AbstractController
 
     public function chercherIntervenantRhAction(): array
     {
-        $connecteurRh = $this->getExportRhService();
+        $connecteurRh = $this->getServiceExportRh();
 
         $params = [
             'nomUsuel' => '',

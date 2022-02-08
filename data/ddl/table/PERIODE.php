@@ -33,18 +33,6 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'ECART_MOIS_PAIEMENT'   => [
-            'name'        => 'ECART_MOIS_PAIEMENT',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => NULL,
-            'position'    => 15,
-            'commentaire' => NULL,
-        ],
         'ENSEIGNEMENT'          => [
             'name'        => 'ENSEIGNEMENT',
             'type'        => 'bool',

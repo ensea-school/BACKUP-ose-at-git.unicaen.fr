@@ -94,9 +94,9 @@ class PeriodeService extends AbstractEntityService
         $dY = (int)$date->format('Y');
         $dM = (int)$date->format('n');
 
-        $ecartMoisPaiement = ($dY - $aY) * 12 + $dM - $aM;
+        $ecartMoisPaiement = (($dY - $aY) * 12 + $dM - $aM) + 1;
 
-        return $this->getRepo()->findOneBy(['paiement' => true, 'ecartMoisPaiement' => $ecartMoisPaiement]);
+        return $this->getRepo()->findOneBy(['paiement' => true, 'ecartMois' => $ecartMoisPaiement]);
     }
 
 

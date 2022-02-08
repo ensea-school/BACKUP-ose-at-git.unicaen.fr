@@ -30,7 +30,6 @@ class PeriodeSaisieForm extends AbstractForm
         'enseignement'      => ['type' => 'int'],
         'paiement'          => ['type' => 'int'],
         'ecartMois'         => ['type' => 'int'],
-        'ecartMoisPaiement' => ['type' => 'int'],
     ];
 
 
@@ -94,14 +93,6 @@ class PeriodeSaisieForm extends AbstractForm
             'name'    => 'ecartMois',
             'options' => [
                 'label' => "Ecart des mois depuis septembre",
-            ],
-            'type'    => 'Text',
-        ]);
-
-        $this->add([
-            'name'    => 'ecartMoisPaiement',
-            'options' => [
-                'label' => "Ecart des mois de paiement",
             ],
             'type'    => 'Text',
         ]);
@@ -171,10 +162,6 @@ class PeriodeSaisieForm extends AbstractForm
             ],
 
             'ecartMois' => [
-                'required' => true,
-            ],
-
-            'ecartMoisPaiement' => [
                 'required' => true,
             ],
         ];

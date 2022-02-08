@@ -82,7 +82,6 @@ class PeriodeController extends AbstractController
                 $this->getServicePeriode()->save($sp);
             }
         }
-
         return new MessengerViewModel();
     }
 }

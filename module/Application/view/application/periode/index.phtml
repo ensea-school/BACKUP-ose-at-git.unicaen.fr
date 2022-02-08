@@ -30,8 +30,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <th style="text-align: center">Libellé long</th>
         <th style="text-align: center">Enseignement</th>
         <th style="text-align: center">Paiement</th>
-        <th style="text-align: center" title="Ecart de mois avec le début de l'année universitaire choisie">EcartMois</th>
-        <th style="text-align: center">EcartMoisPaiement</th>
+        <th style="text-align: center"><abbr title="Ecart de mois avec le début de l'année universitaire choisie">EcartMois</abbr></th>
         <?php if ($canEdit): ?>
             <th style="text-align: center">Actions</th>
         <?php endif; ?>
@@ -46,7 +45,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <td style="text-align: center"><?= affBooleen($periode->getEnseignement()); ?></td>
             <td style="text-align: center"><?= affBooleen($periode->getPaiement()); ?></td>
             <td style="text-align: center" title="Écart de mois avec le début de l'année universitaire choisie"><?= $periode->getEcartMois(); ?></td>
-            <td style="text-align: center"><?= $periode->getEcartMoisPaiement(); ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align: center">
                     <a class="ajax-modal" data-event="periodes-edition"

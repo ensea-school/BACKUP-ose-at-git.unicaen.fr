@@ -57,11 +57,6 @@ class Periode implements HistoriqueAwareInterface
     protected $ecartMois;
 
     /**
-     * @var integer
-     */
-    protected $ecartMoisPaiement;
-
-    /**
      * miseEnPaiementIntervenantStructure
      *
      * @var MiseEnPaiementIntervenantStructure
@@ -281,36 +276,6 @@ class Periode implements HistoriqueAwareInterface
     {
         return $this->ecartMois;
     }
-
-
-
-    /**
-     * Set ecartMoisPaiement
-     *
-     * @param integer $ecartMoisPaiement
-     *
-     * @return Periode
-     */
-    public function setEcartMoisPaiement($ecartMoisPaiement)
-    {
-        $this->ecartMoisPaiement = $ecartMoisPaiement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get ecartMoisPaiement
-     *
-     * @return boolean
-     */
-    public function getEcartMoisPaiement()
-    {
-        return $this->ecartMoisPaiement;
-    }
-
-
 
     /**
      * Retourne la date de paiement de la période

@@ -1449,7 +1449,7 @@ return [
         'ID',
         'ANNEE_ID',
         'INTERVENANT_ID',
-        'PEUT_CLOTURER_SAISIE',
+        'ACTIF',
         'CLOTURE',
     ],
     'TBL_CONTRAT'                    => [

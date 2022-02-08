@@ -1358,12 +1358,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "3cfcd4ad130686896b5c24bf4308cb4fda84e7ac"
+                "reference": "978f687df91c98f4fb0bf0de950cb0a336a4c135"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/3cfcd4ad130686896b5c24bf4308cb4fda84e7ac",
-                "reference": "3cfcd4ad130686896b5c24bf4308cb4fda84e7ac",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/978f687df91c98f4fb0bf0de950cb0a336a4c135",
+                "reference": "978f687df91c98f4fb0bf0de950cb0a336a4c135",
                 "shasum": ""
             },
             "require": {
@@ -1383,7 +1383,7 @@
                 "psr/cache": "^1 || ^2 || ^3",
                 "symfony/console": "^3.0 || ^4.0 || ^5.0 || ^6.0",
                 "symfony/polyfill-php72": "^1.23",
-                "symfony/polyfill-php80": "^1.15"
+                "symfony/polyfill-php80": "^1.16"
             },
             "conflict": {
                 "doctrine/annotations": "<1.13 || >= 2.0"
@@ -1449,7 +1449,7 @@
                 "issues": "https://github.com/doctrine/orm/issues",
                 "source": "https://github.com/doctrine/orm/tree/2.12.x"
             },
-            "time": "2022-02-06T15:07:47+00:00"
+            "time": "2022-02-07T08:34:45+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -2569,12 +2569,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-filter.git",
-                "reference": "ae5743b3249f079376706b312d80803f7b70021d"
+                "reference": "e8376ba0417d85028da0a61f7db50563baea8d22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-filter/zipball/ae5743b3249f079376706b312d80803f7b70021d",
-                "reference": "ae5743b3249f079376706b312d80803f7b70021d",
+                "url": "https://api.github.com/repos/laminas/laminas-filter/zipball/e8376ba0417d85028da0a61f7db50563baea8d22",
+                "reference": "e8376ba0417d85028da0a61f7db50563baea8d22",
                 "shasum": ""
             },
             "require": {
@@ -2641,7 +2641,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-24T10:46:47+00:00"
+            "time": "2022-02-07T13:15:19+00:00"
         },
         {
             "name": "laminas/laminas-form",
@@ -7014,7 +7014,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "e51ac4a52ba3b41a74ab96eff89817ef8ab4d7ff"
+                "reference": "4e9342404413b203babe15ea6e59bf2ddf738bbd"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7032,7 +7032,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2022-01-31T09:45:09+00:00"
+            "time": "2022-02-02T16:16:11+00:00"
         },
         {
             "name": "unicaen/console",
@@ -7361,12 +7361,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "7caf9262b096b3d3546b3939993cc8970727bd86"
+                "reference": "b84383fb64029889eb494987aa348b1245b48f50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/7caf9262b096b3d3546b3939993cc8970727bd86",
-                "reference": "7caf9262b096b3d3546b3939993cc8970727bd86",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/b84383fb64029889eb494987aa348b1245b48f50",
+                "reference": "b84383fb64029889eb494987aa348b1245b48f50",
                 "shasum": ""
             },
             "require": {
@@ -7409,7 +7409,7 @@
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2022-01-17T02:05:49+00:00"
+            "time": "2022-02-07T22:26:48+00:00"
         }
     ],
     "aliases": [],

@@ -13,4 +13,4 @@ FROM
 WHERE
   sr.histo_destruction IS NULL
 GROUP BY
-  i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id, fr.plafond
+  i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id

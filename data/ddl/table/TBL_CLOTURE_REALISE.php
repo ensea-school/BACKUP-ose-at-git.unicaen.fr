@@ -57,8 +57,8 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'PEUT_CLOTURER_SAISIE' => [
-            'name'        => 'PEUT_CLOTURER_SAISIE',
+        'ACTIF' => [
+            'name'        => 'ACTIF',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

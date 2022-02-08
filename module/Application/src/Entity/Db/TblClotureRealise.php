@@ -6,30 +6,39 @@ class TblClotureRealise
 {
     private int         $id;
 
-    private bool        $estCloture = false;
-
-    private bool        $hasCloture = false;
+    private Annee       $annee;
 
     private Intervenant $intervenant;
 
-    private Annee       $annee;
+    private bool        $actif   = false;
+
+    private bool        $cloture = false;
 
 
 
-    public function estCloture(): bool
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
-        return $this->estCloture;
+        return $this->id;
     }
 
 
 
-    public function hasCloture(): bool
+    /**
+     * @return Annee
+     */
+    public function getAnnee(): Annee
     {
-        return $this->hasCloture;
+        return $this->annee;
     }
 
 
 
+    /**
+     * @return Intervenant
+     */
     public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
@@ -37,9 +46,23 @@ class TblClotureRealise
 
 
 
-    public function getAnnee(): Annee
+    /**
+     * @return bool
+     */
+    public function getActif(): bool
     {
-        return $this->annee;
+        return $this->actif;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getCloture(): bool
+    {
+        return $this->cloture;
+    }
+
 }
 

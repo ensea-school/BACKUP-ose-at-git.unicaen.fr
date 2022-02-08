@@ -280,11 +280,16 @@ class PlafondService extends AbstractEntityService
             $first    = true;
             $hasQuery = false;
             foreach ($plafonds as $plafond) {
-                if ($this->testRequete($plafond)) {
+                $testRes = $this->testRequete($plafond);
+                if ($testRes['success']) {
 
                     $hasQuery = true;
                     if (!$first) $view .= "\n\n    UNION ALL\n";
-                    $view  .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID, p.* FROM (\n    ";
+                    $view .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID,";
+                    if (!$testRes['plafondCol']) {
+                        $view .= " NULL PLAFOND,";
+                    }
+                    $view  .= " p.* FROM (\n    ";
                     $view  .= str_replace("\n", "\n      ", $plafond->getRequete());
                     $view  .= "\n    ) p";
                     $first = false;
@@ -319,25 +324,43 @@ class PlafondService extends AbstractEntityService
 
 
 
-    public function testRequete(Plafond $plafond): bool
+    public function testRequete(Plafond $plafond): array
     {
         $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
         $cols    = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
-        $cols    = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION', 'DEPASSEMENT']);
+        $cols    = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION', 'DEPASSEMENT', 'PLAFOND']);
+
+        $return = ['success' => true];
 
         try {
             $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';
             $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
+            if (empty($res)) {
+                $return['success'] = false;
+                $return['error']   = 'Le plafond ne retourne aucune donnée';
+
+                return $return;
+            }
+
+            $res                  = $res[0];
+            $return['plafondCol'] = isset($res['PLAFOND']);
+
             foreach ($cols as $col) {
-                if (!isset($res[0][$col])) {
-                    return false;
+                if (!isset($res[$col])) {
+                    $return['sucess'] = false;
+                    $return['error']  = 'Colonne ' . $col . ' manquante';
+
+                    return $return;
                 }
             }
 
-            return true;
+            return $return;
         } catch (Exception $e) {
-            return false;
+            $return['success'] = false;
+            $return['error']   = $e->getMessage();
+
+            return $return;
         }
     }
 

@@ -9,7 +9,19 @@ return [
     'commentaire' => 'Clôture de saisie du service réalisé par les intervenants',
     'sequence'    => 'TBL_CLOTURE_REALISE_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'             => [
+        'ACTIF'          => [
+            'name'        => 'ACTIF',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 4,
+            'commentaire' => 'Témoin (0 ou 1)',
+        ],
+        'ANNEE_ID'       => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +33,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CLOTURE'              => [
+        'CLOTURE'        => [
             'name'        => 'CLOTURE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +45,7 @@ return [
             'position'    => 5,
             'commentaire' => 'Témoin (0 ou 1 : 1 si clôturé)',
         ],
-        'ID'                   => [
+        'ID'             => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -45,7 +57,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'       => [
+        'INTERVENANT_ID' => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -56,18 +68,6 @@ return [
             'default'     => NULL,
             'position'    => 3,
             'commentaire' => NULL,
-        ],
-        'ACTIF' => [
-            'name'        => 'ACTIF',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 4,
-            'commentaire' => 'Témoin (0 ou 1)',
         ],
     ],
 ];

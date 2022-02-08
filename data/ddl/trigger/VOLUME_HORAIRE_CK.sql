@@ -4,11 +4,11 @@ FOR EACH ROW
   DECLARE
     has_validation NUMERIC;
     modified       BOOLEAN;
-    intervenant_id NUMERIC;
+    mnp_actif      NUMERIC;
   BEGIN
     IF :OLD.motif_non_paiement_id IS NULL AND :NEW.motif_non_paiement_id IS NOT NULL THEN
-      SELECT s.intervenant_id INTO intervenant_id FROM service s WHERE s.id = :NEW.service_id;
-      IF 0 = ose_divers.intervenant_has_privilege( intervenant_id, 'saisie_motif_non_paiement') THEN
+      SELECT si.motif_non_paiement INTO mnp_actif FROM service s JOIN intervenant i ON i.id = s.intervenant_id JOIN statut si ON si.id = i.statut_id WHERE s.id = :NEW.service_id;
+      IF 0 = mnp_actif THEN
         raise_application_error(-20101, 'Il est impossible d''associer un motif de non paiement à cet intervenant.');
       END IF;
     END IF;

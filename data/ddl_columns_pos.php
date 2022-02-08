@@ -1577,7 +1577,6 @@ return [
         'NBVH',
         'HEURES',
         'VALIDE',
-
     ],
     'TBL_SERVICE_REFERENTIEL'        => [
         'ID',

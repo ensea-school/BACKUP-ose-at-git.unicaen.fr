@@ -783,7 +783,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SELECT
             i.annee_id              annee_id,
             i.id                    intervenant_id,
-            si.peut_cloturer_saisie peut_cloturer_saisie,
+            si.cloture              actif,
             CASE WHEN v.id IS NULL THEN 0 ELSE 1 END cloture
           FROM
                       intervenant         i
@@ -802,20 +802,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         SELECT
           annee_id,
           intervenant_id,
-          peut_cloturer_saisie,
+          actif,
           CASE WHEN sum(cloture) = 0 THEN 0 ELSE 1 END cloture
         FROM
           t
         GROUP BY
           annee_id,
           intervenant_id,
-          peut_cloturer_saisie';
+          actif';
 
     OPEN c FOR '
     SELECT
       CASE WHEN
             t.ANNEE_ID                   = v.ANNEE_ID
         AND t.INTERVENANT_ID             = v.INTERVENANT_ID
+        AND t.ACTIF                      = v.ACTIF
         AND t.CLOTURE                    = v.CLOTURE
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
@@ -2524,28 +2525,25 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@INTERVENANT_ID=s.intervenant_id*/
         )
         SELECT
-          i.annee_id                                                                                annee_id,
-          i.id                                                                                      intervenant_id,
-          i.structure_id                                                                            intervenant_structure_id,
-          NVL( t.structure_id, i.structure_id )                                                     structure_id,
-          ti.id                                                                                     type_intervenant_id,
-          ti.code                                                                                   type_intervenant_code,
-          si.peut_saisir_service                                                                    peut_saisir_service,
-
-          t.element_pedagogique_id,
-          t.service_id,
-          t.element_pedagogique_periode_id,
-          t.etape_id,
-          t.type_volume_horaire_id,
-          t.type_volume_horaire_code,
-          t.element_pedagogique_histo,
-          t.etape_histo,
-
-          CASE WHEN SUM(t.has_heures_mauvaise_periode) > 0 THEN 1 ELSE 0 END has_heures_mauvaise_periode,
-
-          CASE WHEN type_volume_horaire_id IS NULL THEN 0 ELSE count(*) END nbvh,
+          i.annee_id                                                             annee_id,
+          i.id                                                                   intervenant_id,
+          si.service                                                             actif,
+          t.service_id                                                           service_id,
+          t.element_pedagogique_id                                               element_pedagogique_id,
+          ti.id                                                                  type_intervenant_id,
+          ti.code                                                                type_intervenant_code,
+          NVL( t.structure_id, i.structure_id )                                  structure_id,
+          i.structure_id                                                         intervenant_structure_id,
+          t.element_pedagogique_periode_id                                       element_pedagogique_periode_id,
+          t.etape_id                                                             etape_id,
+          t.type_volume_horaire_id                                               type_volume_horaire_id,
+          t.type_volume_horaire_code                                             type_volume_horaire_code,
+          t.element_pedagogique_histo                                            element_pedagogique_histo,
+          t.etape_histo                                                          etape_histo,
+          CASE WHEN SUM(t.has_heures_mauvaise_periode) > 0 THEN 1 ELSE 0 END     has_heures_mauvaise_periode,
+          CASE WHEN type_volume_horaire_id IS NULL THEN 0 ELSE count(*) END      nbvh,
           CASE WHEN type_volume_horaire_id IS NULL THEN 0 ELSE sum(t.heures) END heures,
-          sum(valide) valide
+          sum(valide)                                                            valide
         FROM
           t
           JOIN intervenant                  i ON i.id = t.intervenant_id
@@ -2563,7 +2561,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           i.structure_id,
           ti.id,
           ti.code,
-          si.peut_saisir_service,
+          si.service,
           t.element_pedagogique_id,
           t.service_id,
           t.element_pedagogique_periode_id,
@@ -2582,6 +2580,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.STRUCTURE_ID,0)                   = COALESCE(v.STRUCTURE_ID,0)
         AND t.TYPE_INTERVENANT_ID                        = v.TYPE_INTERVENANT_ID
         AND t.TYPE_INTERVENANT_CODE                      = v.TYPE_INTERVENANT_CODE
+        AND t.ACTIF                                      = v.ACTIF
         AND COALESCE(t.ELEMENT_PEDAGOGIQUE_ID,0)         = COALESCE(v.ELEMENT_PEDAGOGIQUE_ID,0)
         AND t.SERVICE_ID                                 = v.SERVICE_ID
         AND COALESCE(t.ELEMENT_PEDAGOGIQUE_PERIODE_ID,0) = COALESCE(v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,0)
@@ -2601,7 +2600,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.STRUCTURE_ID,
       v.TYPE_INTERVENANT_ID,
       v.TYPE_INTERVENANT_CODE,
-      v.SERVICE,
+      v.ACTIF,
       v.ELEMENT_PEDAGOGIQUE_ID,
       v.SERVICE_ID,
       v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,

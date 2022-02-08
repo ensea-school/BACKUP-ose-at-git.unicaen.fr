@@ -589,7 +589,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_cloture_realise c
         WHERE
           ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
-          AND c.has_cloture = 1
+          AND c.actif = 1
     ';
 
 

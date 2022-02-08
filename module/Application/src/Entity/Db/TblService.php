@@ -2,145 +2,106 @@
 
 namespace Application\Entity\Db;
 
-/**
- * TblService
- */
 class TblService
 {
-    /**
-     * @var float
-     */
-    private $nbvh = 0;
+    private int               $id;
 
-    /**
-     * @var boolean
-     */
-    private $peutSaisirService = false;
+    private Annee             $annee;
 
-    /**
-     * @var float
-     */
-    private $valide = 0;
+    private Intervenant       $intervenant;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private bool              $actif                    = false;
 
-    /**
-     * @var \Application\Entity\Db\TypeVolumeHoraire
-     */
-    private $typeVolumeHoraire;
+    private Service           $service;
 
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
+    private ?Structure        $structure;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private TypeVolumeHoraire $typeVolumeHoraire;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
+    private bool              $hasHeuresMauvaisePeriode = false;
+
+    private int               $nbvh                     = 0;
+
+    private float             $heures                   = 0;
+
+    private int               $valide                   = 0;
 
 
 
-    /**
-     * Get nbvh
-     *
-     * @return float
-     */
-    public function getNbvh()
-    {
-        return $this->nbvh;
-    }
-
-
-
-    /**
-     * Get peutSaisirService
-     *
-     * @return boolean
-     */
-    public function getPeutSaisirService()
-    {
-        return $this->peutSaisirService;
-    }
-
-
-
-    /**
-     * Get valide
-     *
-     * @return float
-     */
-    public function getValide()
-    {
-        return $this->valide;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Get typeVolumeHoraire
-     *
-     * @return \Application\Entity\Db\TypeVolumeHoraire
-     */
-    public function getTypeVolumeHoraire()
+    public function getAnnee(): Annee
     {
-        return $this->typeVolumeHoraire;
+        return $this->annee;
     }
 
 
 
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
 
 
 
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
+    public function getActif(): bool
     {
-        return $this->annee;
+        return $this->actif;
     }
+
+
+
+    public function getService(): Service
+    {
+        return $this->service;
+    }
+
+
+
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+
+
+    public function getTypeVolumeHoraire(): TypeVolumeHoraire
+    {
+        return $this->typeVolumeHoraire;
+    }
+
+
+
+    public function getHasHeuresMauvaisePeriode(): bool
+    {
+        return $this->hasHeuresMauvaisePeriode;
+    }
+
+
+
+    public function getNbvh(): int
+    {
+        return $this->nbvh;
+    }
+
+
+
+    public function getHeures(): float|int
+    {
+        return $this->heures;
+    }
+
+
+
+    public function getValide(): int
+    {
+        return $this->valide;
+    }
+
 }
 

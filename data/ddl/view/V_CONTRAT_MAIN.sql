@@ -97,7 +97,7 @@ FROM
     CASE WHEN hs."libelleAutres" IS NOT NULL THEN 'Autres heures*' ELSE 'Autres heures' END                         "enteteAutresHeures",
     CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                              est_contrat,
     CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                                      est_projet,
-    si.tem_atv                                                                                    est_atv
+    CASE WHEN LOWER(si.codes_corresp_1) = 'oui' THEN 1 ELSE 0 END                                 est_atv
 
   FROM
               contrat               c

@@ -24,8 +24,7 @@ class FormButtonGroupViewHelper extends FormRadio
      *
      * @return string
      */
-    protected function renderOptions(MultiCheckboxElement $element, array $options, array $selectedOptions,
-        array $attributes)
+    protected function renderOptions(MultiCheckboxElement $element, array $options, array $selectedOptions, array $attributes): string
     {
         $escapeHtmlHelper = $this->getEscapeHtmlHelper();
         $labelHelper      = $this->getLabelHelper();

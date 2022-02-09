@@ -17,7 +17,6 @@ use Application\Service\PieceJointeService;
 use Application\Service\TypePieceJointeService;
 use Application\Service\TypeValidationService;
 use Application\Service\ValidationService;
-use Application\Service\WorkflowService;
 
 $repertoire = '/app/cache/2020/';
 $typeMime   = 'application/msword';

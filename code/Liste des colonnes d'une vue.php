@@ -22,10 +22,7 @@ class Lcv
 {
     use EntityManagerAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $view;
+    protected ?string $view;
 
 
 
@@ -36,22 +33,14 @@ class Lcv
 
 
 
-    /**
-     * @return string
-     */
-    public function getView()
+    public function getView(): ?string
     {
         return $this->view;
     }
 
 
 
-    /**
-     * @param string $view
-     *
-     * @return Lcv
-     */
-    public function setView($view)
+    public function setView(string $view): Lcv
     {
         $this->view = $view;
 

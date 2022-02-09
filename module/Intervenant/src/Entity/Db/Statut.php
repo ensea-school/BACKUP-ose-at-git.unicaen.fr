@@ -32,7 +32,7 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
     private float   $serviceStatutaire                  = 0;
 
-    private bool    $depassementServiceDuSansHc         = false;
+    private bool    $depassementServiceDuSansHC         = false;
 
     private float   $tauxChargesPatronales              = 1.0;
 

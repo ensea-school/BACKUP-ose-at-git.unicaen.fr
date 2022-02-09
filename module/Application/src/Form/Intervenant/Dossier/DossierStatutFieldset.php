@@ -47,7 +47,7 @@ class DossierStatutFieldset extends AbstractFieldset
         $statut      = $this->getOption('statut');
         $intervenant = $this->getOption('intervenant');
         /*On va chercher les statuts que l'intervenant possède
-        déjà pour ne pas les afficher dans la liste car il
+        déjà pour ne pas les afficher dans la liste, car il
         ne peut pas avoir deux fois le même statut*/
         $intervernants = $this->getServiceIntervenant()->getIntervenants($intervenant);
         $statuts       = [];

@@ -4,13 +4,9 @@ return [
     'explicit'          => true,
     'table'             => [
         'includes' => [
-            'ADRESSE_INTERVENANT',
-            'ADRESSE_STRUCTURE',
-            'INTERVENANT_SAISIE',
-            'DOSSIER',
             'TBL_DEMS',
-            'VERSION',
             'TMP_SCENARIO_NOEUD_EFFECTIF',
+            'DOSSIER_CHAMP_AUTRE_PAR_STATUT',
         ],
     ],
     'materialized-view' => [

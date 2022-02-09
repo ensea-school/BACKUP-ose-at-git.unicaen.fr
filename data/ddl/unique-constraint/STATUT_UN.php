@@ -3,12 +3,13 @@
 //@formatter:off
 
 return [
-    'name'    => 'STATUT_CODE_UN',
+    'name'    => 'STATUT_UN',
     'table'   => 'STATUT',
-    'index'   => 'STATUT_CODE_UN',
+    'index'   => 'STATUT_UN',
     'columns' => [
         'CODE',
         'HISTO_DESTRUCTION',
+        'ANNEE_ID',
     ],
 ];
 

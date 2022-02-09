@@ -1,33 +1,38 @@
 {
-    "name"        : "unicaen/ose",
-    "description" : "Organisation des Services d'Enseignement (OSE)",
-    "repositories": [
+    "name"             : "unicaen/ose",
+    "description"      : "Organisation des Services d'Enseignement (OSE)",
+    "repositories"     : [
         {
             "type": "composer",
             "url" : "https://gest.unicaen.fr/packagist"
         }
     ],
-    "require"     : {
-        "php"                    : ">=8.0",
-        "unicaen/app"            : "dev-ll-php8",
-        "unicaen/auth"           : "dev-ll-php8",
-        "laminas/laminas-file"   : "^2.8",
-        "unicaen/code"           : "dev-ll-php8",
-        "unicaen/import"         : "dev-ll-php8",
-        "unicaen/tbl"            : "dev-ll-php8",
-        "unicaen/open-document"  : "^4.0",
-        "unicaen/siham"          : "^2.0",
+    "require"          : {
+        "php"                                         : ">=8.0",
+        "unicaen/app"                                 : "dev-ll-php8",
+        "unicaen/auth"                                : "dev-ll-php8",
+        "laminas/laminas-file"                        : "^2.8",
+        "unicaen/code"                                : "dev-ll-php8",
+        "unicaen/import"                              : "dev-ll-php8",
+        "unicaen/tbl"                                 : "dev-ll-php8",
+        "unicaen/open-document"                       : "^4.0",
+        "unicaen/siham"                               : "^2.0",
         "laminas/laminas-cache-storage-adapter-memory": "2.1.x-dev",
-        "laminas/laminas-text": "2.10.x-dev"
+        "laminas/laminas-text"                        : "2.10.x-dev"
     },
-    "require-dev": {
-        "squizlabs/php_codesniffer" : "*"
+    "require-dev"      : {
+        "squizlabs/php_codesniffer"         : "3.*",
+        "phpcompatibility/php-compatibility": "*"
     },
-    "config": {
+    "prefer-stable"    : true,
+    "config"           : {
         "allow-plugins": {
-            "laminas/laminas-dependency-plugin": true,
+            "laminas/laminas-dependency-plugin"   : true,
             "composer/package-versions-deprecated": true
         }
+    },
+    "scripts"          : {
+        "sniffer:php8": "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
     },
     "minimum-stability": "dev"
 }

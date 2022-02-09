@@ -209,7 +209,7 @@ class  IntervenantController extends AbstractController
         $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
         $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
 
-        if ($intervenant->getStatut()->getPeutSaisirService() && $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION)) {
+        if ($intervenant->getStatut()->getService() && $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION)) {
             $services = $this->getProcessusService()->getServices($intervenant, $recherche);
         } else {
             $services = false;
@@ -231,7 +231,7 @@ class  IntervenantController extends AbstractController
         if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
 
         /* Clôture de saisie (si nécessaire) */
-        if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getPeutCloturerSaisie()) {
+        if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getCloture()) {
             $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
         } else {
             $cloture = null;

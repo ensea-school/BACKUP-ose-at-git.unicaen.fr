@@ -2,15 +2,10 @@
 
 namespace Intervenant\Entity\Db;
 
-use Application\Entity\Db\DossierAutre;
 use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
-use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypePieceJointeStatut;
-use Doctrine\Common\Collections\Collection;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenAuth\Entity\Db\Privilege;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\Traits\ParametreEntityTrait;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 
 /**
@@ -18,200 +13,160 @@ use Laminas\Permissions\Acl\Role\RoleInterface;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Statut implements HistoriqueAwareInterface, RoleInterface
+class Statut implements ParametreEntityInterface, RoleInterface
 {
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
 
-    use HistoriqueAwareTrait;
+    use ParametreEntityTrait;
     use TypeIntervenantAwareTrait;
 
-    protected ?int    $id;
 
-    protected ?string $code;
+    private ?string $code;
 
-    protected ?string $libelle;
+    private ?string $libelle;
 
-    protected int     $ordre                         = 0;
+    private int     $ordre                              = 9999;
 
-    protected ?string $codeRh;
+    private bool    $prioritaireIndicateurs             = false;
 
-    protected bool    $prioritaireIndicateurs        = false;
+    private float   $serviceStatutaire                  = 0;
 
-    protected bool    $nonAutorise                   = false;
+    private bool    $depassementServiceDuSansHc         = false;
 
-    protected bool    $depassement                   = true;
+    private float   $tauxChargesPatronales              = 1.0;
 
-    protected bool    $depassementSDSHC              = false;
+    private bool    $dossier                            = true;
 
-    protected float   $serviceStatutaire             = 0;
+    private bool    $dossierVisualisation               = true;
 
-    protected float   $maximumHETD                   = 9999;
+    private bool    $dossierEdition                     = true;
 
-    protected float   $tauxChargesPatronales         = 1.0;
+    private bool    $dossierSelectionnable              = true;
 
-    protected bool    $peutSaisirService             = true;
+    private bool    $dossierIdentiteComplementaire      = true;
 
-    protected bool    $referentiel                   = false;
+    private bool    $dossierContact                     = true;
 
-    protected bool    $dossierSelectionnable         = true;
+    private bool    $dossierTelPerso                    = false;
 
-    protected bool    $dossier                       = true;
+    private bool    $dossierEmailPerso                  = false;
 
-    protected bool    $peutAvoirContrat              = true;
+    private bool    $dossierAdresse                     = true;
 
-    protected bool    $peutCloturerSaisie            = false;
+    private bool    $dossierBanque                      = true;
 
-    protected bool    $peutSaisirMotifNonPaiement    = false;
+    private bool    $dossierInsee                       = true;
 
-    protected bool    $peutSaisirServiceExt          = false;
+    private bool    $dossierEmployeur                   = false;
 
-    protected bool    $dossierIdentiteComplementaire = true;
+    private bool    $dossierAutre1                      = false;
 
-    protected bool    $dossierAdresse                = true;
+    private bool    $dossierAutre1Visualisation         = true;
 
-    protected bool    $dossierContact                = true;
+    private bool    $dossierAutre1Edition               = true;
 
-    protected bool    $dossierInsee                  = true;
+    private bool    $dossierAutre2                      = false;
 
-    protected bool    $dossierBanque                 = true;
+    private bool    $dossierAutre2Visualisation         = true;
 
-    protected bool    $dossierEmployeur              = false;
+    private bool    $dossierAutre2Edition               = true;
 
-    protected bool    $dossierEmailPerso             = true;
+    private bool    $dossierAutre3                      = false;
 
-    protected bool    $dossierTelPerso               = true;
+    private bool    $dossierAutre3Visualisation         = true;
 
-    /**
-     * @var Collection|DossierAutre[]
-     */
-    protected Collection $champsAutres;
+    private bool    $dossierAutre3Edition               = true;
 
-    /**
-     * @var Collection|TypePieceJointeStatut[]
-     */
-    protected Collection $typePieceJointeStatut;
+    private bool    $dossierAutre4                      = false;
 
-    /**
-     * @var Collection|TypeAgrementStatut[]
-     */
-    protected Collection $typeAgrementStatut;
+    private bool    $dossierAutre4Visualisation         = true;
 
-    /**
-     * @var Collection|Privilege[]
-     */
-    protected Collection $privilege;
+    private bool    $dossierAutre4Edition               = true;
+
+    private bool    $dossierAutre5                      = false;
+
+    private bool    $dossierAutre5Visualisation         = true;
+
+    private bool    $dossierAutre5Edition               = true;
+
+    private bool    $pieceJustificativeVisualisation    = true;
+
+    private bool    $pieceJustificativeTelechargement   = true;
+
+    private bool    $pieceJustificativeEdition          = true;
+
+    private bool    $pieceJustificativeArchivage        = true;
+
+    private bool    $conseilRestreint                   = true;
+
+    private bool    $conseilRestreintVisualisation      = true;
+
+    private int     $conseilRestreintDureeVie           = 1;
+
+    private bool    $conseilAcademique                  = true;
+
+    private bool    $conseilAcademiqueVisualisation     = true;
+
+    private int     $conseilAcademiqueDureeVie          = 5;
+
+    private bool    $contrat                            = true;
+
+    private bool    $contratVisualisation               = true;
+
+    private bool    $contratDepot                       = true;
+
+    private bool    $service                            = true;
+
+    private bool    $serviceVisualisation               = true;
+
+    private bool    $serviceEdition                     = true;
+
+    private bool    $serviceExterieur                   = true;
+
+    private bool    $referentiel                        = true;
+
+    private bool    $referentielVisualisation           = true;
+
+    private bool    $referentielEdition                 = true;
+
+    private bool    $cloture                            = true;
+
+    private bool    $modificationServiceDu              = true;
+
+    private bool    $modificationServiceDuVisualisation = true;
+
+    private bool    $paiementVisualisation              = true;
+
+    private bool    $motifNonPaiement                   = true;
+
+    private bool    $formuleVisualisation               = true;
+
+    private ?string $codesCorresp1                      = null;
+
+    private ?string $codesCorresp2                      = null;
+
+    private ?string $codesCorresp3                      = null;
+
+    private ?string $codesCorresp4                      = null;
 
 
 
-    public function __construct()
-    {
-        $this->champsAutres          = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->typePieceJointeStatut = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->typeAgrementStatut    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->privilege             = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-
-
-    /**
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getLibelle();
     }
 
 
 
-    /**
-     * Add typeAgrementStatut
-     *
-     * @param \Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut
-     *
-     * @return TypeTypeAgrementStatut
-     */
-    public function addTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
-    {
-        $this->typeAgrementStatut[] = $typeAgrementStatut;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove typeAgrementStatut
-     *
-     * @param \Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut
-     */
-    public function removeTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
-    {
-        $this->typeAgrementStatut->removeElement($typeAgrementStatut);
-    }
-
-
-
-    /**
-     * Get typeAgrementStatut
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTypeAgrementStatut()
-    {
-        return $this->typeAgrementStatut;
-    }
-
-
-
-    /**
-     * Get privilege
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPrivilege()
-    {
-        return $this->privilege;
-    }
-
-
-
-    /**
-     * Détermine si le type de rôle possède un provilège ou non.
-     * Si le privilège transmis est un objet de classe Privilege, alors il est inutile de fournir la ressource, sinon il est
-     * obligatoire de la préciser
-     *
-     * @param Privilege|string $privilege
-     *
-     * @return boolean
-     * @throws \LogicException
-     */
-    public function hasPrivilege($privilege)
-    {
-        if ($privilege instanceof Privilege) {
-            $privilege = $privilege->getFullCode();
-        }
-        $privileges = $this->getPrivilege();
-        if ($privileges) {
-            foreach ($privileges as $priv) {
-                if ($priv->getFullCode() === $privilege) return true;
-            }
-        }
-
-        return false;
-    }
-
-
-
-    public function getRoleId()
+    public function getRoleId(): string
     {
         return 'statut/' . $this->getCode();
     }
 
 
 
-    public function dupliquer()
+    public function dupliquer(): Statut
     {
         $new     = new Statut();
         $methods = get_class_methods($this);
@@ -231,94 +186,30 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    /**
-     * Indique si ce statut correspond à un intervenant permanent.
-     *
-     * @return bool
-     */
-    public function estPermanent()
+    public function estPermanent(): bool
     {
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
     }
 
 
 
-    /**
-     * Indique si ce statut correspond aux vacataires.
-     *
-     * @return bool
-     */
-    public function estVacataire()
+    public function estVacataire(): bool
     {
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
     }
 
 
 
-    /**
-     * Add champ autre
-     *
-     * @param \Application\Entity\Db\DossierAutre $champAutre
-     *
-     * @return Statut
-     */
-    public function addChampAutre(DossierAutre $champAutre)
+    public function isNonAutorise(): bool
     {
-        if (!$this->champsAutres->contains($champAutre)) {
-            $this->champsAutres[] = $champAutre;
-        }
-
-        return $this;
+        return $this->code === self::CODE_NON_AUTORISE;
     }
 
 
 
-    /**
-     * Remove champ autre
-     *
-     * @param \Application\Entity\Db\DossierAutre $champAutre
-     */
-    public function removeChampAutre(DossierAutre $champAutre)
+    public function isAutres(): bool
     {
-        if ($this->champsAutres) {
-            $this->champsAutres->removeElement($champAutre);
-        }
-    }
-
-
-
-    /**
-     * Get champs autres
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getChampsAutres()
-    {
-        return $this->champsAutres;
-    }
-
-
-
-    /**
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * @param int|null $id
-     *
-     * @return Statut
-     */
-    public function setId(?int $id): Statut
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->code === self::CODE_AUTRES;
     }
 
 
@@ -396,30 +287,6 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
-     * @return string|null
-     */
-    public function getCodeRh(): ?string
-    {
-        return $this->codeRh;
-    }
-
-
-
-    /**
-     * @param string|null $codeRh
-     *
-     * @return Statut
-     */
-    public function setCodeRh(?string $codeRh): Statut
-    {
-        $this->codeRh = $codeRh;
-
-        return $this;
-    }
-
-
-
-    /**
      * @return bool
      */
     public function getPrioritaireIndicateurs(): bool
@@ -437,78 +304,6 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     public function setPrioritaireIndicateurs(bool $prioritaireIndicateurs): Statut
     {
         $this->prioritaireIndicateurs = $prioritaireIndicateurs;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getNonAutorise(): bool
-    {
-        return $this->nonAutorise;
-    }
-
-
-
-    /**
-     * @param bool $nonAutorise
-     *
-     * @return Statut
-     */
-    public function setNonAutorise(bool $nonAutorise): Statut
-    {
-        $this->nonAutorise = $nonAutorise;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getDepassement(): bool
-    {
-        return $this->depassement;
-    }
-
-
-
-    /**
-     * @param bool $depassement
-     *
-     * @return Statut
-     */
-    public function setDepassement(bool $depassement): Statut
-    {
-        $this->depassement = $depassement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getDepassementSDSHC(): bool
-    {
-        return $this->depassementSDSHC;
-    }
-
-
-
-    /**
-     * @param bool $depassementSDSHC
-     *
-     * @return Statut
-     */
-    public function setDepassementSDSHC(bool $depassementSDSHC): Statut
-    {
-        $this->depassementSDSHC = $depassementSDSHC;
 
         return $this;
     }
@@ -540,23 +335,23 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
-     * @return float|int
+     * @return bool
      */
-    public function getMaximumHETD(): float|int
+    public function getDepassementServiceDuSansHc(): bool
     {
-        return $this->maximumHETD;
+        return $this->depassementServiceDuSansHc;
     }
 
 
 
     /**
-     * @param float|int $maximumHETD
+     * @param bool $depassementServiceDuSansHc
      *
      * @return Statut
      */
-    public function setMaximumHETD(float|int $maximumHETD): Statut
+    public function setDepassementServiceDuSansHc(bool $depassementServiceDuSansHc): Statut
     {
-        $this->maximumHETD = $maximumHETD;
+        $this->depassementServiceDuSansHc = $depassementServiceDuSansHc;
 
         return $this;
     }
@@ -566,93 +361,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return float
      */
-    public function getChargesPatronales(): float
+    public function getTauxChargesPatronales(): float
     {
-        return $this->chargesPatronales;
+        return $this->tauxChargesPatronales;
     }
 
 
 
     /**
-     * @param float $chargesPatronales
+     * @param float $tauxChargesPatronales
      *
      * @return Statut
      */
-    public function setChargesPatronales(float $chargesPatronales): Statut
+    public function setTauxChargesPatronales(float $tauxChargesPatronales): Statut
     {
-        $this->chargesPatronales = $chargesPatronales;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getPeutSaisirService(): bool
-    {
-        return $this->peutSaisirService;
-    }
-
-
-
-    /**
-     * @param bool $peutSaisirService
-     *
-     * @return Statut
-     */
-    public function setPeutSaisirService(bool $peutSaisirService): Statut
-    {
-        $this->peutSaisirService = $peutSaisirService;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getReferentiel(): bool
-    {
-        return $this->referentiel;
-    }
-
-
-
-    /**
-     * @param bool $referentiel
-     *
-     * @return Statut
-     */
-    public function setReferentiel(bool $referentiel): Statut
-    {
-        $this->referentiel = $referentiel;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isDossierSelectionnable(): bool
-    {
-        return $this->dossierSelectionnable;
-    }
-
-
-
-    /**
-     * @param bool $dossierSelectionnable
-     *
-     * @return Statut
-     */
-    public function setDossierSelectionnable(bool $dossierSelectionnable): Statut
-    {
-        $this->dossierSelectionnable = $dossierSelectionnable;
+        $this->tauxChargesPatronales = $tauxChargesPatronales;
 
         return $this;
     }
@@ -686,21 +409,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function hasContrat(): bool
+    public function getDossierVisualisation(): bool
     {
-        return $this->contrat;
+        return $this->dossierVisualisation;
     }
 
 
 
     /**
-     * @param bool $contrat
+     * @param bool $dossierVisualisation
      *
      * @return Statut
      */
-    public function setContrat(bool $contrat): Statut
+    public function setDossierVisualisation(bool $dossierVisualisation): Statut
     {
-        $this->contrat = $contrat;
+        $this->dossierVisualisation = $dossierVisualisation;
 
         return $this;
     }
@@ -710,21 +433,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getPeutCloturerSaisie(): bool
+    public function getDossierEdition(): bool
     {
-        return $this->peutCloturerSaisie;
+        return $this->dossierEdition;
     }
 
 
 
     /**
-     * @param bool $peutCloturerSaisie
+     * @param bool $dossierEdition
      *
      * @return Statut
      */
-    public function setPeutCloturerSaisie(bool $peutCloturerSaisie): Statut
+    public function setDossierEdition(bool $dossierEdition): Statut
     {
-        $this->peutCloturerSaisie = $peutCloturerSaisie;
+        $this->dossierEdition = $dossierEdition;
 
         return $this;
     }
@@ -734,45 +457,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getPeutSaisirMotifNonPaiement(): bool
+    public function getDossierSelectionnable(): bool
     {
-        return $this->peutSaisirMotifNonPaiement;
+        return $this->dossierSelectionnable;
     }
 
 
 
     /**
-     * @param bool $peutSaisirMotifNonPaiement
+     * @param bool $dossierSelectionnable
      *
      * @return Statut
      */
-    public function setPeutSaisirMotifNonPaiement(bool $peutSaisirMotifNonPaiement): Statut
+    public function setDossierSelectionnable(bool $dossierSelectionnable): Statut
     {
-        $this->peutSaisirMotifNonPaiement = $peutSaisirMotifNonPaiement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getPeutSaisirServiceExt(): bool
-    {
-        return $this->peutSaisirServiceExt;
-    }
-
-
-
-    /**
-     * @param bool $peutSaisirServiceExt
-     *
-     * @return Statut
-     */
-    public function setPeutSaisirServiceExt(bool $peutSaisirServiceExt): Statut
-    {
-        $this->peutSaisirServiceExt = $peutSaisirServiceExt;
+        $this->dossierSelectionnable = $dossierSelectionnable;
 
         return $this;
     }
@@ -806,30 +505,6 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getDossierAdresse(): bool
-    {
-        return $this->dossierAdresse;
-    }
-
-
-
-    /**
-     * @param bool $dossierAdresse
-     *
-     * @return Statut
-     */
-    public function setDossierAdresse(bool $dossierAdresse): Statut
-    {
-        $this->dossierAdresse = $dossierAdresse;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
     public function getDossierContact(): bool
     {
         return $this->dossierContact;
@@ -854,69 +529,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getDossierInsee(): bool
+    public function getDossierTelPerso(): bool
     {
-        return $this->dossierInsee;
+        return $this->dossierTelPerso;
     }
 
 
 
     /**
-     * @param bool $dossierInsee
+     * @param bool $dossierTelPerso
      *
      * @return Statut
      */
-    public function setDossierInsee(bool $dossierInsee): Statut
+    public function setDossierTelPerso(bool $dossierTelPerso): Statut
     {
-        $this->dossierInsee = $dossierInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getDossierBanque(): bool
-    {
-        return $this->dossierBanque;
-    }
-
-
-
-    /**
-     * @param bool $dossierBanque
-     *
-     * @return Statut
-     */
-    public function setDossierBanque(bool $dossierBanque): Statut
-    {
-        $this->dossierBanque = $dossierBanque;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getDossierEmployeur(): bool
-    {
-        return $this->dossierEmployeur;
-    }
-
-
-
-    /**
-     * @param bool $dossierEmployeur
-     *
-     * @return Statut
-     */
-    public function setDossierEmployeur(bool $dossierEmployeur): Statut
-    {
-        $this->dossierEmployeur = $dossierEmployeur;
+        $this->dossierTelPerso = $dossierTelPerso;
 
         return $this;
     }
@@ -950,21 +577,21 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getDossierTelPerso(): bool
+    public function getDossierAdresse(): bool
     {
-        return $this->dossierTelPerso;
+        return $this->dossierAdresse;
     }
 
 
 
     /**
-     * @param bool $dossierTelPerso
+     * @param bool $dossierAdresse
      *
      * @return Statut
      */
-    public function setDossierTelPerso(bool $dossierTelPerso): Statut
+    public function setDossierAdresse(bool $dossierAdresse): Statut
     {
-        $this->dossierTelPerso = $dossierTelPerso;
+        $this->dossierAdresse = $dossierAdresse;
 
         return $this;
     }
@@ -972,31 +599,1153 @@ class Statut implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
-     * @return TypePieceJointeStatut[]|Collection
+     * @return bool
      */
-    public function getTypePieceJointeStatut(): \Doctrine\Common\Collections\ArrayCollection|Collection|array
+    public function getDossierBanque(): bool
     {
-        return $this->typePieceJointeStatut;
+        return $this->dossierBanque;
     }
 
 
 
     /**
-     * @param TypePieceJointeStatut[]|Collection $typePieceJointeStatut
+     * @param bool $dossierBanque
      *
      * @return Statut
      */
-    public function setTypePieceJointeStatut(\Doctrine\Common\Collections\ArrayCollection|Collection|array $typePieceJointeStatut): Statut
+    public function setDossierBanque(bool $dossierBanque): Statut
     {
-        $this->typePieceJointeStatut = $typePieceJointeStatut;
+        $this->dossierBanque = $dossierBanque;
 
         return $this;
     }
 
 
 
-    public function isNonAutorise(): bool
+    /**
+     * @return bool
+     */
+    public function getDossierInsee(): bool
     {
-        return $this->code === self::CODE_NON_AUTORISE;
+        return $this->dossierInsee;
     }
+
+
+
+    /**
+     * @param bool $dossierInsee
+     *
+     * @return Statut
+     */
+    public function setDossierInsee(bool $dossierInsee): Statut
+    {
+        $this->dossierInsee = $dossierInsee;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierEmployeur(): bool
+    {
+        return $this->dossierEmployeur;
+    }
+
+
+
+    /**
+     * @param bool $dossierEmployeur
+     *
+     * @return Statut
+     */
+    public function setDossierEmployeur(bool $dossierEmployeur): Statut
+    {
+        $this->dossierEmployeur = $dossierEmployeur;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre1(): bool
+    {
+        return $this->dossierAutre1;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre1
+     *
+     * @return Statut
+     */
+    public function setDossierAutre1(bool $dossierAutre1): Statut
+    {
+        $this->dossierAutre1 = $dossierAutre1;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre1Visualisation(): bool
+    {
+        return $this->dossierAutre1Visualisation;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre1Visualisation
+     *
+     * @return Statut
+     */
+    public function setDossierAutre1Visualisation(bool $dossierAutre1Visualisation): Statut
+    {
+        $this->dossierAutre1Visualisation = $dossierAutre1Visualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre1Edition(): bool
+    {
+        return $this->dossierAutre1Edition;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre1Edition
+     *
+     * @return Statut
+     */
+    public function setDossierAutre1Edition(bool $dossierAutre1Edition): Statut
+    {
+        $this->dossierAutre1Edition = $dossierAutre1Edition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre2(): bool
+    {
+        return $this->dossierAutre2;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre2
+     *
+     * @return Statut
+     */
+    public function setDossierAutre2(bool $dossierAutre2): Statut
+    {
+        $this->dossierAutre2 = $dossierAutre2;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre2Visualisation(): bool
+    {
+        return $this->dossierAutre2Visualisation;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre2Visualisation
+     *
+     * @return Statut
+     */
+    public function setDossierAutre2Visualisation(bool $dossierAutre2Visualisation): Statut
+    {
+        $this->dossierAutre2Visualisation = $dossierAutre2Visualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre2Edition(): bool
+    {
+        return $this->dossierAutre2Edition;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre2Edition
+     *
+     * @return Statut
+     */
+    public function setDossierAutre2Edition(bool $dossierAutre2Edition): Statut
+    {
+        $this->dossierAutre2Edition = $dossierAutre2Edition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre3(): bool
+    {
+        return $this->dossierAutre3;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre3
+     *
+     * @return Statut
+     */
+    public function setDossierAutre3(bool $dossierAutre3): Statut
+    {
+        $this->dossierAutre3 = $dossierAutre3;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre3Visualisation(): bool
+    {
+        return $this->dossierAutre3Visualisation;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre3Visualisation
+     *
+     * @return Statut
+     */
+    public function setDossierAutre3Visualisation(bool $dossierAutre3Visualisation): Statut
+    {
+        $this->dossierAutre3Visualisation = $dossierAutre3Visualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre3Edition(): bool
+    {
+        return $this->dossierAutre3Edition;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre3Edition
+     *
+     * @return Statut
+     */
+    public function setDossierAutre3Edition(bool $dossierAutre3Edition): Statut
+    {
+        $this->dossierAutre3Edition = $dossierAutre3Edition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre4(): bool
+    {
+        return $this->dossierAutre4;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre4
+     *
+     * @return Statut
+     */
+    public function setDossierAutre4(bool $dossierAutre4): Statut
+    {
+        $this->dossierAutre4 = $dossierAutre4;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre4Visualisation(): bool
+    {
+        return $this->dossierAutre4Visualisation;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre4Visualisation
+     *
+     * @return Statut
+     */
+    public function setDossierAutre4Visualisation(bool $dossierAutre4Visualisation): Statut
+    {
+        $this->dossierAutre4Visualisation = $dossierAutre4Visualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre4Edition(): bool
+    {
+        return $this->dossierAutre4Edition;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre4Edition
+     *
+     * @return Statut
+     */
+    public function setDossierAutre4Edition(bool $dossierAutre4Edition): Statut
+    {
+        $this->dossierAutre4Edition = $dossierAutre4Edition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre5(): bool
+    {
+        return $this->dossierAutre5;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre5
+     *
+     * @return Statut
+     */
+    public function setDossierAutre5(bool $dossierAutre5): Statut
+    {
+        $this->dossierAutre5 = $dossierAutre5;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre5Visualisation(): bool
+    {
+        return $this->dossierAutre5Visualisation;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre5Visualisation
+     *
+     * @return Statut
+     */
+    public function setDossierAutre5Visualisation(bool $dossierAutre5Visualisation): Statut
+    {
+        $this->dossierAutre5Visualisation = $dossierAutre5Visualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getDossierAutre5Edition(): bool
+    {
+        return $this->dossierAutre5Edition;
+    }
+
+
+
+    /**
+     * @param bool $dossierAutre5Edition
+     *
+     * @return Statut
+     */
+    public function setDossierAutre5Edition(bool $dossierAutre5Edition): Statut
+    {
+        $this->dossierAutre5Edition = $dossierAutre5Edition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getPieceJustificativeVisualisation(): bool
+    {
+        return $this->pieceJustificativeVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $pieceJustificativeVisualisation
+     *
+     * @return Statut
+     */
+    public function setPieceJustificativeVisualisation(bool $pieceJustificativeVisualisation): Statut
+    {
+        $this->pieceJustificativeVisualisation = $pieceJustificativeVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getPieceJustificativeTelechargement(): bool
+    {
+        return $this->pieceJustificativeTelechargement;
+    }
+
+
+
+    /**
+     * @param bool $pieceJustificativeTelechargement
+     *
+     * @return Statut
+     */
+    public function setPieceJustificativeTelechargement(bool $pieceJustificativeTelechargement): Statut
+    {
+        $this->pieceJustificativeTelechargement = $pieceJustificativeTelechargement;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getPieceJustificativeEdition(): bool
+    {
+        return $this->pieceJustificativeEdition;
+    }
+
+
+
+    /**
+     * @param bool $pieceJustificativeEdition
+     *
+     * @return Statut
+     */
+    public function setPieceJustificativeEdition(bool $pieceJustificativeEdition): Statut
+    {
+        $this->pieceJustificativeEdition = $pieceJustificativeEdition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getPieceJustificativeArchivage(): bool
+    {
+        return $this->pieceJustificativeArchivage;
+    }
+
+
+
+    /**
+     * @param bool $pieceJustificativeArchivage
+     *
+     * @return Statut
+     */
+    public function setPieceJustificativeArchivage(bool $pieceJustificativeArchivage): Statut
+    {
+        $this->pieceJustificativeArchivage = $pieceJustificativeArchivage;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getConseilRestreint(): bool
+    {
+        return $this->conseilRestreint;
+    }
+
+
+
+    /**
+     * @param bool $conseilRestreint
+     *
+     * @return Statut
+     */
+    public function setConseilRestreint(bool $conseilRestreint): Statut
+    {
+        $this->conseilRestreint = $conseilRestreint;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getConseilRestreintVisualisation(): bool
+    {
+        return $this->conseilRestreintVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $conseilRestreintVisualisation
+     *
+     * @return Statut
+     */
+    public function setConseilRestreintVisualisation(bool $conseilRestreintVisualisation): Statut
+    {
+        $this->conseilRestreintVisualisation = $conseilRestreintVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getConseilRestreintDureeVie(): int
+    {
+        return $this->conseilRestreintDureeVie;
+    }
+
+
+
+    /**
+     * @param int $conseilRestreintDureeVie
+     *
+     * @return Statut
+     */
+    public function setConseilRestreintDureeVie(int $conseilRestreintDureeVie): Statut
+    {
+        $this->conseilRestreintDureeVie = $conseilRestreintDureeVie;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getConseilAcademique(): bool
+    {
+        return $this->conseilAcademique;
+    }
+
+
+
+    /**
+     * @param bool $conseilAcademique
+     *
+     * @return Statut
+     */
+    public function setConseilAcademique(bool $conseilAcademique): Statut
+    {
+        $this->conseilAcademique = $conseilAcademique;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getConseilAcademiqueVisualisation(): bool
+    {
+        return $this->conseilAcademiqueVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $conseilAcademiqueVisualisation
+     *
+     * @return Statut
+     */
+    public function setConseilAcademiqueVisualisation(bool $conseilAcademiqueVisualisation): Statut
+    {
+        $this->conseilAcademiqueVisualisation = $conseilAcademiqueVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getConseilAcademiqueDureeVie(): int
+    {
+        return $this->conseilAcademiqueDureeVie;
+    }
+
+
+
+    /**
+     * @param int $conseilAcademiqueDureeVie
+     *
+     * @return Statut
+     */
+    public function setConseilAcademiqueDureeVie(int $conseilAcademiqueDureeVie): Statut
+    {
+        $this->conseilAcademiqueDureeVie = $conseilAcademiqueDureeVie;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getContrat(): bool
+    {
+        return $this->contrat;
+    }
+
+
+
+    /**
+     * @param bool $contrat
+     *
+     * @return Statut
+     */
+    public function setContrat(bool $contrat): Statut
+    {
+        $this->contrat = $contrat;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getContratVisualisation(): bool
+    {
+        return $this->contratVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $contratVisualisation
+     *
+     * @return Statut
+     */
+    public function setContratVisualisation(bool $contratVisualisation): Statut
+    {
+        $this->contratVisualisation = $contratVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getContratDepot(): bool
+    {
+        return $this->contratDepot;
+    }
+
+
+
+    /**
+     * @param bool $contratDepot
+     *
+     * @return Statut
+     */
+    public function setContratDepot(bool $contratDepot): Statut
+    {
+        $this->contratDepot = $contratDepot;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getService(): bool
+    {
+        return $this->service;
+    }
+
+
+
+    /**
+     * @param bool $service
+     *
+     * @return Statut
+     */
+    public function setService(bool $service): Statut
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getServiceVisualisation(): bool
+    {
+        return $this->serviceVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $serviceVisualisation
+     *
+     * @return Statut
+     */
+    public function setServiceVisualisation(bool $serviceVisualisation): Statut
+    {
+        $this->serviceVisualisation = $serviceVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getServiceEdition(): bool
+    {
+        return $this->serviceEdition;
+    }
+
+
+
+    /**
+     * @param bool $serviceEdition
+     *
+     * @return Statut
+     */
+    public function setServiceEdition(bool $serviceEdition): Statut
+    {
+        $this->serviceEdition = $serviceEdition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getServiceExterieur(): bool
+    {
+        return $this->serviceExterieur;
+    }
+
+
+
+    /**
+     * @param bool $serviceExterieur
+     *
+     * @return Statut
+     */
+    public function setServiceExterieur(bool $serviceExterieur): Statut
+    {
+        $this->serviceExterieur = $serviceExterieur;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getReferentiel(): bool
+    {
+        return $this->referentiel;
+    }
+
+
+
+    /**
+     * @param bool $referentiel
+     *
+     * @return Statut
+     */
+    public function setReferentiel(bool $referentiel): Statut
+    {
+        $this->referentiel = $referentiel;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getReferentielVisualisation(): bool
+    {
+        return $this->referentielVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $referentielVisualisation
+     *
+     * @return Statut
+     */
+    public function setReferentielVisualisation(bool $referentielVisualisation): Statut
+    {
+        $this->referentielVisualisation = $referentielVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getReferentielEdition(): bool
+    {
+        return $this->referentielEdition;
+    }
+
+
+
+    /**
+     * @param bool $referentielEdition
+     *
+     * @return Statut
+     */
+    public function setReferentielEdition(bool $referentielEdition): Statut
+    {
+        $this->referentielEdition = $referentielEdition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getCloture(): bool
+    {
+        return $this->cloture;
+    }
+
+
+
+    /**
+     * @param bool $cloture
+     *
+     * @return Statut
+     */
+    public function setCloture(bool $cloture): Statut
+    {
+        $this->cloture = $cloture;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getModificationServiceDu(): bool
+    {
+        return $this->modificationServiceDu;
+    }
+
+
+
+    /**
+     * @param bool $modificationServiceDu
+     *
+     * @return Statut
+     */
+    public function setModificationServiceDu(bool $modificationServiceDu): Statut
+    {
+        $this->modificationServiceDu = $modificationServiceDu;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getModificationServiceDuVisualisation(): bool
+    {
+        return $this->modificationServiceDuVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $modificationServiceDuVisualisation
+     *
+     * @return Statut
+     */
+    public function setModificationServiceDuVisualisation(bool $modificationServiceDuVisualisation): Statut
+    {
+        $this->modificationServiceDuVisualisation = $modificationServiceDuVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getPaiementVisualisation(): bool
+    {
+        return $this->paiementVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $paiementVisualisation
+     *
+     * @return Statut
+     */
+    public function setPaiementVisualisation(bool $paiementVisualisation): Statut
+    {
+        $this->paiementVisualisation = $paiementVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getMotifNonPaiement(): bool
+    {
+        return $this->motifNonPaiement;
+    }
+
+
+
+    /**
+     * @param bool $motifNonPaiement
+     *
+     * @return Statut
+     */
+    public function setMotifNonPaiement(bool $motifNonPaiement): Statut
+    {
+        $this->motifNonPaiement = $motifNonPaiement;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getFormuleVisualisation(): bool
+    {
+        return $this->formuleVisualisation;
+    }
+
+
+
+    /**
+     * @param bool $formuleVisualisation
+     *
+     * @return Statut
+     */
+    public function setFormuleVisualisation(bool $formuleVisualisation): Statut
+    {
+        $this->formuleVisualisation = $formuleVisualisation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp1(): ?string
+    {
+        return $this->codesCorresp1;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp1
+     *
+     * @return Statut
+     */
+    public function setCodesCorresp1(?string $codesCorresp1): Statut
+    {
+        $this->codesCorresp1 = $codesCorresp1;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp2(): ?string
+    {
+        return $this->codesCorresp2;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp2
+     *
+     * @return Statut
+     */
+    public function setCodesCorresp2(?string $codesCorresp2): Statut
+    {
+        $this->codesCorresp2 = $codesCorresp2;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp3(): ?string
+    {
+        return $this->codesCorresp3;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp3
+     *
+     * @return Statut
+     */
+    public function setCodesCorresp3(?string $codesCorresp3): Statut
+    {
+        $this->codesCorresp3 = $codesCorresp3;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodesCorresp4(): ?string
+    {
+        return $this->codesCorresp4;
+    }
+
+
+
+    /**
+     * @param string|null $codesCorresp4
+     *
+     * @return Statut
+     */
+    public function setCodesCorresp4(?string $codesCorresp4): Statut
+    {
+        $this->codesCorresp4 = $codesCorresp4;
+
+        return $this;
+    }
+
 }

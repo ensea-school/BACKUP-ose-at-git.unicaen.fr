@@ -360,7 +360,7 @@ class ServiceAssertion extends AbstractAssertion
 
     protected function assertCloture(Role $role, Intervenant $intervenant)
     {
-        if ($intervenant->getStatut()->getPeutCloturerSaisie()) {
+        if ($intervenant->getStatut()->getCloture()) {
             $softPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES);
             $hardPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES_AVEC_MEP);
 
@@ -477,7 +477,7 @@ class ServiceAssertion extends AbstractAssertion
     {
         // filtrer pour la structure ? ?
         return $this->asserts([
-            $intervenant->getStatut()->getPeutSaisirMotifNonPaiement(),
+            $intervenant->getStatut()->getMotifNonPaiement(),
             $this->assertIntervenant($role, $intervenant),
         ]);
     }

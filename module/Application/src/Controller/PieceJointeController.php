@@ -91,7 +91,7 @@ class PieceJointeController extends AbstractController
 
         $messages = $this->makeMessages($demandees, $fournies);
 
-        $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->hasContrat();
+        $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getContrat();
 
         return compact('intervenant', 'title', 'heuresPourSeuil', 'demandees', 'synthese', 'fournies', 'messages', 'alertContrat', 'annee');
     }

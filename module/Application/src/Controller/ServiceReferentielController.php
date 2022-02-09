@@ -59,8 +59,9 @@ class ServiceReferentielController extends AbstractController
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
         $viewHelperParams      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                  = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant           = $this->params()->fromRoute('intervenant');
-        $viewModel             = new \Laminas\View\Model\ViewModel();
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->params()->fromRoute('intervenant');
+        $viewModel   = new \Laminas\View\Model\ViewModel();
 
         if (!$intervenant) {
             $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement

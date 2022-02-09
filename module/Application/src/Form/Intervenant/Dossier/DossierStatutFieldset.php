@@ -63,7 +63,7 @@ class DossierStatutFieldset extends AbstractFieldset
             }
         }
         //Si statut intervenant n'est pas selectionnable dans la liste alors liste en lecture seule
-        if ($statut->isDossierSelectionnable() || $statut->getCode() == Statut::CODE_AUTRES) {
+        if ($statut->getDossierSelectionnable() || $statut->isAutres()) {
             $this->get('statut')
                 ->setValueOptions(['' => '(Sélectionnez un statut)'] + \UnicaenApp\Util::collectionAsOptions($statutSelectable));
         } else {

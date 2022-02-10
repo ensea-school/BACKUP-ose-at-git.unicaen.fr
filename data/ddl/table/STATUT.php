@@ -765,8 +765,8 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL'                     => [
-            'name'        => 'REFERENTIEL',
+        'REFERENTIEL_PREVU'                     => [
+            'name'        => 'REFERENTIEL_PREVU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -777,8 +777,8 @@ return [
             'position'    => 55,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_EDITION'             => [
-            'name'        => 'REFERENTIEL_EDITION',
+        'REFERENTIEL_PREVU_EDITION'             => [
+            'name'        => 'REFERENTIEL_PREVU_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -789,8 +789,8 @@ return [
             'position'    => 57,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_VISUALISATION'       => [
-            'name'        => 'REFERENTIEL_VISUALISATION',
+        'REFERENTIEL_PREVU_VISU'       => [
+            'name'        => 'REFERENTIEL_PREVU_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -801,8 +801,46 @@ return [
             'position'    => 56,
             'commentaire' => NULL,
         ],
-        'SERVICE'                         => [
-            'name'        => 'SERVICE',
+
+        'REFERENTIEL_REALISE'                     => [
+            'name'        => 'REFERENTIEL_REALISE',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 55,
+            'commentaire' => NULL,
+        ],
+        'REFERENTIEL_REALISE_EDITION'             => [
+            'name'        => 'REFERENTIEL_REALISE_EDITION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 57,
+            'commentaire' => NULL,
+        ],
+        'REFERENTIEL_REALISE_VISU'       => [
+            'name'        => 'REFERENTIEL_REALISE_VISU',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 56,
+            'commentaire' => NULL,
+        ],
+
+        'SERVICE_PREVU'                         => [
+            'name'        => 'SERVICE_PREVU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -813,8 +851,8 @@ return [
             'position'    => 51,
             'commentaire' => NULL,
         ],
-        'SERVICE_EDITION'                 => [
-            'name'        => 'SERVICE_EDITION',
+        'SERVICE_PREVU_EDITION'                 => [
+            'name'        => 'SERVICE_PREVU_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -825,6 +863,32 @@ return [
             'position'    => 53,
             'commentaire' => NULL,
         ],
+
+        'SERVICE_REALISE'                         => [
+            'name'        => 'SERVICE_REALISE',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 51,
+            'commentaire' => NULL,
+        ],
+        'SERVICE_REALISE_EDITION'                 => [
+            'name'        => 'SERVICE_REALISE_EDITION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 53,
+            'commentaire' => NULL,
+        ],
+
         'SERVICE_EXTERIEUR'               => [
             'name'        => 'SERVICE_EXTERIEUR',
             'type'        => 'bool',
@@ -849,8 +913,8 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'SERVICE_VISUALISATION'           => [
-            'name'        => 'SERVICE_VISUALISATION',
+        'SERVICE_PREVU_VISU'           => [
+            'name'        => 'SERVICE_PREVU_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -861,6 +925,20 @@ return [
             'position'    => 52,
             'commentaire' => NULL,
         ],
+
+        'SERVICE_REALISE_VISU'           => [
+            'name'        => 'SERVICE_REALISE_VISU',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 52,
+            'commentaire' => NULL,
+        ],
+
         'TAUX_CHARGES_PATRONALES'         => [
             'name'        => 'TAUX_CHARGES_PATRONALES',
             'type'        => 'float',

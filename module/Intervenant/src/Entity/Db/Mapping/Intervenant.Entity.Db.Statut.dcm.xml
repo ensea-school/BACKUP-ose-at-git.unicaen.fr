@@ -67,14 +67,20 @@
         <field name="contratVisualisation" type="boolean" column="CONTRAT_VISUALISATION" nullable="false"/>
         <field name="contratDepot" type="boolean" column="CONTRAT_DEPOT" nullable="false"/>
 
-        <field name="service" type="boolean" column="SERVICE" nullable="false"/>
-        <field name="serviceVisualisation" type="boolean" column="SERVICE_VISUALISATION" nullable="false"/>
-        <field name="serviceEdition" type="boolean" column="SERVICE_EDITION" nullable="false"/>
+        <field name="servicePrevu" type="boolean" column="SERVICE_PREVU" nullable="false"/>
+        <field name="servicePrevuVisualisation" type="boolean" column="SERVICE_PREVU_VISU" nullable="false"/>
+        <field name="servicePrevuEdition" type="boolean" column="SERVICE_PREVU_EDITION" nullable="false"/>
+        <field name="serviceRealise" type="boolean" column="SERVICE_REALISE" nullable="false"/>
+        <field name="serviceRealiseVisualisation" type="boolean" column="SERVICE_REALISE_VISU" nullable="false"/>
+        <field name="serviceRealiseEdition" type="boolean" column="SERVICE_REALISE_EDITION" nullable="false"/>
         <field name="serviceExterieur" type="boolean" column="SERVICE_EXTERIEUR" nullable="false"/>
 
-        <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false"/>
-        <field name="referentielVisualisation" type="boolean" column="REFERENTIEL_VISUALISATION" nullable="false"/>
-        <field name="referentielEdition" type="boolean" column="REFERENTIEL_EDITION" nullable="false"/>
+        <field name="referentielPrevu" type="boolean" column="REFERENTIEL_PREVU" nullable="false"/>
+        <field name="referentielPrevuVisualisation" type="boolean" column="REFERENTIEL_PREVU_VISU" nullable="false"/>
+        <field name="referentielPrevuEdition" type="boolean" column="REFERENTIEL_PREVU_EDITION" nullable="false"/>
+        <field name="referentielRealise" type="boolean" column="REFERENTIEL_REALISE" nullable="false"/>
+        <field name="referentielRealiseVisualisation" type="boolean" column="REFERENTIEL_REALISE_VISU" nullable="false"/>
+        <field name="referentielRealiseEdition" type="boolean" column="REFERENTIEL_REALISE_EDITION" nullable="false"/>
 
         <field name="cloture" type="boolean" column="CLOTURE" nullable="false"/>
 

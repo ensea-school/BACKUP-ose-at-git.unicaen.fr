@@ -18,6 +18,10 @@ class Statut implements ParametreEntityInterface, RoleInterface
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
 
+    const ETAT_ACTIF         = 'actif';
+    const ETAT_VISUALISATION = 'visu';
+    const ETAT_EDITION       = 'edit';
+
     use ParametreEntityTrait;
     use TypeIntervenantAwareTrait;
 
@@ -116,19 +120,31 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
     private bool    $contratDepot                       = true;
 
-    private bool    $service                            = true;
+    private bool    $servicePrevu                       = true;
 
-    private bool    $serviceVisualisation               = true;
+    private bool    $servicePrevuVisualisation          = true;
 
-    private bool    $serviceEdition                     = true;
+    private bool    $servicePrevuEdition                = true;
+
+    private bool    $serviceRealise                     = true;
+
+    private bool    $serviceRealiseVisualisation        = true;
+
+    private bool    $serviceRealiseEdition              = true;
 
     private bool    $serviceExterieur                   = true;
 
-    private bool    $referentiel                        = true;
+    private bool    $referentielPrevu                   = true;
 
-    private bool    $referentielVisualisation           = true;
+    private bool    $referentielPrevuVisualisation      = true;
 
-    private bool    $referentielEdition                 = true;
+    private bool    $referentielPrevuEdition            = true;
+
+    private bool    $referentielRealise                 = true;
+
+    private bool    $referentielRealiseVisualisation    = true;
+
+    private bool    $referentielRealiseEdition          = true;
 
     private bool    $cloture                            = true;
 
@@ -214,9 +230,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return string|null
-     */
     public function getCode(): ?string
     {
         return $this->code;
@@ -224,11 +237,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param string|null $code
-     *
-     * @return Statut
-     */
     public function setCode(?string $code): Statut
     {
         $this->code = $code;
@@ -238,9 +246,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return string|null
-     */
     public function getLibelle(): ?string
     {
         return $this->libelle;
@@ -248,11 +253,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param string|null $libelle
-     *
-     * @return Statut
-     */
     public function setLibelle(?string $libelle): Statut
     {
         $this->libelle = $libelle;
@@ -262,9 +262,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return int
-     */
     public function getOrdre(): int
     {
         return $this->ordre;
@@ -272,11 +269,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param int $ordre
-     *
-     * @return Statut
-     */
     public function setOrdre(int $ordre): Statut
     {
         $this->ordre = $ordre;
@@ -286,9 +278,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getPrioritaireIndicateurs(): bool
     {
         return $this->prioritaireIndicateurs;
@@ -296,11 +285,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $prioritaireIndicateurs
-     *
-     * @return Statut
-     */
     public function setPrioritaireIndicateurs(bool $prioritaireIndicateurs): Statut
     {
         $this->prioritaireIndicateurs = $prioritaireIndicateurs;
@@ -310,22 +294,14 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return float|int
-     */
-    public function getServiceStatutaire(): float|int
+    public function getServiceStatutaire(): float
     {
         return $this->serviceStatutaire;
     }
 
 
 
-    /**
-     * @param float|int $serviceStatutaire
-     *
-     * @return Statut
-     */
-    public function setServiceStatutaire(float|int $serviceStatutaire): Statut
+    public function setServiceStatutaire(float $serviceStatutaire): Statut
     {
         $this->serviceStatutaire = $serviceStatutaire;
 
@@ -334,9 +310,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDepassementServiceDuSansHc(): bool
     {
         return $this->depassementServiceDuSansHc;
@@ -344,11 +317,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $depassementServiceDuSansHc
-     *
-     * @return Statut
-     */
     public function setDepassementServiceDuSansHc(bool $depassementServiceDuSansHc): Statut
     {
         $this->depassementServiceDuSansHc = $depassementServiceDuSansHc;
@@ -358,9 +326,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return float
-     */
     public function getTauxChargesPatronales(): float
     {
         return $this->tauxChargesPatronales;
@@ -368,11 +333,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param float $tauxChargesPatronales
-     *
-     * @return Statut
-     */
     public function setTauxChargesPatronales(float $tauxChargesPatronales): Statut
     {
         $this->tauxChargesPatronales = $tauxChargesPatronales;
@@ -382,9 +342,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossier(): bool
     {
         return $this->dossier;
@@ -392,11 +349,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossier
-     *
-     * @return Statut
-     */
     public function setDossier(bool $dossier): Statut
     {
         $this->dossier = $dossier;
@@ -406,9 +358,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierVisualisation(): bool
     {
         return $this->dossierVisualisation;
@@ -416,11 +365,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierVisualisation
-     *
-     * @return Statut
-     */
     public function setDossierVisualisation(bool $dossierVisualisation): Statut
     {
         $this->dossierVisualisation = $dossierVisualisation;
@@ -430,9 +374,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierEdition(): bool
     {
         return $this->dossierEdition;
@@ -440,11 +381,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierEdition
-     *
-     * @return Statut
-     */
     public function setDossierEdition(bool $dossierEdition): Statut
     {
         $this->dossierEdition = $dossierEdition;
@@ -454,9 +390,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierSelectionnable(): bool
     {
         return $this->dossierSelectionnable;
@@ -464,11 +397,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierSelectionnable
-     *
-     * @return Statut
-     */
     public function setDossierSelectionnable(bool $dossierSelectionnable): Statut
     {
         $this->dossierSelectionnable = $dossierSelectionnable;
@@ -478,9 +406,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierIdentiteComplementaire(): bool
     {
         return $this->dossierIdentiteComplementaire;
@@ -488,11 +413,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierIdentiteComplementaire
-     *
-     * @return Statut
-     */
     public function setDossierIdentiteComplementaire(bool $dossierIdentiteComplementaire): Statut
     {
         $this->dossierIdentiteComplementaire = $dossierIdentiteComplementaire;
@@ -502,9 +422,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierContact(): bool
     {
         return $this->dossierContact;
@@ -512,11 +429,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierContact
-     *
-     * @return Statut
-     */
     public function setDossierContact(bool $dossierContact): Statut
     {
         $this->dossierContact = $dossierContact;
@@ -526,9 +438,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierTelPerso(): bool
     {
         return $this->dossierTelPerso;
@@ -536,11 +445,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierTelPerso
-     *
-     * @return Statut
-     */
     public function setDossierTelPerso(bool $dossierTelPerso): Statut
     {
         $this->dossierTelPerso = $dossierTelPerso;
@@ -550,9 +454,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierEmailPerso(): bool
     {
         return $this->dossierEmailPerso;
@@ -560,11 +461,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierEmailPerso
-     *
-     * @return Statut
-     */
     public function setDossierEmailPerso(bool $dossierEmailPerso): Statut
     {
         $this->dossierEmailPerso = $dossierEmailPerso;
@@ -574,9 +470,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAdresse(): bool
     {
         return $this->dossierAdresse;
@@ -584,11 +477,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAdresse
-     *
-     * @return Statut
-     */
     public function setDossierAdresse(bool $dossierAdresse): Statut
     {
         $this->dossierAdresse = $dossierAdresse;
@@ -598,9 +486,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierBanque(): bool
     {
         return $this->dossierBanque;
@@ -608,11 +493,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierBanque
-     *
-     * @return Statut
-     */
     public function setDossierBanque(bool $dossierBanque): Statut
     {
         $this->dossierBanque = $dossierBanque;
@@ -622,9 +502,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierInsee(): bool
     {
         return $this->dossierInsee;
@@ -632,11 +509,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierInsee
-     *
-     * @return Statut
-     */
     public function setDossierInsee(bool $dossierInsee): Statut
     {
         $this->dossierInsee = $dossierInsee;
@@ -646,9 +518,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierEmployeur(): bool
     {
         return $this->dossierEmployeur;
@@ -656,11 +525,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierEmployeur
-     *
-     * @return Statut
-     */
     public function setDossierEmployeur(bool $dossierEmployeur): Statut
     {
         $this->dossierEmployeur = $dossierEmployeur;
@@ -670,9 +534,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre1(): bool
     {
         return $this->dossierAutre1;
@@ -680,11 +541,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre1
-     *
-     * @return Statut
-     */
     public function setDossierAutre1(bool $dossierAutre1): Statut
     {
         $this->dossierAutre1 = $dossierAutre1;
@@ -694,9 +550,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre1Visualisation(): bool
     {
         return $this->dossierAutre1Visualisation;
@@ -704,11 +557,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre1Visualisation
-     *
-     * @return Statut
-     */
     public function setDossierAutre1Visualisation(bool $dossierAutre1Visualisation): Statut
     {
         $this->dossierAutre1Visualisation = $dossierAutre1Visualisation;
@@ -718,9 +566,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre1Edition(): bool
     {
         return $this->dossierAutre1Edition;
@@ -728,11 +573,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre1Edition
-     *
-     * @return Statut
-     */
     public function setDossierAutre1Edition(bool $dossierAutre1Edition): Statut
     {
         $this->dossierAutre1Edition = $dossierAutre1Edition;
@@ -742,9 +582,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre2(): bool
     {
         return $this->dossierAutre2;
@@ -752,11 +589,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre2
-     *
-     * @return Statut
-     */
     public function setDossierAutre2(bool $dossierAutre2): Statut
     {
         $this->dossierAutre2 = $dossierAutre2;
@@ -766,9 +598,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre2Visualisation(): bool
     {
         return $this->dossierAutre2Visualisation;
@@ -776,11 +605,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre2Visualisation
-     *
-     * @return Statut
-     */
     public function setDossierAutre2Visualisation(bool $dossierAutre2Visualisation): Statut
     {
         $this->dossierAutre2Visualisation = $dossierAutre2Visualisation;
@@ -790,9 +614,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre2Edition(): bool
     {
         return $this->dossierAutre2Edition;
@@ -800,11 +621,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre2Edition
-     *
-     * @return Statut
-     */
     public function setDossierAutre2Edition(bool $dossierAutre2Edition): Statut
     {
         $this->dossierAutre2Edition = $dossierAutre2Edition;
@@ -814,9 +630,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre3(): bool
     {
         return $this->dossierAutre3;
@@ -824,11 +637,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre3
-     *
-     * @return Statut
-     */
     public function setDossierAutre3(bool $dossierAutre3): Statut
     {
         $this->dossierAutre3 = $dossierAutre3;
@@ -838,9 +646,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre3Visualisation(): bool
     {
         return $this->dossierAutre3Visualisation;
@@ -848,11 +653,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre3Visualisation
-     *
-     * @return Statut
-     */
     public function setDossierAutre3Visualisation(bool $dossierAutre3Visualisation): Statut
     {
         $this->dossierAutre3Visualisation = $dossierAutre3Visualisation;
@@ -862,9 +662,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre3Edition(): bool
     {
         return $this->dossierAutre3Edition;
@@ -872,11 +669,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre3Edition
-     *
-     * @return Statut
-     */
     public function setDossierAutre3Edition(bool $dossierAutre3Edition): Statut
     {
         $this->dossierAutre3Edition = $dossierAutre3Edition;
@@ -886,9 +678,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre4(): bool
     {
         return $this->dossierAutre4;
@@ -896,11 +685,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre4
-     *
-     * @return Statut
-     */
     public function setDossierAutre4(bool $dossierAutre4): Statut
     {
         $this->dossierAutre4 = $dossierAutre4;
@@ -910,9 +694,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre4Visualisation(): bool
     {
         return $this->dossierAutre4Visualisation;
@@ -920,11 +701,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre4Visualisation
-     *
-     * @return Statut
-     */
     public function setDossierAutre4Visualisation(bool $dossierAutre4Visualisation): Statut
     {
         $this->dossierAutre4Visualisation = $dossierAutre4Visualisation;
@@ -934,9 +710,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre4Edition(): bool
     {
         return $this->dossierAutre4Edition;
@@ -944,11 +717,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre4Edition
-     *
-     * @return Statut
-     */
     public function setDossierAutre4Edition(bool $dossierAutre4Edition): Statut
     {
         $this->dossierAutre4Edition = $dossierAutre4Edition;
@@ -958,9 +726,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre5(): bool
     {
         return $this->dossierAutre5;
@@ -968,11 +733,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre5
-     *
-     * @return Statut
-     */
     public function setDossierAutre5(bool $dossierAutre5): Statut
     {
         $this->dossierAutre5 = $dossierAutre5;
@@ -982,9 +742,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre5Visualisation(): bool
     {
         return $this->dossierAutre5Visualisation;
@@ -992,11 +749,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre5Visualisation
-     *
-     * @return Statut
-     */
     public function setDossierAutre5Visualisation(bool $dossierAutre5Visualisation): Statut
     {
         $this->dossierAutre5Visualisation = $dossierAutre5Visualisation;
@@ -1006,9 +758,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getDossierAutre5Edition(): bool
     {
         return $this->dossierAutre5Edition;
@@ -1016,11 +765,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $dossierAutre5Edition
-     *
-     * @return Statut
-     */
     public function setDossierAutre5Edition(bool $dossierAutre5Edition): Statut
     {
         $this->dossierAutre5Edition = $dossierAutre5Edition;
@@ -1030,9 +774,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getPieceJustificativeVisualisation(): bool
     {
         return $this->pieceJustificativeVisualisation;
@@ -1040,11 +781,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $pieceJustificativeVisualisation
-     *
-     * @return Statut
-     */
     public function setPieceJustificativeVisualisation(bool $pieceJustificativeVisualisation): Statut
     {
         $this->pieceJustificativeVisualisation = $pieceJustificativeVisualisation;
@@ -1054,9 +790,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getPieceJustificativeTelechargement(): bool
     {
         return $this->pieceJustificativeTelechargement;
@@ -1064,11 +797,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $pieceJustificativeTelechargement
-     *
-     * @return Statut
-     */
     public function setPieceJustificativeTelechargement(bool $pieceJustificativeTelechargement): Statut
     {
         $this->pieceJustificativeTelechargement = $pieceJustificativeTelechargement;
@@ -1078,9 +806,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getPieceJustificativeEdition(): bool
     {
         return $this->pieceJustificativeEdition;
@@ -1088,11 +813,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $pieceJustificativeEdition
-     *
-     * @return Statut
-     */
     public function setPieceJustificativeEdition(bool $pieceJustificativeEdition): Statut
     {
         $this->pieceJustificativeEdition = $pieceJustificativeEdition;
@@ -1102,9 +822,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getPieceJustificativeArchivage(): bool
     {
         return $this->pieceJustificativeArchivage;
@@ -1112,11 +829,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $pieceJustificativeArchivage
-     *
-     * @return Statut
-     */
     public function setPieceJustificativeArchivage(bool $pieceJustificativeArchivage): Statut
     {
         $this->pieceJustificativeArchivage = $pieceJustificativeArchivage;
@@ -1126,9 +838,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getConseilRestreint(): bool
     {
         return $this->conseilRestreint;
@@ -1136,11 +845,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $conseilRestreint
-     *
-     * @return Statut
-     */
     public function setConseilRestreint(bool $conseilRestreint): Statut
     {
         $this->conseilRestreint = $conseilRestreint;
@@ -1150,9 +854,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getConseilRestreintVisualisation(): bool
     {
         return $this->conseilRestreintVisualisation;
@@ -1160,11 +861,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $conseilRestreintVisualisation
-     *
-     * @return Statut
-     */
     public function setConseilRestreintVisualisation(bool $conseilRestreintVisualisation): Statut
     {
         $this->conseilRestreintVisualisation = $conseilRestreintVisualisation;
@@ -1174,9 +870,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return int
-     */
     public function getConseilRestreintDureeVie(): int
     {
         return $this->conseilRestreintDureeVie;
@@ -1184,11 +877,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param int $conseilRestreintDureeVie
-     *
-     * @return Statut
-     */
     public function setConseilRestreintDureeVie(int $conseilRestreintDureeVie): Statut
     {
         $this->conseilRestreintDureeVie = $conseilRestreintDureeVie;
@@ -1198,9 +886,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getConseilAcademique(): bool
     {
         return $this->conseilAcademique;
@@ -1208,11 +893,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $conseilAcademique
-     *
-     * @return Statut
-     */
     public function setConseilAcademique(bool $conseilAcademique): Statut
     {
         $this->conseilAcademique = $conseilAcademique;
@@ -1222,9 +902,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getConseilAcademiqueVisualisation(): bool
     {
         return $this->conseilAcademiqueVisualisation;
@@ -1232,11 +909,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $conseilAcademiqueVisualisation
-     *
-     * @return Statut
-     */
     public function setConseilAcademiqueVisualisation(bool $conseilAcademiqueVisualisation): Statut
     {
         $this->conseilAcademiqueVisualisation = $conseilAcademiqueVisualisation;
@@ -1246,9 +918,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return int
-     */
     public function getConseilAcademiqueDureeVie(): int
     {
         return $this->conseilAcademiqueDureeVie;
@@ -1256,11 +925,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param int $conseilAcademiqueDureeVie
-     *
-     * @return Statut
-     */
     public function setConseilAcademiqueDureeVie(int $conseilAcademiqueDureeVie): Statut
     {
         $this->conseilAcademiqueDureeVie = $conseilAcademiqueDureeVie;
@@ -1270,9 +934,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getContrat(): bool
     {
         return $this->contrat;
@@ -1280,11 +941,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $contrat
-     *
-     * @return Statut
-     */
     public function setContrat(bool $contrat): Statut
     {
         $this->contrat = $contrat;
@@ -1294,9 +950,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getContratVisualisation(): bool
     {
         return $this->contratVisualisation;
@@ -1304,11 +957,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $contratVisualisation
-     *
-     * @return Statut
-     */
     public function setContratVisualisation(bool $contratVisualisation): Statut
     {
         $this->contratVisualisation = $contratVisualisation;
@@ -1318,9 +966,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getContratDepot(): bool
     {
         return $this->contratDepot;
@@ -1328,11 +973,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $contratDepot
-     *
-     * @return Statut
-     */
     public function setContratDepot(bool $contratDepot): Statut
     {
         $this->contratDepot = $contratDepot;
@@ -1342,81 +982,102 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
-    public function getService(): bool
+    public function getServicePrevu(): bool
     {
-        return $this->service;
+        return $this->servicePrevu;
     }
 
 
 
-    /**
-     * @param bool $service
-     *
-     * @return Statut
-     */
-    public function setService(bool $service): Statut
+    public function setServicePrevu(bool $servicePrevu): Statut
     {
-        $this->service = $service;
+        $this->servicePrevu = $servicePrevu;
 
         return $this;
     }
 
 
 
-    /**
-     * @return bool
-     */
-    public function getServiceVisualisation(): bool
+    public function getServicePrevuVisualisation(): bool
     {
-        return $this->serviceVisualisation;
+        return $this->servicePrevuVisualisation;
     }
 
 
 
-    /**
-     * @param bool $serviceVisualisation
-     *
-     * @return Statut
-     */
-    public function setServiceVisualisation(bool $serviceVisualisation): Statut
+    public function setServicePrevuVisualisation(bool $servicePrevuVisualisation): Statut
     {
-        $this->serviceVisualisation = $serviceVisualisation;
+        $this->servicePrevuVisualisation = $servicePrevuVisualisation;
 
         return $this;
     }
 
 
 
-    /**
-     * @return bool
-     */
-    public function getServiceEdition(): bool
+    public function getServicePrevuEdition(): bool
     {
-        return $this->serviceEdition;
+        return $this->servicePrevuEdition;
     }
 
 
 
-    /**
-     * @param bool $serviceEdition
-     *
-     * @return Statut
-     */
-    public function setServiceEdition(bool $serviceEdition): Statut
+    public function setServicePrevuEdition(bool $servicePrevuEdition): Statut
     {
-        $this->serviceEdition = $serviceEdition;
+        $this->servicePrevuEdition = $servicePrevuEdition;
 
         return $this;
     }
 
 
 
-    /**
-     * @return bool
-     */
+    public function getServiceRealise(): bool
+    {
+        return $this->serviceRealise;
+    }
+
+
+
+    public function setServiceRealise(bool $serviceRealise): Statut
+    {
+        $this->serviceRealise = $serviceRealise;
+
+        return $this;
+    }
+
+
+
+    public function getServiceRealiseVisualisation(): bool
+    {
+        return $this->serviceRealiseVisualisation;
+    }
+
+
+
+    public function setServiceRealiseVisualisation(bool $serviceRealiseVisualisation): Statut
+    {
+        $this->serviceRealiseVisualisation = $serviceRealiseVisualisation;
+
+        return $this;
+    }
+
+
+
+    public function getServiceRealiseEdition(): bool
+    {
+        return $this->serviceRealiseEdition;
+    }
+
+
+
+    public function setServiceRealiseEdition(bool $serviceRealiseEdition): Statut
+    {
+        $this->serviceRealiseEdition = $serviceRealiseEdition;
+
+        return $this;
+    }
+
+
+
     public function getServiceExterieur(): bool
     {
         return $this->serviceExterieur;
@@ -1424,11 +1085,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $serviceExterieur
-     *
-     * @return Statut
-     */
     public function setServiceExterieur(bool $serviceExterieur): Statut
     {
         $this->serviceExterieur = $serviceExterieur;
@@ -1438,81 +1094,102 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
-    public function getReferentiel(): bool
+    public function getReferentielPrevu(): bool
     {
-        return $this->referentiel;
+        return $this->referentielPrevu;
     }
 
 
 
-    /**
-     * @param bool $referentiel
-     *
-     * @return Statut
-     */
-    public function setReferentiel(bool $referentiel): Statut
+    public function setReferentielPrevu(bool $referentielPrevu): Statut
     {
-        $this->referentiel = $referentiel;
+        $this->referentielPrevu = $referentielPrevu;
 
         return $this;
     }
 
 
 
-    /**
-     * @return bool
-     */
-    public function getReferentielVisualisation(): bool
+    public function getReferentielPrevuVisualisation(): bool
     {
-        return $this->referentielVisualisation;
+        return $this->referentielPrevuVisualisation;
     }
 
 
 
-    /**
-     * @param bool $referentielVisualisation
-     *
-     * @return Statut
-     */
-    public function setReferentielVisualisation(bool $referentielVisualisation): Statut
+    public function setReferentielPrevuVisualisation(bool $referentielPrevuVisualisation): Statut
     {
-        $this->referentielVisualisation = $referentielVisualisation;
+        $this->referentielPrevuVisualisation = $referentielPrevuVisualisation;
 
         return $this;
     }
 
 
 
-    /**
-     * @return bool
-     */
-    public function getReferentielEdition(): bool
+    public function getReferentielPrevuEdition(): bool
     {
-        return $this->referentielEdition;
+        return $this->referentielPrevuEdition;
     }
 
 
 
-    /**
-     * @param bool $referentielEdition
-     *
-     * @return Statut
-     */
-    public function setReferentielEdition(bool $referentielEdition): Statut
+    public function setReferentielPrevuEdition(bool $referentielPrevuEdition): Statut
     {
-        $this->referentielEdition = $referentielEdition;
+        $this->referentielPrevuEdition = $referentielPrevuEdition;
 
         return $this;
     }
 
 
 
-    /**
-     * @return bool
-     */
+    public function getReferentielRealise(): bool
+    {
+        return $this->referentielRealise;
+    }
+
+
+
+    public function setReferentielRealise(bool $referentielRealise): Statut
+    {
+        $this->referentielRealise = $referentielRealise;
+
+        return $this;
+    }
+
+
+
+    public function getReferentielRealiseVisualisation(): bool
+    {
+        return $this->referentielRealiseVisualisation;
+    }
+
+
+
+    public function setReferentielRealiseVisualisation(bool $referentielRealiseVisualisation): Statut
+    {
+        $this->referentielRealiseVisualisation = $referentielRealiseVisualisation;
+
+        return $this;
+    }
+
+
+
+    public function getReferentielRealiseEdition(): bool
+    {
+        return $this->referentielRealiseEdition;
+    }
+
+
+
+    public function setReferentielRealiseEdition(bool $referentielRealiseEdition): Statut
+    {
+        $this->referentielRealiseEdition = $referentielRealiseEdition;
+
+        return $this;
+    }
+
+
+
     public function getCloture(): bool
     {
         return $this->cloture;
@@ -1520,11 +1197,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $cloture
-     *
-     * @return Statut
-     */
     public function setCloture(bool $cloture): Statut
     {
         $this->cloture = $cloture;
@@ -1534,9 +1206,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getModificationServiceDu(): bool
     {
         return $this->modificationServiceDu;
@@ -1544,11 +1213,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $modificationServiceDu
-     *
-     * @return Statut
-     */
     public function setModificationServiceDu(bool $modificationServiceDu): Statut
     {
         $this->modificationServiceDu = $modificationServiceDu;
@@ -1558,9 +1222,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getModificationServiceDuVisualisation(): bool
     {
         return $this->modificationServiceDuVisualisation;
@@ -1568,11 +1229,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $modificationServiceDuVisualisation
-     *
-     * @return Statut
-     */
     public function setModificationServiceDuVisualisation(bool $modificationServiceDuVisualisation): Statut
     {
         $this->modificationServiceDuVisualisation = $modificationServiceDuVisualisation;
@@ -1582,9 +1238,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getPaiementVisualisation(): bool
     {
         return $this->paiementVisualisation;
@@ -1592,11 +1245,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $paiementVisualisation
-     *
-     * @return Statut
-     */
     public function setPaiementVisualisation(bool $paiementVisualisation): Statut
     {
         $this->paiementVisualisation = $paiementVisualisation;
@@ -1606,9 +1254,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getMotifNonPaiement(): bool
     {
         return $this->motifNonPaiement;
@@ -1616,11 +1261,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $motifNonPaiement
-     *
-     * @return Statut
-     */
     public function setMotifNonPaiement(bool $motifNonPaiement): Statut
     {
         $this->motifNonPaiement = $motifNonPaiement;
@@ -1630,9 +1270,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function getFormuleVisualisation(): bool
     {
         return $this->formuleVisualisation;
@@ -1640,11 +1277,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param bool $formuleVisualisation
-     *
-     * @return Statut
-     */
     public function setFormuleVisualisation(bool $formuleVisualisation): Statut
     {
         $this->formuleVisualisation = $formuleVisualisation;
@@ -1654,9 +1286,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return string|null
-     */
     public function getCodesCorresp1(): ?string
     {
         return $this->codesCorresp1;
@@ -1664,11 +1293,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param string|null $codesCorresp1
-     *
-     * @return Statut
-     */
     public function setCodesCorresp1(?string $codesCorresp1): Statut
     {
         $this->codesCorresp1 = $codesCorresp1;
@@ -1678,9 +1302,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return string|null
-     */
     public function getCodesCorresp2(): ?string
     {
         return $this->codesCorresp2;
@@ -1688,11 +1309,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param string|null $codesCorresp2
-     *
-     * @return Statut
-     */
     public function setCodesCorresp2(?string $codesCorresp2): Statut
     {
         $this->codesCorresp2 = $codesCorresp2;
@@ -1702,9 +1318,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return string|null
-     */
     public function getCodesCorresp3(): ?string
     {
         return $this->codesCorresp3;
@@ -1712,11 +1325,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param string|null $codesCorresp3
-     *
-     * @return Statut
-     */
     public function setCodesCorresp3(?string $codesCorresp3): Statut
     {
         $this->codesCorresp3 = $codesCorresp3;
@@ -1726,9 +1334,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @return string|null
-     */
     public function getCodesCorresp4(): ?string
     {
         return $this->codesCorresp4;
@@ -1736,11 +1341,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    /**
-     * @param string|null $codesCorresp4
-     *
-     * @return Statut
-     */
     public function setCodesCorresp4(?string $codesCorresp4): Statut
     {
         $this->codesCorresp4 = $codesCorresp4;

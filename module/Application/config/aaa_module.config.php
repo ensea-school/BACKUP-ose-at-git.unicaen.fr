@@ -216,7 +216,7 @@ $config = [
             '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
         ],
         'inline_scripts' => [
-            '010_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+            '010_bootstrap'   => 'vendor/bootstrap-5.0.2/js/bootstrap.min.js',
             '030_util'        => 'js/util.js',
             '040_unicaen'     => 'js/unicaen.js',
             '050_jquery_form' => 'vendor/jquery.form-3.51.js', // pour l'uploader Unicaen uniquement!!,
@@ -230,8 +230,8 @@ $config = [
             '010_jquery-ui'           => 'vendor/jquery-ui-1.11.4/jquery-ui.min.css',
             '020_jquery-ui-structure' => 'vendor/jquery-ui-1.11.4/jquery-ui.structure.min.css',
             '030_jquery-ui-theme'     => 'vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css',
-            '040_bootstrap'           => 'vendor/bootstrap-3.3.5/css/bootstrap.min.css',
-            '050_bootstrap-theme'     => 'vendor/bootstrap-3.3.5/css/bootstrap-theme.min.css',
+            '040_bootstrap'           => 'vendor/bootstrap-5.0.2/css/bootstrap.min.css',
+            //'050_bootstrap-theme'     => 'vendor/bootstrap-5.0.2/css/bootstrap-theme.min.css',
             '060_unicaen'             => null,
 
             '111_' => 'css/cartridge.css',

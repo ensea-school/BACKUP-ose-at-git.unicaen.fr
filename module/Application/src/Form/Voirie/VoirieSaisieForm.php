@@ -90,7 +90,6 @@ class VoirieSaisieForm extends AbstractForm
             'type' => 'Hidden',
         ]);
 
-
         return $this;
     }
 
@@ -115,6 +114,3 @@ class VoirieSaisieForm extends AbstractForm
     }
 
 }
-
-
-

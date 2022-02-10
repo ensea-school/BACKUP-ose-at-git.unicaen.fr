@@ -104,6 +104,17 @@ class StatutService extends AbstractEntityService
 
 
 
+    public function fetchMaxOrdre(): int
+    {
+        $sql = 'SELECT MAX(ORDRE) MAX_ORDRE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL';
+
+        $res = $this->getEntityManager()->getConnection()->fetchColumn($sql, [], 0);
+
+        return (int)$res;
+    }
+
+
+
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
@@ -111,8 +122,10 @@ class StatutService extends AbstractEntityService
     public function newEntity(): Statut
     {
         /** @var Statut $entity */
-        $entity = parent::newEntity();
+        $statut = parent::newEntity();
 
-        return $entity;
+        $statut->setOrdre($this->fetchMaxOrdre() + 1);
+
+        return $statut;
     }
 }

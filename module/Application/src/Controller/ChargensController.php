@@ -225,8 +225,12 @@ class ChargensController extends AbstractController
         /** @var Scenario $scenario */
         $scenario = $this->getEvent()->getParam('scenario');
 
-        $form = $this->getFormChargensScenario();
-        $form->delete($scenario, $this->getServiceScenario(), "Scénario supprimé avec succès.");
+        try {
+            $this->getServiceScenario()->delete($scenario);
+            $this->flashMessenger()->addSuccessMessage("Scénario supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
 
         return new MessengerViewModel();
     }

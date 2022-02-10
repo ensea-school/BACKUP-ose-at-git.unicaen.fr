@@ -44,7 +44,10 @@ WHERE
 SELECT
   i.annee_id                                                             annee_id,
   i.id                                                                   intervenant_id,
-  si.service                                                             actif,
+  CASE WHEN t.type_volume_horaire_code = 'PREVU'
+    THEN si.service_prevu
+    ELSE si.service_realise
+  END                                                                    actif,
   t.service_id                                                           service_id,
   t.element_pedagogique_id                                               element_pedagogique_id,
   ti.id                                                                  type_intervenant_id,
@@ -78,7 +81,8 @@ GROUP BY
   i.structure_id,
   ti.id,
   ti.code,
-  si.service,
+  si.service_prevu,
+  si.service_realise,
   t.element_pedagogique_id,
   t.service_id,
   t.element_pedagogique_periode_id,

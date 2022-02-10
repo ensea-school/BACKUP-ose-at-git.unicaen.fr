@@ -169,7 +169,6 @@ return [
     'Application\Entity\Db\TblPieceJointeDemande'                                       => __DIR__ . '/src/Entity/Db/TblPieceJointeDemande.php',
     'Application\Entity\Db\TblPieceJointeFournie'                                       => __DIR__ . '/src/Entity/Db/TblPieceJointeFournie.php',
     'Application\Entity\Db\TblService'                                                  => __DIR__ . '/src/Entity/Db/TblService.php',
-    'Application\Entity\Db\TblServiceReferentiel'                                       => __DIR__ . '/src/Entity/Db/TblServiceReferentiel.php',
     'Application\Entity\Db\TblServiceSaisie'                                            => __DIR__ . '/src/Entity/Db/TblServiceSaisie.php',
     'Application\Entity\Db\TblValidationEnseignement'                                   => __DIR__ . '/src/Entity/Db/TblValidationEnseignement.php',
     'Application\Entity\Db\TblValidationReferentiel'                                    => __DIR__ . '/src/Entity/Db/TblValidationReferentiel.php',

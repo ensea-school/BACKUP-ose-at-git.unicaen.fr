@@ -349,20 +349,28 @@ Services d'ensiegnement
 | HEURES                         | NB d'heures saisi                                |
 
 
-## Table TBL_SERVICE_REFERENTIEL
+## Table TBL_REFERENTIEL
 
 Référentiel
 
-| Colonne                |Description                          |
-|------------------------|-------------------------------------|
-| ID                     |                                     |
-| ANNEE_ID               |==> ANNEE.ID                         |
-| INTERVENANT_ID         |==> INTERVENANT.ID                   |
-| REFERENTIEL            |Témoin (1=peut saisir du référentiel)|
-| TYPE_VOLUME_HORAIRE_ID |==> TYPE_VOLUME_HORAIRE.ID           |
-| STRUCTURE_ID           |==> STRUCTURE.ID                     |
-| NBVH                   |Nombre de volumes horaires           |
-| VALIDE                 |Nombre de volumes horaires validés   |
+| Colonne                   | Description                        |
+|---------------------------|------------------------------------|
+| ID                        |                                    |
+| ANNEE_ID                  | ==> ANNEE.ID                       |
+| INTERVENANT_ID            | ==> INTERVENANT.ID                 |
+| ACTIF                     | Témoin (0 ou 1)                    |
+| TYPE_VOLUME_HORAIRE_ID    | ==> TYPE_VOLUME_HORAIRE.ID         |
+| STRUCTURE_ID              | ==> STRUCTURE.ID                   |
+| NBVH                      | Nombre de volumes horaires         |
+| VALIDE                    | Nombre de volumes horaires validés |
+| INTERVENANT_STRUCTURE_ID  | ==> STRUCTURE.ID                   |
+| SERVICE_REFERENTIEL_ID    | ==> SERVICE_REFERENTIEL.ID         |
+| FONCTION_REFERENTIEL_ID   | ==> FONCTION_REFERENTIEL.ID        |
+| TYPE_INTERVENANT_ID       | ==> TYPE_INTERVENANT.ID            |
+| TYPE_INTERVENANT_CODE     | ==> TYPE_INTERVENANT.CODE          |                                   
+| TYPE_VOLUME_HORAIRE_CODE  | ==> TYPE_VOLUME_HORAIRE.CODE       |       
+| HEURES                    | Nombre d'heures concernées         |
+
 
 
 ## Table TBL_SERVICE_SAISIE

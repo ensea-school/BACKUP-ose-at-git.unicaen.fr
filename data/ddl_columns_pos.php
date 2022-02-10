@@ -1583,14 +1583,21 @@ return [
         'HEURES',
         'VALIDE',
     ],
-    'TBL_SERVICE_REFERENTIEL'        => [
+    'TBL_REFERENTIEL'        => [
         'ID',
         'ANNEE_ID',
         'INTERVENANT_ID',
-        'REFERENTIEL',
         'TYPE_VOLUME_HORAIRE_ID',
+        'ACTIF',
         'STRUCTURE_ID',
+        'INTERVENANT_STRUCTURE_ID',
+        'SERVICE_REFERENTIEL_ID',
+        'FONCTION_REFERENTIEL_ID',
+        'TYPE_INTERVENANT_ID',
+        'TYPE_INTERVENANT_CODE',
+        'TYPE_VOLUME_HORAIRE_CODE',
         'NBVH',
+        'HEURES',
         'VALIDE',
     ],
     'TBL_SERVICE_SAISIE'             => [

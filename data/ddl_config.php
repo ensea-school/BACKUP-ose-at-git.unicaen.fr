@@ -7,6 +7,7 @@ return [
             'TBL_DEMS',
             'TMP_SCENARIO_NOEUD_EFFECTIF',
             'DOSSIER_CHAMP_AUTRE_PAR_STATUT',
+            'TBL_SERVICE_REFERENTIEL',
         ],
     ],
     'materialized-view' => [
@@ -38,6 +39,7 @@ return [
             'V_INDICATEUR_1221',
             'V_INDICATEUR_1230',
             'V_INDICATEUR_1240',
+            'V_TBL_SERVICE_REFERENTIEL',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],

@@ -365,7 +365,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           si.dossier
 
         WHEN e.code = ''SERVICE_SAISIE'' THEN
-          CASE WHEN si.service + si.referentiel = 0 THEN 0 ELSE 1 END
+          CASE WHEN si.service_prevu + si.referentiel_prevu = 0 THEN 0 ELSE 1 END
 
         WHEN e.code = ''PJ_SAISIE'' OR e.code = ''PJ_VALIDATION'' THEN
           CASE WHEN EXISTS(
@@ -374,10 +374,10 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = ''SERVICE_VALIDATION'' THEN
-          si.service
+          si.service_prevu
 
         WHEN e.code = ''REFERENTIEL_VALIDATION'' THEN
-          si.referentiel
+          si.referentiel_prevu
 
         WHEN e.code = ''CONSEIL_ACADEMIQUE'' OR e.code = ''CONSEIL_RESTREINT'' THEN
           CASE WHEN EXISTS(
@@ -392,16 +392,16 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           si.contrat
 
         WHEN e.code = ''SERVICE_SAISIE_REALISE'' OR e.code = ''DEMANDE_MEP'' OR e.code = ''SAISIE_MEP'' THEN
-          CASE WHEN si.service + si.referentiel = 0 THEN 0 ELSE 1 END
+          CASE WHEN si.service_realise + si.referentiel_realise = 0 THEN 0 ELSE 1 END
 
         WHEN e.code = ''CLOTURE_REALISE'' THEN
           si.cloture
 
         WHEN e.code = ''SERVICE_VALIDATION_REALISE'' THEN
-          si.service
+          si.service_realise
 
         WHEN e.code = ''REFERENTIEL_VALIDATION_REALISE'' THEN
-          si.referentiel
+          si.referentiel_realise
     ';
 
 

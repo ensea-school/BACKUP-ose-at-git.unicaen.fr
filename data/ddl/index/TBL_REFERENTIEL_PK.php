@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_SERVICE_REFERENTIEL_PK',
+    'name'    => 'TBL_REFERENTIEL_PK',
     'unique'  => TRUE,
-    'table'   => 'TBL_SERVICE_REFERENTIEL',
+    'table'   => 'TBL_REFERENTIEL',
     'columns' => [
         'ID',
     ],

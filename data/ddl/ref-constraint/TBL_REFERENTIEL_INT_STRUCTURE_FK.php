@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'TBL_SERVICE_REF_STRUCTURE_FK',
-    'table'       => 'TBL_SERVICE_REFERENTIEL',
+    'name'        => 'TBL_REFERENTIEL_INT_STRUCTURE_FK',
+    'table'       => 'TBL_REFERENTIEL',
     'rtable'      => 'STRUCTURE',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
-        'STRUCTURE_ID' => 'ID',
+        'INTERVENANT_STRUCTURE_ID' => 'ID',
     ],
 ];
 

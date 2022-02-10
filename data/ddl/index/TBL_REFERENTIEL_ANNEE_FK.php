@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_SERVICE_REF_ANNEE_FK',
+    'name'    => 'TBL_REFERENTIEL_ANNEE_FK',
     'unique'  => FALSE,
-    'table'   => 'TBL_SERVICE_REFERENTIEL',
+    'table'   => 'TBL_REFERENTIEL',
     'columns' => [
         'ANNEE_ID',
     ],

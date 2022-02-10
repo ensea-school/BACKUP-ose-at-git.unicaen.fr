@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 58,
+            'position'    => 61,
             'commentaire' => NULL,
         ],
         'CODE'                            => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 64,
+            'position'    => 67,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_2'                 => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 65,
+            'position'    => 68,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_3'                 => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 66,
+            'position'    => 69,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_4'                 => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 67,
+            'position'    => 70,
             'commentaire' => NULL,
         ],
         'CONSEIL_ACA'                     => [
@@ -546,7 +546,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 63,
+            'position'    => 66,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'               => [
@@ -558,7 +558,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 69,
+            'position'    => 72,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'                  => [
@@ -570,7 +570,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 68,
+            'position'    => 71,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'            => [
@@ -582,7 +582,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 73,
+            'position'    => 76,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'               => [
@@ -594,7 +594,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 72,
+            'position'    => 75,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'           => [
@@ -606,7 +606,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 71,
+            'position'    => 74,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'              => [
@@ -618,7 +618,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 70,
+            'position'    => 73,
             'commentaire' => NULL,
         ],
         'ID'                              => [
@@ -654,7 +654,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 59,
+            'position'    => 62,
             'commentaire' => NULL,
         ],
         'MODIF_SERVICE_DU_VISUALISATION'  => [
@@ -666,7 +666,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 60,
+            'position'    => 63,
             'commentaire' => NULL,
         ],
         'MOTIF_NON_PAIEMENT'              => [
@@ -678,7 +678,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 62,
+            'position'    => 65,
             'commentaire' => NULL,
         ],
         'ORDRE'                           => [
@@ -702,7 +702,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 61,
+            'position'    => 64,
             'commentaire' => NULL,
         ],
         'PJ_ARCHIVAGE'                    => [
@@ -765,7 +765,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_PREVU'                     => [
+        'REFERENTIEL_PREVU'               => [
             'name'        => 'REFERENTIEL_PREVU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -774,10 +774,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 55,
+            'position'    => 58,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_PREVU_EDITION'             => [
+        'REFERENTIEL_PREVU_EDITION'       => [
             'name'        => 'REFERENTIEL_PREVU_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -786,10 +786,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 57,
+            'position'    => 60,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_PREVU_VISU'       => [
+        'REFERENTIEL_PREVU_VISU'          => [
             'name'        => 'REFERENTIEL_PREVU_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -798,11 +798,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 56,
+            'position'    => 59,
             'commentaire' => NULL,
         ],
-
-        'REFERENTIEL_REALISE'                     => [
+        'REFERENTIEL_REALISE'             => [
             'name'        => 'REFERENTIEL_REALISE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -811,10 +810,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 55,
+            'position'    => 77,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_REALISE_EDITION'             => [
+        'REFERENTIEL_REALISE_EDITION'     => [
             'name'        => 'REFERENTIEL_REALISE_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -823,10 +822,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 57,
+            'position'    => 78,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_REALISE_VISU'       => [
+        'REFERENTIEL_REALISE_VISU'        => [
             'name'        => 'REFERENTIEL_REALISE_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -835,11 +834,22 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 56,
+            'position'    => 79,
             'commentaire' => NULL,
         ],
-
-        'SERVICE_PREVU'                         => [
+        'SERVICE_EXTERIEUR'               => [
+            'name'        => 'SERVICE_EXTERIEUR',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 57,
+            'commentaire' => NULL,
+        ],
+        'SERVICE_PREVU'                   => [
             'name'        => 'SERVICE_PREVU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -851,7 +861,7 @@ return [
             'position'    => 51,
             'commentaire' => NULL,
         ],
-        'SERVICE_PREVU_EDITION'                 => [
+        'SERVICE_PREVU_EDITION'           => [
             'name'        => 'SERVICE_PREVU_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -863,8 +873,19 @@ return [
             'position'    => 53,
             'commentaire' => NULL,
         ],
-
-        'SERVICE_REALISE'                         => [
+        'SERVICE_PREVU_VISU'              => [
+            'name'        => 'SERVICE_PREVU_VISU',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 52,
+            'commentaire' => NULL,
+        ],
+        'SERVICE_REALISE'                 => [
             'name'        => 'SERVICE_REALISE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -873,10 +894,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 51,
+            'position'    => 54,
             'commentaire' => NULL,
         ],
-        'SERVICE_REALISE_EDITION'                 => [
+        'SERVICE_REALISE_EDITION'         => [
             'name'        => 'SERVICE_REALISE_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -885,20 +906,19 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 53,
+            'position'    => 56,
             'commentaire' => NULL,
         ],
-
-        'SERVICE_EXTERIEUR'               => [
-            'name'        => 'SERVICE_EXTERIEUR',
+        'SERVICE_REALISE_VISU'            => [
+            'name'        => 'SERVICE_REALISE_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
             'scale'       => '0',
             'precision'   => 1,
             'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 54,
+            'default'     => '1',
+            'position'    => 55,
             'commentaire' => NULL,
         ],
         'SERVICE_STATUTAIRE'              => [
@@ -913,32 +933,6 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'SERVICE_PREVU_VISU'           => [
-            'name'        => 'SERVICE_PREVU_VISU',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '1',
-            'position'    => 52,
-            'commentaire' => NULL,
-        ],
-
-        'SERVICE_REALISE_VISU'           => [
-            'name'        => 'SERVICE_REALISE_VISU',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '1',
-            'position'    => 52,
-            'commentaire' => NULL,
-        ],
-
         'TAUX_CHARGES_PATRONALES'         => [
             'name'        => 'TAUX_CHARGES_PATRONALES',
             'type'        => 'float',

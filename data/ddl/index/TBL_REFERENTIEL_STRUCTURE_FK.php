@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_SERVICE_REF_STRUCTURE_FK',
+    'name'    => 'TBL_REFERENTIEL_STRUCTURE_FK',
     'unique'  => FALSE,
-    'table'   => 'TBL_SERVICE_REFERENTIEL',
+    'table'   => 'TBL_REFERENTIEL',
     'columns' => [
         'STRUCTURE_ID',
     ],

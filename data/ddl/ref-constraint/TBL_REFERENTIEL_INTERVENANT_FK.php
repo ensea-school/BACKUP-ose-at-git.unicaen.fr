@@ -3,8 +3,8 @@
 //@formatter:off
 
 return [
-    'name'        => 'TBL_SERVICE_REF_INTERVENANT_FK',
-    'table'       => 'TBL_SERVICE_REFERENTIEL',
+    'name'        => 'TBL_REFERENTIEL_INTERVENANT_FK',
+    'table'       => 'TBL_REFERENTIEL',
     'rtable'      => 'INTERVENANT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,

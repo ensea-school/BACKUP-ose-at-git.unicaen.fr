@@ -3,13 +3,14 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_SERVICE_REFERENTIEL_UN',
-    'unique'  => TRUE,
-    'table'   => 'TBL_SERVICE_REFERENTIEL',
+    'name'    => 'TBL_REFERENTIEL_UN',
+    'table'   => 'TBL_REFERENTIEL',
+    'index'   => 'TBL_REFERENTIEL_UN',
     'columns' => [
         'INTERVENANT_ID',
         'TYPE_VOLUME_HORAIRE_ID',
         'STRUCTURE_ID',
+        'SERVICE_REFERENTIEL_ID',
     ],
 ];
 

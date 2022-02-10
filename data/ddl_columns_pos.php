@@ -1331,9 +1331,6 @@ return [
         'REFERENTIEL_PREVU',
         'REFERENTIEL_PREVU_VISU',
         'REFERENTIEL_PREVU_EDITION',
-        'REFERENTIEL',
-        'REFERENTIEL_VISUALISATION',
-        'REFERENTIEL_EDITION',
         'CLOTURE',
         'MODIF_SERVICE_DU',
         'MODIF_SERVICE_DU_VISUALISATION',
@@ -1350,6 +1347,9 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'REFERENTIEL_REALISE',
+        'REFERENTIEL_REALISE_EDITION',
+        'REFERENTIEL_REALISE_VISU',
     ],
     'STATUT_PRIVILEGE'               => [
         'STATUT_ID',
@@ -1583,7 +1583,7 @@ return [
         'HEURES',
         'VALIDE',
     ],
-    'TBL_REFERENTIEL'        => [
+    'TBL_REFERENTIEL'                => [
         'ID',
         'ANNEE_ID',
         'INTERVENANT_ID',

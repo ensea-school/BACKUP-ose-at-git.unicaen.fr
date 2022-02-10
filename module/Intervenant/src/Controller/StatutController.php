@@ -39,15 +39,14 @@ class StatutController extends AbstractController
     public function saisieAction()
     {
         try {
+            /** @var Statut $statut */
+            $statut = $this->getEvent()->getParam('statut');
 
-
-            $statut       = $this->getEvent()->getParam('statut');
             $form         = $this->getFormStatutSaisie();
             $champsAutres = $this->getServiceDossierAutre()->getList();
             if (empty($statut)) {
                 $title  = 'Création d\'un nouveau statut d\'intervenant';
                 $statut = $this->getServiceStatut()->newEntity();
-                $statut->setOrdre($this->getServiceStatut()->fetchMaxOrdre() + 1);
             } else {
                 $title = 'Édition d\'un statut d\'intervenant';
             }

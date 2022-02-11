@@ -316,7 +316,6 @@ class IntervenantDossierController extends AbstractController
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'dossier',
-            'service_saisie',
             'piece_jointe_demande',
         ], $intervenant);
     }

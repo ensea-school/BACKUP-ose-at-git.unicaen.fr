@@ -663,16 +663,6 @@ return [
             'FEUILLE_DE_ROUTE'   => true,
         ],
         [
-            'TBL_NAME'           => 'service_saisie',
-            'TABLE_NAME'         => 'TBL_SERVICE_SAISIE',
-            'VIEW_NAME'          => 'V_TBL_SERVICE_SAISIE',
-            'SEQUENCE_NAME'      => null,
-            'CONSTRAINT_NAME'    => 'TBL_SERVICE_SAISIE_UN',
-            'CUSTOM_CALCUL_PROC' => null,
-            'ORDRE'              => 10,
-            'FEUILLE_DE_ROUTE'   => true,
-        ],
-        [
             'TBL_NAME'           => 'referentiel',
             'TABLE_NAME'         => 'TBL_REFERENTIEL',
             'VIEW_NAME'          => 'V_TBL_REFERENTIEL',

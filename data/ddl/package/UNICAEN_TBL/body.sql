@@ -2649,80 +2649,9 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
   PROCEDURE C_SERVICE_SAISIE(useParams BOOLEAN DEFAULT FALSE) IS
-  TYPE r_cursor IS REF CURSOR;
-  c r_cursor;
-  d TBL_SERVICE_SAISIE%rowtype;
-  viewQuery CLOB;
+
   BEGIN
-    viewQuery := 'SELECT
-          i.annee_id,
-          i.id intervenant_id,
-          si.service,
-          si.referentiel,
-          SUM( CASE WHEN tvhs.code = ''PREVU''   THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_prev,
-          SUM( CASE WHEN tvhrs.code = ''PREVU''   THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_prev,
-          SUM( CASE WHEN tvhs.code = ''REALISE'' THEN NVL(vh .heures,0) ELSE 0 END ) heures_service_real,
-          SUM( CASE WHEN tvhrs.code = ''REALISE'' THEN NVL(vhr.heures,0) ELSE 0 END ) heures_referentiel_real
-        FROM
-          intervenant i
-          JOIN statut si ON si.id = i.statut_id
-          LEFT JOIN service s ON s.intervenant_id = i.id AND s.histo_destruction IS NULL
-          LEFT JOIN volume_horaire vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
-          LEFT JOIN type_volume_horaire tvhs ON tvhs.id = vh.type_volume_horaire_id
-
-          LEFT JOIN service_referentiel sr ON sr.intervenant_id = i.id AND sr.histo_destruction IS NULL
-          LEFT JOIN volume_horaire_ref vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
-          LEFT JOIN type_volume_horaire tvhrs ON tvhrs.id = vhr.type_volume_horaire_id
-        WHERE
-          i.histo_destruction IS NULL
-          /*@INTERVENANT_ID=i.id*/
-          /*@ANNEE_ID=i.annee_id*/
-        GROUP BY
-          i.annee_id,
-          i.id,
-          si.service,
-          si.referentiel';
-
-    OPEN c FOR '
-    SELECT
-      CASE WHEN
-            t.ANNEE_ID                            = v.ANNEE_ID
-        AND t.INTERVENANT_ID                      = v.INTERVENANT_ID
-        AND t.SERVICE                             = v.SERVICE
-        AND t.REFERENTIEL                         = v.REFERENTIEL
-        AND t.HEURES_SERVICE_PREV                 = v.HEURES_SERVICE_PREV
-        AND t.HEURES_REFERENTIEL_PREV             = v.HEURES_REFERENTIEL_PREV
-        AND t.HEURES_SERVICE_REAL                 = v.HEURES_SERVICE_REAL
-        AND t.HEURES_REFERENTIEL_REAL             = v.HEURES_REFERENTIEL_REAL
-      THEN -1 ELSE t.ID END ID,
-      v.ANNEE_ID,
-      v.INTERVENANT_ID,
-      v.SERVICE,
-      v.REFERENTIEL,
-      v.HEURES_SERVICE_PREV,
-      v.HEURES_REFERENTIEL_PREV,
-      v.HEURES_SERVICE_REAL,
-      v.HEURES_REFERENTIEL_REAL
-    FROM
-      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
-      FULL JOIN TBL_SERVICE_SAISIE t ON
-            t.INTERVENANT_ID                      = v.INTERVENANT_ID
-    WHERE ' || PARAMS_MAKE_FILTER(useParams);
-    LOOP
-      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
-
-      IF d.id IS NULL THEN
-        d.id := TBL_SERVICE_SAISIE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_SERVICE_SAISIE values d;
-      ELSIF
-            d.INTERVENANT_ID IS NULL
-      THEN
-        DELETE FROM TBL_SERVICE_SAISIE WHERE id = d.id;
-      ELSIF d.id <> -1 THEN
-        UPDATE TBL_SERVICE_SAISIE SET row = d WHERE id = d.id;
-      END IF;
-    END LOOP;
-    CLOSE c;
+    return;
   END;
 
 

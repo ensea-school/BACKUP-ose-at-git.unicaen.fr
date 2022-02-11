@@ -680,7 +680,7 @@ class ServiceController extends AbstractController
         ], $intervenant);
 
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie', 'service', 'piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord(['service', 'piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
         }
     }
 }

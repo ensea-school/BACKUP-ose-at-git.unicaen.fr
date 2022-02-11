@@ -8,6 +8,7 @@ return [
             'TMP_SCENARIO_NOEUD_EFFECTIF',
             'DOSSIER_CHAMP_AUTRE_PAR_STATUT',
             'TBL_SERVICE_REFERENTIEL',
+            'TBL_SERVICE_SAISIE',
         ],
     ],
     'materialized-view' => [
@@ -40,6 +41,7 @@ return [
             'V_INDICATEUR_1230',
             'V_INDICATEUR_1240',
             'V_TBL_SERVICE_REFERENTIEL',
+            'V_TBL_SERVICE_SAISIE',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],
@@ -59,7 +61,7 @@ return [
     ],
     'sequence'          => [
         'includes' => [
-
+            'TBL_SERVICE_SAISIE_ID_SEQ',
         ],
     ],
 ];

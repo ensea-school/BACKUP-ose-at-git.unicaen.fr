@@ -352,6 +352,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     intervenant CLOB;
     dossier CLOB;
     service_saisie CLOB;
+    service_saisie_realise CLOB;
     validation_enseignement CLOB;
     validation_referentiel CLOB;
     pieces_justificatives CLOB;
@@ -448,27 +449,56 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
     service_saisie := '
         SELECT
-          e.code                                                    etape_code,
-          tss.intervenant_id                                        intervenant_id,
-          NULL                                                      structure_id,
-          1                                                         objectif,
-          CASE
-            WHEN e.code = ''SERVICE_SAISIE'' THEN
-              CASE WHEN tss.heures_service_prev + tss.heures_referentiel_prev > 0 THEN 1 ELSE 0 END
-
-            WHEN e.code = ''SERVICE_SAISIE_REALISE'' THEN
-              CASE WHEN tss.heures_service_real + tss.heures_referentiel_real > 0 THEN 1 ELSE 0 END
-
-          END                                                       realisation
+          ''SERVICE_SAISIE''                                   etape_code,
+          i.id                                                 intervenant_id,
+          NULL                                                 structure_id,
+          1                                                    objectif,
+          CASE WHEN t.intervenant_id IS NULL THEN 0 ELSE 1 END realisation
         FROM
-          TBL_SERVICE_SAISIE tss
-          JOIN (
-                  SELECT ''SERVICE_SAISIE''                 code FROM dual
-            UNION SELECT ''SERVICE_SAISIE_REALISE''         code FROM dual
-          ) e ON 1=1
+          intervenant i
+          JOIN statut si ON si.id = i.statut_id
+          LEFT JOIN (
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_service t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''PREVU''
+
+            UNION
+
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_referentiel t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''PREVU''
+          ) t ON t.intervenant_id = i.id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
-          AND (tss.service = 1 OR tss.referentiel = 1)
+          i.histo_destruction IS NULL
+          AND (si.service_prevu = 1 OR si.referentiel_prevu = 1)
+    ';
+
+
+
+    service_saisie_realise := '
+        SELECT
+          ''SERVICE_SAISIE_REALISE''                           etape_code,
+          i.id                                                 intervenant_id,
+          NULL                                                 structure_id,
+          1                                                    objectif,
+          CASE WHEN t.intervenant_id IS NULL THEN 0 ELSE 1 END realisation
+        FROM
+          intervenant i
+          JOIN statut si ON si.id = i.statut_id
+          LEFT JOIN (
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_service t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''REALISE''
+
+            UNION
+
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_referentiel t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''REALISE''
+          ) t ON t.intervenant_id = i.id
+        WHERE
+          i.histo_destruction IS NULL
+          AND (si.service_realise = 1 OR si.referentiel_realise = 1)
     ';
 
 
@@ -676,6 +706,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       JOIN wf_etape                 e ON 1 = CASE ' || dems || ' END
       LEFT JOIN ( ' || dossier || '
         UNION ALL ' || service_saisie || '
+        UNION ALL ' || service_saisie_realise || '
         UNION ALL ' || validation_enseignement || '
         UNION ALL ' || validation_referentiel || '
         UNION ALL ' || pieces_justificatives || '

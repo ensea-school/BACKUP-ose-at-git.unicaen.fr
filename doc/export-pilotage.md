@@ -372,24 +372,6 @@ Référentiel
 | HEURES                    | Nombre d'heures concernées         |
 
 
-
-## Table TBL_SERVICE_SAISIE
-
-Service (pour alimenter le Workflow)
-
-| Colonne                 |Description                            |
-|-------------------------|---------------------------------------|
-| ID                      |                                       |
-| ANNEE_ID                |==> ANNEE.ID                           |
-| INTERVENANT_ID          |==> INTERVENANT.ID                     |
-| SERVICE                 |Témoin (0 ou 1)                        |
-| REFERENTIEL             |Témoin (0 ou 1)                        |
-| HEURES_SERVICE_PREV     |NB d'heures de service prévisionnel    |
-| HEURES_REFERENTIEL_PREV |NB d'heures de référentiel prévisionnel|
-| HEURES_SERVICE_REAL     |NB d'heures de service réalisé         |
-| HEURES_REFERENTIEL_REAL |NB d'heures de référentiel réalisé     |
-
-
 ## Table TBL_VALIDATION_ENSEIGNEMENT
 
 Suivi des validations de services

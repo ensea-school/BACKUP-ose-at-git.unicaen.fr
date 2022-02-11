@@ -390,9 +390,9 @@ class ServiceReferentielController extends AbstractController
 
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
-        $this->getServiceWorkflow()->calculerTableauxBord(['formule', 'validation_referentiel', 'service_referentiel'], $intervenant);
+        $this->getServiceWorkflow()->calculerTableauxBord(['formule', 'validation_referentiel', 'referentiel'], $intervenant);
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord(['referentiel', 'piece_jointe_fournie'], $intervenant);
         }
     }
 

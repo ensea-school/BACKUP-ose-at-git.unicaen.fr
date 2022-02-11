@@ -1600,17 +1600,6 @@ return [
         'HEURES',
         'VALIDE',
     ],
-    'TBL_SERVICE_SAISIE'             => [
-        'ID',
-        'ANNEE_ID',
-        'INTERVENANT_ID',
-        'SERVICE',
-        'REFERENTIEL',
-        'HEURES_SERVICE_PREV',
-        'HEURES_REFERENTIEL_PREV',
-        'HEURES_SERVICE_REAL',
-        'HEURES_REFERENTIEL_REAL',
-    ],
     'TBL_VALIDATION_ENSEIGNEMENT'    => [
         'ID',
         'ANNEE_ID',

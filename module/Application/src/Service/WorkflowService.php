@@ -348,11 +348,10 @@ class WorkflowService extends AbstractService
             'dossier'                 => ['workflow'],
             'paiement'                => ['workflow'],
             'piece_jointe'            => ['workflow'],
-            'service_saisie'          => ['workflow'],
-            'service_referentiel'     => ['workflow'],
+            'service'                 => ['workflow'],
+            'referentiel'             => ['workflow'],
             'validation_enseignement' => ['workflow'],
             'validation_referentiel'  => ['workflow'],
-            'service'                 => [],
             'workflow'                => [],
         ];
 

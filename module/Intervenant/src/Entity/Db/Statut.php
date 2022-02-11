@@ -310,16 +310,16 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    public function getDepassementServiceDuSansHc(): bool
+    public function getDepassementServiceDuSansHC(): bool
     {
-        return $this->depassementServiceDuSansHc;
+        return $this->depassementServiceDuSansHC;
     }
 
 
 
-    public function setDepassementServiceDuSansHc(bool $depassementServiceDuSansHc): Statut
+    public function setDepassementServiceDuSansHC(bool $depassementServiceDuSansHC): Statut
     {
-        $this->depassementServiceDuSansHc = $depassementServiceDuSansHc;
+        $this->depassementServiceDuSansHC = $depassementServiceDuSansHC;
 
         return $this;
     }

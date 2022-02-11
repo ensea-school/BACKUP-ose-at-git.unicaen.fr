@@ -14,7 +14,6 @@ class MotifNonPaiementController extends AbstractController
     use MotifNonPaiementSaisieFormAwareTrait;
 
 
-
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -33,7 +32,7 @@ class MotifNonPaiementController extends AbstractController
         /* @var $motifNonPaiement MotifNonPaiement */
         $motifNonPaiement = $this->getEvent()->getParam('motifNonPaiement');
 
-        $form = $this->getFormMotifNonPaiementSaisie();
+        $form = $this->getFormMotifNonPaiementMotifNonPaiementSaisie();
         if (empty($motifNonPaiement)) {
             $title            = 'Création d\'un nouveau motif de non paiement';
             $motifNonPaiement = $this->getServiceMotifNonPaiement()->newEntity();
@@ -41,13 +40,12 @@ class MotifNonPaiementController extends AbstractController
             $title = 'Édition d\'un motif de non paiement';
         }
 
-        $form->bindRequestSave($motifNonPaiement, $this->getRequest(), function (MotifNonPaiement $fr) {
+        $form->bindRequestSave($motifNonPaiement, $this->getRequest(), function (MotifNonPaiement $motifNonPaiement) {
             try {
-                $this->getServiceMotifNonPaiement()->save($fr);
+                $this->getServiceMotifNonPaiement()->save($motifNonPaiement);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $fr->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -62,11 +60,11 @@ class MotifNonPaiementController extends AbstractController
 
         try {
             $this->getServiceMotifNonPaiement()->delete($motifNonPaiement);
-            $this->flashMessenger()->addSuccessMessage("Motif de non paiement supprimée avec succès.");
+            $this->flashMessenger()->addSuccessMessage("Motif de non paiement supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
-        return new MessengerViewModel(compact('motifNonPaiement'));
+        return new MessengerViewModel();
     }
 }

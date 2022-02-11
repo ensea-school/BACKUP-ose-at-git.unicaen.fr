@@ -38,41 +38,36 @@ class StatutController extends AbstractController
 
     public function saisieAction()
     {
-        try {
-            /** @var Statut $statut */
-            $statut = $this->getEvent()->getParam('statut');
+        /** @var Statut $statut */
+        $statut = $this->getEvent()->getParam('statut');
 
-            $form         = $this->getFormStatutSaisie();
-            $champsAutres = $this->getServiceDossierAutre()->getList();
-            if (empty($statut)) {
-                $title  = 'Création d\'un nouveau statut d\'intervenant';
-                $statut = $this->getServiceStatut()->newEntity();
-            } else {
-                $title = 'Édition d\'un statut d\'intervenant';
-            }
+        $form = $this->getFormStatutSaisie();
 
-            $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-            if ($canEdit) {
-                $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) {
-                    try {
-                        $this->getServiceStatut()->save($si);
-                        unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                        unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
-                        $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-                    } catch (\Exception $e) {
-                        $this->flashMessenger()->addErrorMessage($this->translate($e));
-                    }
-                });
-            } else {
-                $form->bind($statut);
-                $form->readOnly();
-            }
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        if (empty($statut)) {
+            $title  = 'Création d\'un nouveau statut d\'intervenant';
+            $statut = $this->getServiceStatut()->newEntity();
+        } else {
+            $title = 'Édition d\'un statut d\'intervenant';
         }
 
+        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
+        if ($canEdit) {
+            $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) {
+                try {
+                    $this->getServiceStatut()->save($si);
+                    unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                    unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
+                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                }
+            });
+        } else {
+            $form->bind($statut);
+            $form->readOnly();
+        }
 
-        return compact('form', 'title', 'champsAutres');
+        return compact('form', 'title');
     }
 
 

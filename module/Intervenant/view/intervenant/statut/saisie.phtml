@@ -12,7 +12,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
 /** @var $statut \Intervenant\Entity\Db\Statut */
 $statut = $form->getObject();
 
+echo $this->form($form);
 
+return;
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 echo $this->form()->openTag($form);

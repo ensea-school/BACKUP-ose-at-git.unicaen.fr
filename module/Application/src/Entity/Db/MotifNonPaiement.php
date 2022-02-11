@@ -2,47 +2,38 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-/**
- * MotifNonPaiement
- */
 class MotifNonPaiement implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $code;
+    protected ?int    $id           = null;
 
-    /**
-     * @var string
-     */
-    protected $libelleCourt;
+    protected ?string $code         = null;
 
-    /**
-     * @var string
-     */
-    protected $libelleLong;
+    protected ?string $libelleCourt = null;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected ?string $libelleLong  = null;
 
 
 
-    /**
-     * Set code
-     *
-     * @param string $code
-     *
-     * @return MotifNonPaiement
-     */
-    public function setCode($code)
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+
+
+    public function setCode(?string $code): MotifNonPaiement
     {
         $this->code = $code;
 
@@ -51,26 +42,14 @@ class MotifNonPaiement implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
+    public function getLibelleCourt(): ?string
     {
-        return $this->code;
+        return $this->libelleCourt;
     }
 
 
 
-    /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return MotifNonPaiement
-     */
-    public function setLibelleCourt($libelleCourt)
+    public function setLibelleCourt(?string $libelleCourt): MotifNonPaiement
     {
         $this->libelleCourt = $libelleCourt;
 
@@ -79,26 +58,14 @@ class MotifNonPaiement implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get libelleCourt
-     *
-     * @return string
-     */
-    public function getLibelleCourt()
+    public function getLibelleLong(): ?string
     {
-        return $this->libelleCourt;
+        return $this->libelleLong;
     }
 
 
 
-    /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     *
-     * @return MotifNonPaiement
-     */
-    public function setLibelleLong($libelleLong)
+    public function setLibelleLong(?string $libelleLong): MotifNonPaiement
     {
         $this->libelleLong = $libelleLong;
 
@@ -107,42 +74,7 @@ class MotifNonPaiement implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get libelleLong
-     *
-     * @return string
-     */
-    public function getLibelleLong()
-    {
-        return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-
-    /**************************************************************************************************
-     *                                        Début ajout
-     **************************************************************************************************/
-
-
-    /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getLibelleLong() ?: $this->getLibelleCourt();
     }

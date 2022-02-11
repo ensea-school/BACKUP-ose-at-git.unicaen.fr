@@ -3,7 +3,9 @@
 namespace Application\Hydrator;
 
 use Application\Constants;
+use Application\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 

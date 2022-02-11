@@ -1158,24 +1158,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           LEFT JOIN validation       v ON v.intervenant_id = i.id
                                       AND v.type_validation_id = tv.id
                                       AND v.histo_destruction IS NULL
-          /*Champs autre 1*/
-          LEFT JOIN dossier_champ_autre_par_statut dcas1 ON dcas1.dossier_champ_autre_id = 1 AND dcas1.statut_id = si.id
-          LEFT JOIN dossier_champ_autre dca1 ON dca1.id = 1 AND dcas1.dossier_champ_autre_id = dca1.id
-         /*Champs autre 2*/
-          LEFT JOIN dossier_champ_autre_par_statut dcas2 ON dcas2.dossier_champ_autre_id = 2 AND dcas2.statut_id = si.id
-          LEFT JOIN dossier_champ_autre dca2 ON dca2.id = 2 AND dcas2.dossier_champ_autre_id = dca2.id
-         /*Champs autre 3*/
-          LEFT JOIN dossier_champ_autre_par_statut dcas3 ON dcas3.dossier_champ_autre_id = 3 AND dcas3.statut_id = si.id
-          LEFT JOIN dossier_champ_autre dca3 ON dca3.id = 3 AND dcas3.dossier_champ_autre_id = dca3.id
-         /*Champs autre 4*/
-          LEFT JOIN dossier_champ_autre_par_statut dcas4 ON dcas4.dossier_champ_autre_id = 4 AND dcas4.statut_id = si.id
-          LEFT JOIN dossier_champ_autre dca4 ON dca4.id = 4 AND dcas4.dossier_champ_autre_id = dca4.id
-         /*Champs autre 5*/
-          LEFT JOIN dossier_champ_autre_par_statut dcas5 ON dcas5.dossier_champ_autre_id = 5 AND dcas5.statut_id = si.id
-          LEFT JOIN dossier_champ_autre dca5 ON dca5.id = 5 AND dcas5.dossier_champ_autre_id = dca5.id
+
+          LEFT JOIN dossier_champ_autre dca1 ON dca1.id = 1 AND si.dossier_autre_1 = 1
+          LEFT JOIN dossier_champ_autre dca2 ON dca2.id = 2 AND si.dossier_autre_2 = 1
+          LEFT JOIN dossier_champ_autre dca3 ON dca3.id = 3 AND si.dossier_autre_3 = 1
+          LEFT JOIN dossier_champ_autre dca4 ON dca4.id = 4 AND si.dossier_autre_4 = 1
+          LEFT JOIN dossier_champ_autre dca5 ON dca5.id = 5 AND si.dossier_autre_5 = 1
         WHERE
           i.histo_destruction IS NULL
-           /*@INTERVENANT_ID=i.id*/
+          /*@INTERVENANT_ID=i.id*/
           /*@ANNEE_ID=i.annee_id*/';
 
     OPEN c FOR '
@@ -1896,13 +1887,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
-          SELECT 1 PLAFOND_ID, p.* FROM (
+          SELECT 1 PLAFOND_ID, NULL PLAFOND, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
                 fr.type_volume_horaire_id           type_volume_horaire_id,
                 i.id                                intervenant_id,
-                fr.heures_compl_fc_majorees         heures,
-                ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond
+                fr.heures_compl_fc_majorees         heures
+              /*  ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
 
               FROM
                      intervenant                i
@@ -2476,6 +2467,148 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
+  PROCEDURE C_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_REFERENTIEL%rowtype;
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          t.annee_id,
+          t.intervenant_id,
+          t.type_volume_horaire_id,
+          t.actif,
+          t.structure_id,
+          t.intervenant_structure_id,
+          t.service_referentiel_id,
+          t.fonction_referentiel_id,
+          t.type_intervenant_id,
+          t.type_intervenant_code,
+          t.type_volume_horaire_code,
+          SUM(nbvh)   nbvh,
+          SUM(heures) heures,
+          SUM(valide) valide
+        FROM
+          (
+          SELECT
+            i.annee_id       annee_id,
+            i.id             intervenant_id,
+            tvh.id           type_volume_horaire_id,
+            CASE tvh.code
+              WHEN ''PREVU'' THEN si.referentiel_prevu
+              WHEN ''REALISE'' THEN si.referentiel_realise
+              ELSE 0
+            END              actif,
+            s.structure_id   structure_id,
+            i.structure_id   intervenant_structure_id,
+            s.id             service_referentiel_id,
+            s.fonction_id    fonction_referentiel_id,
+            ti.id            type_intervenant_id,
+            tvh.code         type_volume_horaire_code,
+            ti.code          type_intervenant_code,
+            vh.heures        heures,
+            1                nbvh,
+            CASE WHEN v.id IS NULL AND vh.auto_validation=0 THEN 0 ELSE 1 END valide
+          FROM
+                      volume_horaire_ref               vh
+                 JOIN service_referentiel               s ON s.id = vh.service_referentiel_id
+                                                         AND s.histo_destruction IS NULL
+
+                 JOIN intervenant                       i ON i.id = s.intervenant_id
+                                                         AND i.histo_destruction IS NULL
+
+                 JOIN statut                           si ON si.id = i.statut_id
+
+                 JOIN type_intervenant                 ti ON ti.id = si.type_intervenant_id
+
+                 JOIN type_volume_horaire             tvh ON tvh.id = vh.type_volume_horaire_id
+
+            LEFT JOIN validation_vol_horaire_ref      vvh ON vvh.volume_horaire_ref_id = vh.id
+
+            LEFT JOIN validation                        v ON v.id = vvh.validation_id
+                                                         AND v.histo_destruction IS NULL
+          WHERE
+            vh.histo_destruction IS NULL
+            /*@INTERVENANT_ID=i.id*/
+            /*@ANNEE_ID=i.annee_id*/
+            /*@STRUCTURE_ID=COALESCE(s.structure_id,i.structure_id)*/
+          ) t
+        GROUP BY
+          t.annee_id,
+          t.intervenant_id,
+          t.type_volume_horaire_id,
+          t.actif,
+          t.structure_id,
+          t.intervenant_structure_id,
+          t.service_referentiel_id,
+          t.fonction_referentiel_id,
+          t.type_intervenant_id,
+          t.type_intervenant_code,
+          t.type_volume_horaire_code';
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            t.ANNEE_ID                             = v.ANNEE_ID
+        AND t.INTERVENANT_ID                       = v.INTERVENANT_ID
+        AND t.ACTIF                                = v.ACTIF
+        AND t.TYPE_VOLUME_HORAIRE_ID               = v.TYPE_VOLUME_HORAIRE_ID
+        AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
+        AND t.NBVH                                 = v.NBVH
+        AND t.VALIDE                               = v.VALIDE
+        AND COALESCE(t.INTERVENANT_STRUCTURE_ID,0) = COALESCE(v.INTERVENANT_STRUCTURE_ID,0)
+        AND t.SERVICE_REFERENTIEL_ID               = v.SERVICE_REFERENTIEL_ID
+        AND t.FONCTION_REFERENTIEL_ID              = v.FONCTION_REFERENTIEL_ID
+        AND t.TYPE_INTERVENANT_ID                  = v.TYPE_INTERVENANT_ID
+        AND t.TYPE_INTERVENANT_CODE                = v.TYPE_INTERVENANT_CODE
+        AND t.TYPE_VOLUME_HORAIRE_CODE             = v.TYPE_VOLUME_HORAIRE_CODE
+        AND t.HEURES                               = v.HEURES
+      THEN -1 ELSE t.ID END ID,
+      v.ANNEE_ID,
+      v.INTERVENANT_ID,
+      v.ACTIF,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.STRUCTURE_ID,
+      v.NBVH,
+      v.VALIDE,
+      v.INTERVENANT_STRUCTURE_ID,
+      v.SERVICE_REFERENTIEL_ID,
+      v.FONCTION_REFERENTIEL_ID,
+      v.TYPE_INTERVENANT_ID,
+      v.TYPE_INTERVENANT_CODE,
+      v.TYPE_VOLUME_HORAIRE_CODE,
+      v.HEURES
+    FROM
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      FULL JOIN TBL_REFERENTIEL t ON
+            t.INTERVENANT_ID                       = v.INTERVENANT_ID
+        AND t.TYPE_VOLUME_HORAIRE_ID               = v.TYPE_VOLUME_HORAIRE_ID
+        AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
+        AND t.SERVICE_REFERENTIEL_ID               = v.SERVICE_REFERENTIEL_ID
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_REFERENTIEL_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_REFERENTIEL values d;
+      ELSIF
+            d.INTERVENANT_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.STRUCTURE_ID IS NULL
+        AND d.SERVICE_REFERENTIEL_ID IS NULL
+      THEN
+        DELETE FROM TBL_REFERENTIEL WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_REFERENTIEL SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
   PROCEDURE C_SERVICE(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;
@@ -2527,7 +2660,10 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         SELECT
           i.annee_id                                                             annee_id,
           i.id                                                                   intervenant_id,
-          si.service                                                             actif,
+          CASE WHEN t.type_volume_horaire_code = ''PREVU''
+            THEN si.service_prevu
+            ELSE si.service_realise
+          END                                                                    actif,
           t.service_id                                                           service_id,
           t.element_pedagogique_id                                               element_pedagogique_id,
           ti.id                                                                  type_intervenant_id,
@@ -2561,7 +2697,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           i.structure_id,
           ti.id,
           ti.code,
-          si.service,
+          si.service_prevu,
+          si.service_realise,
           t.element_pedagogique_id,
           t.service_id,
           t.element_pedagogique_periode_id,
@@ -2635,23 +2772,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       END IF;
     END LOOP;
     CLOSE c;
-  END;
-
-
-
-
-  PROCEDURE C_SERVICE_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
-  BEGIN
-    return;
-  END;
-
-
-
-
-  PROCEDURE C_SERVICE_SAISIE(useParams BOOLEAN DEFAULT FALSE) IS
-
-  BEGIN
-    return;
   END;
 
 

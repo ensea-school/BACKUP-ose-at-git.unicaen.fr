@@ -14,13 +14,13 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 1 PLAFOND_ID, p.* FROM (
+  SELECT 1 PLAFOND_ID, NULL PLAFOND, p.* FROM (
     SELECT
         i.annee_id                          annee_id,
         fr.type_volume_horaire_id           type_volume_horaire_id,
         i.id                                intervenant_id,
-        fr.heures_compl_fc_majorees         heures,
-        ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond
+        fr.heures_compl_fc_majorees         heures
+      /*  ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
 
       FROM
              intervenant                i

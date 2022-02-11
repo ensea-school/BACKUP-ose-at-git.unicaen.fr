@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => FALSE,
     'commentaire' => 'Référentiel',
-    'sequence'    => NULL,
+    'sequence'    => 'TBL_REFERENTIEL_ID_SEQ',
     'columns'     => [
         'ACTIF'                    => [
             'name'        => 'ACTIF',

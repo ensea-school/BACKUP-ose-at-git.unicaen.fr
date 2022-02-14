@@ -407,8 +407,6 @@ class PaiementController extends AbstractController
     {
         if ($recherche->getEtat() == MiseEnPaiement::A_METTRE_EN_PAIEMENT) {
             $filename = 'demande_mise_en_paiement';
-        } elseif ($recherche->getEtat() == 'imputation-budgetaire') {
-            $filename = 'imputation-budgetaire';
         } else {
             $filename = 'etat_paiement';
         }
@@ -530,10 +528,9 @@ class PaiementController extends AbstractController
         $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'imputation-budgetaire']);
 
 
-        //creation d'un privilege specifique aux imputations budgétaire
         if ($this->params()->fromPost('exporter-csv-imputation') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
             $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $recherche->getFilters());
-            $csvModel->setFilename($this->makeFilenameFromRecherche($recherche) . '.csv');
+            $csvModel->setFilename(str_replace(' ', '_', 'imputation_siham_' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '_' . strtolower(($recherche->getTypeIntervenant()) ? $recherche->getTypeIntervenant()->getLibelle() : 'vactaire_et_permanent') . '.csv'));
 
             return $csvModel;
         } else {

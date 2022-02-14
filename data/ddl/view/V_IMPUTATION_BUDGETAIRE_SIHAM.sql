@@ -34,9 +34,8 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
              domaine_fonctionnel_code,
              hetd,
              hetd_montant,
-             rem_fc_d714
-
-
+             rem_fc_d714,
+             type_intervenant_id
       FROM
            (
            SELECT

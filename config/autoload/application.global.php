@@ -11,7 +11,7 @@ return [
                     'user'     => AppConfig::get('bdd', 'username'),
                     'password' => AppConfig::get('bdd', 'password'),
                     'charset'  => 'AL32UTF8',
-                    'connectstring' => AppConfig::get('bdd', 'connecstring'),
+                    'connectstring' => AppConfig::get('bdd', 'connectstring'),
                     //'persistent' => true,
                 ],
             ],

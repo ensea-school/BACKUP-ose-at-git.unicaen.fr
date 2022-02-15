@@ -143,8 +143,13 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                         champsIds += $(this).data('id');
                     });
                     console.debug(champsIds);
-                    $.post(Url('type-intervention/type-intervention-trier'), {champsIds: champsIds}).done(function (res) {
-                        alertFlash(res.msg, 'success', 3000);
+                    $.ajax({
+                        type: 'POST',
+                        url: Url('type-intervention/type-intervention-trier'),
+                        data: {champsIds: champsIds},
+                        success: function (res) {
+                            alertFlash('Tri des champs effectué', 'success', 3000);
+                        },
                     });
                 }
             });

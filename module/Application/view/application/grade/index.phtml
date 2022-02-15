@@ -35,7 +35,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_R
                 <?= $grade->getLibelleLong() ?>
             </td>
             <td><?= $grade->getSource()->getLibelle() ?></td>
-            <td><?= $grade->getCorps()->getLibelleCourt() ?></td>
+            <?php if ($grade->getCorps()): ?>
+                <td><?= $grade->getCorps()->getLibelleCourt() ?></td>
+            <?php else: ?>
+                <td></td>
+            <?php endif; ?>
 
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">

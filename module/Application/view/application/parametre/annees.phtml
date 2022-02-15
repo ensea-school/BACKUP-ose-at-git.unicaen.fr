@@ -20,7 +20,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANN
         <?php foreach ($al as $annee): ?>
 
             <div style="margin:5px">
-                <button type="button" <?= (!$canEdit) ? 'disabled="disabled"' : ''; ?> data-id="<?= $annee->getId() ?>" class="btn btn-annee <?= $annee->isActive() ? 'btn-info active' : 'btn-default' ?>"><?= $annee ?></button>
+                <button type="button" <?= (!$canEdit) ? 'disabled="disabled"' : ''; ?> data-id="<?= $annee->getId() ?>"
+                        class="btn btn-annee <?= $annee->isActive() ? 'btn-info active' : 'btn-default' ?>"><?= $annee ?></button>
             </div>
 
         <?php endforeach; ?>
@@ -45,8 +46,13 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANN
             isActive = true;
         }
 
-        $.post(<?= var_export($this->url('parametres/annees'), true) ?>, {annee: anneeId}, function (data) {
-            alertFlash(data.message, data.status, 5000);
+        $.ajax({
+            type: 'POST',
+            url: "<?= var_export($this->url('parametres/annees'), true) ?>",
+            data: {annee: anneeId},
+            success: function (data) {
+                alertFlash(data.message, data.status, 5000);
+            },
         });
 
     });

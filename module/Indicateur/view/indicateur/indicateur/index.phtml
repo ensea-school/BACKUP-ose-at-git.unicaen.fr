@@ -106,8 +106,11 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                 var that = this;
 
                 typeIndicateur.removeClass("non-calcule");
-                $.post("<?= $this->url('indicateur') ?>" + "/calcul/" + typeIndicateur.data('id'), [], function (data)
-                    {
+                $.ajax({
+                    type: 'POST',
+                    url: "<?= $this->url('indicateur') ?>" + "/calcul/" + typeIndicateur.data('id'),
+                    data: {},
+                    success: function (data) {
                         for (id in data) {
                             var td = that.element.find('.indicateur#' + id).find('.intitule');
 
@@ -118,14 +121,13 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                             }
                         }
                         that.calculerNextType();
+                    },
+                    error: function (jqXHR) {
+                        alertFlash(jqXHR.responseText, 'error', 5000);
+                        console.log(jqXHR);
+                        that.calculerNextType();
                     }
-                ).fail(function (jqXHR)
-                {
-                    alertFlash(jqXHR.responseText, 'danger', 5000);
-                    console.log(jqXHR);
-                    that.calculerNextType();
                 });
-
             },
 
             _create: function ()

@@ -336,6 +336,8 @@ return [
             'campagnes-saisie-visualisation' => 'Campagnes de saisie - Visualisation',
             'annees-edition'                 => 'Années - Édition',
             'annees-visualisation'           => 'Années - Visualisation',
+            'periodes-edition'               => 'Périodes - Édition',
+            'periodes-visualisation'         => 'Périodes - Visualisation',
         ],
     ],
 

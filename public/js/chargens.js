@@ -718,20 +718,26 @@ $.widget("ose.chargens", {
         var that = this;
         var p = params;
 
-        $.post(url, params, function (data)
-        {
-            if (data.erreur) {
-                alertFlash(data.erreur, 'danger', 5000);
-            } else if (data.noeuds) {
-                that.chargerDonnees(p.etape, p.scenario, data);
-            } else {
-                alertFlash(data, 'danger', 15000);
-            }
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {params: params},
+            success: function (data)
+            {
+                if (data.erreur) {
+                    alertFlash(data.erreur, 'error', 5000);
+                } else if (data.noeuds) {
+                    that.chargerDonnees(p.etape, p.scenario, data);
+                } else {
+                    alertFlash(data, 'error', 15000);
+                }
 
-        }).fail(function (jqXHR)
-        {
-            alertFlash(jqXHR.responseText, 'danger', 5000);
-            console.log(jqXHR);
+            },
+            error: function (jqXHR)
+            {
+                alertFlash(jqXHR.responseText, 'error', 5000);
+                console.log(jqXHR);
+            }
         });
     },
 

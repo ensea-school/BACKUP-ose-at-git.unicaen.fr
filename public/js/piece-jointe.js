@@ -32,14 +32,20 @@ $.widget("ose.pieceJointe", {
         var that = this;
         var tpj = element.parent('.tpj').data('tpj');
         element.button('loading');
-        $.post(element.prop('href'), [], function(data, textStatus, jqXHR){
-            that.onFileChange(tpj);
-        }).done(function( jqXHR ){
-            location.reload(true);
-        })
-        .fail(function( jqXHR ) {
-            alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
-            console.log(jqXHR);
+        $.ajax({
+            type: 'POST',
+            url: element.prop('href'),
+            data: {},
+            success: function (data, textStatus, jqXHR) {
+                that.onFileChange(tpj);
+            },
+            error: function (jqXHR) {
+                alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
+                console.log(jqXHR);
+            },
+            complete: function (jqXHR) {
+                location.reload(true);
+            }
         });
     },
 
@@ -49,25 +55,31 @@ $.widget("ose.pieceJointe", {
         var tpj = element.parents('.tpj').data('tpj');
 
         element.button('loading');
-        $.post(element.prop('href'), [], function (data, textStatus, jqXHR)
-        {
-            var container = that.getContainer(tpj);
-            container.find('.validation-bar').html(data);
-            container.removeClass('panel-default');
-            container.removeClass('panel-success');
 
-            var isValider = data.indexOf("/valider/") !== -1;
+        $.ajax({
+            type: 'POST',
+            url: element.prop('href'),
+            data: {},
+            success: function (data, textStatus, jqXHR) {
+                var container = that.getContainer(tpj);
+                container.find('.validation-bar').html(data);
+                container.removeClass('panel-default');
+                container.removeClass('panel-success');
 
-            if (isValider){
-                container.addClass('panel-default');
-            }else{
-                container.addClass('panel-success');
-            }
+                var isValider = data.indexOf("/valider/") !== -1;
 
-            that.onValidationChange( tpj, isValider );
-        }).fail(function( jqXHR ) {
-            alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
-            console.log(jqXHR);
+                if (isValider) {
+                    container.addClass('panel-default');
+                } else {
+                    container.addClass('panel-success');
+                }
+
+                that.onValidationChange(tpj, isValider);
+            },
+            error: function (jqXHR) {
+                alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
+                console.log(jqXHR);
+            },
         });
     },
 

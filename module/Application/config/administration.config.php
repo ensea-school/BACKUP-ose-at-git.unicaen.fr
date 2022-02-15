@@ -52,7 +52,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-intervenant'        => [
+            'administration-intervenant'     => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-intervenant',
@@ -63,13 +63,24 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-nomenclature-rh'    => [
+            'administration-nomenclature-rh' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-nomenclature-rh',
                     'defaults' => [
                         'controller' => 'Application\Controller\Administration',
                         'action'     => 'administration-nomenclature-rh',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'administration-periode'         => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/administration-periode',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Administration',
+                        'action'     => 'administration-periode',
                     ],
                 ],
                 'may_terminate' => true,
@@ -106,7 +117,7 @@ return [
 
                                 ],
                             ],
-                            'gestion-nomenclature-rh'    => [
+                            'gestion-nomenclature-rh' => [
                                 'label'          => 'Gestion des nomenclatures RH',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-nomenclature-rh',
@@ -133,7 +144,15 @@ return [
                                     ],
                                 ],
                             ],
-                            'gestion-intervenant'        => [
+                            'gestion-periode'         => [
+                                'label'          => 'Gestion des periodes',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'periodes',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\Periode', 'index'),
+                                'order'          => 84,
+                                'border - color' => '#111',
+                            ],
+                            'gestion-intervenant'     => [
                                 'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-intervenant',
@@ -216,7 +235,8 @@ return [
                                      'administration-financiere',
                                      'administration-intervenant',
                                      'administration-referentiel-commun',
-                                     'administration-nomenclature-rh'],
+                                     'administration-nomenclature-rh',
+                                     'administration-periode',],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,
@@ -247,6 +267,7 @@ return [
                         Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
                         Privileges::ODF_RECONDUCTION_OFFRE,
                         Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
+                        Privileges::PARAMETRES_PERIODES_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],

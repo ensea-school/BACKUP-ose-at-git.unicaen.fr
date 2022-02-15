@@ -34,7 +34,9 @@ Objectif : Plafonds personnalisables
 * Refonte de l'interface d'administration des statuts
   * Les paramétrages de statuts sont maintenant annualisés  
 * Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un intervenant vers le SIRH  
-* Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'intervenant
+* Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
+  intervenant
+* Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
 
 ## Corrections de bugs
 

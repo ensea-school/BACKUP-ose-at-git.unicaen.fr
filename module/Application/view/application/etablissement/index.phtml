@@ -26,6 +26,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <thead>
     <tr>
         <th style="text-align: center">Libellé</th>
+        <th style="text-align: center">Localisation</th>
         <th style="text-align: center">Departement</th>
         <th style="text-align: center">Source</th>
         <?php if ($canEdit): ?>
@@ -37,6 +38,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <?php foreach ($etablissements as $etablissement): ?>
         <tr class="champ-triable" data-id= <?php echo $etablissement->getId() ?>>
             <td><?= $etablissement->getLibelle(); ?></td>
+            <td><?= $etablissement->getLocalisation(); ?></td>
             <td style="text-align: center"><?= $etablissement->getDepartement(); ?></td>
             <td style="text-align: center"><?= $etablissement->getSource()->getLibelle(); ?></td>
             <?php if ($canEdit): ?>

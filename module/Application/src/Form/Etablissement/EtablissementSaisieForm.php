@@ -92,10 +92,6 @@ class EtablissementSaisieForm extends AbstractForm
             'libelle' => [
                 'required' => true,
             ],
-
-            'departement' => [
-                'required' => true,
-            ],
         ];
     }
 

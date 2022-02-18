@@ -1,14 +1,15 @@
 <?php
-namespace Application\Form\Periode;
+
+namespace Application\Form\Etablissement;
 
 use Psr\Container\ContainerInterface;
 
 /**
- * Description of PeriodeSaisieFormFactory
+ * Description of EtablissementSaisieFormFactory
  *
  * @author Joriot Florian
  */
-class PeriodeSaisieFormFactory
+class EtablissementSaisieFormFactory
 {
 
     /**
@@ -16,11 +17,11 @@ class PeriodeSaisieFormFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return PeriodeSaisieForm
+     * @return EtablissementSaisieForm
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $form = new PeriodeSaisieForm();
+        $form = new EtablissementSaisieForm();
 
         return $form;
     }

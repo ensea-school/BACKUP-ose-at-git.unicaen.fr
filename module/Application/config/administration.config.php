@@ -152,6 +152,14 @@ return [
                                 'order'          => 84,
                                 'border - color' => '#111',
                             ],
+                            'gestion-etablissement'   => [
+                                'label'          => 'Gestion des etablissements',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'etablissement',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\Etablissement', 'index'),
+                                'order'          => 85,
+                                'border - color' => '#111',
+                            ],
                             'gestion-intervenant'     => [
                                 'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
@@ -236,7 +244,8 @@ return [
                                      'administration-intervenant',
                                      'administration-referentiel-commun',
                                      'administration-nomenclature-rh',
-                                     'administration-periode',],
+                                     'administration-periode',
+                                     'administration-etablissement',],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,

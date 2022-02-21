@@ -99,7 +99,7 @@ return [
                         'order'    => 7,
                         'pages'    => [
                             'gestion-referentiel-commun' => [
-                                'label'          => 'Gestion dictonnaires de données',
+                                'label'          => 'Gestion dictionnaires de données',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-referentiel-commun',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-referentiel-commun'),
@@ -145,7 +145,7 @@ return [
                                 ],
                             ],
                             'gestion-periode'         => [
-                                'label'          => 'Gestion des periodes',
+                                'label'          => 'Gestion des périodes',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'periodes',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Periode', 'index'),
@@ -153,7 +153,7 @@ return [
                                 'border - color' => '#111',
                             ],
                             'gestion-etablissement'   => [
-                                'label'          => 'Gestion des etablissements',
+                                'label'          => 'Gestion des établissements',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'etablissement',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Etablissement', 'index'),

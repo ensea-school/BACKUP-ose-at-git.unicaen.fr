@@ -81,7 +81,7 @@ class PeriodeSaisieForm extends AbstractForm
         $this->add([
             'name'    => 'paiement',
             'options' => [
-                'label' => "peut porter des paiement",
+                'label' => "Peut porter des paiements",
             ],
             'type'    => 'Checkbox',
         ]);

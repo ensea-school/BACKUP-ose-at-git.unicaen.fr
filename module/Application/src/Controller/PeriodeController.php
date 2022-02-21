@@ -41,10 +41,10 @@ class PeriodeController extends AbstractController
         $form    = $this->getFormPeriodeSaisie();
 
         if (empty($periode)) {
-            $title   = "Création d'une nouvelle periode";
+            $title   = "Création d'une nouvelle période";
             $periode = $this->getServicePeriode()->newEntity();
         } else {
-            $title = "Edition d'une periode";
+            $title = "Edition d'une période";
         }
 
         $form->bindRequestSave($periode, $this->getRequest(), function () use ($periode, $form) {

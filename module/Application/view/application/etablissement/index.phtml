@@ -27,7 +27,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <tr>
         <th style="text-align: center">Libellé</th>
         <th style="text-align: center">Localisation</th>
-        <th style="text-align: center">Departement</th>
+        <th style="text-align: center">Département</th>
         <th style="text-align: center">Source</th>
         <?php if ($canEdit): ?>
             <th style="text-align: center">Actions</th>
@@ -47,7 +47,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                         <a class="ajax-modal" data-event="etablissement-edition"
                            href="<?= $this->url('etablissement/saisie', ['etablissement' => $etablissement->getId()], ['query' => ['tab' => 'edition']]) ?>"
                            title="Modifier l'établissement"><span class="glyphicon glyphicon-edit"></span></a>
-                        <a class="pop-ajax" data-title="Suppression de l'établissement" data-content="Etes vous sur de supprimer" data-confirm="true"
+                        <a class="pop-ajax" data-title="Suppression de l'établissement" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
                            data-submit-reload="true"
                            href="<?= $this->url('etablissement/supprimer', ['etablissement' => $etablissement->getId()]) ?>"
                            title="Supprimer l'établissement"><span class="glyphicon glyphicon-remove"></span></a>

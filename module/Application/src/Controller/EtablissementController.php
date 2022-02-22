@@ -158,7 +158,7 @@ class EtablissementController extends AbstractController
     public function supprimerAction()
     {
         $etablissement = $this->getEvent()->getParam('etablissement');
-        $this->getServiceEtablissement()->delete($etablissement, false);
+        $this->getServiceEtablissement()->delete($etablissement, true);
 
         return new MessengerViewModel();
     }

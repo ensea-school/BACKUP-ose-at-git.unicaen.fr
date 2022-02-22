@@ -19,18 +19,23 @@ $.widget("ose.indicateur", {
 
         notif.data('previousValue', notif.val());
         notif.addClass("loading");
-        $.post(this.element.data('url'), {
-            notification: notif.val(),
-            'in-home': inHome.is(':checked') ? '1' : '0'
-        }, function (data, textStatus, jqXHR)
-        {
-            if (data.status !== "success") {
-                notif.val(notif.data('previousValue'));
+        $.ajax({
+            type: 'POST',
+            url: this.element.data('url'),
+            data: {
+                notification: notif.val(),
+                'in-home': inHome.is(':checked') ? '1' : '0'
+            },
+            success: function (data, textStatus, jqXHR)
+            {
+                if (data.status !== "success") {
+                    notif.val(notif.data('previousValue'));
+                }
+                notif.removeClass("loading");
+                var infos = $(".indicateur-info", notif.parent()).attr('title', data.infos).tooltip('destroy').tooltip();
+                notif.val() ? infos.show() : infos.hide();
+                alertFlash(data.message, data.status, 5000);
             }
-            notif.removeClass("loading");
-            var infos = $(".indicateur-info", notif.parent()).attr('title', data.infos).tooltip('destroy').tooltip();
-            notif.val() ? infos.show() : infos.hide();
-            alertFlash(data.message, data.status, 5000);
         });
     },
 

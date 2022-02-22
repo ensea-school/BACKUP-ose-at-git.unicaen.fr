@@ -136,6 +136,14 @@ class MiseEnPaiementRechercheForm extends AbstractForm
                 'class' => 'btn btn-default',
             ],
         ]);
+
+        $this->add([
+            'name'       => 'exporter-csv-imputation',
+            'type'       => 'Submit',
+            'attributes' => [
+                'class' => 'btn btn-default',
+            ],
+        ]);
     }
 
 

@@ -136,8 +136,8 @@ class AppConfig
                     './vendor',
                 ],
                 'cache_dir'                => 'cache/',
-                'config_cache_enabled'     => ('prod' == $env),
-                'module_map_cache_enabled' => ('prod' == $env),
+                'config_cache_enabled'     => ('prod' == $env  && !self::inConsole()),
+                'module_map_cache_enabled' => ('prod' == $env  && !self::inConsole()),
             ],
         ];
     }

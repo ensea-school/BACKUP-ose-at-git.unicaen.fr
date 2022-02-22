@@ -57,7 +57,7 @@ trait ObligatoireSelonSeuilHeuresTrait
     {
         $obligatoire = $this->getObligatoire();
 
-        if ($obligatoire && $this->getSeuilHeures() && !$this->isSeuilHeuresDepasse($totalHeuresReellesIntervenant)) {
+        if ($obligatoire && $this->getSeuilHetd() && !$this->isSeuilHeuresDepasse($totalHeuresReellesIntervenant)) {
             $obligatoire = false;
         }
 
@@ -78,7 +78,7 @@ trait ObligatoireSelonSeuilHeuresTrait
     public function getObligatoireToString($totalHeuresReellesIntervenant)
     {
         if ($this->isObligatoire($totalHeuresReellesIntervenant)) {
-            $seuilHETD   = $this->getSeuilHeures();
+            $seuilHETD   = $this->getSeuilHetd();
             $obligatoire = "Obligatoire";
             $obligatoire .= $this->isSeuilHeuresDepasse($totalHeuresReellesIntervenant) ?
                 " car le <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total d'heures réelles</abbr> > {$seuilHETD}h" :
@@ -101,10 +101,10 @@ trait ObligatoireSelonSeuilHeuresTrait
      */
     public function isSeuilHeuresDepasse($totalHETDIntervenant)
     {
-        if (!$this->getSeuilHeures()) {
+        if (!$this->getSeuilHetd()) {
             return false;
         }
 
-        return (float)$this->getSeuilHeures() < (float)$totalHETDIntervenant;
+        return (float)$this->getSeuilHetd() < (float)$totalHETDIntervenant;
     }
 }

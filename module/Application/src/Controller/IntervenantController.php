@@ -323,6 +323,11 @@ class  IntervenantController extends AbstractController
         $canEdit = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION);
         $form->setReadOnly(!$canEdit);
         $form->bind($intervenant);
+        //Edition avancée pour éditer le code et la source de l'intervenant
+        $canEditAvancee = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION_AVANCEE);
+        if ($canEditAvancee) {
+            $form->activerEditionAvancee();
+        }
 
         $ancienStatut = $intervenant->getStatut();
 

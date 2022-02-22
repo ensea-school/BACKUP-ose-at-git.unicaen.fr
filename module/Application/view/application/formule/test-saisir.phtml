@@ -567,25 +567,31 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 if (this.id) url += '/' + this.id;
 
                 that.saving = true;
-                $.post(url, {"data": JSON.stringify(that.getData())}, function (data)
-                {
-                    that.element.find('.errors').html('');
-                    that.setData(data.data);
-                    if (data.errors) {
-                        for (e in data.errors) {
-                            that.affErreur(data.errors[e]);
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {data: JSON.stringify(that.getData())},
+                    success: function (data) {
+                        that.element.find('.errors').html('');
+                        console.log(data.data);
+                        that.setData(data.data);
+                        if (data.errors) {
+                            for (e in data.errors) {
+                                that.affErreur(data.errors[e]);
+                            }
+                        } else {
+                            if (autoReload && lastId == null) {
+                                window.location.href = '<?= $this->url('formule-calcul/test/saisir') ?>/' + that.id;
+                            }
                         }
-                    } else {
-                        if (autoReload && lastId == null) {
-                            window.location.href = '<?= $this->url('formule-calcul/test/saisir') ?>/' + that.id;
-                        }
+                        that.saving = false;
+                    },
+                    error: function (jqXHR) {
+                        alertFlash(jqXHR.responseText, 'error', 5000);
+                        console.log(jqXHR);
+                        that.saving = false;
                     }
-                    that.saving = false;
-                }).fail(function (jqXHR)
-                {
-                    alertFlash(jqXHR.responseText, 'danger', 5000);
-                    console.log(jqXHR);
-                    that.saving = false;
                 });
 
                 return result;

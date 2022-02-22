@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'ANNEE_FIN_ID'          => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'CHANGEMENT_RIB'        => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 14,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'DUREE_VIE'             => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 15,
+            'position'    => 16,
             'commentaire' => 'Durée de vie de la pièce jointe',
         ],
         'FC'                    => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'     => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'        => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'  => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'     => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID' => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'    => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'ID'                    => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE_HNP'       => [
@@ -174,7 +174,7 @@ return [
             'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 16,
+            'position'    => 17,
             'commentaire' => 'Piece jointe obligatoire même si les heures sont non payables',
         ],
         'SEUIL_HETD'            => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'STATUT_ID'             => [
@@ -198,7 +198,19 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 3,
+            'commentaire' => NULL,
+        ],
+        'TYPE_HEURE_HETD'        => [
+            'name'        => 'TYPE_HEURE_HETD',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID'  => [

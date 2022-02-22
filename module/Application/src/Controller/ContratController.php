@@ -312,17 +312,21 @@ class ContratController extends AbstractController
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE)) {
             throw new UnAuthorizedException('Vous n\'avez pas les droits requis pour saisir la date de retour du contrat signé.');
         }
+        $canSaisieDateSigne = true;
+        if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0) {
+            $form->bindRequestSave($contrat, $this->getRequest(), function () use ($contrat, $contratToString) {
 
-        $form->bindRequestSave($contrat, $this->getRequest(), function () use ($contrat, $contratToString) {
+                $this->getServiceContrat()->save($contrat);
+                $this->updateTableauxBord($contrat->getIntervenant());
+                $this->flashMessenger()->addSuccessMessage(
+                    "Saisie du retour $contratToString signé enregistrée avec succès."
+                );
+            });
+        } else {
+            $canSaisieDateSigne = false;
+        }
 
-            $this->getServiceContrat()->save($contrat);
-            $this->updateTableauxBord($contrat->getIntervenant());
-            $this->flashMessenger()->addSuccessMessage(
-                "Saisie du retour $contratToString signé enregistrée avec succès."
-            );
-        });
-
-        return compact('form', 'done', 'title');
+        return compact('form', 'done', 'title', 'canSaisieDateSigne');
     }
 
 

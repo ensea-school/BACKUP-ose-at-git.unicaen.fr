@@ -269,7 +269,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 0,
-            "ECART_MOIS_PAIEMENT" => -1,
         ],
         [
             "CODE"                => "P02",
@@ -279,7 +278,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 1,
-            "ECART_MOIS_PAIEMENT" => 0,
         ],
         [
             "CODE"                => "P03",
@@ -289,7 +287,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 2,
-            "ECART_MOIS_PAIEMENT" => 1,
         ],
         [
             "CODE"                => "P04",
@@ -299,7 +296,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 3,
-            "ECART_MOIS_PAIEMENT" => 2,
         ],
         [
             "CODE"                => "P05",
@@ -309,7 +305,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 4,
-            "ECART_MOIS_PAIEMENT" => 3,
         ],
         [
             "CODE"                => "P06",
@@ -319,7 +314,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 5,
-            "ECART_MOIS_PAIEMENT" => 4,
         ],
         [
             "CODE"                => "P07",
@@ -329,7 +323,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 6,
-            "ECART_MOIS_PAIEMENT" => 5,
         ],
         [
             "CODE"                => "P08",
@@ -339,7 +332,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 7,
-            "ECART_MOIS_PAIEMENT" => 6,
         ],
         [
             "CODE"                => "P09",
@@ -349,7 +341,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 8,
-            "ECART_MOIS_PAIEMENT" => 7,
         ],
         [
             "CODE"                => "P10",
@@ -359,7 +350,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 9,
-            "ECART_MOIS_PAIEMENT" => 8,
         ],
         [
             "CODE"                => "P11",
@@ -369,7 +359,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 10,
-            "ECART_MOIS_PAIEMENT" => 9,
         ],
         [
             "CODE"                => "P12",
@@ -379,7 +368,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 11,
-            "ECART_MOIS_PAIEMENT" => 10,
         ],
         [
             "CODE"                => "P13",
@@ -389,7 +377,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 12,
-            "ECART_MOIS_PAIEMENT" => 11,
         ],
         [
             "CODE"                => "P14",
@@ -399,7 +386,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 13,
-            "ECART_MOIS_PAIEMENT" => 12,
         ],
         [
             "CODE"                => "P15",
@@ -409,7 +395,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 14,
-            "ECART_MOIS_PAIEMENT" => 13,
         ],
         [
             "CODE"                => "P16",
@@ -419,7 +404,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 15,
-            "ECART_MOIS_PAIEMENT" => 14,
         ],
         [
             "CODE"                => "PTD",
@@ -429,7 +413,6 @@ return [
             "ENSEIGNEMENT"        => false,
             "PAIEMENT"            => true,
             "ECART_MOIS"          => 16,
-            "ECART_MOIS_PAIEMENT" => 15,
         ],
         [
             "CODE"                => "S1",
@@ -439,7 +422,6 @@ return [
             "ENSEIGNEMENT"        => true,
             "PAIEMENT"            => false,
             "ECART_MOIS"          => 0,
-            "ECART_MOIS_PAIEMENT" => -1,
         ],
         [
             "CODE"                => "S2",
@@ -449,7 +431,6 @@ return [
             "ENSEIGNEMENT"        => true,
             "PAIEMENT"            => false,
             "ECART_MOIS"          => 5,
-            "ECART_MOIS_PAIEMENT" => 4,
         ],
     ],
 

@@ -173,28 +173,26 @@ class ModeleContratService extends AbstractEntityService
     /**
      * @return string
      */
-    public
-    function getModeleGeneriqueFile(): string
+    public function getModeleGeneriqueFile(): string
     {
         return getcwd() . '/data/modele_contrat.odt';
     }
 
 
 
-    private
-    function generateData(ModeleContrat $modele, Contrat $contrat)
+    private function generateData(ModeleContrat $modele, Contrat $contrat)
     {
         $connection = $this->getEntityManager()->getConnection();
 
         $params = ['contrat' => $contrat->getId()];
 
-        $mainData = $connection->fetchAssoc('SELECT * FROM V_CONTRAT_MAIN WHERE CONTRAT_ID = :contrat', $params);
+        $mainData = $connection->fetchAssociative('SELECT * FROM V_CONTRAT_MAIN WHERE CONTRAT_ID = :contrat', $params);
         if ($modele->getRequete()) {
-            $mainDataPerso = $connection->fetchAssoc($modele->getRequete(), $params);
+            $mainDataPerso = $connection->fetchAssociative($modele->getRequete(), $params);
             foreach ($mainDataPerso as $key => $value) {
-                if ($value) {
-                    $mainData[$key] = $value;
-                }
+                // if ($value) {
+                $mainData[$key] = $value;
+                // }
             }
         }
 
@@ -237,8 +235,7 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    private
-    function getRank(ModeleContrat $modele, Contrat $contrat)
+    private function getRank(ModeleContrat $modele, Contrat $contrat)
     {
         $rank = 100;
 
@@ -268,8 +265,7 @@ class ModeleContratService extends AbstractEntityService
      *
      * @return string
      */
-    public
-    function getAlias()
+    public function getAlias()
     {
         return 'modele_contrat';
     }
@@ -279,8 +275,7 @@ class ModeleContratService extends AbstractEntityService
     /**
      * @return array
      */
-    public
-    function getConfig()
+    public function getConfig()
     {
         return $this->config;
     }
@@ -292,8 +287,7 @@ class ModeleContratService extends AbstractEntityService
      *
      * @return ModeleContratService
      */
-    public
-    function setConfig(array $config): ModeleContratService
+    public function setConfig(array $config): ModeleContratService
     {
         $this->config = $config;
 

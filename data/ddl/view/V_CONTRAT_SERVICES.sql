@@ -28,18 +28,18 @@ servicesAutres AS (
 		FROM (
 			SELECT DISTINCT
 			  c.id                                             						contrat_id,
-			  ti.libelle                                                            type_intervention_libelle
-			FROM
+			  ti.libelle || ' (' || SUM(vh.heures) || ' h)'                           type_intervention_libelle
+   			FROM
 			            contrat                  c
 			       JOIN volume_horaire          vh ON vh.contrat_id = c.id AND vh.histo_destruction IS NULL
 			       JOIN type_intervention       ti ON ti.id = vh.type_intervention_id
 			WHERE ti.code NOT IN ('CM','TD','TP')
+			GROUP BY
+			c.id, ti.libelle
 		) t
 		GROUP by
 		t.contrat_id
-
-
-)
+		)
 SELECT
 
   s.contrat_id,

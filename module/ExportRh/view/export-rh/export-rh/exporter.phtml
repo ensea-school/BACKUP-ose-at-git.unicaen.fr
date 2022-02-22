@@ -27,16 +27,14 @@ if ($priseEnCharge) {
         <div class="messenger alert alert-warning">
             L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires (hors <?= implode(', ', $excludeStatut) ?> )
         </div>
-    <?php elseif ($haveContratOse === false): ?>
+    <?php elseif ($canExport === false): ?>
         <div class="messenger alert alert-warning">
             L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>) n'a pas
-            encore retourné son
-            contrat. Vous pourrez le renouveler ou le prendre en charge dans <?= $nameConnecteur; ?> une fois le
-            contrat retourné et daté.
+            encore franchi l'étape de la feuille de route permettant la PEC ou la REN. Il doit avoir franchi l'étape "<?= $etapeFranchissementLibelle ?>"
         </div>
 
 
-    <?php elseif ($haveContratOse === true): ?>
+    <?php elseif ($canExport === true): ?>
 
         <div class="well">
             <?php if (empty($intervenantRh)): ?>

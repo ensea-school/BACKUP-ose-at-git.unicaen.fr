@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 17.1](#ose-171-07122021)
+[OSE 17.2](#ose-172-05012022)
 
 
 
@@ -33,6 +33,10 @@ Objectif : Plafonds personnalisables
   * certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
 * Refonte de l'interface d'administration des statuts
   * Les paramétrages de statuts sont maintenant annualisés  
+* Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un intervenant vers le SIRH  
+* Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
+  intervenant
+* Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
 
 ## Corrections de bugs
 
@@ -40,6 +44,7 @@ Objectif : Plafonds personnalisables
 * Adaptation de la commande update-employeur pour assurer la compatibilité avec les différentes versions d'oracle
 * Correction sur un problème de route dans l'écran Engagements & Liquidation (#38763)
 * Export CSV des agréments : inversion de colonnes (#41513)
+* Correction sur la suppression de service lorsque la clôture de service a été historisé (#42046)
 
 ## Notes de mise à jour
 

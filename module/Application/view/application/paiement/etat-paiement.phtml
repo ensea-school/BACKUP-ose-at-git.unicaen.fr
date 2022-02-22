@@ -63,6 +63,9 @@ $this->headTitle()->append($title);
             if ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
                 echo $this->formRow($rechercheForm->get('exporter-csv-etat')) . ' ';
             }
+            if ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
+                echo $this->formRow($rechercheForm->get('exporter-csv-imputation')) . ' ';
+            }
             //Bouton export PDF mise en paiement
             if ($recherche->getEtat() === MiseEnPaiement::A_METTRE_EN_PAIEMENT && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF))) {
                 echo $this->formRow($rechercheForm->get('exporter-pdf')) . ' ';

@@ -150,7 +150,12 @@ $(function ()
 
 });
 
+$(document).ajaxError(function (event, request, settings) {
+    if (!(typeof settings.error === 'function')) {
+        alertFlash(request.responseText, 'error', 3000);
+    }
 
+});
 
 function Url(route, data)
 {

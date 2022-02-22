@@ -52,6 +52,7 @@ class IntervenantAssertion extends AbstractAssertion
                     case Privileges::CLOTURE_REOUVERTURE:
                         return $this->assertCloture($entity);
                     case Privileges::INTERVENANT_EDITION:
+                    case Privileges::INTERVENANT_EDITION_AVANCEE:
                         return $this->assertEdition($entity);
                 }
             break;
@@ -102,7 +103,7 @@ class IntervenantAssertion extends AbstractAssertion
         if ($role instanceof Role && $role->getStructure() && $intervenant->getStructure()) {
             return $role->getStructure() == $intervenant->getStructure();
         }
-
+        
         return true;
     }
 

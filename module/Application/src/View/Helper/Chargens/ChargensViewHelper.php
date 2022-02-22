@@ -67,11 +67,11 @@ class ChargensViewHelper extends AbstractViewHelper
             )
             . $t('div', ['id' => 'chargens-attente', 'class' => 'alert alert-info', 'style' => 'display:none'])->html(
                 'Construction du diagramme en cours. Veuillez patienter... '
-                .$t('img', ['src' => $this->getView()->basePath() . '/images/wait.gif', 'alt' => 'Attente...'])->openClose()
+                . $t('img', ['src' => $this->getView()->basePath() . '/images/wait.gif', 'alt' => 'Attente...'])->openClose()
 
             )
             . $t('div', [
-                'id'    => uniqid('chargens-'),
+                'id'    => (string)uniqid('chargens-'),
                 'class' => 'dessin',
             ])->text()
         );

@@ -15,7 +15,7 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
     const A_METTRE_EN_PAIEMENT = 'a-mettre-en-paiement';
     const MIS_EN_PAIEMENT      = 'mis-en-paiement';
-
+    
     /**
      * @var \DateTime
      */

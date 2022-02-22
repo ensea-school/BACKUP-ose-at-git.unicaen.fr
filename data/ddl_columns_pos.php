@@ -1073,7 +1073,6 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'ECART_MOIS',
-        'ECART_MOIS_PAIEMENT',
     ],
     'PIECE_JOINTE'                   => [
         'ID',

@@ -54,6 +54,14 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'type-heure-hetd',
+            'options' => [
+                'label' => 'Calculer les seuils en utilisant les heures  en équivalent HETD',
+            ],
+            'type'    => 'Checkbox',
+        ]);
+
+        $this->add([
             'name'    => 'changement-rib',
             'options' => [
                 'label' => 'Uniquement en cas de changement de RIB',
@@ -217,6 +225,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'changement-rib'  => [
                 'required' => true,
             ],
+            'type-heure-hetd' => [
+                'required' => true,
+            ],
             'fc'              => [
                 'required' => true,
             ],
@@ -256,10 +267,12 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        //$object->setPremierRecrutement($data['premier-recrutement']);
+
         $object->setChangementRIB($data['changement-rib']);
         $object->setObligatoire($data['typePieceJointe']);
         $object->setSeuilHetd((empty($data['seuil-hetd']) ? null : $data['seuil-hetd']));
+        $object->setTypeHeureHetd($data['type-heure-hetd']);
+
         if (array_key_exists('annee-debut', $data)) {
             $object->setAnneeDebut($this->getServiceAnnee()->get($data['annee-debut']));
         }
@@ -287,9 +300,8 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
         $data = [
             'id'              => $object->getId(),
             'typePieceJointe' => $object->getObligatoire(),
-            //'premier-recrutement' => $object->getPremierRecrutement(),
-            'seuil-hetd'      => $object->getSeuilHeures(),
-            //'premier-recrutement' => $object->getPremierRecrutement(),
+            'seuil-hetd'      => $object->getSeuilHetd(),
+            'type-heure-hetd' => $object->getTypeHeureHetd(),
             'changement-rib'  => $object->getChangementRIB(),
             'fc'              => $object->getFC(),
             'duree-vie'       => $object->getDureeVie(),

@@ -289,7 +289,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 
         $attrs = [
             'class' => ['type-heures', 'col-md-' . $colSpan],
-            'id'    => $typeHeures->getId(),
+            'id'    => (string)$typeHeures->getId(),
             'style' => ['margin-bottom:.5em'],
         ];
         if ($notAllowed) $attrs['class'][] = 'not-allowed';
@@ -297,7 +297,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 
         $attrs = [
             'class'       => ['table', 'table-condensed', 'table-extra-condensed', 'table-bordered', 'mise-en-paiement-liste'],
-            'id'          => self::$miseEnPaiementListeIdSequence++,
+            'id'          => (string)self::$miseEnPaiementListeIdSequence++,
             'data-params' => json_encode($params),
         ];
         if ($notAllowed && !$saisieTerminee) $attrs['class'][] = 'bg-warning';

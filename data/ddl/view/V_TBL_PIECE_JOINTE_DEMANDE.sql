@@ -17,6 +17,19 @@ WITH i_h AS (
     /*@INTERVENANT_ID=s.intervenant_id*/
   GROUP BY
     s.intervenant_id
+),
+hetd AS (
+	SELECT
+		intervenant_id,
+		SUM(total) AS total_hetd
+	from
+		formule_resultat   fr
+	JOIN type_volume_horaire tvh ON tvh.id = fr.type_volume_horaire_id
+	JOIN etat_volume_horaire evh ON evh.id = fr.etat_volume_horaire_id
+		where
+		tvh.code = 'PREVU'
+	GROUP BY
+		intervenant_id
 )
 SELECT
   i.annee_id                      annee_id,
@@ -24,7 +37,8 @@ SELECT
   i.id                            intervenant_id,
   tpj.id                          type_piece_jointe_id,
   MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
-  tpjs.obligatoire obligatoire
+  tpjs.obligatoire obligatoire,
+  MAX(COALESCE(hetd.total_hetd, 0))    heures_pour_seuil_hetd
 FROM
             intervenant                 i
 
@@ -39,14 +53,17 @@ FROM
                                          AND tpj.histo_destruction IS NULL
 
   LEFT JOIN                           i_h ON i_h.intervenant_id = i.id
+  LEFT JOIN 						  hetd ON hetd.intervenant_id = i.id
 WHERE
   -- Gestion de l'historique
   i.histo_destruction IS NULL
   /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
 
-  -- Seuil HETD ou PJ obligatoire meme avec des heures non payables
-  AND (COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1) OR (COALESCE(i_h.heures_non_payables,0) > 0 AND tpjs.obligatoire_hnp = 1 ))
+  -- Seuil heure soit en HETD soit en heure ou PJ obligatoire meme avec des heures non payables
+  AND ((COALESCE(tpjs.type_heure_hetd,0) = 0 AND COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
+        OR (tpjs.type_heure_hetd = 1  AND COALESCE(hetd.total_hetd,0) > COALESCE(tpjs.seuil_hetd,-1))
+        OR (COALESCE(i_h.heures_non_payables,0) > 0 AND tpjs.obligatoire_hnp = 1 ))
 
 
   -- Le RIB n'est demandé QUE s'il est différent!!

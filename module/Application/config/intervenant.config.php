@@ -574,6 +574,7 @@ return [
                             Privileges::CLOTURE_CLOTURE,
                             Privileges::CLOTURE_REOUVERTURE,
                             Privileges::INTERVENANT_EDITION,
+                            Privileges::INTERVENANT_EDITION_AVANCEE,
                         ],
                         'resources'  => ['Validation', 'Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,

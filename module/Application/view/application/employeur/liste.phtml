@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th style="width:40%">Libellé</th>
-        <th style="width:20%">Siren</th>
+        <th style="width:20%">Siret</th>
 
     </tr>
     </thead>
@@ -10,9 +10,10 @@
     <?php foreach ($employeurs
 
     as $employeur): ?>
+
     <tr>
         <td><?= $employeur['label']; ?></td>
-        <td><?= $employeur['siren']; ?></td>
+        <td><?= $employeur['siret']; ?></td>
     </tr>
     </tbody>
     <?php endforeach; ?>

@@ -481,6 +481,70 @@ class PaiementController extends AbstractController
 
 
 
+    public function imputationSihamAction()
+    {
+        $title = 'Export des données pour le chargement en masse des imputations budgétaires dans SIHAM';
+        $this->initFilters();
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $recherche = new MiseEnPaiementRecherche;
+        $recherche->setEtat(MiseEnPaiement::MIS_EN_PAIEMENT); // données à mettre en paiement uniquement
+        $recherche->setAnnee($this->getServiceContext()->getAnnee());
+        $recherche->setTypeIntervenant($this->context()->typeIntervenantFromPost('type-intervenant'));
+
+        $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
+        $rechercheForm->bind($recherche);
+
+
+        $qb = $this->getServicePeriode()->finderByMiseEnPaiement();
+        $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
+        $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
+        $periodes = $this->getServicePeriode()->getList($qb);
+
+        $rechercheForm->populatePeriodes($periodes);
+        if (count($periodes) == 1) {
+            $recherche->setPeriode(current($periodes));
+            $rechercheForm->get('periode')->setValue($recherche->getPeriode()->getId());
+        } else {
+            $recherche->setPeriode($this->context()->periodeFromPost());
+        }
+
+        $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement(null, $recherche->getPeriode());
+        $this->getServiceIntervenant()->finderByAnnee($recherche->getAnnee(), $qb);
+        $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
+        $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
+        $intervenants = $this->getServiceIntervenant()->getList($qb);
+        $rechercheForm->populateIntervenants($intervenants);
+        $noData = count($intervenants) == 0;
+
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $rechercheForm->setData($request->getPost());
+            $rechercheForm->isValid();
+        }
+
+        $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'imputation-budgetaire']);
+
+
+        if ($this->params()->fromPost('exporter-csv-imputation') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
+            $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $recherche->getFilters());
+            $csvModel->setFilename(str_replace(' ', '_', 'imputation_siham_' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '_' . strtolower(($recherche->getTypeIntervenant()) ? $recherche->getTypeIntervenant()->getLibelle() : 'vactaire_et_permanent') . '.csv'));
+
+            return $csvModel;
+        } else {
+            $etatPaiement = null;
+            if ($recherche->getIntervenants()->count() > 0) {
+                $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement($recherche);
+            }
+
+            return compact('recherche', 'rechercheForm', 'etatPaiement', 'noData');
+        }
+    }
+
+
+
     public function miseEnPaiementAction()
     {
         $this->initFilters();

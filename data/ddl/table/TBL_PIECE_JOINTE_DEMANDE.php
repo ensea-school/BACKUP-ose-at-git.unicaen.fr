@@ -9,7 +9,7 @@ return [
     'commentaire' => 'Pièces justificatives (demandes)',
     'sequence'    => 'TBL_PIECE_JOINTE_DEMAND_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'             => [
+        'ANNEE_ID'               => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CODE_INTERVENANT'     => [
+        'CODE_INTERVENANT'       => [
             'name'        => 'CODE_INTERVENANT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -33,7 +33,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'HEURES_POUR_SEUIL'    => [
+        'HEURES_POUR_SEUIL'      => [
             'name'        => 'HEURES_POUR_SEUIL',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -45,7 +45,19 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'ID'                   => [
+        'HEURES_POUR_SEUIL_HETD' => [
+            'name'        => 'HEURES_POUR_SEUIL_HETD',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
+        'ID'                     => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +69,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'       => [
+        'INTERVENANT_ID'         => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +81,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'OBLIGATOIRE'          => [
+        'OBLIGATOIRE'            => [
             'name'        => 'OBLIGATOIRE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +93,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'TYPE_PIECE_JOINTE_ID' => [
+        'TYPE_PIECE_JOINTE_ID'   => [
             'name'        => 'TYPE_PIECE_JOINTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -91,18 +103,6 @@ return [
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 5,
-            'commentaire' => NULL,
-        ],
-        'HEURES_POUR_SEUIL_HETD'    => [
-            'name'        => 'HEURES_POUR_SEUIL_HETD',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 8,
             'commentaire' => NULL,
         ],
     ],

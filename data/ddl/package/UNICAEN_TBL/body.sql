@@ -1565,7 +1565,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             s.intervenant_id,
             SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NULL THEN vh.heures ELSE 0 END) heures,
             SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NOT NULL THEN vh.heures ELSE 0 END) heures_non_payables,
-            sum(ep.taux_fc) fc
+            SUM(ep.taux_fc) fc
           FROM
                  service               s
             JOIN type_volume_horaire tvh ON tvh.code = ''PREVU''
@@ -1580,17 +1580,17 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             s.intervenant_id
         ),
         hetd AS (
-            SELECT
-                intervenant_id,
-                SUM(total) AS total_hetd
-            from
-                formule_resultat   fr
-            JOIN type_volume_horaire tvh ON tvh.id = fr.type_volume_horaire_id
-            JOIN etat_volume_horaire evh ON evh.id = fr.etat_volume_horaire_id
-                where
-                tvh.code = ''PREVU''
-            GROUP BY
-                intervenant_id
+          SELECT
+            intervenant_id,
+            SUM(total) AS total_hetd
+          FROM
+            formule_resultat   fr
+          JOIN type_volume_horaire tvh ON tvh.id = fr.type_volume_horaire_id
+          JOIN etat_volume_horaire evh ON evh.id = fr.etat_volume_horaire_id
+            WHERE
+            tvh.code = ''PREVU''
+          GROUP BY
+            intervenant_id
         )
         SELECT
           i.annee_id                      annee_id,
@@ -1614,7 +1614,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                                                  AND tpj.histo_destruction IS NULL
 
           LEFT JOIN                           i_h ON i_h.intervenant_id = i.id
-          LEFT JOIN 						  hetd ON hetd.intervenant_id = i.id
+          LEFT JOIN               hetd ON hetd.intervenant_id = i.id
         WHERE
           -- Gestion de l''historique
           i.histo_destruction IS NULL
@@ -1622,14 +1622,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           /*@ANNEE_ID=i.annee_id*/
 
           -- Seuil heure soit en HETD soit en heure ou PJ obligatoire meme avec des heures non payables
-            AND ((COALESCE(tpjs.type_heure_hetd,0) = 0 AND COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
+          AND ((COALESCE(tpjs.type_heure_hetd,0) = 0 AND COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
                 OR (tpjs.type_heure_hetd = 1  AND COALESCE(hetd.total_hetd,0) > COALESCE(tpjs.seuil_hetd,-1))
                 OR (COALESCE(i_h.heures_non_payables,0) > 0 AND tpjs.obligatoire_hnp = 1 ))
+
 
           -- Le RIB n''est demandé QUE s''il est différent!!
           AND CASE
                 WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
-                ELSE CASE WHEN replace(i.bic, '' '', '''') = replace(d.bic, '' '', '''') AND replace(i.iban, '' '', '''') = replace(d.iban, '' '', '''') THEN 0 ELSE 1 END
+                ELSE CASE WHEN REPLACE(i.bic, '' '', '''') = REPLACE(d.bic, '' '', '''') AND REPLACE(i.iban, '' '', '''') = REPLACE(d.iban, '' '', '''') THEN 0 ELSE 1 END
               END = 1
 
           -- Filtre FC
@@ -1644,25 +1645,26 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
     OPEN c FOR '
     SELECT
       CASE WHEN
-            t.ANNEE_ID                         = v.ANNEE_ID
-        AND t.CODE_INTERVENANT                 = v.CODE_INTERVENANT
-        AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
-        AND t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
-        AND t.HEURES_POUR_SEUIL                = v.HEURES_POUR_SEUIL
-        AND COALESCE(t.OBLIGATOIRE,0)          = COALESCE(v.OBLIGATOIRE,0)
-        AND t.HEURES_POUR_SEUIL_HETD           = v.HEURES_POUR_SEUIL_HETD
+            t.ANNEE_ID                           = v.ANNEE_ID
+        AND t.CODE_INTERVENANT                   = v.CODE_INTERVENANT
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.TYPE_PIECE_JOINTE_ID               = v.TYPE_PIECE_JOINTE_ID
+        AND t.HEURES_POUR_SEUIL                  = v.HEURES_POUR_SEUIL
+        AND COALESCE(t.OBLIGATOIRE,0)            = COALESCE(v.OBLIGATOIRE,0)
+        AND t.HEURES_POUR_SEUIL_HETD             = v.HEURES_POUR_SEUIL_HETD
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.CODE_INTERVENANT,
       v.INTERVENANT_ID,
       v.TYPE_PIECE_JOINTE_ID,
       v.HEURES_POUR_SEUIL,
-      v.OBLIGATOIRE
+      v.OBLIGATOIRE,
+      v.HEURES_POUR_SEUIL_HETD
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PIECE_JOINTE_DEMANDE t ON
-            t.INTERVENANT_ID                   = v.INTERVENANT_ID
-        AND t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
+            t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.TYPE_PIECE_JOINTE_ID               = v.TYPE_PIECE_JOINTE_ID
     WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;

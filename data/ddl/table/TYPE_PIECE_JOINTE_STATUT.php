@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'OBLIGATOIRE_HNP'       => [
@@ -198,10 +198,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
-        'TYPE_HEURE_HETD'        => [
+        'TYPE_HEURE_HETD'       => [
             'name'        => 'TYPE_HEURE_HETD',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -210,7 +210,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 18,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'TYPE_PIECE_JOINTE_ID'  => [

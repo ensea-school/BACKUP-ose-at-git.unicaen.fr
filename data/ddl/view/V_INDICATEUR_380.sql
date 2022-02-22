@@ -1,3 +1,4 @@
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_380 AS
 SELECT
 	i.id   intervenant_id,
 	i.structure_id structure_id

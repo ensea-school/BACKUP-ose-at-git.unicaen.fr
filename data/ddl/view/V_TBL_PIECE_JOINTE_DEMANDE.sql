@@ -4,7 +4,7 @@ WITH i_h AS (
     s.intervenant_id,
     SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NULL THEN vh.heures ELSE 0 END) heures,
     SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NOT NULL THEN vh.heures ELSE 0 END) heures_non_payables,
-    sum(ep.taux_fc) fc
+    SUM(ep.taux_fc) fc
   FROM
          service               s
     JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
@@ -19,17 +19,17 @@ WITH i_h AS (
     s.intervenant_id
 ),
 hetd AS (
-	SELECT
-		intervenant_id,
-		SUM(total) AS total_hetd
-	from
-		formule_resultat   fr
-	JOIN type_volume_horaire tvh ON tvh.id = fr.type_volume_horaire_id
-	JOIN etat_volume_horaire evh ON evh.id = fr.etat_volume_horaire_id
-		where
-		tvh.code = 'PREVU'
-	GROUP BY
-		intervenant_id
+  SELECT
+    intervenant_id,
+    SUM(total) AS total_hetd
+  FROM
+    formule_resultat   fr
+  JOIN type_volume_horaire tvh ON tvh.id = fr.type_volume_horaire_id
+  JOIN etat_volume_horaire evh ON evh.id = fr.etat_volume_horaire_id
+    WHERE
+    tvh.code = 'PREVU'
+  GROUP BY
+    intervenant_id
 )
 SELECT
   i.annee_id                      annee_id,
@@ -53,7 +53,7 @@ FROM
                                          AND tpj.histo_destruction IS NULL
 
   LEFT JOIN                           i_h ON i_h.intervenant_id = i.id
-  LEFT JOIN 						  hetd ON hetd.intervenant_id = i.id
+  LEFT JOIN               hetd ON hetd.intervenant_id = i.id
 WHERE
   -- Gestion de l'historique
   i.histo_destruction IS NULL
@@ -69,7 +69,7 @@ WHERE
   -- Le RIB n'est demandé QUE s'il est différent!!
   AND CASE
         WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
-        ELSE CASE WHEN replace(i.bic, ' ', '') = replace(d.bic, ' ', '') AND replace(i.iban, ' ', '') = replace(d.iban, ' ', '') THEN 0 ELSE 1 END
+        ELSE CASE WHEN REPLACE(i.bic, ' ', '') = REPLACE(d.bic, ' ', '') AND REPLACE(i.iban, ' ', '') = REPLACE(d.iban, ' ', '') THEN 0 ELSE 1 END
       END = 1
 
   -- Filtre FC

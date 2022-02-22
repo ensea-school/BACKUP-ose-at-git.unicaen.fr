@@ -1546,6 +1546,7 @@ return [
         'TYPE_PIECE_JOINTE_ID',
         'HEURES_POUR_SEUIL',
         'OBLIGATOIRE',
+        'HEURES_POUR_SEUIL_HETD',
     ],
     'TBL_PIECE_JOINTE_FOURNIE'       => [
         'ID',
@@ -1827,6 +1828,7 @@ return [
         'ID',
         'TYPE_PIECE_JOINTE_ID',
         'OBLIGATOIRE',
+        'TYPE_HEURE_HETD',
         'SEUIL_HETD',
         'HISTO_CREATION',
         'HISTO_CREATEUR_ID',

@@ -1,18 +1,18 @@
 CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
-  SELECT
-             'P'         			   Type,
-             null        			   uo,
-             intervenant_matricule 	   matricule,
-             date_debut				   date_debut,
-             date_fin    			   date_fin,
+SELECT
+             'P'                  TYPE,
+             NULL                 uo,
+             intervenant_matricule      matricule,
+             date_debut           date_debut,
+             date_fin             date_fin,
              CASE WHEN rem_fc_d714 > 0 THEN '1542' ELSE
-             	CASE WHEN type_intervenant_code = 'P' THEN '0204' ELSE '2251' END
-             END 					   code_indemnite,
-             eotp_code      		   operation,
-             centre_cout_code 		   centre_cout,
+               CASE WHEN type_intervenant_code = 'P' THEN '0204' ELSE '2251' END
+             END              code_indemnite,
+             eotp_code             operation,
+             centre_cout_code        centre_cout,
              domaine_fonctionnel_code  destination,
-             NULL 					   fonds,
-             NULL					   poste_reservation_credit,
+             NULL              fonds,
+             NULL             poste_reservation_credit,
              to_char((CASE WHEN pourc_ecart >= 0 THEN
                  CASE WHEN RANK() OVER (PARTITION BY periode_id, intervenant_id, etat ORDER BY CASE WHEN (pourc_ecart >= 0 AND pourc_diff >= 0) OR (pourc_ecart < 0 AND pourc_diff < 0) THEN pourc_diff ELSE -1 END DESC) <= (ABS(pourc_ecart) / 0.001) THEN hetd_pourc + (pourc_ecart / ABS(pourc_ecart) * 0.001) ELSE hetd_pourc END
                   ELSE
@@ -20,11 +20,11 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
                  END)) * 100         pourcentage,
            --  pourc_ecart,
            --  pourc_diff,
-             NULL 					nombres_heures,
+             NULL           nombres_heures,
              NULL FLMODI,
              NULL NUMORD,
              NULL NUMGRP,
-			 annee_id,
+       annee_id,
              periode_id,
              intervenant_id,
              centre_cout_id,
@@ -92,7 +92,7 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
                                 cc.id                                                               centre_cout_id,
                                 df.id                                                               domaine_fonctionnel_id,
                                 ti.id                                                               type_intervenant_id,
-                                ti.code																type_intervenant_code,
+                                ti.code                                type_intervenant_code,
                                 CASE
                                       WHEN mep.date_mise_en_paiement IS NULL THEN 'a-mettre-en-paiement'
                                       ELSE 'mis-en-paiement'
@@ -125,7 +125,7 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
                                 LEFT JOIN centre_cout             cc2 ON  cc.parent_id = cc2.id
                                 JOIN intervenant               i ON   i.id = mis.intervenant_id      AND i.histo_destruction IS NULL
                                 JOIN annee                     a ON   a.id = i.annee_id
-                                JOIN statut_intervenant       si ON  si.id = i.statut_id
+                                JOIN statut                   si ON  si.id = i.statut_id
                                 JOIN type_intervenant         ti ON  ti.id = si.type_intervenant_id
                            LEFT JOIN validation                v ON   v.id = mep.validation_id       AND v.histo_destruction IS NULL
                            LEFT JOIN domaine_fonctionnel      df ON  df.id = mis.domaine_fonctionnel_id
@@ -192,10 +192,8 @@ CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
            )
                dep4
 
-	ORDER BY
+  ORDER BY
                annee_id,
                type_intervenant_id,
                periode_id,
                intervenant_nom
-
-

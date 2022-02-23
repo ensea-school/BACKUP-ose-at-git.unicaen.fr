@@ -21,17 +21,22 @@ $libelle = $this->translate('J\'ai terminé la saisie de la totalité de mon ser
                 if (!confirm("<?= $this->confirm ?>")) {
                     return;
                 }
-                $.post(url, {cloturer: 1}, function() {
-                    window.location.reload();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {cloturer: 1},
+                    success: function () {
+                        window.location.reload();
+                    },
                 });
             });
         });
     </script>
 
 
-<!----------------------------------------------------------------------------->
-<!--                       Clôture existante éventuelle                      -->
-<!----------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------->
+    <!--                       Clôture existante éventuelle                      -->
+    <!----------------------------------------------------------------------------->
 <?php if ($this->validation && $this->validation->getHistoModification() ): ?>
 <?php if ($this->isAllowed($this->validation, 'read')): ?>
 

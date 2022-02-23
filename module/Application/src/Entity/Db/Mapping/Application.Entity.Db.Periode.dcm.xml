@@ -20,7 +20,6 @@
     <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
     <field name="paiement" type="boolean" column="PAIEMENT" nullable="true"/>
     <field name="ecartMois" type="integer" column="ECART_MOIS" nullable="false"/>
-    <field name="ecartMoisPaiement" type="integer" column="ECART_MOIS_PAIEMENT" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

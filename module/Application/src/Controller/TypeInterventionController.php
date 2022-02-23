@@ -179,7 +179,7 @@ class TypeInterventionController extends AbstractController
             }
         }
 
-        return new JsonModel(['msg' => 'Tri des champs effectué']);
+        return new MessengerViewModel();
     }
 
 

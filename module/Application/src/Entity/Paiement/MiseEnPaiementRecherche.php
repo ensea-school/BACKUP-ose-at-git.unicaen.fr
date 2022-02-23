@@ -36,7 +36,6 @@ class MiseEnPaiementRecherche
 
 
 
-
     /**
      *
      * @return string
@@ -46,15 +45,20 @@ class MiseEnPaiementRecherche
         return $this->etat;
     }
 
+
+
     function setEtat($etat)
     {
-        if ($etat === null || $etat === MiseEnPaiement::A_METTRE_EN_PAIEMENT || $etat === MiseEnPaiement::MIS_EN_PAIEMENT){
+        if ($etat === null || $etat === MiseEnPaiement::A_METTRE_EN_PAIEMENT || $etat === MiseEnPaiement::MIS_EN_PAIEMENT || $etat === MiseEnPaiement::IMPUTATION_BUDGETAIRE) {
             $this->etat = $etat;
-        }else{
-            throw new \LogicException('L\'état de mise en paiement "'.$etat.'" est invalide.');
+        } else {
+            throw new \LogicException('L\'état de mise en paiement "' . $etat . '" est invalide.');
         }
+
         return $this;
     }
+
+
 
     /**
      *
@@ -62,10 +66,11 @@ class MiseEnPaiementRecherche
      */
     public function getIntervenants()
     {
-        if (null === $this->intervenants){
+        if (null === $this->intervenants) {
             $this->intervenants = new Collection;
-            $this->intervenants->initEntityClass( Intervenant::class );
+            $this->intervenants->initEntityClass(Intervenant::class);
         }
+
         return $this->intervenants;
     }
 
@@ -74,7 +79,7 @@ class MiseEnPaiementRecherche
     public function getFilters(): array
     {
         $filters = [];
-        if ($e = $this->getEtat()){
+        if ($e = $this->getEtat()) {
             $filters['ETAT'] = $e;
         }
         if ($a = $this->getAnnee()) {
@@ -93,7 +98,7 @@ class MiseEnPaiementRecherche
             $iIdList = [];
             foreach ($this->getIntervenants() as $intervenant) {
                 $filters['INTERVENANT_ID'] = $iIdList;
-                $iIdList[] = $intervenant->getId();
+                $iIdList[]                 = $intervenant->getId();
             }
             $filters['INTERVENANT_ID'] = $iIdList;
         }

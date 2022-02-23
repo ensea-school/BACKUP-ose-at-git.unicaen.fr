@@ -94,7 +94,7 @@ $c->exec([
     "chmod 777 data/fichiers",
     "mkdir log",
     "chmod 777 log",
-    "chmod +7 bin/ose",
+    "chmod +x bin/ose",
 ]);
 $od->writeVersion($osedir, $version);
 $intVersion = (int)substr($version, 0, 2);

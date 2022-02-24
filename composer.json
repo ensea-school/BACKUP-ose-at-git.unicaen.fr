@@ -9,7 +9,7 @@
     ],
     "require"          : {
         "php"                                         : ">=8.0",
-        "unicaen/app"                                 : "dev-ll-php8",
+        "unicaen/app"                                 : "dev-ll-php8-bs5",
         "unicaen/auth"                                : "dev-ll-php8",
         "laminas/laminas-file"                        : "^2.8",
         "unicaen/code"                                : "dev-ll-php8",

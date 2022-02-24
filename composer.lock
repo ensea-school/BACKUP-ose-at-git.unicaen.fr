@@ -1,20 +1,20 @@
 {
-    "_readme": [
+    "_readme"           : [
         "This file locks the dependencies of your project to a known state",
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "743a85fcaf19a8c5531f12b2a963ba4d",
-    "packages": [
+    "content-hash"      : "78d8bc979bc3ad3ce7c7a3bbf901f8e4",
+    "packages"          : [
         {
-            "name": "beberlei/assert",
+            "name"   : "beberlei/assert",
             "version": "v3.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/beberlei/assert.git",
+            "source" : {
+                "type"     : "git",
+                "url"      : "https://github.com/beberlei/assert.git",
                 "reference": "cb70015c04be1baee6f5f5c953703347c0ac1655"
             },
-            "dist": {
+            "dist"   : {
                 "type": "zip",
                 "url": "https://api.github.com/repos/beberlei/assert/zipball/cb70015c04be1baee6f5f5c953703347c0ac1655",
                 "reference": "cb70015c04be1baee6f5f5c953703347c0ac1655",
@@ -6778,18 +6778,18 @@
             "time": "2016-11-16T10:37:54+00:00"
         },
         {
-            "name": "unicaen/app",
-            "version": "dev-ll-php8",
-            "source": {
-                "type": "git",
-                "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "8e620328723c25a1b7f6a8f4cc910d410e217c42"
+            "name"   : "unicaen/app",
+            "version": "dev-ll-php8-bs5",
+            "source" : {
+                "type"     : "git",
+                "url"      : "https://git.unicaen.fr/lib/unicaen/app.git",
+                "reference": "de80ad6d5615fdd38ed87d8cf3f6472a75b31a5a"
             },
             "require": {
-                "beberlei/assert": "^3.3",
-                "doctrine/dbal": "^3.2",
+                "beberlei/assert"                   : "^3.3",
+                "doctrine/dbal"                     : "^3.2",
                 "doctrine/doctrine-laminas-hydrator": "^3.0",
-                "doctrine/doctrine-orm-module": "^5.0",
+                "doctrine/doctrine-orm-module"      : "^5.0",
                 "ext-bcmath": "*",
                 "ext-intl": "*",
                 "ext-ldap": "*",
@@ -6840,7 +6840,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2022-01-31T09:45:35+00:00"
+            "time"   : "2022-02-14T08:55:50+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -6851,9 +6851,9 @@
                 "reference": "e0cc60d78c307f72287ab572d304f96b4cc10700"
             },
             "require": {
-                "jasig/phpcas": "^1.4",
-                "ramsey/uuid": "^4.2",
-                "unicaen/app": "^4.0 || dev-ll-php8",
+                "jasig/phpcas"         : "^1.4",
+                "ramsey/uuid"          : "^4.2",
+                "unicaen/app"          : "^4.0 || dev-ll-php8-bs5",
                 "unicaen/bjy-authorize": "^4.0 || dev-ll-php8"
             },
             "require-dev": {
@@ -6948,7 +6948,7 @@
                 "easybook/geshi": ">=1.0",
                 "laminas/laminas-developer-tools": "^2.3",
                 "laminas/laminas-file": "^2.10",
-                "unicaen/app": "^4.0 || dev-ll-php8"
+                "unicaen/app": "^4.0 || dev-ll-php8-bs5"
             },
             "type": "library",
             "autoload": {
@@ -7098,7 +7098,7 @@
                 "reference": "dfa4393442ce8fc7c9a7f0968fc8af283870b01b"
             },
             "require": {
-                "unicaen/app": "^4.0 || dev-ll-php8"
+                "unicaen/app": "^4.0 || dev-ll-php8-bs5"
             },
             "type": "library",
             "autoload": {
@@ -8136,5 +8136,5 @@
         "php": ">=8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }

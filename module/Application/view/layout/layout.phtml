@@ -8,6 +8,13 @@ $navigationHelper = $this->navigation('navigation');
 echo $this->doctype(); ?>
 <html lang="fr">
 <head>
+    <link href="/vendor/jquery-ui-1.11.4/jquery-ui.structure.min.css" media="all" rel="stylesheet" type="text/css">
+    <link href="/vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css" media="all" rel="stylesheet" type="text/css">
+    <link href="/vendor/bootstrap-5.0.2/css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css">
+    <link href="/css/app.css" media="all" rel="stylesheet" type="text/css">
+    <link href="/vendor/font-awesome-4.5.0/css/font-awesome.css" media="all" rel="stylesheet" type="text/css">
+
+
     <!-- Meta -->
     <meta charset="utf-8">
     <?php
@@ -33,26 +40,13 @@ echo $this->doctype(); ?>
     ?>
 
     <!-- Scripts -->
-    <?= $this->headScript(); ?>
+
+    <script src="/vendor/jquery-1.11.3.min.js"></script>
+    <script src="/vendor/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+    <script src="/vendor/bootstrap-5.0.2/js/bootstrap.bundle.js"></script>
 </head>
 
 <body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">
-<!--<div id="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">-->
-<!--    <div class="container">-->
-<!--        <div class="navbar-header">-->
-<!--            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".bs-navbar-collapse">-->
-<!--                <span class="sr-only">Toggle navigation</span>-->
-<!--                <span class="icon-bar"></span>-->
-<!--                <span class="icon-bar"></span>-->
-<!--                <span class="icon-bar"></span>-->
-<!--            </button>-->
-<!--        </div>-->
-<!--        <div class="navbar-collapse bs-navbar-collapse collapse">-->
-<!--            <p class="navbar-text navbar-right">-->
-<!--            </p>-->
-<!--        </div>/.nav-collapse -->
-<!--    </div>-->
-<!--</div>-->
 
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #002768">
     <div class="container-fluid center">
@@ -62,11 +56,11 @@ echo $this->doctype(); ?>
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto px-2">
-                <li class="nav-item">
-                    <?= $navigationHelper->menuPrincipal(); ?>
-                </li>
-            </ul>
+            <?= $navigationHelper
+                ->menu('navigation')
+                ->setUlClass('navbar-nav me-auto')
+                ->setPartial('layout/menu-principal.phtml'); ?>
+            <!--                A remplacer par   $navigationHelper->menuPrincipal() suite au merge de unicaenApp mis à jour avec l'utilisation de la vue partiel -->
             <form class="d-flex">
                 <button class="btn btn-outline-success" type="submit">
                     <?= $this->appConnection(); ?>

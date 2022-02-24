@@ -1,6 +1,5 @@
 body {
     font-family: ubuntu, arial, sans-serif;
-    padding-top: 60px;
 }
 
 
@@ -309,7 +308,6 @@ div#contenu-principal {
 }
 
 body {
-    padding-top: 50px;
     background-color: #f8f8fa;
 }
 

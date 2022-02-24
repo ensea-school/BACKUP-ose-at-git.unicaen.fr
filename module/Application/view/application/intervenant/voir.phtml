@@ -64,4 +64,13 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_
     ];
 }
 
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION))) {
+    $tabs[] = [
+        'id'            => 'notes',
+        'label'         => '<span class="glyphicon glyphicon-book"></span> Notes',
+        'url'           => $this->url('note', ['intervenant' => $intervenant->getId()]),
+        'force-refresh' => true,
+    ];
+}
+
 echo $this->tabajax($tabs, $tab);

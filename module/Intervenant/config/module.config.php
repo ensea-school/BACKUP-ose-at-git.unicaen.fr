@@ -6,6 +6,22 @@ use Application\Provider\Privilege\Privileges;
 
 return [
     'routes' => [
+        'note'   => [
+            'options'       => [
+                'route'       => '/note/:intervenant/',
+                'constraints' => [
+                    'statut' => '[0-9]*',
+                ],
+                'defaults'    => [
+                    '__NAMESPACE__' => 'Intervenant\Controller',
+                    'controller'    => 'Note',
+                    'action'        => 'index',
+                ],
+            ],
+            'may_terminate' => true,
+            'child_routes'  => [
+            ],
+        ],
         'statut' => [
             'options'       => [
                 'route'       => '/statut',
@@ -82,14 +98,22 @@ return [
             'action'     => ['delete', 'trier', 'clone'],
             'privileges' => [Privileges::INTERVENANT_STATUT_EDITION],
         ],
+        [
+            'controller' => 'Intervenant\Controller\Note',
+            'action'     => ['index'],
+            'privileges' => [Privileges::INTERVENANT_NOTE_VISUALISATION],
+        ],
     ],
 
     'controllers' => [
         'Intervenant\Controller\Statut' => Controller\StatutControllerFactory::class,
+        'Intervenant\Controller\Note'   => Controller\NoteControllerFactory::class,
     ],
+
 
     'services' => [
         Service\StatutService::class => Service\StatutServiceFactory::class,
+        Service\NoteService::class   => Service\NoteServiceFactory::class,
     ],
 
 

@@ -19,6 +19,7 @@ $canAddService = $this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
 $serviceReferentiel = new \Application\Entity\Db\ServiceReferentiel();
 $serviceReferentiel->setIntervenant($intervenant);
 $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
+$serviceReferentiel->setStructure($role->getStructure());
 $canAddServiceReferentiel = $this->isAllowed($serviceReferentiel, Privileges::REFERENTIEL_EDITION);
 
 if ($typeVolumeHoraire->isPrevu()) {

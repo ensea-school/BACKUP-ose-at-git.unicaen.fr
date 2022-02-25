@@ -24,7 +24,7 @@ trait PeriodeSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormPeriodeSaisie(periodeSaisieForm $formPeriodeSaisie)
+    public function setFormPeriodeSaisie(PeriodeSaisieForm $formPeriodeSaisie)
     {
         $this->formPeriodeSaisie = $formPeriodeSaisie;
 

@@ -15,12 +15,12 @@ function affBooleen($flg)
     return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
 }
 
-$this->headTitle()->append("Gestion des periodes");
+$this->headTitle()->append("Gestion des périodes");
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_PERIODES_EDITION));
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
 
-<h1 class="page-header">Gestion des periodes</h1>
+<h1 class="page-header">Gestion des périodes</h1>
 
 <table class="table table-bordered table-condensed">
     <thead>
@@ -50,7 +50,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <a class="ajax-modal" data-event="periodes-edition"
                        href="<?= $this->url('periodes/saisie', ['periode' => $periode->getId()], ['query' => ['tab' => 'edition']]) ?>"
                        title="Modifier la période"><span class="glyphicon glyphicon-edit"></span></a>
-                    <a class="pop-ajax" data-title="Suppression de période" data-content="Etes vous sur de supprimer" data-confirm="true"
+                    <a class="pop-ajax" data-title="Suppression de période" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
                        data-submit-reload="true"
                        href="<?= $this->url('periodes/supprimer', ['periode' => $periode->getId()]) ?>"
                        title="Supprimer la periode"><span class="glyphicon glyphicon-remove"></span></a>

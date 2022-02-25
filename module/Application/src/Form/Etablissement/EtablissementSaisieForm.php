@@ -98,7 +98,7 @@ class EtablissementSaisieForm extends AbstractForm
                 'required'   => false,
                 'validators' => [
                     new \Laminas\Validator\Callback([
-                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% possède plus de 3 caractères'],
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => 'Le champ département doit contenir 3 caractères ou moins'],
                         'callback' => function ($value) {
                             if ($value == null) return true;
 

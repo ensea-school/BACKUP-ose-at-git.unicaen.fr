@@ -50,7 +50,7 @@ class TypePieceJointeStatutService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStatutIntervenant(Statut $statut, QueryBuilder $qb = null, $alias = null)
+    public function finderByStatut(Statut $statut, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.statut = :statut")->setParameter('statut', $statut);
@@ -68,7 +68,7 @@ class TypePieceJointeStatutService extends AbstractEntityService
     public function derniereAnneeDebut(TypePieceJointeStatut $typePieceJointeStatut)
     {
         $id     = $typePieceJointeStatut->getId() ?: 0;
-        $statut = $typePieceJointeStatut->getStatutIntervenant()->getId();
+        $statut = $typePieceJointeStatut->getStatut()->getId();
         $tpj    = $typePieceJointeStatut->getTypePieceJointe()->getId();
         $annee  = $this->getServiceContext()->getAnnee()->getId();
         $params = compact('id', 'statut', 'tpj', 'annee');
@@ -104,7 +104,7 @@ class TypePieceJointeStatutService extends AbstractEntityService
     public function premiereAnneeFin(TypePieceJointeStatut $typePieceJointeStatut)
     {
         $id     = $typePieceJointeStatut->getId() ?: 0;
-        $statut = $typePieceJointeStatut->getStatutIntervenant()->getId();
+        $statut = $typePieceJointeStatut->getStatut()->getId();
         $tpj    = $typePieceJointeStatut->getTypePieceJointe()->getId();
         $annee  = $this->getServiceContext()->getAnnee()->getId();
         $params = compact('id', 'statut', 'tpj', 'annee');

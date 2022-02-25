@@ -39,7 +39,7 @@ class StructureController extends AbstractController
 
         $structure = $this->getEvent()->getParam('structure');
 
-        $form = $this->getFormStructureSaisie();
+        $form = $this->getFormStructureStructureSaisie();
         if (empty($structure)) {
             $title     = 'Création d\'une nouvelle Structure';
             $structure = $this->getServiceStructure()->newEntity();

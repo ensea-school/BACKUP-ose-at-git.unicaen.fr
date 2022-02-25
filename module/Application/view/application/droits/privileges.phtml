@@ -23,11 +23,6 @@
         <?php if (!empty($roles) && !empty($statuts)): ?>
             <th class="separator rotate-45">&nbsp;</th>
         <?php endif; ?>
-        <?php foreach ($statuts as $statut): ?>
-            <th class="rotate-45 statut" data-statut="<?= $statut->getId() ?>" title="<?= $statut; ?>">
-                <div><span><a><?= $statut; ?></a></span></div>
-            </th>
-        <?php endforeach; ?>
     </tr>
     <tr>
         <th>Privilèges</th>
@@ -36,9 +31,6 @@
         <?php endif; ?>
         <?php if (!empty($roles) && !empty($statuts)): ?>
             <th class="separator">&nbsp;</th>
-        <?php endif; ?>
-        <?php if (!empty($statuts)): ?>
-            <th class="statuts" colspan="<?= count($statuts); ?>"><a class="statuts">Statuts (intervenants)</a></th>
         <?php endif; ?>
         <th style="border:none;min-width:166px">&nbsp;</th>
     </tr>
@@ -67,15 +59,6 @@
                 <?php if (!empty($roles) && !empty($statuts)): ?>
                     <th class="separator ">&nbsp;</th>
                 <?php endif; ?>
-                <?php $role = null;
-                foreach ($statuts as $statut): ?>
-                    <td class="modifier statut" data-statut="<?= $statut->getId() ?>"
-                        data-privilege="<?= $privilege->getId() ?>"
-                        title="Statut : <?= $statut->getLibelle() ?>"
-                    >
-                        <?= $this->partial('/application/droits/partial/tbl-link', compact('role', 'statut', 'privilege')) ?>
-                    </td>
-                <?php endforeach; ?>
             </tr>
         <?php endforeach; ?>
     <?php endforeach; ?>

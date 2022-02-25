@@ -17,7 +17,7 @@ class PlafondStatut implements PlafondConfigInterface
 
     public function getEntity()
     {
-        return $this->getStatutIntervenant();
+        return $this->getStatut();
     }
 
 
@@ -27,7 +27,7 @@ class PlafondStatut implements PlafondConfigInterface
         if (!$entity instanceof Statut) {
             throw new \Exception('Un statut doit être fourni');
         }
-        $this->setStatutIntervenant($entity);
+        $this->setStatut($entity);
 
         return $this;
     }

@@ -28,7 +28,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
     <?php foreach ($typeInterventionStatuts as $tis): ?>
         <tr>
             <td>
-                <?= $tis->getStatutIntervenant()->getLibelle() ?>&nbsp;
+                <?= $tis->getStatut()->getLibelle() ?>&nbsp;
             </td>
             <td>
                 <?= StringFromFloat::run($tis->getTauxHETDService()) ?>

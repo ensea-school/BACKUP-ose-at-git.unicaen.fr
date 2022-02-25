@@ -4,7 +4,6 @@ namespace Application\Form\MotifNonPaiement;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Form\AbstractForm;
-use Laminas\Form\Element\Csrf;
 
 /**
  * Description of MotifNonPaiementSaisieForm
@@ -16,23 +15,13 @@ class MotifNonPaiementSaisieForm extends AbstractForm
 
     public function init()
     {
-        $this->setAttribute('action', $this->getCurrentUrl());
-
         $this->spec(MotifNonPaiement::class);
-        $this->spec([
-            'libelleCourt' => ['element' => ['options' => ['label' => 'Libellé court']]],
-            'libelleLong'  => ['element' => ['options' => ['label' => 'Libellé long']]],
-        ]);
-        $this->specBuild();
+        $this->build();
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => "Enregistrer",
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+        $this->get('libelleCourt')->setLabel('Libellé court');
+        $this->get('libelleLong')->setLabel('Libellé long');
+
+        $this->addSubmit();
 
         return $this;
     }

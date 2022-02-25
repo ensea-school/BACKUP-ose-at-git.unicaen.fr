@@ -8,6 +8,10 @@
  * @var $viewFile   string
  */
 
+phpinfo();
+
+return;
+
 $introspection = \UnicaenCode\Util::introspection();
 
 

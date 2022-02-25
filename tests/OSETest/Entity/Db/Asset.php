@@ -90,7 +90,7 @@ class Asset
 
 
 
-    static public function newStatutIntervenant(TypeIntervenant $typeIntervenant)
+    static public function newStatut(TypeIntervenant $typeIntervenant)
     {
         $e = new Statut();
         $e

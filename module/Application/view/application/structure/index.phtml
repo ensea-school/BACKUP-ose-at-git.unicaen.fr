@@ -26,7 +26,6 @@ $globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTUR
     <th style="word-wrap: break-word ; ">Libelle Court</th>
     <th style="word-wrap: break-word ; ">Libelle Long</th>
     <th style="word-wrap: break-word ; ">Enseignement</th>
-    <th style="word-wrap: break-word ; ">Plafond Référentiel</th>
     <th style="word-wrap: break-word ; ">Aff. adresse sur contrat</th>
     <th style="word-wrap: break-word ; ">Source</th>
     <?php if ($globalCanEdit) echo '<th>Actions</th>' ?>
@@ -40,7 +39,6 @@ $globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTUR
             <td style="word-wrap: break-word ; "><?= $structure->getLibelleCourt() ?></td>
             <td style="word-wrap: break-word ; "><?= $structure->getLibelleLong() ?></td>
             <td style="word-wrap: break-word ; "><?= affBooleen($structure->isEnseignement()) ?></td>
-            <td style="word-wrap: break-word ; "><?= ($structure->getPlafondReferentiel()) ? Util::formattedNumber($structure->getPlafondReferentiel()) : '' ?></td>
             <td style="word-wrap: break-word ; "><?= affBooleen($structure->isAffAdresseContrat()) ?></td>
             <td style="word-wrap: break-word ; "><?= $structure->getSource() . ($structure->getSource()->getImportable() ? ' (' . $structure->getSourceCode() . ')' : '') ?></td>
             <?php if ($canEdit): ?>

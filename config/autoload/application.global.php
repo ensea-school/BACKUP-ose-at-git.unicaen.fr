@@ -5,12 +5,12 @@ return [
         'connection'    => [
             'orm_default' => [
                 'params' => [
-                    'host'     => AppConfig::get('bdd', 'host'),
-                    'port'     => AppConfig::get('bdd', 'port'),
-                    'dbname'   => AppConfig::get('bdd', 'dbname'),
-                    'user'     => AppConfig::get('bdd', 'username'),
-                    'password' => AppConfig::get('bdd', 'password'),
-                    'charset'  => 'AL32UTF8',
+                    'host'          => AppConfig::get('bdd', 'host'),
+                    'port'          => AppConfig::get('bdd', 'port'),
+                    'dbname'        => AppConfig::get('bdd', 'dbname'),
+                    'user'          => AppConfig::get('bdd', 'username'),
+                    'password'      => AppConfig::get('bdd', 'password'),
+                    'charset'       => 'AL32UTF8',
                     'connectstring' => AppConfig::get('bdd', 'connectstring'),
                     //'persistent' => true,
                 ],
@@ -37,7 +37,7 @@ return [
 
     'session_config' => [
         // Session cookie will expire in 1 hour.
-        'cookie_lifetime' => 60 * 60 * 1,
+        'cookie_lifetime' => 0,
         // Session data will be stored on server maximum for 30 days.
         'gc_maxlifetime'  => 60 * 60 * 24 * 30,
     ],

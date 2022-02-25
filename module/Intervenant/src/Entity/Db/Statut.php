@@ -18,17 +18,13 @@ class Statut implements ParametreEntityInterface, RoleInterface
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
 
-    const ETAT_ACTIF         = 'actif';
-    const ETAT_VISUALISATION = 'visu';
-    const ETAT_EDITION       = 'edit';
-
     use ParametreEntityTrait;
     use TypeIntervenantAwareTrait;
 
 
-    private ?string $code;
+    private ?string $code                               = null;
 
-    private ?string $libelle;
+    private ?string $libelle                            = null;
 
     private int     $ordre                              = 9999;
 
@@ -96,11 +92,7 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
     private bool    $pieceJustificativeVisualisation    = true;
 
-    private bool    $pieceJustificativeTelechargement   = true;
-
     private bool    $pieceJustificativeEdition          = true;
-
-    private bool    $pieceJustificativeArchivage        = true;
 
     private bool    $conseilRestreint                   = true;
 
@@ -188,11 +180,10 @@ class Statut implements ParametreEntityInterface, RoleInterface
         $methods = get_class_methods($this);
         foreach ($methods as $method) {
             $setMethod = 'set' . substr($method, 3);
-            if (0 === strpos($method, 'get') && in_array($setMethod, $methods)) {
+            if (str_starts_with($method, 'get') && in_array($setMethod, $methods)) {
                 $new->$setMethod($this->$method());
             }
         }
-        $new->setId(null);
         $uid = uniqid();
         $new->setCode($this->getCode() . '_' . $uid);
         $new->setLibelle($this->getLibelle() . ' (Copie ' . $uid . ')');
@@ -790,22 +781,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
 
 
 
-    public function getPieceJustificativeTelechargement(): bool
-    {
-        return $this->pieceJustificativeTelechargement;
-    }
-
-
-
-    public function setPieceJustificativeTelechargement(bool $pieceJustificativeTelechargement): Statut
-    {
-        $this->pieceJustificativeTelechargement = $pieceJustificativeTelechargement;
-
-        return $this;
-    }
-
-
-
     public function getPieceJustificativeEdition(): bool
     {
         return $this->pieceJustificativeEdition;
@@ -816,22 +791,6 @@ class Statut implements ParametreEntityInterface, RoleInterface
     public function setPieceJustificativeEdition(bool $pieceJustificativeEdition): Statut
     {
         $this->pieceJustificativeEdition = $pieceJustificativeEdition;
-
-        return $this;
-    }
-
-
-
-    public function getPieceJustificativeArchivage(): bool
-    {
-        return $this->pieceJustificativeArchivage;
-    }
-
-
-
-    public function setPieceJustificativeArchivage(bool $pieceJustificativeArchivage): Statut
-    {
-        $this->pieceJustificativeArchivage = $pieceJustificativeArchivage;
 
         return $this;
     }

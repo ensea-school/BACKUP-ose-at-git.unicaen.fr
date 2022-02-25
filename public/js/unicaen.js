@@ -806,7 +806,7 @@ $.widget("unicaen.popAjax", {
         content: undefined,
         confirm: false,
         confirmButton: '<span class="glyphicon glyphicon-ok"></span> OK',
-        cancelButton: '<span class="glyphicon glyphicon-remove"></span> Annuler',
+        cancelButton: '<i class="fa fa-times"></i> Annuler',
         animation: true,
         delay: 200,
         placement: 'auto',

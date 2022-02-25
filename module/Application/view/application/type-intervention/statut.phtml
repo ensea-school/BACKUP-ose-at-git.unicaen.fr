@@ -43,12 +43,12 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                        data-event="type-intervention-statut"
                        href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $tis->getTypeIntervention()->getId(), 'typeInterventionStatut' => $tis->getId()]); ?>"
                        data-submit-reload="false">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fa fa-edit"></i></a>
                     <a class="ajax-modal"
                        data-event="type-intervention-statut"
                        href="<?= $this->url('type-intervention/statut-delete', ['typeIntervention' => $tis->getTypeIntervention()->getId(), 'typeInterventionStatut' => $tis->getId()]) ?>"
                        data-submit-reload="false">
-                        <span class="glyphicon glyphicon-trash"></span></a>
+                        <i class="fa fa-trash-alt"></i></a>
                 </td>
 
             <?php endif; ?>

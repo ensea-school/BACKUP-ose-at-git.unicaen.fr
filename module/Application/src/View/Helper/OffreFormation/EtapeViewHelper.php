@@ -99,7 +99,7 @@ class EtapeViewHelper extends AbstractViewHelper
         $buttons = '';
         if ($this->getView()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
-            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><i class="fa fa-trash-alt"></i> Supprimer</a>';
         }
 
         if ($buttons) {
@@ -142,7 +142,7 @@ class EtapeViewHelper extends AbstractViewHelper
 
     public function renderAjouterLink($content = '', $attributes = [])
     {
-        if (!$content) $content = '<span class="glyphicon glyphicon-plus"></span> Ajouter une formation';
+        if (!$content) $content = '<i class="fa fa-plus"></i> Ajouter une formation';
 
         $default = [
             'href'       => $this->getView()->url('of/etape/ajouter'),

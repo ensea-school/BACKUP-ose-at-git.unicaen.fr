@@ -115,7 +115,7 @@ class AgrementController extends AbstractController
                     'intervenant' => $ta->getIntervenant()->getId(),
                 ];
                 $actionUrl   = $this->url()->fromRoute('intervenant/agrement/supprimer', $params);
-                $actionLabel = '<span class="glyphicon glyphicon-trash"></span> Retirer l\'agrément';
+                $actionLabel = '<i class="fa fa-trash-alt"></i> Retirer l\'agrément';
             } elseif (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
                 $params = [
                     'typeAgrement' => $ta->getTypeAgrement()->getId(),

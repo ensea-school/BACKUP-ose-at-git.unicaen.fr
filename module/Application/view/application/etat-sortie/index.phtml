@@ -42,7 +42,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_AD
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <span class="glyphicon glyphicon-trash"></span>
+                        <i class="fa fa-trash-alt"></i>
                     </a>
                 <?php endif; ?>&nbsp;
                 <?php if ($etatSortie->hasFichier()) {
@@ -69,7 +69,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_AD
 </table>
 <?php if ($canEdit): ?>
     <a class="btn btn-primary" href="<?= $this->url('etat-sortie/saisir') ?>">
-        <span class="glyphicon glyphicon-plus"></span>
+        <i class="fa fa-plus"></i>
         Ajouter un état de sortie
     </a>
 <?php endif; ?>

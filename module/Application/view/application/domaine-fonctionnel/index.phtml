@@ -31,7 +31,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DOMAINES_FONCT
                     <a class="ajax-modal" data-event="domaine-fonctionnel-saisie"
                        href="<?= $this->url('domaine-fonctionnel/saisie', ['domaineFonctionnel' => $fr->getId()]) ?>"
                        title="Modifier la DomaineFonctionnel">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fa fa-edit"></i></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('domaine-fonctionnel/delete', ['domaineFonctionnel' => $fr->getId()]) ?>"
                        title="Supprimer la DomaineFonctionnel"
@@ -41,7 +41,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DOMAINES_FONCT
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <span class="glyphicon glyphicon-remove"></span>
+                        <i class="fa fa-times"></i>
                     </a>
                 </td>
             <?php } else { ?>
@@ -55,7 +55,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DOMAINES_FONCT
     <a class="btn btn-primary ajax-modal" data-event="domaine-fonctionnel-saisie"
        href="<?= $this->url('domaine-fonctionnel/saisie') ?>"
        title="Ajouter une domaine fonctionnel">
-        <span class="glyphicon glyphicon-edit"></span>
+        <i class="fa fa-edit"></i>
         Ajouter un domaine fonctionnel</a>
 
     <script type="text/javascript">

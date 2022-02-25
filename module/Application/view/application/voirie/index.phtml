@@ -39,7 +39,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_CO
                         <a class="disabled ajax-modal" data-event="voirie-saisie"
                            href="<?= $this->url('voirie/saisie', ['voirie' => $voirie->getId()]) ?>"
                            title="Modifier la voirie">
-                            <span class="glyphicon glyphicon-edit"></span></a>
+                            <i class="fa fa-edit"></i></a>
                         <a class="pop-ajax"
                            href="<?= $this->url('voirie/delete', ['voirie' => $voirie->getId()]) ?>"
                            title="Supprimer la voirie"
@@ -49,7 +49,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_CO
                            data-cancel-button="Non"
                            data-submit-reload="true"
                         >
-                            <span class="glyphicon glyphicon-remove"></span>
+                            <i class="fa fa-times"></i>
                         </a>
                     <?php else: ?>
                         Non modifiable
@@ -64,7 +64,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_CO
     <a class="btn btn-primary ajax-modal" data-event="voirie-saisie"
        href="<?= $this->url('voirie/saisie') ?>"
        title="Ajouter une voirie">
-        <span class="glyphicon glyphicon-edit"></span>
+        <i class="fa fa-edit"></i>
         Ajouter une voirie</a>
 
     <script type="text/javascript">

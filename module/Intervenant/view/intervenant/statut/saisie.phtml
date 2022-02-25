@@ -272,7 +272,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
            data-confirm="true" data-confirm-button="Oui"
            data-cancel-button="Non"
            data-submit-reload="true">
-            <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+            <i class="fa fa-trash-alt"></i> Supprimer</a>
         <a class="ajax-modal btn btn-warning" data-event="statut-clone"
            href="<?= $this->url('statut/clone', ['statut' => $form->getObject()->getId()]) ?>"
            title="Dupliquer le statut d'intervenant">

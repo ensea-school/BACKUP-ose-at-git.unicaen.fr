@@ -42,8 +42,11 @@ function truncCodesCorresp($value){
             <?php if (isset($libellesCodesCorresp[4])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp4()).'</td>' ?>
             <td style="text-align: center">
             <?php if (! $discipline->getSource()->getImportable() && $canEdit): ?>
-                <a class="ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir', ['discipline' => $discipline->getId()])?>" title="Modifier la discipline"><span class="glyphicon glyphicon-edit"></span></a>
-                <a class="ajax-modal" data-event="discipline-suppression" href="<?= $this->url('discipline/supprimer', ['discipline' => $discipline->getId()])?>" title="Supprimer la discipline"><span class="glyphicon glyphicon-remove"></span></a>
+                <a class="ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir', ['discipline' => $discipline->getId()]) ?>"
+                   title="Modifier la discipline"><i class="fa fa-edit"></i></a>
+                <a class="ajax-modal" data-event="discipline-suppression"
+                   href="<?= $this->url('discipline/supprimer', ['discipline' => $discipline->getId()]) ?>" title="Supprimer la discipline"><i
+                            class="fa fa-times"></i></a>
             <?php else: ?>
                 <?= $discipline->getSource(); ?>
             <?php endif; ?>
@@ -52,16 +55,17 @@ function truncCodesCorresp($value){
     <?php endforeach; ?>
     </tbody>
 </table>
-<?php if ($canEdit):?>
-<a class="btn btn-primary ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir'); ?>"><span class="glyphicon glyphicon-plus"></span> Ajout d'une nouvelle discipline</a>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir'); ?>"><i class="fa fa-plus"></i> Ajout d'une
+        nouvelle discipline</a>
 <?php endif; ?>
 <script type="text/javascript">
-    $(function() {
-        $("body").on("discipline-edition", function(event, data) {
+    $(function () {
+        $("body").on("discipline-edition", function (event, data) {
             window.location.reload();
         });
 
-        $("body").on("discipline-suppression", function(event, data) {
+        $("body").on("discipline-suppression", function (event, data) {
             window.location.reload();
         });
     });

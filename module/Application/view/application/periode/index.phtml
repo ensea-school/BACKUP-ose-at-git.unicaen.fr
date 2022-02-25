@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 function affBooleen($flg)
 {
     // affiche booléen avec des glypheIcon
-    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
+    return ($flg ? '<i class="fa fa-check text-succes"></i>' : '<i class="fa fa-times text-danger refuse"></i>');
 }
 
 $this->headTitle()->append("Gestion des périodes");
@@ -49,11 +49,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <td style="text-align: center">
                     <a class="ajax-modal" data-event="periodes-edition"
                        href="<?= $this->url('periodes/saisie', ['periode' => $periode->getId()], ['query' => ['tab' => 'edition']]) ?>"
-                       title="Modifier la période"><span class="glyphicon glyphicon-edit"></span></a>
+                       title="Modifier la période"><i class="fa fa-edit"></i></a>
                     <a class="pop-ajax" data-title="Suppression de période" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
                        data-submit-reload="true"
                        href="<?= $this->url('periodes/supprimer', ['periode' => $periode->getId()]) ?>"
-                       title="Supprimer la periode"><span class="glyphicon glyphicon-remove"></span></a>
+                       title="Supprimer la periode"><i class="fa fa-times"></i></a>
                     <span class="glyphicon glyphicon-move"
                           title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
                 </td>
@@ -63,8 +63,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     </tbody>
 </table>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="periodes-edition" href="<?= $this->url('periodes/saisie'); ?>"><span
-                class="glyphicon glyphicon-plus"></span> Ajout d'une nouvelle periode</a>
+    <a class="btn btn-primary ajax-modal" data-event="periodes-edition" href="<?= $this->url('periodes/saisie'); ?>"><i class="fa fa-plus"></i> Ajout d'une
+        nouvelle periode</a>
 <?php endif; ?>
 
 <script type="text/javascript">

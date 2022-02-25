@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 function affBooleen($flg)
 {
     // affiche booléen avec des glypheIcon
-    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
+    return ($flg ? '<i class="fa fa-check text-succes"></i>' : '<i class="fa fa-times text-danger refuse"></i>');
 }
 
 $this->headTitle()->append("Gestion des établissements");
@@ -46,11 +46,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <?php if (!$etablissement->getSource()->getImportable()): ?>
                         <a class="ajax-modal" data-event="etablissement-edition"
                            href="<?= $this->url('etablissement/saisie', ['etablissement' => $etablissement->getId()], ['query' => ['tab' => 'edition']]) ?>"
-                           title="Modifier l'établissement"><span class="glyphicon glyphicon-edit"></span></a>
+                           title="Modifier l'établissement"><i class="fa fa-edit"></i></a>
                         <a class="pop-ajax" data-title="Suppression de l'établissement" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
                            data-submit-reload="true"
                            href="<?= $this->url('etablissement/supprimer', ['etablissement' => $etablissement->getId()]) ?>"
-                           title="Supprimer l'établissement"><span class="glyphicon glyphicon-remove"></span></a>
+                           title="Supprimer l'établissement"><i class="fa fa-times"></i></a>
                     <?php else: ?>
                         Non modifiable
                     <?php endif; ?>
@@ -62,8 +62,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 </table>
 
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="etablissement-edition" href="<?= $this->url('etablissement/saisie'); ?>"><span
-                class="glyphicon glyphicon-plus"></span> Ajout d'un nouvel établissement</a>
+    <a class="btn btn-primary ajax-modal" data-event="etablissement-edition" href="<?= $this->url('etablissement/saisie'); ?>"><i class="fa fa-plus"></i> Ajout
+        d'un nouvel établissement</a>
 <?php endif; ?>
 
 <script type="text/javascript">

@@ -9,7 +9,7 @@ use Application\Provider\Privilege\Privileges;
 function affBooleen($flg)
 {
     // affiche booléen avec des glypheIcon
-    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
+    return ($flg ? '<i class="fa fa-check text-succes"></i>' : '<i class="fa fa-times text-danger refuse"></i>');
 }
 
 $this->headTitle()->append("Motifs de modification de service dû");
@@ -42,7 +42,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIFS_MODIFIC
                     <a class="ajax-modal" data-event="motif-modification-service-saisie"
                        href="<?= $this->url('motif-modification-service/saisie', ['motifModificationServiceDu' => $fr->getId()]) ?>"
                        title="Modifier le Motif de Modificationde Service dû">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fa fa-edit"></i></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('motif-modification-service/delete', ['motifModificationServiceDu' => $fr->getId()]) ?>"
                        title="Supprimer le Motif de Modificationde Service dû"
@@ -52,7 +52,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIFS_MODIFIC
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <span class="glyphicon glyphicon-remove"></span>
+                        <i class="fa fa-times"></i>
                     </a>
                 </td>
             <?php } ?>
@@ -64,7 +64,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIFS_MODIFIC
     <a class="btn btn-primary ajax-modal" data-event="motif-modification-service-saisie"
        href="<?= $this->url('motif-modification-service/saisie') ?>"
        title="Ajouter un motif de modification du service dû">
-        <span class="glyphicon glyphicon-edit"></span>
+        <i class="fa fa-edit"></i>
         Ajouter un motif de modification du service dû</a>
 
     <script type="text/javascript">

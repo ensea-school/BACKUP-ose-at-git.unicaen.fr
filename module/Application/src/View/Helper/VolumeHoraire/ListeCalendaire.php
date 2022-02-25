@@ -216,7 +216,7 @@ class ListeCalendaire extends AbstractViewHelper
             'data-submit-event' => 'save-volume-horaire',
             'data-min-width'    => '450px',
             'data-service'      => $volumeHoraireListe->getService()->getId(),
-        ])->html('<span class="glyphicon glyphicon-plus"></span>');
+        ])->html('<i class="fa fa-plus"></i>');
     }
 
 
@@ -242,10 +242,10 @@ class ListeCalendaire extends AbstractViewHelper
             'title'             => 'Supprimer',
             'class'             => 'pop-ajax',
             'data-submit-event' => 'save-volume-horaire',
-            'data-content' => 'Souhaitez-vous vraiment supprimer ces heures de service ?',
+            'data-content'      => 'Souhaitez-vous vraiment supprimer ces heures de service ?',
             'data-confirm'      => 'true',
             'data-service'      => $volumeHoraireListe->getService()->getId(),
-        ])->html('<span class="glyphicon glyphicon-trash"></span>');
+        ])->html('<i class="fa fa-trash-alt"></i>');
 
         return $edit . ' ' . $delete;
     }

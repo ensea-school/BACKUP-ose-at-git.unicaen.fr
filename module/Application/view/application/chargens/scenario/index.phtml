@@ -47,7 +47,7 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
                         <?php if ($canEditScenario): ?>
                             <a class="pop-ajax" data-submit-reload="true"
                                href="<?= $this->url('chargens/scenario/saisir', ['scenario' => $scenario->getId()]) ?>"
-                               title="Modifier le scénario"><span class="glyphicon glyphicon-edit"></span></a>
+                               title="Modifier le scénario"><i class="fa fa-edit"></i></a>
                         <?php endif; ?>
                         <?php if ($canCopy): ?>
                             <a class="pop-ajax" data-submit-reload="true"
@@ -62,7 +62,7 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
                                data-cancel-button="Non"
                                data-submit-reload="true"
                                href="<?= $this->url('chargens/scenario/supprimer', ['scenario' => $scenario->getId()]) ?>"
-                               title="Supprimer le scénario"><span class="glyphicon glyphicon-remove"></span></a>
+                               title="Supprimer le scénario"><i class="fa fa-times"></i></a>
                         <?php endif; ?>
                     </td>
                 <?php endif; ?>
@@ -72,7 +72,7 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
     </table>
 <?php if ($canEditLocal): ?>
     <a class="btn btn-primary pop-ajax" data-submit-reload="true"
-       href="<?= $this->url('chargens/scenario/saisir'); ?>"><span class="glyphicon glyphicon-plus"></span> Ajout d'un
+       href="<?= $this->url('chargens/scenario/saisir'); ?>"><i class="fa fa-plus"></i> Ajout d'un
         nouveau scenario local</a>
 <?php endif; ?>
 <a class="btn btn-default" href="<?= $this->url('chargens'); ?>">

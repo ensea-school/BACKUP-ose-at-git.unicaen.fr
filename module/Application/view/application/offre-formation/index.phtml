@@ -164,7 +164,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <div class="panel panel-default">
             <div class="panel-heading">
                 Formation
-                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
+                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fa fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
             </div>
             <div class="panel-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...
@@ -231,7 +231,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                             'data-event' => 'element-pedagogique-ajouter',
                             'title'      => 'Ajouter un enseignement',
                         ];
-                        echo $this->tag('a', $attrs)->html('<span class="glyphicon glyphicon-plus"></span> Nouvel enseignement');
+                        echo $this->tag('a', $attrs)->html('<i class="fa fa-plus"></i> Nouvel enseignement');
                     }
                     if ($canExport) {
                         $params      = [

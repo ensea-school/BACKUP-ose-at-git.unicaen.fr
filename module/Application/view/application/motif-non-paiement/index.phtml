@@ -33,7 +33,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
                     <a class="ajax-modal" data-event="motif-non-paiement-saisie"
                        href="<?= $this->url('motif-non-paiement/saisir', ['motifNonPaiement' => $fr->getId()]) ?>"
                        title="Modifier le motif de non paiement">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fa fa-edit"></i></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('motif-non-paiement/supprimer', ['motifNonPaiement' => $fr->getId()]) ?>"
                        title="Supprimer le motif de non paiement"
@@ -43,7 +43,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <span class="glyphicon glyphicon-remove"></span>
+                        <i class="fa fa-times"></i>
                     </a>
                 </td>
             <?php } ?>
@@ -54,7 +54,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="motif-non-paiement-saisie"
        href="<?= $this->url('motif-non-paiement/saisir') ?>">
-        <span class="glyphicon glyphicon-edit"></span>
+        <i class="fa fa-edit"></i>
         Ajouter un motif de non paiement</a>
 
     <script type="text/javascript">

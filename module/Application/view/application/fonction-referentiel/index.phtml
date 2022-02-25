@@ -37,15 +37,14 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
             <td><?= $fr->getDomaineFonctionnel() ?></td>
             <td><?= $this->structure($fr->getStructure())->renderLink() ?></td>
             <td style="text-align:center"><?php if ($fr->isEtapeRequise()): ?><span
-                        class="text-success glyphicon glyphicon-ok"></span><?php else: ?><span
-                        class="text-danger glyphicon glyphicon-remove"></span><?php endif; ?></td>
+                        class="text-success glyphicon glyphicon-ok"></span><?php else: ?><i class="fa fa-times"></i><?php endif; ?></td>
             <td style="text-align:center"><?= $fr->isServiceStatutaire() ? 'Oui' : 'Non' ?></td>
             <?php if ($canEdit) { ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal" data-event="fonction-referentiel-saisie"
                        href="<?= $this->url('fonction-referentiel/saisie', ['fonctionReferentiel' => $fr->getId()]) ?>"
                        title="Modifier la fonction référentielle">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fa fa-edit"></i></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('fonction-referentiel/delete', ['fonctionReferentiel' => $fr->getId()]) ?>"
                        title="Supprimer la fonction référentielle"
@@ -55,7 +54,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <span class="glyphicon glyphicon-remove"></span>
+                        <i class="fa fa-times"></i>
                     </a>
                 </td>
             <?php } ?>
@@ -67,7 +66,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
     <a class="btn btn-primary ajax-modal" data-event="fonction-referentiel-saisie"
        href="<?= $this->url('fonction-referentiel/saisie') ?>"
        title="Ajouter une fonction référentielle">
-        <span class="glyphicon glyphicon-edit"></span>
+        <i class="fa fa-edit"></i>
         Ajouter une fonction référentielle</a>
 
     <script type="text/javascript">

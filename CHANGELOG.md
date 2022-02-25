@@ -37,6 +37,7 @@ Objectif : Plafonds personnalisables
 * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
   intervenant
 * Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
+* Un nouveau modèle de contrat sera possible avec la ventilation des heures de services par types d'intervention (CM/TD/TP)
 
 ## Corrections de bugs
 
@@ -51,6 +52,7 @@ Objectif : Plafonds personnalisables
 * **ATTENTION : OSE 18** ne pourra être mis à jour **qu'à partir de OSE 17.x**. Si vous utilisez une version plus ancienne de OSE, veuillez **d'abord** mettre à jour en version 17.
 * **ATTENTION : PHP 8.0** est requis
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
+* Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
 
 
 

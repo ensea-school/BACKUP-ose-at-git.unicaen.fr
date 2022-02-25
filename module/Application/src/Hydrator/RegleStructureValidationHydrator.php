@@ -2,7 +2,7 @@
 
 namespace Application\Hydrator;
 
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 

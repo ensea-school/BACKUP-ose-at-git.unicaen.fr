@@ -6,6 +6,9 @@ use Application\Entity\Collection;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
+use Application\Entity\Db\Traits\PeriodeAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 
 
 /**
@@ -16,9 +19,9 @@ use Application\Entity\Db\Traits\AnneeAwareTrait;
 class MiseEnPaiementRecherche
 {
     use AnneeAwareTrait;
-    use \Application\Entity\Db\Traits\StructureAwareTrait;
-    use \Application\Entity\Db\Traits\PeriodeAwareTrait;
-    use \Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+    use StructureAwareTrait;
+    use PeriodeAwareTrait;
+    use TypeIntervenantAwareTrait;
 
     /**
      * etat

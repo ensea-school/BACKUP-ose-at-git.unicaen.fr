@@ -11,7 +11,7 @@
         </unique-constraints>
         <field name="code" type="string" column="CODE" length="50" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="128" nullable="false"/>
-        <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
+        <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
             <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">

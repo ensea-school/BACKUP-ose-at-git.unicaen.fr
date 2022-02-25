@@ -20,7 +20,7 @@
                 <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
+        <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
             <join-columns>
                 <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
             </join-columns>

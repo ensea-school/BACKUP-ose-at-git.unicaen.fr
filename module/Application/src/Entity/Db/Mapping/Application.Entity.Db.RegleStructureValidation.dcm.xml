@@ -10,7 +10,7 @@
     <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
         <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
+    <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
         <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
     </many-to-one>
   </entity>

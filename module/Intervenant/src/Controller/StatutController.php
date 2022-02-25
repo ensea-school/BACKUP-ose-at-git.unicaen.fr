@@ -11,7 +11,7 @@ use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 
 class StatutController extends AbstractController
@@ -29,7 +29,8 @@ class StatutController extends AbstractController
             Statut::class,
         ]);
 
-        $statuts = $this->getServiceStatut()->getList();
+        $statuts           = $this->getServiceStatut()->getList();
+        $typesIntervenants = $this->getServiceTypeIntervenant()->getList();
 
         return compact('statuts');
     }

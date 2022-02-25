@@ -48,7 +48,7 @@ class WfEtapeDep
     private $etapePrec;
 
     /**
-     * @var \Application\Entity\Db\TypeIntervenant
+     * @var \Intervenant\Entity\Db\TypeIntervenant
      */
     private $typeIntervenant;
 

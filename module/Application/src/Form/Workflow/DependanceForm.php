@@ -4,7 +4,7 @@ namespace Application\Form\Workflow;
 
 use Application\Entity\Db\WfEtapeDep;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use UnicaenApp\Util;
 use Laminas\Hydrator\HydratorInterface;

@@ -2,6 +2,7 @@
 
 namespace Application\Form\Etablissement;
 
+use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -91,6 +92,20 @@ class EtablissementSaisieForm extends AbstractForm
         return [
             'libelle' => [
                 'required' => true,
+            ],
+
+            'departement' => [
+                'required'   => false,
+                'validators' => [
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% possède plus de 3 caractères'],
+                        'callback' => function ($value) {
+                            if ($value == null) return true;
+
+                            return (strlen($value) <= 3 ? true : false);
+                        }]),
+                ],
+
             ],
         ];
     }

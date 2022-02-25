@@ -46,7 +46,7 @@ class TypeAgrementStatutService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStatutIntervenant(Statut $statut, QueryBuilder $qb = null, $alias = null)
+    public function finderByStatut(Statut $statut, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.statut = :statut")->setParameter('statut', $statut);

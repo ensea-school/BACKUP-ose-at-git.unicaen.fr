@@ -179,6 +179,12 @@ $config = [
         ],
     ],
     'view_helpers'       => [
+        'aliases'    => [
+            // on utilise les objets standards de Laminas, et plus ceux d'Unicaen
+            'headLink'     => \Laminas\View\Helper\HeadLink::class,
+            'headScript'   => \Laminas\View\Helper\HeadScript::class,
+            'inlineScript' => \Laminas\View\Helper\InlineScript::class,
+        ],
         'factories'  => [
             \UnicaenAuth\View\Helper\UserProfileSelectRadioItem::class => View\Helper\UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
@@ -209,41 +215,6 @@ $config = [
         ],
         'template_map'        => include __DIR__ . '/../template_map.php',
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
-    ],
-    'public_files'       => [
-        'head_scripts'   => [
-            '010_jquery'   => 'vendor/jquery-1.11.3.min.js',
-            '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
-        ],
-        'inline_scripts' => [
-            '010_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
-            '030_util'        => 'js/util.js',
-            '040_unicaen'     => 'js/unicaen.js',
-            '050_jquery_form' => 'vendor/jquery.form-3.51.js', // pour l'uploader Unicaen uniquement!!,
-
-            '001_' => 'js/datepicker-fr.js',
-            '113_' => 'js/paiement.js',
-
-            '121_' => 'js/piece-jointe.js',
-        ],
-        'stylesheets'    => [
-            '010_jquery-ui'           => 'vendor/jquery-ui-1.11.4/jquery-ui.min.css',
-            '020_jquery-ui-structure' => 'vendor/jquery-ui-1.11.4/jquery-ui.structure.min.css',
-            '030_jquery-ui-theme'     => 'vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css',
-            '040_bootstrap'           => 'vendor/bootstrap-3.3.5/css/bootstrap.min.css',
-            '050_bootstrap-theme'     => 'vendor/bootstrap-3.3.5/css/bootstrap-theme.min.css',
-            '060_unicaen'             => null,
-
-            '111_' => 'css/cartridge.css',
-            '112_' => 'vendor/font-awesome-4.5.0/css/font-awesome.min.css',
-            '113_' => 'vendor/open-sans-gh-pages/open-sans.css',
-            '114_' => 'css/budget.css',
-            '115_' => 'css/paiement.css',
-            '116_' => 'css/agrement.css',
-            '118_' => 'css/acceuil.css',
-            '120_' => 'css/callout.css',
-            '121_' => 'css/piece-jointe.css',
-        ],
     ],
 ];
 

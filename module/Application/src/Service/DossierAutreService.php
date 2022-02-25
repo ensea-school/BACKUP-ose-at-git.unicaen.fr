@@ -16,6 +16,8 @@ use http\Exception;
  * Description of DossierAutreService
  *
  * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
+ * @method DossierAutre get($id)
+ * @method DossierAutre[] getList(QueryBuilder $qb = null, $alias = null)
  */
 class DossierAutreService extends AbstractEntityService
 {
@@ -82,8 +84,7 @@ class DossierAutreService extends AbstractEntityService
      *
      * @return string
      */
-    public
-    function getAlias()
+    public function getAlias()
     {
         return 'dossierAutre';
     }

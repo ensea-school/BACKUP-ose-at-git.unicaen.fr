@@ -130,7 +130,7 @@ class UtilisateurService extends AbstractEntityService
      *   creer-intervenant : bool
      *   code   : null | string                     => généré si non fourni
      *   annee  : null | int | Annee                => Année en cours si non fournie
-     *   statut : null | string | StatutIntervenant => AUTRES si non fourni, si string alors c'est le code du statut
+     *   statut : null | string | Statut => AUTRES si non fourni, si string alors c'est le code du statut
      *
      * @return Utilisateur
      */

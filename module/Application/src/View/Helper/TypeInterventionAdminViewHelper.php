@@ -93,7 +93,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
         $statuts = $ti->getTypeInterventionStatut();
         foreach ($statuts as $tis) {
             if ($title) $title .= ' - ';
-            $title .= $tis->getStatutIntervenant()->getLibelle();
+            $title .= $tis->getStatut()->getLibelle();
         }
         $etoile = (strlen($title) ? '&#x2605;' : '');
 

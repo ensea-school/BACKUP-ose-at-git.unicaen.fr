@@ -827,3 +827,8 @@ td .alert {
     padding-top: 10px;
     float:right;
 }
+
+form.statut fieldset legend {
+    font-size: 12px;
+    font-weight: 700;
+}

@@ -9,6 +9,7 @@ return [
     'columns' => [
         'HISTO_DESTRUCTION',
         'ORDRE',
+        'ANNEE_ID',
     ],
 ];
 

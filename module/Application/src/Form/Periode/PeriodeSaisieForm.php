@@ -1,7 +1,4 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\Periode;
 
@@ -84,7 +81,7 @@ class PeriodeSaisieForm extends AbstractForm
         $this->add([
             'name'    => 'paiement',
             'options' => [
-                'label' => "peut porter des paiement",
+                'label' => "Peut porter des paiements",
             ],
             'type'    => 'Checkbox',
         ]);

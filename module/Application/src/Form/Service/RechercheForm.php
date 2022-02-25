@@ -35,9 +35,8 @@ use Laminas\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
+class RechercheForm extends AbstractForm
 {
-    use EntityManagerAwareTrait;
     use StructureServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;

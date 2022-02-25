@@ -11,7 +11,6 @@ use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use UnicaenApp\Util;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Description of TypeInterventionStructureSaisieForm

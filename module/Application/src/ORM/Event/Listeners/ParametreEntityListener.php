@@ -50,6 +50,7 @@ class ParametreEntityListener implements EventSubscriber
         $this->metadata = $this->em->getClassMetadata(get_class($this->entity));
         $this->hydrator = new ClassMethodsHydrator();
         $this->hydrator->setUnderscoreSeparatedKeys(false);
+        $disabledFilters = $this->disableFilters();
 
         /* Gestion de l'historique en délégation à l'HistoriqueListener */
         $histoListener = new HistoriqueListener();
@@ -78,6 +79,8 @@ class ParametreEntityListener implements EventSubscriber
                 $this->saveNextEntities();
             }
         }
+
+        $this->enableFilters($disabledFilters);
 
         $this->isSaving = false;
     }
@@ -286,6 +289,28 @@ class ParametreEntityListener implements EventSubscriber
         }
 
         return $ucc;
+    }
+
+
+
+    protected function disableFilters()
+    {
+        $filters = $this->em->getFilters()->getEnabledFilters();
+
+        foreach ($filters as $name => $filter) {
+            $this->em->getFilters()->disable($name);
+        }
+
+        return $filters;
+    }
+
+
+
+    protected function enableFilters(array $filters)
+    {
+        foreach ($filters as $name => $filter) {
+            $this->em->getFilters()->enable($name);
+        }
     }
 
 

@@ -3,7 +3,7 @@
 namespace Application\Entity\Service;
 
 use Application\Entity\Db\EtatVolumeHoraire;
-use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Traits\NiveauEtapeAwareTrait;

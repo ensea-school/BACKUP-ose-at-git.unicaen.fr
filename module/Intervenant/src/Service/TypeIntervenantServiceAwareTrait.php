@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Service\Traits;
+namespace Intervenant\Service;
 
-use Application\Service\TypeIntervenantService;
 
 /**
  * Description of TypeIntervenantServiceAwareTrait

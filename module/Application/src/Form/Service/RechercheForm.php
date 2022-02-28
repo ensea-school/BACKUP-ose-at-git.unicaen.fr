@@ -7,7 +7,7 @@ use Application\Entity\Db\Etape;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
 use Application\Entity\Service\Recherche;
@@ -18,7 +18,7 @@ use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -35,9 +35,8 @@ use Laminas\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
+class RechercheForm extends AbstractForm
 {
-    use EntityManagerAwareTrait;
     use StructureServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;

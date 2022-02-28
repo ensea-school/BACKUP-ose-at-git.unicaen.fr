@@ -4,11 +4,11 @@ namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
+use Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 
@@ -19,7 +19,7 @@ use Application\Filter\StringFromFloat;
  */
 class TypeInterventionStatutSaisieForm extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
+    use TypeInterventionStatutAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use StatutServiceAwareTrait;
 

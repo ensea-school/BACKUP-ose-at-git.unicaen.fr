@@ -2,8 +2,6 @@
 
 namespace Intervenant\Entity\Db;
 
-use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
-use Application\Entity\Db\TypeIntervenant;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
 use Laminas\Permissions\Acl\Role\RoleInterface;

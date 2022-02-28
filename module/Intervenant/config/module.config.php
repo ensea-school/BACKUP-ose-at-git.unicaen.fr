@@ -89,7 +89,8 @@ return [
     ],
 
     'services' => [
-        Service\StatutService::class => Service\StatutServiceFactory::class,
+        Service\TypeIntervenantService::class => Service\TypeIntervenantServiceFactory::class,
+        Service\StatutService::class          => Service\StatutServiceFactory::class,
     ],
 
 

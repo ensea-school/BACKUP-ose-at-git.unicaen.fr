@@ -21,7 +21,7 @@ use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\ServiceAPayerServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;

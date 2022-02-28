@@ -3,8 +3,10 @@
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $form  \Intervenant\Form\StatutSaisieForm
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $typesIntervenants \Intervenant\Entity\Db\TypeIntervenant[]
+ * @var $statuts           \Intervenant\Entity\Db\Statut[]
+ * @var $form              \Intervenant\Form\StatutSaisieForm
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
@@ -20,267 +22,290 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 ?>
 
-<!-- Informations générales -->
-<div class="panel panel-default">
-    <div class="panel-heading">Informations générales</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-4">
-                <?= $this->formControlGroup($form->get('typeIntervenant')); ?>
-            </div>
-            <div class="col-md-8">
-                <?= $this->formControlGroup($form->get('libelle')); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <?= $this->formControlGroup($form->get('code')); ?>
-            </div>
-            <div class="col-md-4">
-                <?= $this->formControlGroup($form->get('tauxChargesPatronales')); ?>
-            </div>
-            <div class="col-md-4">
-                <?= $this->formControlGroup($form->get('prioritaireIndicateurs')); ?>
-            </div>
-        </div>
-        <div class="row">
-            <?php for ($i = 1; $i <= 4; $i++): if ($form->has('codesCorresp' . $i)): ?>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('codesCorresp' . $i)); ?>
-                </div>
-            <?php endif; endfor; ?>
-        </div>
-
+<div class="row">
+    <div class="col-md-3">
+        <?php
+        foreach ($typesIntervenants as $typeIntervenant) {
+            echo $this->tag('h3')->text($typeIntervenant);
+            echo $this->tag('div', ['class' => 'list-group']);
+            foreach ($statuts as $statut) {
+                if ($statut->getTypeIntervenant() == $typeIntervenant) {
+                    $url    = $this->url('statut/saisie', ['statut' => $statut?->getId()]);
+                    $active = $statut == $form->getObject() ? ' active' : '';
+                    echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->text($statut) . "\n";
+                }
+            }
+            echo '</div>';
+        }
+        ?>
     </div>
-</div>
-
-
-<!-- Données personnelles -->
-<div class="panel panel-default">
-    <div class="panel-heading">Données personnelles</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-12">
-                <?= $this->formControlGroup($form->get('dossier')); ?>
-            </div>
-        </div>
-        <div class="donneesDetails">
-            <div class="row">
-                <div class="col-md-12">
-                    <?= $this->formControlGroup($form->get('dossierSelectionnable')); ?>
-                </div>
-            </div>
-            <fieldset>
-                <legend>Modules à activer :</legend>
-
+    <div class="col-md-9">
+        <!-- Informations générales -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Informations générales</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('dossierIdentiteComplementaire')); ?>
+                        <?= $this->formControlGroup($form->get('typeIntervenant')); ?>
                     </div>
-                    <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('dossierContact')); ?>
-                    </div>
-                    <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('dossierAdresse')); ?>
+                    <div class="col-md-8">
+                        <?= $this->formControlGroup($form->get('libelle')); ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('dossierBanque')); ?>
+                        <?= $this->formControlGroup($form->get('code')); ?>
                     </div>
                     <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('dossierInsee')); ?>
+                        <?= $this->formControlGroup($form->get('tauxChargesPatronales')); ?>
                     </div>
                     <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('dossierEmployeur')); ?>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="donneesContactDetails">
-                <legend>Règles spécifiques au module Contact :</legend>
-                <div class="row">
-                    <div class="col-md-12">
-                        <?= $this->formControlGroup($form->get('dossierTelPerso')); ?>
+                        <?= $this->formControlGroup($form->get('prioritaireIndicateurs')); ?>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <?= $this->formControlGroup($form->get('dossierEmailPerso')); ?>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>Autres informations demandées :</legend>
-                <div class="row">
-                    <?php for ($i = 1; $i <= 5; $i++): if ($form->has('dossierAutre' . $i)): ?>
+                    <?php for ($i = 1; $i <= 4; $i++): if ($form->has('codesCorresp' . $i)): ?>
                         <div class="col-md-6">
-                            <?= $this->formControlGroup($form->get('dossierAutre' . $i)); ?>
+                            <?= $this->formControlGroup($form->get('codesCorresp' . $i)); ?>
                         </div>
                     <?php endif; endfor; ?>
                 </div>
-            </fieldset>
+
+            </div>
         </div>
+
+
+        <!-- Données personnelles -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Données personnelles</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('dossier')); ?>
+                    </div>
+                </div>
+                <div class="donneesDetails">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->formControlGroup($form->get('dossierSelectionnable')); ?>
+                        </div>
+                    </div>
+                    <fieldset>
+                        <legend>Modules à activer :</legend>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierIdentiteComplementaire')); ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierContact')); ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierAdresse')); ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierBanque')); ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierInsee')); ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierEmployeur')); ?>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="donneesContactDetails">
+                        <legend>Règles spécifiques au module Contact :</legend>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?= $this->formControlGroup($form->get('dossierTelPerso')); ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?= $this->formControlGroup($form->get('dossierEmailPerso')); ?>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Autres informations demandées :</legend>
+                        <div class="row">
+                            <?php for ($i = 1; $i <= 5; $i++): if ($form->has('dossierAutre' . $i)): ?>
+                                <div class="col-md-6">
+                                    <?= $this->formControlGroup($form->get('dossierAutre' . $i)); ?>
+                                </div>
+                            <?php endif; endfor; ?>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pièces justificatives -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Pièces justificatives</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('pieceJustificative')); ?>
+                        <a target="_blank" href="<?= $this->url('piece-jointe/type-piece-jointe-statut'); ?>">Page d'administration des pièces
+                            justificatives</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Services -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Services d'enseignement</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('servicePrevu')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('serviceRealise')); ?>
+                    </div>
+                </div>
+                <div class="row servicesDetails">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('serviceExterieur')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Référentiel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Référentiel</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('referentielPrevu')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('referentielRealise')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Agréments -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Agréments</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('conseilRestreint')); ?>
+                    </div>
+                    <div class="col-md-6 agrementCRDetails">
+                        <?= $this->formControlGroup($form->get('conseilRestreintDureeVie')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('conseilAcademique')); ?>
+                    </div>
+                    <div class="col-md-6 agrementCADetails">
+                        <?= $this->formControlGroup($form->get('conseilAcademiqueDureeVie')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Contrat -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Contrat de travail et avenants</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('contrat')); ?>
+                        <a target="_blank" href="<?= $this->url('contrat/modeles'); ?>">Page d'administration des modèles de contrats de travail</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Calcul des heures complémentaires et mises en paiement -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Calcul des heures complémentaires et mises en paiement</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('serviceStatutaire')); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('modificationServiceDu')); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('depassementServiceDuSansHC')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('cloture')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('motifNonPaiement')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('formuleVisualisation')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('paiementVisualisation')); ?>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Plafonds -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Plafonds</div>
+            <div class="panel-body">
+                TODO
+            </div>
+        </div>
+
+
+        <!-- Boutons d'actions -->
+        <a href="<?= $this->url('statut') ?>" class="btn btn-default">
+            <i class="fa fa-undo"></i> Retour à la liste des statuts
+        </a>
+        <?php if ($canEdit): ?>
+            <?= $this->formSubmit($form->get('submit')); ?>
+            <?php if ($form->getObject()?->getId()): ?>
+                <a class="pop-ajax btn btn-danger" data-event="statut-clone"
+                   href="<?= $this->url('statut/delete', ['statut' => $form->getObject()->getId()]) ?>"
+                   title="Supprimer le statut d'intervenant"
+                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                   data-confirm="true" data-confirm-button="Oui"
+                   data-cancel-button="Non"
+                   data-submit-reload="true">
+                    <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                <a class="ajax-modal btn btn-warning" data-event="statut-clone"
+                   href="<?= $this->url('statut/clone', ['statut' => $form->getObject()->getId()]) ?>"
+                   title="Dupliquer le statut d'intervenant">
+                    <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <?= $this->form()->closeTag(); ?>
+
     </div>
+
 </div>
-
-
-<!-- Pièces justificatives -->
-<div class="panel panel-default">
-    <div class="panel-heading">Pièces justificatives</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-12">
-                <?= $this->formControlGroup($form->get('pieceJustificative')); ?>
-                <a target="_blank" href="<?= $this->url('piece-jointe/type-piece-jointe-statut'); ?>">Page d'administration des pièces justificatives</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Services -->
-<div class="panel panel-default">
-    <div class="panel-heading">Services d'enseignement</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('servicePrevu')); ?>
-            </div>
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('serviceRealise')); ?>
-            </div>
-        </div>
-        <div class="row servicesDetails">
-            <div class="col-md-12">
-                <?= $this->formControlGroup($form->get('serviceExterieur')); ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Référentiel -->
-<div class="panel panel-default">
-    <div class="panel-heading">Référentiel</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('referentielPrevu')); ?>
-            </div>
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('referentielRealise')); ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Agréments -->
-<div class="panel panel-default">
-    <div class="panel-heading">Agréments</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('conseilRestreint')); ?>
-            </div>
-            <div class="col-md-6 agrementCRDetails">
-                <?= $this->formControlGroup($form->get('conseilRestreintDureeVie')); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('conseilAcademique')); ?>
-            </div>
-            <div class="col-md-6 agrementCADetails">
-                <?= $this->formControlGroup($form->get('conseilAcademiqueDureeVie')); ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Contrat -->
-<div class="panel panel-default">
-    <div class="panel-heading">Contrat de travail et avenants</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-12">
-                <?= $this->formControlGroup($form->get('contrat')); ?>
-                <a target="_blank" href="<?= $this->url('contrat/modeles'); ?>">Page d'administration des modèles de contrats de travail</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Calcul des heures complémentaires et mises en paiement -->
-<div class="panel panel-default">
-    <div class="panel-heading">Calcul des heures complémentaires et mises en paiement</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-4">
-                <?= $this->formControlGroup($form->get('serviceStatutaire')); ?>
-            </div>
-            <div class="col-md-4">
-                <?= $this->formControlGroup($form->get('modificationServiceDu')); ?>
-            </div>
-            <div class="col-md-4">
-                <?= $this->formControlGroup($form->get('depassementServiceDuSansHC')); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('cloture')); ?>
-            </div>
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('motifNonPaiement')); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('formuleVisualisation')); ?>
-            </div>
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('paiementVisualisation')); ?>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-<!-- Plafonds -->
-<div class="panel panel-default">
-    <div class="panel-heading">Plafonds</div>
-    <div class="panel-body">
-        TODO
-    </div>
-</div>
-
-
-<!-- Boutons d'actions -->
-<a href="<?= $this->url('statut') ?>" class="btn btn-default">
-    <i class="fa fa-undo"></i> Retour à la liste des statuts
-</a>
-<?php if ($canEdit): ?>
-    <?= $this->formSubmit($form->get('submit')); ?>
-    <?php if ($form->getObject()?->getId()): ?>
-        <a class="pop-ajax btn btn-danger" data-event="statut-clone"
-           href="<?= $this->url('statut/delete', ['statut' => $form->getObject()->getId()]) ?>"
-           title="Supprimer le statut d'intervenant"
-           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-           data-confirm="true" data-confirm-button="Oui"
-           data-cancel-button="Non"
-           data-submit-reload="true">
-            <i class="fa fa-trash-alt"></i> Supprimer</a>
-        <a class="ajax-modal btn btn-warning" data-event="statut-clone"
-           href="<?= $this->url('statut/clone', ['statut' => $form->getObject()->getId()]) ?>"
-           title="Dupliquer le statut d'intervenant">
-            <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
-    <?php endif; ?>
-<?php endif; ?>
-
-<?= $this->form()->closeTag(); ?>
 
 <script type="text/javascript">
     $(function () {

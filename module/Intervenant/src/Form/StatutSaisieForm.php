@@ -65,6 +65,7 @@ class StatutSaisieForm extends AbstractForm
         ];
 
         $ignored = [
+            'id',
             'ordre',
             'pieceJustificativeVisualisation',
             'pieceJustificativeEdition',

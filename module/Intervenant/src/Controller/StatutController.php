@@ -68,13 +68,18 @@ class StatutController extends AbstractController
         }
 
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
+        $canEdit = false;
         if ($canEdit) {
             $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) {
                 try {
+                    $isNew = !$si->getId();
                     $this->getServiceStatut()->save($si);
                     unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                     unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                    if ($isNew) {
+                        $this->redirect()->toRoute('statut/saisie', ['statut' => $si->getId()]);
+                    }
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
@@ -84,7 +89,7 @@ class StatutController extends AbstractController
             $form->readOnly();
         }
 
-        return compact('typesIntervenants', 'statuts', 'form', 'title');
+        return compact('typesIntervenants', 'statut', 'statuts', 'form', 'title');
     }
 
 

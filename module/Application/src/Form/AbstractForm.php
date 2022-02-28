@@ -451,7 +451,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
 
 
 
-    public function readOnly(bool $readOnly)
+    public function readOnly(bool $readOnly = true)
     {
         /** @var $element \Laminas\Form\Element */
         foreach ($this->getElements() as $element) {

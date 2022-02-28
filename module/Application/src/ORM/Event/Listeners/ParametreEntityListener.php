@@ -167,8 +167,10 @@ class ParametreEntityListener implements EventSubscriber
     {
         $next = $this->nextEntities();
         foreach ($next as $entity) {
-            $this->em->remove($entity);
-            $this->em->flush($entity);
+            if ($entity) {
+                $this->em->remove($entity);
+                $this->em->flush($entity);
+            }
         }
     }
 

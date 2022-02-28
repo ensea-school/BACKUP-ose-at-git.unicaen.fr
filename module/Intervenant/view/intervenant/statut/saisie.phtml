@@ -6,6 +6,7 @@ use Application\Provider\Privilege\Privileges;
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $typesIntervenants \Intervenant\Entity\Db\TypeIntervenant[]
  * @var $statuts           \Intervenant\Entity\Db\Statut[]
+ * @var $statut            \Intervenant\Entity\Db\Statut
  * @var $form              \Intervenant\Form\StatutSaisieForm
  */
 
@@ -28,11 +29,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         foreach ($typesIntervenants as $typeIntervenant) {
             echo $this->tag('h3')->text($typeIntervenant);
             echo $this->tag('div', ['class' => 'list-group']);
-            foreach ($statuts as $statut) {
-                if ($statut->getTypeIntervenant() == $typeIntervenant) {
-                    $url    = $this->url('statut/saisie', ['statut' => $statut?->getId()]);
-                    $active = $statut == $form->getObject() ? ' active' : '';
-                    echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->text($statut) . "\n";
+            foreach ($statuts as $s) {
+                if ($s->getTypeIntervenant() == $typeIntervenant) {
+                    $url    = $this->url('statut/saisie', ['statut' => $s->getId()]);
+                    $active = $s == $statut ? ' active' : '';
+                    echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->text($s) . "\n";
                 }
             }
             echo '</div>';
@@ -59,9 +60,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('tauxChargesPatronales')); ?>
                     </div>
-                    <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('prioritaireIndicateurs')); ?>
-                    </div>
                 </div>
                 <div class="row">
                     <?php for ($i = 1; $i <= 4; $i++): if ($form->has('codesCorresp' . $i)): ?>
@@ -70,7 +68,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                         </div>
                     <?php endif; endfor; ?>
                 </div>
-
+                <?= $this->formControlGroup($form->get('prioritaireIndicateurs')); ?>
             </div>
         </div>
 
@@ -239,33 +237,18 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <div class="panel-heading">Calcul des heures complémentaires et mises en paiement</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('serviceStatutaire')); ?>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('modificationServiceDu')); ?>
                     </div>
-                    <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('depassementServiceDuSansHC')); ?>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('cloture')); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('motifNonPaiement')); ?>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('formuleVisualisation')); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('paiementVisualisation')); ?>
-                    </div>
-                </div>
-
+                <?= $this->formControlGroup($form->get('depassementServiceDuSansHC')); ?>
+                <?= $this->formControlGroup($form->get('cloture')); ?>
+                <?= $this->formControlGroup($form->get('motifNonPaiement')); ?>
+                <?= $this->formControlGroup($form->get('formuleVisualisation')); ?>
+                <?= $this->formControlGroup($form->get('paiementVisualisation')); ?>
             </div>
         </div>
 
@@ -285,9 +268,9 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         </a>
         <?php if ($canEdit): ?>
             <?= $this->formSubmit($form->get('submit')); ?>
-            <?php if ($form->getObject()?->getId()): ?>
+            <?php if ($statut->getId()): ?>
                 <a class="pop-ajax btn btn-danger" data-event="statut-clone"
-                   href="<?= $this->url('statut/delete', ['statut' => $form->getObject()->getId()]) ?>"
+                   href="<?= $this->url('statut/delete', ['statut' => $statut->getId()]) ?>"
                    title="Supprimer le statut d'intervenant"
                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                    data-confirm="true" data-confirm-button="Oui"
@@ -295,7 +278,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                    data-submit-reload="true">
                     <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
                 <a class="ajax-modal btn btn-warning" data-event="statut-clone"
-                   href="<?= $this->url('statut/clone', ['statut' => $form->getObject()->getId()]) ?>"
+                   href="<?= $this->url('statut/clone', ['statut' => $statut->getId()]) ?>"
                    title="Dupliquer le statut d'intervenant">
                     <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
             <?php endif; ?>

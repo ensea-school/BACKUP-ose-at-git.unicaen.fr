@@ -65,6 +65,7 @@ class StatutSaisieForm extends AbstractForm
         ];
 
         $ignored = [
+            'id',
             'ordre',
             'pieceJustificativeVisualisation',
             'pieceJustificativeEdition',
@@ -111,56 +112,170 @@ class StatutSaisieForm extends AbstractForm
 
         foreach ($dveElements as $dveElement) {
             $this->spec([$dveElement => [
-                'type'    => 'Select',
-                'name'    => $dveElement,
-                'options' => [
+                'type'     => 'Select',
+                'name'     => $dveElement,
+                'options'  => [
                     'value_options' => [
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
                         'edition'       => 'Activé et modifiable par l\'intervenant',
                     ],
+                ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $getter = 'get' . ucfirst($name);
+
+                        $access = $statut->{$getter}();
+                        $visu   = $statut->{$getter . 'Visualisation'}();
+                        $edit   = $statut->{$getter . 'Edition'}();
+
+                        if ($edit && $visu && $access) {
+                            return 'edition';
+                        } elseif ($visu && $access) {
+                            return 'visualisation';
+                        } elseif ($access) {
+                            return 'active';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $access = false;
+                        $visu   = false;
+                        $edit   = false;
+                        switch ($value) {
+                            case 'edition':
+                                $edit = true;
+                            case 'visualisation':
+                                $visu = true;
+                            case 'active':
+                                $access = true;
+                        }
+                        $setter = 'set' . ucfirst($name);
+                        $statut->{$setter}($access);
+                        $statut->{$setter . 'Visualisation'}($visu);
+                        $statut->{$setter . 'Edition'}($edit);
+                    },
                 ],
             ]]);
         }
 
         $this->spec([
             'pieceJustificative'    => [
-                'type'    => 'Select',
-                'name'    => 'pieceJustificative',
-                'options' => [
+                'type'     => 'Select',
+                'name'     => 'pieceJustificative',
+                'options'  => [
                     'value_options' => [
+                        'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
                         'edition'       => 'Activé et modifiable par l\'intervenant',
                     ],
                 ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $visu = $statut->getPieceJustificativeVisualisation();
+                        $edit = $statut->getPieceJustificativeEdition();
+                        if ($edit && $visu) {
+                            return 'edition';
+                        } elseif ($visu) {
+                            return 'visualisation';
+                        } else {
+                            return 'active';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $visu = false;
+                        $edit = false;
+                        switch ($value) {
+                            case 'edition':
+                                $edit = true;
+                            case 'visualisation':
+                                $visu = true;
+                        }
+                        $statut->setPieceJustificativeVisualisation($visu);
+                        $statut->setPieceJustificativeEdition($edit);
+                    },
+                ],
             ],
             'conseilRestreint'      => [
-                'type'    => 'Select',
-                'name'    => 'conseilRestreint',
-                'options' => [
+                'type'     => 'Select',
+                'name'     => 'conseilRestreint',
+                'options'  => [
                     'value_options' => [
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
                     ],
+                ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $access = $statut->getConseilRestreint();
+                        $visu   = $statut->getConseilRestreintVisualisation();
+
+                        if ($visu && $access) {
+                            return 'visualisation';
+                        } elseif ($access) {
+                            return 'active';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $access = false;
+                        $visu   = false;
+                        switch ($value) {
+                            case 'visualisation':
+                                $visu = true;
+                            case 'active':
+                                $access = true;
+                        }
+                        $statut->setConseilRestreint($access);
+                        $statut->setConseilRestreintVisualisation($visu);
+                    },
                 ],
             ],
             'conseilAcademique'     => [
-                'type'    => 'Select',
-                'name'    => 'conseilAcademique',
-                'options' => [
+                'type'     => 'Select',
+                'name'     => 'conseilAcademique',
+                'options'  => [
                     'value_options' => [
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
                     ],
                 ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $access = $statut->getConseilAcademique();
+                        $visu   = $statut->getConseilAcademiqueVisualisation();
+
+                        if ($visu && $access) {
+                            return 'visualisation';
+                        } elseif ($access) {
+                            return 'active';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $access = false;
+                        $visu   = false;
+                        switch ($value) {
+                            case 'visualisation':
+                                $visu = true;
+                            case 'active':
+                                $access = true;
+                        }
+                        $statut->setConseilAcademique($access);
+                        $statut->setConseilAcademiqueVisualisation($visu);
+                    },
+                ],
             ],
             'contrat'               => [
-                'type'    => 'Select',
-                'name'    => 'contrat',
-                'options' => [
+                'type'     => 'Select',
+                'name'     => 'contrat',
+                'options'  => [
                     'value_options' => [
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
@@ -168,16 +283,77 @@ class StatutSaisieForm extends AbstractForm
                         'depot'         => 'Activé et contrat téléversable par l\'intervenant',
                     ],
                 ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $access = $statut->getContrat();
+                        $visu   = $statut->getContratVisualisation();
+                        $depot  = $statut->getContratDepot();
+
+                        if ($depot && $visu && $access) {
+                            return 'depot';
+                        } elseif ($visu && $access) {
+                            return 'visualisation';
+                        } elseif ($access) {
+                            return 'active';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $access = false;
+                        $visu   = false;
+                        $depot  = false;
+                        switch ($value) {
+                            case 'depot':
+                                $depot = true;
+                            case 'visualisation':
+                                $visu = true;
+                            case 'active':
+                                $access = true;
+                        }
+                        $statut->setContrat($access);
+                        $statut->setContratVisualisation($visu);
+                        $statut->setContratDepot($depot);
+                    },
+                ],
             ],
             'modificationServiceDu' => [
-                'type'    => 'Select',
-                'name'    => 'modificationServiceDu',
-                'options' => [
+                'type'     => 'Select',
+                'name'     => 'modificationServiceDu',
+                'options'  => [
                     'value_options' => [
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
                     ],
+                ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $access = $statut->getModificationServiceDu();
+                        $visu   = $statut->getModificationServiceDuVisualisation();
+
+                        if ($visu && $access) {
+                            return 'visualisation';
+                        } elseif ($access) {
+                            return 'active';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $access = false;
+                        $visu   = false;
+                        switch ($value) {
+
+                            case 'visualisation':
+                                $visu = true;
+
+                            case 'active':
+                                $access = true;
+                        }
+                        $statut->setModificationServiceDu($access);
+                        $statut->setModificationServiceDuVisualisation($visu);
+                    },
                 ],
             ],
         ]);
@@ -185,12 +361,11 @@ class StatutSaisieForm extends AbstractForm
         $this->build();
         $this->setAttribute('class', 'statut');
 
+        $this->addSubmit();
         $this->get('serviceStatutaire')->setOption('suffix', 'HETD');
         $this->get('tauxChargesPatronales')->setOption('suffix', '%');
         $this->get('conseilRestreintDureeVie')->setOption('suffix', 'an(s)');
         $this->get('conseilAcademiqueDureeVie')->setOption('suffix', 'an(s)');
-
-        $this->addSubmit();
         $this->setLabels($labels);
 
         $this->setValueOptions('typeIntervenant', $this->getServiceTypeIntervenant()->getList());

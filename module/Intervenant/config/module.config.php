@@ -37,14 +37,10 @@ return [
             'may_terminate' => true,
             'child_routes'  => [
                 'saisie' => [
-                    'options'       => [
-                        'route'       => '/saisie[/:statut]',
-                        'constraints' => [
-                            'statut' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'saisie',
-                        ],
+                    'route'         => '/saisie[/:statut]',
+                    'action'        => 'saisie',
+                    'constraints'   => [
+                        'statut' => '[0-9]*',
                     ],
                     'may_terminate' => true,
                 ],
@@ -110,11 +106,11 @@ return [
         'Intervenant\Controller\Note'   => Controller\NoteControllerFactory::class,
     ],
 
-
     'services' => [
         Service\TypeIntervenantService::class => Service\TypeIntervenantServiceFactory::class,
         Service\StatutService::class          => Service\StatutServiceFactory::class,
         Service\NoteService::class   => Service\NoteServiceFactory::class,
+        Assertion\StatutAssertion::class      => Assertion\StatutAssertionFactory::class,
     ],
 
 

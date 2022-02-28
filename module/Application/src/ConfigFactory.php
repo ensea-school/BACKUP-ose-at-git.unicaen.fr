@@ -82,6 +82,13 @@ class ConfigFactory
             ];
         }
 
+        if (isset($config['resources'])) {
+            if (!isset($finalConfig['bjyauthorize'])) $finalConfig['bjyauthorize'] = [];
+            $finalConfig['bjyauthorize']['resource_providers'] = [
+                \BjyAuthorize\Provider\Resource\Config::class => $config['resources'],
+            ];
+        }
+
         if (isset($config['controllers'])) {
             $finalConfig['controllers'] = [
                 'factories' => $config['controllers'],

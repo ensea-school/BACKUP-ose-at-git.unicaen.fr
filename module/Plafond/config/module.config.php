@@ -110,7 +110,7 @@ return [
         'administration' => [
             'pages' => [
                 'plafonds' => [
-                    'icon'         => 'fa fa-wrench',
+                    'icon'         => 'fa-solid fa-wrench',
                     'label'        => "Plafonds",
                     'route'        => 'plafond',
                     'resource'     => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),

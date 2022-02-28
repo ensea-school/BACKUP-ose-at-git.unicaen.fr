@@ -32,7 +32,7 @@ class ModificationServiceDuForm extends AbstractForm
             'type'       => 'Button',
             'name'       => 'ajouter',
             'options'    => [
-                'label'         => '<i class="fa fa-plus"></i> Ajouter',
+                'label'         => '<i class="fa-solid fa-plus"></i> Ajouter',
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],

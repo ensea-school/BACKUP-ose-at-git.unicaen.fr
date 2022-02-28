@@ -281,7 +281,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
         <!-- Boutons d'actions -->
         <a href="<?= $this->url('statut') ?>" class="btn btn-default">
-            <i class="fa fa-undo"></i> Retour à la liste des statuts
+            <i class="fa-solid fa-rotate-left"></i> Retour à la liste des statuts
         </a>
         <?php if ($canEdit): ?>
             <?= $this->formSubmit($form->get('submit')); ?>

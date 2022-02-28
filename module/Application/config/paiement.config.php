@@ -144,7 +144,7 @@ return [
                                 'label'        => "Paiement",
                                 'title'        => "Paiement",
                                 'route'        => 'paiement',
-                                'icon'         => 'fa fa-credit-card',
+                                'icon'         => 'fa-solid fa-credit-card',
                                 'border-color' => '#F5E79E',
                                 'resource'     => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                                 'order'        => 40,

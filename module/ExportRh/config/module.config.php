@@ -123,7 +123,7 @@ return [
                                  'pages'          => [
                                      'chercher-intervenant-rh' => [
                                          'label'        => 'Rechercher un intervenant dans le SI RH',
-                                         'icon'         => 'fa fa-graduation-cap',
+                                         'icon'         => 'fa-solid fa-graduation-cap',
                                          'route'        => 'intervenant/administration/chercher-intervenant-rh',
                                          'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'chercher-intervenant-rh'),
                                          'order'        => 800,

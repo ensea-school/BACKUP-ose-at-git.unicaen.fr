@@ -42,7 +42,7 @@ return [
                             'pilotage' => [
                                 'label'        => 'Pilotage',
                                 'title'        => 'Pilotage',
-                                'icon'         => 'fa fa-tachometer',
+                                'icon'         => 'fa-solid fa-tachometer',
                                 'route'        => 'pilotage',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
                                 'pages'        => [

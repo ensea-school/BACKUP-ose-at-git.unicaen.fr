@@ -309,7 +309,7 @@ class Ligne extends AbstractViewHelper
             'data-id'      => $this->getService()->getId(),
             'href'         => $url,
             'title'        => 'Supprimer cet enseignement',
-        ])->html('<i class="fa fa-trash-alt"></i>');
+        ])->html('<i class="fa-solid fa-trash-can"></i>');
     }
 
 

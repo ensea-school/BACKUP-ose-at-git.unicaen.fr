@@ -240,7 +240,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
                     $attrs   = [
                         'class' => 'text-danger pull-right',
                     ];
-                    $content = $tag('span', ['class' => 'fa fa-times text-danger']);
+                    $content = $tag('span', ['class' => 'fa-solid fa-xmark text-danger']);
                 }else{
                     $attrs   = [
                         'title' => 'À faire',

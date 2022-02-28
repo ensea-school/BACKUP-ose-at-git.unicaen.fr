@@ -251,7 +251,7 @@ class Ligne extends AbstractViewHelper
             'data-id'      => $this->getServiceReferentiel()->getId(),
             'href'         => $url,
             'title'        => 'Supprimer cette ligne de référentiel',
-        ])->html('<i class="fa fa-trash-alt"></i>');
+        ])->html('<i class="fa-solid fa-trash-can"></i>');
     }
 
 

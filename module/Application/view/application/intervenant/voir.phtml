@@ -48,7 +48,7 @@ if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_C
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION))) {
     $tabs[] = [
         'id'            => 'suppression',
-        'label'         => '<i class="fa fa-trash-alt"></i> Suppression',
+        'label'         => '<i class="fa-solid fa-trash-can"></i> Suppression',
         'url'           => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];

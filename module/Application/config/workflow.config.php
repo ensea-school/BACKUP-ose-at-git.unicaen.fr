@@ -117,7 +117,7 @@ return [
                                 'label'        => "Workflow",
                                 'title'        => "Workflow",
                                 'route'        => 'workflow',
-                                'icon'         => 'fa fa-gears',
+                                'icon'         => 'fa-solid fa-gears',
                                 'resource'     => Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_VISUALISATION),
                                 'order'        => 110,
                                 'border-color' => '#111',

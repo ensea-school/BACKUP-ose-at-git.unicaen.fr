@@ -24,7 +24,7 @@ SELECT
   i.id                           id,
   null                           categorie,
   i.prenom || ' ' || i.nom_usuel || ' (' || si.libelle || ', ' || a.libelle || ')'         label,
-  'fa fa-user' icon
+  'fa-solid fa-user' icon
 FROM
   intervenant i
   JOIN statut si ON si.id = i.statut_id 
@@ -41,7 +41,7 @@ SELECT
   d.id                           id,
   null                           categorie,
   'Données personnelles'         label,
-  'fa fa-user' icon
+  'fa-solid fa-user' icon
 FROM
   intervenant_dossier d
 WHERE 
@@ -56,7 +56,7 @@ SELECT
   pj.id                         id,
   'Pièces justificatives'       categorie,
   tpj.libelle                   label,
- 'fa fa-envelope' icon
+ 'fa-solid fa-envelope' icon
 FROM
   piece_jointe pj
   JOIN type_piece_jointe tpj ON tpj.id = pj.type_piece_jointe_id
@@ -74,7 +74,7 @@ SELECT
   msd.id                              id,
   'Modifications de service dû'       categorie,
   msd.heures * mss.multiplicateur || ' heures pour ' || mss.libelle label,
-  'fa fa-fill'    icon
+  'fa-solid fa-fill'    icon
 FROM
   MODIFICATION_SERVICE_DU msd
   JOIN motif_modification_service mss ON mss.id = msd.motif_id
@@ -92,7 +92,7 @@ SELECT
   s.id                            id,
   'Enseignements|' || str.libelle_court categorie,
   TRIM(initcap(case WHEN ep.id IS NULL THEN 'Extérieur (' || e.libelle || ')' else ep.libelle || ' (' || ep.code || ')' END)) label,
-  'fa fa-graduation-cap' icon
+  'fa-solid fa-graduation-cap' icon
 FROM
   service s
   JOIN etablissement e ON e.id = s.etablissement_id 
@@ -112,7 +112,7 @@ SELECT
   s.id                          id,
   'Référentiel'                 categorie,
   fr.libelle_court || CASE WHEN str.id IS NULL THEN '' ELSE ' (' || str.libelle_court || ')' END label,
-  'fa fa-graduation-cap' icon
+  'fa-solid fa-graduation-cap' icon
 FROM
   service_referentiel s
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
@@ -132,7 +132,7 @@ SELECT
   v.id                     id,
   'Validations'            categorie,
   tv.libelle || ' par ' || u.display_name || ' le ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) label,
-  'fa fa-check' icon
+  'fa-solid fa-check' icon
 FROM
   validation v
   JOIN utilisateur u ON u.id = v.histo_createur_id
@@ -149,7 +149,7 @@ SELECT
   a.id                          id,
   'Agréments'                   categorie,
   ta.libelle || CASE WHEN s.id IS NULL THEN '' ELSE ' ' || s.libelle_court END || CASE WHEN a.date_decision IS NULL THEN '' ELSE ' (décision du ' || to_char( a.date_decision, 'dd/mm/YYYY' ) || ')' END label,
-  'fa fa-check-circle'icon
+  'fa-solid fa-circle-check'icon
 FROM
   agrement a
   JOIN type_agrement ta ON ta.id = a.type_agrement_id
@@ -168,7 +168,7 @@ SELECT
   c.id                          id,
   tc.libelle || 's'             categorie,
   'N°' || c.id || ', ' || s.libelle_court || case WHEN c.date_retour_signe IS NOT NULL THEN ', retourné signé le ' || to_char( c.date_retour_signe, 'dd/mm/YYYY' ) ELSE '' END label,
-  'fa fa-book-alt'    icon
+  'fa-solid fa-book'    icon
 FROM
   contrat c
   JOIN type_contrat tc ON tc.id = c.type_contrat_id JOIN structure s ON s.id = c.structure_id
@@ -186,7 +186,7 @@ SELECT
   v.id                     id,
   null                     categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
-  'fa fa-check' icon
+  'fa-solid fa-check' icon
 FROM
   validation v
   JOIN utilisateur u ON u.id = v.histo_createur_id
@@ -204,7 +204,7 @@ SELECT
   vh.id                     id,
   tvh.libelle               categorie,
   vh.heures || ' heures ' || ti.code || ', ' || p.libelle_court || CASE WHEN mnp.id IS NULL THEN '' ELSE ' (NP: ' || mnp.libelle_court || ')' END label,
-  'fa fa-calendar-alt' icon
+  'fa-solid fa-calendar-days' icon
 FROM
   volume_horaire vh
   JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id 
@@ -224,7 +224,7 @@ SELECT
   mep.id                          id,
   'Mises en paiement'             categorie,
   mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END label,
-  'fa fa-euro-sign' icon
+  'fa-solid fa-euro-sign' icon
 FROM
   mise_en_paiement mep
   JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
@@ -244,7 +244,7 @@ SELECT
   vh.id                           id,
   tvh.libelle                     categorie,
   vh.heures || 'h'                label,
-  'fa fa-calendar-alt' icon
+  'fa-solid fa-calendar-days' icon
 FROM
   volume_horaire_ref vh
   JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id 
@@ -262,7 +262,7 @@ SELECT
   mep.id                          id,
   'Mises en paiement'             categorie,
   mep.heures || 'h ' || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END label,
-  'fa fa-euro-sign' icon
+  'fa-solid fa-euro-sign' icon
 FROM
   mise_en_paiement mep
   JOIN formule_resultat_service_ref frs ON frs.id = mep.formule_res_service_ref_id
@@ -281,7 +281,7 @@ SELECT
   f.id                            id,
   null                            categorie,
   'Fichier: ' || f.nom            label,
-  'fa fa-file'      icon
+  'fa-solid fa-file'      icon
 FROM
   fichier f
   JOIN piece_jointe_fichier pjf ON pjf.fichier_id = f.id
@@ -299,7 +299,7 @@ SELECT
   v.id                     id,
   null                     categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
-  'fa fa-check' icon
+  'fa-solid fa-check' icon
 FROM
   validation v
   JOIN utilisateur u ON u.id = v.histo_createur_id
@@ -316,7 +316,7 @@ SELECT
   f.id                            id,
   null                            categorie,
   'Fichier: ' || f.nom            label,
-  'fa fa-file'      icon
+  'fa-solid fa-file'      icon
 FROM
   fichier f
   JOIN contrat_fichier cf ON cf.fichier_id = f.id
@@ -334,7 +334,7 @@ SELECT
   v.id                     id,
   null                     categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
-  'fa fa-check' icon
+  'fa-solid fa-check' icon
 FROM
   validation v
   JOIN utilisateur u ON u.id = v.histo_createur_id
@@ -353,7 +353,7 @@ SELECT
   '[VOLUME_HORAIRE_ID:' || vvh.VOLUME_HORAIRE_ID || ',VALIDATION_ID:' || vvh.validation_id || ']' id,
   null                     categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
-  'fa fa-check' icon
+  'fa-solid fa-check' icon
 FROM
   validation v
   JOIN utilisateur u ON u.id = v.histo_createur_id
@@ -372,7 +372,7 @@ SELECT
   '[VOLUME_HORAIRE_REF_ID:' || vvh.VOLUME_HORAIRE_REF_ID || ',VALIDATION_ID:' || vvh.validation_id || ']' id,
   null                      categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
-  'fa fa-check'  icon
+  'fa-solid fa-check'  icon
 FROM
   validation v
   JOIN utilisateur u ON u.id = v.histo_createur_id
@@ -389,7 +389,7 @@ SELECT
   v.id                     id,
   null                     categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
-  'fa fa-check' icon
+  'fa-solid fa-check' icon
 FROM
   validation v
   JOIN utilisateur u ON u.id = v.histo_createur_id

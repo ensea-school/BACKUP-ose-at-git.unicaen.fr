@@ -108,7 +108,7 @@ return [
                                 'pages'          => [
                                     'voirie' => [
                                         'label'        => 'Gestion des voiries',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fa-solid fa-graduation-cap',
                                         'route'        => 'voirie',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
                                         'order'        => 800,
@@ -127,7 +127,7 @@ return [
                                 'pages'          => [
                                     'grade'      => [
                                         'label'        => 'Gestion des grades',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fa-solid fa-graduation-cap',
                                         'route'        => 'grades',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Grade', 'index'),
                                         'order'        => 800,
@@ -170,7 +170,7 @@ return [
                                 'pages'          => [
                                     'statut'                                     => [
                                         'label'        => 'Edition des statuts des intervenants',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fa-solid fa-graduation-cap',
                                         'route'        => 'statut',
                                         'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
                                         'order'        => 90,
@@ -209,7 +209,7 @@ return [
                                 'pages'          => [
                                     'centre-cout'          => [
                                         'label'        => 'Edition des centres de coûts',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fa-solid fa-graduation-cap',
                                         'route'        => 'centre-cout',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
                                         'order'        => 80,
@@ -217,7 +217,7 @@ return [
                                     ],
                                     'centre-cout-activite' => [
                                         'label'        => 'Edition des types d\'activités des centres de coûts',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fa-solid fa-graduation-cap',
                                         'route'        => 'centre-cout-activite',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
                                         'order'        => 80,

@@ -7,7 +7,7 @@ use Application\Provider\Privilege\Privileges;
  * @var $deps \Application\Entity\Db\WfEtapeDep[][]
  */
 
-$ok = '<i class="fa fa-check text-succes"></i>';
+$ok = '<i class="fa-solid fa-check text-succes"></i>';
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_EDITION));
 
@@ -53,9 +53,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
                         <?php if ($canEdit): ?>
                             <a href="<?= $this->url('workflow/dependances/saisie', ['wfEtapeDep' => $d->getId()]) ?>"
                                class="ajax-modal" data-event="dependances-saisie"><i
-                                        class="fa fa-edit"></i></a>
+                                        class="fa-solid fa-pen-to-square"></i></a>
                             <a href="<?= $this->url('workflow/dependances/suppression', ['wfEtapeDep' => $d->getId()]) ?>"
-                               class="ajax-modal" data-event="dependances-suppression"><i class="fa fa-trash-alt"></i></a>
+                               class="ajax-modal" data-event="dependances-suppression"><i class="fa-solid fa-trash-can"></i></a>
                         <?php endif; ?>
                         <?= $d->getEtapePrec()->getLibelleAutres() ?>
                     </td>
@@ -76,7 +76,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
     <?php if ($canEdit): ?>
         <a href="<?= $this->url('workflow/dependances/saisie', [], ['query' => ['etapeSuivante' => $etape->getId()]]) ?>"
            class="btn btn-primary btn-xs ajax-modal"
-           data-event="dependances-saisie"><i class="fa fa-plus"></i> Ajouter une dépendance</a>
+           data-event="dependances-saisie"><i class="fa-solid fa-plus"></i> Ajouter une dépendance</a>
     <?php endif; ?>
     </div>
 <?php endforeach; ?>
@@ -84,9 +84,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
 <hr />
 <?php if ($canEdit): ?>
     <a href="<?= $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal"
-       data-event="dependances-saisie"><i class="fa fa-plus"></i> Ajouter une dépendance</a>
+       data-event="dependances-saisie"><i class="fa-solid fa-plus"></i> Ajouter une dépendance</a>
     <a href="<?= $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><span
-            class="fa fa-cogs"></span> Recalculer le Workflow</a>
+                class="fa-solid fa-gears"></span> Recalculer le Workflow</a>
 <?php endif; ?>
 <script type="text/javascript">
     $(function ()

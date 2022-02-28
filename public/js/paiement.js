@@ -18,7 +18,7 @@ function DemandeMiseEnPaiement(id)
     this.showError = function (serviceElement, errorStr)
     {
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
-            + '<i class="fa fa-exclamation"></i> '
+            + '<i class="fa-solid fa-exclamation"></i> '
             + errorStr
             + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
@@ -240,7 +240,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     this.showError = function (errorStr)
     {
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
-            + '<i class="fa fa-exclamation"></i> '
+            + '<i class="fa-solid fa-exclamation"></i> '
             + errorStr
             + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
@@ -457,12 +457,12 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         if (data['read-only']) {
             if (data['validation'] != undefined) {
-                outA = '<i class="fa fa-check-circle" title="Validé par ' + data['validation']['utilisateur'] + ' le ' + data['validation']['date'] + '">';
+                outA = '<i class="fa-solid fa-circle-check" title="Validé par ' + data['validation']['utilisateur'] + ' le ' + data['validation']['date'] + '">';
             } else {
                 outA = '';
             }
         } else {
-            outA = '<a role="button" class="action-delete" title="Supprimer la ligne"><i class="fa fa-times"></i></a>';
+            outA = '<a role="button" class="action-delete" title="Supprimer la ligne"><i class="fa-solid fa-xmark"></i></a>';
         }
 
         return outA;

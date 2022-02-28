@@ -22,7 +22,7 @@ $this->headTitle()->append($title);
 
 
 <a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
-    <i class="fa fa-undo" aria-hidden="true"></i>
+    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>
 
@@ -32,7 +32,7 @@ $this->headTitle()->append($title);
     {
         var scenario = $(".chargens-filtre #scenario").val();
 
-        if (!scenario){
+        if (!scenario) {
             alert('Scénario non sélectionné');
         }else{
             var url = "<?= $this->url('chargens/export/csv') ?>";

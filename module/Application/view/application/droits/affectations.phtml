@@ -55,9 +55,9 @@ $ajoutUrl = $this->url('droits/affectations/edition');
                 if (!$affectation->getSource()->getImportable() && $canEdit) {
                     ?>
                     <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><i
-                                class="fa fa-edit"></i></a>
+                                class="fa-solid fa-pen-to-square"></i></a>
                     <a href="<?= $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><i
-                                class="fa fa-times"></i></a>
+                                class="fa-solid fa-xmark"></i></a>
                     <?php
                 } else {
                     echo $affectation->getSource();

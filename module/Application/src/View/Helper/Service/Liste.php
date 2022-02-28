@@ -301,7 +301,7 @@ class Liste extends AbstractViewHelper
             'href'       => $this->getAddUrl(),
             'title'      => 'Ajouter un nouvel enseignement',
         ];
-        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><i class="fa fa-plus"></i> Je saisis</a>';
+        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><i class="fa-solid fa-plus"></i> Je saisis</a>';
 
         return $out;
     }

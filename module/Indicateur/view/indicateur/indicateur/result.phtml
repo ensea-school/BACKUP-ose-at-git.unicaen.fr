@@ -97,7 +97,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             </div>
         <?php endif; ?>
         <a class="btn btn-default" href="<?= $this->url('indicateur'); ?>">
-            <i class="fa fa-undo" aria-hidden="true"></i>
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
             Retour à la liste des indicateurs
         </a>
         <a class="btn btn-default" href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">

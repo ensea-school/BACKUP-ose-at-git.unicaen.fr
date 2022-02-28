@@ -44,7 +44,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_RESSOURCE
                        data-event="type-ressource-saisie"
                        href="<?= $this->url('type-ressource/saisie', ['typeRessource' => $type->getId()]) ?>"
                        data-submit-reload="true">
-                        <i class="fa fa-edit"></i></a>
+                        <i class="fa-solid fa-pen-to-square"></i></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('type-ressource/delete', ['typeRessource' => $type->getId()]) ?>"
                        title="Supprimer le type de ressource"
@@ -54,7 +54,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_RESSOURCE
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <i class="fa fa-trash-alt"></i>
+                        <i class="fa-solid fa-trash-can"></i>
                     </a>
                 </td>
             <?php endif; ?>
@@ -67,7 +67,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_RESSOURCE
     <a class="btn btn-primary ajax-modal" data-event="type-ressource-saisie"
        href="<?= $this->url('type-ressource/saisie') ?>"
        title="Ajouter un type de ressource">
-        <i class="fa fa-plus"></i>
+        <i class="fa-solid fa-plus"></i>
         Ajouter un type de ressource</a>
 <?php endif; ?>
 

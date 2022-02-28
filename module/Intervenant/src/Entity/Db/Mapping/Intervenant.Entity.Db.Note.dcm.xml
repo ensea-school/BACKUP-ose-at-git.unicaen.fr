@@ -7,7 +7,7 @@
             <generator strategy="SEQUENCE"/>
         </id>
         <field name="libelle" type="string" column="LIBELLE" length="500" nullable="false"/>
-        <field name="contenu" type="blob" column="CONTENU" nullable="false"/>
+        <field name="contenu" type="string" column="CONTENU" length="4000" nullable="false"/>
         <many-to-one field="type" target-entity="Intervenant\Entity\Db\TypeNote">
             <join-column name="type_note_id" referenced-column-name="ID"/>
         </many-to-one>

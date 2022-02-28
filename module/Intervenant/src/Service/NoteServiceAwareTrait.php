@@ -21,7 +21,7 @@ trait NoteServiceAwareTrait
      */
     public function setServiceNote(?NoteService $serviceNote)
     {
-        $this->NoteService = $serviceNote;
+        $this->serviceNote = $serviceNote;
 
         return $this;
     }

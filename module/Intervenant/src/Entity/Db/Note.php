@@ -4,6 +4,7 @@ namespace Intervenant\Entity\Db;
 
 
 use Application\Entity\Db\Intervenant;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -12,7 +13,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
  *
  * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  */
-class Note implements HistoriqueAwareInterface
+class Note implements ResourceInterface, HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
@@ -54,7 +55,7 @@ class Note implements HistoriqueAwareInterface
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -78,7 +79,7 @@ class Note implements HistoriqueAwareInterface
     /**
      * @return string
      */
-    public function getLibelle(): string
+    public function getLibelle(): ?string
     {
         return $this->libelle;
     }
@@ -102,7 +103,7 @@ class Note implements HistoriqueAwareInterface
     /**
      * @return string
      */
-    public function getContenu(): string
+    public function getContenu(): ?string
     {
         return $this->contenu;
     }
@@ -126,7 +127,7 @@ class Note implements HistoriqueAwareInterface
     /**
      * @return Intervenant
      */
-    public function getIntervenant(): Intervenant
+    public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;
     }
@@ -150,7 +151,7 @@ class Note implements HistoriqueAwareInterface
     /**
      * @return TypeNote
      */
-    public function getType(): TypeNote
+    public function getType(): ?TypeNote
     {
         return $this->type;
     }
@@ -169,4 +170,17 @@ class Note implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
+    public function __toString(): string
+    {
+        return $this->getLibelle();
+    }
+
+
+
+    public function getResourceId()
+    {
+        return 'Note';
+    }
 }

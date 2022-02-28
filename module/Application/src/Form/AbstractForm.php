@@ -23,7 +23,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Util;
 
 
-abstract class AbstractForm extends Form implements InputFilterProviderInterface
+abstract class  AbstractForm extends Form implements InputFilterProviderInterface
 {
     use TranslatorTrait;
 

@@ -57,6 +57,7 @@ return [
             'lien-systeme-information' => 'Afficher le lien vers le système d\'information dans la fiche',
             'note-visualisation'       => 'Notes (Visualisation)',
             'note-edition'             => 'Notes (Édition)',
+            'note-suppression'         => 'Notes (Suppression)',
         ],
     ],
 

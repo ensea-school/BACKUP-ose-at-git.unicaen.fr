@@ -353,7 +353,7 @@ return [
                         'pages' => [
                             'modification-service-du-export-csv' => [
                                 'label'        => "Modifications de service dû (CSV)",
-                                'icon'         => 'glyphicon glyphicon-adjust',
+                                'icon'         => 'fa-solid fa-fill',
                                 'title'        => "Modifications de service dû (CSV)",
                                 'route'        => 'modification-service-du/export-csv',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'export-csv'),
@@ -376,7 +376,7 @@ return [
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
-                                'icon'         => "glyphicon glyphicon-search",
+                                'icon'         => "fa-solid fa-magnifying-glass",
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'rechercher'),
                                 'order'        => 1,

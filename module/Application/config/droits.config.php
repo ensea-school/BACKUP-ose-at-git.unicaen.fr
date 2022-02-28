@@ -129,7 +129,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'droits' => [
-                                'icon'         => 'glyphicon glyphicon-off',
+                                'icon'         => 'fa-solid fa-power-off',
                                 'label'        => "Droits d'accès",
                                 'title'        => "Gestion des droits d'accès",
                                 'route'        => 'droits',

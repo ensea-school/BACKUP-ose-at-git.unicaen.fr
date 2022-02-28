@@ -233,7 +233,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
                     'title' => 'Fait',
                     'class' => 'text-success pull-right',
                 ];
-                $content = $tag('span', ['class' => 'text-success glyphicon glyphicon-ok']);
+                $content = $tag('span', ['class' => 'text-success fa-solid fa-check']);
             break;
             case $franchissement == 0:
                 if ($objectif === .0){
@@ -258,7 +258,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         }
 
         if ($detailsLink instanceof TagViewHelper) {
-            $content = $detailsLink->html($tag('span', ['class' => 'glyphicon glyphicon-eye-open'])->openClose().' '.$content);
+            $content        = $detailsLink->html($tag('span', ['class' => 'fa-solid fa-eye'])->openClose() . ' ' . $content);
             $attrs['title'] .= ' (cliquez pour afficher le détail par composante)';
 
         }

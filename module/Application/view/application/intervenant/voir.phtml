@@ -11,7 +11,7 @@ $this->intervenant($intervenant)->renderTitle('Fiche');
 $tabs = [
     [
         'id'            => 'fiche',
-        'label'         => '<span class="glyphicon glyphicon-eye-open"></span> Fiche',
+        'label'         => '<span class="fa-solid fa-eye"></span> Fiche',
         'content'       => $this->partial('application/intervenant/fiche.phtml', compact('intervenant')),
         'url'           => $this->url('intervenant/fiche', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
@@ -21,7 +21,7 @@ $tabs = [
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
     $tabs[] = [
         'id'    => 'edition',
-        'label' => '<span class="glyphicon glyphicon-pencil"></span> Édition',
+        'label' => '<i class="fa-solid fa-pencil"></span> Édition',
         'url'   => $this->url('intervenant/saisir', ['intervenant' => $intervenant->getId()]),
     ];
 }
@@ -29,7 +29,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
     $tabs[] = [
         'id'            => 'synchronisation',
-        'label'         => '<span class="glyphicon glyphicon-import"></span> Synchronisation',
+        'label'         => '<span class="fa-solid fa-download"></span> Synchronisation',
         'url'           => $this->url('intervenant/synchronisation', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];
@@ -38,7 +38,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
 if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)) {
     $tabs[] = [
         'id'            => 'export-rh',
-        'label'         => '<span class="glyphicon glyphicon-export"></span> Export RH',
+        'label'         => '<span class="fa-solid fa-upload"></span> Export RH',
         'url'           => $this->url('intervenant/exporter', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];
@@ -58,7 +58,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSI
 if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_VISUALISATION))) {
     $tabs[] = [
         'id'            => 'derogations',
-        'label'         => '<span class="glyphicon glyphicon-random"></span> Dérogations',
+        'label'         => '<span class="fa-solid fa-shuffle"></span> Dérogations',
         'url'           => $this->url('derogations', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];

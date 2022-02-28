@@ -115,7 +115,7 @@ return [
                          'pages' => [
                              'export-rh' => [
                                  'label'          => 'Export vers le SI RH',
-                                 'icon'           => 'glyphicon glyphicon-list-alt',
+                                 'icon'           => 'fa-solid fa-table-list',
                                  'route'          => 'intervenant/administration',
                                  'resource'       => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
                                  'order'          => 82,

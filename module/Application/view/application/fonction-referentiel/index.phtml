@@ -37,7 +37,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
             <td><?= $fr->getDomaineFonctionnel() ?></td>
             <td><?= $this->structure($fr->getStructure())->renderLink() ?></td>
             <td style="text-align:center"><?php if ($fr->isEtapeRequise()): ?><span
-                        class="text-success glyphicon glyphicon-ok"></span><?php else: ?><i class="fa-solid fa-xmark"></i><?php endif; ?></td>
+                        class="text-success fa-solid fa-check"></span><?php else: ?><i class="fa-solid fa-xmark"></i><?php endif; ?></td>
             <td style="text-align:center"><?= $fr->isServiceStatutaire() ? 'Oui' : 'Non' ?></td>
             <?php if ($canEdit) { ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">

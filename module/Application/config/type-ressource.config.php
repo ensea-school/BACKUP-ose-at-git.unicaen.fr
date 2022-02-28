@@ -59,7 +59,7 @@ return [
                                 'pages' => [
                                     'type-ressource' => [
                                         'label'        => 'Types de ressources',
-                                        'icon'         => 'fa  fa-commenting',
+                                        'icon'         => 'fa-solid fa-commenting',
                                         'route'        => 'type-ressource',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeRessource', 'index'),
                                         'order'        => 60,

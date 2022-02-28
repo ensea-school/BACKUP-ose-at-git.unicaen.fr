@@ -70,7 +70,7 @@ return [
                         'pages'    => [
                             'discipline' => [
                                 'border-color' => '#9F491F',
-                                'icon'         => 'glyphicon glyphicon-list-alt',
+                                'icon'         => 'fa-solid fa-table-list',
                                 'label'        => "Disciplines",
                                 'title'        => "Gestion des disciplines",
                                 'route'        => 'discipline',

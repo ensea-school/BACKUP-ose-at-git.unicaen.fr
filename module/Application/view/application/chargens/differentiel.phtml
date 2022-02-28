@@ -66,10 +66,10 @@ echo $this->form()->closeTag();
 
             if (etapeElements.is(':hidden')) {
                 etapeElements.show();
-                $(this).html('Masquer les éléments <span class="glyphicon glyphicon-arrow-up"></span>');
+                $(this).html('Masquer les éléments <span class="fa-solid fa-arrow-up"></span>');
             } else {
                 etapeElements.hide();
-                $(this).html('Afficher les éléments <span class="glyphicon glyphicon-arrow-down"></span>');
+                $(this).html('Afficher les éléments <i class="fa-solid fa-arrow-down"></i>');
             }
         });
 
@@ -152,7 +152,7 @@ if ($error) {
                 . '</table>';
             echo '</div>';
             echo '<div class="col-md-3">';
-            echo '<button class="btn btn-info diff-details-ep">Afficher les éléments <span class="glyphicon glyphicon-arrow-down"></span></button>';
+            echo '<button class="btn btn-info diff-details-ep">Afficher les éléments <i class="fa-solid fa-arrow-down"></span></button>';
             echo '</div>';
             echo '</div>';
             echo '<div class="etape-elements" style="display:none">';

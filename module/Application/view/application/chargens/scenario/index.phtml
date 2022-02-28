@@ -52,7 +52,7 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
                         <?php if ($canCopy): ?>
                             <a class="pop-ajax" data-submit-reload="true"
                                href="<?= $this->url('chargens/scenario/dupliquer', ['scenario' => $scenario->getId()]) ?>"
-                               title="Dupliquer le scénario"><span class="glyphicon glyphicon-copy"></span></a>
+                               title="Dupliquer le scénario"><span class="fa-solid fa-copy"></span></a>
                         <?php endif; ?>
                         <?php if ($canEditScenario): ?>
                             <a class="pop-ajax"

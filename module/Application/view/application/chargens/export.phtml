@@ -16,9 +16,9 @@ $this->headTitle()->append($title);
 <div class="chargens-filtre">
         <label>Scénario : </label>
         <?= $this->formSelect($filtre->get('scenario')) ?>
-        <button class="btn btn-default" type="button" onclick="getCsv()"><span class="glyphicon glyphicon-export"></span> Exporter</button>
+    <button class="btn btn-default" type="button" onclick="getCsv()"><span class="fa-solid fa-upload"></span> Exporter</button>
 </div>
-<br />
+<br/>
 
 
 <a class="btn btn-default" href="<?= $this->url('chargens'); ?>">

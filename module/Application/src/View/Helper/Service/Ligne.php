@@ -292,7 +292,7 @@ class Ligne extends AbstractViewHelper
         }
         $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => $query]);
 
-        return '<a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-pencil"></span></a>';
+        return '<a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier l\'enseignement"><i class="fa-solid fa-pencil"></i></a>';
     }
 
 
@@ -309,7 +309,7 @@ class Ligne extends AbstractViewHelper
             'data-id'      => $this->getService()->getId(),
             'href'         => $url,
             'title'        => 'Supprimer cet enseignement',
-        ])->html('<i class="fa-solid fa-trash-can"></i>');
+        ])->html('<i class="fa-solid fa-trash-can"></i');
     }
 
 
@@ -318,7 +318,7 @@ class Ligne extends AbstractViewHelper
     {
         $out =
             '<a class="service-details-button" title="Détail des heures">'
-            . '<span class="glyphicon glyphicon-chevron-' . ($details ? 'up' : 'down') . '"></span>'
+            . '<span class="fa-solid fa-chevron-' . ($details ? 'up' : 'down') . '"></span>'
             . '</a>';
 
         return $out;

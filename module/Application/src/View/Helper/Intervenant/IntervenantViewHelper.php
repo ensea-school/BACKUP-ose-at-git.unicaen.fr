@@ -180,14 +180,14 @@ class IntervenantViewHelper extends AbstractHtmlElement
                             <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
                             <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
                             <span class="statut"><?= $iStatut->getStatut()->getLibelle() ?></span>
-                            <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger glyphicon glyphicon-warning-sign', 'title' => 'Intervenant historisé'])->text('') ?>
+                            <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger fa-solid fa-triangle-exclamation', 'title' => 'Intervenant historisé'])->text('') ?>
                         </a>
                         </li>
                     <?php endif; endforeach; ?>
                     <?php if ($canAddIntervenant && $intervenant->getId()): ?>
                         <li class="ajout-intervenant">
                             <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]); ?>"
-                               title="Ajout d'un nouveau statut à l'intervenant"><i class="fa-solid fa-plus"></i></a>
+                               title="Ajout d'un nouveau statut à l'intervenant"><i class="fa-solid fa-plus"></i</a>
                         </li>
                     <?php endif; ?>
                 </ul>

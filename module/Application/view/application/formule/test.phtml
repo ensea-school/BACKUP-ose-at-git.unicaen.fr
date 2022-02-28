@@ -30,7 +30,7 @@ $title = "Page de tests de formule de calcul des HETD";
             <td><?= $formuleTestIntervenant->getAnnee() ?></td>
             <td>
                 <a href="<?= $this->url('formule-calcul/test/saisir', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]) ?>"><span
-                            class="glyphicon glyphicon-pencil"></span></span></a>
+                            class="fa-solid fa-pencil"></i></span></a>
                 <a class="pop-ajax"
                    href="<?= $this->url('formule-calcul/test/supprimer', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]) ?>"
                    title="Supprimer le test de formule"
@@ -40,7 +40,7 @@ $title = "Page de tests de formule de calcul des HETD";
                    data-cancel-button="Non"
                    data-submit-reload="true"
 
-                ><i class="fa-solid fa-trash-can"></i></span></a>
+                ><i class="fa-solid fa-trash-can"></i</span></a>
             </td>
         </tr>
     <?php endforeach; ?>

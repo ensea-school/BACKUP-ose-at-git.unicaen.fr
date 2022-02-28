@@ -85,8 +85,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
 <?php if ($canEdit): ?>
     <a href="<?= $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal"
        data-event="dependances-saisie"><i class="fa-solid fa-plus"></i> Ajouter une dépendance</a>
-    <a href="<?= $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><span
-                class="fa-solid fa-gears"></span> Recalculer le Workflow</a>
+    <a href="<?= $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><i
+                class="fa-solid fa-gears"></i> Recalculer le Workflow</a>
 <?php endif; ?>
 <script type="text/javascript">
     $(function ()

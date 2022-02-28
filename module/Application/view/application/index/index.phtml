@@ -43,7 +43,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
                         echo $this->tag('div', ['class' => 'alert alert-info', 'style' => 'margin-top:1em', 'role' => 'alert'])->html(
                             'Un guide d\'utilisation de OSE vous est proposé. Vous pouvez le télécharger en suivant le lien ci-contre : '
                             . $this->tag('a', ['target' => '__blank', 'href' => $documentation[$guideType]])->html(
-                                $this->tag('span', ['class' => 'glyphicon glyphicon-book'])->openClose() . ' Guide d\'utilisation'
+                                $this->tag('span', ['class' => 'fa-solid fa-book'])->openClose() . ' Guide d\'utilisation'
                             )
                         );
                     }

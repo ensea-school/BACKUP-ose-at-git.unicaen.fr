@@ -3,8 +3,10 @@
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this    \Application\View\Renderer\PhpRenderer
- * @var $statuts \Intervenant\Entity\Db\Statut[]
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $typesIntervenants \Intervenant\Entity\Db\TypeIntervenant[]
+ * @var $statuts           \Intervenant\Entity\Db\Statut[]
+ *
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
@@ -16,54 +18,55 @@ $this->headTitle()->append($title = "Statuts des intervenants");
 ?>
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<table class="table table-bordered table-hover table-condensed">
-    <head>
-        <tr>
-            <th>Type d'intervenant</th>
-            <th>Code</th>
-            <th>Libellé</th>
-            <?php if ($canEdit): ?>
-                <th>Actions</th>
-            <?php endif; ?>
-        </tr>
-    </head>
-    <body>
-    <?php foreach ($statuts as $statut): ?>
-        <tr class="statut" data-id="<?= $statut->getId() ?>">
-            <td><?= $statut->getTypeIntervenant() ?></td>
-            <td><?= $statut->getCode() ?></td>
-            <td><?= $statut->getLibelle() ?></td>
-            <?php if ($canEdit): ?>
-                <th style="text-align: center">
-                    <a href="<?= $this->url('statut/saisie', ['statut' => $statut->getId()]) ?>" title="Modifier le statut">
-                        <span class="glyphicon glyphicon-edit"></span>
-                    </a>
+<?php foreach ($typesIntervenants as $typeIntervenant): ?>
+    <h3><?= $typeIntervenant ?></h3>
+    <table class="table table-bordered table-hover table-condensed">
+        <head>
+            <tr>
+                <th style="width:25%">Code</th>
+                <th style="width:65%">Libellé</th>
+                <?php if ($canEdit): ?>
+                    <th style="width:1%">Actions</th>
+                <?php endif; ?>
+            </tr>
+        </head>
+        <body>
+        <?php foreach ($statuts as $statut): if ($statut->getTypeIntervenant() == $typeIntervenant): ?>
+            <tr class="statut" data-id="<?= $statut->getId() ?>">
+                <td><?= $statut->getCode() ?></td>
+                <td><?= $statut->getLibelle() ?></td>
+                <?php if ($canEdit): ?>
+                    <th style="text-align: center">
+                        <a href="<?= $this->url('statut/saisie', ['statut' => $statut->getId()]) ?>" title="Modifier le statut">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
 
-                    <a class="pop-ajax"
-                       href="<?= $this->url('statut/delete', ['statut' => $statut->getId()]) ?>"
-                       title="Supprimer le statut"
-                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-cancel-button="Non"
-                       data-submit-reload="true"
-                    >
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </a>
+                        <a class="pop-ajax"
+                           href="<?= $this->url('statut/delete', ['statut' => $statut->getId()]) ?>"
+                           title="Supprimer le statut"
+                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                           data-confirm="true"
+                           data-confirm-button="Oui"
+                           data-cancel-button="Non"
+                           data-submit-reload="true"
+                        >
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
 
-                    <a role="button" data-toggle="collapse" title="Vous pouvez trier les statuts en déplaçant les lignes">
-                        <span class="glyphicon glyphicon-move"></span>
-                    </a>
-                </th>
-            <?php endif; ?>
-        </tr>
-    <?php endforeach; ?>
-    </body>
-</table>
+                        <a role="button" data-toggle="collapse" title="Vous pouvez trier les statuts en déplaçant les lignes">
+                            <span class="glyphicon glyphicon-move"></span>
+                        </a>
+                    </th>
+                <?php endif; ?>
+            </tr>
+        <?php endif; endforeach; ?>
+        </body>
+    </table>
+<?php endforeach; ?>
 
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut d'intervenant">
-        <span class="glyphicon glyphicon-plus"></span> Ajouter un statut d'intervenant
+    <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut">
+        <span class="glyphicon glyphicon-plus"></span> Ajouter un statut
     </a>
 
     <script type="text/javascript">

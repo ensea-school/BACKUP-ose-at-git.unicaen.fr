@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\CampagneSaisie;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
@@ -20,7 +20,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 class CampagneSaisieService extends AbstractEntityService
 {
     use ContextServiceAwareTrait;
-
 
 
     /**

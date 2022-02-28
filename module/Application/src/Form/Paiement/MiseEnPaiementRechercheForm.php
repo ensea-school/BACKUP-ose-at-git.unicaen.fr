@@ -8,7 +8,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
 /**

@@ -4,6 +4,7 @@ namespace Intervenant\Controller;
 
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Controller\AbstractController;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 use Intervenant\Form\StatutSaisieFormAwareTrait;
@@ -11,7 +12,7 @@ use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 
 class StatutController extends AbstractController
@@ -22,22 +23,38 @@ class StatutController extends AbstractController
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
     use DossierAutreServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Statut::class,
         ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            Statut::class,
+        ]);
 
-        $statuts = $this->getServiceStatut()->getList();
+        $typesIntervenants = $this->getServiceTypeIntervenant()->getList();
+        $statuts           = $this->getServiceStatut()->getList();
 
-        return compact('statuts');
+        return compact('typesIntervenants', 'statuts');
     }
 
 
 
     public function saisieAction()
     {
+        $this->em()->getFilters()->enable('historique')->init([
+            Statut::class,
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            Statut::class,
+        ]);
+
+        $typesIntervenants = $this->getServiceTypeIntervenant()->getList();
+        $statuts           = $this->getServiceStatut()->getList();
+
+
         /** @var Statut $statut */
         $statut = $this->getEvent()->getParam('statut');
 
@@ -67,7 +84,7 @@ class StatutController extends AbstractController
             $form->readOnly();
         }
 
-        return compact('form', 'title');
+        return compact('typesIntervenants', 'statuts', 'form', 'title');
     }
 
 

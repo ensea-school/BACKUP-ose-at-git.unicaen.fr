@@ -10,7 +10,7 @@ use Application\Entity\Db\RegimeSecu;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\IntervenantExterieur;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Service;
@@ -365,16 +365,16 @@ class EntityProvider
 
 
     /**
-     * Retourne à chaque appel une nouvelle instance de StatutIntervenant persistée.
+     * Retourne à chaque appel une nouvelle instance de Statut persistée.
      *
      * @param boolean $permanent
      *
      * @return Statut
      */
-    public function getStatutIntervenant($permanent = true)
+    public function getStatut($permanent = true)
     {
         $typeIntervenant = $this->getTypeIntervenant($permanent);
-        $statut          = Asset::newStatutIntervenant($typeIntervenant);
+        $statut          = Asset::newStatut($typeIntervenant);
 
         $this->getEntityManager()->persist($statut);
 
@@ -386,13 +386,13 @@ class EntityProvider
 
 
     /**
-     * Recherche et retourne le StatutIntervenant correspondant au code spécifié.
+     * Recherche et retourne le Statut correspondant au code spécifié.
      *
-     * @param string $sourceCode Code "source" du statut, ex: StatutIntervenant::SALAR_PRIVE
+     * @param string $sourceCode Code "source" du statut, ex: Statut::SALAR_PRIVE
      *
      * @return Statut
      */
-    public function getStatutIntervenantByCode($sourceCode)
+    public function getStatutByCode($sourceCode)
     {
         if (!$sourceCode) {
             throw new LogicException("Un code de statut intervenant est requis.");

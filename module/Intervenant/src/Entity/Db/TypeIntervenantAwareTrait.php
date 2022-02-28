@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
+namespace Intervenant\Entity\Db;
 
-use Application\Entity\Db\TypeIntervenant;
 
 /**
  * Description of TypeIntervenantAwareTrait
@@ -20,7 +19,7 @@ trait TypeIntervenantAwareTrait
      *
      * @return self
      */
-    public function setTypeIntervenant( ?TypeIntervenant $typeIntervenant )
+    public function setTypeIntervenant(?TypeIntervenant $typeIntervenant)
     {
         $this->typeIntervenant = $typeIntervenant;
 

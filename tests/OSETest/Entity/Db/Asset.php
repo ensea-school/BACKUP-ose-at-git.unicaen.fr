@@ -12,7 +12,7 @@ use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\RegimeSecu;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
@@ -90,7 +90,7 @@ class Asset
 
 
 
-    static public function newStatutIntervenant(TypeIntervenant $typeIntervenant)
+    static public function newStatut(TypeIntervenant $typeIntervenant)
     {
         $e = new Statut();
         $e

@@ -7,7 +7,7 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestIntervenant;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FormuleTestIntervenantServiceAwareTrait;

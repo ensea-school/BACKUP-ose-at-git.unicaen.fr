@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Db\ServiceAPayerInterface;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
@@ -32,7 +32,6 @@ class MiseEnPaiementService extends AbstractEntityService
     use TypeHeuresServiceAwareTrait;
     use FormuleResultatServiceServiceAwareTrait;
     use FormuleResultatServiceReferentielServiceAwareTrait;
-
 
 
     /**
@@ -69,7 +68,7 @@ class MiseEnPaiementService extends AbstractEntityService
      */
     public function finderByEtat($etat, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         switch ($etat) {
             case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
@@ -89,7 +88,7 @@ class MiseEnPaiementService extends AbstractEntityService
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         if ($typeIntervenant) {
             $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
@@ -106,7 +105,7 @@ class MiseEnPaiementService extends AbstractEntityService
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
         $serviceMIS->finderByStructure($structure, $qb);
@@ -120,7 +119,7 @@ class MiseEnPaiementService extends AbstractEntityService
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
         $serviceMIS->finderByIntervenant($intervenants, $qb);
@@ -261,7 +260,7 @@ class MiseEnPaiementService extends AbstractEntityService
     public function getEtatPaiementCsv(MiseEnPaiementRecherche $recherche)
     {
         // initialisation
-        $annee          = $this->getServiceContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         $data = [];
 
@@ -341,13 +340,13 @@ class MiseEnPaiementService extends AbstractEntityService
         $data  = [];
 
         $params = [
-            'annee' => $annee->getId()
+            'annee' => $annee->getId(),
         ];
-        $sql = 'SELECT * FROM V_EXPORT_DMEP WHERE annee_id = :annee';
+        $sql    = 'SELECT * FROM V_EXPORT_DMEP WHERE annee_id = :annee';
 
         if ($structure) {
             $params['structure'] = $structure->getId();
-            $sql .= ' AND structure_id = :structure';
+            $sql                 .= ' AND structure_id = :structure';
         }
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
@@ -429,7 +428,7 @@ class MiseEnPaiementService extends AbstractEntityService
         if (empty($structure)) return $this->getTblLiquidationMS();
         if (is_array($structure)) return $this->getTblLiquidationMS($structure);
 
-        if (! $structure instanceof Structure){
+        if (!$structure instanceof Structure) {
             throw new RuntimeException('La structure fournie n\'est pas uns entité');
         }
 
@@ -457,7 +456,7 @@ class MiseEnPaiementService extends AbstractEntityService
             $heures          = (float)$d['HEURES'];
 
             $res[$typeRessourceId] = $heures;
-            $res['total'] += $heures;
+            $res['total']          += $heures;
         }
 
         return $res;
@@ -465,7 +464,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    private function getTblLiquidationMS( array $structures = [] )
+    private function getTblLiquidationMS(array $structures = [])
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -480,7 +479,7 @@ class MiseEnPaiementService extends AbstractEntityService
           V_TBL_DMEP_LIQUIDATION
         WHERE
           annee_id = :annee
-          ".Util::sqlAndIn('structure_id', $structures);
+          " . Util::sqlAndIn('structure_id', $structures);
 
         $params = [
             'annee' => $annee->getId(),
@@ -494,7 +493,7 @@ class MiseEnPaiementService extends AbstractEntityService
             $res[$structureId][$typeRessourceId] = $heures;
             if (!isset($res[$structureId]['total'])) $res[$structureId]['total'] = 0;
             $res[$structureId]['total'] += $heures;
-            $res['total'] += $heures;
+            $res['total']               += $heures;
         }
 
         return $res;
@@ -531,14 +530,14 @@ class MiseEnPaiementService extends AbstractEntityService
 
     /**
      *
-     * @param Structure                      $structure
+     * @param Structure                            $structure
      * @param \Application\Entity\Db\Intervenant[] $intervenants
-     * @param Periode                        $periodePaiement
+     * @param Periode                              $periodePaiement
      * @param \DateTime                            $dateMiseEnPaiement
      */
     public function mettreEnPaiement(Structure $structure, $intervenants, Periode $periodePaiement, \DateTime $dateMiseEnPaiement)
     {
-        list($qb, $alias) = $this->initQuery();
+        [$qb, $alias] = $this->initQuery();
         $this->finderByEtat(MiseEnPaiement::A_METTRE_EN_PAIEMENT, $qb);
         $this->finderByStructure($structure, $qb);
         $this->finderByIntervenants($intervenants, $qb);
@@ -558,11 +557,11 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return $this
      */
-    public function deleteHistorises( ServiceAPayerInterface $sap )
+    public function deleteHistorises(ServiceAPayerInterface $sap)
     {
-        $sap->getMiseEnPaiement()->map( function(MiseEnPaiement $mep){
-            if (!$mep->estNonHistorise()){
-                $this->delete( $mep, false );
+        $sap->getMiseEnPaiement()->map(function (MiseEnPaiement $mep) {
+            if (!$mep->estNonHistorise()) {
+                $this->delete($mep, false);
             }
         });
 

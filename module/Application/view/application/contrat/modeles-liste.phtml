@@ -39,7 +39,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
                 ])->text($modele->getLibelle());
                 ?></td>
             <td><?= $modele->getStructure() ?></td>
-            <td><?= $modele->getStatutIntervenant() ?></td>
+            <td><?= $modele->getStatut() ?></td>
             <?php if ($canEdit): ?>
                 <td>
                     <a class="ajax-modal" data-event="modeles-editer"

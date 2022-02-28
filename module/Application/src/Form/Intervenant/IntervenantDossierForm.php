@@ -3,6 +3,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
+use Application\Form\AbstractFieldset;
 use Application\Form\AbstractForm;
 use Application\Form\Employeur\EmployeurFieldset;
 use Application\Form\Adresse\AdresseFieldset;
@@ -33,21 +34,25 @@ class IntervenantDossierForm extends AbstractForm
     use ServiceServiceAwareTrait;
     use DossierServiceAwareTrait;
 
-    protected $dossierIdentiteFieldset;
+    protected AbstractFieldset $dossierIdentiteFieldset;
 
-    protected $dossierAdresseFieldset;
+    protected AbstractFieldset $dossierIdentiteComplementaireFieldset;
 
-    protected $dossierContactFiedlset;
+    protected AbstractFieldset $dossierAdresseFieldset;
 
-    protected $dossierInseeFiedlset;
+    protected AbstractFieldset $dossierStatutFieldset;
 
-    protected $dossierBancaireFieldset;
+    protected AbstractFieldset $dossierContactFiedlset;
 
-    protected $dossierEmployeurFieldset;
+    protected AbstractFieldset $dossierInseeFiedlset;
 
-    protected $dossierAutresFiedlset;
+    protected AbstractFieldset $dossierBancaireFieldset;
 
-    protected $intervenant;
+    protected AbstractFieldset $dossierEmployeurFieldset;
+
+    protected AbstractFieldset $dossierAutresFiedlset;
+
+    protected Intervenant      $intervenant;
 
 
 
@@ -143,15 +148,7 @@ class IntervenantDossierForm extends AbstractForm
 
 
 
-    public function isValid(): bool
-    {
-
-        return parent::isValid();
-    }
-
-
-
-    public function setIntervenant(Intervenant $intervenant)
+    public function setIntervenant(Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
 
@@ -162,11 +159,11 @@ class IntervenantDossierForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
+     * {@link \Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
-    public function getInputFilterSpecification()
+    public function getInputFilterSpecification(): array
     {
         return [];
     }

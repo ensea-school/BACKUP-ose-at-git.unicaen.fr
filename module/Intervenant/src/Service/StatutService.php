@@ -106,11 +106,9 @@ class StatutService extends AbstractEntityService
 
     public function fetchMaxOrdre(): int
     {
-        $sql = 'SELECT MAX(ORDRE) MAX_ORDRE FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL';
+        $sql = 'SELECT MAX(ORDRE) MAX_ORDRE FROM STATUT WHERE HISTO_DESTRUCTION IS NULL';
 
-        $res = $this->getEntityManager()->getConnection()->fetchColumn($sql, [], 0);
-
-        return (int)$res;
+        return (int)$this->getEntityManager()->getConnection()->fetchOne($sql);
     }
 
 

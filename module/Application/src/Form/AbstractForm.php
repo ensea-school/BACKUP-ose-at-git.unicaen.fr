@@ -20,6 +20,7 @@ use Laminas\InputFilter\InputFilterProviderInterface;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Stdlib\ArrayUtils;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Util;
 
 
 abstract class AbstractForm extends Form implements InputFilterProviderInterface
@@ -30,7 +31,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
 
     private ?EntityManager  $entityManager                  = null;
 
-    private array           $spec                           = [];
+    protected array         $spec                           = [];
 
 
 
@@ -64,11 +65,11 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
      * @param array|Traversable $options            Options for the route
      * @param bool              $reuseMatchedParams Whether to reuse matched parameters
      *
-     * @return string Url                         For the link href attribute
+     * @return string                         For the link href attribute
      * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
      *
      */
-    protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
+    protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false): string
     {
         $url = \Application::$container->get('ViewHelperManager')->get('url');
 
@@ -84,27 +85,6 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
     protected function getCurrentUrl()
     {
         return $this->getUrl(null, [], [], true);
-    }
-
-
-
-    /**
-     * @param array       $hydratorElements
-     * @param string|null $hydratorClass
-     *
-     * @return GenericHydrator
-     */
-    protected function useGenericHydrator(array $hydratorElements, ?string $hydratorClass = null): GenericHydrator
-    {
-        if ($hydratorClass) {
-            $hydrator = new $hydratorClass($this->getEntityManager(), $hydratorElements);
-        } else {
-            $hydrator = new GenericHydrator($this->getEntityManager(), $hydratorElements);
-        }
-
-        $this->setHydrator($hydrator);
-
-        return $hydrator;
     }
 
 
@@ -126,30 +106,155 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
 
 
 
-    public function specElement(string $elementName, array $elSpec)
+    public function specDump()
     {
-        if (!isset($this->spec[$elementName])) {
-            $this->spec[$elementName] = [];
+        echo '<pre>';
+        foreach ($this->spec as $name => $spec) {
+
+            echo '<h3>' . $name . '</h3>';
+            phpDump($spec);
         }
-        if (!isset($this->spec[$elementName]['element'])) {
-            $this->spec[$elementName]['element'] = [];
-        }
-        $this->spec[$elementName]['element'] = ArrayUtils::merge($this->spec[$elementName]['element'], $elSpec);
+        echo '</pre>';
     }
 
 
 
-    public function specBuild()
+    public function build()
     {
-        $this->useGenericHydrator($this->spec);
+        if (!$this->hasAttribute('action')) {
+            $this->setAttribute('action', $this->getCurrentUrl());
+        }
+
+        if (!$this->hydrator) {
+            $hydratorElements = [];
+            foreach ($this->spec as $name => $spec) {
+                if (isset($spec['hydrator'])) {
+                    $hydratorElements[$name] = $spec['hydrator'];
+                }
+            }
+            $hydrator = new GenericHydrator($this->getEntityManager(), $hydratorElements);
+            $this->setHydrator($hydrator);
+        }
 
         foreach ($this->spec as $elName => $elSpec) {
-            if (isset($elSpec['element'])) {
-                $this->add($elSpec['element']);
+            if (isset($elSpec['input'])) {
+                unset($elSpec['input']);
+            }
+            if (isset($elSpec['hydrator'])) {
+                unset($elSpec['hydrator']);
+            }
+            if (!empty($elSpec)) {
+                try {
+                    $this->add($elSpec);
+                } catch (\Throwable $e) {
+                    throw new \Exception('L\'élément de formulaire "' . $elName . '" n\'a pas pu être généré depuis sa spécification', 0, $e);
+                }
             }
         }
 
         $this->add(new Csrf('security'));
+    }
+
+
+
+    public function addSubmit(string $value = 'Enregistrer'): self
+    {
+        $this->add([
+            'name'       => 'submit',
+            'type'       => 'Submit',
+            'attributes' => [
+                'value' => $value,
+                'class' => 'btn btn-primary',
+            ],
+        ]);
+
+        return $this;
+    }
+
+
+
+    public function setLabels(array $labels): self
+    {
+        foreach ($labels as $element => $label) {
+            if ($this->has($element)) {
+                $this->get($element)->setLabel($label);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * Permet de peupler facilement une liste d'options
+     * Accepte pour $collection :
+     * - Un tableau d'entités
+     * - Une requête DQL
+     * - Un tableau associatif ([value => label, ...])
+     *
+     * $params sert à fournir d'éventuels paramètres si $collection est une requête DQL
+     *
+     * @param string       $name
+     * @param string|array $collection
+     * @param              $params
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function setValueOptions(string $name, string|array $collection, $params = null): self
+    {
+        if (!$this->has($name)) {
+            throw new \Exception('Elément ' . $name . ' non trouvé');
+        }
+        $element = $this->get($name);
+        if (!method_exists($element, 'setValueOptions')) {
+            throw new \Exception('L\élément ' . $name . ' ne peut pas se voir associer de listes d\'options');
+        }
+
+        if (is_string($collection)) {
+            $query = $this->getEntityManager()->createQuery($collection);
+            if (is_array($params)) {
+                $query->setParameters($params);
+            }
+            $element->setValueOptions(Util::collectionAsOptions($query->getResult()));
+        }
+        if (is_array($collection)) {
+            $element->setValueOptions(Util::collectionAsOptions($collection));
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * Permet de peupler facilement une liste d'options à l'aide d'une requête SQL
+     * la clé doit correspondre à la colonne VALUE et à défaut ID ou CODE ou SOURCE_CODE
+     * la valeur doit correspondre à la colonne LABEL et à défaut LIBELLE ou LIBELLE_COURT
+     * Si la clé est introuvable, alors la ligne est ignorée
+     *
+     * @param string $name
+     * @param string $query
+     * @param array  $params
+     *
+     * @return $this
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function setValueOptionsSql(string $name, string $query, array $params = []): self
+    {
+        $res     = $this->getEntityManager()->getConnection()->fetchAllAssociative($query, $params);
+        $options = [];
+        foreach ($res as $r) {
+            $value = $r['VALUE'] ?? $r['ID'] ?? $r['CODE'] ?? $r['SOURCE_CODE'] ?? null;
+            $label = $r['LABEL'] ?? $r['LIBELLE'] ?? $r['LIBELLE_COURT'] ?? null;
+            if ($value && $label) {
+                $options[$value] = $label;
+            }
+        }
+        asort($options);
+
+        return $this->setValueOptions($name, $options);
     }
 
 
@@ -190,15 +295,17 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
                 $elKey = lcfirst($property);
                 if (!in_array($elKey, $ignore)) {
                     $element = [
-                        'getter' => $method->name,
-                        'setter' => 'set' . $property,
+                        'hydrator' => [
+                            'getter' => $method->name,
+                            'setter' => 'set' . $property,
+                        ],
                     ];
                     if ($method->hasReturnType()) {
                         $rt = $method->getReturnType();
                         if ($rt instanceof \ReflectionNamedType) {
-                            $element['type'] = $rt->getName();
+                            $element['hydrator']['type'] = $rt->getName();
                         } elseif ($rt instanceof \ReflectionUnionType) {
-                            $element['type'] = $rt->getTypes()[0]->getName();
+                            $element['hydrator']['type'] = $rt->getTypes()[0]->getName();
                         }
                     }
                     $elements[$elKey] = $element;
@@ -223,7 +330,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
 
         /* Ajout d'un élément caché pour l'ID */
         if ($cmd && $cmd->hasField('id')) {
-            $this->spec(['id' => ['element' => ['type' => 'Hidden', 'name' => 'id']]]);
+            $elements['id'] = ['type' => 'Hidden', 'name' => 'id'];
         }
 
         /* Construction des éléments de formulaires */
@@ -367,9 +474,9 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
     {
         $filters = [];
 
-        foreach ($this->spec as $name => $spec) {
-            if (isset($spec['filter'])) {
-                $filters[$name] = $spec['filter'];
+        foreach ($this->spec as $name => $elSpec) {
+            if (isset($elSpec['input'])) {
+                $filters[$name] = $elSpec['input'];
             }
         }
 
@@ -382,44 +489,35 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
     {
         /* Gestion du Required */
         if (isset($mapping['nullable'])) {
-            if (!isset($element['controls'])) {
-                $element['controls'] = [];
+            if (!isset($element['input'])) {
+                $element['input'] = [];
             }
-            $element['controls']['required'] = !$mapping['nullable'];
+            $element['input']['required'] = !$mapping['nullable'];
         }
 
         /* Gestion des length */
         if (($mapping['type'] ?? '') == 'string' && isset($mapping['length']) && $mapping['length']) {
-            $validator = [
+            if (!isset($element['input'])) {
+                $element['input'] = [];
+            }
+            if (!isset($element['input']['validators'])) {
+                $element['input']['validators'] = [];
+            }
+            $element['input']['validators'][] = [
                 'name'    => 'StringLength',
                 'options' => ['max' => $mapping['length']],
             ];
-            $this->elementAddValidator($element, $validator);
         }
-    }
-
-
-
-    protected function elementAddValidator(array &$element, array $validatorConfig)
-    {
-        if (!isset($element['controls'])) {
-            $element['controls'] = [];
-        }
-        if (!isset($element['controls']['validators'])) {
-            $element['controls']['validators'] = [];
-        }
-        $element['controls']['validators'][] = $validatorConfig;
     }
 
 
 
     protected function makeElement(string $property, array &$element)
     {
-        $elSpec     = [];
-        $elControls = [];
-        switch ($element['type'] ?? '') {
+        $spec = [];
+        switch ($element['hydrator']['type'] ?? '') {
             case 'string':
-                $elSpec = [
+                $spec = [
                     'type'    => 'Text',
                     'name'    => $property,
                     'options' => [
@@ -429,7 +527,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
             break;
             case 'bool':
             case 'boolean':
-                $elSpec = [
+                $spec = [
                     'type'    => 'Checkbox',
                     'name'    => $property,
                     'options' => [
@@ -440,36 +538,37 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
                 ];
             break;
             case 'float':
-                $elSpec     = [
+                $spec = [
                     'type'    => 'Text',
                     'name'    => $property,
                     'options' => [
                         'label' => ucfirst($property),
                     ],
-                ];
-                $elControls = [
-                    'filters' => [
-                        ['name' => 'Laminas\Filter\StringTrim'],
-                        ['name' => FloatFromString::class],
+                    'input'   => [
+                        'filters' => [
+                            ['name' => 'Laminas\Filter\StringTrim'],
+                            ['name' => FloatFromString::class],
+                        ],
                     ],
                 ];
+
             break;
             case 'int':
-                $elSpec     = [
+                $spec = [
                     'type'    => 'Text',
                     'name'    => $property,
                     'options' => [
                         'label' => ucfirst($property),
                     ],
-                ];
-                $elControls = [
-                    'filters' => [
-                        ['name' => 'Laminas\Filter\StringTrim'],
+                    'input'   => [
+                        'filters' => [
+                            ['name' => 'Laminas\Filter\StringTrim'],
+                        ],
                     ],
                 ];
             break;
             case \DateTime::class:
-                $elSpec = [
+                $spec = [
                     'type'       => 'DateTime',
                     'name'       => $property,
                     'options'    => [
@@ -488,8 +587,8 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
 
         /* Si c'est une entité Doctrine, alors on présuppose qu'on a affaire à un Select */
         try {
-            $this->getEntityManager()->getClassMetadata($element['type'] ?? '');
-            $elSpec = [
+            $this->getEntityManager()->getClassMetadata($element['hydrator']['type'] ?? '');
+            $spec = [
                 'type'    => 'Select',
                 'name'    => $property,
                 'options' => [
@@ -499,17 +598,8 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
         } catch (\Exception $e) {
         }
 
-        if (!empty($elSpec)) {
-            if (!isset($element['element'])) {
-                $element['element'] = [];
-            }
-            $element['element'] = ArrayUtils::merge($element['element'], $elSpec);
-        }
-        if (!empty($elControls)) {
-            if (!isset($element['controls'])) {
-                $element['controls'] = [];
-            }
-            array_push($element['controls'], $elControls);
+        if (!empty($spec)) {
+            $element = ArrayUtils::merge($element, $spec);
         }
     }
 }

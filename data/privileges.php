@@ -340,6 +340,8 @@ return [
             'annees-visualisation'           => 'Années - Visualisation',
             'periodes-edition'               => 'Périodes - Édition',
             'periodes-visualisation'         => 'Périodes - Visualisation',
+            'etablissement-edition'          => 'Établissement - Édition',
+            'etablissement-visualisation'    => 'Établissement - Visualisation',
         ],
     ],
 

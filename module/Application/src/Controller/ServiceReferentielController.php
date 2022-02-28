@@ -113,8 +113,8 @@ class ServiceReferentielController extends AbstractController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service = $this->getServiceServiceReferentiel();
-        //$role    = $this->getServiceContext()->getSelectedIdentityRole();
-        $form = $this->getFormServiceReferentielSaisie();
+        $role    = $this->getServiceContext()->getSelectedIdentityRole();
+        $form    = $this->getFormServiceReferentielSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
 
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
@@ -137,6 +137,9 @@ class ServiceReferentielController extends AbstractController
         $assertionEntity
             ->setTypeVolumeHoraire($typeVolumeHoraire)
             ->setIntervenant($intervenant);
+        if ($assertionEntity->getStructure() == null) {
+            $assertionEntity->setStructure($role->getStructure());
+        }
         if (!$this->isAllowed($assertionEntity, Privileges::REFERENTIEL_EDITION)) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }

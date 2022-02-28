@@ -4,7 +4,7 @@ namespace Application\Form\Intervenant;
 
 use Application\Form\AbstractForm;
 use Application\Hydrator\RegleStructureValidationHydrator;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 
 /**

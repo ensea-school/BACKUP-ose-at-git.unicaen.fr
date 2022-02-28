@@ -2,7 +2,7 @@
 
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
- * @var $typesIntervenants    \Application\Entity\Db\TypeIntervenant[]
+ * @var $typesIntervenants    \Intervenant\Entity\Db\TypeIntervenant[]
  * @var $typesVolumesHoraires \Application\Entity\Db\TypeVolumeHoraire[]
  * @var $canEdit              boolean
  * @var $forms                \Application\Form\CampagneSaisieForm[][]
@@ -36,7 +36,7 @@
                     </div>
                     <div class="row">
                         <div
-                            class="col-md-12"><?= $this->formControlGroup($form->get('messageIntervenant')) ?></div>
+                                class="col-md-12"><?= $this->formControlGroup($form->get('messageIntervenant')) ?></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><?= $this->formControlGroup($form->get('messageAutres')) ?></div>

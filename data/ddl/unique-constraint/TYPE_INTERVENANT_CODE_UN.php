@@ -8,7 +8,6 @@ return [
     'index'   => 'TYPE_INTERVENANT_CODE_UN',
     'columns' => [
         'CODE',
-        'HISTO_DESTRUCTION',
     ],
 ];
 

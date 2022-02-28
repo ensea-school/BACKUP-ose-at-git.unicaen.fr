@@ -5,17 +5,14 @@ namespace Application\Form\OffreFormation;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Description of ElementPedagogiqueSynchronisationForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ElementPedagogiqueSynchronisationForm extends AbstractForm implements EntityManagerAwareInterface
+class ElementPedagogiqueSynchronisationForm extends AbstractForm
 {
-    use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
     use StructureAwareTrait;
 

@@ -4,7 +4,7 @@ namespace Application\Entity\Db;
 
 use Application\Constants;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
@@ -154,11 +154,11 @@ class CampagneSaisie
      *
      * @return string
      */
-    public function getMessage( \Application\Acl\Role $role )
+    public function getMessage(\Application\Acl\Role $role)
     {
-        if ($role->getIntervenant()){
+        if ($role->getIntervenant()) {
             $message = $this->getMessageIntervenant();
-        }else{
+        } else {
             $message = $this->getMessageAutres();
         }
 
@@ -181,12 +181,12 @@ class CampagneSaisie
 
 
 
-    private function formatMessage( $message)
+    private function formatMessage($message)
     {
         $dateDebut = $this->dateDebut ? $this->dateDebut->format(Constants::DATE_FORMAT) : '[Pas de date définie]';
-        $dateFin = $this->dateFin ? $this->dateFin->format(Constants::DATE_FORMAT) : '[Pas de date définie]';
+        $dateFin   = $this->dateFin ? $this->dateFin->format(Constants::DATE_FORMAT) : '[Pas de date définie]';
 
-        return str_replace([':dateDebut',':dateFin'], [$dateDebut,$dateFin], $message);
+        return str_replace([':dateDebut', ':dateFin'], [$dateDebut, $dateFin], $message);
     }
 
 

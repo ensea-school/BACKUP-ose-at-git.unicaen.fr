@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
@@ -36,6 +36,8 @@ class RegleStructureValidation
      * @var TypeIntervenant
      */
     protected $typeIntervenant;
+
+
 
     /**
      * @return int
@@ -108,6 +110,7 @@ class RegleStructureValidation
     }
 
 
+
     /**
      * @return TypeVolumeHoraire
      */
@@ -137,6 +140,8 @@ class RegleStructureValidation
     {
         return $this->typeIntervenant;
     }
+
+
 
     /**
      * @param TypeIntervenant $typeIntervenant

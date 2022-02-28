@@ -99,7 +99,7 @@ return [
                         'order'    => 7,
                         'pages'    => [
                             'gestion-referentiel-commun' => [
-                                'label'          => 'Gestion dictonnaires de données',
+                                'label'          => 'Gestion dictionnaires de données',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-referentiel-commun',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-referentiel-commun'),
@@ -145,11 +145,19 @@ return [
                                 ],
                             ],
                             'gestion-periode'         => [
-                                'label'          => 'Gestion des periodes',
+                                'label'          => 'Gestion des périodes',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'periodes',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Periode', 'index'),
                                 'order'          => 84,
+                                'border - color' => '#111',
+                            ],
+                            'gestion-etablissement'   => [
+                                'label'          => 'Gestion des établissements',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'etablissement',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\Etablissement', 'index'),
+                                'order'          => 85,
                                 'border - color' => '#111',
                             ],
                             'gestion-intervenant'     => [
@@ -236,7 +244,8 @@ return [
                                      'administration-intervenant',
                                      'administration-referentiel-commun',
                                      'administration-nomenclature-rh',
-                                     'administration-periode',],
+                                     'administration-periode',
+                                     'administration-etablissement',],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,

@@ -2,9 +2,10 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Etablissement;
+
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
-
 
 
 /**
@@ -23,8 +24,10 @@ class EtablissementService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\Etablissement::class;
+        return Etablissement::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante
@@ -48,7 +51,7 @@ class EtablissementService extends AbstractEntityService
     {
         $terms = explode( ' ', $term );
 
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $concatFields = [
             "$alias.libelle",
@@ -68,13 +71,13 @@ class EtablissementService extends AbstractEntityService
             );
         }
 
-        $haystack = new Func( 'CONVERT', [ $searchIn, '?1' ] );
+        $haystack   = new Func( 'CONVERT', [ $searchIn, '?1' ] );
         $parameters = [
             1 => 'US7ASCII'
         ];
 
         $index = 2;
-        foreach( $terms as $term ){
+        foreach($terms as $term ){
             $parameters[$index] = "%$term%";
             $qb->andWhere($qb->expr()->like($qb->expr()->upper($haystack), $qb->expr()->upper("CONVERT(?$index, ?1)")));
             $index++;

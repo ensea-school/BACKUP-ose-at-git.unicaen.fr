@@ -7,7 +7,7 @@ use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;

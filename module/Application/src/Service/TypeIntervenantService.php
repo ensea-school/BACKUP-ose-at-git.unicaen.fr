@@ -2,7 +2,8 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of TypeIntervenantService
@@ -23,6 +24,8 @@ class TypeIntervenantService extends AbstractEntityService
         return TypeIntervenant::class;
     }
 
+
+
     /**
      * Retourne le type d'intervenant Permanent
      *
@@ -32,6 +35,8 @@ class TypeIntervenantService extends AbstractEntityService
     {
         return $this->getRepo()->findOneBy(['code' => TypeIntervenant::CODE_PERMANENT]);
     }
+
+
 
     /**
      * Retourne le type d'intervenant Extérieur
@@ -43,23 +48,47 @@ class TypeIntervenantService extends AbstractEntityService
         return $this->getRepo()->findOneBy(['code' => TypeIntervenant::CODE_EXTERIEUR]);
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'type_int';
     }
+
+
+
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     *
+     * @return QueryBuilder
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.code", 'DESC');
+
+        return $qb;
+    }
+
+
 
     /**
      *
      * @param string $code
+     *
      * @return TypeIntervenant
      */
-    public function getByCode( $code )
+    public function getByCode($code)
     {
         if (null == $code) return null;
+
         return $this->getRepo()->findOneBy(['code' => $code]);
     }
 

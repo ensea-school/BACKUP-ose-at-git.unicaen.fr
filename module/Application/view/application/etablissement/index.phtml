@@ -1,0 +1,75 @@
+<?php
+/*
+* @author JORIOT Florian <florian.joriot at unicaen.fr>
+*/
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+function affBooleen($flg)
+{
+    // affiche booléen avec des glypheIcon
+    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
+}
+
+$this->headTitle()->append("Gestion des établissements");
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ETABLISSEMENT_EDITION));
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+?>
+
+<h1 class="page-header">Gestion des établissements</h1>
+
+<table class="table table-bordered table-sort table-condensed">
+    <thead>
+    <tr>
+        <th style="text-align: center">Libellé</th>
+        <th style="text-align: center">Localisation</th>
+        <th style="text-align: center">Département</th>
+        <th style="text-align: center">Source</th>
+        <?php if ($canEdit): ?>
+            <th style="text-align: center">Actions</th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables ui-sortable">
+    <?php foreach ($etablissements as $etablissement): ?>
+        <tr class="champ-triable" data-id= <?php echo $etablissement->getId() ?>>
+            <td><?= $etablissement->getLibelle(); ?></td>
+            <td><?= $etablissement->getLocalisation(); ?></td>
+            <td style="text-align: center"><?= $etablissement->getDepartement(); ?></td>
+            <td style="text-align: center"><?= $etablissement->getSource()->getLibelle(); ?></td>
+            <?php if ($canEdit): ?>
+                <td style="text-align: center">
+                    <?php if (!$etablissement->getSource()->getImportable()): ?>
+                        <a class="ajax-modal" data-event="etablissement-edition"
+                           href="<?= $this->url('etablissement/saisie', ['etablissement' => $etablissement->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                           title="Modifier l'établissement"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a class="pop-ajax" data-title="Suppression de l'établissement" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
+                           data-submit-reload="true"
+                           href="<?= $this->url('etablissement/supprimer', ['etablissement' => $etablissement->getId()]) ?>"
+                           title="Supprimer l'établissement"><span class="glyphicon glyphicon-remove"></span></a>
+                    <?php else: ?>
+                        Non modifiable
+                    <?php endif; ?>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="etablissement-edition" href="<?= $this->url('etablissement/saisie'); ?>"><span
+                class="glyphicon glyphicon-plus"></span> Ajout d'un nouvel établissement</a>
+<?php endif; ?>
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("etablissement-edition", function (event, data) {
+            window.location.reload();
+        });
+    });
+</script>

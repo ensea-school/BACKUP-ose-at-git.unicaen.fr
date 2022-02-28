@@ -11,7 +11,7 @@
         </unique-constraints>
         <field name="code" type="string" column="CODE" length="50" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="128" nullable="false"/>
-        <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
+        <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
             <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
@@ -52,9 +52,7 @@
         <field name="dossierAutre5Edition" type="boolean" column="DOSSIER_AUTRE_5_EDITION" nullable="false"/>
 
         <field name="pieceJustificativeVisualisation" type="boolean" column="PJ_VISUALISATION" nullable="false"/>
-        <field name="pieceJustificativeTelechargement" type="boolean" column="PJ_TELECHARGEMENT" nullable="false"/>
         <field name="pieceJustificativeEdition" type="boolean" column="PJ_EDITION" nullable="false"/>
-        <field name="pieceJustificativeArchivage" type="boolean" column="PJ_ARCHIVAGE" nullable="false"/>
 
         <field name="conseilRestreint" type="boolean" column="CONSEIL_RESTREINT" nullable="false"/>
         <field name="conseilRestreintVisualisation" type="boolean" column="CONSEIL_RESTREINT_VISUALISATION" nullable="false"/>

@@ -43,7 +43,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
         $(function () {
 
             $(".triables").sortable({
-                handle: '.glyphicon-move',
+                handle: '.fa-arrows-alt',
                 axis: 'y',
                 update: function (event, ui) {
                     var champsIds = '';

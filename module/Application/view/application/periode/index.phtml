@@ -54,8 +54,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                        data-submit-reload="true"
                        href="<?= $this->url('periodes/supprimer', ['periode' => $periode->getId()]) ?>"
                        title="Supprimer la periode"><i class="fa fa-times"></i></a>
-                    <span class="glyphicon glyphicon-move"
-                          title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
+                    <i class="fa fa-arrows-alt"
+                       title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>&nbsp;
                 </td>
             <?php endif; ?>
         </tr>
@@ -71,7 +71,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
     $(function () {
         $(".triables").sortable({
-            handle: '.glyphicon-move',
+            handle: '.fa-arrows-alt',
             axis: 'y',
             update: function (event, ui) {
                 var champsIds = '';

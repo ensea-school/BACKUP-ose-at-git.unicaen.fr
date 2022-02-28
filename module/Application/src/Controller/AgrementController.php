@@ -124,7 +124,7 @@ class AgrementController extends AbstractController
                 if ($ta->getStructure()) $params['structure'] = $ta->getStructure()->getId();
 
                 $actionUrl   = $this->url()->fromRoute('intervenant/agrement/ajouter', $params);
-                $actionLabel = '<span class="glyphicon glyphicon-ok"></span> Agréer';
+                $actionLabel = '<i class="fa fa-check"></i> Agréer';
             } else {
                 $actionUrl   = null;
                 $actionLabel = null;

@@ -18,7 +18,7 @@ function DemandeMiseEnPaiement(id)
     this.showError = function (serviceElement, errorStr)
     {
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
-            + '<span class="glyphicon glyphicon-exclamation-sign"></span> '
+            + '<i class="fa fa-exclamation"></i> '
             + errorStr
             + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
@@ -240,7 +240,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     this.showError = function (errorStr)
     {
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
-            + '<span class="glyphicon glyphicon-exclamation-sign"></span> '
+            + '<i class="fa fa-exclamation"></i> '
             + errorStr
             + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
@@ -457,7 +457,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         if (data['read-only']) {
             if (data['validation'] != undefined) {
-                outA = '<span class="glyphicon glyphicon-ok-circle" title="Validé par ' + data['validation']['utilisateur'] + ' le ' + data['validation']['date'] + '">';
+                outA = '<i class="fa fa-check-circle" title="Validé par ' + data['validation']['utilisateur'] + ' le ' + data['validation']['date'] + '">';
             } else {
                 outA = '';
             }

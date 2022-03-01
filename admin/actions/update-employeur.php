@@ -8,7 +8,7 @@ $oseSource = $oa->getSourceOseId();
 $oseId     = $oa->getOseAppliId();
 $c->println("Mise à jour de la table employeur");
 
-ini_set('memory_limit', '8192M');
+ini_set('memory_limit', '-1');
 $importDirectory = $osedir . 'cache/employeurs/';
 $importArchive   = 'employeurs.tar.gz';
 $importFilePath  = $importDirectory . $importArchive;

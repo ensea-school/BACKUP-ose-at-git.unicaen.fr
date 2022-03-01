@@ -60,7 +60,7 @@ while ($i < $nTblListe) {
                 <a class="ajax-modal" data-event="centre-cout-saisie"
                    href="<?= $this->url('centre-cout/saisie', ['centreCout' => $fr->getId()]) ?>"
                    title="Modifier la Centre de Coûts">
-                    <i class="fa-solid fa-pen-to-square"></i></a>
+                    <i class="fas fa-pen-to-square"></i></a>
                 <a class="pop-ajax"
                    href="<?= $this->url('centre-cout/delete', ['centreCout' => $fr->getId()]) ?>"
                    title="Supprimer la Centre de Coûts"
@@ -70,7 +70,7 @@ while ($i < $nTblListe) {
                    data-cancel-button="Non"
                    data-submit-reload="true"
                 >
-                    <i class="fa-solid fa-trash-can"></i>
+                    <i class="fas fa-trash-can"></i>
                 </a>
             <?php } else echo $fr->getSource(); ?>
         </td>
@@ -97,7 +97,7 @@ while ($i < $nTblListe) {
                                data-cancel-button="Non"
                                data-submit-reload="true"
                             >
-                                <i class="fa-solid fa-trash-can"></i>
+                                <i class="fas fa-trash-can"></i>
                             </a>
                         <?php } ?>
                         <br>
@@ -130,7 +130,7 @@ while ($i < $nTblListe) {
                         <a class="ajax-modal" data-event="centre-cout-saisie"
                            href="<?= $this->url('centre-cout/saisie', ['centreCout' => $frf->getId()]) ?>"
                            title="Modifier la Centre de Coûts">
-                            <i class="fa-solid fa-pen-to-square"></i></a>
+                            <i class="fas fa-pen-to-square"></i></a>
                         <a class="pop-ajax"
                            href="<?= $this->url('centre-cout/delete', ['centreCout' => $frf->getId()]) ?>"
                            title="Supprimer le Centre de Coûts"
@@ -140,7 +140,7 @@ while ($i < $nTblListe) {
                            data-cancel-button="Non"
                            data-submit-reload="true"
                         >
-                            <i class="fa-solid fa-trash-can"></i>
+                            <i class="fas fa-trash-can"></i>
                         </a>
                     </td>
                 <?php } else echo '<td>' . $frf->getSource(); ?></td>
@@ -161,7 +161,7 @@ while ($i < $nTblListe) {
                                     <a class="ajax-modal" data-event="centre-cout-saisie"
                                        href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $fr->getId(), 'centreCoutStructure' => $ccs->getId()]) ?>"
                                        title="Modifier la structure">
-                                        <i class="fa-solid fa-pen-to-square"></i></a>
+                                        <i class="fas fa-pen-to-square"></i></a>
                                     <a class="pop-ajax"
                                        href="<?= $this->url('centre-cout/delete-structure', ['centreCoutStructure' => $ccs->getId()]) ?>"
                                        title="Supprimer la sructure du Centre de Coûts"
@@ -171,7 +171,7 @@ while ($i < $nTblListe) {
                                        data-cancel-button="Non"
                                        data-submit-reload="true"
                                     >
-                                        <i class="fa-solid fa-trash-can"></i>
+                                        <i class="fas fa-trash-can"></i>
                                     </a>
                                 <?php } ?>
                                 <br>
@@ -196,7 +196,7 @@ while ($i < $nTblListe) {
     <a class="btn btn-primary ajax-modal" data-event="centre-cout-saisie"
        href="<?= $this->url('centre-cout/saisie') ?>"
        title="Ajouter un Centre de Coûts">
-        <i class="fa-solid fa-pen-to-square"></i>
+        <i class="fas fa-pen-to-square"></i>
         Ajouter un centre de coûts</a>
 
     <script type="text/javascript">

@@ -120,7 +120,7 @@ return [
                         'pages' => [
                             'formule-calcul' => [
                                 'label'        => 'Test de formule de calcul',
-                                'icon'         => 'fa-solid fa-briefcase',
+                                'icon'         => 'fas fa-briefcase',
                                 'route'        => 'formule-calcul/test',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Formule', 'test'),
                                 'order'        => 80,

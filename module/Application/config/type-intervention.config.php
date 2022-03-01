@@ -136,7 +136,7 @@ return [
                         'pages' => [
                             'type-intervention' => [
                                 'label'        => 'Types d\'interventions',
-                                'icon'         => 'fa-solid fa-commenting',
+                                'icon'         => 'fas fa-commenting',
                                 'route'        => 'type-intervention',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),
                                 'order'        => 60,

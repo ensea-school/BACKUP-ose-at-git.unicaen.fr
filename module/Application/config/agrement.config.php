@@ -181,7 +181,7 @@ return [
                             'agrement' => [
                                 'label'        => "Agréments par lot",
                                 'title'        => "Gestion des agréments par lot",
-                                'icon'         => 'fa-solid fa-tags',
+                                'icon'         => 'fas fa-tags',
                                 'route'        => 'gestion/agrement',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'index'),
                                 'visible'      => Assertion\AgrementAssertion::class,

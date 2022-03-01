@@ -15,7 +15,7 @@ $tabs = [
 if ($this->isAllowed($etape,Privileges::ODF_CENTRES_COUT_EDITION)){
     $tabs[] = [
         'id'    => 'centres-couts',
-        'label' => '<span class="fa-solid fa-euro-sign"></span> Centres de coûts',
+        'label' => '<span class="fas fa-euro-sign"></span> Centres de coûts',
         'url'   => $this->url('of/etape/centres-couts', ['etape' => $etape->getId()]),
     ];
 }
@@ -23,7 +23,7 @@ if ($this->isAllowed($etape,Privileges::ODF_CENTRES_COUT_EDITION)){
 if ($this->isAllowed($etape,Privileges::ODF_TAUX_MIXITE_EDITION)){
     $tabs[] = [
         'id'    => 'taux-mixite',
-        'label' => '<span class="fa-solid fa-weight-scale"></span> Taux de mixité',
+        'label' => '<span class="fas fa-weight-scale"></span> Taux de mixité',
         'url'   => $this->url('of/etape/taux-mixite', ['etape' => $etape->getId()]),
     ];
 }
@@ -31,7 +31,7 @@ if ($this->isAllowed($etape,Privileges::ODF_TAUX_MIXITE_EDITION)){
 if ($this->isAllowed($etape,Privileges::ODF_MODULATEURS_EDITION)){
     $tabs[] = [
         'id'    => 'modulateurs',
-        'label' => '<span class="fa-solid fa-table-list"></span> Modulateurs',
+        'label' => '<span class="fas fa-table-list"></span> Modulateurs',
         'url'   => $this->url('of/etape/modulateurs', ['etape' => $etape->getId()]),
     ];
 }

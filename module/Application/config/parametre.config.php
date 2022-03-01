@@ -61,7 +61,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'parametres' => [
-                                'icon'         => 'fa-solid fa-wrench',
+                                'icon'         => 'fas fa-wrench',
                                 'label'        => "Paramétrages",
                                 'route'        => 'parametres',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Parametre', 'index'),

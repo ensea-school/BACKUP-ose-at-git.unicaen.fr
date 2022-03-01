@@ -216,7 +216,7 @@ class ListeCalendaire extends AbstractViewHelper
             'data-submit-event' => 'save-volume-horaire',
             'data-min-width'    => '450px',
             'data-service'      => $volumeHoraireListe->getService()->getId(),
-        ])->html('<i class="fa-solid fa-plus"></i');
+        ])->html('<i class="fas fa-plus"></i');
     }
 
 
@@ -235,7 +235,7 @@ class ListeCalendaire extends AbstractViewHelper
             'data-submit-event' => 'save-volume-horaire',
             'data-min-width'    => '450px',
             'data-service'      => $volumeHoraireListe->getService()->getId(),
-        ])->html('<i class="fa-solid fa-pencil"></i>');
+        ])->html('<i class="fas fa-pencil"></i>');
 
         $delete = $this->getView()->tag('a', [
             'href'              => $this->getView()->url('volume-horaire/suppression-calendaire', $p1, $p2),
@@ -245,7 +245,7 @@ class ListeCalendaire extends AbstractViewHelper
             'data-content'      => 'Souhaitez-vous vraiment supprimer ces heures de service ?',
             'data-confirm'      => 'true',
             'data-service'      => $volumeHoraireListe->getService()->getId(),
-        ])->html('<i class="fa-solid fa-trash-can"></i');
+        ])->html('<i class="fas fa-trash-can"></i');
 
         return $edit . ' ' . $delete;
     }

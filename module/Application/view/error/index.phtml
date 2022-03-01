@@ -5,7 +5,7 @@ $details = AppConfig::get('global', 'affichageErreurs') && isset($this->exceptio
 
 ?>
 <div class="alert alert-danger exception" role="alert">
-    <i class="fa-solid fa-triangle-exclamation"></i>
+    <i class="fas fa-triangle-exclamation"></i>
     <h1><?= $this->translate($title) ?> :</h1>
     <?= $this->exception->getMessage() ?>
     <?php if ($details): ?>

@@ -39,7 +39,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
         <!-- Informations -->
         <?php if ($validation->getId()): ?>
             <ul style="list-style-type: none">
-                <li><span class="fa-solid fa-thumbs-up"></span> Validé
+                <li><span class="fas fa-thumbs-up"></span> Validé
                     le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                     par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
             </ul>
@@ -73,7 +73,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
                     data-confirm="true"
                     data-confirm-button="Oui"
                     data-cancel-button="Non"
-                ><span class="fa-solid fa-thumbs-up"></span> Valider</a>
+                ><span class="fas fa-thumbs-up"></span> Valider</a>
             <?php endif; ?>
             <?php if ($devaliderUrl): ?>
                 <a
@@ -84,7 +84,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
                     data-confirm="true"
                     data-confirm-button="Oui"
                     data-cancel-button="Non"
-                ><span class="fa-solid fa-thumbs-down"></span> Dévalider</a>
+                ><span class="fas fa-thumbs-down"></span> Dévalider</a>
             <?php endif; ?>
         </div>
     <?php endif; ?>

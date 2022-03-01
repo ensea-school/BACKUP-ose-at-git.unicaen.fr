@@ -42,7 +42,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::BUDGET_CC_ACTI
                        data-event="centre-cout-activite-saisie"
                        href="<?= $this->url('centre-cout-activite/saisie', ['ccActivite' => $activite->getId()]) ?>"
                        data-submit-reload="true">
-                        <i class="fa-solid fa-pen-to-square"></i></a>
+                        <i class="fas fa-pen-to-square"></i></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('centre-cout-activite/delete', ['ccActivite' => $activite->getId()]) ?>"
                        title="Supprimer le type d'activité"
@@ -52,7 +52,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::BUDGET_CC_ACTI
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <i class="fa-solid fa-trash-can"></i>
+                        <i class="fas fa-trash-can"></i>
                     </a>
                 </td>
             <?php endif; ?>
@@ -65,7 +65,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::BUDGET_CC_ACTI
     <a class="btn btn-primary ajax-modal" data-event="centre-cout-activite-saisie"
        href="<?= $this->url('centre-cout-activite/saisie') ?>"
        title="Ajouter un type d'activité">
-        <i class="fa-solid fa-plus"></i>
+        <i class="fas fa-plus"></i>
         Ajouter un type d'activité</a>
 <?php endif; ?>
 

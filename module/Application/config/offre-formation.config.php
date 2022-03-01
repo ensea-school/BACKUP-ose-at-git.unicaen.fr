@@ -290,7 +290,7 @@ return [
                         'pages' => [
                             'offre-formation' => [
                                 'label'          => 'Administration de l\'offre de formation',
-                                'icon'           => 'fa-solid fa-table-list',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'aof',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'administrationOffre'),
                                 'order'          => 0,

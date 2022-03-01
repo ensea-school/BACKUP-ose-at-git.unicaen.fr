@@ -96,7 +96,7 @@ return [
                         'pages' => [
                             'etat-sortie' => [
                                 'border-color' => '#9F491F',
-                                'icon'         => 'fa-solid fa-table-list',
+                                'icon'         => 'fas fa-table-list',
                                 'label'        => "États de sortie",
                                 'title'        => "États de sortie",
                                 'route'        => 'etat-sortie',

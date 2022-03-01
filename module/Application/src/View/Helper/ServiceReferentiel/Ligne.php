@@ -234,7 +234,7 @@ class Ligne extends AbstractViewHelper
     {
         $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
 
-        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="' . $url . '" title="Modifier cette ligne de référentiel"><i class="fa-solid fa-pencil"></i></a>';
+        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="' . $url . '" title="Modifier cette ligne de référentiel"><i class="fas fa-pencil"></i></a>';
     }
 
 
@@ -251,7 +251,7 @@ class Ligne extends AbstractViewHelper
             'data-id'      => $this->getServiceReferentiel()->getId(),
             'href'         => $url,
             'title'        => 'Supprimer cette ligne de référentiel',
-        ])->html('<i class="fa-solid fa-trash-can"></i');
+        ])->html('<i class="fas fa-trash-can"></i');
     }
 
 

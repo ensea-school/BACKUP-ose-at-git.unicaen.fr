@@ -69,7 +69,7 @@ return [
                         'pages' => [
                             'structure' => [
                                 'label'        => 'Structures',
-                                'icon'         => 'fa-solid fa-graduation-cap',
+                                'icon'         => 'fas fa-graduation-cap',
                                 'route'        => 'structure',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index'),
                                 'order'        => 80,

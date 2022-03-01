@@ -55,7 +55,7 @@ return [
                         'pages' => [
                             'motif-non-paiement' => [
                                 'label'        => 'Motifs de non paiement',
-                                'icon'         => 'fa-solid fa-graduation-cap',
+                                'icon'         => 'fas fa-graduation-cap',
                                 'route'        => 'motif-non-paiement',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifNonPaiement', 'index'),
                                 'order'        => 80,

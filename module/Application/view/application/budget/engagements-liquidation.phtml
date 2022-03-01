@@ -97,7 +97,7 @@ if ($structureElement) {
     <?php if ($this->isAllowed(\UnicaenAuth\Guard\PrivilegeController::getResourceId('Application\Controller\Budget', 'export'))): ?>
         <div class="budget-export">
             <a href="<?= $this->url('budget/export', ['structure' => $structure->getId()]) ?>">
-                <span class="fa-solid fa-download"></span>
+                <span class="fas fa-download"></span>
                 Export des données de paiement au format CSV
             </a>
         </div>
@@ -141,7 +141,7 @@ if ($structureElement) {
         <?php if ($canEdit): ?>
             <a href="<?= $dotEditUrl1 ?>" class="ajax-modal" data-event="engagement-maj"
                title="<?= $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
-                <span class="fa-solid fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></span>
+                <span class="fas fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></span>
             </a>
         <?php endif; ?>
     </div>
@@ -150,7 +150,7 @@ if ($structureElement) {
         <?php if ($canEdit): ?>
             <a href="<?= $dotEditUrl2 ?>" class="ajax-modal" data-event="engagement-maj"
                title="<?= $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
-                <span class="fa-solid fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></span>
+                <span class="fas fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></span>
             </a>
         <?php endif; ?>
     </div>

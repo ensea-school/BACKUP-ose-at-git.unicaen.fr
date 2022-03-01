@@ -70,7 +70,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
 
                        href="<?= $urlEmail ?>">
                 <?php endif; ?>
-                <i class="fa-solid fa-paper-plane-top"></i> Envoyer par mail
+                <i class="fas fa-paper-plane-top"></i> Envoyer par mail
             </a>
             </span>
         <?php endif; ?>
@@ -79,7 +79,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
 
             <span class="pull-right">
             <a class="btn btn-<?= $panel ?>" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
-                <span class="fa-solid fa-upload"></span> Exporter en PDF
+                <span class="fas fa-upload"></span> Exporter en PDF
             </a>
             </span>
         <?php endif; ?>
@@ -91,21 +91,21 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
     <div class="panel-body">
         <!-- Informations -->
         <ul style="list-style-type: none">
-            <li><span class="fa-solid fa-thumbs-up"></span> Créé
+            <li><span class="fas fa-thumbs-up"></span> Créé
                 le <?= $contrat->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                 par <?= $this->utilisateur($contrat->getHistoCreateur()) ?></li>
             <?php if ($validation): ?>
-                <li><span class="fa-solid fa-thumbs-up"></span> Validé
+                <li><span class="fas fa-thumbs-up"></span> Validé
                     le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                     par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
             <?php endif; ?>
             <?php if ($dateEnvoiEmail): ?>
-                <li><span class="fa-solid fa-thumbs-up"></span> Envoyé par email
+                <li><span class="fas fa-thumbs-up"></span> Envoyé par email
                     le <?= $dateEnvoiEmail->format(\Application\Constants::DATE_FORMAT) ?>
                 </li>
             <?php endif; ?>
             <?php if ($retourSigne): ?>
-                <li><span class="fa-solid fa-thumbs-up"></span> Retourné signé
+                <li><span class="fas fa-thumbs-up"></span> Retourné signé
                     le <?= $retourSigne->format(Application\Constants::DATE_FORMAT) ?></li>
             <?php endif ?>
         </ul>
@@ -161,7 +161,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-cancel-button="Non"
                         data-submit-reload="true"
                 >
-                    <span class="fa-solid fa-thumbs-up"></span> Valider
+                    <span class="fas fa-thumbs-up"></span> Valider
                 </a>
             <?php endif; ?>
 
@@ -169,7 +169,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                 <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax"
                    data-submit-reload="true">
                     <span
-                            class="fa-solid fa-calendar-days"></span> <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
+                            class="fas fa-calendar-days"></span> <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
                     la date de retour signé
                 </a>
             <?php endif; ?>
@@ -184,7 +184,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-confirm-button="Oui"
                         data-cancel-button="Non"
                 >
-                    <span class="fa-solid fa-thumbs-down"></span> Dévalider
+                    <span class="fas fa-thumbs-down"></span> Dévalider
                 </a>
             <?php endif; ?>
 
@@ -198,7 +198,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-cancel-button="Non"
                         data-submit-reload="true"
                 >
-                    <i class="fa-solid fa-trash-can"></i Supprimer
+                    <i class="fas fa-trash-can"></i Supprimer
                 </a>
             <?php endif; ?>
         </div>

@@ -14,13 +14,13 @@ if ($object->getPrivilege()->contains($privilege)):
     ?>
 
     <?php if ($canEdit): ?><a href="javascript:void(0)" data-action="refuser" title="Privilège accordé. Cliquez pour le retirer."><?php endif; ?>
-    <i class="fa-solid fa-check text-succes"></i
+    <i class="fas fa-check text-succes"></i
     <?php if ($canEdit): ?></a><?php endif; ?>
 
 <?php else: ?>
 
     <?php if ($canEdit): ?><a href="javascript:void(0)" data-action="accorder" title="Privilège refusé. Cliquez pour l'accorder."><?php endif; ?>
-    <i class="fa-solid fa-xmark text-danger refuse"></i
+    <i class="fas fa-xmark text-danger refuse"></i
     <?php if ($canEdit): ?></a><?php endif; ?>
 
 <?php endif; ?>

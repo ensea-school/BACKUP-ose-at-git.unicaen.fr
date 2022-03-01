@@ -115,7 +115,7 @@ return [
             'pages' => [
                 'indicateurs' => [
                     'label'        => "Indicateurs",
-                    'icon'         => 'fa-solid fa-chart-line',
+                    'icon'         => 'fas fa-chart-line',
                     'title'        => "Indicateurs",
                     'route'        => 'indicateur',
                     'resource'     => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),

@@ -43,10 +43,10 @@ function truncCodesCorresp($value){
             <td style="text-align: center">
             <?php if (! $discipline->getSource()->getImportable() && $canEdit): ?>
                 <a class="ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir', ['discipline' => $discipline->getId()]) ?>"
-                   title="Modifier la discipline"><i class="fa-solid fa-pen-to-square"></i></a>
+                   title="Modifier la discipline"><i class="fas fa-pen-to-square"></i></a>
                 <a class="ajax-modal" data-event="discipline-suppression"
                    href="<?= $this->url('discipline/supprimer', ['discipline' => $discipline->getId()]) ?>" title="Supprimer la discipline"><i
-                            class="fa-solid fa-trash-can"></i></a>
+                            class="fas fa-trash-can"></i></a>
             <?php else: ?>
                 <?= $discipline->getSource(); ?>
             <?php endif; ?>
@@ -56,7 +56,7 @@ function truncCodesCorresp($value){
     </tbody>
 </table>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir'); ?>"><i class="fa-solid fa-plus"></i> Ajout
+    <a class="btn btn-primary ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir'); ?>"><i class="fas fa-plus"></i> Ajout
         d'une
         nouvelle discipline</a>
 <?php endif; ?>

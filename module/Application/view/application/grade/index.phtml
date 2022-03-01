@@ -47,7 +47,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_R
                         <a class="disabled ajax-modal" data-event="grade-saisie"
                            href="<?= $this->url('grades/saisie', ['grade' => $grade->getId()]) ?>"
                            title="Modifier le grade">
-                            <i class="fa-solid fa-pen-to-square"></i</a>
+                            <i class="fas fa-pen-to-square"></i</a>
                         <a class="pop-ajax"
                            href="<?= $this->url('grades/delete', ['grade' => $grade->getId()]) ?>"
                            title="Supprimer le grade"
@@ -57,7 +57,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_R
                            data-cancel-button="Non"
                            data-submit-reload="true"
                         >
-                            <i class="fa-solid fa-trash-can"></i
+                            <i class="fas fa-trash-can"></i
                         </a>
                     <?php else: ?>
                         Non modifiable
@@ -72,7 +72,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_R
     <a class="btn btn-primary ajax-modal" data-event="grade-saisie"
        href="<?= $this->url('grades/saisie') ?>"
        title="Ajouter un grade">
-        <i class="fa-solid fa-pen-to-square"></i
+        <i class="fas fa-pen-to-square"></i
                 Ajouter un grade</a>
 
     <script type="text/javascript">

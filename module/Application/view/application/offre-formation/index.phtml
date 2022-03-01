@@ -164,7 +164,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <div class="panel panel-default">
             <div class="panel-heading">
                 Formation
-                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fa-solid fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
+                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
             </div>
             <div class="panel-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...
@@ -183,7 +183,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         <?php endif; ?>
                         <?php
                         if ($canViewEtape && $ei['etape']) {
-                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs fa-solid fa-magnifying-glass" style="float:right"></span>');
+                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs fas fa-magnifying-glass" style="float:right"></span>');
                         }
                         ?>
                         <div style="clear: both"></div>
@@ -222,7 +222,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                             'data-event' => 'element-pedagogique-synchronisation',
                             'title'      => 'Importer ou synchroniser un enseignement',
                         ];
-                        echo $this->tag('a', $attrs)->html('<i class="fa-solid fa-arrows-rotate"></span> Import élément');
+                        echo $this->tag('a', $attrs)->html('<i class="fas fa-arrows-rotate"></span> Import élément');
                     }
                     if ($canEditElement) {
                         $attrs = [
@@ -231,7 +231,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                             'data-event' => 'element-pedagogique-ajouter',
                             'title'      => 'Ajouter un enseignement',
                         ];
-                        echo $this->tag('a', $attrs)->html('<i class="fa-solid fa-plus"></i> Nouvel enseignement');
+                        echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel enseignement');
                     }
                     if ($canExport) {
                         $params      = [
@@ -243,7 +243,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
 
                         ?>
                         <a class="pull-right btn btn-default btn-xs" href="<?= $urlExportOf ?>">
-                            <span class="fa-solid fa-upload"></span> Télécharger (CSV)
+                            <span class="fas fa-upload"></span> Télécharger (CSV)
                         </a>
                         <?php
                     }

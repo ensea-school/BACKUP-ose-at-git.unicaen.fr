@@ -153,7 +153,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
             $out .= '</div>';
             $out .= '<div class="depassement-budget">';
             $out .= '<div class="alert alert-danger" role="alert">
-                <i class="fa-solid fa-circle-minus"></i>
+                <i class="fas fa-circle-minus"></i>
                 <h1>Dépassement de budget!!</h1>
                 Les demandes de mise en paiement que vous avez saisies engendrent un ou plusieurs dépassements budgétaires.
                 Vous ne pouvez donc pas enregistrer votre saisie en l\'état.

@@ -298,14 +298,14 @@ class WorkflowService extends AbstractService
             $begin = microtime(true);
             $tbl   = $tbl['TBL_NAME'];
             $sql   = 'BEGIN UNICAEN_TBL.CALCULER(\'' . $tbl . '\'); END;';
-            if (is_callable($beforeTrigger)) {
+            if ($beforeTrigger instanceof \Closure) {
                 $beforeTrigger([
                     'tableau-bord' => $tbl,
                 ]);
             }
             try {
                 $this->getEntityManager()->getConnection()->executeStatement($sql);
-                if (is_callable($afterTrigger)) {
+                if ($afterTrigger instanceof \Closure) {
                     $afterTrigger([
                         'tableau-bord' => $tbl,
                         'result'       => true,
@@ -313,7 +313,7 @@ class WorkflowService extends AbstractService
                     ]);
                 }
             } catch (\Exception $e) {
-                if (is_callable($afterTrigger)) {
+                if ($afterTrigger instanceof \Closure) {
                     $afterTrigger([
                         'tableau-bord' => $tbl,
                         'result'       => false,

@@ -38,10 +38,10 @@ $canConfig = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CON
                 <td style="width:50%"><?= $plafond->getPlafond(); ?></td>
                 <?php if ($canEdit): ?>
                     <td>
-                        <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getPlafond()]) ?>" title="Modifier le plafond"><span
+                        <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getPlafond()->getId()]) ?>" title="Modifier le plafond"><span
                                     class="glyphicon glyphicon-edit"</a>
                         <a class="pop-ajax"
-                           href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getPlafond()]) ?>"
+                           href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getPlafond()->getId()]) ?>"
                            title="Supprimer le plafond"
                            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                            data-confirm="true"

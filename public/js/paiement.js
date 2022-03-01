@@ -462,7 +462,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
                 outA = '';
             }
         } else {
-            outA = '<a role="button" class="action-delete" title="Supprimer la ligne"><i class="fa-solid fa-xmark"></i></a>';
+            outA = '<a role="button" class="action-delete" title="Supprimer la ligne"><i class="fa-solid fa-trash-can"></i></a>';
         }
 
         return outA;

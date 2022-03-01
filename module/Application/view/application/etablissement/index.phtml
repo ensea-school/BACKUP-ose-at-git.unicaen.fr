@@ -50,7 +50,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                         <a class="pop-ajax" data-title="Suppression de l'établissement" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
                            data-submit-reload="true"
                            href="<?= $this->url('etablissement/supprimer', ['etablissement' => $etablissement->getId()]) ?>"
-                           title="Supprimer l'établissement"><i class="fa-solid fa-xmark"></i></a>
+                           title="Supprimer l'établissement"><i class="fa-solid fa-trash-can"></i></a>
                     <?php else: ?>
                         Non modifiable
                     <?php endif; ?>

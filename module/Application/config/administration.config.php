@@ -52,7 +52,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-intervenant'     => [
+            'administration-intervenant'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-intervenant',
@@ -63,7 +63,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-nomenclature-rh' => [
+            'administration-nomenclature-rh'    => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-nomenclature-rh',
@@ -74,7 +74,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-periode'         => [
+            'administration-periode'            => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-periode',
@@ -117,7 +117,7 @@ return [
 
                                 ],
                             ],
-                            'gestion-nomenclature-rh' => [
+                            'gestion-nomenclature-rh'    => [
                                 'label'          => 'Gestion des nomenclatures RH',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-nomenclature-rh',
@@ -144,7 +144,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'gestion-periode'         => [
+                            'gestion-periode'            => [
                                 'label'          => 'Gestion des périodes',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'periodes',
@@ -152,7 +152,7 @@ return [
                                 'order'          => 84,
                                 'border - color' => '#111',
                             ],
-                            'gestion-etablissement'   => [
+                            'gestion-etablissement'      => [
                                 'label'          => 'Gestion des établissements',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'etablissement',
@@ -160,7 +160,7 @@ return [
                                 'order'          => 85,
                                 'border - color' => '#111',
                             ],
-                            'gestion-intervenant'     => [
+                            'gestion-intervenant'        => [
                                 'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
                                 'icon'           => 'glyphicon glyphicon - list-alt',
                                 'route'          => 'administration-intervenant',
@@ -277,6 +277,7 @@ return [
                         Privileges::ODF_RECONDUCTION_OFFRE,
                         Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
                         Privileges::PARAMETRES_PERIODES_VISUALISATION,
+                        Privileges::INTERVENANT_STATUT_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],

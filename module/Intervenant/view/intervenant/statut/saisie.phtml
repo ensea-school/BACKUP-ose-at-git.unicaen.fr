@@ -5,12 +5,11 @@ use Application\Provider\Privilege\Privileges;
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $typesIntervenants \Intervenant\Entity\Db\TypeIntervenant[]
+ * @var $canEdit           bool
  * @var $statuts           \Intervenant\Entity\Db\Statut[]
  * @var $statut            \Intervenant\Entity\Db\Statut
  * @var $form              \Intervenant\Form\StatutSaisieForm
  */
-
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
 
 $this->headTitle()->append($title = "Modification d'un statut d'intervenant");
 

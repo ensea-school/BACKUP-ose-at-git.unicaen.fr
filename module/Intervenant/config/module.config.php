@@ -3,67 +3,54 @@
 namespace Intervenant;
 
 use Application\Provider\Privilege\Privileges;
+use Intervenant\Entity\Db\Statut;
 
 return [
     'routes' => [
         'statut' => [
-            'options'       => [
-                'route'       => '/statut',
-                'constraints' => [
-                    'statut' => '[0-9]*',
-                ],
-                'defaults'    => [
-                    '__NAMESPACE__' => 'Intervenant\Controller',
-                    'controller'    => 'Statut',
-                    'action'        => 'index',
-                ],
-            ],
+            'route'         => '/statut',
+            'controller'    => 'Intervenant\Controller\Statut',
+            'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
                 'saisie' => [
-                    'route'         => '/saisie[/:statut]',
-                    'action'        => 'saisie',
-                    'constraints'   => [
+                    'route'       => '/saisie[/:statut]',
+                    'action'      => 'saisie',
+                    'constraints' => [
                         'statut' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
                 ],
                 'delete' => [
-                    'options'       => [
-                        'route'       => '/delete/:statut',
-                        'constraints' => [
-                            'statut' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'delete',
-                        ],
+                    'route'       => '/delete/:statut',
+                    'action'      => 'delete',
+                    'constraints' => [
+                        'statut' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
                 ],
                 'trier'  => [
-                    'options'       => [
-                        'route'      => '/trier',
-                        'contraints' => [
-                        ],
-                        'defaults'   => [
-                            'action' => 'trier',
-                        ],
-                    ],
-                    'may_terminate' => 'true',
+                    'route'  => '/trier',
+                    'action' => 'trier',
                 ],
                 'clone'  => [
-                    'options'       => [
-                        'route'       => '/clone/:statut',
-                        'constraints' => [
-                            'statut' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'clone',
-                        ],
+                    'route'       => '/clone/:statut',
+                    'action'      => 'clone',
+                    'constraints' => [
+                        'statut' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
                 ],
             ],
+        ],
+    ],
+
+    'resources' => [
+        'Statut',
+    ],
+
+    'rules' => [
+        [
+            'privileges' => Privileges::INTERVENANT_STATUT_EDITION,
+            'resources'  => 'Statut',
+            'assertion'  => Assertion\StatutAssertion::class,
         ],
     ],
 

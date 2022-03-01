@@ -61,7 +61,7 @@ class GenericHydrator implements HydratorInterface
                 $value = null;
                 if (is_string($getter) && method_exists($object, $getter)) {
                     $value = $object->$getter();
-                } elseif (is_callable($getter)) {
+                } elseif ($getter instanceof \Closure) {
                     $value = $getter($object, $name);
                 } elseif (method_exists($object, $gget = 'get' . ucFirst($name))) {
                     $value = $object->$gget();
@@ -125,7 +125,7 @@ class GenericHydrator implements HydratorInterface
                 }
 
                 /* Injection de la valeur dans l'objet */
-                if (is_callable($setter)) {
+                if ($setter instanceof \Closure) {
                     $setter($object, $value, $name);
                 } elseif (is_string($setter) && method_exists($object, $setter)) {
                     $object->$setter($value);

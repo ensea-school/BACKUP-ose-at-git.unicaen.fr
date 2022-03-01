@@ -12,7 +12,7 @@ class HostLocalizationOse implements HostLocalizationInterface
         if ($inEtablissement instanceof HostLocalizationInterface) {
             $inEtablissement = $inEtablissement->inEtablissement();
         }
-        if (is_callable($inEtablissement)) {
+        if ($inEtablissement instanceof \Closure) {
             $inEtablissement = $inEtablissement();
         }
 

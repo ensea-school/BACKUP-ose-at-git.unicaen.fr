@@ -30,7 +30,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_AD
             <td style=" white-space: nowrap">
                 <?php if ($canEdit): ?>
                     <a href="<?= $this->url('etat-sortie/saisir', ['etatSortie' => $etatSortie->getId()]) ?>">
-                        <i class="fas fa-pencil"></span>
+                        <i class="fas fa-pencil"></i>
                     </a>
                     <a class="pop-ajax"
                        data-event="type-intervention-saisie"

@@ -31,22 +31,22 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default" title="Plein écran">
                     <input type="checkbox" class="fullscreen" autocomplete="off"/>
-                    <span class="fas fa-maximize"></span>
+                    <i class="fas fa-maximize"></i>
                     Plein écran
                 </label>
             </div>
 
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default zplus" title="Zoomer">
-                    <span class="fas fa-magnifying-glass-plus"></span>
+                    <i class="fas fa-magnifying-glass-plus"></i>
                     Zoom +
                 </button>
                 <button type="button" class="btn btn-default zmoins" title="Dézoomer">
-                    <span class="fas fa-magnifying-glass-minus"></span>
+                    <i class="fas fa-magnifying-glass-minus"></i>
                     Zoom -
                 </button>
                 <button type="button" class="btn btn-default zdefaut" title="Zoom par défaut">
-                    <span class="fas fa-magnifying-glass"></span>
+                    <i class="fas fa-magnifying-glass"></i>
                     Zoom par défaut
                 </button>
             </div>
@@ -54,7 +54,7 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
             <?php if ($canCopy): ?>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default dupliquer" title="Dupliquer les données de ce diagramme dans un autre scénario">
-                        <span class="fas fa-copy"></span> Dupliquer
+                        <i class="fas fa-copy"></i> Dupliquer
                     </button>
                 </div>
             <?php endif; ?>

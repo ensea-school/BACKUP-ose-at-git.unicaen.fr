@@ -318,7 +318,7 @@ class Ligne extends AbstractViewHelper
     {
         $out =
             '<a class="service-details-button" title="Détail des heures">'
-            . '<span class="fas fa-chevron-' . ($details ? 'up' : 'down') . '"></span>'
+            . '<i class="fas fa-chevron-' . ($details ? 'up' : 'down') . '"></span>'
             . '</a>';
 
         return $out;

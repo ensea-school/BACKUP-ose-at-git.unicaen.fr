@@ -79,7 +79,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
 
             <span class="pull-right">
             <a class="btn btn-<?= $panel ?>" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
-                <span class="fas fa-upload"></span> Exporter en PDF
+                <i class="fas fa-upload"></i> Exporter en PDF
             </a>
             </span>
         <?php endif; ?>
@@ -91,21 +91,21 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
     <div class="panel-body">
         <!-- Informations -->
         <ul style="list-style-type: none">
-            <li><span class="fas fa-thumbs-up"></span> Créé
+            <li><i class="fas fa-thumbs-up"></i> Créé
                 le <?= $contrat->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                 par <?= $this->utilisateur($contrat->getHistoCreateur()) ?></li>
             <?php if ($validation): ?>
-                <li><span class="fas fa-thumbs-up"></span> Validé
+                <li><i class="fas fa-thumbs-up"></i> Validé
                     le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                     par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
             <?php endif; ?>
             <?php if ($dateEnvoiEmail): ?>
-                <li><span class="fas fa-thumbs-up"></span> Envoyé par email
+                <li><i class="fas fa-thumbs-up"></i> Envoyé par email
                     le <?= $dateEnvoiEmail->format(\Application\Constants::DATE_FORMAT) ?>
                 </li>
             <?php endif; ?>
             <?php if ($retourSigne): ?>
-                <li><span class="fas fa-thumbs-up"></span> Retourné signé
+                <li><i class="fas fa-thumbs-up"></i> Retourné signé
                     le <?= $retourSigne->format(Application\Constants::DATE_FORMAT) ?></li>
             <?php endif ?>
         </ul>
@@ -161,15 +161,15 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-cancel-button="Non"
                         data-submit-reload="true"
                 >
-                    <span class="fas fa-thumbs-up"></span> Valider
+                    <i class="fas fa-thumbs-up"></i> Valider
                 </a>
             <?php endif; ?>
 
             <?php if ($urlSaisieRetour): ?>
                 <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax"
                    data-submit-reload="true">
-                    <span
-                            class="fas fa-calendar-days"></span> <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
+                    <i
+                            class="fas fa-calendar-days"></i> <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
                     la date de retour signé
                 </a>
             <?php endif; ?>
@@ -184,7 +184,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-confirm-button="Oui"
                         data-cancel-button="Non"
                 >
-                    <span class="fas fa-thumbs-down"></span> Dévalider
+                    <i class="fas fa-thumbs-down"></i> Dévalider
                 </a>
             <?php endif; ?>
 
@@ -198,7 +198,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-cancel-button="Non"
                         data-submit-reload="true"
                 >
-                    <i class="fas fa-trash-can"></i Supprimer
+                    <i class="fas fa-trash-can"></i> Supprimer
                 </a>
             <?php endif; ?>
         </div>

@@ -13,7 +13,7 @@ $tabs = [
 if ($this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_VH_VISUALISATION))) {
     $tabs[] = [
         'id'    => 'volume-horaire-ens',
-        'label' => '<span class="fas fa-clock"></span> Volumes horaires',
+        'label' => '<i class="fas fa-clock"></i> Volumes horaires',
         'url'   => $this->url('of/element/volume-horaire', ['elementPedagogique' => $element->getId()]),
     ];
 }
@@ -22,7 +22,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::ODF_MODULATEURS_EDITI
     $this->isAllowed(Privileges::getResourceId(Privileges::ODF_CENTRES_COUT_EDITION))) {
     $tabs[] = [
         'id'    => 'modulateur-cc',
-        'label' => '<span class="fas fa-clock"></span> Modulateurs et Centres de coûts',
+        'label' => '<i class="fas fa-clock"></i> Modulateurs et Centres de coûts',
         'url'   => $this->url('of/element/modulateurs-centres-couts', ['elementPedagogique' => $element->getId()]),
     ];
 }

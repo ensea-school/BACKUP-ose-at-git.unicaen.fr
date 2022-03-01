@@ -78,7 +78,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                             <?php if ($mailUrl): ?>
                                 <th class="cc"><input type="checkbox" checked="checked" value="<?= $intervenantId ?>" class="indic-intervenant"/></th>
                             <?php endif; ?>
-                            <td style="text-align: center"><?= $r['prioritaire'] ? '<span class="fas fa-star-sharp"></span>' : '' ?></td>
+                            <td style="text-align: center"><?= $r['prioritaire'] ? '<i class="fas fa-star-sharp"></i>' : '' ?></td>
                             <td><?php printValue($r['structure-libelle']); ?></td>
                             <td>
                                 <a href="<?= $this->url($indicateur->getRoute(), ['intervenant' => $intervenantId]) ?>">
@@ -101,7 +101,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                     Retour à la liste des indicateurs
         </a>
         <a class="btn btn-default" href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">
-            <span class="fas fa-upload" aria-hidden="true"></span>
+            <i class="fas fa-upload" aria-hidden="true"></i>
             Export de la liste au format CSV
         </a>
         <?php if ($mailUrl): ?>

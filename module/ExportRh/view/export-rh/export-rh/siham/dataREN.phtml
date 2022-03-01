@@ -113,8 +113,9 @@
         </table>
         <p>
             <?php if ($intervenantRh->getBIC() != $intervenantDossier->getBIC() || $intervenantRh->getIBAN() != $intervenantDossier->getIBAN()): ?>
-                <i class="fas fa-triangle-exclamation" style="color:#a40000;"></i> <span
-                        style="font-style: italic;color:#555753">&nbsp;Attention, le BIC et l'IBAN sont différents entre SIHAM et OSE, le renouvellement SIHAM ne met pas à jour cette information, pensez à le faire manuellement dans SIHAM.</span>
+                <i class="fas fa-triangle-exclamation" style="color:#a40000;"></i> <i
+                        style="font-style: italic;color:#555753">&nbsp;Attention, le BIC et l'IBAN sont différents entre SIHAM et OSE, le renouvellement SIHAM
+                    ne met pas à jour cette information, pensez à le faire manuellement dans SIHAM.</i>
             <?php endif; ?>
         </p>
 

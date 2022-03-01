@@ -222,7 +222,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                             'data-event' => 'element-pedagogique-synchronisation',
                             'title'      => 'Importer ou synchroniser un enseignement',
                         ];
-                        echo $this->tag('a', $attrs)->html('<i class="fas fa-arrows-rotate"></span> Import élément');
+                        echo $this->tag('a', $attrs)->html('<i class="fas fa-arrows-rotate"></i> Import élément');
                     }
                     if ($canEditElement) {
                         $attrs = [
@@ -243,7 +243,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
 
                         ?>
                         <a class="pull-right btn btn-default btn-xs" href="<?= $urlExportOf ?>">
-                            <span class="fas fa-upload"></span> Télécharger (CSV)
+                            <i class="fas fa-upload"></i> Télécharger (CSV)
                         </a>
                         <?php
                     }

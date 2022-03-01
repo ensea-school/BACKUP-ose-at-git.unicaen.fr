@@ -64,7 +64,7 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
 <?php elseif ($isCloture && !$bottom): ?>
 
     <div class="alert alert-success">
-        <span class="fas fa-power-off pull-left" style="font-size: 48pt;margin-right:.2em"></span>
+        <i class="fas fa-power-off pull-left" style="font-size: 48pt;margin-right:.2em"></i>
         <p>La saisie du service réalisé a été clôturée par <?= $cloture->getHistoModificateur() ?>
             le <?= $cloture->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?>.</p>
         <?php if (!$canEditAfter): ?>

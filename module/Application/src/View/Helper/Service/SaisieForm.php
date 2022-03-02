@@ -244,7 +244,7 @@ class SaisieForm extends AbstractViewHelper
             }
         }
         if ($inRealise) {
-            $res .= '<div><label>&nbsp;</label><br /><br /><button type="button" class="btn btn-default prevu-to-realise" title="Initialise le formulaire avec les heures prévues">Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>';
+            $res .= '<div><label>&nbsp;</label><br /><br /><button type="button" class="btn btn-default prevu-to-realise" title="Initialise le formulaire avec les heures prévues">Prévu <i class="fas fa-arrow-right"></i> réalisé</button>';
 
             $res .= '</div>';
         }

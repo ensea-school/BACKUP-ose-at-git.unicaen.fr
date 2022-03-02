@@ -64,7 +64,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                                            data-event="type-intervention-saisie"
                                            href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>"
                                            data-submit-reload="true">
-                                            <span class="glyphicon glyphicon-edit"></span></a>
+                                            <i class="fas fa-pen-to-square"></i></a>
                                         <a class="pop-ajax"
                                            data-event="type-intervention-saisie"
                                            href="<?= $this->url('type-intervention/type-intervention-structure-delete', ['typeInterventionStructure' => $tis->getId()]) ?>"
@@ -73,7 +73,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                                            data-confirm="true" data-confirm-button="Oui"
                                            data-cancel-button="Non"
                                            data-submit-reload="true">
-                                            <span class="glyphicon glyphicon-trash"></span></a>
+                                            <i class="fas fa-trash-can"></i></a>
                                     </td>
                                 <?php endif; ?>
                             </tr>
@@ -91,13 +91,13 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             </td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
-                    <span class="glyphicon glyphicon-move"
-                          title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>
+                    <i class="fas fa-arrows-alt"
+                       title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>
                     <a class="ajax-modal"
                        data-event="type-intervention-saisie"
                        href="<?= $this->url('type-intervention/saisie', ['typeIntervention' => $ti->getId()]) ?>"
                        title="Modifier le type d'intervention">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fas fa-pen-to-square"></i></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('type-intervention/delete', ['typeIntervention' => $ti->getId()]) ?>"
                        title="Supprimer le type d'intervention"
@@ -107,7 +107,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <span class="glyphicon glyphicon-trash"></span>
+                        <i class="fas fa-trash-can"></i>
                     </a>
                 </td>
             <?php endif; // $ti ?>
@@ -124,7 +124,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
     <a class="btn btn-primary ajax-modal" data-event="type-intervention-saisie"
        href="<?= $this->url('type-intervention/saisie') ?>"
        title="Ajouter un type d'intervention">
-        <span class="glyphicon glyphicon-plus"></span>
+        <i class="fas fa-plus"></i>
         Ajouter un type d'intervention</a>
 
     <script type="text/javascript">
@@ -134,7 +134,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             });
 
             $(".triables").sortable({
-                handle: '.glyphicon-move',
+                handle: '.fa-arrows-alt',
                 axis: 'y',
                 update: function (event, ui) {
                     var champsIds = '';

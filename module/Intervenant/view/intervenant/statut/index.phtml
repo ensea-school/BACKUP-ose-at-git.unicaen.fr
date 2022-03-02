@@ -38,7 +38,7 @@ $this->headTitle()->append($title = "Statuts des intervenants");
                 <?php if ($canEdit): ?>
                     <th style="text-align: center">
                         <a href="<?= $this->url('statut/saisie', ['statut' => $statut->getId()]) ?>" title="Modifier le statut">
-                            <span class="glyphicon glyphicon-edit"></span>
+                            <i class="fas fa-pen-to-square"></i>
                         </a>
 
                         <a class="pop-ajax"
@@ -50,11 +50,11 @@ $this->headTitle()->append($title = "Statuts des intervenants");
                            data-cancel-button="Non"
                            data-submit-reload="true"
                         >
-                            <span class="glyphicon glyphicon-trash"></span>
+                            <i class="fas fa-trash-can"></i>
                         </a>
 
                         <a role="button" data-toggle="collapse" title="Vous pouvez trier les statuts en déplaçant les lignes">
-                            <span class="glyphicon glyphicon-move"></span>
+                            <i class="fas fa-arrows-up-down-left-right"></i>
                         </a>
                     </th>
                 <?php endif; ?>
@@ -66,7 +66,7 @@ $this->headTitle()->append($title = "Statuts des intervenants");
 
 <?php if ($canEdit): ?>
     <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut">
-        <span class="glyphicon glyphicon-plus"></span> Ajouter un statut
+        <i class="fas fa-plus"></i> Ajouter un statut
     </a>
 
     <script type="text/javascript">

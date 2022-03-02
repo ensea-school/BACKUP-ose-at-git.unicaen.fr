@@ -54,10 +54,10 @@ $ajoutUrl = $this->url('droits/affectations/edition');
             <td style="text-align: center;width:1%;white-space: nowrap"><?php
                 if (!$affectation->getSource()->getImportable() && $canEdit) {
                     ?>
-                    <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><span
-                                class="glyphicon glyphicon-edit"></span></a>
-                    <a href="<?= $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><span
-                                class="glyphicon glyphicon-remove"></span></a>
+                    <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><i
+                                class="fas fa-pen-to-square"></i></a>
+                    <a href="<?= $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><i
+                                class="fas fa-trash-can"></i></a>
                     <?php
                 } else {
                     echo $affectation->getSource();

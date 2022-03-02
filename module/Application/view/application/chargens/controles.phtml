@@ -31,32 +31,32 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default" title="Plein écran">
                     <input type="checkbox" class="fullscreen" autocomplete="off"/>
-                    <span class="glyphicon glyphicon-fullscreen"></span>
+                    <i class="fas fa-maximize"></i>
                     Plein écran
                 </label>
             </div>
 
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default zplus" title="Zoomer">
-                    <span class="glyphicon glyphicon-zoom-in"></span>
+                    <i class="fas fa-magnifying-glass-plus"></i>
                     Zoom +
                 </button>
                 <button type="button" class="btn btn-default zmoins" title="Dézoomer">
-                    <span class="glyphicon glyphicon-zoom-out"></span>
+                    <i class="fas fa-magnifying-glass-minus"></i>
                     Zoom -
                 </button>
                 <button type="button" class="btn btn-default zdefaut" title="Zoom par défaut">
-                    <span class="glyphicon glyphicon-search"></span>
+                    <i class="fas fa-magnifying-glass"></i>
                     Zoom par défaut
                 </button>
             </div>
 
             <?php if ($canCopy): ?>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default dupliquer" title="Dupliquer les données de ce diagramme dans un autre scénario">
-                   <span class="glyphicon glyphicon-copy"></span> Dupliquer
-                </button>
-            </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default dupliquer" title="Dupliquer les données de ce diagramme dans un autre scénario">
+                        <i class="fas fa-copy"></i> Dupliquer
+                    </button>
+                </div>
             <?php endif; ?>
 
             <div class="nav navbar-nav navbar-right navbar-brand div-hetd-composante">
@@ -131,8 +131,8 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
     </table>
 
     <div class="text-right">
-        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fa fa-undo"></i> Annuler</button>
-        <button type="button" class="btn btn-primary" id="btn-save"><i class="fa fa-save"></i> Enregistrer</button>
+        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fas fa-rotate-left"></i> Annuler</button>
+        <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-floppy-disk"></i> Enregistrer</button>
     </div>
 </div>
 <div class="form-lien" style="display:none">
@@ -166,7 +166,7 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
     </div>
 
     <div class="text-right">
-        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fa fa-undo"></i> Annuler</button>
-        <button type="button" class="btn btn-primary" id="btn-save"><i class="fa fa-save"></i> Enregistrer</button>
+        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fas fa-rotate-left"></i> Annuler</button>
+        <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-floppy-disk"></i> Enregistrer</button>
     </div>
 </div>

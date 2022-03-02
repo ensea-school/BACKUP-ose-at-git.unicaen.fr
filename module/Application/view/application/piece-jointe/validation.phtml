@@ -22,7 +22,7 @@ $params = [
        title="Valider la pièce justificative '<?= $pj->getType() ?>'"
        data-loading-text="Patientez..."
     >
-        <span class="glyphicon glyphicon-thumbs-up"></span> Valider
+        <i class="fas fa-thumbs-up"></i> Valider
     </a>
 <?php endif ?>
 
@@ -33,6 +33,6 @@ $params = [
        title="Dévalider la pièce justificative <?= "'" . $pj->getType() . "'.\n" . $pj->getValidation() ?>"
        data-loading-text="Patientez..."
     >
-        <span class="glyphicon glyphicon-thumbs-down"></span> Dévalider
+        <i class="fas fa-thumbs-down"></i> Dévalider
     </a>
 <?php endif ?>

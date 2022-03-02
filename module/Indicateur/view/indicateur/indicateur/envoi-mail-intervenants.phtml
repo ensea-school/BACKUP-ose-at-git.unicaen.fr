@@ -37,10 +37,10 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
     </div>
 <?php endif; ?>
 
-<button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fa fa-undo" aria-hidden="true"></i>
-    Retour à l'indicateur
+<button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fas fa-rotate-left" aria-hidden="true"></i
+            Retour à l'indicateur
 </button>
-<button class="btn btn-primary" type="submit"><span class='glyphicon glyphicon-send'></span> Envoyer</button>
+<button class="btn btn-primary" type="submit"><span class='fas fa-paper-plane-top'></span> Envoyer</button>
 <?= $this->formHidden($form->get('intervenants')) . $this->form()->closeTag(); ?>
 
 <script type="text/javascript">

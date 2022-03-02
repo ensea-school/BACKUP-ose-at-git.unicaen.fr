@@ -216,7 +216,7 @@ class Liste extends AbstractViewHelper
                 'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
-            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
+            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
             $out     .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
             $out     .= '<div class="modal-dialog modal-md">';
             $out     .= '<div class="modal-content">';
@@ -245,7 +245,7 @@ class Liste extends AbstractViewHelper
                 'title'       => "Initialiser le service référentiel prévisionnel avec le service référentiel prévisionnel validé l'année dernière",
             ];
             $source  = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'))->getLibelle();
-            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
             $out     .= '<div class="modal fade" id="referentiel-prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
             $out     .= '<div class="modal-dialog modal-md">';
             $out     .= '<div class="modal-content">';
@@ -270,7 +270,7 @@ class Liste extends AbstractViewHelper
             'href'       => $this->getAddUrl(),
             'title'      => 'Ajouter une nouvelle fonction',
         ];
-        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
+        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><i class="fas fa-plus"></i> Je saisis</a>';
 
         return $out;
     }
@@ -352,8 +352,8 @@ class Liste extends AbstractViewHelper
     {
         return
             '<div class="service-show-hide-buttons">'
-            . '<button type="button" class="btn btn-default btn-xs service-show-all-details"><span class="glyphicon glyphicon-chevron-down"></span> Tout déplier</button> '
-            . '<button type="button" class="btn btn-default btn-xs service-hide-all-details"><span class="glyphicon glyphicon-chevron-up"></span> Tout replier</button>'
+            . '<button type="button" class="btn btn-default btn-xs service-show-all-details"><i class="fas fa-chevron-down"></i> Tout déplier</button> '
+            . '<button type="button" class="btn btn-default btn-xs service-hide-all-details"><i class="fas fa-chevron-up"></i> Tout replier</button>'
             . '</div>';
     }
 

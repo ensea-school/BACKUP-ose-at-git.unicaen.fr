@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 function affBooleen($flg)
 {
     // affiche booléen avec des glypheIcon
-    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
+    return ($flg ? '<i class="fas fa-check text-succes"></i>' : '<i class="fas fa-xmark text-danger refuse"></i>');
 }
 
 $this->headTitle()->append("Gestion des périodes");
@@ -49,13 +49,13 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <td style="text-align: center">
                     <a class="ajax-modal" data-event="periodes-edition"
                        href="<?= $this->url('periodes/saisie', ['periode' => $periode->getId()], ['query' => ['tab' => 'edition']]) ?>"
-                       title="Modifier la période"><span class="glyphicon glyphicon-edit"></span></a>
+                       title="Modifier la période"><i class="fas fa-pen-to-square"></i></a>
                     <a class="pop-ajax" data-title="Suppression de période" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
                        data-submit-reload="true"
                        href="<?= $this->url('periodes/supprimer', ['periode' => $periode->getId()]) ?>"
-                       title="Supprimer la periode"><span class="glyphicon glyphicon-remove"></span></a>
-                    <span class="glyphicon glyphicon-move"
-                          title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
+                       title="Supprimer la periode"><i class="fas fa-trash-can"></i></a>
+                    <i class="fas fa-arrows-up-down-left-right"
+                       title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>&nbsp;
                 </td>
             <?php endif; ?>
         </tr>
@@ -63,15 +63,16 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     </tbody>
 </table>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="periodes-edition" href="<?= $this->url('periodes/saisie'); ?>"><span
-                class="glyphicon glyphicon-plus"></span> Ajout d'une nouvelle periode</a>
+    <a class="btn btn-primary ajax-modal" data-event="periodes-edition" href="<?= $this->url('periodes/saisie'); ?>"><i class="fas fa-plus"></i> Ajout
+        d'une
+        nouvelle periode</a>
 <?php endif; ?>
 
 <script type="text/javascript">
 
     $(function () {
         $(".triables").sortable({
-            handle: '.glyphicon-move',
+            handle: '.fa-arrows-up-down-left-right',
             axis: 'y',
             update: function (event, ui) {
                 var champsIds = '';

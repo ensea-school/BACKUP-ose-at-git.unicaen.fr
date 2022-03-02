@@ -103,11 +103,11 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
 
         $buttons = '';
         if ($this->getView()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
-            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/modifier', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
-            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/supprimer', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
+            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/modifier', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-modifier"><i class="fas fa-pencil"></i> Modifier</a>';
+            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/supprimer', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-supprimer"><i class="fas fa-trash-can"></i> Supprimer</a>';
         }
         if ($this->getView()->isAllowed($entity, Privileges::ODF_ELEMENT_SYNCHRONISATION)) {
-            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/synchronisation', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-synchronisation"><span class="glyphicon glyphicon-refresh"></span> Synchronisation</a>';
+            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/synchronisation', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-synchronisation"><i class="fas fa-arrows-rotate"></i> Synchronisation</a>';
         }
         if ($buttons) $html .= "<div class=\"actions\">$buttons</div>";
 

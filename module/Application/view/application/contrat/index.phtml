@@ -66,7 +66,7 @@ $this->messenger() ?>
                         <?php if ($canCreer): ?>
                             <a class="btn btn-primary"
                                href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                <span class="glyphicon glyphicon-file"></span> Créer un
+                                <i class="fas fa-file"></i> Créer un
                                 projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                             </a>
                         <?php else:

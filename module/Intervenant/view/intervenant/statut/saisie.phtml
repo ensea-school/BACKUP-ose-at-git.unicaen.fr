@@ -263,7 +263,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
         <!-- Boutons d'actions -->
         <a href="<?= $this->url('statut') ?>" class="btn btn-default">
-            <i class="fa fa-undo"></i> Retour à la liste des statuts
+            <i class="fas fa-rotate-left"></i> Retour à la liste des statuts
         </a>
         <?php if ($canEdit): ?>
             <?= $this->formSubmit($form->get('submit')); ?>
@@ -275,11 +275,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                    data-confirm="true" data-confirm-button="Oui"
                    data-cancel-button="Non"
                    data-submit-reload="true">
-                    <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                    <i i="fas fa-trash-can"></i> Supprimer</a>
                 <a class="ajax-modal btn btn-warning" data-event="statut-clone"
                    href="<?= $this->url('statut/clone', ['statut' => $statut->getId()]) ?>"
                    title="Dupliquer le statut d'intervenant">
-                    <span class="glyphicon glyphicon-repeat"></span> Dupliquer</a>
+                    <i class="fas fa-rotate-right"></i> Dupliquer</a>
             <?php endif; ?>
         <?php endif; ?>
 

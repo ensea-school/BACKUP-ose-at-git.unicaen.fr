@@ -115,7 +115,7 @@ return [
                          'pages' => [
                              'export-rh' => [
                                  'label'          => 'Export vers le SI RH',
-                                 'icon'           => 'glyphicon glyphicon-list-alt',
+                                 'icon'           => 'fas fa-table-list',
                                  'route'          => 'intervenant/administration',
                                  'resource'       => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
                                  'order'          => 82,
@@ -123,7 +123,7 @@ return [
                                  'pages'          => [
                                      'chercher-intervenant-rh' => [
                                          'label'        => 'Rechercher un intervenant dans le SI RH',
-                                         'icon'         => 'fa fa-graduation-cap',
+                                         'icon'         => 'fas fa-graduation-cap',
                                          'route'        => 'intervenant/administration/chercher-intervenant-rh',
                                          'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'chercher-intervenant-rh'),
                                          'order'        => 800,

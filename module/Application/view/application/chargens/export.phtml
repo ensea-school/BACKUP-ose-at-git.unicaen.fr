@@ -16,13 +16,13 @@ $this->headTitle()->append($title);
 <div class="chargens-filtre">
         <label>Scénario : </label>
         <?= $this->formSelect($filtre->get('scenario')) ?>
-        <button class="btn btn-default" type="button" onclick="getCsv()"><span class="glyphicon glyphicon-export"></span> Exporter</button>
+    <button class="btn btn-default" type="button" onclick="getCsv()"><i class="fas fa-upload"></i> Exporter</button>
 </div>
-<br />
+<br/>
 
 
 <a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
-    <i class="fa fa-undo" aria-hidden="true"></i>
+    <i class="fas fa-rotate-left" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>
 
@@ -32,7 +32,7 @@ $this->headTitle()->append($title);
     {
         var scenario = $(".chargens-filtre #scenario").val();
 
-        if (!scenario){
+        if (!scenario) {
             alert('Scénario non sélectionné');
         }else{
             var url = "<?= $this->url('chargens/export/csv') ?>";

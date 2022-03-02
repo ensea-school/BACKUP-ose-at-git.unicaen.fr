@@ -29,12 +29,12 @@ foreach ($typeModulateurs as $tm) {
                         <a class="ajax-modal" data-event="modulateur-saisie"
                            href="<?= $this->url('modulateur/saisie', ['typeModulateur' => $tm->getId()]) ?>"
                            title="Ajouter un modulateur">
-                <span class="glyphicon glyphicon-plus"></span>
+                <i class="fas fa-plus"></i>
             </a>
                         <a class="ajax-modal" data-event="modulateur-saisie"
                            href="<?= $this->url('modulateur/type-modulateur-saisie', ['typeModulateur' => $tm->getId()]) ?>"
                            title="Modifier le type de modulateur">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fas fa-pen-to-square"></i></a>
         <a class="pop-ajax"
            href="<?= $this->url('modulateur/type-modulateur-delete', ['typeModulateur' => $tm->getId()]) ?>"
            title="Supprimer le type de modulateur"
@@ -44,7 +44,7 @@ foreach ($typeModulateurs as $tm) {
            data-cancel-button="Non"
            data-submit-reload="true"
         >
-            <span class="glyphicon glyphicon-remove"></span>
+            <i class="fas fa-trash-can"></i>
         </a>
                 </span>
                 </div>
@@ -75,7 +75,7 @@ foreach ($typeModulateurs as $tm) {
                                                    data-event="modulateur-saisie"
                                                    href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"
                                                    title="Éditer un type de modulateur pour une structure">
-                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                    <i class="fas fa-pen-to-square"></i>
                                                 </a>
                                                 <a style="position:absolute; right:20px; " class="pop-ajax"
                                                    href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
@@ -86,7 +86,7 @@ foreach ($typeModulateurs as $tm) {
                                                    data-cancel-button="Non"
                                                    data-submit-reload="true"
                                                 >
-                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                    <i class="fas fa-trash-can"></i>
                                                 </a>
                                             <?php } ?>
                                         </td>
@@ -126,7 +126,7 @@ foreach ($typeModulateurs as $tm) {
                                                 <a class="ajax-modal" data-event="modulateur-saisie"
                                                    href="<?= $this->url('modulateur/saisie', ['typeModulateur' => $tm->getId(), 'modulateur' => $modu->getId()]) ?>"
                                                    title="Modifier le modulateur">
-                                                    <span class="glyphicon glyphicon-edit"></span></a>
+                                                    <i class="fas fa-pen-to-square"></i></a>
                                                 <a class="pop-ajax"
                                                    href="<?= $this->url('modulateur/delete', ['modulateur' => $modu->getId()]) ?>"
                                                    title="Supprimer le modulateur"
@@ -136,7 +136,7 @@ foreach ($typeModulateurs as $tm) {
                                                    data-cancel-button="Non"
                                                    data-submit-reload="true"
                                                 >
-                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                    <i class="fas fa-trash-can"></i>
                                                 </a>
                                             </td>
                                         <?php } ?>
@@ -159,7 +159,7 @@ foreach ($typeModulateurs as $tm) {
     <a class="btn btn-primary ajax-modal" data-event="modulateur-saisie"
        href="<?= $this->url('modulateur/type-modulateur-saisie', []) ?>"
        title="Ajouter un type de modulateur">
-        <span class="glyphicon glyphicon-edit"></span>
+        <i class="fas fa-pen-to-square"></i>
         Ajouter un type de modulateur</a>
     <script type="text/javascript">
         $(function () {

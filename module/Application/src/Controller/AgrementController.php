@@ -115,7 +115,7 @@ class AgrementController extends AbstractController
                     'intervenant' => $ta->getIntervenant()->getId(),
                 ];
                 $actionUrl   = $this->url()->fromRoute('intervenant/agrement/supprimer', $params);
-                $actionLabel = '<span class="glyphicon glyphicon-trash"></span> Retirer l\'agrément';
+                $actionLabel = '<i class="fas fa-trash-can"></i> Retirer l\'agrément';
             } elseif (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
                 $params = [
                     'typeAgrement' => $ta->getTypeAgrement()->getId(),
@@ -124,7 +124,7 @@ class AgrementController extends AbstractController
                 if ($ta->getStructure()) $params['structure'] = $ta->getStructure()->getId();
 
                 $actionUrl   = $this->url()->fromRoute('intervenant/agrement/ajouter', $params);
-                $actionLabel = '<span class="glyphicon glyphicon-ok"></span> Agréer';
+                $actionLabel = '<i class="fas fa-check"></i> Agréer';
             } else {
                 $actionUrl   = null;
                 $actionLabel = null;

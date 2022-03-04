@@ -74,7 +74,7 @@ class MotifModificationServiceDuFieldset extends AbstractFieldset
             'type'       => 'Button',
             'name'       => 'remove',
             'options'    => [
-                'label'         => "<span class=\"glyphicon glyphicon-minus\"></span> Supprimer",
+                'label'         => "<span class=\"fas fa-minus\"></i> Supprimer",
                 'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [

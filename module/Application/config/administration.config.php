@@ -52,7 +52,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-intervenant'     => [
+            'administration-intervenant'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-intervenant',
@@ -63,7 +63,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-nomenclature-rh' => [
+            'administration-nomenclature-rh'    => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-nomenclature-rh',
@@ -74,7 +74,7 @@ return [
                 ],
                 'may_terminate' => true,
             ],
-            'administration-periode'         => [
+            'administration-periode'            => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration-periode',
@@ -100,7 +100,7 @@ return [
                         'pages'    => [
                             'gestion-referentiel-commun' => [
                                 'label'          => 'Gestion dictionnaires de données',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-referentiel-commun',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-referentiel-commun'),
                                 'order'          => 82,
@@ -108,7 +108,7 @@ return [
                                 'pages'          => [
                                     'voirie' => [
                                         'label'        => 'Gestion des voiries',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'voirie',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
                                         'order'        => 800,
@@ -117,9 +117,9 @@ return [
 
                                 ],
                             ],
-                            'gestion-nomenclature-rh' => [
+                            'gestion-nomenclature-rh'    => [
                                 'label'          => 'Gestion des nomenclatures RH',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-nomenclature-rh',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-nomenclature-rh'),
                                 'order'          => 83,
@@ -127,7 +127,7 @@ return [
                                 'pages'          => [
                                     'grade'      => [
                                         'label'        => 'Gestion des grades',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'grades',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Grade', 'index'),
                                         'order'        => 800,
@@ -135,7 +135,7 @@ return [
                                     ],
                                     'Employeurs' => [
                                         'border-color' => '#9F491F',
-                                        'icon'         => 'glyphicon glyphicon-list-alt',
+                                        'icon'         => 'fas fa-table-list',
                                         'label'        => "Gestion des employeurs",
                                         'title'        => "Gestion des employeurs",
                                         'route'        => 'employeur',
@@ -144,25 +144,25 @@ return [
                                     ],
                                 ],
                             ],
-                            'gestion-periode'         => [
+                            'gestion-periode'            => [
                                 'label'          => 'Gestion des périodes',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'periodes',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Periode', 'index'),
                                 'order'          => 84,
                                 'border - color' => '#111',
                             ],
-                            'gestion-etablissement'   => [
+                            'gestion-etablissement'      => [
                                 'label'          => 'Gestion des établissements',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'etablissement',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Etablissement', 'index'),
                                 'order'          => 85,
                                 'border - color' => '#111',
                             ],
-                            'gestion-intervenant'     => [
+                            'gestion-intervenant'        => [
                                 'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-intervenant',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-intervenant'),
                                 'order'          => 80,
@@ -170,7 +170,7 @@ return [
                                 'pages'          => [
                                     'statut'                                     => [
                                         'label'        => 'Edition des statuts des intervenants',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'statut',
                                         'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
                                         'order'        => 90,
@@ -201,7 +201,7 @@ return [
                             ],
                             'administration-financiere'  => [
                                 'label'          => 'Données financières',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-financiere',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Administration', 'administration-financiere'),
                                 'order'          => 81,
@@ -209,7 +209,7 @@ return [
                                 'pages'          => [
                                     'centre-cout'          => [
                                         'label'        => 'Edition des centres de coûts',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'centre-cout',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
                                         'order'        => 80,
@@ -217,7 +217,7 @@ return [
                                     ],
                                     'centre-cout-activite' => [
                                         'label'        => 'Edition des types d\'activités des centres de coûts',
-                                        'icon'         => 'fa fa-graduation-cap',
+                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'centre-cout-activite',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
                                         'order'        => 80,
@@ -277,6 +277,7 @@ return [
                         Privileges::ODF_RECONDUCTION_OFFRE,
                         Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
                         Privileges::PARAMETRES_PERIODES_VISUALISATION,
+                        Privileges::INTERVENANT_STATUT_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],

@@ -40,25 +40,25 @@ $(document).ready(function() {
 		dom: 'Bfrtip',
 		buttons: [
 			{
-				extend:    'copyHtml5',
-				text:      '<i class="fa fa-files-o"></i>',
-				titleAttr: 'Copy'
-			},
-			{
-				extend:    'excelHtml5',
-				text:      '<i class="fa fa-file-excel-o"></i>',
-				titleAttr: 'Excel'
-			},
-			{
-				extend:    'csvHtml5',
-				text:      '<i class="fa fa-file-text-o"></i>',
-				titleAttr: 'CSV'
-			},
-			{
-				extend:    'pdfHtml5',
-				text:      '<i class="fa fa-file-pdf-o"></i>',
-				titleAttr: 'PDF'
-			}
+                extend: 'copyHtml5',
+                text: '<i class="fa-solid fa-files-o"></i>',
+                titleAttr: 'Copy'
+            },
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fa-solid fa-file-excel-o"></i>',
+                titleAttr: 'Excel'
+            },
+            {
+                extend: 'csvHtml5',
+                text: '<i class="fa-solid fa-file-text-o"></i>',
+                titleAttr: 'CSV'
+            },
+            {
+                extend: 'pdfHtml5',
+                text: '<i class="fa-solid fa-file-pdf-o"></i>',
+                titleAttr: 'PDF'
+            }
 		]
 	} );
 } );
@@ -569,33 +569,34 @@ $(document).ready(function() {
 			</ul>
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('#example').DataTable( {
-		dom: 'Bfrtip',
-		buttons: [
-			{
-				extend:    'copyHtml5',
-				text:      '&lt;i class=&quot;fa fa-files-o&quot;&gt;&lt;/i&gt;',
-				titleAttr: 'Copy'
-			},
-			{
-				extend:    'excelHtml5',
-				text:      '&lt;i class=&quot;fa fa-file-excel-o&quot;&gt;&lt;/i&gt;',
-				titleAttr: 'Excel'
-			},
-			{
-				extend:    'csvHtml5',
-				text:      '&lt;i class=&quot;fa fa-file-text-o&quot;&gt;&lt;/i&gt;',
-				titleAttr: 'CSV'
-			},
-			{
-				extend:    'pdfHtml5',
-				text:      '&lt;i class=&quot;fa fa-file-pdf-o&quot;&gt;&lt;/i&gt;',
-				titleAttr: 'PDF'
-			}
-		]
-	} );
-} );</code>
+					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function()
+                    {
+                    $('#example').DataTable( {
+                    dom: 'Bfrtip',
+                    buttons: [
+                    {
+                    extend: 'copyHtml5',
+                    text: '&lt;i class=&quot;fa-solid fa-files-o&quot;&gt;&lt;/i&gt;',
+                    titleAttr: 'Copy'
+                    },
+                    {
+                    extend: 'excelHtml5',
+                    text: '&lt;i class=&quot;fa-solid fa-file-excel-o&quot;&gt;&lt;/i&gt;',
+                    titleAttr: 'Excel'
+                    },
+                    {
+                    extend: 'csvHtml5',
+                    text: '&lt;i class=&quot;fa-solid fa-file-text-o&quot;&gt;&lt;/i&gt;',
+                    titleAttr: 'CSV'
+                    },
+                    {
+                    extend: 'pdfHtml5',
+                    text: '&lt;i class=&quot;fa-solid fa-file-pdf-o&quot;&gt;&lt;/i&gt;',
+                    titleAttr: 'PDF'
+                    }
+                    ]
+                    } );
+                    } );</code>
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>

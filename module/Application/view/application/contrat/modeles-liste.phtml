@@ -44,7 +44,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
                 <td>
                     <a class="ajax-modal" data-event="modeles-editer"
                        href="<?= $this->url('contrat/modeles/editer', ['modeleContrat' => $modele->getId()]) ?>">
-                        <span class="glyphicon glyphicon-pencil"></span>
+                        <i class="fas fa-pencil"></i>
                     </a>
                     <a class="pop-ajax"
                        data-event="type-intervention-saisie"
@@ -56,7 +56,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
                        data-cancel-button="Non"
                        data-submit-reload="true"
                     >
-                        <span class="glyphicon glyphicon-trash"></span>
+                        <i class="fas fa-trash-can"></i>
                     </a>
                 </td>
             <?php endif; ?>
@@ -66,7 +66,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
 </table>
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="modeles-editer" href="<?= $this->url('contrat/modeles/editer') ?>">
-        <span class="glyphicon glyphicon-plus"></span>
+        <i class="fas fa-plus"></i>
         Ajouter un modèle de contrat
     </a>
 <?php endif; ?>

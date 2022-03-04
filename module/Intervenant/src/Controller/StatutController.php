@@ -67,8 +67,7 @@ class StatutController extends AbstractController
             $title = 'Édition d\'un statut d\'intervenant';
         }
 
-        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-        $canEdit = false;
+        $canEdit = $this->isAllowed($statut, Privileges::INTERVENANT_STATUT_EDITION);
         if ($canEdit) {
             $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) {
                 try {
@@ -89,7 +88,7 @@ class StatutController extends AbstractController
             $form->readOnly();
         }
 
-        return compact('typesIntervenants', 'statut', 'statuts', 'form', 'title');
+        return compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title');
     }
 
 

@@ -324,7 +324,7 @@ return [
                         'pages' => [
                             'contrats' => [
                                 'label'        => 'Modèles de contrats de travail',
-                                'icon'         => 'fa  fa-commenting',
+                                'icon'         => 'fas fa-commenting',
                                 'route'        => 'contrat/modeles',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'modeles-liste'),
                                 'order'        => 60,

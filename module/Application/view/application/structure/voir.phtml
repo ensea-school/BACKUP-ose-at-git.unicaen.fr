@@ -26,12 +26,12 @@ if ($structureId && $canEdit) {
 
     $tabs[] = [
         'id'    => 'edition',
-        'label' => '<span class="glyphicon glyphicon-pencil"></span> Modification',
+        'label' => '<i class="fas fa-pencil"></i> Modification',
         'url'   => $this->url('structure/saisie', ['structure' => $structureId]),
     ];
     $tabs[] = [
         'id'    => 'plafonds',
-        'label' => '<span class="glyphicon glyphicon-signal"></span> Plafonds',
+        'label' => '<i class="fas fa-signal"></i> Plafonds',
         'url'   => $this->url('plafond/structure', ['structure' => $structureId]),
     ];
 

@@ -99,7 +99,7 @@ return [
                             'budget' => [
                                 'label'        => 'Budget',
                                 'title'        => 'Budget',
-                                'icon'         => 'fa fa-eur',
+                                'icon'         => 'fas fa-eur',
                                 'route'        => 'budget',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Budget', 'index'),
                                 'order'        => 30,

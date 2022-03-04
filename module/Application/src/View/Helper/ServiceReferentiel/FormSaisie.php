@@ -124,7 +124,7 @@ EOS;
                     'class' => 'btn btn-default referentiel-prevu-to-realise',
                     'title' => "Initialise le formulaire avec les heures prévues",
                 ])
-                ->setLabel(str_replace('=>', '<span class="glyphicon glyphicon-arrow-right"></span>', $this->getView()->translate('Prévu => réalisé')))
+                ->setLabel(str_replace('=>', '<i class="fas fa-arrow-right"></i>', $this->getView()->translate('Prévu => réalisé')))
                 ->setLabelOption('disable_html_escape', true);
             $buttonMarkup = $this->getView()->formControlGroup($button);
         }

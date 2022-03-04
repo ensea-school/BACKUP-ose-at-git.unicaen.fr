@@ -94,7 +94,7 @@ class ElementModulateurSaisieForm extends AbstractHelper
              $res .= '<th>';
              $res .= $this->getView()->formSelect($typeModulateurElement);
  //href="javascript:return false;" onclick="Modulateur.setFormValues($(this).data(\'code\'), $($(this).data(\'code\')).val())
-             $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value" data-code="' . $typeModulateur->getCode() . '" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
+             $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value" data-code="' . $typeModulateur->getCode() . '" title="Appliquer à tous"><i class="fas fa-arrow-down"></i></button>';
              $res .= '</th>';
          }
          $res .= '</tr>';

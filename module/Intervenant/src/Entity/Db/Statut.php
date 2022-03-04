@@ -4,6 +4,7 @@ namespace Intervenant\Entity\Db;
 
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 
 /**
@@ -11,7 +12,7 @@ use Laminas\Permissions\Acl\Role\RoleInterface;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Statut implements ParametreEntityInterface, RoleInterface
+class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface
 {
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
@@ -161,6 +162,13 @@ class Statut implements ParametreEntityInterface, RoleInterface
     public function __toString(): string
     {
         return $this->getLibelle();
+    }
+
+
+
+    public function getResourceId()
+    {
+        return 'Statut';
     }
 
 

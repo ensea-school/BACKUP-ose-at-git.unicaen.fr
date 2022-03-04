@@ -66,10 +66,10 @@ $.widget("ose.serviceListe", {
             }
         }
         if (action === 'show') {
-            button.html('<span class="glyphicon glyphicon-chevron-up"></span>');
+            button.html('<i class="fas fa-chevron-up"></i>');
             tr.show(200);
         } else {
-            button.html('<span class="glyphicon glyphicon-chevron-down"></span>');
+            button.html('<i class="fas fa-chevron-down"></i>');
             tr.hide(200);
         }
     },

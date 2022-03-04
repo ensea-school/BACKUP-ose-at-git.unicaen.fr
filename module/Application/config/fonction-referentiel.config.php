@@ -57,7 +57,7 @@ return [
                         'pages' => [
                             'fonction-referentiel' => [
                                 'label'        => 'Référentiel fonctions',
-                                'icon'         => 'fa fa-graduation-cap',
+                                'icon'         => 'fas fa-graduation-cap',
                                 'route'        => 'fonction-referentiel',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\FonctionReferentiel', 'index'),
                                 'order'        => 80,

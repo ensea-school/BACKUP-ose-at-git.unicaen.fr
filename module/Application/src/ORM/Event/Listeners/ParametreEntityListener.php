@@ -47,6 +47,7 @@ class ParametreEntityListener implements EventSubscriber
         $this->args     = $args;
         $this->em       = $args->getEntityManager();
         $this->entity   = $args->getEntity();
+        $this->key      = [];
         $this->metadata = $this->em->getClassMetadata(get_class($this->entity));
         $this->hydrator = new ClassMethodsHydrator();
         $this->hydrator->setUnderscoreSeparatedKeys(false);

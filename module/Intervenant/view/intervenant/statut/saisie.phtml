@@ -9,16 +9,17 @@ use Application\Provider\Privilege\Privileges;
  * @var $statuts           \Intervenant\Entity\Db\Statut[]
  * @var $statut            \Intervenant\Entity\Db\Statut
  * @var $form              \Intervenant\Form\StatutSaisieForm
+ * @var $title             string
  */
 
-$this->headTitle()->append($title = "Modification d'un statut d'intervenant");
-
-echo $this->tag('h1')->text($title);
+$this->headTitle()->append($title);
 
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 echo $this->formElement($form->get('security'));
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+$canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
 
 ?>
 
@@ -32,14 +33,21 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 if ($s->getTypeIntervenant() == $typeIntervenant) {
                     $url    = $this->url('statut/saisie', ['statut' => $s->getId()]);
                     $active = $s == $statut ? ' active' : '';
-                    echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->text($s) . "\n";
+                    echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->html($s) . "\n";
                 }
             }
             echo '</div>';
         }
         ?>
+        <?php if ($canAdd): ?>
+            <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut">
+                <span class="fas fa-plus"></span> Ajouter un statut
+            </a>
+        <?php endif; ?>
     </div>
     <div class="col-md-9">
+        <h1><?= $title ?></h1>
+
         <!-- Informations générales -->
         <div class="panel panel-default">
             <div class="panel-heading">Informations générales</div>
@@ -353,7 +361,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             {
                 return this.element.find('[name=' + name + ']');
             }
-        })
-        ;
+        });
     });
 </script>

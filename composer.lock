@@ -1833,12 +1833,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-memory.git",
-                "reference": "7dfdd263ce9b318b4476c0a0fea059169f42fd44"
+                "reference": "e99380bf735559e69770da7f4fc69cb6525cd00f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memory/zipball/7dfdd263ce9b318b4476c0a0fea059169f42fd44",
-                "reference": "7dfdd263ce9b318b4476c0a0fea059169f42fd44",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memory/zipball/e99380bf735559e69770da7f4fc69cb6525cd00f",
+                "reference": "e99380bf735559e69770da7f4fc69cb6525cd00f",
                 "shasum": ""
             },
             "require": {
@@ -1891,7 +1891,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-06T20:27:17+00:00"
+            "time": "2022-02-28T20:15:47+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-deprecated-factory",
@@ -5043,25 +5043,29 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.10.2",
+            "version": "1.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "776f831124e9c62e1a2c601ecc52e776d8bb7220"
+                "reference": "c6a951b75d684fd43fbbd69617488e1e2e8924ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/776f831124e9c62e1a2c601ecc52e776d8bb7220",
-                "reference": "776f831124e9c62e1a2c601ecc52e776d8bb7220",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/c6a951b75d684fd43fbbd69617488e1e2e8924ba",
+                "reference": "c6a951b75d684fd43fbbd69617488e1e2e8924ba",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0"
             },
+            "conflict": {
+                "doctrine/collections": "<1.6.8",
+                "doctrine/common": "<2.13.3 || >=3,<3.2.2"
+            },
             "require-dev": {
-                "doctrine/collections": "^1.0",
-                "doctrine/common": "^2.6",
-                "phpunit/phpunit": "^7.1"
+                "doctrine/collections": "^1.6.8",
+                "doctrine/common": "^2.13.3 || ^3.2.2",
+                "phpunit/phpunit": "^7.5.20 || ^8.5.23 || ^9.5.13"
             },
             "type": "library",
             "autoload": {
@@ -5086,7 +5090,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.10.2"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.10.3"
             },
             "funding": [
                 {
@@ -5094,7 +5098,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-13T09:40:50+00:00"
+            "time": "2022-03-02T14:16:47+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -5625,12 +5629,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Ramsey\\Uuid\\": "src/"
-                },
                 "files": [
                     "src/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "Ramsey\\Uuid\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [

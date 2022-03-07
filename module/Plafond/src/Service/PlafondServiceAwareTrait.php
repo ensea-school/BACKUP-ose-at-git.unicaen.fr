@@ -34,6 +34,6 @@ trait PlafondServiceAwareTrait
             $this->servicePlafond = \Application::$container->get(PlafondService::class);
         }
 
-        w        return $this->servicePlafond;
+        return $this->servicePlafond;
     }
 }

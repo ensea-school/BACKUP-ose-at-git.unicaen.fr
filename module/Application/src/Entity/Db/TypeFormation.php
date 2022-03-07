@@ -15,69 +15,37 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
 
-
-
     /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
+     * @var string
      */
-    public function __toString()
-    {
-        return $this->getLibelleLong();
-    }
-
-
+    protected ?string $libelleCourt = null;
 
     /**
      * @var string
      */
-    protected $libelleCourt;
-
-    /**
-     * @var string
-     */
-    protected $libelleLong;
+    protected ?string $libelleLong = null;
 
     /**
      * @var integer
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @var \Application\Entity\Db\GroupeTypeFormation
      */
-    protected $groupe;
+    protected ?GroupeTypeFormation $groupe = null;
 
     /**
      * @var bool
      */
-    protected $serviceStatutaire = true;
+    protected bool $serviceStatutaire = true;
 
 
 
     /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return TypeFormation
-     */
-    public function setLibelleCourt($libelleCourt)
-    {
-        $this->libelleCourt = $libelleCourt;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelleCourt
-     *
      * @return string
      */
-    public function getLibelleCourt()
+    public function getLibelleCourt(): ?string
     {
         return $this->libelleCourt;
     }
@@ -85,27 +53,19 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     *
-     * @return TypeFormation
+     * @param string $libelleCourt
      */
-    public function setLibelleLong($libelleLong)
+    public function setLibelleCourt(?string $libelleCourt): void
     {
-        $this->libelleLong = $libelleLong;
-
-        return $this;
+        $this->libelleCourt = $libelleCourt;
     }
 
 
 
     /**
-     * Get libelleLong
-     *
      * @return string
      */
-    public function getLibelleLong()
+    public function getLibelleLong(): ?string
     {
         return $this->libelleLong;
     }
@@ -113,11 +73,19 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @param string $libelleLong
      */
-    public function getId()
+    public function setLibelleLong(?string $libelleLong): void
+    {
+        $this->libelleLong = $libelleLong;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
@@ -125,29 +93,31 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * Set groupe
-     *
-     * @param \Application\Entity\Db\GroupeTypeFormation $groupe
-     *
-     * @return TypeFormation
+     * @param int $id
      */
-    public function setGroupe(\Application\Entity\Db\GroupeTypeFormation $groupe = null)
+    public function setId(int $id): void
     {
-        $this->groupe = $groupe;
-
-        return $this;
+        $this->id = $id;
     }
 
 
 
     /**
-     * Get groupe
-     *
-     * @return \Application\Entity\Db\GroupeTypeFormation
+     * @return GroupeTypeFormation
      */
-    public function getGroupe()
+    public function getGroupe(): ?GroupeTypeFormation
     {
         return $this->groupe;
+    }
+
+
+
+    /**
+     * @param GroupeTypeFormation $groupe
+     */
+    public function setGroupe(?GroupeTypeFormation $groupe): void
+    {
+        $this->groupe = $groupe;
     }
 
 
@@ -164,14 +134,14 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
 
     /**
      * @param bool $serviceStatutaire
-     *
-     * @return FonctionReferentiel
      */
-    public function setServiceStatutaire(bool $serviceStatutaire): FonctionReferentiel
+    public function setServiceStatutaire(bool $serviceStatutaire): void
     {
         $this->serviceStatutaire = $serviceStatutaire;
-
-        return $this;
     }
+
+
+
+
 
 }

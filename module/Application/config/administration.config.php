@@ -117,7 +117,7 @@ return [
 
                                 ],
                             ],
-                            'gestion-nomenclature-rh'    => [
+                            'gestion-nomenclature-rh' => [
                                 'label'          => 'Gestion des nomenclatures RH',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-nomenclature-rh',
@@ -144,7 +144,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'gestion-periode'            => [
+                            'gestion-periode'         => [
                                 'label'          => 'Gestion des périodes',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'periodes',
@@ -152,7 +152,7 @@ return [
                                 'order'          => 84,
                                 'border - color' => '#111',
                             ],
-                            'gestion-etablissement'      => [
+                            'gestion-etablissement'   => [
                                 'label'          => 'Gestion des établissements',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'etablissement',
@@ -160,7 +160,15 @@ return [
                                 'order'          => 85,
                                 'border - color' => '#111',
                             ],
-                            'gestion-intervenant'        => [
+                            'gestion-type-formation'  => [
+                                'label'          => 'Gestion des types de formations',
+                                'icon'           => 'fas fa-table-list',
+                                'route'          => 'type-formation',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\TypeFormation', 'index'),
+                                'order'          => 86,
+                                'border - color' => '#111',
+                            ],
+                            'gestion-intervenant'     => [
                                 'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-intervenant',
@@ -245,7 +253,8 @@ return [
                                      'administration-referentiel-commun',
                                      'administration-nomenclature-rh',
                                      'administration-periode',
-                                     'administration-etablissement',],
+                                     'administration-etablissement',
+                                     'administration-type-formation',],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,

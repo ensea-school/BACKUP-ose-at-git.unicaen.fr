@@ -11,6 +11,8 @@ return [
             'element-synchronisation'            => 'Enseignements - Synchronisation',
             'etape-visualisation'                => 'Formations - Visualisation',
             'etape-edition'                      => 'Formations - Édition',
+            'type-formation-visualisation'       => 'Type formations - Visualisation',
+            'type-formation-edition'             => 'Type formations - Édition',
             'centres-cout-edition'               => 'Centres de coûts - Édition',
             'modulateurs-edition'                => 'Modulateurs - Édition',
             'taux-mixite-edition'                => 'Taux de mixité - Édition',

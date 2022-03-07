@@ -2,8 +2,12 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\GroupeTypeFormation;
+
 /**
  * Description of GroupeTypeFormation
+ * @method GroupeTypeFormation get($id)
+ * @method GroupeTypeFormation[] list($id)
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
@@ -20,6 +24,8 @@ class GroupeTypeFormationService extends AbstractEntityService
     {
         return \Application\Entity\Db\GroupeTypeFormation::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante

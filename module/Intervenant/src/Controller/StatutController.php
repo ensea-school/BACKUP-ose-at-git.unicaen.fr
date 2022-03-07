@@ -11,6 +11,7 @@ use Intervenant\Form\StatutSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
+use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
@@ -24,6 +25,7 @@ class StatutController extends AbstractController
     use CacheContainerTrait;
     use DossierAutreServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use PlafondServiceAwareTrait;
 
     public function indexAction()
     {
@@ -67,12 +69,17 @@ class StatutController extends AbstractController
             $title = $statut->getLibelle();
         }
 
+        $plafonds = $this->getServicePlafond()->getPlafondsConfig($statut);
+
         $canEdit = $this->isAllowed($statut, Privileges::INTERVENANT_STATUT_EDITION);
         if ($canEdit) {
-            $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) {
+            $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) use ($plafonds) {
                 try {
                     $isNew = !$si->getId();
                     $this->getServiceStatut()->save($si);
+                    foreach ($plafonds as $plafond) {
+                        $this->getServicePlafond()->saveConfig($plafond);
+                    }
                     unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                     unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
@@ -88,7 +95,7 @@ class StatutController extends AbstractController
             $form->readOnly();
         }
 
-        return compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title');
+        return compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title', 'plafonds');
     }
 
 

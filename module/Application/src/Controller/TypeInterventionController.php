@@ -26,7 +26,6 @@ class TypeInterventionController extends AbstractController
     use ContextServiceAwareTrait;
 
 
-
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -65,7 +64,7 @@ class TypeInterventionController extends AbstractController
         /* @var $typeIntervention TypeIntervention */
 
         $typeIntervention = $this->getEvent()->getParam('typeIntervention');
-        $form             = $this->getFormTypeInterventionSaisie();
+        $form             = $this->getFormTypeInterventionTypeInterventionSaisie();
         if (empty($typeIntervention)) {
             $title            = 'Création d\'un nouveau type d\'intervention';
             $typeIntervention = $this->getServiceTypeIntervention()->newEntity();
@@ -221,12 +220,12 @@ class TypeInterventionController extends AbstractController
         $ti    = $this->getEvent()->getParam('typeIntervention');
         $tis   = $this->getEvent()->getParam('typeInterventionStatut');
         $title = "Suppression du statut";
-        $form  = $this->makeFormSupprimer(function () use ($tis,$ti) {
+        $form  = $this->makeFormSupprimer(function () use ($tis, $ti) {
             $this->getServiceTypeInterventionStatut()->delete($tis);
             $this->redirect()->toRoute('type-intervention/statut', ['typeIntervention' => $ti->getId()]); // redirection vers la page parent en cas de succès
             $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
-
         });
+
         return compact('form', 'title');
     }
 }

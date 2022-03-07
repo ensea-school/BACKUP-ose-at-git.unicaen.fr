@@ -132,7 +132,7 @@ class PieceJointeController extends AbstractController
         $nbObligatoiresNonFournis = 0;
 
         foreach ($demandees as $demandee) {
-            if ($demandee->isObligatoire()) {
+            if ($demandee->getObligatoire()) {
                 $nbDemandees++;
                 if (isset($fournies[$demandee->getTypePieceJointe()->getId()])) {
                     $pj = $fournies[$demandee->getTypePieceJointe()->getId()];
@@ -432,7 +432,6 @@ class PieceJointeController extends AbstractController
             $statut          = $this->getEvent()->getParam('statut');
             $tpjs->setTypePieceJointe($typePieceJointe);
             $tpjs->setStatut($statut);
-            $tpjs->setObligatoire(true);
         } else {
             $title           = 'Édition du paramètre de gestion de pièce justificative';
             $typePieceJointe = $tpjs->getTypePieceJointe();

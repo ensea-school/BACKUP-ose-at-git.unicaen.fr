@@ -290,14 +290,13 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\AgrementService::class           => Service\AgrementService::class,
-            Service\TblAgrementService::class        => Service\TblAgrementService::class,
-            Service\TypeAgrementService::class       => Service\TypeAgrementService::class,
-            Service\TypeAgrementStatutService::class => Service\TypeAgrementStatutService::class,
+            Service\AgrementService::class     => Service\AgrementService::class,
+            Service\TblAgrementService::class  => Service\TblAgrementService::class,
+            Service\TypeAgrementService::class => Service\TypeAgrementService::class,
         ],
         'factories'  => [
             Assertion\InformationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
-            Assertion\AgrementAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\AgrementAssertion::class    => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

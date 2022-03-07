@@ -30,7 +30,6 @@ use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\TypeAgrement;
-use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\Contrat;
@@ -317,18 +316,6 @@ class Asset
         $e
             ->setCode(uniqid())
             ->setLibelle(uniqid("TA "));
-
-        return $e;
-    }
-
-
-
-    static public function newTypeAgrementStatut(Statut $statut, TypeAgrement $type)
-    {
-        $e = new TypeAgrementStatut();
-        $e
-            ->setType($type)
-            ->setStatut($statut);
 
         return $e;
     }

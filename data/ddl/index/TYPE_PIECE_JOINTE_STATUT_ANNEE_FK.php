@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TPJS_ANNEE_FIN_FK',
+    'name'    => 'TYPE_PIECE_JOINTE_STATUT_ANNEE_FK',
     'unique'  => FALSE,
     'table'   => 'TYPE_PIECE_JOINTE_STATUT',
     'columns' => [
-        'ANNEE_FIN_ID',
+        'ANNEE_ID',
     ],
 ];
 

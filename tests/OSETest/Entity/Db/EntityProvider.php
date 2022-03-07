@@ -29,7 +29,6 @@ use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\TypeAgrement;
-use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\Contrat;
@@ -768,29 +767,6 @@ class EntityProvider
         $this->newEntities->push($type);
 
         return $type;
-    }
-
-
-
-    /**
-     * Retourne à chaque appel une nouvelle instance de TypeAgrementStatut persistée.
-     *
-     * @param Statut       $statut
-     * @param TypeAgrement $type
-     *
-     * @return TypeAgrementStatut
-     */
-    public function getTypeAgrementStatut(Statut $statut, TypeAgrement $type = null)
-    {
-        $tas = Asset::newTypeAgrementStatut(
-            $statut,
-            $type ?: $this->getTypeAgrement());
-
-        $this->getEntityManager()->persist($tas);
-
-        $this->newEntities->push($tas);
-
-        return $tas;
     }
 
 

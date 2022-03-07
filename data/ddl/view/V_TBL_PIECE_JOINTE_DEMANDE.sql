@@ -47,7 +47,7 @@ FROM
 
        JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
                                          AND tpjs.histo_destruction IS NULL
-                                         AND i.annee_id BETWEEN COALESCE(tpjs.annee_debut_id,i.annee_id) AND COALESCE(tpjs.annee_fin_id,i.annee_id)
+                                         AND i.annee_id = tpjs.annee_id
 
        JOIN type_piece_jointe         tpj ON tpj.id = tpjs.type_piece_jointe_id
                                          AND tpj.histo_destruction IS NULL

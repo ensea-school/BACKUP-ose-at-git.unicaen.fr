@@ -17,85 +17,60 @@ $this->headTitle()->append($title = "Statuts des intervenants");
 
 ?>
 <h1 class="page-header"><?php echo $title ?></h1>
+<div class="resultats"></div>
+<div>
+    <?php foreach ($typesIntervenants as $typeIntervenant): ?>
+        <h3><?= $typeIntervenant ?></h3>
+        <?php
+        echo $this->tag('div', ['style' => 'padding-left: 3em;padding-right:3em']);
+        echo $this->tag('div', ['class' => 'list-group statuts']);
+        foreach ($statuts as $s) {
+            if ($s->getTypeIntervenant() == $typeIntervenant) {
+                ?>
+                <div class="list-group-item statut" data-id="<?= $s->getId() ?>">
+                    <a href="<?= $this->url('statut/saisie', ['statut' => $s->getId()]) ?>">
+                        <?= $s ?>
+                    </a>
+                    <?php if ($canEdit): ?>
+                        <i class="fas fa-arrows-up-down pull-right" title="Vous pouvez trier les statuts en déplaçant les lignes"></i>
+                    <?php endif; ?>
+                </div>
+                <?php
+            }
+        }
 
-<?php foreach ($typesIntervenants as $typeIntervenant): ?>
-    <h3><?= $typeIntervenant ?></h3>
-    <table class="table table-bordered table-hover table-condensed">
-        <head>
-            <tr>
-                <th style="width:25%">Code</th>
-                <th style="width:65%">Libellé</th>
-                <?php if ($canEdit): ?>
-                    <th style="width:1%">Actions</th>
-                <?php endif; ?>
-            </tr>
-        </head>
-        <body>
-        <?php foreach ($statuts as $statut): if ($statut->getTypeIntervenant() == $typeIntervenant): ?>
-            <tr class="statut" data-id="<?= $statut->getId() ?>">
-                <td><?= $statut->getCode() ?></td>
-                <td><?= $statut->getLibelle() ?></td>
-                <?php if ($canEdit): ?>
-                    <th style="text-align: center">
-                        <a href="<?= $this->url('statut/saisie', ['statut' => $statut->getId()]) ?>" title="Modifier le statut">
-                            <i class="fas fa-pen-to-square"></i>
-                        </a>
+        echo '</div></div>';
+        ?>
 
-                        <a class="pop-ajax"
-                           href="<?= $this->url('statut/delete', ['statut' => $statut->getId()]) ?>"
-                           title="Supprimer le statut"
-                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                           data-confirm="true"
-                           data-confirm-button="Oui"
-                           data-cancel-button="Non"
-                           data-submit-reload="true"
-                        >
-                            <i class="fas fa-trash-can"></i>
-                        </a>
-
-                        <a role="button" data-toggle="collapse" title="Vous pouvez trier les statuts en déplaçant les lignes">
-                            <i class="fas fa-arrows-up-down-left-right"></i>
-                        </a>
-                    </th>
-                <?php endif; ?>
-            </tr>
-        <?php endif; endforeach; ?>
-        </body>
-    </table>
-<?php endforeach; ?>
+    <?php endforeach; ?>
+</div>
 
 <?php if ($canEdit): ?>
     <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut">
-        <i class="fas fa-plus"></i> Ajouter un statut
+        <span class="fas fa-plus"></span> Ajouter un statut
     </a>
 
     <script type="text/javascript">
-        $(function () {
-            function injecte(element)
-            {
-                var ancre = '#c_' + $(element).data('id');
-                var ti = $(element).data('id');
-                adr = "<?php echo $this->url('statut/saisie') ?>" + "/" + ti;
-                $(ancre).load(adr);
-            }
 
-            $(function () {
-                $(".triables").sortable({
-                    handle: '.glyphicon-move',
-                    axis: 'y',
-                    update: function (event, ui) {
-                        var champsIds = '';
-                        ui.item.parent().find('div.champ-triable').each(function () {
-                            if (champsIds != '') champsIds += ',';
-                            console.log($(this)[0]['id']);
-                            champsIds += $(this)[0]['id'];
-                        });
-                        $.post(Url('statut/trier'), {champsIds: champsIds}).done(function (res) {
-                            alertFlash(res.msg, 'success', 3000);
-                        });
+        $(".statuts").sortable({
+            handle: '.fa-arrows-up-down',
+            axis: 'y',
+            update: function (event, ui) {
+                var ids = [];
+                $(".statuts .statut").each(function () {
+                    ids.push($(this).data('id'));
+                });
+                $('.resultats').html('<div class="alert alert-info"><span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Tri en cours ...</div>');
+                $.ajax({
+                    type: 'POST',
+                    url: "<?= $this->url('statut/trier')?>",
+                    data: {ids: ids},
+                    success: function (res) {
+                        $('.resultats').html(res);
                     }
                 });
-            });
+            }
         });
+
     </script>
 <?php endif; ?>

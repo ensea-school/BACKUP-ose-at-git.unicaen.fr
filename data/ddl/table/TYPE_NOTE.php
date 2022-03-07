@@ -9,31 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'TYPE_NOTE_ID_SEQ',
     'columns'     => [
-        'ID'                     => [
-            'name'        => 'ID',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => NULL,
-            'position'    => 1,
-            'commentaire' => NULL,
-        ],
-        'LIBELLE'     => [
-            'name'        => 'LIBELLE',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 200,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => NULL,
-            'position'    => 2,
-            'commentaire' => NULL,
-        ],
-        'CODE' => [
+        'CODE'                  => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -45,7 +21,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'        => [
+        'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -54,10 +30,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 54,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'           => [
+        'HISTO_CREATION'        => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -66,10 +42,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 53,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'     => [
+        'HISTO_DESTRUCTEUR_ID'  => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -78,10 +54,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 58,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'        => [
+        'HISTO_DESTRUCTION'     => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -90,10 +66,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 57,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID'    => [
+        'HISTO_MODIFICATEUR_ID' => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -102,10 +78,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 56,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'       => [
+        'HISTO_MODIFICATION'    => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -114,10 +90,33 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 55,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
-
+        'ID'                    => [
+            'name'        => 'ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 1,
+            'commentaire' => NULL,
+        ],
+        'LIBELLE'               => [
+            'name'        => 'LIBELLE',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 200,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 2,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

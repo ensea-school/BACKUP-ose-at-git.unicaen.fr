@@ -9,6 +9,9 @@
         </id>
         <field name="tauxHETDService" type="float" column="TAUX_HETD_SERVICE" nullable="true"/>
         <field name="tauxHETDComplementaire" type="float" column="TAUX_HETD_COMPLEMENTAIRE" nullable="true"/>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
             <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
         </many-to-one>

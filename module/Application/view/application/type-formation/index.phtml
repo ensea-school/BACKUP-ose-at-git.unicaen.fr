@@ -23,17 +23,18 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <h1 class="page-header">Gestion des types de formations</h1>
 <div class="triables ui-sortable">
     <?php foreach ($groupeTypeFormations as $groupeTypeFormation): ?>
-        <div class="panel panel-default champ-triable" data-id= <?php echo $groupeTypeFormation->getId() ?>>
-            <div class="panel-heading"><?= $groupeTypeFormation->getLibelleLong(); ?> (<?= $groupeTypeFormation->getLibelleCourt(); ?>)
-                <span class="badge badge-info"><?= affBooleen($groupeTypeFormation->isPertinenceNiveau()); ?></span>
-                <span class="badge"><?= $groupeTypeFormation->getSource()->getLibelle(); ?></span>
-                <?php if ($canEdit): ?>
-                    <i class="fas fa-arrows-up-down-left-right pull-right"
-                       title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>
-                    <span class="pull-right"> </span>
-                    <a class="pop-ajax pull-right" data-title="Suppression d'une collection" data-content="Êtes-vous sur de vouloir supprimer"
-                       data-confirm="true"
-                       data-submit-reload="true"
+        <div class="champ-triable" data-id= <?php echo $groupeTypeFormation->getId() ?>>
+            <div class="panel panel-default">
+                <div class="panel-heading"><?= $groupeTypeFormation->getLibelleLong(); ?> (<?= $groupeTypeFormation->getLibelleCourt(); ?>)
+                    <span class="badge badge-info"><?= affBooleen($groupeTypeFormation->isPertinenceNiveau()); ?></span>
+                    <span class="badge"><?= $groupeTypeFormation->getSource()->getLibelle(); ?></span>
+                    <?php if ($canEdit): ?>
+                        <i class="fas fa-arrows-up-down-left-right pull-right"
+                           title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>
+                        <span class="pull-right"> </span>
+                        <a class="pop-ajax pull-right" data-title="Suppression d'une collection" data-content="Êtes-vous sur de vouloir supprimer"
+                           data-confirm="true"
+                           data-submit-reload="true"
                        href="<?= $this->url('type-formation/supprimer-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()]) ?>"
                        title="Supprimer la collection"><i class="fas fa-trash-can"></i></a>
                     <span class="pull-right"> </span>
@@ -80,8 +81,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 
             </div>
+            </div>
         </div>
-
     <?php endforeach; ?>
 </div>
 <?php if ($canEdit): ?>

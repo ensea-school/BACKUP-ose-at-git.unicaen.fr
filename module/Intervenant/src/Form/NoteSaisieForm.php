@@ -25,11 +25,13 @@ class NoteSaisieForm extends AbstractForm
 
         $this->spec(Note::class, ['intervenant']);
         $this->spec(['contenu' => ['type' => 'Textarea']]);
+
         $this->build();
 
         $this->setAttribute('class', 'note');
         $this->addSubmit();
 
+       
         $this->setValueOptions('type', $this->getServiceTypeNote()->getList());
 
         return $this;

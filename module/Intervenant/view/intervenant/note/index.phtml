@@ -10,47 +10,60 @@ use Application\Provider\Privilege\Privileges;
  */
 
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_EDITION));
+$canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_AJOUT));
+$canSee = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION));
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 $this->headTitle()->append($title = "Notes sur l'intervenant");
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
+<h3 class="page-header"><?php echo $title ?></h3>
 
-<table class="table table-bordered table-hover table-condensed">
+<table class="table table-bordered ">
     <head>
         <tr>
+            <th>Type</th>
             <th>Libellé</th>
-            <th>Contenu</th>
+            <th>Par</th>
             <th>Action</th>
         </tr>
     </head>
     <body>
     <?php if (!empty($notes)): ?>
-        <?php foreach ($notes as $note): ?>
+        <?php foreach ($notes
+
+                       as $note): ?>
             <tr class="note" data-id="<?= $note->getId() ?>">
-                <td class="col-lg-5"><?= $note->getType()->getLibelle() . ' par ' . $note->getHistoCreateur()->getDisplayName() . ' le ' . $note->getHistoCreation()->format(\Application\Constants::DATETIME_FORMAT) ?></td>
-                <td class="col-lg-7"><?= $note->getContenu() ?></td>
-                <td>
+                <td class="col-lg-2"><?= $note->getType()->getLibelle() ?></td>
+                <td class="col-lg-4"><?= $note->getLibelle() ?></td>
+                <td class="col-lg-5"><?= 'Par ' . $note->getHistoCreateur()->getDisplayName() . ' le ' . $note->getHistoCreation()->format(\Application\Constants::DATETIME_FORMAT) ?></td>
+                <td class="col-lg-1">
                     <div class="btn-group">
-                        <a class="ajax-modal" data-event="note-edition" href="<?= $this->url('note/saisir', ['intervenant' => $intervenant->getId(), 'note' => $note->getId()]); ?>"><i class="fa fa-edit fa-lg" aria-hidden="true"></i></a>
-                        <?php $this->isAllowed($note, Privileges::INTERVENANT_NOTE_SUPPRESSION);
-                        var_dump($this->isAllowed($note, Privileges::INTERVENANT_NOTE_SUPPRESSION));
-                        die;
-                        ?>
-                        <a class="pop-ajax"
-                           href="<?= $this->url('note/supprimer', ['intervenant' => $intervenant->getId(), 'note' => $note->getId()]); ?>"
-                           title="Supprimer la note"
-                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                           data-confirm="true"
-                           data-confirm-button="Oui"
-                           data-cancel-button="Non"
-                           data-submit-reload="true"
-                        >
-                            <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
-                        </a>
+                        <?php if ($this->isAllowed($note, \Intervenant\Assertion\NoteAssertion::PRIV_EDITER_NOTE)): ?>
+                            <a class="ajax-modal" data-event="note-edition"
+                               href="<?= $this->url('note/saisir', ['intervenant' => $intervenant->getId(), 'note' => $note->getId()]); ?>"><i
+                                        class="fa fa-edit fa-lg" aria-hidden="true"></i></a>
+                        <?php elseif ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION))): ?>
+                            <a class="ajax-modal" data-event="note-voir"
+                               href="<?= $this->url('note/voir', ['intervenant' => $intervenant->getId(), 'note' => $note->getId()]); ?>"><i
+                                        class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                        <?php endif; ?>
+
+                        <?php if ($this->isAllowed($note, \Intervenant\Assertion\NoteAssertion::PRIV_SUPPRIMER_NOTE)): ?>
+                            <a class="pop-ajax"
+                               href="<?= $this->url('note/supprimer', ['intervenant' => $intervenant->getId(), 'note' => $note->getId()]); ?>"
+                               title="Supprimer la note"
+                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                               data-confirm="true"
+                               data-confirm-button="Oui"
+                               data-cancel-button="Non"
+                               data-submit-reload="true"
+                               data-event="note-suppression"
+                            >
+                                <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                        <?php endif; ?>
 
                     </div>
                 </td>
@@ -67,9 +80,43 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
     </body>
 </table>
 
-<?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="note-edition" href="<?= $this->url('note/saisir', ['intervenant' => $intervenant->getId()]); ?>"><span class="glyphicon glyphicon-plus"></span> Ajouter une note</a>
+<?php if ($canAdd): ?>
+    <a class="btn btn-primary ajax-modal" data-event="note-edition"
+       href="<?= $this->url('note/saisir', ['intervenant' => $intervenant->getId()]); ?>"><span
+                class="glyphicon glyphicon-plus"></span> Ajouter une note</a>
 <?php endif; ?>
+
+
+<h3 class="page-header">Historique intervenant</h3>
+
+<table class="table table-bordered ">
+    <head>
+        <tr>
+            <th>Action</th>
+            <th>Fait le</th>
+            <th>Par</th>
+        </tr>
+    </head>
+    <body>
+    <?php if (!empty($historique)): ?>
+        <?php foreach ($historique as $v): ?>
+            <tr class="note" data-id="<?= $v['id'] ?>">
+                <td class="col-lg-6"><?= $v['label'] ?></td>
+                <td class="col-lg-3"><?= $v['histo_date']->format(\Application\Constants::DATETIME_FORMAT) ?></td>
+                <td class="col-lg-3"><?= $v['histo_user'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="3">
+                Aucun historique pour l'intervenant
+            </td>
+        </tr>
+    <?php endif; ?>
+
+    </body>
+</table>
+
 <script type="text/javascript">
     $(function () {
         $("body").on("note-edition", function (event, data) {
@@ -79,7 +126,17 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
             } else {
                 window.location.assign(window.location.href + '?tab=notes');
             }
-            //window.location.reload();
+            window.location.reload();
+
+        });
+        $("body").on("note-suppression", function (event, data) {
+            str = window.location.href;
+            if (str.indexOf("tab=notes") !== -1) {
+                window.location.reload();
+            } else {
+                window.location.assign(window.location.href + '?tab=notes');
+            }
+            window.location.reload();
 
         });
     });

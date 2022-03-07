@@ -4,9 +4,9 @@ namespace Intervenant\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
-use Doctrine\Common\Collections\ArrayCollection;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Note;
-use Doctrine\ORM\QueryBuilder;
+use Laminas\Mail\Message;
 
 /**
  * Description of NoteService
@@ -15,6 +15,9 @@ use Doctrine\ORM\QueryBuilder;
  */
 class NoteService extends AbstractEntityService
 {
+
+    use ContextServiceAwareTrait;
+    use TypeNoteServiceAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -28,7 +31,6 @@ class NoteService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne l'alias d'entité courante
      *
@@ -38,7 +40,6 @@ class NoteService extends AbstractEntityService
     {
         return 'note';
     }
-
 
 
     /**
@@ -51,12 +52,45 @@ class NoteService extends AbstractEntityService
     {
         $qb = $this->finderByIntervenant($intervenant);
         $this->finderByHistorique($qb);
-        $notes = $this->getList();
-      
+        $notes = $this->getList($qb);
+
 
         return $notes;
     }
 
+    public function getHistoriqueIntervenant(Intervenant $intervenant)
+    {
+        $historique = [];
+        $sql = 'SELECT * FROM v_intervenant_historique where intervenant_id =  ' . $intervenant->getId() . ' ORDER BY histo_date DESC';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while ($r = $stmt->fetch()) {
+
+            $historique[] = [
+                'id'             => $r['ID'],
+                'intervenant_id' => $r['INTERVENANT_ID'],
+                'label'          => $r['LABEL'],
+                'histo_date'     => new \DateTime($r['HISTO_DATE']),
+                'histo_user'     => $r['HISTO_USER'],
+
+            ];
+        }
+
+        return $historique;
+
+    }
+
+    public function createNoteFromEmail(Intervenant $intervenant, $sujet, $message): Note
+    {
+        $note = $this->newEntity();
+        $note->setIntervenant($intervenant);
+        $note->setLibelle($sujet);
+        $note->setContenu($message);
+        $note->setType($this->getServiceTypeNote()->getByCode('email'));
+        $this->save($note);
+
+        return $note;
+
+    }
 
 
     /**

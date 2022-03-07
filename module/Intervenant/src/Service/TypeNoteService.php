@@ -20,7 +20,6 @@ class TypeNoteService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne l'alias d'entité courante
      *
@@ -31,6 +30,14 @@ class TypeNoteService extends AbstractEntityService
         return 'typeNote';
     }
 
+    public function getByCode($code): ?TypeNote
+    {
+        if ($code) {
+            return $this->getRepo()->findOneBy(['code' => $code]);
+        } else {
+            return null;
+        }
+    }
 
 
     public function newEntity(): TypeNote

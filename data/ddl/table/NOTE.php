@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'NOTE_ID_SEQ',
     'columns'     => [
-        'ID'                     => [
+        'ID'                    => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE'     => [
+        'LIBELLE'               => [
             'name'        => 'LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -33,11 +33,11 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CONTENU' => [
+        'CONTENU'               => [
             'name'        => 'CONTENU',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 4000,
+            'type'        => 'clob',
+            'bdd-type'    => 'CLOB',
+            'length'      => 0,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,
@@ -45,7 +45,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'TYPE_NOTE_ID'    => [
+        'TYPE_NOTE_ID'          => [
             'name'        => 'TYPE_NOTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +57,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'    => [
+        'INTERVENANT_ID'        => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +69,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'        => [
+        'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +81,7 @@ return [
             'position'    => 54,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'           => [
+        'HISTO_CREATION'        => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -93,7 +93,7 @@ return [
             'position'    => 53,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'     => [
+        'HISTO_DESTRUCTEUR_ID'  => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -105,7 +105,7 @@ return [
             'position'    => 58,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'        => [
+        'HISTO_DESTRUCTION'     => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -117,7 +117,7 @@ return [
             'position'    => 57,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID'    => [
+        'HISTO_MODIFICATEUR_ID' => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -129,7 +129,7 @@ return [
             'position'    => 56,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'       => [
+        'HISTO_MODIFICATION'    => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',

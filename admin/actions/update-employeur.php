@@ -2,16 +2,16 @@
 
 $fromMaster = true;
 
-$osedir    = $oa->getOseDir();
-$bdd       = $oa->getBdd();
+$osedir = $oa->getOseDir();
+$bdd = $oa->getBdd();
 $oseSource = $oa->getSourceOseId();
-$oseId     = $oa->getOseAppliId();
+$oseId = $oa->getOseAppliId();
 $c->println("Mise à jour de la table employeur");
 
 ini_set('memory_limit', '-1');
 $importDirectory = $osedir . 'cache/employeurs/';
-$importArchive   = 'employeurs.tar.gz';
-$importFilePath  = $importDirectory . $importArchive;
+$importArchive = 'employeurs.tar.gz';
+$importFilePath = $importDirectory . $importArchive;
 mkdir($importDirectory);
 if (file_exists($importFilePath)) {
     unlink($importFilePath);
@@ -34,14 +34,14 @@ exec('cd ' . $importDirectory . ' && tar -xvf ' . $importFilePath);
 //Verification si des SIRET sont déjà chargé en base
 $bdd = $oa->getBdd();
 //$haveAlreadySiret     = $bdd->select("SELECT siret FROM employeur e WHERE siret IS NOT null FETCH FIRST 5 ROWS ONLY", [], ['fetch' => $bdd::FETCH_ONE]);
-$haveAlreadySiret     = $bdd->select("select siret from (select siret, rownum as rn FROM employeur e WHERE siret IS NOT NULL) e where e.rn < 10", [], ['fetch' => $bdd::FETCH_ONE]);
+$haveAlreadySiret = $bdd->select("SELECT siret FROM (SELECT siret, rownum AS rn FROM employeur e WHERE siret IS NOT NULL) e WHERE e.rn < 10", [], ['fetch' => $bdd::FETCH_ONE]);
 $haveAlreadyEmployeur = $bdd->select("SELECT * FROM employeur e");
 
 
 //récupération de la liste des fichiers CSV
 $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
-$nbFiles   = count($listFiles);
-$i         = 1;
+$nbFiles = count($listFiles);
+$i = 1;
 $c->println("Nombre de fichier à charger : $nbFiles", $c::COLOR_LIGHT_GREEN);
 $tableEmployeur = $bdd->getTable('EMPLOYEUR');
 
@@ -51,8 +51,8 @@ foreach ($listFiles as $file) {
 
     $c->println("Chargement du fichier employeur N° $i sur $nbFiles");
     $csvFile = fopen($importDirectory . $file, "r");
-    $row     = 0;
-    $datas   = [];
+    $row = 0;
+    $datas = [];
 
     while (($data = fgetcsv($csvFile, 1000, ",")) !== false) {
         /*
@@ -86,7 +86,7 @@ foreach ($listFiles as $file) {
         //SIREN
         $siren = $data[0];
         //SIRET
-        $siret = $data[0] . $data[12];
+        $siret = (isset($data[12])) ? $data[0] . $data[12] : '';
 
         //IDENTIFIANT ASSOCIATION
         $identifiantAssociation = $data[10];
@@ -108,23 +108,23 @@ foreach ($listFiles as $file) {
             continue;
         }
         //Compilation des datas
-        $data                            = [];
-        $options                         = [];
-        $data['SIREN']                   = $siren;
-        $data['SIRET']                   = $siret;
-        $data['RAISON_SOCIALE']          = $raisonSociale;
-        $data['NOM_COMMERCIAL']          = $nomCommercial;
-        $data['SOURCE_CODE']             = $siret;
-        $data['SOURCE_ID']               = $oseSource;
+        $data = [];
+        $options = [];
+        $data['SIREN'] = $siren;
+        $data['SIRET'] = $siret;
+        $data['RAISON_SOCIALE'] = $raisonSociale;
+        $data['NOM_COMMERCIAL'] = $nomCommercial;
+        $data['SOURCE_CODE'] = $siret;
+        $data['SOURCE_ID'] = $oseSource;
         $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
-        $data['HISTO_DESTRUCTEUR_ID']    = null;
-        $data['HISTO_DESTRUCTION']       = null;
+        $data['HISTO_DESTRUCTEUR_ID'] = null;
+        $data['HISTO_DESTRUCTION'] = null;
         $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
-        $data['CRITERE_RECHERCHE']       = reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren . ' ' . $siret);
-        $datas[]                         = $data;
-        $options['histo-user-id']        = $oseId;
-        $options['where']                = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'OSE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
-        $options['soft-delete']          = false;
+        $data['CRITERE_RECHERCHE'] = reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren . ' ' . $siret);
+        $datas[] = $data;
+        $options['histo-user-id'] = $oseId;
+        $options['where'] = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'OSE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
+        $options['soft-delete'] = false;
     }
 
     $i++;
@@ -136,40 +136,40 @@ foreach ($listFiles as $file) {
     }
 }
 //On remet l'insertion de l'employeur étrangé
-$data                            = [];
-$data['SIREN']                   = '999999999';
-$data['RAISON_SOCIALE']          = 'EMPLOYEUR ETRANGÉ';
-$data['NOM_COMMERCIAL']          = 'EMPLOYEUR ETRANGÉ';
-$data['SOURCE_CODE']             = '999999999';
-$data['SOURCE_ID']               = $oseSource;
+$data = [];
+$data['SIREN'] = '999999999';
+$data['RAISON_SOCIALE'] = 'EMPLOYEUR ETRANGÉ';
+$data['NOM_COMMERCIAL'] = 'EMPLOYEUR ETRANGÉ';
+$data['SOURCE_CODE'] = '999999999';
+$data['SOURCE_ID'] = $oseSource;
 $data['IDENTIFIANT_ASSOCIATION'] = null;
-$data['HISTO_DESTRUCTEUR_ID']    = null;
-$data['HISTO_DESTRUCTION']       = null;
+$data['HISTO_DESTRUCTEUR_ID'] = null;
+$data['HISTO_DESTRUCTION'] = null;
 $data['IDENTIFIANT_ASSOCIATION'] = null;
-$data['CRITERE_RECHERCHE']       = reduce('Employeur étrangé 999999999');
-$options['histo - user - id']    = $oseId;
-$options['where']                = 'SIREN = \'999999999\'';
-$options['soft-delete']          = true;
-$datas                           = [];
-$datas[]                         = $data;
+$data['CRITERE_RECHERCHE'] = reduce('Employeur étrangé 999999999');
+$options['histo - user - id'] = $oseId;
+$options['where'] = 'SIREN = \'999999999\'';
+$options['soft-delete'] = true;
+$datas = [];
+$datas[] = $data;
 $tableEmployeur->merge($datas, 'SIREN', $options);
 
-$data                            = [];
-$data['SIREN']                   = '000000000000';
-$data['RAISON_SOCIALE']          = 'Employeur non présent dans la liste';
-$data['NOM_COMMERCIAL']          = 'Employeur non présent dans la liste';
-$data['SOURCE_CODE']             = '000000000000';
-$data['SOURCE_ID']               = $oseSource;
+$data = [];
+$data['SIREN'] = '000000000000';
+$data['RAISON_SOCIALE'] = 'Employeur non présent dans la liste';
+$data['NOM_COMMERCIAL'] = 'Employeur non présent dans la liste';
+$data['SOURCE_CODE'] = '000000000000';
+$data['SOURCE_ID'] = $oseSource;
 $data['IDENTIFIANT_ASSOCIATION'] = null;
-$data['HISTO_DESTRUCTEUR_ID']    = null;
-$data['HISTO_DESTRUCTION']       = null;
+$data['HISTO_DESTRUCTEUR_ID'] = null;
+$data['HISTO_DESTRUCTION'] = null;
 $data['IDENTIFIANT_ASSOCIATION'] = null;
-$data['CRITERE_RECHERCHE']       = reduce('Employeur non présent dans la liste 000000000000');
-$options['histo-user-id']        = $oseId;
-$options['where']                = 'SIREN = \'000000000000\'';
-$options['soft-delete']          = true;
-$datas                           = [];
-$datas[]                         = $data;
+$data['CRITERE_RECHERCHE'] = reduce('Employeur non présent dans la liste 000000000000');
+$options['histo-user-id'] = $oseId;
+$options['where'] = 'SIREN = \'000000000000\'';
+$options['soft-delete'] = true;
+$datas = [];
+$datas[] = $data;
 $tableEmployeur->merge($datas, 'SIREN', $options);
 
 
@@ -182,14 +182,14 @@ exec('rm -r ' . $importDirectory);
 function reduce($str, $encoding = 'UTF-8')
 {
     $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ€@()…,<>/?€%!":’\'';
-    $to   = 'aaaaaacdeeeeiiiioooooouuuuynaaaaaacdeeeeiiiioooooouuuuynea_______________';
+    $to = 'aaaaaacdeeeeiiiioooooouuuuynaaaaaacdeeeeiiiioooooouuuuynea_______________';
 
     $rstr = '';
-    $ok   = true;
-    $len  = mb_strlen($str, $encoding);
+    $ok = true;
+    $len = mb_strlen($str, $encoding);
     for ($i = 0; $i < $len; $i++) {
         $char = mb_substr($str, $i, 1, $encoding);
-        $pos  = mb_strpos($from, $char, 0, $encoding);
+        $pos = mb_strpos($from, $char, 0, $encoding);
         if (false === $pos) {
             $rstr .= $char;
         } else {

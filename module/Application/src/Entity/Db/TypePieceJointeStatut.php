@@ -168,8 +168,6 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
         if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
-        if ($this->getAnneeDebut()) $t[] = 'Actif à partir de ' . $this->getAnneeDebut();
-        if ($this->getAnneeFin()) $t[] = 'Actif jusqu\'à' . $this->getAnneeFin();
         if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie();
 
         return implode("\n", $t);

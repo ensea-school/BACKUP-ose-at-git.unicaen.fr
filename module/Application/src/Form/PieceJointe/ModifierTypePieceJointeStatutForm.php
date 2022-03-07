@@ -33,7 +33,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'type'    => 'Checkbox',
             'name'    => 'typePieceJointe',
             'options' => [
-                'label' => "La pièce justifitative doit être fournie obligatoirement",
+                'label' => "La pièce justificative doit être fournie obligatoirement",
             ],
         ]);
 

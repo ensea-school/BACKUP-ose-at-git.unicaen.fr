@@ -15,78 +15,81 @@ function affBooleen($flg)
     return ($flg ? '<i class="fas fa-check "></i>' : '<i class="fas fa-xmark "></i>');
 }
 
-$this->headTitle()->append("Gestion des formations");
+$this->headTitle()->append("Gestion des types de formations");
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_TYPE_FORMATION_EDITION));
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
 
-<h1 class="page-header">Gestion des groupes de types de formations</h1>
-<?php foreach ($groupeTypeFormations as $groupeTypeFormation): ?>
-    <div panel panel-default triables ui-sortable" data-id= <?php echo $groupeTypeFormation->getId() ?>>
-    <div class="panel-heading class="" ><?= $groupeTypeFormation->getLibelleLong(); ?> (<?= $groupeTypeFormation->getLibelleCourt(); ?>)
-    <span class="badge badge-info"><?= affBooleen($groupeTypeFormation->isPertinenceNiveau()); ?></span>
-    <span class="badge"><?= $groupeTypeFormation->getSource()->getLibelle(); ?></span>
-    <?php if ($canEdit): ?>
-        <i class="fas fa-arrows-up-down-left-right pull-right"
-           title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>
-        <span class="pull-right"> </span>
-        <a class="pop-ajax pull-right" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
-           data-confirm="true"
-           data-submit-reload="true"
-           href="<?= $this->url('type-formation/supprimer-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()]) ?>"
-           title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
-        <span class="pull-right"> </span>
-        <a class="ajax-modal pull-right" data-event="type-formation-edition"
-           href="<?= $this->url('type-formation/saisie-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
-           title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
-    <?php endif; ?>
-    </div>
-    <div class="type-formations">
-        <table class="table table-bordered table-condensed">
-            <thead>
-            <tr>
-                <th style="text-align: center">Libellé court</th>
-                <th style="text-align: center">Libellé long</th>
-                <th style="text-align: center">Source</th>
+<h1 class="page-header">Gestion des types de formations</h1>
+<div class="triables ui-sortable">
+    <?php foreach ($groupeTypeFormations as $groupeTypeFormation): ?>
+        <div class="panel panel-default champ-triable" data-id= <?php echo $groupeTypeFormation->getId() ?>>
+            <div class="panel-heading"><?= $groupeTypeFormation->getLibelleLong(); ?> (<?= $groupeTypeFormation->getLibelleCourt(); ?>)
+                <span class="badge badge-info"><?= affBooleen($groupeTypeFormation->isPertinenceNiveau()); ?></span>
+                <span class="badge"><?= $groupeTypeFormation->getSource()->getLibelle(); ?></span>
                 <?php if ($canEdit): ?>
-                    <th style="text-align: center">Actions</th>
+                    <i class="fas fa-arrows-up-down-left-right pull-right"
+                       title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>
+                    <span class="pull-right"> </span>
+                    <a class="pop-ajax pull-right" data-title="Suppression d'une collection" data-content="Êtes-vous sur de vouloir supprimer"
+                       data-confirm="true"
+                       data-submit-reload="true"
+                       href="<?= $this->url('type-formation/supprimer-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()]) ?>"
+                       title="Supprimer la collection"><i class="fas fa-trash-can"></i></a>
+                    <span class="pull-right"> </span>
+                    <a class="ajax-modal pull-right" data-event="type-formation-edition"
+                       href="<?= $this->url('type-formation/saisie-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                       title="Modifier la collection"><i class="fas fa-pen-to-square"></i></a>
                 <?php endif; ?>
-            </tr>
-            </thead>
-            <tbody class="triables ui-sortable">
-            <?php foreach ($groupeTypeFormation->getTypeFormation() as $typeFormation): ?>
-                <tr class="champ-triable" data-id= <?php echo $typeFormation->getId() ?>>
-                    <td style="text-align: center"><?= $typeFormation->getLibelleCourt(); ?></td>
-                    <td style="text-align: center"><?= $typeFormation->getLibelleLong(); ?></td>
-                    <td style="text-align: center"><?= $typeFormation->getSource()->getLibelle(); ?></td>
-                    <?php if ($canEdit): ?>
-                        <td style="text-align: center">
-                            <a class="ajax-modal" data-event="type-formation-edition"
-                               href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
-                               title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
-                            <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
-                               data-confirm="true"
-                               data-submit-reload="true"
-                               href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormation->getId()]) ?>"
-                               title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
-                        </td>
-                    <?php endif; ?>
+            </div>
+            <div class="type-formations">
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">Libellé court</th>
+                        <th style="text-align: center">Libellé long</th>
+                        <th style="text-align: center">Source</th>
+                        <?php if ($canEdit): ?>
+                            <th style="text-align: center">Actions</th>
+                        <?php endif; ?>
+                    </tr>
+                    </thead>
+                    <tbody class="triables ui-sortable">
+                    <?php foreach ($groupeTypeFormation->getTypeFormation() as $typeFormation): ?>
+                        <tr class="champ-triable" data-id= <?php echo $typeFormation->getId() ?>>
+                            <td style="text-align: center"><?= $typeFormation->getLibelleCourt(); ?></td>
+                            <td style="text-align: center"><?= $typeFormation->getLibelleLong(); ?></td>
+                            <td style="text-align: center"><?= $typeFormation->getSource()->getLibelle(); ?></td>
+                            <?php if ($canEdit): ?>
+                                <td style="text-align: center">
+                                    <a class="ajax-modal" data-event="type-formation-edition"
+                                       href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                                       title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
+                                    <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
+                                       data-confirm="true"
+                                       data-submit-reload="true"
+                                       href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormation->getId()]) ?>"
+                                       title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
+                                </td>
+                            <?php endif; ?>
 
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
 
 
-    </div>
+            </div>
+        </div>
 
-<?php endforeach; ?>
+    <?php endforeach; ?>
+</div>
 <?php if ($canEdit): ?>
     <tr class="champ-triable">
         <a class="btn btn-primary ajax-modal " data-event="groupe-type-formation-edition" href="<?= $this->url('type-formation/saisie-groupe'); ?>"><i
                     class="fas fa-plus"></i>
-            Ajout
-            d'un nouveau groupe de types de formations</a>
+            Ajout d'une nouvele collection
+        </a>
     </tr>
 <?php endif; ?>
 <?php if ($canEdit): ?>
@@ -106,7 +109,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             axis: 'y',
             update: function (event, ui) {
                 var champsIds = '';
-                ui.item.parent().find('li.champ-triable').each(function () {
+                ui.item.parent().find('div.champ-triable').each(function () {
                     if (champsIds != '') champsIds += ',';
                     champsIds += $(this).data('id');
                 });

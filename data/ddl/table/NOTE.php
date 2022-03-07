@@ -11,9 +11,9 @@ return [
     'columns'     => [
         'CONTENU'               => [
             'name'        => 'CONTENU',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 4000,
+            'type'        => 'clob',
+            'bdd-type'    => 'CLOB',
+            'length'      => 0,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,

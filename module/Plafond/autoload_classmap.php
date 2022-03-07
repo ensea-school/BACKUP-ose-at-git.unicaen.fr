@@ -9,8 +9,6 @@ return [
     'Plafond\Controller\DerogationControllerFactory'            => __DIR__ . '/src/Controller/DerogationControllerFactory.php',
     'Plafond\Controller\PlafondController'                      => __DIR__ . '/src/Controller/PlafondController.php',
     'Plafond\Controller\PlafondControllerFactory'               => __DIR__ . '/src/Controller/PlafondControllerFactory.php',
-    'Plafond\Controller\PlafondStructureController'             => __DIR__ . '/src/Controller/PlafondStructureController.php',
-    'Plafond\Controller\PlafondStructureControllerFactory'      => __DIR__ . '/src/Controller/PlafondStructureControllerFactory.php',
     'Plafond\Entity\Db\Plafond'                                 => __DIR__ . '/src/Entity/Db/Plafond.php',
     'Plafond\Entity\Db\PlafondApplication'                      => __DIR__ . '/src/Entity/Db/PlafondApplication.php',
     'Plafond\Entity\Db\PlafondDerogation'                       => __DIR__ . '/src/Entity/Db/PlafondDerogation.php',
@@ -29,8 +27,6 @@ return [
     'Plafond\Processus\PlafondProcessusFactory'                 => __DIR__ . '/src/Processus/PlafondProcessusFactory.php',
     'Plafond\Service\PlafondService'                            => __DIR__ . '/src/Service/PlafondService.php',
     'Plafond\Service\PlafondServiceFactory'                     => __DIR__ . '/src/Service/PlafondServiceFactory.php',
-    'Plafond\Service\PlafondStructureService'                   => __DIR__ . '/src/Service/PlafondStructureService.php',
-    'Plafond\Service\PlafondStructureServiceFactory'            => __DIR__ . '/src/Service/PlafondStructureServiceFactory.php',
     'Plafond\View\Helper\PlafondConfigElementViewHelper'        => __DIR__ . '/src/View/Helper/PlafondConfigElementViewHelper.php',
     'Plafond\View\Helper\PlafondConfigElementViewHelperFactory' => __DIR__ . '/src/View/Helper/PlafondConfigElementViewHelperFactory.php',
 ];

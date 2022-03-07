@@ -185,16 +185,14 @@ return [
         ],*/
 
     'controllers' => [
-        'Plafond\Controller\Plafond'          => Controller\PlafondControllerFactory::class,
-        'Plafond\Controller\PlafondStructure' => Controller\PlafondStructureControllerFactory::class,
-        'Plafond\Controller\Derogation'       => Controller\DerogationControllerFactory::class,
+        'Plafond\Controller\Plafond'    => Controller\PlafondControllerFactory::class,
+        'Plafond\Controller\Derogation' => Controller\DerogationControllerFactory::class,
     ],
 
     'services' => [
-        Assertion\PlafondAssertion::class      => AssertionFactory::class,
-        Service\PlafondService::class          => Service\PlafondServiceFactory::class,
-        Service\PlafondStructureService::class => Service\PlafondStructureServiceFactory::class,
-        Processus\PlafondProcessus::class      => Processus\PlafondProcessusFactory::class,
+        Assertion\PlafondAssertion::class => AssertionFactory::class,
+        Service\PlafondService::class     => Service\PlafondServiceFactory::class,
+        Processus\PlafondProcessus::class => Processus\PlafondProcessusFactory::class,
     ],
 
     'forms' => [

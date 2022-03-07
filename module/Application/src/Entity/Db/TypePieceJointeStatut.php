@@ -3,96 +3,43 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\TypePieceJointeAwareTrait;
-use Application\Traits\ObligatoireSelonSeuilHeuresTrait;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\Traits\ParametreEntityTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 
-/**
- * TypePieceJointeStatut
- */
-class TypePieceJointeStatut implements HistoriqueAwareInterface
+class TypePieceJointeStatut implements ParametreEntityInterface
 {
-    use HistoriqueAwareTrait;
-    use ObligatoireSelonSeuilHeuresTrait;
+    use ParametreEntityTrait;
     use StatutAwareTrait;
     use TypePieceJointeAwareTrait;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private float $seuilHetd      = 0;
 
-    /**
-     * @var float
-     * @see  ObligatoireSelonSeuilHeuresTrait
-     * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
-     */
-    private $seuilHetd;
+    private bool  $typeHeureHetd  = false;
 
-    /**
-     * @var boolean
-     */
-    private $typeHeureHetd;
+    private bool  $fc             = false;
 
-    /**
-     * @var Annee
-     */
-    private $anneeDebut;
+    private bool  $changementRIB  = false;
 
-    /**
-     * @var Annee
-     */
-    private $anneeFin;
+    private int   $dureeVie       = 1;
 
-    /**
-     * @var boolean
-     */
-    private $fc;
+    private bool  $obligatoireHNP = false;
 
-    /**
-     * @var boolean
-     */
-    private $changementRIB;
-
-    /**
-     * @var integeer
-     */
-    private $dureeVie;
-
-    /**
-     * @var boolean
-     */
-    private $obligatoireHNP;
+    private bool  $obligatoire    = true;
 
 
 
-
-    /**
-     * Set obligatoire
-     *
-     * @param boolean $obligatoire
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setObligatoire($obligatoire)
+    public function getSeuilHetd(): float|int
     {
-        $this->obligatoire = $obligatoire;
-
-        return $this;
+        return $this->seuilHetd;
     }
 
 
 
-    /**
-     * Set seuilHetd
-     *
-     * @param integer $seuilHetd
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setSeuilHetd($seuilHetd)
+    public function setSeuilHetd(float|int $seuilHetd): TypePieceJointeStatut
     {
         $this->seuilHetd = $seuilHetd;
 
@@ -101,26 +48,14 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get seuilHetd
-     *
-     * @return integer
-     */
-    public function getSeuilHetd()
+    public function getTypeHeureHetd(): bool
     {
-        return $this->seuilHetd;
+        return $this->typeHeureHetd;
     }
 
 
 
-    /**
-     * Set typeHeure
-     *
-     * @param integer $typeHeureHetd
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setTypeHeureHetd($typeHeureHetd)
+    public function setTypeHeureHetd(bool $typeHeureHetd): TypePieceJointeStatut
     {
         $this->typeHeureHetd = $typeHeureHetd;
 
@@ -129,96 +64,14 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get typeHeure
-     *
-     * @return integer
-     */
-    public function getTypeHeureHetd()
+    public function getFc(): bool
     {
-        return $this->typeHeureHetd;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * @return Annee
-     */
-    public function getAnneeDebut()
-    {
-        return $this->anneeDebut;
-    }
-
-
-
-    /**
-     * @param Annee $anneeDebut
-     *
-     * @return TypePieceJointeStatut
-     */
-    public function setAnneeDebut(Annee $anneeDebut = null)
-    {
-        $this->anneeDebut = $anneeDebut;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return Annee
-     */
-    public function getAnneeFin()
-    {
-        return $this->anneeFin;
-    }
-
-
-
-    /**
-     * @param Annee $anneeFin
-     *
-     * @return * TypePieceJointeStatut
-     */
-    public function setAnneeFin(Annee $anneeFin = null)
-    {
-        $this->anneeFin = $anneeFin;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getFC()
-    {
-        if (!isset($this->fc)) return false;
-
         return $this->fc;
     }
 
 
 
-    /**
-     * @param boolean $fC
-     *
-     * * @return * TypePieceJointeStatut
-     */
-    public function setFC($fc = null)
+    public function setFc(bool $fc): TypePieceJointeStatut
     {
         $this->fc = $fc;
 
@@ -227,12 +80,14 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
 
 
-    /**
-     * @param boolean $changementRIB
-     *
-     * * @return * TypePieceJointeStatut
-     */
-    public function setChangementRIB($changementRIB = null)
+    public function getChangementRIB(): bool
+    {
+        return $this->changementRIB;
+    }
+
+
+
+    public function setChangementRIB(bool $changementRIB): TypePieceJointeStatut
     {
         $this->changementRIB = $changementRIB;
 
@@ -241,36 +96,14 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
 
 
-    /**
-     * @return boolean
-     */
-    public function getChangementRIB()
+    public function getDureeVie(): int
     {
-        if (!isset($this->changementRIB)) return false;
-
-        return $this->changementRIB;
-    }
-
-
-
-    /**
-     * @return integer
-     */
-    public function getDureeVie()
-    {
-        if (!isset($this->dureeVie)) return 1;
-
         return $this->dureeVie;
     }
 
 
 
-    /**
-     * @param integer $dureeVie
-     *
-     * * @return * TypePieceJointeStatut
-     */
-    public function setDureeVie($dureeVie = null)
+    public function setDureeVie(int $dureeVie): TypePieceJointeStatut
     {
         $this->dureeVie = $dureeVie;
 
@@ -279,22 +112,32 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
 
 
-    /**
-     * @return bool
-     */
-    public function isObligatoireHNP()
+    public function getObligatoireHNP(): bool
     {
         return $this->obligatoireHNP;
     }
 
 
 
-    /**
-     * @param bool $obligatoireHNP
-     */
-    public function setObligatoireHNP($obligatoireHNP)
+    public function setObligatoireHNP(bool $obligatoireHNP): TypePieceJointeStatut
     {
         $this->obligatoireHNP = $obligatoireHNP;
+
+        return $this;
+    }
+
+
+
+    public function getObligatoire(): bool
+    {
+        return $this->obligatoire;
+    }
+
+
+
+    public function setObligatoire(bool $obligatoire): TypePieceJointeStatut
+    {
+        $this->obligatoire = $obligatoire;
 
         return $this;
     }
@@ -305,7 +148,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     {
         $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
         if ($this->getSeuilHetd()) $txt .= ' >' . $this->getSeuilHetd();
-        if ($this->getFC()) $txt .= ' FC ';
+        if ($this->getFc()) $txt .= ' FC ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
         if ($this->getDureeVie() && $this->getDureeVie() > 1) $txt .= ' ' . $this->getDureeVie() . 'ans';
 
@@ -323,10 +166,8 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
         $t   = [];
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
         if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
-        if ($this->getFC()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
+        if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
-        if ($this->getAnneeDebut()) $t[] = 'Actif à partir de ' . $this->getAnneeDebut();
-        if ($this->getAnneeFin()) $t[] = 'Actif jusqu\'à' . $this->getAnneeFin();
         if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie();
 
         return implode("\n", $t);

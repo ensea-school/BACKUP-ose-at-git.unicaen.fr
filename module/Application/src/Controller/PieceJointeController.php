@@ -11,6 +11,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
+use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
@@ -132,7 +133,7 @@ class PieceJointeController extends AbstractController
         $nbObligatoiresNonFournis = 0;
 
         foreach ($demandees as $demandee) {
-            if ($demandee->isObligatoire()) {
+            if ($demandee->getObligatoire()) {
                 $nbDemandees++;
                 if (isset($fournies[$demandee->getTypePieceJointe()->getId()])) {
                     $pj = $fournies[$demandee->getTypePieceJointe()->getId()];
@@ -339,10 +340,13 @@ class PieceJointeController extends AbstractController
 
     public function typePieceJointeStatutAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\TypePieceJointe::class,
-            \Intervenant\Entity\Db\Statut::class,
-            \Application\Entity\Db\TypePieceJointeStatut::class,
+        $this->em()->getFilters()->enable('historique')->init(entity: [
+            TypePieceJointe::class,
+            Statut::class,
+            TypePieceJointeStatut::class,
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            Statut::class,
         ]);
 
         $anneeId = $this->getServiceContext()->getAnnee()->getId();
@@ -356,17 +360,18 @@ class PieceJointeController extends AbstractController
 
         $dql = "
         SELECT
-          tpjs, adeb, afin
+          tpjs, tpj, si
         FROM
-          " . \Application\Entity\Db\TypePieceJointeStatut::class . " tpjs
-          LEFT JOIN tpjs.anneeDebut adeb
-          LEFT JOIN tpjs.anneeFin afin
+          " . TypePieceJointeStatut::class . " tpjs
+          JOIN tpjs.typePieceJointe tpj
+          JOIN tpjs.statut si
         WHERE
-          COALESCE($anneeId,$anneeId) BETWEEN COALESCE(adeb.id,$anneeId) AND COALESCE(afin.id,$anneeId)
-        "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
+          tpjs.annee = :annee
+        ";
 
         /* @var $tpjss TypePieceJointeStatut[] */
-        $tpjss                     = $this->em()->createQuery($dql)->getResult();
+        $query                     = $this->em()->createQuery($dql)->setParameters(['annee' => $this->getServiceContext()->getAnnee()->getId()]);
+        $tpjss                     = $query->getResult();
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
             $tpjID = $tpjs->getTypePieceJointe()->getId();
@@ -404,7 +409,7 @@ class PieceJointeController extends AbstractController
         /* @var $typePieceJointe TypePieceJointe */
         $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
 
-        $form = $this->getFormTypePieceJointeSaisie();
+        $form = $this->getFormPieceJointeTypePieceJointeSaisie();
         if (empty($typePieceJointe)) {
             $title           = 'Création d\'un nouveau type de pièce jointe';
             $typePieceJointe = $this->getServiceTypePieceJointe()->newEntity();
@@ -424,7 +429,7 @@ class PieceJointeController extends AbstractController
         /* @var $tpjs TypePieceJointeStatut */
         $tpjs = $this->getEvent()->getParam('typePieceJointeStatut'); // $tpjs1 pour existence sur supprimer
 
-        $form = $this->getFormModifierTypePieceJointeStatut();
+        $form = $this->getFormPieceJointeModifierTypePieceJointeStatut();
         if (empty($tpjs)) {
             $title           = 'Nouveau paramètre de gestion de pièce justificative';
             $tpjs            = $this->getServiceTypePieceJointeStatut()->newEntity();
@@ -432,13 +437,11 @@ class PieceJointeController extends AbstractController
             $statut          = $this->getEvent()->getParam('statut');
             $tpjs->setTypePieceJointe($typePieceJointe);
             $tpjs->setStatut($statut);
-            $tpjs->setObligatoire(true);
         } else {
             $title           = 'Édition du paramètre de gestion de pièce justificative';
             $typePieceJointe = $tpjs->getTypePieceJointe();
             $statut          = $tpjs->getStatut();
         }
-        $form->buildAnnees($tpjs);
         $form->bindRequestSave($tpjs, $this->getRequest(), $this->getServiceTypePieceJointeStatut());
 
         return compact('form', 'title', 'typePieceJointe', 'statut');

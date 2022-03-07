@@ -9,6 +9,7 @@ use Application\Provider\Privilege\Privileges;
  * @var $statuts           \Intervenant\Entity\Db\Statut[]
  * @var $statut            \Intervenant\Entity\Db\Statut
  * @var $form              \Intervenant\Form\StatutSaisieForm
+ * @var $plafonds          \Plafond\Interfaces\PlafondConfigInterface[]
  * @var $title             string
  */
 
@@ -264,7 +265,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <div class="panel panel-default">
             <div class="panel-heading">Plafonds</div>
             <div class="panel-body">
-                TODO
+                <?php var_dump($plafonds) ?>
             </div>
         </div>
 

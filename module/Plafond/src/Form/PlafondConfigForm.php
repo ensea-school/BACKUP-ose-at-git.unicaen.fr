@@ -43,14 +43,7 @@ class PlafondConfigForm extends AbstractForm
             ],
         ]);
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+        $this->addSubmit();
     }
 
 
@@ -98,21 +91,6 @@ class PlafondConfigForm extends AbstractForm
 
 
         return $e;
-    }
-
-
-
-    /**
-     * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return [
-            /* Filtres et validateurs */
-        ];
     }
 
 }

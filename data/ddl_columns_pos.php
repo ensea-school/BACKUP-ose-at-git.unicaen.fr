@@ -1753,6 +1753,7 @@ return [
         'TAUX_HETD_SERVICE',
         'TAUX_HETD_COMPLEMENTAIRE',
         'STATUT_ID',
+        'ANNEE_ID',
     ],
     'TYPE_INTERVENTION_STRUCTURE'    => [
         'ID',

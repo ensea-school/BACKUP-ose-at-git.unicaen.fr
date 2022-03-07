@@ -2,85 +2,32 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\Traits\ParametreEntityTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 
-/**
- * TypeInterventionStatut
- */
-class TypeInterventionStatut
+class TypeInterventionStatut implements ParametreEntityInterface
 {
+    use ParametreEntityTrait;
+    use TypeInterventionAwareTrait;
     use StatutAwareTrait;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected float $tauxHETDService        = 1;
 
-    /**
-     * @var integer
-     */
-    protected $typeIntervention;
-
-    /**
-     * @var float
-     */
-    protected $tauxHETDService;
-
-    /**
-     * @var float
-     */
-    protected $tauxHETDComplementaire;
+    protected float $tauxHETDComplementaire = 1;
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getTauxHETDService(): float
     {
-        return $this->id;
+        return $this->tauxHETDService;
     }
 
 
 
-    /**
-     * Set typeIntervention
-     *
-     * @param integer $typeIntervention
-     *
-     * @return TypeInterventionStatut
-     */
-    public function setTypeIntervention($typeIntervention)
-    {
-        $this->typeIntervention = $typeIntervention;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get typeIntevention
-     *
-     * @return integer
-     */
-    public function getTypeIntervention()
-    {
-        return $this->typeIntervention;
-    }
-
-
-
-    /**
-     * Set tauxHetdService
-     *
-     * @param float $tauxHETDService
-     *
-     * @return TypeInterventionStatut
-     */
-    public function setTauxHETDService($tauxHETDService)
+    public function setTauxHETDService(float $tauxHETDService): TypeInterventionStatut
     {
         $this->tauxHETDService = $tauxHETDService;
 
@@ -89,42 +36,18 @@ class TypeInterventionStatut
 
 
 
-    /**
-     * Get tauxHETDService
-     *
-     * @return float
-     */
-    public function getTauxHETDService()
+    public function getTauxHETDComplementaire(): float
     {
-        return $this->tauxHETDService;
+        return $this->tauxHETDComplementaire;
     }
 
 
 
-    /**
-     * Set tauxHETDComplementaire
-     *
-     * @param float $tauxHETDComplementaire
-     *
-     * @return TypeInterventionStatut
-     */
-    public function setTauxHETDComplementaire($tauxHETDComplementaire)
+    public function setTauxHETDComplementaire(float $tauxHETDComplementaire): TypeInterventionStatut
     {
         $this->tauxHETDComplementaire = $tauxHETDComplementaire;
 
         return $this;
-    }
-
-
-
-    /**
-     * Get tauxHETDComplementaire
-     *
-     * @return float
-     */
-    public function getTauxHETDComplementaire()
-    {
-        return $this->tauxHETDComplementaire;
     }
 
 }

@@ -18,11 +18,8 @@
     <field name="fc" type="boolean" column="FC" nullable="false"/>
     <field name="dureeVie" type="integer" column="DUREE_VIE" nullable="true"/>
     <field name="obligatoireHNP" type="boolean" column="OBLIGATOIRE_HNP" nullable="false"/>
-    <many-to-one field="anneeDebut" target-entity="Application\Entity\Db\Annee">
-      <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <many-to-one field="anneeFin" target-entity="Application\Entity\Db\Annee">
-      <join-column name="ANNEE_FIN_ID" referenced-column-name="ID"/>
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-column name="ANNEE_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>

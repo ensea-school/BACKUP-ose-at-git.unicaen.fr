@@ -85,7 +85,7 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -30,7 +30,6 @@ class TypeFormationController extends AbstractController
 
     public function indexAction()
     {
-
         $dql                  = "SELECT gtf,tf FROM " . GroupeTypeFormation::class . " gtf 
             LEFT JOIN gtf.typeFormation tf WITH tf.histoDestruction is null
             WHERE gtf.histoDestruction is null
@@ -45,6 +44,10 @@ class TypeFormationController extends AbstractController
 
     public function saisieAction()
     {
+        $this->em()->getFilters()->enable('historique')->init([
+            GroupeTypeFormation::class,
+        ]);
+
         $typeFormations = $this->getEvent()->getParam('typeFormation');
         $form           = $this->getFormTypeFormationSaisie();
 

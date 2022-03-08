@@ -105,7 +105,7 @@ class TypeFormationController extends AbstractController
     public
     function supprimerGroupeAction()
     {
-        $typeformation = $this->getEvent()->getParam('groupeFypeFormation');
+        $typeformation = $this->getEvent()->getParam('groupeTypeFormation');
         $this->getServiceGroupeTypeFormation()->delete($typeformation, true);
 
         return new MessengerViewModel();

@@ -81,13 +81,11 @@ class TypeFormationController extends AbstractController
         }
         $form->bindRequestSave($groupeTypeFormation, $this->getRequest(), function () use ($groupeTypeFormation, $form) {
 
-
-            $this->getServiceTypeFormation()->save($groupeTypeFormation);
+            $this->getServiceGroupeTypeFormation()->save($groupeTypeFormation);
             $this->flashMessenger()->addSuccessMessage(
                 "Ajout réussis"
             );
         });
-
 
         return compact('form', 'title');
     }
@@ -97,21 +95,20 @@ class TypeFormationController extends AbstractController
     public
     function supprimerAction()
     {
-//        $typeformation = $this->getEvent()->getParam('typeformation');
-//        $this->getServicetypeformation()->delete($typeformation, false);
-//
-//        return new MessengerViewModel();
-    }
+        $typeformation = $this->getEvent()->getParam('typeFormation');
+        $this->getServiceTypeFormation()->delete($typeformation, true);
 
+        return new MessengerViewModel();
+    }
 
 
     public
     function supprimerGroupeAction()
     {
-//        $typeformation = $this->getEvent()->getParam('typeformation');
-//        $this->getServicetypeformation()->delete($typeformation, false);
-//
-//        return new MessengerViewModel();
+        $typeformation = $this->getEvent()->getParam('groupeFypeFormation');
+        $this->getServiceGroupeTypeFormation()->delete($typeformation, true);
+
+        return new MessengerViewModel();
     }
 
 

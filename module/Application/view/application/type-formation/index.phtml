@@ -97,8 +97,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <tr class="champ-triable">
         <a class="btn btn-primary ajax-modal " data-event="type-formation-edition" href="<?= $this->url('type-formation/saisie'); ?>"><i
                     class="fas fa-plus"></i>
-            Ajout
-            d'un nouveau type de formation</a>
+            Ajout d'un nouveau type de formation</a>
     </tr>
 <?php endif; ?>
 
@@ -132,7 +131,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     });
 
     $(function () {
-        $("body").on("groupe-formation-edition", function (event, data) {
+        $("body").on("groupe-type-formation-edition", function (event, data) {
             window.location.reload();
         });
     });

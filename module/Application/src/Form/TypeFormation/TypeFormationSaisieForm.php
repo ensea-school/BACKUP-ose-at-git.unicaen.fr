@@ -31,6 +31,8 @@ class TypeFormationSaisieForm extends AbstractForm
         $this->get('libelleLong')->setLabel('Libellé long');
         $this->setValueOptions('groupe', $this->getServiceGroupeTypeFormation()->getList());
 
+        $this->addSubmit();
+
         return $this;
     }
 

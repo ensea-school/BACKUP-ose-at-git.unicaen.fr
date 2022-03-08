@@ -56,5 +56,4 @@ class TypeFormationService extends AbstractEntityService
         $qb->addOrderBy("$alias.libelleLong");
         return parent::getList($qb, $alias);
     }
-
 }

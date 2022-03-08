@@ -32,7 +32,26 @@ class GroupeTypeFormationService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'gtf';
+    }
+
+
+
+    /**
+     * Sauvegarde la periode
+     *
+     * @param Periode $entity
+     */
+    public function save($entity)
+    {
+        if (empty($entity->getOrdre())) {
+            $ordre = (int)$this->getEntityManager()->getConnection()->fetchOne("SELECT MAX(ORDRE) M FROM GROUPE_TYPE_FORMATION gtf");
+            $ordre++;
+            $entity->setOrdre($ordre);
+        }
+
+        return parent::save($entity);
     }
 }

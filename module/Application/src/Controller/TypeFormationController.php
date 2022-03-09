@@ -7,6 +7,7 @@ namespace Application\Controller;
 
 
 use Application\Entity\Db\GroupeTypeFormation;
+use Application\Entity\Db\TypeFormation;
 use Application\Form\GroupeTypeFormation\Traits\GroupeTypeFormationSaisieFormAwareTrait;
 use Application\Form\TypeFormation\Traits\TypeFormationSaisieFormAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
@@ -37,7 +38,12 @@ class TypeFormationController extends AbstractController
         $query                = $this->em()->createQuery($dql);
         $groupeTypeFormations = $query->getResult();
 
-        return compact('groupeTypeFormations');
+        $dqlWithoutGroup             = "SELECT tf FROM " . TypeFormation::class . " tf 
+            WHERE tf.histoDestruction is null AND tf.groupe is null";
+        $queryWithoutGroup           = $this->em()->createQuery($dqlWithoutGroup);
+        $typeFormationsWithoutGroupe = $queryWithoutGroup->getResult();
+
+        return compact('groupeTypeFormations', 'typeFormationsWithoutGroupe');
     }
 
 

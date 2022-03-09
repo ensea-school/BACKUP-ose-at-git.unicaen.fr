@@ -37,7 +37,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                                data-submit-reload="true"
                                href="<?= $this->url('type-formation/supprimer-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()]) ?>"
                                title="Supprimer la collection"><i class="fas fa-trash-can"></i></a>
-                            <i class="fas fa-arrows-up-down-left-right"
+                            <i class="fas fa-arrows-up-down"
                                title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>
                         </div>
                     <?php endif; ?>
@@ -46,8 +46,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <table class="table table-bordered table-condensed">
                     <thead>
                     <tr>
-                        <th style="text-align: center">Libellé court</th>
-                        <th style="text-align: center">Libellé long</th>
+                        <th style="text-align: center" width="20%">Libellé court</th>
+                        <th style="text-align: center" width="60%">Libellé long</th>
                         <th style="text-align: center">Source</th>
                         <?php if ($canEdit): ?>
                             <th style="text-align: center">Actions</th>
@@ -57,8 +57,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <tbody class="triables ui-sortable">
                     <?php foreach ($groupeTypeFormation->getTypeFormation() as $typeFormation): ?>
                         <tr class="champ-triable" data-id= <?php echo $typeFormation->getId() ?>>
-                            <td><?= $typeFormation->getLibelleCourt(); ?></td>
-                            <td style="text-align: center"><?= $typeFormation->getLibelleLong(); ?></td>
+                            <td style=""><?= $typeFormation->getLibelleCourt(); ?></td>
+                            <td><?= $typeFormation->getLibelleLong(); ?></td>
                             <td style="text-align: center"><?= $typeFormation->getSource()->getLibelle(); ?></td>
                             <?php if ($canEdit): ?>
                                 <td style="text-align: center">
@@ -83,6 +83,46 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         </div>
     <?php endforeach; ?>
 </div>
+<?php if (!empty($typeFormationsWithoutGroupe)): ?>
+    <div class="panel panel-danger">
+        <div class="panel-heading ">Type de formation ne possédant pas de groupe
+        </div>
+        <table class="table table-bordered table-condensed bg-danger">
+            <thead>
+            <tr>
+                <th style="text-align: center" width="20%">Libellé court</th>
+                <th style="text-align: center" width="60%">Libellé long</th>
+                <th style="text-align: center">Source</th>
+                <?php if ($canEdit): ?>
+                    <th style="text-align: center">Actions</th>
+                <?php endif; ?>
+            </tr>
+            </thead>
+            <tbody class="triables ui-sortable">
+            <?php foreach ($typeFormationsWithoutGroupe as $typeFormationWithoutGroupe): ?>
+                <tr>
+                    <td><?= $typeFormationWithoutGroupe->getLibelleCourt(); ?></td>
+                    <td><?= $typeFormationWithoutGroupe->getLibelleLong(); ?></td>
+                    <td style="text-align: center"><?= $typeFormationWithoutGroupe->getSource()->getLibelle(); ?></td>
+                    <?php if ($canEdit): ?>
+                        <td style="text-align: center">
+                            <a class="ajax-modal" data-event="type-formation-edition"
+                               href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormationWithoutGroupe->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                               title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
+                            <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
+                               data-confirm="true"
+                               data-submit-reload="true"
+                               href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormationWithoutGroupe->getId()]) ?>"
+                               title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
+                        </td>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>
 <?php if ($canEdit): ?>
     <tr class="champ-triable">
         <a class="btn btn-primary ajax-modal " data-event="groupe-type-formation-edition" href="<?= $this->url('type-formation/saisie-groupe'); ?>"><i
@@ -103,7 +143,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <script type="text/javascript">
     $(function () {
         $(".triables").sortable({
-            handle: '.fa-arrows-up-down-left-right',
+            handle: '.fa-arrows-up-down',
             axis: 'y',
             update: function (event, ui) {
                 var champsIds = '';

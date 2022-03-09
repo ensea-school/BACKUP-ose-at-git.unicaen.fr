@@ -17,7 +17,7 @@ use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\InputFilter\InputFilterProviderInterface;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Stdlib\ArrayUtils;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Util;
@@ -410,6 +410,8 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
                         return false;
                     }
                 }
+            } else {
+                $this->getControllerPluginFlashMessenger()->addErrorMessage('Le formulaire ne peut pas être validé');
             }
         }
 

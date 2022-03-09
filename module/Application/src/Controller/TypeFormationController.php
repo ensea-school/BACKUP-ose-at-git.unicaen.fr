@@ -52,10 +52,10 @@ class TypeFormationController extends AbstractController
         $form           = $this->getFormTypeFormationSaisie();
 
         if (empty($typeFormations)) {
-            $title          = "Création d'une nouvelle formation";
+            $title          = "Création d'un nouveau type de formation";
             $typeFormations = $this->getServiceTypeFormation()->newEntity();
         } else {
-            $title = "Edition d'une formation";
+            $title = "Édition d'un type de formation";
         }
 
         $form->bindRequestSave($typeFormations, $this->getRequest(), function () use ($typeFormations, $form) {
@@ -77,10 +77,10 @@ class TypeFormationController extends AbstractController
         $form                = $this->getFormGroupeTypeFormationSaisie();
 
         if (empty($groupeTypeFormation)) {
-            $title               = "Création d'un nouveau groupe de types de formations";
+            $title               = "Création d'un nouveau groupe";
             $groupeTypeFormation = $this->getServiceGroupeTypeFormation()->newEntity();
         } else {
-            $title = "Edition d'un groupe de type de formations";
+            $title = "Édition d'un groupe";
         }
         $form->bindRequestSave($groupeTypeFormation, $this->getRequest(), function () use ($groupeTypeFormation, $form) {
 

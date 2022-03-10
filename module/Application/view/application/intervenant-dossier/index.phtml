@@ -93,9 +93,9 @@ $fieldsets = $form->getFieldsets();
         <?php if (!empty($tblDossier)): ?>
             <div class="messenger alert <?= ($tblDossier->getCompletude()) ? 'alert-success' : 'alert-warning' ?> ">
                 <?php if ($tblDossier->getCompletude() && $intervenantDossierValidation): ?>
-                    Vos données personnelles sont maintenant <span style="font-size:1em;" class="label label-success">Complet</span> et
+                    Vos données personnelles sont maintenant <span style="font-size:1em;" class="label label-success">Complètes</span> et
                     <span
-                            style="font-size:1em;" class="label label-success">Validé</span>
+                            style="font-size:1em;" class="label label-success">Validées</span>
                 <?php elseif ($tblDossier->getCompletude() && !$intervenantDossierValidation): ?>
                     Vos données personnelles sont maintenant <span style="font-size:1em;"
                                                                    class="label label-success">complètes</span> et en attente de validation par nos services

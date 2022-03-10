@@ -93,12 +93,15 @@ class NoteAssertion extends AbstractAssertion
             return false;
         }
 
-
-        if ($this->getServiceContext()->getUtilisateur() == $note->getHistoCreateur()) {
+        if ($this->getRole()->hasPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
             return true;
         }
 
-        if ($this->getRole()->hasPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
+        if ($note->getType()->getCode() == 'email') {
+            return false;
+        }
+
+        if ($this->getServiceContext()->getUtilisateur() == $note->getHistoCreateur()) {
             return true;
         }
 
@@ -115,13 +118,14 @@ class NoteAssertion extends AbstractAssertion
             return false;
         }
 
+        if ($this->getRole()->hasPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
+            return true;
+        }
+
         if ($this->getServiceContext()->getUtilisateur() == $note->getHistoCreateur()) {
             return true;
         }
 
-        if ($this->getRole()->hasPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
-            return true;
-        }
 
         return false;
 

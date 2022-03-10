@@ -5,6 +5,7 @@ namespace Intervenant\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Intervenant\Entity\Db\Note;
 use Laminas\Mail\Message;
 
@@ -50,8 +51,13 @@ class NoteService extends AbstractEntityService
 
     public function getByIntervenant(Intervenant $intervenant): array
     {
+        /**
+         * @var $qb QueryBuilder
+         */
         $qb = $this->finderByIntervenant($intervenant);
         $this->finderByHistorique($qb);
+        $qb->orderBy($this->getAlias() . '.histoCreation', 'DESC');
+
         $notes = $this->getList($qb);
 
 
@@ -90,6 +96,15 @@ class NoteService extends AbstractEntityService
 
         return $note;
 
+    }
+
+    public function countNote(Intervenant $intervenant)
+    {
+
+        $sql = 'SELECT count(*) AS nb FROM note WHERE intervenant_id =  ' . $intervenant->getId() . ' AND histo_destruction IS NULL';
+        $count = $this->getEntityManager()->getConnection()->fetchOne($sql);
+
+        return $count;
     }
 
 

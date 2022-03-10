@@ -38,7 +38,6 @@ class DossierService extends AbstractEntityService
     private $dcache = [];
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -51,7 +50,6 @@ class DossierService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne l'alias d'entité courante
      *
@@ -61,7 +59,6 @@ class DossierService extends AbstractEntityService
     {
         return 'd';
     }
-
 
 
     /**
@@ -80,12 +77,11 @@ class DossierService extends AbstractEntityService
         foreach ($this->getList($qb) as $dossier) {
             return $dossier;
         }
-        $dossier                             = $this->newEntity()->fromIntervenant($intervenant);
+        $dossier = $this->newEntity()->fromIntervenant($intervenant);
         $this->dcache[$intervenant->getId()] = $dossier;
 
         return $dossier;
     }
-
 
 
     /**
@@ -106,7 +102,6 @@ class DossierService extends AbstractEntityService
     }
 
 
-
     /**
      * Détermine si l'intervenant courant était connu comme vacataire les années précédentes
      * dans l'application.
@@ -123,14 +118,13 @@ class DossierService extends AbstractEntityService
 
             $iPrec = $this->getServiceIntervenant()->getPrecedent($intervenant, -$i);
 
-            if ($iPrec && $iPrec->getStatut()->estVacataire() && $iPrec->getStatut()->getService()) {
+            if ($iPrec && $iPrec->getStatut()->estVacataire() && $iPrec->getStatut()->getServiceStatutaire()) {
                 return $iPrec;
             }
         }
 
         return null;
     }
-
 
 
     /**
@@ -142,9 +136,9 @@ class DossierService extends AbstractEntityService
      */
     public function getValidation(Intervenant $intervenant)
     {
-        $validation        = null;
+        $validation = null;
         $serviceValidation = $this->getServiceValidation();
-        $qb                = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
+        $qb = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
         $serviceValidation->finderByHistorique($qb);
         $serviceValidation->finderByIntervenant($intervenant, $qb);
         $validations = $serviceValidation->getList($qb);
@@ -154,7 +148,6 @@ class DossierService extends AbstractEntityService
 
         return $validation;
     }
-
 
 
     /**
@@ -185,12 +178,11 @@ class DossierService extends AbstractEntityService
     }
 
 
-
     /**
      * Methode qui compare les données de la fiche intervenant et celle du dossier intervenant pour alimenter
      * la table INDIC_MODIF_DOSSIER (
      *
-     * @param Intervenant        $intervenant
+     * @param Intervenant $intervenant
      * @param IntervenantDossier $intervenantDossier
      *
      * @return boolean
@@ -202,9 +194,9 @@ class DossierService extends AbstractEntityService
 
         $indicModifDossierCollection = $intervenant->getIndicModifDossier();
         $indicModifDossierInProgress = [];
-        $sourceOse                   = $this->getServiceSource()->getOse()->getCode();
-        $sourceIntervenant           = $intervenant->getSource()->getCode();
-        $em                          = $this->getEntityManager();
+        $sourceOse = $this->getServiceSource()->getOse()->getCode();
+        $sourceIntervenant = $intervenant->getSource()->getCode();
+        $em = $this->getEntityManager();
 
         /**
          * @var $indicModifDossier IndicModifDossier
@@ -215,38 +207,38 @@ class DossierService extends AbstractEntityService
             }
         }
 
-        $newDatas                     = [];
-        $oldDatas                     = [];
+        $newDatas = [];
+        $oldDatas = [];
         $newDatas['NOM_PATRONYMIQUE'] = ($intervenantDossier->getNomPatronymique()) ? trim(strtolower($intervenantDossier->getNomPatronymique())) : '(aucun)';
-        $newDatas['NOM_USUEL']        = ($intervenantDossier->getNomUsuel()) ? trim(strtolower($intervenantDossier->getNomUsuel())) : '(aucun)';
-        $newDatas['CIVILITE']         = ($intervenantDossier->getCivilite()) ? trim(strtolower($intervenantDossier->getCivilite()->getLibelleCourt())) : '(aucun)';
-        $newDatas['PRENOM']           = ($intervenantDossier->getPrenom()) ? trim(strtolower($intervenantDossier->getPrenom())) : '(aucun)';
-        $newDatas['DATE_NAISSANCE']   = ($intervenantDossier->getDateNaissance()) ? $intervenantDossier->getDateNaissance()->format('d/m/Y') : '(aucun)';
+        $newDatas['NOM_USUEL'] = ($intervenantDossier->getNomUsuel()) ? trim(strtolower($intervenantDossier->getNomUsuel())) : '(aucun)';
+        $newDatas['CIVILITE'] = ($intervenantDossier->getCivilite()) ? trim(strtolower($intervenantDossier->getCivilite()->getLibelleCourt())) : '(aucun)';
+        $newDatas['PRENOM'] = ($intervenantDossier->getPrenom()) ? trim(strtolower($intervenantDossier->getPrenom())) : '(aucun)';
+        $newDatas['DATE_NAISSANCE'] = ($intervenantDossier->getDateNaissance()) ? $intervenantDossier->getDateNaissance()->format('d/m/Y') : '(aucun)';
         /*Nettoyage et normalisation du RIB pour comparaison*/
-        $rib                       = ($intervenantDossier->getRib()) ? trim(strtolower($intervenantDossier->getRib())) : '(aucun)';
-        $rib                       = str_replace(' ', '', $rib);
-        $newDatas['RIB']           = $rib;
+        $rib = ($intervenantDossier->getRib()) ? trim(strtolower($intervenantDossier->getRib())) : '(aucun)';
+        $rib = str_replace(' ', '', $rib);
+        $newDatas['RIB'] = $rib;
         $intervenantDossierAdresse = $intervenantDossier->getAdresse();
         /*Normalisation et nettoyage de l'adresse pour comparaison*/
         $intervenantDossierAdresse = trim(strtolower($intervenantDossierAdresse));
         $intervenantDossierAdresse = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantDossierAdresse);
         $intervenantDossierAdresse = preg_replace('/\s\s+/', ' ', $intervenantDossierAdresse);
-        $newDatas['ADRESSE']       = (!empty($intervenantDossierAdresse)) ? $intervenantDossierAdresse : '(aucun)';
+        $newDatas['ADRESSE'] = (!empty($intervenantDossierAdresse)) ? $intervenantDossierAdresse : '(aucun)';
 
         $oldDatas['NOM_PATRONYMIQUE'] = ($intervenant->getNomPatronymique()) ? trim(strtolower($intervenant->getNomPatronymique())) : '(aucun)';
-        $oldDatas['NOM_USUEL']        = ($intervenant->getNomUsuel()) ? trim(strtolower($intervenant->getNomUsuel())) : '(aucun)';
-        $oldDatas['CIVILITE']         = ($intervenant->getCivilite()) ? trim(strtolower($intervenant->getCivilite()->getLibelleCourt())) : '(aucun)';
-        $oldDatas['PRENOM']           = ($intervenant->getPrenom()) ? trim(strtolower($intervenant->getPrenom())) : '(aucun)';
-        $oldDatas['DATE_NAISSANCE']   = ($intervenant->getDateNaissance()) ? $intervenant->getDateNaissance()->format('d/m/Y') : '(aucun)';
+        $oldDatas['NOM_USUEL'] = ($intervenant->getNomUsuel()) ? trim(strtolower($intervenant->getNomUsuel())) : '(aucun)';
+        $oldDatas['CIVILITE'] = ($intervenant->getCivilite()) ? trim(strtolower($intervenant->getCivilite()->getLibelleCourt())) : '(aucun)';
+        $oldDatas['PRENOM'] = ($intervenant->getPrenom()) ? trim(strtolower($intervenant->getPrenom())) : '(aucun)';
+        $oldDatas['DATE_NAISSANCE'] = ($intervenant->getDateNaissance()) ? $intervenant->getDateNaissance()->format('d/m/Y') : '(aucun)';
         /*Nettoyage et normalisation du RIB pour comparaison*/
-        $rib                = ($intervenant->getRib()) ? trim(strtolower($intervenant->getRib())) : '(aucun)';
-        $rib                = str_replace(' ', '', $rib);
-        $oldDatas['RIB']    = $rib;
+        $rib = ($intervenant->getRib()) ? trim(strtolower($intervenant->getRib())) : '(aucun)';
+        $rib = str_replace(' ', '', $rib);
+        $oldDatas['RIB'] = $rib;
         $intervenantAdresse = $intervenant->getAdresse();
         /*Normalisation et nettoyage de l'adresse pour comparaison*/
-        $intervenantAdresse  = trim(strtolower($intervenantAdresse));
-        $intervenantAdresse  = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantAdresse);
-        $intervenantAdresse  = preg_replace('/\s\s+/', ' ', $intervenantAdresse);
+        $intervenantAdresse = trim(strtolower($intervenantAdresse));
+        $intervenantAdresse = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantAdresse);
+        $intervenantAdresse = preg_replace('/\s\s+/', ' ', $intervenantAdresse);
         $oldDatas['ADRESSE'] = (!empty($intervenantAdresse)) ? $intervenantAdresse : '(aucun)';
 
         //On calcule les champs différents

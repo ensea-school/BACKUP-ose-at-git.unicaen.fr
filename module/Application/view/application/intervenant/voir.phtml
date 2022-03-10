@@ -66,9 +66,13 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_
 }
 
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION))) {
+    $label = '<span class="glyphicon glyphicon-book"></span> Notes';
+    if ($notificationNote > 0) {
+        $label .= ' <span class="badge" style="background-color: red;font-size:10px;margin-bottom:5px;">' . $notificationNote . '</span>';
+    }
     $tabs[] = [
         'id'            => 'notes',
-        'label'         => '<span class="glyphicon glyphicon-book"></span> Notes <span class="badge" style="background-color: red;font-size:10px;margin-bottom:5px;">4</span>',
+        'label'         => $label,
         'url'           => $this->url('note', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];

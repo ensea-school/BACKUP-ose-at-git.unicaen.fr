@@ -141,6 +141,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'NUM_REGLE'             => [
+            'name'        => 'NUM_REGLE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 18,
+            'commentaire' => NULL,
+        ],
         'OBLIGATOIRE'           => [
             'name'        => 'OBLIGATOIRE',
             'type'        => 'int',

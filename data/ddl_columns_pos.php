@@ -1843,6 +1843,7 @@ return [
         'OBLIGATOIRE_HNP',
         'STATUT_ID',
         'ANNEE_ID',
+        'NUM_REGLE',
     ],
     'TYPE_RESSOURCE'                 => [
         'ID',

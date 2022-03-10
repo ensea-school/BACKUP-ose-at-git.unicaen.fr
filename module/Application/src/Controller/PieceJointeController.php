@@ -8,6 +8,7 @@ use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TblPieceJointe;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
+use Application\Entity\Db\Validation;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
@@ -49,9 +50,9 @@ class PieceJointeController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\PieceJointe::class,
-            \Application\Entity\Db\Fichier::class,
-            \Application\Entity\Db\Validation::class,
+            PieceJointe::class,
+            Fichier::class,
+            Validation::class,
         ]);
     }
 
@@ -437,6 +438,7 @@ class PieceJointeController extends AbstractController
             $statut          = $this->getEvent()->getParam('statut');
             $tpjs->setTypePieceJointe($typePieceJointe);
             $tpjs->setStatut($statut);
+            $this->getServiceTypePieceJointeStatut()->incrementerNumPiece($tpjs);
         } else {
             $title           = 'Édition du paramètre de gestion de pièce justificative';
             $typePieceJointe = $tpjs->getTypePieceJointe();

@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
@@ -17,6 +16,7 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use UnicaenAuth\Entity\Db\Privilege;
@@ -39,7 +39,7 @@ class DroitsController extends AbstractController
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;
     use ContextServiceAwareTrait;
-    use CacheContainerTrait;
+    use SessionContainerTrait;
 
     protected FilesystemCache $doctrineCache;
 
@@ -118,8 +118,7 @@ class DroitsController extends AbstractController
         $form  = $this->makeFormSupprimer(function () use ($role) {
             $this->getServiceRole()->delete($role);
             $this->doctrineCache->delete(RoleProvider::class . '/affectations');
-            $cc = $this->getCacheContainer(PrivilegeService::class);
-            unset($cc->privilegesRoles);
+            $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
         });
 
         return compact('role', 'title', 'form');
@@ -164,14 +163,7 @@ class DroitsController extends AbstractController
             $roles = [];
         }
 
-        if ($rsFilter == 's' || !$rsFilter) {
-            $qb      = $this->getServiceStatut()->finderByHistorique();
-            $statuts = $this->getServiceStatut()->getList($qb);
-        } else {
-            $statuts = [];
-        }
-
-        return compact('privileges', 'roles', 'statuts', 'filters');
+        return compact('privileges', 'roles', 'filters');
     }
 
 
@@ -179,25 +171,22 @@ class DroitsController extends AbstractController
     public function privilegesModifierAction()
     {
         $role      = $this->context()->roleFromPost();
-        $statut    = $this->context()->statutFromPost('statut');
         $privilege = $this->getServicePrivilege()->get($this->params()->fromPost('privilege'));
         $action    = $this->params()->fromPost('action');
-        $cc        = $this->getCacheContainer(PrivilegeService::class);
-        unset($cc->privilegesRoles);
+
+        $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
 
         switch ($action) {
             case 'accorder':
                 if ($role) $this->roleAddPrivilege($role, $privilege);
-                if ($statut) $this->statutAddPrivilege($statut, $privilege);
             break;
             case 'refuser':
                 if ($role) $this->roleRemovePrivilege($role, $privilege);
-                if ($statut) $this->statutRemovePrivilege($statut, $privilege);
             break;
         }
         $this->doctrineCache->delete(RoleProvider::class . '/affectations');
 
-        return compact('role', 'statut', 'privilege');
+        return compact('role', 'privilege');
     }
 
 
@@ -219,26 +208,6 @@ class DroitsController extends AbstractController
         $this->em()->getConnection()->executeStatement($sql);
         $this->em()->refresh($privilege);
         $this->em()->refresh($role);
-    }
-
-
-
-    private function statutAddPrivilege(Statut $statut, Privilege $privilege)
-    {
-        $sql = "INSERT INTO STATUT_PRIVILEGE (statut_id, privilege_id) VALUES (" . $statut->getId() . ", " . $privilege->getId() . ")";
-        $this->em()->getConnection()->executeStatement($sql);
-        $this->em()->refresh($privilege);
-        $this->em()->refresh($statut);
-    }
-
-
-
-    private function statutRemovePrivilege(Statut $statut, Privilege $privilege)
-    {
-        $sql = "DELETE STATUT_PRIVILEGE WHERE statut_id = " . $statut->getId() . " AND privilege_id = " . $privilege->getId();
-        $this->em()->getConnection()->executeStatement($sql);
-        $this->em()->refresh($privilege);
-        $this->em()->refresh($statut);
     }
 
 

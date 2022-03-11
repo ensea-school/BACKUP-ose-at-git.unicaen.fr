@@ -1350,10 +1350,6 @@ return [
         'REFERENTIEL_REALISE_EDITION',
         'REFERENTIEL_REALISE_VISU',
     ],
-    'STATUT_PRIVILEGE'               => [
-        'STATUT_ID',
-        'PRIVILEGE_ID',
-    ],
     'STRUCTURE'                      => [
         'ID',
         'LIBELLE_LONG',
@@ -1651,19 +1647,6 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
-    ],
-    'TYPE_AGREMENT_STATUT'           => [
-        'ID',
-        'TYPE_AGREMENT_ID',
-        'OBLIGATOIRE',
-        'HISTO_CREATION',
-        'HISTO_CREATEUR_ID',
-        'HISTO_MODIFICATION',
-        'HISTO_MODIFICATEUR_ID',
-        'HISTO_DESTRUCTION',
-        'HISTO_DESTRUCTEUR_ID',
-        'DUREE_VIE',
-        'STATUT_ID',
     ],
     'TYPE_CONTRAT'                   => [
         'ID',

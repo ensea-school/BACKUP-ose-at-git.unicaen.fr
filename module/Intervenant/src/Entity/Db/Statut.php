@@ -3,6 +3,7 @@
 namespace Intervenant\Entity\Db;
 
 use Application\Interfaces\ParametreEntityInterface;
+use Application\Provider\Privilege\Privileges;
 use Application\Traits\ParametreEntityTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
@@ -1311,6 +1312,77 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
         $this->codesCorresp4 = $codesCorresp4;
 
         return $this;
+    }
+
+
+
+    /**
+     * Retourne la liste des privilèges associés à un statut sous forme de tableau associatif :
+     *
+     * [privilege] => boolean
+     *
+     * @return array
+     */
+    public function getPrivileges(): array
+    {
+        $privileges = [
+            Privileges::INTERVENANT_FICHE                          => true,
+            Privileges::ODF_ELEMENT_VISUALISATION                  => ($this->servicePrevu && $this->servicePrevuVisualisation) || ($this->serviceRealise && $this->serviceRealiseVisualisation),
+            Privileges::ODF_ETAPE_VISUALISATION                    => ($this->servicePrevu && $this->servicePrevuVisualisation) || ($this->serviceRealise && $this->serviceRealiseVisualisation),
+            Privileges::INTERVENANT_CALCUL_HETD                    => $this->formuleVisualisation,
+            Privileges::MODIF_SERVICE_DU_ASSOCIATION               => $this->modificationServiceDu,
+            Privileges::MODIF_SERVICE_DU_VISUALISATION             => $this->modificationServiceDu && $this->modificationServiceDuVisualisation,
+            Privileges::DOSSIER_VISUALISATION                      => $this->dossier && $this->dossierVisualisation,
+            Privileges::DOSSIER_EDITION                            => $this->dossier && $this->dossierEdition,
+            Privileges::DOSSIER_ADRESSE_VISUALISATION              => $this->dossier && $this->dossierVisualisation && $this->dossierAdresse,
+            Privileges::DOSSIER_ADRESSE_EDITION                    => $this->dossier && $this->dossierEdition && $this->dossierAdresse,
+            Privileges::DOSSIER_BANQUE_VISUALISATION               => $this->dossier && $this->dossierVisualisation && $this->dossierBanque,
+            Privileges::DOSSIER_BANQUE_EDITION                     => $this->dossier && $this->dossierEdition && $this->dossierBanque,
+            Privileges::DOSSIER_CONTACT_VISUALISATION              => $this->dossier && $this->dossierVisualisation && $this->dossierContact,
+            Privileges::DOSSIER_CONTACT_EDITION                    => $this->dossier && $this->dossierEdition && $this->dossierContact,
+            Privileges::DOSSIER_EMPLOYEUR_VISUALISATION            => $this->dossier && $this->dossierVisualisation && $this->dossierEmployeur,
+            Privileges::DOSSIER_EMPLOYEUR_EDITION                  => $this->dossier && $this->dossierEdition && $this->dossierEmployeur,
+            Privileges::DOSSIER_IDENTITE_VISUALISATION             => $this->dossier && $this->dossierVisualisation && $this->dossierIdentiteComplementaire,
+            Privileges::DOSSIER_IDENTITE_EDITION                   => $this->dossier && $this->dossierEdition && $this->dossierIdentiteComplementaire,
+            Privileges::DOSSIER_INSEE_VISUALISATION                => $this->dossier && $this->dossierVisualisation && $this->dossierInsee,
+            Privileges::DOSSIER_INSEE_EDITION                      => $this->dossier && $this->dossierEdition && $this->dossierInsee,
+            Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION        => $this->dossier && $this->dossierAutre1 && $this->dossierAutre1Visualisation,
+            Privileges::DOSSIER_CHAMP_AUTRE_1_EDITION              => $this->dossier && $this->dossierAutre1 && $this->dossierAutre1Edition,
+            Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION        => $this->dossier && $this->dossierAutre2 && $this->dossierAutre2Visualisation,
+            Privileges::DOSSIER_CHAMP_AUTRE_2_EDITION              => $this->dossier && $this->dossierAutre2 && $this->dossierAutre2Edition,
+            Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION        => $this->dossier && $this->dossierAutre3 && $this->dossierAutre3Visualisation,
+            Privileges::DOSSIER_CHAMP_AUTRE_3_EDITION              => $this->dossier && $this->dossierAutre3 && $this->dossierAutre3Edition,
+            Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION        => $this->dossier && $this->dossierAutre4 && $this->dossierAutre4Visualisation,
+            Privileges::DOSSIER_CHAMP_AUTRE_4_EDITION              => $this->dossier && $this->dossierAutre4 && $this->dossierAutre4Edition,
+            Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION        => $this->dossier && $this->dossierAutre5 && $this->dossierAutre5Visualisation,
+            Privileges::DOSSIER_CHAMP_AUTRE_5_EDITION              => $this->dossier && $this->dossierAutre5 && $this->dossierAutre5Edition,
+            Privileges::PIECE_JUSTIFICATIVE_VISUALISATION          => $this->pieceJustificativeVisualisation,
+            Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT         => $this->pieceJustificativeVisualisation,
+            Privileges::PIECE_JUSTIFICATIVE_EDITION                => $this->pieceJustificativeEdition,
+            Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE              => $this->pieceJustificativeEdition,
+            Privileges::ENSEIGNEMENT_VISUALISATION                 => ($this->servicePrevu && $this->servicePrevuVisualisation) || ($this->serviceRealise && $this->serviceRealiseVisualisation),
+            Privileges::ENSEIGNEMENT_EDITION                       => ($this->servicePrevu && $this->servicePrevuEdition) || ($this->serviceRealise && $this->serviceRealiseEdition),
+            Privileges::ENSEIGNEMENT_EXTERIEUR                     => ($this->servicePrevu || $this->serviceRealise) && $this->serviceExterieur,
+            Privileges::REFERENTIEL_VISUALISATION                  => ($this->referentielPrevu && $this->referentielPrevuVisualisation) || ($this->referentielRealise && $this->referentielRealiseVisualisation),
+            Privileges::REFERENTIEL_EDITION                        => ($this->referentielPrevu && $this->referentielPrevuEdition) || ($this->referentielRealise && $this->referentielRealiseEdition),
+            Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION   => $this->conseilRestreint && $this->conseilRestreintVisualisation,
+            Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION  => $this->conseilAcademique && $this->conseilAcademiqueVisualisation,
+            Privileges::CONTRAT_VISUALISATION                      => $this->contrat && $this->contratVisualisation,
+            Privileges::CONTRAT_DEPOT_RETOUR_SIGNE                 => $this->contrat && $this->contratDepot,
+            Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT => $this->paiementVisualisation,
+            Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseEdition || $this->referentielRealiseEdition),
+        ];
+
+        return $privileges;
+    }
+
+
+
+    public function hasPrivilege(string $privilege): bool
+    {
+        $privileges = $this->getPrivileges();
+
+        return isset($privileges[$privilege]) && $privileges[$privilege];
     }
 
 }

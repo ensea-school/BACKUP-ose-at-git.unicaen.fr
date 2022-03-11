@@ -9,6 +9,8 @@ return [
             'DOSSIER_CHAMP_AUTRE_PAR_STATUT',
             'TBL_SERVICE_REFERENTIEL',
             'TBL_SERVICE_SAISIE',
+            'STATUT_PRIVILEGE',
+            'TYPE_AGREMENT_STATUT',
         ],
     ],
     'materialized-view' => [
@@ -42,6 +44,7 @@ return [
             'V_INDICATEUR_1240',
             'V_TBL_SERVICE_REFERENTIEL',
             'V_TBL_SERVICE_SAISIE',
+            'V_PRIVILEGES_ROLES',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],
@@ -62,6 +65,9 @@ return [
     'sequence'          => [
         'includes' => [
             'TBL_SERVICE_SAISIE_ID_SEQ',
+            'TBL_SERVICE_REFERENTIEL_ID_SEQ',
+            'STATUT_PRIVILEGE_ID_SEQ',
+            'TYPE_AGREMENT_STATUT_ID_SEQ',
         ],
     ],
 ];

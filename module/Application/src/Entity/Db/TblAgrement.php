@@ -11,9 +11,6 @@ use Application\Resource\WorkflowResource;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
-/**
- * TblAgrement
- */
 class TblAgrement implements ResourceInterface
 {
     use AnneeAwareTrait;
@@ -22,80 +19,43 @@ class TblAgrement implements ResourceInterface
     use StructureAwareTrait;
     use AgrementAwareTrait;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private int   $id       = 0;
 
-    /**
-     * @var boolean
-     */
-    private $obligatoire;
+    private int   $dureeVie = 1;
 
-    private $codeIntervenant;
+    private Annee $anneeAgrement;
 
-    private $dureeVie;
 
-    private $anneeAgrement;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @return boolean
-     */
-    public function getObligatoire()
-    {
-        return $this->obligatoire;
-    }
-
-    public function getCodeIntervenant()
-    {
-        return $this->codeIntervenant;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDureeVie()
+    public function getDureeVie(): int
     {
         return $this->dureeVie;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAnneeAgrement()
+
+
+    public function getAnneeAgrement(): Annee
     {
         return $this->anneeAgrement;
     }
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+
+    public function getResourceId(): string
     {
         return 'TblAgrement';
     }
 
 
 
-    /**
-     * @return WorkflowResource
-     */
-    public function getResourceWorkflow()
+    public function getResourceWorkflow(): WorkflowResource
     {
         $etape = $this->getTypeAgrement()->getCode();
 

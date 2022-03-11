@@ -81,7 +81,6 @@ class StatutController extends AbstractController
                         $this->getServicePlafond()->saveConfig($plafond);
                     }
                     unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                    unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                     if ($isNew) {
                         $this->redirect()->toRoute('statut/saisie', ['statut' => $si->getId()]);
@@ -114,7 +113,6 @@ class StatutController extends AbstractController
             try {
                 $this->getServiceStatut()->save($si);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -143,7 +141,6 @@ class StatutController extends AbstractController
             try {
                 $this->getServiceStatut()->delete($statut);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

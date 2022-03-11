@@ -4,7 +4,6 @@
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $privileges UnicaenAuth\Entity\Db\Privilege[]
  * @var $roles      Application\Entity\Db\Role[]
- * @var $statuts    Intervenant\Entity\Db\Statut[]
  * @var $filters    array
  */
 
@@ -20,7 +19,7 @@
                 <div><span><a><?= $role; ?></a></span></div>
             </th>
         <?php endforeach; ?>
-        <?php if (!empty($roles) && !empty($statuts)): ?>
+        <?php if (!empty($roles)): ?>
             <th class="separator rotate-45">&nbsp;</th>
         <?php endif; ?>
     </tr>
@@ -39,7 +38,7 @@
     <?php foreach ($privileges as $cat): ?>
         <tr class="categorie" data-categorie="<?= $cat['categorie']->getCode() ?>">
             <th class="categorie">&nbsp;</th>
-            <th class="categorie" colspan="<?= 1 + count($roles) + count($statuts); ?>">
+            <th class="categorie" colspan="<?= 1 + count($roles); ?>">
                 <a class="categorie"
                    data-categorie="<?= $cat['categorie']->getCode() ?>"><?= $cat['categorie'] ?></a>
             </th>

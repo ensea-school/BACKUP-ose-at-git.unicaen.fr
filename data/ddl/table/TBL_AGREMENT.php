@@ -93,18 +93,6 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'OBLIGATOIRE'      => [
-            'name'        => 'OBLIGATOIRE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => NULL,
-            'position'    => 8,
-            'commentaire' => 'Témoin (1 ou 0) pour définir si l\'agrément doit être demandé obligatoirement ou non',
-        ],
         'STRUCTURE_ID'     => [
             'name'        => 'STRUCTURE_ID',
             'type'        => 'int',

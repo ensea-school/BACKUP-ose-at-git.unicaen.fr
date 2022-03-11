@@ -15,7 +15,7 @@ Il est possible à partir de la version 18 d'ajouter, modifier ou supprimer des 
 ![Tables](Periode_administration.png)
 
 Comme il est fastidieux de renseigner beaucoup de période en utilisant le menu d'administration, un [fichier SQL](InsertionPeriodes.sql) permettant d'affiner
-les mois de paiement disponible pour le paiement tardif en transformant la période paiement tardif pour avoir à la place tous les mois sur les quatre années
+les mois de paiements disponibles pour le paiement tardif en transformant la période paiement tardif pour avoir à la place tous les mois sur les quatre années
 suivantes a été mis à disposition.
 
 Par exemple si l'on prend l'année 2019/2020, après l'exécution du fichier SQL, on ne verra alors plus le paiement tardif dans la liste mais tous les mois de

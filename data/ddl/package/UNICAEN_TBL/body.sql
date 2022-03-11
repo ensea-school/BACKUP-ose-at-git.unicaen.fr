@@ -329,20 +329,19 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             WHERE
             	a.histo_destruction IS NULL
         )
-        SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE" FROM (
+        SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","AGREMENT_ID","DUREE_VIE" FROM (
             SELECT
               i.annee_id                     annee_id,
               CASE
                 WHEN COALESCE (avi.agrement_id,0) = 0
                 THEN NULL
                 ELSE NVL(avi.annee_id, i.annee_id) END   annee_agrement,
-              tas.type_agrement_id                       type_agrement_id,
+              ta.id                                      type_agrement_id,
               i.id                                       intervenant_id,
               i.code                                     code_intervenant,
               null                                       structure_id,
-              tas.obligatoire                            obligatoire,
-              avi.agrement_id			                 agrement_id,
-              tas.duree_vie                              duree_vie,
+              avi.agrement_id			                       agrement_id,
+              si.conseil_aca_duree_vie                   duree_vie,
               RANK() OVER(
                 PARTITION BY i.code,i.annee_id ORDER BY
                 CASE
@@ -352,22 +351,20 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
               ) rank
             FROM
               type_agrement                  ta
-              JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
-                                                AND tas.histo_destruction IS NULL
-
               JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                                AND i.statut_id = tas.statut_id
+              JOIN statut                     si ON si.id = i.statut_id
 
               JOIN                           i_s ON i_s.intervenant_id = i.id
 
               LEFT JOIN                      avi ON i.code = avi.intervenant_code
-              							                		AND avi.type_agrement_id = tas.type_agrement_id
-                                                AND i.annee_id < avi.annee_id + tas.duree_vie
+              							                		AND avi.type_agrement_id = ta.id
+                                                AND i.annee_id < avi.annee_id + si.conseil_aca_duree_vie
                                                 AND i.annee_id >= avi.annee_id
 
 
             WHERE
               ta.code = ''CONSEIL_ACADEMIQUE''
+              AND si.conseil_aca = 1
               /*@INTERVENANT_ID=i.id*/
               /*@ANNEE_ID=i.annee_id*/
           )
@@ -375,20 +372,19 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           rank = 1
 
         UNION ALL
-        SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","OBLIGATOIRE","AGREMENT_ID","DUREE_VIE" FROM (
+        SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","AGREMENT_ID","DUREE_VIE" FROM (
             SELECT
               i.annee_id                                  annee_id,
               CASE
                 WHEN COALESCE (avi.agrement_id,0) = 0
                 THEN NULL
                 ELSE NVL(avi.annee_id, i.annee_id) END    annee_agrement,
-              tas.type_agrement_id                        type_agrement_id,
+              ta.id                                       type_agrement_id,
               i.id                                        intervenant_id,
               i.code                                      code_intervenant,
-              i_s.structure_id							  structure_id,
-              tas.obligatoire                             obligatoire,
-              avi.agrement_id 			                  agrement_id,
-              tas.duree_vie                               duree_vie,
+              i_s.structure_id		            					  structure_id,
+              avi.agrement_id 			                      agrement_id,
+              si.conseil_restreint_duree_vie              duree_vie,
               RANK() OVER(
                 PARTITION BY i.code,i.annee_id,i_s.structure_id ORDER BY
                 CASE
@@ -398,23 +394,20 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
               ) rank
             FROM
               type_agrement                   ta
-              JOIN type_agrement_statut      tas ON tas.type_agrement_id = ta.id
-                                                AND tas.histo_destruction IS NULL
-
               JOIN intervenant                 i ON i.histo_destruction IS NULL
-                                                AND i.statut_id = tas.statut_id
-
+              JOIN statut                     si ON si.id = i.statut_id
               JOIN                           i_s ON i_s.intervenant_id = i.id
 
               LEFT JOIN                      avi ON i.code = avi.intervenant_code
-                							                	AND avi.type_agrement_id = tas.type_agrement_id
+                							                	AND avi.type_agrement_id = ta.id
         										                    AND COALESCE(avi.structure_id,0) = COALESCE(i_s.structure_id,0)
-                                                AND i.annee_id < avi.annee_id + tas.duree_vie
+                                                AND i.annee_id < avi.annee_id + si.conseil_restreint_duree_vie
                                                 AND i.annee_id >= avi.annee_id
 
 
             WHERE
               ta.code = ''CONSEIL_RESTREINT''
+              AND si.conseil_restreint = 1
               /*@INTERVENANT_ID=i.id*/
               /*@ANNEE_ID=i.annee_id*/
           )
@@ -430,7 +423,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.INTERVENANT_ID               = v.INTERVENANT_ID
         AND t.CODE_INTERVENANT             = v.CODE_INTERVENANT
         AND COALESCE(t.STRUCTURE_ID,0)     = COALESCE(v.STRUCTURE_ID,0)
-        AND t.OBLIGATOIRE                  = v.OBLIGATOIRE
         AND COALESCE(t.AGREMENT_ID,0)      = COALESCE(v.AGREMENT_ID,0)
         AND t.DUREE_VIE                    = v.DUREE_VIE
       THEN -1 ELSE t.ID END ID,
@@ -440,7 +432,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.INTERVENANT_ID,
       v.CODE_INTERVENANT,
       v.STRUCTURE_ID,
-      v.OBLIGATOIRE,
       v.AGREMENT_ID,
       v.DUREE_VIE
     FROM
@@ -1608,7 +1599,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
                JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
                                                  AND tpjs.histo_destruction IS NULL
-                                                 AND i.annee_id BETWEEN COALESCE(tpjs.annee_debut_id,i.annee_id) AND COALESCE(tpjs.annee_fin_id,i.annee_id)
+                                                 AND i.annee_id = tpjs.annee_id
 
                JOIN type_piece_jointe         tpj ON tpj.id = tpjs.type_piece_jointe_id
                                                  AND tpj.histo_destruction IS NULL
@@ -1703,28 +1694,27 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           f.id fichier_id,
         --  CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN 1 ELSE MIN(COALESCE(tpjs.duree_vie,1)) END duree_vie,
           --CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN i.annee_id+1 ELSE MIN(i.annee_id+COALESCE(tpjs.duree_vie,1)) END date_validite,
-          MIN(COALESCE(tpjs.duree_vie,1)) duree_vie,
-          MIN(COALESCE(tpjs.annee_fin_id+1, i.annee_id+COALESCE(tpjs.duree_vie,1))) date_validite,
+          MIN(COALESCE(tpjs.duree_vie,999)) duree_vie,
+          MIN(i.annee_id+COALESCE(tpjs.duree_vie,999)) date_validite,
 
           pj.date_archive date_archive
         FROM
-                    piece_jointe          pj
-               JOIN intervenant            i ON i.id = pj.intervenant_id
-                                            AND i.histo_destruction IS NULL
-               JOIN piece_jointe_fichier pjf ON pjf.piece_jointe_id = pj.id
-               JOIN fichier                f ON f.id = pjf.fichier_id
-                                            AND f.histo_destruction IS NULL
-                LEFT JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
-                                                   AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
-                                                   AND i.annee_id BETWEEN COALESCE(tpjs.annee_debut_id,i.annee_id) AND COALESCE(tpjs.annee_fin_id,i.annee_id)
-                                                   AND tpjs.HISTO_DESTRUCTION IS NULL
-
-         LEFT JOIN validation             v ON v.id = pj.validation_id
-                                            AND v.histo_destruction IS NULL
+                    piece_jointe              pj
+               JOIN intervenant                i ON i.id = pj.intervenant_id
+                                                AND i.histo_destruction IS NULL
+               JOIN piece_jointe_fichier     pjf ON pjf.piece_jointe_id = pj.id
+               JOIN fichier                    f ON f.id = pjf.fichier_id
+                                                AND f.histo_destruction IS NULL
+         LEFT JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
+                                                AND tpjs.type_piece_jointe_id = pj.type_piece_jointe_id
+                                                AND i.annee_id = tpjs.annee_id
+                                                AND tpjs.HISTO_DESTRUCTION IS NULL
+         LEFT JOIN validation                  v ON v.id = pj.validation_id
+                                                AND v.histo_destruction IS NULL
         WHERE
           pj.histo_destruction IS NULL
         GROUP BY
-        i.annee_id,
+          i.annee_id,
           i.code,
           pj.type_piece_jointe_id,
           pj.intervenant_id,
@@ -1906,6 +1896,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
+          SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+            SELECT
+                i.annee_id                          annee_id,
+                fr.type_volume_horaire_id           type_volume_horaire_id,
+                fr.intervenant_id                   intervenant_id,
+                fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
+              FROM
+                     intervenant                i
+                JOIN statut                    si ON si.id = i.statut_id
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+            ) p
+
+            UNION ALL
+
           SELECT 1 PLAFOND_ID, NULL PLAFOND, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
@@ -1975,21 +1980,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
                 JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
                 JOIN statut                    si ON si.id = i.statut_id
-            ) p
-
-            UNION ALL
-
-          SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
-            SELECT
-                i.annee_id                          annee_id,
-                fr.type_volume_horaire_id           type_volume_horaire_id,
-                fr.intervenant_id                   intervenant_id,
-                fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
-              FROM
-                     intervenant                i
-                JOIN statut                    si ON si.id = i.statut_id
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id

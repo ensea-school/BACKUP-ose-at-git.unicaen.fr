@@ -30,4 +30,4 @@ FROM
 WHERE
   pp.TEMOIN_ACTIF = 1        -- on ne sélectionne que les projets actifs
   AND pep.PREV_ELP_REFERENCE_ID IS NULL -- on ignore les noeuds "référence"
-  AND pve.STATUT IN ('TERMINE','FERME')  -- on ne récupère que ce qui est terminé ou fermé
+  AND pve.STATUT IN ('TERMINE','FERME','VALIDE')  -- on ne récupère que ce qui est terminé ou fermé ou validé

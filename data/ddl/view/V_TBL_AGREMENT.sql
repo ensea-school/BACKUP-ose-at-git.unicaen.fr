@@ -1,3 +1,4 @@
+CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
 WITH i_s AS (
   SELECT
     fr.intervenant_id,
@@ -69,7 +70,6 @@ WHERE
   rank = 1
 
 UNION ALL
-
 SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","AGREMENT_ID","DUREE_VIE" FROM (
     SELECT
       i.annee_id                                  annee_id,

@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => 'ID de l\'agrément si agréé',
         ],
         'ANNEE_AGREMENT'   => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'   => [

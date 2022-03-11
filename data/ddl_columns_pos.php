@@ -1411,9 +1411,10 @@ return [
         'INTERVENANT_ID',
         'CODE_INTERVENANT',
         'STRUCTURE_ID',
-        'OBLIGATOIRE',
         'AGREMENT_ID',
         'DUREE_VIE',
+        'DUREE_VIE',
+        'ID',
     ],
     'TBL_CHARGENS'                   => [
         'ID',

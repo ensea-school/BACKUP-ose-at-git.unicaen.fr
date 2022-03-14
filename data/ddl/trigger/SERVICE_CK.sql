@@ -15,7 +15,7 @@ BEGIN
 
   SELECT si.service_exterieur INTO se_actif FROM intervenant i JOIN statut si ON si.id = i.statut_id WHERE i.id = :NEW.intervenant_id;
 
-  IF NOT :NEW.etablissement_id <> etablissement AND se_actif = 1 THEN
+  IF :NEW.etablissement_id <> etablissement AND se_actif = 0 THEN
     raise_application_error(-20101, 'L''intervenant n''a pas la possibilité de renseigner des enseignements pris à l''extérieur de par son statut.');
   END IF;
 

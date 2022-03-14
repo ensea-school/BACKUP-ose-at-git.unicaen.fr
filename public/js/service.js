@@ -317,7 +317,7 @@ $.widget("ose.serviceForm", {
             this.element.find('#element-interne').hide();
             this.getElementElementPedagogiqueId().val('');
             this.getElementElementPedagogiqueLabel().val('');
-            this.getElementElementPedagogiqueListe().selectpicker('val','');
+            this.getElementElementPedagogiqueListe().selectpicker('val', '');
             this.element.find('#element-externe').show();
         }
         this.updateVolumesHoraires();
@@ -369,6 +369,7 @@ $.widget("ose.serviceForm", {
         this.getElementInterneExterne().on('change', function () {
             that.onInterneExterneChange();
         });
+        that.onInterneExterneChange();
 
         /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
         this.getElementElementPedagogiqueId().on("autocompleteselect", function () {

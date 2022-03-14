@@ -6,8 +6,8 @@ return [
     'name'        => 'TYPE_FORMATION_GROUPE_FK',
     'table'       => 'TYPE_FORMATION',
     'rtable'      => 'GROUPE_TYPE_FORMATION',
-    'delete_rule' => NULL,
-    'index'       => NULL,
+    'delete_rule' => 'SET NULL',
+    'index'       => null,
     'columns'     => [
         'GROUPE_ID' => 'ID',
     ],

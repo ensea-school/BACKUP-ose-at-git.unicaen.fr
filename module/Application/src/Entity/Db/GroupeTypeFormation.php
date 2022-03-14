@@ -2,7 +2,8 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -19,52 +20,55 @@ class GroupeTypeFormation implements HistoriqueAwareInterface, ImportAwareInterf
     /**
      * @var string
      */
-    protected $libelleCourt;
+    protected ?string $libelleCourt = null;
 
     /**
      * @var string
      */
-    protected $libelleLong;
+    protected ?string $libelleLong = null;
 
     /**
      * @var integer
      */
-    protected $ordre;
+    protected ?int $ordre = null;
 
     /**
      * @var boolean
      */
-    protected $pertinenceNiveau;
+    protected bool $pertinenceNiveau = true;
 
     /**
      * @var integer
      */
-    protected $id;
+    protected ?int       $id = null;
+
+    protected Collection $typeFormation;
 
 
 
-    /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return GroupeTypeFormation
-     */
-    public function setLibelleCourt($libelleCourt)
+    public function __construct()
     {
-        $this->libelleCourt = $libelleCourt;
-
-        return $this;
+        $this->typeFormation = new ArrayCollection();
     }
 
 
 
     /**
-     * Get libelleCourt
+     * Get PlafondReferentiel
      *
+     * @return TypeFormation[]
+     */
+    public function getTypeFormation(): Collection
+    {
+        return $this->typeFormation;
+    }
+
+
+
+    /**
      * @return string
      */
-    public function getLibelleCourt()
+    public function getLibelleCourt(): ?string
     {
         return $this->libelleCourt;
     }
@@ -72,27 +76,19 @@ class GroupeTypeFormation implements HistoriqueAwareInterface, ImportAwareInterf
 
 
     /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     *
-     * @return GroupeTypeFormation
+     * @param string $libelleCourt
      */
-    public function setLibelleLong($libelleLong)
+    public function setLibelleCourt(?string $libelleCourt): void
     {
-        $this->libelleLong = $libelleLong;
-
-        return $this;
+        $this->libelleCourt = $libelleCourt;
     }
 
 
 
     /**
-     * Get libelleLong
-     *
      * @return string
      */
-    public function getLibelleLong()
+    public function getLibelleLong(): ?string
     {
         return $this->libelleLong;
     }
@@ -100,27 +96,19 @@ class GroupeTypeFormation implements HistoriqueAwareInterface, ImportAwareInterf
 
 
     /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     *
-     * @return GroupeTypeFormation
+     * @param string $libelleLong
      */
-    public function setOrdre($ordre)
+    public function setLibelleLong(?string $libelleLong): void
     {
-        $this->ordre = $ordre;
-
-        return $this;
+        $this->libelleLong = $libelleLong;
     }
 
 
 
     /**
-     * Get ordre
-     *
-     * @return integer
+     * @return int
      */
-    public function getOrdre()
+    public function getOrdre(): ?int
     {
         return $this->ordre;
     }
@@ -128,27 +116,19 @@ class GroupeTypeFormation implements HistoriqueAwareInterface, ImportAwareInterf
 
 
     /**
-     * Set pertinenceNiveau
-     *
-     * @param boolean $pertinenceNiveau
-     *
-     * @return GroupeTypeFormation
+     * @param int $ordre
      */
-    public function setPertinenceNiveau($pertinenceNiveau)
+    public function setOrdre(?int $ordre): void
     {
-        $this->pertinenceNiveau = $pertinenceNiveau;
-
-        return $this;
+        $this->ordre = $ordre;
     }
 
 
 
     /**
-     * Get pertinenceNiveau
-     *
-     * @return boolean
+     * @return bool
      */
-    public function getPertinenceNiveau()
+    public function isPertinenceNiveau(): bool
     {
         return $this->pertinenceNiveau;
     }
@@ -156,13 +136,31 @@ class GroupeTypeFormation implements HistoriqueAwareInterface, ImportAwareInterf
 
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @param bool $pertinenceNiveau
      */
-    public function getId()
+    public function setPertinenceNiveau(bool $pertinenceNiveau): void
+    {
+        $this->pertinenceNiveau = $pertinenceNiveau;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+
+    /**
+     * @param int $id
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
 

@@ -209,14 +209,14 @@ class  IntervenantController extends AbstractController
         $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
         $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
 
-        if ($intervenant->getStatut()->getService() && $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION)) {
+        if ($this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION)) {
             $services = $this->getProcessusService()->getServices($intervenant, $recherche);
         } else {
             $services = false;
         }
 
         /* Services référentiels (si nécessaire) */
-        if ($intervenant->getStatut()->getReferentiel() && $this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION)) {
+        if ($this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION)) {
             $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
         } else {
             $servicesReferentiel = false;

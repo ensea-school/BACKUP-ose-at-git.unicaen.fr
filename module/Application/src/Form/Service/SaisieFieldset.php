@@ -303,20 +303,19 @@ class SaisieFieldsetHydrator implements HydratorInterface
             $data['intervenant'] = null;
         }
 
-
-        if ($object->getEtablissement() === $this->getServiceContext()->getEtablissement()) {
-            $data['interne-externe'] = 'service-interne';
-        } else {
-            $data['interne-externe'] = 'service-externe';
-        }
-
-        if ($object->getEtablissement() && $data['interne-externe'] == 'service-externe') {
+        if ($object->getEtablissement()) {
             $data['etablissement'] = [
                 'id'    => $object->getEtablissement()->getId(),
                 'label' => (string)$object->getEtablissement(),
             ];
         } else {
             $data['etablissement'] = null;
+        }
+
+        if ($object->getEtablissement() === $this->getServiceContext()->getEtablissement()) {
+            $data['interne-externe'] = 'service-interne';
+        } else {
+            $data['interne-externe'] = 'service-externe';
         }
 
         return $data;

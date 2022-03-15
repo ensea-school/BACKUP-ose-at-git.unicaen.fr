@@ -342,6 +342,10 @@ return [
             'periodes-visualisation'         => 'Périodes - Visualisation',
             'etablissement-edition'          => 'Établissement - Édition',
             'etablissement-visualisation'    => 'Établissement - Visualisation',
+            'Pays-visualisation'             => 'Pays - Visualisation',
+            'Pays-edition'                   => 'Pays - Édition',
+            'Departement-visualisation'      => 'Departement - Visualisation',
+            'Departement-edition'            => 'Departement - Édition',
         ],
     ],
 

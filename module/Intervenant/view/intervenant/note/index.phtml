@@ -80,12 +80,17 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
     </body>
 </table>
 
+
 <?php if ($canAdd): ?>
     <a class="btn btn-primary ajax-modal" data-event="note-edition"
-       href="<?= $this->url('note/saisir', ['intervenant' => $intervenant->getId()]); ?>"><span
-                class="glyphicon glyphicon-plus"></span> Ajouter une note</a>
+       href="<?= $this->url('note/saisir', ['intervenant' => $intervenant->getId()]); ?>">
+        <i class="fa-solid fa-plus"></i> Ajouter une note</a>
 <?php endif; ?>
-
+<?php if ($canAdd): ?>
+    <a class="btn btn-primary ajax-modal" data-event="note-envoi-email"
+       href="<?= $this->url('note/envoyer-email', ['intervenant' => $intervenant->getId()]); ?>">
+        <i class="fa-solid fa-envelope"></i> Rédiger un e-mail à l'intervenant</a>
+<?php endif; ?>
 
 <h3 class="page-header">Historique intervenant</h3>
 

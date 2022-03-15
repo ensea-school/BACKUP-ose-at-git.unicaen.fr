@@ -83,6 +83,33 @@ class DossierService extends AbstractEntityService
         return $dossier;
     }
 
+    public function getEmailsIntervenant(Intervenant $intervenant)
+    {
+        $emails = [
+            'perso' => '',
+            'pro'   => '',
+        ];
+        //On récupére en priorité les emails fournis dans le dossier de l'intervenant
+        $sql = "SELECT email_pro, email_perso FROM intervenant_dossier WHERE intervenant_id = :intervenant AND histo_destruction IS NULL";
+        $res = $this->getEntityManager()->getConnection()->fetchAssociative($sql, [
+            'intervenant' => $intervenant->getId(),
+        ]);
+
+        //Si pas de dossier alors on prend les informations de la fiche intervenant
+        if (!empty($res)) {
+            $emailsIntervenantDossierPerso = $res['EMAIL_PERSO'] ?? '';
+            $emailsIntervenantDossierPro = $res['EMAIL_PRO'] ?? '';
+        }
+        $emailsIntervenantPerso = $intervenant->getEmailPerso();
+        $emailsIntervenantPro = $intervenant->getEmailPerso();
+
+        $emails['perso'] = (!empty($emailsIntervenantDossierPerso)) ? $emailsIntervenantDossierPerso : $emailsIntervenantPerso;
+        $emails['pro'] = (!empty($emailsIntervenantDossierPro)) ? $emailsIntervenantDossierPro : $emailsIntervenantPro;
+
+        return $emails;
+
+    }
+
 
     /**
      * Enregistrement d'un dossier.

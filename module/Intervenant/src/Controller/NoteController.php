@@ -7,14 +7,21 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Intervenant\Assertion\NoteAssertion;
 use Intervenant\Entity\Db\Note;
+use Intervenant\Form\MailerIntervenantFormAwareTrait;
 use Intervenant\Form\NoteSaisieFormAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
+
+use Laminas\Mail\Message as MailMessage;
+use Laminas\Mime\Message;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 class NoteController extends AbstractController
 {
     use NoteServiceAwareTrait;
     use NoteSaisieFormAwareTrait;
+    use MailerIntervenantFormAwareTrait;
 
     public function indexAction()
     {
@@ -30,7 +37,7 @@ class NoteController extends AbstractController
         }
 
         $notes = $this->getServiceNote()->getByIntervenant($intervenant);
-        
+
         $historique = $this->getServiceNote()->getHistoriqueIntervenant($intervenant);
 
 
@@ -105,6 +112,45 @@ class NoteController extends AbstractController
         }
 
         return new MessengerViewModel(compact('note'));
+    }
+
+    public function envoyerEmailAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $form = $this->getFormMailerIntervenant()->setIntervenant($intervenant)->initForm();
+
+        if ($this->getRequest()->isPost()) {
+
+            $data = $this->getRequest()->getPost();
+            $from = $data['from'];
+            $to = $data['to'];
+            $subject = $data['subject'];
+            $content = $data['content'];
+
+            $body = new Message();
+
+            $text = new Part($content);
+            $text->type = Mime::TYPE_HTML;
+            $text->charset = 'utf-8';
+            $body->addPart($text);
+            $message = new MailMessage();
+
+            $message->setEncoding('UTF-8')
+                ->setFrom($from)
+                ->setSubject($subject)
+                ->addTo($to)
+                ->setBody($body);
+
+            //Envoi du mail
+            $this->mail()->send($message);
+            //Création d'une trace de l'envoi dans les notes de l'intervenant
+            $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $content);
+
+
+        }
+
+        return compact('intervenant', 'form');
     }
 }
 

@@ -58,7 +58,7 @@ WHERE
 $intervenants          = [];
 $intervenantsInvalides = [];
 
-$da = $si->getEntityManager()->getConnection()->fetchAll($sql, [
+$da = $si->getEntityManager()->getConnection()->fetchAllAssociative($sql, [
     'type_piece_jointe' => $typePieceJointe->getId(),
 ]);
 foreach ($da as $d) {

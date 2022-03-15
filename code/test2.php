@@ -19,7 +19,6 @@ $em = $container->get(\Application\Constants::BDD);
 $s = $em->find(\Plafond\Entity\Db\PlafondStatut::class, 567);
 
 $pel = new \Application\ORM\Event\Listeners\ParametreEntityListener();
-$pel->zozo();
 
 $d = $pel->extract($s);
 

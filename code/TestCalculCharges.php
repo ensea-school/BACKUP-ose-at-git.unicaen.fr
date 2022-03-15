@@ -53,18 +53,14 @@ function calc($choixMin, $choixMax, $poids, $maxPoids, $totalPoids, $nbChoix)
 //        $res = $coefChoix * $nbChoix * ($coefPoids+(((1/$nbChoix)-$coefPoids)*0));
 //        $resMax = $coefChoix * $nbChoix * $maxCoefPoids;
 
-        $delta = $resMax;
-
-        return $delta;
+        return $resMax;
         $res = $coefChoix;
 
         //$res = 1 / (($coefChoix * $nbChoix * $coefPoids) - 1);
 //return $res;
-        $correcteur = $res;
-        $res        = $coefChoix * $nbChoix * ($coefPoids + (((1 / $nbChoix) - $coefPoids) * $correcteur));
+        $correcteur = $coefChoix * $nbChoix * ($coefPoids + (((1 / $nbChoix) - $coefPoids) * $correcteur));
 
-
-        return $res;
+        return $correcteur;
     }
 }
 

@@ -104,7 +104,7 @@ class ChargensController extends AbstractController
         }
 
         if (empty($result['errors'])) {
-            $provider = $this->getProviderChargens();
+            $provider = $this->getProviderChargensChargens();
 
             foreach ($etapesIds as $etapeId) {
                 $etape = $this->getServiceEtape()->get($etapeId);
@@ -308,7 +308,7 @@ class ChargensController extends AbstractController
         /** @var Scenario $scenario */
         $scenario = $scenario = $this->getEvent()->getParam('scenario');
 
-        $provider = $this->getProviderChargens();
+        $provider = $this->getProviderChargensChargens();
         $provider->setScenario($scenario);
 
         $result = $provider->getHeuresFi();
@@ -365,7 +365,7 @@ class ChargensController extends AbstractController
             $form->setData($post);
             if ($form->isValid()) {
                 $data = $form->getData();
-                $pce  = $this->getProviderChargens()->getExport();
+                $pce  = $this->getProviderChargensChargens()->getExport();
 
                 try {
                     if ($data['avant'] == 'export' && isset($data['avant-fichier']['tmp_name'])) {
@@ -414,7 +414,7 @@ class ChargensController extends AbstractController
         $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();
 
-        $pce = $this->getProviderChargens()->getExport();
+        $pce = $this->getProviderChargensChargens()->getExport();
 
         $export   = $pce->fromBdd($annee, $scenario, $structure);
         $csvModel = $pce->toCsv($export);

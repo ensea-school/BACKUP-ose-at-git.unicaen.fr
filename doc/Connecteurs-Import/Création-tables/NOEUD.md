@@ -1,6 +1,6 @@
 # NOEUD
 
-Liste des noeuds
+Liste des nœuds
 
 Colonnes nécessaires :
 

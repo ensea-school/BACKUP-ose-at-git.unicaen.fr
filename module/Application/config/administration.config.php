@@ -177,7 +177,7 @@ return [
                                 'border - color' => '#111',
                             ],
                             'gestion-departement'     => [
-                                'label'          => 'Gestion des Pays',
+                                'label'          => 'Gestion des Départements',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'departement',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\Departement', 'index'),
@@ -271,6 +271,7 @@ return [
                                      'administration-periode',
                                      'administration-etablissement',
                                      'administration-pays',
+                                     'administration-departement',
                                      'administration-type-formation',],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,

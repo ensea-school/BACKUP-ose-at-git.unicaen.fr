@@ -1,15 +1,15 @@
 <?php
 
-namespace Application\Form\Pays;
+namespace Application\Form\Departement;
 
 use Psr\Container\ContainerInterface;
 
 /**
- * Description of PaysSaisieFormFactory
+ * Description of DepartementSaisieFormFactory
  *
  * @author Joriot Florian
  */
-class PaysSaisieFormFactory
+class DepartementSaisieFormFactory
 {
 
     /**
@@ -17,11 +17,11 @@ class PaysSaisieFormFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return PaysSaisieForm
+     * @return DepartementSaisieForm
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $form = new PaysSaisieForm();
+        $form = new DepartementSaisieForm();
 
         return $form;
     }

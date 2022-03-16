@@ -60,9 +60,9 @@ $etapesItems = [
 
 foreach ($etapes as $etp) {
     $etapesItems[$etp->getId()] = [
-        'label'     => sprintf("%s (%s EP)", $etp, count($etp->getElementPedagogique())),
+        'label'     => sprintf("%s (%s EP)", $etp, count($etp->getCheminPedagogique())),
         'etape'     => $etp,
-        'orpheline' => $etp->getElementPedagogique()->count() === 0,
+        'orpheline' => $etp->getCheminPedagogique()->count() === 0,
         'url'       => $this->url('of', [], makeQuery($structure, $niveau, $etp)),
     ];
 }

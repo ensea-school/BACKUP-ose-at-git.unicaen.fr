@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\CheminPedagogique;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\GroupeTypeFormation;
@@ -365,6 +366,7 @@ class OffreFormationController extends AbstractController
         /* Mise en place des filtres */
         $this->em()->getFilters()->enable('historique')->init([
             ElementPedagogique::class,
+            CheminPedagogique::class,
             TypeFormation::class,
             GroupeTypeFormation::class,
             TypeModulateur::class,

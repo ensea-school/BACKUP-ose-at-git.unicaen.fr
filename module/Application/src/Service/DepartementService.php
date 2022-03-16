@@ -48,4 +48,15 @@ class DepartementService extends AbstractEntityService
 
         return parent::getList($qb, $alias);
     }
+
+
+
+    public function save($entity)
+    {
+        if ($entity->getSourceCode() == null) {
+            $entity->setSourceCode($entity->getCode());
+        }
+
+        return parent::save($entity);
+    }
 }

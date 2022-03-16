@@ -1,0 +1,73 @@
+<?php
+/*
+* @author JORIOT Florian <florian.joriot at unicaen.fr>
+*/
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+function affBooleen($flg)
+{
+    // affiche booléen avec des glypheIcon
+    return ($flg ? '<i class="fas fa-check text-succes"></i>' : '<i class="fas fa-xmark text-danger refuse"></i>');
+}
+
+$this->headTitle()->append("Gestion des Pays");
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_PAYS_EDITION));
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+?>
+
+<h1 class="page-header">Gestion des pays</h1>
+
+<table class="table table-bordered table-sort table-condensed">
+    <thead>
+    <tr>
+        <th style="text-align: center">Libellé</th>
+        <th style="text-align: center">Code</th>
+        <th style="text-align: center">Source</th>
+        <?php if ($canEdit): ?>
+            <th style="text-align: center">Actions</th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables ui-sortable">
+    <?php foreach ($payss as $pays): ?>
+        <tr class="champ-triable" data-id= <?php echo $pays->getId() ?>>
+            <td><?= $pays->getLibelle(); ?></td>
+            <td><?= $pays->getCode(); ?></td>
+            <td style="text-align: center"><?= $pays->getSource()->getLibelle(); ?></td>
+            <?php if ($canEdit): ?>
+                <td style="text-align: center">
+                    <?php if (!$pays->getSource()->getImportable()): ?>
+                        <a class="ajax-modal" data-event="pays-edition"
+                           href="<?= $this->url('pays/saisie', ['pays' => $pays->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                           title="Modifier le pays"><i class="fas fa-pen-to-square"></i></a>
+                        <a class="pop-ajax" data-title="Suppression de l'établissement" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
+                           data-submit-reload="true"
+                           href="<?= $this->url('pays/supprimer', ['pays' => $pays->getId()]) ?>"
+                           title="Supprimer le pays"><i class="fas fa-trash-can"></i></a>
+                    <?php else: ?>
+                        Non modifiable
+                    <?php endif; ?>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="pays-edition" href="<?= $this->url('pays/saisie'); ?>"><i class="fas fa-plus"></i>
+        Ajout d'un nouveau pays</a>
+<?php endif; ?>
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("pays-edition", function (event, data) {
+            window.location.reload();
+        });
+    });
+</script>

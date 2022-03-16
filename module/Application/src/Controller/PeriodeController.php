@@ -50,7 +50,7 @@ class PeriodeController extends AbstractController
         $form->bindRequestSave($periode, $this->getRequest(), function () use ($periode, $form) {
             $this->getServicePeriode()->save($periode);
             $this->flashMessenger()->addSuccessMessage(
-                "Ajout réussis"
+                "Ajout réussi"
             );
         });
 

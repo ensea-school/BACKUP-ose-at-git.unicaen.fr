@@ -32,12 +32,15 @@ Objectif : Plafonds personnalisables
   * extraction CSV des indicateurs (#19405)
   * certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
 * Refonte de l'interface d'administration des statuts
-  * Les paramétrages de statuts sont maintenant annualisés  
-* Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un intervenant vers le SIRH  
+  * Les paramétrages de statuts sont maintenant annualisés
+* Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un
+  intervenant vers le SIRH
 * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
   intervenant
 * Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
 * Un nouveau modèle de contrat sera possible avec la ventilation des heures de services par types d'intervention (CM/TD/TP)
+* Des périodes pourront être ajoutés, supprimés ou modifiés depuis l'administration des périodes.
+* Les types de formations et les groupes les contenant pourront être ajoutés, supprimés ou modifiés depuis l'administration des types de formations.
 
 ## Corrections de bugs
 

@@ -12,8 +12,6 @@ use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwaretrait;
 use UnicaenApp\Util;
 use Laminas\Filter\PregReplace;
 use Laminas\Validator\Callback;
@@ -28,13 +26,12 @@ use Laminas\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInterface
+class SaisieFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
     use LocalContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use FonctionReferentielServiceAwareTrait;
-    use EntityManagerAwareTrait;
 
     /**
      * @var Structure[]

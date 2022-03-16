@@ -2,6 +2,7 @@
 
 namespace Application\Form\TypeIntervention;
 
+use Application\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
@@ -19,7 +20,7 @@ use UnicaenApp\Util;
  */
 class TypeInterventionStructureSaisieForm extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
+    use TypeInterventionStructureAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
     use AnneeServiceAwareTrait;

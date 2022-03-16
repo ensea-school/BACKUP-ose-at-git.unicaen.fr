@@ -5,8 +5,6 @@ namespace Application\Form\OffreFormation;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -17,9 +15,8 @@ use Laminas\Hydrator\HydratorInterface;
  * Description of ElementPedagogiqueRechercheFieldset
  *
  */
-class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements EntityManagerAwareInterface
+class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
 {
-    use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
     use SessionContainerTrait;
     use ElementPedagogiqueServiceAwareTrait;

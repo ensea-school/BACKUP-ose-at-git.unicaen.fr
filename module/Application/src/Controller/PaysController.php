@@ -47,7 +47,7 @@ class PaysController extends AbstractController
                 }
                 $this->getServicePays()->save($pays);
                 $this->flashMessenger()->addSuccessMessage(
-                    "Ajout réussis"
+                    "Ajout réussi"
                 );
             } catch (Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

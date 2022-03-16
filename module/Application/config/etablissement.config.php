@@ -88,8 +88,13 @@ return [
 
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Etablissement' => Controller\EtablissementController::class,
+        'factories' => [
+            'Application\Controller\Etablissement' => Controller\Factory\EtablissementControllerFactory::class,
+        ],
+    ],
+    'form_elements'   => [
+        'factories' => [
+            Form\Etablissement\EtablissementSaisieForm::class => Form\Etablissement\EtablissementSaisieFormFactory::class,
         ],
     ],
     'service_manager' => [

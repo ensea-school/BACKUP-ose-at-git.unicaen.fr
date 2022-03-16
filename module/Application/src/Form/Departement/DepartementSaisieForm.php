@@ -4,9 +4,6 @@ namespace Application\Form\Departement;
 
 use Application\Entity\Db\Departement;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
-use Application\Service\Traits\SourceServiceAwareTrait;
-use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 
 /**
@@ -16,16 +13,11 @@ use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
  */
 class DepartementSaisieForm extends AbstractForm
 {
-    use SourceServiceAwareTrait;
-    use GroupeTypeFormationServiceAwareTrait;
-    use SchemaServiceAwareTrait;
-
-
     public function init()
     {
-        $this->spec(Departement::class);
+        $ignore = ["sourceCode", "source"];
+        $this->spec(Departement::class, $ignore);
         $this->build();
-
         $this->addSubmit();
 
         return $this;

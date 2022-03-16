@@ -73,8 +73,13 @@ return [
 
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Pays' => Controller\PaysController::class,
+        'factories' => [
+            'Application\Controller\Pays' => Controller\Factory\PaysControllerFactory::class,
+        ],
+    ],
+    'form_elements'   => [
+        'factories' => [
+            Form\Pays\PaysSaisieForm::class => Form\Pays\PaysSaisieFormFactory::class,
         ],
     ],
     'service_manager' => [

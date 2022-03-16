@@ -40,18 +40,11 @@ class DepartementController extends AbstractController
         } else {
             $title = "Edition d'un département";
         }
-        $form->bindRequestSave($departement, $this->getRequest(), function () use ($departement, $form) {
-            try {
-                if ($departement->getSourceCode() == null) {
-                    $departement->setSourceCode($departement->getCode());
-                }
-                $this->getServiceDepartement()->save($departement);
-                $this->flashMessenger()->addSuccessMessage(
-                    "Ajout réussis"
-                );
-            } catch (Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
+        $form->bindRequestSave($departement, $this->getRequest(), function () use ($departement) {
+            $this->getServiceDepartement()->save($departement);
+            $this->flashMessenger()->addSuccessMessage(
+                "Ajout réussi"
+            );
         });
 
 

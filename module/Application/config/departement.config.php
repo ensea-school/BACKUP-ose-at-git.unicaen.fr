@@ -61,8 +61,13 @@ return [
 
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Departement' => Controller\DepartementController::class,
+        'factories' => [
+            'Application\Controller\Departement' => Controller\Factory\DepartementControllerFactory::class,
+        ],
+    ],
+    'form_elements'   => [
+        'factories' => [
+            Form\Departement\DepartementSaisieForm::class => Form\Departement\DepartementSaisieFormFactory::class,
         ],
     ],
     'service_manager' => [

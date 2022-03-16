@@ -70,7 +70,6 @@ class NoteService extends AbstractEntityService
         $sql = 'SELECT * FROM v_intervenant_historique where intervenant_id =  ' . $intervenant->getId() . ' ORDER BY ordre ASC, histo_date ASC';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while ($r = $stmt->fetch()) {
-            //if (array_key_exists($r['CATEGORIE'], $historique)) {
             $historique[$r['CATEGORIE']][] = [
                 'id'             => $r['ID'],
                 'intervenant_id' => $r['INTERVENANT_ID'],
@@ -80,7 +79,6 @@ class NoteService extends AbstractEntityService
                 'ordre'          => $r['ORDRE'],
 
             ];
-            //}
 
 
         }

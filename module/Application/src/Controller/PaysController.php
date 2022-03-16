@@ -42,9 +42,6 @@ class PaysController extends AbstractController
         }
         $form->bindRequestSave($pays, $this->getRequest(), function () use ($pays, $form) {
             try {
-                if ($pays->getSourceCode() == null) {
-                    $pays->setSourceCode($pays->getCode());
-                }
                 $this->getServicePays()->save($pays);
                 $this->flashMessenger()->addSuccessMessage(
                     "Ajout réussi"

@@ -140,7 +140,13 @@ return [
         ],
         [
             'controller' => 'Intervenant\Controller\Note',
-            'action'     => ['saisir', 'envoyer-email'],
+            'action'     => ['envoyer-email'],
+            'privileges' => [Privileges::INTERVENANT_NOTE_EMAIL],
+
+        ],
+        [
+            'controller' => 'Intervenant\Controller\Note',
+            'action'     => ['saisir'],
             'assertion'  => Assertion\NoteAssertion::class,
         ],
         [

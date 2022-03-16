@@ -146,6 +146,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INTERVENANT_NOTE_ADMINISTRATION = 'intervenant-note-administration';
     const INTERVENANT_NOTE_AJOUT = 'intervenant-note-ajout';
     const INTERVENANT_NOTE_VISUALISATION = 'intervenant-note-visualisation';
+    const INTERVENANT_NOTE_EMAIL = 'intervenant-note-email';
     const INTERVENANT_SUPPRESSION = 'intervenant-suppression';
     const INTERVENANT_VISUALISATION_HISTORISES = 'intervenant-visualisation-historises';
     const MISE_EN_PAIEMENT_DEMANDE = 'mise-en-paiement-demande';

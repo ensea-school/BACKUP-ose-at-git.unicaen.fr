@@ -67,18 +67,22 @@ class NoteService extends AbstractEntityService
     public function getHistoriqueIntervenant(Intervenant $intervenant)
     {
         $historique = [];
-        $sql = 'SELECT * FROM v_intervenant_historique where intervenant_id =  ' . $intervenant->getId() . ' ORDER BY histo_date DESC';
+        $sql = 'SELECT * FROM v_intervenant_historique where intervenant_id =  ' . $intervenant->getId() . ' ORDER BY ordre ASC, histo_date ASC';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while ($r = $stmt->fetch()) {
-
-            $historique[] = [
+            //if (array_key_exists($r['CATEGORIE'], $historique)) {
+            $historique[$r['CATEGORIE']][] = [
                 'id'             => $r['ID'],
                 'intervenant_id' => $r['INTERVENANT_ID'],
                 'label'          => $r['LABEL'],
                 'histo_date'     => new \DateTime($r['HISTO_DATE']),
                 'histo_user'     => $r['HISTO_USER'],
+                'ordre'          => $r['ORDRE'],
 
             ];
+            //}
+
+
         }
 
         return $historique;

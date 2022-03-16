@@ -79,15 +79,17 @@ class NoteController extends AbstractController
         }
 
 
-        return compact('form', 'intervenant');
+        return compact('form', 'intervenant', 'title');
     }
 
     public function voirAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $note = $this->getEvent()->getParam('note');
+        $title = 'Visualisation d\'une note intervenant';
 
-        return compact('intervenant', 'note');
+
+        return compact('intervenant', 'note', 'title');
 
     }
 
@@ -117,6 +119,7 @@ class NoteController extends AbstractController
     public function envoyerEmailAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
+        $title = 'Rédiger un email à l\'intervenant';
 
         $form = $this->getFormMailerIntervenant()->setIntervenant($intervenant)->initForm();
 
@@ -150,7 +153,7 @@ class NoteController extends AbstractController
 
         }
 
-        return compact('intervenant', 'form');
+        return compact('intervenant', 'form', 'title');
     }
 }
 

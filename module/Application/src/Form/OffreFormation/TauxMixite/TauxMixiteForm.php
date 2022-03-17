@@ -43,7 +43,7 @@ class TauxMixiteForm extends AbstractForm
 
 
 
-    private function build()
+    public function build()
     {
         $elements = $this->getEtape()->getElementPedagogique();
         foreach ($elements as $element) {
@@ -73,7 +73,7 @@ class TauxMixiteForm extends AbstractForm
 
     private function createFieldset(ElementPedagogique $element)
     {
-        $f = $this->getFieldsetOffreFormationTauxMixite();
+        $f = $this->getFieldsetOffreFormationTauxMixiteTauxMixite();
 
         $f->setName('EL' . $element->getId());
         $f->setElementPedagogique($element);

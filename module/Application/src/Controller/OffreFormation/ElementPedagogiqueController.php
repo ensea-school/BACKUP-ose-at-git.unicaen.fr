@@ -284,7 +284,7 @@ class ElementPedagogiqueController extends AbstractController
         ]);
 
         $element = $this->getEvent()->getParam('elementPedagogique');
-        $form    = $this->getElementModulateurCentreCoutForm();
+        $form    = $this->getFormOffreFormationElementModulateurCentreCout();
         //Traitement retour formulaire
         $request = $this->getRequest();
         if ($request->isPost()) {

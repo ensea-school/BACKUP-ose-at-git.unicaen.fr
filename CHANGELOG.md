@@ -7,7 +7,7 @@
 
 
 # OSE 18 (à venir)
-Objectif : Plafonds personnalisables
+Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 ## Nouveautés
 
@@ -59,6 +59,13 @@ Objectif : Plafonds personnalisables
 
 
 
+# OSE 17.3 (à venir)
+
+## Corrections de bugs
+
+* Dans la page Offre de formation, le total des éléments par formations tient maintenant compte des éléments mutualisés (#42043)
+* Lors de la saisie d'un nouveau service, le filtre par formation prend maintenant en compte les formations ne contenant que des éléments mutualisés (#40208)
+* Formule de l'université de Université Paris-Est Créteil (UPEC) corrigée (#37737)
 
 # OSE 17.2 (05/01/2022)
 

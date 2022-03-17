@@ -143,7 +143,7 @@ class EtablissementController extends AbstractController
             try {
                 $this->getServiceEtablissement()->save($etablissement);
                 $this->flashMessenger()->addSuccessMessage(
-                    "Ajout réussis"
+                    "Ajout réussi"
                 );
             } catch (Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

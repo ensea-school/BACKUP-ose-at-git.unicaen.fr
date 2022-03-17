@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use DateTime;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -18,34 +19,34 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     use ImportAwareTrait;
 
     /**
-     * @var int|null
+     * @var integer
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @var string
      */
-    protected $code;
+    protected ?string $code = null;
 
     /**
      * @var string|null
      */
-    protected $libelle;
+    protected ?string $libelle = null;
 
     /**
      * @var bool|null
      */
-    protected $temoinUe;
+    protected ?bool $temoinUe = false;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      */
-    protected $validiteDebut;
+    protected ?DateTime $validiteDebut = null;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      */
-    protected $validiteFin;
+    protected ?DateTime $validiteFin = null;
 
 
 
@@ -56,6 +57,8 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->id;
     }
+
+
 
     /**
      * @param int|null $id
@@ -74,7 +77,7 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -86,7 +89,7 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
      *
      * @return Pays
      */
-    public function setCode(string $code): Pays
+    public function setCode(?string $code): Pays
     {
         $this->code = $code;
 
@@ -144,9 +147,9 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getValiditeDebut(): ?\DateTime
+    public function getValiditeDebut(): ?DateTime
     {
         return $this->validiteDebut;
     }
@@ -154,11 +157,11 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * @param \DateTime|null $validiteDebut
+     * @param DateTime|null $validiteDebut
      *
      * @return Pays
      */
-    public function setValiditeDebut(?\DateTime $validiteDebut): Pays
+    public function setValiditeDebut(?DateTime $validiteDebut): Pays
     {
         $this->validiteDebut = $validiteDebut;
 
@@ -168,9 +171,9 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getValiditeFin(): ?\DateTime
+    public function getValiditeFin(): ?DateTime
     {
         return $this->validiteFin;
     }
@@ -178,11 +181,11 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * @param \DateTime|null $validiteFin
+     * @param DateTime|null $validiteFin
      *
      * @return Pays
      */
-    public function setValiditeFin(?\DateTime $validiteFin): Pays
+    public function setValiditeFin(?DateTime $validiteFin): Pays
     {
         $this->validiteFin = $validiteFin;
 

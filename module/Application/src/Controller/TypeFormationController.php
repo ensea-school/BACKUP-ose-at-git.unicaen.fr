@@ -68,7 +68,7 @@ class TypeFormationController extends AbstractController
 
             $this->getServiceTypeFormation()->save($typeFormations);
             $this->flashMessenger()->addSuccessMessage(
-                "Ajout réussis"
+                "Ajout réussi"
             );
         });
 
@@ -92,7 +92,7 @@ class TypeFormationController extends AbstractController
 
             $this->getServiceGroupeTypeFormation()->save($groupeTypeFormation);
             $this->flashMessenger()->addSuccessMessage(
-                "Ajout réussis"
+                "Ajout réussi"
             );
         });
 

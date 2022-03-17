@@ -140,4 +140,15 @@ class PaysService extends AbstractEntityService
 
         return $qb;
     }
+
+
+
+    public function save($entity)
+    {
+        if ($entity->getSourceCode() == null) {
+            $entity->setSourceCode($entity->getCode());
+        }
+
+        return parent::save($entity);
+    }
 }

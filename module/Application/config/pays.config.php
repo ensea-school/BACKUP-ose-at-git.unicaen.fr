@@ -8,12 +8,12 @@ use Application\Provider\Privilege\Privileges;
 return [
     'router'          => [
         'routes' => [
-            'etablissement' => [
+            'pays' => [
                 'type'          => 'Literal',
                 'options'       => [
-                    'route'    => '/etablissement',
+                    'route'    => '/pays',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Etablissement',
+                        'controller' => 'Application\Controller\Pays',
                         'action'     => 'index',
                     ],
                 ],
@@ -31,19 +31,10 @@ return [
                             ],
                         ],
                     ],
-                    'recherche' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/recherche[/:term]',
-                            'defaults' => [
-                                'action' => 'recherche',
-                            ],
-                        ],
-                    ],
                     'saisie'    => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/saisie[/:etablissement]',
+                            'route'    => '/saisie[/:pays]',
                             'defaults' => [
                                 'action' => 'saisie',
                             ],
@@ -53,7 +44,7 @@ return [
                     'supprimer' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/supprimer/:etablissement',
+                            'route'    => '/supprimer/:pays',
                             'defaults' => [
                                 'action' => 'supprimer',
                             ],
@@ -66,22 +57,16 @@ return [
     ],
     'bjyauthorize'    => [
         'guards' => [
-            'BjyAuthorize\Guard\Controller' => [
+            PrivilegeController::class => [
                 [
-                    'controller' => 'Application\Controller\Etablissement',
-                    'action'     => ['choisir', 'recherche', 'voir', 'apercevoir',],
-                    'roles'      => ['user']],
-            ],
-            PrivilegeController::class      => [
-                [
-                    'controller' => 'Application\Controller\Etablissement',
+                    'controller' => 'Application\Controller\Pays',
                     'action'     => ['index'],
-                    'privileges' => [Privileges::PARAMETRES_ETABLISSEMENT_VISUALISATION],
+                    'privileges' => [Privileges::PARAMETRES_PAYS_VISUALISATION],
                 ],
                 [
-                    'controller' => 'Application\Controller\Etablissement',
+                    'controller' => 'Application\Controller\Pays',
                     'action'     => ['saisie', 'supprimer'],
-                    'privileges' => [Privileges::PARAMETRES_ETABLISSEMENT_EDITION],
+                    'privileges' => [Privileges::PARAMETRES_PAYS_EDITION],
                 ],
             ],
         ],
@@ -89,22 +74,17 @@ return [
     ],
     'controllers'     => [
         'factories' => [
-            'Application\Controller\Etablissement' => Controller\Factory\EtablissementControllerFactory::class,
+            'Application\Controller\Pays' => Controller\Factory\PaysControllerFactory::class,
         ],
     ],
     'form_elements'   => [
         'factories' => [
-            Form\Etablissement\EtablissementSaisieForm::class => Form\Etablissement\EtablissementSaisieFormFactory::class,
+            Form\Pays\PaysSaisieForm::class => Form\Pays\PaysSaisieFormFactory::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            Service\EtablissementService::class => Service\EtablissementService::class,
-        ],
-    ],
-    'view_helpers'    => [
-        'invokables' => [
-            'etablissement' => View\Helper\EtablissementViewHelper::class,
+            Service\PaysService::class => Service\PaysService::class,
         ],
     ],
 ];

@@ -207,11 +207,11 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UPEC" AS
           RETURN 1;
         ELSE
           -- SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))
-          IF cell('sTP') <= 384 THEN
+          IF cell('sTP') <= i.heures_service_statutaire THEN
             RETURN 1;
           ELSE
             --(384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)
-            RETURN (384+((cell('sTP')-384)*(2/3)))/cell('sTP');
+            RETURN (i.heures_service_statutaire+((cell('sTP')-i.heures_service_statutaire)*(2/3)))/cell('sTP');
           END IF;
         END IF;
       END IF;
@@ -239,11 +239,11 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UPEC" AS
           END IF;
         ELSE
           -- SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))
-          IF cell('sTP') <= 384 THEN
+          IF cell('sTP') <= i.heures_service_statutaire THEN
             RETURN 1;
           ELSE
             --(384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)
-            RETURN (384+((cell('sTP')-384)*(2/3)))/cell('sTP');
+            RETURN (i.heures_service_statutaire+((cell('sTP')-i.heures_service_statutaire)*(2/3)))/cell('sTP');
           END IF;
         END IF;
       END IF;

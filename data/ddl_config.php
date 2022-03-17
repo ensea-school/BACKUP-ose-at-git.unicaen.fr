@@ -45,6 +45,7 @@ return [
             'V_TBL_SERVICE_REFERENTIEL',
             'V_TBL_SERVICE_SAISIE',
             'V_PRIVILEGES_ROLES',
+            'V_CTL_SERVICES_ODF_HISTO',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],

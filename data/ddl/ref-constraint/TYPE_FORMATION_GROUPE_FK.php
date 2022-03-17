@@ -7,7 +7,7 @@ return [
     'table'       => 'TYPE_FORMATION',
     'rtable'      => 'GROUPE_TYPE_FORMATION',
     'delete_rule' => 'SET NULL',
-    'index'       => null,
+    'index'       => NULL,
     'columns'     => [
         'GROUPE_ID' => 'ID',
     ],

@@ -203,7 +203,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
 
         foreach ($vhdata as $vh) {
             $ftvh = new FormuleTestVolumeHoraire();
-            $ftvh->setIntervenantTest($fti);
+            $ftvh->setFormuleTestIntervenant($fti);
             $ftvh->setReferentiel($vh['VOLUME_HORAIRE_REF_ID'] != null);
             $ftvh->setServiceStatutaire($vh['SERVICE_STATUTAIRE'] == '1');
             $ftvh->setTypeInterventionCode($vh['TYPE_INTERVENTION_CODE']);

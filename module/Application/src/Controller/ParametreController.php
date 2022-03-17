@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
-use Application\Form\CampagneSaisieFieldset;
 use Application\Form\Traits\CampagneSaisieFormAwareTrait;
 use Application\Form\Traits\ParametresFormAwareTrait;
 use Application\Provider\Privilege\Privileges;

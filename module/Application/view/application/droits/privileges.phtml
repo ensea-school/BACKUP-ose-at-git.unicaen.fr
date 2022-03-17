@@ -28,7 +28,7 @@
         <?php if (!empty($roles)): ?>
             <th class="roles" colspan="<?= count($roles); ?>"><a class="roles">Rôles (personnel)</a></th>
         <?php endif; ?>
-        <?php if (!empty($roles) && !empty($statuts)): ?>
+        <?php if (!empty($roles)): ?>
             <th class="separator">&nbsp;</th>
         <?php endif; ?>
         <th style="border:none;min-width:166px">&nbsp;</th>
@@ -46,16 +46,16 @@
         <?php foreach ($cat['privileges'] as $privilege): ?>
             <tr class="categorie" data-categorie="<?= $cat['categorie']->getCode() ?>">
                 <th class="privilege"><?= $privilege ?></th>
-                <?php $statut = null;
+                <?php
                 foreach ($roles as $role): ?>
                     <td class="modifier role" data-role="<?= $role->getId() ?>"
                         data-privilege="<?= $privilege->getId() ?>"
                         title="Rôle : <?= $role->getLibelle() ?>"
                     >
-                        <?= $this->partial('/application/droits/partial/tbl-link', compact('role', 'statut', 'privilege')) ?>
+                        <?= $this->partial('/application/droits/partial/tbl-link', compact('role', 'privilege')) ?>
                     </td>
                 <?php endforeach; ?>
-                <?php if (!empty($roles) && !empty($statuts)): ?>
+                <?php if (!empty($roles)): ?>
                     <th class="separator ">&nbsp;</th>
                 <?php endif; ?>
             </tr>

@@ -67,6 +67,9 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Lors de la saisie d'un nouveau service, le filtre par formation prend maintenant en compte les formations ne contenant que des éléments mutualisés (#40208)
 * Formule de l'université de Université Paris-Est Créteil (UPEC) corrigée (#37737)
 
+## Notes de mise à jour
+
+* La mise à jour risque de bloquer à cause d'un fichier "composer.lock" situé dans le répertoire racine de l'application. Veuillez le supprimer manuellement pour que la mise à jour puisse se dérouler. 
 
 
 # OSE 17.2 (05/01/2022)

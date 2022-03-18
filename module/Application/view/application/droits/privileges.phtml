@@ -4,7 +4,6 @@
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $privileges UnicaenAuth\Entity\Db\Privilege[]
  * @var $roles      Application\Entity\Db\Role[]
- * @var $filters    array
  */
 
 ?>
@@ -12,52 +11,36 @@
 <table class="droits-tbl table table-bordered table-condensed table-extra-condensed table-header-rotated">
     <thead>
     <tr>
-        <th class="menu"><a class="btn btn-default show-all">Supprimer les
-                filtres</a></th>
+        <th class="menu"></th>
         <?php foreach ($roles as $role): ?>
-            <th class="rotate-45 role" data-role="<?= $role->getId() ?>" title="<?= $role; ?>">
-                <div><span><a><?= $role; ?></a></span></div>
+            <th class="rotate-45 role" data-role="<?= $role->getId() ?>">
+                <div title="<?= $role; ?>"><span><a><?= $role; ?></a></span></div>
             </th>
         <?php endforeach; ?>
-        <?php if (!empty($roles)): ?>
-            <th class="separator rotate-45">&nbsp;</th>
-        <?php endif; ?>
-    </tr>
-    <tr>
-        <th>Privilèges</th>
-        <?php if (!empty($roles)): ?>
-            <th class="roles" colspan="<?= count($roles); ?>"><a class="roles">Rôles (personnel)</a></th>
-        <?php endif; ?>
-        <?php if (!empty($roles)): ?>
-            <th class="separator">&nbsp;</th>
-        <?php endif; ?>
-        <th style="border:none;min-width:166px">&nbsp;</th>
     </tr>
     </thead>
     <tbody>
+    <tr>
+        <th class="categorie" colspan="<?= 2 + count($roles); ?>">
+            <select class="categorie selectpicker" data-live-search="true" data-width="auto">
+                <option value="">Veuillez choisir une catégorie de privilèges ...</option>
+                <?php foreach ($privileges as $cat): ?>
+                    <option value="<?= $cat['categorie']->getCode() ?>"><?= $cat['categorie'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </th>
+    </tr>
     <?php foreach ($privileges as $cat): ?>
-        <tr class="categorie" data-categorie="<?= $cat['categorie']->getCode() ?>">
-            <th class="categorie">&nbsp;</th>
-            <th class="categorie" colspan="<?= 1 + count($roles); ?>">
-                <a class="categorie"
-                   data-categorie="<?= $cat['categorie']->getCode() ?>"><?= $cat['categorie'] ?></a>
-            </th>
-        </tr>
         <?php foreach ($cat['privileges'] as $privilege): ?>
-            <tr class="categorie" data-categorie="<?= $cat['categorie']->getCode() ?>">
+            <tr class="categorie" data-categorie="<?= $cat['categorie']->getCode() ?>" style="display: none">
                 <th class="privilege"><?= $privilege ?></th>
                 <?php
                 foreach ($roles as $role): ?>
-                    <td class="modifier role" data-role="<?= $role->getId() ?>"
-                        data-privilege="<?= $privilege->getId() ?>"
-                        title="Rôle : <?= $role->getLibelle() ?>"
-                    >
+                    <td class="modifier role" data-role="<?= $role->getId() ?>" data-privilege="<?= $privilege->getId() ?>">
                         <?= $this->partial('/application/droits/partial/tbl-link', compact('role', 'privilege')) ?>
                     </td>
                 <?php endforeach; ?>
-                <?php if (!empty($roles)): ?>
-                    <th class="separator ">&nbsp;</th>
-                <?php endif; ?>
+
             </tr>
         <?php endforeach; ?>
     <?php endforeach; ?>

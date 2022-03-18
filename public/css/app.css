@@ -688,7 +688,15 @@ td .alert {
 
 
 
+.table-header-rotated {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
 
+.table-header-rotated thead th:first-child {
+/*    border-bottom: none; */
+}
 
 .table-header-rotated th.row-header {
     width: auto;
@@ -725,6 +733,11 @@ td .alert {
 
 .table-header-rotated th.rotate-45.first > div {
     border-left: 1px solid #ddd;
+}
+
+.table-header-rotated thead tr th div {
+    background-color:white;
+    border-top: 1px solid #ddd;
 }
 
 .table-header-rotated th.rotate-45 span {

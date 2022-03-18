@@ -5,7 +5,6 @@ namespace Application\Service;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
-use UnicaenApp\Traits\SessionContainerTrait;
 
 /**
  * Description of Privilege
@@ -14,8 +13,10 @@ use UnicaenApp\Traits\SessionContainerTrait;
  */
 class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 {
-    use SessionContainerTrait;
     use ContextServiceAwareTrait;
+
+    private array $privilegesCache = [];
+
 
 
     /**
@@ -31,16 +32,12 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
      */
     public function getPrivilegesRoles()
     {
-        $annee = $this->getServiceContext()->getAnnee();
-
-        $pk      = 'privileges' . $annee->getId();
-        $session = $this->getSessionContainer();
-
-        if (!isset($session->$pk)) {
-            $session->$pk = $this->makePrivilegesRoles($annee);
+        if (empty($this->privilegesCache)) {
+            $annee                 = $this->getServiceContext()->getAnnee();
+            $this->privilegesCache = $this->makePrivilegesRoles($annee);
         }
 
-        return $session->$pk;
+        return $this->privilegesCache;
     }
 
 

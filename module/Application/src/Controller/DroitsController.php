@@ -128,42 +128,24 @@ class DroitsController extends AbstractController
 
     public function privilegesAction()
     {
-        $filters = [];
-        if ($categorieFilter = $this->params()->fromQuery('cat')) {
-            $filters['cat'] = $categorieFilter;
-        }
-        if ($rsFilter = $this->params()->fromQuery('rs')) {
-            $filters['rs'] = $rsFilter;
-        }
-
         $ps         = $this->getServicePrivilege()->getList();
         $privileges = [];
         foreach ($ps as $privilege) {
             $categorie = $privilege->getCategorie();
 
-            $ok = true;
-            if ($categorieFilter && $categorieFilter != $categorie->getCode()) $ok = false;
-
-            if ($ok) {
-                if (!isset($privileges[$categorie->getCode()])) {
-                    $privileges[$categorie->getCode()] = [
-                        'categorie'     => $categorie,
-                        'categorieLink' => $this->url()->fromRoute(null, [], ['query' => $filters + ['cat' => $categorie->getCode()]], true),
-                        'privileges'    => [],
-                    ];
-                }
-                $privileges[$categorie->getCode()]['privileges'][] = $privilege;
+            if (!isset($privileges[$categorie->getCode()])) {
+                $privileges[$categorie->getCode()] = [
+                    'categorie'  => $categorie,
+                    'privileges' => [],
+                ];
             }
+            $privileges[$categorie->getCode()]['privileges'][] = $privilege;
         }
 
-        if ($rsFilter == 'r' || !$rsFilter) {
-            $qb    = $this->getServiceRole()->finderByHistorique();
-            $roles = $this->getServiceRole()->getList($qb);
-        } else {
-            $roles = [];
-        }
+        $dql   = "SELECT r FROM " . Role::class . " r WHERE r.histoDestruction IS NULL AND r.code <> :roleAdmin ORDER BY r.libelle";
+        $roles = $this->em()->createQuery($dql)->setParameter('roleAdmin', Role::ADMINISTRATEUR)->getResult();
 
-        return compact('privileges', 'roles', 'filters');
+        return compact('privileges', 'roles');
     }
 
 

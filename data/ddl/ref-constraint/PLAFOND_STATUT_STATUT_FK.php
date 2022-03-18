@@ -6,7 +6,7 @@ return [
     'name'        => 'PLAFOND_STATUT_STATUT_FK',
     'table'       => 'PLAFOND_STATUT',
     'rtable'      => 'STATUT',
-    'delete_rule' => NULL,
+    'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
         'STATUT_ID' => 'ID',

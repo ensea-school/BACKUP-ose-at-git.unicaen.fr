@@ -157,8 +157,11 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('pieceJustificative')); ?>
-                        <a target="_blank" href="<?= $this->url('piece-jointe/type-piece-jointe-statut'); ?>">Page d'administration des pièces
-                            justificatives</a>
+                        <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION))): ?>
+                            <a target="_blank" href="<?= $this->url('piece-jointe/type-piece-jointe-statut'); ?>">
+                                Page d'administration des pièces justificatives
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -233,7 +236,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('contrat')); ?>
-                        <a target="_blank" href="<?= $this->url('contrat/modeles'); ?>">Page d'administration des modèles de contrats de travail</a>
+                        <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::CONTRAT_MODELES_VISUALISATION))): ?>
+                            <a target="_blank" href="<?= $this->url('contrat/modeles'); ?>">Page d'administration des modèles de contrats de travail</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -264,9 +269,13 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Plafonds -->
         <div class="panel panel-default">
             <div class="panel-heading">Plafonds</div>
-            <div class="panel-body">
-                <?php var_dump($plafonds) ?>
-            </div>
+            <?= $this->plafondConfig()->afficher($statut, $canEdit); ?>
+            <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_VISUALISATION))): ?>
+                <div class="panel panel-body"><a target="_blank" href="<?= $this->url('plafond'); ?>">
+                        Page d'administration des plafonds
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
 
 
@@ -283,10 +292,10 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                    data-confirm="true" data-confirm-button="Oui"
                    data-cancel-button="Non"
-                   data-submit-reload="true">
+                   data-submit-event="statut_delete">
                     <i i="fas fa-trash-can"></i> Supprimer</a>
-                <a class="ajax-modal btn btn-warning" data-event="statut-clone"
-                   href="<?= $this->url('statut/clone', ['statut' => $statut->getId()]) ?>"
+                <a class="btn btn-warning"
+                   href="<?= $this->url('statut/dupliquer', ['statut' => $statut->getId()]) ?>"
                    title="Dupliquer le statut d'intervenant">
                     <i class="fas fa-rotate-right"></i> Dupliquer</a>
             <?php endif; ?>
@@ -300,6 +309,12 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 <script type="text/javascript">
     $(function () {
+        $("body").on("statut_delete", function (event, popAjax)
+        {
+            window.location.href = '<?= (string)$this->url('statut'); ?>';
+        });
+
+
         WidgetInitializer.add('statut', {
 
             donneesVisu: function ()

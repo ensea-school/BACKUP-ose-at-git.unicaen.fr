@@ -8,6 +8,7 @@ use Application\Entity\Db\Structure;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Interfaces\PlafondConfigInterface;
+use Plafond\Service\PlafondServiceAwareTrait;
 
 
 /**
@@ -18,6 +19,7 @@ use Plafond\Interfaces\PlafondConfigInterface;
 class PlafondConfigElementViewHelper extends AbstractHtmlElement
 {
     use PlafondConfigFormAwareTrait;
+    use PlafondServiceAwareTrait;
 
     private PlafondConfigInterface $plafondConfig;
 
@@ -40,39 +42,56 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
 
     public function etatPrevu(bool $editable = false): string
     {
-        if ($editable) {
-            $element = $this->getFormPlafondConfig()->getElement($this->plafondConfig, 'plafondEtatPrevu');
+        $element = $this->getFormPlafondConfig()->getElement($this->plafondConfig, 'plafondEtatPrevu');
+        $element->setAttribute('disabled', !$editable);
 
-            return $this->getView()->formControlGroup($element);
-        } else {
-            return $this->plafondConfig->getEtatPrevu();
-        }
+        return $this->getView()->formControlGroup($element);
     }
 
 
 
     public function etatRealise(bool $editable = false): string
     {
-        if ($editable) {
-            $element = $this->getFormPlafondConfig()->getElement($this->plafondConfig, 'plafondEtatRealise');
+        $element = $this->getFormPlafondConfig()->getElement($this->plafondConfig, 'plafondEtatRealise');
+        $element->setAttribute('disabled', !$editable);
 
-            return $this->getView()->formControlGroup($element);
-        } else {
-            return $this->plafondConfig->getEtatRealise();
-        }
+        return $this->getView()->formControlGroup($element);
     }
 
 
 
     public function heures(bool $editable = false): string
     {
-        if ($editable) {
-            $element = $this->getFormPlafondConfig()->getElement($this->plafondConfig, 'heures');
+        $element = $this->getFormPlafondConfig()->getElement($this->plafondConfig, 'heures');
+        $element->setAttribute('readonly', !$editable);
 
-            return $this->getView()->formControlGroup($element);
-        } else {
-            return floatToString($this->plafondConfig->getHeures());
+        return $this->getView()->formControlGroup($element);
+    }
+
+
+
+    /**
+     * @param PlafondConfigInterface[] $plafondConfigs
+     *
+     * @return string
+     */
+    public function afficher($entity, bool $canEdit = true, bool $autoSave = false): string
+    {
+        if (!($entity instanceof FonctionReferentiel || $entity instanceof Structure || $entity instanceof Statut)) {
+            throw new \Exception(get_class($entity) . ' non gérée pour l\'affichage des statuts');
         }
+
+        $plafondConfigs = $this->getServicePlafond()->getPlafondsConfig($entity);
+
+        $params = [
+            'title'    => null,
+            'autoSave' => $autoSave,
+            'configs'  => $plafondConfigs,
+            'canEdit'  => $canEdit,
+            'entity'   => $entity,
+        ];
+
+        return (string)$this->getView()->partial('plafond/plafond/config', $params);
     }
 
 

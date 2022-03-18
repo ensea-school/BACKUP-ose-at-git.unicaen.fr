@@ -7,10 +7,12 @@ use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
+use Intervenant\Form\StatutSaisieForm;
 use Intervenant\Form\StatutSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
+use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
@@ -26,6 +28,7 @@ class StatutController extends AbstractController
     use DossierAutreServiceAwareTrait;
     use ContextServiceAwareTrait;
     use PlafondServiceAwareTrait;
+    use PlafondConfigFormAwareTrait;
 
     public function indexAction()
     {
@@ -73,20 +76,15 @@ class StatutController extends AbstractController
 
         $canEdit = $this->isAllowed($statut, Privileges::INTERVENANT_STATUT_EDITION);
         if ($canEdit) {
-            $form->bindRequestSave($statut, $this->getRequest(), function (Statut $si) use ($plafonds) {
-                try {
-                    $isNew = !$si->getId();
-                    $this->getServiceStatut()->save($si);
-                    foreach ($plafonds as $plafond) {
-                        $this->getServicePlafond()->saveConfig($plafond);
-                    }
-                    unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-                    if ($isNew) {
-                        $this->redirect()->toRoute('statut/saisie', ['statut' => $si->getId()]);
-                    }
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+            $request = $this->getRequest();
+            $form->bindRequestSave($statut, $request, function (Statut $si) use ($plafonds, $request) {
+                $isNew = !$si->getId();
+                $this->getServiceStatut()->save($si);
+                $this->getFormPlafondConfig()->requestSaveConfigs($plafonds, $request);
+                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                if ($isNew) {
+                    $this->redirect()->toRoute('statut/saisie', ['statut' => $si->getId()]);
                 }
             });
         } else {
@@ -94,36 +92,26 @@ class StatutController extends AbstractController
             $form->readOnly();
         }
 
-        return compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title', 'plafonds');
+        $vm = new ViewModel();
+        $vm->setTemplate('intervenant/statut/saisie');
+        $vm->setVariables(compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title', 'plafonds'));
+
+        return $vm;
     }
 
 
 
-    public function cloneAction()
+    public function dupliquerAction()
     {
-        /* @var $statut Statut */
-        $statut    = $this->getEvent()->getParam('statut');
-        $newStatut = $statut->dupliquer();
-        $newStatut->setOrdre($this->getServiceStatut()->fetchMaxOrdre() + 1);
-        $form         = $this->getFormStatutSaisie();
-        $title        = 'Duplication d\'un statut d\'intervenant';
-        $champsAutres = $this->getServiceDossierAutre()->getList();
+        $vm = $this->saisieAction();
 
-        $form->bindRequestSave($newStatut, $this->getRequest(), function (Statut $si) {
-            try {
-                $this->getServiceStatut()->save($si);
-                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        });
+        /** @var StatutSaisieForm $form */
+        $form = $vm->getVariable('form');
+        $form->setAttribute('action', $this->url()->fromRoute('statut/saisie'));
+        $form->get('code')->setValue(null);
+        $form->get('libelle')->setValue($form->get('libelle')->getValue() . ' (Copie)');
 
-        $viewModel = new ViewModel();
-        $viewModel->setVariables(compact('form', 'title'));
-        $viewModel->setTemplate('application/statut/saisie');
-
-        return $viewModel;
+        return $vm;
     }
 
 
@@ -133,7 +121,6 @@ class StatutController extends AbstractController
         $statut = $this->getEvent()->getParam('statut');
 
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
-
 
         if (!$canEdit) {
             $this->flashMessenger()->addErrorMessage('Statut non modifiable : droit non accordé, car vous n\'avez pas le privilège pour cela ou bien le statut est synchronisé depuis un autre logiciel');

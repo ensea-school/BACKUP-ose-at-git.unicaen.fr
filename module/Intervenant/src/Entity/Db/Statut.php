@@ -181,25 +181,6 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function dupliquer(): Statut
-    {
-        $new     = new Statut();
-        $methods = get_class_methods($this);
-        foreach ($methods as $method) {
-            $setMethod = 'set' . substr($method, 3);
-            if (str_starts_with($method, 'get') && in_array($setMethod, $methods)) {
-                $new->$setMethod($this->$method());
-            }
-        }
-        $uid = uniqid();
-        $new->setCode($this->getCode() . '_' . $uid);
-        $new->setLibelle($this->getLibelle() . ' (Copie ' . $uid . ')');
-
-        return $new;
-    }
-
-
-
     public function estPermanent(): bool
     {
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;

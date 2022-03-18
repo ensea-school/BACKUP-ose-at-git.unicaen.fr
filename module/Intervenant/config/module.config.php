@@ -13,27 +13,27 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
-                'saisie' => [
+                'saisie'    => [
                     'route'       => '/saisie[/:statut]',
                     'action'      => 'saisie',
                     'constraints' => [
                         'statut' => '[0-9]*',
                     ],
                 ],
-                'delete' => [
+                'delete'    => [
                     'route'       => '/delete/:statut',
                     'action'      => 'delete',
                     'constraints' => [
                         'statut' => '[0-9]*',
                     ],
                 ],
-                'trier'  => [
+                'trier'     => [
                     'route'  => '/trier',
                     'action' => 'trier',
                 ],
-                'clone'  => [
-                    'route'       => '/clone/:statut',
-                    'action'      => 'clone',
+                'dupliquer' => [
+                    'route'       => '/dupliquer/:statut',
+                    'action'      => 'dupliquer',
                     'constraints' => [
                         'statut' => '[0-9]*',
                     ],
@@ -62,7 +62,7 @@ return [
         ],
         [
             'controller' => 'Intervenant\Controller\Statut',
-            'action'     => ['delete', 'trier', 'clone'],
+            'action'     => ['delete', 'trier', 'dupliquer'],
             'privileges' => [Privileges::INTERVENANT_STATUT_EDITION],
         ],
     ],

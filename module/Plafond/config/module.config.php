@@ -196,7 +196,8 @@ return [
     ],
 
     'forms' => [
-        Form\PlafondForm::class => Form\PlafondFormFactory::class,
+        Form\PlafondForm::class           => Form\PlafondFormFactory::class,
+        Form\PlafondConfigFieldset::class => Form\PlafondConfigFieldsetFactory::class,
     ],
 
     'view_helpers' => [

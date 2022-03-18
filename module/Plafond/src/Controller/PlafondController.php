@@ -123,62 +123,55 @@ class PlafondController extends AbstractController
 
     public function configApplicationAction()
     {
-        return $this->configAction(null);
+        $plafondId     = (int)$this->params()->fromPost('plafond');
+        $plafondConfig = $this->getServicePlafond()->getPlafondConfig($plafondId);
+
+        $this->getFormPlafondConfig()->requestSaveConfig($plafondConfig, $this->getRequest());
+
+        return new JsonModel([]);
     }
 
 
 
     public function configStructureAction()
     {
-        $entityId = $this->params()->fromPost('entityId');
-        $entity   = $this->em()->find(Structure::class, (int)$entityId);
+        $entityId  = (int)$this->params()->fromPost('entityId');
+        $plafondId = (int)$this->params()->fromPost('plafond');
 
-        return $this->configAction($entity);
+        $entity        = $this->em()->find(Structure::class, $entityId);
+        $plafondConfig = $this->getServicePlafond()->getPlafondConfig($plafondId, $entity);
+
+        $this->getFormPlafondConfig()->requestSaveConfig($plafondConfig, $this->getRequest());
+
+        return new JsonModel([]);
     }
 
 
 
     public function configStatutAction()
     {
-        $entityId = $this->params()->fromPost('entityId');
-        $entity   = $this->em()->find(Statut::class, (int)$entityId);
+        $entityId  = (int)$this->params()->fromPost('entityId');
+        $plafondId = (int)$this->params()->fromPost('plafond');
 
-        return $this->configAction($entity);
+        $entity        = $this->em()->find(Statut::class, $entityId);
+        $plafondConfig = $this->getServicePlafond()->getPlafondConfig($plafondId, $entity);
+
+        $this->getFormPlafondConfig()->requestSaveConfig($plafondConfig, $this->getRequest());
+
+        return new JsonModel([]);
     }
 
 
 
     public function configReferentielAction()
     {
-        $entityId = $this->params()->fromPost('entityId');
-        $entity   = $this->em()->find(FonctionReferentiel::class, (int)$entityId);
+        $entityId  = (int)$this->params()->fromPost('entityId');
+        $plafondId = (int)$this->params()->fromPost('plafond');
 
-        return $this->configAction($entity);
-    }
+        $entity        = $this->em()->find(FonctionReferentiel::class, $entityId);
+        $plafondConfig = $this->getServicePlafond()->getPlafondConfig($plafondId, $entity);
 
-
-
-    private function configAction($entity)
-    {
-        /** @var Plafond $plafond */
-        $plafondId = $this->params()->fromPost('plafond');
-        $name      = $this->params()->fromPost('name');
-        $value     = $this->params()->fromPost('value');
-
-        $config = $this->getServicePlafond()->getPlafondConfig($plafondId, $entity);
-
-        switch ($name) {
-            case 'plafondEtatPrevu':
-                $config->setEtatPrevu($this->em()->find(PlafondEtat::class, $value));
-            break;
-            case 'plafondEtatRealise':
-                $config->setEtatRealise($this->em()->find(PlafondEtat::class, $value));
-            break;
-            case 'heures':
-                $config->setHeures(stringToFloat($value));
-            break;
-        }
-        $this->getServicePlafond()->saveConfig($config);
+        $this->getFormPlafondConfig()->requestSaveConfig($plafondConfig, $this->getRequest());
 
         return new JsonModel([]);
     }

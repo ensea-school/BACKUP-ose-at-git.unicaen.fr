@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Application\Provider\Privilege\Privileges;
+
 /**
  * TypeVolumeHoraire
  */
@@ -13,7 +15,7 @@ class TypeVolumeHoraire
 
     static public $codes = [
         self::CODE_PREVU,
-        self::CODE_REALISE
+        self::CODE_REALISE,
     ];
 
     /**
@@ -165,5 +167,53 @@ class TypeVolumeHoraire
     public function __toString()
     {
         return $this->getLibelle();
+    }
+
+
+
+    public function getPrivilegeEnseignementVisualisation(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::ENSEIGNEMENT_PREVU_VISUALISATION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::ENSEIGNEMENT_REALISE_VISUALISATION;
+        }
+    }
+
+
+
+    public function getPrivilegeEnseignementEdition(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::ENSEIGNEMENT_PREVU_EDITION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::ENSEIGNEMENT_REALISE_EDITION;
+        }
+    }
+
+
+
+    public function getPrivilegeReferentielVisualisation(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::REFERENTIEL_PREVU_VISUALISATION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::REFERENTIEL_REALISE_VISUALISATION;
+        }
+    }
+
+
+
+    public function getPrivilegeReferentielEdition(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::REFERENTIEL_PREVU_EDITION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::REFERENTIEL_REALISE_EDITION;
+        }
     }
 }

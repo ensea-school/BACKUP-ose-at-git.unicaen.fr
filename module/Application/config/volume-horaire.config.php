@@ -19,7 +19,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'liste'  => [
+                    'liste'                  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/liste[/:service]',
@@ -31,7 +31,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisie' => [
+                    'saisie'                 => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie/:service',
@@ -43,7 +43,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisie-calendaire' => [
+                    'saisie-calendaire'      => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie-calendaire/:service',
@@ -78,12 +78,18 @@ return [
                 [
                     'controller' => 'Application\Controller\VolumeHoraire',
                     'action'     => ['liste'],
-                    'privileges' => Privileges::ENSEIGNEMENT_VISUALISATION,
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                    ],
                 ],
                 [
                     'controller' => 'Application\Controller\VolumeHoraire',
                     'action'     => ['saisie', 'saisie-calendaire', 'suppression-calendaire'],
-                    'privileges' => Privileges::ENSEIGNEMENT_EDITION,
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
             ],

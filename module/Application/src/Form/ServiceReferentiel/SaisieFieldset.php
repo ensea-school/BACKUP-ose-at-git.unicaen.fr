@@ -12,6 +12,7 @@ use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 use Laminas\Filter\PregReplace;
 use Laminas\Validator\Callback;
@@ -334,7 +335,7 @@ class SaisieFieldset extends AbstractFieldset
  */
 class SaisieFieldsetHydrator implements HydratorInterface
 {
-    use EntityManagerAwaretrait;
+    use EntityManagerAwareTrait;
 
 
     /**

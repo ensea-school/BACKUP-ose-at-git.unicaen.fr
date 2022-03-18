@@ -100,13 +100,13 @@ class Ligne extends AbstractViewHelper
         $service       = $this->getServiceReferentiel();
         $vhlListe      = $service->getVolumeHoraireReferentielListe();
         $heuresTVH     = $vhlListe
-                            ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
-                            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi())
-                            ->getHeures();
+            ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
+            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi())
+            ->getHeures();
         $heuresPrevues = $vhlListe
-                            ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
-                            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide())
-                            ->getHeures();
+            ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide())
+            ->getHeures();
         $out           = '';
         if ($liste->getColumnVisibility('intervenant')) {
             $out .= '<td>' . $this->renderIntervenant($service->getIntervenant()) . '</td>';
@@ -325,7 +325,8 @@ class Ligne extends AbstractViewHelper
      */
     public function setServiceReferentiel(ServiceReferentiel $serviceReferentiel = null)
     {
-        $this->forcedReadOnly = !$this->getView()->isAllowed($serviceReferentiel, Privileges::REFERENTIEL_EDITION);
+        $typeVolumeHoraire        = $serviceReferentiel->getTypeVolumeHoraire();
+        $this->forcedReadOnly     = !$this->getView()->isAllowed($serviceReferentiel, $typeVolumeHoraire->getPrivilegeReferentielEdition());
         $this->serviceReferentiel = $serviceReferentiel;
 
         return $this;

@@ -264,7 +264,7 @@ class ServiceService extends AbstractEntityService
             if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
                 $entity->setIntervenant($intervenant);
             }
-            if (!$this->getAuthorize()->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
+            if (!$this->getAuthorize()->isAllowed($entity, Privileges::ENSEIGNEMENT_PREVU_EDITION) || !$this->getAuthorize()->isAllowed($entity, Privileges::ENSEIGNEMENT_REALISE_EDITION)) {
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
             }
 

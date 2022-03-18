@@ -479,8 +479,10 @@ return [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['services'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -540,8 +542,10 @@ return [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['formule-totaux-hetd'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                 ],
                 [

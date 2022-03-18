@@ -57,7 +57,7 @@ class PlafondProcessus implements EntityManagerAwareInterface
      */
     public function endTransaction(Intervenant $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
     {
-        $this->getEntityManager()->flush();
+        //$this->getEntityManager()->flush();
 
         if ($isDiminution) {
             $passed = true; // ça passe à tous les coups si on diminue le volume d'heures

@@ -14,13 +14,13 @@ use Application\Provider\Privilege\Privileges;
 $service = new \Application\Entity\Db\Service();
 $service->setIntervenant($intervenant);
 $service->setTypeVolumeHoraire($typeVolumeHoraire);
-$canAddService = $this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
+$canAddService = $this->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition());
 
 $serviceReferentiel = new \Application\Entity\Db\ServiceReferentiel();
 $serviceReferentiel->setIntervenant($intervenant);
 $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
 $serviceReferentiel->setStructure($role->getStructure());
-$canAddServiceReferentiel = $this->isAllowed($serviceReferentiel, Privileges::REFERENTIEL_EDITION);
+$canAddServiceReferentiel = $this->isAllowed($serviceReferentiel, $typeVolumeHoraire->getPrivilegeReferentielEdition());
 
 if ($typeVolumeHoraire->isPrevu()) {
     $nextEtape = WfEtape::CODE_SERVICE_SAISIE;

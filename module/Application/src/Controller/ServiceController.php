@@ -94,7 +94,7 @@ class ServiceController extends AbstractController
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $viewModel        = new \Laminas\View\Model\ViewModel();
 
-        $canAddService = Privileges::ENSEIGNEMENT_EDITION;
+        $canAddService = Privileges::ENSEIGNEMENT_PREVU_EDITION || Privileges::ENSEIGNEMENT_REALISE_EDITION;
 
         $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
         $params             = $this->getEvent()->getRouteMatch()->getParams();
@@ -416,7 +416,7 @@ class ServiceController extends AbstractController
 
         foreach ($services as $service) {
             $service->setTypeVolumeHoraire($realise);
-            if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
+            if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_REALISE_EDITION)) {
                 $this->getServiceService()->setRealisesFromPrevus($service);
             }
         }
@@ -448,7 +448,10 @@ class ServiceController extends AbstractController
             throw new \LogicException('Le service n\'existe pas');
         }
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (!$this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
+        $privilege = null;
+        if ($typeVolumeHoraire->isPrevu()) $privilege = Privileges::ENSEIGNEMENT_PREVU_EDITION;
+        if ($typeVolumeHoraire->isRealise()) $privilege = Privileges::ENSEIGNEMENT_REALISE_EDITION;
+        if ((!$privilege) || !$this->isAllowed($service, $privilege)) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
@@ -515,7 +518,7 @@ class ServiceController extends AbstractController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                if (!$this->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
+                if (!$this->isAllowed($entity, $typeVolumeHoraire->getPrivilegeEnseignementEdition())) {
                     $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
                 } else {
                     $form->saveToContext();

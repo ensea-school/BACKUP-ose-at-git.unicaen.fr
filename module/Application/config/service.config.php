@@ -266,7 +266,8 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -274,8 +275,10 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'horodatage'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_EDITION,
-                        Privileges::REFERENTIEL_EDITION,
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -291,7 +294,8 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -329,7 +333,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -337,7 +342,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'initialisation', 'constatation'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_EDITION,
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -345,7 +351,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['validation'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -369,16 +376,20 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['resume-refresh'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_EDITION,
-                        Privileges::REFERENTIEL_EDITION,
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['resume', 'recherche'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -406,8 +417,10 @@ return [
                     /* Enseignements */
                     [
                         'privileges' => [
-                            Privileges::ENSEIGNEMENT_VISUALISATION,
-                            Privileges::ENSEIGNEMENT_EDITION,
+                            Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                            Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                            Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                            Privileges::ENSEIGNEMENT_REALISE_EDITION,
                         ],
                         'resources'  => ['Service', 'Intervenant'],
                         'assertion'  => Assertion\ServiceAssertion::class,
@@ -444,8 +457,10 @@ return [
                     /* Référentiel */
                     [
                         'privileges' => [
-                            Privileges::REFERENTIEL_VISUALISATION,
-                            Privileges::REFERENTIEL_EDITION,
+                            Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                            Privileges::REFERENTIEL_PREVU_EDITION,
+                            Privileges::REFERENTIEL_REALISE_VISUALISATION,
+                            Privileges::REFERENTIEL_REALISE_EDITION,
                         ],
                         'resources'  => ['ServiceReferentiel', 'Intervenant'],
                         'assertion'  => Assertion\ServiceAssertion::class,

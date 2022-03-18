@@ -124,9 +124,11 @@ return [
     'enseignement' => [
         'libelle'    => 'Enseignement',
         'privileges' => [
-            'visualisation'                          => 'Visualisation',
-            'edition'                                => 'Édition',
             'edition-masse'                          => 'Édition en masse',
+            'prevu-visualisation'                    => 'Visualisation du prévisionnel',
+            'prevu-edition'                          => 'Édition du prévisionnel',
+            'realise-visualisation'                  => 'Visualisation du réalisé',
+            'realise-edition'                        => 'Édition du réalisé',
             'exterieur'                              => 'Saisie de service dans une autre université',
             'validation'                             => 'Validation',
             'autovalidation'                         => 'Validation automatique',
@@ -149,8 +151,10 @@ return [
     'referentiel' => [
         'libelle'    => 'Référentiel',
         'privileges' => [
-            'visualisation'             => 'Visualisation',
-            'edition'                   => 'Édition',
+            'prevu-visualisation'       => 'Visualisation du prévisionnel',
+            'prevu-edition'             => 'Édition du prévisionnel',
+            'realise-visualisation'     => 'Visualisation du réalisé',
+            'realise-edition'           => 'Édition du réalisé',
             'validation'                => 'Validation',
             'autovalidation'            => 'Validation automatique',
             'admin-edition'             => 'Administration - Édition',

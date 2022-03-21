@@ -233,7 +233,7 @@ return [
         ],
     ],
 
-    'import'            => [
+    'import' => [
         'libelle'    => 'Import',
         'privileges' => [
             'ecarts'                => 'Écarts',
@@ -246,6 +246,7 @@ return [
             'tables-visualisation'  => 'Tables (visualisation)',
         ],
     ],
+
     'type-intervention' => [
         'libelle'    => 'Type d\'intervention',
         'privileges' => [
@@ -253,19 +254,12 @@ return [
             'edition'       => 'Édition',
         ],
     ],
-    'type-ressource'    => [
+
+    'type-ressource' => [
         'libelle'    => 'Types de ressources',
         'privileges' => [
             'visualisation' => 'Visualisation',
             'edition'       => 'Édition',
-        ],
-    ],
-
-    'unicaen-tbl' => [
-        'libelle'    => 'Tableaux de bord',
-        'privileges' => [
-            'admin'         => 'Gestion des tableaux de bord',
-            'actualisation' => 'Actualisation',
         ],
     ],
 
@@ -418,12 +412,13 @@ return [
         ],
     ],
 
-    'formule'            => [
+    'formule' => [
         'libelle'    => 'Formule de calcul',
         'privileges' => [
             'tests' => 'Tests',
         ],
     ],
+    
     'referentiel-commun' => [
         'libelle'    => 'Référentiels communs',
         'privileges' => [
@@ -433,7 +428,8 @@ return [
             'employeur-edition'       => 'Édition employeurs',
         ],
     ],
-    'nomenclature-rh'    => [
+
+    'nomenclature-rh' => [
         'libelle'    => 'Nomenclature RH',
         'privileges' => [
             'grades-visualisation' => 'Visualisation grades',

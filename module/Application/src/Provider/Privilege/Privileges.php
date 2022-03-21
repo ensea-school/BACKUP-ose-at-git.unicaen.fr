@@ -242,8 +242,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const TYPE_INTERVENTION_VISUALISATION                     = 'type-intervention-visualisation';
     const TYPE_RESSOURCE_EDITION                              = 'type-ressource-edition';
     const TYPE_RESSOURCE_VISUALISATION                        = 'type-ressource-visualisation';
-    const UNICAEN_TBL_ACTUALISATION                           = 'unicaen-tbl-actualisation';
-    const UNICAEN_TBL_ADMIN                                   = 'unicaen-tbl-admin';
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
 

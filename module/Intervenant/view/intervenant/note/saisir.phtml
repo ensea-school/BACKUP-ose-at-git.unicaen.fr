@@ -12,7 +12,11 @@ echo $this->form()->openTag($form);
 
 echo $this->formControlGroup($form->get('libelle'));
 echo $this->formControlGroup($form->get('contenu')->setAttributes(['rows' => 15, 'id' => 'body']));
-echo $this->formControlGroup($form->get('type'));
+?>
+    <div style="display:none">
+        <?= $this->formControlGroup($form->get('type')); ?>
+    </div>
+<?php
 echo $this->formRow($form->get('submit'));
 echo $this->formElement($form->get('security'));
 

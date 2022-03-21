@@ -36,12 +36,13 @@ class NoteController extends AbstractController
             throw new \Exception('Intervenant introuvable');
         }
 
-        $notes = $this->getServiceNote()->getByIntervenant($intervenant);
+        $notes = $this->getServiceNote()->getByIntervenant($intervenant, 'note');
+        $emails = $this->getServiceNote()->getByIntervenant($intervenant, 'email');
 
         $historique = $this->getServiceNote()->getHistoriqueIntervenant($intervenant);
 
 
-        return compact('notes', 'intervenant', 'historique');
+        return compact('notes', 'emails', 'intervenant', 'historique');
     }
 
 
@@ -103,7 +104,7 @@ class NoteController extends AbstractController
 
 
         if (!$canDelete) {
-            $this->flashMessenger()->addErrorMessage('Statut non modifiable : droit non accordé, car vous n\'avez pas le privilège pour cela');
+            $this->flashMessenger()->addErrorMessage('Note non supprimable : droit non accordé, car vous n\'avez pas le privilège pour cela');
         } else {
             try {
                 $this->getServiceNote()->delete($note);
@@ -124,31 +125,35 @@ class NoteController extends AbstractController
         $form = $this->getFormMailerIntervenant()->setIntervenant($intervenant)->initForm();
 
         if ($this->getRequest()->isPost()) {
+            try {
+                $data = $this->getRequest()->getPost();
+                $from = $data['from'];
+                $to = $data['to'];
+                $subject = $data['subject'];
+                $content = $data['content'];
 
-            $data = $this->getRequest()->getPost();
-            $from = $data['from'];
-            $to = $data['to'];
-            $subject = $data['subject'];
-            $content = $data['content'];
+                $body = new Message();
 
-            $body = new Message();
+                $text = new Part($content);
+                $text->type = Mime::TYPE_HTML;
+                $text->charset = 'utf-8';
+                $body->addPart($text);
+                $message = new MailMessage();
 
-            $text = new Part($content);
-            $text->type = Mime::TYPE_HTML;
-            $text->charset = 'utf-8';
-            $body->addPart($text);
-            $message = new MailMessage();
+                $message->setEncoding('UTF-8')
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addTo($to)
+                    ->setBody($body);
 
-            $message->setEncoding('UTF-8')
-                ->setFrom($from)
-                ->setSubject($subject)
-                ->addTo($to)
-                ->setBody($body);
-
-            //Envoi du mail
-            $this->mail()->send($message);
-            //Création d'une trace de l'envoi dans les notes de l'intervenant
-            $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $content);
+                //Envoi du mail
+                $this->mail()->send($message);
+                //Création d'une trace de l'envoi dans les notes de l'intervenant
+                $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $content);
+                $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
 
 
         }

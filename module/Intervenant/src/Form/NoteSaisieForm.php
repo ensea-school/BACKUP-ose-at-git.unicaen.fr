@@ -31,8 +31,8 @@ class NoteSaisieForm extends AbstractForm
         $this->setAttribute('class', 'note');
         $this->addSubmit();
 
-       
-        $this->setValueOptions('type', $this->getServiceTypeNote()->getList());
+        $qb = $this->getServiceTypeNote()->findDefaultCode();
+        $this->setValueOptions('type', $this->getServiceTypeNote()->getList($qb));
 
         return $this;
     }

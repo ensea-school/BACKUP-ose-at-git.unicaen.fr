@@ -104,7 +104,7 @@ return [
     ],
 
     'resources' => [
-        'Statut',
+        'Statut', 'Note',
     ],
 
     'rules' => [
@@ -112,6 +112,14 @@ return [
             'privileges' => Privileges::INTERVENANT_STATUT_EDITION,
             'resources'  => 'Statut',
             'assertion'  => Assertion\StatutAssertion::class,
+        ],
+        [
+            'privileges' => [
+                NoteAssertion::PRIV_EDITER_NOTE,
+                NoteAssertion::PRIV_SUPPRIMER_NOTE,
+            ],
+            'resources'  => 'Note',
+            'assertion'  => Assertion\NoteAssertion::class,
         ],
     ],
 
@@ -156,20 +164,6 @@ return [
         ],
     ],
 
-    'resources' => [
-        'Note',
-    ],
-
-    'rules' => [
-        [
-            'privileges' => [
-                NoteAssertion::PRIV_EDITER_NOTE,
-                NoteAssertion::PRIV_SUPPRIMER_NOTE,
-            ],
-            'resources'  => 'Note',
-            'assertion'  => Assertion\NoteAssertion::class,
-        ],
-    ],
 
     'controllers' => [
         'Intervenant\Controller\Statut' => Controller\StatutControllerFactory::class,

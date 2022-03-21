@@ -39,6 +39,13 @@ class TypeNoteService extends AbstractEntityService
         }
     }
 
+    public function findDefaultCode(QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $qb->andWhere($alias . '.code = \'note\' ');
+        return $qb;
+    }
+
 
     public function newEntity(): TypeNote
     {

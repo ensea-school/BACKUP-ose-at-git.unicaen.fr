@@ -273,8 +273,9 @@ class Liste extends AbstractViewHelper
 
     public function setVolumeHoraireListe(VolumeHoraireListe $volumeHoraireListe)
     {
+        $typeVolumeHoraire        = $volumeHoraireListe->getTypeVolumeHoraire();
         $this->volumeHoraireListe = $volumeHoraireListe;
-        $this->forcedReadOnly     = !$this->getView()->isAllowed($volumeHoraireListe->getService(), Privileges::ENSEIGNEMENT_EDITION);
+        $this->forcedReadOnly     = !$this->getView()->isAllowed($volumeHoraireListe->getService(), $typeVolumeHoraire->getPrivilegeEnseignementEdition());
         $this->typesIntervention  = null;
 
         return $this;

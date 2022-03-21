@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Role;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 
@@ -15,7 +16,20 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 {
     use ContextServiceAwareTrait;
 
-    private array $privilegesCache = [];
+
+    private array $privilegesCache       = [];
+
+    private array $privilegesRolesConfig = [];
+
+
+
+    /**
+     * @param array $privilegesRolesConfig
+     */
+    public function __construct(array $privilegesRolesConfig)
+    {
+        $this->privilegesRolesConfig = $privilegesRolesConfig;
+    }
 
 
 
@@ -44,7 +58,24 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 
     public function makePrivilegesRoles(Annee $annee)
     {
-        $privilegesRoles = [];
+        $privilegesRoles = $this->privilegesRolesConfig;
+
+        /* L'administrateur a tous les privilèges obligatoirement */
+        $rc         = new \ReflectionClass(\Application\Provider\Privilege\Privileges::class);
+        $privileges = array_values($rc->getConstants());
+        foreach ($privileges as $privilege) {
+            if (!isset($privilegesRoles[$privilege])) {
+                $privilegesRoles[$privilege] = [];
+            }
+            $privilegesRoles[$privilege][] = Role::ADMINISTRATEUR;
+        }
+
+        /* L'administrateur a tous les privilèges obligatoirement */
+        $rc         = new \ReflectionClass(\Application\Provider\Privilege\Privileges::class);
+        $privileges = array_values($rc->getConstants());
+        foreach ($privileges as $privilege) {
+            $privilegesRoles[$privilege] = [Role::ADMINISTRATEUR];
+        }
 
         $sql   = "
           SELECT
@@ -58,11 +89,8 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
         ";
         $query = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while ($pr = $query->fetchAssociative()) {
-            $privilege = $pr['PRIVILEGE'];
-            $role      = $pr['ROLE'];
-            if (!array_key_exists($privilege, $privilegesRoles)) {
-                $privilegesRoles[$privilege] = [];
-            }
+            $privilege                     = $pr['PRIVILEGE'];
+            $role                          = $pr['ROLE'];
             $privilegesRoles[$privilege][] = $role;
         }
 
@@ -74,9 +102,6 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
             $sp = $statut->getPrivileges();
             foreach ($sp as $privilege => $has) {
                 if ($has) {
-                    if (!array_key_exists($privilege, $privilegesRoles)) {
-                        $privilegesRoles[$privilege] = [];
-                    }
                     $privilegesRoles[$privilege][] = $statut->getRoleId();
                 }
             }

@@ -143,10 +143,10 @@ class ListeCalendaire extends AbstractViewHelper
     public function render()
     {
         $this->hasForbiddenPeriodes = false;
-        $service = $this->getVolumeHoraireListe()->getService();
+        $service                    = $this->getVolumeHoraireListe()->getService();
 
-        $canViewMNP                 = $this->getView()->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
-        $canEdit                    = $this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
+        $canViewMNP = $this->getView()->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEdit    = $this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_PREVU_EDITION) || $this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_REALISE_EDITION);
 
         $filtres = [
             VolumeHoraireListe::FILTRE_HORAIRE_DEBUT,
@@ -170,7 +170,7 @@ class ListeCalendaire extends AbstractViewHelper
             $out .= "<th>Motif de non paiement</th>\n";
         }
         if ($canEdit) {
-            $out .= "<th style='text-align:center'>".$this->renderAddAction($this->getVolumeHoraireListe()->createChild()->setNew(true))."</th>\n";
+            $out .= "<th style='text-align:center'>" . $this->renderAddAction($this->getVolumeHoraireListe()->createChild()->setNew(true)) . "</th>\n";
         }
         $out .= "</tr>\n";
         $out .= '</thead>';
@@ -301,8 +301,9 @@ class ListeCalendaire extends AbstractViewHelper
 
     public function setVolumeHoraireListe(VolumeHoraireListe $volumeHoraireListe)
     {
+        $typeVolumeHoraire        = $volumeHoraireListe->getTypeVolumeHoraire();
         $this->volumeHoraireListe = $volumeHoraireListe;
-        $this->forcedReadOnly     = !$this->getView()->isAllowed($volumeHoraireListe->getService(), Privileges::ENSEIGNEMENT_EDITION);
+        $this->forcedReadOnly     = !$this->getView()->isAllowed($volumeHoraireListe->getService(), $typeVolumeHoraire->getPrivilegeEnseignementEdition());
         $this->typesIntervention  = null;
 
         return $this;

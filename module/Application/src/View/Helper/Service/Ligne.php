@@ -380,7 +380,8 @@ class Ligne extends AbstractViewHelper
     public function setService(Service $service = null)
     {
         $service->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire());
-        $this->forcedReadOnly = !$this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
+        $typeVolumeHoraire    = $this->getListe()->getTypeVolumeHoraire();
+        $this->forcedReadOnly = !$this->getView()->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition());
         $this->service        = $service;
 
         return $this;

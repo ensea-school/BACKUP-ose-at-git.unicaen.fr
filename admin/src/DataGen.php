@@ -397,21 +397,6 @@ class DataGen
             }
         }
 
-        /* L'administrateur doit avoir tous les droits obligatoirement! */
-        $this->logMsg('Attribution de tous les droits au rôle Administrateur ...', true);
-        $this->oseAdmin->getBdd()->exec("
-        INSERT INTO
-          ROLE_PRIVILEGE(PRIVILEGE_ID, ROLE_ID)
-        SELECT
-          P.ID PRIVILEGE_ID, R.ID ROLE_ID
-        FROM
-          PRIVILEGE P
-          JOIN ROLE R ON R.CODE = 'administrateur'
-          LEFT JOIN ROLE_PRIVILEGE RP ON RP.PRIVILEGE_ID = P.ID AND RP.ROLE_ID = R.ID
-        WHERE
-          RP.ROLE_ID IS NULL
-        ");
-
         $this->logMsg('Mise à jour du point d\'indice pour les HETD ...', true);
         $this->oseAdmin->getBdd()->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
         $this->logEnd();

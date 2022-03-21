@@ -208,29 +208,14 @@ class  IntervenantController extends AbstractController
         $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
         $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
 
-        if ($typeVolumeHoraire->isPrevu()) {
-            $hasService = $intervenant->getStatut()->getServicePrevu()
-                && $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION);
-        } else {
-            $hasService = $intervenant->getStatut()->getServiceRealise()
-                && $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION);
-        }
-
-        if ($hasService) {
+        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeEnseignementVisualisation())) {
             $services = $this->getProcessusService()->getServices($intervenant, $recherche);
         } else {
             $services = false;
         }
 
         /* Services référentiels (si nécessaire) */
-        if ($typeVolumeHoraire->isPrevu()) {
-            $hasReferentiel = $intervenant->getStatut()->getReferentielPrevu()
-                && $this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION);
-        } else {
-            $hasReferentiel = $intervenant->getStatut()->getReferentielRealise()
-                && $this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION);
-        }
-        if ($hasReferentiel) {
+        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeReferentielVisualisation())) {
             $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
         } else {
             $servicesReferentiel = false;

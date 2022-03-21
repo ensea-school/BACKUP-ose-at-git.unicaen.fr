@@ -140,7 +140,7 @@ class ServiceReferentielController extends AbstractController
         if ($assertionEntity->getStructure() == null) {
             $assertionEntity->setStructure($role->getStructure());
         }
-        if (!$this->isAllowed($assertionEntity, Privileges::REFERENTIEL_EDITION)) {
+        if (!$this->isAllowed($assertionEntity, $typeVolumeHoraire->getPrivilegeReferentielEdition())) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
         $hDeb    = $entity->getVolumeHoraireReferentielListe()->getHeures();
@@ -217,7 +217,7 @@ class ServiceReferentielController extends AbstractController
             foreach ($services as $sid) {
                 $service = $this->getServiceServiceReferentiel()->get($sid);
                 $service->setTypeVolumeHoraire($typeVolumeHoraire);
-                if ($this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
+                if ($this->isAllowed($service, Privileges::REFERENTIEL_REALISE_EDITION)) {
                     $this->getProcessusPlafond()->beginTransaction();
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
                     $this->updateTableauxBord($service->getIntervenant());
@@ -247,7 +247,7 @@ class ServiceReferentielController extends AbstractController
             throw new \LogicException('Le service référentiel n\'existe pas');
         }
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (!$this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
+        if (!$this->isAllowed($service, $typeVolumeHoraire->getPrivilegeReferentielEdition())) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
         if ($this->getRequest()->isPost()) {

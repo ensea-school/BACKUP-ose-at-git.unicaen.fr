@@ -7,15 +7,15 @@ use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
-    'router'          => [
+    'router' => [
         'routes' => [
             'workflow' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/workflow',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Workflow',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Workflow',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -68,8 +68,8 @@ return [
                     'feuille-de-route-refresh'  => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/feuille-de-route-refresh/:intervenant',
-                            'defaults'    => [
+                            'route'    => '/feuille-de-route-refresh/:intervenant',
+                            'defaults' => [
                                 'action' => 'feuilleDeRouteRefresh',
                             ],
                         ],
@@ -142,7 +142,12 @@ return [
                 [
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => ['feuilleDeRouteBtnNext'],
-                    'privileges' => [Privileges::ENSEIGNEMENT_EDITION, Privileges::REFERENTIEL_EDITION],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
+                    ],
                 ],
                 [
                     'controller' => 'Application\Controller\Workflow',
@@ -185,11 +190,11 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\WfEtapeDepService::class   => Service\WfEtapeDepService::class,
-            Service\WfEtapeService::class      => Service\WfEtapeService::class,
+            Service\WfEtapeDepService::class => Service\WfEtapeDepService::class,
+            Service\WfEtapeService::class    => Service\WfEtapeService::class,
         ],
         'factories'  => [
-            Service\WorkflowService::class => Service\Factory\WorkflowServiceFactory::class,
+            Service\WorkflowService::class     => Service\Factory\WorkflowServiceFactory::class,
             Assertion\WorkflowAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],

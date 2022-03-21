@@ -9,7 +9,8 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                 = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION             = 'agrement-conseil-academique-suppression';
@@ -103,15 +104,17 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const DROIT_AFFECTATION_VISUALISATION                     = 'droit-affectation-visualisation';
     const ENSEIGNEMENT_AUTOVALIDATION                         = 'enseignement-autovalidation';
     const ENSEIGNEMENT_DEVALIDATION                           = 'enseignement-devalidation';
-    const ENSEIGNEMENT_EDITION                                = 'enseignement-edition';
     const ENSEIGNEMENT_EDITION_MASSE                          = 'enseignement-edition-masse';
     const ENSEIGNEMENT_EXPORT_CSV                             = 'enseignement-export-csv';
     const ENSEIGNEMENT_EXPORT_PDF                             = 'enseignement-export-pdf';
     const ENSEIGNEMENT_EXTERIEUR                              = 'enseignement-exterieur';
     const ENSEIGNEMENT_IMPORT_INTERVENANT_PREVISIONNEL_AGENDA = 'enseignement-import-intervenant-previsionnel-agenda';
     const ENSEIGNEMENT_IMPORT_INTERVENANT_REALISE_AGENDA      = 'enseignement-import-intervenant-realise-agenda';
+    const ENSEIGNEMENT_PREVU_EDITION                          = 'enseignement-prevu-edition';
+    const ENSEIGNEMENT_PREVU_VISUALISATION                    = 'enseignement-prevu-visualisation';
+    const ENSEIGNEMENT_REALISE_EDITION                        = 'enseignement-realise-edition';
+    const ENSEIGNEMENT_REALISE_VISUALISATION                  = 'enseignement-realise-visualisation';
     const ENSEIGNEMENT_VALIDATION                             = 'enseignement-validation';
-    const ENSEIGNEMENT_VISUALISATION                          = 'enseignement-visualisation';
     const ETAT_SORTIE_ADMINISTRATION_EDITION                  = 'etat-sortie-administration-edition';
     const ETAT_SORTIE_ADMINISTRATION_VISUALISATION            = 'etat-sortie-administration-visualisation';
     const FORMULE_TESTS                                       = 'formule-tests';
@@ -139,15 +142,15 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const INTERVENANT_EXPORTER                                = 'intervenant-exporter';
     const INTERVENANT_FICHE                                   = 'intervenant-fiche';
     const INTERVENANT_LIEN_SYSTEME_INFORMATION                = 'intervenant-lien-systeme-information';
-    const INTERVENANT_NOTE_ADMINISTRATION                     = 'intervenant-note-administration';
-    const INTERVENANT_NOTE_AJOUT                              = 'intervenant-note-ajout';
-    const INTERVENANT_NOTE_EMAIL                              = 'intervenant-note-email';
-    const INTERVENANT_NOTE_VISUALISATION                      = 'intervenant-note-visualisation';
     const INTERVENANT_RECHERCHE                               = 'intervenant-recherche';
     const INTERVENANT_STATUT_EDITION                          = 'intervenant-statut-edition';
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';
     const INTERVENANT_SUPPRESSION                             = 'intervenant-suppression';
     const INTERVENANT_VISUALISATION_HISTORISES                = 'intervenant-visualisation-historises';
+    const INTERVENANT_NOTE_ADMINISTRATION                     = 'intervenant-note-administration';
+    const INTERVENANT_NOTE_AJOUT                              = 'intervenant-note-ajout';
+    const INTERVENANT_NOTE_EMAIL                              = 'intervenant-note-email';
+    const INTERVENANT_NOTE_VISUALISATION                      = 'intervenant-note-visualisation';
     const MISE_EN_PAIEMENT_DEMANDE                            = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EDITION                            = 'mise-en-paiement-edition';
     const MISE_EN_PAIEMENT_EXPORT_CSV                         = 'mise-en-paiement-export-csv';
@@ -232,18 +235,18 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const REFERENTIEL_COMMUN_VOIRIE_EDITION                   = 'referentiel-commun-voirie-edition';
     const REFERENTIEL_COMMUN_VOIRIE_VISUALISATION             = 'referentiel-commun-voirie-visualisation';
     const REFERENTIEL_DEVALIDATION                            = 'referentiel-devalidation';
-    const REFERENTIEL_EDITION                                 = 'referentiel-edition';
+    const REFERENTIEL_PREVU_EDITION                           = 'referentiel-prevu-edition';
+    const REFERENTIEL_PREVU_VISUALISATION                     = 'referentiel-prevu-visualisation';
+    const REFERENTIEL_REALISE_EDITION                         = 'referentiel-realise-edition';
+    const REFERENTIEL_REALISE_VISUALISATION                   = 'referentiel-realise-visualisation';
     const REFERENTIEL_SAISIE_TOUTES_COMPOSANTES               = 'referentiel-saisie-toutes-composantes';
     const REFERENTIEL_VALIDATION                              = 'referentiel-validation';
-    const REFERENTIEL_VISUALISATION                           = 'referentiel-visualisation';
     const STRUCTURES_ADMINISTRATION_EDITION                   = 'structures-administration-edition';
     const STRUCTURES_ADMINISTRATION_VISUALISATION             = 'structures-administration-visualisation';
     const TYPE_INTERVENTION_EDITION                           = 'type-intervention-edition';
     const TYPE_INTERVENTION_VISUALISATION                     = 'type-intervention-visualisation';
     const TYPE_RESSOURCE_EDITION                              = 'type-ressource-edition';
     const TYPE_RESSOURCE_VISUALISATION                        = 'type-ressource-visualisation';
-    const UNICAEN_TBL_ACTUALISATION                           = 'unicaen-tbl-actualisation';
-    const UNICAEN_TBL_ADMIN                                   = 'unicaen-tbl-admin';
     const WORKFLOW_DEPENDANCES_EDITION                        = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                  = 'workflow-dependances-visualisation';
 

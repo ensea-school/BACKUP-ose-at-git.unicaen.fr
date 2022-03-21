@@ -13,8 +13,6 @@ $settings = [
      */
     'enable_registration'        => false,
 
-    'enable_privileges' => true,
-
     'entity_manager_name'    => 'doctrine.entitymanager.orm_default', // nom du gestionnaire d'entités à utiliser
 
     /**
@@ -106,22 +104,11 @@ if (AppConfig::get('cas', 'actif')) {
     ];
 }
 
-$localConfig = [
+return [
     'unicaen-auth' => $settings,
     'bjyauthorize' => [
-        /* this module uses a meta-role that inherits from any roles that should
-                 * be applied to the active user. the identity provider tells us which
-                 * roles the "identity role" should inherit from.
-                 *
-                 * for ZfcUser, this will be your default identity provider
-                 */
         //'identity_provider' => 'UnicaenAuth\Provider\Identity\Chain',
 
-        /* role providers simply provide a list of roles that should be inserted
-         * into the Laminas\Acl instance. the module comes with two providers, one
-         * to specify roles in a config file and one to load roles using a
-         * Laminas\Db adapter.
-         */
         'role_providers' => [
             /**
              * Fournit les rôles issus de la base de données éventuelle de l'appli.
@@ -136,64 +123,54 @@ $localConfig = [
              */
             //'UnicaenAuth\Provider\Role\Username' => [],
         ],
-    ],
-    'zfcuser'      => [
-        $k = 'enable_registration' => isset($settings[$k]) ? $settings[$k] : false,
-    ],
-];
 
-if ($settings['enable_privileges']) {
-    $privileges = [
-        'bjyauthorize' => [
+        'resource_providers' => [
+            /**
+             * Le service Privilèges peut aussi être une source de ressources,
+             * si on souhaite tester directement l'accès à un privilège
+             */
+            'UnicaenAuth\Service\Privilege' => [],
+        ],
 
-            'resource_providers' => [
-                /**
-                 * Le service Privilèges peut aussi être une source de ressources,
-                 * si on souhaite tester directement l'accès à un privilège
-                 */
-                'UnicaenAuth\Service\Privilege' => [],
-            ],
+        'rule_providers' => [
+            'UnicaenAuth\Provider\Rule\PrivilegeRuleProvider' => [],
+        ],
 
-            'rule_providers' => [
-                'UnicaenAuth\Provider\Rule\PrivilegeRuleProvider' => [],
-            ],
-
-            'guards' => [
-                'UnicaenAuth\Guard\PrivilegeController' => [
-                    [
-                        'controller' => 'UnicaenAuth\Controller\Droits',
-                        'action'     => ['index'],
-                        'privileges' => [
-                            \UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_VISUALISATION,
-                            \UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_VISUALISATION,
-                        ],
+        'guards' => [
+            'UnicaenAuth\Guard\PrivilegeController' => [
+                [
+                    'controller' => 'UnicaenAuth\Controller\Droits',
+                    'action'     => ['index'],
+                    'privileges' => [
+                        \UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_VISUALISATION,
+                        \UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_VISUALISATION,
                     ],
-                    [
-                        'controller' => 'UnicaenAuth\Controller\Droits',
-                        'action'     => ['roles'],
-                        'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_VISUALISATION],
-                    ],
-                    [
-                        'controller' => 'UnicaenAuth\Controller\Droits',
-                        'action'     => ['privileges'],
-                        'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_VISUALISATION],
-                    ],
-                    [
-                        'controller' => 'UnicaenAuth\Controller\Droits',
-                        'action'     => ['role-edition', 'role-suppression'],
-                        'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_EDITION],
-                    ],
-                    [
-                        'controller' => 'UnicaenAuth\Controller\Droits',
-                        'action'     => ['privileges-modifier'],
-                        'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_EDITION],
-                    ],
+                ],
+                [
+                    'controller' => 'UnicaenAuth\Controller\Droits',
+                    'action'     => ['roles'],
+                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_VISUALISATION],
+                ],
+                [
+                    'controller' => 'UnicaenAuth\Controller\Droits',
+                    'action'     => ['privileges'],
+                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_VISUALISATION],
+                ],
+                [
+                    'controller' => 'UnicaenAuth\Controller\Droits',
+                    'action'     => ['role-edition', 'role-suppression'],
+                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_EDITION],
+                ],
+                [
+                    'controller' => 'UnicaenAuth\Controller\Droits',
+                    'action'     => ['privileges-modifier'],
+                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_EDITION],
                 ],
             ],
         ],
-    ];
-} else {
-    $privileges = [];
-}
+    ],
 
-return array_merge_recursive($localConfig, $privileges);
+    'zfcuser' => [
+        $k = 'enable_registration' => isset($settings[$k]) ? $settings[$k] : false,
+    ],
+];

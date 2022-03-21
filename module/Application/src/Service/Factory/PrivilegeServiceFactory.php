@@ -25,11 +25,17 @@ class PrivilegeServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $service = new PrivilegeService();
+        $config = $container->get('Config');
+
+        if (isset($config['application']['privileges'])) {
+            $privilegesRolesConfig = $config['application']['privileges'];
+        } else {
+            $privilegesRolesConfig = [];
+        }
+
+        $service = new PrivilegeService($privilegesRolesConfig);
         $service->setEntityManager($container->get(Constants::BDD));
 
-
-        $config = $container->get('Config');
 
         if (!isset($config['unicaen-auth']['privilege_entity_class'])) {
             $config['unicaen-auth']['privilege_entity_class'] = Privilege::class;

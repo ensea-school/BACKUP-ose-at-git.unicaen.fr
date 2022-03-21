@@ -72,7 +72,7 @@ class ServiceAssertion extends AbstractAssertion
         if ($intervenant && isset($page['route'])) {
             switch ($page['route']) {
                 case 'intervenant/validation/service/prevu':
-                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION);
+                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_PREVU_VISUALISATION);
                 break;
             }
         }
@@ -101,9 +101,11 @@ class ServiceAssertion extends AbstractAssertion
         switch (true) {
             case $entity instanceof Service:
                 switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_VISUALISATION:
+                    case Privileges::ENSEIGNEMENT_PREVU_VISUALISATION:
+                    case Privileges::ENSEIGNEMENT_REALISE_VISUALISATION:
                         return $this->assertServiceVisualisation($role, $entity);
-                    case Privileges::ENSEIGNEMENT_EDITION:
+                    case Privileges::ENSEIGNEMENT_PREVU_EDITION:
+                    case Privileges::ENSEIGNEMENT_REALISE_EDITION:
                         return $this->assertServiceEdition($role, $entity);
                     case Privileges::ENSEIGNEMENT_EXTERIEUR:
                         return $this->assertServiceExterieur($role, $entity);
@@ -119,9 +121,11 @@ class ServiceAssertion extends AbstractAssertion
             break;
             case $entity instanceof ServiceReferentiel:
                 switch ($privilege) {
-                    case Privileges::REFERENTIEL_VISUALISATION:
+                    case Privileges::REFERENTIEL_PREVU_VISUALISATION:
+                    case Privileges::REFERENTIEL_REALISE_VISUALISATION:
                         return $this->assertServiceReferentielVisualisation($role, $entity);
-                    case Privileges::REFERENTIEL_EDITION:
+                    case Privileges::REFERENTIEL_PREVU_EDITION:
+                    case Privileges::REFERENTIEL_REALISE_EDITION:
                         return $this->assertServiceReferentielEdition($role, $entity);
                     case Privileges::REFERENTIEL_VALIDATION:
                         return $this->assertServiceReferentielValidation($role, $entity);
@@ -135,10 +139,14 @@ class ServiceAssertion extends AbstractAssertion
             break;
             case $entity instanceof Intervenant:
                 switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_VISUALISATION:
-                    case Privileges::ENSEIGNEMENT_EDITION:
-                    case Privileges::REFERENTIEL_VISUALISATION:
-                    case Privileges::REFERENTIEL_EDITION:
+                    case Privileges::ENSEIGNEMENT_PREVU_VISUALISATION:
+                    case Privileges::ENSEIGNEMENT_PREVU_EDITION:
+                    case Privileges::REFERENTIEL_PREVU_VISUALISATION:
+                    case Privileges::REFERENTIEL_PREVU_EDITION:
+                    case Privileges::ENSEIGNEMENT_REALISE_VISUALISATION:
+                    case Privileges::ENSEIGNEMENT_REALISE_EDITION:
+                    case Privileges::REFERENTIEL_REALISE_VISUALISATION:
+                    case Privileges::REFERENTIEL_REALISE_EDITION:
                         return $this->assertIntervenant($role, $entity);
 
                     case Privileges::MOTIF_NON_PAIEMENT_VISUALISATION:
@@ -186,7 +194,7 @@ class ServiceAssertion extends AbstractAssertion
 
         switch ($controller . '.' . $action) {
             case 'Application\Controller\Service.validation':
-                return $role->hasPrivilege(Privileges::ENSEIGNEMENT_VISUALISATION);
+                return $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION) || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
 
             break;
             case 'Application\Controller\Service.resume':
@@ -227,7 +235,7 @@ class ServiceAssertion extends AbstractAssertion
     protected function assertEnseignements(Role $role)
     {
         return $this->asserts([
-            $role->hasPrivilege(Privileges::ENSEIGNEMENT_VISUALISATION),
+            ($role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION) || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)),
             !$role->getIntervenant(),
         ]);
     }

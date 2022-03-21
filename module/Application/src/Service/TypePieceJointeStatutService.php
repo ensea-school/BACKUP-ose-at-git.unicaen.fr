@@ -42,6 +42,15 @@ class TypePieceJointeStatutService extends AbstractEntityService
 
 
 
+    public function incrementerNumPiece(TypePieceJointeStatut $typePieceJointeStatut)
+    {
+        $sql      = "SELECT TPJS_NUM_REGLE_SEQ.NEXTVAL S FROM dual";
+        $numPiece = (int)$this->getEntityManager()->getConnection()->executeQuery($sql)->fetchOne();
+        $typePieceJointeStatut->setNumRegle($numPiece);
+    }
+
+
+
     /**
      *
      * @param QueryBuilder|null $qb

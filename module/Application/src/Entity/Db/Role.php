@@ -15,6 +15,8 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 {
     use HistoriqueAwareTrait;
 
+    const ADMINISTRATEUR = 'administrateur';
+
     /**
      * @var integer
      */

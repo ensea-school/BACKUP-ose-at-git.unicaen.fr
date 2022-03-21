@@ -5,8 +5,6 @@ namespace Application\Form\OffreFormation;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -17,9 +15,8 @@ use Laminas\Hydrator\HydratorInterface;
  * Description of ElementPedagogiqueRechercheFieldset
  *
  */
-class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements EntityManagerAwareInterface
+class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
 {
-    use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
     use SessionContainerTrait;
     use ElementPedagogiqueServiceAwareTrait;
@@ -183,7 +180,8 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
               e.libelle etape_libelle
             FROM
               element_pedagogique ep
-              JOIN etape e ON e.id = ep.etape_id
+              JOIN chemin_pedagogique cp ON cp.element_pedagogique_id = ep.id AND cp.histo_destruction IS NULL
+              JOIN etape e ON e.id = cp.etape_id
               JOIN type_formation tf ON tf.id = e.type_formation_id
               JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id
               JOIN structure s ON s.id = ep.structure_id

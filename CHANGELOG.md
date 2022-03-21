@@ -1,13 +1,13 @@
 # Version stable
 
-[OSE 17.2](#ose-172-05012022)
+[OSE 17.3](#ose-173-17032022)
 
 
 
 
 
 # OSE 18 (à venir)
-Objectif : Plafonds personnalisables
+Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 ## Nouveautés
 
@@ -58,6 +58,18 @@ Objectif : Plafonds personnalisables
 * Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
 
 
+
+# OSE 17.3 (17/03/2022)
+
+## Corrections de bugs
+
+* Dans la page Offre de formation, le total des éléments par formations tient maintenant compte des éléments mutualisés (#42043)
+* Lors de la saisie d'un nouveau service, le filtre par formation prend maintenant en compte les formations ne contenant que des éléments mutualisés (#40208)
+* Formule de l'université de Université Paris-Est Créteil (UPEC) corrigée (#37737)
+
+## Notes de mise à jour
+
+* La mise à jour risque de bloquer à cause d'un fichier "composer.lock" situé dans le répertoire racine de l'application. Veuillez le supprimer manuellement pour que la mise à jour puisse se dérouler. 
 
 
 # OSE 17.2 (05/01/2022)

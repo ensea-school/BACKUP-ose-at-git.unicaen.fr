@@ -1350,10 +1350,6 @@ return [
         'REFERENTIEL_REALISE_EDITION',
         'REFERENTIEL_REALISE_VISU',
     ],
-    'STATUT_PRIVILEGE'               => [
-        'STATUT_ID',
-        'PRIVILEGE_ID',
-    ],
     'STRUCTURE'                      => [
         'ID',
         'LIBELLE_LONG',
@@ -1415,9 +1411,10 @@ return [
         'INTERVENANT_ID',
         'CODE_INTERVENANT',
         'STRUCTURE_ID',
-        'OBLIGATOIRE',
         'AGREMENT_ID',
         'DUREE_VIE',
+        'DUREE_VIE',
+        'ID',
     ],
     'TBL_CHARGENS'                   => [
         'ID',
@@ -1652,19 +1649,6 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
     ],
-    'TYPE_AGREMENT_STATUT'           => [
-        'ID',
-        'TYPE_AGREMENT_ID',
-        'OBLIGATOIRE',
-        'HISTO_CREATION',
-        'HISTO_CREATEUR_ID',
-        'HISTO_MODIFICATION',
-        'HISTO_MODIFICATEUR_ID',
-        'HISTO_DESTRUCTION',
-        'HISTO_DESTRUCTEUR_ID',
-        'DUREE_VIE',
-        'STATUT_ID',
-    ],
     'TYPE_CONTRAT'                   => [
         'ID',
         'CODE',
@@ -1754,6 +1738,12 @@ return [
         'TAUX_HETD_COMPLEMENTAIRE',
         'STATUT_ID',
         'ANNEE_ID',
+        'HISTO_CREATION',
+        'HISTO_CREATEUR_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_DESTRUCTEUR_ID',
     ],
     'TYPE_INTERVENTION_STRUCTURE'    => [
         'ID',
@@ -1837,6 +1827,7 @@ return [
         'OBLIGATOIRE_HNP',
         'STATUT_ID',
         'ANNEE_ID',
+        'NUM_REGLE',
     ],
     'TYPE_RESSOURCE'                 => [
         'ID',

@@ -6,14 +6,14 @@ Les plafonds permettent de cadrer la saisie des services (et du référentiel)
 en fixant des règles à plusieurs niveaux.
 
 Chaque plafond peut être activé ou non de plusieures manières :
-- Désactivé : le plafond n'est pas mis en oeuvre
+- Désactivé : le plafond n'est pas mis en œuvre
 - Indicateur : le plafond n'est pas affiché, il n'est utilisé que pour les indicateurs
 - Informatif : s'il y a dépassement, OSE vous l'indiquera, sans pour autant bloquer la saisie des heures
 - Bloquant : L'application refusera d'enregistrer toute heure qui entrainerait le dépassement du plafond
 
 Les plafonds ont un périmètre, dont voici la liste :
 - Composante : le calcul s'effectue à l'échelle de la composante
-- Intervenant : idem mais au niveau de chaque intervenant
+- Intervenant : idem, mais au niveau de chaque intervenant
 - Elément : le plafond fera des tests au niveau de l'élément pédagogique
 - Volume horaire : tests effectués par volume horaire (15h CM en Maths par exempel)
 - Référentiel : calcul fait par fonction référentielle
@@ -44,7 +44,7 @@ Leur application (désactivé, informatif ou bloquant) pourra être gérés par 
 
 Le guide administrateur vous donnera la marche à suivre de manière plus détaillée pour configurer vos plafonds.  
 
-## Mise en oeuvre technique
+## Mise en œuvre technique
 
 Dans OSE queqques plafonds vous sont proposés en standard. Ils sont désactivés par défaut.
 Il vous revient de les activer ou non selon vos besoins.

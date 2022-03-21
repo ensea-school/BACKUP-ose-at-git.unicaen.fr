@@ -9,8 +9,8 @@ SELECT
   f.id fichier_id,
 --  CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN 1 ELSE MIN(COALESCE(tpjs.duree_vie,1)) END duree_vie,
   --CASE WHEN MIN(COALESCE(tpjs.duree_vie,1)) IS NULL THEN i.annee_id+1 ELSE MIN(i.annee_id+COALESCE(tpjs.duree_vie,1)) END date_validite,
-  MIN(tpjs.duree_vie) duree_vie,
-  MIN(i.annee_id+tpjs.duree_vie) date_validite,
+  MIN(COALESCE(tpjs.duree_vie,999)) duree_vie,
+  MIN(i.annee_id+COALESCE(tpjs.duree_vie,999)) date_validite,
 
   pj.date_archive date_archive
 FROM

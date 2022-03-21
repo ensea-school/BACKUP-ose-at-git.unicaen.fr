@@ -11,7 +11,6 @@ use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Cassandra\Exception\ExecutionException;
 use Laminas\View\Model\JsonModel;
 use UnicaenApp\View\Model\MessengerViewModel;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
 /**
@@ -21,7 +20,6 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  */
 class PeriodeController extends AbstractController
 {
-    use EntityManagerAwareTrait;
     use PeriodeSaisieFormAwareTrait;
     use PeriodeServiceAwareTrait;
 
@@ -82,6 +80,7 @@ class PeriodeController extends AbstractController
                 $this->getServicePeriode()->save($sp);
             }
         }
+
         return new MessengerViewModel();
     }
 }

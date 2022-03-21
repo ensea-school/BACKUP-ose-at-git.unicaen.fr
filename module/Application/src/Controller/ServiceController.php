@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Validation;
+use Application\Form\Service\Saisie;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
@@ -522,13 +523,14 @@ class ServiceController extends AbstractController
                     try {
                         $entity = $service->save($entity);
                         $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
+                        $hFin = $entity->getVolumeHoraireListe()->getHeures();
+                        $this->updateTableauxBord($entity->getIntervenant());
+                        if (!$this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                            $this->updateTableauxBord($entity->getIntervenant());
+                        }
                     } catch (\Exception $e) {
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
-                    }
-                    $hFin = $entity->getVolumeHoraireListe()->getHeures();
-                    $this->updateTableauxBord($entity->getIntervenant());
-                    if (!$this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
-                        $this->updateTableauxBord($entity->getIntervenant());
+                        $this->em()->rollback();
                     }
                 }
             } else {

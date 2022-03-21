@@ -320,24 +320,6 @@ class DataGen
             'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
         ],
         [
-            'table'   => 'STATUT_PRIVILEGE',
-            'context' => ['install'],
-            'key'     => ['STATUT_ID', 'PRIVILEGE_ID'],
-            'options' => ['columns' => [
-                'STATUT_ID'    => ['transformer' => 'SELECT ID FROM STATUT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
-            ],],
-        ],
-        [
-            'table'   => 'TYPE_AGREMENT_STATUT',
-            'context' => ['install'],
-            'key'     => ['STATUT_ID', 'TYPE_AGREMENT_ID'],
-            'options' => ['columns' => [
-                'STATUT_ID'        => ['transformer' => 'SELECT ID FROM STATUT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'TYPE_AGREMENT_ID' => ['transformer' => 'SELECT ID FROM TYPE_AGREMENT WHERE CODE = %s'],
-            ],],
-        ],
-        [
             'table'   => 'TYPE_PIECE_JOINTE',
             'context' => ['install'],
             'key'     => 'CODE',

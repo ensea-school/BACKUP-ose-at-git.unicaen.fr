@@ -52,7 +52,7 @@ class Lcv
     public function getViewDefinition()
     {
         $sql    = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME = '" . strtoupper($this->getView()) . "'";
-        $result = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
         return $result[0]['TEXT'];
     }
@@ -63,7 +63,7 @@ class Lcv
     {
         $sql = "SELECT referenced_name FROM user_dependencies WHERE name = '" . strtoupper($this->getView()) . "'";
 
-        $result = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $tables = [];
 
         foreach ($result as $r) {

@@ -87,7 +87,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                     $object->removeVolumeHoraireTest($vhs[$index]);
                 } elseif (!$exists && !$toDelete) {
                     $vhs[$index] = new FormuleTestVolumeHoraire();
-                    $vhs[$index]->setIntervenantTest($object);
+                    $vhs[$index]->setFormuleTestIntervenant($object);
                     $object->addVolumeHoraireTest($vhs[$index]);
                 }
                 if (!$toDelete) {
@@ -182,7 +182,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
         }
 
         for ($p = 1; $p < 6; $p++) {
-            if (!$object->getIntervenantTest()->getFormule()->{'getVhParam' . $p . 'Libelle'}()) {
+            if (!$object->getFormuleTestIntervenant()->getFormule()->{'getVhParam' . $p . 'Libelle'}()) {
                 $object->{'setParam' . $p}(null);
             }
         }

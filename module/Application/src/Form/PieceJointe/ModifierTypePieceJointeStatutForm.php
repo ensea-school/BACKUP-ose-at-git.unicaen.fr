@@ -31,7 +31,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
 
         $this->add([
             'type'    => 'Checkbox',
-            'name'    => 'typePieceJointe',
+            'name'    => 'obligatoire',
             'options' => [
                 'label' => "La pièce justificative doit être fournie obligatoirement",
             ],
@@ -51,7 +51,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         $this->add([
             'name'    => 'type-heure-hetd',
             'options' => [
-                'label' => 'Calculer les seuils en utilisant les heures  en équivalent HETD',
+                'label' => 'Calculer les seuils en utilisant les heures équivalent TD',
             ],
             'type'    => 'Checkbox',
         ]);
@@ -76,7 +76,8 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'type'       => 'Number',
             'name'       => 'duree-vie',
             'options'    => [
-                'label' => "Durée de vie de la pièce jointe (en année)",
+                'label'  => "Durée de vie de la pièce jointe",
+                'suffix' => "année(s)",
             ],
             'attributes' => [
                 'min'       => '1',
@@ -112,7 +113,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'typePieceJointe' => [
+            'obligatoire'     => [
                 'required' => true,
             ],
             'seuil-hetd'      => [
@@ -171,8 +172,8 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     {
 
         $object->setChangementRIB($data['changement-rib']);
-        $object->setObligatoire($data['typePieceJointe']);
-        $object->setSeuilHetd((empty($data['seuil-hetd']) ? null : $data['seuil-hetd']));
+        $object->setObligatoire($data['obligatoire']);
+        $object->setSeuilHetd((empty($data['seuil-hetd']) ? 0 : $data['seuil-hetd']));
         $object->setTypeHeureHetd($data['type-heure-hetd']);
         $object->setFC($data['fc']);
         $object->setDureeVie($data['duree-vie']);
@@ -194,7 +195,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     {
         $data = [
             'id'              => $object->getId(),
-            'typePieceJointe' => $object->getObligatoire(),
+            'obligatoire'     => $object->getObligatoire(),
             'seuil-hetd'      => $object->getSeuilHetd(),
             'type-heure-hetd' => $object->getTypeHeureHetd(),
             'changement-rib'  => $object->getChangementRIB(),

@@ -53,7 +53,7 @@ foreach ($lines as $l) {
         $referentiel = \UnicaenApp\Util::reduce($tiCode) == 'referentiel';
 
         $vh = new \Application\Entity\Db\FormuleTestVolumeHoraire();
-        $vh->setIntervenantTest($fti);
+        $vh->setFormuleTestIntervenant($fti);
         $vh->setStructureCode($structureCode);
         $vh->setServiceStatutaire(cBool($l[3]));
         $vh->setTauxFi(cPourc($l[4]));

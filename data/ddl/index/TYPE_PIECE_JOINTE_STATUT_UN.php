@@ -3,13 +3,14 @@
 //@formatter:off
 
 return [
-    'name'    => 'TYPE_AGREMENT_STATUT__UN',
+    'name'    => 'TYPE_PIECE_JOINTE_STATUT_UN',
     'unique'  => TRUE,
-    'table'   => 'TYPE_AGREMENT_STATUT',
+    'table'   => 'TYPE_PIECE_JOINTE_STATUT',
     'columns' => [
-        'TYPE_AGREMENT_ID',
+        'TYPE_PIECE_JOINTE_ID',
         'STATUT_ID',
         'HISTO_DESTRUCTION',
+        'NUM_REGLE',
     ],
 ];
 

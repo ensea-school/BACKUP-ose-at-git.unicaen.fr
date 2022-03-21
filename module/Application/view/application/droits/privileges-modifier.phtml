@@ -1,10 +1,9 @@
 <?php
 
 /* @var $role Application\Entity\Db\Role */
-/* @var $statut Intervenant\Entity\Db\Statut */
 /* @var $privilege UnicaenAuth\Entity\Db\Privilege */
 
 echo $this->partial(
     '/application/droits/partial/tbl-link',
-    compact('role', 'statut', 'privilege')
+    compact('role', 'privilege')
 );

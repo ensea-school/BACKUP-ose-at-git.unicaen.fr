@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'TYPE_AGREMENT_STATUT_HDFK',
-    'table'       => 'TYPE_AGREMENT_STATUT',
+    'name'        => 'TYPE_INTERVENTION_STATUT_HMFK',
+    'table'       => 'TYPE_INTERVENTION_STATUT',
     'rtable'      => 'UTILISATEUR',
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
-        'HISTO_DESTRUCTEUR_ID' => 'ID',
+        'HISTO_MODIFICATEUR_ID' => 'ID',
     ],
 ];
 

@@ -28,7 +28,6 @@ class EtapeController extends AbstractController
     use TauxMixiteFormAwareTrait;
 
 
-
     protected function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -93,7 +92,7 @@ class EtapeController extends AbstractController
             ElementPedagogique::class,
         ]);
         $etape        = $this->getEvent()->getParam('etape');
-        $title        = $etape.' ('.$etape->getCode().')';
+        $title        = $etape . ' (' . $etape->getCode() . ')';
         $serviceEtape = $this->getServiceEtape();
 
         return compact('etape', 'title', 'serviceEtape');
@@ -104,7 +103,7 @@ class EtapeController extends AbstractController
     public function tauxMixiteAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\ElementPedagogique::class
+            \Application\Entity\Db\ElementPedagogique::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
             \Application\Entity\Db\ElementPedagogique::class,
@@ -112,7 +111,7 @@ class EtapeController extends AbstractController
 
         $etape = $this->getEvent()->getParam('etape');
         /* @var $etape Etape */
-        $form = $this->getFormOffreFormationTauxMixite();
+        $form = $this->getFormOffreFormationTauxMixiteTauxMixite();
 
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->bind($etape);

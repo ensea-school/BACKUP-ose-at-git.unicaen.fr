@@ -30,6 +30,8 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
     private bool  $obligatoire    = true;
 
+    protected int $numRegle       = 1;
+
 
 
     public function getSeuilHetd(): float|int
@@ -144,6 +146,22 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
 
 
+    public function getNumRegle(): int
+    {
+        return $this->numRegle;
+    }
+
+
+
+    public function setNumRegle(int $numRegle): TypePieceJointeStatut
+    {
+        $this->numRegle = $numRegle;
+
+        return $this;
+    }
+
+
+
     public function __toString()
     {
         $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
@@ -168,7 +186,7 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
         if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
-        if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie();
+        if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie() . ' an(s)';
 
         return implode("\n", $t);
     }

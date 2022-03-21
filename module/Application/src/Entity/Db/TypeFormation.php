@@ -142,6 +142,9 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
 
 
 
-
+    public function __toString(): string
+    {
+        return $this->getLibelleLong();
+    }
 
 }

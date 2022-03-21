@@ -3,13 +3,16 @@
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
- * @var $configs              \Plafond\Entity\Db\PlafondStructure[]
+ * @var $configs              \Plafond\Interfaces\PlafondConfigInterface[]
  * @var $entity               object
  * @var $canEdit              bool
+ * @var $autoSave             bool
  */
 
+$autoSave = isset($autoSave) ? $autoSave : true;
+
 ?>
-    <h1 class="page-header"><?= $title ?></h1>
+<?php if ($title): ?><h1 class="page-header"><?= $title ?></h1><?php endif; ?>
 
     <table class="table table-condensed table-hover table-bordered plafonds-config">
         <thead>
@@ -31,4 +34,4 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-<?= $this->plafondConfig()->script($entity); ?>
+<?php if ($autoSave) echo $this->plafondConfig()->script($entity); ?>

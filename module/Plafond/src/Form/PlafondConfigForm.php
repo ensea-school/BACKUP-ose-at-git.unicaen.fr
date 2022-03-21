@@ -4,6 +4,8 @@ namespace Plafond\Form;
 
 use Application\Form\AbstractForm;
 use Laminas\Form\Element;
+use Laminas\Http\Request;
+use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
@@ -91,6 +93,69 @@ class PlafondConfigForm extends AbstractForm
 
 
         return $e;
+    }
+
+
+
+    public function requestSaveConfig(PlafondConfigInterface $plafondConfig, Request $request)
+    {
+        /** @var Plafond $plafond */
+        $plafondId = $request->getPost('plafond');
+        $name      = $request->getPost('name');
+        $value     = $request->getPost('value');
+
+        switch ($name) {
+            case 'plafondEtatPrevu':
+                $plafondConfig->setEtatPrevu($this->em()->find(PlafondEtat::class, $value));
+            break;
+            case 'plafondEtatRealise':
+                $plafondConfig->setEtatRealise($this->em()->find(PlafondEtat::class, $value));
+            break;
+            case 'heures':
+                $plafondConfig->setHeures(stringToFloat($value));
+            break;
+        }
+        $this->getServicePlafond()->saveConfig($plafondConfig);
+    }
+
+
+
+    /**
+     * @param PlafondConfigInterface[] $plafondConfigs
+     * @param Request                  $request
+     *
+     * @return void
+     */
+    public function requestSaveConfigs(array $plafondConfigs, Request $request)
+    {
+        $heures      = $request->getPost('heures', []);
+        $etatPrevu   = $request->getPost('plafondEtatPrevu', []);
+        $etatRealise = $request->getPost('plafondEtatRealise', []);
+
+        foreach ($plafondConfigs as $plafondConfig) {
+            if (isset($heures[$plafondConfig->getPlafond()->getId()])) {
+                $v = stringToFloat($heures[$plafondConfig->getPlafond()->getId()]);
+                $plafondConfig->setHeures($v);
+            }
+
+            if (isset($etatPrevu[$plafondConfig->getPlafond()->getId()])) {
+                $v = (int)$etatPrevu[$plafondConfig->getPlafond()->getId()];
+                if ($v != $plafondConfig->getEtatPrevu()?->getId()) {
+                    $v = $this->getEntityManager()->find(PlafondEtat::class, $v);
+                    $plafondConfig->setEtatPrevu($v);
+                }
+            }
+
+            if (isset($etatRealise[$plafondConfig->getPlafond()->getId()])) {
+                $v = (int)$etatRealise[$plafondConfig->getPlafond()->getId()];
+                if ($v != $plafondConfig->getEtatRealise()?->getId()) {
+                    $v = $this->getEntityManager()->find(PlafondEtat::class, $v);
+                    $plafondConfig->setEtatRealise($v);
+                }
+            }
+
+            $this->getServicePlafond()->saveConfig($plafondConfig);
+        }
     }
 
 }

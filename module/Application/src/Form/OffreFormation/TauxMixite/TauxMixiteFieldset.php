@@ -44,7 +44,7 @@ class TauxMixiteFieldset extends AbstractFieldset
 
 
 
-    private function build()
+    public function build()
     {
         $typesHeures = $this->getTypesHeures();
         foreach ($typesHeures as $th) {

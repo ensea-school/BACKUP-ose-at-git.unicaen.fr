@@ -12,7 +12,7 @@ class Plafond
 {
     use PlafondPerimetreAwareTrait;
 
-    protected int        $id;
+    protected ?int       $id      = null;
 
     protected int        $numero  = 0;
 

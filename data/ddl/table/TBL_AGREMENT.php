@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 8,
             'commentaire' => 'ID de l\'agrément si agréé',
         ],
         'ANNEE_AGREMENT'   => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 1,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'   => [
@@ -92,18 +92,6 @@ return [
             'default'     => NULL,
             'position'    => 5,
             'commentaire' => NULL,
-        ],
-        'OBLIGATOIRE'      => [
-            'name'        => 'OBLIGATOIRE',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => NULL,
-            'position'    => 8,
-            'commentaire' => 'Témoin (1 ou 0) pour définir si l\'agrément doit être demandé obligatoirement ou non',
         ],
         'STRUCTURE_ID'     => [
             'name'        => 'STRUCTURE_ID',

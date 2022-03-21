@@ -54,7 +54,7 @@ class OffreFormationService extends AbstractEntityService
         $etapes   = [];
         $elements = [];
 
-        $sql = 'SELECT
+        $dql = 'SELECT
                 partial e.{id,code,annee,libelle,sourceCode,niveau,histoDestruction},
                 partial tf.{id},
                 partial gtf.{id, libelleCourt, ordre},
@@ -71,13 +71,13 @@ class OffreFormationService extends AbstractEntityService
               (s = :structure OR ep.structure = :structure) AND e.annee = :annee ';
 
         if (!empty($source)) {
-            $sql .= 'AND e.source = :source ';
+            $dql .= 'AND e.source = :source ';
         }
 
-        $sql .= 'ORDER BY
+        $dql .= 'ORDER BY
               gtf.ordre, e.niveau';
 
-        $query = $this->getEntityManager()->createQuery($sql);
+        $query = $this->getEntityManager()->createQuery($dql);
 
         $query->setParameter('structure', $structure);
         $query->setParameter('annee', $annee);
@@ -133,7 +133,7 @@ class OffreFormationService extends AbstractEntityService
         $etapes   = [];
         $elements = [];
 
-        $sql = 'SELECT
+        $dql = 'SELECT
                 cp,
                 partial e.{id,code,annee,libelle,sourceCode,niveau,histoDestruction},
                 partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
@@ -146,7 +146,7 @@ class OffreFormationService extends AbstractEntityService
             WHERE
               cp.etape = :etape';
 
-        $query = $this->getEntityManager()->createQuery($sql);
+        $query = $this->getEntityManager()->createQuery($dql);
 
         $query->setParameter('etape', $etape);
 

@@ -29,7 +29,7 @@ class FonctionReferentielController extends AbstractController
         $fonctionReferentiel = $this->getEvent()->getParam('fonctionReferentiel');
         $tab                 = $this->params()->fromQuery('tab', 'fiche');
 
-        $form = $this->getFormFonctionReferentielSaisie();
+        $form = $this->getFormFonctionReferentielFonctionReferentielSaisie();
         if (empty($fonctionReferentiel)) {
             $title               = 'Création d\'une nouvelle fonction référentielle';
             $fonctionReferentiel = $this->getServiceFonctionReferentiel()->newEntity();

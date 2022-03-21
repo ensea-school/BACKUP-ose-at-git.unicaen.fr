@@ -70,13 +70,6 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
             $privilegesRoles[$privilege][] = Role::ADMINISTRATEUR;
         }
 
-        /* L'administrateur a tous les privilèges obligatoirement */
-        $rc         = new \ReflectionClass(\Application\Provider\Privilege\Privileges::class);
-        $privileges = array_values($rc->getConstants());
-        foreach ($privileges as $privilege) {
-            $privilegesRoles[$privilege] = [Role::ADMINISTRATEUR];
-        }
-
         $sql   = "
           SELECT
           cp.code || '-' || p.code privilege,

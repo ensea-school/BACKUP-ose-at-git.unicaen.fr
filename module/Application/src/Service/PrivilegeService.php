@@ -16,7 +16,20 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 {
     use ContextServiceAwareTrait;
 
-    private array $privilegesCache = [];
+
+    private array $privilegesCache       = [];
+
+    private array $privilegesRolesConfig = [];
+
+
+
+    /**
+     * @param array $privilegesRolesConfig
+     */
+    public function __construct(array $privilegesRolesConfig)
+    {
+        $this->privilegesRolesConfig = $privilegesRolesConfig;
+    }
 
 
 
@@ -45,13 +58,16 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 
     public function makePrivilegesRoles(Annee $annee)
     {
-        $privilegesRoles = [];
+        $privilegesRoles = $this->privilegesRolesConfig;
 
         /* L'administrateur a tous les privilèges obligatoirement */
         $rc         = new \ReflectionClass(\Application\Provider\Privilege\Privileges::class);
         $privileges = array_values($rc->getConstants());
         foreach ($privileges as $privilege) {
-            $privilegesRoles[$privilege] = [Role::ADMINISTRATEUR];
+            if (!isset($privilegesRoles[$privilege])) {
+                $privilegesRoles[$privilege] = [];
+            }
+            $privilegesRoles[$privilege][] = Role::ADMINISTRATEUR;
         }
 
         $sql   = "

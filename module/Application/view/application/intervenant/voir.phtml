@@ -1,5 +1,6 @@
 <?php
 
+
 use Application\Provider\Privilege\Privileges;
 
 /* @var $intervenant \Application\Entity\Db\Intervenant */
@@ -60,6 +61,19 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_
         'id'            => 'derogations',
         'label'         => '<i class="fas fa-shuffle"></i> Dérogations',
         'url'           => $this->url('derogations', ['intervenant' => $intervenant->getId()]),
+        'force-refresh' => true,
+    ];
+}
+
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION))) {
+    $label = '<span class="glyphicon glyphicon-book"></span> Notes';
+    if ($notificationNote > 0) {
+        $label .= ' <span class="badge" style="background-color: red;font-size:10px;margin-bottom:5px;">' . $notificationNote . '</span>';
+    }
+    $tabs[] = [
+        'id'            => 'notes',
+        'label'         => $label,
+        'url'           => $this->url('note', ['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];
 }

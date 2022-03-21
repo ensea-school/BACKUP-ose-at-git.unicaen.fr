@@ -10,7 +10,7 @@ use Laminas\InputFilter\InputFilterProviderInterface;
 use Laminas\Stdlib\ArrayUtils;
 
 
-abstract class AbstractForm extends Form implements InputFilterProviderInterface
+abstract class  AbstractForm extends Form implements InputFilterProviderInterface
 {
     use FormFieldsetTrait;
 

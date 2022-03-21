@@ -13,13 +13,12 @@ trait SihamConnecteurAwareTrait
     protected ?SihamConnecteur $connecteurSihamSiham = null;
 
 
-
     /**
      * @param SihamConnecteur $connecteurSihamSiham
      *
      * @return self
      */
-    public function setConnecteurSihamSiham( ?SihamConnecteur $connecteurSihamSiham )
+    public function setConnecteurSihamSiham(?SihamConnecteur $connecteurSihamSiham)
     {
         $this->connecteurSihamSiham = $connecteurSihamSiham;
 
@@ -27,9 +26,12 @@ trait SihamConnecteurAwareTrait
     }
 
 
-
     public function getConnecteurSihamSiham(): ?SihamConnecteur
     {
+        if (!$this->connecteurSihamSiham) {
+            $this->connecteurSihamSiham = \Application::$container->get(SihamConnecteur::class);
+        }
+
         return $this->connecteurSihamSiham;
     }
 }

@@ -1,0 +1,13 @@
+<?php
+
+/* @var $form \Intervenant\Form\NoteSaisieForm */
+/* @var $errors array */
+/* @var $note \Intervenant\Entity\Db\Note */
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+?>
+
+<p>
+    <?= $note->getContenu(); ?>
+</p>

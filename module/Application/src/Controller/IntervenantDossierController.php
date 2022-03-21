@@ -53,13 +53,12 @@ class IntervenantDossierController extends AbstractController
     }
 
 
-
     public function indexAction()
     {
         $this->initFilters();
 
         /* Initialisation */
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -68,7 +67,7 @@ class IntervenantDossierController extends AbstractController
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         /* Récupération de la validation du dossier si elle existe */
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
-        $tblDossier                   = $intervenantDossier->getTblDossier();
+        $tblDossier = $intervenantDossier->getTblDossier();
         if (!$tblDossier and $intervenantDossier->getId()) {
             //$this->em()->refresh($intervenantDossier);
             $tblDossier = $intervenantDossier->getTblDossier();
@@ -76,7 +75,7 @@ class IntervenantDossierController extends AbstractController
         $lastCompleted = (!empty($tblDossier)) ? $tblDossier->getCompletude() : '';
 
         /* Initialisation du formulaire */
-        $form = $this->getIntervenantDossierForm($intervenant);
+        $form = $this->getFormIntervenantIntervenantDossier()->setIntervenant($intervenant)->initForm();
         $form->bind($intervenantDossier);
 
         //si on vient de post et que le dossier n'est pas encore validé
@@ -88,14 +87,14 @@ class IntervenantDossierController extends AbstractController
                 $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
                 /*On reinitialise le formulaire car le statut du dossier a
                 pu être changé donc les règles d'affichage ne sont plus les mêmes*/
-                $form = $this->getIntervenantDossierForm($intervenant);
+                $form = $this->getFormIntervenantIntervenantDossier($intervenant);
                 $form->bind($intervenantDossier);
                 //Alimentation de la table INDIC_MODIF_DOSSIER
                 $this->getServiceDossier()->updateIndicModifDossier($intervenant, $intervenantDossier);
                 //Recalcul des tableaux de bord nécessaires
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
                 $this->em()->refresh($intervenantDossier);
-                $tblDossier    = $intervenantDossier->getTblDossier();
+                $tblDossier = $intervenantDossier->getTblDossier();
                 $lastCompleted = $tblDossier->getCompletude();
 
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
@@ -114,7 +113,7 @@ class IntervenantDossierController extends AbstractController
 
         $intervenantDossierStatut = $intervenantDossier->getStatut();
         //Règles pour afficher ou non les fieldsets
-        $champsAutres  = $intervenantDossier->getStatut()->getChampsAutres();
+        $champsAutres = $intervenantDossier->getStatut()->getChampsAutres();
         $fieldsetRules = [
             'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
             'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
@@ -125,7 +124,7 @@ class IntervenantDossierController extends AbstractController
             'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
         ];
 
-        $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
+        $iPrec = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
         $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;
 
         if ($lastHETD > 0) {
@@ -155,19 +154,18 @@ class IntervenantDossierController extends AbstractController
     }
 
 
-
     public function changeStatutDossierAction()
     {
         if ($this->getRequest()->isPost()) {
-            $data        = $this->getRequest()->getPost();
-            $role        = $this->getServiceContext()->getSelectedIdentityRole();
+            $data = $this->getRequest()->getPost();
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
             $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
             if (!$intervenant) {
                 throw new \LogicException('Intervenant non précisé ou inexistant');
             }
 
             $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $statut             = $this->getServiceStatut()->get($data['DossierStatut']['statut']);
+            $statut = $this->getServiceStatut()->get($data['DossierStatut']['statut']);
             if ($statut) {
                 $intervenantDossier->setStatut($statut);
                 $this->getServiceDossier()->save($intervenantDossier);
@@ -191,15 +189,14 @@ class IntervenantDossierController extends AbstractController
     }
 
 
-
     public function validerAction()
     {
         $this->initFilters();
 
-        $role               = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $validation         = $this->getServiceDossier()->getValidation($intervenant);
+        $validation = $this->getServiceDossier()->getValidation($intervenant);
         if ($validation) {
             throw new \Exception('Ce dossier a déjà été validé par ' . $validation->getHistoCreateur() . ' le ' . $validation->getHistoCreation()->format(Constants::DATE_FORMAT));
         }
@@ -216,14 +213,13 @@ class IntervenantDossierController extends AbstractController
     }
 
 
-
     public function devaliderAction()
     {
         $this->initFilters();
 
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $validation  = $this->getServiceDossier()->getValidation($intervenant);
+        $validation = $this->getServiceDossier()->getValidation($intervenant);
         try {
             $this->getServiceValidation()->delete($validation);
             $this->updateTableauxBord($intervenant, true);
@@ -236,14 +232,13 @@ class IntervenantDossierController extends AbstractController
     }
 
 
-
     public function supprimerAction()
     {
         $this->initFilters();
 
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $dossier     = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
 
         try {
             $this->getServiceDossier()->delete($dossier);
@@ -255,7 +250,6 @@ class IntervenantDossierController extends AbstractController
 
         return new MessengerViewModel;
     }
-
 
 
     public function differencesAction()
@@ -279,11 +273,10 @@ class IntervenantDossierController extends AbstractController
         $query->setParameter('intervenant', $intervenant);
 
         $differences = $query->getResult();
-        $title       = "Historique des modifications d'informations importantes dans les données personnelles";
+        $title = "Historique des modifications d'informations importantes dans les données personnelles";
 
         return compact('title', 'intervenant', 'differences');
     }
-
 
 
     public function purgerDifferencesAction()
@@ -309,7 +302,6 @@ class IntervenantDossierController extends AbstractController
             return compact('intervenant');
         }
     }
-
 
 
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)

@@ -57,6 +57,10 @@ return [
             'autres-visualisation'     => 'Champs autres (Visualisation)',
             'autres-edition'           => 'Champs autres (Edition)',
             'lien-systeme-information' => 'Afficher le lien vers le système d\'information dans la fiche',
+            'note-visualisation'       => 'Visualiser des notes',
+            'note-ajout'               => 'Ajouter des notes',
+            'note-administration'      => 'Administrer les notes',
+            'note-email'               => 'Envoyer un email à l\'intervenant',
         ],
     ],
 

@@ -9,7 +9,8 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                 = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION             = 'agrement-conseil-academique-suppression';
@@ -146,6 +147,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const INTERVENANT_STATUT_VISUALISATION                    = 'intervenant-statut-visualisation';
     const INTERVENANT_SUPPRESSION                             = 'intervenant-suppression';
     const INTERVENANT_VISUALISATION_HISTORISES                = 'intervenant-visualisation-historises';
+    const INTERVENANT_NOTE_ADMINISTRATION                     = 'intervenant-note-administration';
+    const INTERVENANT_NOTE_AJOUT                              = 'intervenant-note-ajout';
+    const INTERVENANT_NOTE_EMAIL                              = 'intervenant-note-email';
+    const INTERVENANT_NOTE_VISUALISATION                      = 'intervenant-note-visualisation';
     const MISE_EN_PAIEMENT_DEMANDE                            = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EDITION                            = 'mise-en-paiement-edition';
     const MISE_EN_PAIEMENT_EXPORT_CSV                         = 'mise-en-paiement-export-csv';

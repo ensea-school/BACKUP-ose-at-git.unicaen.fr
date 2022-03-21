@@ -50,8 +50,8 @@ class SihamFieldset extends AbstractFieldset
             ],
             'type'       => 'Select',
         ]);
-
-        $valuesModaliteService = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeModalites());
+        $connecteur = $this->getConnecteurSihamSiham();
+        $valuesModaliteService = \UnicaenApp\Util::collectionAsOptions($this->getConnecteurSihamSiham()->recupererListeModalites());
 
         if (count($valuesModaliteService) == 1) {
             $this->get('modaliteService')
@@ -78,7 +78,7 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
-        $valuesStatut = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeStatuts());
+        $valuesStatut = \UnicaenApp\Util::collectionAsOptions($this->getConnecteurSihamSiham()->recupererListeStatuts());
 
         if (count($valuesStatut) == 1) {
             $this->get('statut')
@@ -105,7 +105,7 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
-        $valuesPosition = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListePositions());
+        $valuesPosition = \UnicaenApp\Util::collectionAsOptions($this->getConnecteurSihamSiham()->recupererListePositions());
 
         if (count($valuesPosition) == 1) {
             $this->get('position')
@@ -131,8 +131,8 @@ class SihamFieldset extends AbstractFieldset
             ],
             'type'       => 'Select',
         ]);
-        
-        $valuesAffectation = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeUO());
+
+        $valuesAffectation = \UnicaenApp\Util::collectionAsOptions($this->getConnecteurSihamSiham()->recupererListeUO());
 
         if (count($valuesAffectation) == 1) {
             $this->get('affectation')
@@ -159,7 +159,7 @@ class SihamFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
-        $valuesEmploi = \UnicaenApp\Util::collectionAsOptions($this->getSihamConnecteur()->recupererListeEmplois());
+        $valuesEmploi = \UnicaenApp\Util::collectionAsOptions($this->getConnecteurSihamSiham()->recupererListeEmplois());
 
         if (count($valuesEmploi) == 1) {
             $this->get('emploi')
@@ -173,7 +173,6 @@ class SihamFieldset extends AbstractFieldset
 
         return $this;
     }
-
 
 
     public function getInputFilterSpecification()

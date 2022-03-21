@@ -8,9 +8,9 @@ use Psr\Container\ContainerInterface;
 /**
  * Description of StatutServiceFactory
  *
- * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  */
-class StatutServiceFactory
+class NoteServiceFactory
 {
 
     /**
@@ -22,7 +22,7 @@ class StatutServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $service = new StatutService();
+        $service = new NoteService();
 
         return $service;
     }

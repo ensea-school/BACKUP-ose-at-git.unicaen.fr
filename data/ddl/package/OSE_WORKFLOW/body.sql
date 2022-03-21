@@ -380,14 +380,11 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         WHEN e.code = ''REFERENTIEL_VALIDATION'' THEN
           si.referentiel_prevu
 
-        WHEN e.code = ''CONSEIL_ACADEMIQUE'' OR e.code = ''CONSEIL_RESTREINT'' THEN
-          CASE WHEN EXISTS(
-            SELECT statut_id
-            FROM type_agrement_statut tas JOIN type_agrement ta ON ta.id = tas.type_agrement_id
-            WHERE tas.histo_destruction IS NULL
-              AND ta.code = e.code
-              AND tas.statut_id = si.id
-          ) THEN 1 ELSE 0 END
+        WHEN e.code = ''CONSEIL_ACADEMIQUE'' THEN
+          si.conseil_aca
+
+        WHEN e.code = ''CONSEIL_RESTREINT'' THEN
+          si.conseil_restreint
 
         WHEN e.code = ''CONTRAT'' THEN
           si.contrat

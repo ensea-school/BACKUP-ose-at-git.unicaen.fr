@@ -56,10 +56,10 @@
 
         <field name="conseilRestreint" type="boolean" column="CONSEIL_RESTREINT" nullable="false"/>
         <field name="conseilRestreintVisualisation" type="boolean" column="CONSEIL_RESTREINT_VISUALISATION" nullable="false"/>
-        <field name="conseilRestreintDureeVie" type="boolean" column="CONSEIL_RESTREINT_DUREE_VIE" nullable="false"/>
+        <field name="conseilRestreintDureeVie" type="integer" column="CONSEIL_RESTREINT_DUREE_VIE" nullable="false"/>
         <field name="conseilAcademique" type="boolean" column="CONSEIL_ACA" nullable="false"/>
         <field name="conseilAcademiqueVisualisation" type="boolean" column="CONSEIL_ACA_VISUALISATION" nullable="false"/>
-        <field name="conseilAcademiqueDureeVie" type="boolean" column="CONSEIL_ACA_DUREE_VIE" nullable="false"/>
+        <field name="conseilAcademiqueDureeVie" type="integer" column="CONSEIL_ACA_DUREE_VIE" nullable="false"/>
 
         <field name="contrat" type="boolean" column="CONTRAT" nullable="false"/>
         <field name="contratVisualisation" type="boolean" column="CONTRAT_VISUALISATION" nullable="false"/>

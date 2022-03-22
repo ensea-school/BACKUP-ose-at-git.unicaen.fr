@@ -18,6 +18,8 @@ class DepartementSaisieForm extends AbstractForm
         $ignore = ["sourceCode", "source"];
         $this->spec(Departement::class, $ignore);
         $this->build();
+
+        $this->addSecurity();
         $this->addSubmit();
 
         return $this;

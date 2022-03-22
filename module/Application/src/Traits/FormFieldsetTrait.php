@@ -252,10 +252,6 @@ trait FormFieldsetTrait
                 }
             }
         }
-
-        if ($this instanceof Form) {
-            $this->add(new Csrf('security'));
-        }
     }
 
 

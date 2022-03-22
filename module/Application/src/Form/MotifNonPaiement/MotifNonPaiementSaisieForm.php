@@ -21,6 +21,7 @@ class MotifNonPaiementSaisieForm extends AbstractForm
         $this->get('libelleCourt')->setLabel('Libellé court');
         $this->get('libelleLong')->setLabel('Libellé long');
 
+        $this->addSecurity();
         $this->addSubmit();
 
         return $this;

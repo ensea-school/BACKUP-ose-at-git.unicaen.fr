@@ -17,7 +17,6 @@ $this->headTitle()->append($title);
 
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
-echo $this->formElement($form->get('security'));
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));

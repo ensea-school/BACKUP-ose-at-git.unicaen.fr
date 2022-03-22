@@ -240,7 +240,7 @@ class ServiceReferentielService extends AbstractEntityService
             if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
                 $entity->setIntervenant($intervenant);
             }
-            if (!$this->getAuthorize()->isAllowed($entity, Privileges::REFERENTIEL_PREVU_EDITION) || !$this->getAuthorize()->isAllowed($entity, Privileges::REFERENTIEL_REALISE_EDITION)) {
+            if (!$this->getAuthorize()->isAllowed($entity, $entity->getTypeVolumeHoraire()->getPrivilegeReferentielEdition())) {
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
             }
 

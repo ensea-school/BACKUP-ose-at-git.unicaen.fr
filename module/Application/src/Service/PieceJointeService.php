@@ -2,7 +2,9 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\TblPieceJointe;
 use Application\Entity\Db\TblPieceJointeDemande;
+use Application\Entity\Db\TblPieceJointeFournie;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -79,7 +81,7 @@ class PieceJointeService extends AbstractEntityService
      *
      * @param Intervenant $intervenant
      *
-     * @return TypePieceJointe[]
+     * @return TblPieceJointeDemande[]
      */
     public function getTypesPiecesDemandees(Intervenant $intervenant)
     {
@@ -133,9 +135,9 @@ class PieceJointeService extends AbstractEntityService
     /**
      * @param Intervenant $intervenant
      *
-     * @return mixed $result
+     * @return TblPieceJointe[] $result
      */
-    public function getPiecesSynthese(Intervenant $intervenant)
+    public function getPiecesSynthese(Intervenant $intervenant): array
     {
         $dql = "
             SELECT 
@@ -163,7 +165,7 @@ class PieceJointeService extends AbstractEntityService
     /**
      * @param Intervenant $intervenant
      *
-     * @return \Application\Entity\Db\PieceJointe[]
+     * @return TblPieceJointeFournie[]
      */
     public function getPiecesFournies(Intervenant $intervenant)
     {

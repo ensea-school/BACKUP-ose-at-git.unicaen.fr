@@ -147,8 +147,10 @@ return [
     'motif-non-paiement' => [
         'libelle'    => 'Motifs de non paiement (pour enseignements)',
         'privileges' => [
-            'visualisation' => 'Visualisation',
-            'edition'       => 'Édition',
+            'visualisation'                => 'Visualisation',
+            'edition'                      => 'Édition',
+            'administration-visualisation' => 'Administration - Visualisation',
+            'administration-edition'       => 'Administration - Édition',
         ],
     ],
 

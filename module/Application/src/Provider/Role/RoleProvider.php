@@ -2,18 +2,17 @@
 
 namespace Application\Provider\Role;
 
-use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
+use Intervenant\Entity\Db\Statut;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
 use Intervenant\Service\StatutServiceAwareTrait;
-use UnicaenApp\Traits\SessionContainerTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 
 /**
@@ -26,16 +25,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
     use StatutServiceAwareTrait;
-    use SessionContainerTrait;
     use IntervenantServiceAwareTrait;
     use PrivilegeProviderAwareTrait;
     use ContextServiceAwareTrait;
-    use CacheContainerTrait;
 
-    /**
-     * @var array
-     */
-    protected $config = [];
 
     /**
      * @var array
@@ -43,26 +36,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     protected $roles;
 
     /**
-     * @var Structure
-     */
-    protected $structureSelectionnee;
-
-    /**
      * @var array
      */
     private $rolesPrivileges;
-
-
-
-    /**
-     * Constructeur.
-     *
-     * @param array $config
-     */
-    public function __construct($config = [])
-    {
-        $this->config = $config;
-    }
 
 
 
@@ -181,19 +157,17 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
         // Chargement des rôles par statut d'intervenant
-        $si = $this->getCacheContainer()->statutsInfo('getStatutsInfo');
-        foreach ($si as $statut) {
-            $role = new Role($statut['role-id'], 'user', $statut['role-name']);
+        $statuts = $this->getServiceStatut()->getStatuts();
+        foreach ($statuts as $statut) {
+            $role = new Role($statut->getRoleId(), 'user', $statut->getTypeIntervenant()->getLibelle());
 
-            if ($intervenant) {
-                if ($intervenant->getStatut()->getId() == $statut['statut-id']) {
-                    $role->setIntervenant($intervenant);
-                    if (isset($rolesPrivileges[$intervenant->getStatut()->getRoleId()])) {
-                        $role->initPrivileges($rolesPrivileges[$intervenant->getStatut()->getRoleId()]);
-                    }
+            if ($intervenant && $intervenant->getStatut() == $statut) {
+                $role->setIntervenant($intervenant);
+                if (isset($rolesPrivileges[$intervenant->getStatut()->getRoleId()])) {
+                    $role->initPrivileges($rolesPrivileges[$intervenant->getStatut()->getRoleId()]);
                 }
             }
-            $roles[$statut['role-id']] = $role;
+            $roles[$statut->getRoleId()] = $role;
         }
 
         $this->getServiceContext()->setInInit(false);
@@ -201,29 +175,4 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         return $roles;
     }
 
-
-
-    public function getStatutsInfo(): array
-    {
-        $si      = [];
-        $statuts = $this->getServiceStatut()->getList();
-        foreach ($statuts as $statut) {
-            $si[] = [
-                'statut-id' => $statut->getId(),
-                'role-id'   => $statut->getRoleId(),
-                'role-name' => $statut->getTypeIntervenant()->getLibelle(),
-            ];
-        }
-
-        return $si;
-    }
-
-
-
-    public function setStructureSelectionnee(Structure $structureSelectionnee = null)
-    {
-        $this->structureSelectionnee = $structureSelectionnee;
-
-        return $this;
-    }
 }

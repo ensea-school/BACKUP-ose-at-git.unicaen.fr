@@ -4,17 +4,24 @@ namespace Application\Service;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Role;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use BjyAuthorize\Provider\Resource\ProviderInterface;
 use Intervenant\Entity\Db\Statut;
+use Intervenant\Service\StatutServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenAuth\Provider\Privilege\PrivilegeProviderInterface;
 
 /**
  * Description of Privilege
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
+class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
 {
+    use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
+    use StatutServiceAwareTrait;
 
 
     private array $privilegesCache       = [];
@@ -47,8 +54,7 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
     public function getPrivilegesRoles()
     {
         if (empty($this->privilegesCache)) {
-            $annee                 = $this->getServiceContext()->getAnnee();
-            $this->privilegesCache = $this->makePrivilegesRoles($annee);
+            $this->privilegesCache = $this->makePrivilegesRoles();
         }
 
         return $this->privilegesCache;
@@ -56,7 +62,23 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 
 
 
-    public function makePrivilegesRoles(Annee $annee)
+    /**
+     * @return array
+     */
+    public function getResources()
+    {
+        $resources  = [];
+        $privileges = array_keys($this->getPrivilegesRoles());
+        foreach ($privileges as $privilege) {
+            $resources[] = Privileges::getResourceId($privilege);
+        }
+
+        return $resources;
+    }
+
+
+
+    public function makePrivilegesRoles()
     {
         $privilegesRoles = $this->privilegesRolesConfig;
 
@@ -87,10 +109,7 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
             $privilegesRoles[$privilege][] = $role;
         }
 
-        $dql   = "SELECT s FROM " . Statut::class . " s WHERE s.annee = :annee";
-        $query = $this->getEntityManager()->createQuery($dql)->setParameter('annee', $annee);
-        /** @var Statut[] $statuts */
-        $statuts = $query->getResult();
+        $statuts = $this->getServiceStatut()->getStatuts();
         foreach ($statuts as $statut) {
             $sp = $statut->getPrivileges();
             foreach ($sp as $privilege => $has) {

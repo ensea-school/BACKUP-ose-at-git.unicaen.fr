@@ -20,19 +20,10 @@ class RoleProviderFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('BjyAuthorize\Config');
-        $em     = $container->get(\Application\Constants::BDD);
+        $em = $container->get(\Application\Constants::BDD);
         /* @var $em \Doctrine\ORM\EntityManager */
 
-        if (!isset($config['role_providers'][RoleProvider::class])) {
-            throw new InvalidArgumentException(
-                'Config for "ApplicationRoleProvider" not set'
-            );
-        }
-
-        $providerConfig = $config['role_providers'][RoleProvider::class];
-
-        $roleProvider = new RoleProvider($providerConfig);
+        $roleProvider = new RoleProvider();
         $roleProvider
             ->setEntityManager($em)
             ->setServiceStatut($container->get(StatutService::class))

@@ -36,12 +36,6 @@ class PrivilegeServiceFactory
         $service = new PrivilegeService($privilegesRolesConfig);
         $service->setEntityManager($container->get(Constants::BDD));
 
-
-        if (!isset($config['unicaen-auth']['privilege_entity_class'])) {
-            $config['unicaen-auth']['privilege_entity_class'] = Privilege::class;
-        }
-        $service->setPrivilegeEntityClass($config['unicaen-auth']['privilege_entity_class']);
-
         return $service;
     }
 }

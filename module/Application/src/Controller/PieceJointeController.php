@@ -131,7 +131,7 @@ class PieceJointeController extends AbstractController
         $nbObligatoiresNonFournis = 0;
 
         foreach ($demandees as $demandee) {
-            if ($demandee->getObligatoire()) {
+            if ($demandee->isObligatoire()) {
                 $nbDemandees++;
                 if (isset($fournies[$demandee->getTypePieceJointe()->getId()])) {
                     $pj = $fournies[$demandee->getTypePieceJointe()->getId()];

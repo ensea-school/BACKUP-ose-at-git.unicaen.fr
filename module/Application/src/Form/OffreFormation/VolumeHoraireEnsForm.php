@@ -36,7 +36,7 @@ class VolumeHoraireEnsForm extends Form implements InputFilterProviderInterface
     /**
      * @param VolumeHoraireEns[] $vhes
      */
-    public function buildElements(array $vhes)
+    public function build(array $vhes)
     {
         foreach ($vhes as $vhe) {
             $this->add([

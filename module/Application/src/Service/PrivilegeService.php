@@ -86,10 +86,13 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
         $rc         = new \ReflectionClass(\Application\Provider\Privilege\Privileges::class);
         $privileges = array_values($rc->getConstants());
         foreach ($privileges as $privilege) {
-            if (!isset($privilegesRoles[$privilege])) {
-                $privilegesRoles[$privilege] = [];
+            if ($privilege != Privileges::ENSEIGNEMENT_AUTOVALIDATION) {
+                // On ne pet plus l'auto-validation à l'administrateur par défaut
+                if (!isset($privilegesRoles[$privilege])) {
+                    $privilegesRoles[$privilege] = [];
+                }
+                $privilegesRoles[$privilege][] = Role::ADMINISTRATEUR;
             }
-            $privilegesRoles[$privilege][] = Role::ADMINISTRATEUR;
         }
 
         $sql   = "

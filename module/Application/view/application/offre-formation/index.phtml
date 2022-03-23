@@ -215,7 +215,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     Enseignements <?= $compl ?>
                     <!--------------- Bouton d'ajout d'élément pédagogique --------------->
                     <?php
-                    if ($canSyncElement && $structure) {
+                    if ($canSyncElement && $structure && $serviceSchema->isImportedEntity($structure)) {
                         $attrs = [
                             'href'       => $this->url('of/element/synchronisation-par-code', [], ['query' => ['structure' => $structure->getId()]]),
                             'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'pull-right', 'btn-xs'],

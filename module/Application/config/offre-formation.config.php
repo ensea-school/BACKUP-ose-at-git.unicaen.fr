@@ -480,12 +480,12 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\OffreFormation'                 => Controller\OffreFormationController::class,
             'Application\Controller\OffreFormation\Etape'           => Controller\OffreFormation\EtapeController::class,
             'Application\Controller\OffreFormation\Modulateur'      => Controller\OffreFormation\ModulateurController::class,
             'Application\Controller\OffreFormation\EtapeCentreCout' => Controller\OffreFormation\EtapeCentreCoutController::class,
         ],
         'factories'  => [
+            'Application\Controller\OffreFormation'                    => Controller\Factory\OffreFormationControllerFactory::class,
             'Application\Controller\OffreFormation\ElementPedagogique' => Controller\OffreFormation\Factory\ElementPedagogiqueControllerFactory::class,
         ],
     ],

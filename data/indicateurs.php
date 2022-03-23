@@ -162,7 +162,7 @@ return [
                 'enabled'           => true,
                 'libelle_singulier' => '%s intervenant a saisi des enseignements dont l\'étape, l\'élément pédagogique ou la période ont disparu',
                 'libelle_pluriel'   => '%s intervenants ont saisi des enseignements dont l\'étape, l\'élément pédagogique ou la période ont disparu',
-                'route'             => 'intervenant/services',
+                'route'             => 'intervenant/services-prevus',
                 'irrecevables'      => false,
             ],
         ],

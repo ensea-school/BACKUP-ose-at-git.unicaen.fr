@@ -50,17 +50,6 @@ class Resume extends AbstractViewHelper
 
 
     /**
-     *
-     * @return \Application\Entity\Db\TypeIntervention[]
-     */
-    public function getTypesIntervention()
-    {
-
-    }
-
-
-
-    /**
      * Génère le code HTML.
      *
      * @return string
@@ -115,7 +104,7 @@ class Resume extends AbstractViewHelper
             $intervenantPermanent = $line['intervenant-type-code'] === \Intervenant\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
             $res .= '<tr>' . "\n";
-            $url = $this->getView()->url('intervenant/services', ['intervenant' => $line['intervenant-id']]);
+            $url = $this->getView()->url('intervenant/services-prevus', ['intervenant' => $line['intervenant-id']]);
 
             $res .= '<td><a href="' . $url . '">' . strtoupper($line['intervenant-nom']) . '</a></td>' . "\n";
             $totaux['intervenant']++;

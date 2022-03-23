@@ -86,11 +86,6 @@ $(function ()
         WidgetInitializer.includeCss(Url('css/service.css'));
     });
 
-    /* Indicateurs */
-    WidgetInitializer.add('indicateur', 'indicateur', function () {
-        WidgetInitializer.includeJs(Url('js/indicateur.js'));
-        WidgetInitializer.includeCss(Url('css/indicateur.css'));
-    });
 
     /* Pièces jointes */
     //  WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){

@@ -19,11 +19,13 @@ class TblAgrement implements ResourceInterface
     use StructureAwareTrait;
     use AgrementAwareTrait;
 
-    private int   $id       = 0;
+    private int    $id            = 0;
 
-    private int   $dureeVie = 1;
+    private int    $dureeVie      = 1;
 
-    private Annee $anneeAgrement;
+    private ?Annee $anneeAgrement = null;
+
+    private string $codeIntervenant;
 
 
 
@@ -41,9 +43,21 @@ class TblAgrement implements ResourceInterface
 
 
 
-    public function getAnneeAgrement(): Annee
+    public function getAnneeAgrement(): ?Annee
     {
         return $this->anneeAgrement;
+    }
+
+
+
+    /**
+     * Utile pour le finderByCodeIntervenant
+     *
+     * @return string
+     */
+    public function getCodeIntervenant(): string
+    {
+        return $this->codeIntervenant;
     }
 
 

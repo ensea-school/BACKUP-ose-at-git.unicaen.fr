@@ -32,6 +32,7 @@ class GroupeTypeFormationSaisieForm extends AbstractForm
         $this->get('libelleLong')->setLabel('Libellé long');
         $this->get('pertinenceNiveau')->setLabel('Le niveau (1 pour L1, etc...) devra être précisé dans les formations correspondantes');
 
+        $this->addSecurity();
         $this->addSubmit();
 
         return $this;

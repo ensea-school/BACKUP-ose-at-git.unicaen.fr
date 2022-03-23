@@ -27,7 +27,6 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
     use ContextServiceAwareTrait;
 
 
-
     /**
      *
      * @return self
@@ -70,7 +69,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         $res .= $tag('div', ['class' => 'col-md-9']);
 
         if (!empty($feuilleDeRoute)) {
-            $res .= $tag('ul', ['class' => 'list-group']);
+            $res             .= $tag('ul', ['class' => 'list-group']);
             $index           = 0;
             $isAfterCourante = false;
 
@@ -160,18 +159,20 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
                     $attributes['title'] = 'Cliquez sur ce lien pour accéder à la page correspondant à cette étape';
                 }
                 $attributes['href'] = $etape->getUrl();
-                $res .= $tag('a', $attributes)->text($etape->getEtape()->getLibelle($role));
+                $res                .= $tag('a', $attributes)->text($etape->getEtape()->getLibelle($role));
             } else {
-                $attrs = ['title' => 'Vous n\'avez pas les droits requis pour accéder à cette étape.'];
-                $res .= $tag('span', $attrs)->text($etape->getEtape()->getLibelle($role));
+                if (!str_contains($attributes['class'] ?? '', 'btn')) {
+                    $attrs = ['title' => 'Vous n\'avez pas les droits requis pour accéder à cette étape.'];
+                    $res   .= $tag('span', $attrs)->text($etape->getEtape()->getLibelle($role));
+                }
             }
         } elseif ($forceDisplay) {
             $attrs = [];
             $na    = $this->getWhyNonAtteignable($etape);
             if ($na) {
-                $t = 'abbr';
+                $t              = 'abbr';
                 $attrs['title'] = $na;
-            }else{
+            } else {
                 $t = 'span';
             }
             $res .= $tag($t, $attrs)->text($etape->getEtape()->getLibelle($role));
@@ -215,12 +216,12 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
     {
 
         $objectif = null;
-        if ($etape instanceof TblWorkflow){
+        if ($etape instanceof TblWorkflow) {
             $franchissement = $etape->getFranchie();
-            $objectif = $etape->getObjectif();
-        }elseif($etape instanceof WorkflowEtape){
+            $objectif       = $etape->getObjectif();
+        } elseif ($etape instanceof WorkflowEtape) {
             $franchissement = $etape->getFranchie();
-            $objectif = $etape->getObjectif();
+            $objectif       = $etape->getObjectif();
         }
 
         $res = '';
@@ -236,12 +237,12 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
                 $content = $tag('span', ['class' => 'text-success fas fa-check']);
             break;
             case $franchissement == 0:
-                if ($objectif === .0){
+                if ($objectif === .0) {
                     $attrs   = [
                         'class' => 'text-danger pull-right',
                     ];
                     $content = $tag('span', ['class' => 'fas fa-xmark text-danger']);
-                }else{
+                } else {
                     $attrs   = [
                         'title' => 'À faire',
                         'class' => 'text-danger pull-right',
@@ -260,7 +261,6 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         if ($detailsLink instanceof TagViewHelper) {
             $content        = $detailsLink->html($tag('span', ['class' => 'fas fa-eye'])->openClose() . ' ' . $content);
             $attrs['title'] .= ' (cliquez pour afficher le détail par composante)';
-
         }
 
         $res .= $tag('span', $attrs)->html($content);
@@ -280,14 +280,14 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         $res .= $tag('div', ['class' => 'col-md-4 col-md-offset-8']);
         $res .= $tag('ul', ['class' => 'list-group']);
         foreach ($etape->getEtapes() as $sEtape) {
-            $attrs = ['class' => 'list-group-item'];
-            $spanTag = 'span';
+            $attrs     = ['class' => 'list-group-item'];
+            $spanTag   = 'span';
             $spanTitle = '';
             if (!$sEtape->getAtteignable()) {
                 if ($naDesc = $this->getWhyNonAtteignable($sEtape)) {
                     $attrs['title'] = $naDesc;
-                    $spanTag = 'abbr';
-                    $spanTitle = $naDesc;
+                    $spanTag        = 'abbr';
+                    $spanTitle      = $naDesc;
                 }
                 $attrs['class'] .= ' after-courante';
             }
@@ -307,7 +307,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
 
 
 
-    public function getWhyNonAtteignable($etape, $toArray=false)
+    public function getWhyNonAtteignable($etape, $toArray = false)
     {
         if ($etape instanceof TblWorkflow) {
             $etapes = [$etape];
@@ -316,25 +316,24 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         } else {
             throw new \LogicException('La classe de l\'étape fournie ne peut pas être prise en compte');
         }
-        /* @var $etapes TblWorkflow[]  */
+        /* @var $etapes TblWorkflow[] */
         $naDesc = $toArray ? [] : '';
         foreach ($etapes as $etp) {
-            if ($etp->getObjectif() == 0 && $etp->getEtape()->getDescSansObjectif()){
-                if ($toArray){
+            if ($etp->getObjectif() == 0 && $etp->getEtape()->getDescSansObjectif()) {
+                if ($toArray) {
                     $naDesc[] = $etp->getEtape()->getDescSansObjectif();
-                }else{
+                } else {
                     $naDesc .= ' - ' . $etp->getEtape()->getDescSansObjectif() . "\n";
                 }
             }
             $deps = $etp->getEtapeDeps();
             foreach ($deps as $ed) {
                 /* @var $ed WfDepBloquante */
-                if ($toArray){
+                if ($toArray) {
                     $naDesc[] = $ed->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
-                }else{
+                } else {
                     $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie() . "\n";
                 }
-
             }
             break; // pour ne pas répéter!!!
         }
@@ -348,9 +347,9 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
 
 
 
-    public function renderWhyNonAtteignable( $etape, $structure=null)
+    public function renderWhyNonAtteignable($etape, $structure = null)
     {
-        if (is_string($etape)){
+        if (is_string($etape)) {
             $etape = $this->getServiceWorkflow()->getEtape($etape, $this->getIntervenant());
         }
 
@@ -358,13 +357,13 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
             $etape = $etape->getStructureEtape($structure);
         }
 
-        if (!$etape instanceof TblWorkflow){
+        if (!$etape instanceof TblWorkflow) {
             throw new \LogicException('L\'étape est inexistante ou est fournie dans un format qui ne peut pas être pris en compte');
         }
 
         /* @var $etape TblWorkflow */
         $deps = $etape->getEtapeDeps();
-        foreach( $deps as $dep ){
+        foreach ($deps as $dep) {
             $desc = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
             ?>
             <div class="alert alert-danger alert-dismissible" role="alert">

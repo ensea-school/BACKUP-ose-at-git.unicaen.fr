@@ -25,7 +25,6 @@ class modulateurController extends AbstractController
     use ContextServiceAwareTrait;
 
 
-
     public function indexAction()
     {
         /* @var $modulateurs [] modulateur */
@@ -62,7 +61,7 @@ class modulateurController extends AbstractController
 
         $modulateur     = $this->getEvent()->getParam('modulateur');
         $typeModulateur = $this->getEvent()->getParam('typeModulateur');
-        $form           = $this->getFormModulateurSaisie();
+        $form           = $this->getFormModulateurModulateurSaisie();
         if (empty($modulateur)) {
             $title      = 'Création d\'un nouveau Modulateur';
             $modulateur = $this->getServicemodulateur()->newEntity()

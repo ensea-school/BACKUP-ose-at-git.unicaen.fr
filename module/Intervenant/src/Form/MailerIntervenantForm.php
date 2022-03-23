@@ -31,6 +31,8 @@ class MailerIntervenantForm extends AbstractForm
 
     protected Intervenant $intervenant;
 
+
+
     public function initForm()
     {
         $labels = [
@@ -99,7 +101,7 @@ class MailerIntervenantForm extends AbstractForm
         $this->setValueOptions('to', $emailValues);
 
         //On set l'email expéditeur par rapport au contexte utilisateur
-        $context = $this->getServiceContext();
+        $context          = $this->getServiceContext();
         $emailUtilisateur = $context->getUtilisateur()->getEmail();
         $this->get('from')->setValue($emailUtilisateur);
 
@@ -110,10 +112,13 @@ class MailerIntervenantForm extends AbstractForm
         $this->getInputFilter()->get('subject')->setRequired('true');
         $this->getInputFilter()->get('content')->setRequired('true');
 
+        $this->addSecurity();
         $this->addSubmit('Envoyer');
 
         return $this;
     }
+
+
 
     public function setIntervenant(Intervenant $intervenant)
     {
@@ -122,10 +127,11 @@ class MailerIntervenantForm extends AbstractForm
         return $this;
     }
 
+
+
     public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
-
 
 }

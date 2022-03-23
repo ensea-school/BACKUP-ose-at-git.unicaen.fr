@@ -26,12 +26,14 @@ class TypeRessourceController extends AbstractController
         return compact('listTypesRessources', 'title');
     }
 
+
+
     public function saisieAction()
     {
         $typeRessource = $this->getEvent()->getParam('typeRessource');
-        $form = $this->getFormTypeRessourceSaisie();
+        $form          = $this->getFormTypeRessourceTypeRessourceSaisie();
         if (empty($typeRessource)) {
-            $title            = 'Création d\'un nouveau type de ressource';
+            $title         = 'Création d\'un nouveau type de ressource';
             $typeRessource = $this->getServiceTypeRessource()->newEntity();
         } else {
             $title = 'Édition d\'un type de ressource';
@@ -47,8 +49,9 @@ class TypeRessourceController extends AbstractController
         });
 
         return compact('form', 'title');
-
     }
+
+
 
     public function deleteAction()
     {

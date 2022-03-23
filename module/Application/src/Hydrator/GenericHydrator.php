@@ -95,8 +95,8 @@ class GenericHydrator implements HydratorInterface
     {
         foreach ($this->elements as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
-                $type     = isset($params['type']) ? $params['type'] : null;
                 $setter   = isset($params['setter']) ? $params['setter'] : 'set' . ucfirst($name);
+                $type     = ($setter instanceof \Closure) ? 'string' : (isset($params['type']) ? $params['type'] : null);
                 $readOnly = isset($params['readonly']) ? (bool)$params['readonly'] : false;
 
                 if ($readOnly || !isset($data[$name])) continue;

@@ -16,6 +16,9 @@ class StatutService extends AbstractEntityService
 {
     use SessionContainerTrait;
 
+    private array $statuts = [];
+
+
 
     /**
      * retourne la classe des entités
@@ -60,6 +63,23 @@ class StatutService extends AbstractEntityService
     public function getAutres()
     {
         return $this->getByCode(Statut::CODE_AUTRES);
+    }
+
+
+
+    /**
+     * @return Statut[]
+     */
+    public function getStatuts(): array
+    {
+        if (empty($this->statuts)) {
+            $dql   = "SELECT s FROM " . Statut::class . " s WHERE s.annee = :annee AND s.histoDestruction IS NULL ORDER BY s.ordre";
+            $query = $this->getEntityManager()->createQuery($dql)->setParameter('annee', $this->getServiceContext()->getAnnee());
+
+            $this->statuts = $query->getResult();
+        }
+
+        return $this->statuts;
     }
 
 

@@ -52,15 +52,16 @@ class IntervenantDossierForm extends AbstractForm
 
     protected AbstractFieldset $dossierAutresFiedlset;
 
-    protected Intervenant $intervenant;
+    protected Intervenant      $intervenant;
+
 
 
     public function initForm()
     {
 
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
-        $statut = $this->intervenant->getStatut();
-        $intervenant = $dossierIntervenant->getIntervenant();
+        $statut             = $this->intervenant->getStatut();
+        $intervenant        = $dossierIntervenant->getIntervenant();
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
@@ -83,13 +84,13 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
 
-        $options = [
+        $options                      = [
             'dossierIntervenant' => $dossierIntervenant,
         ];
         $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact', $options);
         $this->dossierContactFiedlset->init();
 
-        $options = [
+        $options                    = [
             'dossierIdentiteComplementaireFieldset' => $this->dossierIdentiteComplementaireFieldset,
             'dossierIdentiteFieldset'               => $this->dossierIdentiteFieldset,
         ];
@@ -102,7 +103,7 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
         $this->dossierEmployeurFieldset->init();
 
-        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => []]);//$dossierIntervenant->getStatut()->getChampsAutres()]);
+        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $dossierIntervenant->getStatut()->getChampsAutres()]);
         $this->dossierAutresFiedlset->init();
 
 
@@ -140,12 +141,14 @@ class IntervenantDossierForm extends AbstractForm
     }
 
 
+
     public function setIntervenant(Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
 
         return $this;
     }
+
 
 
     /**

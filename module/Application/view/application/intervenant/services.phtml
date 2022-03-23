@@ -4,11 +4,13 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this              \Application\View\Renderer\PhpRenderer
- * @var $intervenant       \Application\Entity\Db\Intervenant
- * @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire
- * @var $cloture           \Application\Entity\Db\Validation|null
- * @var $role              \Application\Acl\Role
+ * @var $this                \Application\View\Renderer\PhpRenderer
+ * @var $intervenant         \Application\Entity\Db\Intervenant
+ * @var $typeVolumeHoraire   \Application\Entity\Db\TypeVolumeHoraire
+ * @var $cloture             \Application\Entity\Db\Validation|null
+ * @var $role                \Application\Acl\Role
+ * @var $services            \Application\Entity\Db\Service[]
+ * @var $servicesReferentiel \Application\Entity\Db\ServiceReferentiel[]
  */
 
 $service = new \Application\Entity\Db\Service();
@@ -30,7 +32,7 @@ if ($typeVolumeHoraire->isPrevu()) {
     $title     = 'Constatation des enseignements réalisés';
 }
 
-$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+$menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 $btnNextUrl = $this->url('workflow/feuille-de-route-btn-next', ['intervenant' => $intervenant->getId(), 'wfEtapeCode' => $nextEtape]);
 

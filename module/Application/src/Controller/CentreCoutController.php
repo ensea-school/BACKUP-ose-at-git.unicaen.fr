@@ -92,7 +92,7 @@ class CentreCoutController extends AbstractController
         $centreCout          = $this->getEvent()->getParam('centreCout');
         $centreCoutStructure = $this->getEvent()->getParam('centreCoutStructure');
 
-        $form = $this->getFormCentreCoutStructureSaisie();
+        $form = $this->getFormCentreCoutCentreCoutStructureSaisie();
         if (empty($centreCoutStructure)) {
             $title               = 'Création d\'une structure pour le Centre de Coûts';
             $centreCoutStructure = $this->getServiceCentreCoutStructure()->newEntity()
@@ -129,10 +129,12 @@ class CentreCoutController extends AbstractController
         return new MessengerViewModel(compact('centreCoutStructure'));
     }
 
+
+
     public function centreCoutActiviteAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            CcActivite::class
+            CcActivite::class,
         ]);
 
         $listeActivites = $this->getServiceCcActivite()->getList();
@@ -140,12 +142,14 @@ class CentreCoutController extends AbstractController
         return compact('listeActivites');
     }
 
+
+
     public function centreCoutActiviteSaisieAction()
     {
         $centreCoutActivite = $this->getEvent()->getParam('ccActivite');
-        $form = $this->getFormCentreCoutActiviteSaisie();
+        $form               = $this->getFormCentreCoutCentreCoutActiviteSaisie();
         if (empty($centreCoutActivite)) {
-            $title            = 'Création d\'une nouvelle activité de centre de cout';
+            $title              = 'Création d\'une nouvelle activité de centre de cout';
             $centreCoutActivite = $this->getServiceCcActivite()->newEntity();
         } else {
             $title = 'Édition d\'un type d\'activité de centre de coût';
@@ -160,8 +164,9 @@ class CentreCoutController extends AbstractController
         });
 
         return compact('form', 'title');
-
     }
+
+
 
     public function centreCoutActiviteDeleteAction()
     {
@@ -176,7 +181,5 @@ class CentreCoutController extends AbstractController
 
         return new MessengerViewModel(compact('centreCoutActivite'));
     }
-
-
 
 }

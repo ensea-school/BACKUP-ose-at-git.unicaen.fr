@@ -27,6 +27,7 @@ class PaysSaisieForm extends AbstractForm
         $this->spec(Pays::class, $ignore);
         $this->build();
 
+        $this->addSecurity();
         $this->addSubmit();
 
         return $this;

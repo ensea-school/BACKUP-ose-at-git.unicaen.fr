@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Service\AbstractEntityService;
 use Application\Traits\FormFieldsetTrait;
+use Laminas\Form\Element\Csrf;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\InputFilter\InputFilterProviderInterface;
@@ -25,6 +26,15 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
                 'class' => 'btn btn-primary',
             ],
         ]);
+
+        return $this;
+    }
+
+
+
+    public function addSecurity(): self
+    {
+        $this->add(new Csrf('security'));
 
         return $this;
     }
@@ -74,7 +84,12 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
                     }
                 }
             } else {
-                $this->getControllerPluginFlashMessenger()->addErrorMessage('Le formulaire ne peut pas être validé');
+                $messages = $this->getMessages();
+                foreach ($messages as $element => $msgs) {
+                    foreach ($msgs as $msg) {
+                        $this->getControllerPluginFlashMessenger()->addErrorMessage($msg . ' [' . $element . ']');
+                    }
+                }
             }
         }
 
@@ -107,6 +122,13 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
                     $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
 
                     return false;
+                }
+            } else {
+                $messages = $this->getMessages();
+                foreach ($messages as $element => $msgs) {
+                    foreach ($msgs as $msg) {
+                        $this->getControllerPluginFlashMessenger()->addErrorMessage($msg . ' [' . $element . ']');
+                    }
                 }
             }
         }

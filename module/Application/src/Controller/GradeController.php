@@ -31,7 +31,7 @@ class GradeController extends AbstractController
     {
         $grade = $this->getEvent()->getParam('grade');
 
-        $form = $this->getFormGradeSaisie();
+        $form = $this->getFormGradeGradeSaisie();
 
         if (empty($grade)) {
             $title = "Création d'un nouveau grade";

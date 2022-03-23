@@ -11,7 +11,7 @@ return [
     "SERVICE_SAISIE"                 => [
         "LIBELLE_INTERVENANT" => "Je saisis mes enseignements prévisionnels",
         "LIBELLE_AUTRES"      => "J'accède aux enseignements prévisionnels",
-        "ROUTE"               => "intervenant/services",
+        "ROUTE"               => "intervenant/services-prevus",
         "DESC_NON_FRANCHIE"   => "Aucun enseignement prévisionnel n'a été saisi",
         "OBLIGATOIRE"         => true,
     ],

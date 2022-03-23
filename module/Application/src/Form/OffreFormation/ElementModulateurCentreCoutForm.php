@@ -59,7 +59,7 @@ class ElementModulateurCentreCoutForm extends AbstractForm
 
 
 
-    public function build()
+    public function buildElements()
     {
         $elementPedagogique = $this->getElementPedagogique();
         if (!$elementPedagogique) {

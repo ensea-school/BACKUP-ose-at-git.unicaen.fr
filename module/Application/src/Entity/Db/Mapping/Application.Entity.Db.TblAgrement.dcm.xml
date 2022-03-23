@@ -35,5 +35,6 @@
             </join-columns>
         </many-to-one>
         <field name="dureeVie" type="integer" column="DUREE_VIE" nullable="false" />
+        <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="false" />
     </entity>
 </doctrine-mapping>

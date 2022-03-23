@@ -29,14 +29,8 @@ class StructureSaisieForm extends AbstractForm
         $this->get('enseignement')->setLabel('Peut porter des enseignements');
         $this->get('affAdresseContrat')->setLabel('Affichage de l\'adresse sur le contrat de travail');
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => "Enregistrer",
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+        $this->addSecurity();
+        $this->addSubmit();
 
         return $this;
     }

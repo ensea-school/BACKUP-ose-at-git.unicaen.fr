@@ -2,24 +2,30 @@
 
 namespace Intervenant\Entity\Db;
 
+use Application\Entity\Db\DossierAutre;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Provider\Privilege\Privileges;
 use Application\Traits\ParametreEntityTrait;
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManagerAware;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Description of Statut
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface
+class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface, ObjectManagerAware
 {
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
 
     use ParametreEntityTrait;
     use TypeIntervenantAwareTrait;
+    use EntityManagerAwareTrait;
 
 
     private ?string $code                               = null;
@@ -1370,4 +1376,37 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
         return isset($privileges[$privilege]) && $privileges[$privilege];
     }
 
+
+
+    /**
+     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
+     *
+     * @param ObjectManager $objectManager
+     * @param ClassMetadata $classMetadata
+     *
+     * @return void
+     */
+    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
+    {
+        $this->setEntityManager($objectManager);
+    }
+
+
+
+    /**
+     * @return DossierAutre[]
+     */
+    public function getChampsAutres(): array
+    {
+        /** @var DossierAutre[] $champsAutres */
+        $champsAutres = $this->getEntityManager()->getRepository(DossierAutre::class)->findAll();
+        foreach ($champsAutres as $index => $champAutre) {
+            $id = $champAutre->getId();
+            if (!$this->{'getDossierAutre' . $id}()) {
+                unset($champsAutres[$index]);
+            }
+        }
+
+        return $champsAutres;
+    }
 }

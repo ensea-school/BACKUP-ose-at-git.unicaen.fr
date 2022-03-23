@@ -245,7 +245,7 @@ class ListeCalendaire extends AbstractViewHelper
             'data-content'      => 'Souhaitez-vous vraiment supprimer ces heures de service ?',
             'data-confirm'      => 'true',
             'data-service'      => $volumeHoraireListe->getService()->getId(),
-        ])->html('<i class="fas fa-trash-can"></i');
+        ])->html('<i class="fas fa-trash-can"></i>');
 
         return $edit . ' ' . $delete;
     }

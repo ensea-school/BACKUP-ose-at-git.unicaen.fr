@@ -16,6 +16,8 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenApp\Util;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+
 
 /**
  * Description of SaisieCalendaire

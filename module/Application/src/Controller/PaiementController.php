@@ -246,7 +246,7 @@ class PaiementController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $mep       = $this->params()->fromPost('mep', null);
+        $mep       = $this->params()->fromPost('mep', []);
         $paiements = [];
         /* @var $paiements MiseEnPaiement[] */
 
@@ -294,7 +294,7 @@ class PaiementController extends AbstractController
 
 
         foreach ($paiements as $index => $paiement) {
-            if ($mep[$paiement->getId()] == "1") {
+            if (isset($mep[$paiement->getId()]) && $mep[$paiement->getId()] == "1") {
                 if ($paiement->getPeriodePaiement()) {
                     $paiement->setPeriodePaiement(null);
                     $paiement->setDateMiseEnPaiement(null);

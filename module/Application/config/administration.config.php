@@ -300,7 +300,7 @@ return [
                         Privileges::MODULATEUR_VISUALISATION,
                         Privileges::DOMAINES_FONCTIONNELS_ADMINISTRATION_VISUALISATION,
                         Privileges::MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION,
-                        Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
+                        Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_VISUALISATION,
                         Privileges::ODF_RECONDUCTION_OFFRE,
                         Privileges::ODF_TYPE_FORMATION_VISUALISATION,
                         Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,

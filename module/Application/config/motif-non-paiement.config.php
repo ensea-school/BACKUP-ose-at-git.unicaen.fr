@@ -73,12 +73,12 @@ return [
                 [
                     'controller' => 'Application\Controller\MotifNonPaiement',
                     'action'     => ['index'],
-                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
+                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\MotifNonPaiement',
                     'action'     => ['saisir', 'supprimer'],
-                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_EDITION,
+                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_EDITION,
                 ],
             ],
         ],

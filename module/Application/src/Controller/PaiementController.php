@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
@@ -316,12 +317,15 @@ class PaiementController extends AbstractController
     {
         $this->initFilters();
 
+        $typeIntervenantId = (int)$this->params()->fromPost('type-intervenant');
+        $typeIntervenant   = $this->getServiceTypeIntervenant()->get($typeIntervenantId);
+
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $recherche = new MiseEnPaiementRecherche;
         $recherche->setEtat($this->params()->fromRoute('etat')); // données à mettre en paiement uniquement
         $recherche->setAnnee($this->getServiceContext()->getAnnee());
-        $recherche->setTypeIntervenant($this->context()->typeIntervenantFromPost('type-intervenant'));
+        $recherche->setTypeIntervenant($typeIntervenant);
 
         $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
         $rechercheForm->bind($recherche);
@@ -345,11 +349,15 @@ class PaiementController extends AbstractController
                 $rechercheForm->get('structure')->setValue($structure->getId());
                 $noData = false;
             } elseif (count($structures) == 0) {
+                $structure = $this->getServiceStructure()->get((int)$this->params()->fromPost('structure'));
+
                 $noData = true;
-                $recherche->setStructure($this->context()->structureFromPost());
+                $recherche->setStructure($structure);
             } else {
+                $structure = $this->getServiceStructure()->get((int)$this->params()->fromPost('structure'));
+
                 $noData = false;
-                $recherche->setStructure($this->context()->structureFromPost());
+                $recherche->setStructure($structure);
             }
         }
 
@@ -363,7 +371,8 @@ class PaiementController extends AbstractController
                 $recherche->setPeriode(current($periodes));
                 $rechercheForm->get('periode')->setValue($recherche->getPeriode()->getId());
             } else {
-                $recherche->setPeriode($this->context()->periodeFromPost());
+                $periode = $this->getServicePeriode()->get((int)$this->params()->fromPost('periode'));
+                $recherche->setPeriode($periode);
             }
 
             $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement($recherche->getStructure(), $recherche->getPeriode());
@@ -486,12 +495,15 @@ class PaiementController extends AbstractController
         $title = 'Export des données pour le chargement en masse des imputations budgétaires dans SIHAM';
         $this->initFilters();
 
+        $typeIntervenantId = (int)$this->params()->fromPost('type-intervenant');
+        $typeIntervenant   = $this->getServiceTypeIntervenant()->get($typeIntervenantId);
+
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $recherche = new MiseEnPaiementRecherche;
         $recherche->setEtat(MiseEnPaiement::MIS_EN_PAIEMENT); // données à mettre en paiement uniquement
         $recherche->setAnnee($this->getServiceContext()->getAnnee());
-        $recherche->setTypeIntervenant($this->context()->typeIntervenantFromPost('type-intervenant'));
+        $recherche->setTypeIntervenant($typeIntervenant);
 
         $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
         $rechercheForm->bind($recherche);
@@ -507,7 +519,8 @@ class PaiementController extends AbstractController
             $recherche->setPeriode(current($periodes));
             $rechercheForm->get('periode')->setValue($recherche->getPeriode()->getId());
         } else {
-            $recherche->setPeriode($this->context()->periodeFromPost());
+            $periode = $this->getServicePeriode()->get((int)$this->params()->fromPost('periode'));
+            $recherche->setPeriode($periode);
         }
 
         $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement(null, $recherche->getPeriode());

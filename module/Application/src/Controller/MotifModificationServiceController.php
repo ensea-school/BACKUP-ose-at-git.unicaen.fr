@@ -13,7 +13,6 @@ class MotifModificationServiceController extends AbstractController
     use MotifModificationServiceSaisieFormAwareTrait;
 
 
-
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -33,7 +32,7 @@ class MotifModificationServiceController extends AbstractController
 
         $motifModificationServiceDu = $this->getEvent()->getParam('motifModificationServiceDu');
 
-        $form = $this->getFormMotifModificationServiceSaisie();
+        $form = $this->getFormMotifModificationServiceMotifModificationServiceSaisie();
         if (empty($motifModificationServiceDu)) {
             $title                      = 'Création d\'un nouveau motif de modification de service dû';
             $motifModificationServiceDu = $this->getServiceMotifModificationService()->newEntity();

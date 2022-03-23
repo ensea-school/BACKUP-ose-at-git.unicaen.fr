@@ -27,7 +27,7 @@ class AutresController extends AbstractController
     public function saisieAction()
     {
         $dossierAutre = $this->getEvent()->getParam('dossierAutre');
-        $form         = $this->getAutresForm();
+        $form         = $this->getFormIntervenantAutres();
         $title        = 'Édition champs autre';
 
         $form->bindRequestSave($dossierAutre, $this->getRequest(), function (DossierAutre $autre) {

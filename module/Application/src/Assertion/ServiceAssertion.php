@@ -73,6 +73,13 @@ class ServiceAssertion extends AbstractAssertion
             switch ($page['route']) {
                 case 'intervenant/validation/service/prevu':
                     return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_PREVU_VISUALISATION);
+                case 'intervenant/validation/referentiel/prevu':
+                    return $this->assertEntity($intervenant, Privileges::REFERENTIEL_PREVU_VISUALISATION);
+                break;
+                case 'intervenant/validation/service/realise':
+                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
+                case 'intervenant/validation/referentiel/realise':
+                    return $this->assertEntity($intervenant, Privileges::REFERENTIEL_REALISE_VISUALISATION);
                 break;
                 case 'intervenant/services-prevus':
                     return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
@@ -115,13 +122,15 @@ class ServiceAssertion extends AbstractAssertion
                         return $this->assertServiceEdition($role, $entity);
                     case Privileges::ENSEIGNEMENT_EXTERIEUR:
                         return $this->assertServiceExterieur($role, $entity);
-                    case Privileges::ENSEIGNEMENT_VALIDATION:
+                    case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
+                    case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertServiceValidation($role, $entity);
                 }
             break;
             case $entity instanceof VolumeHoraire:
                 switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_VALIDATION:
+                    case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
+                    case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertVolumeHoraireValidation($role, $entity);
                 }
             break;
@@ -133,13 +142,15 @@ class ServiceAssertion extends AbstractAssertion
                     case Privileges::REFERENTIEL_PREVU_EDITION:
                     case Privileges::REFERENTIEL_REALISE_EDITION:
                         return $this->assertServiceReferentielEdition($role, $entity);
-                    case Privileges::REFERENTIEL_VALIDATION:
+                    case Privileges::REFERENTIEL_PREVU_VALIDATION:
+                    case Privileges::REFERENTIEL_REALISE_VALIDATION:
                         return $this->assertServiceReferentielValidation($role, $entity);
                 }
             break;
             case $entity instanceof VolumeHoraireReferentiel:
                 switch ($privilege) {
-                    case Privileges::REFERENTIEL_VALIDATION:
+                    case Privileges::REFERENTIEL_PREVU_VALIDATION:
+                    case Privileges::REFERENTIEL_REALISE_VALIDATION:
                         return $this->assertVolumeHoraireReferentielValidation($role, $entity);
                 }
             break;
@@ -179,8 +190,10 @@ class ServiceAssertion extends AbstractAssertion
             break;
             case $entity instanceof Validation:
                 switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_VALIDATION:
-                    case Privileges::REFERENTIEL_VALIDATION:
+                    case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
+                    case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
+                    case Privileges::REFERENTIEL_PREVU_VALIDATION:
+                    case Privileges::REFERENTIEL_REALISE_VALIDATION:
                         return $this->assertValidationValidation($role, $entity);
                     case Privileges::ENSEIGNEMENT_DEVALIDATION:
                     case Privileges::REFERENTIEL_DEVALIDATION:

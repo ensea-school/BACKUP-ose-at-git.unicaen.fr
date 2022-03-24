@@ -35,6 +35,7 @@ class PrivilegeServiceFactory
 
         $service = new PrivilegeService($privilegesRolesConfig);
         $service->setEntityManager($container->get(Constants::BDD));
+        $service->setPrivilegeEntityClass(Privilege::class);
 
         return $service;
     }

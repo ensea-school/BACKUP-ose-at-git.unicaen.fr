@@ -215,7 +215,7 @@ $.widget("ose.serviceListe", {
                 totalHeures += $(this).data('value');
             });
 
-            if (totalHeures = 0) {
+            if (totalHeures == 0) {
                 $(this).hide();
                 that.element.find("table.service tr#service-" + id + "-volume-horaire-tr").hide();
             } else {

@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
@@ -342,7 +343,7 @@ class ServiceReferentielController extends AbstractController
 
         $validation = $this->getProcessusValidationReferentiel()->creer($intervenant, $structure);
 
-        if ($this->isAllowed($validation, Privileges::REFERENTIEL_VALIDATION)) {
+        if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeReferentielValidation())) {
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->enregistrer($typeVolumeHoraire, $validation);

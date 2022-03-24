@@ -216,4 +216,52 @@ class TypeVolumeHoraire
             return Privileges::REFERENTIEL_REALISE_EDITION;
         }
     }
+
+
+
+    public function getPrivilegeEnseignementValidation(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::ENSEIGNEMENT_PREVU_VALIDATION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::ENSEIGNEMENT_REALISE_VALIDATION;
+        }
+    }
+
+
+
+    public function getPrivilegeEnseignementAutoValidation(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION;
+        }
+    }
+
+
+
+    public function getPrivilegeReferentielValidation(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::REFERENTIEL_PREVU_VALIDATION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::REFERENTIEL_REALISE_VALIDATION;
+        }
+    }
+
+
+
+    public function getPrivilegeReferentielAutoValidation(): string
+    {
+        if ($this->isPrevu()) {
+            return Privileges::REFERENTIEL_PREVU_AUTOVALIDATION;
+        }
+        if ($this->isRealise()) {
+            return Privileges::REFERENTIEL_REALISE_AUTOVALIDATION;
+        }
+    }
 }

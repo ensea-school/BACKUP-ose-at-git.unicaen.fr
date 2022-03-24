@@ -627,7 +627,7 @@ class ServiceController extends AbstractController
 
         $validation = $this->getProcessusValidationEnseignement()->creer($intervenant, $structure);
 
-        if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_VALIDATION)) {
+        if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeEnseignementValidation())) {
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationEnseignement()->enregistrer($typeVolumeHoraire, $validation);

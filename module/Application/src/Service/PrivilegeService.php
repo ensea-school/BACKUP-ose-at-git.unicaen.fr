@@ -13,11 +13,11 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderInterface;
 
 /**
- * Description of Privilege
+ * Description of PrivilegeService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
+class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 {
     use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
@@ -27,6 +27,13 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
     private array $privilegesCache       = [];
 
     private array $privilegesRolesConfig = [];
+
+    private array $noAdminPrivileges     = [
+        Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
+        Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
+        Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
+        Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
+    ];
 
 
 
@@ -62,22 +69,6 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
 
 
 
-    /**
-     * @return array
-     */
-    public function getResources()
-    {
-        $resources  = [];
-        $privileges = array_keys($this->getPrivilegesRoles());
-        foreach ($privileges as $privilege) {
-            $resources[] = Privileges::getResourceId($privilege);
-        }
-
-        return $resources;
-    }
-
-
-
     public function makePrivilegesRoles()
     {
         $privilegesRoles = $this->privilegesRolesConfig;
@@ -86,7 +77,7 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
         $rc         = new \ReflectionClass(\Application\Provider\Privilege\Privileges::class);
         $privileges = array_values($rc->getConstants());
         foreach ($privileges as $privilege) {
-            if ($privilege != Privileges::ENSEIGNEMENT_AUTOVALIDATION) {
+            if (!in_array($privilege, $this->noAdminPrivileges)) {
                 // On ne pet plus l'auto-validation à l'administrateur par défaut
                 if (!isset($privilegesRoles[$privilege])) {
                     $privilegesRoles[$privilege] = [];

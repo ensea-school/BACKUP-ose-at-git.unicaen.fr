@@ -14,7 +14,7 @@ use Application\Provider\Privilege\Privileges;
 $validerUrl   = null;
 $devaliderUrl = null;
 
-if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_VALIDATION)) {
+if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeEnseignementValidation())) {
     $validerUrl = $this->url('intervenant/validation/service/valider', [
         'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
         'structure'         => $structure->getId(),
@@ -66,24 +66,24 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <!-- Actions -->
             <?php if ($validerUrl): ?>
                 <a
-                    href="<?= $validerUrl ?>"
-                    class="validation-delete btn btn-primary btn-primary pop-ajax"
-                    data-submit-reload="true"
-                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette validation ?</p>"
-                    data-confirm="true"
-                    data-confirm-button="Oui"
-                    data-cancel-button="Non"
+                        href="<?= $validerUrl ?>"
+                        class="validation-delete btn btn-primary btn-primary pop-ajax"
+                        data-submit-reload="true"
+                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette validation ?</p>"
+                        data-confirm="true"
+                        data-confirm-button="Oui"
+                        data-cancel-button="Non"
                 ><i class="fas fa-thumbs-up"></i> Valider</a>
             <?php endif; ?>
             <?php if ($devaliderUrl): ?>
                 <a
-                    href="<?= $devaliderUrl ?>"
-                    class="validation-delete btn btn-primary btn-danger pop-ajax"
-                    data-submit-reload="true"
-                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
-                    data-confirm="true"
-                    data-confirm-button="Oui"
-                    data-cancel-button="Non"
+                        href="<?= $devaliderUrl ?>"
+                        class="validation-delete btn btn-primary btn-danger pop-ajax"
+                        data-submit-reload="true"
+                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+                        data-confirm="true"
+                        data-confirm-button="Oui"
+                        data-cancel-button="Non"
                 ><i class="fas fa-thumbs-down"></i> Dévalider</a>
             <?php endif; ?>
         </div>

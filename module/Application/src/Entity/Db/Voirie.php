@@ -36,7 +36,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     protected $libelle;
 
 
-
     /**
      * @return int|null
      */
@@ -44,7 +43,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->id;
     }
-
 
 
     /**
@@ -60,7 +58,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @return string|null
      */
@@ -68,7 +65,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->code;
     }
-
 
 
     /**
@@ -84,7 +80,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @return string|null
      */
@@ -94,7 +89,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @param string|null $codeRh
      *
@@ -102,11 +96,10 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
      */
     public function setCodeRh(?string $codeRh): Voirie
     {
-        $this->code = $codeRh;
+        $this->codeRh = $codeRh;
 
         return $this;
     }
-
 
 
     /**
@@ -116,7 +109,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->libelle;
     }
-
 
 
     /**
@@ -130,7 +122,6 @@ class Voirie implements HistoriqueAwareInterface, ImportAwareInterface
 
         return $this;
     }
-
 
 
     /**

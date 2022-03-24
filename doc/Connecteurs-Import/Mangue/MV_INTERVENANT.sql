@@ -234,7 +234,8 @@ comptes (no_individu, rank_compte, nombre_comptes, IBAN, BIC) AS (
   CAST(NULL AS varchar2(255))                                   z_employeur_id,
   /* DATES VALIDITE */
   CASE WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY') THEN NULL ELSE i.validite_debut END validite_debut,
-  CASE WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY') THEN NULL ELSE i.validite_fin END validite_fin
+  CASE WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY') THEN NULL ELSE i.validite_fin END validite_fin,
+  CAST(NULL AS varchar2(255))                                    affectation_fin
 FROM
   i
   JOIN grhum.individu_ulr@dbl_grhum  			individu ON individu.no_individu        = i.code

@@ -106,10 +106,10 @@ class PlafondConfigForm extends AbstractForm
 
         switch ($name) {
             case 'plafondEtatPrevu':
-                $plafondConfig->setEtatPrevu($this->em()->find(PlafondEtat::class, $value));
+                $plafondConfig->setEtatPrevu($this->getEntityManager()->find(PlafondEtat::class, $value));
             break;
             case 'plafondEtatRealise':
-                $plafondConfig->setEtatRealise($this->em()->find(PlafondEtat::class, $value));
+                $plafondConfig->setEtatRealise($this->getEntityManager()->find(PlafondEtat::class, $value));
             break;
             case 'heures':
                 $plafondConfig->setHeures(stringToFloat($value));

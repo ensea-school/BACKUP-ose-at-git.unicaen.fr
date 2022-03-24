@@ -131,7 +131,7 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
                             success: function () {
                                 alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
                             },
-                            error: function () {
+                            error: function (jqXHR) {
                                 alertFlash(jqXHR.responseText, 'error', 3000);
                             }
                         });

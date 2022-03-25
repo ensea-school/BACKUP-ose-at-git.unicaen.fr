@@ -88,9 +88,37 @@ $.widget("ose.pieceJointe", {
         });
     },
 
+    refuser: function (element)
+    {
+        var that = this;
+        var tpj = element.parents('.tpj').data('tpj');
 
+        element.button('loading');
 
-    onValidationChange: function( tpj, isValider )
+        $.ajax({
+            type: 'POST',
+            url: element.prop('href'),
+            data: {},
+            success: function (data, textStatus, jqXHR) {
+                var container = that.getContainer(tpj);
+                container.find('.validation-bar').html(data);
+                container.removeClass('panel-default');
+                container.removeClass('panel-success');
+
+                var isValider = data.indexOf("/valider/") !== -1;
+
+                container.addClass('panel-default');
+
+                that.onValidationChange(tpj, isValider);
+            },
+            error: function (jqXHR) {
+                alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
+                console.log(jqXHR);
+            },
+        });
+    },
+
+    onValidationChange: function (tpj, isValider)
     {
         this.refreshFiles(tpj, isValider);
         this.refreshInfos();

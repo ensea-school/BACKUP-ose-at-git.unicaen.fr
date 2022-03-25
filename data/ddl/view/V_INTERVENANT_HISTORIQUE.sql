@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
+CREATE OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
 WITH historique AS (
 --Initialisation des données personnelles
     SELECT d.intervenant_id                              intervenant_id,
@@ -87,7 +86,7 @@ SELECT s.intervenant_id                                                         
 FROM volume_horaire vh
          JOIN service s ON s.id = vh.service_id
          JOIN element_pedagogique ep ON s.element_pedagogique_id = ep.id
-         JOIN structure st ON st.id = ep.structure_id
+         JOIN STRUCTURE st ON st.id = ep.structure_id
          JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id AND tvh.code = 'PREVU'
          JOIN periode p ON p.id = vh.periode_id
          JOIN type_intervention ti ON ti.id = vh.type_intervention_id
@@ -102,34 +101,34 @@ SELECT  s.intervenant_id                                                        
         'Service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
        s.histo_modification                                                                histo_date,
        s.histo_modificateur_id                                                             histo_createur_id,
-       u.display_name                                     								   histo_user,
-       'glyphicon glyphicon-ok'                           								   icon,
-       3            										ordre
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       3                                ordre
 FROM
   service_referentiel s
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
   JOIN utilisateur u ON u.id = s.histo_modificateur_id
-  LEFT JOIN structure str ON str.id = s.structure_id
+  LEFT JOIN STRUCTURE str ON str.id = s.structure_id
 WHERE
  s.histo_destruction IS NULL
 
  UNION ALL
  --Modification de service dû
   SELECT
-	   msd.intervenant_id                                                                     intervenant_id,
+     msd.intervenant_id                                                                     intervenant_id,
        '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
         'Modification de service dû : ' || mss.libelle                              label,
        msd.histo_modification                                                                histo_date,
        msd.histo_modificateur_id                                                             histo_createur_id,
-       u.display_name                                     								   histo_user,
-       'glyphicon glyphicon-ok'                           								   icon,
-       3            										ordre
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       3                                ordre
 FROM
   modification_service_du msd
   JOIN motif_modification_service mss ON mss.id = msd.motif_id
   JOIN utilisateur u ON u.id = msd.histo_modificateur_id
 WHERE
-	msd.histo_destruction IS NULL
+  msd.histo_destruction IS NULL
 
 
 UNION ALL
@@ -154,7 +153,7 @@ FROM tbl_agrement tbla
 JOIN agrement a ON tbla.agrement_id = a.id
 JOIN type_agrement ta ON ta.id = a.type_agrement_id
          JOIN utilisateur u ON u.id = a.histo_modificateur_id
-         LEFT JOIN structure s ON s.id = a.structure_id
+         LEFT JOIN STRUCTURE s ON s.id = a.structure_id
 WHERE a.histo_destruction IS NULL
 
 UNION ALL
@@ -170,7 +169,7 @@ SELECT C.intervenant_id                          intervenant_id,
        5                                         ordre
 FROM contrat C
          JOIN type_contrat tc ON tc.id = C.type_contrat_id
-         JOIN structure s ON s.id = C.structure_id
+         JOIN STRUCTURE s ON s.id = C.structure_id
          JOIN utilisateur u ON u.id = C.histo_createur_id
 WHERE C.histo_destruction IS NULL
 
@@ -189,7 +188,7 @@ FROM validation v
          JOIN utilisateur u ON u.id = v.histo_createur_id
          JOIN contrat C ON C.validation_id = v.id AND C.histo_destruction IS NULL
          JOIN type_contrat tc ON tc.id = C.type_contrat_id
-         JOIN structure s ON s.id = C.structure_id
+         JOIN STRUCTURE s ON s.id = C.structure_id
 WHERE v.histo_destruction IS NULL
 
 UNION ALL
@@ -208,7 +207,7 @@ FROM fichier f
          JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL
          JOIN contrat C ON C.id = cf.contrat_id
          JOIN type_contrat tc ON tc.id = C.type_contrat_id
-         JOIN structure s ON s.id = C.structure_id
+         JOIN STRUCTURE s ON s.id = C.structure_id
          JOIN utilisateur u ON u.id = f.histo_createur_id
 WHERE f.histo_destruction IS NULL
 
@@ -225,7 +224,7 @@ SELECT C.intervenant_id                                  intervenant_id,
        5                                                 ordre
 FROM contrat C
          JOIN type_contrat tc ON tc.id = C.type_contrat_id
-         JOIN structure s ON s.id = C.structure_id
+         JOIN STRUCTURE s ON s.id = C.structure_id
          JOIN utilisateur u ON u.id = C.histo_modificateur_id
 WHERE C.histo_destruction IS NULL
   AND C.date_retour_signe IS NOT NULL
@@ -242,7 +241,7 @@ SELECT s.intervenant_id                                                         
 FROM volume_horaire vh
          JOIN service s ON s.id = vh.service_id
          JOIN element_pedagogique ep ON s.element_pedagogique_id = ep.id
-         JOIN structure st ON st.id = ep.structure_id
+         JOIN STRUCTURE st ON st.id = ep.structure_id
          JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id AND tvh.code = 'REALISE'
          JOIN periode p ON p.id = vh.periode_id
          JOIN type_intervention ti ON ti.id = vh.type_intervention_id
@@ -253,14 +252,14 @@ GROUP BY s.intervenant_id, ep.structure_id
 UNION ALL
 --Mise en paiement
 SELECT
-	 s.intervenant_id                                                                     intervenant_id,
+   s.intervenant_id                                                                     intervenant_id,
        '6 - Mise en paiement'                                 categorie,
        mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END                      label,
        mep.histo_modification                                                                histo_date,
        mep.histo_modificateur_id                                                             histo_createur_id,
-       u.display_name                                     								   histo_user,
-       'glyphicon glyphicon-ok'                           								   icon,
-       6            										ordre
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       6                                ordre
 FROM
   mise_en_paiement mep
   JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id

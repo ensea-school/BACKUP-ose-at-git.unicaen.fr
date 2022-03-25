@@ -7049,7 +7049,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "01b49a83a5ccc4a401aa94b0a82be3a3ef58b39e"
+                "reference": "547f6954db7d4759c8e84ca5f1af91a7d8ef10de"
             },
             "require": {
                 "unicaen/auth": "^4.0 || dev-ll-php8"
@@ -7067,7 +7067,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2022-01-06T14:12:23+00:00"
+            "time": "2022-03-23T14:45:05+00:00"
         },
         {
             "name": "unicaen/open-document",

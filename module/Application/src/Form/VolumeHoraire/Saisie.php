@@ -12,6 +12,7 @@ use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;

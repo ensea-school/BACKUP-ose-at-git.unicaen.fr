@@ -131,12 +131,14 @@ return [
             'edition-masse'                          => 'Édition en masse',
             'prevu-visualisation'                    => 'Visualisation du prévisionnel',
             'prevu-edition'                          => 'Édition du prévisionnel',
+            'prevu-validation'                       => 'Validation du prévisionnel',
+            'prevu-autovalidation'                   => 'Validation automatique du prévisionnel',
             'realise-visualisation'                  => 'Visualisation du réalisé',
             'realise-edition'                        => 'Édition du réalisé',
-            'exterieur'                              => 'Saisie de service dans une autre université',
-            'validation'                             => 'Validation',
-            'autovalidation'                         => 'Validation automatique',
+            'realise-validation'                     => 'Validation du réalisé',
+            'realise-autovalidation'                 => 'Validation automatique du réalisé',
             'devalidation'                           => 'Dévalidation',
+            'exterieur'                              => 'Saisie de service dans une autre université',
             'export-pdf'                             => 'Export PDF',
             'export-csv'                             => 'Export CSV',
             'import-intervenant-previsionnel-agenda' => 'Import service prévisionnel depuis agenda',
@@ -159,10 +161,12 @@ return [
         'privileges' => [
             'prevu-visualisation'       => 'Visualisation du prévisionnel',
             'prevu-edition'             => 'Édition du prévisionnel',
+            'prevu-validation'          => 'Validation du prévisionnel',
+            'prevu-autovalidation'      => 'Validation automatique du prévisionnel',
             'realise-visualisation'     => 'Visualisation du réalisé',
             'realise-edition'           => 'Édition du réalisé',
-            'validation'                => 'Validation',
-            'autovalidation'            => 'Validation automatique',
+            'realise-validation'        => 'Validation du réalisé',
+            'realise-autovalidation'    => 'Validation automatique du réalisé',
             'admin-edition'             => 'Administration - Édition',
             'devalidation'              => 'Dévalidation',
             'admin-visualisation'       => 'Administration - Visualisation',
@@ -424,7 +428,7 @@ return [
             'tests' => 'Tests',
         ],
     ],
-    
+
     'referentiel-commun' => [
         'libelle'    => 'Référentiels communs',
         'privileges' => [

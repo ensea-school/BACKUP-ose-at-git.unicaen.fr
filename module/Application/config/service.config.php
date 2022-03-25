@@ -303,7 +303,8 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['valider'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VALIDATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
                     ],
                 ],
                 [
@@ -360,7 +361,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['valider'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_VALIDATION,
+                        Privileges::REFERENTIEL_PREVU_VALIDATION,
+                        Privileges::REFERENTIEL_REALISE_VALIDATION,
                     ],
                 ],
                 [
@@ -427,8 +429,10 @@ return [
                     ],
                     [
                         'privileges' => [
-                            Privileges::ENSEIGNEMENT_VALIDATION,
-                            Privileges::ENSEIGNEMENT_AUTOVALIDATION,
+                            Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                            Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
+                            Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
+                            Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
                         ],
                         'resources'  => ['Service', 'VolumeHoraire', 'Validation'],
                         'assertion'  => Assertion\ServiceAssertion::class,
@@ -467,8 +471,10 @@ return [
                     ],
                     [
                         'privileges' => [
-                            Privileges::REFERENTIEL_VALIDATION,
-                            Privileges::REFERENTIEL_AUTOVALIDATION,
+                            Privileges::REFERENTIEL_PREVU_VALIDATION,
+                            Privileges::REFERENTIEL_REALISE_VALIDATION,
+                            Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
+                            Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
                         ],
                         'resources'  => ['ServiceReferentiel', 'VolumeHoraireReferentiel', 'Validation'],
                         'assertion'  => Assertion\ServiceAssertion::class,

@@ -3,7 +3,6 @@
 namespace Application\Controller\OffreFormation\Factory;
 
 use Application\Controller\OffreFormation\ElementPedagogiqueController;
-use Application\Controller\OffreFormationController;
 use Psr\Container\ContainerInterface;
 use UnicaenImport\Service\SchemaService;
 

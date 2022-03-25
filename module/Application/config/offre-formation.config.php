@@ -532,7 +532,6 @@ return [
         'invokables' => [
             'etapeModulateursSaisieForm'          => View\Helper\OffreFormation\EtapeModulateursSaisieForm::class,
             'elementModulateursSaisieFieldset'    => View\Helper\OffreFormation\ElementModulateursSaisieFieldset::class,
-            'elementPedagogique'                  => View\Helper\OffreFormation\ElementPedagogiqueViewHelper::class,
             'etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
             'etapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
             'elementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
@@ -540,5 +539,9 @@ return [
             'elementTauxMixiteFieldset'           => View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper::class,
             'fieldsetElementPedagogiqueRecherche' => View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche::class,
         ],
+        'factories'  => [
+            'elementPedagogique' => View\Helper\OffreFormation\Factory\ElementPedagogiqueViewHelperFactory::class,
+        ],
+
     ],
 ];

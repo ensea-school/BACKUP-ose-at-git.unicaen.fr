@@ -21,9 +21,9 @@ class ElementPedagogiqueViewHelperFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $controller = new ElementPedagogiqueViewHelper();
-        $controller->setServiceSchema($container->get(SchemaService::class));
+        $viewHelper = new ElementPedagogiqueViewHelper();
+        $viewHelper->setServiceSchema($container->get(SchemaService::class));
 
-        return $controller;
+        return $viewHelper;
     }
 }

@@ -7,12 +7,17 @@ $.widget("ose.pieceJointe", {
     {
         var that = this;
 
-        that.element.on('click', '.valider-pj, .devalider-pj', function(event){
-            that.validerDevalider( $(this) );
+        that.element.on('click', '.valider-pj, .devalider-pj', function (event) {
+            that.validerDevalider($(this));
             event.preventDefault();
         });
 
-        that.element.on('click', '.archiver-pj', function (event){
+        that.element.on('click', '.refuser-pj', function (event) {
+            that.refuser($(this));
+            event.preventDefault();
+        });
+
+        that.element.on('click', '.archiver-pj', function (event) {
             that.archiver($(this));
             event.preventDefault();
 

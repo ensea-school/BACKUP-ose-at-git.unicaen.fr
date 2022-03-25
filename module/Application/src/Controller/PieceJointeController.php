@@ -516,4 +516,45 @@ class PieceJointeController extends AbstractController
         }
     }
 
+
+
+    public function refuserAction()
+    {
+        //        $this->initFilters();
+        //
+        //        /** @var PieceJointe $pj */
+        //        $pj = $this->getEvent()->getParam('pieceJointe');
+        //        $this->getServicePieceJointe()->valider($pj);
+        //        $this->updateTableauxBord($pj->getIntervenant(), true);
+        //
+        //        $viewModel = new ViewModel();
+        //        $viewModel->setTemplate('application/piece-jointe/validation');
+        //        $viewModel->setVariable('pj', $pj);
+        //
+        //        return $viewModel;
+        //
+        //
+        //        return $viewModel;
+        /** @var PieceJointe $pj */
+        $pj = $this->getEvent()->getParam('pieceJointe');
+
+        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
+        if ($intervenant && $pj->getIntervenant() != $intervenant) {
+            // un intervenant tente de supprimer la PJ d'un autre intervenant
+            throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
+        }
+
+        foreach ($pj->getFichier() as $fichier) {
+            $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
+        }
+
+        $this->updateTableauxBord($pj->getIntervenant());
+
+        $viewModel = new ViewModel();
+        $viewModel->setTemplate('application/piece-jointe/validation');
+        $viewModel->setVariable('pj', $pj);
+
+        return $viewModel;
+    }
+
 }

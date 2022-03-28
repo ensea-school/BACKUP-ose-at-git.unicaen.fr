@@ -1,0 +1,79 @@
+<?php
+/*
+* @author JORIOT Florian <florian.joriot at unicaen.fr>
+*/
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+function affBooleen($flg)
+{
+    // affiche booléen avec des glypheIcon
+    return ($flg ? '<i class="fas fa-check "></i>' : '<i class="fas fa-xmark "></i>');
+}
+
+$this->headTitle()->append("Gestion des corps");
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_RH_CORPS_EDITION));
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+?>
+
+<h1 class="page-header">Gestion des corps</h1>
+<table class="table table-bordered table-sort table-condensed">
+    <thead>
+    <tr>
+        <th style="text-align: center">Libellé court</th>
+        <th style="text-align: center">Libellé long</th>
+        <th style="text-align: center">Source</th>
+        <?php if ($canEdit): ?>
+            <th style="text-align: center">Actions</th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables">
+    <?php foreach ($corpss as $corps): ?>
+        <tr class="champ-triable" data-id= <?php echo $corps->getId() ?>>
+            <td style=""><?= $corps->getLibelleCourt(); ?></td>
+            <td><?= $corps->getLibelleLong(); ?></td>
+            <td style="text-align: center"><?= $corps->getSource()->getLibelle(); ?></td>
+            <?php if ($canEdit): ?>
+                <td style="text-align: center">
+                    <a class="ajax-modal" data-event="corps-edition"
+                       href="<?= $this->url('corps/saisie', ['corps' => $corps->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                       title="Modifier le corps"><i class="fas fa-pen-to-square"></i></a>
+                    <?php if (!$corps->getSource()->getImportable()): ?>
+                        <a class="pop-ajax" data-title="Suppression du corps" data-content="Êtes-vous sur de vouloir supprimer"
+                           data-confirm="true"
+                           data-submit-reload="true"
+                           href="<?= $this->url('corps/supprimer', ['corps' => $corps->getId()]) ?>"
+                           title="Supprimer le corps"><i class="fas fa-trash-can"></i></a>
+                    <?php endif; ?>
+
+                </td>
+            <?php endif; ?>
+
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+
+<?php if ($canEdit): ?>
+    <tr class="champ-triable">
+        <a class="btn btn-primary ajax-modal " data-event="corps-edition" href="<?= $this->url('corps/saisie'); ?>"><i
+                    class="fas fa-plus"></i>
+            Ajout d'un nouveau corps</a>
+    </tr>
+<?php endif; ?>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("corps-edition", function (event, data) {
+            window.location.reload();
+        });
+    });
+
+</script>

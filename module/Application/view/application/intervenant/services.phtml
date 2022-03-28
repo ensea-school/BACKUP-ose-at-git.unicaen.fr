@@ -39,6 +39,7 @@ $btnNextUrl = $this->url('workflow/feuille-de-route-btn-next', ['intervenant' =>
 $this->intervenant($intervenant)->renderTitle($title);
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 $bottom = false;
 if ($cloture) echo $this->partial('application/intervenant/partial/cloture', compact('cloture', 'role', 'bottom'));

@@ -4,6 +4,7 @@ namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
@@ -68,6 +69,22 @@ class PlafondController extends AbstractController
         });
 
         return compact('title', 'form');
+    }
+
+
+
+    public function plafondsAction()
+    {
+        $perimetre           = $this->params()->fromRoute('perimetre');
+        $id                  = (int)$this->params()->fromRoute('id');
+        $typeVolumeHoraireId = (int)$this->params()->fromRoute('typeVolumeHoraire');
+
+        $class = $this->getServicePlafond()->perimetreCodeToEntityClass($perimetre);
+
+        $entity            = $this->em()->find($class, $id);
+        $typeVolumeHoraire = $this->em()->find(TypeVolumeHoraire::class, $typeVolumeHoraireId);
+
+        return compact('entity', 'typeVolumeHoraire');
     }
 
 

@@ -73,7 +73,7 @@ class PlafondService extends AbstractEntityService
      *
      * @return PlafondControle[]
      */
-    public function controle(TypeVolumeHoraire $typeVolumeHoraire, $entity, bool $pourBlocage = false): array
+    public function controle(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): array
     {
         $sqls = [];
         if ($entity instanceof Structure) {
@@ -133,6 +133,64 @@ class PlafondService extends AbstractEntityService
         }
 
         return $depassements;
+    }
+
+
+
+    /**
+     * Prend en entrée une entité ou bien sa classe
+     * Retourne le code du périmètre correspondant
+     *
+     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|string $entity
+     *
+     * @return string
+     */
+    public function entityToPerimetreCode(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|string $entity): string
+    {
+        if (is_object($entity)) {
+            $class = get_class($entity);
+        } else {
+            $class = $entity;
+        }
+        switch ($class) {
+            case Structure::class:
+                return PlafondPerimetre::STRUCTURE;
+            case Intervenant::class:
+                return PlafondPerimetre::INTERVENANT;
+            case ElementPedagogique::class:
+                return PlafondPerimetre::ELEMENT;
+            case VolumeHoraire::class:
+                return PlafondPerimetre::VOLUME_HORAIRE;
+            case FonctionReferentiel::class:
+                return PlafondPerimetre::REFERENTIEL;
+        }
+    }
+
+
+
+    /**
+     * Prend entrée le code d'un périmè_tre de plafond
+     *
+     * Retourne la classe d'objet correspondante
+     *
+     * @param string $perimetreCode
+     *
+     * @return string
+     */
+    public function perimetreCodeToEntityClass(string $perimetreCode): string
+    {
+        switch ($perimetreCode) {
+            case PlafondPerimetre::REFERENTIEL:
+                return FonctionReferentiel::class;
+            case PlafondPerimetre::VOLUME_HORAIRE:
+                return VolumeHoraire::class;
+            case PlafondPerimetre::ELEMENT:
+                return ElementPedagogique::class;
+            case PlafondPerimetre::INTERVENANT:
+                return Intervenant::class;
+            case PlafondPerimetre::STRUCTURE:
+                return Structure::class;
+        }
     }
 
 
@@ -217,7 +275,8 @@ class PlafondService extends AbstractEntityService
               JOIN plafond_etat         pe ON pe.id = pd.plafond_etat_id
               JOIN plafond_perimetre    pp ON pp.id = p.plafond_perimetre_id
             WHERE
-                  pd.type_volume_horaire_id = " . ((int)$typeVolumeHoraire->getId());
+              pe.code NOT IN ('desactive', 'indicateur')
+              AND pd.type_volume_horaire_id = " . ((int)$typeVolumeHoraire->getId());
 
         foreach ($filters as $v => $c) {
             $sql .= "\n  AND $v = $c";

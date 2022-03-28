@@ -205,8 +205,6 @@ class  IntervenantController extends AbstractController
             return $vh;
         }
 
-        $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire);
-
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
 
         if (!$campagneSaisie->estOuverte()) {

@@ -445,6 +445,8 @@ return [
         'privileges' => [
             'grades-visualisation' => 'Visualisation grades',
             'grades-edition'       => 'Édition grades',
+            'corps-visualisation'  => 'Visualisation corps',
+            'corps-edition'        => 'Édition corps',
         ],
     ],
 

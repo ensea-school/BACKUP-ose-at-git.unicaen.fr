@@ -18,42 +18,24 @@ class Corps implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @var string
      */
-    protected $libelleCourt;
+    protected ?string $libelleCourt = null;
 
     /**
      * @var string
      */
-    protected $libelleLong;
+    protected ?string $libelleLong = null;
 
     /**
      * @var integer
      */
-    protected $id;
+    protected ?int $id = null;
 
 
 
     /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return Corps
-     */
-    public function setLibelleCourt($libelleCourt)
-    {
-        $this->libelleCourt = $libelleCourt;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelleCourt
-     *
      * @return string
      */
-    public function getLibelleCourt()
+    public function getLibelleCourt(): ?string
     {
         return $this->libelleCourt;
     }
@@ -61,27 +43,19 @@ class Corps implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     *
-     * @return Corps
+     * @param string $libelleCourt
      */
-    public function setLibelleLong($libelleLong)
+    public function setLibelleCourt(?string $libelleCourt): void
     {
-        $this->libelleLong = $libelleLong;
-
-        return $this;
+        $this->libelleCourt = $libelleCourt;
     }
 
 
 
     /**
-     * Get libelleLong
-     *
      * @return string
      */
-    public function getLibelleLong()
+    public function getLibelleLong(): ?string
     {
         return $this->libelleLong;
     }
@@ -89,18 +63,22 @@ class Corps implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @param string $libelleLong
      */
-    public function getId()
+    public function setLibelleLong(?string $libelleLong): void
     {
-        return $this->id;
+        $this->libelleLong = $libelleLong;
     }
 
 
 
-
+    /**
+     * @return int
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
 
     /**************************************************************************************************

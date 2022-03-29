@@ -69,7 +69,7 @@ class PlafondsViewHelper extends AbstractHtmlElement
         ];
 
         $attrs = [
-            'class'    => 'plafonds',
+            'class'    => 'plafonds alert alert-info',
             'data-url' => $this->getView()->url('plafond/plafonds', $params),
         ];
 
@@ -80,9 +80,84 @@ class PlafondsViewHelper extends AbstractHtmlElement
 
     public function affichage(): string
     {
-        var_dump($this->plafonds);
+        if (empty($this->plafonds)) {
+            return '';
+        }
 
-        return '';
+        $html = $this->getView()->tag('h4')->text('Plafonds');
+        foreach ($this->plafonds as $plafond) {
+            $html .= $this->affichagePlafond($plafond);
+        }
+
+        return $html;
     }
 
+
+
+    protected function affichagePlafond(PlafondControle $plafond)
+    {
+        $t = $this->getView()->tag();
+
+        $html = $t('div', ['class' => 'col-md-8'])->html(
+            $plafond->getMessage()
+            . ' '
+            . $t('span', ['class' => 'label label-info'])->text('n° ' . $plafond->getNumero())
+        );
+
+        $text = '';
+
+        $max = $plafond->getPlafond() + $plafond->getDerogation();
+        if ($plafond->getHeures() >= $max) {
+            $max = $plafond->getHeures();
+            if ($plafond->getPlafond() == 0) {
+                $text = floatToString($plafond->getHeures()) . 'h pour aucune autorisée';
+            } else {
+                $text = floatToString($plafond->getHeures()) . 'h pour ' . floatToString($plafond->getPlafond()) . ' max.';
+            }
+
+            if ($plafond->isBloquant()) {
+                $color = 'danger';
+            } else {
+                $color = 'warning';
+            }
+        } else {
+            if ($plafond->isBloquant()) {
+                $color = 'info';
+            } else {
+                $color = 'success';
+            }
+        }
+
+        if ($max > 0) {
+            $progression = ceil($plafond->getHeures() * 100 / $max);
+        } else {
+            $progression = 0;
+        }
+
+        if (!$text) {
+            if ($progression > 49) {
+                $text = floatToString($plafond->getHeures()) . 'h, '
+                    . floatToString($max - $plafond->getHeures()) . ' dispo.';
+            } elseif ($progression > 10) {
+                $text = floatToString($plafond->getHeures()) . 'h';
+            }
+        }
+
+        $html .= $t('div', ['class' => 'col-md-4'])->html(
+            $t('div', [
+                'class' => 'progress',
+            ])->html(
+                $t('div', [
+                    'class'         => 'progress-bar progress-bar-striped progress-bar-' . $color,
+                    'role'          => 'progressbar',
+                    'aria-valuenow' => $progression,
+                    'aria-valuemin' => 0,
+                    'aria-valuemax' => 100,
+                    'style'         => 'width:' . $progression . '%',
+                ])->text($text)
+            )
+        );
+
+        return $t('div', ['class' => 'row plafond'])->html($html);
+    }
 }

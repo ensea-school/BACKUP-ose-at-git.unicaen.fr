@@ -98,21 +98,27 @@ class PlafondsViewHelper extends AbstractHtmlElement
     {
         $t = $this->getView()->tag();
 
-        $html = $t('div', ['class' => 'col-md-8'])->html(
-            $plafond->getMessage()
-            . ' '
-            . $t('span', ['class' => 'label label-info'])->text('n° ' . $plafond->getNumero())
-        );
+        $labAttrs = ['class' => ['label']];
+        if ($plafond->isBloquant()) {
+            $labAttrs['class'][] = 'label-danger';
+            $labAttrs['title']   = 'Plafond bloquant';
+        } else {
+            $labAttrs['class'][] = 'label-info';
+            $labAttrs['title']   = 'Plafond informatif';
+        }
+
 
         $text = '';
 
         $max = $plafond->getPlafond() + $plafond->getDerogation();
         if ($plafond->getHeures() >= $max) {
             $max = $plafond->getHeures();
-            if ($plafond->getPlafond() == 0) {
-                $text = floatToString($plafond->getHeures()) . 'h pour aucune autorisée';
-            } else {
-                $text = floatToString($plafond->getHeures()) . 'h pour ' . floatToString($plafond->getPlafond()) . ' max.';
+            if ($plafond->getHeures() > 0) {
+                if ($plafond->getPlafond() == 0) {
+                    $text = floatToString($plafond->getHeures()) . 'h pour aucune autorisée';
+                } else {
+                    $text = floatToString($plafond->getHeures()) . 'h pour ' . floatToString($plafond->getPlafond()) . ' max.';
+                }
             }
 
             if ($plafond->isBloquant()) {
@@ -143,6 +149,8 @@ class PlafondsViewHelper extends AbstractHtmlElement
             }
         }
 
+        $html = '';
+
         $html .= $t('div', ['class' => 'col-md-4'])->html(
             $t('div', [
                 'class' => 'progress',
@@ -156,6 +164,12 @@ class PlafondsViewHelper extends AbstractHtmlElement
                     'style'         => 'width:' . $progression . '%',
                 ])->text($text)
             )
+        );
+
+        $html .= $t('div', ['class' => 'col-md-8'])->html(
+            $plafond->getMessage()
+            . ' '
+            . $t('span', $labAttrs)->text('n° ' . $plafond->getNumero())
         );
 
         return $t('div', ['class' => 'row plafond'])->html($html);

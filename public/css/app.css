@@ -889,5 +889,9 @@ form.statut fieldset legend {
 
 /* Plafonds */
 .plafonds .plafond .progress {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
+}
+
+.plafonds .plafond {
+    margin-bottom: 10px;
 }

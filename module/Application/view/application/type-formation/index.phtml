@@ -32,11 +32,14 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                                href="<?= $this->url('type-formation/saisie-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
                                title="Modifier la collection"><i class="fas fa-pen-to-square"></i></a>
 
-                            <a class="pop-ajax " data-title="Suppression d'une collection" data-content="Êtes-vous sur de vouloir supprimer"
-                               data-confirm="true"
-                               data-submit-reload="true"
-                               href="<?= $this->url('type-formation/supprimer-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()]) ?>"
-                               title="Supprimer la collection"><i class="fas fa-trash-can"></i></a>
+                            <?php if (!$groupeTypeFormation->getSource()->getImportable()): ?>
+                                <a class="pop-ajax " data-title="Suppression d'une collection" data-content="Êtes-vous sur de vouloir supprimer"
+                                   data-confirm="true"
+                                   data-submit-reload="true"
+                                   href="<?= $this->url('type-formation/supprimer-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()]) ?>"
+                                   title="Supprimer la collection"><i class="fas fa-trash-can"></i></a>
+                            <?php endif; ?>
+
                             <i class="fas fa-arrows-up-down"
                                title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>
                         </div>
@@ -65,11 +68,13 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                                     <a class="ajax-modal" data-event="type-formation-edition"
                                        href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
                                        title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
-                                    <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
-                                       data-confirm="true"
-                                       data-submit-reload="true"
-                                       href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormation->getId()]) ?>"
-                                       title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
+                                    <?php if (!$typeFormation->getSource()->getImportable()): ?>
+                                        <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
+                                           data-confirm="true"
+                                           data-submit-reload="true"
+                                           href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormation->getId()]) ?>"
+                                           title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
+                                    <?php endif; ?>
                                 </td>
                             <?php endif; ?>
 
@@ -109,11 +114,14 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                             <a class="ajax-modal" data-event="type-formation-edition"
                                href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormationWithoutGroupe->getId()], ['query' => ['tab' => 'edition']]) ?>"
                                title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
-                            <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
-                               data-confirm="true"
-                               data-submit-reload="true"
-                               href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormationWithoutGroupe->getId()]) ?>"
-                               title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
+                            <?php if (!$typeFormationWithoutGroupe->getSource()->getImportable()): ?>
+                                <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
+                                   data-confirm="true"
+                                   data-submit-reload="true"
+                                   href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormationWithoutGroupe->getId()]) ?>"
+                                   title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
+                            <?php endif; ?>
+
                         </td>
                     <?php endif; ?>
                 </tr>

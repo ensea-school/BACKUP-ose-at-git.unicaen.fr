@@ -16,8 +16,7 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
-
-
+use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 /**
  * Description of ElementPedagogiqueController
  *
@@ -34,6 +33,7 @@ class ElementPedagogiqueController extends AbstractController
     use CentreCoutEpServiceAwareTrait;
     use ElementPedagogiqueSynchronisationFormAwareTrait;
     use StructureServiceAwareTrait;
+    use SchemaServiceAwareTrait;
 
 
     public function voirAction()
@@ -42,10 +42,11 @@ class ElementPedagogiqueController extends AbstractController
             \Application\Entity\Db\CheminPedagogique::class,
             \Application\Entity\Db\VolumeHoraire::class,
         ]);
-        $element = $this->getEvent()->getParam('elementPedagogique');
-        $title   = $element->getLibelle() . ' (' . $element->getCode() . ')';
+        $element       = $this->getEvent()->getParam('elementPedagogique');
+        $title         = $element->getLibelle() . ' (' . $element->getCode() . ')';
+        $serviceSchema = $this->getServiceSchema();
 
-        return compact('element', 'title');
+        return compact('element', 'title', 'serviceSchema');
     }
 
 

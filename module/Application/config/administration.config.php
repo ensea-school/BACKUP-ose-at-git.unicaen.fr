@@ -133,6 +133,14 @@ return [
                                         'order'        => 800,
                                         'border-color' => '#BBCF55',
                                     ],
+                                    'corps'      => [
+                                        'label'        => 'Gestion des corps',
+                                        'icon'         => 'fas fa-graduation-cap',
+                                        'route'        => 'corps',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Corps', 'index'),
+                                        'order'        => 800,
+                                        'border-color' => '#BBCF55',
+                                    ],
                                     'Employeurs' => [
                                         'border-color' => '#9F491F',
                                         'icon'         => 'fas fa-table-list',
@@ -290,6 +298,7 @@ return [
                         Privileges::REFERENTIEL_COMMUN_VOIRIE_VISUALISATION,
                         Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                         Privileges::NOMENCLATURE_RH_GRADES_VISUALISATION,
+                        Privileges::NOMENCLATURE_RH_CORPS_VISUALISATION,
                         Privileges::TYPE_INTERVENTION_VISUALISATION,
                         Privileges::TYPE_RESSOURCE_VISUALISATION,
                         Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,

@@ -771,6 +771,7 @@ return [
         ],
     ],
 
+
     'TYPE_HEURES' => [
         [
             'ID'                       => 1,
@@ -879,6 +880,20 @@ return [
             "REGLE_FC"                 => false,
             "VISIBLE_EXTERIEUR"        => true,
         ],
+    ],
+    "TYPE_NOTE"         => [
+        [
+            "ID"      => 1,
+            "LIBELLE" => "Email",
+            "CODE"    => "email",
+        ],
+        [
+            "ID"      => 2,
+            "LIBELLE" => "Note",
+            "CODE"    => "note",
+        ],
+        
+
     ],
 
     'TYPE_RESSOURCE' => [

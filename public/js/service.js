@@ -29,7 +29,6 @@ $.widget("ose.serviceListe", {
     },
 
 
-
     calculTotaux: function () {
         var that = this;
         this.totaux = {};
@@ -54,7 +53,6 @@ $.widget("ose.serviceListe", {
     },
 
 
-
     showHideDetails: function (serviceId, action) {
         var tr = this.element.find("#service-" + serviceId + "-volume-horaire-tr");
         var button = this.element.find("#service-" + serviceId + "-ligne td.actions .service-details-button");
@@ -75,7 +73,6 @@ $.widget("ose.serviceListe", {
     },
 
 
-
     showAllDetails: function () {
         var that = this;
         this.element.find(".service-ligne").each(function () {
@@ -84,7 +81,6 @@ $.widget("ose.serviceListe", {
             }
         });
     },
-
 
 
     hideAllDetails: function () {
@@ -97,11 +93,9 @@ $.widget("ose.serviceListe", {
     },
 
 
-
     hasHeures: function () {
         return this.total > 0;
     },
-
 
 
     onAfterChange: function () {
@@ -127,14 +121,15 @@ $.widget("ose.serviceListe", {
     },
 
 
-
     onAfterSaisie: function (serviceId) {
         var that = this;
         if (that.element.find("#service-" + serviceId + "-ligne").length) { // simple modification
             that.element.find("#service-" + serviceId + "-ligne").refresh({
                 details: that.element.find('#service-' + serviceId + '-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
                 params: that.params
-            }, function () { that.onAfterChange(); });
+            }, function () {
+                that.onAfterChange();
+            });
             that.element.find("#service-" + serviceId + "-volume-horaire-td div#vhl").refresh();
         } else { // nouveau service
             var url = Url("service/rafraichir-ligne/" + serviceId, {
@@ -150,7 +145,6 @@ $.widget("ose.serviceListe", {
     },
 
 
-
     onAfterDelete: function (serviceId) {
         if (this.params['in-realise']) { // si on est dans les services réalisés alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
             this.onAfterSaisie(serviceId);
@@ -160,7 +154,6 @@ $.widget("ose.serviceListe", {
             this.onAfterChange();
         }
     },
-
 
 
     setRealisesFromPrevus: function () {
@@ -185,7 +178,6 @@ $.widget("ose.serviceListe", {
     },
 
 
-
     setPrevusFromPrevus: function () {
         var that = this;
         that.element.find('#prevu-to-prevu-attente').show();
@@ -202,7 +194,6 @@ $.widget("ose.serviceListe", {
             }
         );
     },
-
 
 
     init2: function () {
@@ -237,9 +228,11 @@ $.widget("ose.serviceListe", {
             }
         });
 
-        this.calculTotaux();
-    },
 
+        this.calculTotaux();
+        this.showHideTypesIntervention();
+
+    },
 
 
     _create: function () {
@@ -247,10 +240,18 @@ $.widget("ose.serviceListe", {
 
         this.params = this.element.data('params');
 
-        this.element.find(".service-show-all-details").on('click', function () { that.showAllDetails(); });
-        this.element.find(".service-hide-all-details").on('click', function () { that.hideAllDetails(); });
-        this.element.find(".prevu-to-realise").on('click', function () { that.setRealisesFromPrevus(); });
-        this.getElementPrevuToPrevu().on('click', function () { that.setPrevusFromPrevus(); });
+        this.element.find(".service-show-all-details").on('click', function () {
+            that.showAllDetails();
+        });
+        this.element.find(".service-hide-all-details").on('click', function () {
+            that.hideAllDetails();
+        });
+        this.element.find(".prevu-to-realise").on('click', function () {
+            that.setRealisesFromPrevus();
+        });
+        this.getElementPrevuToPrevu().on('click', function () {
+            that.setPrevusFromPrevus();
+        });
         this.init2();
 
         $("body").on("service-modify-message", function (event, data) {
@@ -300,11 +301,10 @@ $.widget("ose.serviceListe", {
     },
 
 
-    getElementPrevuToPrevu: function () { return this.element.find(".prevu-to-prevu") }
+    getElementPrevuToPrevu: function () {
+        return this.element.find(".prevu-to-prevu")
+    }
 });
-
-
-
 
 
 $.widget("ose.serviceForm", {
@@ -318,6 +318,8 @@ $.widget("ose.serviceForm", {
             this.getElementEtablissementLabel().val('');
             this.element.find('#element-interne').show();
         } else {
+            this.getElementEtablissementId().val('');
+            this.getElementEtablissementLabel().val('');
             this.element.find('#element-interne').hide();
             this.getElementElementPedagogiqueId().val('');
             this.getElementElementPedagogiqueLabel().val('');
@@ -373,7 +375,6 @@ $.widget("ose.serviceForm", {
         this.getElementInterneExterne().on('change', function () {
             that.onInterneExterneChange();
         });
-        that.onInterneExterneChange();
 
         /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
         this.getElementElementPedagogiqueId().on("autocompleteselect", function () {
@@ -408,18 +409,31 @@ $.widget("ose.serviceForm", {
         return result == undefined ? 'service-interne' : result;
     },
 
-    getElementInterneExterne: function () { return this.element.find('input[name="service\\[interne-externe\\]"]'); },
-    getElementElementPedagogiqueId: function () { return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']"); },
-    getElementElementPedagogiqueLabel: function () { return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']"); },
-    getElementElementPedagogiqueListe: function () { return this.element.find("select#element-liste"); },
-    getElementEtablissementId: function () { return this.element.find("input[name='service\\[etablissement\\]\\[id\\]']"); },
-    getElementEtablissementLabel: function () { return this.element.find("input[name='service\\[etablissement\\]\\[label\\]']"); },
-    getElementTypeVolumeHoraire: function () { return this.element.find("input[name='type-volume-horaire']"); },
-    getElementVolumesHoraires: function () { return this.element.find('div#volumes-horaires'); }
+    getElementInterneExterne: function () {
+        return this.element.find('input[name="service\\[interne-externe\\]"]');
+    },
+    getElementElementPedagogiqueId: function () {
+        return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']");
+    },
+    getElementElementPedagogiqueLabel: function () {
+        return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']");
+    },
+    getElementElementPedagogiqueListe: function () {
+        return this.element.find("select#element-liste");
+    },
+    getElementEtablissementId: function () {
+        return this.element.find("input[name='service\\[etablissement\\]\\[id\\]']");
+    },
+    getElementEtablissementLabel: function () {
+        return this.element.find("input[name='service\\[etablissement\\]\\[label\\]']");
+    },
+    getElementTypeVolumeHoraire: function () {
+        return this.element.find("input[name='type-volume-horaire']");
+    },
+    getElementVolumesHoraires: function () {
+        return this.element.find('div#volumes-horaires');
+    }
 });
-
-
-
 
 
 $.widget("ose.serviceFiltres", {
@@ -427,8 +441,12 @@ $.widget("ose.serviceFiltres", {
     _create: function () {
         var that = this;
 
-        this.getElementStructureAff().change(function () { that.changeIntervenant(); });
-        this.getElementTypeIntervenant().change(function () { that.changeIntervenant(); });
+        this.getElementStructureAff().change(function () {
+            that.changeIntervenant();
+        });
+        this.getElementTypeIntervenant().change(function () {
+            that.changeIntervenant();
+        });
         this.changeIntervenant();
     },
 
@@ -454,8 +472,16 @@ $.widget("ose.serviceFiltres", {
         }
     },
 
-    getElementStructureAff: function () { return this.element.find('form.service-recherche select[name=\"structure-aff\"]'); },
-    getElementIntervenant: function () { return this.element.find('form.service-recherche input[name=\"intervenant[label]\"]') },
-    getElementTypeIntervenant: function () { return this.element.find('form.service-recherche input[name=type-intervenant]') },
-    getElementTypeIntervenantSelected: function () { return this.element.find('form.service-recherche input[name=type-intervenant]:checked') }
+    getElementStructureAff: function () {
+        return this.element.find('form.service-recherche select[name=\"structure-aff\"]');
+    },
+    getElementIntervenant: function () {
+        return this.element.find('form.service-recherche input[name=\"intervenant[label]\"]')
+    },
+    getElementTypeIntervenant: function () {
+        return this.element.find('form.service-recherche input[name=type-intervenant]')
+    },
+    getElementTypeIntervenantSelected: function () {
+        return this.element.find('form.service-recherche input[name=type-intervenant]:checked')
+    }
 });

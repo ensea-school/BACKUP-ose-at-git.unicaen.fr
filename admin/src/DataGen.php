@@ -1,9 +1,6 @@
 <?php
 
 
-
-
-
 class DataGen
 {
     use \BddAdmin\Logger\LoggerAwareTrait;
@@ -23,13 +20,13 @@ class DataGen
      */
     private $donneesDefaut = [];
 
-    private $actions       = [
+    private $actions = [
         'install'    => 'Insertion des données',
         'update'     => 'Contrôle et mise à jour des données',
         'privileges' => 'Mise à jour des privilèges dans la base de données',
     ];
 
-    private $config        = [
+    private $config = [
         /* Obligatoire au début */
         [
             'table'   => 'UTILISATEUR',
@@ -66,6 +63,11 @@ class DataGen
             'context' => ['install', 'update'],
             'options' => ['update' => false, 'delete' => false],
             'key'     => 'NUMERO',
+        ],
+        [
+            'table'   => 'TYPE_NOTE',
+            'context' => ['install', 'update'],
+            'key'     => 'CODE',
         ],
         [
             'table'   => 'TYPE_VOLUME_HORAIRE',
@@ -117,7 +119,7 @@ class DataGen
             'table'   => 'PRIVILEGE',
             'context' => ['install', 'update', 'privileges'],
             'key'     => ['CATEGORIE_ID', 'CODE'],
-            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT ID FROM CATEGORIE_PRIVILEGE WHERE CODE = %s']]],
+            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]],
         ],
         [
             'table'   => 'TYPE_INDICATEUR',
@@ -233,15 +235,15 @@ class DataGen
             'table'   => 'ROLE',
             'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['columns' => ['PERIMETRE_ID' => ['transformer' => 'SELECT ID FROM PERIMETRE WHERE CODE = %s']]],
+            'options' => ['columns' => ['PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s']]],
         ],
         [
             'table'   => 'ROLE_PRIVILEGE',
             'context' => ['install'],
             'key'     => ['ROLE_ID', 'PRIVILEGE_ID'],
             'options' => ['columns' => [
-                'ROLE_ID'      => ['transformer' => 'SELECT ID FROM ROLE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
+                'ROLE_ID'      => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
+                'PRIVILEGE_ID' => ['transformer' => 'SELECT p.id FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE cp.code || \'-\' || p.code = %s'],
             ],],
         ],
         [
@@ -249,8 +251,8 @@ class DataGen
             'context' => ['install'],
             'key'     => ['UTILISATEUR_ID', 'ROLE_ID'],
             'options' => ['columns' => [
-                'ROLE_ID'        => ['transformer' => 'SELECT ID FROM ROLE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'UTILISATEUR_ID' => ['transformer' => 'SELECT ID FROM UTILISATEUR WHERE USERNAME = %s'],
+                'ROLE_ID'        => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
+                'UTILISATEUR_ID' => ['transformer' => 'SELECT id FROM utilisateur WHERE username = %s'],
             ],],
         ],
 
@@ -285,7 +287,7 @@ class DataGen
             'table'   => 'GRADE',
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',
-            'options' => ['columns' => ['CORPS_ID' => ['transformer' => 'SELECT ID FROM CORPS WHERE SOURCE_CODE = %s']]],
+            'options' => ['columns' => ['CORPS_ID' => ['transformer' => 'SELECT id FROM corps WHERE source_code = %s']]],
         ],
         [
             'table'   => 'DISCIPLINE',
@@ -301,7 +303,7 @@ class DataGen
             'table'   => 'FONCTION_REFERENTIEL',
             'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['columns' => ['DOMAINE_FONCTIONNEL_ID' => ['transformer' => 'SELECT ID FROM DOMAINE_FONCTIONNEL WHERE SOURCE_CODE = %s']]],
+            'options' => ['columns' => ['DOMAINE_FONCTIONNEL_ID' => ['transformer' => 'SELECT id FROM domaine_fonctionnel WHERE source_code = %s']]],
         ],
         [
             'table'   => 'MOTIF_MODIFICATION_SERVICE',
@@ -317,7 +319,7 @@ class DataGen
             'table'   => 'STATUT',
             'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
+            'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s']]],
         ],
         [
             'table'   => 'TYPE_PIECE_JOINTE',
@@ -329,8 +331,8 @@ class DataGen
             'context' => ['install'],
             'key'     => ['STATUT_ID', 'TYPE_PIECE_JOINTE_ID'],
             'options' => ['columns' => [
-                'STATUT_ID'            => ['transformer' => 'SELECT ID FROM STATUT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'TYPE_PIECE_JOINTE_ID' => ['transformer' => 'SELECT ID FROM TYPE_PIECE_JOINTE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'STATUT_ID'            => ['transformer' => 'SELECT id FROM statut WHERE histo_destruction IS NULL AND code = %s'],
+                'TYPE_PIECE_JOINTE_ID' => ['transformer' => 'SELECT id FROM type_piece_jointe WHERE histo_destruction IS NULL AND code = %s'],
             ],],
         ],
         [
@@ -338,9 +340,9 @@ class DataGen
             'context' => ['install'],
             'key'     => ['ETAPE_SUIV_ID', 'ETAPE_PREC_ID'],
             'options' => ['columns' => [
-                'ETAPE_PREC_ID'       => ['transformer' => 'SELECT ID FROM WF_ETAPE WHERE CODE = %s'],
-                'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT ID FROM WF_ETAPE WHERE CODE = %s'],
-                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s'],
+                'ETAPE_PREC_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
+                'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
+                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
             ],],
         ],
 
@@ -354,13 +356,11 @@ class DataGen
     ];
 
 
-
     public function __construct(OseAdmin $oseAdmin)
     {
         $this->oseAdmin = $oseAdmin;
         $this->setLogger($oseAdmin->getConsole());
     }
-
 
 
     public function install(string $table = null)
@@ -369,12 +369,10 @@ class DataGen
     }
 
 
-
     public function update(string $table = null)
     {
         return $this->action('update', $table);
     }
-
 
 
     public function updatePrivileges()
@@ -383,11 +381,10 @@ class DataGen
     }
 
 
-
     private function action(string $action, string $table = null)
     {
         $this->logBegin($this->actions[$action]);
-        $this->nomenclature  = require $this->oseAdmin->getOseDir() . 'data/nomenclatures.php';
+        $this->nomenclature = require $this->oseAdmin->getOseDir() . 'data/nomenclatures.php';
         $this->donneesDefaut = require $this->oseAdmin->getOseDir() . 'data/donnees_par_defaut.php';
 
         foreach ($this->config as $tbl => $params) {
@@ -403,11 +400,10 @@ class DataGen
     }
 
 
-
     private function syncTable(string $table, array $params)
     {
         $tableObject = $this->oseAdmin->getBdd()->getTable($table);
-        $ddl         = $tableObject->getDdl();
+        $ddl = $tableObject->getDdl();
 
         if ($tableObject->hasHistorique() && !isset($params['options']['histo-user-id'])) {
             $params['options']['histo-user-id'] = $this->oseAdmin->getOseAppliId();
@@ -452,12 +448,11 @@ class DataGen
     }
 
 
-
     private function getAnneeCourante(): int
     {
-        $now      = new \DateTime();
-        $year     = (int)$now->format('Y');
-        $mois     = (int)$now->format('m');
+        $now = new \DateTime();
+        $year = (int)$now->format('Y');
+        $mois = (int)$now->format('m');
         $anneeRef = $year;
         if ($mois < 9) $anneeRef--;
 
@@ -465,16 +460,15 @@ class DataGen
     }
 
 
-
     public function ANNEE()
     {
         $annees = [];
         for ($a = 1950; $a < 2100; $a++) {
             $dateDebut = \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-09-01 00:00:00');
-            $dateFin   = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
+            $dateFin = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
 
             $anneeRef = $this->getAnneeCourante();
-            $active   = ($a >= $anneeRef && $a < $anneeRef + 3);
+            $active = ($a >= $anneeRef && $a < $anneeRef + 3);
 
             $annees[$a] = [
                 'ID'         => $a,
@@ -488,7 +482,6 @@ class DataGen
 
         return $annees;
     }
-
 
 
     public function DEPARTEMENT()
@@ -518,23 +511,21 @@ class DataGen
     }
 
 
-
     public function IMPORT_TABLES()
     {
         $data = require $this->oseAdmin->getOseDir() . 'data/import_tables.php';
 
         $ordre = 0;
-        $d     = [];
+        $d = [];
         foreach ($data as $table => $td) {
             $ordre++;
             $td['TABLE_NAME'] = $table;
-            $td['ORDRE']      = $ordre;
-            $d[]              = $td;
+            $td['ORDRE'] = $ordre;
+            $d[] = $td;
         }
 
         return $d;
     }
-
 
 
     public function ETAT_SORTIE()
@@ -543,10 +534,9 @@ class DataGen
     }
 
 
-
     public function CATEGORIE_PRIVILEGE()
     {
-        $data       = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
         $categories = [];
         foreach ($data as $code => $record) {
             $categories[] = [
@@ -560,10 +550,9 @@ class DataGen
     }
 
 
-
     public function PRIVILEGE()
     {
-        $data       = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
         $privileges = [];
         foreach ($data as $code => $record) {
             $io = 0;
@@ -582,13 +571,12 @@ class DataGen
     }
 
 
-
     public function FORMULE()
     {
-        $data     = $this->nomenclature['FORMULE'];
+        $data = $this->nomenclature['FORMULE'];
         $formules = [];
         foreach ($data as $id => $formule) {
-            $formule['ID']             = $id;
+            $formule['ID'] = $id;
             $formule['PROCEDURE_NAME'] = 'CALCUL_RESULTAT';
             for ($i = 1; $i < 6; $i++) {
                 if (!isset($formule['I_PARAM_' . $i . '_LIBELLE'])) $formule['I_PARAM_' . $i . '_LIBELLE'] = null;
@@ -601,37 +589,35 @@ class DataGen
     }
 
 
-
     public function PLAFOND()
     {
-        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
 
         foreach ($data['plafonds'] as $numero => $p) {
-            $psql        = 'SELECT id FROM plafond_perimetre WHERE code = :code';
+            $psql = 'SELECT id FROM plafond_perimetre WHERE code = :code';
             $perimetreId = $this->oseAdmin->getBdd()->select($psql, ['code' => $p['perimetre']], ['fetch' => \BddAdmin\Bdd::FETCH_ONE])['ID'];
-            $plafond     = [
+            $plafond = [
                 'NUMERO'               => $numero,
                 'LIBELLE'              => $p['libelle'],
                 'MESSAGE'              => $p['message'] ?? null,
                 'PLAFOND_PERIMETRE_ID' => $perimetreId,
                 'REQUETE'              => $p['requete'],
             ];
-            $plafonds[]  = $plafond;
+            $plafonds[] = $plafond;
         }
 
         return $plafonds;
     }
 
 
-
     public function PLAFOND_ETAT()
     {
-        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
-        $id       = 1;
+        $id = 1;
         foreach ($data['etats'] as $code => $pe) {
-            $plafond    = [
+            $plafond = [
                 'ID'       => $id,
                 'CODE'     => $code,
                 'LIBELLE'  => $pe['libelle'],
@@ -645,15 +631,14 @@ class DataGen
     }
 
 
-
     public function PLAFOND_PERIMETRE()
     {
-        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
-        $id       = 0;
+        $id = 0;
         foreach ($data['perimetres'] as $code => $libelle) {
             $id++;
-            $plafond    = [
+            $plafond = [
                 'ID'      => $id,
                 'CODE'    => $code,
                 'LIBELLE' => $libelle,
@@ -665,14 +650,13 @@ class DataGen
     }
 
 
-
     public function TYPE_INDICATEUR()
     {
-        $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre       = 0;
+        $ordre = 0;
         foreach ($data as $libelle => $indicateur) {
-            $idata         = [
+            $idata = [
                 'ID'      => $indicateur['id'],
                 'LIBELLE' => $libelle,
                 'ORDRE'   => $ordre++,
@@ -684,12 +668,11 @@ class DataGen
     }
 
 
-
     public function INDICATEUR()
     {
-        $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre       = 0;
+        $ordre = 0;
         foreach ($data as $typeIndicateur) {
             foreach ($typeIndicateur['indicateurs'] as $numero => $idata) {
                 $indicateur = [
@@ -708,21 +691,19 @@ class DataGen
     }
 
 
-
     public function WF_ETAPE()
     {
-        $data   = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
         $etapes = [];
-        $ordre  = 1;
+        $ordre = 1;
         foreach ($data as $code => $etape) {
-            $etape['CODE']  = $code;
+            $etape['CODE'] = $code;
             $etape['ORDRE'] = $ordre++ * 10;
-            $etapes[]       = $etape;
+            $etapes[] = $etape;
         }
 
         return $etapes;
     }
-
 
 
     public function PARAMETRE()
@@ -744,14 +725,14 @@ class DataGen
             }
         }
 
-        $data['annee']['VALEUR']        = (string)$this->getAnneeCourante();
+        $data['annee']['VALEUR'] = (string)$this->getAnneeCourante();
         $data['annee_import']['VALEUR'] = (string)$this->getAnneeCourante();
-        $data['oseuser']['VALEUR']      = (string)$this->oseAdmin->getOseAppliId();
+        $data['oseuser']['VALEUR'] = (string)$this->oseAdmin->getOseAppliId();
 
         $parametres = [];
         foreach ($data as $nom => $params) {
             $params['NOM'] = $nom;
-            $parametres[]  = $params;
+            $parametres[] = $params;
         }
 
         return $parametres;

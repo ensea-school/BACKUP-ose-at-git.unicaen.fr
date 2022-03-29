@@ -7,6 +7,7 @@ use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Application\Util;
+use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 /**
  * Description of ElementPedagogiqueViewHelper
@@ -16,6 +17,7 @@ use Application\Util;
 class ElementPedagogiqueViewHelper extends AbstractHtmlElement
 {
     use ElementPedagogiqueAwareTrait;
+    use SchemaServiceAwareTrait;
 
 
     /**
@@ -53,7 +55,6 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
     public function renderDescription()
     {
         $entity = $this->getElementPedagogique();
-
         if (!$entity) {
             return '';
         }
@@ -93,9 +94,10 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
      */
     public function render()
     {
-        $entity = $this->getElementPedagogique();
+        $entity  = $this->getElementPedagogique();
+        $schemas = $this->getServiceSchema();
 
-        if (!$entity) {
+        if (!$entity || !$schemas) {
             return '';
         }
 
@@ -106,7 +108,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
             $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/modifier', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-modifier"><i class="fas fa-pencil"></i> Modifier</a>';
             $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/supprimer', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-supprimer"><i class="fas fa-trash-can"></i> Supprimer</a>';
         }
-        if ($this->getView()->isAllowed($entity, Privileges::ODF_ELEMENT_SYNCHRONISATION)) {
+        if ($this->getView()->isAllowed($entity, Privileges::ODF_ELEMENT_SYNCHRONISATION) && $this->getServiceSchema()->isImportedEntity($entity)) {
             $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/element/synchronisation', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-synchronisation"><i class="fas fa-arrows-rotate"></i> Synchronisation</a>';
         }
         if ($buttons) $html .= "<div class=\"actions\">$buttons</div>";

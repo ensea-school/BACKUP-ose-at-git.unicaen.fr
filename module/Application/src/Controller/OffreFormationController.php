@@ -19,6 +19,7 @@ use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\OffreFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
+use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 
 /**
@@ -37,6 +38,7 @@ class OffreFormationController extends AbstractController
     use AnneeServiceAwareTrait;
     use ReconductionProcessusAwareTrait;
     use OffreFormationServiceAwareTrait;
+    use SchemaServiceAwareTrait;
 
 
     public function indexAction()
@@ -65,7 +67,6 @@ class OffreFormationController extends AbstractController
         if (($element = $this->params()->fromPost('element')) && isset($element['id'])) {
             $form->get('element')->setValue($element);
         }
-
         return [
             'structures'     => $structures,
             'niveaux'        => $niveaux,
@@ -76,6 +77,7 @@ class OffreFormationController extends AbstractController
             'etape'          => $etape,
             'serviceEtape'   => $this->getServiceEtape(), // pour déterminer les droits
             'serviceElement' => $this->getServiceElementPedagogique(), // pour déterminer les droits
+            'serviceSchema'  => $this->getServiceSchema(),
         ];
     }
 

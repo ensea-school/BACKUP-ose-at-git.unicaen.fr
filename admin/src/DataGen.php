@@ -613,6 +613,7 @@ class DataGen
             $plafond     = [
                 'NUMERO'               => $numero,
                 'LIBELLE'              => $p['libelle'],
+                'MESSAGE'              => $p['message'] ?? null,
                 'PLAFOND_PERIMETRE_ID' => $perimetreId,
                 'REQUETE'              => $p['requete'],
             ];

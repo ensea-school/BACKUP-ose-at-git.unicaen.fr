@@ -55,17 +55,11 @@ class PlafondController extends AbstractController
         }
 
         $form = $this->getFormPlafond();
-        $form->bindRequestSave($plafond, $this->getRequest(), function (Plafond $p) {
-            try {
-                $this->getServicePlafond()->save($p);
-                $this->construireAction();
-
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-
-                $this->redirect()->toRoute('plafond');
-            } catch (Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
+        $res  = $form->bindRequestSave($plafond, $this->getRequest(), function (Plafond $p) {
+            $this->getServicePlafond()->save($p);
+            $this->construireAction();
+            $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            $this->redirect()->toRoute('plafond');
         });
 
         return compact('title', 'form');

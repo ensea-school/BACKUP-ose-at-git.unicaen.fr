@@ -4,6 +4,7 @@ namespace Plafond\Form;
 
 use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
+use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Laminas\InputFilter\InputFilterProviderInterface;
@@ -18,39 +19,20 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
 {
     use PlafondServiceAwareTrait;
 
-    protected $hydratorElements = [
-        'id'               => ['type' => 'int'],
-        'numero'           => ['type' => 'int'],
-        'libelle'          => ['type' => 'string'],
-        'plafondPerimetre' => ['type' => PlafondPerimetre::class],
-        'requete'          => ['type' => 'string'],
-    ];
-
-
 
     public function init()
     {
-        $hydrator = new PlafondFormHydrator($this->getServicePlafond()->getEntityManager(), $this->hydratorElements);
-        $this->setHydrator($hydrator);
+        $this->setAttribute('class', 'plafond-form');
 
-        $this->setAttributes(['action' => $this->getCurrentUrl(), 'class' => 'plafond-form']);
+        $this->spec(Plafond::class);
+        $this->build();
 
-        $this->add([
-            'name'    => 'numero',
-            'options' => [
-                'label' => 'Numéro (3 chiffres max.)',
-            ],
-            'type'    => 'Text',
+        $this->setLabels([
+            'numero'  => 'Numéro (3 chiffres max.)',
+            'libelle' => 'Libellé',
         ]);
 
-        $this->add([
-            'name'    => 'libelle',
-            'options' => [
-                'label' => 'Libellé',
-            ],
-            'type'    => 'Text',
-        ]);
-
+        $this->remove('plafondPerimetre');
         $this->add([
             'name'       => 'plafondPerimetre',
             'options'    => [
@@ -65,6 +47,7 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
             'type'       => 'Select',
         ]);
 
+        $this->remove('requete');
         $this->add([
             'type'       => 'Textarea',
             'name'       => 'requete',
@@ -77,75 +60,6 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
             ],
         ]);
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary btn-save',
-            ],
-        ]);
-    }
-
-
-
-    /**
-     * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return [
-            'numero'           => [
-                'required' => true,
-            ],
-            'libelle'          => [
-                'required' => true,
-            ],
-            'plafondPerimetre' => [
-                'required' => true,
-            ],
-            'requete'          => [
-                'required' => true,
-            ],
-        ];
-    }
-}
-
-
-
-
-
-class PlafondFormHydrator extends GenericHydrator
-{
-    protected $noGenericParse = [];
-
-
-
-    /**
-     * @param array                              $data
-     * @param \Application\Entity\Db\Intervenant $object
-     *
-     * @return object
-     */
-    public function hydrate(array $data, $object)
-    {
-        parent::hydrate($data, $object);
-    }
-
-
-
-    /**
-     * @param \Application\Entity\Db\Intervenant $object
-     *
-     * @return array
-     */
-    public function extract($object): array
-    {
-        $res = parent::extract($object);
-
-        return $res;
+        $this->addSubmit();
     }
 }

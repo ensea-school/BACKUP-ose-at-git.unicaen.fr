@@ -40,16 +40,19 @@ return [
         14 => [
             'libelle'   => 'Plafond des services par rapport à la charge d\'enseignement',
             'perimetre' => 'volume_horaire',
+            'message'   => 'Dépassement de la charge pour :sujet',
             'requete'   => file_get_contents($sqlDir . '14.sql'),
         ],
         15 => [
             'libelle'   => 'Heures max. de référentiel par structure',
             'perimetre' => 'structure',
+            'message'   => 'Heures max. de référentiel pour :sujet',
             'requete'   => file_get_contents($sqlDir . '15.sql'),
         ],
         17 => [
             'libelle'   => 'Heures max. de référentiel par intervenant et par fonction référentielle',
             'perimetre' => 'referentiel',
+            'message'   => 'Heures max. de référentiel par intervenant pour :sujet',
             'requete'   => file_get_contents($sqlDir . '17.sql'),
         ],
         18 => [

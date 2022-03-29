@@ -1095,6 +1095,7 @@ return [
         'ID',
         'LIBELLE',
         'PLAFOND_PERIMETRE_ID',
+        'MESSAGE',
         'REQUETE',
         'NUMERO',
     ],

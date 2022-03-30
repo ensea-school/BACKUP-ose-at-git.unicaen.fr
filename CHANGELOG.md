@@ -41,6 +41,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Un nouveau modèle de contrat sera possible avec la ventilation des heures de services par types d'intervention (CM/TD/TP)
 * Des périodes pourront être ajoutés, supprimés ou modifiés depuis l'administration des périodes.
 * Les types de formations et les groupes les contenant pourront être ajoutés, supprimés ou modifiés depuis l'administration des types de formations.
+* Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les établissements (#42944)
 * Ajout d'un module de gestion des Notes sur l'intervenant : 
   * Possibilité de rajouter une note écrite (informations, message important etc...) sur une fiche intervenant (Tâche #25565)
   * Possibilité d'envoyer un email à intervenant avec historisation de l'email directement depuis la fiche intervenant (Tâche #26546)

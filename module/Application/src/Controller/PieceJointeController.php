@@ -14,6 +14,7 @@ use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTr
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
+use Intervenant\Form\MailerIntervenantFormAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
@@ -23,6 +24,8 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\JsonModel;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Intervenant\Service\MailServiceAwareTrait;
+use Intervenant\Service\NoteServiceAwareTrait;
 
 
 /**
@@ -40,7 +43,9 @@ class PieceJointeController extends AbstractController
     use TypePieceJointeServiceAwareTrait;
     use TypePieceJointeStatutServiceAwareTrait;
     use WorkflowServiceAwareTrait;
-
+    use MailServiceAwareTrait;
+    use NoteServiceAwareTrait;
+    use MailerIntervenantFormAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -520,23 +525,7 @@ class PieceJointeController extends AbstractController
 
     public function refuserAction()
     {
-        //        $this->initFilters();
-        //
-        //        /** @var PieceJointe $pj */
-        //        $pj = $this->getEvent()->getParam('pieceJointe');
-        //        $this->getServicePieceJointe()->valider($pj);
-        //        $this->updateTableauxBord($pj->getIntervenant(), true);
-        //
-        //        $viewModel = new ViewModel();
-        //        $viewModel->setTemplate('application/piece-jointe/validation');
-        //        $viewModel->setVariable('pj', $pj);
-        //
-        //        return $viewModel;
-        //
-        //
-        //        return $viewModel;
         /** @var PieceJointe $pj */
-        $pj = $this->getEvent()->getParam('pieceJointe');
 
         $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
         if ($intervenant && $pj->getIntervenant() != $intervenant) {
@@ -544,17 +533,35 @@ class PieceJointeController extends AbstractController
             throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
         }
 
-        foreach ($pj->getFichier() as $fichier) {
-            $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
+        $pj = $this->getEvent()->getParam('pieceJointe');
+
+        $title = 'Rédiger un email à l\'intervenant pour le refus de pièce';
+
+        $form = $this->getFormMailerIntervenant()->setIntervenant($pj->getIntervenant())->initForm();
+
+        if ($this->getRequest()->isPost() && $this->getRequest()->getPost()->count() > 0) {
+            try {
+                $data    = $this->getRequest()->getPost();
+                $from    = $data['from'];
+                $to      = $data['to'];
+                $subject = $data['subject'];
+                $content = $data['content'];
+                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content);
+                //Création d'une trace de l'envoi dans les notes de l'intervenant
+                $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);
+                $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');
+
+                foreach ($pj->getFichier() as $fichier) {
+                    $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
+                }
+
+                $this->updateTableauxBord($pj->getIntervenant());
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
         }
 
-        $this->updateTableauxBord($pj->getIntervenant());
-
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('application/piece-jointe/validation');
-        $viewModel->setVariable('pj', $pj);
-
-        return $viewModel;
+        return compact('pj', 'title', 'form');
     }
 
 }

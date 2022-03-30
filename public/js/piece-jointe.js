@@ -11,11 +11,11 @@ $.widget("ose.pieceJointe", {
             that.validerDevalider($(this));
             event.preventDefault();
         });
-
-        that.element.on('click', '.refuser-pj', function (event) {
-            that.refuser($(this));
-            event.preventDefault();
-        });
+        //
+        // that.element.on('click', '.refuser-pj', function (event) {
+        //     that.refuser($(this));
+        //     event.preventDefault();
+        // });
 
         that.element.on('click', '.archiver-pj', function (event) {
             that.archiver($(this));
@@ -94,27 +94,22 @@ $.widget("ose.pieceJointe", {
         var tpj = element.parents('.tpj').data('tpj');
 
         element.button('loading');
+        // that.onFileChange( tpj );
+
 
         $.ajax({
             type: 'POST',
             url: element.prop('href'),
             data: {},
             success: function (data, textStatus, jqXHR) {
-                var container = that.getContainer(tpj);
-                container.find('.validation-bar').html(data);
-                container.removeClass('panel-default');
-                container.removeClass('panel-success');
-
-                var isValider = data.indexOf("/valider/") !== -1;
-
-                container.addClass('panel-default');
-
-                that.onValidationChange(tpj, isValider);
             },
             error: function (jqXHR) {
                 alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
                 console.log(jqXHR);
             },
+            complete: function (jqXHR) {
+                that.onFileChange(tpj);
+            }
         });
     },
 

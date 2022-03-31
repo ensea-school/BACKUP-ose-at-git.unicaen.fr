@@ -1,6 +1,5 @@
-CREATE
-OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
-  WITH heures_s AS (
+CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
+WITH heures_s AS (
   SELECT
     i.id                                      intervenant_id,
     COALESCE(ep.structure_id,i.structure_id)  structure_id,

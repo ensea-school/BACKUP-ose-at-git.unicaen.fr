@@ -1,0 +1,15 @@
+<?php
+
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\VolumeHoraire;
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $entity            Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel
+ * @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire
+ */
+
+echo $this->plafonds($entity, $typeVolumeHoraire)->affichage();

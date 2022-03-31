@@ -73,7 +73,7 @@ class PlafondService extends AbstractEntityService
      *
      * @return PlafondControle[]
      */
-    public function controle(TypeVolumeHoraire $typeVolumeHoraire, $entity, bool $pourBlocage = false): array
+    public function controle(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): array
     {
         $sqls = [];
         if ($entity instanceof Structure) {
@@ -138,20 +138,67 @@ class PlafondService extends AbstractEntityService
 
 
     /**
-     * @param TypeVolumeHoraire                                                          $typeVolumeHoraire
-     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity
-     * @param string|PlafondPerimetre|null                                               $perimetre
-     * @param bool                                                                       $pourBlocage
-     * @param bool                                                                       $bloquantUniquement
-     * @param bool                                                                       $depassementsUniquement
+     * Prend en entrée une entité ou bien sa classe
+     * Retourne le code du périmètre correspondant
+     *
+     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|string $entity
      *
      * @return string
-     * @throws \Exception
      */
+    public function entityToPerimetreCode(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|string $entity): string
+    {
+        if (is_object($entity)) {
+            $class = get_class($entity);
+        } else {
+            $class = $entity;
+        }
+        switch ($class) {
+            case Structure::class:
+                return PlafondPerimetre::STRUCTURE;
+            case Intervenant::class:
+                return PlafondPerimetre::INTERVENANT;
+            case ElementPedagogique::class:
+                return PlafondPerimetre::ELEMENT;
+            case VolumeHoraire::class:
+                return PlafondPerimetre::VOLUME_HORAIRE;
+            case FonctionReferentiel::class:
+                return PlafondPerimetre::REFERENTIEL;
+        }
+    }
+
+
+
+    /**
+     * Prend entrée le code d'un périmè_tre de plafond
+     *
+     * Retourne la classe d'objet correspondante
+     *
+     * @param string $perimetreCode
+     *
+     * @return string
+     */
+    public function perimetreCodeToEntityClass(string $perimetreCode): string
+    {
+        switch ($perimetreCode) {
+            case PlafondPerimetre::REFERENTIEL:
+                return FonctionReferentiel::class;
+            case PlafondPerimetre::VOLUME_HORAIRE:
+                return VolumeHoraire::class;
+            case PlafondPerimetre::ELEMENT:
+                return ElementPedagogique::class;
+            case PlafondPerimetre::INTERVENANT:
+                return Intervenant::class;
+            case PlafondPerimetre::STRUCTURE:
+                return Structure::class;
+        }
+    }
+
+
+
     protected function makeControleQuery(
         TypeVolumeHoraire $typeVolumeHoraire,
-        $entity,
-        $perimetre = null,
+        Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity,
+        string|PlafondPerimetre|null $perimetre = null,
         bool $pourBlocage = false,
         bool $bloquantUniquement = false,
         bool $depassementsUniquement = false): string
@@ -193,6 +240,30 @@ class PlafondService extends AbstractEntityService
             $filters['pd.depassement'] = 1;
         }
 
+        switch ($perimetre) {
+            case PlafondPerimetre::STRUCTURE:
+                $join   = "JOIN STRUCTURE entity ON entity.id = pd.STRUCTURE_ID";
+                $libVal = 'entity.libelle_court';
+            break;
+            case PlafondPerimetre::INTERVENANT:
+                $join   = "JOIN INTERVENANT entity ON entity.id = pd.INTERVENANT_ID";
+                $libVal = "entity.prenom || ' ' || entity.nom_usuel";
+            break;
+            case PlafondPerimetre::ELEMENT:
+                $join   = "JOIN ELEMENT_PEDAGOGIQUE entity ON entity.id = pd.ELEMENT_PEDAGOGIQUE_ID";
+                $libVal = 'entity.libelle';
+            break;
+            case PlafondPerimetre::VOLUME_HORAIRE:
+                $join   = "JOIN ELEMENT_PEDAGOGIQUE entity1 ON entity1.id = pd.ELEMENT_PEDAGOGIQUE_ID\n";
+                $join   .= "JOIN TYPE_INTERVENTION entity2 ON entity2.id = pd.TYPE_INTERVENTION_ID";
+                $libVal = "entity1.code || ' ' || entity2.code ";
+            break;
+            case PlafondPerimetre::REFERENTIEL:
+                $join   = "JOIN FONCTION_REFERENTIEL entity ON entity.id = pd.FONCTION_REFERENTIEL_ID";
+                $libVal = 'entity.libelle_court';
+            break;
+        }
+
         /*
         Pour un contrôle en vue d'un blocage, il faut avoir recours à la vue, car les TBL n'ont pas encore été mis à jour
         Pour un listage de plafonds normal, on utilise la table pour de raisons de perfs
@@ -203,7 +274,7 @@ class PlafondService extends AbstractEntityService
               p.id           id,
               p.numero       numero,
               p.libelle      libelle,
-              p.libelle      message,
+              CASE WHEN p.message IS NOT NULL THEN replace(p.message, ':sujet', $libVal) ELSE p.libelle END message,
               pp.code        perimetre,
               pe.code        etat,
               pe.bloquant    bloquant,
@@ -216,8 +287,10 @@ class PlafondService extends AbstractEntityService
               JOIN plafond               p ON p.id = pd.plafond_id
               JOIN plafond_etat         pe ON pe.id = pd.plafond_etat_id
               JOIN plafond_perimetre    pp ON pp.id = p.plafond_perimetre_id
+              $join
             WHERE
-                  pd.type_volume_horaire_id = " . ((int)$typeVolumeHoraire->getId());
+              pe.code NOT IN ('desactive', 'indicateur')
+              AND pd.type_volume_horaire_id = " . ((int)$typeVolumeHoraire->getId());
 
         foreach ($filters as $v => $c) {
             $sql .= "\n  AND $v = $c";
@@ -310,8 +383,8 @@ class PlafondService extends AbstractEntityService
             $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
             $view .= "\nWHERE\n";
             $view .= "  CASE\n";
-            $view .= "    WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)\n";
-            $view .= "    WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)\n";
+            $view .= "    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)\n";
+            $view .= "    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)\n";
             $view .= "  END IS NOT NULL";
             foreach ($cols as $col) {
                 if ($col != 'PLAFOND' && $col != 'HEURES' && $col != 'DEROGATION') {
@@ -464,6 +537,9 @@ class PlafondService extends AbstractEntityService
 
     public function construire()
     {
+        $oseAdmin = oseAdmin();
+        $dataGen  = new \DataGen($oseAdmin);
+        $dataGen->update('INDICATEUR');
         $this->construireVues();
         $this->getServiceQueryGenerator()->updateProcedures();
     }

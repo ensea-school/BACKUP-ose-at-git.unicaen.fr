@@ -225,9 +225,8 @@ return [
             'I_PARAM_2_LIBELLE' => 'Lecteur/ATER',
         ],
         21 => [
-            'LIBELLE'            => 'Université De Guyane',
-            'PACKAGE_NAME'       => 'FORMULE_GUYANE',
-            'VH_PARAM_1_LIBELLE' => 'Autre établissement (Oui/Non)',
+            'LIBELLE'      => 'Université De Guyane',
+            'PACKAGE_NAME' => 'FORMULE_GUYANE',
         ],
         22 => [
             'LIBELLE'      => 'Université Rennes 1',

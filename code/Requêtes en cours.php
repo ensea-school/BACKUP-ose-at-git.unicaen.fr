@@ -8,8 +8,7 @@
  * @var $viewFile   string
  */
 
-
-$bdd = adminBdd();
+$bdd = oseAdmin()->getBdd();
 
 $sql = "
 SELECT
@@ -59,7 +58,7 @@ foreach ($res as $s) {
     <b>Objet qui bloque : </b><?= $s['OBJET_BLOQUANT'] ?>,
     <b>Evénement : </b><?= $s['EVENEMENT'] ?>,
     <?php
-    AdminUtil::highlight($s['REQUETE_SQL'], 'sql-f');
+    sqlDump($s['REQUETE_SQL']);
 }
 
 ?>

@@ -103,7 +103,7 @@ class EtapeModulateursSaisie extends AbstractForm
 
 
 
-    protected function build()
+    protected function construire()
     {
         $etape = $this->getEtape();
         if (!$etape) {
@@ -122,14 +122,7 @@ class EtapeModulateursSaisie extends AbstractForm
             'type' => 'Hidden',
         ]);
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+        $this->addSubmit();
     }
 
 
@@ -144,7 +137,7 @@ class EtapeModulateursSaisie extends AbstractForm
     {
         if ($object instanceof Etape) {
             $this->setEtape($object);
-            $this->build();
+            $this->construire();
         }
 
         return parent::setObject($object);

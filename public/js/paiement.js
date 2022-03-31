@@ -1015,7 +1015,7 @@ $.widget("ose.dmepBudget", {
     setDiffValue: function (typeRessourceId, structureId, value)
     {
         var progress = this.getElementEnveloppe(typeRessourceId, structureId);
-        var bar = progress.find('.progressbar');
+        var bar = progress.find('.progress-bar');
         var dotation = progress.data('dotation');
         var usage = progress.data('usage') + value;
         var restant = dotation - usage;

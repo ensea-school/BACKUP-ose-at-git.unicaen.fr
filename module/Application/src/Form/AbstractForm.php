@@ -23,7 +23,7 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
             'type'       => 'Submit',
             'attributes' => [
                 'value' => $value,
-                'class' => 'btn btn-primary',
+                'class' => 'btn btn-primary btn-save',
             ],
         ]);
 
@@ -67,21 +67,17 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
 
             $this->setData($data);
             if ($this->isValid()) {
-                if ($saveFnc instanceof AbstractEntityService) {
-                    try {
+                try {
+                    if ($saveFnc instanceof AbstractEntityService) {
                         $saveFnc->save($entity);
                         $this->getControllerPluginFlashMessenger()->addSuccessMessage($successMessage);
-                    } catch (\Exception $e) {
-                        $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
-                    }
-                } elseif ($saveFnc instanceof \Closure) {
-                    try {
+                    } elseif ($saveFnc instanceof \Closure) {
                         $saveFnc($entity);
-                    } catch (\Exception $e) {
-                        $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
-
-                        return false;
                     }
+                } catch (\Exception $e) {
+                    $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
+
+                    return false;
                 }
             } else {
                 $messages = $this->getMessages();

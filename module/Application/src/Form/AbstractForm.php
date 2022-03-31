@@ -67,7 +67,6 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
 
             $this->setData($data);
             if ($this->isValid()) {
-                $this->getEntityManager()->beginTransaction();
                 try {
                     if ($saveFnc instanceof AbstractEntityService) {
                         $saveFnc->save($entity);
@@ -75,9 +74,7 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
                     } elseif ($saveFnc instanceof \Closure) {
                         $saveFnc($entity);
                     }
-                    $this->getEntityManager()->commit();
                 } catch (\Exception $e) {
-                    $this->getEntityManager()->rollback();
                     $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
 
                     return false;

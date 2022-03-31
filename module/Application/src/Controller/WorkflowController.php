@@ -145,11 +145,11 @@ class WorkflowController extends AbstractController
 
         $result = $this->getServiceWorkflow()->calculerTousTableauxBord(function (array $d) {
             $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
-            $c       = adminConsole();
+            $c       = oseAdmin()->getConsole();
             $c->print($tblLine);
             $c->print('Calcul en cours...', $c::COLOR_LIGHT_PURPLE);
         }, function (array $d) {
-            $c       = adminConsole();
+            $c       = oseAdmin()->getConsole();
             $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
             $c->print("\r" . $tblLine);
             if ($d['result']) {
@@ -159,7 +159,7 @@ class WorkflowController extends AbstractController
                 $c->println('Erreur : ' . $d['exception']->getMessage(), $c::BG_RED);
             }
         });
-        $c      = adminConsole();
+        $c      = oseAdmin()->getConsole();
         $c->println('Fin du calcul des tableaux de bord');
         if ($result) {
             $c->println('Tout c\'est bien passé', $c::COLOR_GREEN);

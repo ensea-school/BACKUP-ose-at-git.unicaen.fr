@@ -8,7 +8,7 @@
  * @var $viewFile   string
  */
 
-$bdd = adminBdd();
+$bdd = oseAdmin()->getBdd();
 
 /*$tables = [
     [

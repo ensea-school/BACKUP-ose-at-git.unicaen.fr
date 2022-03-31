@@ -11,6 +11,7 @@ use Application\Form\Agrement\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AgrementService;
 use Application\Service\Traits\AgrementServiceAwareTrait;
+use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
@@ -36,6 +37,7 @@ class AgrementController extends AbstractController
     use SaisieAwareTrait;
     use StructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use EtatSortieServiceAwareTrait;
 
 
     /**
@@ -53,7 +55,6 @@ class AgrementController extends AbstractController
     }
 
 
-
     /**
      * Page de menu des agréments
      */
@@ -61,7 +62,6 @@ class AgrementController extends AbstractController
     {
         return [];
     }
-
 
 
     /**
@@ -77,7 +77,6 @@ class AgrementController extends AbstractController
     }
 
 
-
     /**
      * Liste des agréments d'un type donné, concernant un intervenant.
      */
@@ -85,9 +84,9 @@ class AgrementController extends AbstractController
     {
         $this->initFilters();
 
-        $role         = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $typeAgrement = $this->getEvent()->getParam('typeAgrement');
-        $intervenant  = $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getEvent()->getParam('intervenant');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -101,20 +100,20 @@ class AgrementController extends AbstractController
 
         $tas = $this->getServiceTblAgrement()->getList($qb);
 
-        $test          = false;
+        $test = false;
         $needStructure = false;
-        $hasActions    = false;
-        $data          = [];
+        $hasActions = false;
+        $data = [];
         foreach ($tas as $ta) {
 
             /* Actions éventuelles */
             if (($a = $ta->getAgrement()) && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeSuppression())) {
 
-                $params      = [
+                $params = [
                     'agrement'    => $a->getId(),
                     'intervenant' => $ta->getIntervenant()->getId(),
                 ];
-                $actionUrl   = $this->url()->fromRoute('intervenant/agrement/supprimer', $params);
+                $actionUrl = $this->url()->fromRoute('intervenant/agrement/supprimer', $params);
                 $actionLabel = '<i class="fas fa-trash-can"></i> Retirer l\'agrément';
             } elseif (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
                 $params = [
@@ -123,10 +122,10 @@ class AgrementController extends AbstractController
                 ];
                 if ($ta->getStructure()) $params['structure'] = $ta->getStructure()->getId();
 
-                $actionUrl   = $this->url()->fromRoute('intervenant/agrement/ajouter', $params);
+                $actionUrl = $this->url()->fromRoute('intervenant/agrement/ajouter', $params);
                 $actionLabel = '<i class="fas fa-check"></i> Agréer';
             } else {
-                $actionUrl   = null;
+                $actionUrl = null;
                 $actionLabel = null;
             }
 
@@ -137,7 +136,6 @@ class AgrementController extends AbstractController
 
         return compact('role', 'typeAgrement', 'intervenant', 'data', 'needStructure', 'hasActions');
     }
-
 
 
     public function saisirAction()
@@ -163,14 +161,13 @@ class AgrementController extends AbstractController
     }
 
 
-
     public function saisirLotAction()
     {
         $typeAgrement = $this->getEvent()->getParam('typeAgrement');
         /* @var $typeAgrement TypeAgrement */
 
         $title = sprintf("Agrément par %s", $typeAgrement->toString(true));
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $form = $this->getFormAgrementSaisie();
 
@@ -179,7 +176,7 @@ class AgrementController extends AbstractController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $dateDecision = $form->get('dateDecision')->normalizeDate($form->get('dateDecision')->getValue());
-                $agreer       = $this->params()->fromPost('agreer', []);
+                $agreer = $this->params()->fromPost('agreer', []);
 
                 foreach ($agreer as $a => $val) {
                     if ('1' === $val) {
@@ -236,9 +233,9 @@ class AgrementController extends AbstractController
         /* @var $res TblWorkflow[] */
 
         $needStructure = false;
-        $needAction    = false;
-        $data          = [];
-        $canEdit       = $this->isAllowed(Privileges::getResourceId($typeAgrement->getPrivilegeEdition()));
+        $needAction = false;
+        $data = [];
+        $canEdit = $this->isAllowed(Privileges::getResourceId($typeAgrement->getPrivilegeEdition()));
         foreach ($res as $wie) {
 
             if ($canEdit) {
@@ -264,7 +261,6 @@ class AgrementController extends AbstractController
     }
 
 
-
     public function supprimerAction()
     {
         /** @var Agrement $agrement */
@@ -281,22 +277,24 @@ class AgrementController extends AbstractController
     }
 
 
-
     public function exportCsvAction()
     {
+        //Contexte année et structure
         $annee = $this->getServiceContext()->getAnnee();
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = $this->getServiceContext()->getStructure();
 
-        $data = $this->getServiceAgrement()->getExportCsvData($annee, $role->getStructure());
+        $filters['ANNEE_ID'] = $annee->getId();
+        if ($structure) {
+            $filters['STRUCTURE_ID'] = $structure->getId();
+        }
+        //On récupére l'état de sortie pour l'export des agréments
+        $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'export-agrement']);
+        $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
+        $csvModel->setFilename('export-agrement.csv');
 
-        $csvModel = new CsvModel();
-        $csvModel->setHeader($data['head']);
-        $csvModel->addLines($data['data']);
-        $csvModel->setFilename('agrements-' . $annee . '.csv');
 
         return $csvModel;
     }
-
 
 
     private function updateTableauxBord(Intervenant $intervenant)

@@ -6,7 +6,7 @@ return [
         'LIBELLE'        => 'Extraction Winpaie',
         'PDF_TRAITEMENT' => null,
         'AUTO_BREAK'     => false,
-        'REQUETE'        => 'SELECT * FROM V_EXPORT_PAIEMENT_WINPAIE',
+        'REQUETE'        => 'SELECT * FROM v_export_paiement_winpaie',
         'CSV_PARAMS'     => '{
     "ANNEE_ID": {
         "visible": false
@@ -58,11 +58,43 @@ return [
 }',
     ],
     [
+        'CODE'           => 'export-agrement',
+        'LIBELLE'        => 'Export Agrément',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT * FROM v_agrement_export_csv',
+        'CSV_PARAMS'     => '{
+    "ANNEE_ID"            : { "visible": false },
+    "INTERVENANT_ID"            : { "visible": false },
+    "INTERVENANT_STRUCTURE_ID"            : { "visible": false },
+    "STRUCTURE_ID"            : { "visible": false },
+    "AGREE"            : { "visible": false },
+    "ANNEE": { "libelle": "Année"},
+    "INTERVENANT_CODE": { "libelle": "Code intervenant"},
+    "STRUCTURE_LIBELLE": {"libelle": "Structure hiérarchique"},
+    "INTERVENANT_STRUCTURE_LIBELLE": {"libelle": "Structure d\'affectation"},
+    "INTERVENANT_NOM_USUEL": {"libelle": "Nom usuel"},
+    "INTERVENANT_NOM_PATRONYMIQUE": {"libelle": "Nom patronymique"},
+    "INTERVENANT_PRENOM": {"libelle": "Prénom"},
+    "INTERVENANT_STATUT_LIBELLE": {"libelle": "Statut"},
+    "DISCIPLINE": {"libelle": "Discipline"},
+    "HETD_FI": {"libelle": "HETD (FI)", "type": "float"},
+    "HETD_FA": {"libelle": "HETD (FA)","type": "float"},
+    "HETD_FC": {"libelle": "HETD (FC)","type": "float"},
+    "HETD_TOTAL": {"libelle": "HETD (Total)","type": "float"},
+    "TYPE_AGREMENT": {"libelle": "Type d\'agrément"},
+    "AGREE_TXT": {"libelle": "Agréé"},
+    "DATE_DECISION": {"libelle": "Date de décision"},
+    "MODIFICATEUR": {"libelle": "Modificateur"},
+    "DATE_MODIFICATION": {"libelle": "Date de modification"}
+}',
+    ],
+    [
         'CODE'           => 'etat_paiement',
         'LIBELLE'        => 'État de paiement',
         'PDF_TRAITEMENT' => '/data/Etats de sortie/etat_paiement.php',
         'AUTO_BREAK'     => true,
-        'REQUETE'        => 'SELECT * FROM V_ETAT_PAIEMENT',
+        'REQUETE'        => 'SELECT * FROM v_etat_paiement',
         'CSV_PARAMS'     => '{
     "ANNEE_ID"                  : { "visible": false },
     "TYPE_INTERVENANT_ID"       : { "visible": false },
@@ -104,11 +136,54 @@ return [
         'REQUETE'        => 'SELECT 
     *
 FROM 
-    V_EXPORT_SERVICE
+    v_export_service
 ORDER BY 
-    INTERVENANT_NOM, 
-    SERVICE_STRUCTURE_ENS_LIBELLE, 
-    ETAPE_LIBELLE, ETABLISSEMENT_LIBELLE,
-    ELEMENT_LIBELLE, FONCTION_REFERENTIEL_LIBELLE',
+    intervenant_nom, 
+    service_structure_ens_libelle, 
+    etape_libelle, etablissement_libelle,
+    element_libelle, fonction_referentiel_libelle',
+    ],
+    [
+        'CODE'           => 'imputation-budgetaire',
+        'LIBELLE'        => 'Export des imputations budgétaires',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT * FROM v_imputation_budgetaire_siham',
+        'CSV_PARAMS'     => '{
+"ANNEE_ID"            : { "visible": false },
+    "PERIODE_ID"            : { "visible": false },
+    "INTERVENANT_ID"            : { "visible": false },
+    "TYPE_INTERVENANT_ID"            : { "visible": false },
+    "CENTRE_COUT_ID"            : { "visible": false },
+    "DOMAINE_FONCTIONNEL_ID"            : { "visible": false },
+    "ETAT"            : { "visible": false },
+    "COMPOSANTE"            : { "visible": false },
+    "DATE_MISE_EN_PAIEMENT"            : { "visible": false },
+    "PERIODE"            : { "visible": false },
+    "DOMAINE_FONCTIONNEL_CODE"            : { "visible": false },
+    "HETD_POURC"            : { "visible": false },
+    "HETD" : { "visible": false },
+    "HETD_MONTANT"            : { "visible": false },
+    "REM_FC_D714"            : { "visible": false },
+    "NOMBRES_HEURES"    : { "visible": false },
+                
+    
+    "TYPE"                     : { "libelle": "Type" },
+    "UO"                      : { "libelle": "UO" },
+    "MATRICULE"                      : { "libelle": "Matricule" },
+    "DATE_DEBUT"                      : {"type": "date", "libelle": "Date de début" },
+    "DATE_FIN"                      : { "type": "date","libelle": "Date de fin" },
+    "CODE_INDEMNITE"                      : { "libelle": "Code indemnité" },
+    "OPERATION"                      : { "libelle": "Opération" },
+    "CENTRE_COUT"                      : { "libelle": "Centre de coût" },
+    "DESTINATION"                      : { "libelle": "Destination" },
+    "FONDS"                      : { "libelle": "Fonds" },
+    "POSTE_RESERVATION_CREDIT"                      : { "libelle": "Poste de réservation de crédit" },
+    "POURCENTAGE"                      : {"type": "float", "libelle": "Pourcentage" },
+    "NOMBRES_HEURES"                      : { "libelle": "Nombre d\'heures" },
+    "FLMODI"                      : { "libelle": "FLMODI" },
+    "NUMORD"                      : { "libelle": "NUMORD" },
+    "NUMGRP"                      : { "libelle": "NUMGRP" }
+}',
     ],
 ];

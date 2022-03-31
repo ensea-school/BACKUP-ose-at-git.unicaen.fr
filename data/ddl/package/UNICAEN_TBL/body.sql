@@ -1896,6 +1896,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
+          SELECT 2 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+            SELECT
+                i.annee_id                             annee_id,
+                fr.type_volume_horaire_id              type_volume_horaire_id,
+                i.id                                   intervenant_id,
+                fr.total - fr.heures_compl_fc_majorees heures
+              FROM
+                intervenant                     i
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+                JOIN statut                    si ON si.id = i.statut_id
+            ) p
+
+            UNION ALL
+
           SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
@@ -1907,6 +1922,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 JOIN statut                    si ON si.id = i.statut_id
                 JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
                 JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+            ) p
+
+            UNION ALL
+
+          SELECT 4 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+            SELECT
+                i.annee_id                             annee_id,
+                fr.type_volume_horaire_id              type_volume_horaire_id,
+                i.id                                   intervenant_id,
+                fr.total - fr.heures_compl_fc_majorees heures
+              FROM
+                intervenant                     i
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+                JOIN statut                    si ON si.id = i.statut_id
             ) p
 
             UNION ALL
@@ -1925,21 +1955,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 JOIN statut                    si ON si.id = i.statut_id
                 JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
                 JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-            ) p
-
-            UNION ALL
-
-          SELECT 2 PLAFOND_ID, NULL PLAFOND, p.* FROM (
-            SELECT
-                i.annee_id                             annee_id,
-                fr.type_volume_horaire_id              type_volume_horaire_id,
-                i.id                                   intervenant_id,
-                fr.total - fr.heures_compl_fc_majorees heures
-              FROM
-                intervenant                     i
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-                JOIN statut                    si ON si.id = i.statut_id
             ) p
 
             UNION ALL
@@ -1965,21 +1980,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 i.annee_id,
                 i.id,
                 i.statut_id
-            ) p
-
-            UNION ALL
-
-          SELECT 4 PLAFOND_ID, NULL PLAFOND, p.* FROM (
-            SELECT
-                i.annee_id                             annee_id,
-                fr.type_volume_horaire_id              type_volume_horaire_id,
-                i.id                                   intervenant_id,
-                fr.total - fr.heures_compl_fc_majorees heures
-              FROM
-                intervenant                     i
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-                JOIN statut                    si ON si.id = i.statut_id
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id

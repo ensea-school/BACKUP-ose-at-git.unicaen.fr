@@ -213,6 +213,7 @@ return [
         Assertion\PlafondAssertion::class => AssertionFactory::class,
         Service\PlafondService::class     => Service\PlafondServiceFactory::class,
         Processus\PlafondProcessus::class => Processus\PlafondProcessusFactory::class,
+        Service\IndicateurService::class  => Service\IndicateurServiceFactory::class,
     ],
 
     'forms' => [

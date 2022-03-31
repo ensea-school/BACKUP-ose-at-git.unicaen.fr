@@ -21,6 +21,7 @@ class IndicateurService extends AbstractService
 {
     use IntervenantServiceAwareTrait;
     use CacheContainerTrait;
+    use \Plafond\Service\IndicateurServiceAwareTrait;
 
 
     protected function getViewDef(int $numero): string
@@ -40,7 +41,11 @@ class IndicateurService extends AbstractService
         $structure = $this->getServiceContext()->getStructure();
         $annee     = $this->getServiceContext()->getAnnee();
 
-        $viewDef = $this->getViewDef($numero);
+        if ($indicateur->getTypeIndicateur()->isPlafond()) {
+            $viewDef = $this->getServiceIndicateur()->makeQuery($indicateur);
+        } else {
+            $viewDef = $this->getViewDef($numero);
+        }
 
         $params = [
             'annee' => $annee->getId(),

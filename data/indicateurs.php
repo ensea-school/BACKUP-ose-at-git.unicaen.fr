@@ -362,4 +362,39 @@ return [
             ],
         ],
     ],
+
+
+    'Plafonds par intervenants' => [
+        'id'          => 12,
+        'indicateurs' => [
+        ],
+    ],
+
+
+    'Plafonds par structures' => [
+        'id'          => 13,
+        'indicateurs' => [
+        ],
+    ],
+
+
+    'Plafonds par fonctions référentielles' => [
+        'id'          => 14,
+        'indicateurs' => [
+        ],
+    ],
+
+
+    'Plafonds par enseignements' => [
+        'id'          => 15,
+        'indicateurs' => [
+        ],
+    ],
+
+
+    'Plafonds par volumes horaires d\'enseignements' => [
+        'id'          => 16,
+        'indicateurs' => [
+        ],
+    ],
 ];

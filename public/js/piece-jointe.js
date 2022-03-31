@@ -11,7 +11,7 @@ $.widget("ose.pieceJointe", {
             that.validerDevalider($(this));
             event.preventDefault();
         });
-        //
+
         // that.element.on('click', '.refuser-pj', function (event) {
         //     that.refuser($(this));
         //     event.preventDefault();
@@ -94,7 +94,6 @@ $.widget("ose.pieceJointe", {
         var tpj = element.parents('.tpj').data('tpj');
 
         element.button('loading');
-        // that.onFileChange( tpj );
 
 
         $.ajax({

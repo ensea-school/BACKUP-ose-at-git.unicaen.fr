@@ -82,4 +82,4 @@ FROM tbl_agrement ta
     AND fr.etat_volume_horaire_id = evh.id
 
          LEFT JOIN heures_s ON heures_s.intervenant_id = i.id
-    AND heures_s.structure_id = s.id;
+    AND heures_s.structure_id = s.id

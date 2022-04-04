@@ -551,11 +551,11 @@ class PieceJointeController extends AbstractController
                 $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);
                 $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');
 
-                foreach ($pj->getFichier() as $fichier) {
-                    $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
-                }
+//                foreach ($pj->getFichier() as $fichier) {
+//                    $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
+//                }
 
-                $this->updateTableauxBord($pj->getIntervenant());
+//                $this->updateTableauxBord($pj->getIntervenant());
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }

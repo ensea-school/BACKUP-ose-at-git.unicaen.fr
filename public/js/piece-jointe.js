@@ -12,10 +12,14 @@ $.widget("ose.pieceJointe", {
             event.preventDefault();
         });
 
-        // that.element.on('click', '.refuser-pj', function (event) {
-        //     that.refuser($(this));
-        //     event.preventDefault();
-        // });
+        that.element.on('click', '.refuser-pj', function (event) {
+            that.refuser($(this));
+            event.preventDefault();
+        });
+
+        that.element.on('body', "pj-refus-event", function (event, data) {
+            location.reload(true);
+        });
 
         that.element.on('click', '.archiver-pj', function (event) {
             that.archiver($(this));
@@ -107,7 +111,7 @@ $.widget("ose.pieceJointe", {
                 console.log(jqXHR);
             },
             complete: function (jqXHR) {
-                that.onFileChange(tpj);
+                // that.onFileChange(tpj);
             }
         });
     },

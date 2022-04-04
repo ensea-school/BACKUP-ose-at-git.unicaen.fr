@@ -565,6 +565,23 @@ class ParametresForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'avenant',
+            'options'    => [
+                'label' => 'Possibilité de créer des avenants',
+
+                'value_options' => [
+                    PARAMETRE::AVENANT => 'Les avenants sont disponibles',
+                    'desactive'        => 'Fonctionnalité désactivée',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
     }
 
 

@@ -543,20 +543,20 @@
             "time": "2022-02-02T09:15:57+00:00"
         },
         {
-            "name"       : "doctrine/dbal",
-            "version"    : "3.3.4",
-            "source"     : {
-                "type"     : "git",
-                "url"      : "https://github.com/doctrine/dbal.git",
+            "name": "doctrine/dbal",
+            "version": "3.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/dbal.git",
                 "reference": "83f779beaea1893c0bece093ab2104c6d15a7f26"
             },
-            "dist"       : {
-                "type"     : "zip",
-                "url"      : "https://api.github.com/repos/doctrine/dbal/zipball/83f779beaea1893c0bece093ab2104c6d15a7f26",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/83f779beaea1893c0bece093ab2104c6d15a7f26",
                 "reference": "83f779beaea1893c0bece093ab2104c6d15a7f26",
-                "shasum"   : ""
+                "shasum": ""
             },
-            "require"    : {
+            "require": {
                 "composer-runtime-api": "^2",
                 "doctrine/cache": "^1.11|^2.0",
                 "doctrine/deprecations": "^0.5.3",
@@ -633,7 +633,7 @@
                 "sqlserver",
                 "sqlsrv"
             ],
-            "support"    : {
+            "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
                 "source": "https://github.com/doctrine/dbal/tree/3.3.4"
             },
@@ -651,7 +651,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time"       : "2022-03-20T18:37:29+00:00"
+            "time": "2022-03-20T18:37:29+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1450,20 +1450,20 @@
             "time": "2022-03-09T15:23:58+00:00"
         },
         {
-            "name"    : "doctrine/persistence",
-            "version" : "2.4.1",
-            "source"  : {
-                "type"     : "git",
-                "url"      : "https://github.com/doctrine/persistence.git",
+            "name": "doctrine/persistence",
+            "version": "2.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/persistence.git",
                 "reference": "092a52b71410ac1795287bb5135704ef07d18dd0"
             },
-            "dist"    : {
-                "type"     : "zip",
-                "url"      : "https://api.github.com/repos/doctrine/persistence/zipball/092a52b71410ac1795287bb5135704ef07d18dd0",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/092a52b71410ac1795287bb5135704ef07d18dd0",
                 "reference": "092a52b71410ac1795287bb5135704ef07d18dd0",
-                "shasum"   : ""
+                "shasum": ""
             },
-            "require" : {
+            "require": {
                 "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/collections": "^1.0",
                 "doctrine/deprecations": "^0.5.3",
@@ -1531,11 +1531,11 @@
                 "orm",
                 "persistence"
             ],
-            "support" : {
+            "support": {
                 "issues": "https://github.com/doctrine/persistence/issues",
                 "source": "https://github.com/doctrine/persistence/tree/2.4.1"
             },
-            "time"    : "2022-03-22T06:44:40+00:00"
+            "time": "2022-03-22T06:44:40+00:00"
         },
         {
             "name": "easybook/geshi",
@@ -1729,20 +1729,20 @@
             "time": "2022-03-09T23:07:57+00:00"
         },
         {
-            "name"       : "laminas/laminas-cache",
-            "version"    : "3.1.3",
-            "source"     : {
-                "type"     : "git",
-                "url"      : "https://github.com/laminas/laminas-cache.git",
+            "name": "laminas/laminas-cache",
+            "version": "3.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-cache.git",
                 "reference": "dfd5a66f6ea4b1979231560eb75b615c7aafe0e6"
             },
-            "dist"       : {
-                "type"     : "zip",
-                "url"      : "https://api.github.com/repos/laminas/laminas-cache/zipball/dfd5a66f6ea4b1979231560eb75b615c7aafe0e6",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-cache/zipball/dfd5a66f6ea4b1979231560eb75b615c7aafe0e6",
                 "reference": "dfd5a66f6ea4b1979231560eb75b615c7aafe0e6",
-                "shasum"   : ""
+                "shasum": ""
             },
-            "require"    : {
+            "require": {
                 "laminas/laminas-cache-storage-implementation": "1.0",
                 "laminas/laminas-eventmanager": "^3.4",
                 "laminas/laminas-servicemanager": "^3.7",
@@ -1760,20 +1760,20 @@
                 "psr/simple-cache-implementation": "1.0"
             },
             "require-dev": {
-                "laminas/laminas-cache-storage-adapter-apcu"      : "^2.0",
-                "laminas/laminas-cache-storage-adapter-blackhole" : "^2.0",
+                "laminas/laminas-cache-storage-adapter-apcu": "^2.0",
+                "laminas/laminas-cache-storage-adapter-blackhole": "^2.0",
                 "laminas/laminas-cache-storage-adapter-filesystem": "^2.0",
-                "laminas/laminas-cache-storage-adapter-memory"    : "^2.0",
-                "laminas/laminas-cache-storage-adapter-test"      : "^2.0",
-                "laminas/laminas-cli"                             : "^1.0",
-                "laminas/laminas-coding-standard"                 : "~2.2.0",
-                "laminas/laminas-config-aggregator"               : "^1.5",
-                "laminas/laminas-feed"                            : "^2.14",
-                "laminas/laminas-serializer"                      : "^2.6",
-                "phpbench/phpbench"                               : "^1.0",
-                "phpunit/phpunit"                                 : "^9.5",
-                "psalm/plugin-phpunit"                            : "^0.16.1",
-                "vimeo/psalm"                                     : "^4.9"
+                "laminas/laminas-cache-storage-adapter-memory": "^2.0",
+                "laminas/laminas-cache-storage-adapter-test": "^2.0",
+                "laminas/laminas-cli": "^1.0",
+                "laminas/laminas-coding-standard": "~2.2.0",
+                "laminas/laminas-config-aggregator": "^1.5",
+                "laminas/laminas-feed": "^2.14",
+                "laminas/laminas-serializer": "^2.6",
+                "phpbench/phpbench": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "psalm/plugin-phpunit": "^0.16.1",
+                "vimeo/psalm": "^4.9"
             },
             "suggest": {
                 "laminas/laminas-cache-storage-adapter-apcu": "APCu implementation",
@@ -1825,7 +1825,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time"       : "2022-03-24T09:32:54+00:00"
+            "time": "2022-03-24T09:32:54+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-memory",
@@ -5568,24 +5568,24 @@
             "time": "2021-10-10T03:01:02+00:00"
         },
         {
-            "name"   : "ramsey/uuid",
+            "name": "ramsey/uuid",
             "version": "4.3.1",
-            "source" : {
-                "type"     : "git",
-                "url"      : "https://github.com/ramsey/uuid.git",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ramsey/uuid.git",
                 "reference": "8505afd4fea63b81a85d3b7b53ac3cb8dc347c28"
             },
-            "dist"   : {
-                "type"     : "zip",
-                "url"      : "https://api.github.com/repos/ramsey/uuid/zipball/8505afd4fea63b81a85d3b7b53ac3cb8dc347c28",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/8505afd4fea63b81a85d3b7b53ac3cb8dc347c28",
                 "reference": "8505afd4fea63b81a85d3b7b53ac3cb8dc347c28",
-                "shasum"   : ""
+                "shasum": ""
             },
             "require": {
-                "brick/math"       : "^0.8 || ^0.9",
-                "ext-ctype"        : "*",
-                "ext-json"         : "*",
-                "php"              : "^8.0",
+                "brick/math": "^0.8 || ^0.9",
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "php": "^8.0",
                 "ramsey/collection": "^1.0"
             },
             "replace": {
@@ -5659,7 +5659,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time"   : "2022-03-27T21:42:02+00:00"
+            "time": "2022-03-27T21:42:02+00:00"
         },
         {
             "name": "setasign/fpdi",
@@ -7312,29 +7312,29 @@
     ],
     "packages-dev": [
         {
-            "name"       : "composer/pcre",
-            "version"    : "3.0.0",
-            "source"     : {
-                "type"     : "git",
-                "url"      : "https://github.com/composer/pcre.git",
+            "name": "composer/pcre",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/pcre.git",
                 "reference": "e300eb6c535192decd27a85bc72a9290f0d6b3bd"
             },
-            "dist"       : {
-                "type"     : "zip",
-                "url"      : "https://api.github.com/repos/composer/pcre/zipball/e300eb6c535192decd27a85bc72a9290f0d6b3bd",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/e300eb6c535192decd27a85bc72a9290f0d6b3bd",
                 "reference": "e300eb6c535192decd27a85bc72a9290f0d6b3bd",
-                "shasum"   : ""
+                "shasum": ""
             },
-            "require"    : {
+            "require": {
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phpstan/phpstan"             : "^1.3",
+                "phpstan/phpstan": "^1.3",
                 "phpstan/phpstan-strict-rules": "^1.1",
-                "symfony/phpunit-bridge"      : "^5"
+                "symfony/phpunit-bridge": "^5"
             },
-            "type"       : "library",
-            "extra"      : {
+            "type": "library",
+            "extra": {
                 "branch-alias": {
                     "dev-main": "3.x-dev"
                 }
@@ -7362,7 +7362,7 @@
                 "regex",
                 "regular expression"
             ],
-            "support"    : {
+            "support": {
                 "issues": "https://github.com/composer/pcre/issues",
                 "source": "https://github.com/composer/pcre/tree/3.0.0"
             },
@@ -7380,7 +7380,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time"       : "2022-02-25T20:21:48+00:00"
+            "time": "2022-02-25T20:21:48+00:00"
         },
         {
             "name": "composer/semver",
@@ -7464,28 +7464,28 @@
             "time": "2022-03-16T11:22:07+00:00"
         },
         {
-            "name"       : "composer/xdebug-handler",
-            "version"    : "3.0.3",
-            "source"     : {
-                "type"     : "git",
-                "url"      : "https://github.com/composer/xdebug-handler.git",
+            "name": "composer/xdebug-handler",
+            "version": "3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/xdebug-handler.git",
                 "reference": "ced299686f41dce890debac69273b47ffe98a40c"
             },
-            "dist"       : {
-                "type"     : "zip",
-                "url"      : "https://api.github.com/repos/composer/xdebug-handler/zipball/ced299686f41dce890debac69273b47ffe98a40c",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/ced299686f41dce890debac69273b47ffe98a40c",
                 "reference": "ced299686f41dce890debac69273b47ffe98a40c",
-                "shasum"   : ""
+                "shasum": ""
             },
-            "require"    : {
+            "require": {
                 "composer/pcre": "^1 || ^2 || ^3",
-                "php"          : "^7.2.5 || ^8.0",
-                "psr/log"      : "^1 || ^2 || ^3"
+                "php": "^7.2.5 || ^8.0",
+                "psr/log": "^1 || ^2 || ^3"
             },
             "require-dev": {
-                "phpstan/phpstan"             : "^1.0",
+                "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.1",
-                "symfony/phpunit-bridge"      : "^6.0"
+                "symfony/phpunit-bridge": "^6.0"
             },
             "type": "library",
             "autoload": {
@@ -7508,7 +7508,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "support"    : {
+            "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/xdebug-handler/issues",
                 "source": "https://github.com/composer/xdebug-handler/tree/3.0.3"
@@ -7527,7 +7527,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time"       : "2022-02-25T21:32:43+00:00"
+            "time": "2022-02-25T21:32:43+00:00"
         },
         {
             "name": "felixfbecker/advanced-json-rpc",
@@ -8029,24 +8029,24 @@
             "time": "2022-01-04T19:58:01+00:00"
         },
         {
-            "name"       : "phpmd/phpmd",
-            "version"    : "2.12.0",
-            "source"     : {
-                "type"     : "git",
-                "url"      : "https://github.com/phpmd/phpmd.git",
+            "name": "phpmd/phpmd",
+            "version": "2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpmd/phpmd.git",
                 "reference": "c0b678ba71902f539c27c14332aa0ddcf14388ec"
             },
-            "dist"       : {
-                "type"     : "zip",
-                "url"      : "https://api.github.com/repos/phpmd/phpmd/zipball/c0b678ba71902f539c27c14332aa0ddcf14388ec",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/c0b678ba71902f539c27c14332aa0ddcf14388ec",
                 "reference": "c0b678ba71902f539c27c14332aa0ddcf14388ec",
-                "shasum"   : ""
+                "shasum": ""
             },
-            "require"    : {
+            "require": {
                 "composer/xdebug-handler": "^1.0 || ^2.0 || ^3.0",
-                "ext-xml"                : "*",
-                "pdepend/pdepend"        : "^2.10.3",
-                "php"                    : ">=5.3.9"
+                "ext-xml": "*",
+                "pdepend/pdepend": "^2.10.3",
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "easy-doc/easy-doc": "0.0.0 || ^1.3.2",
@@ -8098,7 +8098,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "support"    : {
+            "support": {
                 "irc": "irc://irc.freenode.org/phpmd",
                 "issues": "https://github.com/phpmd/phpmd/issues",
                 "source": "https://github.com/phpmd/phpmd/tree/2.12.0"
@@ -8109,7 +8109,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time"       : "2022-03-24T13:33:01+00:00"
+            "time": "2022-03-24T13:33:01+00:00"
         },
         {
             "name": "sabre/event",

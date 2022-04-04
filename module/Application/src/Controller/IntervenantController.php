@@ -105,7 +105,7 @@ class  IntervenantController extends AbstractController
             Intervenant::class,
         ]);
 
-        $critere   = $this->params()->fromPost('critere');
+        $critere = $this->params()->fromPost('critere');
         $recherche = $this->getProcessusIntervenant()->recherche();
 
         $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
@@ -120,7 +120,7 @@ class  IntervenantController extends AbstractController
     public function voirAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $tab         = $this->params()->fromQuery('tab');
+        $tab = $this->params()->fromQuery('tab');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
@@ -238,7 +238,7 @@ class  IntervenantController extends AbstractController
         $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
         $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
         $params['action'] = 'formuleTotauxHetd';
-        $widget           = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
+        $widget = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
         if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
 
         /* Clôture de saisie (si nécessaire) */
@@ -297,7 +297,7 @@ class  IntervenantController extends AbstractController
 
     public function ficheAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
 
         return compact('intervenant', 'role');
@@ -306,10 +306,10 @@ class  IntervenantController extends AbstractController
 
     public function saisirAction()
     {
-        $intervenant  = $this->getEvent()->getParam('intervenant');
-        $title        = "Saisie d'un intervenant";
-        $form         = $this->getFormIntervenantEdition();
-        $errors       = [];
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $title = "Saisie d'un intervenant";
+        $form = $this->getFormIntervenantEdition();
+        $errors = [];
         $actionDetail = $this->params()->fromRoute('action-detail');
         if ($intervenant) {
             $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
@@ -341,19 +341,19 @@ class  IntervenantController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $oriData  = $form->getHydrator()->extract($intervenant);
+            $oriData = $form->getHydrator()->extract($intervenant);
             $postData = $request->getPost()->toArray();
-            $data     = array_merge($oriData, $postData);
+            $data = array_merge($oriData, $postData);
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
                     if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
-                        $nom           = $intervenant->getNomUsuel();
-                        $prenom        = $intervenant->getPrenom();
+                        $nom = $intervenant->getNomUsuel();
+                        $prenom = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();
-                        $login         = $form->get('intervenant-edition-login')->getValue();
-                        $password      = $form->get('intervenant-edition-password')->getValue();
-                        $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
+                        $login = $form->get('intervenant-edition-login')->getValue();
+                        $password = $form->get('intervenant-edition-password')->getValue();
+                        $utilisateur = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
                         $utilisateur->setCode($intervenant->getUtilisateurCode() ?: $intervenant->getCode());
                         $this->getServiceUtilisateur()->save($utilisateur);
                         if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
@@ -471,7 +471,7 @@ class  IntervenantController extends AbstractController
         /* @var $intervenant Intervenant */
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
     }
@@ -547,7 +547,7 @@ class  IntervenantController extends AbstractController
     public function validationVolumeHoraireTypeIntervenantAction()
     {
         $serviceRVS = $this->getServiceRegleStructureValidation();
-        $listeRsv   = $serviceRVS->getList();
+        $listeRsv = $serviceRVS->getList();
 
         return compact('listeRsv');
     }
@@ -556,8 +556,8 @@ class  IntervenantController extends AbstractController
     public function validationVolumeHoraireTypeIntervenantSaisieAction()
     {
         $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-        $form                     = $this->getFormIntervenantRegleStructureValidation();
-        $title                    = 'Édition de la régle de validation';
+        $form = $this->getFormIntervenantRegleStructureValidation();
+        $title = 'Édition de la régle de validation';
         $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
             try {
                 $this->getServiceRegleStructureValidation()->save($rsv);

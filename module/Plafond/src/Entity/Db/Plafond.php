@@ -103,7 +103,7 @@ class Plafond
         return $this;
     }
 
-
+    
 
     public function getRequete(): string
     {

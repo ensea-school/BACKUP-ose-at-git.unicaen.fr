@@ -23,13 +23,13 @@ class DataGen
      */
     private $donneesDefaut = [];
 
-    private $actions = [
+    private $actions       = [
         'install'    => 'Insertion des données',
         'update'     => 'Contrôle et mise à jour des données',
         'privileges' => 'Mise à jour des privilèges dans la base de données',
     ];
 
-    private $config  = [
+    private $config        = [
         /* Obligatoire au début */
         [
             'table'   => 'UTILISATEUR',

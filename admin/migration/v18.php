@@ -433,7 +433,10 @@ class v18 extends AbstractMigration
 
         if (empty($bdd->table()->get('SAVE_V18_TPJS'))) {
             $this->manager->sauvegarderTable('TYPE_PIECE_JOINTE_STATUT', 'SAVE_V18_TPJS');
+            $c->msg('Anciens paramètres "TYPE_PIECE_JOINTE_STATUT" sauvegardés dans "SAVE_V18_TPJS".');
+
             $bdd->exec('DELETE FROM TYPE_PIECE_JOINTE_STATUT');
+            $c->msg("Vidage de la table \"TYPE_PIECE_JOINTE_STATUT\" avant d'insérer les nouveaux paramètres");
         }
 
         /* Modifications au niveau de la table TPJS */

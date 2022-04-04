@@ -17,15 +17,16 @@ $.widget("ose.pieceJointe", {
             event.preventDefault();
         });
 
-        that.element.on('body', "pj-refus-event", function (event, data) {
-            location.reload(true);
+        $("body").on("pj-refus-event", function (event, container) {
+            var tpj = event.a.data('tpj');
+            that.onFileChange(tpj);
+            that.refreshContainerValidationBar();
+
         });
 
         that.element.on('click', '.archiver-pj', function (event) {
             that.archiver($(this));
             event.preventDefault();
-
-
         });
 
         $("body").on("upload-event-file-deleted upload-event-file-uploaded", function (event, container)
@@ -111,7 +112,7 @@ $.widget("ose.pieceJointe", {
                 console.log(jqXHR);
             },
             complete: function (jqXHR) {
-                // that.onFileChange(tpj);
+                that.onFileChange(tpj);
             }
         });
     },

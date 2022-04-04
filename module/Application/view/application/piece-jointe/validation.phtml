@@ -15,7 +15,7 @@ $params = [
 
 ?>
 
-<!-- actions de validation de la pièce jointe entière -->
+    <!-- actions de validation de la pièce jointe entière -->
 <?php if (!$pj->getValidation() && $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))): ?>
     <a class="valider-pj btn btn-success"
        href="<?= $this->url('piece-jointe/intervenant/valider', $params, [], true) ?>"
@@ -33,12 +33,12 @@ $params = [
        href="<?= $this->url('piece-jointe/intervenant/refuser', $params, [], true) ?>"
        title="Refuser la pièce justificative '<?= $pj->getType() ?>'"
        data-event="pj-refus-event"
-    >
+       data-tpj="<?= $pj->getType()->getId() ?>">
         <i class="fas fa-trash-can"></i> Refuser
     </a>
 <?php endif ?>
 
-<!-- actions de dévalidation de la pièce jointe entière -->
+    <!-- actions de dévalidation de la pièce jointe entière -->
 <?php if ($pj->getValidation() && $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION))): ?>
     <a class="devalider-pj btn btn-danger"
        href="<?= $this->url('piece-jointe/intervenant/devalider', $params, [], true) ?>"

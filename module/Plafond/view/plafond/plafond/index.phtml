@@ -1,12 +1,11 @@
 <?php
 
-use Application\Entity\Db\PlafondApplication;
 use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
- * @var $plafonds             PlafondApplication[]
+ * @var $plafonds             \Plafond\Entity\Db\PlafondApplication[]
  */
 
 $canEdit   = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITION));
@@ -19,6 +18,7 @@ $canConfig = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CON
         <thead>
         <tr>
             <th rowspan="2">Périmètre</th>
+            <th rowspan="2">Numéro</th>
             <th rowspan="2">Plafond</th>
             <?php if ($canEdit): ?>
                 <th rowspan="2">Actions</th>
@@ -35,6 +35,7 @@ $canConfig = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CON
         <?php foreach ($plafonds as $plafond): ?>
             <tr>
                 <td><?= $plafond->getPlafond()->getPlafondPerimetre() ?></td>
+                <td><?= $plafond->getPlafond()->getNumero() ?></td>
                 <td style="width:50%"><?= $plafond->getPlafond(); ?></td>
                 <?php if ($canEdit): ?>
                     <td>

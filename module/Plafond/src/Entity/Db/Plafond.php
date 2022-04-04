@@ -18,6 +18,8 @@ class Plafond
 
     protected string     $libelle = 'Nouveau plafond';
 
+    protected ?string    $message = null;
+
     protected string     $requete = '';
 
     protected Collection $plafondApplication;
@@ -73,6 +75,30 @@ class Plafond
     public function setLibelle(string $libelle): Plafond
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+
+
+    /**
+     * @param string|null $message
+     *
+     * @return Plafond
+     */
+    public function setMessage(?string $message): Plafond
+    {
+        $this->message = $message;
 
         return $this;
     }

@@ -1,6 +1,9 @@
 <?php
 
 
+
+
+
 class DataGen
 {
     use \BddAdmin\Logger\LoggerAwareTrait;
@@ -26,7 +29,7 @@ class DataGen
         'privileges' => 'Mise à jour des privilèges dans la base de données',
     ];
 
-    private $config = [
+    private $config  = [
         /* Obligatoire au début */
         [
             'table'   => 'UTILISATEUR',
@@ -129,7 +132,7 @@ class DataGen
         [
             'table'   => 'INDICATEUR',
             'context' => ['install', 'update'],
-            'key'     => 'NUMERO',
+            'key'     => ['TYPE_INDICATEUR_ID', 'NUMERO'],
         ],
         [
             'table'   => 'FORMULE',
@@ -356,11 +359,13 @@ class DataGen
     ];
 
 
+
     public function __construct(OseAdmin $oseAdmin)
     {
         $this->oseAdmin = $oseAdmin;
-        $this->setLogger($oseAdmin->getConsole());
+        $this->setLogger($oseAdmin->getBdd()->getLogger());
     }
+
 
 
     public function install(string $table = null)
@@ -369,10 +374,12 @@ class DataGen
     }
 
 
+
     public function update(string $table = null)
     {
         return $this->action('update', $table);
     }
+
 
 
     public function updatePrivileges()
@@ -381,10 +388,11 @@ class DataGen
     }
 
 
+
     private function action(string $action, string $table = null)
     {
         $this->logBegin($this->actions[$action]);
-        $this->nomenclature = require $this->oseAdmin->getOseDir() . 'data/nomenclatures.php';
+        $this->nomenclature  = require $this->oseAdmin->getOseDir() . 'data/nomenclatures.php';
         $this->donneesDefaut = require $this->oseAdmin->getOseDir() . 'data/donnees_par_defaut.php';
 
         foreach ($this->config as $tbl => $params) {
@@ -394,16 +402,19 @@ class DataGen
             }
         }
 
-        $this->logMsg('Mise à jour du point d\'indice pour les HETD ...', true);
-        $this->oseAdmin->getBdd()->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
+        if (!$table) {
+            $this->logMsg('Mise à jour du point d\'indice pour les HETD ...', true);
+            $this->oseAdmin->getBdd()->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
+        }
         $this->logEnd();
     }
+
 
 
     private function syncTable(string $table, array $params)
     {
         $tableObject = $this->oseAdmin->getBdd()->getTable($table);
-        $ddl = $tableObject->getDdl();
+        $ddl         = $tableObject->getDdl();
 
         if ($tableObject->hasHistorique() && !isset($params['options']['histo-user-id'])) {
             $params['options']['histo-user-id'] = $this->oseAdmin->getOseAppliId();
@@ -448,11 +459,12 @@ class DataGen
     }
 
 
+
     private function getAnneeCourante(): int
     {
-        $now = new \DateTime();
-        $year = (int)$now->format('Y');
-        $mois = (int)$now->format('m');
+        $now      = new \DateTime();
+        $year     = (int)$now->format('Y');
+        $mois     = (int)$now->format('m');
         $anneeRef = $year;
         if ($mois < 9) $anneeRef--;
 
@@ -460,15 +472,16 @@ class DataGen
     }
 
 
+
     public function ANNEE()
     {
         $annees = [];
         for ($a = 1950; $a < 2100; $a++) {
             $dateDebut = \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-09-01 00:00:00');
-            $dateFin = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
+            $dateFin   = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
 
             $anneeRef = $this->getAnneeCourante();
-            $active = ($a >= $anneeRef && $a < $anneeRef + 3);
+            $active   = ($a >= $anneeRef && $a < $anneeRef + 3);
 
             $annees[$a] = [
                 'ID'         => $a,
@@ -482,6 +495,7 @@ class DataGen
 
         return $annees;
     }
+
 
 
     public function DEPARTEMENT()
@@ -511,21 +525,23 @@ class DataGen
     }
 
 
+
     public function IMPORT_TABLES()
     {
         $data = require $this->oseAdmin->getOseDir() . 'data/import_tables.php';
 
         $ordre = 0;
-        $d = [];
+        $d     = [];
         foreach ($data as $table => $td) {
             $ordre++;
             $td['TABLE_NAME'] = $table;
-            $td['ORDRE'] = $ordre;
-            $d[] = $td;
+            $td['ORDRE']      = $ordre;
+            $d[]              = $td;
         }
 
         return $d;
     }
+
 
 
     public function ETAT_SORTIE()
@@ -534,9 +550,10 @@ class DataGen
     }
 
 
+
     public function CATEGORIE_PRIVILEGE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data       = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
         $categories = [];
         foreach ($data as $code => $record) {
             $categories[] = [
@@ -550,9 +567,10 @@ class DataGen
     }
 
 
+
     public function PRIVILEGE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data       = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
         $privileges = [];
         foreach ($data as $code => $record) {
             $io = 0;
@@ -571,12 +589,13 @@ class DataGen
     }
 
 
+
     public function FORMULE()
     {
-        $data = $this->nomenclature['FORMULE'];
+        $data     = $this->nomenclature['FORMULE'];
         $formules = [];
         foreach ($data as $id => $formule) {
-            $formule['ID'] = $id;
+            $formule['ID']             = $id;
             $formule['PROCEDURE_NAME'] = 'CALCUL_RESULTAT';
             for ($i = 1; $i < 6; $i++) {
                 if (!isset($formule['I_PARAM_' . $i . '_LIBELLE'])) $formule['I_PARAM_' . $i . '_LIBELLE'] = null;
@@ -589,34 +608,37 @@ class DataGen
     }
 
 
+
     public function PLAFOND()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
 
         foreach ($data['plafonds'] as $numero => $p) {
-            $psql = 'SELECT id FROM plafond_perimetre WHERE code = :code';
+            $psql        = 'SELECT id FROM plafond_perimetre WHERE code = :code';
             $perimetreId = $this->oseAdmin->getBdd()->select($psql, ['code' => $p['perimetre']], ['fetch' => \BddAdmin\Bdd::FETCH_ONE])['ID'];
-            $plafond = [
+            $plafond     = [
                 'NUMERO'               => $numero,
                 'LIBELLE'              => $p['libelle'],
+                'MESSAGE'              => $p['message'] ?? null,
                 'PLAFOND_PERIMETRE_ID' => $perimetreId,
                 'REQUETE'              => $p['requete'],
             ];
-            $plafonds[] = $plafond;
+            $plafonds[]  = $plafond;
         }
 
         return $plafonds;
     }
 
 
+
     public function PLAFOND_ETAT()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
-        $id = 1;
+        $id       = 1;
         foreach ($data['etats'] as $code => $pe) {
-            $plafond = [
+            $plafond    = [
                 'ID'       => $id,
                 'CODE'     => $code,
                 'LIBELLE'  => $pe['libelle'],
@@ -630,14 +652,15 @@ class DataGen
     }
 
 
+
     public function PLAFOND_PERIMETRE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
-        $id = 0;
+        $id       = 0;
         foreach ($data['perimetres'] as $code => $libelle) {
             $id++;
-            $plafond = [
+            $plafond    = [
                 'ID'      => $id,
                 'CODE'    => $code,
                 'LIBELLE' => $libelle,
@@ -649,13 +672,14 @@ class DataGen
     }
 
 
+
     public function TYPE_INDICATEUR()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre = 0;
+        $ordre       = 0;
         foreach ($data as $libelle => $indicateur) {
-            $idata = [
+            $idata         = [
                 'ID'      => $indicateur['id'],
                 'LIBELLE' => $libelle,
                 'ORDRE'   => $ordre++,
@@ -667,11 +691,12 @@ class DataGen
     }
 
 
+
     public function INDICATEUR()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre = 0;
+        $ordre       = 0;
         foreach ($data as $typeIndicateur) {
             foreach ($typeIndicateur['indicateurs'] as $numero => $idata) {
                 $indicateur = [
@@ -686,23 +711,30 @@ class DataGen
             }
         }
 
+        $pis = $this->oseAdmin->getBdd()->select('SELECT * FROM V_PLAFOND_INDICATEURS');
+        foreach ($pis as $pi) {
+            $indicateurs[] = $pi;
+        }
+
         return $indicateurs;
     }
 
 
+
     public function WF_ETAPE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
+        $data   = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
         $etapes = [];
-        $ordre = 1;
+        $ordre  = 1;
         foreach ($data as $code => $etape) {
-            $etape['CODE'] = $code;
+            $etape['CODE']  = $code;
             $etape['ORDRE'] = $ordre++ * 10;
-            $etapes[] = $etape;
+            $etapes[]       = $etape;
         }
 
         return $etapes;
     }
+
 
 
     public function PARAMETRE()
@@ -724,14 +756,14 @@ class DataGen
             }
         }
 
-        $data['annee']['VALEUR'] = (string)$this->getAnneeCourante();
+        $data['annee']['VALEUR']        = (string)$this->getAnneeCourante();
         $data['annee_import']['VALEUR'] = (string)$this->getAnneeCourante();
-        $data['oseuser']['VALEUR'] = (string)$this->oseAdmin->getOseAppliId();
+        $data['oseuser']['VALEUR']      = (string)$this->oseAdmin->getOseAppliId();
 
         $parametres = [];
         foreach ($data as $nom => $params) {
             $params['NOM'] = $nom;
-            $parametres[] = $params;
+            $parametres[]  = $params;
         }
 
         return $parametres;

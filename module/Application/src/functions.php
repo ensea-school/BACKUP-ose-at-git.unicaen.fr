@@ -110,34 +110,9 @@ function vhlDump(\Application\Entity\VolumeHoraireListe $volumeHoraireListe): \O
 }
 
 
-function adminBdd(): \BddAdmin\Bdd
+function oseAdmin(): OseAdmin
 {
-    if (!class_exists('BddAdmin\Bdd')) {
-        spl_autoload_register(function ($class) {
-            if (0 === strpos($class, 'BddAdmin')) {
-                $dir   = getcwd() . '/admin/src/';
-                $class = $dir . str_replace('\\', '/', $class) . '.php';
+    require_once getcwd() . '/admin/src/OseAdmin.php';
 
-                require_once $class;
-            }
-        });
-    }
-
-    $bdd = new BddAdmin\Bdd(AppConfig::get('bdd'));
-
-    return $bdd;
-}
-
-
-function adminConsole(): Console
-{
-    if (!class_exists('Console')) {
-        $dir = getcwd() . '/admin/src/';
-        require_once $dir . '/BddAdmin/Logger/LoggerInterface.php';
-        require_once $dir . '/Console.php';
-    }
-
-    $console = new Console;
-
-    return $console;
+    return OseAdmin::getInstance();
 }

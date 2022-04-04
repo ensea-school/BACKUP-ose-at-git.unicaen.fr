@@ -4,6 +4,7 @@ namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
@@ -55,19 +56,29 @@ class PlafondController extends AbstractController
 
         $form = $this->getFormPlafond();
         $form->bindRequestSave($plafond, $this->getRequest(), function (Plafond $p) {
-            try {
-                $this->getServicePlafond()->save($p);
-                $this->construireAction();
-
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-
-                $this->redirect()->toRoute('plafond');
-            } catch (Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
+            $this->getServicePlafond()->save($p);
+            $this->construireAction();
+            $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            $this->redirect()->toRoute('plafond');
         });
 
         return compact('title', 'form');
+    }
+
+
+
+    public function plafondsAction()
+    {
+        $perimetre           = $this->params()->fromRoute('perimetre');
+        $id                  = (int)$this->params()->fromRoute('id');
+        $typeVolumeHoraireId = (int)$this->params()->fromRoute('typeVolumeHoraire');
+
+        $class = $this->getServicePlafond()->perimetreCodeToEntityClass($perimetre);
+
+        $entity            = $this->em()->find($class, $id);
+        $typeVolumeHoraire = $this->em()->find(TypeVolumeHoraire::class, $typeVolumeHoraireId);
+
+        return compact('entity', 'typeVolumeHoraire');
     }
 
 

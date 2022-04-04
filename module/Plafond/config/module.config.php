@@ -34,6 +34,15 @@ return [
                         'plafond' => '[0-9]*',
                     ],
                 ],
+                'plafonds'  => [
+                    'route'       => '/plafonds/:perimetre/:id/:typeVolumeHoraire',
+                    'action'      => 'plafonds',
+                    'constraints' => [
+                        'perimetre'         => '[a-z_]*',
+                        'id'                => '[0-9]*',
+                        'typeVolumeHoraire' => '[0-9]*',
+                    ],
+                ],
 
                 'config-application' => [
                     'route'  => '/config/application',
@@ -134,6 +143,17 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['plafonds'],
+            'privileges' => [
+                Privileges::PLAFONDS_VISUALISATION,
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                Privileges::REFERENTIEL_REALISE_VISUALISATION,
+            ],
+        ],
+        [
+            'controller' => 'Plafond\Controller\Plafond',
             'action'     => ['config-application'],
             'privileges' => Privileges::PLAFONDS_CONFIG_APPLICATION,
         ],
@@ -193,6 +213,7 @@ return [
         Assertion\PlafondAssertion::class => AssertionFactory::class,
         Service\PlafondService::class     => Service\PlafondServiceFactory::class,
         Processus\PlafondProcessus::class => Processus\PlafondProcessusFactory::class,
+        Service\IndicateurService::class  => Service\IndicateurServiceFactory::class,
     ],
 
     'forms' => [
@@ -202,5 +223,6 @@ return [
 
     'view_helpers' => [
         'plafondConfig' => PlafondConfigElementViewHelperFactory::class,
+        'plafonds'      => View\Helper\PlafondsViewHelperFactory::class,
     ],
 ];

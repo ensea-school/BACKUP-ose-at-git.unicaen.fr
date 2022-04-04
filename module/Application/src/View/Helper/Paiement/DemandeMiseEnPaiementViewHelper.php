@@ -210,7 +210,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
                             'data-usage'          => $this->budget[$sid][$trid]['usage'],
                         ])->html(
                             $t('div', [
-                                'class'         => 'progressbar progress-bar-striped',
+                                'class'         => 'progress-bar progress-bar-striped',
                                 'role'          => 'progressbar',
                                 'aria-valuenow' => 0,
                                 'aria-valuemin' => 0,

@@ -7,3 +7,8 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+$oseAdmin = oseAdmin();
+$dataGen  = new DataGen($oseAdmin);
+var_dump($dataGen);
+//$dataGen->update('PRIVILEGE');

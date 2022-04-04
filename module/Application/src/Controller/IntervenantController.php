@@ -91,14 +91,12 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function rechercherAction()
     {
         $recents = $this->getIntervenantsRecents();
 
         return compact('recents');
     }
-
 
 
     public function rechercheAction()
@@ -117,7 +115,6 @@ class  IntervenantController extends AbstractController
 
         return compact('intervenants');
     }
-
 
 
     public function voirAction()
@@ -144,7 +141,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function definirParDefautAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -157,7 +153,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function servicesPrevusAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
@@ -166,14 +161,12 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function servicesRealisesAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
 
         return $this->servicesAction($typeVolumeHoraire);
     }
-
 
 
     private function servicesAction(TypeVolumehoraire $typeVolumeHoraire)
@@ -204,8 +197,6 @@ class  IntervenantController extends AbstractController
 
             return $vh;
         }
-
-        $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire);
 
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
 
@@ -263,7 +254,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function cloturerAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -305,7 +295,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function ficheAction()
     {
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
@@ -313,7 +302,6 @@ class  IntervenantController extends AbstractController
 
         return compact('intervenant', 'role');
     }
-
 
 
     public function saisirAction()
@@ -405,7 +393,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function synchronisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -430,7 +417,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function synchroniserAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -439,7 +425,6 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
     }
-
 
 
     public function voirHeuresCompAction()
@@ -480,7 +465,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function formuleTotauxHetdAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -491,7 +475,6 @@ class  IntervenantController extends AbstractController
 
         return compact('formuleResultat');
     }
-
 
 
     public function supprimerAction()
@@ -531,7 +514,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function historiserAction()
     {
         /* @var $intervenant \Application\Entity\Db\Intervenant */
@@ -544,7 +526,6 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
     }
-
 
 
     public function restaurerAction()
@@ -563,7 +544,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function validationVolumeHoraireTypeIntervenantAction()
     {
         $serviceRVS = $this->getServiceRegleStructureValidation();
@@ -571,7 +551,6 @@ class  IntervenantController extends AbstractController
 
         return compact('listeRsv');
     }
-
 
 
     public function validationVolumeHoraireTypeIntervenantSaisieAction()
@@ -596,7 +575,6 @@ class  IntervenantController extends AbstractController
 
         return compact('form', 'title');
     }
-
 
 
     /**
@@ -626,7 +604,6 @@ class  IntervenantController extends AbstractController
             return [];
         }
     }
-
 
 
     /**
@@ -667,7 +644,7 @@ class  IntervenantController extends AbstractController
                 'structure'        => (string)$intervenant->getStructure(),
                 'statut'           => (string)$intervenant->getStatut(),
                 'code'             => $intervenant->getCode(),
-                'numero-personnel' => $intervenant->getCode(),
+                'numero-personnel' => $intervenant->getCodeRh(),
                 '__horo_ajout__'   => (int)date('U'),
             ];
         } else {

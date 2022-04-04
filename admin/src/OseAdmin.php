@@ -9,20 +9,11 @@ class OseAdmin
     const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
     const MIN_VERSION = 14; // version minimum installable
 
-    /**
-     * @var self
-     */
-    private static $instance;
+    private static ?OseAdmin $instance = null;
 
-    /**
-     * @var Console
-     */
-    protected $console;
+    protected Console        $console;
 
-    /**
-     * @var Bdd
-     */
-    protected $bdd;
+    protected ?\BddAdmin\Bdd $bdd      = null;
 
     /**
      * @var array
@@ -56,21 +47,19 @@ class OseAdmin
 
 
 
-    /**
-     * OseAdmin constructor.
-     *
-     * @param Console $console
-     */
-    public function __construct(Console $console)
+    private function __construct()
     {
-        $this->console  = $console;
-        self::$instance = $this;
     }
 
 
 
     public static function getInstance(): self
     {
+        if (!self::$instance) {
+            self::$instance = new self();
+            self::$instance->init();
+        }
+
         return self::$instance;
     }
 
@@ -78,6 +67,26 @@ class OseAdmin
 
     public function init()
     {
+        spl_autoload_register(function ($class) {
+            $root = self::getInstance()->getOseDir();
+
+            $dirs = [
+                $root . '/admin/src/',
+                $root . '/admin/actul/src/',
+            ];
+
+            foreach ($dirs as $dir) {
+                $filename = $dir . str_replace('\\', '/', $class) . '.php';
+
+                if (file_exists($filename)) {
+                    require_once $filename;
+                    break;
+                }
+            }
+        });
+
+        $this->console = new Console();
+
         $this->version    = $this->currentVersion();
         $this->oldVersion = $this->version;
 
@@ -309,7 +318,9 @@ class OseAdmin
                     . "\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
             }
             $this->bdd = new \BddAdmin\Bdd(Config::getBdd());
-            $this->bdd->setLogger($this->console);
+            if (PHP_SAPI == 'cli') {
+                $this->bdd->setLogger($this->console);
+            }
         }
 
         return $this->bdd;

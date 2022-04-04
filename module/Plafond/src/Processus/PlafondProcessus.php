@@ -2,8 +2,12 @@
 
 namespace Plafond\Processus;
 
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\VolumeHoraire;
 use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -83,10 +87,10 @@ class PlafondProcessus implements EntityManagerAwareInterface
      *
      * @return bool
      */
-    public function controle($entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
+    public function controle(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
     {
         $blocage = false;
-        $reponse = $this->getServicePlafond()->controle($typeVolumeHoraire, $entity, $pourBlocage);
+        $reponse = $this->getServicePlafond()->controle($entity, $typeVolumeHoraire, $pourBlocage);
         if (!empty($reponse)) {
             foreach ($reponse as $controle) {
                 if ($controle->isBloquant() && $controle->isDepassement()) {

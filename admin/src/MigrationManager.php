@@ -38,7 +38,6 @@ class MigrationManager
         $this->oseAdmin = $oseAdmin;
         $this->ref      = $ref;
         $this->filtres  = DdlFilters::normalize($filters);
-        $this->old      = $oseAdmin->getBdd()->getDdl($filters);
     }
 
 
@@ -270,10 +269,14 @@ class MigrationManager
 
     public function migration(string $context = 'pre', string $action = null)
     {
+        if (!$this->old) {
+            $this->old = $this->oseAdmin->getBdd()->getDdl($this->filters);
+        }
+
         if (!is_dir($this->getMigrationDir())) return;
         $files = scandir($this->getMigrationDir());
         sort($files);
-        
+
         foreach ($files as $i => $file) {
             if ($file == '.' || $file == '..') {
                 continue;

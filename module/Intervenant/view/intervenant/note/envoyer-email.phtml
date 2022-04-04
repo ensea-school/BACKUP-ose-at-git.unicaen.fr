@@ -24,6 +24,7 @@ echo $this->form()->closeTag();
     $(function () {
         var selector = "textarea#<?= $form->get('content')->getAttribute('id') ?>";
         var form = $("form#<?= $form->getAttribute('id') ?>");
+        var message = "Êtes-vous sûr(e) de vouloir envoyer ce message à l'intervenant ?";
 
 
         installEditor(selector, form);

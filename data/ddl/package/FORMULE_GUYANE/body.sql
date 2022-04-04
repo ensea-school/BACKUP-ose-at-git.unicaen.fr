@@ -129,13 +129,6 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
 
 
-  FUNCTION autreEtablissement( v VARCHAR2 DEFAULT NULL ) RETURN BOOLEAN IS
-  BEGIN
-    RETURN COALESCE(LOWER(v),'non') = 'oui';
-  END;
-
-
-
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
     vh ose_formule.t_volume_horaire;
     i  ose_formule.t_intervenant;
@@ -441,7 +434,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- AH=SI(ET($D20="Oui";$N20<>"Oui";$H20<>"Référentiel";$A20=i_structure_code);$M20*($E20+$F20)*$AE20;0)
     WHEN c = 'AH' AND v >= 1 THEN
-      IF vh.service_statutaire AND NOT autreEtablissement(vh.param_1) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
+      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
         RETURN vh.heures * (vh.taux_fi + vh.taux_fa) * cell('AE', l);
       ELSE
         RETURN 0;
@@ -487,7 +480,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- AN=SI(ET($D20="Oui";$N20<>"Oui";$H20<>"Référentiel";$A20<>i_structure_code);$M20*($E20+$F20)*$AE20;0)
     WHEN c = 'AN' AND v >= 1 THEN
-      IF vh.service_statutaire AND NOT autreEtablissement(vh.param_1) AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
+      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
         RETURN vh.heures * (vh.taux_fi + vh.taux_fa) * cell('AE', l);
       ELSE
         RETURN 0;
@@ -533,7 +526,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- AT=SI(ET($D20="Oui";$N20<>"Oui";$H20<>"Référentiel";$A20=i_structure_code);$M20*$G20*$AE20;0)
     WHEN c = 'AT' AND v >= 1 THEN
-      IF vh.service_statutaire AND NOT autreEtablissement(vh.param_1) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
+      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fc * cell('AE',l);
       ELSE
         RETURN 0;
@@ -579,7 +572,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- AZ=SI(ET($D20="Oui";$N20<>"Oui";$H20<>"Référentiel";$A20<>i_structure_code);$M20*$G20*$AE20;0)
     WHEN c = 'AZ' AND v >= 1 THEN
-      IF vh.service_statutaire AND NOT autreEtablissement(vh.param_1) AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
+      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
         RETURN vh.heures * vh.taux_fc * cell('AE',l);
       ELSE
         RETURN 0;
@@ -624,8 +617,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
 
     -- BF=SI(ET($D20="Oui";$N20<>"Oui";$H20="Référentiel";$A20=i_structure_code);$M20*$AE20;0)
+    -- pas de prise en compte de si on est extérieur ou non
     WHEN c = 'BF' AND v >= 1 THEN
-      IF vh.service_statutaire AND NOT autreEtablissement(vh.param_1) AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
         RETURN vh.heures * cell('AE',l);
       ELSE
         RETURN 0;
@@ -671,7 +665,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- BL=SI(ET($D20="Oui";$N20<>"Oui";$H20="Référentiel";$A20<>i_structure_code;$A20<>$K$10);$M20*$AE20;0)
     WHEN c = 'BL' AND v >= 1 THEN
-      IF vh.service_statutaire AND NOT autreEtablissement(vh.param_1) AND vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
         RETURN vh.heures * cell('AE',l);
       ELSE
         RETURN 0;
@@ -717,7 +711,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- BR=SI(ET($D20="Oui";$N20<>"Oui";$H20="Référentiel";$A20=$K$10);$M20*$AE20;0)
     WHEN c = 'BR' AND v >= 1 THEN
-      IF vh.service_statutaire AND NOT autreEtablissement(vh.param_1) AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ THEN
+      IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ THEN
         RETURN vh.heures * cell('AE',l);
       ELSE
         RETURN 0;
@@ -763,7 +757,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
 
     -- BX=SI(ET($D20="Oui";$N20="Oui");$M20*$AE20;0)
     WHEN c = 'BX' AND v >= 1 THEN
-      IF vh.service_statutaire AND autreEtablissement(vh.param_1) THEN
+      IF vh.service_statutaire AND vh.structure_code IS NULL THEN
         RETURN vh.heures * cell('AE',l);
       ELSE
         RETURN 0;
@@ -857,7 +851,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_GUYANE AS
     RETURN '
     SELECT
       fvh.*,
-      CASE WHEN s.element_pedagogique_id IS NULL THEN ''oui'' ELSE ''non'' END param_1,
+      NULL param_1,
       NULL param_2,
       NULL param_3,
       NULL param_4,

@@ -14,21 +14,6 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
-    SELECT
-        i.annee_id                          annee_id,
-        fr.type_volume_horaire_id           type_volume_horaire_id,
-        fr.intervenant_id                   intervenant_id,
-        fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
-      FROM
-             intervenant                i
-        JOIN statut                    si ON si.id = i.statut_id
-        JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
-        JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-    ) p
-
-    UNION ALL
-
   SELECT 1 PLAFOND_ID, NULL PLAFOND, p.* FROM (
     SELECT
         i.annee_id                          annee_id,
@@ -98,6 +83,21 @@ FROM
         JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
         JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
         JOIN statut                    si ON si.id = i.statut_id
+    ) p
+
+    UNION ALL
+
+  SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+    SELECT
+        i.annee_id                          annee_id,
+        fr.type_volume_horaire_id           type_volume_horaire_id,
+        fr.intervenant_id                   intervenant_id,
+        fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
+      FROM
+             intervenant                i
+        JOIN statut                    si ON si.id = i.statut_id
+        JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+        JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
     ) p
   ) p
   JOIN intervenant i ON i.id = p.intervenant_id

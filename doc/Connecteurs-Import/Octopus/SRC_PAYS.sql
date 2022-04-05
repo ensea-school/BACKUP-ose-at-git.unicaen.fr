@@ -1,8 +1,9 @@
 CREATE
 OR REPLACE FORCE VIEW SRC_PAYS AS
 SELECT code_pays                                                     code,
+       code_iso3                                                     code_iso3,
        libelle_long                                                  libelle,
-       coalesce(date_ouverture, TO_DATE('1900/01/01', 'YYYY/MM/DD')) validite_debut,
+       COALESCE(date_ouverture, to_date('1900/01/01', 'YYYY/MM/DD')) validite_debut,
        date_fermeture                                                validite_fin,
        0                                                             temoin_ue,
        s.id                                                          source_id,

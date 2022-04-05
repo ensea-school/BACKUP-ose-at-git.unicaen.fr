@@ -477,6 +477,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'temPrincipale' => 1,
             ];
 
+
             $params = [
                 'categorieEntree'           => 'ACTIVE',
                 'civilite'                  => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
@@ -484,7 +485,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                 'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
                 'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr($dossierIntervenant->getDepartementNaissance()->getCode(), 1, 2) : '',
-                'paysNaissance'             => 'FRA',
+                'paysNaissance'             => (!empty($dossierIntervenant->getPaysNaissance())) ? $dossierIntervenant->getPaysNaissance()->getCodeIso3() : '',
                 'emploi'                    => $datas['connecteurForm']['emploi'],
                 'listeCoordonneesPostales'  => $coordonneesPostales,
                 'listeCoordonneesBancaires' => $coordonneesBancaires,
@@ -666,7 +667,7 @@ class SihamConnecteur implements ConnecteurRhInterface
         }
 
         ksort($uo);
-        
+
         return $uo;
     }
 

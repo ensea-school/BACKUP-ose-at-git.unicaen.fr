@@ -203,14 +203,15 @@ $.widget("ose.serviceListe", {
             that.showHideDetails($(this).parents('.service-ligne').data('id'));
         });
 
-        this.element.find("table.service tr.service-ligne").each(function () {
+        //Uniquement pour le mode semestriel
+        this.element.find("table.service tr.service-ligne").not('.mode-calendaire').each(function () {
             var id = $(this).data('id');
             var totalHeures = 0;
             $(this).find('td.heures').each(function () {
                 totalHeures += $(this).data('value');
             });
-
-            if (totalHeures == 0) {
+            //On affiche toutes les lignes de services meme celle avec 0H
+            if (totalHeures === 0) {
                 $(this).hide();
                 that.element.find("table.service tr#service-" + id + "-volume-horaire-tr").hide();
             } else {
@@ -298,13 +299,15 @@ $.widget("ose.serviceListe", {
             popAjax.hide();
             that.onAfterSaisie(serviceId);
         });
-    },
+    }
+    ,
 
 
     getElementPrevuToPrevu: function () {
         return this.element.find(".prevu-to-prevu")
     }
-});
+})
+;
 
 
 $.widget("ose.serviceForm", {

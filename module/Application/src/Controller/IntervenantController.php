@@ -91,7 +91,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function rechercherAction()
     {
         $recents = $this->getIntervenantsRecents();
@@ -100,14 +99,13 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function rechercheAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Intervenant::class,
         ]);
 
-        $critere   = $this->params()->fromPost('critere');
+        $critere = $this->params()->fromPost('critere');
         $recherche = $this->getProcessusIntervenant()->recherche();
 
         $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
@@ -119,11 +117,10 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function voirAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $tab         = $this->params()->fromQuery('tab');
+        $tab = $this->params()->fromQuery('tab');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
@@ -144,7 +141,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function definirParDefautAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -157,7 +153,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function servicesPrevusAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
@@ -166,14 +161,12 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function servicesRealisesAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
 
         return $this->servicesAction($typeVolumeHoraire);
     }
-
 
 
     private function servicesAction(TypeVolumehoraire $typeVolumeHoraire)
@@ -245,7 +238,7 @@ class  IntervenantController extends AbstractController
         $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
         $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
         $params['action'] = 'formuleTotauxHetd';
-        $widget           = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
+        $widget = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
         if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
 
         /* Clôture de saisie (si nécessaire) */
@@ -259,7 +252,6 @@ class  IntervenantController extends AbstractController
 
         return $vm;
     }
-
 
 
     public function cloturerAction()
@@ -303,23 +295,21 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function ficheAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
 
         return compact('intervenant', 'role');
     }
 
 
-
     public function saisirAction()
     {
-        $intervenant  = $this->getEvent()->getParam('intervenant');
-        $title        = "Saisie d'un intervenant";
-        $form         = $this->getFormIntervenantEdition();
-        $errors       = [];
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $title = "Saisie d'un intervenant";
+        $form = $this->getFormIntervenantEdition();
+        $errors = [];
         $actionDetail = $this->params()->fromRoute('action-detail');
         if ($intervenant) {
             $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
@@ -351,19 +341,19 @@ class  IntervenantController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $oriData  = $form->getHydrator()->extract($intervenant);
+            $oriData = $form->getHydrator()->extract($intervenant);
             $postData = $request->getPost()->toArray();
-            $data     = array_merge($oriData, $postData);
+            $data = array_merge($oriData, $postData);
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
                     if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
-                        $nom           = $intervenant->getNomUsuel();
-                        $prenom        = $intervenant->getPrenom();
+                        $nom = $intervenant->getNomUsuel();
+                        $prenom = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();
-                        $login         = $form->get('intervenant-edition-login')->getValue();
-                        $password      = $form->get('intervenant-edition-password')->getValue();
-                        $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
+                        $login = $form->get('intervenant-edition-login')->getValue();
+                        $password = $form->get('intervenant-edition-password')->getValue();
+                        $utilisateur = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
                         $utilisateur->setCode($intervenant->getUtilisateurCode() ?: $intervenant->getCode());
                         $this->getServiceUtilisateur()->save($utilisateur);
                         if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
@@ -403,7 +393,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function synchronisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -428,7 +417,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function synchroniserAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -437,7 +425,6 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
     }
-
 
 
     public function voirHeuresCompAction()
@@ -478,18 +465,16 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function formuleTotauxHetdAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
     }
-
 
 
     public function supprimerAction()
@@ -529,7 +514,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function historiserAction()
     {
         /* @var $intervenant \Application\Entity\Db\Intervenant */
@@ -542,7 +526,6 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
     }
-
 
 
     public function restaurerAction()
@@ -561,22 +544,20 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function validationVolumeHoraireTypeIntervenantAction()
     {
         $serviceRVS = $this->getServiceRegleStructureValidation();
-        $listeRsv   = $serviceRVS->getList();
+        $listeRsv = $serviceRVS->getList();
 
         return compact('listeRsv');
     }
 
 
-
     public function validationVolumeHoraireTypeIntervenantSaisieAction()
     {
         $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-        $form                     = $this->getFormIntervenantRegleStructureValidation();
-        $title                    = 'Édition de la régle de validation';
+        $form = $this->getFormIntervenantRegleStructureValidation();
+        $title = 'Édition de la régle de validation';
         $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
             try {
                 $this->getServiceRegleStructureValidation()->save($rsv);
@@ -594,7 +575,6 @@ class  IntervenantController extends AbstractController
 
         return compact('form', 'title');
     }
-
 
 
     /**
@@ -624,7 +604,6 @@ class  IntervenantController extends AbstractController
             return [];
         }
     }
-
 
 
     /**
@@ -665,7 +644,7 @@ class  IntervenantController extends AbstractController
                 'structure'        => (string)$intervenant->getStructure(),
                 'statut'           => (string)$intervenant->getStatut(),
                 'code'             => $intervenant->getCode(),
-                'numero-personnel' => $intervenant->getCode(),
+                'numero-personnel' => $intervenant->getCodeRh(),
                 '__horo_ajout__'   => (int)date('U'),
             ];
         } else {

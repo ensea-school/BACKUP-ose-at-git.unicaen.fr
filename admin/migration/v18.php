@@ -41,7 +41,9 @@ class v18 extends AbstractMigration
         $this->preMigrationIndicateurs();
         $this->preMigrationStatuts();
         $this->preMigrationIntervenants();
+        $this->preMigrationDossiers();
         $this->preMigrationTypePieceJointeStatuts();
+        $this->preMigrationTypeInterventionStatuts();
     }
 
 
@@ -79,9 +81,18 @@ class v18 extends AbstractMigration
         $bdd = $this->manager->getBdd();
         $c   = $this->manager->getOseAdmin()->getConsole();
 
+        $c->begin('Mise à jour de la liste des statuts');
+
+        if (empty($bdd->table()->get('SAVE_V18_STATUT'))) {
+            $this->manager->sauvegarderTable('STATUT_INTERVENANT', 'SAVE_V18_STATUT');
+            $c->msg('Anciens statuts "STATUT_INTERVENANT" sauvegardés dans "SAVE_V18_STATUT".');
+        }
+
+
         /* Modifications préalables à faire en BDD */
         if (empty($bdd->sequence()->get('STATUT_ID_SEQ'))) {
             $bdd->exec('CREATE SEQUENCE STATUT_ID_SEQ INCREMENT BY 1 MINVALUE 1 NOCACHE');
+            $c->msg('Nouvelle séquence STATUT_ID_SEQ ajoutée');
         }
 
         if (empty($bdd->table()->get('STATUT'))) {
@@ -166,11 +177,11 @@ class v18 extends AbstractMigration
               REFERENTIEL_REALISE_EDITION NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
               REFERENTIEL_REALISE_VISU NUMBER(1) DEFAULT 1 NOT NULL ENABLE
             )');
+            $c->msg('Nouvelle table STATUT créée');
         }
 
         /* Récup de tous les statuts */
-        $c->begin('Récupération des anciennes données liées aux statuts des intervenants');
-        $res     = $bdd->select('SELECT * FROM statut_intervenant');
+        $res     = $bdd->select('SELECT * FROM SAVE_V18_STATUT');
         $statuts = [];
         foreach ($res as $r) {
             $r['privileges']        = [];
@@ -223,7 +234,7 @@ class v18 extends AbstractMigration
           max(si.id) id, i.annee_id
         FROM
           intervenant i
-          JOIN statut_intervenant si ON si.id = i.statut_id
+          JOIN SAVE_V18_STATUT si ON si.id = i.statut_id
         GROUP BY
           si.code, i.annee_id
         ORDER BY
@@ -234,19 +245,29 @@ class v18 extends AbstractMigration
         }
 
         /* Calcul des années */
+        $toutesAnnees = [];
+        for ($a = 2010; $a < 2100; $a++) {
+            $toutesAnnees[] = $a;
+        }
+
         foreach ($statuts as $id => $statut) {
-            if (empty($statut['HISTO_DESTRUCTION'])) {
-                if (empty($statut['annees'])) {
-                    $maxAnnee = 2020;
-                } else {
-                    $maxAnnee = max($statut['annees']);
-                }
-                for ($a = $maxAnnee + 1; $a < 2100; $a++) {
-                    $statuts[$id]['annees'][] = $a;
-                }
+            $code = $statut['CODE'];
+            if ($code == 'AUTRES' || $code == 'NON_AUTORISE') {
+                $statuts[$id]['annees'] = $toutesAnnees;
             } else {
-                if (empty($statut['annees'])) {
-                    unset($statuts[$id]); // on supprime les statuts supprimés n'ayant jamais servi
+                if (empty($statut['HISTO_DESTRUCTION'])) {
+                    if (empty($statut['annees'])) {
+                        $maxAnnee = 2020;
+                    } else {
+                        $maxAnnee = max($statut['annees']);
+                    }
+                    for ($a = $maxAnnee + 1; $a < 2100; $a++) {
+                        $statuts[$id]['annees'][] = $a;
+                    }
+                } else {
+                    if (empty($statut['annees'])) {
+                        unset($statuts[$id]); // on supprime les statuts supprimés n'ayant jamais servi
+                    }
                 }
             }
         }
@@ -356,7 +377,7 @@ class v18 extends AbstractMigration
                 $new             = $statut['new'];
                 $new['ANNEE_ID'] = $annee;
                 if (!$first) {
-                    $new['HISTO_MODIFICATION'] = null;
+                    $new['HISTO_MODIFICATEUR_ID'] = null;
                 }
                 if (!isset($newStatuts[$new['CODE'] . '-' . $new['ANNEE_ID']])) {
                     $bdd->getTable('STATUT')->insert($new);
@@ -388,7 +409,7 @@ class v18 extends AbstractMigration
           nsi.id new_statut_id
         FROM
           intervenant i
-          JOIN statut_intervenant osi ON osi.id = i.statut_id
+          JOIN SAVE_V18_STATUT osi ON osi.id = i.statut_id
           LEFT JOIN statut nsi ON nsi.code = osi.code AND nsi.annee_id = i.annee_id
         WHERE
           osi.id <> COALESCE(nsi.id,0)
@@ -424,6 +445,51 @@ class v18 extends AbstractMigration
 
 
 
+    protected function preMigrationDossiers()
+    {
+        $bdd = $this->manager->getBdd();
+        $c   = $this->manager->getOseAdmin()->getConsole();
+
+        $c->begin('Application des nouveaux statuts aux données personnelles');
+
+        $convInts = $bdd->select("
+        SELECT
+          d.id dossier_id,
+          osi.id old_statut_id,
+          nsi.id new_statut_id
+        FROM
+          intervenant_dossier d
+          JOIN intervenant i ON i.id = d.intervenant_id
+          JOIN SAVE_V18_STATUT osi ON osi.id = d.statut_id
+          LEFT JOIN statut nsi ON nsi.code = osi.code AND nsi.annee_id = i.annee_id
+        WHERE
+          osi.id <> COALESCE(nsi.id,0)
+        ");
+        foreach ($convInts as $r) {
+            if (empty($r['NEW_STATUT_ID'])) {
+                $c->printDie('ERREUR : certaines données personnelles ne pourront pas avoir de statut au nouveau format. Merci de contacter l\'équipe OSE Caen pour résoudre ce problème');
+            }
+        }
+        try {
+            $bdd->exec("ALTER TABLE INTERVENANT_DOSSIER DROP CONSTRAINT INT_DOSSIER_STATUT_FK");
+        } catch (\Exception $e) {
+            // rien à faire : la contrainte a déjà du être supprimée
+        }
+        $current = 0;
+        $count   = count($convInts);
+        foreach ($convInts as $r) {
+            $current++;
+            $c->msg("Traitement des données personnelles $current / $count", true);
+            $bdd->exec('UPDATE INTERVENANT_DOSSIER SET STATUT_ID = :newStatutId WHERE ID = :id', [
+                'id'          => $r['DOSSIER_ID'],
+                'newStatutId' => $r['NEW_STATUT_ID'],
+            ]);
+        }
+        $c->end('Données personnelles mises à jour');
+    }
+
+
+
     protected function preMigrationTypePieceJointeStatuts()
     {
         $bdd = $this->manager->getBdd();
@@ -454,7 +520,7 @@ class v18 extends AbstractMigration
             $bdd->exec("ALTER TABLE TYPE_PIECE_JOINTE_STATUT MODIFY(HISTO_MODIFICATEUR_ID null)");
         }
 
-        /* Récupération des anciennes données */
+        /* Récupération des anciennes données et insertion des nouvelles */
         $res = $bdd->select("SELECT
           tpjs.id,
           t.type_piece_jointe_id,
@@ -485,7 +551,7 @@ class v18 extends AbstractMigration
             tpjs.obligatoire_hnp
           FROM 
             SAVE_V18_TPJS tpjs
-            JOIN statut_intervenant si ON si.id = tpjs.statut_intervenant_id
+            JOIN SAVE_V18_STATUT si ON si.id = tpjs.statut_intervenant_id
             JOIN (SELECT min(annee_id) annee_debut_id, max(annee_id) annee_fin_id, code FROM statut GROUP BY code) sc ON sc.code = si.code
             JOIN annee a ON a.id BETWEEN GREATEST(COALESCE(tpjs.annee_debut_id,1950), sc.annee_debut_id) AND LEAST(COALESCE(tpjs.annee_fin_id,2100), sc.annee_fin_id) 
             JOIN statut s ON s.code = si.code AND s.annee_id = a.id
@@ -507,7 +573,83 @@ class v18 extends AbstractMigration
             }
         }
 
-
         $c->end("Paramétrages de PJ mis à jour");
+    }
+
+
+
+    protected function preMigrationTypeInterventionStatuts()
+    {
+        $bdd = $this->manager->getBdd();
+        $c   = $this->manager->getOseAdmin()->getConsole();
+
+        $c->begin('Application des nouveaux statuts aux paramétrages des types d\'intervention');
+
+        if (empty($bdd->table()->get('SAVE_V18_TIS'))) {
+            $this->manager->sauvegarderTable('TYPE_INTERVENTION_STATUT', 'SAVE_V18_TIS');
+            $c->msg('Anciens paramètres "TYPE_INTERVENTION_STATUT" sauvegardés dans "SAVE_V18_TIS".');
+
+            $bdd->exec('DELETE FROM TYPE_INTERVENTION_STATUT');
+            $c->msg("Vidage de la table \"TYPE_INTERVENTION_STATUT\" avant d'insérer les nouveaux paramètres");
+        }
+
+        /* Modifications au niveau de la table TIS */
+        $ddl = $bdd->table()->get('TYPE_INTERVENTION_STATUT')['TYPE_INTERVENTION_STATUT'];
+        if (!isset($ddl['columns']['ANNEE_ID'])) {
+            $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT ADD(ANNEE_ID NUMBER)");
+        }
+        if (!isset($ddl['columns']['STATUT_ID'])) {
+            $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT RENAME COLUMN STATUT_INTERVENANT_ID TO STATUT_ID");
+        }
+        if (!isset($ddl['columns']['HISTO_CREATEUR_ID'])) {
+            $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT ADD(HISTO_CREATEUR_ID NUMBER(*,0))");
+        }
+        if (!isset($ddl['columns']['HISTO_CREATION'])) {
+            $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT ADD(HISTO_CREATION DATE)");
+        }
+        if (!isset($ddl['columns']['HISTO_MODIFICATEUR_ID'])) {
+            $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT ADD(HISTO_MODIFICATEUR_ID NUMBER(*,0))");
+        }
+        if (!isset($ddl['columns']['HISTO_MODIFICATION'])) {
+            $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT ADD(HISTO_MODIFICATION DATE)");
+        }
+
+        try {
+            $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT DROP CONSTRAINT TI_STATUT_STATUT_INT_FK");
+        } catch (\Exception $e) {
+            // rien à faire : la contrainte a déjà du être supprimée
+        }
+
+        /* Récupération des anciennes données et insertion des nouvelles */
+        $res = $bdd->select("
+        SELECT
+          ntis.id,
+          tis.type_intervention_id,
+          s.id statut_id,
+          COALESCE(tis.taux_hetd_service,1) taux_hetd_service,
+          COALESCE(tis.taux_hetd_complementaire,1) taux_hetd_complementaire,
+          s.annee_id,
+          ose_divers.get_ose_utilisateur_id histo_createur_id,
+          sysdate histo_creation,
+          ose_divers.get_ose_utilisateur_id histo_modificateur_id,
+          sysdate histo_modification
+        FROM
+          save_v18_tis tis
+          JOIN SAVE_V18_STATUT si ON si.id = tis.statut_intervenant_id
+          JOIN statut s ON s.code = si.code
+          LEFT JOIN type_intervention_statut ntis ON ntis.type_intervention_id = tis.type_intervention_id AND ntis.statut_id = s.id
+        ");
+
+        $count   = count($res);
+        $current = 0;
+        foreach ($res as $r) {
+            $current++;
+            $c->msg("Ajout du paramètre $current / $count ...", true);
+            if (empty($r['ID'])) {
+                $bdd->getTable('TYPE_INTERVENTION_STATUT')->insert($r);
+            }
+        }
+
+        $c->end("Paramétrages des types d'intervention mis à jour");
     }
 }

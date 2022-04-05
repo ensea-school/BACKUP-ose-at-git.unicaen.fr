@@ -198,24 +198,39 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
     $(function () {
         $("body").on("note-edition", function (event, data) {
             str = window.location.href;
+            event.div.modal('hide'); // ferme la fenêtre modale
             if (str.indexOf("tab=notes") !== -1) {
                 window.location.reload();
             } else {
                 window.location.assign(window.location.href + '?tab=notes');
             }
-            window.location.reload();
+
 
         });
         $("body").on("note-suppression", function (event, data) {
             str = window.location.href;
+            event.div.modal('hide'); // ferme la fenêtre modale
             if (str.indexOf("tab=notes") !== -1) {
                 window.location.reload();
             } else {
                 window.location.assign(window.location.href + '?tab=notes');
             }
-            window.location.reload();
+
 
         });
+
+
+        $("body").on("note-envoi-email", function (event, data) {
+            str = window.location.href;
+            event.div.modal('hide'); // ferme la fenêtre modale
+            if (str.indexOf("tab=notes") !== -1) {
+                window.location.reload();
+            } else {
+                window.location.assign(window.location.href + '?tab=notes');
+            }
+
+        });
+
     });
 </script>
 

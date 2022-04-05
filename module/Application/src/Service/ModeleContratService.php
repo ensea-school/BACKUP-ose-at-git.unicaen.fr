@@ -248,7 +248,7 @@ class ModeleContratService extends AbstractEntityService
         }
 
         if ($modele->getStatut() && $contrat->getIntervenant()->getStatut()) {
-            if ($modele->getStatut() == $contrat->getIntervenant()->getStatut()) {
+            if ($modele->getStatut()->getCode() == $contrat->getIntervenant()->getStatut()->getCode()) {
                 $rank += 55;
             } else {
                 return 0;

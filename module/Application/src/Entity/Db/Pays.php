@@ -29,6 +29,12 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     protected ?string $code = null;
 
     /**
+     * @var string
+     */
+    protected ?string $codeIso3 = null;
+
+
+    /**
      * @var string|null
      */
     protected ?string $libelle = null;
@@ -49,7 +55,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     protected ?DateTime $validiteFin = null;
 
 
-
     /**
      * @return int|null
      */
@@ -57,7 +62,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->id;
     }
-
 
 
     /**
@@ -73,7 +77,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @return string
      */
@@ -81,7 +84,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->code;
     }
-
 
 
     /**
@@ -97,6 +99,27 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
+    /**
+     * @return string
+     */
+    public function getCodeIso3(): ?string
+    {
+        return $this->codeIso3;
+    }
+
+
+    /**
+     * @param string $codeIso3
+     *
+     * @return Pays
+     */
+    public function setCodeIso3(?string $codeIso3): Pays
+    {
+        $this->codeIso3 = $codeIso3;
+
+        return $this;
+    }
+
 
     /**
      * @return string|null
@@ -105,7 +128,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->libelle;
     }
-
 
 
     /**
@@ -121,7 +143,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @return bool|null
      */
@@ -129,7 +150,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->temoinUe;
     }
-
 
 
     /**
@@ -145,7 +165,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @return DateTime|null
      */
@@ -153,7 +172,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->validiteDebut;
     }
-
 
 
     /**
@@ -169,7 +187,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @return DateTime|null
      */
@@ -177,7 +194,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->validiteFin;
     }
-
 
 
     /**
@@ -193,7 +209,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * Retourne la représentation littérale de cet objet.
      *
@@ -203,7 +218,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->getLibelle();
     }
-
 
 
     public function isFrance(): bool

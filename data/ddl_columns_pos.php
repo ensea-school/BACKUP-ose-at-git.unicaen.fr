@@ -1052,6 +1052,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'CODE',
+        'CODE_ISO3',
     ],
     'PERIMETRE'                      => [
         'ID',

@@ -334,7 +334,7 @@ class WorkflowService extends AbstractService
      * @param array|string    $tableauxBords
      * @param Intervenant|int $intervenant
      */
-    public function calculerTableauxBord($tableauxBords, $intervenant): array
+    public function calculerTableauxBord(array|string|null $tableauxBords, Intervenant|int $intervenant): array
     {
         $errors = [];
 
@@ -353,6 +353,11 @@ class WorkflowService extends AbstractService
             'validation_enseignement' => ['workflow'],
             'validation_referentiel'  => ['workflow'],
             'workflow'                => [],
+            //'plafond_structure'       => [],
+            //'plafond_intervenant'     => [],
+            //'plafond_element'         => [],
+            //'plafond_volume_horaire'  => [],
+            //'plafond_referentiel'     => [],
         ];
 
         if ($tableauxBords) {

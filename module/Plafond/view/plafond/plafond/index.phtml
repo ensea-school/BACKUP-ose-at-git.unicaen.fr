@@ -5,11 +5,10 @@ use Application\Provider\Privilege\Privileges;
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
- * @var $plafonds             \Plafond\Entity\Db\PlafondApplication[]
+ * @var $plafonds             \Plafond\Entity\Db\Plafond[]
  */
 
-$canEdit   = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITION));
-$canConfig = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_APPLICATION));
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITION));
 
 ?>
     <h1 class="page-header"><?= $title ?></h1>
@@ -23,26 +22,20 @@ $canConfig = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CON
             <?php if ($canEdit): ?>
                 <th rowspan="2">Actions</th>
             <?php endif; ?>
-            <th colspan="3">Application</th>
-        </tr>
-        <tr>
-            <th>Prévisionnel</th>
-            <th>Réalisé</th>
-            <th rowspan="2">Heures<sup>*</sup></th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($plafonds as $plafond): ?>
             <tr>
-                <td><?= $plafond->getPlafond()->getPlafondPerimetre() ?></td>
-                <td><?= $plafond->getPlafond()->getNumero() ?></td>
-                <td style="width:50%"><?= $plafond->getPlafond(); ?></td>
+                <td><?= $plafond->getPlafondPerimetre() ?></td>
+                <td><?= $plafond->getNumero() ?></td>
+                <td style="width:50%"><?= $plafond; ?></td>
                 <?php if ($canEdit): ?>
                     <td>
-                        <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getPlafond()->getId()]) ?>" title="Modifier le plafond"><i
+                        <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>" title="Modifier le plafond"><i
                                     class="fas fa-pen-to-square"></i></a>
                         <a class="pop-ajax"
-                           href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getPlafond()->getId()]) ?>"
+                           href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getId()]) ?>"
                            title="Supprimer le plafond"
                            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                            data-confirm="true"
@@ -54,15 +47,12 @@ $canConfig = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CON
                         </a>
                     </td>
                 <?php endif; ?>
-                <td><?= $this->plafondConfig($plafond)->etatPrevu($canConfig); ?></td>
-                <td><?= $this->plafondConfig($plafond)->etatRealise($canConfig); ?></td>
-                <td><?= $this->plafondConfig($plafond)->heures($canConfig); ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
 <?php if ($canEdit): ?>
     <a href="<?= $this->url('plafond/ajouter') ?>" class="btn btn-default">Création d'un nouveau plafond</a>
-    <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
 <?php endif; ?>
+    <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
 <?= $this->plafondConfig()->script() ?>

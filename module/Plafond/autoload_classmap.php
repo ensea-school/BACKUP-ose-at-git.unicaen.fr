@@ -10,7 +10,6 @@ return [
     'Plafond\Controller\PlafondController'                      => __DIR__ . '/src/Controller/PlafondController.php',
     'Plafond\Controller\PlafondControllerFactory'               => __DIR__ . '/src/Controller/PlafondControllerFactory.php',
     'Plafond\Entity\Db\Plafond'                                 => __DIR__ . '/src/Entity/Db/Plafond.php',
-    'Plafond\Entity\Db\PlafondApplication'                      => __DIR__ . '/src/Entity/Db/PlafondApplication.php',
     'Plafond\Entity\Db\PlafondDerogation'                       => __DIR__ . '/src/Entity/Db/PlafondDerogation.php',
     'Plafond\Entity\Db\PlafondEtat'                             => __DIR__ . '/src/Entity/Db/PlafondEtat.php',
     'Plafond\Entity\Db\PlafondPerimetre'                        => __DIR__ . '/src/Entity/Db/PlafondPerimetre.php',

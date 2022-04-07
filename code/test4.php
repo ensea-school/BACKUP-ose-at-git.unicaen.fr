@@ -8,6 +8,15 @@
  * @var $viewFile   string
  */
 
+if ($controller->getRequest()->isXmlHttpRequest()) {
+    $filename = getcwd() . '/cache/testRunner';
+    $content  = file_get_contents($filename);
+    file_put_contents($filename, '');
+    echo $content;
+
+    return;
+}
+
 exec('php ' . getcwd() . '/public/index.php UnicaenCode test6' . " > /dev/null &");
 
 ?>
@@ -20,27 +29,27 @@ exec('php ' . getcwd() . '/public/index.php UnicaenCode test6' . " > /dev/null &
     {
         $.ajax({
             type: 'POST',
-            url: '/unicaen-code/test6',
+            url: '/unicaen-code/test4',
             data: {},
-            success: function (data) {
+            success: function (data)
+            {
                 var endOfFlux = '<END-OF-FLUX />';
                 var theEnd = false;
                 if (data.substr(-endOfFlux.length) === endOfFlux) {
                     theEnd = true;
                     data = data.substr(0, data.length - endOfFlux.length);
+                    $('.aff .chargement').hide();
                 }
-                if (!theEnd) {
-                    data += '<span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Chargement en cours...';
-                }
-                $('.aff').html(data);
+                $('.aff .body').append(data);
                 if (!theEnd) {
                     setTimeout(affRes, 1000);
                 }
-            },
+            }
         });
     }
 
     $(function () {
+        $('.aff').html('<div class="body"></div><div class="chargement"><span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Chargement en cours...</div>');
         setTimeout(affRes, 1000);
     });
 </script>

@@ -25,14 +25,7 @@ class Flux
     public function demarrer(string $filename): bool
     {
         $this->filename = $filename;
-
-        if (!\Unicaen\Console\Console::isConsole()) {
-            echo file_get_contents($this->filename);
-
-            return false;
-        }
-
-        $this->buffer = fopen($this->filename, 'w');
+        $this->buffer   = fopen($this->filename, 'w');
 
         return true;
     }

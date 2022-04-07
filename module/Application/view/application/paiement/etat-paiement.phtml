@@ -23,7 +23,6 @@ switch ($recherche->getEtat()) {
     break;
 }
 $rechercheForm->get('exporter-csv-etat')->setValue('Extraction pour tableur (CSV)');
-
 $this->headTitle()->append($title);
 
 ?>
@@ -62,9 +61,6 @@ $this->headTitle()->append($title);
             echo $this->formRow($rechercheForm->get('afficher')) . ' ';
             if ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
                 echo $this->formRow($rechercheForm->get('exporter-csv-etat')) . ' ';
-            }
-            if ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
-                echo $this->formRow($rechercheForm->get('exporter-csv-imputation')) . ' ';
             }
             //Bouton export PDF mise en paiement
             if ($recherche->getEtat() === MiseEnPaiement::A_METTRE_EN_PAIEMENT && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF))) {

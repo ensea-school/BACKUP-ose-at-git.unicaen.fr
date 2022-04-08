@@ -485,7 +485,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                 'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
                 'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr($dossierIntervenant->getDepartementNaissance()->getCode(), 1, 2) : '',
-                'paysNaissance'             => (!empty($dossierIntervenant->getPaysNaissance())) ? $dossierIntervenant->getPaysNaissance()->getCodeIso3() : '',
+                'paysNaissance'             => (!empty($dossierIntervenant->getPaysNaissance() && !empty($dossierIntervenant->getPaysNaissance()->getCodeIso3()))) ? $dossierIntervenant->getPaysNaissance()->getCodeIso3() : 'FRA',
                 'emploi'                    => $datas['connecteurForm']['emploi'],
                 'listeCoordonneesPostales'  => $coordonneesPostales,
                 'listeCoordonneesBancaires' => $coordonneesBancaires,

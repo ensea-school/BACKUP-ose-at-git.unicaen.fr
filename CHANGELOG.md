@@ -11,11 +11,6 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 ## Nouveautés
 
-* Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
-* Depuis la fiche de service de l'intervenant, vous pouvez maintenant désactiver la possibilité de reporter le prévisionnel n-1 vers l'année en cours ou du prévisionnel vers le réalisé
-* Technique : 
-  * migration vers Laminas et Composer 2
-  * migration vers PHP 8
 * Nouvelle infrastructure de gestion des plafonds 
   * Les plafonds sont maintenant personnalisables : vous pouvez les modifier en retirer ou en créer
   * [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
@@ -23,30 +18,62 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
     * par composante
     * par statut d'intervenant
     * par fonction référentielle
+    * par élément pédagogique
+    * par volume horaire (par élément pédagogique et par type d'intervention, exemple: nombre de CM en Maths)
   * Les paramétrages liés aux plafonds sont annualisés
-  * Des dérogations aux plafonds sont possibles par intervenant
-* Paramétrage du mail expéditeur du contrat (Tâche #41014)
-* Possibilité d'envoyer en cci l'email des indicateurs (#40999)
-* Evolution des indicateurs
-  * gestion des dossiers irrecevables (#18307)
-  * extraction CSV des indicateurs (#19405)
-  * certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
-* Refonte de l'interface d'administration des statuts
-  * Les paramétrages de statuts sont maintenant annualisés
-* Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un
-  intervenant vers le SIRH
-* Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
-  intervenant
-* Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
-* Un nouveau modèle de contrat sera possible avec la ventilation des heures de services par types d'intervention (CM/TD/TP)
-* Des périodes pourront être ajoutés, supprimés ou modifiés depuis l'administration des périodes.
-* Les types de formations et les groupes les contenant pourront être ajoutés, supprimés ou modifiés depuis l'administration des types de formations.
-* Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les établissements (#42944)
-* Module Export Siham : possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
-* Ajout d'un module de gestion des Notes sur l'intervenant : 
+  * Les plafonds pourront être utilisés comme de simples indicateurs
+  * Des gauges relatives au plafonds affichent dans la page de saisie de service 
+  * Des dérogations aux plafonds sont possibles par intervenant via un nouvel onglet dédié
+  
+* Indicateurs
+  * Optimisation du chargement de la page des indicateurs
+  * Gestion des dossiers irrecevables (#18307)
+  * Extraction CSV des indicateurs (#19405)
+  * Certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
+  * Possibilité d'envoyer en cci l'email des indicateurs (#40999)
+
+* Saisie de service & référentiel
+  * Par statut, vous pouvez maintenant choisir d'activer le prévisionnel et le réalisé de manière indépendante
+  * Vous avez maintenant des privilèges distincts pour la saisie du service : un pour le prévisionnel et un pour le réalisé
+  * Idem pour le référentiel
+  * Idem pour les validations des services
+  * Idem pour les validations du référentiel
+  * Vous pouvez maintenant désactiver la possibilité de reporter le prévisionnel n-1 vers l'année en cours ou du prévisionnel vers le réalisé
+
+* Contrats
+  * Un nouveau modèle de contrat sera possible avec la ventilation des heures de services par types d'intervention (CM/TD/TP)
+  * Paramétrage du mail expéditeur du contrat (Tâche #41014)
+  * Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
+ 
+* Fiche Intervenant
+  * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
+  * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
+    intervenant
+
+* Export des intervenants vers Siham
+  * Possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
+  * Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un
+    intervenant vers le SIRH
+
+* Ajout d'un module de gestion des Notes sur l'intervenant
   * Possibilité de rajouter une note écrite (informations, message important etc...) sur une fiche intervenant (Tâche #25565)
   * Possibilité d'envoyer un email à intervenant avec historisation de l'email directement depuis la fiche intervenant (Tâche #26546)
   * Historique des emails envoyés à l'intervenant (contrat, indicateur etc...)
+
+* Interfaces d'administration
+  * Les types de formations et les groupes les contenant pourront être ajoutés, supprimés ou modifiés depuis l'administration des types de formations.
+  * Des périodes pourront être ajoutés, supprimés ou modifiés depuis l'administration des périodes.
+  * Améliorations ergonomiques de la "matrice" des privilèges
+  * La page d'administration des statuts a été réécrite pour plus de clarté et de souplesse
+    * Il n'est plus nécessaire de paramétrer les privilèges par statut, tout se passe désormais dans l'IHM d'administration des statuts
+    * Les paramétrages de statuts sont maintenant annualisés
+  
+* En bref
+  * Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les établissements (#42944)
+  * Les paramétrages de pièces justificatives par statut sont maintenant annualisés: il n'y a plus de notion d'année de début/année de fin
+  * Les paramétrages des types d'intervention par statut sont également annualisés
+  * [Technique] Migration vers Laminas et Composer 2
+  * [Technique] Migration vers PHP 8.0
 
 
 ## Corrections de bugs

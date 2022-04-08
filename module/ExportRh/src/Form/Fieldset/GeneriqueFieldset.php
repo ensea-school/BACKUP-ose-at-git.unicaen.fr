@@ -9,6 +9,19 @@ class GeneriqueFieldset extends AbstractFieldset
 
     public function init()
     {
+
+        //Nom usuel
+        $this->add([
+            'name'       => 'civilite',
+            'type'       => 'Checkbox',
+            'options'    => [
+                'label' => "Civilité",
+            ],
+            'attributes' => [
+                'value' => 1,
+            ],
+        ]);
+
         //Nom usuel
         $this->add([
             'name'       => 'nomUsuel',
@@ -156,7 +169,6 @@ class GeneriqueFieldset extends AbstractFieldset
 
         return $this;
     }
-
 
 
     public function getInputFilterSpecification()

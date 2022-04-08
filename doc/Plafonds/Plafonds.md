@@ -2,16 +2,21 @@
 
 ## Principes généraux
 
-Les plafonds permettent de cadrer la saisie des services (et du référentiel) 
+Les plafonds permettent de cadrer la saisie des services (et du référentiel)
 en fixant des règles à plusieurs niveaux.
 
+Un plafond se caractérise par un numéro qui lui est spécifique, un libellé, un message d'avertissement, un périmètre et une requête SQL qui permet de le
+calculer.
+
 Chaque plafond peut être activé ou non de plusieures manières :
+
 - Désactivé : le plafond n'est pas mis en œuvre
 - Indicateur : le plafond n'est pas affiché, il n'est utilisé que pour les indicateurs
 - Informatif : s'il y a dépassement, OSE vous l'indiquera, sans pour autant bloquer la saisie des heures
 - Bloquant : L'application refusera d'enregistrer toute heure qui entrainerait le dépassement du plafond
 
 Les plafonds ont un périmètre, dont voici la liste :
+
 - Composante : le calcul s'effectue à l'échelle de la composante
 - Intervenant : idem, mais au niveau de chaque intervenant
 - Elément : le plafond fera des tests au niveau de l'élément pédagogique
@@ -19,115 +24,125 @@ Les plafonds ont un périmètre, dont voici la liste :
 - Référentiel : calcul fait par fonction référentielle
 
 Enfin, chaque plafond peut être calculé selon deux contextes différents :
+
 - Prévisionnel : valable en saisie de service prévisionnel
 - Réalisé : valable pour le service réalisé
 
 ## Visualisation
 
 Pour chaque plafond, deux indicateurs sont automatiquement créés :
+
 - un pour le prévisionnel
 - un pour le réalisé
 
-Il y a en plus de cela : 
+De plus, au niveau de la fiche de saisie de services, un encart aves des gauges indique, par plafond, où en est l'intervenant. Seuls les plafonds informatifs ou
+bloquants sont affichés.
 
-- Pour le plafond par intervenant :
-une jauge sur la page de saisie de service permet de savoir où on en est.
-
-- Pour le plafond par volume horaire :
-une jauge est affichée dans le formulaire de la saisie de service, au plus près des heures saisies.
+Les gauges peuvent prendre plusieurs couleurs. Si le plafond est informatif, la gauge sera verte si le plafond n'est pas dépassé, et orange s'il y a
+dépassement. Si le plafond est bloquant, la gauge sera bleue, ou rouge en cas de dépassement.
 
 ## Administration
 
-Les plafonds peuvent être créés/modifiés/supprimés par un adfministrateurs
+Les plafonds peuvent être créés/modifiés/supprimés par un administrateur. Leur application (désactivé, informatif ou bloquant) pourra être également gérée par
+un administratif.
 
-Leur application (désactivé, informatif ou bloquant) pourra être gérés par un administratif
-
-Le guide administrateur vous donnera la marche à suivre de manière plus détaillée pour configurer vos plafonds.  
+Le guide administrateur vous donnera la marche à suivre de manière plus détaillée pour configurer vos plafonds.
 
 ## Mise en œuvre technique
 
-Dans OSE queqques plafonds vous sont proposés en standard. Ils sont désactivés par défaut.
-Il vous revient de les activer ou non selon vos besoins.
+Dans OSE queqques plafonds vous sont proposés en standard. Ils sont désactivés par défaut. Il vous revient de les activer ou non selon vos besoins.
 
 Mais vous avez aussi la possibilité de créer vos propres plafonds.
 
 Concrètement, un plafond se compose :
-- d'un code unique qui permet de distinguer facilement ce dernier
+
+- d'un numéro unique qui permet de distinguer facilement ce dernier
 - d'un libellé
+- d'un message qui s'affichera à droite des gauges et en alerte si dépassement à la saisie de service ou de référentiel
 - de son périmètre
 - d'une requête SQL qui permet de le calculer
 
-Les requêtes SQL sont normalisées par périmètre, c'est-à-dire qu'elles doivent comporter des colonnes
-bien spécifiques, dépendant du périmètre.
-Les requêtes que vous écrirez peuvent comporter plus de colonnes, mais celles listées ci-dessous sont obligatoires.
+Le message peut contenir une variable ":sujet" qui sera remplacé par la valeur correspondante selo le contexte.
+Par exemple, pour un plafond de périmètre intervenant, ":sujet" sera remplacé par le libellé du statut de l'intervenant.
+Pour un périmètre Composante, ":sujet" sera remplacé par le libellé court de la composante concernée.
+Idem avec le libellé des fonctions référentielles, des libellés d'éléments pédagogiqures, etc.
+
+
+Les requêtes SQL sont normalisées par périmètre, c'est-à-dire qu'elles doivent comporter des colonnes bien spécifiques, dépendant du périmètre. Les requêtes que
+vous écrirez peuvent comporter plus de colonnes, mais celles listées ci-dessous sont obligatoires, sauf PLAFOND dans certains cas.
 
 Liste des colonnes spécifiques par périmètre :
 
 ### Composante
 
-| Colonne | Type (ou référence) | Description |
-| ------- | ------------------- | ----------- |
-| ANNEE_ID               | => ANNEE.ID               | Année universitaire | 
-| STRUCTURE_ID           | => STRUCTURE.ID           | Identifiant de la composante concernée | 
-| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé |
-| PLAFOND                | FLOAT NOT NULL            | Valeur du plafond en heures |
+| Colonne                | Type (ou référence)       | Description                               |
+|------------------------|---------------------------|-------------------------------------------|
+| ANNEE_ID               | => ANNEE.ID               | Année universitaire                       | 
+| STRUCTURE_ID           | => STRUCTURE.ID           | Identifiant de la composante concernée    | 
+| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé                   |
+| PLAFOND*               | FLOAT NOT NULL            | Valeur du plafond en heures               |
 | HEURES                 | FLOAT NOT NULL            | Heures calculées pour l'intervenant donné |
 
-Attention : il doit y avoir unicité de la clé [ANNEE_ID, STRUCTURE_ID, TYPE_VOLUME_HORAIRE_ID]   
+Attention : il doit y avoir unicité de la clé [ANNEE_ID, STRUCTURE_ID, TYPE_VOLUME_HORAIRE_ID]
 
-
+(*) La colonne PLAFOND est facultative et ne doit être fournie que si ce plafond dépend d'un calcul. A défaut la valeur retenue est celle saisie dans l'IHM d'
+administration des structures pour le plafond donné.
 
 ### Intervenant
 
-| Colonne | Type (ou référence) | Description |
-| ------- | ------------------- | ----------- |
-| ANNEE_ID               | => ANNEE.ID               | Année universitaire | 
-| INTERVENANT_ID         | => INTERVENANT.ID         | Identifiant de l'intervenant concerné | 
-| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé |
-| PLAFOND                | FLOAT NOT NULL            | Valeur du plafond en heures |
+| Colonne                | Type (ou référence)       | Description                               |
+|------------------------|---------------------------|-------------------------------------------|
+| ANNEE_ID               | => ANNEE.ID               | Année universitaire                       | 
+| INTERVENANT_ID         | => INTERVENANT.ID         | Identifiant de l'intervenant concerné     | 
+| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé                   |
+| PLAFOND*               | FLOAT NOT NULL            | Valeur du plafond en heures               |
 | HEURES                 | FLOAT NOT NULL            | Heures calculées pour l'intervenant donné |
 
 Attention : il doit y avoir unicité de la clé [ANNEE_ID, INTERVENANT_ID, TYPE_VOLUME_HORAIRE_ID]
 
-
-
-### Elément
-
-| Colonne | Type (ou référence) | Description |
-| ------- | ------------------- | ----------- |
-| ANNEE_ID               | => ANNEE.ID               | Année universitaire | 
-| ELEMENT_PEDAGOGIQUE_ID | => ELEMENT_PEDAGOGIQUE.ID | Identifiant de l'élément pédagogique concerné | 
-| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé |
-| PLAFOND                | FLOAT NOT NULL            | Valeur du plafond en heures |
-| HEURES                 | FLOAT NOT NULL            | Heures calculées pour l'intervenant donné |
-
-Attention : il doit y avoir unicité de la clé [ANNEE_ID, ELEMENT_PEDAGOGIQUE_ID, TYPE_VOLUME_HORAIRE_ID]
-
-
-
-### Volume horaire
-
-| Colonne | Type (ou référence) | Description |
-| ------- | ------------------- | ----------- |
-| ANNEE_ID               | => ANNEE.ID               | Année universitaire | 
-| ELEMENT_PEDAGOGIQUE_ID | => ELEMENT_PEDAGOGIQUE.ID | Identifiant de l'élément pédagogique concerné | 
-| TYPE_INTERVENTION_ID   | => TYPE_INTERVENTION.ID   | Identifiant du type d'intervention (CM, TED, TP, etc.) |
-| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé |
-| PLAFOND                | FLOAT NOT NULL            | Valeur du plafond en heures |
-| HEURES                 | FLOAT NOT NULL            | Heures calculées pour l'intervenant donné |
-
-Attention : il doit y avoir unicité de la clé [ANNEE_ID, ELEMENT_PEDAGOGIQUE_ID, TYPE_INTERVENTION_ID, TYPE_VOLUME_HORAIRE_ID]
-
-
+(*) La colonne PLAFOND est facultative et ne doit être fournie que si ce plafond dépend d'un calcul (% du service dû, etc.). A défaut la valeur retenue est
+celle saisie dans l'IHM d'administration du statut relatif à l'intervenant pour le plafond donné.
 
 ### Référentiel
 
-| Colonne | Type (ou référence) | Description |
-| ------- | ------------------- | ----------- |
-| ANNEE_ID                | => ANNEE.ID                | Année universitaire | 
+| Colonne                 | Type (ou référence)        | Description                                    |
+|-------------------------|----------------------------|------------------------------------------------|
+| ANNEE_ID                | => ANNEE.ID                | Année universitaire                            | 
 | FONCTION_REFERENTIEL_ID | => FONCTION_REFERENTIEL.ID | Identifiant de la fonction référentielle visée | 
-| TYPE_VOLUME_HORAIRE_ID  | => TYPE_VOLUME_HORAIRE.ID  | Prévisionnel ou réalisé |
-| PLAFOND                 | FLOAT NOT NULL             | Valeur du plafond en heures |
-| HEURES                  | FLOAT NOT NULL             | Heures calculées pour l'intervenant donné |
+| TYPE_VOLUME_HORAIRE_ID  | => TYPE_VOLUME_HORAIRE.ID  | Prévisionnel ou réalisé                        |
+| PLAFOND*                | FLOAT NOT NULL             | Valeur du plafond en heures                    |
+| HEURES                  | FLOAT NOT NULL             | Heures calculées pour l'intervenant donné      |
 
 Attention : il doit y avoir unicité de la clé [ANNEE_ID, FONCTION_REFERENTIEL_ID, TYPE_VOLUME_HORAIRE_ID]
+
+* Si la colonne PLAFOND n'est pas fournie par la requête, alors la valeur du plafond sera celle saisie dans OSE pour la fonction référentielle donnée
+
+(*) La colonne PLAFOND est facultative et ne doit être fournie que si ce plafond dépend d'un calcul (% du service dû, etc.). A défaut la valeur retenue est
+celle saisie dans l'IHM d'administration de la fonction référentielle pour le plafond donné.
+
+### Elément
+
+| Colonne                | Type (ou référence)       | Description                                                    |
+|------------------------|---------------------------|----------------------------------------------------------------|
+| ANNEE_ID               | => ANNEE.ID               | Année universitaire                                            | 
+| ELEMENT_PEDAGOGIQUE_ID | => ELEMENT_PEDAGOGIQUE.ID | Identifiant de l'élément pédagogique concerné                  | 
+| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé                                        |
+| PLAFOND_ETAT_ID        | => PLAFOND_ETAT.ID        | Etat du plafond (désactivé, indicateur, informatif ou bloquant |
+| PLAFOND                | FLOAT NOT NULL            | Valeur du plafond en heures                                    |
+| HEURES                 | FLOAT NOT NULL            | Heures calculées pour l'intervenant donné                      |
+
+Attention : il doit y avoir unicité de la clé [ANNEE_ID, ELEMENT_PEDAGOGIQUE_ID, TYPE_VOLUME_HORAIRE_ID]
+
+### Volume horaire
+
+| Colonne                | Type (ou référence)       | Description                                                    |
+|------------------------|---------------------------|----------------------------------------------------------------|
+| ANNEE_ID               | => ANNEE.ID               | Année universitaire                                            | 
+| ELEMENT_PEDAGOGIQUE_ID | => ELEMENT_PEDAGOGIQUE.ID | Identifiant de l'élément pédagogique concerné                  | 
+| TYPE_INTERVENTION_ID   | => TYPE_INTERVENTION.ID   | Identifiant du type d'intervention (CM, TED, TP, etc.)         |
+| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé                                        |
+| PLAFOND_ETAT_ID        | => PLAFOND_ETAT.ID        | Etat du plafond (désactivé, indicateur, informatif ou bloquant |
+| PLAFOND                | FLOAT NOT NULL            | Valeur du plafond en heures                                    |
+| HEURES                 | FLOAT NOT NULL            | Heures calculées pour l'intervenant donné                      |
+
+Attention : il doit y avoir unicité de la clé [ANNEE_ID, ELEMENT_PEDAGOGIQUE_ID, TYPE_INTERVENTION_ID, TYPE_VOLUME_HORAIRE_ID]

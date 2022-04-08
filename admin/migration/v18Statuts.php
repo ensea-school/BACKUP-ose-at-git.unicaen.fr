@@ -37,38 +37,44 @@ class v18Statuts extends AbstractMigration
 
     public function before()
     {
+        $bdd = $this->manager->getBdd();
+        $c   = $this->manager->getOseAdmin()->getConsole();
+
         try {
             $this->preMigrationIndicateurs();
         } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
         }
 
         try {
             $this->preMigrationStatuts();
         } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
         }
 
         try {
             $this->preMigrationIntervenants();
         } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
         }
 
         try {
             $this->preMigrationDossiers();
         } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
         }
 
         try {
             $this->preMigrationTypePieceJointeStatuts();
         } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
         }
 
         try {
             $this->preMigrationTypeInterventionStatuts();
         } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
         }
-
-        $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
 
         $ddl = $bdd->table()->get('TBL_WORKFLOW')['TBL_WORKFLOW'];
         if (isset($ddl['columns']['STATUT_ID'])) {

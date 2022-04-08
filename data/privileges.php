@@ -413,7 +413,6 @@ return [
         'privileges' => [
             'visualisation'             => 'Visualisation',
             'edition'                   => 'Édition',
-            'config-application'        => 'Application',
             'config-structure'          => 'Configuration par composante',
             'config-referentiel'        => 'Configuration par fonction référentielle',
             'config-statut'             => 'Configuration par statut d\'intervenant',

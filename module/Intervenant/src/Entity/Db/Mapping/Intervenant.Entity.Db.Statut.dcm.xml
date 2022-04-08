@@ -55,7 +55,7 @@
         <field name="pieceJustificativeEdition" type="boolean" column="PJ_EDITION" nullable="false"/>
 
         <field name="conseilRestreint" type="boolean" column="CONSEIL_RESTREINT" nullable="false"/>
-        <field name="conseilRestreintVisualisation" type="boolean" column="CONSEIL_RESTREINT_VISUALISATION" nullable="false"/>
+        <field name="conseilRestreintVisualisation" type="boolean" column="CONSEIL_RESTREINT_VISU" nullable="false"/>
         <field name="conseilRestreintDureeVie" type="integer" column="CONSEIL_RESTREINT_DUREE_VIE" nullable="false"/>
         <field name="conseilAcademique" type="boolean" column="CONSEIL_ACA" nullable="false"/>
         <field name="conseilAcademiqueVisualisation" type="boolean" column="CONSEIL_ACA_VISUALISATION" nullable="false"/>

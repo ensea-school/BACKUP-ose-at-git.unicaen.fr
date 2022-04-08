@@ -153,8 +153,8 @@ return [
             'position'    => 44,
             'commentaire' => NULL,
         ],
-        'CONSEIL_RESTREINT_VISUALISATION' => [
-            'name'        => 'CONSEIL_RESTREINT_VISUALISATION',
+        'CONSEIL_RESTREINT_VISU' => [
+            'name'        => 'CONSEIL_RESTREINT_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

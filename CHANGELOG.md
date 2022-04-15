@@ -63,6 +63,10 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Interfaces d'administration
   * Les types de formations et les groupes les contenant pourront être ajoutés, supprimés ou modifiés depuis l'administration des types de formations.
   * Des périodes pourront être ajoutés, supprimés ou modifiés depuis l'administration des périodes.
+  * Des établissements pourront être ajoutés, supprimés ou modifiés depuis l'administration des établissements.
+  * Des pays pourront être ajoutés, supprimés ou modifiés depuis l'administration des pays.
+  * Des départements pourront être ajoutés, supprimés ou modifiés depuis l'administration des départements.
+  * Des corps pourront être ajoutés, supprimés ou modifiés depuis l'administration des corps présent dans le bloc d'administration des nomenclatures RH.
   * Améliorations ergonomiques de la "matrice" des privilèges
   * La page d'administration des statuts a été réécrite pour plus de clarté et de souplesse
     * Il n'est plus nécessaire de paramétrer les privilèges par statut, tout se passe désormais dans l'IHM d'administration des statuts

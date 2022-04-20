@@ -62,18 +62,23 @@ class PlafondsViewHelper extends AbstractHtmlElement
 
     public function render(): string
     {
-        $params = [
-            'perimetre'         => $this->getServicePlafond()->entityToPerimetreCode($this->entity),
-            'id'                => $this->entity->getId(),
-            'typeVolumeHoraire' => $this->typeVolumeHoraire->getId(),
-        ];
+        $contenu = $this->affichage();
+        if (!empty($contenu)) {
+            $params = [
+                'perimetre'         => $this->getServicePlafond()->entityToPerimetreCode($this->entity),
+                'id'                => $this->entity->getId(),
+                'typeVolumeHoraire' => $this->typeVolumeHoraire->getId(),
+            ];
 
-        $attrs = [
-            'class'    => 'plafonds alert alert-info',
-            'data-url' => $this->getView()->url('plafond/plafonds', $params),
-        ];
+            $attrs = [
+                'class'    => 'plafonds alert alert-info',
+                'data-url' => $this->getView()->url('plafond/plafonds', $params),
+            ];
 
-        return $this->getView()->tag('div', $attrs)->html($this->affichage());
+            return $this->getView()->tag('div', $attrs)->html($contenu);
+        } else {
+            return '';
+        }
     }
 
 

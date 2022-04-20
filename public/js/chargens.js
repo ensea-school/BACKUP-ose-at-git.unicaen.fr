@@ -721,7 +721,7 @@ $.widget("ose.chargens", {
         $.ajax({
             type: 'POST',
             url: url,
-            data: {params: params},
+            data: params,
             success: function (data)
             {
                 if (data.erreur) {

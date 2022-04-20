@@ -26,7 +26,6 @@ return [
     'Application\Cache\CacheService'                                                    => __DIR__ . '/src/Cache/CacheService.php',
     'Application\Cache\Factory\CacheServiceFactory'                                     => __DIR__ . '/src/Cache/Factory/CacheServiceFactory.php',
     'Application\ConfigFactory'                                                         => __DIR__ . '/src/ConfigFactory.php',
-    'Application\Connecteur\Bdd\BddConnecteur'                                          => __DIR__ . '/src/Connecteur/Bdd/BddConnecteur.php',
     'Application\Connecteur\Factory\LdapConnecteurFactory'                              => __DIR__ . '/src/Connecteur/Factory/LdapConnecteurFactory.php',
     'Application\Connecteur\LdapConnecteur'                                             => __DIR__ . '/src/Connecteur/LdapConnecteur.php',
     'Application\Constants'                                                             => __DIR__ . '/src/Constants.php',

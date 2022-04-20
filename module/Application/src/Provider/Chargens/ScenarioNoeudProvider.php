@@ -157,8 +157,7 @@ class ScenarioNoeudProvider
      */
     private function persistScenarioNoeud(ScenarioNoeud $scenarioNoeud, array $changes = [])
     {
-        $bdd         = $this->chargens->getBdd();
-        $conn        = $bdd->getEntityManager()->getConnection();
+        $conn        = $this->chargens->getEntityManager()->getConnection();
         $userId      = $this->chargens->getServiceContext()->getUtilisateur()->getId();
         $date        = $conn->convertToDatabaseValue(new \DateTime(), 'datetime');
         $oseSourceId = $this->chargens->getServiceSource()->getOse()->getId();
@@ -171,7 +170,7 @@ class ScenarioNoeudProvider
             $changes['HISTO_MODIFICATION']    = $date;
             $conn->update('SCENARIO_NOEUD', $changes, ['ID' => $scenarioNoeud->getId()]);
         } else {
-            $scenarioNoeud->setId($bdd->sequenceNextVal('SCENARIO_NOEUD_ID_SEQ'));
+            $scenarioNoeud->setId((int)$conn->fetchAssociative('SELECT SCENARIO_NOEUD_ID_SEQ.NEXTVAL VAL FROM DUAL')['VAL']);
             $changes['ID']                    = $scenarioNoeud->getId();
             $changes['SCENARIO_ID']           = $scenarioNoeud->getScenario()->getId();
             $changes['NOEUD_ID']              = $scenarioNoeud->getNoeud()->getId();
@@ -213,8 +212,7 @@ class ScenarioNoeudProvider
      */
     private function persistScenarioNoeudEffectif(ScenarioNoeudEffectif $scenarioNoeudEffectif, array $changes)
     {
-        $bdd  = $this->chargens->getBdd();
-        $conn = $bdd->getEntityManager()->getConnection();
+        $conn = $this->chargens->getEntityManager()->getConnection();
 
         if ($scenarioNoeudEffectif->getId()) {
             unset($changes['ID']);
@@ -226,7 +224,7 @@ class ScenarioNoeudProvider
                 $this->persistScenarioNoeud($scenarioNoeudEffectif->getScenarioNoeud());
             }
 
-            $scenarioNoeudEffectif->setId($bdd->sequenceNextVal('SCENARIO_NOEUD_EFFECTIF_ID_SEQ'));
+            $scenarioNoeudEffectif->setId((int)$conn->fetchAssociative('SELECT SCENARIO_NOEUD_EFFECTIF_ID_SEQ.NEXTVAL VAL FROM DUAL')['VAL']);
             $changes['ID']                    = $scenarioNoeudEffectif->getId();
             $changes['SCENARIO_NOEUD_ID']     = $scenarioNoeudEffectif->getScenarioNoeud()->getId();
             $changes['TYPE_HEURES_ID']        = $scenarioNoeudEffectif->getTypeHeures()->getId();
@@ -274,8 +272,8 @@ class ScenarioNoeudProvider
      */
     public function calculSousEffectifs(ScenarioNoeudEffectif $scenarioNoeudEffectif)
     {
-        $bdd = $this->chargens->getBdd();
-        $bdd->execPlsql('OSE_CHARGENS.CALC_SUB_EFFECTIF(:noeud, :scenario, :typeHeures, :etape);', [
+        $conn = $this->chargens->getEntityManager()->getConnection();
+        $conn->executeStatement('BEGIN OSE_CHARGENS.CALC_SUB_EFFECTIF(:noeud, :scenario, :typeHeures, :etape); END;', [
             'noeud'      => $scenarioNoeudEffectif->getScenarioNoeud()->getNoeud()->getId(),
             'scenario'   => $scenarioNoeudEffectif->getScenarioNoeud()->getScenario()->getId(),
             'typeHeures' => $scenarioNoeudEffectif->getTypeHeures()->getId(),
@@ -295,8 +293,7 @@ class ScenarioNoeudProvider
      */
     private function persistScenarioNoeudSeuil(ScenarioNoeudSeuil $scenarioNoeudSeuil, array $changes)
     {
-        $bdd  = $this->chargens->getBdd();
-        $conn = $bdd->getEntityManager()->getConnection();
+        $conn = $this->chargens->getEntityManager()->getConnection();
 
         $noData = $scenarioNoeudSeuil->getOuverture() === null
             && $scenarioNoeudSeuil->getDedoublement() === null
@@ -314,7 +311,7 @@ class ScenarioNoeudProvider
                 $this->persistScenarioNoeud($scenarioNoeudSeuil->getScenarioNoeud());
             }
 
-            $scenarioNoeudSeuil->setId($bdd->sequenceNextVal('SCENARIO_NOEUD_SEUIL_ID_SEQ'));
+            $scenarioNoeudSeuil->setId((int)$conn->fetchAssociative('SELECT SCENARIO_NOEUD_SEUIL_ID_SEQ.NEXTVAL VAL FROM DUAL')['VAL']);
             $changes['ID']                   = $scenarioNoeudSeuil->getId();
             $changes['SCENARIO_NOEUD_ID']    = $scenarioNoeudSeuil->getScenarioNoeud()->getId();
             $changes['TYPE_INTERVENTION_ID'] = $scenarioNoeudSeuil->getTypeIntervention()->getId();
@@ -344,7 +341,7 @@ class ScenarioNoeudProvider
           AND sn.noeud_id IN ($noeudIds)
         ";
 
-        return $this->chargens->getBdd()->fetch($sql);
+        return $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql);
     }
 
 
@@ -371,7 +368,7 @@ class ScenarioNoeudProvider
           sn.noeud_id IN ($noeudIds)
         ";
 
-        return $this->chargens->getBdd()->fetch($sql);
+        return $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql);
     }
 
 
@@ -399,7 +396,7 @@ class ScenarioNoeudProvider
           AND sn.noeud_id IN ($noeudIds)
         ";
 
-        return $this->chargens->getBdd()->fetch($sql);
+        return $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql);
     }
 
 

@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Connecteur\Bdd\BddConnecteur;
-use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Db\Scenario;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -20,7 +18,6 @@ use Doctrine\ORM\QueryBuilder;
 class ScenarioService extends AbstractEntityService
 {
     use ContextServiceAwareTrait;
-    use BddConnecteurAwareTrait;
 
 
     /**
@@ -67,12 +64,11 @@ class ScenarioService extends AbstractEntityService
      */
     public function dupliquer(Scenario $source, Scenario $destination, $noeuds = '', $liens = '')
     {
-        $bdd = new BddConnecteur();
-        $bdd->setEntityManager($this->getEntityManager());
+        $conn = $this->getEntityManager()->getConnection();
 
         $structure = $this->getServiceContext()->getStructure() ?: $source->getStructure();
 
-        $bdd->execPlsql('OSE_CHARGENS.DUPLIQUER(:source, :destination, :utilisateur, :structure, :noeuds, :liens);', [
+        $conn->executeStatement('BEGIN OSE_CHARGENS.DUPLIQUER(:source, :destination, :utilisateur, :structure, :noeuds, :liens); END;', [
             'source'      => $source->getId(),
             'destination' => $destination->getId(),
             'utilisateur' => $this->getServiceContext()->getUtilisateur()->getId(),

@@ -35,11 +35,11 @@ class EntityProvider
      */
     public function add($entity)
     {
-        if (is_array($entity)){
+        if (is_array($entity)) {
             foreach ($entity as $e) {
                 $this->__add($e);
             }
-        }else{
+        } else {
             $this->__add($entity);
         }
 
@@ -55,10 +55,10 @@ class EntityProvider
     {
         if ($entity && method_exists($entity, 'getId') && $entity->getId()) {
             $name = get_class($entity);
-            if (($pos = strpos($name,'Application')) > 0){
-                $name = substr( $name, $pos);
+            if (($pos = strpos($name, 'Application')) > 0) {
+                $name = substr($name, $pos);
             }
-            $id    = $entity->getId();
+            $id = $entity->getId();
 
             $this->entities[$name][$id] = $entity;
         }
@@ -67,28 +67,28 @@ class EntityProvider
 
 
     /**
-     * @param string  $name
+     * @param string        $name
      * @param integer|array $id
      *
      * @return $this
      */
     public function load($name, $id)
     {
-        if (is_array($id)){
-            foreach( $id as $k => $i ){
-                if ($this->has($name, $i)){
+        if (is_array($id)) {
+            foreach ($id as $k => $i) {
+                if ($this->has($name, $i)) {
                     unset($id[$k]);
                 }
             }
-            $repo = $this->chargens->getBdd()->getEntityManager()->getRepository($name);
-            $qb = $repo->createQueryBuilder('ent');
+            $repo = $this->chargens->getEntityManager()->getRepository($name);
+            $qb   = $repo->createQueryBuilder('ent');
             $qb->andWhere('ent IN (:ids)')->setParameter('ids', $id);
             $entity = $qb->getQuery()->execute();
-        }else{
-            if ($this->has($name, $id)){
+        } else {
+            if ($this->has($name, $id)) {
                 $entity = null;
-            }else{
-                $entity = $this->chargens->getBdd()->getEntityManager()->find($name, $id);
+            } else {
+                $entity = $this->chargens->getEntityManager()->find($name, $id);
             }
         }
 
@@ -141,9 +141,9 @@ class EntityProvider
      * This method is called by var_dump() when dumping an object to get the properties that should be shown.
      * If the method isn't defined on an object, then all public, protected and private properties will be shown.
      *
+     * @return array
      * @since PHP 5.6.0
      *
-     * @return array
      * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
      */
     function __debugInfo()

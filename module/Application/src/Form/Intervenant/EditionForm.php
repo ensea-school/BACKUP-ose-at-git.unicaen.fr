@@ -409,7 +409,7 @@ class EditionForm extends AbstractForm
 
     public function getStatuts(): array
     {
-        $statuts = $this->getServiceStatut()->getList($this->getServiceStatut()->finderByHistorique());
+        $statuts = $this->getServiceStatut()->getStatuts();
         $res     = [];
         foreach ($statuts as $statut) {
             $ti = $statut->getTypeIntervenant();

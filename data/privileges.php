@@ -330,7 +330,7 @@ return [
     ],
 
     'etat-sortie' => [
-        'libelle'    => 'États de sortie',
+        'libelle'    => 'Etats de sortie',
         'privileges' => [
             'administration-visualisation' => 'Administration (visualisation)',
             'administration-edition'       => 'Administration (édition)',

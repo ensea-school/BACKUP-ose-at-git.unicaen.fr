@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'STATUT_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'                        => [
+        'ANNEE_ID'                       => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'CLOTURE'                         => [
+        'CLOTURE'                        => [
             'name'        => 'CLOTURE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +33,7 @@ return [
             'position'    => 61,
             'commentaire' => NULL,
         ],
-        'CODE'                            => [
+        'CODE'                           => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -45,7 +45,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CODES_CORRESP_1'                 => [
+        'CODES_CORRESP_1'                => [
             'name'        => 'CODES_CORRESP_1',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -57,7 +57,7 @@ return [
             'position'    => 67,
             'commentaire' => NULL,
         ],
-        'CODES_CORRESP_2'                 => [
+        'CODES_CORRESP_2'                => [
             'name'        => 'CODES_CORRESP_2',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -69,7 +69,7 @@ return [
             'position'    => 68,
             'commentaire' => NULL,
         ],
-        'CODES_CORRESP_3'                 => [
+        'CODES_CORRESP_3'                => [
             'name'        => 'CODES_CORRESP_3',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -81,7 +81,7 @@ return [
             'position'    => 69,
             'commentaire' => NULL,
         ],
-        'CODES_CORRESP_4'                 => [
+        'CODES_CORRESP_4'                => [
             'name'        => 'CODES_CORRESP_4',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -93,7 +93,7 @@ return [
             'position'    => 70,
             'commentaire' => NULL,
         ],
-        'CONSEIL_ACA'                     => [
+        'CONSEIL_ACA'                    => [
             'name'        => 'CONSEIL_ACA',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -105,7 +105,7 @@ return [
             'position'    => 45,
             'commentaire' => NULL,
         ],
-        'CONSEIL_ACA_DUREE_VIE'           => [
+        'CONSEIL_ACA_DUREE_VIE'          => [
             'name'        => 'CONSEIL_ACA_DUREE_VIE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -117,7 +117,7 @@ return [
             'position'    => 47,
             'commentaire' => NULL,
         ],
-        'CONSEIL_ACA_VISUALISATION'       => [
+        'CONSEIL_ACA_VISUALISATION'      => [
             'name'        => 'CONSEIL_ACA_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -129,7 +129,7 @@ return [
             'position'    => 46,
             'commentaire' => NULL,
         ],
-        'CONSEIL_RESTREINT'               => [
+        'CONSEIL_RESTREINT'              => [
             'name'        => 'CONSEIL_RESTREINT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -141,7 +141,7 @@ return [
             'position'    => 42,
             'commentaire' => NULL,
         ],
-        'CONSEIL_RESTREINT_DUREE_VIE'     => [
+        'CONSEIL_RESTREINT_DUREE_VIE'    => [
             'name'        => 'CONSEIL_RESTREINT_DUREE_VIE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -153,7 +153,7 @@ return [
             'position'    => 44,
             'commentaire' => NULL,
         ],
-        'CONSEIL_RESTREINT_VISU' => [
+        'CONSEIL_RESTREINT_VISU'         => [
             'name'        => 'CONSEIL_RESTREINT_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -165,7 +165,7 @@ return [
             'position'    => 43,
             'commentaire' => NULL,
         ],
-        'CONTRAT'                         => [
+        'CONTRAT'                        => [
             'name'        => 'CONTRAT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -177,7 +177,7 @@ return [
             'position'    => 48,
             'commentaire' => NULL,
         ],
-        'CONTRAT_DEPOT'                   => [
+        'CONTRAT_DEPOT'                  => [
             'name'        => 'CONTRAT_DEPOT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -189,7 +189,7 @@ return [
             'position'    => 50,
             'commentaire' => NULL,
         ],
-        'CONTRAT_VISUALISATION'           => [
+        'CONTRAT_VISUALISATION'          => [
             'name'        => 'CONTRAT_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -201,7 +201,7 @@ return [
             'position'    => 49,
             'commentaire' => NULL,
         ],
-        'DEPASSEMENT_SERVICE_DU_SANS_HC'  => [
+        'DEPASSEMENT_SERVICE_DU_SANS_HC' => [
             'name'        => 'DEPASSEMENT_SERVICE_DU_SANS_HC',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -213,7 +213,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'DOSSIER'                         => [
+        'DOSSIER'                        => [
             'name'        => 'DOSSIER',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -225,7 +225,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'DOSSIER_ADRESSE'                 => [
+        'DOSSIER_ADRESSE'                => [
             'name'        => 'DOSSIER_ADRESSE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -237,7 +237,7 @@ return [
             'position'    => 19,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_1'                 => [
+        'DOSSIER_AUTRE_1'                => [
             'name'        => 'DOSSIER_AUTRE_1',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -249,7 +249,7 @@ return [
             'position'    => 23,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_1_EDITION'         => [
+        'DOSSIER_AUTRE_1_EDITION'        => [
             'name'        => 'DOSSIER_AUTRE_1_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -261,7 +261,7 @@ return [
             'position'    => 25,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_1_VISUALISATION'   => [
+        'DOSSIER_AUTRE_1_VISUALISATION'  => [
             'name'        => 'DOSSIER_AUTRE_1_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -273,7 +273,7 @@ return [
             'position'    => 24,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_2'                 => [
+        'DOSSIER_AUTRE_2'                => [
             'name'        => 'DOSSIER_AUTRE_2',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -285,7 +285,7 @@ return [
             'position'    => 26,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_2_EDITION'         => [
+        'DOSSIER_AUTRE_2_EDITION'        => [
             'name'        => 'DOSSIER_AUTRE_2_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -297,7 +297,7 @@ return [
             'position'    => 28,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_2_VISUALISATION'   => [
+        'DOSSIER_AUTRE_2_VISUALISATION'  => [
             'name'        => 'DOSSIER_AUTRE_2_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -309,7 +309,7 @@ return [
             'position'    => 27,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_3'                 => [
+        'DOSSIER_AUTRE_3'                => [
             'name'        => 'DOSSIER_AUTRE_3',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -321,7 +321,7 @@ return [
             'position'    => 29,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_3_EDITION'         => [
+        'DOSSIER_AUTRE_3_EDITION'        => [
             'name'        => 'DOSSIER_AUTRE_3_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -333,7 +333,7 @@ return [
             'position'    => 31,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_3_VISUALISATION'   => [
+        'DOSSIER_AUTRE_3_VISUALISATION'  => [
             'name'        => 'DOSSIER_AUTRE_3_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -345,7 +345,7 @@ return [
             'position'    => 30,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_4'                 => [
+        'DOSSIER_AUTRE_4'                => [
             'name'        => 'DOSSIER_AUTRE_4',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -357,7 +357,7 @@ return [
             'position'    => 32,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_4_EDITION'         => [
+        'DOSSIER_AUTRE_4_EDITION'        => [
             'name'        => 'DOSSIER_AUTRE_4_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -369,7 +369,7 @@ return [
             'position'    => 34,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_4_VISUALISATION'   => [
+        'DOSSIER_AUTRE_4_VISUALISATION'  => [
             'name'        => 'DOSSIER_AUTRE_4_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -381,7 +381,7 @@ return [
             'position'    => 33,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_5'                 => [
+        'DOSSIER_AUTRE_5'                => [
             'name'        => 'DOSSIER_AUTRE_5',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -393,7 +393,7 @@ return [
             'position'    => 35,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_5_EDITION'         => [
+        'DOSSIER_AUTRE_5_EDITION'        => [
             'name'        => 'DOSSIER_AUTRE_5_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -405,7 +405,7 @@ return [
             'position'    => 37,
             'commentaire' => NULL,
         ],
-        'DOSSIER_AUTRE_5_VISUALISATION'   => [
+        'DOSSIER_AUTRE_5_VISUALISATION'  => [
             'name'        => 'DOSSIER_AUTRE_5_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -417,7 +417,7 @@ return [
             'position'    => 36,
             'commentaire' => NULL,
         ],
-        'DOSSIER_BANQUE'                  => [
+        'DOSSIER_BANQUE'                 => [
             'name'        => 'DOSSIER_BANQUE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -429,7 +429,7 @@ return [
             'position'    => 20,
             'commentaire' => NULL,
         ],
-        'DOSSIER_CONTACT'                 => [
+        'DOSSIER_CONTACT'                => [
             'name'        => 'DOSSIER_CONTACT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -441,7 +441,7 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
-        'DOSSIER_EDITION'                 => [
+        'DOSSIER_EDITION'                => [
             'name'        => 'DOSSIER_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -453,7 +453,7 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'DOSSIER_EMAIL_PERSO'             => [
+        'DOSSIER_EMAIL_PERSO'            => [
             'name'        => 'DOSSIER_EMAIL_PERSO',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -465,7 +465,7 @@ return [
             'position'    => 18,
             'commentaire' => NULL,
         ],
-        'DOSSIER_EMPLOYEUR'               => [
+        'DOSSIER_EMPLOYEUR'              => [
             'name'        => 'DOSSIER_EMPLOYEUR',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -477,7 +477,7 @@ return [
             'position'    => 22,
             'commentaire' => NULL,
         ],
-        'DOSSIER_IDENTITE_COMP'           => [
+        'DOSSIER_IDENTITE_COMP'          => [
             'name'        => 'DOSSIER_IDENTITE_COMP',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -489,7 +489,7 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
-        'DOSSIER_INSEE'                   => [
+        'DOSSIER_INSEE'                  => [
             'name'        => 'DOSSIER_INSEE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -501,7 +501,7 @@ return [
             'position'    => 21,
             'commentaire' => NULL,
         ],
-        'DOSSIER_SELECTIONNABLE'          => [
+        'DOSSIER_SELECTIONNABLE'         => [
             'name'        => 'DOSSIER_SELECTIONNABLE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -513,7 +513,7 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'DOSSIER_TEL_PERSO'               => [
+        'DOSSIER_TEL_PERSO'              => [
             'name'        => 'DOSSIER_TEL_PERSO',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -525,7 +525,7 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'DOSSIER_VISUALISATION'           => [
+        'DOSSIER_VISUALISATION'          => [
             'name'        => 'DOSSIER_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -537,7 +537,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'FORMULE_VISUALISATION'           => [
+        'FORMULE_VISUALISATION'          => [
             'name'        => 'FORMULE_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -549,7 +549,7 @@ return [
             'position'    => 66,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'               => [
+        'HISTO_CREATEUR_ID'              => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -561,7 +561,7 @@ return [
             'position'    => 72,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'                  => [
+        'HISTO_CREATION'                 => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -573,7 +573,7 @@ return [
             'position'    => 71,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'            => [
+        'HISTO_DESTRUCTEUR_ID'           => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -585,7 +585,7 @@ return [
             'position'    => 76,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'               => [
+        'HISTO_DESTRUCTION'              => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -597,7 +597,7 @@ return [
             'position'    => 75,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID'           => [
+        'HISTO_MODIFICATEUR_ID'          => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -609,7 +609,7 @@ return [
             'position'    => 74,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'              => [
+        'HISTO_MODIFICATION'             => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -621,7 +621,7 @@ return [
             'position'    => 73,
             'commentaire' => NULL,
         ],
-        'ID'                              => [
+        'ID'                             => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -633,7 +633,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE'                         => [
+        'LIBELLE'                        => [
             'name'        => 'LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -645,7 +645,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'MODIF_SERVICE_DU'                => [
+        'MODIF_SERVICE_DU'               => [
             'name'        => 'MODIF_SERVICE_DU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -657,7 +657,7 @@ return [
             'position'    => 62,
             'commentaire' => NULL,
         ],
-        'MODIF_SERVICE_DU_VISUALISATION'  => [
+        'MODIF_SERVICE_DU_VISUALISATION' => [
             'name'        => 'MODIF_SERVICE_DU_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -669,7 +669,7 @@ return [
             'position'    => 63,
             'commentaire' => NULL,
         ],
-        'MOTIF_NON_PAIEMENT'              => [
+        'MOTIF_NON_PAIEMENT'             => [
             'name'        => 'MOTIF_NON_PAIEMENT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -681,7 +681,7 @@ return [
             'position'    => 65,
             'commentaire' => NULL,
         ],
-        'ORDRE'                           => [
+        'ORDRE'                          => [
             'name'        => 'ORDRE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -693,7 +693,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'PAIEMENT_VISUALISATION'          => [
+        'PAIEMENT_VISUALISATION'         => [
             'name'        => 'PAIEMENT_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -705,7 +705,7 @@ return [
             'position'    => 64,
             'commentaire' => NULL,
         ],
-        'PJ_ARCHIVAGE'                    => [
+        'PJ_ARCHIVAGE'                   => [
             'name'        => 'PJ_ARCHIVAGE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -717,7 +717,7 @@ return [
             'position'    => 41,
             'commentaire' => NULL,
         ],
-        'PJ_EDITION'                      => [
+        'PJ_EDITION'                     => [
             'name'        => 'PJ_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -729,7 +729,7 @@ return [
             'position'    => 40,
             'commentaire' => NULL,
         ],
-        'PJ_TELECHARGEMENT'               => [
+        'PJ_TELECHARGEMENT'              => [
             'name'        => 'PJ_TELECHARGEMENT',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -741,7 +741,7 @@ return [
             'position'    => 39,
             'commentaire' => NULL,
         ],
-        'PJ_VISUALISATION'                => [
+        'PJ_VISUALISATION'               => [
             'name'        => 'PJ_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -753,7 +753,7 @@ return [
             'position'    => 38,
             'commentaire' => NULL,
         ],
-        'PRIORITAIRE_INDICATEURS'         => [
+        'PRIORITAIRE_INDICATEURS'        => [
             'name'        => 'PRIORITAIRE_INDICATEURS',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -765,7 +765,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_PREVU'               => [
+        'REFERENTIEL_PREVU'              => [
             'name'        => 'REFERENTIEL_PREVU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -777,7 +777,7 @@ return [
             'position'    => 58,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_PREVU_EDITION'       => [
+        'REFERENTIEL_PREVU_EDITION'      => [
             'name'        => 'REFERENTIEL_PREVU_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -789,7 +789,7 @@ return [
             'position'    => 60,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_PREVU_VISU'          => [
+        'REFERENTIEL_PREVU_VISU'         => [
             'name'        => 'REFERENTIEL_PREVU_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -801,7 +801,7 @@ return [
             'position'    => 59,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_REALISE'             => [
+        'REFERENTIEL_REALISE'            => [
             'name'        => 'REFERENTIEL_REALISE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -813,7 +813,7 @@ return [
             'position'    => 77,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_REALISE_EDITION'     => [
+        'REFERENTIEL_REALISE_EDITION'    => [
             'name'        => 'REFERENTIEL_REALISE_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -825,7 +825,7 @@ return [
             'position'    => 78,
             'commentaire' => NULL,
         ],
-        'REFERENTIEL_REALISE_VISU'        => [
+        'REFERENTIEL_REALISE_VISU'       => [
             'name'        => 'REFERENTIEL_REALISE_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -837,7 +837,7 @@ return [
             'position'    => 79,
             'commentaire' => NULL,
         ],
-        'SERVICE_EXTERIEUR'               => [
+        'SERVICE_EXTERIEUR'              => [
             'name'        => 'SERVICE_EXTERIEUR',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -849,7 +849,7 @@ return [
             'position'    => 57,
             'commentaire' => NULL,
         ],
-        'SERVICE_PREVU'                   => [
+        'SERVICE_PREVU'                  => [
             'name'        => 'SERVICE_PREVU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -861,7 +861,7 @@ return [
             'position'    => 51,
             'commentaire' => NULL,
         ],
-        'SERVICE_PREVU_EDITION'           => [
+        'SERVICE_PREVU_EDITION'          => [
             'name'        => 'SERVICE_PREVU_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -873,7 +873,7 @@ return [
             'position'    => 53,
             'commentaire' => NULL,
         ],
-        'SERVICE_PREVU_VISU'              => [
+        'SERVICE_PREVU_VISU'             => [
             'name'        => 'SERVICE_PREVU_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -885,7 +885,7 @@ return [
             'position'    => 52,
             'commentaire' => NULL,
         ],
-        'SERVICE_REALISE'                 => [
+        'SERVICE_REALISE'                => [
             'name'        => 'SERVICE_REALISE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -897,7 +897,7 @@ return [
             'position'    => 54,
             'commentaire' => NULL,
         ],
-        'SERVICE_REALISE_EDITION'         => [
+        'SERVICE_REALISE_EDITION'        => [
             'name'        => 'SERVICE_REALISE_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -909,7 +909,7 @@ return [
             'position'    => 56,
             'commentaire' => NULL,
         ],
-        'SERVICE_REALISE_VISU'            => [
+        'SERVICE_REALISE_VISU'           => [
             'name'        => 'SERVICE_REALISE_VISU',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -921,7 +921,7 @@ return [
             'position'    => 55,
             'commentaire' => NULL,
         ],
-        'SERVICE_STATUTAIRE'              => [
+        'SERVICE_STATUTAIRE'             => [
             'name'        => 'SERVICE_STATUTAIRE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -933,7 +933,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'TAUX_CHARGES_PATRONALES'         => [
+        'TAUX_CHARGES_PATRONALES'        => [
             'name'        => 'TAUX_CHARGES_PATRONALES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -945,7 +945,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'TYPE_INTERVENANT_ID'             => [
+        'TYPE_INTERVENANT_ID'            => [
             'name'        => 'TYPE_INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

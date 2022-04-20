@@ -698,7 +698,7 @@ return [
             'TABLE_NAME'         => 'TBL_PLAFOND_STRUCTURE',
             'VIEW_NAME'          => 'V_TBL_PLAFOND_STRUCTURE',
             'SEQUENCE_NAME'      => null,
-            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_STRUCTURE_UN',
+            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_STR_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 16,
             'FEUILLE_DE_ROUTE'   => false,
@@ -708,7 +708,7 @@ return [
             'TABLE_NAME'         => 'TBL_PLAFOND_INTERVENANT',
             'VIEW_NAME'          => 'V_TBL_PLAFOND_INTERVENANT',
             'SEQUENCE_NAME'      => null,
-            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_INTERVENANT_UN',
+            'CONSTRAINT_NAME'    => 'TBL_PLA_INT_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 17,
             'FEUILLE_DE_ROUTE'   => false,
@@ -728,7 +728,7 @@ return [
             'TABLE_NAME'         => 'TBL_PLAFOND_VOLUME_HORAIRE',
             'VIEW_NAME'          => 'V_TBL_PLAFOND_VOLUME_HORAIRE',
             'SEQUENCE_NAME'      => null,
-            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_VOLUME_HORAIRE_UN',
+            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_VH_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 19,
             'FEUILLE_DE_ROUTE'   => false,
@@ -738,7 +738,7 @@ return [
             'TABLE_NAME'         => 'TBL_PLAFOND_REFERENTIEL',
             'VIEW_NAME'          => 'V_TBL_PLAFOND_REFERENTIEL',
             'SEQUENCE_NAME'      => null,
-            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_REFERENTIEL_UN',
+            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_REF_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 20,
             'FEUILLE_DE_ROUTE'   => false,
@@ -892,7 +892,7 @@ return [
             "LIBELLE" => "Note",
             "CODE"    => "note",
         ],
-        
+
 
     ],
 

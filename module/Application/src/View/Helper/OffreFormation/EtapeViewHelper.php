@@ -3,6 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\Etape as Entity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtapeServiceAwareTrait as ServiceEtapeAwareTrait;
@@ -140,12 +141,12 @@ class EtapeViewHelper extends AbstractViewHelper
 
 
 
-    public function renderAjouterLink($content = '', $attributes = [])
+    public function renderAjouterLink(string $content, array $attributes, Structure $structure)
     {
         if (!$content) $content = '<i class="fas fa-plus"></i> Ajouter une formation';
 
         $default = [
-            'href'       => $this->getView()->url('of/etape/ajouter'),
+            'href'       => $this->getView()->url('of/etape/ajouter', ['structure' => $structure->getId()]),
             'class'      => ['etape-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
             'data-event' => 'etape-ajouter',
             'title'      => 'Ajouter une formation',

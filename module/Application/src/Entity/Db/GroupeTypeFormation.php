@@ -128,7 +128,7 @@ class GroupeTypeFormation implements HistoriqueAwareInterface, ImportAwareInterf
     /**
      * @return bool
      */
-    public function isPertinenceNiveau(): bool
+    public function getPertinenceNiveau(): bool
     {
         return $this->pertinenceNiveau;
     }

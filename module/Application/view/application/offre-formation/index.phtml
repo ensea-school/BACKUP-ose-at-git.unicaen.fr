@@ -1,15 +1,17 @@
 <?php
 
+/**
+ * @var $this       \Application\View\Renderer\PhpRenderer
+ * @var $structure  \Application\Entity\Db\Structure
+ * @var $niveau     \Application\Entity\NiveauEtape
+ * @var $etape      \Application\Entity\Db\Etape
+ * @var $structures \Application\Entity\Db\Structure[]
+ * @var $niveaux    \Application\Entity\NiveauEtape[]
+ * @var $etapes     \Application\Entity\Db\Etape[]
+ * @var $elements   \Application\Entity\Db\ElementPedagogique[]
+ */
+
 use Application\Provider\Privilege\Privileges;
-
-/* @var $structure \Application\Entity\Db\Structure */
-/* @var $niveau \Application\Entity\NiveauEtape */
-/* @var $etape \Application\Entity\Db\Etape */
-
-/* @var $structures \Application\Entity\Db\Structure[] */
-/* @var $niveaux \Application\Entity\NiveauEtape[] */
-/* @var $etapes \Application\Entity\Db\Etape[] */
-/* @var $elements \Application\Entity\Db\ElementPedagogique[] */
 
 
 /**
@@ -164,7 +166,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <div class="panel panel-default">
             <div class="panel-heading">
                 Formation
-                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
+                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right'], $structure) ?>
             </div>
             <div class="panel-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...

@@ -8,12 +8,12 @@ en fixant des règles à plusieurs niveaux.
 Un plafond se caractérise par un numéro qui lui est spécifique, un libellé, un message d'avertissement, un périmètre et une requête SQL qui permet de le
 calculer.
 
-Chaque plafond peut être activé ou non de plusieures manières :
+Chaque plafond peut être activé ou non de plusieurs manières :
 
 - Désactivé : le plafond n'est pas mis en œuvre
 - Indicateur : le plafond n'est pas affiché, il n'est utilisé que pour les indicateurs
 - Informatif : s'il y a dépassement, OSE vous l'indiquera, sans pour autant bloquer la saisie des heures
-- Bloquant : L'application refusera d'enregistrer toute heure qui entrainerait le dépassement du plafond
+- Bloquant : L'application refusera d'enregistrer toute heure qui entraînerait le dépassement du plafond
 
 Les plafonds ont un périmètre, dont voici la liste :
 
@@ -35,11 +35,11 @@ Pour chaque plafond, deux indicateurs sont automatiquement créés :
 - un pour le prévisionnel
 - un pour le réalisé
 
-De plus, au niveau de la fiche de saisie de services, un encart aves des gauges indique, par plafond, où en est l'intervenant. Seuls les plafonds informatifs ou
+De plus, au niveau de la fiche de saisie de services, un encart avec des jauges indique, par plafond, où en est l'intervenant. Seuls les plafonds informatifs ou
 bloquants sont affichés.
 
-Les gauges peuvent prendre plusieurs couleurs. Si le plafond est informatif, la gauge sera verte si le plafond n'est pas dépassé, et orange s'il y a
-dépassement. Si le plafond est bloquant, la gauge sera bleue, ou rouge en cas de dépassement.
+Les jauges peuvent prendre plusieurs couleurs. Si le plafond est informatif, la jauge sera verte si le plafond n'est pas dépassé, et orange s'il y a
+dépassement. Si le plafond est bloquant, la jauge sera bleue, ou rouge en cas de dépassement.
 
 ## Administration
 
@@ -50,7 +50,7 @@ Le guide administrateur vous donnera la marche à suivre de manière plus détai
 
 ## Mise en œuvre technique
 
-Dans OSE queqques plafonds vous sont proposés en standard. Ils sont désactivés par défaut. Il vous revient de les activer ou non selon vos besoins.
+Dans OSE quelques plafonds vous sont proposés en standard. Ils sont désactivés par défaut. Il vous revient de les activer ou non selon vos besoins.
 
 Mais vous avez aussi la possibilité de créer vos propres plafonds.
 
@@ -58,7 +58,7 @@ Concrètement, un plafond se compose :
 
 - d'un numéro unique qui permet de distinguer facilement ce dernier
 - d'un libellé
-- d'un message qui s'affichera à droite des gauges et en alerte si dépassement à la saisie de service ou de référentiel
+- d'un message qui s'affichera à droite des jauges et en alerte si dépassement à la saisie de service ou de référentiel
 - de son périmètre
 - d'une requête SQL qui permet de le calculer
 

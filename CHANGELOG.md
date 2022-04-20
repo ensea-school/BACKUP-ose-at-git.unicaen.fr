@@ -22,7 +22,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
     * par volume horaire (par élément pédagogique et par type d'intervention, exemple: nombre de CM en Maths)
   * Les paramétrages liés aux plafonds sont annualisés
   * Les plafonds pourront être utilisés comme de simples indicateurs
-  * Des gauges relatives au plafonds affichent dans la page de saisie de service 
+  * Des jauges relatives aux plafonds s'affichent dans la page de saisie de service 
   * Des dérogations aux plafonds sont possibles par intervenant via un nouvel onglet dédié
   
 * Indicateurs
@@ -52,7 +52,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 * Export des intervenants vers Siham
   * Possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
-  * Nouveau paramètre dans administration > paramètre généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un
+  * Nouveau paramètre dans administration > paramètres généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un
     intervenant vers le SIRH
 
 * Ajout d'un module de gestion des Notes sur l'intervenant

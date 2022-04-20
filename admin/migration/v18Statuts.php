@@ -77,7 +77,7 @@ class v18Statuts extends AbstractMigration
         }
 
         $ddl = $bdd->table()->get('TBL_WORKFLOW')['TBL_WORKFLOW'];
-        if (isset($ddl['columns']['STATUT_ID'])) {
+        if (!isset($ddl['columns']['STATUT_ID'])) {
             $bdd->exec('DROP TABLE TBL_WORKFLOW');
             $c->msg('Suppression de la table TBL_WORKFLOW, qui sera recréée au nouveau format');
         }
@@ -167,6 +167,11 @@ class v18Statuts extends AbstractMigration
         if (empty($bdd->table()->get('SAVE_V18_TA_STATUT'))) {
             $this->manager->sauvegarderTable('TYPE_AGREMENT_STATUT', 'SAVE_V18_TA_STATUT');
             $c->msg('Anciens statuts "TYPE_AGREMENT_STATUT" sauvegardés dans "SAVE_V18_TA_STATUT".');
+        }
+
+        if (empty($bdd->table()->get('SAVE_V18_DOSSIER_AUTRE_STATUT'))) {
+            $this->manager->sauvegarderTable('DOSSIER_CHAMP_AUTRE_PAR_STATUT', 'SAVE_V18_DOSSIER_AUTRE_STATUT');
+            $c->msg('Anciens statuts "DOSSIER_CHAMP_AUTRE_PAR_STATUT" sauvegardés dans "SAVE_V18_DOSSIER_AUTRE_STATUT".');
         }
 
 
@@ -288,7 +293,7 @@ class v18Statuts extends AbstractMigration
         }
 
         /* Récup des utilisations de champs autres */
-        $res = $bdd->select("select * from dossier_champ_autre_par_statut");
+        $res = $bdd->select("select * from SAVE_V18_DOSSIER_AUTRE_STATUT");
         foreach ($res as $r) {
             $statuts[(int)$r['STATUT_ID']]['dossierAutres'][] = (int)$r['DOSSIER_CHAMP_AUTRE_ID'];
         }

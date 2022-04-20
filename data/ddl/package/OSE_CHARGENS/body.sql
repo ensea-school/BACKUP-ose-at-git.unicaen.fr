@@ -1,5 +1,13 @@
 CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
 
+  PROCEDURE MAJ_CACHE IS
+  BEGIN
+    UNICAEN_IMPORT.REFRESH_MV('TBL_NOEUD');
+    UNICAEN_IMPORT.REFRESH_MV('MV_LIEN');
+    UNICAEN_TBL.CALCULER('chargens');
+  END;
+
+
   FUNCTION CALC_COEF( choix_min NUMERIC, choix_max NUMERIC, poids NUMERIC, max_poids NUMERIC, total_poids NUMERIC, nb_choix NUMERIC ) RETURN FLOAT IS
     cmin NUMERIC;
     cmax NUMERIC;
@@ -36,7 +44,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
         res := coef_choix * nb_choix * (coef_poids + (((1/nb_choix)-coef_poids)*correcteur));
       END IF;
 
-      --ose_test.echo('choix_min= ' || cmin || ', choix_max= ' || cmax || ', poids = ' || poids || ', max_poids = ' || max_poids || ', total_poids = ' || total_poids || ', nb_choix = ' || nb_choix || ', RES = ' || res);
+      ose_test.echo('choix_min= ' || cmin || ', choix_max= ' || cmax || ', poids = ' || poids || ', max_poids = ' || max_poids || ', total_poids = ' || total_poids || ', nb_choix = ' || nb_choix || ', RES = ' || res);
       RETURN res;
   END;
 
@@ -61,75 +69,51 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
     ;
 
     FOR p IN (
-      SELECT
-        ninf.id                     noeud_id,
-        snsup.scenario_id           scenario_id,
-        sninf.id                    scenario_noeud_id,
-        sne.type_heures_id          type_heures_id,
-        sne.etape_id                etape_id,
-        slsup.choix_minimum         choix_minimum,
-        slsup.choix_maximum         choix_maximum,
-        COALESCE(slinf.poids,1)     poids,
-        MAX(COALESCE(slinf.poids,1))   max_poids,
-        SUM(COALESCE(slinf.poids,1))   total_poids,
-        COUNT(*)                    nb_choix,
-        sne.effectif                effectif
-      FROM
-                  noeud                nsup
+      SELECT * FROM (
+        SELECT
+          l.noeud_inf_id              noeud_id,
+          snsup.scenario_id           scenario_id,
+          sninf.id                    scenario_noeud_id,
+          sne.type_heures_id          type_heures_id,
+          sne.etape_id                etape_id,
+          sne.effectif                effectif,
+          slsup.choix_minimum         choix_minimum,
+          slsup.choix_maximum         choix_maximum,
+          COALESCE(slinf.poids,1)     poids,
+          MAX(COALESCE(slinf.poids,1)) OVER (PARTITION BY l.noeud_liste_id, snsup.scenario_id, sne.type_heures_id, sne.etape_id) max_poids,
+          SUM(COALESCE(slinf.poids,1)) OVER (PARTITION BY l.noeud_liste_id, snsup.scenario_id, sne.type_heures_id, sne.etape_id) total_poids,
+          COUNT(*)                     OVER (PARTITION BY l.noeud_liste_id, snsup.scenario_id, sne.type_heures_id, sne.etape_id) nb_choix
+        FROM
+                    mv_lien                lrem
+               JOIN mv_lien                   l ON l.noeud_sup_id = lrem.noeud_sup_id
 
-             JOIN lien                 lsup   ON lsup.noeud_sup_id = nsup.id
-                                             AND lsup.histo_destruction IS NULL
+               JOIN scenario_noeud        snsup ON snsup.noeud_id = l.noeud_sup_id
+                                               AND snsup.histo_destruction IS NULL
 
-             JOIN noeud                  nl   ON nl.liste = 1
-                                             AND nl.histo_destruction IS NULL
-                                             AND nl.id = lsup.noeud_inf_id
+               JOIN scenario_noeud_effectif sne ON sne.scenario_noeud_id = snsup.id
 
-             JOIN lien                 linf   ON linf.noeud_sup_id = nl.id
-                                             AND linf.histo_destruction IS NULL
+          LEFT JOIN scenario_lien         slsup ON slsup.histo_destruction IS NULL
+                                               AND slsup.lien_id = l.lien_sup_id
+                                               AND slsup.scenario_id = snsup.scenario_id
 
-             JOIN noeud                ninf   ON ninf.id = linf.noeud_inf_id
-                                             AND ninf.histo_destruction IS NULL
-                                             AND ninf.liste = 0
+          LEFT JOIN scenario_lien         slinf ON slinf.histo_destruction IS NULL
+                                               AND slinf.lien_id = l.lien_inf_id
+                                               AND slinf.scenario_id = snsup.scenario_id
 
-             JOIN scenario_noeud        snsup ON snsup.noeud_id = nsup.id
-                                             AND snsup.histo_destruction IS NULL
+          LEFT JOIN scenario_noeud        sninf ON sninf.noeud_id = l.noeud_inf_id
+                                               AND sninf.scenario_id = snsup.scenario_id
+                                               AND sninf.histo_destruction IS NULL
+        WHERE
+          lrem.noeud_inf_id = CALC_EFFECTIF.noeud_id
+          AND (slsup.actif = 1 OR slsup.actif IS NULL)
+          AND (slinf.actif = 1 OR slinf.actif IS NULL)
+          AND snsup.scenario_id = CALC_EFFECTIF.scenario_id
+          AND sne.type_heures_id = CALC_EFFECTIF.type_heures_id
+          AND sne.etape_id = CALC_EFFECTIF.etape_id
 
-             JOIN scenario_noeud_effectif sne ON sne.scenario_noeud_id = snsup.id
-
-        LEFT JOIN scenario_lien         slsup ON slsup.histo_destruction IS NULL
-                                             AND slsup.lien_id = lsup.id
-                                             AND slsup.scenario_id = snsup.scenario_id
-
-        LEFT JOIN scenario_lien         slinf ON slinf.histo_destruction IS NULL
-                                             AND slinf.lien_id = linf.id
-                                             AND slinf.scenario_id = snsup.scenario_id
-
-        LEFT JOIN scenario_noeud        sninf ON sninf.noeud_id = ninf.id
-                                             AND sninf.scenario_id = snsup.scenario_id
-                                             AND sninf.histo_destruction IS NULL
-
-      WHERE
-        nsup.histo_destruction IS NULL
-        AND nsup.liste = 0
-        AND (slsup.actif = 1 OR slsup.actif IS NULL)
-        AND (slinf.actif = 1 OR slinf.actif IS NULL)
-        AND ninf.id = CALC_EFFECTIF.noeud_id
-        --AND ninf.id = 389005
-        AND snsup.scenario_id = CALC_EFFECTIF.scenario_id
-        AND sne.type_heures_id = CALC_EFFECTIF.type_heures_id
-        AND sne.etape_id = CALC_EFFECTIF.etape_id
-      GROUP BY
-        nsup.id,
-        ninf.id,
-        snsup.scenario_id,
-        sninf.id,
-        sne.type_heures_id,
-        sne.etape_id,
-        sne.effectif,
-        slsup.choix_minimum,
-        slsup.choix_maximum,
-        slinf.poids
+      ) WHERE noeud_id = CALC_EFFECTIF.noeud_id
     ) LOOP
+      ose_test.echo('Calcul pour le noeud ' || p.noeud_id);
       effectif := OSE_CHARGENS.CALC_COEF(
           p.choix_minimum,
           p.choix_maximum,
@@ -154,27 +138,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
   BEGIN
     FOR p IN (
       SELECT
-        ninf.id noeud_inf_id
+        l.noeud_inf_id
       FROM
-             noeud            nsup
-
-        JOIN lien             lsup   ON lsup.noeud_sup_id = nsup.id
-                                    AND lsup.histo_destruction IS NULL
-
-        JOIN noeud              nl   ON nl.liste = 1
-                                    AND nl.histo_destruction IS NULL
-                                    AND nl.id = lsup.noeud_inf_id
-
-        JOIN lien             linf   ON linf.noeud_sup_id = nl.id
-                                    AND linf.histo_destruction IS NULL
-
-        JOIN noeud            ninf   ON ninf.id = linf.noeud_inf_id
-                                    AND ninf.histo_destruction IS NULL
-                                    AND ninf.liste = 0
+        mv_lien l
       WHERE
-        nsup.histo_destruction IS NULL
-        AND nsup.liste = 0
-        AND nsup.id = CALC_SUB_EFFECTIF.noeud_id
+        l.noeud_sup_id = CALC_SUB_EFFECTIF.noeud_id
     ) LOOP
       CALC_EFFECTIF( p.noeud_inf_id, scenario_id, type_heures_id, etape_id );
     END LOOP;

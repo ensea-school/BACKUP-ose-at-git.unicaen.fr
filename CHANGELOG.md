@@ -87,6 +87,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Correction sur un problème de route dans l'écran Engagements & Liquidation (#38763)
 * Export CSV des agréments : inversion de colonnes (#41513)
 * Correction sur la suppression de service lorsque la clôture de service a été historisé (#42046)
+* Le calcul des choix minimum/maximum est de nouveau fiable (#42080)
 
 ## Notes de mise à jour
 

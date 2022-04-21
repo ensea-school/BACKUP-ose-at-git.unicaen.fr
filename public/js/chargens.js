@@ -996,7 +996,9 @@ $.widget("ose.chargensFiltre", {
         var etape = this.getEtapeElement().val();
         var scenario = this.getScenarioElement().val();
 
-        $('.chargens').chargens('charger', etape, scenario);
+        if (etape && scenario) {
+            $('.chargens').chargens('charger', etape, scenario);
+        }
     },
 
 

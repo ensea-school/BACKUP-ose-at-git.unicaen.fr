@@ -343,6 +343,7 @@ class PlafondService extends AbstractEntityService
             $view     .= "\n  CASE";
             $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id";
             $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id";
+            $view     .= "\n    ELSE COALESCE(p.plafond_etat_id,1)";
             $view     .= "\n  END plafond_etat_id,";
             $view     .= "\n  COALESCE(pd.heures, 0) derogation,";
             $view     .= "\n  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
@@ -359,6 +360,9 @@ class PlafondService extends AbstractEntityService
                     $view .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID,";
                     if (!$testRes['plafondCol']) {
                         $view .= " NULL PLAFOND,";
+                    }
+                    if (!$testRes['etatCol']) {
+                        $view .= " NULL PLAFOND_ETAT_ID,";
                     }
                     $view  .= " p.* FROM (\n    ";
                     $view  .= str_replace("\n", "\n      ", $plafond->getRequete());
@@ -415,6 +419,7 @@ class PlafondService extends AbstractEntityService
 
             $res                  = $res[0];
             $return['plafondCol'] = isset($res['PLAFOND']);
+            $return['etatCol']    = isset($res['PLAFOND_ETAT_ID']);
 
             foreach ($cols as $col) {
                 if (!isset($res[$col])) {

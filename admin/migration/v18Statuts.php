@@ -126,9 +126,9 @@ class v18Statuts extends AbstractMigration
 
         $c->begin('Mise à jour des libellés des champs complémentaires pour les statuts');
 
-        $bdd->exec("UPDATE parametre SET value='Code Siham' WHERE nom='statut_intervenant_codes_corresp_1_libelle'");
-        $bdd->exec("UPDATE parametre SET value='Est ATV (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_2_libelle'");
-        $bdd->exec("UPDATE parametre SET value='Est VA (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_3_libelle'");
+        $bdd->exec("UPDATE parametre SET valeur='Code Siham' WHERE nom='statut_intervenant_codes_corresp_1_libelle'");
+        $bdd->exec("UPDATE parametre SET valeur='Est ATV (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_2_libelle'");
+        $bdd->exec("UPDATE parametre SET valeur='Est VA (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_3_libelle'");
 
         $c->end('Libellés mis à jour');
     }

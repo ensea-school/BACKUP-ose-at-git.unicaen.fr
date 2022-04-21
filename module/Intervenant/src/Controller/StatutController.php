@@ -82,6 +82,7 @@ class StatutController extends AbstractController
                 $this->getServiceStatut()->save($si);
                 $this->getFormPlafondConfig()->requestSaveConfigs($plafonds, $request);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                $plafonds = $this->getServicePlafond()->getPlafondsConfig($si);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 if ($isNew) {
                     $this->redirect()->toRoute('statut/saisie', ['statut' => $si->getId()]);

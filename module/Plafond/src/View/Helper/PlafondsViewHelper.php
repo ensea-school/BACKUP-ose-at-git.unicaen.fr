@@ -71,7 +71,7 @@ class PlafondsViewHelper extends AbstractHtmlElement
             ];
 
             $attrs = [
-                'class'    => 'plafonds alert alert-info',
+                'class'    => 'plafonds',
                 'data-url' => $this->getView()->url('plafond/plafonds', $params),
             ];
 
@@ -85,18 +85,19 @@ class PlafondsViewHelper extends AbstractHtmlElement
 
     public function affichage(): string
     {
-        if (empty($this->plafonds)) {
-            return '';
-        }
+        $aff = false;
 
         $html = $this->getView()->tag('h4')->text('Plafonds');
         foreach ($this->plafonds as $plafond) {
             if ($plafond->getHeures() > 0) {
                 $html .= $this->affichagePlafond($plafond);
+                $aff  = true;
             }
         }
 
-        return $html;
+        if (!$aff) return '';
+
+        return $this->getView()->tag('div', ['class' => 'alert alert-info'])->html($html);
     }
 
 

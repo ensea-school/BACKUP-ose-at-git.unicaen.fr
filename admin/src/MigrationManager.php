@@ -129,6 +129,20 @@ class MigrationManager
 
 
     /**
+     * Détermine si une table existe dans la base de données avant migration
+     *
+     * @param string $tableName
+     *
+     * @return bool
+     */
+    public function hasTable(string $tableName): bool
+    {
+        return isset($this->old->get(Ddl::TABLE)[$tableName]);
+    }
+
+
+
+    /**
      * Détermine si une colonne existe dans la base de données avant migration
      *
      * @param string $tableName

@@ -701,7 +701,7 @@ return [
             'CONSTRAINT_NAME'    => 'TBL_PLAFOND_STR_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 16,
-            'FEUILLE_DE_ROUTE'   => false,
+            'FEUILLE_DE_ROUTE'   => true,
         ],
         [
             'TBL_NAME'           => 'plafond_intervenant',
@@ -711,7 +711,7 @@ return [
             'CONSTRAINT_NAME'    => 'TBL_PLA_INT_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 17,
-            'FEUILLE_DE_ROUTE'   => false,
+            'FEUILLE_DE_ROUTE'   => true,
         ],
         [
             'TBL_NAME'           => 'plafond_element',
@@ -721,7 +721,7 @@ return [
             'CONSTRAINT_NAME'    => 'TBL_PLAFOND_ELEMENT_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 18,
-            'FEUILLE_DE_ROUTE'   => false,
+            'FEUILLE_DE_ROUTE'   => true,
         ],
         [
             'TBL_NAME'           => 'plafond_volume_horaire',
@@ -731,7 +731,7 @@ return [
             'CONSTRAINT_NAME'    => 'TBL_PLAFOND_VH_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 19,
-            'FEUILLE_DE_ROUTE'   => false,
+            'FEUILLE_DE_ROUTE'   => true,
         ],
         [
             'TBL_NAME'           => 'plafond_referentiel',
@@ -741,7 +741,7 @@ return [
             'CONSTRAINT_NAME'    => 'TBL_PLAFOND_REF_UN',
             'CUSTOM_CALCUL_PROC' => null,
             'ORDRE'              => 20,
-            'FEUILLE_DE_ROUTE'   => false,
+            'FEUILLE_DE_ROUTE'   => true,
         ],
     ],
 

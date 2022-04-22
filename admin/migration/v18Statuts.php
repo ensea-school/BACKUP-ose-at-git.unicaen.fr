@@ -178,7 +178,7 @@ class v18Statuts extends AbstractMigration
             $c->msg('Anciens statuts "TYPE_AGREMENT_STATUT" sauvegardés dans "SAVE_V18_TA_STATUT".');
         }
 
-        if (empty($bdd->table()->get('SAVE_V18_DOSSIER_AUTRE_STATUT'))) {
+        if (!$this->manager->hasTable('SAVE_V18_DOSSIER_AUTRE_STATUT') && $this->manager->hasTable('DOSSIER_CHAMP_AUTRE_PAR_STATUT')) {
             $this->manager->sauvegarderTable('DOSSIER_CHAMP_AUTRE_PAR_STATUT', 'SAVE_V18_DOSSIER_AUTRE_STATUT');
             $c->msg('Anciens statuts "DOSSIER_CHAMP_AUTRE_PAR_STATUT" sauvegardés dans "SAVE_V18_DOSSIER_AUTRE_STATUT".');
         }

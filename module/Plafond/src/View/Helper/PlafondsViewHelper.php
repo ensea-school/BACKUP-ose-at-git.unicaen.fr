@@ -91,7 +91,9 @@ class PlafondsViewHelper extends AbstractHtmlElement
 
         $html = $this->getView()->tag('h4')->text('Plafonds');
         foreach ($this->plafonds as $plafond) {
-            $html .= $this->affichagePlafond($plafond);
+            if ($plafond->getHeures() > 0) {
+                $html .= $this->affichagePlafond($plafond);
+            }
         }
 
         return $html;

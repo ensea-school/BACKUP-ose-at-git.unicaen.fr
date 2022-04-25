@@ -4,6 +4,7 @@ namespace Plafond\Entity\Db;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Plafond\Interfaces\PlafondConfigInterface;
 
 /**
  * Plafond
@@ -22,8 +23,6 @@ class Plafond
 
     protected string     $requete = '';
 
-    protected Collection $plafondApplication;
-
     protected Collection $plafondStructure;
 
     protected Collection $plafondReferentiel;
@@ -34,7 +33,6 @@ class Plafond
 
     public function __construct()
     {
-        $this->plafondApplication = new ArrayCollection();
         $this->plafondStructure   = new ArrayCollection();
         $this->plafondReferentiel = new ArrayCollection();
         $this->plafondStatut      = new ArrayCollection();
@@ -103,7 +101,7 @@ class Plafond
         return $this;
     }
 
-    
+
 
     public function getRequete(): string
     {
@@ -117,18 +115,6 @@ class Plafond
         $this->requete = $requete;
 
         return $this;
-    }
-
-
-
-    /**
-     * Get PlafondApplication
-     *
-     * @return PlafondApplication[]
-     */
-    public function getPlafondApplication(): Collection
-    {
-        return $this->plafondApplication;
     }
 
 
@@ -165,6 +151,25 @@ class Plafond
     public function getPlafondStatut(): Collection
     {
         return $this->plafondStatut;
+    }
+
+
+
+    public function addConfig(PlafondConfigInterface $plafondConfig): self
+    {
+        if ($plafondConfig->getPlafond() !== $this) {
+            throw new \Exception('Mauvais plafond transmis');
+        }
+
+        if ($plafondConfig instanceof PlafondStatut) {
+            $this->plafondStatut->add($plafondConfig);
+        } elseif ($plafondConfig instanceof PlafondStructure) {
+            $this->plafondStructure->add($plafondConfig);
+        } elseif ($plafondConfig instanceof PlafondReferentiel) {
+            $this->plafondReferentiel->add($plafondConfig);
+        }
+
+        return $this;
     }
 
 

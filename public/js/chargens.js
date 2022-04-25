@@ -721,7 +721,7 @@ $.widget("ose.chargens", {
         $.ajax({
             type: 'POST',
             url: url,
-            data: {params: params},
+            data: params,
             success: function (data)
             {
                 if (data.erreur) {
@@ -996,7 +996,9 @@ $.widget("ose.chargensFiltre", {
         var etape = this.getEtapeElement().val();
         var scenario = this.getScenarioElement().val();
 
-        $('.chargens').chargens('charger', etape, scenario);
+        if (etape && scenario) {
+            $('.chargens').chargens('charger', etape, scenario);
+        }
     },
 
 

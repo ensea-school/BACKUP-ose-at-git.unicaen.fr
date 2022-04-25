@@ -2,7 +2,7 @@ SELECT
   i.annee_id                             annee_id,
   fr.type_volume_horaire_id              type_volume_horaire_id,
   i.id                                   intervenant_id,
-  fr.total - fr.heures_compl_fc_majorees heures
+  fr.service_referentiel + fr.heures_compl_referentiel heures
 FROM
   intervenant                     i
   JOIN etat_volume_horaire      evh ON evh.code = 'saisi'

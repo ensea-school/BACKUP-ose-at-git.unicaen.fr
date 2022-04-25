@@ -1791,25 +1791,24 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           p.INTERVENANT_ID,
           p.ELEMENT_PEDAGOGIQUE_ID,
           p.HEURES,
-          COALESCE(p.PLAFOND,ps.heures,pa.heures,0) PLAFOND,
+          COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
-          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
             SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL ELEMENT_PEDAGOGIQUE_ID,NULL HEURES,NULL PLAFOND,NULL PLAFOND_ETAT_ID,NULL DEROGATION FROM dual WHERE 0 = 1
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id
-          LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id
           LEFT JOIN plafond_statut ps ON 1 = 0
           LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
         WHERE
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END IS NOT NULL
           /*@PLAFOND_ID=p.PLAFOND_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
@@ -1887,15 +1886,45 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           p.TYPE_VOLUME_HORAIRE_ID,
           p.INTERVENANT_ID,
           p.HEURES,
-          COALESCE(p.PLAFOND,ps.heures,pa.heures,0) PLAFOND,
+          COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
-          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
+          SELECT 4 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+            SELECT
+                i.annee_id                             annee_id,
+                fr.type_volume_horaire_id              type_volume_horaire_id,
+                i.id                                   intervenant_id,
+                fr.total - fr.heures_compl_fc_majorees heures
+              FROM
+                intervenant                     i
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+                JOIN statut                    si ON si.id = i.statut_id
+            ) p
+
+            UNION ALL
+
+          SELECT 2 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+            SELECT
+                i.annee_id                             annee_id,
+                fr.type_volume_horaire_id              type_volume_horaire_id,
+                i.id                                   intervenant_id,
+                fr.total - fr.heures_compl_fc_majorees heures
+              FROM
+                intervenant                     i
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+                JOIN statut                    si ON si.id = i.statut_id
+            ) p
+
+            UNION ALL
+
           SELECT 1 PLAFOND_ID, NULL PLAFOND, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
@@ -1914,17 +1943,17 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 2 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
             SELECT
-                i.annee_id                             annee_id,
-                fr.type_volume_horaire_id              type_volume_horaire_id,
-                i.id                                   intervenant_id,
-                fr.total - fr.heures_compl_fc_majorees heures
+                i.annee_id                          annee_id,
+                fr.type_volume_horaire_id           type_volume_horaire_id,
+                fr.intervenant_id                   intervenant_id,
+                fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
               FROM
-                intervenant                     i
+                     intervenant                i
+                JOIN statut                    si ON si.id = i.statut_id
                 JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
                 JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-                JOIN statut                    si ON si.id = i.statut_id
             ) p
 
             UNION ALL
@@ -1951,45 +1980,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 i.id,
                 i.statut_id
             ) p
-
-            UNION ALL
-
-          SELECT 4 PLAFOND_ID, NULL PLAFOND, p.* FROM (
-            SELECT
-                i.annee_id                             annee_id,
-                fr.type_volume_horaire_id              type_volume_horaire_id,
-                i.id                                   intervenant_id,
-                fr.total - fr.heures_compl_fc_majorees heures
-              FROM
-                intervenant                     i
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-                JOIN statut                    si ON si.id = i.statut_id
-            ) p
-
-            UNION ALL
-
-          SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
-            SELECT
-                i.annee_id                          annee_id,
-                fr.type_volume_horaire_id           type_volume_horaire_id,
-                fr.intervenant_id                   intervenant_id,
-                fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
-              FROM
-                     intervenant                i
-                JOIN statut                    si ON si.id = i.statut_id
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-            ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id
-          LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id
           LEFT JOIN plafond_statut ps ON ps.plafond_id = p.plafond_id AND ps.statut_id = i.statut_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL
           LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
         WHERE
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END IS NOT NULL
           /*@PLAFOND_ID=p.PLAFOND_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
@@ -2063,13 +2061,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           p.INTERVENANT_ID,
           p.FONCTION_REFERENTIEL_ID,
           p.HEURES,
-          COALESCE(p.PLAFOND,ps.heures,pa.heures,0) PLAFOND,
+          COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
-          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
           SELECT 3 PLAFOND_ID, NULL PLAFOND, p.* FROM (
@@ -2131,13 +2129,12 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id
-          LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id
           LEFT JOIN plafond_referentiel ps ON ps.plafond_id = p.plafond_id AND ps.fonction_referentiel_id = p.fonction_referentiel_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL
           LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
         WHERE
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END IS NOT NULL
           /*@PLAFOND_ID=p.PLAFOND_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
@@ -2216,13 +2213,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           p.INTERVENANT_ID,
           p.STRUCTURE_ID,
           p.HEURES,
-          COALESCE(p.PLAFOND,ps.heures,pa.heures,0) PLAFOND,
+          COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
-          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
           SELECT 7 PLAFOND_ID, NULL PLAFOND, p.* FROM (
@@ -2242,15 +2239,35 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
               GROUP BY
                 i.annee_id, vhr.type_volume_horaire_id, i.id, s.id
             ) p
+
+            UNION ALL
+
+          SELECT 25 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+            SELECT
+                      i.annee_id                 annee_id,
+                      vh.type_volume_horaire_id  type_volume_horaire_id,
+                      i.id                       intervenant_id,
+                      str.id                     structure_id,
+                      SUM(vh.heures)             heures
+                    FROM
+                      service                    s
+                      JOIN element_pedagogique  ep ON ep.id = s.element_pedagogique_id
+                      JOIN intervenant           i ON i.id = s.intervenant_id
+                      JOIN structure           str ON str.id = ep.structure_id
+                      JOIN volume_horaire       vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
+                    WHERE
+                      s.histo_destruction IS NULL
+                    GROUP BY
+                      i.annee_id, vh.type_volume_horaire_id, i.id, str.id
+            ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id
-          LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id
           LEFT JOIN plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL
           LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
         WHERE
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END IS NOT NULL
           /*@PLAFOND_ID=p.PLAFOND_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/
@@ -2330,13 +2347,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           p.ELEMENT_PEDAGOGIQUE_ID,
           p.TYPE_INTERVENTION_ID,
           p.HEURES,
-          COALESCE(p.PLAFOND,ps.heures,pa.heures,0) PLAFOND,
+          COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
-          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
           SELECT 9 PLAFOND_ID, p.* FROM (
@@ -2399,13 +2416,12 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id
-          LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id
           LEFT JOIN plafond_statut ps ON 1 = 0
           LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
         WHERE
           CASE
-            WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-            WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
           END IS NOT NULL
           /*@PLAFOND_ID=p.PLAFOND_ID*/
           /*@ANNEE_ID=p.ANNEE_ID*/

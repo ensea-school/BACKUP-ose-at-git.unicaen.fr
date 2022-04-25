@@ -14,7 +14,6 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Plafond\Entity\Db\Plafond;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Plafond\Entity\Db\PlafondApplication;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Entity\Db\PlafondReferentiel;
@@ -307,11 +306,10 @@ class PlafondService extends AbstractEntityService
 
         $dql = "
         SELECT
-          pp, p, pa
+          pp, p
         FROM
           Plafond\Entity\Db\PlafondPerimetre pp
           LEFT JOIN pp.plafond p
-          LEFT JOIN p.plafondApplication pa
         ";
 
         $q = $this->getEntityManager()->createQuery($dql);
@@ -341,13 +339,14 @@ class PlafondService extends AbstractEntityService
                     $view .= "\n  p.$col,";
                 }
             }
-            $view     .= "\n  COALESCE(p.PLAFOND,ps.heures,pa.heures,0) PLAFOND,";
+            $view     .= "\n  COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,";
             $view     .= "\n  CASE";
-            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)";
-            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)";
+            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id";
+            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id";
+            $view     .= "\n    ELSE COALESCE(p.plafond_etat_id,1)";
             $view     .= "\n  END plafond_etat_id,";
             $view     .= "\n  COALESCE(pd.heures, 0) derogation,";
-            $view     .= "\n  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,pa.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
+            $view     .= "\n  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
             $view     .= "\nFROM\n  (";
             $plafonds = $perimetre->getPlafond();
             $first    = true;
@@ -361,6 +360,9 @@ class PlafondService extends AbstractEntityService
                     $view .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID,";
                     if (!$testRes['plafondCol']) {
                         $view .= " NULL PLAFOND,";
+                    }
+                    if (!$testRes['etatCol']) {
+                        $view .= " NULL PLAFOND_ETAT_ID,";
                     }
                     $view  .= " p.* FROM (\n    ";
                     $view  .= str_replace("\n", "\n      ", $plafond->getRequete());
@@ -378,13 +380,12 @@ class PlafondService extends AbstractEntityService
             }
             $view .= "\n  ) p";
             $view .= "\n  JOIN intervenant i ON i.id = p.intervenant_id";
-            $view .= "\n  LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id";
             $view .= "\n  LEFT JOIN " . $configTablesJoin[$perimetre->getCode()];
             $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
             $view .= "\nWHERE\n";
             $view .= "  CASE\n";
-            $view .= "    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)\n";
-            $view .= "    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)\n";
+            $view .= "    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id\n";
+            $view .= "    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id\n";
             $view .= "  END IS NOT NULL";
             foreach ($cols as $col) {
                 if ($col != 'PLAFOND' && $col != 'HEURES' && $col != 'DEROGATION') {
@@ -418,6 +419,7 @@ class PlafondService extends AbstractEntityService
 
             $res                  = $res[0];
             $return['plafondCol'] = isset($res['PLAFOND']);
+            $return['etatCol']    = isset($res['PLAFOND_ETAT_ID']);
 
             foreach ($cols as $col) {
                 if (!isset($res[$col])) {
@@ -603,9 +605,6 @@ class PlafondService extends AbstractEntityService
 
     protected function entityToConfigClass($entity = null): string
     {
-        if (empty($entity)) {
-            return PlafondApplication::class;
-        }
         if ($entity instanceof Structure) {
             return PlafondStructure::class;
         }
@@ -615,7 +614,7 @@ class PlafondService extends AbstractEntityService
         if ($entity instanceof FonctionReferentiel) {
             return PlafondReferentiel::class;
         }
-        throw new \Exception("L'entité fournie ne permet pas e récupérer une configuration de plafond");
+        throw new \Exception("L'entité fournie ne permet pas de récupérer une configuration de plafond");
     }
 
 
@@ -656,7 +655,6 @@ class PlafondService extends AbstractEntityService
     private function getterPlafondConfig(int $plafondId, $entity = null): array
     {
         $joins = [
-            PlafondApplication::class => null,
             PlafondStructure::class   => 'LEFT JOIN p.plafondStructure pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.structure = :entity',
             PlafondStatut::class      => 'LEFT JOIN p.plafondStatut pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.statut = :entity',
             PlafondReferentiel::class => 'LEFT JOIN p.plafondReferentiel pc WITH pc.annee = :annee AND pc.histoDestruction IS NULL AND pc.fonctionReferentiel = :entity',
@@ -684,11 +682,10 @@ class PlafondService extends AbstractEntityService
 
         $dql = "
         SELECT
-          p, prm, papp" . ($joins[$class] ? ', pc' : '') . "
+          p, prm" . ($joins[$class] ? ', pc' : '') . "
         FROM
           " . Plafond::class . " p
           JOIN p.plafondPerimetre prm
-          LEFT JOIN p.plafondApplication papp WITH papp.annee = :annee AND papp.histoDestruction IS NULL
           " . $joins[$class] . "
         " . (empty($where) ? '' : ('WHERE ' . implode(' AND ', $where))) . "
         ORDER BY
@@ -702,14 +699,12 @@ class PlafondService extends AbstractEntityService
             $configCount = $plafond->$getter()->count();
             switch ($configCount) {
                 case 0:
-                    /* @var $papp PlafondApplication */
-                    $papp = $plafond->getPlafondApplication()->first();
-                    $pc   = new $class;
+                    $pc = new $class;
                     $pc->setPlafond($plafond);
                     if ($entity) $pc->setEntity($entity);
-                    $pc->setEtatPrevu($papp ? $papp->getEtatPrevu() : $this->getEtat(PlafondEtat::DESACTIVE));
-                    $pc->setEtatRealise($papp ? $papp->getEtatRealise() : $this->getEtat(PlafondEtat::DESACTIVE));
-                    $pc->setHeures($papp ? $papp->getHeures() : 0);
+                    $pc->setEtatPrevu($this->getEtat(PlafondEtat::DESACTIVE));
+                    $pc->setEtatRealise($this->getEtat(PlafondEtat::DESACTIVE));
+                    $pc->setHeures(0);
                     $pcs[$plafond->getId()] = $pc;
                 break;
                 case 1:
@@ -739,6 +734,9 @@ class PlafondService extends AbstractEntityService
             $plafondConfig->setEtatRealise($this->getEtat(PlafondEtat::DESACTIVE));
         }
 
+        if (!$plafondConfig->getId()) {
+            $plafondConfig->getPlafond()->addConfig($plafondConfig);
+        }
         $this->getEntityManager()->persist($plafondConfig);
         $this->getEntityManager()->flush($plafondConfig);
 

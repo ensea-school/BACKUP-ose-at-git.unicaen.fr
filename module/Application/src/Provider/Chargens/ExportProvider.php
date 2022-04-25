@@ -47,7 +47,7 @@ class ExportProvider
             $params['structure'] = $structure->getId();
         }
 
-        $data = $this->chargens->getBdd()->fetch($sql, $params);
+        $data = $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         foreach ($data as $i => $d) {
             $l = [
                 'annee'                      => $d['ANNEE'],

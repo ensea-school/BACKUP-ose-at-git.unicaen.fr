@@ -5,6 +5,7 @@ namespace Application\Controller\OffreFormation;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etape;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeFormation;
 use Application\Form\OffreFormation\TauxMixite\Traits\TauxMixiteFormAwareTrait;
@@ -36,34 +37,24 @@ class EtapeController extends AbstractController
             Structure::class,
         ]);
 
-        $etape  = $this->getEvent()->getParam('etape');
+        $structure = $this->em()->find(Structure::class, $this->params()->fromRoute('structure'));
+        $etape     = $this->getEvent()->getParam('etape');
+
         $title  = $etape ? "Modification d'une formation" : "Création d'une nouvelle formation";
         $form   = $this->getFormOffreFormationEtapeSaisie();
         $errors = [];
 
-        if ($etape) {
-            $form->bind($etape);
-        } else {
+        if (!$etape) {
             $etape = $this->getServiceEtape()->newEntity();
-            $form->setObject($etape);
+            $etape->setStructure($structure);
         }
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form->bindRequestSave($etape, $this->getRequest(), function (Etape $etape) use ($form) {
+            $this->getServiceEtape()->save($etape);
+            $form->get('id')->setValue($etape->getId()); // transmet le nouvel ID
+        });
 
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                try {
-                    $this->getServiceEtape()->save($etape);
-                    $form->get('id')->setValue($etape->getId()); // transmet le nouvel ID
-                } catch (\Exception $e) {
-                    $errors[] = $this->translate($e);
-                }
-            }
-        }
-
-        return compact('form', 'title', 'errors');
+        return compact('form', 'title');
     }
 
 

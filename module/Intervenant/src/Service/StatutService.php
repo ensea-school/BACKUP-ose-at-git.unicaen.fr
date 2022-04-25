@@ -48,11 +48,11 @@ class StatutService extends AbstractEntityService
     /**
      * @param string $code
      *
-     * @return Statut
+     * @return ?Statut
      */
-    public function getByCode(string $code): Statut
+    public function getByCode(string $code): ?Statut
     {
-        return $this->getRepo()->findOneBy(['code' => $code]);
+        return $this->getRepo()->findOneBy(['code' => $code, 'annee' => $this->getServiceContext()->getAnnee()]);
     }
 
 

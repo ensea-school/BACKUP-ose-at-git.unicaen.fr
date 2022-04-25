@@ -2,7 +2,6 @@
 
 namespace Application\Provider\Chargens;
 
-use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
 use Unicaen\Console\Console;
@@ -20,11 +19,8 @@ class ChargensProviderFactory
         $em = $container->get(\Application\Constants::BDD);
         /* @var $em \Doctrine\ORM\EntityManager */
 
-        $bdd = new BddConnecteur();
-        $bdd->setEntityManager($em);
-
         $chargensProvider = new ChargensProvider();
-        $chargensProvider->setBdd($bdd);
+        $chargensProvider->setEntityManager($em);
 
         if (!Console::isConsole()) {
             $serviceAuthorize = $container->get('BjyAuthorize\Service\Authorize');

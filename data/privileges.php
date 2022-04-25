@@ -330,7 +330,7 @@ return [
     ],
 
     'etat-sortie' => [
-        'libelle'    => 'États de sortie',
+        'libelle'    => 'Etats de sortie',
         'privileges' => [
             'administration-visualisation' => 'Administration (visualisation)',
             'administration-edition'       => 'Administration (édition)',
@@ -413,7 +413,6 @@ return [
         'privileges' => [
             'visualisation'             => 'Visualisation',
             'edition'                   => 'Édition',
-            'config-application'        => 'Application',
             'config-structure'          => 'Configuration par composante',
             'config-referentiel'        => 'Configuration par fonction référentielle',
             'config-statut'             => 'Configuration par statut d\'intervenant',

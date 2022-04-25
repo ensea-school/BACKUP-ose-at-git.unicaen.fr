@@ -35,7 +35,7 @@ class DomaineFonctionnelController extends AbstractController
 
         $domaineFonctionnel = $this->getEvent()->getParam('domaineFonctionnel');
 
-        $form = $this->getFormDomaineFonctionnelSaisie();
+        $form = $this->getFormDomaineFonctionnelDomaineFonctionnelSaisie();
         if (empty($domaineFonctionnel)) {
             $title              = 'Création d\'un nouveau domaine fonctionnel';
             $domaineFonctionnel = $this->getServiceDomaineFonctionnel()->newEntity()

@@ -33,9 +33,7 @@ class ModeleForm extends AbstractForm
 
     public function getStatuts()
     {
-        $qb = $this->getServiceStatut()->finderByHistorique();
-
-        return $this->getServiceStatut()->getList($qb);
+        return $this->getServiceStatut()->getStatuts();
     }
 
 
@@ -222,10 +220,15 @@ class ModeleFormHydrator implements HydratorInterface
      */
     public function extract($object): array
     {
+        $statut = null;
+        if ($object->getStatut()) {
+            $statut = $this->getServiceStatut()->getByCode($object->getStatut()->getCode());
+        }
+
         $data = [
             'libelle'   => $object->getLibelle(),
             'structure' => $object->getStructure() ? $object->getStructure()->getId() : null,
-            'statut'    => $object->getStatut() ? $object->getStatut()->getId() : null,
+            'statut'    => $statut?->getId(),
             'requete'   => $object->getRequete(),
         ];
 

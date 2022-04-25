@@ -1,11 +1,15 @@
-<?= $this->form()->openTag($form->prepare()); ?>
-
 <?php
-if ($errors) {
-    echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
-}
-?>
 
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Application\Form\OffreFormation\EtapeSaisie
+ * @var $title string
+ */
+
+echo $this->form()->openTag($form->prepare());
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+?>
 <div class="row">
     <div class="col-sm-4">
         <?php

@@ -153,6 +153,11 @@ class AgrementAssertion extends AbstractAssertion
         }
 
         if (!$role instanceof Role) return false;
+
+        if ($role->getIntervenant() && str_starts_with($page['route'], 'gestion/')) {
+            return false;
+        }
+
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
         if ($wfEtape && $intervenant && !$this->isAllowed(WorkflowResource::create($wfEtape, $intervenant))) return false;
 

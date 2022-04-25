@@ -294,7 +294,7 @@ class ServiceController extends AbstractController
             }
         }
 
-        return compact('rechercheForm', $errors);
+        return compact('rechercheForm', 'errors');
     }
 
 

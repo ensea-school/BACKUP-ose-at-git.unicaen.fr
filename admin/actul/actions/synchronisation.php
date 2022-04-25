@@ -29,8 +29,9 @@ $c->end('Synchronisation terminée');
 
 
 $c->begin('Mise à jour des caches de données');
-$c->print('Vue matérialisée TBL_NOEUD ... ');
-$ca->ose->exec('BEGIN UNICAEN_IMPORT.REFRESH_MV(\'TBL_NOEUD\'); END;');
+$c->print('Vues matérialisées pour les charges d\'enseignement ... ');
+$ca->ose->exec('BEGIN OSE_CHARGENS.MAJ_CACHE; END;');
+
 $c->println('OK');
 
 $oa->run('chargens-calcul-effectifs', true);

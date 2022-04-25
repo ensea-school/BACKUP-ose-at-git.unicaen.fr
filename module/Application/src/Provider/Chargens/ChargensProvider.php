@@ -2,7 +2,6 @@
 
 namespace Application\Provider\Chargens;
 
-use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Chargens\Noeud;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
@@ -13,11 +12,12 @@ use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use BjyAuthorize\Service\Authorize;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
 class ChargensProvider
 {
-    use BddConnecteurAwareTrait;
+    use EntityManagerAwareTrait;
     use SourceServiceAwareTrait;
     use ContextServiceAwareTrait;
     use StructureAwareTrait;
@@ -195,7 +195,7 @@ class ChargensProvider
           AND ROWNUM = 1
         ";
 
-        $noeudId = $this->getBdd()->fetchOne($sql, ['etape' => $etape], 'ID', 'int');
+        $noeudId = (int)$this->getEntityManager()->getConnection()->fetchAssociative($sql, ['etape' => $etape->getId()])['ID'];
 
         $this->setStructure($etape->getStructure());
 
@@ -255,7 +255,7 @@ class ChargensProvider
           l.noeud_sup_id = :noeud
         ";
 
-        $relations = $this->getBdd()->fetch($sql, compact('noeud'));
+        $relations = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, compact('noeud'));
         foreach ($relations as $relation) {
             $liens[(int)$relation['ID']]            = true;
             $noeuds[(int)$relation['NOEUD_SUP_ID']] = true;
@@ -347,7 +347,7 @@ class ChargensProvider
           scenario_id
         ";
 
-        $d = $this->getBdd()->fetchOne($sql, [
+        $d = $this->getEntityManager()->getConnection()->fetchAssociative($sql, [
             'annee'     => $this->getServiceContext()->getAnnee()->getId(),
             'structure' => $this->getStructure()->getId(),
             'scenario'  => $this->getScenario()->getId(),
@@ -400,7 +400,7 @@ class ChargensProvider
         if ($structure) {
             $params['structure'] = $structure->getId();
         }
-        $ds = $this->getBdd()->fetch($sql, $params);
+        $ds = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         foreach ($ds as $d) {
             $sid              = (int)$d['STRUCTURE_ID'];
             $heures           = (float)$d['HEURES'];

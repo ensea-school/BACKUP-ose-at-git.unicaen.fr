@@ -8,7 +8,12 @@
  * @var $viewFile   string
  */
 
+$filename = getcwd() . '/cache/testRunner';
+echo file_get_contents($filename);
+
+/*
 $oseAdmin = oseAdmin();
 $dataGen  = new DataGen($oseAdmin);
 var_dump($dataGen);
 //$dataGen->update('PRIVILEGE');
+*/

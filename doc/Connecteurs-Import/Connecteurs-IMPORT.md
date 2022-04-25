@@ -796,6 +796,5 @@ UNICAEN_IMPORT.REFRESH_MV('MV_INTERVENANT');
 - Table NOEUD : mise à jour de tableaux de bord après la synchro :
 
 ```sql
-UNICAEN_IMPORT.REFRESH_MV('TBL_NOEUD');
-UNICAEN_TBL.CALCULER('chargens');
+OSE_CHARGENS.MAJ_CACHE;
 ```

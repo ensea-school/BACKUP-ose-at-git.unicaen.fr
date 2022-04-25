@@ -213,8 +213,9 @@ return [
                             'ajouter'       => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'    => '/ajouter',
-                                    'defaults' => ['action' => 'saisir'],
+                                    'route'       => '/ajouter/:structure',
+                                    'constraints' => ['structure' => '[0-9]*'],
+                                    'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
                             'modifier'      => [

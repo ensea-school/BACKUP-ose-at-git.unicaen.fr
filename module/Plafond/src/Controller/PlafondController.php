@@ -37,7 +37,7 @@ class PlafondController extends AbstractController
     public function indexAction()
     {
         $title    = 'Gestion des plafonds';
-        $plafonds = $this->getServicePlafond()->getPlafondsConfig();
+        $plafonds = $this->getServicePlafond()->getList();
 
         return compact('title', 'plafonds');
     }
@@ -128,18 +128,6 @@ class PlafondController extends AbstractController
         $vh->setVariables(compact('title', 'configs', 'canEdit', 'entity'));
 
         return $vh;
-    }
-
-
-
-    public function configApplicationAction()
-    {
-        $plafondId     = (int)$this->params()->fromPost('plafond');
-        $plafondConfig = $this->getServicePlafond()->getPlafondConfig($plafondId);
-
-        $this->getFormPlafondConfig()->requestSaveConfig($plafondConfig, $this->getRequest());
-
-        return new JsonModel([]);
     }
 
 

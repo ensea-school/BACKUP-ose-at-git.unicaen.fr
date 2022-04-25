@@ -61,6 +61,8 @@ return [
             'F_CONTRAT_S',
             'INDIC_TRG_MODIF_DOSSIER',
             'CHARGENS_MAJ_EFFECTIFS',
+            'F_STATUT_INTERVENANT',
+            'F_STATUT_INTERVENANT_S',
         ],
     ],
     'sequence'          => [

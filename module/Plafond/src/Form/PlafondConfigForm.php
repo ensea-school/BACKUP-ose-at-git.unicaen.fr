@@ -2,7 +2,10 @@
 
 namespace Plafond\Form;
 
+use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
+use Intervenant\Entity\Db\Statut;
 use Laminas\Form\Element;
 use Laminas\Http\Request;
 use Plafond\Entity\Db\Plafond;
@@ -126,11 +129,13 @@ class PlafondConfigForm extends AbstractForm
      *
      * @return void
      */
-    public function requestSaveConfigs(array $plafondConfigs, Request $request)
+    public function requestSaveConfigs(Statut|Structure|FonctionReferentiel $entity, Request $request)
     {
         $heures      = $request->getPost('heures', []);
         $etatPrevu   = $request->getPost('plafondEtatPrevu', []);
         $etatRealise = $request->getPost('plafondEtatRealise', []);
+
+        $plafondConfigs = $this->getServicePlafond()->getPlafondsConfig($entity);
 
         foreach ($plafondConfigs as $plafondConfig) {
             if (isset($heures[$plafondConfig->getPlafond()->getId()])) {

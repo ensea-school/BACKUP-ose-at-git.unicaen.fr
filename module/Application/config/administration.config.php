@@ -125,6 +125,15 @@ return [
                                 'order'          => 83,
                                 'border - color' => '#111',
                                 'pages'          => [
+                                    'Employeurs' => [
+                                        'border-color' => '#9F491F',
+                                        'icon'         => 'fas fa-table-list',
+                                        'label'        => "Gestion des employeurs",
+                                        'title'        => "Gestion des employeurs",
+                                        'route'        => 'employeur',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
+                                        'order'        => 799,
+                                    ],
                                     'grade'      => [
                                         'label'        => 'Gestion des grades',
                                         'icon'         => 'fas fa-graduation-cap',
@@ -138,17 +147,8 @@ return [
                                         'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'corps',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Corps', 'index'),
-                                        'order'        => 800,
+                                        'order'        => 801,
                                         'border-color' => '#BBCF55',
-                                    ],
-                                    'Employeurs' => [
-                                        'border-color' => '#9F491F',
-                                        'icon'         => 'fas fa-table-list',
-                                        'label'        => "Gestion des employeurs",
-                                        'title'        => "Gestion des employeurs",
-                                        'route'        => 'employeur',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
-                                        'order'        => 70,
                                     ],
                                 ],
                             ],
@@ -213,6 +213,7 @@ return [
                                         'title'      => "Permet de personnaliser les pièces justificatives à demander en fonction du statut des intervenants",
                                         'route'      => 'piece-jointe/type-piece-jointe-statut',
                                         'withtarget' => true,
+                                        'order'      => 91,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
                                     ],
                                     'gestion-champs-autres-dossier-intervenant'  => [
@@ -220,6 +221,7 @@ return [
                                         'title'      => "Editer et modifier les 5 champs personnalisables pour les dossiers des intervenant",
                                         'route'      => 'autres-infos',
                                         'withtarget' => true,
+                                        'order'      => 92,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\Autres', 'index'),
                                     ],
                                     'validation-volume-horaire-type-intervenant' => [
@@ -227,6 +229,7 @@ return [
                                         'title'      => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",
                                         'route'      => 'validation-volume-horaire-type-intervenant',
                                         'withtarget' => true,
+                                        'order'      => 93,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'validation-volume-horaire-type-intervenant'),
                                     ],
                                 ],

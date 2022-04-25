@@ -1,4 +1,5 @@
-CREATE OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
+CREATE
+OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
 WITH historique AS (
 --Initialisation des données personnelles
     SELECT d.intervenant_id                              intervenant_id,
@@ -79,8 +80,8 @@ UNION ALL
 SELECT s.intervenant_id                                                                          intervenant_id,
        '3 - Service prévisionnel et/ou service référentiel'                                                              categorie,
        'Modification/Ajout du service prévisionnel pour la composante ' || MAX(st.libelle_court) label,
-       MAX(vh.histo_modification)                                                                histo_date,
-       MAX(vh.histo_modificateur_id)                                                             KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)    histo_user,
+       MAX(vh.histo_creation)                                                                histo_date,
+       MAX(vh.histo_createur_id)                                                             KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)    histo_user,
        'glyphicon glyphicon-ok'                           icon,
        3                                                                                         ordre
 FROM volume_horaire vh
@@ -106,6 +107,47 @@ SELECT  s.intervenant_id                                                        
        3                                ordre
 FROM
   service_referentiel s
+  JOIN fonction_referentiel fr ON fr.id = s.fonction_id
+  JOIN utilisateur u ON u.id = s.histo_modificateur_id
+  LEFT JOIN STRUCTURE str ON str.id = s.structure_id
+WHERE
+ s.histo_destruction IS NULL
+
+ UNION ALL
+--Validation du service prévisionnel
+SELECT s.intervenant_id                                                                          intervenant_id,
+       '3 - Service prévisionnel et/ou service référentiel'                                                              categorie,
+       'Validation du service prévisionnel pour la composante ' || MAX(st.libelle_court) label,
+       MAX(v.histo_modification)                                                                histo_date,
+       MAX(v.histo_modificateur_id)                                                             KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)    histo_user,
+       'glyphicon glyphicon-ok'                           icon,
+       3                                                                                         ordre
+FROM volume_horaire vh
+         JOIN service s ON s.id = vh.service_id
+         JOIN element_pedagogique ep ON s.element_pedagogique_id = ep.id
+         JOIN STRUCTURE st ON st.id = ep.structure_id
+         JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id AND tvh.code = 'PREVU'
+         JOIN periode p ON p.id = vh.periode_id
+         JOIN type_intervention ti ON ti.id = vh.type_intervention_id
+         JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
+         JOIN validation v ON v.id = vvh.validation_id
+         JOIN utilisateur u ON u.id = vh.histo_modificateur_id
+         GROUP BY s.intervenant_id, ep.structure_id
+
+         UNION ALL
+         --validation du service référentiel
+SELECT  s.intervenant_id                                                                     intervenant_id,
+       '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
+        'Validation du service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
+       v.histo_modification                                                                histo_date,
+       v.histo_modificateur_id                                                             histo_createur_id,
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       3                                ordre
+FROM
+  service_referentiel s
+  JOIN validation_vol_horaire_ref vvhr ON s.id = vvhr.volume_horaire_ref_id
+  JOIN validation v ON v.id = vvhr.validation_id
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
   JOIN utilisateur u ON u.id = s.histo_modificateur_id
   LEFT JOIN STRUCTURE str ON str.id = s.structure_id
@@ -245,6 +287,28 @@ FROM volume_horaire vh
          JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id AND tvh.code = 'REALISE'
          JOIN periode p ON p.id = vh.periode_id
          JOIN type_intervention ti ON ti.id = vh.type_intervention_id
+         JOIN utilisateur u ON u.id = vh.histo_modificateur_id
+         LEFT JOIN motif_non_paiement mnp ON mnp.id = vh.motif_non_paiement_id
+GROUP BY s.intervenant_id, ep.structure_id
+
+UNION ALL
+
+--Validation du service réalisé
+SELECT s.intervenant_id                                                                     intervenant_id,
+       '5 - Services réalisés'                                                              categorie,
+       'Validation du service réalisé pour la composante ' || MAX(st.libelle_court) label,
+       MAX(v.histo_modification)                                                           histo_date,
+       MAX(v.histo_modificateur_id)                                                        KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
+       5                                                                                    ordre
+FROM volume_horaire vh
+         JOIN service s ON s.id = vh.service_id
+         JOIN element_pedagogique ep ON s.element_pedagogique_id = ep.id
+         JOIN STRUCTURE st ON st.id = ep.structure_id
+         JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id AND tvh.code = 'REALISE'
+         JOIN periode p ON p.id = vh.periode_id
+         JOIN type_intervention ti ON ti.id = vh.type_intervention_id
+         JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
+         JOIN validation v ON v.id = vvh.validation_id
          JOIN utilisateur u ON u.id = vh.histo_modificateur_id
          LEFT JOIN motif_non_paiement mnp ON mnp.id = vh.motif_non_paiement_id
 GROUP BY s.intervenant_id, ep.structure_id

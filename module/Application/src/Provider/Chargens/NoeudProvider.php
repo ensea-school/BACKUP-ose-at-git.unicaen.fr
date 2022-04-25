@@ -170,8 +170,8 @@ class NoeudProvider
         if (empty($noeudIds)) return [];
 
         /* Récup des noeuds */
-        $ids  = implode(',', $noeudIds);
-        $sql  = "
+        $ids   = implode(',', $noeudIds);
+        $sql   = "
         SELECT 
           n.id, 
           n.code, 
@@ -191,7 +191,11 @@ class NoeudProvider
         ORDER BY
             n.code
         ";
-        $data = $this->chargens->getBdd()->fetch($sql, ['annee' => $anneeId], 'ID');
+        $qdata = $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['annee' => $anneeId]);
+        $data  = [];
+        foreach ($qdata as $d) {
+            $data[(int)$d['ID']] = $d;
+        }
 
         if (empty($data)) return $data;
 
@@ -212,7 +216,7 @@ class NoeudProvider
             OR l.noeud_inf_id IN (" . $ids . ")
           )
         ";
-        $dliens = $this->chargens->getBdd()->fetch($sql);
+        $dliens = $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         foreach ($dliens as $lien) {
             $noeudSupId = (int)$lien['NOEUD_SUP_ID'];
             $noeudInfId = (int)$lien['NOEUD_INF_ID'];
@@ -261,7 +265,7 @@ class NoeudProvider
           n.id IN (" . $ids . ")
           AND 1 = COALESCE(tis.visible, ti.visible)
         ";
-        $dti = $this->chargens->getBdd()->fetch($sql);
+        $dti = $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         foreach ($dti as $d) {
             $nid = $d['NOEUD_ID'];
 
@@ -300,7 +304,7 @@ class NoeudProvider
           csdd.noeud_id IN (" . $ids . ")
         ";
 
-        $csdd = $this->chargens->getBdd()->fetch($sql);
+        $csdd = $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         foreach ($csdd as $d) {
             $nid              = $d['NOEUD_ID'];
             $scenario         = (int)$d['SCENARIO_ID'];
@@ -351,7 +355,7 @@ class NoeudProvider
           scenario_id
         ";
 
-        $csdd = $this->chargens->getBdd()->fetch($sql, $params);
+        $csdd = $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         foreach ($csdd as $d) {
             $nid      = $d['NOEUD_ID'];
             $scenario = (int)$d['SCENARIO_ID'];

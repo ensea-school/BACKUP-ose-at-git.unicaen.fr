@@ -9,7 +9,8 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                 = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION             = 'agrement-conseil-academique-suppression';
@@ -225,8 +226,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const PIECE_JUSTIFICATIVE_VISUALISATION         = 'piece-justificative-visualisation';
     const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
     const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
-    const PLAFONDS_CONFIG_APPLICATION               = 'plafonds-config-application';
-    const PLAFONDS_CONFIG_REFERENTIEL               = 'plafonds-config-referentiel';
+    const  PLAFONDS_CONFIG_REFERENTIEL               = 'plafonds-config-referentiel';
     const PLAFONDS_CONFIG_STATUT                    = 'plafonds-config-statut';
     const PLAFONDS_CONFIG_STRUCTURE                 = 'plafonds-config-structure';
     const PLAFONDS_DEROGATIONS_EDITION              = 'plafonds-derogations-edition';

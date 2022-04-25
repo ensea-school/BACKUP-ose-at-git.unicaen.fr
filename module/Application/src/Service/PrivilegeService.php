@@ -10,6 +10,7 @@ use BjyAuthorize\Provider\Resource\ProviderInterface;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenAuth\Entity\Db\PrivilegeInterface;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderInterface;
 
 /**
@@ -65,6 +66,22 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
         }
 
         return $this->privilegesCache;
+    }
+
+
+
+    /**
+     * @return PrivilegeInterface[]
+     */
+    public function getList()
+    {
+        $qb = $this->getRepo()->createQueryBuilder('p')
+            ->addSelect('c')
+            ->join('p.categorie', 'c')
+            ->addOrderBy('c.libelle')
+            ->addOrderBy('p.ordre');
+
+        return $qb->getQuery()->getResult();
     }
 
 

@@ -40,6 +40,7 @@ class EtapeSaisie extends AbstractForm
         $hydrator->setServiceTypeFormation($this->getServiceTypeFormation());
         $this->setHydrator($hydrator);
         $this->setAttribute('class', 'etape-saisie');
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         /* construction du formulaire */
         $this->add([

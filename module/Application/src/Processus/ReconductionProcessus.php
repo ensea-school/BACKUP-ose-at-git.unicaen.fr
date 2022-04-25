@@ -2,7 +2,6 @@
 
 namespace Application\Processus;
 
-use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
@@ -24,7 +23,6 @@ class ReconductionProcessus extends AbstractProcessus
 {
 
     use EtapeServiceAwareTrait;
-    use BddConnecteurAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use CheminPedagogiqueServiceAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
@@ -278,7 +276,7 @@ class ReconductionProcessus extends AbstractProcessus
     {
         $connection = $this->getEntityManager()->getConnection();
         $stmt       = $connection->executeQuery('SELECT ' . $sequenceName . '.NEXTVAL val FROM DUAL');
-        $result     = $stmt->fetch();
+        $result     = $stmt->fetchAssociative();
 
         return $result['VAL'];
     }

@@ -154,11 +154,6 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
-            'action'     => ['config-application'],
-            'privileges' => Privileges::PLAFONDS_CONFIG_APPLICATION,
-        ],
-        [
-            'controller' => 'Plafond\Controller\Plafond',
             'action'     => ['config-structure'],
             'privileges' => Privileges::PLAFONDS_CONFIG_STRUCTURE,
             'assertion'  => Assertion\PlafondAssertion::class,

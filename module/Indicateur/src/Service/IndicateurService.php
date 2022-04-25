@@ -3,6 +3,7 @@
 namespace Indicateur\Service;
 
 use Application\Cache\Traits\CacheContainerTrait;
+use Application\Entity\Db\Annee;
 use Application\Service\AbstractService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Indicateur\Entity\Db\Indicateur;
@@ -24,11 +25,11 @@ class IndicateurService extends AbstractService
     use \Plafond\Service\IndicateurServiceAwareTrait;
 
 
-    protected function getViewDef(int $numero): string
+    protected function getViewDef(int $numero, Annee $annee): string
     {
         $view    = 'V_INDICATEUR_' . $numero;
-        $sql     = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME = '$view'";
-        $viewDef = $this->getEntityManager()->getConnection()->fetchAssociative($sql, [])['TEXT'];
+        $sql     = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME = :view";
+        $viewDef = $this->getEntityManager()->getConnection()->fetchAssociative($sql, compact('view'))['TEXT'];
 
         return $viewDef;
     }
@@ -44,7 +45,7 @@ class IndicateurService extends AbstractService
         if ($indicateur->getTypeIndicateur()->isPlafond()) {
             $viewDef = $this->getServiceIndicateur()->makeQuery($indicateur);
         } else {
-            $viewDef = $this->getViewDef($numero);
+            $viewDef = $this->getViewDef($numero, $annee);
         }
 
         $params = [

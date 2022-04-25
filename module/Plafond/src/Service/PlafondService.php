@@ -614,7 +614,7 @@ class PlafondService extends AbstractEntityService
         if ($entity instanceof FonctionReferentiel) {
             return PlafondReferentiel::class;
         }
-        throw new \Exception("L'entité fournie ne permet pas e récupérer une configuration de plafond");
+        throw new \Exception("L'entité fournie ne permet pas de récupérer une configuration de plafond");
     }
 
 
@@ -734,6 +734,9 @@ class PlafondService extends AbstractEntityService
             $plafondConfig->setEtatRealise($this->getEtat(PlafondEtat::DESACTIVE));
         }
 
+        if (!$plafondConfig->getId()) {
+            $plafondConfig->getPlafond()->addConfig($plafondConfig);
+        }
         $this->getEntityManager()->persist($plafondConfig);
         $this->getEntityManager()->flush($plafondConfig);
 

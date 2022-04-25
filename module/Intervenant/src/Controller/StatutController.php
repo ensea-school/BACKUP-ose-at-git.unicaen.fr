@@ -72,17 +72,14 @@ class StatutController extends AbstractController
             $title = $statut->getLibelle();
         }
 
-        $plafonds = $this->getServicePlafond()->getPlafondsConfig($statut);
-
         $canEdit = $this->isAllowed($statut, Privileges::INTERVENANT_STATUT_EDITION);
         if ($canEdit) {
             $request = $this->getRequest();
-            $form->bindRequestSave($statut, $request, function (Statut $si) use ($plafonds, $request) {
+            $form->bindRequestSave($statut, $request, function (Statut $si) use ($request) {
                 $isNew = !$si->getId();
                 $this->getServiceStatut()->save($si);
-                $this->getFormPlafondConfig()->requestSaveConfigs($plafonds, $request);
+                $this->getFormPlafondConfig()->requestSaveConfigs($si, $request);
                 unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
-                $plafonds = $this->getServicePlafond()->getPlafondsConfig($si);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 if ($isNew) {
                     $this->redirect()->toRoute('statut/saisie', ['statut' => $si->getId()]);
@@ -95,7 +92,7 @@ class StatutController extends AbstractController
 
         $vm = new ViewModel();
         $vm->setTemplate('intervenant/statut/saisie');
-        $vm->setVariables(compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title', 'plafonds'));
+        $vm->setVariables(compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title'));
 
         return $vm;
     }

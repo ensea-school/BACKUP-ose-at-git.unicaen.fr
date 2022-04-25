@@ -4,6 +4,7 @@ namespace Plafond\Entity\Db;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Plafond\Interfaces\PlafondConfigInterface;
 
 /**
  * Plafond
@@ -150,6 +151,25 @@ class Plafond
     public function getPlafondStatut(): Collection
     {
         return $this->plafondStatut;
+    }
+
+
+
+    public function addConfig(PlafondConfigInterface $plafondConfig): self
+    {
+        if ($plafondConfig->getPlafond() !== $this) {
+            throw new \Exception('Mauvais plafond transmis');
+        }
+
+        if ($plafondConfig instanceof PlafondStatut) {
+            $this->plafondStatut->add($plafondConfig);
+        } elseif ($plafondConfig instanceof PlafondStructure) {
+            $this->plafondStructure->add($plafondConfig);
+        } elseif ($plafondConfig instanceof PlafondReferentiel) {
+            $this->plafondReferentiel->add($plafondConfig);
+        }
+
+        return $this;
     }
 
 

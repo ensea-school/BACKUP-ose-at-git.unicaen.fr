@@ -27,6 +27,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <tr>
         <th style="text-align: center">Libellé</th>
         <th style="text-align: center">Code</th>
+        <th style="text-align: center">Code ISO</th>
         <th style="text-align: center">Source</th>
         <?php if ($canEdit): ?>
             <th style="text-align: center">Actions</th>
@@ -38,6 +39,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <tr class="champ-triable" data-id= <?php echo $pays->getId() ?>>
             <td><?= $pays->getLibelle(); ?></td>
             <td><?= $pays->getCode(); ?></td>
+            <td><?= $pays->getCodeIso3(); ?></td>
             <td style="text-align: center"><?= $pays->getSource()->getLibelle(); ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align: center">
@@ -45,7 +47,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                         <a class="ajax-modal" data-event="pays-edition"
                            href="<?= $this->url('pays/saisie', ['pays' => $pays->getId()], ['query' => ['tab' => 'edition']]) ?>"
                            title="Modifier le pays"><i class="fas fa-pen-to-square"></i></a>
-                        <a class="pop-ajax" data-title="Suppression de l'établissement" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
+                        <a class="pop-ajax" data-title="Suppression de l'établissement"
+                           data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
                            data-submit-reload="true"
                            href="<?= $this->url('pays/supprimer', ['pays' => $pays->getId()]) ?>"
                            title="Supprimer le pays"><i class="fas fa-trash-can"></i></a>
@@ -60,7 +63,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 </table>
 
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="pays-edition" href="<?= $this->url('pays/saisie'); ?>"><i class="fas fa-plus"></i>
+    <a class="btn btn-primary ajax-modal" data-event="pays-edition" href="<?= $this->url('pays/saisie'); ?>"><i
+                class="fas fa-plus"></i>
         Ajout d'un nouveau pays</a>
 <?php endif; ?>
 

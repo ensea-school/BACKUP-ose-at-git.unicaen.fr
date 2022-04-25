@@ -477,6 +477,14 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'temPrincipale' => 1,
             ];
 
+            /*PAYS NAISSANCE*/
+            if (!empty($dossierIntervenant->getPaysNaissance() && !empty($dossierIntervenant->getPaysNaissance()->getCodeIso3()))) {
+                $paysNaissance = $dossierIntervenant->getPaysNaissance()->getCodeIso3();
+            } elseif (!empty($dossierIntervenant->getDepartementNaissance())) {
+                $paysNaissance = 'FRA';
+            } else {
+                $paysNaissance = '';
+            }
 
             $params = [
                 'categorieEntree'           => 'ACTIVE',
@@ -485,7 +493,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                 'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
                 'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr($dossierIntervenant->getDepartementNaissance()->getCode(), 1, 2) : '',
-                'paysNaissance'             => (!empty($dossierIntervenant->getPaysNaissance() && !empty($dossierIntervenant->getPaysNaissance()->getCodeIso3()))) ? $dossierIntervenant->getPaysNaissance()->getCodeIso3() : 'FRA',
+                'paysNaissance'             => $paysNaissance,
                 'emploi'                    => $datas['connecteurForm']['emploi'],
                 'listeCoordonneesPostales'  => $coordonneesPostales,
                 'listeCoordonneesBancaires' => $coordonneesBancaires,

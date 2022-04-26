@@ -47,13 +47,12 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
  
 * Fiche Intervenant
   * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
-  * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
-    intervenant
+  * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'intervenant
 
 * Export des intervenants vers Siham
   * Possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
-  * Nouveau paramètre dans administration > paramètres généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un
-    intervenant vers le SIRH
+  * Nouveau paramètre dans administration > paramètres généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un intervenant vers le SIRH
+  * Meilleure gestion du pays de naissance lors de la PEC ou REN
 
 * Ajout d'un module de gestion des Notes sur l'intervenant
   * Possibilité de rajouter une note écrite (informations, message important etc...) sur une fiche intervenant (Tâche #25565)

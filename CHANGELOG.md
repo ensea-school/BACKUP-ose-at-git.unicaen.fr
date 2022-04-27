@@ -48,6 +48,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Fiche Intervenant
   * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
   * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'intervenant
+  * Le code de l'intervenant peut devenir cliquable pour vous rediriger vers une page de gestion des comptes d'accès au SI ou autre (cf. notes de mise à jour, paramètre ldap>systemeInformationUrl)
 
 * Export des intervenants vers Siham
   * Possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
@@ -94,7 +95,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * **ATTENTION : PHP 8.0** est requis
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
 * Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
-
+* Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.
 
 
 # OSE 17.3 (17/03/2022)

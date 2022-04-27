@@ -31,7 +31,7 @@ trait TranslatorTrait
      */
     private function translateException(\Exception $exception, $textDomain = 'default', $locale = null): string
     {
-        if (!$exception->getPrevious() instanceof \Doctrine\DBAL\Driver\OCI8\OCI8Exception) {
+        if (!$exception->getPrevious() instanceof \Doctrine\DBAL\Driver\Exception) {
             // Non gérée donc on retourne l'original'
             return $this->translate($exception->getMessage(), $textDomain, $locale);
         }

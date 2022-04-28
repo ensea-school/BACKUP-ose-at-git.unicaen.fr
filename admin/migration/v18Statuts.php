@@ -78,6 +78,7 @@ class v18Statuts extends AbstractMigration
 
         $ddl = $bdd->table()->get('TBL_WORKFLOW')['TBL_WORKFLOW'];
         if (!isset($ddl['columns']['STATUT_ID'])) {
+            $bdd->exec('DROP TABLE WF_DEP_BLOQUANTE');
             $bdd->exec('DROP TABLE TBL_WORKFLOW');
             $c->msg('Suppression de la table TBL_WORKFLOW, qui sera recréée au nouveau format');
         }

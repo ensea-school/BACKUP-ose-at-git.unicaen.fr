@@ -19,7 +19,7 @@ class v18Plafonds extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE');
+        return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE') || $this->manager->hasTable('SAVE_V18_PLAFOND');
     }
 
 
@@ -71,7 +71,7 @@ class v18Plafonds extends AbstractMigration
         }
 
         if (!empty($bdd->table()->get('PLAFOND'))) {
-            $bdd->exec('DROP TABLE PLAFOND');
+            $bdd->exec('DROP TABLE PLAFOND CASCADE CONSTRAINTS');
             $c->msg('Suppression des anciens plafonds');
         }
     }

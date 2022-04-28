@@ -81,8 +81,8 @@ class v18Plafonds extends AbstractMigration
     protected function after()
     {
         $this->migrationParamsStructure();
-        //$this->migrationParamsReferentiel();
-        //$this->migrationParamsStatut();
+        $this->migrationParamsReferentiel();
+        $this->migrationParamsStatut();
     }
 
 

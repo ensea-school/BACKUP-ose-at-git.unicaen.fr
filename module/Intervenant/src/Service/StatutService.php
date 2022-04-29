@@ -87,8 +87,6 @@ class StatutService extends AbstractEntityService
         $entities = $qb->getQuery()->execute();
         $qb->addOrderBy("$alias.code");
 
-        var_dump($qb->getQuery()->getSql());
-
         $result = [];
         $entityClass = $this->getEntityClass();
         foreach ($entities as $entity) {

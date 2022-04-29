@@ -89,6 +89,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Export CSV des agréments : inversion de colonnes (#41513)
 * Correction sur la suppression de service lorsque la clôture de service a été historisé (#42046)
 * Le calcul des choix minimum/maximum est de nouveau fiable (#42080)
+* Liens inactifs lors du changement d'année universitaire (#40992)
 
 ## Notes de mise à jour
 

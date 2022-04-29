@@ -78,8 +78,11 @@ class v18Statuts extends AbstractMigration
 
         $ddl = $bdd->table()->get('TBL_WORKFLOW')['TBL_WORKFLOW'];
         if (!isset($ddl['columns']['STATUT_ID'])) {
-            $bdd->exec('DROP TABLE TBL_WORKFLOW CASCADE CONSTRAINTS');
+            $c->msg('Vidage temporaire de WF_DEP_BLOQUANTE (dépendances du Workflow)');
+            $bdd->exec('DELETE FROM WF_DEP_BLOQUANTE');
+
             $c->msg('Suppression de la table TBL_WORKFLOW, qui sera recréée au nouveau format');
+            $bdd->exec('DROP TABLE TBL_WORKFLOW CASCADE CONSTRAINTS');
         }
 
         $ddl = $bdd->table()->get('MODELE_CONTRAT')['MODELE_CONTRAT'];

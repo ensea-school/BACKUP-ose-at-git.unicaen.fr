@@ -15,15 +15,15 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_
 <h1 class="page-header">Centres de coûts</h1>
 <?php
 $tblListe = [];
-$tblRef   = [];
-$i        = 0;
+$tblRef = [];
+$i = 0;
 foreach ($centreCouts as $fr) {
     if ($fr->getParent() == null) $tblRef[$i++] = $fr;
 }
 $nTblListe = $i;
-$i         = 0;
+$i = 0;
 while ($i < $nTblListe) {
-    $j            = 0;
+    $j = 0;
     $tblListe[$i] = [];
     foreach ($centreCouts as $frf) {
         if (($frf->getParent()) && ($frf->getParent()->getId() == $tblRef[$i]->getId())) {
@@ -49,7 +49,7 @@ while ($i < $nTblListe) {
     for ($i = 0;
          $i < $nTblListe;
          $i++) {
-        $fr  = $tblRef[$i];
+        $fr = $tblRef[$i];
         $nFr = count($tblListe[$i]); ?>
         <td data-order="<?= $fr->getCode() ?>"><?= $fr->getCode() ?><br></td>
         <td><?= $fr->getLibelle() . '<br>' ?></td>
@@ -59,11 +59,11 @@ while ($i < $nTblListe) {
         <td style=" text-align: center;"><?php if ((!$fr->getSource()->getImportable()) && ($canEdit)) { ?>
                 <a class="ajax-modal" data-event="centre-cout-saisie"
                    href="<?= $this->url('centre-cout/saisie', ['centreCout' => $fr->getId()]) ?>"
-                   title="Modifier la Centre de Coûts">
+                   title="Modifier le Centre de Coûts">
                     <i class="fas fa-pen-to-square"></i></a>
                 <a class="pop-ajax"
                    href="<?= $this->url('centre-cout/delete', ['centreCout' => $fr->getId()]) ?>"
-                   title="Supprimer la Centre de Coûts"
+                   title="Supprimer le Centre de Coûts"
                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                    data-confirm="true"
                    data-confirm-button="Oui"
@@ -90,7 +90,7 @@ while ($i < $nTblListe) {
                         <?php if ((!$ccs->getSource()->getImportable()) && $canEdit) { ?>
                             <a class="pop-ajax"
                                href="<?= $this->url('centre-cout/delete-structure', ['centreCoutStructure' => $ccs->getId()]) ?>"
-                               title="Supprimer la sructure du Centre de Coûts"
+                               title="Supprimer la structure du Centre de Coûts"
                                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                data-confirm="true"
                                data-confirm-button="Oui"
@@ -129,7 +129,7 @@ while ($i < $nTblListe) {
                     <td style="text-align:center;width:1px;white-space: nowrap">
                         <a class="ajax-modal" data-event="centre-cout-saisie"
                            href="<?= $this->url('centre-cout/saisie', ['centreCout' => $frf->getId()]) ?>"
-                           title="Modifier la Centre de Coûts">
+                           title="Modifier le Centre de Coûts">
                             <i class="fas fa-pen-to-square"></i></a>
                         <a class="pop-ajax"
                            href="<?= $this->url('centre-cout/delete', ['centreCout' => $frf->getId()]) ?>"
@@ -164,7 +164,7 @@ while ($i < $nTblListe) {
                                         <i class="fas fa-pen-to-square"></i></a>
                                     <a class="pop-ajax"
                                        href="<?= $this->url('centre-cout/delete-structure', ['centreCoutStructure' => $ccs->getId()]) ?>"
-                                       title="Supprimer la sructure du Centre de Coûts"
+                                       title="Supprimer la structure du Centre de Coûts"
                                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                        data-confirm="true"
                                        data-confirm-button="Oui"

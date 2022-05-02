@@ -78,8 +78,11 @@ class v18Statuts extends AbstractMigration
 
         $ddl = $bdd->table()->get('TBL_WORKFLOW')['TBL_WORKFLOW'];
         if (!isset($ddl['columns']['STATUT_ID'])) {
-            $bdd->exec('DROP TABLE TBL_WORKFLOW');
+            $c->msg('Vidage temporaire de WF_DEP_BLOQUANTE (dépendances du Workflow)');
+            $bdd->exec('DELETE FROM WF_DEP_BLOQUANTE');
+
             $c->msg('Suppression de la table TBL_WORKFLOW, qui sera recréée au nouveau format');
+            $bdd->exec('DROP TABLE TBL_WORKFLOW CASCADE CONSTRAINTS');
         }
 
         $ddl = $bdd->table()->get('MODELE_CONTRAT')['MODELE_CONTRAT'];
@@ -417,7 +420,7 @@ class v18Statuts extends AbstractMigration
                 'CONSEIL_RESTREINT_DUREE_VIE'    => $statut['agrements']['CONSEIL_RESTREINT'] ?? 1, // NUMBER DEFAULT 1 NOT NULL ENABLE,
                 'CONSEIL_ACA'                    => isset($statut['agrements']['CONSEIL_ACADEMIQUE']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
                 'CONSEIL_ACA_VISUALISATION'      => in_array('agrement-conseil-academique-visualisation', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
-                'CONSEIL_ACA_DUREE_VIE'          => $statut['agrements']['CONSEIL_RESTREINT'] ?? 5, // NUMBER DEFAULT 5 NOT NULL ENABLE,
+                'CONSEIL_ACA_DUREE_VIE'          => $statut['agrements']['CONSEIL_ACADEMIQUE'] ?? 5, // NUMBER DEFAULT 5 NOT NULL ENABLE,
                 'CONTRAT'                        => $statut['PEUT_AVOIR_CONTRAT'], // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
                 'CONTRAT_VISUALISATION'          => in_array('contrat-visualisation', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
                 'CONTRAT_DEPOT'                  => in_array('contrat-depot-retour-signe', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,

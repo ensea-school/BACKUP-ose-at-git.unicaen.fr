@@ -5,7 +5,10 @@ namespace Application\ORM;
 
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\TypeAgrement;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\IntervenantService;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Mvc\MvcEvent;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -18,6 +21,7 @@ class RouteEntitiesInjector
 {
     use CacheContainerTrait;
     use EntityManagerAwareTrait;
+    use ContextServiceAwareTrait;
 
 
     public function __invoke(MvcEvent $e)
@@ -49,8 +53,17 @@ class RouteEntitiesInjector
                 default:
                     if (array_key_exists($name, $entityParams)) {
                         if (0 !== (int)$value) {
-                            $repo = $this->getEntityManager()->getRepository($entityParams[$name]);
-                            $e->setParam($name, $repo->find($value));
+                            $repo   = $this->getEntityManager()->getRepository($entityParams[$name]);
+                            $entity = $repo->find($value);
+                            if ($entity instanceof ParametreEntityInterface) {
+                                $annee = $this->getServiceContext()->getAnnee();
+                                if ($entity->getAnnee() != $annee) {
+                                    $pel = new ParametreEntityListener();
+                                    $pel->setEntityManager($this->getEntityManager());
+                                    $entity = $pel->entityAutreAnnee($entity, $annee);
+                                }
+                            }
+                            $e->setParam($name, $entity);
                         }
                     }
                 break;

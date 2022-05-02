@@ -41,8 +41,15 @@ class v18Divers extends AbstractMigration
         $c   = $this->manager->getOseAdmin()->getConsole();
 
         try {
-            $bdd->exec("ALTER TABLE TYPE_INTERVENANT DROP CONSTRAINT TYPE_INTERVENANT_CODE_UN");
             $c->msg('Suppression de la contrainte TYPE_INTERVENANT_CODE_UN en prévision de sa recréation');
+            $bdd->exec("DELETE FROM AFFECTATION_RECHERCHE WHERE structure_id NOT IN (SELECT ID FROM STRUCTURE)");
+        } catch (\Exception $e) {
+            // rien à faire : la contrainte a déjà du être supprimée
+        }
+
+        try {
+            $c->msg('Suppression de la contrainte TYPE_INTERVENANT_CODE_UN en prévision de sa recréation');
+            $bdd->exec("ALTER TABLE TYPE_INTERVENANT DROP CONSTRAINT TYPE_INTERVENANT_CODE_UN");
         } catch (\Exception $e) {
             // rien à faire : la contrainte a déjà du être supprimée
         }

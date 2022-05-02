@@ -98,6 +98,9 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
 * Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
 * Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.
+* Pour les utilisateurs du module Export Siham, vous devez renseigner un nouveau paramètre dans Administration > paramètres généraux > 
+Gestion export RH, il vous faut sélectionner l'étape de la feuille de route franchie à partir de laquelle l'intervenant peut être exporté dans SIHAM.
+
 
 
 # OSE 17.3 (17/03/2022)

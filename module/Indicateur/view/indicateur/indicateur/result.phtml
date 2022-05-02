@@ -47,6 +47,8 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                         echo '<li>' . $val . '</li>';
                     }
                     echo '</ul>';
+                } elseif ($value instanceof \DateTime) {
+                    echo $value->format(\Application\Constants::DATE_FORMAT);
                 } elseif ($value) {
                     echo $value;
                 } else {

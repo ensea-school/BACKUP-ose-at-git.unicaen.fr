@@ -123,8 +123,10 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                         that.calculerNextType();
                     },
                     error: function (jqXHR) {
-                        alertFlash(jqXHR.responseText, 'error', 5000);
-                        console.log(jqXHR);
+                        if (jqXHR.responseText != null && jqXHR.responseText.toString() !== "") {
+                            alertFlash(jqXHR.responseText, 'error', 5000);
+                            console.log(jqXHR);
+                        }
                         that.calculerNextType();
                     }
                 });

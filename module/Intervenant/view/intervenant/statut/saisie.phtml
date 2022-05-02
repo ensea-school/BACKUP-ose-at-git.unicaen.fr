@@ -297,6 +297,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                    title="Dupliquer le statut d'intervenant">
                     <i class="fas fa-rotate-right"></i> Dupliquer</a>
             <?php endif; ?>
+            <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
         <?php endif; ?>
 
         <?= $this->form()->closeTag(); ?>

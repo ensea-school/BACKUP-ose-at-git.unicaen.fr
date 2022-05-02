@@ -33,6 +33,13 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
+    public function setEntityManager(EntityManager $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
+
+
     protected function save(LifecycleEventArgs $args)
     {
         if ($this->isSaving) return;

@@ -19,7 +19,7 @@ class v18Plafonds extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE');
+        return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE') || $this->manager->hasTable('SAVE_V18_PLAFOND');
     }
 
 
@@ -71,7 +71,7 @@ class v18Plafonds extends AbstractMigration
         }
 
         if (!empty($bdd->table()->get('PLAFOND'))) {
-            $bdd->exec('DROP TABLE PLAFOND');
+            $bdd->exec('DROP TABLE PLAFOND CASCADE CONSTRAINTS');
             $c->msg('Suppression des anciens plafonds');
         }
     }
@@ -80,9 +80,24 @@ class v18Plafonds extends AbstractMigration
 
     protected function after()
     {
-        $this->migrationParamsStructure();
-        $this->migrationParamsReferentiel();
-        $this->migrationParamsStatut();
+        $c = $this->manager->getOseAdmin()->getConsole();
+        try {
+            $this->migrationParamsStructure();
+        } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
+        }
+
+        try {
+            $this->migrationParamsReferentiel();
+        } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
+        }
+
+        try {
+            $this->migrationParamsStatut();
+        } catch (\Exception $e) {
+            $c->println($e->getMessage(), $c::COLOR_RED);
+        }
     }
 
 
@@ -200,7 +215,7 @@ class v18Plafonds extends AbstractMigration
             $c->msg('Ajout du paramètre ' . ($current + 1) . ' sur ' . $count . ' ...', true);
             $bdd->getTable('PLAFOND_STRUCTURE')->insert($insert);
         }
-        $c->begin('Fin de la convertion des paramètres de plafonds pour les structures');
+        $c->end('Fin de la convertion des paramètres de plafonds pour les structures');
     }
 
 
@@ -306,7 +321,7 @@ class v18Plafonds extends AbstractMigration
             $c->msg('Ajout du paramètre ' . ($current + 1) . ' sur ' . $count . ' ...', true);
             $bdd->getTable('PLAFOND_REFERENTIEL')->insert($insert);
         }
-        $c->begin('Fin de la convertion des paramètres de plafonds pour les fonctions référentielles');
+        $c->end('Fin de la convertion des paramètres de plafonds pour les fonctions référentielles');
     }
 
 
@@ -518,6 +533,6 @@ class v18Plafonds extends AbstractMigration
             $c->msg('Ajout du paramètre ' . ($current + 1) . ' sur ' . $count . ' ...', true);
             $bdd->getTable('PLAFOND_STATUT')->insert($insert);
         }
-        $c->begin('Fin de la convertion des paramètres de plafonds pour les statuts');
+        $c->end('Fin de la convertion des paramètres de plafonds pour les statuts');
     }
 }

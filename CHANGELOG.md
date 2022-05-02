@@ -73,6 +73,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
     * Les paramétrages de statuts sont maintenant annualisés
   
 * En bref
+  * Il est maintenant possible de choisir si on veut être connecté avec le CAS ou avec un compte LDAP ou local au moment du login
   * Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les établissements (#42944)
   * Les paramétrages de pièces justificatives par statut sont maintenant annualisés: il n'y a plus de notion d'année de début/année de fin
   * Les paramétrages des types d'intervention par statut sont également annualisés
@@ -88,6 +89,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Export CSV des agréments : inversion de colonnes (#41513)
 * Correction sur la suppression de service lorsque la clôture de service a été historisé (#42046)
 * Le calcul des choix minimum/maximum est de nouveau fiable (#42080)
+* Liens inactifs lors du changement d'année universitaire (#40992)
 
 ## Notes de mise à jour
 

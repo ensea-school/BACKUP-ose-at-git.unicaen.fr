@@ -275,7 +275,7 @@ UNION ALL
 
 --Dernière modification du service réalisé par composante
 SELECT s.intervenant_id                                                                     intervenant_id,
-       '5 - Services réalisés'                                                              categorie,
+       '6 - Services réalisés'                                                              categorie,
        'Modification/Ajout du service réalisé pour la composante ' || MAX(st.libelle_court) label,
        MAX(vh.histo_modification)                                                           histo_date,
        MAX(vh.histo_modificateur_id)                                                        KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
@@ -295,7 +295,7 @@ UNION ALL
 
 --Validation du service réalisé
 SELECT s.intervenant_id                                                                     intervenant_id,
-       '5 - Services réalisés'                                                              categorie,
+       '6 - Services réalisés'                                                              categorie,
        'Validation du service réalisé pour la composante ' || MAX(st.libelle_court) label,
        MAX(v.histo_modification)                                                           histo_date,
        MAX(v.histo_modificateur_id)                                                        KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
@@ -317,7 +317,7 @@ UNION ALL
 --Mise en paiement
 SELECT
    s.intervenant_id                                                                     intervenant_id,
-       '6 - Mise en paiement'                                 categorie,
+       '7 - Mise en paiement'                                 categorie,
        mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END                      label,
        mep.histo_modification                                                                histo_date,
        mep.histo_modificateur_id                                                             histo_createur_id,

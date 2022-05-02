@@ -39,29 +39,17 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             unset($supCols['intervenant-email-perso']);
             $supCols = array_keys($supCols);
 
-            function FormatDate($date): string
-            {
-                $dt = DateTime::createFromFormat('Y-m-d H:i:s', $date);
-                if ($dt && $dt->format('Y-m-d H:i:s') === $date) {
-                    return $dt->format('Y-m-d');
-                }
-
-                return $date;
-            }
-
             function printValue($value)
             {
                 if (is_array($value)) {
                     echo '<ul>';
                     foreach ($value as $val) {
-                        $val = FormatDate($val);
                         echo '<li>' . $val . '</li>';
                     }
                     echo '</ul>';
                 } elseif ($value instanceof \DateTime) {
                     echo $value->format(\Application\Constants::DATE_FORMAT);
                 } elseif ($value) {
-                    $value = FormatDate($value);
                     echo $value;
                 } else {
                     echo '&nbsp;';
@@ -99,8 +87,26 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                                     <?= $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . ' <small>(n°' . $r['intervenant-code'] . ' / ' . $r['statut-libelle'] . ')</small>' ?>
                                 </a>
                             </td>
-                            <?php foreach ($supCols as $supCol): ?>
-                                <td><?php printValue($r[$supCol]); ?></td>
+
+                            <?php
+                            foreach ($supCols as $supCol):
+                                if (!is_array($r[$supCol])) {
+                                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $r[$supCol]);
+                                    if ($dt && $dt->format('Y-m-d H:i:s') === $r[$supCol]) {
+                                        $dtOrder = $dt->format('Ymd');
+                                        $i       = (int)$dtOrder ?>
+
+                                        <td data-order=<?php echo $dtOrder ?>>
+                                            <?php printValue($dt->format(\Application\Constants::DATE_FORMAT)); ?>
+                                        </td>
+
+                                    <?php }
+                                } else {
+                                    ?>
+                                    <td><?php printValue($r[$supCol]); ?></td>
+
+                                <?php }
+                                ?>
                             <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>

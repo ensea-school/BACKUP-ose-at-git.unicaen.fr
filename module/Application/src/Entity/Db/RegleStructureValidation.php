@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 

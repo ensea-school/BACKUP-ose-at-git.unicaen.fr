@@ -625,6 +625,11 @@ class ServiceController extends AbstractController
         /* @var $structure Structure */
 
 
+        $plafondOk = $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire, true);
+        if (!$plafondOk) {
+            return new MessengerViewModel();
+        }
+
         $validation = $this->getProcessusValidationEnseignement()->creer($intervenant, $structure);
 
         if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeEnseignementValidation())) {

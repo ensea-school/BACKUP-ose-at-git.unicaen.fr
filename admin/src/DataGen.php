@@ -321,7 +321,7 @@ class DataGen
         [
             'table'   => 'STATUT',
             'context' => ['install'],
-            'key'     => 'CODE',
+            'key'     => ['CODE', 'ANNEE_ID'],
             'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s']]],
         ],
         [
@@ -605,6 +605,42 @@ class DataGen
         }
 
         return $formules;
+    }
+
+
+
+    public function STATUT()
+    {
+        $data = $this->donneesDefaut['STATUT'];
+
+        $statuts = [];
+        for ($a = 2010; $a <= 2099; $a++) {
+            foreach ($data as $d) {
+                $d['ANNEE_ID']              = $a;
+                $d['HISTO_MODIFICATEUR_ID'] = null;
+                $statuts[]                  = $d;
+            }
+        }
+
+        return $statuts;
+    }
+
+
+
+    public function TYPE_PIECE_JOINTE_STATUT()
+    {
+        $data = $this->donneesDefaut['TYPE_PIECE_JOINTE_STATUT'];
+
+        $statuts = [];
+        for ($a = 2010; $a <= 2099; $a++) {
+            foreach ($data as $d) {
+                $d['ANNEE_ID']              = $a;
+                $d['HISTO_MODIFICATEUR_ID'] = null;
+                $statuts[]                  = $d;
+            }
+        }
+
+        return $statuts;
     }
 
 

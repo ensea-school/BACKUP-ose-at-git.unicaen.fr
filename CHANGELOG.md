@@ -47,13 +47,13 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
  
 * Fiche Intervenant
   * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
-  * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'
-    intervenant
+  * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le code intervenant et la source de l'intervenant
+  * Le code de l'intervenant peut devenir cliquable pour vous rediriger vers une page de gestion des comptes d'accès au SI ou autre (cf. notes de mise à jour, paramètre ldap>systemeInformationUrl)
 
 * Export des intervenants vers Siham
   * Possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
-  * Nouveau paramètre dans administration > paramètres généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un
-    intervenant vers le SIRH
+  * Nouveau paramètre dans administration > paramètres généraux permettant de choisir l'étape de la feuille de route à franchir pour pouvoir exporter un intervenant vers le SIRH
+  * Meilleure gestion du pays de naissance lors de la PEC ou REN
 
 * Ajout d'un module de gestion des Notes sur l'intervenant
   * Possibilité de rajouter une note écrite (informations, message important etc...) sur une fiche intervenant (Tâche #25565)
@@ -73,6 +73,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
     * Les paramétrages de statuts sont maintenant annualisés
   
 * En bref
+  * Il est maintenant possible de choisir si on veut être connecté avec le CAS ou avec un compte LDAP ou local au moment du login
   * Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les établissements (#42944)
   * Les paramétrages de pièces justificatives par statut sont maintenant annualisés: il n'y a plus de notion d'année de début/année de fin
   * Les paramétrages des types d'intervention par statut sont également annualisés
@@ -88,6 +89,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Export CSV des agréments : inversion de colonnes (#41513)
 * Correction sur la suppression de service lorsque la clôture de service a été historisé (#42046)
 * Le calcul des choix minimum/maximum est de nouveau fiable (#42080)
+* Liens inactifs lors du changement d'année universitaire (#40992)
 
 ## Notes de mise à jour
 
@@ -95,7 +97,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * **ATTENTION : PHP 8.0** est requis
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
 * Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
-
+* Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.
 
 
 # OSE 17.3 (17/03/2022)

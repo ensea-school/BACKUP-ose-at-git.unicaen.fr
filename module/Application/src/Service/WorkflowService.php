@@ -353,11 +353,11 @@ class WorkflowService extends AbstractService
             'validation_enseignement' => ['workflow'],
             'validation_referentiel'  => ['workflow'],
             'workflow'                => [],
-            //'plafond_structure'       => [],
-            //'plafond_intervenant'     => [],
-            //'plafond_element'         => [],
-            //'plafond_volume_horaire'  => [],
-            //'plafond_referentiel'     => [],
+            'plafond_intervenant'     => [],
+            'plafond_structure'       => [],
+            'plafond_referentiel'     => [],
+            'plafond_element'         => [],
+            'plafond_volume_horaire'  => [],
         ];
 
         if ($tableauxBords) {

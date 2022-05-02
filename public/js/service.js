@@ -114,10 +114,6 @@ $.widget("ose.serviceListe", {
         if ($("#service-resume").length > 0) { // Si on est dans le résumé (si nécessaire)
             $("#service-resume").refresh();
         }
-
-        if ($(".plafonds").length > 0) { // Si on est dans le résumé (si nécessaire)
-            $(".plafonds").refresh();
-        }
     },
 
 

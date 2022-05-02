@@ -66,6 +66,12 @@ class IntervenantViewHelper extends AbstractHtmlElement
             $code = $this->getView()->tag('a', ['href' => $systemeInformationUrl, 'target' => '_blank'])->text($code);
         }
 
+        $statut = $entity->getStatut();
+        if ($this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_VISUALISATION))) {
+            $statutUrl = $this->getView()->url('statut/saisie', ['statut' => $statut->getId()]);
+            $statut    = $this->getView()->tag('a', ['href' => $statutUrl, 'target' => '_blank'])->text((string)$statut);
+        }
+
         $vars = [
             'identite'     => [
                 "Civilité"   => (string)($entity->getCivilite()) ? $entity->getCivilite()->getLibelleLong() : '',
@@ -80,7 +86,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
             ],
             'metier'       => [
                 "Type d'intervenant"       => $entity->getStatut()->getTypeIntervenant(),
-                "Statut de l'intervenant"  => $entity->getStatut(),
+                "Statut de l'intervenant"  => $statut,
                 "Composante d'affectation" => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Grade"                    => $entity->getGrade() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Discipline"               => (!empty($entity->getDiscipline()) && $entity->getDiscipline() != '00 Non renseignée') ? $entity->getDiscipline() : '<span class="inconnu">(Inconnue)</span>',

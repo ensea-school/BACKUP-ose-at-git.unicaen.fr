@@ -188,7 +188,17 @@ return [
         /* Attribut correspondant au code de la structure */
         'structureCode'                => 'supannCodeEntite',
 
-        /* URL d'accès à la page de l'utilisateur dans le système d'information */
+        /* [Facultatif] Si vous avez un outil de gestion de vos comptes numériques,
+         * permet de préciser l'URL d'accès à la page de l'utilisateur dans le système d'information
+         * Des variables précédées de ":" peuvent être utilisées pour préciser de quel intervenant il s'agit :
+         * - code
+         * - sourceCode
+         * - utilisateurCode
+         * - codeRh
+         * - autre1 (et autre2 ... autre5)
+         *
+         * Exemple : https://octopus.unicaen.fr/individu/afficher/:code
+         */
         'systemeInformationUrl'        => '',
     ],
 

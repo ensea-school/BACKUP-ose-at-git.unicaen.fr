@@ -15,6 +15,7 @@ $wells = [
 ];
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 foreach ($wells as $well => $title) {
     if ($services[$well]) {

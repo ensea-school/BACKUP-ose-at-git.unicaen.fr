@@ -113,6 +113,9 @@ echo $formuleTotauxHetd;
                     // on met à jour l'horodatage des services !!
                     $("#s-horodatage").refresh();
 
+                    // Mise à jour des plafonds
+                    $(".plafonds").refresh();
+
                     // chargement du menu pour faire apparaître ou disparaitre les liens de validation
                     $('#sidebar').load('<?= $menuUrl; ?>');
 
@@ -134,6 +137,9 @@ echo $formuleTotauxHetd;
 
                     // on met à jour l'horodatage des services !!
                     $("#sr-horodatage").refresh();
+
+                    // Mise à jour des plafonds
+                    $(".plafonds").refresh();
 
                     // chargement du menu pour faire apparaître ou disparaitre les liens de validation
                     $('#sidebar').load('<?= $menuUrl; ?>');

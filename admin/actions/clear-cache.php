@@ -7,10 +7,14 @@ try {
     $c->exec([
         "cd $osedir",
         "rm -Rf cache/*",
-        "chmod -R 777 cache",
     ], false);
 
     $oa->exec("generate-proxies");
+
+    $c->exec([
+        "cd $osedir",
+        "chmod -R 777 cache",
+    ], false);
 
     $c->println('Cache nettoyé, proxies actualisés', $c::COLOR_GREEN);
 } catch (\Exception $e) {

@@ -6,9 +6,6 @@
 
 class v18Divers extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_PRE;
-
-
 
     public function description(): string
     {
@@ -20,17 +17,6 @@ class v18Divers extends AbstractMigration
     public function utile(): bool
     {
         return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE');
-    }
-
-
-
-    public function action(string $contexte)
-    {
-        if ($contexte == self::CONTEXTE_PRE) {
-            $this->before();
-        } else {
-            $this->after();
-        }
     }
 
 

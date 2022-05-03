@@ -6,9 +6,6 @@
 
 class v18Statuts extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
-
-
 
     public function description(): string
     {
@@ -20,17 +17,6 @@ class v18Statuts extends AbstractMigration
     public function utile(): bool
     {
         return $this->manager->hasOld('table', 'STATUT_INTERVENANT');
-    }
-
-
-
-    public function action(string $contexte)
-    {
-        if ($contexte == self::CONTEXTE_PRE) {
-            $this->before();
-        } else {
-            $this->after();
-        }
     }
 
 
@@ -122,7 +108,7 @@ class v18Statuts extends AbstractMigration
 
 
 
-    protected function after()
+    public function after()
     {
         $bdd = $this->manager->getBdd();
         $c   = $this->manager->getOseAdmin()->getConsole();

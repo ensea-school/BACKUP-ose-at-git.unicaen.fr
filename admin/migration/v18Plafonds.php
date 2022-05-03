@@ -6,9 +6,6 @@
 
 class v18Plafonds extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
-
-
 
     public function description(): string
     {
@@ -20,17 +17,6 @@ class v18Plafonds extends AbstractMigration
     public function utile(): bool
     {
         return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE') || $this->manager->hasTable('SAVE_V18_PLAFOND');
-    }
-
-
-
-    public function action(string $contexte)
-    {
-        if ($contexte == self::CONTEXTE_PRE) {
-            $this->before();
-        } else {
-            $this->after();
-        }
     }
 
 
@@ -78,7 +64,7 @@ class v18Plafonds extends AbstractMigration
 
 
 
-    protected function after()
+    public function after()
     {
         $c = $this->manager->getOseAdmin()->getConsole();
         try {

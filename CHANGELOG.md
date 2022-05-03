@@ -99,7 +99,8 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
 * Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.
 * Pour les instances qui utilisent le module Export Siham, vous devez renseigner un nouveau paramètre dans Administration > paramètres généraux > Gestion export RH, il vous faut sélectionner l'étape de la feuille de route franchie à partir de laquelle l'intervenant peut être exporté dans SIHAM.
-
+* La vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) doit être mise à jour. 
+* Par précaution, la mise à jour désactive la synchronisation sur la table INTERVENANT. Vous devrez manuellement remettre en place cette synchronisation après avoir mis à jour votre vue source SRC_INTERVENANT.
 
 
 # OSE 17.3 (17/03/2022)

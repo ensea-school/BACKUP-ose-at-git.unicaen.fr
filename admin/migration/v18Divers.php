@@ -53,6 +53,13 @@ class v18Divers extends AbstractMigration
         } catch (\Exception $e) {
             // rien à faire : la contrainte a déjà du être supprimée
         }
+
+        try {
+            $c->msg('Coupure forcée de la synchronisation sur la table INTERVENANT');
+            $bdd->exec("UPDATE IMPORT_TABLES SET SYNC_ENABLED = 0 WHERE TABLE_NAME = 'INTERVENANT'");
+        } catch (\Exception $e) {
+            // rien à faire : la contrainte a déjà du être supprimée
+        }
     }
 
 }
